@@ -190,6 +190,9 @@
         },
         {
           "$ref": "#/definitions/TruckWorldComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckControllerComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -700,6 +703,22 @@
         "componentType": {
           "enum": [
             "truck-world"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckCOntrollerComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck controller",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-controller"
           ],
           "type": "string"
         }
