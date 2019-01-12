@@ -1,0 +1,5 @@
+if (this.lightIsGreen()) {
+  await this.goForward();
+} else {
+  await this.wait();
+}
