@@ -1,0 +1,33 @@
+{
+  "language": "trucklino_program",
+  "name": "booleanBinaryExpression",
+  "children": {
+    "lhs": [
+      {
+        "language": "trucklino_program",
+        "name": "sensor",
+        "properties": {
+          "type": "canTurnLeft"
+        }
+      }
+    ],
+    "operator": [
+      {
+        "language": "trucklino_program",
+        "name": "relationalOperator",
+        "properties": {
+          "operator": "AND"
+        }
+      }
+    ],
+    "rhs": [
+      {
+        "language": "trucklino_program",
+        "name": "sensor",
+        "properties": {
+          "type": "canTurnRight"
+        }
+      }
+    ]
+  }
+}

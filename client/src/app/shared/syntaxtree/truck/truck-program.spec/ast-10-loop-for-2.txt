@@ -1,0 +1,6 @@
+for (let i0 = 0; i0 < 5; i0++) {
+  await this.goForward();
+  for (let i1 = 0; i1 < 10; i1++) {
+    await this.goForward();
+  }
+}
