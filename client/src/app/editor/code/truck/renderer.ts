@@ -509,7 +509,7 @@ class TruckRenderer implements ObjectRenderer {
    * @param truck Truck.
    */
   private calculateTruckAngle(truck: Truck) {
-    return (truck.facing - 1) * 90;
+    return (truck.facing) * 90;
   }
 
   /**

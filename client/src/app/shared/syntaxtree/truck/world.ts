@@ -143,7 +143,7 @@ export class World {
   constructor(description: string = null) {
     this.size = new Size(5, 5);
 
-    const truck = new Truck(new Position(1, 0, this), 2);
+    const truck = new Truck(new Position(1, 0, this), DirectionUtil.toNumber(Direction.East));
     const tiles = [
       new Tile(new Position(0, 0, this), TileOpening.E | TileOpening.S),
       new Tile(new Position(1, 0, this), TileOpening.E | TileOpening.S | TileOpening.W),
@@ -469,10 +469,10 @@ export class Truck {
    */
   get facingDirection(): Direction {
     const f = this.facing;
-    if (f % 4 === 1 || f % 4 === -3) { return Direction.North; }
-    if (f % 4 === 2 || f % 4 === -2) { return Direction.East; }
-    if (f % 4 === 3 || f % 4 === -1) { return Direction.South; }
-    return Direction.West;
+    if (f % 4 === 1 || f % 4 === -3) { return Direction.East; }
+    if (f % 4 === 2 || f % 4 === -2) { return Direction.South; }
+    if (f % 4 === 3 || f % 4 === -1) { return Direction.West; }
+    return Direction.North;
   }
 
   /**
