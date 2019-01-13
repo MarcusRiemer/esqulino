@@ -1,4 +1,4 @@
-import { World, TileOpening, WorldState, Tile, Truck, TurnDirection, Direction } from 'src/app/shared/syntaxtree/truck/world';
+import { World, TileOpening, WorldState, Tile, Truck, TurnDirection, Direction } from '../../../shared/syntaxtree/truck/world';
 
 /**
  * Renderer.
