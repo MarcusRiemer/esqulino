@@ -277,6 +277,9 @@
         },
         {
           "$ref": "#/definitions/TruckControllerComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckSensorsComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -902,6 +905,22 @@
         "componentType": {
           "enum": [
             "truck-controller"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckSensorsComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a trucks sensors",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-sensors"
           ],
           "type": "string"
         }
