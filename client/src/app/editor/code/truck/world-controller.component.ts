@@ -79,30 +79,35 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
         const sensor = (s: Sensor) => this.world.sensor(s);
 
         // Generate and execute asynchronous function
-        const f = new AsyncFunction(generatedCode);
-        f.call({
-          goForward: async () => { await cmd(Command.goForward); },
-          turnLeft: async () => { await cmd(Command.turnLeft); },
-          turnRight: async () => { await cmd(Command.turnRight); },
-          noTurn: async () => { await cmd(Command.noTurn); },
-          wait: async () => { await cmd(Command.wait); },
-          load: async () => { await cmd(Command.load); },
-          unload: async () => { await cmd(Command.unload); },
+        try {
+          const f = new AsyncFunction(generatedCode);
+          f.call({
+            goForward: async () => { await cmd(Command.goForward); },
+            turnLeft: async () => { await cmd(Command.turnLeft); },
+            turnRight: async () => { await cmd(Command.turnRight); },
+            noTurn: async () => { await cmd(Command.noTurn); },
+            wait: async () => { await cmd(Command.wait); },
+            load: async () => { await cmd(Command.load); },
+            unload: async () => { await cmd(Command.unload); },
 
-          lightIsRed: () => sensor(Sensor.lightIsRed),
-          lightIsGreen: () => sensor(Sensor.lightIsGreen),
-          canGoStraight: () => sensor(Sensor.canGoStraight),
-          canTurnLeft: () => sensor(Sensor.canTurnLeft),
-          canTurnRight: () => sensor(Sensor.canTurnRight),
-          isSolved: () => sensor(Sensor.isSolved),
-        }).then(() => {
-          // success, nothing to do
-        }).catch((error) => {
+            lightIsRed: () => sensor(Sensor.lightIsRed),
+            lightIsGreen: () => sensor(Sensor.lightIsGreen),
+            canGoStraight: () => sensor(Sensor.canGoStraight),
+            canTurnLeft: () => sensor(Sensor.canTurnLeft),
+            canTurnRight: () => sensor(Sensor.canTurnRight),
+            isSolved: () => sensor(Sensor.isSolved),
+          }).then(() => {
+            // success, nothing to do
+          }).catch((error) => {
+            console.error(error);
+            alert(error.msg);
+          }).finally(() => {
+            this.blocked = false;
+          });
+        } catch(error) {
           console.error(error);
-          alert(error.msg);
-        }).finally(() => {
           this.blocked = false;
-        });
+        }
       }
     });
   }
