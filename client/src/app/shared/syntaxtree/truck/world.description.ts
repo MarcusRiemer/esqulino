@@ -11,7 +11,7 @@ export interface WorldDescription {
       x: number,
       y: number
     },
-    facing: 'N' | 'E' | 'S' | 'W'
+    facing: string
   }[]
 
   tiles: {
@@ -19,7 +19,14 @@ export interface WorldDescription {
       x: number,
       y: number
     },
-    openings: ('N' | 'E' | 'S' | 'W')[]
+    openings?: string[],
+    freight?: string[],
+    freightTarget?: string,
+    trafficLights?: {
+      redPhase: number,
+      greenPhase: number,
+      startPhase: number
+    }[]
   }[]
 }
 
@@ -42,7 +49,10 @@ export function readFromNode(node: NodeDescription): WorldDescription {
       for (let x = 0; x < wd.size.height; x++) {
         wd.tiles.push({
           position: { x: x, y: y },
-          openings: []
+          openings: [],
+          freight: [],
+          freightTarget: null,
+          trafficLights: []
         });
       }
     }

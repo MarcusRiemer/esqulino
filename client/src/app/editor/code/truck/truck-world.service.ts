@@ -15,16 +15,12 @@ export class TruckWorldService implements OnInit {
 
   readonly currentWorld = this._selectedWorldId
     .pipe(
-      // TODO: Create a world (if it does not exist yet)
       map(id => {
         const currentProgram = this._currentCodeResource.peekResource;
-        const project = currentProgram.project;
-        const worldResource = project.getCodeResourceById(id);
-        const worldTree = worldResource.syntaxTreePeek.toModel();
 
-        // TODO: Move this translation somewhere else
         // TODO: Decide when to replace the old world and when to simply return it
         if (!this._worlds[currentProgram.id]) {
+          const worldTree = currentProgram.project.getCodeResourceById(id).syntaxTreePeek.toModel();
           const wd = readFromNode(worldTree);
           this._worlds[currentProgram.id] = new World(wd);
         }

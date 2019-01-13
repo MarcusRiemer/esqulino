@@ -1,6 +1,48 @@
 import { World, Command, Direction, StrayedOffTheRoadError, LoadingError,
   UnloadingError, DirectionUtil, TileOpening, TurnDirection, Position,
   TrafficLight, Tile, Freight, Truck } from './world';
+import { WorldDescription } from './world.description';
+
+const worldDescription: WorldDescription = {
+  size: { width: 5, height: 5 },
+  trucks: [{ position: { x: 1, y: 0 }, facing: 'E' }],
+  tiles: [
+    { position: { x: 0, y: 0 }, openings: ['E', 'S'] },
+    { position: { x: 1, y: 0 }, openings: ['E', 'S', 'W'] },
+    { position: { x: 2, y: 0 }, openings: ['E', 'W'], freight: ['Blue'] },
+    { position: { x: 3, y: 0 }, openings: ['S', 'W'] },
+    { position: { x: 4, y: 0 } },
+
+    { position: { x: 0, y: 1 }, openings: ['N', 'S'] },
+    { position: { x: 1, y: 1 }, openings: ['N', 'E'] },
+    { position: { x: 2, y: 1 }, openings: ['S', 'W'] },
+    { position: { x: 3, y: 1 }, openings: ['N', 'E'], freightTarget: 'Blue' },
+    { position: { x: 4, y: 1 }, openings: ['S', 'W'] },
+
+    { position: { x: 0, y: 2 }, openings: ['N', 'E', 'S'] },
+    { position: { x: 1, y: 2 }, openings: ['E', 'W'] },
+    { position: { x: 2, y: 2 }, openings: ['N', 'E', 'S', 'W'], freightTarget: 'Red', trafficLights: [
+      { redPhase: 3, greenPhase: 1, startPhase: 0 },
+      { redPhase: 3, greenPhase: 1, startPhase: 1 },
+      { redPhase: 3, greenPhase: 1, startPhase: 2 },
+      { redPhase: 3, greenPhase: 1, startPhase: 3 }
+    ] },
+    { position: { x: 3, y: 2 }, openings: ['E', 'W'] },
+    { position: { x: 4, y: 2 }, openings: ['N', 'S', 'W'] },
+
+    { position: { x: 0, y: 3 }, openings: ['N', 'S'] },
+    { position: { x: 1, y: 3 } },
+    { position: { x: 2, y: 3 }, openings: ['N', 'S'], freight: ['Red'] },
+    { position: { x: 3, y: 3 } },
+    { position: { x: 4, y: 3 }, openings: ['N', 'S'] },
+
+    { position: { x: 0, y: 4 }, openings: ['N', 'E'] },
+    { position: { x: 1, y: 4 }, openings: ['E', 'W'] },
+    { position: { x: 2, y: 4 }, openings: ['N', 'E', 'W'] },
+    { position: { x: 3, y: 4 }, openings: ['E', 'W'] },
+    { position: { x: 4, y: 4 }, openings: ['N', 'W'] },
+  ]
+};
 
 /******************************************************************************
  * World
@@ -9,7 +51,7 @@ describe('Shared: World', () => {
   let world: World;
 
   beforeEach(() => {
-    world = new World();
+    world = new World(worldDescription);
   });
 
   it('should have exactly one state', () => {
@@ -89,7 +131,7 @@ describe('Shared: World', () => {
  * Truck
  ******************************************************************************/
 describe('Shared: Truck', () => {
-  const position = new Position(1, 1, new World());
+  const position = new Position(1, 1, new World(worldDescription));
   let truck: Truck;
 
   beforeEach(() => {
@@ -155,7 +197,7 @@ describe('Shared: Truck', () => {
  * Tile
  ******************************************************************************/
 describe('Shared: Tile', () => {
-  const position = new Position(1, 1, new World());
+  const position = new Position(1, 1, new World(worldDescription));
   let tile: Tile,
       tileNE: Tile,
       tileRF: Tile,
@@ -295,7 +337,7 @@ describe('Shared: Position', () => {
   let position: Position;
 
   beforeEach(() => {
-    world = new World();
+    world = new World(worldDescription);
     position = new Position(0, 0, world);
   });
 

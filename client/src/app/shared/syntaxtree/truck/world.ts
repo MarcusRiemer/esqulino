@@ -150,12 +150,51 @@ export class World {
       DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing))
     );
 
-    const convertOpenings = (openings) => openings.reduce(
-      (a, v) => a | DirectionUtil.toTileOpening(DirectionUtil.fromChar(v)),
-      TileOpening.None
-    );
+    const tiles = desc.tiles.map((tile) => {
+      // Defaults
+      let openings = TileOpening.None;
+      let freight: Freight[] = [];
+      let freightTarget: Freight = null;
+      let trafficLights: TrafficLight[] = [];
 
-    const tiles = desc.tiles.map((tile) => new Tile(new Position(tile.position.x, tile.position.y, this), convertOpenings(tile.openings)))
+      // Openings
+      if (tile.openings) {
+        openings = tile.openings.reduce(
+          (a, v) => a | DirectionUtil.toTileOpening(DirectionUtil.fromChar(v)),
+          TileOpening.None
+        );
+      }
+
+      // Freight
+      if (tile.freight) {
+        freight = tile.freight.map((f) => ({
+          'Red': Freight.Red,
+          'Green': Freight.Green,
+          'Blue': Freight.Blue
+        }[f]));
+      }
+
+      // Freight target
+      if (tile.freightTarget) {
+        freightTarget = {
+          'Red': Freight.Red,
+          'Green': Freight.Green,
+          'Blue': Freight.Blue
+        }[tile.freightTarget];
+      }
+
+      // Traffic lights
+      if (tile.trafficLights) {
+        trafficLights = tile.trafficLights.map((t) =>
+          new TrafficLight(t.redPhase, t.greenPhase, t.startPhase)
+        );
+      }
+
+      return new Tile(
+        new Position(tile.position.x, tile.position.y, this),
+        openings, freight, freightTarget, trafficLights
+      );
+    });
 
     this.states = [new WorldState(0, tiles, truck, 1)];
   }
@@ -533,6 +572,7 @@ export class Tile {
    * @param openings Directions in which the tile is passable.
    * @param freight Freight.
    * @param freightTarget Freight target.
+   * @param trafficLights Traffic lights.
    */
   constructor(position: Position, openings: TileOpening,
                 freight: Array<Freight> = [], freightTarget: Freight = null,
@@ -908,7 +948,7 @@ export class DirectionUtil {
    * @param c Direction as string (N, E, S, W).
    * @return Direction.
    */
-  public static fromChar(c: 'N' | 'E' | 'S' | 'W'): Direction {
+  public static fromChar(c: string): Direction {
     return {
       'N': Direction.North,
       'E': Direction.East,
