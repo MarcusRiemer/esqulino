@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { World } from 'src/app/shared/syntaxtree/truck/world';
+import { World } from '../../../shared/syntaxtree/truck/world';
 
 @Injectable()
 export class TruckWorldService implements OnInit {

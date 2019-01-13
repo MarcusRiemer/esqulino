@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
-import { World, Command, Sensor } from 'src/app/shared/syntaxtree/truck/world';
+import { World, Command, Sensor } from '../../../shared/syntaxtree/truck/world';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
