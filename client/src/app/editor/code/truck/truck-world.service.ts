@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { World } from '../../../shared/syntaxtree/truck/world';
+import { readFromNode } from '../../../shared/syntaxtree/truck/world.description';
 
 @Injectable()
 export class TruckWorldService implements OnInit {
@@ -24,7 +25,8 @@ export class TruckWorldService implements OnInit {
         // TODO: Move this translation somewhere else
         // TODO: Decide when to replace the old world and when to simply return it
         if (!this._worlds[currentProgram.id]) {
-          this._worlds[currentProgram.id] = new World();
+          const wd = readFromNode(worldTree);
+          this._worlds[currentProgram.id] = new World(wd);
         }
 
         return (this._worlds[currentProgram.id]);
