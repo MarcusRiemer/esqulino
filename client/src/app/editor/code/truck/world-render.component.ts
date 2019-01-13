@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-
 import { TruckWorldService } from './truck-world.service'
 import { Renderer } from './renderer';
 
@@ -14,18 +12,12 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
 
   readonly canvasWidth = 500;
   readonly canvasHeight = 500;
-
-  private _worldSubscription: Subscription;
-
-  readonly currentWorld = this._truckWorld.currentWorld;
-
-  readonly currentProgram = this._currentCodeResource.currentResource;
-
   private _renderer: Renderer;
+  private _worldSubscription: Subscription;
+  readonly currentWorld = this._truckWorld.currentWorld;
 
   constructor(
     private _truckWorld: TruckWorldService,
-    private _currentCodeResource: CurrentCodeResourceService,
     private _ngZone: NgZone
   ) {
   }
