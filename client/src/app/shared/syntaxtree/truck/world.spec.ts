@@ -135,7 +135,7 @@ describe('Shared: Truck', () => {
   let truck: Truck;
 
   beforeEach(() => {
-    truck = new Truck(position, 0);
+    truck = new Truck(position, DirectionUtil.toNumber(Direction.West));
   });
 
   it('should load freight', () => {
