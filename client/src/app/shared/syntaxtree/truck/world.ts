@@ -1,3 +1,5 @@
+import { WorldDescription } from './world.description';
+
 /**
  * Representation of the game world.
  */
@@ -138,60 +140,24 @@ export class World {
   /**
    * Initializes the world following the world description with an initial
    * state.
-   * @param description Description of the world.
+   * @param desc Description of the world.
    */
-  constructor(description: string = null) {
-    this.size = new Size(5, 5);
+  constructor(desc: WorldDescription) {
+    this.size = new Size(desc.size.width, desc.size.height);
 
-    const truck = new Truck(new Position(1, 0, this), DirectionUtil.toNumber(Direction.East));
-    const tiles = [
-      new Tile(new Position(0, 0, this), TileOpening.E | TileOpening.S),
-      new Tile(new Position(1, 0, this), TileOpening.E | TileOpening.S | TileOpening.W),
-      new Tile(new Position(2, 0, this), TileOpening.E | TileOpening.W, [Freight.Blue]),
-      new Tile(new Position(3, 0, this), TileOpening.S | TileOpening.W),
-      new Tile(new Position(4, 0, this), TileOpening.None),
+    const truck = new Truck(
+      new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
+      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing))
+    );
 
-      new Tile(new Position(0, 1, this), TileOpening.N | TileOpening.S),
-      new Tile(new Position(1, 1, this), TileOpening.N | TileOpening.E),
-      new Tile(new Position(2, 1, this), TileOpening.S | TileOpening.W),
-      new Tile(new Position(3, 1, this), TileOpening.N | TileOpening.E, [], Freight.Blue),
-      new Tile(new Position(4, 1, this), TileOpening.S | TileOpening.W),
+    const convertOpenings = (openings) => openings.reduce(
+      (a, v) => a | DirectionUtil.toTileOpening(DirectionUtil.fromChar(v)),
+      TileOpening.None
+    );
 
-      new Tile(new Position(0, 2, this), TileOpening.N | TileOpening.E | TileOpening.S),
-      new Tile(new Position(1, 2, this), TileOpening.E | TileOpening.W),
-      new Tile(new Position(2, 2, this), TileOpening.N | TileOpening.E | TileOpening.S | TileOpening.W, [], Freight.Red, [
-        new TrafficLight(3, 1, 0),
-        new TrafficLight(3, 1, 1),
-        new TrafficLight(3, 1, 2),
-        new TrafficLight(3, 1, 3),
-      ]),
-      new Tile(new Position(3, 2, this), TileOpening.E | TileOpening.W),
-      new Tile(new Position(4, 2, this), TileOpening.N | TileOpening.S | TileOpening.W),
+    const tiles = desc.tiles.map((tile) => new Tile(new Position(tile.position.x, tile.position.y, this), convertOpenings(tile.openings)))
 
-      new Tile(new Position(0, 3, this), TileOpening.N | TileOpening.S),
-      new Tile(new Position(1, 3, this), TileOpening.None),
-      new Tile(new Position(2, 3, this), TileOpening.N | TileOpening.S, [Freight.Red]),
-      new Tile(new Position(3, 3, this), TileOpening.None),
-      new Tile(new Position(4, 3, this), TileOpening.N | TileOpening.S),
-
-      new Tile(new Position(0, 4, this), TileOpening.N | TileOpening.E),
-      new Tile(new Position(1, 4, this), TileOpening.E | TileOpening.W),
-      new Tile(new Position(2, 4, this), TileOpening.N | TileOpening.E | TileOpening.W),
-      new Tile(new Position(3, 4, this), TileOpening.E | TileOpening.W),
-      new Tile(new Position(4, 4, this), TileOpening.N | TileOpening.W),
-    ];
     this.states = [new WorldState(0, tiles, truck, 1)];
-
-    // this.size = new Size(2, 2);
-
-    // const truck = new Truck(new Position(1, 0, this), 2);
-    // const tiles = [
-    //   new Tile(new Position(0, 0, this), TileOpening.N | TileOpening.E | TileOpening.S | TileOpening.W),
-    //   new Tile(new Position(1, 0, this), TileOpening.N | TileOpening.E | TileOpening.S | TileOpening.W),
-    //   new Tile(new Position(0, 1, this), TileOpening.N | TileOpening.E | TileOpening.S | TileOpening.W),
-    //   new Tile(new Position(1, 1, this), TileOpening.N | TileOpening.E | TileOpening.S | TileOpening.W),
-    // ];
-    // this.states = [new WorldState(0, tiles, truck, 1)];
   }
 
   /**
@@ -935,6 +901,20 @@ export class DirectionUtil {
         [Direction.West]: Direction.North,
       }
     }[turnDirection][direction];
+  }
+
+  /**
+   * Returns the direction for a string.
+   * @param c Direction as string (N, E, S, W).
+   * @return Direction.
+   */
+  public static fromChar(c: 'N' | 'E' | 'S' | 'W'): Direction {
+    return {
+      'N': Direction.North,
+      'E': Direction.East,
+      'S': Direction.South,
+      'W': Direction.West,
+    }[c];
   }
 }
 
