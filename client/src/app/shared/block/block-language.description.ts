@@ -99,6 +99,13 @@ export interface TruckControllerComponentDescription {
 }
 
 /**
+ * Displays a trucks sensors
+ */
+export interface TruckSensorsComponentDescription {
+  componentType: "truck-sensors"
+}
+
+/**
  * Any component that could be displayed in the actual editor view.
  */
 export type EditorComponentDescription =
@@ -106,7 +113,8 @@ export type EditorComponentDescription =
   | ValidatorComponentDescription
   | CodeGeneratorComponentDescription
   | TruckWorldComponentDescription
-  | TruckControllerComponentDescription;
+  | TruckControllerComponentDescription
+  | TruckSensorsComponentDescription;
 
 /**
  * The data about a language model that is stored in the database
