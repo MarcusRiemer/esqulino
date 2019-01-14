@@ -7,9 +7,122 @@
 \section{Objektstruktur}
 
 - World, WorldState, Truck, Tile, TrafficLight
-- UML-Diagramm
+
+\begin{figure}[h]
+  \begin{tikzpicture}
+    \tikzstyle{every node}=[font=\small]
+
+    \begin{class}[text width=5cm]{World}{4.75,0}
+      \attribute{commands}
+      \attribute{sensors}
+
+      \operation{command(command: Command)}
+      \operation{sensor(sensor: Sensor): boolean}
+    \end{class}
+
+    \begin{class}[text width=3cm]{Size}{-1.5,-1}
+      \attribute{width: number}
+      \attribute{height: number}
+    \end{class}
+
+    \begin{class}[text width=3cm]{WorldState}{11,-1.5}
+      \attribute{step: number}
+      \attribute{time: number}
+      \attribute{prev: WorldState}
+    \end{class}
+
+    \begin{class}[text width=4cm]{Tile}{-1,-3.5}
+      \attribute{position: Position}
+      \attribute{freightTarget: Freight}
+
+      \operation{addFreight(freight: Freight)}
+      \operation{removeFreight(): Freight}
+    \end{class}
+
+    \begin{class}[text width=5cm]{Truck}{10,-5}
+      \attribute{position: Position}
+      \attribute{facing: number}
+
+      \operation{loadFreight(freight: Freight)}
+      \operation{unloadFreight(): Freight}
+      \operation{turn(turnDirection: TurnDirection)}
+      \operation{move()}
+    \end{class}
+
+    \begin{class}[text width=6cm]{TrafficLight}{4.75,-10}
+      \attribute{redPhase: number}
+      \attribute{greenPhase: number}
+      \attribute{initial: number}
+
+      \operation{isRed(step: number): boolean}
+      \operation{isGreen(step: number): boolean}
+    \end{class}
+
+    \begin{enumeration}[text width=4cm]{TileOpening}{-1,-8}
+      \attribute{None}
+      \attribute{North}
+      \attribute{East}
+      \attribute{South}
+      \attribute{West}
+    \end{enumeration}
+
+    \begin{enumeration}[text width=3.5cm]{Freight}{4.25,-4.5}
+      \attribute{Red}
+      \attribute{Green}
+      \attribute{Blue}
+    \end{enumeration}
+
+    \begin{enumeration}[text width=4cm]{TurnDirection}{10.5,-10.5}
+      \attribute{Straight}
+      \attribute{Left}
+      \attribute{Right}
+    \end{enumeration}
+
+    \aggregation{World}{size}{1}{Size}
+    \aggregation{World}{states}{*}{WorldState}
+    \aggregation{WorldState}{tiles}{*}{Tile}
+    \aggregation{WorldState}{truck}{1}{Truck}
+    \aggregation{Tile}{trafficLights}{0..4}{TrafficLight}
+    \unidirectionalAssociation{Truck}{turning}{1}{TurnDirection}
+    \unidirectionalAssociation{Tile}{openings}{1..4}{TileOpening}
+    \unidirectionalAssociation{Truck}{freight}{0..*}{Freight}
+    \unidirectionalAssociation{Tile}{freight}{0..*}{Freight}
+  \end{tikzpicture}
+  \caption{Vereinfachtes UML-Diagramm der Weltobjektstruktur}
+  \label{fig:implementation:program:uml}
+\end{figure}
 
 \section{Programmiersprache}
+
+Elemente der Sprache
+
+\begin{itemize}
+  \item Wichtigster Bestandteil sind die \emph{atomaren Befehle}. Durch die Aneinanderreihung mehrerer Befehle lässt sich bereits ein sinnvolles Programm implementieren. Als notwendige Befehle wurden identifiziert:
+  \begin{itemize}
+    \item \emph{Vorwärts fahren}: Bewegt den Lastwagen nach Vorne. Falls dabei ein Blinker in eine Richtung gesetzt ist, biegt der Laswagen in die entsprechende Richtung ab.
+    \item \emph{Blinker links setzten}: Setzt den Blinker auf der linken Seite. Dadurch biegt der Lastwagen bei der nächsten Vorwärtsbewegung links ab.
+    \item \emph{Blinker rechts setzten}: Setzt den Blinker auf der rechten Seite. Bei der nächsten Vorwärtsbewegung biegt der biegt der Lastwagen dadurch entsprechend rechts ab.
+    \item \emph{Blinker ausschalten}: Schaltet einen vorher eingeschalteten Blinker wieder aus.
+    \item \emph{Aufladen}: Läd ein Frachstück, welches vor dem Lastwagen liegt auf.
+    \item \emph{Abladen}: Läd ein Frachtstück auf eine Ablagefläche oder einen leeren Steckenabschnitt vor dem Lastwagen wieder ab.
+    \item \emph{Warten}: Wartet einen Zeitschritt ab. Dieser Befehl ist wichtig um das warten auf eine Ampel zu ermöglichen.
+  \end{itemize}
+  \item Um Codeverdoppelung zu vermeiden kann eine \emph{Schleife} eingesetzt werden, die einen Befehlsblock wiederholt. Die Anzahl der Wiederholungen kann vom Nutzer festgelegt werden.
+  \item Um Verzweigungen Nutzen zu können, gibt es die Möglichkeit Werte von \emph{Sensoren} abzufragen. Sensoren stehen immer entweder auf Wahr oder Falsch. Folgende Sensoren stehen zur Verfügung:
+  \begin{itemize}
+    \item \emph{Ampel ist rot}: Dieser Sensor ist Wahr, wenn die Ampel vor dem Lastwagen rot ist. Ist, die Ampel grün, oder es gibt keine Ampel vor dem Lastwagen, so steht dieser Sensor auf Falsch.
+    \item \emph{Ampel ist grün}: Ananlog dazu, ist dieser Sensor Wahr, wenn die Ampel vor dem Lastwagen grün ist und Falsch, wenn sie auf rot steht oder es keine Ampel vor dem Lastwagen gibt.
+    \item \emph{Kann geradeaus fahren}: Dieser Sensor wertet zu Wahr aus, wenn das Straßennetz es zulässt, dass der Lastwagen im nächsten Schritt geradeaus fahren kann.
+    \item \emph{Kann links abbiegen}: Dieser Sensor wertet zu Wahr aus, wenn im nächsten Schritt links abgebogen werden kann.
+    \item \emph{Kann rechts abbiegen}: Wenn im nächsten Schritt nach rechts abgebogen werden kann, wertet dieser Sensor zu Wahr aus.
+    \item \emph{Ist gelöst}: Wenn die aktuelle Welt gelöst wurde, also alle Frachtstücke zu ihren Zielen transporiert wurden, wertet dieser Sensor zu Wahr aus.
+  \end{itemize}
+  \item Mit den Sensoren ist es möglich eine \emph{Schleife mit Abbruchbedingung} zu nutzen. Diese wiederholt den Befehlsblock solange bis der angegebene Ausdruck zu Wahr auswertet.
+  \item Sensoren ermöglichen außerdem \emph{Verzweigungen}, die einen Befehlsblock nur dann ausführen, wenn der angegebene Sensor zu Wahr ausgewertet wird.
+  \item Es ist möglich den Wert von Sensoren zu \emph{negieren}.
+  \item Mit Hilfe von \emph{Verknüfungen} mit "und" und "oder", können neue Ausdrücke erzeugt werden, welche wiederum in Schleifen und Verzweigungen verwendet werden können. So ist es z.B. möglich zu prüfen, ob das vorrausliegende Steckenstück eine Kurve ist: (Kann nicht geradeaus fahren und ((Kann links abbiegen und Kann nicht rechts abbiegen) oder (Kann nicht links abbiegen und Kann rechts abbiegen)))
+  \item Desweiteren ist es möglich eigene \emph{Prozeduren} zu definieren und aufzurufen. Dies ermöglicht zusätzlich die Nutzung von Rekursion.
+\end{itemize}
 
 - Befehle auf Deutsch
 - Zwei Arten von Schleifen
@@ -18,15 +131,47 @@
 - Kompilieren in JS-Code mit async await
 - new AsyncFunction (TypeScript-Compiler-Problem, Anforderung an den Browser)
 
-\subsection{Kompilieren}
+\subsection{Auswertung}
+
 Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Code kommen zwei Vorgehensweisen infrage. Im Grundlagenkapitel \ref{sec:basics:compile-interpret} wurde der Unterschied zwischen Kompilieren und Interpretieren im klassischen Sinne bereits erklärt. Da im Browser jedoch nicht direkt Maschienencode ausgeführt werden kann ist der Unterschied in diesem Zusammenhang etwas anders zu verstehen.
 
-Beim Interpretieren wird der Syntaxbaum nach und nach abgearbeitet und die entsprechenden Befehle direkt ausgeführt. Im Unterschied dazu ist "Kompilieren" in diesem Zusammenhang so zu vertehen, dass der SyntaxBaum zunächst in einen vollständigen JavaScript-Code umgewandelt wird, der anschließend als ganzes in eine Art Sandkasten ausgeführt wird.
+\begin{itemize}
+  \item Beim \emph{Interpretieren} wird der Syntaxbaum nach und nach durch ein in JavaScript geschriebenes Programm abgearbeitet und die entsprechenden Befehle direkt ausgeführt. In dieser Umgebung lässt sich der Fortschritt des Programms leicht verfolgen, da der Interpreter zu jedem Zeitpunkt die Position kennt bis zu der der Code bisher ausgeführt wurde. Dies ermöglicht den Einbau von Aussagekräftigen Debuggingfunktionen für den den auszuführenden Code.
+  \item Im Unterschied dazu ist \emph{Kompilieren} in diesem Zusammenhang so zu verstehen, dass ein JavaScript-Programm den Syntaxbaum zunächst in einen vollständig ausführbaren JavaScript-Code überführt. Der JavaScript-Code liegt bei diesem Vorgehen nach dem Kompilieren als String vor und kann anschließend als ganzes in einer Art Sandkasten ausgeführt werden. Innerhalb dieser "Blackbox" lässt sich nur recht unzuverlässig auf den aktuellen Zustand des laufenden Programmes schließen ohne zusätzlichen Code code einzufügen, der die Lesbarkeit des generierten Codes verschlechtert. Eben diese Lesbarkeit des generierten Codes ist einer der wichtigsten Vortile dieser Vorgehensweise. Der Code lässt sich nicht nur für seine Ausführung nutzen, sondern kann gerade im Kontext einer Lernsoftware für den Nutzer interessant sein.
+\end{itemize}
 
-Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" an dieser Stelle als Anforderung festgelegt.
+Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" an dieser Stelle als Anforderung festgelegt, da dieses Vorgehen speziell für BlattWerkzeug den Vorteil mit sich bringt, dass generierter Code in Zukunft vor der Ausführung noch vom Nutzer angesehen und bearbeitet werden kann, was den Übergang zu einer Universalsprache erleichtern würde \TODO{Verweis auf Ausblick}.
 
-- Vorteil: Man kann auch direkt JS Code reingeben
-- Vorteil: Man kann Code ausgeben lassen und bearbeiten
+Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen einen Codegenrator zu implementieren, der Übersetzungsregeln für jeden Knotentypen definiert. \figreft{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenrators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederrum durch ähnlich aufgebaute Generatoren umgewandelt bis der Vollständige Code des Wurzelknoten im Syntaxbaum generiert wurde.
+
+\begin{figure}[h]
+  \begin{lstlisting}
+    {
+      type: {
+        languageName: "trucklino_program",
+        typeName: "loopWhile"
+      },
+      converter: {
+        init: function(node: Node, process: CodeGeneratorProcess<State>) {
+          process.addConvertedFragment(`while (`, node);
+          node.getChildrenInCategory('pred').forEach((c) => process.generateNode(c));
+          process.addConvertedFragment(`) {`, node, OutputSeparator.NEW_LINE_AFTER);
+          process.indent(() => {
+            node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
+          });
+          process.addConvertedFragment(`}`, node, OutputSeparator.NEW_LINE_AFTER);
+        }
+      }
+    }
+  \end{lstlisting}
+  \caption{Beispielhafte Implementierung eines Codegenrator für eine While-Schleife}
+  \label{fig:implementation:program:evaluation:while}
+\end{figure}
+
+- Funktionen und Sensoren aufrufen, verschiedene Möglichkeiten:
+    - Eine Funktion für Befehle, eine Funktion für Sensoren und gewünschten Befehl/Sensor als Konstante. Vorteil: Sehr gute Wartbarkeit, da Befehle nur an einer Stelle hinzugefügt werden müssen. Nachteil: Unintuitiver generierter Code / Anders als "übliche" Schreibweise
+    - Funktionen und Befehle werden im Kontext übergeben und über this aufgerufen. Vorteil: Gute wartbarkeit (wenn auch doppelte Pflege notwendig), Codelesbarkeit gut, Einfache übergabe im Objekt. Nachteil: Vor jeder Funktion/Sensor muss ein this stehen
+    - Funktionen und Befehle werden als Parameter übergeben. Vorteil: Direkter Aufruf der Funktionen ohne zusätzlichen Code dadurch sehr gute Codelesbarkeit. Nachteil: Unübersichliche Definition der Funktion und dadurch schlechtere Wartbarkeit.
 
 \section{Darstellung}
 
