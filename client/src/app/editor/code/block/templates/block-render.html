@@ -11,7 +11,7 @@
                                [visual]="visual">
     </editor-block-render-error>
   </ng-container>
-  
+
   <!-- Allowing the user to edit a value -->
   <ng-container *ngSwitchCase="'input'">
     <editor-block-render-input [codeResource]="codeResource"
@@ -28,7 +28,9 @@
   </ng-container>
   <!-- Iterate over children of a node -->
   <ng-container *ngSwitchCase="'iterator'">
-    <editor-block-render-iterator [codeResource]="codeResource"
+    <editor-block-render-iterator [blockBase]="visual"
+                                  [blockLayout]="visual"
+                                  [codeResource]="codeResource"
                                   [node]="node"
                                   [visual]="visual">
     </editor-block-render-iterator>
@@ -43,4 +45,3 @@
   <!-- Something is broken, display a error message -->
   <div *ngSwitchDefault>Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar</div>
 </ng-container>
-
