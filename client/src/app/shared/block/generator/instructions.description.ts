@@ -57,7 +57,7 @@ export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" |
 /**
  * Instructions that are useful on a terminal visual.
  */
-export type TerminalInstructions = Readonly<Pick<Instructions, "style">>;
+export type TerminalInstructions = Readonly<Pick<Instructions, "style" | "breakAfter">>;
 
 /**
  * Instructions that are useful on a property.
@@ -88,9 +88,10 @@ export module DefaultInstructions {
   }
 
   export const terminalInstructions: TerminalInstructions = {
+    breakAfter: false,
     style: {
       "display": "inline-block"
-    }
+    },
   }
 
   export const propertyInstructions: PropertyInstructions = {
