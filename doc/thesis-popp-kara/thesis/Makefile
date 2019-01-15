@@ -19,6 +19,9 @@ twoside : $(PDF_FILENAME_TWOSIDE)
 GIT_REV :
 	echo $(CURR_GIT_REV) > GIT_REV
 
+thesis-update: msg-pre-pdf $(TEX_FILES) $(SVG_PDF_FILES)
+	xelatex -synctex=1 -file-line-error -output-directory=build thesis
+
 $(PDF_FILENAME) : clean msg-pre-pdf $(TEX_FILES) $(SVG_PDF_FILES) GIT_REV
 	mkdir -p build
 	xelatex -synctex=1 -file-line-error -output-directory=build thesis

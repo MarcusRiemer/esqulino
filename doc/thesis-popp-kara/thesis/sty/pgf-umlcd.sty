@@ -85,13 +85,13 @@ minimum height=1cm, node distance=2cm]
 \end{classAndEnumerationCommon}
 }
 
-\newenvironment{abstractclass}[3][]%
+\newenvironment{interface}[3][]%
 {
 \begin{classAndEnumerationCommon}{#1}{#2}{#3}
 }%
 {\calcuateNumberOfParts{}
 \node[this umlcd style, anchor=north] (\umlcdClassName) at (\umlcdClassPos)
-    {$<<$abstract$>>$ \\ \textbf{\umlcdClassName}
+    {$<<$interface$>>$ \\ \textbf{\umlcdClassName}
 \insertAttributesAndOperations{}
 };
 
