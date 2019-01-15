@@ -3,6 +3,7 @@
   <!-- This element is an immediate child of the flex-element above. It is therefore
        the only place where flex-children specific properties can be applied.-->
   <editor-block-render class="from-block"
+                       [blockLayout]="childVisualBlock"
                        [blockFlexChild]="childVisualBlock"
                        [visual]="childVisualBlock"
                        [codeResource]="codeResource"
