@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
             sqlite libsqlite3-dev \
             postgresql-10 libpq-dev
 
-        gem install bundler -v 1.16.2
+        gem install bundler -v 2.0.1
 
         sed -i -e 's/md5/trust/g' /etc/postgresql/10/main/pg_hba.conf
         service postgresql reload
