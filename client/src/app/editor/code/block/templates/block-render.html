@@ -37,9 +37,15 @@
   </ng-container>
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
-    <editor-block-render-block [codeResource]="codeResource"
+    <editor-block-render-block #currentBlock
+                               [blockLayout]="visual"
+                               [blockBase]="visual"
+                               [astDropTarget]="node"
+                               [astDraggable]="node"
+                               [codeResource]="codeResource"
                                [node]="node"
-                               [visual]="visual">
+                               [visual]="visual"
+                               (drop)="currentBlock.onDrop()">>
     </editor-block-render-block>
   </ng-container>
   <!-- Something is broken, display a error message -->
