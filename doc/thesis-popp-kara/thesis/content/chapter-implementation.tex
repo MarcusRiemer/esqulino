@@ -5,8 +5,9 @@
 \label{sec:implementation}
 
 \section{Objektstruktur}
+\label{sec:implementation:structure}
 
-- World, WorldState, Truck, Tile, TrafficLight
+\TODO{} wurde zunächst eine Objektorientierte Datenstruktur erarbeitet, die eine Welt repräsentieren und Operationen auf der Welt durchführen kann. \figreft{fig:implementation:program:uml} zeigt ein UML-Diagram dieser Struktur. Zur besseren Übersicht wurde diese Darstellung auf die wehsentlichen zum Verständnis notwenigen Klassen, Attribute und Operationen beschränkt.
 
 \begin{figure}[h]
   \begin{tikzpicture}
@@ -92,6 +93,8 @@
   \label{fig:implementation:program:uml}
 \end{figure}
 
+Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung (\inlinec{WorldDescription}) der zu genrierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Kontruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Lastwagen und Kacheln werden in einen Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in die Liste aller Zustände abgespeichert. Dieses Vorgehen wurde gewählt, um dem Nutzer zu ermöglichen Aktionen wieder rückgängig zu machen. Außerdem vereinfacht sie die für die Animationen \TODO{Verweis} notwenige Interpolation zwischen Zuständen. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}.
+
 \section{Programmiersprache}
 
 Elemente der Sprache
@@ -123,13 +126,6 @@ Elemente der Sprache
   \item Mit Hilfe von \emph{Verknüfungen} mit "und" und "oder", können neue Ausdrücke erzeugt werden, welche wiederum in Schleifen und Verzweigungen verwendet werden können. So ist es z.B. möglich zu prüfen, ob das vorrausliegende Steckenstück eine Kurve ist: (Kann nicht geradeaus fahren und ((Kann links abbiegen und Kann nicht rechts abbiegen) oder (Kann nicht links abbiegen und Kann rechts abbiegen)))
   \item Desweiteren ist es möglich eigene \emph{Prozeduren} zu definieren und aufzurufen. Dies ermöglicht zusätzlich die Nutzung von Rekursion.
 \end{itemize}
-
-- Befehle auf Deutsch
-- Zwei Arten von Schleifen
-- Definition von Funktionen und Schleifenvariablen
-- Befehle werden auf einer Welt ausgeführt
-- Kompilieren in JS-Code mit async await
-- new AsyncFunction (TypeScript-Compiler-Problem, Anforderung an den Browser)
 
 \subsection{Auswertung}
 
@@ -177,14 +173,103 @@ Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügu
 
 \subsection{Technologie}
 
-- Darstellung mit SVG und deren Animationen gut in Angular integriert
-- Angular-Animationen nutzen ein State-System, mit dem sich nur sehr umständlich
-  die benötigten Animationen umsetzten lassen (keine festen Zustände, sondern
-  variable Positionen)
-- Erster Prototyp mit Canvas, dann Umstieg auf Canvas
-- Canvas keine direkte Integration in Angular
-- Canvas-Renderer läuft außerhalb der Angular-Zone
-- WebGL raus weil Nutzen-Aufand nicht gerechtfertigt
+Also mögliche Technologien für die Darstellung und Animation der Welt im Browser wurden im vier Ansätze evaluiert.
+
+\begin{itemize}
+  \item Rendering über klassische \emph{HTML}-Elemente und Styling mittels CSS und Integration von nachgeladenen Bilddateien.
+  \item Rendering mittels eines eingebetteten \emph{SVG}-Element.
+  \item Rendering mittels eines \emph{Canvas}-Element und Integration von nachgeladenen Bilddateien.
+  \item Einsatz von \emph{WebGL} für die Darstellung einer dreidimensionalen Welt.
+\end{itemize}
+
+WebGL ist als Technologie für diese Arbeit als zu mächtig einzustufen. Die Erstellung von dreidimensionalen Modellen hätte den Rahmen dieser Arbeit gesprengt und im Vergleich zu den übrigen Technologien keinen nennenswerten Nutzen gehabt.
+
+Rendering mittels HTML und SVG haben den Vorteil, dass sie sehr von den Funktionen des Angular-Framework profitieren. Die Datenstruktur kann direkt an HTML-Elemente angebunden werden und Angular kümmert sich um die Aktualisierung des DOM. Dieses Vorgehen reduziert den Aufwand für die Implementierung des Renderes enorm. Zusätzlich bringt Angular nativ ein Animationsframework mit. Für die Implementierung eines Prototyp wurde das Rendering mittels eines SVG-Element gewählt, da es gegenüber einfachem HTML den Vorteil bietet, Grafiken direkt und ohne zusätliches Nachladen von Ressourcen integrieren zu können.
+
+In der Implementierung des Prototyp erwies sich aber genau dieses Animationsframework als ein Nachteil dieser Technologie. Angular setzt an dieser Stelle auf ein Zustandsbasiertes System. Eine Animationen finden immer zwischen definierten Zuständen statt. Zustände können bestimmte CSS Regeln definieren, zwischen denen bei einem Zustandswechel interpoliert wird \cite{angular-animations}. Dieses System ist mit den Anforderungen, die der im Rahmen dieser Arbeit behandelte Anwendungsfall stellt nicht kompatibel. Für die Animation eines Lastwagen müsste vielmehr zwischen verschiedenen Positionen interpoliert werden. Diese lassen sich nicht sinnvoll auf Zustände abbilden.
+
+So setzt die aktuelle Version des Programms auf einen Renderer mittels Canvas-Element. Dass Angular keine Funktionen zum Rendern in einem Canvas-Element bereithält und dieser Prozess vollständig außerhalb und unabhängig von Angular stattfinden muss, \TODO{entpuppte / besseres Wort!} sich schnell als Vorteil. Der Renderer hat dadurch keine externen Abhängigkeiten, ermöglicht eine leichte Integration in BlattWerkzeug und könnte potenziell auch in eine Anwendung portiert werden, welche Angular nicht einsetzt.
+
+\subsection{Objektstruktur}
+
+Die Objektstruktur des Renderers ist in \figreft{fig:implementation:rendering:uml} zur besseren Übersicht vereinfacht dargestellt. Wurzelklasse ist hier der Renderer, welche mit einem \inlinec{World}-Objekt (Die Objektstruktur wurde in Abschnitt \ref{sec:implementation:structure} beschrieben) und einem Canvas-Context instanziiert wird. Mit dem Aufruf der \inlinec{render}-Methode wird der Render-Prozess gestartet. Diese Methode zeichnet den Canvas-Inhalt und ruft sich mittels der \inlinec{requestAnimationFrame}-Funktion\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame}} immer wieder selbst auf.
+
+Die Eigentliche Zeichenaufgabe gibt die \inlinec{Renderer}-Klasse jedoch an einen Baum von \inlinec{ObjectRenderer}-Klassen ab, die für die Darstellung wehsentlicher visueller Objekte zuständig sind. Die Struktur der \inlinec{ObjectRenderer} ist an der Weltobjektstruktur \tref{sec:implementation:structure} orientiert. Die \inlinec{Renderer}-Klasse hält eine Instanz eines \inlinec{WorldRenderer}, welcher die von ihm gehaltene \inlinec{WorldStateRenderer}-Instanz über Zustandsänderungen der Welt informiert. Der \inlinec{WorldStateRenderer} verwaltet genau eine \inlinec{TruckRenderer}-Instanz, welche für das letztendliche Zeichnen des Lastwagen und die Animation von dessen Zustandsübergängen verantwortlich ist, sowie die notwenige Anzahl von \inlinec{TileRenderer}-Instanzen. Die \inlinec{draw}-Methode der \inlinec{ObjectRenderer} werden immer mit einem \inlinec{RenderingContext} aufgerufen, welcher den Zeitstempel der Animation verwaltet, einen Verweis auf den zu verwendenden Canvas-Context enhält, sowie einige Hilfsmethoden zum Zeichnen auf demselbigen bereitstellt.
+
+\begin{figure}[h]
+  \begin{tikzpicture}
+    \tikzstyle{every node}=[font=\small]
+
+    \begin{class}[text width=7cm]{Renderer}{1,0}
+      \attribute{running: boolean}
+
+      \operation{constructor(world: World, ctx: CanvasContext)}
+      \operation{stop()}
+      \operation{render(timestamp: TimeStamp)}
+    \end{class}
+
+    \begin{class}[text width=5cm]{RenderingContext}{9,0}
+      \attribute{ctx: CanvasRenderingContext2D}
+      \attribute{width: number}
+      \attribute{height: number}
+      \attribute{start: TimeStamp}
+      \attribute{previousFrame: TimeStamp}
+      \attribute{currentFrame: TimeStamp}
+
+      \operation{animationSpeed(): number}
+    \end{class}
+
+    \begin{interface}[text width=5cm]{ObjectRenderer}{3.5,-3}
+      \operation{draw(ctx: RenderingContext)}
+    \end{interface}
+
+    \begin{class}[text width=3cm]{WorldRenderer}{-1,-5}
+      \implement{ObjectRenderer}
+
+      \attribute{world: World}
+
+    \end{class}
+
+    \begin{class}[text width=4cm]{WorldStateRenderer}{-0.5,-7.5}
+      \implement{ObjectRenderer}
+
+      \attribute{state: WorldState}
+      \attribute{freightTarget: Freight}
+
+      \operation{update(state: WorldState)}
+    \end{class}
+
+    \begin{class}[text width=2.75cm]{TileRenderer}{5.5,-6}
+      \implement{ObjectRenderer}
+
+      \attribute{tile: Tile}
+
+      \operation{update(tile: Tile)}
+    \end{class}
+
+    \begin{class}[text width=3.5cm]{TruckRenderer}{9.75,-7}
+      % \implement{ObjectRenderer}
+
+      \attribute{truck: Truck}
+      \attribute{prevTruck: Truck}
+      \attribute{initial: number}
+
+      \operation{update(truck: Truck)}
+    \end{class}
+
+    \composition{Renderer}{ctx}{1}{RenderingContext}
+    \composition{Renderer}{worldRenderer}{1}{WorldRenderer}
+    \composition{WorldRenderer}{stateRenderer}{1}{WorldStateRenderer}
+    \composition{WorldStateRenderer}{truckRenderer}{1}{TruckRenderer}
+    \composition{WorldStateRenderer}{tileRenderers}{0..*}{TileRenderer}
+
+    \draw[umlcd style implement line](ObjectRenderer) -- (TruckRenderer.north);
+  \end{tikzpicture}
+  \caption{Vereinfachtes UML-Diagramm der Rendererobjektstruktur}
+  \label{fig:implementation:rendering:uml}
+\end{figure}
+
+Wenn die \inlinec{render}-Methode aus einer Angular-Anwendung heraus aufgerufen wird, empfielt es sich diesen Aufruf außerhalt der Angular-Zone vorzunehemen. Angularanwendungen werden immer innerhalb der "Angular-Zone" ausgeführt. Wenn ein Browserereignis (z.B. ein Klick oder ein \inlinec{setTimeout}) eintritt, wird die Angular Zone betreten und der Code zur Ereignisbehandlung ausgeführt. Anschließend führen die Zone und Angular die Änderungserkennung für die Anwendung durch. In den meisten Fällen ist dieses Verhalten erwünscht. Beim Zeichnen führt dies jedoch dazu, dass \inlinec{requestAnimationFrame} ebenfalls in der Angular-Zone ausgeführt wird. Dies bedeutet, wenn eine Animation läuft, werden pro Sekunde bis zu 60 Änderungserkennungen ausgeführt. \cite{angular-canvas} Da die \inlinec{render}-Methode lediglich der Darstellung dient, keinerlei Änderungen an der Welt oder ihren Zuständen vornimmt und somit nie Änderungen zu detektieren sein werden, kann und muss sie dementsprechend außerhalb der Angular-Zone ausgeführt werden.
 
 \subsection{Lastwagen-Position}
 
@@ -200,6 +285,8 @@ Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügu
                  => Erste Idee: Pfeil davor anzeigen, Zweite Idee: Blinker
                  => Rückwärts fahren?
 
+- Bewegung: Absolut (N, E, S, W) vs. Relativ (Links, Rechts, Geradeaus)
+
 \subsection{Animationsschritte}
 
 - Neuer Zustand für jede Operation
@@ -212,12 +299,12 @@ Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügu
   Schritt vor ablauf der Zeit dazu kommt. Dadurch kann ein Programm auch im
   "Schnelldurchlauf" abgespielt werden.
 
-Ansätze "absolute" vs "relative" Bewegung gegenüberstellen
+- Kompilieren in JS-Code mit async await
+- new AsyncFunction (TypeScript-Compiler-Problem, Anforderung an den Browser)
 
 \section{Integration}
 
-- Zunächst Prototypenentwicklung auf "Grüner Wiese", dann Integration in das
-  bestehende Projekt
+Um mit möglichst wenigen Abhängigkeiten und dadurch der Möglichkeit mit geringerem Zeitaufwand verschiedene Ansätze ausprobieren zu können, wurde zunächst mit der Entwicklung eines Prototypen auf einer "grünen Wiese" begonnen. Auch wenn der Prototyp als Angular-Anwendung aufgesetzt wurde, erfolgte der Großteil der Entwicklung erfolge außerhalb dieser Umgebung. Nachdem der ursprüngliche Ansatz der Darstellung mittels SVG-Grafiken verworfen wurde und die Darstellung auf Canvas-Rendering umgestellt wurde, sind die Objektstruktur, sowie der Renderer wurden völlig unabhängig von Angular, da sie von den von Angular bereitgestellten Strukturen nicht profitieren können. Diese Klassen konnten so ohne Anpassungen in die Umgebung von BlattWerkzeug übernommen werden. Lediglich die rudimentäre Benutzeroberfläche des Prototypen \TODO{Screenshot Prototyp} wurde mit Hilfe von Angular umgesetzt, für die Integration in BlattWerkzeug jedoch nicht mehr benötigt.
 
 \subsection{Angular-Service}
 
@@ -225,4 +312,4 @@ Ansätze "absolute" vs "relative" Bewegung gegenüberstellen
 
 \subsection{Fortschrittsmeldungen}
 
-- Rückmeldung über den Fortschritt des Programm zur Anzeige im Drag \& Drop-Editor
+- Rückmeldung über den Fortschritt des Programm zur Anzeige im Drag \& Drop-Editor => Ausblick?
