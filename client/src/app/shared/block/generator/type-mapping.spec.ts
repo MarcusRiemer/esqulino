@@ -9,13 +9,21 @@ import { TypeInstructions } from './instructions';
 describe("BlockLanguage Generator Type Mapping", () => {
 
   it("Terminal => Constant", () => {
-    const res = mapTerminal({ type: "terminal", name: "t", symbol: "t" }, { style: {} });
-    expect(res).toEqual({ blockType: "constant", text: "t" });
+    const res = mapTerminal(
+      { type: "terminal", name: "t", symbol: "t" },
+      { style: {}, breakAfter: true }
+    );
+    expect(res).toEqual({ blockType: "constant", text: "t", breakAfter: true });
   });
 
   it("Styled Terminal => Styled Constant", () => {
-    const res = mapTerminal({ type: "terminal", name: "t", symbol: "t" }, { style: { color: "green" } });
-    expect(res).toEqual({ blockType: "constant", text: "t", style: { color: "green" } });
+    const res = mapTerminal(
+      { type: "terminal", name: "t", symbol: "t" },
+      { style: { color: "green" }, breakAfter: false }
+    );
+    expect(res).toEqual(
+      { blockType: "constant", text: "t", style: { color: "green" }, breakAfter: false },
+    );
   });
 
   it("Writeable Property => Input", () => {
@@ -96,7 +104,8 @@ describe("BlockLanguage Generator Type Mapping", () => {
           {
             blockType: "constant",
             text: "ä",
-            style: DefaultInstructions.terminalInstructions.style
+            style: DefaultInstructions.terminalInstructions.style,
+            breakAfter: false
           }
         ]
       }
