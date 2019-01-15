@@ -236,7 +236,8 @@ concise_attributes:
     false, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\", \"skipParents\":
     0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"booleanBinaryExpression\",
     \"languageName\": \"trucklino_program\"}}], \"editorComponents\": [{\"componentType\":
-    \"truck-world\"}, {\"componentType\": \"generated-code\"}], \"localGeneratorInstructions\":
+    \"truck-controller\"}, {\"componentType\": \"truck-world\"}, {\"componentType\":
+    \"truck-sensors\"}, {\"componentType\": \"generated-code\"}], \"localGeneratorInstructions\":
     {\"traits\": {\"vertical\": {\"applyMode\": \"deepMerge\", \"instructions\": {\"orientation\":
     \"vertical\"}}, \"breakAfter\": {\"applyMode\": \"deepMerge\", \"instructions\":
     {\"breakAfter\": true}}, \"blockBorder\": {\"applyMode\": \"deepMerge\", \"instructions\":
@@ -260,14 +261,15 @@ concise_attributes:
     \"Sensor: \U0001F534\U0001F6A6 Voraus?\"}, {\"defaultNode\": {\"name\": \"sensor\",
     \"language\": \"trucklino_program\", \"properties\": {\"type\": \"lightIsGreen\"}},
     \"displayName\": \"Sensor: \U0001F49A\U0001F6A6 Voraus?\"}], \"categoryCaption\":
-    \"Empty Worlds\"}]}], \"editorComponents\": [{\"componentType\": \"truck-world\"},
+    \"Empty Worlds\"}]}], \"editorComponents\": [{\"componentType\": \"truck-controller\"},
+    {\"componentType\": \"truck-world\"}, {\"componentType\": \"truck-sensors\"},
     {\"componentType\": \"generated-code\"}]}}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-01-09 12:30:41.478228'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-11 15:26:57.868245'
+  value_before_type_cast: '2019-01-13 14:25:06.146428'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang
