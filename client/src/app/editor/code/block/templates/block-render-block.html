@@ -1,19 +1,11 @@
-<!-- Setup visuals and drag & drop -->
-<div [blockLayout]="visual"
-     [blockBase]="visual"
-     [astDropTarget]="node"
-     [astDraggable]="node"
-     [codeResource]="codeResource"
-     [@dropTarget]="dropTargetAnimationState | async"
-     (drop)="onDrop()">
-  <!-- Render all components of this block -->
-  <ng-container *ngFor="let childVisualBlock of visual.children">
-    <!-- This element is an immediate child of the flex-element above. It is therefore
-         the only place where flex-children specific properties can be applied.-->
-    <editor-block-render class="from-block"
-                         [blockFlexChild]="childVisualBlock"
-                         [codeResource]="codeResource"
-                         [visual]="childVisualBlock"
-                         [node]="node"></editor-block-render>
-  </ng-container>
-</div>
+<!-- Render all components of this block -->
+<ng-container *ngFor="let childVisualBlock of visual.children">
+  <!-- This element is an immediate child of the flex-element above. It is therefore
+       the only place where flex-children specific properties can be applied.-->
+  <editor-block-render class="from-block"
+                       [blockLayout]="childVisualBlock"
+                       [blockFlexChild]="childVisualBlock"
+                       [visual]="childVisualBlock"
+                       [codeResource]="codeResource"
+                       [node]="node"></editor-block-render>
+</ng-container>
