@@ -29,7 +29,6 @@ import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
 import { BlockRenderDropTargetComponent } from './block/block-render-drop-target.component'
-import { BlockRenderIteratorComponent } from './block/block-render-iterator.component'
 import { BlockRenderInputComponent } from './block/block-render-input.component'
 import { BlockRenderErrorComponent } from './block/block-render-error.component'
 
@@ -52,7 +51,6 @@ import { WorldSensorsComponent } from './truck/world-sensors.component';
     BlockRenderBlockComponent,
     BlockRenderDropTargetComponent,
     BlockRenderErrorComponent,
-    BlockRenderIteratorComponent,
     BlockRenderInputComponent,
     BlockHostComponent,
     BlockLayoutDirective,
