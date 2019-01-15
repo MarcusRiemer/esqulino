@@ -28,12 +28,27 @@
   </ng-container>
   <!-- Iterate over children of a node -->
   <ng-container *ngSwitchCase="'iterator'">
-    <editor-block-render-iterator [blockBase]="visual"
-                                  [blockLayout]="visual"
-                                  [codeResource]="codeResource"
-                                  [node]="node"
-                                  [visual]="visual">
-    </editor-block-render-iterator>
+    <ng-container *ngFor="let childNode of iteratorChildNodes; let lastChild = last;">
+      <!-- Rendering the actual editor-blocks. This element is an immediate child of the
+           flex-element above. It is therefore the only place where flex-children specific
+           properties can be applied.-->
+      <ng-container *ngFor="let childVisualBlock of iteratorGetEditorBlock(childNode).visual">
+        <editor-block-render class="from-iterator"
+                             [blockFlexChild]="childVisualBlock"
+                             [codeResource]="codeResource"
+                             [node]="childNode"
+                             [visual]="childVisualBlock"></editor-block-render>
+      </ng-container>
+
+      <!-- Possibly render something in between the nodes. -->
+      <ng-container *ngIf="!lastChild">
+        <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
+                             [blockFlexChild]="sepBlock"
+                             [codeResource]="codeResource"
+                             [visual]="sepBlock"
+                             [node]="childNode"></editor-block-render>
+      </ng-container>
+    </ng-container>
   </ng-container>
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
