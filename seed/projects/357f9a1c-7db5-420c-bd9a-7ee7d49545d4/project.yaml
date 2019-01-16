@@ -31,7 +31,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.693124'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-12 10:46:58.966252'
+  value_before_type_cast: '2019-01-16 08:40:07.959133'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false

@@ -18,7 +18,7 @@ concise_attributes:
     keine inhaltliche  Bedeutung.
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
-  value_before_type_cast: true
+  value_before_type_cast: false
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: preview
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -29,7 +29,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.717254'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-12 10:46:58.932686'
+  value_before_type_cast: '2019-01-16 08:40:08.484058'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false
