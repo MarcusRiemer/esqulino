@@ -160,6 +160,11 @@ export namespace VisualBlockDescriptions {
   export function isEditorIterator(obj: EditorBlockBase): obj is EditorIterator {
     return (obj.blockType === "iterator");
   }
+
+  // Type guard for EditorBlock
+  export function isEditorBlock(obj: EditorBlockBase): obj is EditorBlock {
+    return (obj.blockType === "block");
+  }
 }
 
 /**

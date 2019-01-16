@@ -42,7 +42,12 @@ export class CurrentCodeResourceService {
       .subscribe();
   }
 
-  currentResourceChanged(codeResourceId: string) {
+  /**
+   * Allows to change the resource that is currently displayed.
+   *
+   * @remarks This is meant to be updated in conjunction with the URL.
+   */
+  _changeCurrentResource(codeResourceId: string) {
     // Knowing when resources change is handy for debugging
     console.log(`Current resource ID changed to: ${codeResourceId}`);
 
@@ -65,6 +70,9 @@ export class CurrentCodeResourceService {
     return (this._codeResource);
   }
 
+  /**
+   * The currently loaded resource
+   */
   get peekResource() {
     return (this._codeResource.value);
   }
