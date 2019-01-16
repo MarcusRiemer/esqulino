@@ -4,12 +4,14 @@
 \chapter{Implementierung}
 \label{sec:implementation}
 
+\TODO{}
+
 \section{Objektstruktur}
 \label{sec:implementation:structure}
 
 \TODO{} wurde zunächst eine Objektorientierte Datenstruktur erarbeitet, die eine Welt repräsentieren und Operationen auf der Welt durchführen kann. \figreft{fig:implementation:program:uml} zeigt ein UML-Diagram dieser Struktur. Zur besseren Übersicht wurde diese Darstellung auf die wehsentlichen zum Verständnis notwenigen Klassen, Attribute und Operationen beschränkt.
 
-\begin{figure}[h]
+\begin{figure}
   \begin{tikzpicture}
     \tikzstyle{every node}=[font=\small]
 
@@ -140,7 +142,7 @@ Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" an dieser Stelle al
 
 Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen einen Codegenrator zu implementieren, der Übersetzungsregeln für jeden Knotentypen definiert. \figreft{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenrators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederrum durch ähnlich aufgebaute Generatoren umgewandelt bis der Vollständige Code des Wurzelknoten im Syntaxbaum generiert wurde.
 
-\begin{figure}[h]
+\begin{figure}
   \begin{lstlisting}
     {
       type: {
@@ -164,10 +166,85 @@ Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügu
   \label{fig:implementation:program:evaluation:while}
 \end{figure}
 
+Dem kompilierten Code muss zur Ausführung eine Umgebung bereitgestellt werden, welche die eingangs als "atomaren Befehele" bezeichneten Funktionen, sowie Funktionen zur Ermittlung der Sensorwerte zur Verfügung stellt. Für diese Aufgabe bietet sich der \inlinec{Function}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Function}} an. Im Gegensatz zu \inlinec{eval} ermöglicht der \inlinec{Function}-Konstruktor die Ausführung von Code im globalen Gültigkeitsbereich, was zu besseren Programmiergewohnheiten führt und eine effizientere Code-Minimierung ermöglicht \cite{mdn-function}. In diesem speziellen Fall wird für die Ausfühung des Codes der \inlinec{AsyncFunction}-Konstruktor verwendet (siehe dazu \TODO{Verweis Animation}).
+
+Für die Bereitstellung der Befehle und Sensoren werden im Folgenden drei Varianten betrachtet, die in \TODO{Verweis auf Abbildung}:
+
+\begin{enumerate}
+  \item Eine Enum-Klasse mit allen Sensoren und Befehlen, sowie zwei Funktionen deren Auswertung, gibt es schon. Darauf aufbauend wäre eine naheliegend Möglichkeit, diese Funktionen in der Welt bereitzustellen. Ein deutlicher Vorteil dieser Lösung ist der geringe zusätzliche Implementierungsaufwand und die verbesserte Wartbarkeit. Kommen neue Befehle oder Sensoren dazu, stehen diese automatisch auch in der Umgebung zur Verfügung. Der generierte Code ist jedoch nicht intuitiv und sollte er dem Nutzer angezeigt werden, nicht besonders gut zu verstehen. Außerdem halten sich die Funktionsaufrufe nicht an gängige Muster, was den späteren Umstieg auf Universalsprachen erschweren könnte. \TODO{Verweis auf Grafik}
+  \item Eine weitere Möglichkeit \TODO{this}
+  \item \TODO{Parameter}
+\end{enumerate}
+
+\begin{figure}
+  \begin{subfigure}[b]{\textwidth}
+    \begin{lstlisting}
+      let code = `
+        functions.goIfGreen = function() {
+          if (sensor(Sensor.lightIsGreen)) {
+            command(Command.goForward);
+          }
+        }
+        functions.goIfGreen();
+      `;
+      let f = new Function('functions', 'sensor', 'Sensor', 'command', 'Command', code);
+      f({}, (s) => world.sensor(s), Sensor, (c) => world.command(c), Command);
+    \end{lstlisting}
+    \caption{Code für ein Quadrat}
+    \label{fig:implementation:code:func}
+  \end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+    \begin{lstlisting}
+      let code = `
+        this.goIfGreen = () => {
+          if (this.lightIsGreen()) {
+            this.goForward();
+          }
+        }
+      `;
+      let f = new Function(code);
+      f.call({
+        goForward: () => world.command(Command.goForward),
+        ...
+        
+        lightIsGreen: () => world.sensor(Sensor.lightIsGreen),
+        ...
+      });
+    \end{lstlisting}
+    \caption{Code für ein Dreieck}
+    \label{fig:implementation:code:this}
+  \end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+    \begin{lstlisting}
+      let code = `
+        function goIfGreen() {
+          if (lightIsGreen()) {
+            goForward();
+          }
+        }
+        goIfGreen();
+      `;
+      let f = new Function('goForward', ..., 'lightIsGreen', ..., code);
+      f(
+        () => world.command(Command.goForward),
+        ...
+        () => world.sensor(Sensor.lightIsGreen),
+        ...
+      );
+    \end{lstlisting}
+    \caption{Code für ein Haus}
+    \label{fig:implementation:code:param}
+  \end{subfigure}
+  \caption{Zeichnen eines Hauses in LOGO}
+  \label{fig:implementation:code}
+\end{figure}
+
 - Funktionen und Sensoren aufrufen, verschiedene Möglichkeiten:
     - Eine Funktion für Befehle, eine Funktion für Sensoren und gewünschten Befehl/Sensor als Konstante. Vorteil: Sehr gute Wartbarkeit, da Befehle nur an einer Stelle hinzugefügt werden müssen. Nachteil: Unintuitiver generierter Code / Anders als "übliche" Schreibweise
     - Funktionen und Befehle werden im Kontext übergeben und über this aufgerufen. Vorteil: Gute wartbarkeit (wenn auch doppelte Pflege notwendig), Codelesbarkeit gut, Einfache übergabe im Objekt. Nachteil: Vor jeder Funktion/Sensor muss ein this stehen
     - Funktionen und Befehle werden als Parameter übergeben. Vorteil: Direkter Aufruf der Funktionen ohne zusätzlichen Code dadurch sehr gute Codelesbarkeit. Nachteil: Unübersichliche Definition der Funktion und dadurch schlechtere Wartbarkeit.
+
+- Behandlung von Endlosschleifen
 
 \section{Darstellung}
 
@@ -188,7 +265,7 @@ Rendering mittels HTML und SVG haben den Vorteil, dass sie sehr von den Funktion
 
 In der Implementierung des Prototyp erwies sich aber genau dieses Animationsframework als ein Nachteil dieser Technologie. Angular setzt an dieser Stelle auf ein Zustandsbasiertes System. Eine Animationen finden immer zwischen definierten Zuständen statt. Zustände können bestimmte CSS Regeln definieren, zwischen denen bei einem Zustandswechel interpoliert wird \cite{angular-animations}. Dieses System ist mit den Anforderungen, die der im Rahmen dieser Arbeit behandelte Anwendungsfall stellt nicht kompatibel. Für die Animation eines Lastwagen müsste vielmehr zwischen verschiedenen Positionen interpoliert werden. Diese lassen sich nicht sinnvoll auf Zustände abbilden.
 
-So setzt die aktuelle Version des Programms auf einen Renderer mittels Canvas-Element. Dass Angular keine Funktionen zum Rendern in einem Canvas-Element bereithält und dieser Prozess vollständig außerhalb und unabhängig von Angular stattfinden muss, \TODO{entpuppte / besseres Wort!} sich schnell als Vorteil. Der Renderer hat dadurch keine externen Abhängigkeiten, ermöglicht eine leichte Integration in BlattWerkzeug und könnte potenziell auch in eine Anwendung portiert werden, welche Angular nicht einsetzt.
+So setzt die aktuelle Version des Programms auf einen Renderer mittels Canvas-Element. Dass Angular keine Funktionen zum Rendern in einem Canvas-Element bereithält und dieser Prozess vollständig außerhalb und unabhängig von Angular stattfinden muss, erwies sich schnell als Vorteil. Der Renderer hat dadurch keine externen Abhängigkeiten, ermöglicht eine leichte Integration in BlattWerkzeug und könnte potenziell auch in eine Anwendung portiert werden, welche Angular nicht einsetzt.
 
 \subsection{Objektstruktur}
 
@@ -196,7 +273,9 @@ Die Objektstruktur des Renderers ist in \figreft{fig:implementation:rendering:um
 
 Die Eigentliche Zeichenaufgabe gibt die \inlinec{Renderer}-Klasse jedoch an einen Baum von \inlinec{ObjectRenderer}-Klassen ab, die für die Darstellung wehsentlicher visueller Objekte zuständig sind. Die Struktur der \inlinec{ObjectRenderer} ist an der Weltobjektstruktur \tref{sec:implementation:structure} orientiert. Die \inlinec{Renderer}-Klasse hält eine Instanz eines \inlinec{WorldRenderer}, welcher die von ihm gehaltene \inlinec{WorldStateRenderer}-Instanz über Zustandsänderungen der Welt informiert. Der \inlinec{WorldStateRenderer} verwaltet genau eine \inlinec{TruckRenderer}-Instanz, welche für das letztendliche Zeichnen des Lastwagen und die Animation von dessen Zustandsübergängen verantwortlich ist, sowie die notwenige Anzahl von \inlinec{TileRenderer}-Instanzen. Die \inlinec{draw}-Methode der \inlinec{ObjectRenderer} werden immer mit einem \inlinec{RenderingContext} aufgerufen, welcher den Zeitstempel der Animation verwaltet, einen Verweis auf den zu verwendenden Canvas-Context enhält, sowie einige Hilfsmethoden zum Zeichnen auf demselbigen bereitstellt.
 
-\begin{figure}[h]
+Das sichtbare Bild wird durch die ObjectRenderer vollständig aus verschiedenen Komponenten zusammengesetzt, die aus SVG-Sprites an die richtige Stelle im Bild gezeichnet werden. Die Hintergründe der Straßen stammen aus einer freien Sammlung von Spielegrafiken\footnote{\url{https://opengameart.org/node/16589}}, der Truck und die Fracht wurden für den Zweck dieser Arbeit selbst gezeichnet. Alle 16 Varianten von Kacheln sind im Sprite verfügbar. Lediglich der Truck muss vor dem Zeichnen in die richtige Richtung gedreht werden. Ein Vorbereiten aller möglichen Drehungen des Lastwagen im Sprite ist an dieser Stelle nicht sinnvoll, da die Drehung des Lastwagen animiert interpoliert werden soll.
+
+\begin{figure}
   \begin{tikzpicture}
     \tikzstyle{every node}=[font=\small]
 
@@ -271,21 +350,48 @@ Die Eigentliche Zeichenaufgabe gibt die \inlinec{Renderer}-Klasse jedoch an eine
 
 Wenn die \inlinec{render}-Methode aus einer Angular-Anwendung heraus aufgerufen wird, empfielt es sich diesen Aufruf außerhalt der Angular-Zone vorzunehemen. Angularanwendungen werden immer innerhalb der "Angular-Zone" ausgeführt. Wenn ein Browserereignis (z.B. ein Klick oder ein \inlinec{setTimeout}) eintritt, wird die Angular Zone betreten und der Code zur Ereignisbehandlung ausgeführt. Anschließend führen die Zone und Angular die Änderungserkennung für die Anwendung durch. In den meisten Fällen ist dieses Verhalten erwünscht. Beim Zeichnen führt dies jedoch dazu, dass \inlinec{requestAnimationFrame} ebenfalls in der Angular-Zone ausgeführt wird. Dies bedeutet, wenn eine Animation läuft, werden pro Sekunde bis zu 60 Änderungserkennungen ausgeführt. \cite{angular-canvas} Da die \inlinec{render}-Methode lediglich der Darstellung dient, keinerlei Änderungen an der Welt oder ihren Zuständen vornimmt und somit nie Änderungen zu detektieren sein werden, kann und muss sie dementsprechend außerhalb der Angular-Zone ausgeführt werden.
 
+\begin{figure}
+  \begin{lstlisting}
+    ...
+    constructor(private ngZone: NgZone) { }
+
+    ngOnInit() {
+      this.ngZone.runOutsideAngular(() => this.draw());
+    }
+    ...
+  \end{lstlisting}
+  \caption{Aufruf außerhalb der Angular-Zone (in Anlehnung an \cite{angular-canvas})}
+  \label{fig:implementation:program:evaluation:while}
+\end{figure}
+
 \subsection{Lastwagen-Position}
 
-- Möglichkeit A: Lastwagen halten auf Mitte der Kachel und drehen sich auf der
-                 Stelle => Lastwagen können auch wenden, aber das Verhalten
-                 sieht unnatürlich aus.
-- Möglichkeit B: Lastwagen halten auf dem Rand der Kachel und es kann ein
-                 Blinker nach links oder rechts gesetzt werden, der die
-                 Fahrtrichtung beim nächsten Vorwärtsfahren beeinflusst
-                 => Verhalten sieht deutlich natürlicher aus und ist näher am
-                 Vorbild. Allerdings kann der Lastwagen nun nicht mehr auf der
-                 Stelle wenden und muss eventuell längere Strecken fahren.
-                 => Erste Idee: Pfeil davor anzeigen, Zweite Idee: Blinker
-                 => Rückwärts fahren?
-
+- Möglichkeit A: Lastwagen halten auf Mitte der Kachel und drehen sich auf der Stelle (ähnlich zu Kara und Lightbot)
+  => Lastwagen können auch wenden, aber das Verhalten sieht unnatürlich aus.
+- Möglichkeit B: Lastwagen halten auf dem Rand der Kachel und es kann ein Blinker nach links oder rechts gesetzt werden, der die Fahrtrichtung beim nächsten Vorwärtsfahren beeinflusst
+  => Verhalten sieht deutlich natürlicher aus und ist näher am Vorbild. Allerdings kann der Lastwagen nun nicht mehr auf der Stelle wenden und muss eventuell längere Strecken fahren.
+  => Erste Idee: Pfeil davor anzeigen, Zweite Idee: Blinker
+  => Rückwärts fahren?
 - Bewegung: Absolut (N, E, S, W) vs. Relativ (Links, Rechts, Geradeaus)
+
+Sowohl bei Kara \TODO{Verweis}, als auch bei Lightbot \TODO{Verweis} bewegt sich die Spielfigur von einer Kachel des Spielfeldes zur nächsten und kommt zwischen den Schritten auf der Mitte der Kachel zum stehen. Eine Drehung findet auf der Stelle statt. Die Spielfigur dreht sich um sich selbst und kann sich so in alle 4 Richtungen bewegen. So liegt es nah diese Verhalten auch für den Lastwagen zu implementieren, jedoch ist zu bedenken, dass die Spielfiguren von Kara und Lightbot sich in einem realen Umfeld anders Bewegen als ein Lastwagen. Wärend eine Drehung auf der Stelle für einen Marienenkäfer und einen hüpfenden Roboter kein Problem darstellen, wäre der Fahrer eines Lastwagens mit dieser Aufgabe wohl überfordert. Ein Lastwagen dreht sich nur dann, wenn bei einer Vorwärtsbewegung die Lenkung eingeschlagen wird. Um dieses Verhalten auch in die Mikrowelt zu übertragen, wurde eine Implementierung gewählt, bei der der Lastwagen auf der Kante der Kachel zum stehen kommt. An dieser Stelle hat der Spieler die Möglichkeit einen Blinker nach rechts oder links zu setzten und damit die Richtung bei der nächsten Vorwärtsbewegung zu beeinflussen \TODO{Verweis auf Grafik}. Im Gegensatz zur erstgenannten Methode ist mit diesem Ansatz kein Wenden möglich. Der Lastwagn muss eventuell einen Umweg fahren um sein Ziel zu erreichen und darf sich in keine Sackgassen begebn. Für die Zukunft wäre es allerdings denkbar, einen Rückwärtsgang einzuführen \TODO{Verweis auf Ausblick}.
+
+- Nebeneffekt: Richtiges Verhalten an Ampeln
+
+\begin{figure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{gfx/implementation-rendering-truck-A.png}
+    \caption{Haltepunkt auf der Mitte der Kachel}
+    \label{fig:implementation:rendering:truck:a}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{gfx/implementation-rendering-truck-B.png}
+    \caption{Haltepunkt auf der Kante der Kachel}
+    \label{fig:implementation:rendering:truck:b}
+  \end{subfigure}\hfill
+  \caption{Haltepunkte des Lastwagen im Spielfeld}
+  \label{fig:implementation:rendering:truck}
+\end{figure}
 
 \subsection{Animationsschritte}
 
