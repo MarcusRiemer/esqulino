@@ -22,17 +22,28 @@ concise_attributes:
   value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "procedureCall",
     "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
     "procedureCall", "language": "trucklino_program", "properties": {"name": "goForward"}},
-    {"name": "if", "children": {"body": [{"name": "procedureCall", "language": "trucklino_program",
-    "properties": {"name": "goForward"}}], "else": [{"name": "procedureCall", "language":
-    "trucklino_program", "properties": {"name": "goForward"}}], "pred": [{"name":
-    "sensor", "language": "trucklino_program", "properties": {"type": "lightIsGreen"}}]},
-    "language": "trucklino_program"}]}, "language": "trucklino_program"}'
+    {"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "turnLeft"}}, {"name": "procedureCall", "language": "trucklino_program", "properties":
+    {"name": "turnRight"}}, {"name": "if", "children": {"body": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}], "else":
+    [{"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "goForward"}}], "pred": [{"name": "sensor", "language": "trucklino_program", "properties":
+    {"type": "lightIsGreen"}}]}, "language": "trucklino_program"}, {"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "goForward"}},
+    {"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "goForward"}}, {"name": "loopWhile", "children": {"body": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "goForward"}},
+    {"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "goForward"}}], "pred": [{"name": "sensor", "language": "trucklino_program", "properties":
+    {"type": "lightIsRed"}}]}, "language": "trucklino_program"}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-01-09 12:31:53.160508'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-11 15:19:19.027883'
+  value_before_type_cast: '2019-01-15 14:57:58.350894'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
