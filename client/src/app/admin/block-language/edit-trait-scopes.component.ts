@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core'
 
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
-import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
 
 /**
  * Allows editing the scope of all traits that are available on a specific block
@@ -21,6 +20,23 @@ export class EditTraitScopesComponent {
       return (this.blockLanguage.localGeneratorInstructions.traitScopes);
     } else {
       return ([]);
+    }
+  }
+
+  /**
+   * Adds a new, empty trait scope to the current list of applied
+   * trait scopes.
+   */
+  addEmptyScope() {
+    if (this.blockLanguage) {
+      const instructions = this.blockLanguage.localGeneratorInstructions || {};
+      if (!instructions.traitScopes) {
+        instructions.traitScopes = [];
+      }
+
+      instructions.traitScopes.push({
+        traits: []
+      });
     }
   }
 }

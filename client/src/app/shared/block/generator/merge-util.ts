@@ -3,9 +3,10 @@
  * standard library but apparently it isn't.
  */
 function isPrimitive(val: any) {
-  return (val === undefined
-    || val === null
-    || ["string", "number", "boolean", "primitive"].indexOf(typeof (val)) >= 0);
+  return (
+    val === undefined || val === null
+    || ["string", "number", "boolean", "primitive"].indexOf(typeof (val)) >= 0
+  );
 }
 
 /**

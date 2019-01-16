@@ -14,6 +14,7 @@ export interface LanguageDefinition {
   name: string,
   validators: SubValidator[],
   emitters: NodeConverterRegistration[],
+  codeGeneratorState?: any[]
 }
 
 /**
@@ -29,7 +30,7 @@ export class Language {
   constructor(desc: LanguageDefinition) {
     this._id = desc.id;
     this._name = desc.name;
-    this._codeGenerator = new CodeGenerator(desc.emitters);
+    this._codeGenerator = new CodeGenerator(desc.emitters, desc.codeGeneratorState);
     this._validator = new Validator(desc.validators);
   }
 
@@ -87,7 +88,7 @@ export class Language {
    * Validates a syntax tree against this language.
    *
    * @param ast The root of the tree to validate
-   * @param additionalContext 
+   * @param additionalContext
    *   Additional data that may be required by specialized validators. Prime example
    *   is the SQL validator which requires knowledge about the schema.
    * @return A result object containing all errors

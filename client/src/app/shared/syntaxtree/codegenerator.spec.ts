@@ -1,5 +1,5 @@
-import { CodeGenerator, CodeGeneratorProcess } from './codegenerator'
-import { Tree } from './syntaxtree'
+import { CodeGenerator, CodeGeneratorProcess, NodeConverterRegistration } from './codegenerator'
+import { Tree, Node } from './syntaxtree'
 
 describe('Codegeneration', () => {
   it('Converters are registered correctly', () => {
@@ -33,6 +33,94 @@ describe('Codegeneration', () => {
     ];
 
     expect(_ => new CodeGenerator(desc)).toThrowError();
+  });
+
+  it('Gives access to a mutable state', () => {
+    interface State {
+      foo: string;
+      bar: number;
+    };
+
+    // The initial state that will be passed to the code generator
+    const state: State = {
+      foo: "foo",
+      bar: 3
+    };
+
+    // The state that has been passed to a converter
+    let innerState = undefined;
+
+    const desc: NodeConverterRegistration[] = [
+      {
+        type: { languageName: "foo", typeName: "bar" },
+        converter: {
+          init: function(_: Node, process: CodeGeneratorProcess<State>) {
+            // Read and write the state
+            process.state.bar += 1;
+            process.state.foo += "bar";
+
+            // Copy the inner state so it can be evaluated as part of the test
+            innerState = process.state;
+          }
+        }
+      }
+    ];
+
+    // Run the codegenerator
+    const codeGen = new CodeGenerator(desc, [state]);
+    const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
+    codeGen.emit(syntaxTree);
+
+    // This is how the state must look if the mutations were applied correctly
+    expect(innerState).toEqual({ foo: "foobar", bar: 4 });
+    // The original state must remain unchanged
+    expect(state).toEqual({ foo: "foo", bar: 3 });
+  });
+
+  it('Merges multiple states', () => {
+    interface StateA {
+      foo: string;
+      bar: number;
+    };
+
+    interface StateB {
+      count: number;
+    };
+
+    // The initial states that will be passed to the code generator
+    const stateA: StateA = { foo: "foo", bar: 3 };
+    const stateB: StateB = { count: 0 }
+
+    // The state that has been passed to a converter
+    let innerState = undefined;
+
+    const desc: NodeConverterRegistration[] = [
+      {
+        type: { languageName: "foo", typeName: "bar" },
+        converter: {
+          init: function(_: Node, process: CodeGeneratorProcess<StateA & StateB>) {
+            // Read and write the state
+            process.state.bar += 1;
+            process.state.foo += "bar";
+            process.state.count++;
+
+            // Copy the inner state so it can be evaluated as part of the test
+            innerState = process.state;
+          }
+        }
+      }
+    ];
+
+    // Run the codegenerator
+    const codeGen = new CodeGenerator(desc, [stateA, stateB]);
+    const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
+    codeGen.emit(syntaxTree);
+
+    // This is how the state must look if the mutations were applied correctly
+    expect(innerState).toEqual({ foo: "foobar", bar: 4, count: 1 });
+    // The original state must remain unchanged
+    expect(stateA).toEqual({ foo: "foo", bar: 3 });
+    expect(stateB).toEqual({ count: 0 });
   });
 
   it('Fails properly for invalid nodes', () => {

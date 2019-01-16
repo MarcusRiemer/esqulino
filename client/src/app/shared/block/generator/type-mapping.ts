@@ -26,6 +26,7 @@ export function mapTerminal(
   const toReturn: VisualBlockDescriptions.EditorConstant = {
     blockType: "constant",
     text: attr.symbol,
+    breakAfter: instructions.breakAfter,
   };
 
   // Possibly add some style

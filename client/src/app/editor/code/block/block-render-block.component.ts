@@ -1,8 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { trigger, state, style } from '@angular/animations';
-
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -11,24 +7,14 @@ import { DragService } from '../../drag.service';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
-import { calculateDropLocation, calculateDropTargetState, DropTargetState } from './drop-utils';
+import { calculateDropLocation } from './drop-utils';
 
 /**
  * Renders a single and well known visual element of a node.
  */
 @Component({
   templateUrl: 'templates/block-render-block.html',
-  selector: `editor-block-render-block`,
-  animations: [
-    trigger('dropTarget', [
-      state('none', style({
-      })),
-      state('available', style({
-      })),
-      state('self', style({
-      })),
-    ])
-  ]
+  selector: `editor-block-render-block`
 })
 export class BlockRenderBlockComponent implements OnInit {
   @Input() public codeResource: CodeResource;
@@ -44,9 +30,6 @@ export class BlockRenderBlockComponent implements OnInit {
   ngOnInit() {
 
   }
-
-  readonly dropTargetAnimationState: Observable<DropTargetState> = this._dragService.currentDrag
-    .pipe(map(drag => calculateDropTargetState(drag, this)));
 
   /**
    * @return The location a drop should occur in.
