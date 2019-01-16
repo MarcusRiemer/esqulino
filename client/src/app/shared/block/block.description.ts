@@ -155,6 +155,11 @@ export namespace VisualBlockDescriptions {
       skipParents: 0
     }
   }
+
+  // Type guard for EditorIterator
+  export function isEditorIterator(obj: EditorBlockBase): obj is EditorIterator {
+    return (obj.blockType === "iterator");
+  }
 }
 
 /**

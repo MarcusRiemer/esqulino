@@ -35,4 +35,33 @@ export class BlockRenderComponent {
   asBlockInput(block: VisualBlockDescriptions.EditorInput) {
     return (block as VisualBlockDescriptions.EditorInput);
   }
+
+  /**
+   * @return The blocks that should be rendered between iterated blocks
+   */
+  get iteratorSeparatorBlocks() {
+    if (VisualBlockDescriptions.isEditorIterator(this.visual)) {
+      return (this.visual.between || []);
+    } else {
+      return ([]);
+    }
+  }
+
+  /**
+   * @return The actual nodes that should be displayed.
+   */
+  get iteratorChildNodes() {
+    if (VisualBlockDescriptions.isEditorIterator(this.visual)) {
+      return (this.node.getChildrenInCategory(this.visual.childGroupName));
+    } else {
+      return ([]);
+    }
+  }
+
+  /**
+   * @return The visual editor block that should be used to represent the given node.
+   */
+  iteratorGetEditorBlock(node: Node) {
+    return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
+  }
 }

@@ -22,13 +22,21 @@ interface GeneratedNode {
 /**
  * Bundles data that is collected during code generation.
  */
-export class CodeGeneratorProcess {
+export class CodeGeneratorProcess<TState extends {}> {
   private _generated: GeneratedNode[] = [];
-  private _generator: CodeGenerator;
   private _currentDepth: number = 0;
 
-  constructor(generator: CodeGenerator) {
-    this._generator = generator;
+  constructor(
+    private _generator: CodeGenerator,
+    private _state?: TState
+  ) {
+  }
+
+  /**
+   * @return The user defined state
+   */
+  get state(): TState {
+    return (this._state);
   }
 
   /**
@@ -62,14 +70,7 @@ export class CodeGeneratorProcess {
     }
 
     const converter = this._generator.getConverter(node.qualifiedName);
-    const bodyCategories = converter.init(node, this) || node.childrenCategoryNames;
-
-    // Iterate over all children that should be emitted
-    bodyCategories.forEach(categoryName => {
-      node.getChildrenInCategory(categoryName).forEach(child => {
-        this.generateNode(child)
-      });
-    });
+    converter.init(node, this);
 
     // Possibly finish generation
     if (converter.finish) {
@@ -148,7 +149,7 @@ export class CodeGeneratorProcess {
  * Controls how a node is converted to text and what the children
  * have to do with it.
  */
-export interface NodeConverter {
+export interface NodeConverter<T extends {}> {
   /*
    * This function is called when the node is entered. Because
    * languages like XML need to render some special children,
@@ -163,13 +164,13 @@ export interface NodeConverter {
    *         If the return value is `undefined` all children
    *         will be processed as part of the body.
    */
-  init(node: Node, process: CodeGeneratorProcess): (string[] | void);
+  init(node: Node, process: CodeGeneratorProcess<T>): void;
 
   /**
    * A possibility to close any unfinished business from the
    * init-function.
    */
-  finish?: (node: Node, process: CodeGeneratorProcess) => void;
+  finish?: (node: Node, process: CodeGeneratorProcess<T>) => void;
 
 }
 
@@ -177,14 +178,16 @@ export interface NodeConverter {
  * Used to register a NodeConverter for a certain type.
  */
 export interface NodeConverterRegistration {
-  converter: NodeConverter,
+  converter: NodeConverter<any>,
   type: QualifiedTypeName
 }
 
 /**
  * Registers callbacks per language per type.
  */
-type RegisteredCallbacks = { [langName: string]: { [typeName: string]: NodeConverter } };
+type RegisteredCallbacks = {
+  [langName: string]: { [typeName: string]: NodeConverter<any> }
+};
 
 /**
  * Transforms an AST into its compiled string representation.
@@ -192,8 +195,12 @@ type RegisteredCallbacks = { [langName: string]: { [typeName: string]: NodeConve
 export class CodeGenerator {
 
   private _callbacks: RegisteredCallbacks = {};
+  private _state?: any;
 
-  constructor(converters: NodeConverterRegistration[]) {
+  constructor(converters: NodeConverterRegistration[], state: any[] = []) {
+    // Merge all the given states into a single object
+    this._state = Object.assign({}, ...state);
+
     converters.forEach(c => this.registerConverter(c.type, c.converter));
   }
 
@@ -202,7 +209,7 @@ export class CodeGenerator {
    * duplicate converters are not allowed, so it is not possible
    * to unintentionally overwrite already registered convertes.
    */
-  private registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
+  private registerConverter(t: QualifiedTypeName, converter: NodeConverter<any>) {
     if (this.hasConverter(t)) {
       throw new Error(`There is already a converter for "${t.languageName}.${t.typeName}"`);
     } else {
@@ -226,7 +233,8 @@ export class CodeGenerator {
     }
 
     if (rootNode) {
-      const process = new CodeGeneratorProcess(this);
+      const stateCopy = JSON.parse(JSON.stringify(this._state));
+      const process = new CodeGeneratorProcess(this, stateCopy);
       process.generateNode(rootNode);
 
       return (process.emit());

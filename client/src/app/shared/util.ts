@@ -57,7 +57,7 @@ export function encodeUriParameters(params: KeyValuePairs) {
 /**
  * Returns a function that may be used as input for `Array.prototype.sort`
  * on objects.
- * 
+ *
  * Code is adapted from Ege Özcan on StackOverflow: https://stackoverflow.com/a/4760279/431715
  */
 export function fieldCompare<T>(property: keyof T, reverse = false) {
@@ -77,7 +77,7 @@ export function arrayEqual(lhs: any[], rhs: any[]) {
     return (false);
   }
 
-  // compare lengths - can save a lot of time 
+  // compare lengths - can save a lot of time
   if (lhs.length != rhs.length) {
     return (false);
   }

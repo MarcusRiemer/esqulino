@@ -6,7 +6,7 @@ development:
   project_domains: ["localhost.localdomain:9292"]
   editor_domain: "localhost.localdomain:9292"
   mail:
-    default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
+    default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
     admin: "Marcus@GurXite.de"
   ide_service:
     exec:
@@ -25,7 +25,7 @@ test:
   project_domains: ["localhost.localdomain:9292"]
   editor_domain: "localhost.localdomain:9292"
   mail:
-    default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
+    default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
     admin: "Marcus@GurXite.de"
   # The IDE service will, under most circumstances, honor the
   # "mock: true" setting. This allows testcases to specify arbitrary
@@ -50,7 +50,7 @@ production:
   project_domains: ["blattzeug.de"]
   editor_domain: "blattwerkzeug.de"
   mail:
-    default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
+    default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
     admin: "Marcus@GurXite.de"
   ide_service:
     exec:
