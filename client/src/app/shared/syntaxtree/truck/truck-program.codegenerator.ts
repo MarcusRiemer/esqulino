@@ -9,7 +9,7 @@ import { Node } from '../syntaxtree'
  */
 function camelize(str: string) {
   return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
-      /\s+/.test(match) ? '' : (index === 0 ? match.toLowerCase() : match.toUpperCase())
+    /\s+/.test(match) ? '' : (index === 0 ? match.toLowerCase() : match.toUpperCase())
   );
 }
 
@@ -62,6 +62,17 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
           'OR': '|'
         };
         process.addConvertedFragment(operators[node.properties['operator']], node);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "trucklino_program",
+      typeName: "booleanConstant"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess<State>) {
+        process.addConvertedFragment(node.properties['value'].toString(), node);
       }
     }
   },
