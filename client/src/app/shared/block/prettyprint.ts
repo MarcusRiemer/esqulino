@@ -145,6 +145,10 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
     `direction ${desc.direction}`
   ]
 
+  if (typeof (desc.breakAfter) !== "undefined") {
+    props.push(`breakAfter ${desc.breakAfter}`);
+  }
+
   const dropTarget = (desc.dropTarget)
     ? prettyPrintDropTargetProperties(desc.dropTarget)
     : [];
