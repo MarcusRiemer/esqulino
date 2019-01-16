@@ -249,7 +249,8 @@ concise_attributes:
     false, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\", \"skipParents\":
     0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"booleanBinaryExpression\",
     \"languageName\": \"trucklino_program\"}}], \"editorComponents\": [{\"componentType\":
-    \"truck-world\"}, {\"componentType\": \"generated-code\"}], \"localGeneratorInstructions\":
+    \"truck-controller\"}, {\"componentType\": \"truck-world\"}, {\"componentType\":
+    \"truck-sensors\"}, {\"componentType\": \"generated-code\"}], \"localGeneratorInstructions\":
     {\"traits\": {\"vertical\": {\"applyMode\": \"deepMerge\", \"instructions\": {\"orientation\":
     \"vertical\"}}, \"breakAfter\": {\"applyMode\": \"deepMerge\", \"instructions\":
     {\"breakAfter\": true}}, \"blockBorder\": {\"applyMode\": \"deepMerge\", \"instructions\":

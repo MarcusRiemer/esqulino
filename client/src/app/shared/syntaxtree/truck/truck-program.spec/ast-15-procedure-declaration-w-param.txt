@@ -1,0 +1,3 @@
+this.fooBar = async (fooBar) => {
+  await this.goForward();
+}
