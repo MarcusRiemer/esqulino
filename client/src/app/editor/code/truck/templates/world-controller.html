@@ -1,0 +1,13 @@
+<p align="center">
+  <button [disabled]="blocked" (click)="goForward()">goForward</button>
+  <button [disabled]="blocked" (click)="turnLeft()">turnLeft</button>
+  <button [disabled]="blocked" (click)="turnRight()">turnRight</button>
+  <button [disabled]="blocked" (click)="noTurn()">noTurn</button>
+  <button [disabled]="blocked" (click)="load()">load</button>
+  <button [disabled]="blocked" (click)="unload()">unload</button>
+  <button [disabled]="blocked" (click)="wait()">wait</button>
+  &nbsp;|&nbsp;
+  <button [disabled]="blocked" (click)="runSequence()">runSequence</button>
+  &nbsp;|&nbsp;
+  <button (click)="undo()">undo</button>
+</p>

@@ -38,7 +38,8 @@ import { QueryService } from './query/query.service'
 
 import { WorldRenderComponent } from './truck/world-render.component';
 import { TruckWorldService } from './truck/truck-world.service';
-
+import { WorldControllerComponent } from './truck/world-controller.component';
+import { WorldSensorsComponent } from './truck/world-sensors.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,9 @@ import { TruckWorldService } from './truck/truck-world.service';
     LanguageModelSelectorComponent,
     LanguageEmittedSelectorComponent,
     QueryPreviewComponent,
-    WorldRenderComponent
+    WorldRenderComponent,
+    WorldControllerComponent,
+    WorldSensorsComponent
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
@@ -80,7 +83,9 @@ import { TruckWorldService } from './truck/truck-world.service';
     QueryPreviewComponent,
     ValidationComponent,
     CodeGeneratorComponent,
-    WorldRenderComponent
+    WorldRenderComponent,
+    WorldControllerComponent,
+    WorldSensorsComponent
   ],
   providers: [
     ResourceChangedGuard
