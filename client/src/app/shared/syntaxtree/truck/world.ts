@@ -28,7 +28,7 @@ export class World {
           return state;
         }
         throw new RedLightViolationError();
-      // Curves can also be taken without set turn signal
+        // Curves can also be taken without set turn signal
       } else if (curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
         state.truck.move(curTile.curveTurnDirection(state.truck.facingDirection));
         state.time = 1;
@@ -79,7 +79,7 @@ export class World {
           state.truck.unloadFreight();
           state.time = 1;
           return state;
-        // Can be unloaded on empty field?
+          // Can be unloaded on empty field?
         } else if (tile.freightItems === 0 && tile.freightTarget == null) {
           tile.addFreight(state.truck.unloadFreight());
           state.time = 1;
@@ -264,8 +264,8 @@ export class World {
     const state = this.mutateState(f);
     return state != null
       ? new Promise((resolve, reject) => {
-          setTimeout(() => resolve(), state.time * this.animationSpeed);
-        })
+        setTimeout(() => resolve(), state.time * this.animationSpeed);
+      })
       : Promise.resolve();
   }
 
@@ -301,7 +301,7 @@ export class World {
    * @param command Command to be executed.
    * @return Promise, which is resolved when the scheduled time is over.
    */
-  async commandAsync(command: Command) {
+  async commandAsync(command: Command): Promise<void> {
     return this.mutateStateAsync(this.commands[command]);
   }
 
@@ -575,8 +575,8 @@ export class Tile {
    * @param trafficLights Traffic lights.
    */
   constructor(position: Position, openings: TileOpening,
-                freight: Array<Freight> = [], freightTarget: Freight = null,
-                trafficLights: Array<TrafficLight> = []) {
+    freight: Array<Freight> = [], freightTarget: Freight = null,
+    trafficLights: Array<TrafficLight> = []) {
     this.position = position;
     this.openings = openings;
     this.freight = freight;
@@ -884,12 +884,12 @@ export class DirectionUtil {
    * @return Opposite direction.
    */
   public static opposite(direction: Direction) {
-      return {
-        [Direction.North]: Direction.South,
-        [Direction.East]: Direction.West,
-        [Direction.South]: Direction.North,
-        [Direction.West]: Direction.East,
-      }[direction];
+    return {
+      [Direction.North]: Direction.South,
+      [Direction.East]: Direction.West,
+      [Direction.South]: Direction.North,
+      [Direction.West]: Direction.East,
+    }[direction];
   }
 
   /**
