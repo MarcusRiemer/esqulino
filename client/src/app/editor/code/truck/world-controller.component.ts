@@ -5,6 +5,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
 import { World, Command, Sensor } from '../../../shared/syntaxtree/truck/world';
+import { flatMap, first } from 'rxjs/operators';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
@@ -12,6 +13,7 @@ import { World, Command, Sensor } from '../../../shared/syntaxtree/truck/world';
 export class WorldControllerComponent implements OnInit, OnDestroy {
   private _worldSubscription: Subscription;
   public world: World;
+  // TODO: Refactor me
   public blocked = false;
 
   readonly currentWorld = this._truckWorld.currentWorld;
@@ -23,6 +25,10 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
     private _app: ApplicationRef
   ) {
   }
+
+  /*readonly blockedObs = this._truckWorld.currentWorld.pipe(
+    flatMap(curr => curr.blocked)
+  );*/
 
   ngOnInit(): void {
     this._worldSubscription = this._truckWorld.currentWorld.subscribe(world => {
@@ -58,16 +64,17 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
   }
 
   get generatedCode() {
-    return new Promise((resolve) => {
-      // TODO: best way to get the code?
-      this._currentCodeResource.peekResource.generatedCode.subscribe((code) => {
-        resolve(code);
-      });
-    })
+    return (
+      this._currentCodeResource.peekResource.generatedCode
+        .pipe(
+          first(),
+        ).toPromise()
+    );
   }
 
   runSequence() {
     this.generatedCode.then((generatedCode) => {
+      // TODO: This should go into the shared area
       if (!this.blocked) {
         this.blocked = true;
 
@@ -88,7 +95,13 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
             wait: async () => { await cmd(Command.wait); },
             load: async () => { await cmd(Command.load); },
             unload: async () => { await cmd(Command.unload); },
-
+            /*pause: async () => {
+              this.blocked = false;
+              while (this.paused) {
+                await sleep(100);
+              }
+              this.blocked = true;
+            },*/
             lightIsRed: () => sensor(Sensor.lightIsRed),
             lightIsGreen: () => sensor(Sensor.lightIsGreen),
             canGoStraight: () => sensor(Sensor.canGoStraight),
@@ -103,8 +116,8 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
           }).finally(() => {
             this.blocked = false;
           });
-        } catch(error) {
-          console.error(error);
+        } catch (error) {
+          alert(error);
           this.blocked = false;
         }
       }

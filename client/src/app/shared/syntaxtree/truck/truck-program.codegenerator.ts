@@ -157,6 +157,8 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
         node.getChildrenInCategory('pred').forEach((c) => process.generateNode(c));
         process.addConvertedFragment(`) {`, node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
+          // TODO: Look whether any immediate child is a function call
+          //       If no function call exists, insert a `nop()`-operation
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
         process.addConvertedFragment(`}`, node, OutputSeparator.NEW_LINE_AFTER);
