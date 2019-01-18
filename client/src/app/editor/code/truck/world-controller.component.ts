@@ -72,8 +72,7 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
         this.blocked = true;
 
         // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
-        // TODO: Get rid of `eval`
-        const AsyncFunction = eval('Object.getPrototypeOf(async function() {}).constructor');
+        const AsyncFunction = Object.getPrototypeOf(async function() { }).constructor;
 
         const cmd = (c: Command) => this.world.commandAsync(c).then(() => this._app.tick());
         const sensor = (s: Sensor) => this.world.sensor(s);
