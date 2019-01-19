@@ -1,7 +1,7 @@
 % **************************************************
 % Information and Commands for Reuse
 % **************************************************
-\newcommand{\thesisTitle}{Kara-Umgebung (working title)}
+\newcommand{\thesisTitle}{Konzeption und Implementierung einer visuellen Lernumgebung zur spielerischen Einführung in die Programmierung}
 \newcommand{\thesisSubtitle}{Bachelor-Thesis im Fachbereich Informatik}
 \newcommand{\thesisDate}{13. Februar 2019}
 \newcommand{\thesisVersion}{\input{GIT_REV}}
@@ -55,11 +55,11 @@
 \cthesissetcolor{cmyk}{1, .87, .27, .12}{1, .87, .27, .12}
 \usepackage{fontspec}
 
-\setmainfont{Dax Pro}
-\renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
-\renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
-\renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
-\renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
+% \setmainfont{Dax Pro}
+% \renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
+% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
 
 % \setmainfont{Futura PT}
 % \renewcommand{\helv}{\fontspec{Futura PT}\fontsize{9}{11}\selectfont}
@@ -73,7 +73,7 @@
 % \renewcommand{\tgherosfont}{\fontspec{Neue Haas Grotesk Text Pro}}
 % \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Neue Haas Grotesk Text Pro}}
 
-\renewcommand{\ttfamily}{\fontspec{Source Code Pro}}
+% \renewcommand{\ttfamily}{\fontspec{Source Code Pro}}
 
 \renewcommand{\cftchapfont}{\normalfont\bfseries}
 \renewcommand{\cftchappagefont}{\normalfont\bfseries}
@@ -119,10 +119,18 @@
    breaklines=true,
    showtabs=false,
    captionpos=b,
-   autogobble=true
+   autogobble=true,
+   frame=single
 }
 
 \usepackage[simplified]{sty/pgf-umlcd}
+\usepackage{float}
+
+% https://tex.stackexchange.com/a/42620
+\usepackage{amssymb}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
 
 % **************************************************
 % Document CONTENT
@@ -165,8 +173,13 @@
 \input{content/chapter-requirement-analysis}
 \input{content/chapter-implementation}
 \input{content/chapter-conclusion}
-\cleardoublepage
 
+\appendix{}
+
+\input{content/appendix-exercises}
+\input{content/appendix-cd-rom}
+
+\chapter{Literaturverzeichnis}
 % --------------------------
 % Back matter
 % --------------------------
@@ -176,7 +189,7 @@
 \setlength{\biblabelsep}{0pt}
 \setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
 % \printbibliography
-\printbibliography[title=Literaturverzeichnis,nottype=online]
+\printbibliography[heading=none,title=Literaturverzeichnis,nottype=online]
 \printbibliography[heading=subbibliography,title={Quellen im Internet},type=online,prefixnumbers={@}]
 }
 \cleardoublepage
@@ -187,5 +200,5 @@
 % \listoftables
 % \cleardoublepage
 
-\input{content/declaration}
+\input{content/appendix-declaration}
 \cleardoublepage
