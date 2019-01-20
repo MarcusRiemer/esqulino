@@ -1,4 +1,8 @@
 import { WorldDescription } from './world.description';
+import { BehaviorSubject } from 'rxjs';
+
+// https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
+const AsyncFunction = Object.getPrototypeOf(async function() { }).constructor;
 
 /**
  * Representation of the game world.
@@ -12,6 +16,9 @@ export class World {
 
   /** Duration of a step in milliseconds. */
   animationSpeed = 1000;
+
+  /** Command is in progress. */
+  commandInProgress = new BehaviorSubject(false);
 
   /** Executable commands. */
   readonly commands = {
@@ -297,12 +304,27 @@ export class World {
 
   /**
    * Executes a command on the world. The returned promise will be resolved when
-   * the time scheduled for the action in this change of state is over.
+   * the time scheduled for the action in this change of state is over. Also
+   * sets `commandInProgress`.
    * @param command Command to be executed.
    * @return Promise, which is resolved when the scheduled time is over.
    */
   async commandAsync(command: Command): Promise<void> {
-    return this.mutateStateAsync(this.commands[command]);
+    this.commandInProgress.next(true);
+    await this._commandAsync(command);
+    this.commandInProgress.next(false);
+  }
+
+  /**
+   * Executes a command on the world. The returned promise will be resolved when
+   * the time scheduled for the action in this change of state is over. This
+   * function doesn't set `commandInProgress`, so it should only be called by a
+   * function that does that.
+   * @param command Command to be executed.
+   * @return Promise, which is resolved when the scheduled time is over.
+   */
+  private async _commandAsync(command: Command): Promise<void> {
+    await this.mutateStateAsync(this.commands[command]);
   }
 
   /**
@@ -312,6 +334,48 @@ export class World {
    */
   sensor(sensor: Sensor): boolean {
     return this.sensors[sensor](this.state);
+  }
+
+  /**
+   * Executes a string of JavaScript-Code inside a function with the proper
+   * this-context.
+   * @param code Code to be executed.
+   */
+  async runCode(code: string) {
+    this.commandInProgress.next(true);
+
+    try {
+      const f = new AsyncFunction(code);
+
+      await f.call({
+        goForward: async () => { await this._commandAsync(Command.goForward); },
+        turnLeft: async () => { await this._commandAsync(Command.turnLeft); },
+        turnRight: async () => { await this._commandAsync(Command.turnRight); },
+        noTurn: async () => { await this._commandAsync(Command.noTurn); },
+        wait: async () => { await this._commandAsync(Command.wait); },
+        load: async () => { await this._commandAsync(Command.load); },
+        unload: async () => { await this._commandAsync(Command.unload); },
+        doNothing: async () => { await this._commandAsync(Command.doNothing); },
+
+        lightIsRed: () => this.sensor(Sensor.lightIsRed),
+        lightIsGreen: () => this.sensor(Sensor.lightIsGreen),
+        canGoStraight: () => this.sensor(Sensor.canGoStraight),
+        canTurnLeft: () => this.sensor(Sensor.canTurnLeft),
+        canTurnRight: () => this.sensor(Sensor.canTurnRight),
+        isSolved: () => this.sensor(Sensor.isSolved),
+      });
+    } catch (error) {
+        if (typeof error.msg !== 'undefined') {
+          // Forward the "nice" errors
+          throw error;
+        } else {
+          // Display the "bad" errors
+          console.error(error);
+          alert(error);
+        }
+    } finally {
+      this.commandInProgress.next(false);
+    }
   }
 }
 
