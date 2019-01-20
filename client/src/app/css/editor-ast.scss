@@ -42,6 +42,15 @@ trash {
     .from-block {
         //border: 5px solid red;
     }
+
+    editor-block-render {
+        display: contents;
+    }
+
+    .break-after {
+        width: 100%;
+    }
+
 }
 
 /* This class is applied to the error tooltip itself */

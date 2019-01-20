@@ -14,7 +14,7 @@ export class ResourceChangedGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
     const resourceId = route.params["resourceId"];
-    this._editorService.currentResourceChanged(resourceId);
+    this._editorService._changeCurrentResource(resourceId);
     return (true);
   }
 }
