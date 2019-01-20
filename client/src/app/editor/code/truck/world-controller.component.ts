@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, ApplicationRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
-import { World, Command, Sensor } from '../../../shared/syntaxtree/truck/world';
+import { World, Command } from '../../../shared/syntaxtree/truck/world';
 import { flatMap, first } from 'rxjs/operators';
 
 @Component({
@@ -23,8 +23,7 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
 
   constructor(
     private _truckWorld: TruckWorldService,
-    private _currentCodeResource: CurrentCodeResourceService,
-    private _app: ApplicationRef
+    private _currentCodeResource: CurrentCodeResourceService
   ) {
   }
 
