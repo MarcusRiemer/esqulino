@@ -37,6 +37,13 @@ export class BlockRenderComponent {
   }
 
   /**
+   * @return True, if there should be a break after this element
+   */
+  get breakAfter() {
+    return (this.visual && !!this.visual.breakAfter);
+  }
+
+  /**
    * @return The blocks that should be rendered between iterated blocks
    */
   get iteratorSeparatorBlocks() {

@@ -1,6 +1,9 @@
 <ng-container [ngSwitch]="visual.blockType">
   <!-- Show a constant value directly specified in the block description -->
-  <span *ngSwitchCase="'constant'" [blockBase]="visual">{{ asBlockConstant(visual).text }}</span>
+  <span *ngSwitchCase="'constant'"
+        [blockBase]="visual">
+    {{ asBlockConstant(visual).text }}
+  </span>
   <!-- Show a value that is derived from the property of a node -->
   <span *ngSwitchCase="'interpolated'" [blockBase]="visual">{{ node.properties[asBlockInterpolated(visual).property] }}</span>
 
@@ -34,7 +37,6 @@
            properties can be applied.-->
       <ng-container *ngFor="let childVisualBlock of iteratorGetEditorBlock(childNode).visual">
         <editor-block-render class="from-iterator"
-                             [blockFlexChild]="childVisualBlock"
                              [codeResource]="codeResource"
                              [node]="childNode"
                              [visual]="childVisualBlock"></editor-block-render>
@@ -43,7 +45,6 @@
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
-                             [blockFlexChild]="sepBlock"
                              [codeResource]="codeResource"
                              [visual]="sepBlock"
                              [node]="childNode"></editor-block-render>
@@ -66,3 +67,4 @@
   <!-- Something is broken, display a error message -->
   <div *ngSwitchDefault>Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar</div>
 </ng-container>
+<div *ngIf="breakAfter" class="break-after"></div>

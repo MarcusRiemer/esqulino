@@ -13,11 +13,14 @@ concise_attributes:
   value_before_type_cast: trucklino
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
+  value_before_type_cast: Eine Welt voller Waren und ein einsamer Truck der sie an
+    den Bestimmungsort bringen muss. Und dein Programm muss sagen wie das geht!
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
-  value_before_type_cast: false
+  value_before_type_cast: true
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: preview
+  value_before_type_cast: ef77b62e-5dbb-49c6-963f-eec472efa1e4
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -25,7 +28,7 @@ concise_attributes:
   value_before_type_cast: '2018-12-20 14:29:04.862138'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-12-29 15:24:19.253'
+  value_before_type_cast: '2019-01-16 15:46:34.153618'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false
