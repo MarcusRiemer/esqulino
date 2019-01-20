@@ -11,4 +11,5 @@
   <button [disabled]="!(blocked | async)" (click)="terminateCode()">terminateCode</button>
   &nbsp;|&nbsp;
   <button [disabled]="blocked | async" (click)="undo()">undo</button>
+  <button [disabled]="blocked | async" (click)="reset()">reset</button>
 </p>
