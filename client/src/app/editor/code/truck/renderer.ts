@@ -212,13 +212,13 @@ class WorldRenderer implements ObjectRenderer {
    */
   draw(ctx: RenderingContext) {
     // Update WorldStateRenderer when state changed
-    while (this.stateRenderer.state.step !== this.world.state.step) {
-      this.stateRenderer.update(
-        this.world.getState(
-          this.stateRenderer.state.step
-          + (this.stateRenderer.state.step < this.world.state.step ? 1 : -1)
-        )
-      );
+    if (this.stateRenderer.state.step > this.world.state.step) {
+      // Don't animate undo
+      this.stateRenderer.update(this.world.state, true);
+    } else {
+      while (this.stateRenderer.state.step < this.world.state.step) {
+        this.stateRenderer.update(this.world.getState(this.stateRenderer.state.step + 1));
+      }
     }
     this.stateRenderer.draw(ctx);
   }
@@ -269,11 +269,11 @@ class WorldStateRenderer implements ObjectRenderer {
    * Update state.
    * @param state New state.
    */
-  update(state: WorldState) {
+  update(state: WorldState, undo: boolean = false) {
     this.state = state;
 
-    this.tileRenderers.forEach((t, k) => t.update(state.tiles[k]));
-    this.truckRenderer.update(state.truck);
+    this.tileRenderers.forEach((t, k) => t.update(state.tiles[k], undo));
+    this.truckRenderer.update(state.truck, undo);
   }
 }
 
@@ -379,7 +379,7 @@ class TileRenderer implements ObjectRenderer {
    * Update tile.
    * @param tile New tile.
    */
-  update(tile: Tile) {
+  update(tile: Tile, undo: boolean = false) {
     this.tile = tile;
     this.startAnimation = null;
   }
@@ -590,8 +590,8 @@ class TruckRenderer implements ObjectRenderer {
    * Update the truck.
    * @param truck New truck.
    */
-  update(truck: Truck) {
-    this.prevTruck = this.truck;
+  update(truck: Truck, undo: boolean = false) {
+    this.prevTruck = undo ? null : this.truck;
     this.truck = truck;
     this.startAnimation = null;
   }
