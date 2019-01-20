@@ -1,9 +1,12 @@
 this.warteAufAmpel = async () => {
+  await this.doNothing();
   while (this.lightIsRed()) {
+    await this.doNothing();
     await this.wait();
   }
 }
 this.fahrenUndRechtsAbbiegen = async () => {
+  await this.doNothing();
   if (this.canTurnRight()) {
     await this.turnRight();
   }

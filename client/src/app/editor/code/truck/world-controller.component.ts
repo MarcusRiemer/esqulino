@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { flatMap, first } from 'rxjs/operators';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
 import { World, Command } from '../../../shared/syntaxtree/truck/world';
-import { flatMap, first } from 'rxjs/operators';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
