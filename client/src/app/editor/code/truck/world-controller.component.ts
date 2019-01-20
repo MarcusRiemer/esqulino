@@ -77,4 +77,5 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
   terminateCode() { this.world.terminateCode(); }
 
   undo() { this.world.undo(); }
+  reset() { this.world.reset(); }
 }

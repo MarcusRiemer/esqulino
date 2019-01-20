@@ -300,6 +300,15 @@ export class World {
   }
 
   /**
+   * Resets the world state.
+   */
+  reset() {
+    while (this.states.length > 1) {
+      this.undo();
+    }
+  }
+
+  /**
    * Indicates whether all freight has been delivered to their destination.
    * @return True, when all freight has been delivered to their destination,
    *         otherwise false.
