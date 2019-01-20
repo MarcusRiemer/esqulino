@@ -1,3 +1,4 @@
 this.fooBar = async (foo, bar) => {
+  await this.doNothing();
   await this.goForward();
 }

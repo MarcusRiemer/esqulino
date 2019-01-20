@@ -58,8 +58,8 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
         const operators = {
-          'AND': '&',
-          'OR': '|'
+          'AND': '&&',
+          'OR': '||'
         };
         process.addConvertedFragment(operators[node.properties['operator']], node);
       }

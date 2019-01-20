@@ -1,1 +1,1 @@
-(this.canTurnLeft() & this.canTurnRight())
+(this.canTurnLeft() && this.canTurnRight())
