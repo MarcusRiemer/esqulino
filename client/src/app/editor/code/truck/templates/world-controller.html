@@ -8,6 +8,7 @@
   <button [disabled]="blocked | async" (click)="wait()">wait</button>
   &nbsp;|&nbsp;
   <button [disabled]="blocked | async" (click)="runCode()">runCode</button>
+  <button [disabled]="!(blocked | async)" (click)="terminateCode()">terminateCode</button>
   &nbsp;|&nbsp;
   <button [disabled]="blocked | async" (click)="undo()">undo</button>
 </p>

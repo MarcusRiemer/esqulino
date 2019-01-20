@@ -20,6 +20,9 @@ export class World {
   /** Command is in progress. */
   commandInProgress = new BehaviorSubject(false);
 
+  /** Code is being executed, but should be terminated. */
+  codeShouldTerminate = false;
+
   /** Executable commands. */
   readonly commands = {
     // Go forward, if possible
@@ -100,7 +103,12 @@ export class World {
     [Command.wait]: (state: WorldState): WorldState => {
       state.time = 1;
       return state;
-    }
+    },
+
+    // Do nothing, but still check if program should terminate
+    [Command.doNothing]: (state: WorldState): WorldState => {
+      return null;
+    },
   };
 
   /** Sensors. */
@@ -269,11 +277,17 @@ export class World {
    */
   mutateStateAsync(f: (state: WorldState) => WorldState): Promise<void> {
     const state = this.mutateState(f);
-    return state != null
-      ? new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), state.time * this.animationSpeed);
-      })
-      : Promise.resolve();
+    return new Promise((resolve, reject) => {
+      setTimeout(
+        () => resolve(),
+        Math.max(
+          state != null
+            ? state.time * this.animationSpeed
+            : 0,
+          1 // always pause for at least a very short time to avoid busy waiting
+        )
+      );
+    });
   }
 
   /**
@@ -311,6 +325,7 @@ export class World {
    */
   async commandAsync(command: Command): Promise<void> {
     this.commandInProgress.next(true);
+    this.codeShouldTerminate = false;
     await this._commandAsync(command);
     this.commandInProgress.next(false);
   }
@@ -324,6 +339,9 @@ export class World {
    * @return Promise, which is resolved when the scheduled time is over.
    */
   private async _commandAsync(command: Command): Promise<void> {
+    if (this.codeShouldTerminate) {
+      throw new TerminatedError();
+    }
     await this.mutateStateAsync(this.commands[command]);
   }
 
@@ -343,6 +361,7 @@ export class World {
    */
   async runCode(code: string) {
     this.commandInProgress.next(true);
+    this.codeShouldTerminate = false;
 
     try {
       const f = new AsyncFunction(code);
@@ -365,6 +384,8 @@ export class World {
         isSolved: () => this.sensor(Sensor.isSolved),
       });
     } catch (error) {
+      // Only display unexpected errors
+      if (!error.expected) {
         if (typeof error.msg !== 'undefined') {
           // Forward the "nice" errors
           throw error;
@@ -373,9 +394,17 @@ export class World {
           console.error(error);
           alert(error);
         }
+      }
     } finally {
       this.commandInProgress.next(false);
     }
+  }
+
+  /**
+   * Terminates the code currently running asap.
+   */
+  terminateCode() {
+    this.codeShouldTerminate = true;
   }
 }
 
@@ -1058,6 +1087,9 @@ export enum Command {
 
   /** Wait a step without activity. */
   wait,
+
+  /** Do nothing, but still check if program should terminate. */
+  doNothing,
 }
 
 /** Sensors. */
@@ -1083,6 +1115,7 @@ export enum Sensor {
 
 /** General Exception. */
 export class TruckError extends Error {
+  readonly expected: boolean = false;
   readonly msg: string = '';
 }
 
@@ -1104,4 +1137,10 @@ export class LoadingError extends TruckError {
 /** Exception while unloading. */
 export class UnloadingError extends TruckError {
   readonly msg: string = 'Hier kannst du nichts abladen!';
+}
+
+/** Exception while unloading. */
+export class TerminatedError extends TruckError {
+  readonly expected: boolean = true;
+  readonly msg: string = 'Das Programm wurde beendet.';
 }
