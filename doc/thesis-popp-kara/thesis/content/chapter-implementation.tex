@@ -20,7 +20,7 @@ In diesem Kapitel wird die Implemetierung des im Rahmen dieser Arbeit entwickelt
   \label{fig:implementation:structure:uml}
 \end{figure}
 
-Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung (\inlinec{WorldDescription}) der zu genrierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Kontruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Lastwagen und Kacheln werden in einen Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in die Liste aller Zustände abgespeichert. Dieses Vorgehen wurde gewählt, um dem Nutzer zu ermöglichen Aktionen wieder rückgängig zu machen. Außerdem vereinfacht sie die für die Animationen \tref{sec:implementation:rendering:animation} notwenige Interpolation zwischen Zuständen. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}.
+Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung der zu genrierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Kontruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Lastwagen und Kacheln werden in einen Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in die Liste aller Zustände abgespeichert. Dieses Vorgehen wurde gewählt, um dem Nutzer zu ermöglichen Aktionen wieder rückgängig zu machen. Außerdem vereinfacht sie die für die Animationen \tref{sec:implementation:rendering:animation} notwenige Interpolation zwischen Zuständen. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}.
 
 %************************************************
 % Programmiersprache
@@ -111,7 +111,9 @@ Mit den Sensoren ist es möglich eine abweisende Schleife zu nutzen. Diese wiede
 \subsubsection{Verzweigungen}
 \label{sec:implementation:program:elements:if-else}
 
-Sensoren ermöglichen außerdem Verzweigungen, die einen Befehlsblock nur dann ausführen, wenn der angegebene Sensor zu Wahr ausgewertet wird und einen weiteren, optionalen Befehlsblock, wenn der Sensor zu Falsch ausgewertet wird. \TODO{elseif}
+Sensoren ermöglichen außerdem Verzweigungen, die einen Befehlsblock nur dann ausführen, wenn der angegebene Sensor zu Wahr ausgewertet wird und einen weiteren, optionalen Befehlsblock, wenn der Sensor zu Falsch ausgewertet wird.
+
+Das aus anderen Sprachen bekannte \inlinec{elseif} gibt es, wie auch in JavaScript, in der hier definierten Sprache nicht. Um dieses Verhalten zu erreichen, müssen mehrere \inlinec{if...else}-Anweisungen geschachtelt werden. In Zukunft wäre es denkbar, in dieser Form geschachtelte Verzweigungen auch im generierten Code ohne zusätzliche geschweifte Klammern und Einrückung darzustellen. Bisher wurde auf diese Darstellung verzichtet, da auch der Drag \& Drop-Editor hierzu noch nicht in der Lage ist.
 
 \subsubsection{Logische Operatoren}
 \label{sec:implementation:program:elements:op}
@@ -129,7 +131,9 @@ Mit diesen logischen Operatoren ist es nun z.B. möglich zu prüfen, ob das vorr
 \subsubsection{Prozeduren}
 \label{sec:implementation:program:elements:proc}
 
-Desweiteren ist es möglich eigene Prozeduren zu definieren und aufzurufen. \TODO{Parameter} Dies ermöglicht zusätzlich die Nutzung von Rekursion.
+Desweiteren ist es möglich eigene Prozeduren zu definieren und aufzurufen. Für Prozeduren lassen sich zusätzlich Parameter definieren, deren Nutzung innerhalb des Prozedurenblocks möglich ist. Jeder Parameter erhält einen vom Nuzter festgelegten Namen, kann jedoch ausschließlich boolsche Werte übergeben. Bei Aufruf der Prozedur werden die übergebenen Werte -- wie bei Prozeduraufrufen in JavaScript üblich -- kopiert.
+
+Funktionen sind in der Lage sich selbst aufzurufen. Dies ermöglicht zusätzlich die Nutzung von Rekursion. In Verbindung mit Verzweigungen ist auch Rekursion mit Abbruchbedingungen möglich.
 
 \subsection{Auswertung}
 \label{sec:implementation:program:evaluation}
@@ -137,11 +141,13 @@ Desweiteren ist es möglich eigene Prozeduren zu definieren und aufzurufen. \TOD
 Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Code kommen zwei Vorgehensweisen infrage. Im Grundlagenkapitel \ref{sec:basics:compile-interpret} wurde der Unterschied zwischen Kompilieren und Interpretieren im klassischen Sinne bereits erklärt. Da im Browser jedoch nicht direkt Maschienencode ausgeführt werden kann ist der Unterschied in diesem Zusammenhang etwas anders zu verstehen.
 
 \begin{itemize}
-  \item Beim \emph{Interpretieren} wird der Syntaxbaum nach und nach durch ein in JavaScript geschriebenes Programm abgearbeitet und die entsprechenden Befehle direkt ausgeführt. In dieser Umgebung lässt sich der Fortschritt des Programms leicht verfolgen, da der Interpreter zu jedem Zeitpunkt die Position kennt bis zu der der Code bisher ausgeführt wurde. Dies ermöglicht den Einbau von Aussagekräftigen Debuggingfunktionen für den den auszuführenden Code.
+  \item Beim \emph{Interpretieren} wird der Syntaxbaum nach und nach durch ein in JavaScript geschriebenes Programm abgearbeitet und die entsprechenden Befehle direkt ausgeführt. In dieser Umgebung lässt sich der Fortschritt des Programms leicht verfolgen, da der Interpreter zu jedem Zeitpunkt die Position kennt bis zu der der Code bisher ausgeführt wurde. Dies ermöglicht den Einbau von Aussagekräftigen Debuggingfunktionen für den den auszuführenden Code. Außerdem ist es leicht möglich Mechanismen bereitzustellen, welche die Ausführung an einer beliebigen Stelle stoppen oder pausieren und später fortsetzen.
   \item Im Unterschied dazu ist \emph{Kompilieren} in diesem Zusammenhang so zu verstehen, dass ein JavaScript-Programm den Syntaxbaum zunächst in einen vollständig ausführbaren JavaScript-Code überführt. Der JavaScript-Code liegt bei diesem Vorgehen nach dem Kompilieren als String vor und kann anschließend als ganzes in einer Art Sandkasten ausgeführt werden. Innerhalb dieser "Blackbox" lässt sich nur recht unzuverlässig auf den aktuellen Zustand des laufenden Programmes schließen ohne zusätzlichen Code code einzufügen, der die Lesbarkeit des generierten Codes verschlechtert. Eben diese Lesbarkeit des generierten Codes ist einer der wichtigsten Vortile dieser Vorgehensweise. Der Code lässt sich nicht nur für seine Ausführung nutzen, sondern kann gerade im Kontext einer Lernsoftware für den Nutzer interessant sein.
 \end{itemize}
 
 Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" an dieser Stelle als Anforderung festgelegt, da dieses Vorgehen speziell für BlattWerkzeug den Vorteil mit sich bringt, dass generierter Code in Zukunft vor der Ausführung dem Nutzer angezeigt und von ihm bearbeitet werden kann, was den Übergang zu einer Universalsprache erleichtern würde \TODO{Verweis auf Ausblick}.
+
+\subsubsection{Codegenerator}
 
 Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen einen Codegenrator zu implementieren, der Übersetzungsregeln für jeden Knotentypen definiert. \figreft{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenrators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederrum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknoten im Syntaxbaum generiert wurde.
 
@@ -151,7 +157,17 @@ Für die Kompilierung des Syntaxbaum wird auf den von BlattWerkzeug zur Verfügu
   \label{fig:implementation:program:evaluation:while}
 \end{figure}
 
-\TODO{Try Catch für Syntaxfehler}
+\subsubsection{Syntaxfehler}
+
+Es kann nicht garantiert werden, dass der Code, welcher vom Codegenrator erzeugt wurde, frei von Syntaxfehlern ist. Dies resultiert aus der Kompilierung eines unvollständigen Syntaxbaumes. So kann es z.B. vorkommen, dass die Bedingung bei einer While-Schleife leer ist. JavaScript wirft bei der Erzeugung der Funktion einen \inlinec{SyntaxError}, um diesen Fehler abzufangen, muss die Erzeugung der Funktion in einer try...catch-Anweisung\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/try...catch}} stattfinden \fref{fig:implementation:program:evaluation:try-catch}.
+
+\begin{figure}
+  \lstinputlisting{snippets/implementation-program-evaluation-try-catch.js}
+  \caption{Möglicher Syntaxfehler innerhalb des generierten Code}
+  \label{fig:implementation:program:evaluation:try-catch}
+\end{figure}
+
+\subsubsection{Umgebung zur Ausführung}
 
 Dem kompilierten Code muss zur Ausführung eine Umgebung bereitgestellt werden, welche die eingangs als "atomaren Befehele" bezeichneten Funktionen, sowie Funktionen zur Ermittlung der Sensorwerte zur Verfügung stellt. Für diese Aufgabe bietet sich der \inlinec{Function}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Function}} an. Im Gegensatz zu \inlinec{eval} ermöglicht der \inlinec{Function}-Konstruktor die Ausführung von Code im globalen Gültigkeitsbereich, was zu besseren Programmiergewohnheiten führt und eine effizientere Code-Minimierung ermöglicht~\cite{mdn-function}. In diesem speziellen Fall wird für die Ausfühung des Codes der \inlinec{AsyncFunction}-Konstruktor verwendet (siehe dazu \treft{sec:implementation:rendering:animation}).
 
@@ -159,7 +175,7 @@ Für die Bereitstellung der Befehle und Sensoren werden im Folgenden drei Varian
 
 \begin{enumerate}
   \item Eine Enum-Klasse mit allen Sensoren und Befehlen, sowie zwei Funktionen deren Auswertung, gibt es schon. Darauf aufbauend wäre eine naheliegend Möglichkeit, diese Funktionen und die Enum-Klassen einfach in der Welt bereitzustellen. Ein deutlicher Vorteil dieser Lösung ist der geringe zusätzliche Implementierungsaufwand und die verbesserte Wartbarkeit. Kommen neue Befehle oder Sensoren dazu, stehen diese automatisch auch in der Umgebung zur Verfügung. Der generierte Code ist jedoch nicht intuitiv und sollte er dem Nutzer angezeigt werden, nicht besonders gut zu verstehen. Außerdem halten sich die Funktionsaufrufe nicht an gängige Muster, was den späteren Umstieg auf Universalsprachen erschweren könnte \fref{fig:implementation:program:environment:func}.
-  \item Eine weitere denkbare Lösung ist es ein Objekt mit allen benötigten Funktionen für Befehle und Sensoren zu erzeugen und dieses als Wert von \inlinec{this} innerhalb der Funktion zur Verfügung zu stellen. Selbstdefinierte Prozeduren, werden innerhalb der Funktion ebenfalls als Kinder von \inlinec{this} definiert. Dieses Vorgehen hat den Vorteil, dass der Code deutlich intuitiver wird, als dies bei der vorgehend beschriebenen Variante der Fall wäre. Jedem Aufruf muss zwar ein \inlinec{this.} vorangestellt werden, jeder Befehl hat aber seinen eigenen Funktionsaufruf. Der zusätzliche Implemetierungsaufwand ist allerdings ein Nachteil dieser Variante. Es müssen in einem Objekt, Wrapper-Funktionen für alle Befehle und Sensoren definiert werden. Kommt zu einem späteren Zeitpunkt ein Befehl oder ein Sensor hinzu, muss dieser zusätzlich auch an dieser Stelle hinzugefügt werden \fref{fig:implementation:program:environment:this}.
+  \item Eine weitere denkbare Lösung ist es ein Objekt mit allen benötigten Funktionen für Befehle und Sensoren zu erzeugen und dieses als Wert von \inlinec{this} innerhalb der Funktion zur Verfügung zu stellen. Selbstdefinierte Prozeduren, werden innerhalb der Funktion ebenfalls als Kinder von \inlinec{this} definiert. Dieses Vorgehen hat den Vorteil, dass der Code deutlich intuitiver wird, als dies bei der vorgehend beschriebenen Variante der Fall wäre. Jedem Aufruf muss zwar ein \inlinec{this} vorangestellt werden, jeder Befehl hat aber seinen eigenen Funktionsaufruf. Der zusätzliche Implemetierungsaufwand ist allerdings ein Nachteil dieser Variante. Es müssen in einem Objekt, Wrapper-Funktionen für alle Befehle und Sensoren definiert werden. Kommt zu einem späteren Zeitpunkt ein Befehl oder ein Sensor hinzu, muss dieser zusätzlich auch an dieser Stelle hinzugefügt werden \fref{fig:implementation:program:environment:this}.
   \item Auch wäre es möglich alle Befehle und Sensoren als Parameter der Funktion zu definieren. Dadurch würde im Vergleich zur vorigen Variante die Notwendigkeit entfallen \inlinec{this.} vor jeden Aufruf zu stellen. Da die Wrapper-Funktionen in diesem Fall allerdings ebenfalls zusätzlich definiert werden müssen und die Zuordnung ihrer Namen fehleranfällig ist, birgt dieses Vorgehen abgesehen des etwas kompakteren Codes, keine weiteren Vorteile \fref{fig:implementation:program:environment:param}.
 \end{enumerate}
 
@@ -187,7 +203,13 @@ Für die Implementierung scheint Variante zwei am sinnvollsten. Es wird also ein
   \label{fig:implementation:program:environment}
 \end{figure}
 
-\TODO{Behandlung von Endlosschleifen, Abfangen durch try catch => kein try catch mehr im code möglich}
+\subsubsection{Behandlung von Endlosschleifen}
+
+Beim obigen Vergleich wurde ein Vorteil der Vorgehensweise "Interpretieren" genannt, welcher gleichzeitig ein Nachteil beim Kompilieren darstellt: Wurde mit der Ausführung des kompilierten Codes einmal begonnen, kann diese nicht einfach unterbrochen werden. Dies stellt insbesondere ein Problem dar, wenn der Nuzter eine Endlosschleife in sein Programm eingebaut hat. Um dieses Problem zu umgehen, wurde zusätzlich der \inlinec{doNothing}-Befehl eingeführt. Dieser Befehl steht im Drag \& Drop-Editor nicht zur Verfügung. Dieser Befehl verändert -- änlich wie der \inlinec{wait}-Befehl -- den Zustand der Welt nicht, fügt im Gegensatz zu \inlinec{wait} allerdings keinen neuen Zustand ein, kann also auch nicht rückgängig gemacht werden. Trotzdem erzeugt dieser Befehl eine für den Nutzer kaum merkliche Wartezeit von wenigen Millisekunden. Mit diesem Vorgehen kann aktives Warten ("busy waiting") beim Aufruf einer leeren While-Schleife und daraus resultierendes Blockieren der Bedienelemente von BlattWerkzeug, vermieden werden.
+
+\TODO{doNothing nur in leeren Schleifen geht nicht, weil...}
+
+Zusätzlich wird innerhalb von allen Befehlen geprüft, ob der Nuzter die Beendigung des laufenden Programmes angewiesen hat. Ist dies der Fall, wird die Ausführung des aktuellen Codes durch den Wurf einer Exception vorzeitig beendet. Dieses Vorgehen ist die einzig sinnvolle Möglichkeit die Ausführung des Codes vorzeitig zu beenden ohne die Lesbarkeit durch zusätzliche Kontrollbefehle zu verschlechtern, auch wenn es die Nebenwirkung hat, dass \inlinec{try...catch}-Anweisungen in Zukunft nicht innerhalb des generieten Codes eingesetzt werden können.
 
 %************************************************
 % Darstellung
@@ -254,6 +276,13 @@ Wenn die \inlinec{render}-Methode aus einer Angular-Anwendung heraus aufgerufen 
   \label{sec:implementation:rendering:structure:ngzone}
 \end{figure}
 
+\subsection{Level-Editor}
+\label{sec:implementation:program:level-editor}
+
+Für den Drag \& Drop-Editor wurde eine weitere Grammatik in BlattWerkzeug eingeführt, welche es ermöglicht eine eigene Karte zu kreieren. Der hieraus generierte Syntaxbaum wird in eine Beschreibung einer Welt (\inlinec{WorldDescription}) umgewandelt, mit der die \inlinec{World}-Klasse instanziiert werden kann. Diese Beschreibung enthält sowohl die Größe der Welt, sowie die Position und initiale Beladung des Lastwagen. Außerdem eine Liste von Kacheln, welche wiederum ihre Position definieren und sowie Informationen über Ampeln, Fracht und Frachtziele enthalten.
+
+Für die Aufgabe der Definition einer Welt, erwieß sich der Drag \& Drop-Editor als eher ungeeignet. Die Welten für die Beispielaufgaben im Anhang \TODO{Verweis} wurden aus diesem Grund erstellt, indem der Syntaxbaum direkt in der Datenbank bearbeitet wurde. Damit Lehrer ohne tiefergende Kenntnisse der Software in Zukunft selbst in der Lage sind eingene Aufgabenstellungen vorzubereiten, wäre die Entwicklung eines geeigneten Welt-Editor unabhängig vom Drag \& Drop-Editor von BlattWerkzeug notwendig. Dies würde jedoch den \TODO{besseres Wort: scope} dieser Arbeit übersteigen \TODO{Verweis auf Ausblick?}.
+
 \subsection{Lastwagen-Position}
 \label{sec:implementation:rendering:truck-position}
 
@@ -313,7 +342,7 @@ Um mit möglichst wenigen Abhängigkeiten und dadurch der Möglichkeit mit gerin
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.5\textwidth]{gfx/implementation-integration-prototype.png}
+  \includegraphics[width=0.35\textwidth]{gfx/implementation-integration-prototype.png}
   \caption{Bildschirmfoto der UI des Prototyp}
   \label{fig:implementation:integration:prototype}
 \end{figure}
@@ -322,6 +351,11 @@ Um mit möglichst wenigen Abhängigkeiten und dadurch der Möglichkeit mit gerin
 \label{sec:implementation:integration:ng-service}
 
 \TODO{Auslagerung der Welt in einen Service}
+
+\subsection{Renderer}
+\label{sec:implementation:integration:renderer}
+
+\TODO{Renderer}
 
 \subsection{Fortschrittsmeldungen}
 \label{sec:implementation:integration:progress}
