@@ -164,15 +164,14 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
-        process.addConvertedFragment(`while (`, node);
+        process.addConvertedFragment('while (', node);
         node.getChildrenInCategory('pred').forEach((c) => process.generateNode(c));
-        process.addConvertedFragment(`) {`, node, OutputSeparator.NEW_LINE_AFTER);
+        process.addConvertedFragment(') {', node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
-          // TODO: Look whether any immediate child is a function call
-          //       If no function call exists, insert a `nop()`-operation
+          process.addConvertedFragment('await this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
-        process.addConvertedFragment(`}`, node, OutputSeparator.NEW_LINE_AFTER);
+        process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
       }
     }
   },
@@ -205,6 +204,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
         });
         process.addConvertedFragment(') => {', node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
+          process.addConvertedFragment('await this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
         process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
