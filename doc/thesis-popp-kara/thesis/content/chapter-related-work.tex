@@ -100,6 +100,8 @@ Pattis geht mit \textit{Karel the Robot} einen ähnlichen Weg wie Papert mit sei
     \label{fig:related:karel}
 \end{figure}
 
+Im Gegensatz zu Turtle Grafiken, startet der Nutzer bei Karel nicht mit einer leeren Seite, sondern bekommt bereits eine Welt vorgegeben, innerhalb der die Aufgabenstellung zu lösen ist. Eine mögliche Aufgabe in der in Abbildung \ref{fig:related:karel} dargestellten Welt, könnte sein: "Sammle den Beeper an Position 10/12 ein und bewege Karel zurück an seine Ausgangsposition." Eine Welt bietet also oft eine Vielzahl von Möglichkeiten für Aufgabenstellungen, allerdings müssen die Lösungen manuell kontrolliert werden.
+
 %************************************************
 % Kara
 %************************************************
@@ -112,9 +114,9 @@ Kara weicht in seiner ursprünglichen Version von den vorhergenannten Programmen
     "Kara ist eine Mini-Umgebung basierend auf der Idee der endlichen Automaten. Kara, der Marienkäfer, lebt in einer einfachen grafischen Welt auf dem Bildschirm. Der Marienkäfer kann programmiert werden, um in seiner Welt verschiedene Aufgaben zu erledigen. Kleeblätter sammeln, einer Spur von Kleeblättern folgen oder Labyrinthe durchqueren sind einige Beispiele. Die Programme werden grafisch mit der Maus als endliche Automaten erstellt."~\cite[28]{reichert2004}
 \end{quote}
 
-Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere Versionen, die den Übergang zu realen Programmiersprachen erleichtern sollen \cite{kara2017}. So lässt sich der Marienkäfer in der bekannten Welt auch mit Java, JavaScript, Python oder Ruby steuern. Durch die Konstrukte die diese Sprachen mitbringen in Verbindung mit den speziellen Methoden, die die Kara-Umgebung zur Verfügung stellt, sind nun auch kompliziertere Programme möglich.
+Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere Versionen, die den Übergang zu realen Programmiersprachen erleichtern sollen \cite{kara2017}. So lässt sich der Marienkäfer in der bekannten Welt auch mit Universalsprachen wie Java, JavaScript, Python oder Ruby steuern. Durch die Konstrukte die diese Sprachen mitbringen in Verbindung mit den speziellen Methoden, die die Kara-Umgebung zur Verfügung stellt, sind nun auch kompliziertere Programme möglich.
 
-Wärend endliche Automaten hilfreich für ein Grundverständnis des Programmieren sein können, werden mit ihnen aber nicht die Grundkonzepte des Programmieren, wie Verzweigungen, Schleifen und Funktionen, vermittelt. Für das im Rahmen dieser Arbeit entwickelte Programm soll ein Mittelweg beschritten werden bei dem die Programmierung zwar über eine grafische Oberfläche erfolgt, jedoch Verzweigungen und Schleifen verwendet und Prozeduren definiert werden können.
+Der Einsatz von Universalsprachen zur Einführung in die Programmierung bringt jedoch einige Nachteile mit sich (siehe Grundlagenkapitel \ref{sec:basics:mini-languages}) und wärend endliche Automaten hilfreich für ein Grundverständnis des Programmieren sein können, werden mit ihnen nicht die Grundkonzepte des Programmieren, wie Verzweigungen, Schleifen und Funktionen, vermittelt. Für das im Rahmen dieser Arbeit entwickelte Programm soll ein Mittelweg beschritten werden bei dem die Programmierung zwar Syntaxfrei über eine grafische Oberfläche erfolgt, jedoch Verzweigungen und Schleifen verwendet und Prozeduren definiert werden können.
 
 Auch bei Kara gibt es kein durch das Programm definiertes und überprüfbares Spielziel. Es kann eine Aufgabenstellung definiert werden, die zu erfüllen ist. Die Kontrolle obliegt allerdings dem Nutzer selbst oder dem Aufgabensteller.
 
@@ -145,7 +147,7 @@ Lightbot kommt dabei gänzlich ohne klassische geschriebene Programmieranweisung
 
 Die Level in der App sind in drei Gruppen aufgeteilt. Im ersten Bereich "Basics" werden die atomaren Befehle eingeführt. Dabei erhöht sich der Schwierigkeitsgrad im Laufe der 8 Level. Im zweiten Bereich "Procedures" werden dann Prozeduren eingeführt und im dritten Teil "Loops" können die Level nur durch den geschickten Einsatz von Rekursion gelöst werden.
 
-Im Gegensatz zu den bisher beschriebenen Programmen, gibt es bei Lightbot ein klares Ziel, welches durch das Level definiert ist. Es müssen immer alle Lichter eingeschaltet werden. Sobald dies geschehen ist, ist das Level gelöst und das nächste Level wird freigeschaltet. So ist mit Lightbot auch ein unbeaufsichtigtes Lernen möglich. Die Lösung der Aufgabenstellung muss nicht manuell geprüft werden. Das Programm weißt dadurch eher die Merkmale eines Spiels mit Progression auf.
+Im Gegensatz zu den bisher beschriebenen Programmen, gibt es bei Lightbot ein klares Ziel, welches durch das Level definiert ist. Es müssen immer alle Lichter eingeschaltet werden. Sobald dies geschehen ist, ist das Level gelöst und das nächste Level wird freigeschaltet. Die Lösung der Aufgabenstellung muss -- img Gegensatz zu den vorgenannten Anwendungen -- nicht manuell geprüft werden und es ist mit Lightbot auch ein unbeaufsichtigtes Lernen möglich.
 
 \begin{figure}
     \centering

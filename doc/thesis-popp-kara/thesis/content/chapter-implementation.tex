@@ -23,9 +23,9 @@ In diesem Kapitel wird die Implemetierung des im Rahmen dieser Arbeit entwickelt
 Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung der zu genrierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Kontruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Lastwagen und Kacheln werden in einen Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in die Liste aller Zustände abgespeichert. Dieses Vorgehen wurde gewählt, um dem Nutzer zu ermöglichen Aktionen wieder rückgängig zu machen. Außerdem vereinfacht sie die für die Animationen \tref{sec:implementation:rendering:animation} notwenige Interpolation zwischen Zuständen. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}.
 
 %************************************************
-% Programmiersprache
+% Minisprache
 %************************************************
-\section{Programmiersprache}
+\section{Minisprache}
 \label{sec:implementation:program}
 
 \TODO{}
@@ -120,7 +120,7 @@ Das aus anderen Sprachen bekannte \inlinec{elseif} gibt es, wie auch in JavaScri
 
 Mit Hilfe von logische Operatoren können neue Ausdrücke erzeugt werden, welche sich wiederum in Schleifen und Verzweigungen einzetzten lassen.
 
-\begin{itemize}
+\begin{itemize}[noitemsep]
   \item Die \emph{Nicht}-Operation kehrt den Wahrheitswert um.
   \item Die \emph{Und}-Verknüpfung ergibt "Wahr", wenn beide Verküpften Werte "Wahr" sind.
   \item Die \emph{Oder}-Verküpfung ergibt "Wahr", wenn mindestens einer der beiden Verküpften Werte "Wahr" ist.
@@ -207,7 +207,7 @@ Für die Implementierung scheint Variante zwei am sinnvollsten. Es wird also ein
 
 Beim obigen Vergleich wurde ein Vorteil der Vorgehensweise "Interpretieren" genannt, welcher gleichzeitig ein Nachteil beim Kompilieren darstellt: Wurde mit der Ausführung des kompilierten Codes einmal begonnen, kann diese nicht einfach unterbrochen werden. Dies stellt insbesondere ein Problem dar, wenn der Nuzter eine Endlosschleife in sein Programm eingebaut hat. Um dieses Problem zu umgehen, wurde zusätzlich der \inlinec{doNothing}-Befehl eingeführt. Dieser Befehl steht im Drag \& Drop-Editor nicht zur Verfügung. Dieser Befehl verändert -- änlich wie der \inlinec{wait}-Befehl -- den Zustand der Welt nicht, fügt im Gegensatz zu \inlinec{wait} allerdings keinen neuen Zustand ein, kann also auch nicht rückgängig gemacht werden. Trotzdem erzeugt dieser Befehl eine für den Nutzer kaum merkliche Wartezeit von wenigen Millisekunden. Mit diesem Vorgehen kann aktives Warten ("busy waiting") beim Aufruf einer leeren While-Schleife und daraus resultierendes Blockieren der Bedienelemente von BlattWerkzeug, vermieden werden.
 
-\TODO{doNothing nur in leeren Schleifen geht nicht, weil...}
+Den \inlinec{doNothing}-Befehl nur zu leeren Schleifen hinzuzufügen, reicht nicht aus. Zwar wäre es möglich verzeiltelte Konstellation zu überprüfen und auf den zusätzlichen Befehl zu verzichten, wenn eine andere Anweisung auf gleicher Ebene aufgerufen wird, allerdings wird dieses Vorgehen sehr aufwändig, wenn auch kopliziertere Strukturen wie z.B. Verzweigungen oder untergeordnete Schleifen geprüft werden sollen. So kann in vielen Fällen nicht sichergestellt werden, dass der untergeordnete Block auch wirklich aufgerufen und der darin enthaltene Befehl ausgeführt wird.
 
 Zusätzlich wird innerhalb von allen Befehlen geprüft, ob der Nuzter die Beendigung des laufenden Programmes angewiesen hat. Ist dies der Fall, wird die Ausführung des aktuellen Codes durch den Wurf einer Exception vorzeitig beendet. Dieses Vorgehen ist die einzig sinnvolle Möglichkeit die Ausführung des Codes vorzeitig zu beenden ohne die Lesbarkeit durch zusätzliche Kontrollbefehle zu verschlechtern, auch wenn es die Nebenwirkung hat, dass \inlinec{try...catch}-Anweisungen in Zukunft nicht innerhalb des generieten Codes eingesetzt werden können.
 
@@ -219,12 +219,14 @@ Zusätzlich wird innerhalb von allen Befehlen geprüft, ob der Nuzter die Beendi
 
 \TODO{}
 
+\TODO{Im Gegensatz zu Lightbot: Programm beendet sich nach Lösung nicht selbst}
+
 \subsection{Technologie}
 \label{sec:implementation:rendering:technology}
 
-Also mögliche Technologien für die Darstellung und Animation der Welt im Browser wurden im vier Ansätze evaluiert. Eine Übersicht der Eigenschaften findet sich in Tabelle \ref{tbl:implementation:rendering:technology}.
+Als mögliche Technologien für die Darstellung und Animation der Welt im Browser wurden im vier Ansätze evaluiert. Eine Übersicht der Eigenschaften findet sich in Tabelle \ref{tbl:implementation:rendering:technology}.
 
-\begin{itemize}
+\begin{itemize}[noitemsep]
   \item Rendering über klassische \emph{HTML}-Elemente und Styling mittels CSS und Integration von nachgeladenen Bilddateien.
   \item Rendering mittels eines eingebetteten \emph{SVG}-Element.
   \item Rendering mittels eines \emph{Canvas}-Element und Integration von nachgeladenen Bilddateien.
@@ -281,7 +283,7 @@ Wenn die \inlinec{render}-Methode aus einer Angular-Anwendung heraus aufgerufen 
 
 Für den Drag \& Drop-Editor wurde eine weitere Grammatik in BlattWerkzeug eingeführt, welche es ermöglicht eine eigene Karte zu kreieren. Der hieraus generierte Syntaxbaum wird in eine Beschreibung einer Welt (\inlinec{WorldDescription}) umgewandelt, mit der die \inlinec{World}-Klasse instanziiert werden kann. Diese Beschreibung enthält sowohl die Größe der Welt, sowie die Position und initiale Beladung des Lastwagen. Außerdem eine Liste von Kacheln, welche wiederum ihre Position definieren und sowie Informationen über Ampeln, Fracht und Frachtziele enthalten.
 
-Für die Aufgabe der Definition einer Welt, erwieß sich der Drag \& Drop-Editor als eher ungeeignet. Die Welten für die Beispielaufgaben im Anhang \TODO{Verweis} wurden aus diesem Grund erstellt, indem der Syntaxbaum direkt in der Datenbank bearbeitet wurde. Damit Lehrer ohne tiefergende Kenntnisse der Software in Zukunft selbst in der Lage sind eingene Aufgabenstellungen vorzubereiten, wäre die Entwicklung eines geeigneten Welt-Editor unabhängig vom Drag \& Drop-Editor von BlattWerkzeug notwendig. Dies würde jedoch den \TODO{besseres Wort: scope} dieser Arbeit übersteigen \TODO{Verweis auf Ausblick?}.
+Für die Aufgabe der Definition einer Welt, erwieß sich der Drag \& Drop-Editor als eher ungeeignet. Die Welten für die Beispielaufgaben im Anhang \TODO{Verweis} wurden aus diesem Grund erstellt, indem der Syntaxbaum direkt in der Datenbank bearbeitet wurde. Damit Lehrer ohne tiefergende Kenntnisse der Software in Zukunft selbst in der Lage sind eingene Aufgabenstellungen vorzubereiten, wäre die Entwicklung eines geeigneten Welt-Editor unabhängig vom Drag \& Drop-Editor von BlattWerkzeug notwendig. Dies würde jedoch den Rahmen dieser Arbeit übersteigen sprengen.
 
 \subsection{Lastwagen-Position}
 \label{sec:implementation:rendering:truck-position}
@@ -338,26 +340,39 @@ In Abschnitt \ref{sec:implementation:program:evaluation} wurde bereits angedeute
 \section{Integration}
 \label{sec:implementation:integration}
 
-Um mit möglichst wenigen Abhängigkeiten und dadurch der Möglichkeit mit geringerem Zeitaufwand verschiedene Ansätze ausprobieren zu können, wurde zunächst mit der Entwicklung eines Prototypen auf einer "grünen Wiese" begonnen. Auch wenn der Prototyp als Angular-Anwendung aufgesetzt wurde, erfolgte der Großteil der Entwicklung erfolge außerhalb dieser Umgebung. Nachdem der ursprüngliche Ansatz der Darstellung mittels SVG-Grafiken verworfen wurde und die Darstellung auf Canvas-Rendering umgestellt wurde, sind die Objektstruktur, sowie der Renderer wurden völlig unabhängig von Angular, da sie von den von Angular bereitgestellten Strukturen nicht profitieren können. Diese Klassen konnten so ohne Anpassungen in die Umgebung von BlattWerkzeug übernommen werden. Lediglich die rudimentäre Benutzeroberfläche des Prototypen \figref{fig:implementation:integration:prototype} wurde mit Hilfe von Angular umgesetzt, für die Integration in BlattWerkzeug jedoch nicht mehr benötigt.
+Um mit möglichst wenigen Abhängigkeiten und dadurch der Möglichkeit mit geringerem Zeitaufwand verschiedene Ansätze ausprobieren zu können, wurde zunächst mit der Entwicklung eines Prototypen auf einer "grünen Wiese" begonnen. Auch wenn der Prototyp als Angular-Anwendung aufgesetzt wurde, erfolgte der Großteil der Entwicklung außerhalb dieser Umgebung. Nachdem der ursprüngliche Ansatz der Darstellung mittels SVG-Grafiken verworfen wurde und die Darstellung auf Canvas-Rendering umgestellt wurde, sind die Objektstruktur, sowie der Renderer vollständig unabhängig von Angular implementiert, da sie von den von Angular bereitgestellten Strukturen nicht profitieren können. Diese Klassen konnten so ohne Anpassungen in die Umgebung von BlattWerkzeug übernommen werden. Lediglich die rudimentäre Benutzeroberfläche des Prototypen (siehe Abbildung \ref{fig:implementation:integration:prototype}) wurde mit Hilfe von Angular umgesetzt, für die Integration in BlattWerkzeug in dieser Form jedoch nicht mehr benötigt.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.35\textwidth]{gfx/implementation-integration-prototype.png}
-  \caption{Bildschirmfoto der UI des Prototyp}
+  \includegraphics[width=0.4\textwidth]{gfx/implementation-integration-prototype.png}
+  \caption{Bildschirmfoto der UI des Prototyp vor der Integration in Blattwerkzeug}
   \label{fig:implementation:integration:prototype}
 \end{figure}
 
 \subsection{Angular-Service}
 \label{sec:implementation:integration:ng-service}
 
-\TODO{Auslagerung der Welt in einen Service}
+Ein Projekt in BlattWerkzeug kann sowohl mehrere Welten, als auch mehrere Programme (im Folgenden Coderessource genannt) beinhalten. Diese zusammen zu bringen ist die Aufgabe des \inlinec{TruckWorldService}. Die Auslagerung dieser Funktionalität ist notwendig, da Darstellung und Steuerung der Welten über mehrere Angular-Komponenten verteilt sind. Alle diese Komponenten erhalten in Abhängigkeit der ihnen zugeordneten Coderessource die entsprechende Instanz ihrer der Welt. Auch übernimmt der Service die Aufgabe -- falls notwendig -- eine neue Instanz einer Welt zu erzeugen.
 
 \subsection{Renderer}
 \label{sec:implementation:integration:renderer}
 
-\TODO{Renderer}
+Zum Anzeigen der Welt wurde in BlattWerkzeug eine Komponente definiert, welche die \inlinec{Renderer}-Klasse (siehe \ref{sec:implementation:rendering:structure}) aus dem Prototypen nahezu ohne Anpassungen übernehmen konnte. Die Komponente erhält vom \inlinec{TruckWorldService} die aktuelle \inlinec{World}-Instanz, mit der sie den Renderer instanziiert und außerhalb der Angular Zone (siehe Abschnitt \ref{sec:implementation:rendering:structure}) den Renderingprozess startet. Diese Komponente greift dabei lediglich lesend auf die Welt zu und nimmt keine Veränderungen vor.
 
-\subsection{Fortschrittsmeldungen}
-\label{sec:implementation:integration:progress}
+Zusätzlich wird die Komponente im Welt-Editor verwendet, um die bisher erstellte Welt darzustellen. Aus diesem Grund wurde darauf geachtet, die Darstellung möglichst robust und fehlertolerant zu gestalten, damit auch halbfertige Welten zuverlässig dargestellt werden können.
 
-\TODO{Rückmeldung über den Fortschritt des Programm zur Anzeige im Drag \& Drop-Editor => Ausblick?}
+\subsection{Controller}
+\label{sec:implementation:integration:controller}
+
+Innerhalb der Kontroller-Komponente ist es möglich die Befehle in der aktuellen Welt per Klick auf einen Button von Hand auszuführen. Außerdem kann an dieser Stelle die Ausführung des im Drag \& Drop-Editor zusammengestellen Programm gestartet und gestoppt werden. Es ist desweiteren möglich einzelne Befehle rückgängig zu machen oder die Welt direkt auf ihren Ausgangszustand zurückzusetzen.
+
+Auch diese Komponente greift auf den \inlinec{TruckWorldService} zurück, um die aktuell gewählte Welt zu erhalten. Klicks auf die Buttons werden direkt an die entsprechenden Funktionen der \inlinec{World}-Klasse weitergeleitet.
+
+Mit Hilfe des \inlinec{CurrentCodeResourceService}, einem von BlattWerkzeug bereitgestellten Service zum erhalt der aktuellen Coderessource, kann auf den aus dem Drag \& Drop-Editor kompilierten Code zugegriffen werden. Dieser Code wird beim Klick auf den entsprechenden Button an die \inlinec{World}-Klasse zur Ausführung übergeben.
+
+Solange eine Operation auf der Welt ausgeführt wird, sind die Bedienelemente zur Ausführung weiterer Befehle gesperrt. Erst nach Beendigung der Operation und damit auch der Animation, kann ein weiterer Befehl ausgeführt werden. Dazu existiert in der \inlinec{World}-Klasse ein Flag, welches während der Ausführung gesetzt und von dieser Komponente ständig ausgewertet wird.
+
+\subsection{Sensoren}
+\label{sec:implementation:integration:sensors}
+
+Eine letzte Komponente dient lediglich der Darstellung der aktuellen Werte aller Sensoren. Dadurch wird dem Nutzer im Navigationsmodus ermöglicht sich in die Lage des Programms hineinzuversetzen und Entscheidungen basierend auf dem Wert von Sensoren zu treffen. Auch diese Komponente erhält über den \inlinec{TruckWorldService} Zugriff auf die aktuelle Welt, auf welche sie allerdings nur lesend zugreift.
