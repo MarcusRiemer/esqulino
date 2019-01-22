@@ -1,0 +1,7 @@
+<select class="form-control custom-select"
+        [(ngModel)]="selectedWorldId">
+  <option *ngFor="let world of availableWorlds"
+          [value]="world.id">
+    {{ world.name }}
+  </option>
+</select>

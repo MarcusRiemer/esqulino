@@ -36,6 +36,7 @@ import { QueryPreviewComponent } from './query/query-preview.component'
 import { QueryService } from './query/query.service'
 
 import { WorldRenderComponent } from './truck/world-render.component';
+import { WorldSelectorComponent } from './truck/world-selector.component';
 import { TruckWorldService } from './truck/truck-world.service';
 import { WorldControllerComponent } from './truck/world-controller.component';
 import { WorldSensorsComponent } from './truck/world-sensors.component';
@@ -72,7 +73,8 @@ import { WorldSensorsComponent } from './truck/world-sensors.component';
     QueryPreviewComponent,
     WorldRenderComponent,
     WorldControllerComponent,
-    WorldSensorsComponent
+    WorldSensorsComponent,
+    WorldSelectorComponent
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
