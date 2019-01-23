@@ -13,7 +13,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 export class WorldSelectorComponent {
 
   // Fired when the world changes
-  @Output() selectedWorldIdIdChange = new EventEmitter<string>();
+  @Output() selectedWorldIdChange = new EventEmitter<string>();
 
   // Backing field for the world that is selected
   private _selectedWorldId: string = undefined;
@@ -44,6 +44,6 @@ export class WorldSelectorComponent {
    */
   set selectedWorldId(id: string) {
     this._selectedWorldId = id;
-    this.selectedWorldIdIdChange.emit(id);
+    this.selectedWorldIdChange.emit(id);
   }
 }
