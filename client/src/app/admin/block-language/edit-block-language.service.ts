@@ -98,7 +98,8 @@ export class EditBlockLanguageService {
     const instructions = this.editedSubject.localGeneratorInstructions || {};
 
     // Ensure the instructions are valid
-    this.generatorErrors = await this._schemaValidator.validate("BlockLanguageGeneratorDocument", instructions);
+    // TODO: Do actual validation again
+    this.generatorErrors = []; // await this._schemaValidator.validate("BlockLanguageGeneratorDocument", instructions);
 
     // And do something meaningful if they are
     if (this.generatorErrors.length === 0) {
