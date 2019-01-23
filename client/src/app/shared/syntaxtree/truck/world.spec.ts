@@ -5,7 +5,7 @@ import { WorldDescription } from './world.description';
 
 const worldDescription: WorldDescription = {
   size: { width: 5, height: 5 },
-  trucks: [{ position: { x: 1, y: 0 }, facing: 'E' }],
+  trucks: [{ position: { x: 1, y: 0 }, facing: 'E', freight: [] }],
   tiles: [
     { position: { x: 0, y: 0 }, openings: ['E', 'S'] },
     { position: { x: 1, y: 0 }, openings: ['E', 'S', 'W'] },
