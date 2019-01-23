@@ -26,10 +26,16 @@ export class WorldSensorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  get sensorLightIsRed() { return this.world.sensor(Sensor.lightIsRed); }
-  get sensorLightIsGreen() { return this.world.sensor(Sensor.lightIsGreen); }
-  get sensorCanGoStraight() { return this.world.sensor(Sensor.canGoStraight); }
-  get sensorCanTurnLeft() { return this.world.sensor(Sensor.canTurnLeft); }
-  get sensorCanTurnRight() { return this.world.sensor(Sensor.canTurnRight); }
-  get sensorIsSolved() { return this.world.sensor(Sensor.isSolved); }
+  get sensorLightIsRed() { return this.getSensor(Sensor.lightIsRed); }
+  get sensorLightIsGreen() { return this.getSensor(Sensor.lightIsGreen); }
+  get sensorCanGoStraight() { return this.getSensor(Sensor.canGoStraight); }
+  get sensorCanTurnLeft() { return this.getSensor(Sensor.canTurnLeft); }
+  get sensorCanTurnRight() { return this.getSensor(Sensor.canTurnRight); }
+  get sensorIsSolved() { return this.getSensor(Sensor.isSolved); }
+
+  getSensor(sensor: Sensor): boolean {
+    return this.world
+     ? this.world.sensor(sensor)
+     : false;
+  }
 }

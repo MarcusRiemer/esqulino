@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { flatMap, first } from 'rxjs/operators';
 
@@ -6,19 +6,23 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
 import { World, Command } from '../../../shared/syntaxtree/truck/world';
+import { WorldSelectorComponent } from './world-selector.component';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
 })
 export class WorldControllerComponent implements OnInit, OnDestroy {
+  @ViewChild('worldSelector') worldSelector: WorldSelectorComponent;
+
   private _worldSubscription: Subscription;
+  private _worldSelectorSubscription: Subscription;
   public world: World;
 
   readonly currentWorld = this._truckWorld.currentWorld;
   readonly currentProgram = this._currentCodeResource.currentResource;
 
   readonly blocked = this._truckWorld.currentWorld.pipe(
-    flatMap(curr => curr.commandInProgress)
+    flatMap(world => world.commandInProgress)
   );
 
   constructor(
@@ -31,11 +35,17 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
     this._worldSubscription = this._truckWorld.currentWorld.subscribe(world => {
       this.world = world;
     });
+    this._worldSelectorSubscription = this.worldSelector.selectedWorldIdChange.subscribe((selectedWorldId: string) => {
+      this._truckWorld.setNewWorld(selectedWorldId);
+    });
   }
 
   ngOnDestroy(): void {
     if (this._worldSubscription) {
       this._worldSubscription.unsubscribe();
+    }
+    if (this._worldSelectorSubscription) {
+      this._worldSelectorSubscription.unsubscribe();
     }
   }
 
