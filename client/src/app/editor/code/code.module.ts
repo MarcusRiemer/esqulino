@@ -40,6 +40,7 @@ import { WorldSelectorComponent } from './truck/world-selector.component';
 import { TruckWorldService } from './truck/truck-world.service';
 import { WorldControllerComponent } from './truck/world-controller.component';
 import { WorldSensorsComponent } from './truck/world-sensors.component';
+import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { WorldSensorsComponent } from './truck/world-sensors.component';
     WorldRenderComponent,
     WorldControllerComponent,
     WorldSensorsComponent,
-    WorldSelectorComponent
+    WorldSelectorComponent,
+    UserFunctionsSidebarComponent
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
@@ -85,7 +87,8 @@ import { WorldSensorsComponent } from './truck/world-sensors.component';
     CodeGeneratorComponent,
     WorldRenderComponent,
     WorldControllerComponent,
-    WorldSensorsComponent
+    WorldSensorsComponent,
+    UserFunctionsSidebarComponent
   ],
   providers: [
     ResourceChangedGuard
