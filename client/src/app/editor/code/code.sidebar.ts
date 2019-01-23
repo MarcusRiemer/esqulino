@@ -8,6 +8,9 @@ import { CurrentCodeResourceService } from '../current-coderesource.service';
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 
+/**
+ * Maps ids of sidebar components to their actual components.
+ */
 function resolvePortalComponentId(id: string): any {
   switch (id) {
     case "fixedBlocks": return (CodeSidebarFixedBlocksComponent);
@@ -51,4 +54,3 @@ export class CodeSidebarComponent {
     }))
   );
 }
-

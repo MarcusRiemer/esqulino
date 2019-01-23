@@ -1,6 +1,6 @@
 import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
 
-import { FixedBlocksSidebar } from './fixed-blocks-sidebar'
+import { FixedBlocksSidebar } from './sidebar-blocks'
 import { Sidebar } from './sidebar'
 import { BlockLanguageDescription, EditorComponentDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
