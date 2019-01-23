@@ -162,7 +162,12 @@ export class World {
 
     const truck = new Truck(
       new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
-      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing))
+      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing)),
+      desc.trucks[0].freight.map((f) => ({
+        'Red': Freight.Red,
+        'Green': Freight.Green,
+        'Blue': Freight.Blue
+      }[f]))
     );
 
     const tiles = desc.tiles.map((tile) => {

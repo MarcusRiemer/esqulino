@@ -11,7 +11,8 @@ export interface WorldDescription {
       x: number,
       y: number
     },
-    facing: string
+    facing: string,
+    freight: string[]
   }[]
 
   tiles: {
@@ -65,7 +66,10 @@ export function readFromNode(node: NodeDescription): WorldDescription {
           x: +truck.children['position'][0].properties['x'],
           y: +truck.children['position'][0].properties['y']
         },
-        facing: truck.children['orientation'][0].properties['direction']
+        facing: truck.children['orientation'][0].properties['direction'],
+        freight: truck.children['freight']
+          ? truck.children['freight'].map(f => f.properties['colour'])
+          : []
       });
     });
 
@@ -74,7 +78,13 @@ export function readFromNode(node: NodeDescription): WorldDescription {
     node.children['roads'].forEach((tile) => {
       const posToIdx = (pos: NodeDescription): number => (+pos.properties['x']) + (+pos.properties['y']) * wd.size.width;
       wd.tiles[posToIdx(tile.children['position'][0])].openings = tile.children['openings'].map((o) => o.properties['direction']);
-      // TODO: Process more tile properties
+      if (tile.children['freight']) {
+        wd.tiles[posToIdx(tile.children['position'][0])].freight = tile.children['freight'].map((o) => o.properties['colour']);
+      }
+      if (tile.children['unloading_bay'] && tile.children['unloading_bay'].length > 0) {
+        wd.tiles[posToIdx(tile.children['position'][0])].freightTarget = tile.children['unloading_bay'][0].properties['colour'];
+      }
+      // TODO: Process traffic lights
     });
   }
 
