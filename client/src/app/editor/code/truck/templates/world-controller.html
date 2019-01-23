@@ -1,11 +1,8 @@
 <p align="center">
   <truck-world-selector #worldSelector></truck-world-selector>
 </p>
-<p align="center">
-  Selected World: {{ worldSelector.selectedWorldId }}
-</p>
 
-<p align="center">
+<p align="center" ng-if="world">
   <button [disabled]="blocked | async" (click)="goForward()">goForward</button>
   <button [disabled]="blocked | async" (click)="turnLeft()">turnLeft</button>
   <button [disabled]="blocked | async" (click)="turnRight()">turnRight</button>
