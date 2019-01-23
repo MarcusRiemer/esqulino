@@ -222,10 +222,19 @@ export interface DatabaseSchemaSidebarDescription {
   type: "databaseSchema"
 }
 
+export interface TruckProgramUserFunctionsSidebarDescription {
+  /**
+   * Unique identification for this type.
+   */
+  type: "truckProgramUserFunctions"
+}
+
 /**
  * All possible sidebar types
  */
-export type SidebarDescription = FixedBlocksSidebarDescription | DatabaseSchemaSidebarDescription;
+export type SidebarDescription = FixedBlocksSidebarDescription
+  | DatabaseSchemaSidebarDescription
+  | TruckProgramUserFunctionsSidebarDescription;
 
 /**
  * Describes how certain nodes in the syntaxtree should be presented

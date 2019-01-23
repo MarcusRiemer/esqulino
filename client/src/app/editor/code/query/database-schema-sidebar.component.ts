@@ -9,7 +9,6 @@ import { DragService } from '../../drag.service';
 
 @Component({
   templateUrl: 'templates/database-schema-sidebar.html',
-  selector: "database-schema-sidebar"
 })
 export class DatabaseSchemaSidebarComponent {
   constructor(
@@ -66,5 +65,4 @@ export class DatabaseSchemaSidebarComponent {
       alert(e);
     }
   }
-
 }

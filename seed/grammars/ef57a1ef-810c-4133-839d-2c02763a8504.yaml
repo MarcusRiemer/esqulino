@@ -51,8 +51,8 @@ concise_attributes:
     "type": "terminal", "symbol": "("}, {"name": "arguments", "type": "sequence",
     "nodeTypes": [{"occurs": "*", "nodeType": "procedureParameter"}]}, {"name": "parenClose",
     "type": "terminal", "symbol": ")"}, {"name": "bodyOpen", "type": "terminal", "symbol":
-    "{"}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "statement"}]}, {"name": "bodyClose", "type": "terminal", "symbol": "}"}]}, "booleanBinaryExpression":
+    ""}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "statement"}]}, {"name": "bodyClose", "type": "terminal", "symbol": ""}]}, "booleanBinaryExpression":
     {"type": "concrete", "attributes": [{"name": "lhs", "type": "sequence", "nodeTypes":
     ["booleanExpression"]}, {"name": "operator", "type": "sequence", "nodeTypes":
     ["relationalOperator"]}, {"name": "rhs", "type": "sequence", "nodeTypes": ["booleanExpression"]}]}}}'
@@ -61,7 +61,7 @@ concise_attributes:
   value_before_type_cast: '2018-12-19 11:24:42.99628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-22 12:39:37.195737'
+  value_before_type_cast: '2019-01-23 15:18:20.885314'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-lang
