@@ -88,7 +88,7 @@ export class EditBlockLanguageService {
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
       this._serverData
-        .getGrammarDescription(this.editedSubject.grammarId)
+        .getGrammarDescription(this.editedSubject.grammarId, true)
         .pipe(first())
         .subscribe(g => {
           this.generatorErrors.push(...validateGenerator(instructions));
