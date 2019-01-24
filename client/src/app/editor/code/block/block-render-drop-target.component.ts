@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style } from '@angular/animations';
 
-import { map } from 'rxjs/operators';
+import { map, withLatestFrom } from 'rxjs/operators';
 
+import { arrayEqual } from '../../../shared/util';
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
@@ -10,8 +11,9 @@ import { DragService } from '../../drag.service';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
-import { BlockDropProperties } from './block-drop-properties'
+import { BlockDropProperties } from './block-drop-properties';
 import { calculateDropLocation, calculateDropTargetState } from './drop-utils';
+
 
 /**
  * Renders a single and well known visual element of a node.
@@ -46,6 +48,24 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
     private _currentCodeResource: CurrentCodeResourceService,
   ) {
   }
+
+  readonly isDropTarget = this._dragService.currentDrag.pipe(
+    withLatestFrom(this._dragService.isDragInProgress),
+    map(([currentDrag, inProgress]) => {
+      if (inProgress) {
+        if (arrayEqual(currentDrag.hoverLocation, this.dropLocation)) {
+          // We would drop something in the location we are a placeholder.
+          return (true);
+        } else {
+          return (false);
+        }
+      } else {
+        return (false);
+      }
+    })
+  );
+
+  readonly thisBlock = this;
 
   /**
    * @return The location a drop should occur in. This depends on the configuration in the language model.

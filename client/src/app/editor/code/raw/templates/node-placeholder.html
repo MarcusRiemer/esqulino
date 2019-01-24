@@ -1,5 +1,4 @@
-<div [astDropPlaceholder]="location"
-     [@dropPlaceholder]="animationState | async"
+<div [@dropPlaceholder]="animationState | async"
      (drop)="onDropInsert()"
      class="node">
   <ng-content></ng-content>

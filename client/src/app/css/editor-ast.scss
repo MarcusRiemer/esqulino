@@ -1,4 +1,4 @@
-/* The "raw" AST editor */
+/* Any editor that works with an AST */
 .ast {
     /* Basic outline for each node */
     .node {
@@ -9,6 +9,10 @@
     /* Indent each node after the first */
     .node .node {
         margin: 10px;
+    }
+
+    .empty-tree {
+        background-color: green;
     }
 }
 
@@ -43,6 +47,18 @@ trash {
         //border: 5px solid red;
     }
 
+    .drop-placeholder {
+        border: 1px dashed black;
+        border-radius: 500px;
+        background: repeating-linear-gradient(
+            45deg,
+            RGBA(255, 255, 0, 0.2),
+            RGBA(255, 255, 0, 0.2) 10px,
+            RGBA(0, 0, 0, 0.2) 10px,
+            RGBA(0, 0, 0, 0.2) 20px
+        );
+    }
+
     editor-block-render {
         display: contents;
     }
@@ -50,7 +66,6 @@ trash {
     .break-after {
         width: 100%;
     }
-
 }
 
 /* This class is applied to the error tooltip itself */

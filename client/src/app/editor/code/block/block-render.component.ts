@@ -71,4 +71,15 @@ export class BlockRenderComponent {
   iteratorGetEditorBlock(node: Node) {
     return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
   }
+
+  readonly defaultBetweenDropTarget: VisualBlockDescriptions.EditorDropTarget = {
+    blockType: "dropTarget",
+    dropTarget: {
+      self: {
+        order: "insertAfter",
+        skipParents: 0
+      }
+    },
+    direction: "horizontal"
+  };
 }

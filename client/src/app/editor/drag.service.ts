@@ -36,7 +36,7 @@ export interface CurrentDrag {
   // The node that is currently hovered over.
   hoverNode?: Node;
   // The placeholder that is currently hovered over
-  hoverPlaceholder?: NodeLocation;
+  hoverLocation?: NodeLocation;
   // The JSON representation of the thing that is currently beeing dragged
   draggedDescription: NodeDescription;
   // The node in the tree that is currently beeing dragged
@@ -72,7 +72,7 @@ export class DragService {
 
   /**
    * Starts a new dragging operation.
-   * 
+   *
    * @param evt The original drag event that was issued by the DOM
    * @param sourceSidebar The serializable drag information
    * @param sourceTree The node with the corresponding tree that started the drag
@@ -146,39 +146,21 @@ export class DragService {
   }
 
   /**
-   * Needs to be called by nodes when the drag operation currently drags over any node.
-   */
-  public informDraggedOverNode(node: Node) {
-    const dragData = this._currentDrag.value;
-    if (!dragData) {
-      throw new Error("Can't drag over node: No drag in progress");
-    }
-
-    // Just in case: Get rid of a possibly set placeholder    
-    delete dragData.hoverPlaceholder;
-    // Overwrite the current node
-    dragData.hoverNode = node;
-
-    this._currentDrag.next(dragData);
-    console.log("Dragged over node:", JSON.stringify(node.location));
-  }
-
-  /**
    * Needs to be called by nodes when the drag operation currently drags over any placeholder.
    */
-  public informDraggedOverPlaceholder(loc: NodeLocation) {
+  public informDraggedOver(loc: NodeLocation, node: Node) {
     const dragData = this._currentDrag.value;
     if (!dragData) {
       throw new Error("Can't drag over placeholder: No drag in progress");
     }
 
-    // Just in case: Get rid of a possibly set node    
-    delete dragData.hoverNode;
-    // Overwrite the current placeholder
-    dragData.hoverPlaceholder = loc;
+    // Just in case: Get rid of a possibly set node
+    dragData.hoverNode = node;
+    dragData.hoverLocation = loc;
 
     this._currentDrag.next(dragData);
-    console.log("Dragged over placeholder:", JSON.stringify(loc));
+
+    console.log("Dragging over: ", loc, node);
   }
 
   /**
@@ -192,7 +174,7 @@ export class DragService {
 
     // Get rid of everything that could be set
     delete dragData.hoverNode;
-    delete dragData.hoverPlaceholder;
+    delete dragData.hoverLocation;
 
     this._currentDrag.next(dragData);
     console.log("Dragged over editor");

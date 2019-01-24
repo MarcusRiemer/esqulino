@@ -42,6 +42,11 @@
                              [visual]="childVisualBlock"></editor-block-render>
       </ng-container>
 
+      <editor-block-render-drop-target [codeResource]="codeResource"
+                                       [node]="childNode"
+                                       [visual]="defaultBetweenDropTarget">
+      </editor-block-render-drop-target>
+
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
@@ -56,7 +61,7 @@
     <editor-block-render-block #currentBlock
                                [blockLayout]="visual"
                                [blockBase]="visual"
-                               [astDropTarget]="node"
+                               [astDropTarget]="currentBlock"
                                [astDraggable]="node"
                                [codeResource]="codeResource"
                                [node]="node"
