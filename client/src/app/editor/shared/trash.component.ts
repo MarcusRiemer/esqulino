@@ -23,7 +23,8 @@ type AnimationState = "available" | "over" | "hidden";
       })),
       state('hidden', style({
         opacity: 0,
-        transform: 'scale(0)'
+        transform: 'scale(0)',
+        display: 'none',
       })),
       /* Hmmpf, surely there must be a way to state "all transitions except
          :enter and :leave"? The "* => *"-syntax takes those into account and
