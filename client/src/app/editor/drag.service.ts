@@ -1,7 +1,8 @@
+import { Injectable, Injector, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Overlay, OverlayRef, GlobalPositionStrategy } from '@angular/cdk/overlay';
+
 import { Observable, BehaviorSubject } from 'rxjs';
-
-import { Injectable } from '@angular/core';
-
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
 import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
@@ -9,6 +10,9 @@ import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syn
 import { FixedSidebarBlock } from '../shared/block';
 
 import { TrashService } from './shared/trash.service';
+
+import { DropBlockComponent } from './drop-block.component';
+
 
 /**
  * All information about the origin of this drag if it came from
@@ -58,6 +62,15 @@ export class DragService {
   // Shortcut to get the gist of the current drag process
   private _currentDragInProgress = this._currentDrag.pipe(map(d => !!d));
 
+  private _currentDragOverlay: OverlayRef = undefined;
+
+  private _currentDragPos: GlobalPositionStrategy = undefined;
+
+  private _mouse = {
+    x: "0px",
+    y: "0px"
+  };
+
   /**
    * This service is involved  with *every* part of the UI and must therefore
    * be attached to the very root of the dependency injection hierarchy. All
@@ -67,8 +80,60 @@ export class DragService {
    */
   private constructor(
     private _trashService: TrashService,
-    private _analytics: AnalyticsService
-  ) { }
+    private _analytics: AnalyticsService,
+    private _overlay: Overlay,
+    private _injector: Injector,
+    @Inject(PLATFORM_ID) platformId: string
+  ) {
+    if (isPlatformBrowser(platformId)) {
+      // Most dirty hack: Track the mouse position
+      document.addEventListener('mousemove', (evt) => this.updateMousePosition(evt))
+      document.addEventListener('mouseenter', (evt) => this.updateMousePosition(evt))
+    }
+  }
+
+  private updateMousePosition(evt: MouseEvent) {
+    this._mouse.x = evt.clientX + "px";
+    this._mouse.y = evt.clientY + "px";
+
+    //console.log("global", this._mouse);
+
+    if (typeof (this._currentDragPos) !== "undefined") {
+      const floatHeight = 25;
+      this._currentDragPos
+        .left("" + evt.clientX + "px")
+        .top("" + (evt.clientY - floatHeight) + "px");
+
+      this._currentDragPos.apply();
+      //console.log("pos", this._mouse);
+    }
+  }
+
+  private showOverlay(desc: NodeDescription, evt: MouseEvent) {
+    // Create a new overlay at an appropriate position
+    this._currentDragPos = this._overlay.position().global()
+      .left("" + evt.clientX + "px")
+      .top("" + evt.clientY + "px");
+    this._currentDragOverlay = this._overlay.create({
+      positionStrategy: this._currentDragPos,
+      hasBackdrop: false
+    });
+
+    const portal = DropBlockComponent.createPortalComponent(desc, this._injector);
+    this._currentDragOverlay.attach(portal);
+
+    this._currentDragPos.apply();
+  }
+
+  private hideOverlay() {
+    // Remove a previous overlay (if any)
+    if (this._currentDragOverlay) {
+      this._currentDragOverlay.dispose();
+      this._currentDragOverlay = undefined;
+      this._currentDragPos.dispose();
+      this._currentDragPos = undefined;
+    }
+  };
 
   /**
    * Starts a new dragging operation.
@@ -82,21 +147,31 @@ export class DragService {
       throw new Error("Attempted to start a second drag");
     }
 
+    this.showOverlay(desc, evt);
+
     // We are only interested in the top level drag element, if
     // we wouldn't stop the propagation, the parent of the current
     // drag element would fire another dragstart.
     evt.stopPropagation();
+    evt.preventDefault();
 
     // Serialize the dragged "thing"
-    const domDragData = JSON.stringify(desc);
-    evt.dataTransfer.setData('text/plain', domDragData);
+    // const domDragData = JSON.stringify(desc);
+    // evt.dataTransfer.setData('text/plain', domDragData);
 
     // TODO: Choose when to move and when to copy
-    evt.dataTransfer.effectAllowed = "move";
+    //evt.dataTransfer.effectAllowed = "move";
+
+    /*const img = document.createElement("img");
+    img.src = "/vendor/logos/blattwerkzeug-caption.svg"
+    evt.dataTransfer.setDragImage(img, 0, 100);*/
+    //evt.dataTransfer.setDragImage(evt.fromElement, 0, 100);
 
     // Reset everything once the operation has ended
     const dragEndHandler = () => {
-      evt.target.removeEventListener("dragend", dragEndHandler);
+      evt.target.removeEventListener("mouseup", dragEndHandler);
+
+      this.hideOverlay();
 
       this._currentDrag.next(undefined);
       this._trashService.hideTrash();
@@ -110,7 +185,9 @@ export class DragService {
         value: desc
       });
     }
-    evt.target.addEventListener("dragend", dragEndHandler);
+    document.addEventListener("mouseup", dragEndHandler);
+
+    //evt.target.addEventListener("dragend", dragEndHandler);
 
     // Store drag information as long as this drags on
     const hoverData = {

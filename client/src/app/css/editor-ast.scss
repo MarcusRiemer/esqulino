@@ -25,6 +25,10 @@ trash {
     z-index: 1;
 }
 
+.drop-block {
+    pointer-events: none;
+}
+
 /* The "block" AST editor */
 .block-editor-root {
     /* Default font settings */
