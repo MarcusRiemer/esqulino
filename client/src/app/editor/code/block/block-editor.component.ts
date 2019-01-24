@@ -107,6 +107,9 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     return (this._editorComponentsService.createComponent(desc));
   }
 
+  /**
+   * The visual components that should be displayed.
+   */
   readonly editorComponents = this.currentResource
     .pipe(
       switchMap(codeResource => codeResource.blockLanguage),
@@ -119,7 +122,32 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * possibility anything is currently dragged over a node. So we inform the
    * drag service about that.
    */
-  public onDragEnter(_: DragEvent) {
+  public onEditorDragEnter(_: DragEvent) {
     this._dragService.informDraggedOverEditor();
+  }
+
+  /**
+   * When something draggable enters the empty area a program may start with,
+   * there is not actually a node that could be referenced.
+   */
+  public onPlaceholderDragEnter(evt: DragEvent) {
+    console.log("enter");
+    evt.preventDefault();
+    evt.cancelBubble = true;
+    this._dragService.informDraggedOver([], undefined);
+  }
+
+  public onPlaceholdeDragOver(evt: DragEvent) {
+    evt.preventDefault();
+  }
+
+  /**
+   * When something draggable enters the empty area a program may start with,
+   * there is not actually a node that could be referenced.
+   */
+  public onPlaceholderDrop(evt: DragEvent) {
+    evt.preventDefault();
+    const desc = this._dragService.peekDragData.draggedDescription;
+    this._currentCodeResource.peekResource.insertNode([], desc);
   }
 }

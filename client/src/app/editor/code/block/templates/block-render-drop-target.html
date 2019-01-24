@@ -1,8 +1,9 @@
 <!-- Ensure correct visual behaviour -->
-<div [@availability]="currentAvailability | async"
+<div *ngIf="!(isDropTarget | async)"
+     [@availability]="currentAvailability | async"
      [blockBase]="visual"
      [blockLayout]="visual"
-     [astDropPlaceholder]="dropLocation"
+     [astDropTarget]="thisBlock"
      (drop)="onDrop($event)">
   <!-- Render all components of this drop target -->
   <ng-container *ngFor="let childVisualBlock of visual.children">
@@ -10,4 +11,11 @@
                          [visual]="childVisualBlock"
                          [node]="node"></editor-block-render>
   </ng-container>
+</div>
+
+<div *ngIf="true && (isDropTarget | async)"
+     [astDropTarget]="thisBlock"
+     (drop)="onDrop($event)"
+     class="drop-placeholder">
+  Hier
 </div>

@@ -7,6 +7,7 @@ import { DragService } from '../../drag.service';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
+import { BlockDropProperties } from './block-drop-properties'
 import { calculateDropLocation } from './drop-utils';
 
 /**
@@ -16,7 +17,7 @@ import { calculateDropLocation } from './drop-utils';
   templateUrl: 'templates/block-render-block.html',
   selector: `editor-block-render-block`
 })
-export class BlockRenderBlockComponent implements OnInit {
+export class BlockRenderBlockComponent implements BlockDropProperties {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
@@ -25,10 +26,6 @@ export class BlockRenderBlockComponent implements OnInit {
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
   ) {
-  }
-
-  ngOnInit() {
-
   }
 
   /**

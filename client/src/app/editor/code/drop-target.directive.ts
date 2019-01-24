@@ -4,6 +4,8 @@ import { Node } from '../../shared/syntaxtree';
 
 import { DragService } from '../drag.service';
 
+import { BlockDropProperties } from './block/block-drop-properties';
+
 /**
  * Can be used for any element to register it as a drop
  * target for a certain node.
@@ -13,7 +15,7 @@ import { DragService } from '../drag.service';
 })
 export class DropTargetDirective {
 
-  @Input('astDropTarget') node: Node;
+  @Input('astDropTarget') dropProperties: BlockDropProperties;
 
   constructor(ref: ElementRef, dragService: DragService) {
     const el = ref.nativeElement as HTMLElement;
@@ -27,7 +29,10 @@ export class DropTargetDirective {
     // Inform the drag service about hover events
     el.addEventListener("dragenter", evt => {
       preventAndCancel(evt);
-      dragService.informDraggedOverNode(this.node);
+      dragService.informDraggedOver(
+        this.dropProperties.dropLocation,
+        this.dropProperties.node
+      );
     });
 
     // Make this target

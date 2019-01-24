@@ -1,5 +1,5 @@
 <div class="ast"
-     (dragenter)="onDragEnter($event)">
+     (dragenter)="onEditorDragEnter($event)">
   <!-- Ensuring there is a selected resource -->
   <ng-container *ngIf="(currentResource | async); let currentResource">
     <!-- Ensuring there is a selected language model -->
@@ -37,12 +37,14 @@
           <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
             <!-- If the tree is empty, allow the user to populate it -->
             <div *ngIf="currentTree.isEmpty; else renderTree;"
+                 (dragenter)="onPlaceholderDragEnter($event)"
+                 (dragover)="onPlaceholdeDragOver($event)"
+                 (drop)="onPlaceholderDrop($event)"
                  class="card-body">
               Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
-              <ast-node-placeholder [alwaysVisible]="true"
-                                    [location]="[]">
+              <div class="empty-tree">
                 Freier Platz
-              </ast-node-placeholder>
+              </div>
             </div>
 
             <!-- If the tree is not empty, it wants to be rendered -->

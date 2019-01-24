@@ -8,7 +8,6 @@ import { CodeGeneratorComponent } from './code-generator.component'
 import { CreateCodeResourceComponent } from './create-code-resource.component'
 import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
-import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { EditorComponentsService } from './editor-components.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { LanguageEmittedSelectorComponent } from './language-emitted-selector.component'
@@ -61,7 +60,6 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     DatabaseSchemaSidebarComponent,
     DraggableDirective,
     DropTargetDirective,
-    DropPlaceholderDirective,
     NodeComponent,
     NodeChildrenComponent,
     NodePlaceholderComponent,
