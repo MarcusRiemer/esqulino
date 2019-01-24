@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs'
+import { BehaviorSubject, combineLatest } from 'rxjs'
 
 import { TrashService } from './trash.service'
 import { map } from 'rxjs/operators';

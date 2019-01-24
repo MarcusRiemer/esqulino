@@ -3,14 +3,6 @@ import { isPlatformServer } from '@angular/common'
 
 import { ServerApi } from './serverapi'
 
-const BASE_URL = new InjectionToken<string>(
-  "serverApiBaseUrl",
-  {
-    factory: () => undefined,
-    providedIn: "root"
-  }
-);
-
 /**
  * Instead of constructing URLs on the fly, they should be created using
  * this service. It ensures that the server actually provides the

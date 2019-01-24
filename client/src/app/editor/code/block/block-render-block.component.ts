@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';

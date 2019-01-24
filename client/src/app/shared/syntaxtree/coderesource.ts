@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map, first } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Project } from '../project';
 import { ProjectResource } from '../resource';

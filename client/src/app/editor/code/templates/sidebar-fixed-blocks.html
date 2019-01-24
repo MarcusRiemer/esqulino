@@ -5,8 +5,7 @@
     <div *ngFor="let category of sidebar.categories">
       <h6 *ngIf="category.showDisplayName">{{ category.displayName }}</h6>
       <div *ngFor="let block of category.blocks"
-           (dragstart)="startDrag($event, block)"
-           draggable="true"
+           (mousedown)="startDrag($event, block)"
            class="block rounded">
         {{ block.displayName }}
       </div>

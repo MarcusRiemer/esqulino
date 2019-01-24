@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 
-import { map, flatMap, first, tap, share } from 'rxjs/operators'
+import { map, flatMap, first, share } from 'rxjs/operators'
 import { zip } from 'rxjs'
 
 import { ServerApiService } from '../../shared';

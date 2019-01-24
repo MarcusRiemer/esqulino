@@ -1,7 +1,5 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 
-import { Node } from '../../shared/syntaxtree';
-
 import { DragService } from '../drag.service';
 
 import { BlockDropProperties } from './block/block-drop-properties';
