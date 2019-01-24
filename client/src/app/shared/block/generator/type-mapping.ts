@@ -111,24 +111,10 @@ export function mapChildren(
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
     // Create a single terminal character to go in between
     between = [
-      {
-        blockType: "dropTarget",
-        dropTarget: {
-          /*self: {
-            order: "insertAfter",
-            skipParents: 0
-          },*/
-          visibility: { $value: true }
-
-        },
-        children: [
-          mapTerminal(
-            { type: "terminal", name: "t", symbol: "_" + instructions.between + "_" },
-            DefaultInstructions.terminalInstructions
-          )
-        ],
-        direction: "horizontal",
-      }
+      mapTerminal(
+        { type: "terminal", name: "t", symbol: instructions.between },
+        DefaultInstructions.terminalInstructions
+      )
     ];
   }
   // "allowed" and "sequence" may provide fallbacks in the grammar
