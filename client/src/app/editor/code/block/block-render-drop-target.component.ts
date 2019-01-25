@@ -53,7 +53,7 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
     withLatestFrom(this._dragService.isDragInProgress),
     map(([currentDrag, inProgress]) => {
       if (inProgress) {
-        if (arrayEqual(currentDrag.hoverLocation, this.dropLocation)) {
+        if (arrayEqual(currentDrag.dropLocation, this.dropLocation)) {
           // We would drop something in the location we are a placeholder.
           return (true);
         } else {
@@ -80,11 +80,9 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   readonly currentAvailability = this._dragService.currentDrag
     .pipe(map(drag => calculateDropTargetState(drag, this)));
 
-  /**
-   * Handles the drop events on the empty drop
-   */
-  onDrop(_: DragEvent) {
-    const desc = this._dragService.peekDragData.draggedDescription;
-    this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
+  onMouseEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOver(evt, this.dropLocation, this.node);
+    }
   }
 }

@@ -46,7 +46,7 @@ export class NodePlaceholderComponent {
             if (!curr)
               // There is no drag operation
               return (this.alwaysVisible ? "available" : "none");
-            else if (arrayEqual(curr.hoverLocation, this.location))
+            else if (arrayEqual(curr.dropLocation, this.location))
               // There is a drag operation and it targets us
               return ("self");
             else

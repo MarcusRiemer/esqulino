@@ -12,6 +12,7 @@ import { FixedSidebarBlock } from '../shared/block';
 import { TrashService } from './shared/trash.service';
 
 import { DropBlockComponent } from './drop-block.component';
+import { CurrentCodeResourceService } from './current-coderesource.service';
 
 
 /**
@@ -39,8 +40,10 @@ export interface DragTree {
 export interface CurrentDrag {
   // The node that is currently hovered over.
   hoverNode?: Node;
-  // The placeholder that is currently hovered over
-  hoverLocation?: NodeLocation;
+  // Is the node currently hovering over something for deletion?
+  hoverTrash: boolean;
+  // The location that would be dropped at
+  dropLocation?: NodeLocation;
   // The JSON representation of the thing that is currently beeing dragged
   draggedDescription: NodeDescription;
   // The node in the tree that is currently beeing dragged
@@ -83,6 +86,7 @@ export class DragService {
     private _analytics: AnalyticsService,
     private _overlay: Overlay,
     private _injector: Injector,
+    private _currentCodeResource: CurrentCodeResourceService,
     @Inject(PLATFORM_ID) platformId: string
   ) {
     if (isPlatformBrowser(platformId)) {
@@ -99,10 +103,10 @@ export class DragService {
     //console.log("global", this._mouse);
 
     if (typeof (this._currentDragPos) !== "undefined") {
-      const floatHeight = 25;
+      const floatHeight = 10; // Show the dragged element below the cursor
       this._currentDragPos
         .left("" + evt.clientX + "px")
-        .top("" + (evt.clientY - floatHeight) + "px");
+        .top("" + (evt.clientY + floatHeight) + "px");
 
       this._currentDragPos.apply();
       //console.log("pos", this._mouse);
@@ -200,19 +204,23 @@ export class DragService {
   /**
    * Needs to be called by nodes when the drag operation currently drags over any placeholder.
    */
-  public informDraggedOver(loc: NodeLocation, node: Node) {
+  public informDraggedOver(evt: MouseEvent, dropLocation: NodeLocation, node: Node) {
     const dragData = this._currentDrag.value;
     if (!dragData) {
       throw new Error("Can't drag over placeholder: No drag in progress");
     }
 
-    // Just in case: Get rid of a possibly set node
+    // Ensure that no other block tells the same story
+    evt.stopImmediatePropagation();
+
+    // Just in case: Reset all the data
     dragData.hoverNode = node;
-    dragData.hoverLocation = loc;
+    dragData.dropLocation = dropLocation;
+    dragData.hoverTrash = false;
 
     this._currentDrag.next(dragData);
 
-    console.log("Dragging over: ", loc, node);
+    console.log("Dragging over: ", dropLocation, node);
   }
 
   /**
@@ -226,10 +234,27 @@ export class DragService {
 
     // Get rid of everything that could be set
     delete dragData.hoverNode;
-    delete dragData.hoverLocation;
+    delete dragData.dropLocation;
+    dragData.hoverTrash = false;
 
     this._currentDrag.next(dragData);
     console.log("Dragged over editor");
+  }
+
+  /**
+   * Needs to be called when the drag operation currently drags over the editor.
+   */
+  public informDraggedOverTrash() {
+    const dragData = this._currentDrag.value;
+
+    // Get rid of everything that could be set
+    delete dragData.hoverNode;
+    delete dragData.dropLocation;
+
+    // .. but the trash
+    dragData.hoverTrash = true;
+
+    this._currentDrag.next(dragData);
   }
 
   /**
@@ -266,10 +291,20 @@ export class DragService {
    */
   private setupDragEndHandlers(desc: NodeDescription) {
     // Reset everything once the operation has ended
-    const dragEndHandler = () => {
+    const dragEndHandler = (cancelled: boolean) => {
       removeDragHandlers();
-
       this.hideOverlay();
+
+      // Should something be inserted?
+      if (!cancelled && this.peekDragData.dropLocation) {
+        const dropLocation = this.peekDragData.dropLocation;
+        this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
+      }
+
+      // If we have a proper source: Possibly trash it
+      if (this.peekDragData.hoverTrash) {
+        this._trashService._fireDrop(undefined);
+      }
 
       this._currentDrag.next(undefined);
       this._trashService.hideTrash();
@@ -285,21 +320,22 @@ export class DragService {
     }
 
     // Dragging ends when the mouse is no longer pressed ...
-    document.addEventListener("mouseup", (evt: MouseEvent) => {
+    const mouseUpHandler = (evt: MouseEvent) => {
       evt.stopImmediatePropagation();
-      dragEndHandler();
-    });
+      dragEndHandler(false);
+    };
+    document.addEventListener("mouseup", mouseUpHandler);
 
     // ... or the user presses "Escape"
     const escHandler = (evt: KeyboardEvent) => {
       if (evt.key === "Escape") {
-        dragEndHandler();
+        dragEndHandler(true);
       }
     };
     document.addEventListener("keyup", escHandler);
 
     const removeDragHandlers = () => {
-      document.removeEventListener("mouseup", dragEndHandler);
+      document.removeEventListener("mouseup", mouseUpHandler);
       document.removeEventListener("keydown", escHandler);
     }
   }
