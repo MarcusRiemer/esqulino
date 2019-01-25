@@ -148,7 +148,7 @@ export class World {
 
     // Is the world solved?
     [Sensor.isSolved]: (state: WorldState): boolean => {
-      return state.solved();
+      return state.solved;
     },
   };
 
@@ -319,7 +319,7 @@ export class World {
    *         otherwise false.
    */
   get solved(): boolean {
-    return this.state.solved();
+    return this.state.solved;
   }
 
   /**
@@ -487,7 +487,7 @@ export class WorldState {
    * @return True, when all freight has been delivered to their destination,
    *         otherwise false.
    */
-  solved(): boolean {
+  get solved(): boolean {
     return this.truck.freightItems === 0 && !this.tiles.some((t) => t.freightItems > 0);
   }
 

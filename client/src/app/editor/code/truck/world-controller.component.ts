@@ -10,13 +10,17 @@ import { WorldSelectorComponent } from './world-selector.component';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
+  styles: [
+    ':host ::ng-deep truck-world-selector select.custom-select { border-top-left-radius: 0px; border-bottom-left-radius: 0px; }',
+    '.btn-danger.disabled, .btn-danger:disabled { background-color: #e4e4e4; border-color: #e4e4e4; }'
+  ]
 })
 export class WorldControllerComponent implements OnInit, OnDestroy {
   @ViewChild('worldSelector') worldSelector: WorldSelectorComponent;
 
   private _worldSubscription: Subscription;
   private _worldSelectorSubscription: Subscription;
-  public world: World;
+  public world: World = null;
 
   readonly currentWorld = this._truckWorld.currentWorld;
   readonly currentProgram = this._currentCodeResource.currentResource;
