@@ -340,8 +340,15 @@ export class World {
   async commandAsync(command: Command): Promise<void> {
     this.commandInProgress.next(true);
     this.codeShouldTerminate = false;
-    await this._commandAsync(command);
-    this.commandInProgress.next(false);
+    try {
+      await this._commandAsync(command);
+    } catch (error) {
+      if (!error.expected) {
+          throw error;
+      }
+    } finally {
+      this.commandInProgress.next(false);
+    }
   }
 
   /**
