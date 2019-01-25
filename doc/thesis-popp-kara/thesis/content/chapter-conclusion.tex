@@ -4,21 +4,37 @@
 \chapter{Fazit}
 \label{sec:conclusion}
 
-\TODO{Fazit}
+Im diesem Fazit soll nun noch einmal zusammengefasst werden welche Ziele im Hinblick auf die Anforderungsanalyse erreicht wurden und welche Ideen für eine Weiterentwicklung bestehen.
 
 \section{Erreichte Ziele}
 \label{sec:conclusion:archived}
 
-\TODO{Erreichte Ziele}
+Es wurde eine ansprechende Rahmenhandlung mit dem mit dem Lastwagen als Spielfigur entwickelt, in die sich Programmieranfänger gut hineinversetzen können. Die Mikrowelt hält neben den klassischen Navigationsaufgaben, wie sie aus anderen Anwendungen bekannt sind, auch zusätzliche Funktionen bereit. So konnte mit den Ampeln ein Element eingeführt werden, welches zusätzliche zeitbasierte Aufgabenstellungen ermöglicht. Die Bewegungen des Lastwagen sind animiert und auch verspielte Elemente wie z.B. der Blinker haben Einzug gefunden.
+
+Auch der Umfang der Sprache übersteigt die in der Anforderungsanalyse gestellten Mindestanforderungen (siehe \ref{sec:requirements:program}). Neben atomaren Befehen und Prozeduren, konnten zusätzlich auch komplexere Konzepte, wie Sensoren zum Interagieren mit der Welt, verschiedene Arten von Schleifen, sowie Verzweigungen und sogar ein erster Ansatz für Variablen (Prozedurparameter) implementiert werden. Durch die vorgefertigten Bausteine im Drag \& Drop-Editor und die leicht verständliche Sprache, geht dabei trotzdem die Übersicht nicht verloren und da der Nutzer alle Sprachelemente in der Seitenleiste dargestellt bekommt, ist ein leichter Einstieg möglich.
+
+Dabei bettet sich die entwickelte Erweiterung nahtlos in das bestehende BlattWerkzeug-Projekt ein. Neben dem bekannten Drag \& Drop-Editor und der Darstellungs-Komponente, ermöglicht die neue Controller-Komponente auch das schrittweise Interagieren mit der Welt in einem Navigationsmodus.
+
+Mit diesen Mitteln lässt sich -- wie ein Blick in den Anhang \ref{sec:exercises} beweist -- eine Vielzahl von Aufgabenstellungen umsetzen. Ob diese nun auch für die Zielgruppe geeignet sind, lässt sich nur in einem Test herausfinden.
 
 \section{Nicht erreichte Ziele}
 \label{sec:conclusion:open}
 
-\TODO{Nicht erreichte Ziele}
+Die Entwicklung eines Level-Editor (siehe \ref{sec:requirements:world:structure}) musste hinten angestellt werden. Dass im zeitlichen Rahmen der dieser Bachelorarbeit nur ein rudimentärer Level-Editor auf Basis des Drag \& Drop-Editor gebaut werden sollte, war bereits zu Beginn der Arbeit klar. Auch wenn er theoretisch vorhanden ist, stellte sich doch im Laufe der Arbeit heraus, dass sich die Strukturen des Drag \& Drop-Editor für diesen Anwendungsfall nicht geeignet sind.
 
-\section{Weitere Entwicklung}
+Die ursprüngliche Idee den aktuell ausgeführten Befehl im Drag \& Drop-Editor zu markieren und für den Nutzer so nachvollziehbar zu machen an welcher Stelle in seinem Programm sich die Ausführung gerade befindet, konnte nicht mehr umgesetzt werden, da die entsprechenden Vorraussetzungen in BlattWerkzeug dafür zunächst geschaffen werden müssen. Die Integration dieser Funktionalität auf seiten der Erweiterung, sollte jedoch auf Grund der guten Kapselung der Befehle kein Problem darstellen.
+
+\section{Ausblick}
 \label{sec:conclusion:future}
 
-\TODO{Weitere Entwicklung}
+Im Laufe der Arbeit entstanden einige Ideen für spätere Weiterenwicklungen, welche im Folgenden einmal aufgezeigt werden sollen.
 
-\TODO{A promising way of further development of mini-language programming environments is to extend them with an intelligent tutoring component and a hypermedia component. \cite[80]{brusilovsky1997}}
+\begin{description}
+  \item[Level-Editor:] Der Level-Editor wurde bereits mehrfach angesprochen. Ein einfach zu bedienender Level-Editor würde es sowohl Lehrern, als auch Schülern ermöglichen eigene Aufgabenstellungen vorzubereiten.
+  \item[Erweiterung der Darstellung:] Auch wenn die aktuelle grafische Darstellung Ihren Zweck erfüllt, könnte diese durch aufwändiger gestaltete Grafiken noch aufgewertet werden. So wären anstelle der Ablageflächen z.B. kleine Lagerhäuser denkbar in die der Lastwagen hineinfahren kann. Auch zusätzliche Arten von Fahrzeugen wären denkbar, die dann z.B. zwei oder mehr Container transportieren können.
+  \item[Soundeffekte:] Starten des Motors, Fahren, Blinken, Be- und Entladen; dies sind alles Aktionen, die in der Realität mit Geräuschen verbunden sind. Es würde die Anwendung noch einmal aufwerten, wenn diese Geräusche auch hier Einzug halten und die visuelle durch eine akustische Darstellung erweitert werden würde.
+  \item[Mehrere Transportmittel:] Denkbar wäre es auch weitere Fahrzeugklassen einzuführen. So muss vielleicht der Lastwagen zum Quären eines Gewässers auf eine Fähre fahren, die ebenfalls durch das Programm des Nutzers gesteuert wird und den Lastwagen an das andere Ufer bringt.
+  \item[Tutorenkomponente:] Brusilovsky et al. schreiben "Eine viel versprechende Möglichkeit zur Weiterentwicklung von Minisprachen-Programmierumgebungen besteht darin, sie um eine intelligente Tutorenkomponente und eine Hypermedia-Komponente zu erweitern."~\cite[80]{brusilovsky1997}. Diesem Vorschlag möchte sich der Autor dieser Arbeit anschließen. Eine Tutorenkomponente die durch die Aufgaben führt, neue Sprachkomponenten erklärt und bei Schwierigkeiten Hinweise gibt, würde es auch Schülern ohne einen Lehrer im Hintergund ermöglichen, mit Hilfe von BlattWerkzeug erste Erfahrungen beim Programmieren zu lernen. Erklärvideos wäre hierzu ebenfalls eine sinnvolle Ergänzung.
+  \item[Code direkt editieren:] Da schon jetzt vom Drag \& Drop-Editor lesbarer und verständlicher Code generiert wird, liegt es nahe im nächsten Schritt erfahreneren Benuztern die Möglichkeit zu geben den generierten Code direkt zu bearbeiten und so vom vollen Sprachumfang von JavaScript gebrauch zu machen.
+  \item[Nebenläufige Programmierung:] Mit MultiKara\footnote{\url{https://www.swisseduc.ch/informatik/karatojava/multikara/}} lässt sich nebenläufigkeit in Programmen vermitteln. Eine solche Funktion wäre auch für diese Anwendung denkbar indem der Nutzer mit seinem Programm zwei oder mehr Lastwagen gleichzeitig steuert.
+\end{description}

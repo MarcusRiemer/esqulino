@@ -344,8 +344,9 @@
 
 \renewcommand{\descriptionlabel}[1]{%
 	\hspace*{\labelsep}%
-	\color{ctcolorlistlabel}%
+	% \color{ctcolorlistlabel}%
 	\tgherosfont\textbf{#1}%
+	% \tgherosfont{#1}%
 }
 \newenvironment{my_list_desc}
 	{\begin{description}[%

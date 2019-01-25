@@ -61,31 +61,14 @@
 % \renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
 % \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
 
-% \setmainfont{Futura PT}
-% \renewcommand{\helv}{\fontspec{Futura PT}\fontsize{9}{11}\selectfont}
-% \renewcommand{\book}{\fontspec{Futura PT}\fontsize{11}{13}\selectfont}
-% \renewcommand{\tgherosfont}{\fontspec{Futura PT}}
-% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Futura PT}}
-
-% \setmainfont{Neue Haas Grotesk Text Pro}
-% \renewcommand{\helv}{\fontspec{Neue Haas Grotesk Text Pro}\fontsize{9}{11}\selectfont}
-% \renewcommand{\book}{\fontspec{Neue Haas Grotesk Text Pro}\fontsize{11}{13}\selectfont}
-% \renewcommand{\tgherosfont}{\fontspec{Neue Haas Grotesk Text Pro}}
-% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Neue Haas Grotesk Text Pro}}
-
-% \renewcommand{\ttfamily}{\fontspec{Source Code Pro}}
+% \renewcommand{\ttfamily}{\fontspec{Ubuntu Mono}}
 
 \renewcommand{\cftchapfont}{\normalfont\bfseries}
 \renewcommand{\cftchappagefont}{\normalfont\bfseries}
 \usepackage{multicol}
 \addtokomafont{caption}{\normalfont}
 \addtokomafont{captionlabel}{\normalfont}
-% \usepackage{url}
 \urlstyle{rm}
-% \renewcommand{\UrlBreaks}{\do\/\do\-\do\_\do\.\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
-% \setcounter{biburllcpenalty}{9000}% Kleinbuchstaben
-% \setcounter{biburlucpenalty}{9000}% Großbuchstaben
-% \DeclareFieldFormat{url}{\url{#1}}
 \makeatletter
 \def\blx@maxline{77}
 \makeatother
@@ -176,23 +159,9 @@
 
 \appendix{}
 
+\input{content/appendix-bliography}
 \input{content/appendix-exercises}
 \input{content/appendix-cd-rom}
-
-\chapter{Literaturverzeichnis}
-% --------------------------
-% Back matter
-% --------------------------
-{%
-\setstretch{1.1}
-\renewcommand{\bibfont}{\normalfont\small}
-\setlength{\biblabelsep}{0pt}
-\setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
-% \printbibliography
-\printbibliography[heading=none,title=Literaturverzeichnis,nottype=online]
-\printbibliography[heading=subbibliography,title={Quellen im Internet},type=online,prefixnumbers={@}]
-}
-\cleardoublepage
 
 % \listoffigures
 % \cleardoublepage
