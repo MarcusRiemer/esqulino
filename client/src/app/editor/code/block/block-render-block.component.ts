@@ -42,4 +42,10 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
   }
+
+  onMouseEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOver(evt, this.dropLocation, this.node);
+    }
+  }
 }

@@ -211,7 +211,7 @@ export function calculateDropTargetState(
   if (drag) {
     // Highlight in case something is dragging over us. This can only happen if
     // we have been visible before, so there is no need for any additional checking
-    const onThis = arrayEqual(drag.hoverLocation, block.dropLocation);
+    const onThis = arrayEqual(drag.dropLocation, block.dropLocation);
 
     if (onThis) {
       return ("self");

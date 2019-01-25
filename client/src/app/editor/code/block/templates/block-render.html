@@ -66,7 +66,8 @@
                                [codeResource]="codeResource"
                                [node]="node"
                                [visual]="visual"
-                               (drop)="currentBlock.onDrop()">>
+                               (drop)="currentBlock.onDrop()"
+                               (mouseenter)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
   <!-- Something is broken, display a error message -->

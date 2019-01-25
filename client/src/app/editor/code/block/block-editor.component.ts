@@ -133,8 +133,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   public onPlaceholderDragEnter(evt: DragEvent) {
     console.log("enter");
     evt.preventDefault();
-    evt.cancelBubble = true;
-    this._dragService.informDraggedOver([], undefined);
+    this._dragService.informDraggedOver(evt, [], undefined);
   }
 
   public onPlaceholdeDragOver(evt: DragEvent) {

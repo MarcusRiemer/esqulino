@@ -4,7 +4,7 @@
      [blockBase]="visual"
      [blockLayout]="visual"
      [astDropTarget]="thisBlock"
-     (drop)="onDrop($event)">
+     (mouseenter)="onMouseEnter($event)">
   <!-- Render all components of this drop target -->
   <ng-container *ngFor="let childVisualBlock of visual.children">
     <editor-block-render [codeResource]="codeResource"
@@ -15,7 +15,7 @@
 
 <div *ngIf="true && (isDropTarget | async)"
      [astDropTarget]="thisBlock"
-     (drop)="onDrop($event)"
+     (mouseenter)="onMouseEnter($event)"
      class="drop-placeholder">
   Hier
 </div>
