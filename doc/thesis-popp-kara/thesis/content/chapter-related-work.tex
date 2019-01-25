@@ -14,11 +14,11 @@ Es gab bereits viele Versuche Neulinge bei ihren ersten Schritten in der Welt de
 
 Seymour Papert beschreibt 1980 in dem Buch \textit{Mindstorms: Children, Computers, and Powerful Ideas} seine Idee von Turtle Grafiken. Sein Ziel war die Gestaltung von Objekten, die Kinder für sich selbst und auf ihre eigene Art herstellen können. Dabei hilft ein Objekt oder eine Figur, in die sich die Kinder hineinversetzten können. Papert nennt dies das "object-to-think-with"~\cite[11]{papert1980}.
 
-Die Schildkröte kann bewegt werden, indem Befehle über die Tastatur eingegeben werden. Die dafür entwickelte Programmiersprache heißt LOGO. \inlinec{FORWARD 100} bewegt die Schildkröte in einer geraden Linie über eine Strecke von 100 Schritten von je etwas einem Millimeter. Durch die Eingabe von \inlinec{RIGHT 90} wird die Schildkröte um 90 Grad gedreht. \inlinec{PENDOWN} lässt die Schildkröte einen Stift senken, um eine sichtbare Spur des Pfads zu hinterlassen, während \inlinec{PENUP} sie anweist, den Stift anzuheben. Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schildkröte ein neues Wort beigebracht wird. So können \inlinec{TRIANGLE} \fref{fig:related:turtle:square:code} und \inlinec{SQUARE} \fref{fig:related:turtle:triangle:code} als Prozeduren definiert werden, die die Schildkröte ein Dreieck, bzw. ein Quadrat zeichnen lassen. Diese neuen Wörter können nun verwendet werden, um Programme und neue Wörter zu definieren. Es lässt sich zum Beispiel durch Kombination eines Quadrates und eines Dreiecks ein Haus zeichnen \fref{fig:related:turtle:house:code}~\cite[12]{papert1980}.
+Die Schildkröte kann bewegt werden, indem Befehle über die Tastatur eingegeben werden. Die dafür entwickelte Programmiersprache heißt LOGO. \inlinec{FORWARD 100} bewegt die Schildkröte in einer geraden Linie über eine Strecke von 100 Schritten von je etwa einem Millimeter. Durch die Eingabe von \inlinec{RIGHT 90} wird die Schildkröte um 90 Grad gedreht. \inlinec{PENDOWN} lässt die Schildkröte einen Stift senken, um eine sichtbare Spur des Pfads zu hinterlassen, während \inlinec{PENUP} sie anweist, den Stift anzuheben. Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schildkröte ein neues Wort beigebracht wird. So können \inlinec{TRIANGLE} \fref{fig:related:turtle:square:code} und \inlinec{SQUARE} \fref{fig:related:turtle:triangle:code} als Prozeduren definiert werden, die die Schildkröte ein Dreieck, bzw. ein Quadrat zeichnen lassen. Diese neuen Wörter können nun verwendet werden, um Programme und neue Wörter zu definieren. Es lässt sich zum Beispiel durch Kombination eines Quadrates und eines Dreiecks ein Haus zeichnen \fref{fig:related:turtle:house:code}~\cite[12]{papert1980}.
 
 An dieser Stelle ist zu bemerken, dass LOGO und Turtle Grafiken keine klassischen Spielmechaniken aufweisen. Der Nutzer startet immer mit einer leeren Leinwand. Für den Einsatz im Schulunterricht muss der Lehrer Aufgaben stellen, die mit den Mitteln der Sprache zu lösen sind. Eine eventuelle Ergebniskontrolle muss ebenfalls durch die Lehrkraft erfolgen.
 
-Das im Rahmen dieser Arbeit entwickelte Programm soll eine ähnlich leicht zu verstehende Sprache verwenden, jedoch soll jedes Spielwelt ein klares Ziel haben. Die Lösung einer Aufgabe kann durch den Computer überprüft werden. Dadurch wird vor allem das eigenständige Lernen gefördert und Subjektivität aus der Lösung der Aufgabe herausgenommen.
+Das im Rahmen dieser Arbeit entwickelte Programm soll eine ähnlich leicht zu verstehende Sprache verwenden, jedoch soll jede Spielwelt ein klares Ziel haben. Die Lösung einer Aufgabe kann durch den Computer überprüft werden. Dadurch wird vor allem das eigenständige Lernen gefördert und Subjektivität beim Vergleich von Lösungen der Aufgabe herausgenommen.
 
 \begin{figure}
     \begin{subfigure}[b]{0.3\textwidth}
@@ -81,7 +81,7 @@ Das im Rahmen dieser Arbeit entwickelte Programm soll eine ähnlich leicht zu ve
         \caption{Ergebnis des Haus}
         \label{fig:related:turtle:house:result}
     \end{subfigure}
-    \caption{Zeichnen eines Hauses in LOGO}
+    \caption{Zeichnen eines Hauses in LOGO (in Anlehnung an~\cite[14-15]{papert1980})}
     \label{fig:related:turtle:square}
 \end{figure}
 
@@ -91,7 +91,7 @@ Das im Rahmen dieser Arbeit entwickelte Programm soll eine ähnlich leicht zu ve
 \section{Karel the Robot}
 \label{sec:related:karel}
 
-Pattis geht mit \textit{Karel the Robot} einen ähnlichen Weg wie Papert mit seinen Turtle Grafiken. Aber anstelle einer Schildkröte wird der Roboter Karel über das Spielfeld bewegt. Karel bewegt sich nicht frei, sondern auf einem Netz von horizontalen (Avenue) und vertikalen Straßen (Street) auf denen sich Wände (Wall) befinden können und den direkten Weg blockieren. Karel bewegt sich immer von Kreuzung zu Kreuzung (Corner). Außerdem können Gegenstände -- sogenannte Beeper -- auf Kreuzungen platziert sein. Diese können von Karel aufgenommen, bewegt und wieder abgelegt werden. Mögliche Aufgaben beinhalten das Aufsammeln oder Ablegen von Mustern aus Gegenständen~\cite[1-3]{pattis1981}.
+Pattis geht mit \textit{Karel the Robot} einen ähnlichen Weg wie Papert mit seinen Turtle Grafiken. Aber anstelle einer Schildkröte wird der Roboter Karel über das Spielfeld bewegt. Karel bewegt sich nicht frei, sondern auf einem Netz von horizontalen (Avenue) und vertikalen Straßen (Street) auf denen sich Wände befinden können und den direkten Weg blockieren. Karel bewegt sich immer von Kreuzung zu Kreuzung. Außerdem können Gegenstände -- sogenannte Beeper -- auf Kreuzungen platziert sein. Diese können von Karel aufgenommen, bewegt und wieder abgelegt werden. Mögliche Aufgaben beinhalten das Aufsammeln oder Ablegen von Mustern aus Gegenständen~\cite[1-3]{pattis1981}.
 
 \begin{figure}
     \centering
@@ -116,9 +116,9 @@ Kara weicht in seiner ursprünglichen Version von den vorhergenannten Programmen
 
 Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere Versionen, die den Übergang zu realen Programmiersprachen erleichtern sollen \cite{kara2017}. So lässt sich der Marienkäfer in der bekannten Welt auch mit Universalsprachen wie Java, JavaScript, Python oder Ruby steuern. Durch die Konstrukte die diese Sprachen mitbringen in Verbindung mit den speziellen Methoden, die die Kara-Umgebung zur Verfügung stellt, sind nun auch kompliziertere Programme möglich.
 
-Der Einsatz von Universalsprachen zur Einführung in die Programmierung bringt jedoch einige Nachteile mit sich (siehe Grundlagenkapitel \ref{sec:basics:mini-languages}) und wärend endliche Automaten hilfreich für ein Grundverständnis des Programmieren sein können, werden mit ihnen nicht die Grundkonzepte des Programmieren, wie Verzweigungen, Schleifen und Funktionen, vermittelt. Für das im Rahmen dieser Arbeit entwickelte Programm soll ein Mittelweg beschritten werden bei dem die Programmierung zwar Syntaxfrei über eine grafische Oberfläche erfolgt, jedoch Verzweigungen und Schleifen verwendet und Prozeduren definiert werden können.
+Der Einsatz von Universalsprachen zur Einführung in die Programmierung bringt jedoch einige Nachteile mit sich (siehe Grundlagenkapitel \ref{sec:basics:mini-languages}) und wärend endliche Automaten hilfreich für ein Grundverständnis des Programmieren sein können, werden mit ihnen nicht die Grundkonzepte des Programmieren, wie Verzweigungen, Schleifen und Funktionen, vermittelt. Für das im Rahmen dieser Arbeit entwickelte Programm soll ein Mittelweg beschritten werden, bei dem die Programmierung zwar Syntaxfrei über eine grafische Oberfläche erfolgt, jedoch Verzweigungen und Schleifen verwendet und Prozeduren definiert werden können.
 
-Auch bei Kara gibt es kein durch das Programm definiertes und überprüfbares Spielziel. Es kann eine Aufgabenstellung definiert werden, die zu erfüllen ist. Die Kontrolle obliegt allerdings dem Nutzer selbst oder dem Aufgabensteller.
+Auch bei Kara gibt es kein durch das Programm definiertes und überprüfbares Spielziel. Es kann eine Aufgabenstellung, die zu erfüllen ist, definiert und in einem seperaten Fenster angezeigt werden. Die Kontrolle obliegt allerdings dem Nutzer selbst oder dem Aufgabensteller.
 
 \begin{figure}
     \begin{subfigure}[b]{0.5\textwidth}
@@ -147,7 +147,7 @@ Lightbot kommt dabei gänzlich ohne klassische geschriebene Programmieranweisung
 
 Die Level in der App sind in drei Gruppen aufgeteilt. Im ersten Bereich "Basics" werden die atomaren Befehle eingeführt. Dabei erhöht sich der Schwierigkeitsgrad im Laufe der 8 Level. Im zweiten Bereich "Procedures" werden dann Prozeduren eingeführt und im dritten Teil "Loops" können die Level nur durch den geschickten Einsatz von Rekursion gelöst werden.
 
-Im Gegensatz zu den bisher beschriebenen Programmen, gibt es bei Lightbot ein klares Ziel, welches durch das Level definiert ist. Es müssen immer alle Lichter eingeschaltet werden. Sobald dies geschehen ist, ist das Level gelöst und das nächste Level wird freigeschaltet. Die Lösung der Aufgabenstellung muss -- img Gegensatz zu den vorgenannten Anwendungen -- nicht manuell geprüft werden und es ist mit Lightbot auch ein unbeaufsichtigtes Lernen möglich.
+Im Gegensatz zu den bisher beschriebenen Programmen, gibt es bei Lightbot ein klares Ziel, welches durch das Level definiert ist. Es müssen immer alle Lichter eingeschaltet werden. Sobald dies geschehen ist, ist das Level gelöst und das nächste Level wird freigeschaltet. Die Lösung der Aufgabenstellung muss -- im Gegensatz zu den vorgenannten Anwendungen -- nicht manuell geprüft werden und es ist mit Lightbot auch ein unbeaufsichtigtes Lernen möglich.
 
 \begin{figure}
     \centering
