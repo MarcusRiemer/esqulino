@@ -38,4 +38,10 @@ export class WorldSensorsComponent implements OnInit, OnDestroy {
      ? this.world.sensor(sensor)
      : false;
   }
+
+  className(value: boolean): string {
+    return value
+      ? 'text-success'
+      : 'text-danger';
+  }
 }
