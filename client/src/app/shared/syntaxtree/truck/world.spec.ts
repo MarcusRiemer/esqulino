@@ -52,6 +52,7 @@ describe('Shared: World', () => {
 
   beforeEach(() => {
     world = new World(worldDescription);
+    world.smartForward = true;
   });
 
   it('should have exactly one state', () => {

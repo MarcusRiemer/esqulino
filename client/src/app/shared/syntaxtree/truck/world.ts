@@ -23,6 +23,12 @@ export class World {
   /** Code is being executed, but should be terminated. */
   codeShouldTerminate = false;
 
+  /**
+   * Activate smart goForward command, which can automatically take turns
+   * without a set turn signal.
+   */
+  smartForward = false;
+
   /** Executable commands. */
   readonly commands = {
     // Go forward, if possible
@@ -39,7 +45,7 @@ export class World {
         }
         throw new RedLightViolationError();
         // Curves can also be taken without set turn signal
-      } else if (curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
+      } else if (this.smartForward && curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
         state.truck.move(curTile.curveTurnDirection(state.truck.facingDirection));
         state.time = 1;
         return state;
