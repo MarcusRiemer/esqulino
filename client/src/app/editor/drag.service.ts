@@ -139,55 +139,25 @@ export class DragService {
    * Starts a new dragging operation.
    *
    * @param evt The original drag event that was issued by the DOM
+   * @param desc The description of the node to be dragged around
    * @param sourceSidebar The serializable drag information
    * @param sourceTree The node with the corresponding tree that started the drag
    */
-  public dragStart(evt: DragEvent, desc: NodeDescription, sourceSidebar?: DragSidebar, sourceTree?: DragTree) {
+  public dragStart(
+    evt: DragEvent,
+    desc: NodeDescription,
+    sourceSidebar?: DragSidebar,
+    sourceTree?: DragTree
+  ) {
     if (this._currentDrag.value) {
       throw new Error("Attempted to start a second drag");
     }
-
-    this.showOverlay(desc, evt);
 
     // We are only interested in the top level drag element, if
     // we wouldn't stop the propagation, the parent of the current
     // drag element would fire another dragstart.
     evt.stopPropagation();
     evt.preventDefault();
-
-    // Serialize the dragged "thing"
-    // const domDragData = JSON.stringify(desc);
-    // evt.dataTransfer.setData('text/plain', domDragData);
-
-    // TODO: Choose when to move and when to copy
-    //evt.dataTransfer.effectAllowed = "move";
-
-    /*const img = document.createElement("img");
-    img.src = "/vendor/logos/blattwerkzeug-caption.svg"
-    evt.dataTransfer.setDragImage(img, 0, 100);*/
-    //evt.dataTransfer.setDragImage(evt.fromElement, 0, 100);
-
-    // Reset everything once the operation has ended
-    const dragEndHandler = () => {
-      evt.target.removeEventListener("mouseup", dragEndHandler);
-
-      this.hideOverlay();
-
-      this._currentDrag.next(undefined);
-      this._trashService.hideTrash();
-      console.log(`AST-Drag ended:`, sourceSidebar);
-
-      // Tell the analytics API about the ended event
-      this._analytics.trackEvent({
-        category: TrackCategory.BlockEditor,
-        action: "endDrag",
-        name: desc.language,
-        value: desc
-      });
-    }
-    document.addEventListener("mouseup", dragEndHandler);
-
-    //evt.target.addEventListener("dragend", dragEndHandler);
 
     // Store drag information as long as this drags on
     const hoverData = {
@@ -211,6 +181,11 @@ export class DragService {
         sourceTree.codeResource.deleteNode(sourceTree.node.location)
       });
     }
+
+    // Actually show the overlay and make sure it is removed afterwards
+    this.setupDragEndHandlers(desc);
+    this.showOverlay(desc, evt);
+
     console.log(`AST-Drag started:`, sourceSidebar);
 
     // Tell the analytics API about the started event
@@ -283,5 +258,49 @@ export class DragService {
    */
   get peekDragData() {
     return (this._currentDrag.value);
+  }
+
+  /**
+   * Sets up and tears down the DOM event handlers that deal with our
+   * hand rolled drag & drop implementation.
+   */
+  private setupDragEndHandlers(desc: NodeDescription) {
+    // Reset everything once the operation has ended
+    const dragEndHandler = () => {
+      removeDragHandlers();
+
+      this.hideOverlay();
+
+      this._currentDrag.next(undefined);
+      this._trashService.hideTrash();
+      console.log(`AST-Drag ended`);
+
+      // Tell the analytics API about the ended event
+      this._analytics.trackEvent({
+        category: TrackCategory.BlockEditor,
+        action: "endDrag",
+        name: desc.language,
+        value: desc
+      });
+    }
+
+    // Dragging ends when the mouse is no longer pressed ...
+    document.addEventListener("mouseup", (evt: MouseEvent) => {
+      evt.stopImmediatePropagation();
+      dragEndHandler();
+    });
+
+    // ... or the user presses "Escape"
+    const escHandler = (evt: KeyboardEvent) => {
+      if (evt.key === "Escape") {
+        dragEndHandler();
+      }
+    };
+    document.addEventListener("keyup", escHandler);
+
+    const removeDragHandlers = () => {
+      document.removeEventListener("mouseup", dragEndHandler);
+      document.removeEventListener("keydown", escHandler);
+    }
   }
 }
