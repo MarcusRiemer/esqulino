@@ -44,16 +44,20 @@ concise_attributes:
     "value": ["Red", "Green", "Blue"]}]}]}, "direction": {"type": "concrete", "attributes":
     [{"base": "string", "name": "direction", "type": "property", "restrictions": [{"type":
     "enum", "value": ["N", "E", "S", "W"]}]}]}, "trafficLight": {"type": "concrete",
-    "attributes": [{"name": "side", "type": "sequence", "nodeTypes": ["direction"]}]},
-    "unloading_bay": {"type": "concrete", "attributes": [{"base": "string", "name":
-    "colour", "type": "property", "restrictions": [{"type": "enum", "value": ["Red",
-    "Green", "Blue"]}]}]}}}'
+    "attributes": [{"name": "side", "type": "sequence", "nodeTypes": ["direction"]},
+    {"base": "integer", "name": "redPhase", "type": "property", "restrictions": [{"type":
+    "minInclusive", "value": 0}]}, {"base": "integer", "name": "greenPhase", "type":
+    "property", "restrictions": [{"type": "minInclusive", "value": 0}]}, {"base":
+    "integer", "name": "initialPhase", "type": "property", "restrictions": [{"type":
+    "minInclusive", "value": 0}]}]}, "unloading_bay": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "colour", "type": "property", "restrictions": [{"type":
+    "enum", "value": ["Red", "Green", "Blue"]}]}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-12-19 11:24:22.059637'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-23 12:43:59.928915'
+  value_before_type_cast: '2019-01-25 16:30:35.73624'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-world
