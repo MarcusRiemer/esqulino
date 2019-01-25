@@ -216,7 +216,7 @@ export class World {
       );
     });
 
-    this.states = [new WorldState(0, tiles, truck, 1)];
+    this.states = [new WorldState(0, tiles, truck, 0)];
   }
 
   /**
