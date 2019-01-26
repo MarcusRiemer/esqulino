@@ -560,7 +560,7 @@ class TruckRenderer implements ObjectRenderer {
     const truckHeight = tileHeight / 3;
 
     // Calculate the position of the truck
-    const truckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.truck);
+    let truckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.truck);
     let truckAngle = this.calculateTruckAngle(this.truck);
     let turnSignalSpriteNumber = this.turnSignalSpriteNumber(this.truck);
 
@@ -579,9 +579,25 @@ class TruckRenderer implements ObjectRenderer {
         const prevTruckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.prevTruck);
         const prevTruckAngle = this.calculateTruckAngle(this.prevTruck);
 
-        // Interpolate position
-        truckPosition.x = prevTruckPosition.x + (truckPosition.x - prevTruckPosition.x) * t;
-        truckPosition.y = prevTruckPosition.y + (truckPosition.y - prevTruckPosition.y) * t;
+        if (this.truck.facing !== this.prevTruck.facing) {
+          const p0 = prevTruckPosition;
+          const p1 = {
+            x: tileWidth * this.prevTruck.position.x + tileWidth / 2,
+            y:  tileHeight * this.prevTruck.position.y + tileHeight / 2
+          };
+          const p2 = truckPosition;
+          // De Casteljau
+          truckPosition = {
+            x: (1 - t) * (1 - t) * p0.x + 2 * t * (1 - t) * p1.x + t * t * p2.x,
+            y: (1 - t) * (1 - t) * p0.y + 2 * t * (1 - t) * p1.y + t * t * p2.y
+          };
+        } else {
+          // Interpolate position
+          truckPosition.x = prevTruckPosition.x + (truckPosition.x - prevTruckPosition.x) * t;
+          truckPosition.y = prevTruckPosition.y + (truckPosition.y - prevTruckPosition.y) * t;
+        }
+
+        // Interpolate angle
         truckAngle = prevTruckAngle + (truckAngle - prevTruckAngle) * t;
 
         // If necessary, leave the turn signal on as long as truck is turning
