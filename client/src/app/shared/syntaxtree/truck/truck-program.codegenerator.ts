@@ -100,7 +100,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
-        process.addConvertedFragment('await this.', node);
+        process.addConvertedFragment('yield this.', node);
         process.addConvertedFragment(camelize(node.properties['name']), node);
         process.addConvertedFragment('(', node);
         node.getChildrenInCategory('arguments').forEach((a, idx, arr) => {
@@ -168,7 +168,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
         node.getChildrenInCategory('pred').forEach((c) => process.generateNode(c));
         process.addConvertedFragment(') {', node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
-          process.addConvertedFragment('await this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
+          process.addConvertedFragment('yield this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
         process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
@@ -204,7 +204,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
         });
         process.addConvertedFragment(') => {', node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
-          process.addConvertedFragment('await this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
+          process.addConvertedFragment('yield this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
         process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
