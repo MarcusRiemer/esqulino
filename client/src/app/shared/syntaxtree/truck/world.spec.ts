@@ -22,10 +22,10 @@ const worldDescription: WorldDescription = {
     { position: { x: 0, y: 2 }, openings: ['N', 'E', 'S'] },
     { position: { x: 1, y: 2 }, openings: ['E', 'W'] },
     { position: { x: 2, y: 2 }, openings: ['N', 'E', 'S', 'W'], freightTarget: 'Red', trafficLights: [
-      { redPhase: 3, greenPhase: 1, startPhase: 0 },
-      { redPhase: 3, greenPhase: 1, startPhase: 1 },
-      { redPhase: 3, greenPhase: 1, startPhase: 2 },
-      { redPhase: 3, greenPhase: 1, startPhase: 3 }
+      { opening: 'N', redPhase: 3, greenPhase: 1, startPhase: 0 },
+      { opening: 'E', redPhase: 3, greenPhase: 1, startPhase: 1 },
+      { opening: 'S', redPhase: 3, greenPhase: 1, startPhase: 2 },
+      { opening: 'W', redPhase: 3, greenPhase: 1, startPhase: 3 }
     ] },
     { position: { x: 3, y: 2 }, openings: ['E', 'W'] },
     { position: { x: 4, y: 2 }, openings: ['N', 'S', 'W'] },
