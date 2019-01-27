@@ -181,7 +181,7 @@ export class World {
       let openings = TileOpening.None;
       let freight: Freight[] = [];
       let freightTarget: Freight = null;
-      let trafficLights: TrafficLight[] = [];
+      let trafficLights: TrafficLight[] = [null, null, null, null];
 
       // Openings
       if (tile.openings) {
@@ -211,9 +211,14 @@ export class World {
 
       // Traffic lights
       if (tile.trafficLights) {
-        trafficLights = tile.trafficLights.map((t) =>
-          new TrafficLight(t.redPhase, t.greenPhase, t.startPhase)
-        );
+        tile.trafficLights.forEach(t => {
+          trafficLights[{
+            'N': 0,
+            'E': 1,
+            'S': 2,
+            'W': 3
+          }[t.opening]] = new TrafficLight(t.redPhase, t.greenPhase, t.startPhase);
+        });
       }
 
       return new Tile(
