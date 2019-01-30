@@ -61,7 +61,7 @@ RSpec.describe "Seed Manager" do
       expect(identifying_attributes(gOrig)).to eq identifying_attributes(gLoad)
     end
 
-    it "stores and reloads many grammars (CREATE)" do
+    xit "stores and reloads many grammars (CREATE)" do
       3.times do
         FactoryBot.create(:grammar, name: "Test Grammar")
       end
@@ -131,7 +131,7 @@ RSpec.describe "Seed Manager" do
     end
 
 
-    it "stores and reloads many block languages (CREATE)" do
+    xit "stores and reloads many block languages (CREATE)" do
       3.times do
         FactoryBot.create(:block_language)
       end
@@ -183,7 +183,7 @@ RSpec.describe "Seed Manager" do
       expect(identifying_attributes(bOrig)).to eq identifying_attributes(gLoad)
     end
 
-    it "stores and reloads many block language generators (CREATE)" do
+    xit "stores and reloads many block language generators (CREATE)" do
       3.times do
         FactoryBot.create(:block_language_generator)
       end
@@ -250,7 +250,7 @@ RSpec.describe "Seed Manager" do
       end.to raise_exception RuntimeError
     end
 
-    it "stores and reloads many projects (CREATE)" do
+    xit "stores and reloads many projects (CREATE)" do
       3.times do
         FactoryBot.create(:project)
       end
