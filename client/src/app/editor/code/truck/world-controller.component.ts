@@ -90,8 +90,17 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+  resumeCode() {
+    this.world.resumeCode().then(() => {
+      // success, nothing to do
+    }).catch((error) => {
+      console.error(error);
+      alert(error.msg);
+    });
+  }
+
   pauseCode() { this.world.pauseCode(); }
-  resumeCode() { this.world.resumeCode(); }
 
   undo() { this.world.undo(); }
   reset() { this.world.reset(); }
