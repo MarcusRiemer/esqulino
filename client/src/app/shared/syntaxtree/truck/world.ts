@@ -114,6 +114,12 @@ export class World {
       return state;
     },
 
+    // Pause execution until further notice
+    [Command.pause]: (state: WorldState): WorldState => {
+      this.codeShouldPause.next(true);
+      return null;
+    },
+
     // Do nothing, but still check if program should terminate
     [Command.doNothing]: (state: WorldState): WorldState => {
       return null;
@@ -401,9 +407,10 @@ export class World {
         turnLeft: function*() { yield self._commandAsync(Command.turnLeft); },
         turnRight: function*() { yield self._commandAsync(Command.turnRight); },
         noTurn: function*() { yield self._commandAsync(Command.noTurn); },
-        wait: function*() { yield self._commandAsync(Command.wait); },
         load: function*() { yield self._commandAsync(Command.load); },
         unload: function*() { yield self._commandAsync(Command.unload); },
+        wait: function*() { yield self._commandAsync(Command.wait); },
+        pause: function*() { yield self._commandAsync(Command.pause); },
         doNothing: function*() { yield self._commandAsync(Command.doNothing); },
 
         lightIsRed: () => this.sensor(Sensor.lightIsRed),
@@ -1136,6 +1143,9 @@ export enum Command {
 
   /** Wait a step without activity. */
   wait,
+
+  /** Pause execution until further notice. */
+  pause,
 
   /** Do nothing, but still check if program should terminate. */
   doNothing,
