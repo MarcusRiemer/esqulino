@@ -12,7 +12,23 @@
     }
 
     .empty-tree {
-        background-color: green;
+        border: 4px dashed blue;
+        border-radius: 20px;
+        min-height: 200px;
+        padding: 15px;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+
+
+        h3, p {
+            text-align: center;
+        }
+
+        p {
+            margin: 0px;
+        }
     }
 }
 

@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
+
+import { MatRipple } from '@angular/material';
 
 import { map, switchMap, first } from 'rxjs/operators';
 
@@ -12,6 +14,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 import { BlockLanguage } from '../../../shared/block';
+
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -123,7 +126,9 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * drag service about that.
    */
   public onEditorDragEnter(_: DragEvent) {
-    this._dragService.informDraggedOverEditor();
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOverEditor();
+    }
   }
 
   /**
@@ -131,22 +136,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * there is not actually a node that could be referenced.
    */
   public onPlaceholderDragEnter(evt: DragEvent) {
-    console.log("enter");
-    evt.preventDefault();
-    this._dragService.informDraggedOver(evt, [], undefined);
-  }
-
-  public onPlaceholdeDragOver(evt: DragEvent) {
-    evt.preventDefault();
-  }
-
-  /**
-   * When something draggable enters the empty area a program may start with,
-   * there is not actually a node that could be referenced.
-   */
-  public onPlaceholderDrop(evt: DragEvent) {
-    evt.preventDefault();
-    const desc = this._dragService.peekDragData.draggedDescription;
-    this._currentCodeResource.peekResource.insertNode([], desc);
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOver(evt, [], undefined);
+    }
   }
 }

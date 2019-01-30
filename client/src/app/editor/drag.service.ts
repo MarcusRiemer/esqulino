@@ -181,7 +181,7 @@ export class DragService {
     // If we have a proper source: Wire it up to react to
     // being put in the trash.
     if (sourceTree && sourceTree.codeResource) {
-      this._trashService.showTrash(_ => {
+      this._trashService.showTrash(() => {
         sourceTree.codeResource.deleteNode(sourceTree.node.location)
       });
     }
@@ -220,7 +220,7 @@ export class DragService {
 
     this._currentDrag.next(dragData);
 
-    console.log("Dragging over: ", dropLocation, node);
+    // console.log("Dragging over: ", dropLocation, node);
   }
 
   /**
@@ -295,15 +295,16 @@ export class DragService {
       removeDragHandlers();
       this.hideOverlay();
 
-      // Should something be inserted?
-      if (!cancelled && this.peekDragData.dropLocation) {
-        const dropLocation = this.peekDragData.dropLocation;
-        this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
-      }
-
-      // If we have a proper source: Possibly trash it
-      if (this.peekDragData.hoverTrash) {
-        this._trashService._fireDrop(undefined);
+      // Should something be inserted or removed?
+      if (!cancelled) {
+        // Insertion happens on valid drop locations
+        if (this.peekDragData.dropLocation) {
+          const dropLocation = this.peekDragData.dropLocation;
+          this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
+        } else if (this.peekDragData.hoverTrash) {
+          this._trashService._fireDrop();
+          console.log("Dropped on trash");
+        }
       }
 
       this._currentDrag.next(undefined);

@@ -37,13 +37,14 @@
           <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
             <!-- If the tree is empty, allow the user to populate it -->
             <div *ngIf="currentTree.isEmpty; else renderTree;"
-                 (dragenter)="onPlaceholderDragEnter($event)"
-                 (dragover)="onPlaceholdeDragOver($event)"
-                 (drop)="onPlaceholderDrop($event)"
+                 (mouseenter)="onPlaceholderDragEnter($event)"
                  class="card-body">
-              Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
-              <div class="empty-tree">
-                Freier Platz
+              <div matRipple
+                   class="empty-tree">
+                <h3>Hey, hier sollte eigentlich Code stehen!</h3>
+                <p>
+                  Ziehe einen Block aus der Seitenleiste auf diesen freien Platz um mit der Programmierung zu beginnen!
+                </p>
               </div>
             </div>
 
