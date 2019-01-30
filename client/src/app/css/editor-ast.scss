@@ -88,6 +88,12 @@ trash {
     }
 }
 
+.dragged {
+    editor-block-render-block {
+        background: white;
+    }
+}
+
 /* This class is applied to the error tooltip itself */
 .error-marker-tooltip {
     background-color: #b71c1c;
