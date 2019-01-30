@@ -23,6 +23,12 @@ export class World {
   /** Code is being executed, but should be terminated. */
   codeShouldTerminate = false;
 
+  /**
+   * Activate smart goForward command, which can automatically take turns
+   * without a set turn signal.
+   */
+  smartForward = false;
+
   /** Executable commands. */
   readonly commands = {
     // Go forward, if possible
@@ -39,7 +45,7 @@ export class World {
         }
         throw new RedLightViolationError();
         // Curves can also be taken without set turn signal
-      } else if (curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
+      } else if (this.smartForward && curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
         state.truck.move(curTile.curveTurnDirection(state.truck.facingDirection));
         state.time = 1;
         return state;
@@ -148,7 +154,7 @@ export class World {
 
     // Is the world solved?
     [Sensor.isSolved]: (state: WorldState): boolean => {
-      return state.solved();
+      return state.solved;
     },
   };
 
@@ -162,7 +168,12 @@ export class World {
 
     const truck = new Truck(
       new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
-      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing))
+      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing)),
+      desc.trucks[0].freight.map((f) => ({
+        'Red': Freight.Red,
+        'Green': Freight.Green,
+        'Blue': Freight.Blue
+      }[f]))
     );
 
     const tiles = desc.tiles.map((tile) => {
@@ -170,7 +181,7 @@ export class World {
       let openings = TileOpening.None;
       let freight: Freight[] = [];
       let freightTarget: Freight = null;
-      let trafficLights: TrafficLight[] = [];
+      let trafficLights: TrafficLight[] = [null, null, null, null];
 
       // Openings
       if (tile.openings) {
@@ -200,9 +211,14 @@ export class World {
 
       // Traffic lights
       if (tile.trafficLights) {
-        trafficLights = tile.trafficLights.map((t) =>
-          new TrafficLight(t.redPhase, t.greenPhase, t.startPhase)
-        );
+        tile.trafficLights.forEach(t => {
+          trafficLights[{
+            'N': 0,
+            'E': 1,
+            'S': 2,
+            'W': 3
+          }[t.opening]] = new TrafficLight(t.redPhase, t.greenPhase, t.startPhase);
+        });
       }
 
       return new Tile(
@@ -211,7 +227,7 @@ export class World {
       );
     });
 
-    this.states = [new WorldState(0, tiles, truck, 1)];
+    this.states = [new WorldState(0, tiles, truck, 0)];
   }
 
   /**
@@ -314,7 +330,7 @@ export class World {
    *         otherwise false.
    */
   get solved(): boolean {
-    return this.state.solved();
+    return this.state.solved;
   }
 
   /**
@@ -335,8 +351,15 @@ export class World {
   async commandAsync(command: Command): Promise<void> {
     this.commandInProgress.next(true);
     this.codeShouldTerminate = false;
-    await this._commandAsync(command);
-    this.commandInProgress.next(false);
+    try {
+      await this._commandAsync(command);
+    } catch (error) {
+      if (!error.expected) {
+          throw error;
+      }
+    } finally {
+      this.commandInProgress.next(false);
+    }
   }
 
   /**
@@ -475,7 +498,7 @@ export class WorldState {
    * @return True, when all freight has been delivered to their destination,
    *         otherwise false.
    */
-  solved(): boolean {
+  get solved(): boolean {
     return this.truck.freightItems === 0 && !this.tiles.some((t) => t.freightItems > 0);
   }
 
