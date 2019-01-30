@@ -1,7 +1,7 @@
 <!-- The outer div ensures that the mouse enter events are not
      re-triggered when the drop placeholder is swapped out with
      the pre-rendered block.-->
-<div (mouseenter)="onMouseEnter($event)">
+<div (mouseover)="onMouseEnter($event)">
   <!-- Ensure correct visual behaviour -->
   <div *ngIf="!(isDropTarget | async)"
        [@availability]="currentAvailability | async"
@@ -18,7 +18,6 @@
 
   <div *ngIf="true && (isDropTarget | async)"
        [astDropTarget]="thisBlock"
-       (mouseenter)="onMouseEnter($event)"
        class="drop-placeholder">
     Hier
   </div>
