@@ -441,7 +441,22 @@ export class World {
    */
   async resumeCode() {
     this.codeShouldPause.next(false);
-    await this._resumeCode();
+    this.commandInProgress.next(true);
+
+    try {
+      await this._resumeCode();
+    } catch (error) {
+      if (typeof error.msg !== 'undefined') {
+        // Forward the "nice" errors
+        throw error;
+      } else {
+        // Display the "bad" errors
+        console.error(error);
+        alert(error);
+      }
+    } finally {
+      this.commandInProgress.next(false);
+    }
   }
 
   /**
