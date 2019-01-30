@@ -24,6 +24,7 @@ export interface WorldDescription {
     freight?: string[],
     freightTarget?: string,
     trafficLights?: {
+      opening: string,
       redPhase: number,
       greenPhase: number,
       startPhase: number
@@ -84,7 +85,16 @@ export function readFromNode(node: NodeDescription): WorldDescription {
       if (tile.children['unloading_bay'] && tile.children['unloading_bay'].length > 0) {
         wd.tiles[posToIdx(tile.children['position'][0])].freightTarget = tile.children['unloading_bay'][0].properties['colour'];
       }
-      // TODO: Process traffic lights
+      if (tile.children['trafficLights'] && tile.children['trafficLights'].length > 0) {
+        wd.tiles[posToIdx(tile.children['position'][0])].trafficLights = tile.children['trafficLights'].map(t => {
+          return {
+            opening: t.children['side'][0].properties['direction'],
+            redPhase: t.properties['redPhase'],
+            greenPhase: t.properties['greenPhase'],
+            initialPhase: t.properties['initialPhase'],
+          };
+        });
+      }
     });
   }
 
