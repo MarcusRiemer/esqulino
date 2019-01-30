@@ -17,7 +17,7 @@ namespace :blattwerkzeug do
       FileUtils.rm_rf(Dir.glob(data_project_glob))
     end
   end
-  
+
   namespace :project do
     desc '(Re)load all projects from their seed representation'
     task :load_all => :environment do |t, args|
@@ -37,6 +37,19 @@ namespace :blattwerkzeug do
     desc 'Serialize a project to its seed representation'
     task :store, [:project_id] => :environment do |t, args|
       m.store_project(args[:project_id])
+    end
+  end
+
+  namespace :grammar do
+
+    desc 'Load a grammar from its seed representation'
+    task :load, [:grammar_id] => :environment do |t, args|
+      m.load_grammar args[:grammar_id]
+    end
+
+    desc 'Serialize a grammar to its seed representation'
+    task :store, [:grammar_id] => :environment do |t, args|
+      m.store_grammar args[:grammar_id]
     end
   end
 
