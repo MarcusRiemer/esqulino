@@ -1,18 +1,18 @@
-this.warteAufAmpel = async () => {
-  await this.doNothing();
-  while (this.lightIsRed()) {
-    await this.doNothing();
-    await this.wait();
+truck.warteAufAmpel = function*() {
+  yield* truck.doNothing();
+  while (truck.lightIsRed()) {
+    yield* truck.doNothing();
+    yield* truck.wait();
   }
 }
-this.fahrenUndRechtsAbbiegen = async () => {
-  await this.doNothing();
-  if (this.canTurnRight()) {
-    await this.turnRight();
+truck.fahrenUndRechtsAbbiegen = function*() {
+  yield* truck.doNothing();
+  if (truck.canTurnRight()) {
+    yield* truck.turnRight();
   }
-  await this.warteAufAmpel();
-  await this.goForward();
-  await this.fahrenUndRechtsAbbiegen();
+  yield* truck.warteAufAmpel();
+  yield* truck.goForward();
+  yield* truck.fahrenUndRechtsAbbiegen();
 }
 
-await this.fahrenUndRechtsAbbiegen();
+yield* truck.fahrenUndRechtsAbbiegen();

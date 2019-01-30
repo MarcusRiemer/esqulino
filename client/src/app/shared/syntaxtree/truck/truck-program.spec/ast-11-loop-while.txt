@@ -1,4 +1,4 @@
-while (this.lightIsRed()) {
-  await this.doNothing();
-  await this.wait();
+while (truck.lightIsRed()) {
+  yield* truck.doNothing();
+  yield* truck.wait();
 }

@@ -389,21 +389,22 @@ export class World {
    * @param code Code to be executed.
    */
   async runCode(code: string) {
+    var self = this;
     this.commandInProgress.next(true);
     this.codeShouldPause.next(false);
 
     try {
-      const f = new GeneratorFunction(code);
+      const f = new GeneratorFunction('truck', code);
 
-      this._currentGenerator = f.call({
-        goForward: async () => { await this._commandAsync(Command.goForward); },
-        turnLeft: async () => { await this._commandAsync(Command.turnLeft); },
-        turnRight: async () => { await this._commandAsync(Command.turnRight); },
-        noTurn: async () => { await this._commandAsync(Command.noTurn); },
-        wait: async () => { await this._commandAsync(Command.wait); },
-        load: async () => { await this._commandAsync(Command.load); },
-        unload: async () => { await this._commandAsync(Command.unload); },
-        doNothing: async () => { await this._commandAsync(Command.doNothing); },
+      this._currentGenerator = f.call({}, {
+        goForward: function*() { yield self._commandAsync(Command.goForward); },
+        turnLeft: function*() { yield self._commandAsync(Command.turnLeft); },
+        turnRight: function*() { yield self._commandAsync(Command.turnRight); },
+        noTurn: function*() { yield self._commandAsync(Command.noTurn); },
+        wait: function*() { yield self._commandAsync(Command.wait); },
+        load: function*() { yield self._commandAsync(Command.load); },
+        unload: function*() { yield self._commandAsync(Command.unload); },
+        doNothing: function*() { yield self._commandAsync(Command.doNothing); },
 
         lightIsRed: () => this.sensor(Sensor.lightIsRed),
         lightIsGreen: () => this.sensor(Sensor.lightIsGreen),

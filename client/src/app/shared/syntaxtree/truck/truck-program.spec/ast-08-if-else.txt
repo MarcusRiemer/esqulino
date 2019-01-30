@@ -1,5 +1,5 @@
-if (this.lightIsGreen()) {
-  await this.goForward();
+if (truck.lightIsGreen()) {
+  yield* truck.goForward();
 } else {
-  await this.wait();
+  yield* truck.wait();
 }
