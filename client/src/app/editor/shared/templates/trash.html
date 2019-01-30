@@ -1,8 +1,8 @@
 <div [@animationState]="animationState | async"
-      (dragenter)="mouseEnter()"
-      (dragleave)="mouseLeave()"
-      (dragover)="onTrashDrag($event)"
-      (drop)="onTrashDrop($event)">
-  <!-- <span class="fa fa-trash"></span> -->
+     (dragenter)="mouseEnter()"
+     (dragleave)="mouseLeave()"
+     (dragover)="onTrashDrag($event)"
+     (drop)="onTrashDrop($event)"
+     id="trash-delete-block">
   🗑️
 </div>
