@@ -1,1 +1,1 @@
-(this.canTurnLeft() && this.canTurnRight())
+(truck.canTurnLeft() && truck.canTurnRight())
