@@ -552,7 +552,7 @@ class SeedManager
       end
 
       # This shouldn't happen too often ...
-      raise "Could not find block language with slug or ID \"#{slug_or_id}\""
+      raise "Could not find block language with slug or ID \"#{path_slug_or_id}\""
     end
   end
 
