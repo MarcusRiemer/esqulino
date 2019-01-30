@@ -90,6 +90,9 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
   ],
   providers: [
     ResourceChangedGuard
+  ],
+  exports: [
+    BlockHostComponent
   ]
 })
 export class CodeEditorModule {

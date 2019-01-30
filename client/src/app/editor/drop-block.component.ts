@@ -1,7 +1,10 @@
 import { Component, InjectionToken, Injector, Inject } from '@angular/core';
 
-import { NodeDescription } from '../shared/syntaxtree';
 import { PortalInjector, ComponentPortal } from '@angular/cdk/portal';
+
+import { NodeDescription, Node, Tree } from '../shared/syntaxtree';
+
+import { CurrentCodeResourceService } from './current-coderesource.service';
 
 export interface DropBlockData {
   desc: NodeDescription
@@ -16,11 +19,14 @@ export const DROP_BLOCK_DATA = new InjectionToken<{}>('DROP_BLOCK_DATA');
 export class DropBlockComponent {
 
   constructor(
-    @Inject(DROP_BLOCK_DATA) private _dropBlockData: DropBlockData
+    @Inject(DROP_BLOCK_DATA) private _dropBlockData: DropBlockData,
+    private _currentCodeResource: CurrentCodeResourceService
   ) {
   }
 
-  readonly name = this._dropBlockData.desc.name;
+  readonly codeResource = this._currentCodeResource.peekResource;
+
+  readonly draggedTree = new Tree(this._dropBlockData.desc);
 
   public static createPortalComponent(desc: NodeDescription, parentInjector: Injector) {
     // Build an injector that provides the relevant data for the component
