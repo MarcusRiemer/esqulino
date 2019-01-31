@@ -313,7 +313,7 @@ export class DragService {
       if (!cancelled) {
         // Insertion happens on valid drop locations
         const dropLocation = dragData.dropLocation;
-        if (dropLocation && dropLocation.length > 0) {
+        if (dropLocation && (dropLocation.length > 0 || this._currentCodeResource.peekResource.syntaxTreePeek.isEmpty)) {
           this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
         }
         // Otherwise we might want to remove the current node?
