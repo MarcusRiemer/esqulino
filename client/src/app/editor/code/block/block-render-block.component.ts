@@ -1,14 +1,16 @@
 import { Component, Input } from '@angular/core';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { filter, map } from 'rxjs/operators';
+
+import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
-
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { BlockDropProperties } from './block-drop-properties'
 import { calculateDropLocation } from './drop-utils';
+
 
 /**
  * Renders a single and well known visual element of a node.
@@ -48,4 +50,10 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
       this._dragService.informDraggedOver(evt, this.dropLocation, this.node);
     }
   }
+
+  readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
+    .pipe(
+      filter(loc => !!loc),
+      map(loc => locationEquals(loc, this.node.location))
+    );
 }

@@ -1,19 +1,34 @@
 import { Component, Input } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { filter, map } from 'rxjs/operators';
+
+import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
+
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 /**
  * Renders a single and well known visual element of a node.
  */
 @Component({
   templateUrl: 'templates/block-render.html',
-  selector: `editor-block-render`
+  selector: `editor-block-render`,
+  animations: [
+    trigger('isExecuted', [
+      state('true', style({ "background": "lime" })),
+      transition('false <=> true', animate(200))
+    ])
+  ]
 })
 export class BlockRenderComponent {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
+
+  constructor(
+    private _currentCodeResource: CurrentCodeResourceService
+  ) { }
 
   /**
    * Dirty Hack: Template "Typecast"
@@ -72,6 +87,9 @@ export class BlockRenderComponent {
     return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
   }
 
+  /**
+   * These instructions are used if something is dropped on the block itself.
+   */
   readonly defaultBetweenDropTarget: VisualBlockDescriptions.EditorDropTarget = {
     blockType: "dropTarget",
     dropTarget: {

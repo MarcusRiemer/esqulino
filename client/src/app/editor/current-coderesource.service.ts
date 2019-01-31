@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs'
 import { tap } from 'rxjs/operators';
 
-import { CodeResource } from '../shared/syntaxtree';
+import { CodeResource, NodeLocation } from '../shared/syntaxtree';
 
 import { ProjectService } from './project.service';
 import { SidebarService } from './sidebar.service';
@@ -23,6 +23,8 @@ export class CurrentCodeResourceService {
    * The resource that is currently edited.
    */
   private _codeResource = new BehaviorSubject<CodeResource>(undefined);
+
+  private _executionLocation = new BehaviorSubject<NodeLocation>(undefined);
 
   constructor(
     private _sidebarService: SidebarService,
@@ -66,14 +68,24 @@ export class CurrentCodeResourceService {
   /**
    * Informs interested components about the current resource.
    */
-  get currentResource(): Observable<CodeResource> {
-    return (this._codeResource);
-  }
+  readonly currentResource: Observable<CodeResource> = this._codeResource;
+
+  /**
+   *
+   */
+  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation;
 
   /**
    * The currently loaded resource
    */
   get peekResource() {
     return (this._codeResource.value);
+  }
+
+  /**
+   * Broadcasts a new execution location.
+   */
+  setCurrentExecutionLocation(loc?: NodeLocation) {
+    this._executionLocation.next(loc);
   }
 }

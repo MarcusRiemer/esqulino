@@ -1,4 +1,45 @@
-import { Node, NodeDescription, Tree } from './syntaxtree'
+import { Node, NodeDescription, NodeLocation, Tree, locationEquals } from './syntaxtree'
+
+describe('locationEquals(lhs, rhs)', () => {
+  it('undefined & null', () => {
+    expect(locationEquals(undefined, undefined)).toEqual(false);
+    expect(locationEquals(undefined, null)).toEqual(false);
+    expect(locationEquals(null, undefined)).toEqual(false);
+    expect(locationEquals(null, null)).toEqual(false);
+
+    expect(locationEquals([], null)).toEqual(false);
+    expect(locationEquals(null, [])).toEqual(false);
+
+    expect(locationEquals([], undefined)).toEqual(false);
+    expect(locationEquals(undefined, [])).toEqual(false);
+  });
+
+  it('equal locations', () => {
+    expect(locationEquals([], [])).toEqual(true);
+    expect(locationEquals([["body", 1]], [["body", 1]])).toEqual(true);
+    expect(locationEquals([["body", 1], ["body", 1]], [["body", 1], ["body", 1]])).toEqual(true);
+  });
+
+  it('identical location', () => {
+    const both: NodeLocation = [["body", 1], ["body", 1]];
+    expect(locationEquals(both, both)).toEqual(true);
+  });
+
+  it('different locations', () => {
+    expect(locationEquals([["body", 1]], [])).toEqual(false);
+    expect(locationEquals([], [["body", 1]])).toEqual(false);
+
+    expect(locationEquals([["body", 2], ["body", 1]], [["body", 1], ["body", 1]])).toEqual(false);
+    expect(locationEquals([["body", 1], ["body", 2]], [["body", 1], ["body", 1]])).toEqual(false);
+    expect(locationEquals([["body", 1], ["body", 1]], [["body", 2], ["body", 1]])).toEqual(false);
+    expect(locationEquals([["body", 1], ["body", 1]], [["body", 1], ["body", 2]])).toEqual(false);
+
+    expect(locationEquals([["    ", 1], ["body", 1]], [["body", 1], ["body", 1]])).toEqual(false);
+    expect(locationEquals([["body", 1], ["    ", 1]], [["body", 1], ["body", 1]])).toEqual(false);
+    expect(locationEquals([["body", 1], ["body", 1]], [["    ", 1], ["body", 1]])).toEqual(false);
+    expect(locationEquals([["body", 1], ["body", 1]], [["body", 1], ["    ", 1]])).toEqual(false);
+  });
+});
 
 describe('AST: Basic Operations', () => {
   it('Node "all in one"-test', () => {

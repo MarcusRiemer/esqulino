@@ -59,6 +59,7 @@
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
     <editor-block-render-block #currentBlock
+                               [@isExecuted]="currentBlock.isCurrentlyExecuted | async"
                                [blockLayout]="visual"
                                [blockBase]="visual"
                                [astDropTarget]="currentBlock"

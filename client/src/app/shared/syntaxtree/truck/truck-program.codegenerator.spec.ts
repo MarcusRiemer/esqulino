@@ -1,7 +1,7 @@
 import { CodeGenerator } from '../codegenerator'
-import { Node, NodeDescription } from '../syntaxtree'
+import { Node, NodeDescription, Tree } from '../syntaxtree'
 
-import { PROGRAM_NODE_CONVERTER } from './truck-program.codegenerator'
+import { PROGRAM_NODE_CONVERTER, DEFAULT_STATE } from './truck-program.codegenerator'
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -22,13 +22,42 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
 }
 
 /**
+ * Ensures that the given in and output files do match correctly.
+ *
+ * This function can not be exported from a different module because the calls
+ * to `require` are relative to the file the function is defined in.
+ * So for the moment this function is copy and pasted into some spec files :(
+ */
+export function verifySuffixFiles<T>(fileName: string, outSuffix: string, transform: (obj: T) => string) {
+  const input = require(`./truck-program.spec/${fileName}.json`);
+  let expected = require(`raw-loader!./truck-program.spec/${fileName}-${outSuffix}.txt`) as string;
+
+  if (expected.endsWith("\n")) {
+    expected = expected.substr(0, expected.length - 1);
+  }
+
+  expect(transform(input)).toEqual(expected);
+}
+
+/**
  * Calculates the string representation of the given AST
  */
-function emitTree(astDesc: NodeDescription) {
-  const ast = new Node(astDesc, undefined);
-  const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER);
+function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
+  const specCodegenState = Object.assign({}, DEFAULT_STATE);
+  specCodegenState.emitProgressCallbacks = emitProgressCallback;
+
+  const ast = new Tree(astDesc).rootNode;
+  const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER, [specCodegenState]);
 
   return (codeGen.emit(ast));
+}
+
+/**
+ * Calculates the string representation of the given AST
+ * with generated callbacks
+ */
+function emitTreeWithProgressCallbacks(astDesc: NodeDescription) {
+  return emitTree(astDesc, true);
 }
 
 
@@ -103,9 +132,11 @@ describe('Language: Trucklino Program (Codegen)', () => {
 
   it('Program: Simple', () => {
     verifyFiles("ast-17-program", emitTree);
+    verifySuffixFiles("ast-17-program", "progress", emitTreeWithProgressCallbacks);
   });
 
   it('Program: Example', () => {
     verifyFiles("ast-18-program-example", emitTree);
+    verifySuffixFiles("ast-18-program-example", "progress", emitTreeWithProgressCallbacks);
   });
 });
