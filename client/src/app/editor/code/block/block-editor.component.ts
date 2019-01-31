@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { MatRipple } from '@angular/material';
 
-import { map, switchMap, first } from 'rxjs/operators';
+import { map, switchMap, first, tap } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
@@ -38,6 +38,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
+    private _cd: ChangeDetectorRef
   ) {
   }
 
@@ -72,6 +73,11 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(_ => btnSave.isInProgress = false);
     });
+
+    let ref = this._currentCodeResource.currentExecutionLocation.subscribe(loc => {
+      // this._cd.detectChanges();
+    });
+    this._subscriptionRefs.push(ref);
   }
 
   /**
@@ -140,4 +146,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       this._dragService.informDraggedOver(evt, [], undefined);
     }
   }
+
+  readonly currentlyExecuted = this._currentCodeResource.currentExecutionLocation;
 }
