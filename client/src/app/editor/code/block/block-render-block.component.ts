@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -27,6 +27,7 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
+    private _cd: ChangeDetectorRef
   ) {
   }
 
@@ -53,7 +54,10 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
 
   readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
     .pipe(
-      filter(loc => !!loc),
-      map(loc => locationEquals(loc, this.node.location))
+      map(loc => locationEquals(loc, this.node.location)),
+      tap(_ => {
+        this._cd.markForCheck();
+        this._cd.detectChanges();
+      }),
     );
 }

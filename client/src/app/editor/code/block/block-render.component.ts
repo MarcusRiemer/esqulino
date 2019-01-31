@@ -27,7 +27,7 @@ export class BlockRenderComponent {
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
   constructor(
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
   ) { }
 
   /**
