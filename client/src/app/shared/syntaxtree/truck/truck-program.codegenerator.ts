@@ -34,7 +34,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
         const sensorName = camelize(node.properties['type']);
-        process.addConvertedFragment('this.' + sensorName + '()', node);
+        process.addConvertedFragment('truck.' + sensorName + '()', node);
       }
     }
   },
@@ -100,7 +100,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
-        process.addConvertedFragment('await this.', node);
+        process.addConvertedFragment('yield* truck.', node);
         process.addConvertedFragment(camelize(node.properties['name']), node);
         process.addConvertedFragment('(', node);
         node.getChildrenInCategory('arguments').forEach((a, idx, arr) => {
@@ -168,7 +168,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
         node.getChildrenInCategory('pred').forEach((c) => process.generateNode(c));
         process.addConvertedFragment(') {', node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
-          process.addConvertedFragment('await this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
+          process.addConvertedFragment('yield* truck.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
         process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
@@ -193,18 +193,18 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
-        process.addConvertedFragment('this.', node);
+        process.addConvertedFragment('truck.', node);
         process.addConvertedFragment(camelize(node.properties['name']), node);
-        process.addConvertedFragment(' = async (', node);
+        process.addConvertedFragment(' = function*(', node);
         node.getChildrenInCategory('arguments').forEach((a, idx, arr) => {
           process.generateNode(a);
           if (idx !== arr.length - 1) {
             process.addConvertedFragment(', ', node);
           }
         });
-        process.addConvertedFragment(') => {', node, OutputSeparator.NEW_LINE_AFTER);
+        process.addConvertedFragment(') {', node, OutputSeparator.NEW_LINE_AFTER);
         process.indent(() => {
-          process.addConvertedFragment('await this.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
+          process.addConvertedFragment('yield* truck.doNothing();', node, OutputSeparator.NEW_LINE_AFTER);
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
         process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
