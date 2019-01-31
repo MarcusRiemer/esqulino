@@ -65,17 +65,22 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorDropTarget;
 
+  private _currentTarget = false;
+
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
   ) {
   }
 
-  readonly isDropTarget = this._dragService.currentDrag.pipe(
+  readonly showDropTarget = this._dragService.currentDrag.pipe(
     withLatestFrom(this._dragService.isDragInProgress),
     map(([currentDrag, inProgress]) => {
       if (inProgress) {
-        if (arrayEqual(currentDrag.dropLocation, this.dropLocation)) {
+        if (this._currentTarget) {
+          return (false);
+        }
+        else if (arrayEqual(currentDrag.dropLocation, this.dropLocation)) {
           // We would drop something in the location we are a placeholder.
           return (true);
         } else {
@@ -104,8 +109,14 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
     .pipe(map(drag => calculateDropTargetState(drag, this)));
 
   onMouseEnter(evt: MouseEvent) {
+    this._currentTarget = true;
     if (this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.dropLocation, this.node);
     }
+  }
+
+  onMouseOut(evt: MouseEvent) {
+    this._currentTarget = false;
+    evt.stopPropagation();
   }
 }
