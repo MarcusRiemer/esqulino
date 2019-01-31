@@ -1,5 +1,5 @@
 <div class="row no-gutters">
-  <div class="col-7">
+  <div class="col-6">
     <div class="input-group d-flex pr-1">
       <div class="input-group-prepend">
         <div class="input-group-text">Welt wählen: </div>
@@ -7,16 +7,17 @@
       <truck-world-selector #worldSelector class="flex-grow-1"></truck-world-selector>
     </div>
   </div>
-  <div class="col-5">
-    <div class="btn-group d-flex pl-1" role="group">
+  <div class="col-6">
+    <div class="btn-group btn-group-sm d-flex pl-1" role="group">
       <button class="btn btn-success flex-grow-1" [disabled]="!world || (blocked | async)" (click)="runCode()"><i class="fa fa-play"></i>&nbsp;Ausführen</button>
-      <button class="btn btn-danger flex-grow-1" [disabled]="!world || !(blocked | async)" (click)="terminateCode()"><i class="fa fa-stop"></i>&nbsp;Anhalten</button>
+      <button class="btn btn-danger btn-full-disable flex-grow-1" [disabled]="!world || !(blocked | async)" (click)="pauseCode()"><i class="fa fa-pause"></i>&nbsp;Anhalten</button>
+      <button class="btn btn-success btn-full-disable flex-grow-1" [disabled]="!world || (blocked | async) || !(paused | async)" (click)="resumeCode()"><i class="fa fa-play"></i>&nbsp;Fortsetzen</button>
     </div>
   </div>
 </div>
 
 <div class="row no-gutters mt-3">
-  <div class="col-7">
+  <div class="col-6">
     <div class="row">
       <div class="col">
           Befehle: 
@@ -34,10 +35,10 @@
     </div>
   </div>
 
-  <div class="col-5">
+  <div class="col-6">
     <div class="btn-group btn-group-sm d-flex pl-1" role="group">
       <button class="btn btn-outline-primary flex-grow-1" [disabled]="!world || (blocked | async)" (click)="undo()"><i class="fa fa-undo"></i> Schritt zurück</button>
-      <button class="btn btn-outline-primary flex-grow-1" [disabled]="!world || (blocked | async)" (click)="reset()"><i class="fa fa-ban"></i> Zurücksetzten</button>
+      <button class="btn btn-outline-primary flex-grow-1" [disabled]="!world || (blocked | async)" (click)="reset()"><i class="fa fa-ban"></i> Zurücksetzen</button>
     </div>
   </div>
 </div>
