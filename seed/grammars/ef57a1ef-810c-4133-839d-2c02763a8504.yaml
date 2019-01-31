@@ -11,57 +11,65 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": "program", "types": {"if": {"type": "concrete",
-    "attributes": [{"name": "if", "type": "terminal", "symbol": "wenn"}, {"name":
-    "parenOpen", "type": "terminal", "symbol": "("}, {"name": "pred", "type": "sequence",
+    "attributes": [{"name": "if", "type": "terminal", "symbol": "Wenn"}, {"name":
+    "parenOpen", "type": "terminal", "symbol": " ("}, {"name": "pred", "type": "sequence",
     "nodeTypes": ["booleanExpression"]}, {"name": "parenClose", "type": "terminal",
-    "symbol": ")"}, {"name": "then", "type": "terminal", "symbol": "dann"}, {"name":
+    "symbol": ") "}, {"name": "then", "type": "terminal", "symbol": "dann"}, {"name":
     "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]},
-    {"name": "else", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "statement"}]}]}, "sensor": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "type", "type": "property", "restrictions": [{"type": "enum", "value":
-    ["lightIsRed", "lightIsGreen", "canGoStraight", "canTurnLeft", "canTurnRight",
-    "isSolved"]}]}]}, "loopFor": {"type": "concrete", "attributes": [{"base": "integer",
+    {"name": "elset", "type": "terminal", "symbol": "Sonst"}, {"name": "else", "type":
+    "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}]}, "sensor":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "type", "type":
+    "property", "restrictions": [{"type": "enum", "value": ["lightIsRed", "lightIsGreen",
+    "canGoStraight", "canTurnLeft", "canTurnRight", "isSolved"]}]}]}, "loopFor": {"type":
+    "concrete", "attributes": [{"name": "for", "type": "terminal", "symbol": "Wiederhole"},
+    {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"base": "integer",
     "name": "times", "type": "property", "restrictions": [{"type": "minInclusive",
-    "value": 0}]}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*",
-    "nodeType": "statement"}]}]}, "program": {"type": "concrete", "attributes": [{"name":
-    "procedures", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "procedureDeclaration"}]},
-    {"name": "main", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "statement"}]}]}, "loopWhile": {"type": "concrete", "attributes": [{"name": "while",
-    "type": "terminal", "symbol": "while"}, {"name": "parenOpen", "type": "terminal",
-    "symbol": "("}, {"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]},
-    {"name": "parenClose", "type": "terminal", "symbol": ")"}, {"name": "do", "type":
-    "terminal", "symbol": "do"}, {"name": "body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "statement"}]}]}, "statement": {"type": "oneOf",
-    "oneOf": ["procedureCall", "if", "loopFor", "loopWhile"]}, "procedureCall": {"type":
-    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
-    {"name": "parenOpen", "type": "terminal", "symbol": "("}, {"name": "arguments",
-    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "booleanExpression"}]},
-    {"name": "parenClose", "type": "terminal", "symbol": ")"}]}, "booleanConstant":
-    {"type": "concrete", "attributes": [{"base": "string", "name": "value", "type":
-    "property", "restrictions": [{"type": "enum", "value": ["true", "false"]}]}]},
-    "negateExpression": {"type": "concrete", "attributes": [{"name": "expr", "type":
-    "sequence", "nodeTypes": ["booleanExpression"]}]}, "booleanExpression": {"type":
-    "oneOf", "oneOf": ["sensor", "negateExpression", "booleanBinaryExpression", "booleanConstant"]},
+    "value": 0}]}, {"name": "parenClose", "type": "terminal", "symbol": ") "}, {"name":
+    "do", "type": "terminal", "symbol": "mal"}, {"name": "body", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}]}, "program": {"type":
+    "concrete", "attributes": [{"name": "procedures", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": "procedureDeclaration"}]}, {"name": "main", "type":
+    "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}]}, "loopWhile":
+    {"type": "concrete", "attributes": [{"name": "while", "type": "terminal", "symbol":
+    "Solange"}, {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"name":
+    "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]}, {"name": "parenClose",
+    "type": "terminal", "symbol": ") "}, {"name": "do", "type": "terminal", "symbol":
+    "tue"}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "statement"}]}]}, "statement": {"type": "oneOf", "oneOf": ["procedureCall", "if",
+    "loopFor", "loopWhile"]}, "procedureCall": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "name", "type": "property"}, {"name": "parenOpen",
+    "type": "terminal", "symbol": "("}, {"name": "arguments", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": "booleanExpression"}]}, {"name": "parenClose",
+    "type": "terminal", "symbol": ")"}]}, "booleanConstant": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "value", "type": "property", "restrictions":
+    [{"type": "enum", "value": ["true", "false"]}]}]}, "negateExpression": {"type":
+    "concrete", "attributes": [{"name": "not", "type": "terminal", "symbol": "(Nicht "},
+    {"name": "expr", "type": "sequence", "nodeTypes": ["booleanExpression"]}, {"name":
+    "close", "type": "terminal", "symbol": ")"}]}, "booleanExpression": {"type": "oneOf",
+    "oneOf": ["sensor", "negateExpression", "booleanBinaryExpression", "booleanConstant"]},
     "procedureParameter": {"type": "concrete", "attributes": [{"base": "string", "name":
     "name", "type": "property"}]}, "relationalOperator": {"type": "concrete", "attributes":
     [{"base": "string", "name": "operator", "type": "property", "restrictions": [{"type":
     "enum", "value": ["AND", "OR"]}]}]}, "procedureDeclaration": {"type": "concrete",
-    "attributes": [{"name": "function", "type": "terminal", "symbol": "function "},
+    "attributes": [{"name": "function", "type": "terminal", "symbol": "Definiere "},
     {"base": "string", "name": "name", "type": "property"}, {"name": "parenOpen",
     "type": "terminal", "symbol": "("}, {"name": "arguments", "type": "sequence",
     "nodeTypes": [{"occurs": "*", "nodeType": "procedureParameter"}]}, {"name": "parenClose",
     "type": "terminal", "symbol": ")"}, {"name": "bodyOpen", "type": "terminal", "symbol":
     ""}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
     "statement"}]}, {"name": "bodyClose", "type": "terminal", "symbol": ""}]}, "booleanBinaryExpression":
-    {"type": "concrete", "attributes": [{"name": "lhs", "type": "sequence", "nodeTypes":
-    ["booleanExpression"]}, {"name": "operator", "type": "sequence", "nodeTypes":
-    ["relationalOperator"]}, {"name": "rhs", "type": "sequence", "nodeTypes": ["booleanExpression"]}]}}}'
+    {"type": "concrete", "attributes": [{"name": "open", "type": "terminal", "symbol":
+    "("}, {"name": "lhs", "type": "sequence", "nodeTypes": ["booleanExpression"]},
+    {"name": "spaceBefore", "type": "terminal", "symbol": " "}, {"name": "operator",
+    "type": "sequence", "nodeTypes": ["relationalOperator"]}, {"name": "spaceAfter",
+    "type": "terminal", "symbol": " "}, {"name": "rhs", "type": "sequence", "nodeTypes":
+    ["booleanExpression"]}, {"name": "close", "type": "terminal", "symbol": ")"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-12-19 11:24:42.99628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-23 15:18:20.885314'
+  value_before_type_cast: '2019-01-25 19:14:01.552508'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-lang

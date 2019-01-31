@@ -149,10 +149,32 @@ function dropLocationHasChildren(blockDropProperties: BlockDropProperties) {
   }
 }
 
+// Would the immediate child be allowed?
+const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
+  if (!drag || block.dropLocation.length === 0) {
+    return false;
+  }
+
+  const newNodeType: QualifiedTypeName = {
+    languageName: drag.draggedDescription.language,
+    typeName: drag.draggedDescription.name
+  }
+  const currentTree = block.codeResource.syntaxTreePeek;
+  const currentLanguage = block.codeResource.validationLanguagePeek;
+
+  const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
+  const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+
+  return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
+}
+
 /**
  * Calculates how the given block should react to the given drag.
  */
-export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProperties): DropTargetState {
+export function calculateDropTargetState(
+  drag: CurrentDrag,
+  block: BlockDropProperties
+): DropTargetState {
   // Does the description come with a visibility expression? If not simply assume false
   let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $value: false };
   if (block.visual && block.visual.dropTarget && block.visual.dropTarget.visibility) {
@@ -173,31 +195,12 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
     return (result.isValid);
   }
 
-  // Would the immediate child be allowed?
-  const isLegalDrag = () => {
-    if (!drag || block.dropLocation.length === 0) {
-      return false;
-    }
-
-    const newNodeType: QualifiedTypeName = {
-      languageName: drag.draggedDescription.language,
-      typeName: drag.draggedDescription.name
-    }
-    const currentTree = block.codeResource.syntaxTreePeek;
-    const currentLanguage = block.codeResource.validationLanguagePeek;
-
-    const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
-    const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
-
-    return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
-  }
-
   // Build the value map that corresponds to the state for the current block
   const map: Restricted.VariableMap<VisualBlockDescriptions.VisibilityVars> = {
     ifAnyDrag: !!drag,
     ifEmpty: () => !dropLocationHasChildren(block),
     ifLegalChild: isLegalChild.bind(this),
-    ifLegalDrag: isLegalDrag.bind(this)
+    ifLegalDrag: isLegalDrag.bind(this, drag, block)
   };
 
   // Evaluation of the expression function may be costly. So we postpone it until
@@ -208,7 +211,8 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
   if (drag) {
     // Highlight in case something is dragging over us. This can only happen if
     // we have been visible before, so there is no need for any additional checking
-    const onThis = arrayEqual(drag.hoverPlaceholder, block.dropLocation);
+    const onThis = arrayEqual(drag.dropLocation, block.dropLocation);
+
     if (onThis) {
       return ("self");
     } else {

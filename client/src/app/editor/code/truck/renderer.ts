@@ -268,6 +268,7 @@ class WorldStateRenderer implements ObjectRenderer {
   /**
    * Update state.
    * @param state New state.
+   * @param undo True if this is a step back.
    */
   update(state: WorldState, undo: boolean = false) {
     this.state = state;
@@ -286,6 +287,9 @@ class TileRenderer implements ObjectRenderer {
 
   /** Parent WorldStateRenderer. */
   parent: WorldStateRenderer;
+
+  /** Tile of the previous state. */
+  prevTile: Tile;
 
   /** Sprite for the tile background. */
   tileSprite: Sprite;
@@ -310,6 +314,7 @@ class TileRenderer implements ObjectRenderer {
   constructor(tile: Tile, parent: WorldStateRenderer) {
     this.tile = tile;
     this.parent = parent;
+    this.prevTile = null;
 
     // Preload Sprites
     this.tileSprite = SpriteFactory.getSprite('/vendor/truck/tiles.svg', 64, 64);
@@ -328,6 +333,11 @@ class TileRenderer implements ObjectRenderer {
 
     if (this.startAnimation === null) { this.startAnimation = ctx.currentFrame; }
     const t = (ctx.currentFrame - this.startAnimation) / (this.parent.state.time * ctx.animationSpeed);
+
+    // Calculate the freight alpha value
+    const freightAlpha = t < 1 && this.prevTile && this.prevTile.freightItems !== this.tile.freightItems
+      ? t
+      : 1;
 
     this.tileSprite.draw(
       ctx, this.tileSpriteNumber,
@@ -352,14 +362,35 @@ class TileRenderer implements ObjectRenderer {
       }
     });
 
-    // Draw freight
+    // Draw old freight
+    if (this.prevTile && this.prevTile.freightItems > 0 && freightAlpha < 1) {
+      ctx.alpha(
+        1 - freightAlpha,
+        () => {
+          this.freightSprite.draw(
+            ctx, this.freightSpriteNumber(this.prevTile),
+            tileWidth * this.tile.position.x - this.overlap,
+            tileWidth * this.tile.position.y - this.overlap,
+            tileWidth + this.overlap * 2,
+            tileHeight + this.overlap * 2
+          );
+        }
+      );
+    }
+
+    // Draw new freight
     if (this.tile.freightItems > 0) {
-      this.freightSprite.draw(
-        ctx, this.freightSpriteNumber,
-        tileWidth * this.tile.position.x - this.overlap,
-        tileWidth * this.tile.position.y - this.overlap,
-        tileWidth + this.overlap * 2,
-        tileHeight + this.overlap * 2
+      ctx.alpha(
+        freightAlpha,
+        () => {
+          this.freightSprite.draw(
+            ctx, this.freightSpriteNumber(this.tile),
+            tileWidth * this.tile.position.x - this.overlap,
+            tileWidth * this.tile.position.y - this.overlap,
+            tileWidth + this.overlap * 2,
+            tileHeight + this.overlap * 2
+          );
+        }
       );
     }
 
@@ -378,8 +409,10 @@ class TileRenderer implements ObjectRenderer {
   /**
    * Update tile.
    * @param tile New tile.
+   * @param undo True if this is a step back.
    */
   update(tile: Tile, undo: boolean = false) {
+    this.prevTile = undo ? null : this.tile;
     this.tile = tile;
     this.startAnimation = null;
   }
@@ -417,14 +450,15 @@ class TileRenderer implements ObjectRenderer {
   /**
    * Returns the number of the tile in the sprite, depending on the requested
    * freight.
+   * @param tile Tile to get the sprite number for.
    * @return Number of the tile in the sprite.
    */
-  private get freightSpriteNumber(): number {
+  private freightSpriteNumber(tile: Tile): number {
     return {
       'red': 0,
       'green': 2,
       'blue': 4,
-    }[this.tile.freightColor()];
+    }[tile.freightColor()];
   }
 
   /**
@@ -526,9 +560,12 @@ class TruckRenderer implements ObjectRenderer {
     const truckHeight = tileHeight / 3;
 
     // Calculate the position of the truck
-    const truckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.truck);
+    let truckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.truck);
     let truckAngle = this.calculateTruckAngle(this.truck);
     let turnSignalSpriteNumber = this.turnSignalSpriteNumber(this.truck);
+
+    // Current Truck is fully visible by default
+    let truckAlpha = 1;
 
     if (this.prevTruck) {
       if (this.startAnimation === null) { this.startAnimation = ctx.currentFrame; }
@@ -542,15 +579,35 @@ class TruckRenderer implements ObjectRenderer {
         const prevTruckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.prevTruck);
         const prevTruckAngle = this.calculateTruckAngle(this.prevTruck);
 
-        // Interpolate position
-        truckPosition.x = prevTruckPosition.x + (truckPosition.x - prevTruckPosition.x) * t;
-        truckPosition.y = prevTruckPosition.y + (truckPosition.y - prevTruckPosition.y) * t;
+        if (this.truck.facing !== this.prevTruck.facing) {
+          const p0 = prevTruckPosition;
+          const p1 = {
+            x: tileWidth * this.prevTruck.position.x + tileWidth / 2,
+            y:  tileHeight * this.prevTruck.position.y + tileHeight / 2
+          };
+          const p2 = truckPosition;
+          // De Casteljau
+          truckPosition = {
+            x: (1 - t) * (1 - t) * p0.x + 2 * t * (1 - t) * p1.x + t * t * p2.x,
+            y: (1 - t) * (1 - t) * p0.y + 2 * t * (1 - t) * p1.y + t * t * p2.y
+          };
+        } else {
+          // Interpolate position
+          truckPosition.x = prevTruckPosition.x + (truckPosition.x - prevTruckPosition.x) * t;
+          truckPosition.y = prevTruckPosition.y + (truckPosition.y - prevTruckPosition.y) * t;
+        }
+
+        // Interpolate angle
         truckAngle = prevTruckAngle + (truckAngle - prevTruckAngle) * t;
 
         // If necessary, leave the turn signal on as long as truck is turning
         if (this.prevTruck.turning !== TurnDirection.Straight) {
           turnSignalSpriteNumber = this.turnSignalSpriteNumber(this.prevTruck);
         }
+      }
+
+      if (t <= 1 && this.truck.freightColor() !== this.prevTruck.freightColor()) {
+        truckAlpha = t;
       }
     }
 
@@ -565,6 +622,7 @@ class TruckRenderer implements ObjectRenderer {
       truckPosition.x, truckPosition.y,
       truckAngle,
       () => {
+        // Turn signal
         ctx.alpha(
           turnSignalAlpha,
           () => {
@@ -576,11 +634,33 @@ class TruckRenderer implements ObjectRenderer {
             );
           }
         );
-        this.truckSprite.draw(
-          ctx, this.truckSpriteNumber,
-          -(truckWidth / 2),
-          -(truckHeight / 2),
-          truckWidth, truckHeight
+
+        // Old truck
+        if (truckAlpha < 1) {
+          ctx.alpha(
+            1 - truckAlpha,
+            () => {
+              this.truckSprite.draw(
+                ctx, this.truckSpriteNumber(this.prevTruck),
+                -(truckWidth / 2),
+                -(truckHeight / 2),
+                truckWidth, truckHeight
+              );
+            }
+          );
+        }
+
+        // New truck
+        ctx.alpha(
+          truckAlpha,
+          () => {
+            this.truckSprite.draw(
+              ctx, this.truckSpriteNumber(this.truck),
+              -(truckWidth / 2),
+              -(truckHeight / 2),
+              truckWidth, truckHeight
+            );
+          }
         );
       }
     );
@@ -589,6 +669,7 @@ class TruckRenderer implements ObjectRenderer {
   /**
    * Update the truck.
    * @param truck New truck.
+   * @param undo True if this is a step back.
    */
   update(truck: Truck, undo: boolean = false) {
     this.prevTruck = undo ? null : this.truck;
@@ -598,15 +679,16 @@ class TruckRenderer implements ObjectRenderer {
 
   /**
    * Returns the number of the tile in the sprite, depending on the freight.
+   * @param truck Truck to get the sprite number for.
    * @return Number of the tile in the sprite.
    */
-  private get truckSpriteNumber(): number {
-    if (this.truck.freightColor() == null) { return 0; }
+  private truckSpriteNumber(truck: Truck): number {
+    if (truck.freightColor() == null) { return 0; }
     return {
       red: 1,
       green: 2,
       blue: 3,
-    }[this.truck.freightColor()];
+    }[truck.freightColor()];
   }
 
   /**

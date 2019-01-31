@@ -11,6 +11,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { DROP_PLACEHOLDER_ANIMATION } from './node.animation';
 
+
 /**
  * Displays a group of nodes with placeholders spread out between them.
  */
@@ -45,7 +46,7 @@ export class NodePlaceholderComponent {
             if (!curr)
               // There is no drag operation
               return (this.alwaysVisible ? "available" : "none");
-            else if (arrayEqual(curr.hoverPlaceholder, this.location))
+            else if (arrayEqual(curr.dropLocation, this.location))
               // There is a drag operation and it targets us
               return ("self");
             else
