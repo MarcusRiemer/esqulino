@@ -3,10 +3,12 @@ import { Subscription } from 'rxjs';
 import { flatMap, first } from 'rxjs/operators';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { World, Command } from '../../../shared/syntaxtree/truck/world';
+import { NodeLocation } from '../../../shared/syntaxtree';
 
 import { TruckWorldService } from './truck-world.service'
-import { World, Command } from '../../../shared/syntaxtree/truck/world';
 import { WorldSelectorComponent } from './world-selector.component';
+
 
 @Component({
   templateUrl: 'templates/world-controller.html',
@@ -82,7 +84,9 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
 
   runCode() {
     this.generatedCode.then((generatedCode) => {
-      this.world.runCode(generatedCode).then(() => {
+      this._currentCodeResource.setCurrentExecutionLocation(undefined);
+
+      this.world.runCode(generatedCode, this._progressCallback.bind(this)).then(() => {
         // success, nothing to do
       }).catch((error) => {
         console.error(error);
@@ -104,4 +108,11 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
 
   undo() { this.world.undo(); }
   reset() { this.world.reset(); }
+
+  /**
+   * Called on every meaningful progress of the program.
+   */
+  private _progressCallback(loc: NodeLocation) {
+    this._currentCodeResource.setCurrentExecutionLocation(loc);
+  }
 }
