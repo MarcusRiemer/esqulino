@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -7,6 +7,7 @@ import { DragService } from '../../drag.service';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
+import { BlockDropProperties } from './block-drop-properties'
 import { calculateDropLocation } from './drop-utils';
 
 /**
@@ -16,7 +17,7 @@ import { calculateDropLocation } from './drop-utils';
   templateUrl: 'templates/block-render-block.html',
   selector: `editor-block-render-block`
 })
-export class BlockRenderBlockComponent implements OnInit {
+export class BlockRenderBlockComponent implements BlockDropProperties {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
@@ -25,10 +26,6 @@ export class BlockRenderBlockComponent implements OnInit {
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
   ) {
-  }
-
-  ngOnInit() {
-
   }
 
   /**
@@ -44,5 +41,11 @@ export class BlockRenderBlockComponent implements OnInit {
   onDrop() {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
+  }
+
+  onMouseEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOver(evt, this.dropLocation, this.node);
+    }
   }
 }

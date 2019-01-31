@@ -1,4 +1,4 @@
-this.fooBar = async () => {
-  await this.doNothing();
-  await this.goForward();
+truck.fooBar = function*() {
+  yield* truck.doNothing();
+  yield* truck.goForward();
 }

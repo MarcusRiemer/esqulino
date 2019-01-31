@@ -10,19 +10,26 @@ import { WorldSelectorComponent } from './world-selector.component';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
+  styles: [
+    ':host ::ng-deep truck-world-selector select.custom-select { border-top-left-radius: 0px; border-bottom-left-radius: 0px; }',
+    '.btn-full-disable.disabled, .btn-full-disable:disabled { background-color: #e4e4e4; border-color: #e4e4e4; }'
+  ]
 })
 export class WorldControllerComponent implements OnInit, OnDestroy {
   @ViewChild('worldSelector') worldSelector: WorldSelectorComponent;
 
   private _worldSubscription: Subscription;
   private _worldSelectorSubscription: Subscription;
-  public world: World;
+  public world: World = null;
 
   readonly currentWorld = this._truckWorld.currentWorld;
   readonly currentProgram = this._currentCodeResource.currentResource;
 
   readonly blocked = this._truckWorld.currentWorld.pipe(
     flatMap(world => world.commandInProgress)
+  );
+  readonly paused = this._truckWorld.currentWorld.pipe(
+    flatMap(world => world.codeShouldPause)
   );
 
   constructor(
@@ -83,7 +90,17 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
       });
     });
   }
-  terminateCode() { this.world.terminateCode(); }
+
+  resumeCode() {
+    this.world.resumeCode().then(() => {
+      // success, nothing to do
+    }).catch((error) => {
+      console.error(error);
+      alert(error.msg);
+    });
+  }
+
+  pauseCode() { this.world.pauseCode(); }
 
   undo() { this.world.undo(); }
   reset() { this.world.reset(); }

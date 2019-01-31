@@ -1,8 +1,8 @@
 import { WorldDescription } from './world.description';
 import { BehaviorSubject } from 'rxjs';
 
-// https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
-const AsyncFunction = Object.getPrototypeOf(async function() { }).constructor;
+// https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
+const GeneratorFunction = Object.getPrototypeOf(function*() { }).constructor;
 
 /**
  * Representation of the game world.
@@ -17,11 +17,20 @@ export class World {
   /** Duration of a step in milliseconds. */
   animationSpeed = 1000;
 
+  /**
+   * Activate smart goForward command, which can automatically take turns
+   * without a set turn signal.
+   */
+  smartForward = false;
+
   /** Command is in progress. */
   commandInProgress = new BehaviorSubject(false);
 
-  /** Code is being executed, but should be terminated. */
-  codeShouldTerminate = false;
+  /** Code is or should be paused. */
+  codeShouldPause = new BehaviorSubject(false);
+
+  /** Generator for the currently loaded code. */
+  private _currentGenerator: Generator;
 
   /** Executable commands. */
   readonly commands = {
@@ -39,7 +48,7 @@ export class World {
         }
         throw new RedLightViolationError();
         // Curves can also be taken without set turn signal
-      } else if (curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
+      } else if (this.smartForward && curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
         state.truck.move(curTile.curveTurnDirection(state.truck.facingDirection));
         state.time = 1;
         return state;
@@ -105,6 +114,12 @@ export class World {
       return state;
     },
 
+    // Pause execution until further notice
+    [Command.pause]: (state: WorldState): WorldState => {
+      this.codeShouldPause.next(true);
+      return null;
+    },
+
     // Do nothing, but still check if program should terminate
     [Command.doNothing]: (state: WorldState): WorldState => {
       return null;
@@ -148,7 +163,7 @@ export class World {
 
     // Is the world solved?
     [Sensor.isSolved]: (state: WorldState): boolean => {
-      return state.solved();
+      return state.solved;
     },
   };
 
@@ -162,7 +177,12 @@ export class World {
 
     const truck = new Truck(
       new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
-      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing))
+      DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing)),
+      desc.trucks[0].freight.map((f) => ({
+        'Red': Freight.Red,
+        'Green': Freight.Green,
+        'Blue': Freight.Blue
+      }[f]))
     );
 
     const tiles = desc.tiles.map((tile) => {
@@ -170,7 +190,7 @@ export class World {
       let openings = TileOpening.None;
       let freight: Freight[] = [];
       let freightTarget: Freight = null;
-      let trafficLights: TrafficLight[] = [];
+      let trafficLights: TrafficLight[] = [null, null, null, null];
 
       // Openings
       if (tile.openings) {
@@ -200,9 +220,14 @@ export class World {
 
       // Traffic lights
       if (tile.trafficLights) {
-        trafficLights = tile.trafficLights.map((t) =>
-          new TrafficLight(t.redPhase, t.greenPhase, t.startPhase)
-        );
+        tile.trafficLights.forEach(t => {
+          trafficLights[{
+            'N': 0,
+            'E': 1,
+            'S': 2,
+            'W': 3
+          }[t.opening]] = new TrafficLight(t.redPhase, t.greenPhase, t.startPhase);
+        });
       }
 
       return new Tile(
@@ -211,7 +236,7 @@ export class World {
       );
     });
 
-    this.states = [new WorldState(0, tiles, truck, 1)];
+    this.states = [new WorldState(0, tiles, truck, 0)];
   }
 
   /**
@@ -314,7 +339,7 @@ export class World {
    *         otherwise false.
    */
   get solved(): boolean {
-    return this.state.solved();
+    return this.state.solved;
   }
 
   /**
@@ -334,9 +359,13 @@ export class World {
    */
   async commandAsync(command: Command): Promise<void> {
     this.commandInProgress.next(true);
-    this.codeShouldTerminate = false;
-    await this._commandAsync(command);
-    this.commandInProgress.next(false);
+    try {
+      await this._commandAsync(command);
+    } catch (error) {
+      throw error;
+    } finally {
+      this.commandInProgress.next(false);
+    }
   }
 
   /**
@@ -348,9 +377,6 @@ export class World {
    * @return Promise, which is resolved when the scheduled time is over.
    */
   private async _commandAsync(command: Command): Promise<void> {
-    if (this.codeShouldTerminate) {
-      throw new TerminatedError();
-    }
     await this.mutateStateAsync(this.commands[command]);
   }
 
@@ -369,21 +395,23 @@ export class World {
    * @param code Code to be executed.
    */
   async runCode(code: string) {
+    var self = this;
     this.commandInProgress.next(true);
-    this.codeShouldTerminate = false;
+    this.codeShouldPause.next(false);
 
     try {
-      const f = new AsyncFunction(code);
+      const f = new GeneratorFunction('truck', code);
 
-      await f.call({
-        goForward: async () => { await this._commandAsync(Command.goForward); },
-        turnLeft: async () => { await this._commandAsync(Command.turnLeft); },
-        turnRight: async () => { await this._commandAsync(Command.turnRight); },
-        noTurn: async () => { await this._commandAsync(Command.noTurn); },
-        wait: async () => { await this._commandAsync(Command.wait); },
-        load: async () => { await this._commandAsync(Command.load); },
-        unload: async () => { await this._commandAsync(Command.unload); },
-        doNothing: async () => { await this._commandAsync(Command.doNothing); },
+      this._currentGenerator = f.call({}, {
+        goForward: function*() { yield self._commandAsync(Command.goForward); },
+        turnLeft: function*() { yield self._commandAsync(Command.turnLeft); },
+        turnRight: function*() { yield self._commandAsync(Command.turnRight); },
+        noTurn: function*() { yield self._commandAsync(Command.noTurn); },
+        load: function*() { yield self._commandAsync(Command.load); },
+        unload: function*() { yield self._commandAsync(Command.unload); },
+        wait: function*() { yield self._commandAsync(Command.wait); },
+        pause: function*() { yield self._commandAsync(Command.pause); },
+        doNothing: function*() { yield self._commandAsync(Command.doNothing); },
 
         lightIsRed: () => this.sensor(Sensor.lightIsRed),
         lightIsGreen: () => this.sensor(Sensor.lightIsGreen),
@@ -392,17 +420,16 @@ export class World {
         canTurnRight: () => this.sensor(Sensor.canTurnRight),
         isSolved: () => this.sensor(Sensor.isSolved),
       });
+
+      await this._resumeCode();
     } catch (error) {
-      // Only display unexpected errors
-      if (!error.expected) {
-        if (typeof error.msg !== 'undefined') {
-          // Forward the "nice" errors
-          throw error;
-        } else {
-          // Display the "bad" errors
-          console.error(error);
-          alert(error);
-        }
+      if (typeof error.msg !== 'undefined') {
+        // Forward the "nice" errors
+        throw error;
+      } else {
+        // Display the "bad" errors
+        console.error(error);
+        alert(error);
       }
     } finally {
       this.commandInProgress.next(false);
@@ -410,10 +437,45 @@ export class World {
   }
 
   /**
-   * Terminates the code currently running asap.
+   * Resumes execution of a previously paused program.
    */
-  terminateCode() {
-    this.codeShouldTerminate = true;
+  async resumeCode() {
+    this.codeShouldPause.next(false);
+    this.commandInProgress.next(true);
+
+    try {
+      await this._resumeCode();
+    } catch (error) {
+      if (typeof error.msg !== 'undefined') {
+        // Forward the "nice" errors
+        throw error;
+      } else {
+        // Display the "bad" errors
+        console.error(error);
+        alert(error);
+      }
+    } finally {
+      this.commandInProgress.next(false);
+    }
+  }
+
+  /**
+   * Executes the generator als long as it's not finished or paused.
+   */
+  private async _resumeCode() {
+    if (this._currentGenerator) {
+      let result: { value: Promise<void>, done: boolean };
+      while (!this.codeShouldPause.value && !(result = this._currentGenerator.next()).done) {
+        await result.value;
+      }
+    }
+  }
+
+  /**
+   * Pauses the code currently running asap.
+   */
+  pauseCode() {
+    this.codeShouldPause.next(true);
   }
 }
 
@@ -475,7 +537,7 @@ export class WorldState {
    * @return True, when all freight has been delivered to their destination,
    *         otherwise false.
    */
-  solved(): boolean {
+  get solved(): boolean {
     return this.truck.freightItems === 0 && !this.tiles.some((t) => t.freightItems > 0);
   }
 
@@ -1097,6 +1159,9 @@ export enum Command {
   /** Wait a step without activity. */
   wait,
 
+  /** Pause execution until further notice. */
+  pause,
+
   /** Do nothing, but still check if program should terminate. */
   doNothing,
 }
@@ -1146,10 +1211,4 @@ export class LoadingError extends TruckError {
 /** Exception while unloading. */
 export class UnloadingError extends TruckError {
   readonly msg: string = 'Hier kannst du nichts abladen!';
-}
-
-/** Exception while unloading. */
-export class TerminatedError extends TruckError {
-  readonly expected: boolean = true;
-  readonly msg: string = 'Das Programm wurde beendet.';
 }
