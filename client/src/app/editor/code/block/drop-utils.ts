@@ -160,12 +160,20 @@ const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
     typeName: drag.draggedDescription.name
   }
   const currentTree = block.codeResource.syntaxTreePeek;
-  const currentLanguage = block.codeResource.validationLanguagePeek;
 
-  const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
-  const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+  // If the tree is empty, the drop is always forbidden.
+  // This happens if some block is rendered in the sidebar or as a dragged
+  // block and the current tree is empty.
+  if (!currentTree.isEmpty) {
+    const currentLanguage = block.codeResource.validationLanguagePeek;
 
-  return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
+    const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
+    const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+
+    return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
+  } else {
+    return (true);
+  }
 }
 
 /**
