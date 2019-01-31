@@ -78,7 +78,7 @@ export class TrashComponent {
 
   mouseLeave() {
     this._mouseOver.next(false);
-    if (this._dragService.peekIsDragInProgress) {
+    if (this._dragService && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOverEditor();
     }
   }
