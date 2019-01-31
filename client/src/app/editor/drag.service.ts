@@ -238,7 +238,7 @@ export class DragService {
     dragData.hoverTrash = false;
 
     this._currentDrag.next(dragData);
-    console.log("Dragged over editor");
+    // console.log("Dragged over editor");
   }
 
   /**
@@ -292,12 +292,13 @@ export class DragService {
   private setupDragEndHandlers(desc: NodeDescription) {
     // Reset everything once the operation has ended
     const dragEndHandler = (cancelled: boolean) => {
+      // Keep a reference to the now finished drag
+      const dragData = this._currentDrag.value;
 
       // Do the strictly required internal bookkeeping
       removeDragHandlers();
       this.hideOverlay();
       this._currentDrag.next(undefined);
-      this._trashService.hideTrash();
 
       // Tell the analytics API about the ended event
       this._analytics.trackEvent({
@@ -308,18 +309,22 @@ export class DragService {
       });
 
       // Should something be inserted or removed?
+      // - Not if the operation has been cancelled
       if (!cancelled) {
         // Insertion happens on valid drop locations
-        const dropLocation = this.peekDragData.dropLocation;
+        const dropLocation = dragData.dropLocation;
         if (dropLocation && dropLocation.length > 0) {
           this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
-        } else if (this.peekDragData.hoverTrash) {
+        }
+        // Otherwise we might want to remove the current node?
+        else if (dragData.hoverTrash) {
           this._trashService._fireDrop();
           console.log("Dropped on trash");
         }
       }
 
-      console.log(`AST-Drag ended`);
+      this._trashService.hideTrash();
+      console.log(`AST-Drag ended: `, dragData);
     }
 
     // Dragging ends when the mouse is no longer pressed ...
