@@ -16,7 +16,8 @@
     </ng-container>
   </div>
 
-  <div *ngIf="true && (isDropTarget | async)"
+  <div *ngIf="(isDropTarget | async)"
+       @dropTargetVisible
        [astDropTarget]="thisBlock"
        class="drop-placeholder">
     Hier

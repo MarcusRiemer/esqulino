@@ -1,4 +1,5 @@
 import { Component, InjectionToken, Injector, Inject } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { PortalInjector, ComponentPortal } from '@angular/cdk/portal';
 
@@ -14,7 +15,20 @@ export const DROP_BLOCK_DATA = new InjectionToken<{}>('DROP_BLOCK_DATA');
 
 @Component({
   templateUrl: 'templates/drop-block.html',
-  selector: `drop-block`
+  selector: `drop-block`,
+  animations: [
+    trigger('visible', [
+      transition(':enter', [
+        style({
+          "transform": "scale(0)",
+          "transform-origin": "0% 0%"
+        }),
+        animate('0.5s ease', style({
+          "transform": "scale(1)"
+        })),
+      ])
+    ])
+  ]
 })
 export class DropBlockComponent {
 

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { trigger, state, style } from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map, withLatestFrom, debounceTime } from 'rxjs/operators';
 
 import { arrayEqual } from '../../../shared/util';
 import { Node, CodeResource } from '../../../shared/syntaxtree';
@@ -35,6 +35,28 @@ import { calculateDropLocation, calculateDropTargetState } from './drop-utils';
       state('self', style({
         backgroundColor: 'yellow',
       })),
+    ]),
+    trigger('dropTargetVisible', [
+      transition(':enter', [
+        style({
+          "width": '0px',
+          "transform": "scaleX(0)",
+          "white-space": "nowrap"
+        }),
+        animate('0.5s ease', style({
+          "width": '*',
+          "transform": "scaleX(1)"
+        })),
+      ]),
+      transition(':leave', [
+        style({
+          "white-space": "nowrap"
+        }),
+        animate('0.5s ease', style({
+          "width": '0px',
+          "transform": "scaleX(0)"
+        })),
+      ])
     ])
   ]
 })
@@ -62,7 +84,8 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
       } else {
         return (false);
       }
-    })
+    }),
+    debounceTime(0.016) // Don't trigger animations to hasty
   );
 
   readonly thisBlock = this;

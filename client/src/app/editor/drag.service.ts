@@ -247,7 +247,7 @@ export class DragService {
   public informDraggedOverTrash() {
     const dragData = this._currentDrag.value;
 
-    // Get rid of everything that could be set
+    // Get rid of everything that could be set ...
     delete dragData.hoverNode;
     delete dragData.dropLocation;
 
@@ -292,24 +292,12 @@ export class DragService {
   private setupDragEndHandlers(desc: NodeDescription) {
     // Reset everything once the operation has ended
     const dragEndHandler = (cancelled: boolean) => {
+
+      // Do the strictly required internal bookkeeping
       removeDragHandlers();
       this.hideOverlay();
-
-      // Should something be inserted or removed?
-      if (!cancelled) {
-        // Insertion happens on valid drop locations
-        if (this.peekDragData.dropLocation) {
-          const dropLocation = this.peekDragData.dropLocation;
-          this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
-        } else if (this.peekDragData.hoverTrash) {
-          this._trashService._fireDrop();
-          console.log("Dropped on trash");
-        }
-      }
-
       this._currentDrag.next(undefined);
       this._trashService.hideTrash();
-      console.log(`AST-Drag ended`);
 
       // Tell the analytics API about the ended event
       this._analytics.trackEvent({
@@ -318,6 +306,20 @@ export class DragService {
         name: desc.language,
         value: desc
       });
+
+      // Should something be inserted or removed?
+      if (!cancelled) {
+        // Insertion happens on valid drop locations
+        const dropLocation = this.peekDragData.dropLocation;
+        if (dropLocation && dropLocation.length > 0) {
+          this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
+        } else if (this.peekDragData.hoverTrash) {
+          this._trashService._fireDrop();
+          console.log("Dropped on trash");
+        }
+      }
+
+      console.log(`AST-Drag ended`);
     }
 
     // Dragging ends when the mouse is no longer pressed ...
