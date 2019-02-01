@@ -736,6 +736,14 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
             });
           }
           break;
+        case "regex":
+          const regex = new RegExp(restriction.value as string);
+          if (!regex.test(value)) {
+            context.addError(ErrorCodes.IllegalPropertyType, node, {
+              condition: `"${value}" did not match regular expression "${restriction.value}"`
+            });
+          }
+          break;
         default:
           throw new Error(`Unknown string restriction: "${restriction.type}"`);
       }
