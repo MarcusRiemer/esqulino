@@ -157,7 +157,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
     const t = language.getType(typeName);
 
     // Are there any children categories that could be added preemptively?
-    const reqCat = t.requiredChildrenCategoryNames;
+    const reqCat = t.allowedChildrenCategoryNames;
     if (reqCat.length > 0) {
       toReturn.children = {};
       reqCat.forEach(c => {

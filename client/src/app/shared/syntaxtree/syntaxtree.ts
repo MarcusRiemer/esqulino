@@ -369,6 +369,17 @@ export class Tree {
   }
 
   /**
+   * @return The node at the given location or `undefined` if no such node exists.
+   */
+  locateOrUndefined(loc: NodeLocation): Node | undefined {
+    try {
+      return (this.locate(loc));
+    } catch {
+      return (undefined);
+    }
+  }
+
+  /**
    * Returns a new tree where the node at the given location is replaced.
    *
    * @param loc The location of the node to replace.

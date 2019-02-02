@@ -85,6 +85,11 @@ export abstract class NodeType {
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
+
+  /**
+   * These names are valid child categories
+   */
+  abstract get allowedChildrenCategoryNames(): string[];
 }
 
 /**
@@ -769,6 +774,14 @@ class NodeOneOfType extends NodeType {
    * it for child categories is meaningless.
    */
   get requiredChildrenCategoryNames() {
+    return ([]);
+  }
+
+  /**
+   * As this node should never physically appear in a tree, asking
+   * it for child categories is meaningless.
+   */
+  get allowedChildrenCategoryNames() {
     return ([]);
   }
 
