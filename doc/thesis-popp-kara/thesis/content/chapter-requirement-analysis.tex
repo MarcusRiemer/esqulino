@@ -4,7 +4,7 @@
 \chapter{Anforderungsanalyse}
 \label{sec:requirements}
 
-Aufgabe der Abschlussarbeit ist die Integration eines Tools zum spielerischen Erlernen von Programmierfähigkeiten in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe \ref{sec:requirements:existing}). Als Vorbilder dieser Anwendung dienen dabei Kara (\ref{sec:related:kara}) und Lightbot (\ref{sec:related:lightbot}). Im Folgenden sind die Anforderungen an dieses Programm näher beschrieben.
+Ziel dieser Arbeit ist die Integration eines Tools zum spielerischen Erlernen von Programmierfähigkeiten in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe \ref{sec:requirements:existing}). Als Vorbilder dieser Anwendung dienen dabei Kara (\ref{sec:related:kara}) und Lightbot (\ref{sec:related:lightbot}). Im Folgenden sind die Anforderungen an dieses Programm näher beschrieben.
 
 %************************************************
 % Vorhandenes Projekt
@@ -29,13 +29,11 @@ Der Client wurde als eine Single-Page Application mit rein clientseitiger Visual
 \subsection{Drag \& Drop-Editor}
 \label{sec:requirements:existing:structure:drag-drop}
 
-Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Editor von BlattWerkzeug. Auch wenn er vorgegeben und nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion mit dem zu erstellenden Programm abläuft. Programmcode soll zur Ausführung in der Mikrowelt nicht getippt, sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt werden. In einer Seitenleiste sind alle verwendbaren Bausteine aufgelistet. Auch wenn dieses Verhalten zunächst an Lightbot erinnert, soll es doch mit dem Drag \& Drop-Editor möglich sein, mehr als nur Icons in vorgegebene Kästen zu bewegen. Trotz des syntaxfreien Editors, soll die Anmutung von Programmcode entstehen und auch komplexere Strukturen möglich gemacht werden (siehe dazu \ref{sec:requirements:program}).
+Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Editor von BlattWerkzeug. Auch wenn er vorgegeben und nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion mit dem zu erstellenden Programm abläuft. Programmcode soll zur Ausführung in der Mikrowelt nicht getippt, sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt werden. In einer Seitenleiste sind alle verwendbaren Bausteine aufgelistet. Auch wenn dieses Verhalten zunächst an Lightbot erinnert, soll es doch mit dem Drag \& Drop-Editor möglich sein, mehr als nur Icons in vorgegebene Kästen zu bewegen. Trotz des syntaxfreien Editors, soll die Anmutung von Programmcode entstehen und auch komplexere Strukturen möglich gemacht werden.
 
-Die Bausteine des Drag \& Drop-Editors und deren Kombinationsmöglichkeiten werden durch eine Grammatik festgelegt, deren Anforderungen in Abschnitt \ref{sec:requirements:program} näher beschrieben werden. Ergebnis des Drag \& Drop-Editors ist nach dem Bearbeiten durch den Nutzer dann ein Syntaxbaum, der alle "programmierten" Operationen enthält und vom Programm weiterverarbeitet werden kann.
+Die Bausteine des Drag \& Drop-Editors und deren Kombinationsmöglichkeiten werden durch eine Grammatik festgelegt, deren Anforderungen in Abschnitt \ref{sec:requirements:program} näher beschrieben werden. Ergebnis des Drag \& Drop-Editors ist nach dem Bearbeiten durch den Nutzer dann ein Syntaxbaum, der alle "programmierten" Operationen enthält und vom Programm weiterverarbeitet werden kann. Ein beispielhafter Ausschnitt eines solchen Syntaxbaums ist in Abbildung \ref{fig:implementation:program:evaluation:tree} auf Seite \pageref{fig:implementation:program:evaluation:tree} zu finden.
 
-% Auf den Syntaxbaum, sowie die Anforderungen an die Weiterverarbeitung wird im Abschnitt \ref{sec:requirements:world:compile-interpret} weiter eingegangen.
-
-Abbildung \ref{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Editors, in dem eine SQL-Abfrage zusammengestellt wird. Im Block-Editor wird die SQL-Abfrage mit Elementen aus der Seitenleiste zusammengestellt. In den Komponenten darunter wird der daraus resultierende SQl-Befehl angezeigt. Außerdem wird eine Ergebnisvorschau mit dem Resultat der Abfrage angezeigt. Dieses Aussehen soll adaptiert und für die Zwecke dieser Arbeit weiterentwickelt werden.
+Abbildung \ref{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Editors, in dem eine SQL-Abfrage zusammengestellt wird. Im Block-Editor wird die SQL-Abfrage mit Elementen aus der Seitenleiste zusammengestellt. In den Komponenten darunter wird der daraus resultierende SQL-Befehl angezeigt. Außerdem wird eine Ergebnisvorschau mit dem Resultat der Abfrage angezeigt. Dieses Aussehen soll adaptiert und für die Zwecke dieser Arbeit weiterentwickelt werden.
 
 \begin{figure}
     \centering
@@ -44,19 +42,15 @@ Abbildung \ref{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto d
     \label{fig:requirements:existing:draganddrop}
 \end{figure}
 
+Aus dem vorhandenen Projekt ergibt sich außerdem die Zielgruppe für die zu entwickelnde Erweiterung, welche im folgenden Abschnitt wiedergegeben wird.
+
 %************************************************
 % Zielgruppe
 %************************************************
 \section{Zielgruppe}
 \label{sec:requirements:target}
 
-Die Zielgruppe wird zum Teil natürlich auch über die Zielgruppe von BlattWerkzeug definiert, wobei sie im Folgenden noch etwa spezieller formuliert und erweitert werden soll.
-
-BlattWerkzeug definiert die Zielgruppe auf Schüler und Schülerinnen ab der Mittelstufe mit grundlegenden PC-Anwenderkenntnissen. Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen werden nicht als zwingende Voraussetzung, aber als eine sinnvolle Vorstufe, um die Strukturierungsmöglichkeiten von Datenbeständen zu verstehen, angesehen. Für die Entwicklung von Oberflächen werden grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente benötigt. Außerdem wird das Wissen über einzelne englische Vokabeln vorrausgesetzt~\cite[22-23]{riemer2016}.
-
-Bei den Schülern sollten grundlegende PC-Anwenderkenntnisse zur Bedienung des Tools vorhanden sein. Dazu gehört das Starten und Bedienen eines Webbrowsers, was bei den meisten Schülern allerdings vorrausgesetzt werden kann. Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen und Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente ist für die Benutzung nicht notwendig. Schüler, die noch nie mit dem Thema Programmierung in Berührung gekommen sind, sollten bei den ersten Schritten von einer Lehrkraft begleitet werden. Nachdem erste Erfahrungen gesammelt wurden, sollten Schüler dann auch selbstständig in der Lage sein, neue Möglichkeiten zu entdecken und Aufgaben zu lösen. Eine Begleitung in Form einer Schritt für Schritt Anleitung durch die Software ist allerdings zunächst nicht geplant.
-
-Außerdem sollen auch Lehrer in die Zielgruppe mit aufgenommen werden, denen die Möglichkeit gegeben werden soll, Welten und damit Aufgaben für Ihre Schüler zu erstellen und vorzubereiten (siehe \ref{sec:requirements:world}) und ihre Schüler bei der Lösung der Aufgaben zu unterstützen.
+BlattWerkzeug definiert die Zielgruppe auf Schüler und Schülerinnen ab der Mittelstufe mit grundlegenden PC-Anwenderkenntnissen. Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen werden nicht als zwingende Voraussetzung, aber als eine sinnvolle Vorstufe, um die Strukturierungsmöglichkeiten von Datenbeständen zu verstehen, angesehen. Für die Entwicklung von Oberflächen werden grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente benötigt. Außerdem wird das Wissen über einzelne englische Vokabeln vorrausgesetzt~\cite[22-23]{riemer2016}. Diese Zielgruppe sollte auch für die zu entwickelnde Erweiterung berücksichtigt werden.
 
 %************************************************
 % Mikrowelt
@@ -64,7 +58,7 @@ Außerdem sollen auch Lehrer in die Zielgruppe mit aufgenommen werden, denen die
 \section{Mikrowelt}
 \label{sec:requirements:world}
 
-Analog zu den vergleichbaren Arbeiten soll auch für diese Arbeit eine Mikrowelt implementiert werden. Ein Objekt wird mit programmierten Befehlen durch eine virtuelle Welt geführt. Der Spieler löst so eine Art Puzzelrätsel. Ein variabler Schwierigkeitsgrad ist durch die Möglichkeit unterschiedliche Welten zu spielen gegeben.
+Analog zu den vergleichbaren Arbeiten in Kapitel \ref{sec:related} soll auch für diese Arbeit eine Mikrowelt implementiert werden. Ein Objekt wird mit programmierten Befehlen durch eine virtuelle Welt geführt. Der Spieler löst so eine Art Puzzelrätsel. Ein variabler Schwierigkeitsgrad ist durch die Möglichkeit unterschiedliche Welten zu spielen gegeben.
 
 \subsection{Rahmenhandlung}
 \label{sec:requirements:world:story}
@@ -74,11 +68,9 @@ Spielerisches Lernen bringt Spaß, wenn das Lernprogramm eine emotional ansprech
 \subsection{Datenstruktur}
 \label{sec:requirements:world:structure}
 
-In Anlehnung an Kara soll die Möglichkeit gegeben werden, neue Level bzw. Aufgaben zu entwerfen. Jede Aufgabe besteht dabei aus einer Welt, wobei sowohl Lehrer, als auch Schüler in der Lage sein sollen, neue Welten zu erstellen. Die Funktion richtet sich jedoch primär an die Lehrkraft. Es kann davon ausgegangen werden, dass ein Lehrer für das Fach Informatik über Erfahrungen in der Bedienung auch von komplexeren Programmen verfügt. Daher kann die Umgebung zur Gestaltung der Level eher zweckmäßig sein.
+In Anlehnung an Kara soll die Möglichkeit gegeben werden, neue Level bzw. Aufgaben zu entwerfen. Jede Aufgabe besteht dabei aus einer Welt, wobei sowohl Lehrer, als auch Schüler in der Lage sein sollen, neue Welten zu erstellen. Die Funktion richtet sich jedoch primär an die Lehrkraft. Es kann davon ausgegangen werden, dass ein motivierter Lehrer für das Fach Informatik über Erfahrungen in der Bedienung auch von komplexeren Programmen verfügt. Daher kann die Umgebung zur Gestaltung der Level eher zweckmäßig sein.
 
-% Eine Welt soll aus mehreren Kacheln bestehen, welche durch bis zu vier Öffnungen miteinander verbunden werden können und so ein Straßennetz bilden. In Anlehnung an Lightbot ist das Ziel der Aufgabe immer dadurch definiert, dass die verschiedenfarbigen Container -- die sich zu Beginn des Level bereits auf der Ladefläche oder auf einem beliebigen Straßestück im Spielfeld befinden können -- an ihr vorgesehenes Ziel gebracht werden.
-
-Um diese Funktionalität zu ermöglichen, stellt BlattWerkzeug eine Datenstruktur bereit, die in eine visuell darstellbare, objektorientierte Repräsentation der Welt umgewandelt wird. Es muss ein Konverter entwickelt werden, welcher einen von BlattWerkzeug vorgegebenen Syntaxbaum in den Objektbaum zur Repräsentation der Welt umwandelt, auf welchem im weiteren Verlauf der Anwendung auch die vorgesehenen Befehle (siehe \ref{sec:requirements:program}) ausgeführt werden können.
+Um diese Funktionalität zu ermöglichen, stellt BlattWerkzeug eine Datenstruktur bereit, die in eine visuell darstellbare, objektorientierte Repräsentation der Welt umgewandelt wird. Es muss ein Konverter entwickelt werden, welcher einen von BlattWerkzeug vorgegebenen Syntaxbaum in den Objektbaum zur Repräsentation der Welt umwandelt, auf welchem im weiteren Verlauf der Anwendung auch die vorgesehenen Befehle (siehe nächster Abschnitt) ausgeführt werden können.
 
 %************************************************
 % Programm
@@ -86,7 +78,9 @@ Um diese Funktionalität zu ermöglichen, stellt BlattWerkzeug eine Datenstruktu
 \section{Minisprache}
 \label{sec:requirements:program}
 
-Bewegungsabläufe wie z. B. "vorwärts", "links", "rechts" oder "warten" werden vom Nutzer mithilfe des Drag \& Drop-Editors programmiert. Dafür wird eine Minisprache eingeführt, die im Vergleich zu Universalsprachen über einen deutlich reduzierten Funktionsumfang verfügt und dadurch den Nutzer behutsam an die Programmierung heranführen und ihn nicht wie Universalsprachen mit einem großen Sprachumfang und der damit verbundennen steileren Lernkurve überfordern soll. Allgemeine Anforderungen an Minisprachen, sowie deren Vorteile wurden im Grundlagenkapitel \ref{sec:basics:mini-languages} genannt. Mindestanforderung an den Umfang der Minisprache ist die der Vorbild-Anwendung Lightbot (siehe \ref{sec:related:lightbot}), welche die Grundstruktur von Sequenzen, den Aufruf atomarer Befehle zur Navigation durch die Mikrowelt, sowie Definition und Aufruf von Prozeduren ermöglicht. Die Implementierung komplexerer Konzepte der Programmierung, wie Schleifen, Verzweigungen und Variablen, ist zusätzlich denkbar.
+Bewegungsabläufe wie z.~B. "vorwärts", "links", "rechts" oder "warten" werden vom Nutzer mithilfe des Drag \& Drop-Editors programmiert. Dafür wird eine Minisprache eingeführt, die im Vergleich zu Universalsprachen über einen deutlich reduzierten Funktionsumfang verfügt und dadurch den Nutzer behutsam an die Programmierung heranführen und ihn nicht wie Universalsprachen mit einem großen Sprachumfang und der damit verbundennen steileren Lernkurve überfordern soll.
+
+Allgemeine Anforderungen an Minisprachen, sowie deren Vorteile wurden im Grundlagenkapitel \ref{sec:basics:mini-languages} genannt. Mindestanforderung an den Umfang der Minisprache ist die der Vorbild-Anwendung Lightbot (siehe \ref{sec:related:lightbot}), welche die Grundstruktur von Sequenzen, den Aufruf atomarer Befehle zur Navigation durch die Mikrowelt, sowie Definition und Aufruf von Prozeduren ermöglicht. Die Implementierung komplexerer Konzepte der Programmierung, wie Schleifen, Verzweigungen und Variablen, ist zusätzlich denkbar.
 
 \subsection{Auswertung}
 \label{sec:requirements:world:compile-interpret}
@@ -99,3 +93,11 @@ Der Drag \& Drop-Editor von Blattwerkzeug \tref{sec:requirements:existing:struct
 Eine wichtige Anforderung leitet sich aus dem im Grundlagenkapitel \ref{sec:basics:mini-languages} genannten Punkt ab, nämlich dass die Operationen der Minisprache sichtbare Änderungen in der auf dem Bildschirm dargestellten Mikrowelt vornehmen sollten. Diese Mikrowelt soll -- analog zu den Vorbild-Anwendungen Kara und Lightbot -- in einer verspielten Art ansprechend grafisch dargestellt werden. Zustandsänderungen sollen dabei durch Animationen verdeutlicht werden.
 
 Zusätzlich zur Ausführung des Codes soll es möglich sein einzelne Befehle auch über Buttons direkt auszuführen. Diese Anforderung wird im Grundlagenkapitel \ref{sec:basics:mini-languages} als "Navigationsmodus" bezeichnet und ermöglicht ein spielerisches Entdecken der Welt, bevor der Nutzer zum eigentlichen Programmieren übergeht.
+
+%************************************************
+% Zusammenfassung
+%************************************************
+\section{Zusammenfassung}
+\label{sec:requirements:summary}
+
+In diesem Kapitel wurden die Anforderungen an das Programm näher beschrieben, welches sich an den vergleichbaren Arbeiten Kara und Lightbot orientieren soll. Es soll eine Mikrowelt implementiert werden, in welcher der Nutzer im Sinne einer passenden Rahmenhandlung eine Spielfigur bewegen kann. Dazu kommt eine Minisprache zum Einsatz. In einer grafischen Darstellung soll die Ausführung der Befehle dieser Minisprache sichtbar gemacht werden.

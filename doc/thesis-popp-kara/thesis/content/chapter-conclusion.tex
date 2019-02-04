@@ -4,26 +4,35 @@
 \chapter{Fazit}
 \label{sec:conclusion}
 
-In diesem Fazit soll nun noch einmal zusammengefasst werden, welche Ziele im Hinblick auf die Anforderungsanalyse erreicht wurden und welche Ideen für eine Weiterentwicklung bestehen.
+In diesem Fazit soll zusammengefasst werden, welche Ziele im Hinblick auf die Anforderungsanalyse erreicht wurden und welche Ideen für eine Weiterentwicklung bestehen.
 
+%************************************************
+% Erreichte Ziele
+%************************************************
 \section{Erreichte Ziele}
 \label{sec:conclusion:archived}
 
-Es wurde eine ansprechende Rahmenhandlung mit dem Lastwagen als Spielfigur entwickelt, in die sich Programmieranfänger gut hineinversetzen können. Die Mikrowelt hält neben den klassischen Navigationsaufgaben, wie sie aus anderen Anwendungen bekannt sind, auch zusätzliche Funktionen bereit. So konnte mit den Ampeln ein Element eingeführt werden, welches zusätzliche zeitbasierte Aufgabenstellungen ermöglicht. Die Bewegungen des Lastwagens sind animiert und auch verspielte Elemente wie z. B. der Blinker haben Einzug gefunden.
+Es wurde eine ansprechende Rahmenhandlung mit dem Lastwagen als Spielfigur entwickelt, in die sich Programmieranfänger gut hineinversetzen können. Die Mikrowelt hält neben den klassischen Navigationsaufgaben, wie sie aus anderen Anwendungen bekannt sind, auch zusätzliche Funktionen bereit. So konnte mit den Ampeln ein Element eingeführt werden, welches zusätzliche zeitbasierte Aufgabenstellungen ermöglicht. Die Bewegungen des Lastwagens sind animiert und auch verspielte Elemente wie z.~B. der Blinker haben Einzug gefunden.
 
 Auch der Umfang der Sprache übersteigt die in der Anforderungsanalyse gestellten Mindestanforderungen (siehe \ref{sec:requirements:program}). Neben atomaren Befehlen und Prozeduren, konnten zusätzlich auch komplexere Konzepte, wie Sensoren zum Interagieren mit der Welt, verschiedene Arten von Schleifen, sowie Verzweigungen und sogar ein erster Ansatz für Variablen (Prozedurparameter) implementiert werden. Durch die vorgefertigten Bausteine im Drag \& Drop-Editor und die leicht verständliche Sprache, geht dabei trotzdem die Übersicht nicht verloren und da der Nutzer alle Sprachelemente in der Seitenleiste dargestellt bekommt, ist ein leichter Einstieg möglich.
 
 Dabei bettet sich die entwickelte Erweiterung nahtlos in das bestehende BlattWerkzeug-Projekt ein. Neben dem bekannten Drag \& Drop-Editor und der Darstellungs-Komponente, ermöglicht die neue Controller-Komponente auch das schrittweise Interagieren mit der Welt in einem Navigationsmodus.
 
-Mit diesen Mitteln lassen sich -- wie ein Blick in den Anhang \ref{sec:exercises} beweist -- eine Vielzahl von Aufgabenstellungen umsetzen. Ob diese nun auch für die Zielgruppe geeignet sind, lässt sich nur in einem Test herausfinden.
+Mit diesen Mitteln lassen sich -- wie ein Blick in den Anhang \ref{sec:exercises} beweist -- eine Vielzahl von Aufgabenstellungen umsetzen.
 
+%************************************************
+% Nicht erreichte Ziele
+%************************************************
 \section{Nicht erreichte Ziele}
 \label{sec:conclusion:open}
 
 Die Entwicklung eines Level-Editors (siehe \ref{sec:requirements:world:structure}) musste hinten angestellt werden. Dass im zeitlichen Rahmen dieser Bachelorarbeit nur ein rudimentärer Level-Editor auf Basis des Drag \& Drop-Editors gebaut werden sollte, war bereits zu Beginn der Arbeit klar. Auch wenn er theoretisch vorhanden ist, stellte sich doch im Laufe der Arbeit heraus, dass die Strukturen des Drag \& Drop-Editors für diesen Anwendungsfall nicht geeignet sind.
 
-Die ursprüngliche Idee, den aktuell ausgeführten Befehl im Drag \& Drop-Editor zu markieren und so für den Nutzer nachvollziehbar zu machen, an welcher Stelle in seinem Programm sich die Ausführung gerade befindet, konnte nicht mehr umgesetzt werden, da die entsprechenden Voraussetzungen in BlattWerkzeug dafür zunächst geschaffen werden müssen. Die Integration dieser Funktionalität aufseiten der Erweiterung sollte jedoch aufgrund der guten Kapselung der Befehle kein Problem darstellen.
+Die ursprüngliche Idee, den aktuell ausgeführten Befehl im Drag \& Drop-Editor zu markieren und so für den Nutzer nachvollziehbar zu machen, an welcher Stelle in seinem Programm sich die Ausführung gerade befindet, konnte nicht mehr umgesetzt werden, da die entsprechenden Voraussetzungen in BlattWerkzeug dafür zunächst geschaffen werden müssen. Die Integration dieser Funktionalität aufseiten der Erweiterung sollte jedoch aufgrund der guten Kapselung der Befehle kein Problem darstellen. Ein erster Ansatz wurde durch Marcus Riemer bereits parallel zu dieser Arbeit entwickelt.
 
+%************************************************
+% Ausblick
+%************************************************
 \section{Ausblick}
 \label{sec:conclusion:future}
 
@@ -31,7 +40,7 @@ Im Laufe der Arbeit entstanden einige Ideen für spätere Weiterentwicklungen, w
 
 \begin{description}
   \item[Level-Editor:] Der Level-Editor wurde bereits mehrfach angesprochen. Ein einfach zu bedienender Level-Editor würde es sowohl Lehrern, als auch Schülern ermöglichen, eigene Aufgabenstellungen vorzubereiten.
-  \item[Erweiterung der Darstellung:] Auch wenn die aktuelle grafische Darstellung ihren Zweck erfüllt, könnte diese durch aufwendiger gestaltete Grafiken noch aufgewertet werden. So wären anstelle der Ablageflächen z. B. kleine Lagerhäuser denkbar, in die der Lastwagen hineinfahren kann. Auch zusätzliche Arten von Fahrzeugen wären denkbar, die zwei oder mehr Container transportieren können.
+  \item[Erweiterung der Darstellung:] Auch wenn die aktuelle grafische Darstellung ihren Zweck erfüllt, könnte diese durch aufwendiger gestaltete Grafiken noch aufgewertet werden. So wären anstelle der Ablageflächen z.~B. kleine Lagerhäuser denkbar, in die der Lastwagen hineinfahren kann. Auch zusätzliche Arten von Fahrzeugen wären denkbar, die zwei oder mehr Container transportieren können.
   \item[Soundeffekte:] Starten des Motors, Fahren, Blinken, Be- und Entladen; dies sind alles Aktionen, die in der Realität mit Geräuschen verbunden sind. Es würde die Anwendung noch einmal aufwerten, wenn diese Geräusche auch hier Einzug halten und die visuelle durch eine akustische Darstellung erweitert werden würde.
   \item[Mehrere Transportmittel:] Denkbar wäre es auch, weitere Fahrzeugklassen einzuführen. So muss vielleicht der Lastwagen zum Überqueren eines Gewässers auf eine Fähre fahren, die ebenfalls durch das Programm des Nutzers gesteuert wird und den Lastwagen an das andere Ufer bringt.
   \item[Tutorenkomponente:] Brusilovsky et al. schreiben "Eine vielversprechende Möglichkeit zur Weiterentwicklung von Minisprachen-Programmierumgebungen besteht darin, sie um eine intelligente Tutorenkomponente und eine Hypermedia-Komponente zu erweitern."~\cite[80]{brusilovsky1997}. Diesem Vorschlag möchte sich der Autor dieser Arbeit anschließen. Eine Tutorenkomponente, die durch die Aufgaben führt, neue Sprachkomponenten erklärt und bei Schwierigkeiten Hinweise gibt, würde es auch Schülern ohne einen Lehrer im Hintergrund ermöglichen, mithilfe von BlattWerkzeug erste Erfahrungen beim Programmieren zu machen. Erklärungsvideos wären hierzu ebenfalls eine sinnvolle Ergänzung.

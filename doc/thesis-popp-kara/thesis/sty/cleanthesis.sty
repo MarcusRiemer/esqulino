@@ -29,7 +29,7 @@
 %
 % **************************************************
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cleanthesis}[2015/08/26 v0.3.1 Clean-looking thesis style inspired by Apple's user guide documents]
+\ProvidesPackage{sty/cleanthesis}[2015/08/26 v0.3.1 Clean-looking thesis style inspired by Apple's user guide documents]
 %
 % **************************************************
 % Package options
@@ -345,7 +345,7 @@
 \renewcommand{\descriptionlabel}[1]{%
 	\hspace*{\labelsep}%
 	% \color{ctcolorlistlabel}%
-	\tgherosfont\textbf{#1}%
+	\tgherosfont\textit{#1}%
 	% \tgherosfont{#1}%
 }
 \newenvironment{my_list_desc}

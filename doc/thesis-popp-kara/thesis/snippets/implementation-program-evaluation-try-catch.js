@@ -1,6 +1,6 @@
 let code = `
   while() {
-    this.goForward();
+    truck.goForward();
   }
 `;
 try {
