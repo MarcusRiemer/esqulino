@@ -1,14 +1,37 @@
 import {
-  NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName, locateNode
+  NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName,
+  locateNode
 } from './syntaxtree.description'
+import { arrayEqual } from '../util';
 
-export { NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName };
+export { NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName, locateNode };
 
 /**
  * @return True, if both parameters denote the same type.
  */
 export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
   return (lhs.languageName === rhs.languageName && lhs.typeName === rhs.typeName);
+}
+
+/**
+ * @return True, if both locations are identical
+ */
+export function locationEquals(lhs: NodeLocation, rhs: NodeLocation): boolean {
+  if (!lhs || !rhs) {
+    return (false);
+  }
+
+  if (lhs === rhs) {
+    return (true);
+  }
+
+  if (lhs.length != rhs.length) {
+    return (false);
+  }
+
+  return (lhs.every((_, i) => {
+    return (arrayEqual(lhs[i], rhs[i]));
+  }));
 }
 
 /**
@@ -343,6 +366,17 @@ export class Tree {
     })
 
     return (current);
+  }
+
+  /**
+   * @return The node at the given location or `undefined` if no such node exists.
+   */
+  locateOrUndefined(loc: NodeLocation): Node | undefined {
+    try {
+      return (this.locate(loc));
+    } catch {
+      return (undefined);
+    }
   }
 
   /**

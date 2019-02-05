@@ -255,6 +255,17 @@ const langStringConstraint: Schema.GrammarDescription = {
               value: ["a", "b", "c"]
             }
           ]
+        },
+        {
+          name: "regex",
+          type: "property",
+          base: "string",
+          restrictions: [
+            {
+              type: "regex",
+              value: "^[a-zA-Z][a-zA-Z0-9_]*$"
+            }
+          ]
         }
       ]
     }
@@ -595,6 +606,7 @@ describe('Grammar Validation', () => {
         "min": "12",
         "max": "12",
         "enum": "a",
+        "regex": "A"
       }
     };
 
@@ -615,13 +627,14 @@ describe('Grammar Validation', () => {
         "min": "1",
         "max": "123",
         "enum": "d",
+        "regex": "_A"
       }
     };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(4);
+    expect(res.errors.length).toEqual(5);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType)
     expect(res.errors[0].data.condition).toEqual("2 != 1");
     expect(res.errors[1].code).toEqual(ErrorCodes.IllegalPropertyType)
@@ -630,6 +643,8 @@ describe('Grammar Validation', () => {
     expect(res.errors[2].data.condition).toEqual("3 > 2");
     expect(res.errors[3].code).toEqual(ErrorCodes.IllegalPropertyType)
     expect(res.errors[3].data.condition).toEqual(`"d" in ["a","b","c"]`);
+    expect(res.errors[4].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[4].data.condition).toEqual(`"_A" did not match regular expression "^[a-zA-Z][a-zA-Z0-9_]*$"`);
   });
 
   it('Integer value wrongly integer', () => {
