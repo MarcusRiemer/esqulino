@@ -98,6 +98,9 @@ Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren 
     Kann geradeaus fahren & \inlinec{canGoStraight} & Dieser Sensor wertet zu wahr aus, wenn das Straßennetz es zulässt, dass der Lastwagen im nächsten Schritt geradeaus fahren kann. \\ \hline
     Kann links abbiegen & \inlinec{canTurnLeft} & Dieser Sensor wertet zu wahr aus, wenn im nächsten Schritt links abgebogen werden kann. \\ \hline
     Kann rechts abbiegen & \inlinec{canTurnRight} & Wenn im nächsten Schritt nach rechts abgebogen werden kann, wertet dieser Sensor zu wahr aus. \\ \hline
+    Kann aufladen & \inlinec{canLoad} & Wenn auf der Kachel, auf welcher sich der Lastwagen aktuell befindet, aufgeladen werden kann, wertet dieser Sensor zu wahr aus. Das beinhaltet, dass der Lastwagen leer ist und sich auf der Kachel ein Container befindet. \\ \hline
+    Kann abladen & \inlinec{canUnload} & Wenn auf der Kachel, auf welcher sich der Lastwagen aktuell befindet, abgeladen werden kann, wertet dieser Sensor zu wahr aus. Das beinhaltet nicht nur Ablageflächen, sondern auch leere Kacheln. Der Lastwagen muss allerdings beladen sein. \\ \hline
+    Ist auf Ziel & \inlinec{isOnTarget} & Wenn sich die Kachel, auf der sich der Lastwagen befindet, eine Ablagefläche befindet, wertet dieser Sensor zu wahr aus. Dabei wird die Ladung des Lastwagens nicht berücksichtigt. In Verbindung mit "Kann abladen" kann z.~B. festgestellt werden, ob auf der Ablagefläche auch wirklich abgeladen werden kann. \\ \hline
     Ist gelöst & \inlinec{isSolved} & Wenn die aktuelle Welt gelöst wurde, also alle Frachtstücke zu ihren Zielen transportiert wurden, wertet dieser Sensor zu wahr aus. \\ \hline
   \end{tabular}
   \vspace{5pt}
