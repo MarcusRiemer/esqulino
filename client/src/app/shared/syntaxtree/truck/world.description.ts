@@ -89,9 +89,9 @@ export function readFromNode(node: NodeDescription): WorldDescription {
         wd.tiles[posToIdx(tile.children['position'][0])].trafficLights = tile.children['trafficLights'].map(t => {
           return {
             opening: t.children['side'][0].properties['direction'],
-            redPhase: t.properties['redPhase'],
-            greenPhase: t.properties['greenPhase'],
-            initialPhase: t.properties['initialPhase'],
+            redPhase: +t.properties['redPhase'],
+            greenPhase: +t.properties['greenPhase'],
+            startPhase: +t.properties['initialPhase'],
           };
         });
       }
