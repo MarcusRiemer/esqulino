@@ -31,7 +31,7 @@ Der Client wurde als eine Single-Page Application mit rein clientseitiger Visual
 
 Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Editor von BlattWerkzeug. Auch wenn er vorgegeben und nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion mit dem zu erstellenden Programm abläuft. Programmcode soll zur Ausführung in der Mikrowelt nicht getippt, sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt werden. In einer Seitenleiste sind alle verwendbaren Bausteine aufgelistet. Auch wenn dieses Verhalten zunächst an Lightbot erinnert, soll es doch mit dem Drag \& Drop-Editor möglich sein, mehr als nur Icons in vorgegebene Kästen zu bewegen. Trotz des syntaxfreien Editors, soll die Anmutung von Programmcode entstehen und auch komplexere Strukturen möglich gemacht werden.
 
-Die Bausteine des Drag \& Drop-Editors und deren Kombinationsmöglichkeiten werden durch eine Grammatik festgelegt, deren Anforderungen in Abschnitt \ref{sec:requirements:program} näher beschrieben werden. Ergebnis des Drag \& Drop-Editors ist nach dem Bearbeiten durch den Nutzer dann ein Syntaxbaum, der alle "programmierten" Operationen enthält und vom Programm weiterverarbeitet werden kann. Ein beispielhafter Ausschnitt eines solchen Syntaxbaums ist in Abbildung \ref{fig:implementation:program:evaluation:tree} auf Seite \pageref{fig:implementation:program:evaluation:tree} zu finden.
+Die Bausteine des Drag \& Drop-Editors und deren Kombinationsmöglichkeiten werden durch eine Grammatik festgelegt, deren Anforderungen in Abschnitt \ref{sec:requirements:program} näher beschrieben werden. Ergebnis des Drag \& Drop-Editors ist nach dem Bearbeiten durch den Nutzer ein Syntaxbaum, der alle "programmierten" Operationen enthält und vom Programm weiterverarbeitet werden kann. Ein beispielhafter Ausschnitt eines solchen Syntaxbaumes ist in Abbildung \ref{fig:implementation:program:evaluation:tree} auf Seite \pageref{fig:implementation:program:evaluation:tree} zu finden.
 
 Abbildung \ref{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Editors, in dem eine SQL-Abfrage zusammengestellt wird. Im Block-Editor wird die SQL-Abfrage mit Elementen aus der Seitenleiste zusammengestellt. In den Komponenten darunter wird der daraus resultierende SQL-Befehl angezeigt. Außerdem wird eine Ergebnisvorschau mit dem Resultat der Abfrage angezeigt. Dieses Aussehen soll adaptiert und für die Zwecke dieser Arbeit weiterentwickelt werden.
 
@@ -58,7 +58,7 @@ BlattWerkzeug definiert die Zielgruppe auf Schüler und Schülerinnen ab der Mit
 \section{Mikrowelt}
 \label{sec:requirements:world}
 
-Analog zu den vergleichbaren Arbeiten in Kapitel \ref{sec:related} soll auch für diese Arbeit eine Mikrowelt implementiert werden. Ein Objekt wird mit programmierten Befehlen durch eine virtuelle Welt geführt. Der Spieler löst so eine Art Puzzelrätsel. Ein variabler Schwierigkeitsgrad ist durch die Möglichkeit unterschiedliche Welten zu spielen gegeben.
+Analog zu den vergleichbaren Arbeiten in Kapitel \ref{sec:related} soll auch für diese Arbeit eine Mikrowelt implementiert werden. Ein Objekt wird mit programmierten Befehlen durch eine virtuelle Welt geführt. Der Spieler löst so eine Art Puzzelrätsel. Ein variabler Schwierigkeitsgrad ist durch die Möglichkeit, unterschiedliche Welten zu spielen, gegeben.
 
 \subsection{Rahmenhandlung}
 \label{sec:requirements:world:story}
@@ -85,7 +85,7 @@ Allgemeine Anforderungen an Minisprachen, sowie deren Vorteile wurden im Grundla
 \subsection{Auswertung}
 \label{sec:requirements:world:compile-interpret}
 
-Der Drag \& Drop-Editor von Blattwerkzeug \tref{sec:requirements:existing:structure:drag-drop} erzeugt aus den Eingaben des Nutzers einen Syntaxbaum. Dieser Syntaxbaum muss von der Software in einer Form ausgewertet werden können, die die im folgenden Punkt beschriebene Darstellung steuern kann.
+Der Drag \& Drop-Editor von BlattWerkzeug \tref{sec:requirements:existing:structure:drag-drop} erzeugt aus den Eingaben des Nutzers einen Syntaxbaum. Dieser Syntaxbaum muss von der Software in einer Form ausgewertet werden können, die die im folgenden Punkt beschriebene Darstellung steuern kann.
 
 \subsection{Darstellung der Ausführung}
 \label{sec:requirements:world:display}
