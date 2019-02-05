@@ -1,8 +1,18 @@
 import { WorldDescription } from './world.description';
 import { BehaviorSubject } from 'rxjs';
 
+import { NodeLocation } from '../syntaxtree.description';
+
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
-const GeneratorFunction = Object.getPrototypeOf(function*() { }).constructor;
+const GeneratorFunction = Object.getPrototypeOf(function* () { }).constructor;
+
+/**
+ * A callback that is meant to be triggered when the execution of the program
+ * has made some sort of significant progress.
+ *
+ * @param loc The current "position" of the execution in the AST
+ */
+type ExecutionProgessCallback = (loc: NodeLocation) => void;
 
 /**
  * Representation of the game world.
@@ -415,24 +425,25 @@ export class World {
    * this-context.
    * @param code Code to be executed.
    */
-  async runCode(code: string) {
+  async runCode(code: string, progressCallback: ExecutionProgessCallback = (_) => { }) {
     var self = this;
     this.commandInProgress.next(true);
     this.codeShouldPause.next(false);
+    progressCallback(undefined);
 
     try {
       const f = new GeneratorFunction('truck', code);
 
       this._currentGenerator = f.call({}, {
-        goForward: function*() { yield self._commandAsync(Command.goForward); },
-        turnLeft: function*() { yield self._commandAsync(Command.turnLeft); },
-        turnRight: function*() { yield self._commandAsync(Command.turnRight); },
-        noTurn: function*() { yield self._commandAsync(Command.noTurn); },
-        load: function*() { yield self._commandAsync(Command.load); },
-        unload: function*() { yield self._commandAsync(Command.unload); },
-        wait: function*() { yield self._commandAsync(Command.wait); },
-        pause: function*() { yield self._commandAsync(Command.pause); },
-        doNothing: function*() { yield self._commandAsync(Command.doNothing); },
+        goForward: function* () { yield self._commandAsync(Command.goForward); },
+        turnLeft: function* () { yield self._commandAsync(Command.turnLeft); },
+        turnRight: function* () { yield self._commandAsync(Command.turnRight); },
+        noTurn: function* () { yield self._commandAsync(Command.noTurn); },
+        load: function* () { yield self._commandAsync(Command.load); },
+        unload: function* () { yield self._commandAsync(Command.unload); },
+        wait: function* () { yield self._commandAsync(Command.wait); },
+        pause: function* () { yield self._commandAsync(Command.pause); },
+        doNothing: function* () { yield self._commandAsync(Command.doNothing); },
 
         lightIsRed: () => this.sensor(Sensor.lightIsRed),
         lightIsGreen: () => this.sensor(Sensor.lightIsGreen),
@@ -443,6 +454,8 @@ export class World {
         canUnload: () => this.sensor(Sensor.canUnload),
         isOnTarget: () => this.sensor(Sensor.isOnTarget),
         isSolved: () => this.sensor(Sensor.isSolved),
+
+        _progress: (loc: NodeLocation) => progressCallback(loc)
       });
 
       await this._resumeCode();
@@ -457,6 +470,7 @@ export class World {
       }
     } finally {
       this.commandInProgress.next(false);
+      progressCallback(undefined);
     }
   }
 

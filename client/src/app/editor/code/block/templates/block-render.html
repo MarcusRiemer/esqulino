@@ -42,6 +42,11 @@
                              [visual]="childVisualBlock"></editor-block-render>
       </ng-container>
 
+      <editor-block-render-drop-target [codeResource]="codeResource"
+                                       [node]="childNode"
+                                       [visual]="defaultBetweenDropTarget">
+      </editor-block-render-drop-target>
+
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
@@ -54,14 +59,16 @@
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
     <editor-block-render-block #currentBlock
+                               [@isExecuted]="currentBlock.isCurrentlyExecuted | async"
                                [blockLayout]="visual"
                                [blockBase]="visual"
-                               [astDropTarget]="node"
+                               [astDropTarget]="currentBlock"
                                [astDraggable]="node"
                                [codeResource]="codeResource"
                                [node]="node"
                                [visual]="visual"
-                               (drop)="currentBlock.onDrop()">>
+                               (drop)="currentBlock.onDrop()"
+                               (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
   <!-- Something is broken, display a error message -->

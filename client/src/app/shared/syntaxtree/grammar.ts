@@ -85,6 +85,11 @@ export abstract class NodeType {
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
+
+  /**
+   * These names are valid child categories
+   */
+  abstract get allowedChildrenCategoryNames(): string[];
 }
 
 /**
@@ -736,6 +741,14 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
             });
           }
           break;
+        case "regex":
+          const regex = new RegExp(restriction.value as string);
+          if (!regex.test(value)) {
+            context.addError(ErrorCodes.IllegalPropertyType, node, {
+              condition: `"${value}" did not match regular expression "${restriction.value}"`
+            });
+          }
+          break;
         default:
           throw new Error(`Unknown string restriction: "${restriction.type}"`);
       }
@@ -761,6 +774,14 @@ class NodeOneOfType extends NodeType {
    * it for child categories is meaningless.
    */
   get requiredChildrenCategoryNames() {
+    return ([]);
+  }
+
+  /**
+   * As this node should never physically appear in a tree, asking
+   * it for child categories is meaningless.
+   */
+  get allowedChildrenCategoryNames() {
     return ([]);
   }
 

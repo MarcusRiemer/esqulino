@@ -1,3 +1,6 @@
+<span *ngIf="isCurrentlyExecuted | async"
+      class="fa fa-cog fa-spin fa-fw"></span>
+
 <!-- Render all components of this block -->
 <ng-container *ngFor="let childVisualBlock of visual.children">
   <editor-block-render [visual]="childVisualBlock"

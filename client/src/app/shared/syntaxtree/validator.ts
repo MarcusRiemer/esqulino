@@ -148,9 +148,9 @@ export class Validator {
   /**
    * @return The type that has been asked for. Throws if the type does not exist.
    */
-  getType(qualifiedTypename: AST.QualifiedTypeName);
-  getType(language: string, typename: string);
-  getType(languageOrTypeName: string | AST.QualifiedTypeName, optTypename?: string) {
+  getType(qualifiedTypename: AST.QualifiedTypeName): NodeType;
+  getType(language: string, typename: string): NodeType;
+  getType(languageOrTypeName: string | AST.QualifiedTypeName, optTypename?: string): NodeType {
     let language: string = undefined;
     let typename: string = undefined;
 

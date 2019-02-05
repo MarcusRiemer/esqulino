@@ -379,6 +379,9 @@
         },
         {
           "$ref": "#/definitions/EnumRestrictionDescription"
+        },
+        {
+          "$ref": "#/definitions/RegularExpressionRestrictionDescription"
         }
       ],
       "description": "The restrictions that are applicable to strings"
@@ -579,6 +582,26 @@
       "required": [
         "typeName",
         "languageName"
+      ],
+      "type": "object"
+    },
+    "RegularExpressionRestrictionDescription": {
+      "additionalProperties": false,
+      "description": "Restricts to match a regular expression",
+      "properties": {
+        "type": {
+          "enum": [
+            "regex"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
       ],
       "type": "object"
     },

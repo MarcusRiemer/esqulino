@@ -19,10 +19,12 @@ function camelize(str: string) {
  */
 interface State {
   loopCounter: number;
+  emitProgressCallbacks: boolean;
 }
 
 export const DEFAULT_STATE: State = {
-  loopCounter: 0
+  loopCounter: 0,
+  emitProgressCallbacks: true
 }
 
 export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
@@ -100,6 +102,11 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
+        if (process.state.emitProgressCallbacks) {
+          const invokeCallback = `truck._progress(${JSON.stringify(node.location)});`;
+          process.addConvertedFragment(invokeCallback, node, OutputSeparator.NEW_LINE_AFTER);
+        }
+
         process.addConvertedFragment('yield* truck.', node);
         process.addConvertedFragment(camelize(node.properties['name']), node);
         process.addConvertedFragment('(', node);

@@ -380,6 +380,15 @@
         },
         {
           "$ref": "#/definitions/CodeGeneratorComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckWorldComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckControllerComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckSensorsComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -1046,6 +1055,9 @@
         },
         {
           "$ref": "#/definitions/EnumRestrictionDescription"
+        },
+        {
+          "$ref": "#/definitions/RegularExpressionRestrictionDescription"
         }
       ],
       "description": "The restrictions that are applicable to strings"
@@ -1582,6 +1594,26 @@
       "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
       "description": "Type instructions that may contain references."
     },
+    "RegularExpressionRestrictionDescription": {
+      "additionalProperties": false,
+      "description": "Restricts to match a regular expression",
+      "properties": {
+        "type": {
+          "enum": [
+            "regex"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
     "Restricted.Expression_VisualBlockDescriptions.VisibilityVars_": {
       "anyOf": [
         {
@@ -1739,6 +1771,9 @@
         },
         {
           "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckProgramUserFunctionsSidebarDescription"
         }
       ],
       "description": "All possible sidebar types"
@@ -1771,6 +1806,70 @@
         "name",
         "columns",
         "foreign_keys"
+      ],
+      "type": "object"
+    },
+    "TruckControllerComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck controller",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-controller"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckProgramUserFunctionsSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "truckProgramUserFunctions"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "TruckSensorsComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a trucks sensors",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-sensors"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckWorldComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck world",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-world"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
       ],
       "type": "object"
     },

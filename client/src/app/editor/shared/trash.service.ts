@@ -10,18 +10,18 @@ import { first } from 'rxjs/operators';
 export class TrashService {
   private _showTrash = new BehaviorSubject<boolean>(false);
 
-  private _onDrop = new EventEmitter<DataTransfer>();
+  private _onDrop = new EventEmitter<any>();
 
   /**
    * Shows the trash on the next view update. The given
    * callback is fired once something has been dropped
    * on the trash.
    */
-  showTrash(callback: (data: DataTransfer) => void) {
+  showTrash(callback: () => void) {
     this._showTrash.next(true);
 
     if (callback) {
-      this._onDrop = new EventEmitter<DataTransfer>();
+      this._onDrop = new EventEmitter<any>();
       this._onDrop
         .pipe(first())
         .subscribe(callback);
@@ -43,9 +43,9 @@ export class TrashService {
   /**
    * Not for public use!
    */
-  _fireDrop(transfer: DataTransfer) {
+  _fireDrop() {
     if (this._onDrop) {
-      this._onDrop.emit(transfer);
+      this._onDrop.emit();
     }
     this.hideTrash();
   }
