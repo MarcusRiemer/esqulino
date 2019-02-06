@@ -34,6 +34,24 @@
     </td>
   </tr>
   <tr>
+    <td>Kann abladen</td>
+    <td [ngClass]="className(sensorCanLoad)">
+      {{ sensorCanLoad ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Kann aufladen</td>
+    <td [ngClass]="className(sensorCanUnload)">
+      {{ sensorCanUnload ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Ist auf Ziel</td>
+    <td [ngClass]="className(sensorIsOnTarget)">
+      {{ sensorIsOnTarget ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
     <td>Welt ist gelöst</td>
     <td [ngClass]="className(sensorIsSolved)">
       {{ sensorIsSolved ? 'Wahr' : 'Falsch' }}
