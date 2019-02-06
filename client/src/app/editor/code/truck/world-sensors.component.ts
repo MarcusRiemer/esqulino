@@ -31,6 +31,9 @@ export class WorldSensorsComponent implements OnInit, OnDestroy {
   get sensorCanGoStraight() { return this.getSensor(Sensor.canGoStraight); }
   get sensorCanTurnLeft() { return this.getSensor(Sensor.canTurnLeft); }
   get sensorCanTurnRight() { return this.getSensor(Sensor.canTurnRight); }
+  get sensorCanLoad() { return this.getSensor(Sensor.canLoad); }
+  get sensorCanUnload() { return this.getSensor(Sensor.canUnload); }
+  get sensorIsOnTarget() { return this.getSensor(Sensor.isOnTarget); }
   get sensorIsSolved() { return this.getSensor(Sensor.isSolved); }
 
   getSensor(sensor: Sensor): boolean {

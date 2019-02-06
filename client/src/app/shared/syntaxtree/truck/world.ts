@@ -171,6 +171,27 @@ export class World {
         .hasOpeningInDirection(DirectionUtil.turn(state.truck.facingDirection, TurnDirection.Right));
     },
 
+    // Can the truck load here?
+    [Sensor.canLoad]: (state: WorldState): boolean => {
+      return state.truck.freightItems === 0 // Doesn't have anything loaded
+        && state.getTile(state.truck.position).freightItems > 0; // Item on tile
+    },
+
+    // Can the truck unload here?
+    [Sensor.canUnload]: (state: WorldState): boolean => {
+      const tile = state.getTile(state.truck.position);
+      return state.truck.freightItems > 0 // Is freight loaded?
+        && (
+          state.truck.freightItem() === tile.freightTarget // Can be unloaded on target?
+          || (tile.freightItems === 0 && tile.freightTarget == null) // Can be unloaded on empty field?
+        )
+    },
+
+    // Is the Truck on a target?
+    [Sensor.isOnTarget]: (state: WorldState): boolean => {
+      return state.getTile(state.truck.position).freightTarget !== null;
+    },
+
     // Is the world solved?
     [Sensor.isSolved]: (state: WorldState): boolean => {
       return state.solved;
@@ -429,6 +450,9 @@ export class World {
         canGoStraight: () => this.sensor(Sensor.canGoStraight),
         canTurnLeft: () => this.sensor(Sensor.canTurnLeft),
         canTurnRight: () => this.sensor(Sensor.canTurnRight),
+        canLoad: () => this.sensor(Sensor.canLoad),
+        canUnload: () => this.sensor(Sensor.canUnload),
+        isOnTarget: () => this.sensor(Sensor.isOnTarget),
         isSolved: () => this.sensor(Sensor.isSolved),
 
         _progress: (loc: NodeLocation) => progressCallback(loc)
@@ -1196,6 +1220,15 @@ export enum Sensor {
 
   /** Can the truck turn right? */
   canTurnRight,
+
+  /** Can the truck load here? */
+  canLoad,
+
+  /** Can the truck unload here? */
+  canUnload,
+
+  /** Is the Truck on a target? */
+  isOnTarget,
 
   /** Is the world solved? */
   isSolved,
