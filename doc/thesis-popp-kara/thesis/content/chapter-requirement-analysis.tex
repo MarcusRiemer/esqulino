@@ -4,7 +4,7 @@
 \chapter{Anforderungsanalyse}
 \label{sec:requirements}
 
-Ziel dieser Arbeit ist die Integration eines Tools zum spielerischen Erlernen von Programmierfähigkeiten in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe \ref{sec:requirements:existing}). Als Vorbilder dieser Anwendung dienen dabei Kara (\ref{sec:related:kara}) und Lightbot (\ref{sec:related:lightbot}). Im Folgenden sind die Anforderungen an dieses Programm näher beschrieben.
+Ziel dieser Arbeit ist die Integration eines Tools zum spielerischen Erlernen von Programmierfähigkeiten in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe \ref{sec:requirements:existing}). Aus den Vorbildern Kara (\ref{sec:related:kara}) und Lightbot (\ref{sec:related:lightbot}), leitet diese Arbeit dabei die meisten Anforderungen ab. Im Folgenden sind die Anforderungen an dieses Programm näher beschrieben.
 
 %************************************************
 % Vorhandenes Projekt
@@ -12,15 +12,13 @@ Ziel dieser Arbeit ist die Integration eines Tools zum spielerischen Erlernen vo
 \section{Vorhandenes Projekt}
 \label{sec:requirements:existing}
 
-Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt, die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Editoren, für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}. Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und wo möglich von den bestehenden Strukturen Gebrauch machen.
+Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt, die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Editoren, für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}. Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt. Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und wo möglich von den bestehenden Strukturen Gebrauch machen.
 
 \subsection{Aufbau}
 
 \subsubsection{Server}
 
-Der Server ist auf Basis von Ruby mit Sinatra gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten. Kommuniziert wird primär über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}.
-
-Die für diese Arbeit entwickelte Software baut jedoch lediglich auf dem Client von BlattWerkzeug auf und hat mit der serverseitigen Anwendung keine direkten Berührungspunkte.
+Der Server ist auf Basis von Ruby mit Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten. Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}. Die für diese Arbeit entwickelte Software baut jedoch lediglich auf dem Client von BlattWerkzeug auf und hat mit der serverseitigen Anwendung keine direkten Berührungspunkte.
 
 \subsubsection{Client}
 
