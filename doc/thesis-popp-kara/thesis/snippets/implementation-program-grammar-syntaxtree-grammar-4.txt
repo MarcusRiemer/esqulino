@@ -1,0 +1,8 @@
+grammar "trucklino_program" {
+  ...
+  typedef "booleanExpression" ::= sensor | negateExpression | booleanBinaryExpression | booleanConstant
+  node "sensor" {
+    prop "type" { string { enum "lightIsRed" "lightIsGreen" "canGoStraight" "canTurnLeft" "canTurnRight" "canLoad" "canUnload" "isOnTarget" "isSolved" } }
+  }
+  ...
+}

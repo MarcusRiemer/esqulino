@@ -1,0 +1,17 @@
+grammar "trucklino_program" {
+  ...
+  node "procedureDeclaration" {
+    terminal "function" "function "
+    prop "name" { string }
+    terminal "parenOpen" "("
+    children sequence "arguments" ::= procedureParameter*
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+  node "procedureParameter" {
+    prop "name" { string }
+  }
+  ...
+}

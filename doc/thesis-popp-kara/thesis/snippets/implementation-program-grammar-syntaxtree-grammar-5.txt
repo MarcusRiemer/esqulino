@@ -1,0 +1,21 @@
+grammar "trucklino_program" {
+  ...
+  node "negateExpression" {
+    terminal "not" "(NOT "
+    children sequence "expr" ::= booleanExpression
+    terminal "close" ")"
+  }
+  node "booleanBinaryExpression" {
+    terminal "open" "("
+    children sequence "lhs" ::= booleanExpression
+    terminal "spaceBefore" " "
+    children sequence "operator" ::= relationalOperator
+    terminal "spaceAfter" " "
+    children sequence "rhs" ::= booleanExpression
+    terminal "close" ")"
+  }
+  node "relationalOperator" {
+    prop "operator" { string { enum "AND" "OR" } }
+  }
+  ...
+}
