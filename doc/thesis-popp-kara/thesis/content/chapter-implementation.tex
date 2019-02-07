@@ -87,7 +87,7 @@ Um Codeverdoppelung zu vermeiden, kann eine Schleife eingesetzt werden, die eine
 \subsubsection{Sensoren}
 \label{sec:implementation:program:elements:sensors}
 
-Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren abzufragen. Sensoren stehen immer entweder auf wahr oder falsch. Tabelle \ref{tbl:implementation:program:elements:sensors} listet die zur Verfügung stehenden Sensoren auf. Auch hier orientiert sich der Umfang an JavaScriptKara und wurde um Sensoren erweitert, welche bei Tests für diese Rahmenhandlung sinnvoll erschienen. Die verfügbaren Sensoren sind in Tabelle \ref{tbl:implementation:program:elements:sensors} dargestellt.
+Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren abzufragen. Sensoren geben einen booleschen Wert zurück, stehen also immer entweder auf wahr oder falsch. Tabelle \ref{tbl:implementation:program:elements:sensors} listet die zur Verfügung stehenden Sensoren auf. Auch hier orientiert sich der Umfang an JavaScriptKara und wurde um Sensoren erweitert, welche bei Tests für diese Rahmenhandlung sinnvoll erschienen. Die verfügbaren Sensoren sind in Tabelle \ref{tbl:implementation:program:elements:sensors} dargestellt.
 
 \begin{table}
   \begin{tabular}{|p{0.175\textwidth}|p{0.19\textwidth}|p{0.56\textwidth}|}
@@ -108,10 +108,10 @@ Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren 
   \label{tbl:implementation:program:elements:sensors}
 \end{table}
 
-\subsubsection{Abweisende Schleife}
+\subsubsection{Kopfgesteuerte Schleife}
 \label{sec:implementation:program:elements:while}
 
-Mit den Sensoren ist es möglich, eine abweisende Schleife zu nutzen. Diese wiederholt den Befehlsblock solange der angegebene Ausdruck zu wahr auswertet. Wird die Schleifenbedingung vor der ersten Ausführung des Schleifenblocks oder nach ein oder mehreren Ausführungen zu falsch ausgewertet, wird der nachfolgende Block ausgeführt. Der Schleifenblock kann also auch komplett übersprungen werden.
+Mit den Sensoren ist es möglich, eine kopfgesteuerte Schleife zu nutzen. Diese wiederholt den Befehlsblock solange der angegebene Ausdruck zu wahr auswertet. Wird die Schleifenbedingung vor der ersten Ausführung des Schleifenblocks oder nach ein oder mehreren Ausführungen zu falsch ausgewertet, wird der nachfolgende Block ausgeführt. Der Schleifenblock kann also auch komplett übersprungen werden.
 
 Mit diesem Element kann z.~B. das Warten auf eine Ampel realisiert werden, wobei die Schleife immer wieder den "Warten"-Befehl ausführt, bis die Bedingung, dass die Ampel grün ist, erfüllt ist.
 
@@ -144,7 +144,7 @@ Des Weiteren ist es möglich, eigene Prozeduren zu definieren und aufzurufen. F�
 
 Alle Prozeduren werden im Drag \& Drop-Editor in einem Deklarationsteil am Anfang des Programms definiert, da sich der Nutzer sonst zusätzliche Gedanken über den richtigen Ort der Deklaration machen müsste. Da Prozeduren deklariert werden müssen, bevor sie aufgerufen werden können, ist mit dieser Vorgehensweise sichergestellt, dass alle Prozeduren überall im Programm aufrufbar sind. Prozeduren sind auch in der Lage, sich selbst aufzurufen. Dies ermöglicht zusätzlich die Nutzung von Rekursion. In Verbindung mit Verzweigungen ist auch Rekursion mit Abbruchbedingung möglich.
 
-Das im Abschnitt der abweisenden Schleife angesprochene Beispiel des Wartens auf Ampeln, ließe sich nun auch durch Rekursion lösen: Wenn die Ampel rot ist, führt sie den "Warten"-Befehl aus und ruft sich anschließend selbst wieder auf. Wird die Ampel grün, ist die Abbruchbedingung erfüllt und die Prozedur wird verlassen. Im Programm kann diese Funktionalität nun an verschiedenen Stellen wiederverwendet werden.
+Das im Abschnitt der kopfgesteuerten Schleife angesprochene Beispiel des Wartens auf Ampeln, ließe sich nun auch durch Rekursion lösen: Wenn die Ampel rot ist, führt sie den "Warten"-Befehl aus und ruft sich anschließend selbst wieder auf. Wird die Ampel grün, ist die Abbruchbedingung erfüllt und die Prozedur wird verlassen. Im Programm kann diese Funktionalität nun an verschiedenen Stellen wiederverwendet werden.
 
 Im nächsten Schritt müssen die hier beschriebenen Elemente der Sprache in eine Grammatik übersetzt werden, nach welcher ein Syntaxbaum erzeugt werden kann. Diese Elemente sind im nächsten Abschnitt beschrieben.
 
@@ -275,30 +275,24 @@ Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" als Anforderung vor
 
 \subsubsection{Codegenerator}
 
-Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:program:evaluation:tree} (siehe Abbildung \ref{fig:implementation:program:evaluation:tree-render} für eine als Graph visualisierte Ansicht) zeigt einen beispielhaften Ausschnitt eines solchen Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:program:evaluation:tree-result} gezeigten Code kompiliert wird.
+Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:program:evaluation:tree-render} zeigt den Ausschnitt eines Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:program:evaluation:tree-result} gezeigten Code kompiliert wird.
 
 \begin{figure}
   \lstinputlisting{snippets/implementation-program-evaluation-while.ts}
-  \caption{Beispielhafte Implementierung eines Codegenrator für eine abweisende Schleife}
+  \caption{Implementierung des Codegenrator für eine kopfgesteuerte Schleife}
   \label{fig:implementation:program:evaluation:while}
-\end{figure}
-
-\begin{figure}
-  \lstinputlisting{snippets/implementation-program-evaluation-tree.json}
-  \caption{Beispielhafter Ausschnitt eines Syntaxbaum für eine abweisende Schleife}
-  \label{fig:implementation:program:evaluation:tree}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{gfx/implementation-program-evaluation-tree.graphviz.pdf}
-  \caption{Beispielhafter Ausschnitt eines Syntaxbaum für eine abweisende Schleife (visualisiert)}
+  \caption{Beispielhafter Ausschnitt eines Syntaxbaum für eine kopfgesteuerte Schleife}
   \label{fig:implementation:program:evaluation:tree-render}
 \end{figure}
 
 \begin{figure}
   \lstinputlisting{snippets/implementation-program-evaluation-tree-result.js}
-  \caption{Kompilierter Code für den Syntaxbaum in Abbildung \ref{fig:implementation:program:evaluation:tree}}
+  \caption{Kompilierter Code für den Syntaxbaum in Abbildung \ref{fig:implementation:program:evaluation:tree-render}}
   \label{fig:implementation:program:evaluation:tree-result}
 \end{figure}
 
