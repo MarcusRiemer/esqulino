@@ -1,0 +1,16 @@
+grammar "trucklino_program" {
+  ...
+  node "if" {
+    terminal "if" "if"
+    terminal "parenOpen" " ("
+    children sequence "pred" ::= booleanExpression
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+    terminal "elseOpen" " else {"
+    children sequence "else" ::= statement*
+    terminal "elseClose" "}"
+  }
+  ...
+}

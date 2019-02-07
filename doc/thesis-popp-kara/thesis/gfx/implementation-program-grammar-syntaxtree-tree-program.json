@@ -1,0 +1,40 @@
+{
+  "language": "trucklino_program",
+  "name": "program",
+  "children": {
+    "procedures": [],
+    "main": [
+      {
+        "language": "trucklino_program",
+        "name": "loopWhile",
+        "children": {
+          "pred": [
+            {
+              "language": "trucklino_program",
+              "name": "sensor",
+              "properties": {
+                "type": "lightIsRed"
+              }
+            }
+          ],
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "wait"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "goForward"
+        }
+      }
+    ]
+  }
+}

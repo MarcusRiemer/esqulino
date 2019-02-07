@@ -1,0 +1,13 @@
+grammar "trucklino_program" {
+  ...
+  node "loopFor" {
+    terminal "for" "for"
+    terminal "parenOpen" " ("
+    prop "times" { integer }
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+  ...
+}
