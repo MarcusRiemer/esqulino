@@ -37,20 +37,20 @@ Es wurde zunächst eine objektorientierte Datenstruktur erarbeitet, die eine Wel
   \label{fig:implementation:structure:uml}
 \end{figure}
 
-Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung der zu generierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Konstruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Wobei die Kacheln Straßen repräsentieren wiederum Frachten und Ampeln beinhalten können. Lastwagen und Kacheln werden in einem Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in der Liste aller Zustände abgespeichert. Dieses Vorgehen ermöglicht dem Nutzer, Operationen rückgängig zu machen. Außerdem wird dadurch, die für die Animationen \tref{sec:implementation:rendering:animation} notwendige Interpolation zwischen Zuständen vereinfacht. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}. Da alle Operationen auf der Welt parameterlos sind, wird der \inlinec{command}-Methode lediglich der Name der auszuführenden Operation übergeben. Eine Liste der verfügbaren Befehle findet sich in Tabelle \ref{tbl:implementation:program:elements:cmds} auf Seite \pageref{tbl:implementation:program:elements:cmds}.
+Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung der zu generierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Konstruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Wobei die Kacheln Straßen repräsentieren wiederum Frachten und Ampeln beinhalten können. Lastwagen und Kacheln werden in einem Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in der Liste aller Zustände abgespeichert. Dieses Vorgehen ermöglicht dem Nutzer, Operationen rückgängig zu machen. Außerdem wird dadurch, die für die Animationen \tref{sec:implementation:rendering:animation} notwendige Interpolation zwischen Zuständen vereinfacht. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}. Da alle Operationen auf der Welt parameterlos sind, wird der \inlinec{command}-Methode lediglich der Name der auszuführenden Operation übergeben. Eine Liste der verfügbaren Befehle findet sich in Tabelle \ref{tbl:implementation:elements:cmds} auf Seite \pageref{tbl:implementation:elements:cmds}.
 
 %************************************************
 % Elemente der Minisprache
 %************************************************
 \section{Elemente der Minisprache}
-\label{sec:implementation:program:elements}
+\label{sec:implementation:elements}
 
 Im Folgenden sind die Elemente beschrieben, welche dem Nutzer zum Programmieren innerhalb der bereitgestellten Umgebung zur Verfügung stehen.
 
 \subsection*{Atomare Befehle}
-\label{sec:implementation:program:elements:cmds}
+\label{sec:implementation:elements:cmds}
 
-Wichtigster Bestandteil sind die atomaren Befehle. Durch die Aneinanderreihung mehrerer Befehle lässt sich bereits ein sinnvolles Programm implementieren. Es wurden die in Tabelle \ref{tbl:implementation:program:elements:cmds} implementiert. Der Umfang orientiert sich im Wesentlichen an dem von JavaScriptKara (siehe Abbildung \ref{fig:related:kara:code}), wurde aber um weitere Befehle erweitert, deren Notwendigkeit bei Tests identifiziert wurde.
+Wichtigster Bestandteil sind die atomaren Befehle. Durch die Aneinanderreihung mehrerer Befehle lässt sich bereits ein sinnvolles Programm implementieren. Es wurden die in Tabelle \ref{tbl:implementation:elements:cmds} implementiert. Der Umfang orientiert sich im Wesentlichen an dem von JavaScriptKara (siehe Abbildung \ref{fig:related:kara:code}), wurde aber um weitere Befehle erweitert, deren Notwendigkeit bei Tests identifiziert wurde.
 
 \begin{table}
   \begin{tabular}{|p{0.175\textwidth}|p{0.175\textwidth}|p{0.56\textwidth}|}
@@ -67,7 +67,7 @@ Wichtigster Bestandteil sind die atomaren Befehle. Durch die Aneinanderreihung m
   \end{tabular}
   \vspace{5pt}
   \caption{Atomare Befehle}
-  \label{tbl:implementation:program:elements:cmds}
+  \label{tbl:implementation:elements:cmds}
 \end{table}
 
 Bewegungen finden dadurch immer relativ zur aktuellen Blickrichtung des Lastwagens statt. Absolute Bewegungen mit Befehlen wie "Fahre nach Norden", "Fahre nach Osten" usw. sind vor allem aus Arcadespielen wie Pac-Man bekannt und haben den Vorteil, dass sich die Richtungen mit der Blickrichtung des Lastwagens nicht ändern und der Nutzer vor dem Bildschirm nicht umdenken muss. Relative Bewegungen hingegen lassen sich im Kontext von Programmierten Befehlen vielseitiger einsetzen. So kann eine Fahrt im Kreis z.~B. mit zwei Befehlen realisiert werden, welche in einer Schleife ausgeführt werden. Auch wurde dieser Ansatz den absoluten Bewegungen vorgezogen, da er der intuitiven Steuerungsart eines Lastwagens am nächsten kommt. Außerdem können daraus Vorteile für die Darstellung gewonnen werden, wie Abschnitt \ref{sec:implementation:rendering:truck-position} zeigt.
@@ -75,14 +75,14 @@ Bewegungen finden dadurch immer relativ zur aktuellen Blickrichtung des Lastwage
 Der "Vorwärts fahren"-Befehl wurde zunächst mit einer gewissen Intelligenz ausgestattet. Dadurch konnten Kurven gefahren werden, ohne dass ein Blinker gesetzt werden musste. Im Laufe der Arbeit wurde diese Logik als eine mögliche Aufgabenstellung identifiziert und daher deaktiviert. Nutzer sollten sich eine Funktion definieren, die eben diesen intelligenten "Vorwärts fahren"-Befehl umsetzt.
 
 \subsection*{Zählerschleife}
-\label{sec:implementation:program:elements:for}
+\label{sec:implementation:elements:for}
 
 Um Codeverdoppelung zu vermeiden, kann eine Schleife eingesetzt werden, die einen Befehlsblock wiederholt. Die Anzahl der Wiederholungen kann vom Nutzer vorab festgelegt werden, ein vorzeitiges Verlassen der Schleife ist anschließend jedoch nicht mehr möglich. Damit ist es z.~B. möglich, für eine Fahrt auf einer langen Geraden den "Vorwärts fahren"-Befehl viermal in der Schleife auszuführen und ihn so nicht viermal im Programm wiederholen zu müssen.
 
 \subsection*{Sensoren}
-\label{sec:implementation:program:elements:sensors}
+\label{sec:implementation:elements:sensors}
 
-Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren abzufragen. Sensoren geben einen booleschen Wert zurück, stehen also immer entweder auf wahr oder falsch. Tabelle \ref{tbl:implementation:program:elements:sensors} listet die zur Verfügung stehenden Sensoren auf. Auch hier orientiert sich der Umfang an JavaScriptKara und wurde um Sensoren erweitert, welche bei Tests für diese Rahmenhandlung sinnvoll erschienen. Die verfügbaren Sensoren sind in Tabelle \ref{tbl:implementation:program:elements:sensors} dargestellt.
+Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren abzufragen. Sensoren geben einen booleschen Wert zurück, stehen also immer entweder auf wahr oder falsch. Tabelle \ref{tbl:implementation:elements:sensors} listet die zur Verfügung stehenden Sensoren auf. Auch hier orientiert sich der Umfang an JavaScriptKara und wurde um Sensoren erweitert, welche bei Tests für diese Rahmenhandlung sinnvoll erschienen. Die verfügbaren Sensoren sind in Tabelle \ref{tbl:implementation:elements:sensors} dargestellt.
 
 \begin{table}
   \begin{tabular}{|p{0.175\textwidth}|p{0.19\textwidth}|p{0.56\textwidth}|}
@@ -100,18 +100,18 @@ Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren 
   \end{tabular}
   \vspace{5pt}
   \caption{Sensoren}
-  \label{tbl:implementation:program:elements:sensors}
+  \label{tbl:implementation:elements:sensors}
 \end{table}
 
 \subsection*{Kopfgesteuerte Schleife}
-\label{sec:implementation:program:elements:while}
+\label{sec:implementation:elements:while}
 
 Mit den Sensoren ist es möglich, eine kopfgesteuerte Schleife zu nutzen. Diese wiederholt den Befehlsblock solange der angegebene Ausdruck zu wahr auswertet. Wird die Schleifenbedingung vor der ersten Ausführung des Schleifenblocks oder nach ein oder mehreren Ausführungen zu falsch ausgewertet, wird der nachfolgende Block ausgeführt. Der Schleifenblock kann also auch komplett übersprungen werden.
 
 Mit diesem Element kann z.~B. das Warten auf eine Ampel realisiert werden, wobei die Schleife immer wieder den "Warten"-Befehl ausführt, bis die Bedingung, dass die Ampel grün ist, erfüllt ist.
 
 \subsection*{Verzweigungen}
-\label{sec:implementation:program:elements:if-else}
+\label{sec:implementation:elements:if-else}
 
 Sensoren ermöglichen außerdem Verzweigungen, die einen Befehlsblock nur dann ausführen, wenn der angegebene Sensor zu wahr ausgewertet wird und einen weiteren, optionalen Befehlsblock, wenn der Sensor zu falsch ausgewertet wird.
 
@@ -120,7 +120,7 @@ Das aus anderen Sprachen bekannte \inlinec{elseif} gibt es, wie auch in JavaScri
 In Zukunft wäre es denkbar, in dieser Form geschachtelte Verzweigungen auch im generierten Code ohne zusätzliche geschweifte Klammern und Einrückungen darzustellen. Bisher wurde auf diese Darstellung verzichtet, da auch der Drag \& Drop-Editor hierzu noch nicht in der Lage ist.
 
 \subsection*{Logische Operatoren}
-\label{sec:implementation:program:elements:op}
+\label{sec:implementation:elements:op}
 
 Unter Zuhilfenahme von logischen Operatoren können neue Ausdrücke erzeugt werden, welche sich wiederum in Schleifen und Verzweigungen einsetzen lassen.
 
@@ -133,7 +133,7 @@ Unter Zuhilfenahme von logischen Operatoren können neue Ausdrücke erzeugt werd
 Mit diesen logischen Operatoren ist es nun z.~B. möglich, zu prüfen, ob das vorausliegende Streckenstück eine Kurve ist: (Kann nicht geradeaus fahren und ((Kann links abbiegen und Kann nicht rechts abbiegen) oder (Kann nicht links abbiegen und Kann rechts abbiegen)))
 
 \subsection*{Prozeduren}
-\label{sec:implementation:program:elements:proc}
+\label{sec:implementation:elements:proc}
 
 Des Weiteren ist es möglich, eigene Prozeduren zu definieren und aufzurufen. Für Prozeduren lassen sich zusätzliche Parameter definieren, deren Nutzung innerhalb des Prozedurenblocks möglich ist. Jeder Parameter erhält einen vom Nutzer festgelegten Namen, kann jedoch ausschließlich boolesche Werte übergeben. Beim Aufruf der Prozedur werden die übergebenen Werte -- wie auch bei Prozeduraufrufen in JavaScript üblich -- kopiert.
 
@@ -147,112 +147,114 @@ Im nächsten Schritt müssen die hier beschriebenen Elemente der Sprache in eine
 % Datenstruktur
 %************************************************
 \section{Datenstruktur}
-\label{sec:implementation:program:grammar-syntaxtree}
+\label{sec:implementation:datastructure}
 
 Bereits in der Anforderungsanalyse wurden die Begriffe "Grammatik" und "Syntaxbaum" verwendet. Im Folgenden soll nun die für die Minisprache entwickelte Grammatik und die daraus resultierenden Syntaxbäume beschrieben werden.
 
 \subsection{Grammatik}
+\label{sec:implementation:datastructure:grammar}
 
 Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Generator-Anweisungen dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}. Es wird zunächst eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
 
-Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Funktionen später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:1} zeigt den Einstieg in die Grammatik.
+Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Funktionen später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:datastructure:grammar:1} zeigt den Einstieg in die Grammatik.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-1.txt}
   \caption{Grammatik mit Programm-Knoten}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:1}
+  \label{fig:implementation:datastructure:grammar:1}
 \end{figure}
 
-Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:2} dargestellt. Dieser beinhaltet Terminalsymbole, welche für die Darstellung der Elemente im Drag \& Drop-Editor in BlattWerkzeug genutzt werden, für den Syntaxbaum jedoch nicht relevant sind. Mit den Terminalsymbolen wird das spätere Aussehen dem der Syntax von JavaScript nachempfunden. Dadurch soll der spätere Umstieg auf diese Universalsprache erleichtert werden. JavaScript im speziellen wurde gewählt, da auch die Kompilierung in diese Sprache stattfindet (siehe \ref{sec:implementation:program:evaluation}).
+Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:datastructure:grammar:2} dargestellt. Dieser beinhaltet Terminalsymbole, welche für die Darstellung der Elemente im Drag \& Drop-Editor in BlattWerkzeug genutzt werden, für den Syntaxbaum jedoch nicht relevant sind. Mit den Terminalsymbolen wird das spätere Aussehen dem der Syntax von JavaScript nachempfunden. Dadurch soll der spätere Umstieg auf diese Universalsprache erleichtert werden. JavaScript im Speziellen wurde gewählt, da auch die Kompilierung in diese Sprache erfolgt (siehe \ref{sec:implementation:evaluation}).
 
 Knoten können zusätzlich zu den Kindknoten auch Eigenschaften (\inlinec{prop}) aufnehmen. In diesem Fall kann in einer Eigenschaft der Name der Funktion angegeben werden. Eine Prozedur lässt sich mit Parametern (\inlinec{procedureParameter}) ausstatten und kann analog zum Hauptprogramm eine Liste von Anweisungen (\inlinec{statement}) als Kindknoten aufnehmen.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-2.txt}
   \caption{Grammatik mit Prozedurdefinitions-Knoten}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:2}
+  \label{fig:implementation:datastructure:grammar:2}
 \end{figure}
 
-Eine Anweisung (\inlinec{statement}) kann ein Prozeduraufruf (\inlinec{procedureCall}), eine Verzweigung (\inlinec{if}), eine Zählerschleife (\inlinec{loopFor}) oder eine kopfgesteuerte Schleife (\inlinec{loopWhile}) repräsentieren. Mit einem Prozeduraufruf kann sowohl eine selbst definierte Prozedur als auch ein vorgegebener atomarer Befehl aufgerufen werden. Diese Entscheidung führt dazu, dass eigene Prozeduren und vorgegebene atomare Befehle im gleichen Geltungsbereich definiert sein müssen. Das beinhaltet, dass es möglich ist, mit eigenen Prozedurdefinitionen atomare Befehle zu überschreiben, bringt aber den Vorteil mit sich, dass Prozeduraufrufe einheitlich dargestellt werden können. Für einen Prozeduraufruf wird ein Name sowie optional eine Liste von Argumenten festgelegt. Da Sensoren lediglich boolesche Werte enthalten, sind auch als Typen für Prozedurparameter lediglich boolesche Werte (\inlinec{booleanExpression}) vorgesehen. Eine Erweiterung der Minisprache um ein Typsystem wäre jedoch für eine spätere Version denkbar, sodass z.~B. auch Integerwerte für Zählerschleifen übergeben werden können. Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:3} zeigt die Definition von \inlinec{statement} und \inlinec{procedureCall}.
+Eine Anweisung (\inlinec{statement}) kann ein Prozeduraufruf (\inlinec{procedureCall}), eine Verzweigung (\inlinec{if}), eine Zählerschleife (\inlinec{loopFor}) oder eine kopfgesteuerte Schleife (\inlinec{loopWhile}) repräsentieren. Mit einem Prozeduraufruf kann sowohl eine selbst definierte Prozedur als auch ein vorgegebener atomarer Befehl aufgerufen werden. Diese Entscheidung führt dazu, dass eigene Prozeduren und vorgegebene atomare Befehle im gleichen Geltungsbereich definiert sein müssen. Das beinhaltet, dass es möglich ist, mit eigenen Prozedurdefinitionen atomare Befehle zu überschreiben, bringt aber den Vorteil mit sich, dass Prozeduraufrufe einheitlich dargestellt werden können. Für einen Prozeduraufruf wird ein Name sowie optional eine Liste von Argumenten festgelegt. Da Sensoren lediglich boolesche Werte enthalten, sind auch als Typen für Prozedurparameter lediglich boolesche Werte (\inlinec{booleanExpression}) vorgesehen. Eine Erweiterung der Minisprache um ein Typsystem wäre jedoch für eine spätere Version denkbar, sodass z.~B. auch Integerwerte für Zählerschleifen übergeben werden können. Abbildung \ref{fig:implementation:datastructure:grammar:3} zeigt die Definition von \inlinec{statement} und \inlinec{procedureCall}.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-3.txt}
   \caption{Grammatik mit Prozeduraufruf-Knoten}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:3}
+  \label{fig:implementation:datastructure:grammar:3}
 \end{figure}
 
-Boolesche Werte (\inlinec{booleanExpression}) repräsentieren einen Sensor, einen invertierten Ausdruck, eine logische Verknüpfung oder eine boolesche Konstante. Sensoren (\inlinec{sensor}) haben die Eigenschaft \inlinec{type}, deren Wert aus der Liste der vorhandenen Sensortypen gewählt werden kann. Die Einschränkung, welche bei den Prozeduraufrufen aus den oben genannten Gründen nicht vorgenommen wurde, reduziert an dieser Stelle die Fehleranfälligkeit, bringt jedoch den Nachteil mit sich, dass neu hinzugefügte Sensoren zusätzlich eine Änderung der Grammatik erfordern. In Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:4} sind diese Definitionen in der Grammatik dargestellt.
+Boolesche Werte (\inlinec{booleanExpression}) repräsentieren einen Sensor, einen invertierten Ausdruck, eine logische Verknüpfung oder eine boolesche Konstante. Sensoren (\inlinec{sensor}) haben die Eigenschaft \inlinec{type}, deren Wert aus der Liste der vorhandenen Sensortypen gewählt werden kann. Die Einschränkung, welche bei den Prozeduraufrufen aus den oben genannten Gründen nicht vorgenommen wurde, reduziert an dieser Stelle die Fehleranfälligkeit, bringt jedoch den Nachteil mit sich, dass neu hinzugefügte Sensoren zusätzlich eine Änderung der Grammatik erfordern. In Abbildung \ref{fig:implementation:datastructure:grammar:4} sind diese Definitionen in der Grammatik dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-4.txt}
   \caption{Grammatik mit Knoten für boolesche Ausdrück und Sensoren}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:4}
+  \label{fig:implementation:datastructure:grammar:4}
 \end{figure}
 
-Invertierte Ausdrücke (\inlinec{negateExpression}) nehmen lediglich einen anderen booleschen Ausdruck auf. Dadurch ist z.~B. auch ein doppeltes Invertieren möglich. Logische Verknüpfungen (\inlinec{booleanBinaryExpression}) nehmen hingegen jeweils einen booleschen Wert für die linke und die rechte Seite, sowie einen Operator (\inlinec{relationalOperator}) auf (siehe Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:5}).
+Invertierte Ausdrücke (\inlinec{negateExpression}) nehmen lediglich einen anderen booleschen Ausdruck auf. Dadurch ist z.~B. auch ein doppeltes Invertieren möglich. Logische Verknüpfungen (\inlinec{booleanBinaryExpression}) nehmen hingegen jeweils einen booleschen Wert für die linke und die rechte Seite, sowie einen Operator (\inlinec{relationalOperator}) auf (siehe Abbildung \ref{fig:implementation:datastructure:grammar:5}).
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-5.txt}
   \caption{Grammatik mit Knoten für logische Operationen}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:5}
+  \label{fig:implementation:datastructure:grammar:5}
 \end{figure}
 
-Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil, sowie im alternativen \inlinec{else}-Teil. Durch die feste Definition des alternativen Teils ist dieser auch sichtbar, wenn er nicht genutzt wird \TODO{weiter?}. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:6} dargestellt.
+Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil, sowie im alternativen \inlinec{else}-Teil. Durch die feste Definition des alternativen Teils ist dieser auch sichtbar, wenn er nicht genutzt wird \TODO{weiter?}. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:datastructure:grammar:6} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-6.txt}
   \caption{Grammatik mit Knoten für Verzweigungen}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:6}
+  \label{fig:implementation:datastructure:grammar:6}
 \end{figure}
 
-Die Zählerschleife bekommt einen Integerwert als Eigenschaft, der angibt, wie oft die Schleife wiederholt werden soll. Auch hier wird über Kindknoten der Schleifenrumpf definiert. Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:6} zeigt die Grammatik einer solchen Schleife.
+Die Zählerschleife bekommt einen Integerwert als Eigenschaft, der angibt, wie oft die Schleife wiederholt werden soll. Auch hier wird über Kindknoten der Schleifenrumpf definiert. Abbildung \ref{fig:implementation:datastructure:grammar:6} zeigt die Grammatik einer solchen Schleife.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-7.txt}
   \caption{Grammatik mit Knoten für Zählerschleifen}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:7}
+  \label{fig:implementation:datastructure:grammar:7}
 \end{figure}
 
-Die Grammatik der kopfgesteuerten Schleife verfügt schließlich Kindknoten für ihr Prädikat, sowie ihren Schleifenrumpf und ist in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:8} dargestellt.
+Die Grammatik der kopfgesteuerten Schleife verfügt schließlich Kindknoten für ihr Prädikat, sowie ihren Schleifenrumpf und ist in Abbildung \ref{fig:implementation:datastructure:grammar:8} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-8.txt}
   \caption{Grammatik mit Knoten für kopfgesteuerte Schleifen}
-  \label{fig:implementation:program:grammar-syntaxtree:grammar:8}
+  \label{fig:implementation:datastructure:grammar:8}
 \end{figure}
 
 Der sich aus dieser Grammatik ergebende Syntaxbaum wird im nächsten Abschnitt beschrieben.
 
 \subsection{Syntaxbaum}
+\label{sec:implementation:datastructure:syntaxtree}
 
 Der Syntaxbaum repräsentiert die Struktur eines Quelltextes, der mit dem Drag \& Drop-Editor in BlattWerkzeug bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer Datei sprechen. Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf welcher Operationen zur Veränderung (einfügen, löschen, tauschen, ...) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen~\cite[3]{riemer2018}.
 
 Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den Zeichenketten \inlinec{language} (im Sinne einer Programmiersprache) und \inlinec{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module, wie genau mit dem Knoten zu verfahren ist~\cite[4]{riemer2018}.
 
-Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung sogenannter Eigenschaften (engl. Properties). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte, welche über einen Schlüssel zugreifbar sind~\cite[4]{riemer2018}. Diese Eigenschaften wurden im vorigen Kapitel für z.~B. die Angabe des Prozedurnamens bei einem Prozeduraufruf verwendet. Ein solcher Aufruf der Prozedur \inlinec{wait}, sowie der Sensor \inlinec{lightIsRed} sind in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:tree:1} dargestellt.
+Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung sogenannter Eigenschaften (engl. Properties). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte, welche über einen Schlüssel zugreifbar sind~\cite[4]{riemer2018}. Diese Eigenschaften wurden im vorigen Kapitel für z.~B. die Angabe des Prozedurnamens bei einem Prozeduraufruf verwendet. Ein solcher Aufruf der Prozedur \inlinec{wait}, sowie der Sensor \inlinec{lightIsRed} sind in Abbildung \ref{fig:implementation:datastructure:syntaxtree:1} dargestellt.
 
 \begin{figure}[h]
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{gfx/implementation-program-grammar-syntaxtree-tree-wait.graphviz.pdf}
     \caption{Syntaxbaum des Aufrufs der Prozedur \inlinec|wait|}
-    \label{fig:implementation:program:grammar-syntaxtree:tree:wait}
+    \label{fig:implementation:datastructure:syntaxtree:1:wait}
   \end{subfigure}\hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{gfx/implementation-program-grammar-syntaxtree-tree-lightIsRed.graphviz.pdf}
     \caption{Syntaxbaum des Sensors \inlinec|lightIsRed|}
-    \label{fig:implementation:program:grammar-syntaxtree:tree:lightIsRed}
+    \label{fig:implementation:datastructure:syntaxtree:1:lightIsRed}
   \end{subfigure}\hfill
   \caption{Prozeduraufruf \inlinec|wait| und Sensor \inlinec|lightIsRed|}
-  \label{fig:implementation:program:grammar-syntaxtree:tree:1}
+  \label{fig:implementation:datastructure:syntaxtree:1}
 \end{figure}
 
-Kinder von Knoten werden in benannten Kindgruppen organisiert. Dabei handelt es sich um eine Verallgemeinerung der von XML bekannten Aufteilung in Attribut-Kinder und Element-Kinder. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren~\cite[4]{riemer2018}. So sind die in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:tree:1} abgebildeten Knoten in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:tree:2} als Kindknoten einer kopfgesteuerten Schleife dargestellt, welche wiederum als Kindknoten des Wurzelknotens des Programms eingebunden ist. Nachdem die Abbruchbedingung der Schleife erfüllt ist, ist ein \inlinec|goForward|-Prozeduraufruf enthalten.
+Kinder von Knoten werden in benannten Kindgruppen organisiert. Dabei handelt es sich um eine Verallgemeinerung der von XML bekannten Aufteilung in Attribut-Kinder und Element-Kinder. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren~\cite[4]{riemer2018}. So sind die in Abbildung \ref{fig:implementation:datastructure:syntaxtree:1} abgebildeten Knoten in Abbildung \ref{fig:implementation:datastructure:syntaxtree:2} als Kindknoten einer kopfgesteuerten Schleife dargestellt, welche wiederum als Kindknoten des Wurzelknotens des Programms eingebunden ist. Nachdem die Abbruchbedingung der Schleife erfüllt ist, ist ein \inlinec|goForward|-Prozeduraufruf enthalten.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{gfx/implementation-program-grammar-syntaxtree-tree-program.graphviz.pdf}
   \caption{Beispiel eines vollständigen Programms als Syntaxbaum}
-  \label{fig:implementation:program:grammar-syntaxtree:tree:2}
+  \label{fig:implementation:datastructure:syntaxtree:2}
 \end{figure}
 
 Die gezeigten Graphen dienen an dieser Stelle der Übersicht. Intern werden Syntaxbäume als JSON-Dokumente verwaltet.
@@ -263,7 +265,7 @@ Die Auswertung eines solchen Syntaxbaumes ist im folgenden Abschnitt beschrieben
 % Auswertung
 %************************************************
 \section{Auswertung}
-\label{sec:implementation:program:evaluation}
+\label{sec:implementation:evaluation}
 
 Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Codes kommen zwei Vorgehensweisen infrage. In der Informatik bezeichnet der Begriff Kompilieren klassischerweise die Übersetzung von menschenfreundlichen Sprachelementen in maschinennahen Instruktionen, die von einem Prozessor und dem Betriebssystem verarbeitet werden können. Beim Interpretieren wird das Programm nicht vollständig übersetzt, sondern "portionsweise" analysiert, in eine zugehörige Folge von Prozessorinstruktionen übertragen und ausgeführt~\cite[47]{wagenknecht2009}. Da im Browser jedoch nicht direkt Maschinencode ausgeführt werden kann, ist der Unterschied in diesem Zusammenhang etwas anders zu verstehen:
 
@@ -275,51 +277,54 @@ Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Codes
 Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" als Anforderung vorgegeben, da dieses Vorgehen speziell für BlattWerkzeug den Vorteil mit sich bringt, dass generierter Code in Zukunft vor der Ausführung dem Nutzer angezeigt und von ihm bearbeitet werden kann, was den Übergang zu einer Universalsprache erleichtern würde (siehe auch \ref{sec:conclusion:future}).
 
 \subsection{Codegenerator}
+\label{sec:implementation:evaluation:codegenerator}
 
-Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:program:evaluation:tree-render} zeigt den Ausschnitt eines Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:program:evaluation:tree-result} gezeigten Code kompiliert wird.
+Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:evaluation:while} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:evaluation:tree-render} zeigt den Ausschnitt eines Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:evaluation:tree-result} gezeigten Code kompiliert wird.
 
 \begin{figure}
   \lstinputlisting{snippets/implementation-program-evaluation-while.ts}
   \caption{Implementierung des Codegenrator für eine kopfgesteuerte Schleife}
-  \label{fig:implementation:program:evaluation:while}
+  \label{fig:implementation:evaluation:while}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{gfx/implementation-program-evaluation-tree.graphviz.pdf}
   \caption{Beispielhafter Ausschnitt eines Syntaxbaum für eine kopfgesteuerte Schleife}
-  \label{fig:implementation:program:evaluation:tree-render}
+  \label{fig:implementation:evaluation:tree-render}
 \end{figure}
 
 \begin{figure}
   \lstinputlisting{snippets/implementation-program-evaluation-tree-result.js}
-  \caption{Kompilierter Code für den Syntaxbaum in Abbildung \ref{fig:implementation:program:evaluation:tree-render}}
-  \label{fig:implementation:program:evaluation:tree-result}
+  \caption{Kompilierter Code für den Syntaxbaum in Abbildung \ref{fig:implementation:evaluation:tree-render}}
+  \label{fig:implementation:evaluation:tree-result}
 \end{figure}
 
 \subsection{Syntaxfehler}
+\label{sec:implementation:syntax-errors}
 
-Es kann nicht garantiert werden, dass der Code, welcher vom Codegenerator erzeugt wurde, frei von Syntaxfehlern ist. Dies kann aus der Kompilierung eines unvollständigen Syntaxbaumes resultieren. So kann es z.~B. vorkommen, dass die Bedingung bei einer While-Schleife leer ist. JavaScript wirft bei der Erzeugung der Funktion einen \inlinec{SyntaxError}. Um diesen Fehler abzufangen, muss die Erzeugung der Funktion innerhalb einer try...catch-Anweisung\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/try...catch}} stattfinden \fref{fig:implementation:program:evaluation:try-catch}.
+Es kann nicht garantiert werden, dass der Code, welcher vom Codegenerator erzeugt wurde, frei von Syntaxfehlern ist. Dies kann aus der Kompilierung eines unvollständigen Syntaxbaumes resultieren. So kann es z.~B. vorkommen, dass die Bedingung bei einer While-Schleife leer ist. JavaScript wirft bei der Erzeugung der Funktion einen \inlinec{SyntaxError}. Um diesen Fehler abzufangen, muss die Erzeugung der Funktion innerhalb einer try...catch-Anweisung\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/try...catch}} stattfinden \fref{fig:implementation:evaluation:try-catch}.
 
 \begin{figure}
   \lstinputlisting{snippets/implementation-program-evaluation-try-catch.js}
   \caption{Möglicher Syntaxfehler innerhalb des generierten Codes}
-  \label{fig:implementation:program:evaluation:try-catch}
+  \label{fig:implementation:evaluation:try-catch}
 \end{figure}
 
 \subsection[Umgebung zur Ausführung]{Umgebung zur Ausführung\protect\footnotemark}
+\label{sec:implementation:evaluation:environment}
 
 \footnotetext{Zum Verständnis dieses und folgender Abschnitte werden grundlegende Kenntnisse über die Konzepte von Promises, asynchronen Funktionen und Generatorfunktionen in JavaScript vorausgesetzt.}
 
-Dem kompilierten Code muss zur Ausführung eine Umgebung bereitgestellt werden, welche die in Tabelle \ref{tbl:implementation:program:elements:cmds} gelisteten und als "atomaren Befehle" bezeichneten Funktionen, sowie Funktionen zur Ermittlung der Sensorwerte (siehe Tabelle \ref{tbl:implementation:program:elements:sensors}) zur Verfügung stellt. Für diese Aufgabe bietet sich der \inlinec{Function}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Function}} an. Im Gegensatz zu \inlinec{eval} ermöglicht der \inlinec{Function}-Konstruktor die Ausführung von Code im globalen Gültigkeitsbereich, was zu besseren Programmiergewohnheiten führt und eine effizientere Code-Minimierung ermöglicht~\cite{mdn-function}. In diesem speziellen Fall wird für die Ausführung des Codes der \inlinec{GeneratorFunction}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction}} verwendet (siehe dazu auch Abschnitt \ref{sec:implementation:rendering:animation}).
+Dem kompilierten Code muss zur Ausführung eine Umgebung bereitgestellt werden, welche die in Tabelle \ref{tbl:implementation:elements:cmds} gelisteten und als "atomaren Befehle" bezeichneten Funktionen, sowie Funktionen zur Ermittlung der Sensorwerte (siehe Tabelle \ref{tbl:implementation:elements:sensors}) zur Verfügung stellt. Für diese Aufgabe bietet sich der \inlinec{Function}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Function}} an. Im Gegensatz zu \inlinec{eval} ermöglicht der \inlinec{Function}-Konstruktor die Ausführung von Code im globalen Gültigkeitsbereich, was zu besseren Programmiergewohnheiten führt und eine effizientere Code-Minimierung ermöglicht~\cite{mdn-function}. In diesem speziellen Fall wird für die Ausführung des Codes der \inlinec{GeneratorFunction}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction}} verwendet (siehe dazu auch Abschnitt \ref{sec:implementation:rendering:animation}).
 
-Für die Bereitstellung der Befehle und Sensoren werden im folgenden vier Varianten betrachtet. In Abbildung \ref{fig:implementation:program:environment} werden Implementationsbeispiele dieser Varianten einander gegenüber gestellt.
+Für die Bereitstellung der Befehle und Sensoren werden im folgenden vier Varianten betrachtet. In Abbildung \ref{fig:implementation:environment} werden Implementationsbeispiele dieser Varianten einander gegenüber gestellt.
 
 \begin{description}
-  \item[1. Definition und Aufruf mit Enum-Klasse:] Eine Enum-Klasse mit allen Sensoren und Befehlen, sowie zwei Funktionen für deren Auswertung gibt es schon. Darauf aufbauend wäre eine nahe liegende Möglichkeit, diese Funktionen und die Enum-Klassen einfach in der Welt bereitzustellen. Ein deutlicher Vorteil dieser Lösung ist der geringe zusätzliche Implementierungsaufwand und die verbesserte Wartbarkeit. Kommen neue Befehle oder Sensoren dazu, stehen diese automatisch auch in der Umgebung zur Verfügung. Der generierte Code ist jedoch nicht intuitiv und sollte er dem Nutzer angezeigt werden, nicht besonders gut zu verstehen. Außerdem halten sich die Funktionsaufrufe nicht an gängige Muster, was den späteren Umstieg auf Universalsprachen erschweren könnte \fref{fig:implementation:program:environment:func}.
-  \item[2. Definition und Aufruf mit \inlinec|call|:] Eine weitere denkbare Lösung ist es, ein Objekt mit allen benötigten Funktionen für Befehle und Sensoren zu erzeugen und dieses als Wert von \inlinec{this} innerhalb der Funktion zur Verfügung zu stellen. Selbstdefinierte Prozeduren werden innerhalb der Funktion ebenfalls als Kinder von \inlinec{this} definiert. Dieses Vorgehen hat den Vorteil, dass der Code deutlich intuitiver wird, als dies bei der vorgehend beschriebenen Variante der Fall wäre. Jedem Aufruf muss zwar ein \inlinec{this} vorangestellt werden, jeder Befehl hat aber seinen eigenen Funktionsaufruf. Der zusätzliche Implementierungsaufwand ist allerdings ein Nachteil dieser Variante. Es müssen in einem Objekt Wrapper-Funktionen für alle Befehle und Sensoren definiert werden. Kommt zu einem späteren Zeitpunkt ein Befehl oder ein Sensor hinzu, muss dieser zusätzlich auch an dieser Stelle hinzugefügt werden. Außerdem müssen selbst definierte Prozeduren mithilfe von Pfeilfunktionen\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Functions/Pfeilfunktionen}} definiert werden, damit der Bezug zum \inlinec{this} nicht verloren geht \fref{fig:implementation:program:environment:this}.
-  \item[3. Definition und Aufruf über Parameter:] Auch wäre es möglich, alle Befehle und Sensoren als Parameter der Funktion zu definieren. Dadurch würde im Vergleich zur vorigen Variante die Notwendigkeit entfallen, \inlinec{this} vor jeden Aufruf zu stellen. Da die Wrapper-Funktionen in diesem Fall allerdings ebenfalls zusätzlich definiert werden müssen und die Zuordnung ihrer Namen fehleranfällig ist, birgt dieses Vorgehen abgesehen von dem etwas kompakteren Code, keine weiteren Vorteile \fref{fig:implementation:program:environment:param}.
-  \item[4. Definition und Aufruf mit einem Objekt als Parameter:] Letztlich kommt auch eine Kombination der Varianten zwei und drei infrage, bei der alle Befehle und Sensoren in einem Objekt zusammengefasst werden. Im Vergleich zu Variante zwei muss das \inlinec{this} lediglich durch einen Variablennamen ersetzt werden. Dadurch ist es nun nicht zwingend erforderlich, Pfeilfunktionen für die Definition von benutzerdefinierten Prozeduren zu nutzen \fref{fig:implementation:program:environment:obj}.
+  \item[1. Definition und Aufruf mit Enum-Klasse:] Eine Enum-Klasse mit allen Sensoren und Befehlen, sowie zwei Funktionen für deren Auswertung gibt es schon. Darauf aufbauend wäre eine nahe liegende Möglichkeit, diese Funktionen und die Enum-Klassen einfach in der Welt bereitzustellen. Ein deutlicher Vorteil dieser Lösung ist der geringe zusätzliche Implementierungsaufwand und die verbesserte Wartbarkeit. Kommen neue Befehle oder Sensoren dazu, stehen diese automatisch auch in der Umgebung zur Verfügung. Der generierte Code ist jedoch nicht intuitiv und sollte er dem Nutzer angezeigt werden, nicht besonders gut zu verstehen. Außerdem halten sich die Funktionsaufrufe nicht an gängige Muster, was den späteren Umstieg auf Universalsprachen erschweren könnte \fref{fig:implementation:environment:func}.
+  \item[2. Definition und Aufruf mit \inlinec|call|:] Eine weitere denkbare Lösung ist es, ein Objekt mit allen benötigten Funktionen für Befehle und Sensoren zu erzeugen und dieses als Wert von \inlinec{this} innerhalb der Funktion zur Verfügung zu stellen. Selbstdefinierte Prozeduren werden innerhalb der Funktion ebenfalls als Kinder von \inlinec{this} definiert. Dieses Vorgehen hat den Vorteil, dass der Code deutlich intuitiver wird, als dies bei der vorgehend beschriebenen Variante der Fall wäre. Jedem Aufruf muss zwar ein \inlinec{this} vorangestellt werden, jeder Befehl hat aber seinen eigenen Funktionsaufruf. Der zusätzliche Implementierungsaufwand ist allerdings ein Nachteil dieser Variante. Es müssen in einem Objekt Wrapper-Funktionen für alle Befehle und Sensoren definiert werden. Kommt zu einem späteren Zeitpunkt ein Befehl oder ein Sensor hinzu, muss dieser zusätzlich auch an dieser Stelle hinzugefügt werden. Außerdem müssen selbst definierte Prozeduren mithilfe von Pfeilfunktionen\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Functions/Pfeilfunktionen}} definiert werden, damit der Bezug zum \inlinec{this} nicht verloren geht \fref{fig:implementation:environment:this}.
+  \item[3. Definition und Aufruf über Parameter:] Auch wäre es möglich, alle Befehle und Sensoren als Parameter der Funktion zu definieren. Dadurch würde im Vergleich zur vorigen Variante die Notwendigkeit entfallen, \inlinec{this} vor jeden Aufruf zu stellen. Da die Wrapper-Funktionen in diesem Fall allerdings ebenfalls zusätzlich definiert werden müssen und die Zuordnung ihrer Namen fehleranfällig ist, birgt dieses Vorgehen abgesehen von dem etwas kompakteren Code, keine weiteren Vorteile \fref{fig:implementation:environment:param}.
+  \item[4. Definition und Aufruf mit einem Objekt als Parameter:] Letztlich kommt auch eine Kombination der Varianten zwei und drei infrage, bei der alle Befehle und Sensoren in einem Objekt zusammengefasst werden. Im Vergleich zu Variante zwei muss das \inlinec{this} lediglich durch einen Variablennamen ersetzt werden. Dadurch ist es nun nicht zwingend erforderlich, Pfeilfunktionen für die Definition von benutzerdefinierten Prozeduren zu nutzen \fref{fig:implementation:environment:obj}.
 \end{description}
 
 Für den Einsatz in dieser Arbeit ist Variante vier am sinnvollsten, da so Wartbarkeit und Lesbarkeit des generierten Codes in einem angemessenen Verhältnis stehen. Außerdem werden Generatorfunktionen\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/function*}} für die benuzterdefinierten Prozeduren verwendet, welche die Definition über Pfeilfunktionen nicht unterstützen. Der \inlinec{this}-Kontext würde bei Variante zwei dadurch verloren gehen.
@@ -330,31 +335,32 @@ Es wird also ein Objekt mit Wrapper-Funktionen für alle Befehle und Sensoren er
   \begin{subfigure}[b]{\textwidth}
     \lstinputlisting{snippets/implementation-program-environment-func.js}
     \caption{Definition und Aufruf mit Enum-Klasse}
-    \label{fig:implementation:program:environment:func}
+    \label{fig:implementation:environment:func}
     \vspace{0.5cm}
   \end{subfigure}
   \begin{subfigure}[b]{\textwidth}
     \lstinputlisting{snippets/implementation-program-environment-this.js}
     \caption{Definition und Aufruf mit \inlinec|call|}
-    \label{fig:implementation:program:environment:this}
+    \label{fig:implementation:environment:this}
     \vspace{0.5cm}
   \end{subfigure}
   \begin{subfigure}[b]{\textwidth}
     \lstinputlisting{snippets/implementation-program-environment-param.js}
     \caption{Definition und Aufruf über Parameter}
-    \label{fig:implementation:program:environment:param}
+    \label{fig:implementation:environment:param}
     \vspace{0.5cm}
   \end{subfigure}
   \begin{subfigure}[b]{\textwidth}
     \lstinputlisting{snippets/implementation-program-environment-obj.js}
     \caption{Definition und Aufruf mit einem Objekt als Parameter}
-    \label{fig:implementation:program:environment:obj}
+    \label{fig:implementation:environment:obj}
   \end{subfigure}
   \caption{Varianten für die Bereitstellung der Befehle und Sensoren innerhalb der generierten Funktion}
-  \label{fig:implementation:program:environment}
+  \label{fig:implementation:environment}
 \end{figure}
 
 \subsection{Ausführungsdauer von Befehlen}
+\label{sec:implementation:evaluation:execution-time}
 
 Die Ausführung der atomaren Befehle wie dem des vorwärts Fahren oder Warten, haben in JavaScript aufgrund ihrer geringen Komplexität eine kaum merkliche Ausführungszeit. Um die Ausführung trotzdem sichtbar zu machen, soll diese Ausführungszeit künstlich erhöht werden können. Diese Eigenschaft ist unter Anderem auch für die Animation in der Darstellung (siehe \ref{sec:implementation:rendering:animation}) von Bedeutung.
 
@@ -364,9 +370,10 @@ Auch sind die Zeitschritte für die Berechnung der Ampelphasen relevant. Für Am
 
 Um der Ausführungszeit im Programmablauf gerecht zu werden, stellt die \inlinec{World}-Klasse neben der \inlinec{command}-Methode zusätzlich die Methode \inlinec{commandAsync} bereit, die als asynchrone Funktion definiert ist und ein \inlinec{Promise} zurückgibt, welches erfüllt wird, sobald die für diesen Befehl vorgesehene Zeit abgelaufen ist.
 
-Um auch das Pausieren und Fortsetzen der Ausführung zu ermöglichen, kommt für die Ausführung des generierten Codes eine Generatorfunktion zum Einsatz (siehe \TODO{Verweis}).
+Um auch das Pausieren und Fortsetzen der Ausführung zu ermöglichen, kommt für die Ausführung des generierten Codes eine Generatorfunktion zum Einsatz (siehe \ref{sec:implementation:evaluation:pause}).
 
 \subsection{Behandlung von Endlosschleifen}
+\label{sec:implementation:evaluation:infinite-loop}
 
 Im Vergleich zu Beginn dieses Abschnittes, wurde ein Vorteil der Vorgehensweise "Interpretieren" genannt, welcher gleichzeitig ein Nachteil beim Kompilieren darstellt: Wurde mit der Ausführung des kompilierten Codes einmal begonnen, kann diese nicht einfach unterbrochen werden. Dies stellt insbesondere ein Problem dar, wenn der Nutzer eine Endlosschleife in sein Programm eingebaut hat. Das Programm läuft im gleichen Kontext wie die Webseite und kann diese daher einfrieren. Um dieses Problem zu umgehen, wurde zusätzlich der \inlinec{doNothing}-Befehl eingeführt. Dieser Befehl steht im Drag \& Drop-Editor nicht zur Verfügung. Er verändert -- ähnlich wie der \inlinec{wait}-Befehl -- den Zustand der Welt nicht, fügt im Gegensatz zu \inlinec{wait} allerdings keinen neuen Zustand ein, kann also auch nicht rückgängig gemacht werden. Trotzdem erzeugt dieser Befehl eine für den Nutzer kaum merkliche Wartezeit von wenigen Millisekunden. Mit diesem Vorgehen kann aktives Warten ("busy waiting") beim Aufruf einer leeren While-Schleife und daraus resultierendes Blockieren der Bedienelemente von BlattWerkzeug vermieden werden. \TODO{Variation des Halteproblems. Welche Codepfade werden mit Sicherheit ausgeführt und welche nicht?}
 
@@ -375,6 +382,7 @@ Den \inlinec{doNothing}-Befehl nur in leeren Schleifen einzufügen, reicht nicht
 Im nächsten Schritt ist es möglich, das Programm innerhalb einer Endlosschleife manuell vorzeitig zu beenden, bzw. zu pausieren.
 
 \subsection{Vorzeitiges Beenden der Ausführung}
+\label{sec:implementation:evaluation:pause}
 
 Für das vorzeitige Beenden des Programms schien zunächst die Variante sinnvoll, dass zusätzlich innerhalb von allen Befehlen geprüft wird, ob der Nutzer die Beendigung des laufenden Programmes angewiesen hat. Ist dies der Fall, wird die Ausführung des aktuellen Codes durch den Wurf einer Exception vorzeitig beendet. Dieses Vorgehen ist eine Möglichkeit, die Ausführung des Codes vorzeitig zu beenden, ohne die Lesbarkeit durch zusätzliche Kontrollbefehle zu verschlechtern, hat allerdings die Nebenwirkung, dass \inlinec{try...catch}-Anweisungen in Zukunft nicht innerhalb des generierten Codes eingesetzt werden können. Außerdem ist es mit diesem Verhalten nicht möglich, das Programm an der Stelle fortzuführen, an der es gestoppt wurde, da der Kontext der Funktion mit dem Wurf der Exception verloren geht.
 
@@ -445,21 +453,21 @@ Das sichtbare Bild wird durch die \inlinec{ObjectRenderer} vollständig aus vers
 \end{figure}
 
 \subsection{Zielerfüllung}
-\label{sec:implementation:program:finish}
+\label{sec:implementation:finish}
 
 Hat der Nutzer mit seinem Programm oder aber manuell über die Befehlbuttons alle Container an ihr Ziel verbracht, erkennt die Software, dass das Spielfeld gelöst ist. Der Nutzer erhält eine Statusmeldung, dass das Spielfeld gelöst wurde, wird aber nicht aus der aktuellen Arbeitsumgebung herausgerissen. Vielmehr soll er die Möglichkeit bekommen, das eigene Programm noch einmal zu lesen und zu verstehen, \emph{warum} dieses Programm zu der Lösung geführt hat. Außerdem kann der Nutzer so sein Programm weiter optimieren und vielleicht eine Lösung implementieren, welche noch schneller zum gewünschten Ergebnis führt. Einzelne Schritte können dafür mithilfe eines entsprechenden Buttons rückgängig gemacht werden, oder aber die Welt wird direkt wieder auf ihren Ausgangszustand zurückgesetzt.
 
 \subsection{Level-Editor}
-\label{sec:implementation:program:level-editor}
+\label{sec:implementation:level-editor}
 
-Für den Drag \& Drop-Editor wurde eine weitere Grammatik in BlattWerkzeug eingeführt, welche es ermöglicht, eine eigene Karte zu kreieren. Der hieraus generierte Syntaxbaum wird in eine Beschreibung einer Welt (\inlinec{WorldDescription}) umgewandelt, mit der die \inlinec{World}-Klasse instanziiert werden kann. Abbildung \ref{fig:implementation:program:level-editor:tree} zeigt auschnittsweise einen beispielhaften Syntaxbaum für eine Welt. Diese Beschreibung enthält sowohl die Größe der Welt, sowie die Position und initiale Beladung des Lastwagens, als auch eine Liste von Kacheln, welche wiederum ihre Position definieren und Informationen über Ampeln, Fracht und Frachtziele enthalten.
+Für den Drag \& Drop-Editor wurde eine weitere Grammatik in BlattWerkzeug eingeführt, welche es ermöglicht, eine eigene Karte zu kreieren. Der hieraus generierte Syntaxbaum wird in eine Beschreibung einer Welt (\inlinec{WorldDescription}) umgewandelt, mit der die \inlinec{World}-Klasse instanziiert werden kann. Abbildung \ref{fig:implementation:level-editor:tree} zeigt auschnittsweise einen beispielhaften Syntaxbaum für eine Welt. Diese Beschreibung enthält sowohl die Größe der Welt, sowie die Position und initiale Beladung des Lastwagens, als auch eine Liste von Kacheln, welche wiederum ihre Position definieren und Informationen über Ampeln, Fracht und Frachtziele enthalten.
 
 Für die Aufgabe der Definition einer umfangreichen listenartigen Datenstruktur wie der einer Welt, erwies sich der Drag \& Drop-Editor als eher ungeeignet. Der Nutzer muss ein sehr genaues Bild der Welt vor Augen haben, um die Kacheln mit den richtigen Öffnungen zu platzieren. Um die Welten für die Beispielaufgaben besser erzeugen zu können, wurde ein rudimentärer Level-Editor entwickelt, der als JavaScript-Anwendung unabhängig von BlattWerkzeug funktioniert und den Syntaxbaum der Welt ausgibt. Dieser muss anschließend manuell in die BlattWerkzeug-Datenbank einkopiert werden. Da dies keine Lösung für reguläre Anwender darstellt und damit Lehrer ohne tiefer gehende Kenntnisse der Software in Zukunft selbst in der Lage sind, eigene Aufgabenstellungen vorzubereiten, wäre die Entwicklung eines geeigneten Level-Editors innerhalb der BlattWerkzeug-Umgebung, aber unabhängig vom Drag \& Drop-Editor, notwendig. In Absprache mit den Gutachtern wurde dieser Ansatz aus Zeitgründen nicht weiter verfolgt.
 
 \begin{figure}
   \lstinputlisting{snippets/implementation-program-level-editor-tree.json}
   \caption{Beispielhafter Syntaxbaum einer Welt (verkürzt)}
-  \label{fig:implementation:program:level-editor:tree}
+  \label{fig:implementation:level-editor:tree}
 \end{figure}
 
 \subsection{Lastwagen-Position}
@@ -489,7 +497,7 @@ Um dieses Verhalten auch in die Mikrowelt zu übertragen, wurde eine Implementie
 
 Durch Animationen kann das Benutzererlebnis noch einmal deutlich aufgewertet werden, indem sie den Ausführungsfluss der Anwendung verlangsamen und dadurch die Nachvollziehbarkeit der ausgeführten Befehle ermöglicht wird. Zwischen den Positionen des Lastwagens wird daher zeitlich interpoliert. Eine wichtige Grundlage dafür wurde mit der Welt-Objektstruktur bereits geschaffen \tref{sec:implementation:structure}: Jede Operation erzeugt einen neuen Zustand, der in einer Liste gespeichert wird. Dieses Vorgehen macht es leicht zwischen dem aktuellen und dem vorherigen Zustand zu interpolieren.
 
-Auch die in Abschnitt \TODO{Verweis} beschriebenen Zeitschritte spielen an dieser Stelle eine wehsentliche Rolle. Eine Animation der Bewegung des Lastwagens wird so z.~B. immer im Zeitraum eines Zeitschrittes animiert. Dadurch, dass die Ausführung des Programms genau diese Dauer als Ausführungszeit vorsieht, entsteht eine flüssige, nachvollziebare Animation über mehrere Zeitschritte hinweg.
+Auch die in Abschnitt \ref{sec:implementation:evaluation:execution-time} beschriebenen Zeitschritte spielen an dieser Stelle eine wehsentliche Rolle. Eine Animation der Bewegung des Lastwagens wird so z.~B. immer im Zeitraum eines Zeitschrittes animiert. Dadurch, dass die Ausführung des Programms genau diese Dauer als Ausführungszeit vorsieht, entsteht eine flüssige, nachvollziebare Animation über mehrere Zeitschritte hinweg.
 
 %************************************************
 % Integration
