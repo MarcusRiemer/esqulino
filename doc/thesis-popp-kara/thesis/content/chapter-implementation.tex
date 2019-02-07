@@ -40,19 +40,14 @@ Es wurde zunächst eine objektorientierte Datenstruktur erarbeitet, die eine Wel
 Wurzelelement dieser Struktur ist die \inlinec{World}-Klasse. Sie wird mit einer Beschreibung der zu generierenden Welt instanziiert. Anhand dieser Beschreibung erzeugt der Konstruktor die Größe (\inlinec{Size}) der Welt, einen Lastwagen (\inlinec{Truck}) und eine Menge von Kacheln (\inlinec{Tile}). Wobei die Kacheln Straßen repräsentieren wiederum Frachten und Ampeln beinhalten können. Lastwagen und Kacheln werden in einem Weltzustand (\inlinec{WorldState}) verpackt. Die Daten eines einmal gespeicherten Zustandes werden nicht mehr geändert. Stattdessen wird eine Kopie des aktuellen Zustandes erzeugt, verändert und in der Liste aller Zustände abgespeichert. Dieses Vorgehen ermöglicht dem Nutzer, Operationen rückgängig zu machen. Außerdem wird dadurch, die für die Animationen \tref{sec:implementation:rendering:animation} notwendige Interpolation zwischen Zuständen vereinfacht. Die Veränderung der Zustände übernimmt die \inlinec{World}-Klasse in der Operation \inlinec{command}. Da alle Operationen auf der Welt parameterlos sind, wird der \inlinec{command}-Methode lediglich der Name der auszuführenden Operation übergeben. Eine Liste der verfügbaren Befehle findet sich in Tabelle \ref{tbl:implementation:program:elements:cmds} auf Seite \pageref{tbl:implementation:program:elements:cmds}.
 
 %************************************************
-% Minisprache
+% Elemente der Minisprache
 %************************************************
-\section{Minisprache}
-\label{sec:implementation:program}
-
-Mit den nachfolgend beschriebenen Elementen wurde zunächst eine Grammatik entwickelt. Die Syntax orientiert sich dabei grob an der JavaScript-Syntax.
-
-\subsection{Elemente der Sprache}
+\section{Elemente der Minisprache}
 \label{sec:implementation:program:elements}
 
 Im Folgenden sind die Elemente beschrieben, welche dem Nutzer zum Programmieren innerhalb der bereitgestellten Umgebung zur Verfügung stehen.
 
-\subsubsection{Atomare Befehle}
+\subsection*{Atomare Befehle}
 \label{sec:implementation:program:elements:cmds}
 
 Wichtigster Bestandteil sind die atomaren Befehle. Durch die Aneinanderreihung mehrerer Befehle lässt sich bereits ein sinnvolles Programm implementieren. Es wurden die in Tabelle \ref{tbl:implementation:program:elements:cmds} implementiert. Der Umfang orientiert sich im Wesentlichen an dem von JavaScriptKara (siehe Abbildung \ref{fig:related:kara:code}), wurde aber um weitere Befehle erweitert, deren Notwendigkeit bei Tests identifiziert wurde.
@@ -79,12 +74,12 @@ Bewegungen finden dadurch immer relativ zur aktuellen Blickrichtung des Lastwage
 
 Der "Vorwärts fahren"-Befehl wurde zunächst mit einer gewissen Intelligenz ausgestattet. Dadurch konnten Kurven gefahren werden, ohne dass ein Blinker gesetzt werden musste. Im Laufe der Arbeit wurde diese Logik als eine mögliche Aufgabenstellung identifiziert und daher deaktiviert. Nutzer sollten sich eine Funktion definieren, die eben diesen intelligenten "Vorwärts fahren"-Befehl umsetzt.
 
-\subsubsection{Zählerschleife}
+\subsection*{Zählerschleife}
 \label{sec:implementation:program:elements:for}
 
 Um Codeverdoppelung zu vermeiden, kann eine Schleife eingesetzt werden, die einen Befehlsblock wiederholt. Die Anzahl der Wiederholungen kann vom Nutzer vorab festgelegt werden, ein vorzeitiges Verlassen der Schleife ist anschließend jedoch nicht mehr möglich. Damit ist es z.~B. möglich, für eine Fahrt auf einer langen Geraden den "Vorwärts fahren"-Befehl viermal in der Schleife auszuführen und ihn so nicht viermal im Programm wiederholen zu müssen.
 
-\subsubsection{Sensoren}
+\subsection*{Sensoren}
 \label{sec:implementation:program:elements:sensors}
 
 Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren abzufragen. Sensoren geben einen booleschen Wert zurück, stehen also immer entweder auf wahr oder falsch. Tabelle \ref{tbl:implementation:program:elements:sensors} listet die zur Verfügung stehenden Sensoren auf. Auch hier orientiert sich der Umfang an JavaScriptKara und wurde um Sensoren erweitert, welche bei Tests für diese Rahmenhandlung sinnvoll erschienen. Die verfügbaren Sensoren sind in Tabelle \ref{tbl:implementation:program:elements:sensors} dargestellt.
@@ -108,14 +103,14 @@ Um Verzweigungen nutzen zu können, gibt es die Möglichkeit Werte von Sensoren 
   \label{tbl:implementation:program:elements:sensors}
 \end{table}
 
-\subsubsection{Kopfgesteuerte Schleife}
+\subsection*{Kopfgesteuerte Schleife}
 \label{sec:implementation:program:elements:while}
 
 Mit den Sensoren ist es möglich, eine kopfgesteuerte Schleife zu nutzen. Diese wiederholt den Befehlsblock solange der angegebene Ausdruck zu wahr auswertet. Wird die Schleifenbedingung vor der ersten Ausführung des Schleifenblocks oder nach ein oder mehreren Ausführungen zu falsch ausgewertet, wird der nachfolgende Block ausgeführt. Der Schleifenblock kann also auch komplett übersprungen werden.
 
 Mit diesem Element kann z.~B. das Warten auf eine Ampel realisiert werden, wobei die Schleife immer wieder den "Warten"-Befehl ausführt, bis die Bedingung, dass die Ampel grün ist, erfüllt ist.
 
-\subsubsection{Verzweigungen}
+\subsection*{Verzweigungen}
 \label{sec:implementation:program:elements:if-else}
 
 Sensoren ermöglichen außerdem Verzweigungen, die einen Befehlsblock nur dann ausführen, wenn der angegebene Sensor zu wahr ausgewertet wird und einen weiteren, optionalen Befehlsblock, wenn der Sensor zu falsch ausgewertet wird.
@@ -124,7 +119,7 @@ Das aus anderen Sprachen bekannte \inlinec{elseif} gibt es, wie auch in JavaScri
 
 In Zukunft wäre es denkbar, in dieser Form geschachtelte Verzweigungen auch im generierten Code ohne zusätzliche geschweifte Klammern und Einrückungen darzustellen. Bisher wurde auf diese Darstellung verzichtet, da auch der Drag \& Drop-Editor hierzu noch nicht in der Lage ist.
 
-\subsubsection{Logische Operatoren}
+\subsection*{Logische Operatoren}
 \label{sec:implementation:program:elements:op}
 
 Unter Zuhilfenahme von logischen Operatoren können neue Ausdrücke erzeugt werden, welche sich wiederum in Schleifen und Verzweigungen einsetzen lassen.
@@ -137,7 +132,7 @@ Unter Zuhilfenahme von logischen Operatoren können neue Ausdrücke erzeugt werd
 
 Mit diesen logischen Operatoren ist es nun z.~B. möglich, zu prüfen, ob das vorausliegende Streckenstück eine Kurve ist: (Kann nicht geradeaus fahren und ((Kann links abbiegen und Kann nicht rechts abbiegen) oder (Kann nicht links abbiegen und Kann rechts abbiegen)))
 
-\subsubsection{Prozeduren}
+\subsection*{Prozeduren}
 \label{sec:implementation:program:elements:proc}
 
 Des Weiteren ist es möglich, eigene Prozeduren zu definieren und aufzurufen. Für Prozeduren lassen sich zusätzliche Parameter definieren, deren Nutzung innerhalb des Prozedurenblocks möglich ist. Jeder Parameter erhält einen vom Nutzer festgelegten Namen, kann jedoch ausschließlich boolesche Werte übergeben. Beim Aufruf der Prozedur werden die übergebenen Werte -- wie auch bei Prozeduraufrufen in JavaScript üblich -- kopiert.
@@ -148,12 +143,15 @@ Das im Abschnitt der kopfgesteuerten Schleife angesprochene Beispiel des Wartens
 
 Im nächsten Schritt müssen die hier beschriebenen Elemente der Sprache in eine Grammatik übersetzt werden, nach welcher ein Syntaxbaum erzeugt werden kann. Diese Elemente sind im nächsten Abschnitt beschrieben.
 
-\subsection{Grammatik und Syntaxbaum}
+%************************************************
+% Datenstruktur
+%************************************************
+\section{Datenstruktur}
 \label{sec:implementation:program:grammar-syntaxtree}
 
 Bereits in der Anforderungsanalyse wurden die Begriffe "Grammatik" und "Syntaxbaum" verwendet. Im Folgenden soll nun die für die Minisprache entwickelte Grammatik und die daraus resultierenden Syntaxbäume beschrieben werden.
 
-\subsubsection{Grammatik}
+\subsection{Grammatik}
 
 Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Generator-Anweisungen dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}. Es wird zunächst eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
 
@@ -165,7 +163,7 @@ Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig vie
   \label{fig:implementation:program:grammar-syntaxtree:grammar:1}
 \end{figure}
 
-Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:2} dargestellt. Dieser beinhaltet Terminalsymbole, welche für die Darstellung der Elemente im Drag \& Drop-Editor in BlattWerkzeug genutzt werden, für den Syntaxbaum jedoch nicht relevant sind. Mit den Terminalsymbolen wird das spätere Aussehen dem der Syntax von JavaScript nachempfunden.
+Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:program:grammar-syntaxtree:grammar:2} dargestellt. Dieser beinhaltet Terminalsymbole, welche für die Darstellung der Elemente im Drag \& Drop-Editor in BlattWerkzeug genutzt werden, für den Syntaxbaum jedoch nicht relevant sind. Mit den Terminalsymbolen wird das spätere Aussehen dem der Syntax von JavaScript nachempfunden. Dadurch soll der spätere Umstieg auf diese Universalsprache erleichtert werden. JavaScript im speziellen wurde gewählt, da auch die Kompilierung in diese Sprache stattfindet (siehe \ref{sec:implementation:program:evaluation}).
 
 Knoten können zusätzlich zu den Kindknoten auch Eigenschaften (\inlinec{prop}) aufnehmen. In diesem Fall kann in einer Eigenschaft der Name der Funktion angegeben werden. Eine Prozedur lässt sich mit Parametern (\inlinec{procedureParameter}) ausstatten und kann analog zum Hauptprogramm eine Liste von Anweisungen (\inlinec{statement}) als Kindknoten aufnehmen.
 
@@ -225,7 +223,7 @@ Die Grammatik der kopfgesteuerten Schleife verfügt schließlich Kindknoten für
 
 Der sich aus dieser Grammatik ergebende Syntaxbaum wird im nächsten Abschnitt beschrieben.
 
-\subsubsection{Syntaxbaum}
+\subsection{Syntaxbaum}
 
 Der Syntaxbaum repräsentiert die Struktur eines Quelltextes, der mit dem Drag \& Drop-Editor in BlattWerkzeug bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer Datei sprechen. Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf welcher Operationen zur Veränderung (einfügen, löschen, tauschen, ...) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen~\cite[3]{riemer2018}.
 
@@ -261,7 +259,10 @@ Die gezeigten Graphen dienen an dieser Stelle der Übersicht. Intern werden Synt
 
 Die Auswertung eines solchen Syntaxbaumes ist im folgenden Abschnitt beschrieben.
 
-\subsection{Auswertung}
+%************************************************
+% Auswertung
+%************************************************
+\section{Auswertung}
 \label{sec:implementation:program:evaluation}
 
 Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Codes kommen zwei Vorgehensweisen infrage. In der Informatik bezeichnet der Begriff Kompilieren klassischerweise die Übersetzung von menschenfreundlichen Sprachelementen in maschinennahen Instruktionen, die von einem Prozessor und dem Betriebssystem verarbeitet werden können. Beim Interpretieren wird das Programm nicht vollständig übersetzt, sondern "portionsweise" analysiert, in eine zugehörige Folge von Prozessorinstruktionen übertragen und ausgeführt~\cite[47]{wagenknecht2009}. Da im Browser jedoch nicht direkt Maschinencode ausgeführt werden kann, ist der Unterschied in diesem Zusammenhang etwas anders zu verstehen:
@@ -273,7 +274,7 @@ Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Codes
 
 Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" als Anforderung vorgegeben, da dieses Vorgehen speziell für BlattWerkzeug den Vorteil mit sich bringt, dass generierter Code in Zukunft vor der Ausführung dem Nutzer angezeigt und von ihm bearbeitet werden kann, was den Übergang zu einer Universalsprache erleichtern würde (siehe auch \ref{sec:conclusion:future}).
 
-\subsubsection{Codegenerator}
+\subsection{Codegenerator}
 
 Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:program:evaluation:while} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:program:evaluation:tree-render} zeigt den Ausschnitt eines Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:program:evaluation:tree-result} gezeigten Code kompiliert wird.
 
@@ -296,7 +297,7 @@ Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfü
   \label{fig:implementation:program:evaluation:tree-result}
 \end{figure}
 
-\subsubsection{Syntaxfehler}
+\subsection{Syntaxfehler}
 
 Es kann nicht garantiert werden, dass der Code, welcher vom Codegenerator erzeugt wurde, frei von Syntaxfehlern ist. Dies kann aus der Kompilierung eines unvollständigen Syntaxbaumes resultieren. So kann es z.~B. vorkommen, dass die Bedingung bei einer While-Schleife leer ist. JavaScript wirft bei der Erzeugung der Funktion einen \inlinec{SyntaxError}. Um diesen Fehler abzufangen, muss die Erzeugung der Funktion innerhalb einer try...catch-Anweisung\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/try...catch}} stattfinden \fref{fig:implementation:program:evaluation:try-catch}.
 
@@ -306,7 +307,7 @@ Es kann nicht garantiert werden, dass der Code, welcher vom Codegenerator erzeug
   \label{fig:implementation:program:evaluation:try-catch}
 \end{figure}
 
-\subsubsection{Umgebung zur Ausführung\protect\footnotemark}
+\subsection[Umgebung zur Ausführung]{Umgebung zur Ausführung\protect\footnotemark}
 
 \footnotetext{Zum Verständnis dieses und folgender Abschnitte werden grundlegende Kenntnisse über die Konzepte von Promises, asynchronen Funktionen und Generatorfunktionen in JavaScript vorausgesetzt.}
 
@@ -353,7 +354,7 @@ Es wird also ein Objekt mit Wrapper-Funktionen für alle Befehle und Sensoren er
   \label{fig:implementation:program:environment}
 \end{figure}
 
-\subsubsection{Behandlung von Endlosschleifen}
+\subsection{Behandlung von Endlosschleifen}
 
 Im Vergleich zu Beginn dieses Abschnittes, wurde ein Vorteil der Vorgehensweise "Interpretieren" genannt, welcher gleichzeitig ein Nachteil beim Kompilieren darstellt: Wurde mit der Ausführung des kompilierten Codes einmal begonnen, kann diese nicht einfach unterbrochen werden. Dies stellt insbesondere ein Problem dar, wenn der Nutzer eine Endlosschleife in sein Programm eingebaut hat. Das Programm läuft im gleichen Kontext wie die Webseite und kann diese daher einfrieren. Um dieses Problem zu umgehen, wurde zusätzlich der \inlinec{doNothing}-Befehl eingeführt. Dieser Befehl steht im Drag \& Drop-Editor nicht zur Verfügung. Er verändert -- ähnlich wie der \inlinec{wait}-Befehl -- den Zustand der Welt nicht, fügt im Gegensatz zu \inlinec{wait} allerdings keinen neuen Zustand ein, kann also auch nicht rückgängig gemacht werden. Trotzdem erzeugt dieser Befehl eine für den Nutzer kaum merkliche Wartezeit von wenigen Millisekunden. Mit diesem Vorgehen kann aktives Warten ("busy waiting") beim Aufruf einer leeren While-Schleife und daraus resultierendes Blockieren der Bedienelemente von BlattWerkzeug vermieden werden. \TODO{Variation des Halteproblems. Welche Codepfade werden mit Sicherheit ausgeführt und welche nicht?}
 
@@ -361,7 +362,7 @@ Den \inlinec{doNothing}-Befehl nur in leeren Schleifen einzufügen, reicht nicht
 
 Im nächsten Schritt ist es möglich, das Programm innerhalb einer Endlosschleife manuell vorzeitig zu beenden, bzw. zu pausieren.
 
-\subsubsection{Vorzeitiges Beenden der Ausführung}
+\subsection{Vorzeitiges Beenden der Ausführung}
 
 Für das vorzeitige Beenden des Programms schien zunächst die Variante sinnvoll, dass zusätzlich innerhalb von allen Befehlen geprüft wird, ob der Nutzer die Beendigung des laufenden Programmes angewiesen hat. Ist dies der Fall, wird die Ausführung des aktuellen Codes durch den Wurf einer Exception vorzeitig beendet. Dieses Vorgehen ist eine Möglichkeit, die Ausführung des Codes vorzeitig zu beenden, ohne die Lesbarkeit durch zusätzliche Kontrollbefehle zu verschlechtern, hat allerdings die Nebenwirkung, dass \inlinec{try...catch}-Anweisungen in Zukunft nicht innerhalb des generierten Codes eingesetzt werden können. Außerdem ist es mit diesem Verhalten nicht möglich, das Programm an der Stelle fortzuführen, an der es gestoppt wurde, da der Kontext der Funktion mit dem Wurf der Exception verloren geht.
 
@@ -485,7 +486,7 @@ Um der Animationszeit im Programmablauf gerecht zu werden, stellt die \inlinec{W
 %************************************************
 % Integration
 %************************************************
-\section{Integration\protect\footnotemark}
+\section[Integration]{Integration\protect\footnotemark}
 \label{sec:implementation:integration}
 
 \footnotetext{Zum Verständnis dieses Abschnittes werden grundlegende Kenntnisse über das Angular (insbesondere Services und Komponenten) vorausgesetzt.}
