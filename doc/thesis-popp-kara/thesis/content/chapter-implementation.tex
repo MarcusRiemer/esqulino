@@ -354,6 +354,18 @@ Es wird also ein Objekt mit Wrapper-Funktionen für alle Befehle und Sensoren er
   \label{fig:implementation:program:environment}
 \end{figure}
 
+\subsection{Ausführungsdauer von Befehlen}
+
+Die Ausführung der atomaren Befehle wie dem des vorwärts Fahren oder Warten, haben in JavaScript aufgrund ihrer geringen Komplexität eine kaum merkliche Ausführungszeit. Um die Ausführung trotzdem sichtbar zu machen, soll diese Ausführungszeit künstlich erhöht werden können. Diese Eigenschaft ist unter Anderem auch für die Animation in der Darstellung (siehe \ref{sec:implementation:rendering:animation}) von Bedeutung.
+
+Zur Darstellung einiger Operationen wird eine gewisse Zeit benötigt. So ist für die Operation des Vorwärtsfahren, ein Zeitschritt festgelegt, beim Setzen eines Blinkers kann die verbrauchte Zeit jedoch vernachlässigt werden, daher wird diese Operation mit null Zeitschritten bewertet. Die tatsächliche Zeit, die ein Zeitschritt verbraucht, kann separat festgelegt werden. Dadurch ist es möglich die Zeit (z.~B. für die Auswertung von Testfällen) kleiner zu stellen und dadurch die Ausführung schneller laufen zu lassen.
+
+Auch sind die Zeitschritte für die Berechnung der Ampelphasen relevant. Für Ampeln kann die Dauer der Rot- und Grünphasen in Zeitschritten festgelegt werden. Eine Ampel mit einer Rotphase von einem Zeitschritt sowie einer Grünphase von ebenfalls einem Zeitschritt wird nun nach jeder Vorwärtsbewegung oder Aufruf des Warten-Befehls umspringen, jedoch nicht beim Wechsel der Blinkerseite.
+
+Um der Ausführungszeit im Programmablauf gerecht zu werden, stellt die \inlinec{World}-Klasse neben der \inlinec{command}-Methode zusätzlich die Methode \inlinec{commandAsync} bereit, die als asynchrone Funktion definiert ist und ein \inlinec{Promise} zurückgibt, welches erfüllt wird, sobald die für diesen Befehl vorgesehene Zeit abgelaufen ist.
+
+Um auch das Pausieren und Fortsetzen der Ausführung zu ermöglichen, kommt für die Ausführung des generierten Codes eine Generatorfunktion zum Einsatz (siehe \TODO{Verweis}).
+
 \subsection{Behandlung von Endlosschleifen}
 
 Im Vergleich zu Beginn dieses Abschnittes, wurde ein Vorteil der Vorgehensweise "Interpretieren" genannt, welcher gleichzeitig ein Nachteil beim Kompilieren darstellt: Wurde mit der Ausführung des kompilierten Codes einmal begonnen, kann diese nicht einfach unterbrochen werden. Dies stellt insbesondere ein Problem dar, wenn der Nutzer eine Endlosschleife in sein Programm eingebaut hat. Das Programm läuft im gleichen Kontext wie die Webseite und kann diese daher einfrieren. Um dieses Problem zu umgehen, wurde zusätzlich der \inlinec{doNothing}-Befehl eingeführt. Dieser Befehl steht im Drag \& Drop-Editor nicht zur Verfügung. Er verändert -- ähnlich wie der \inlinec{wait}-Befehl -- den Zustand der Welt nicht, fügt im Gegensatz zu \inlinec{wait} allerdings keinen neuen Zustand ein, kann also auch nicht rückgängig gemacht werden. Trotzdem erzeugt dieser Befehl eine für den Nutzer kaum merkliche Wartezeit von wenigen Millisekunden. Mit diesem Vorgehen kann aktives Warten ("busy waiting") beim Aufruf einer leeren While-Schleife und daraus resultierendes Blockieren der Bedienelemente von BlattWerkzeug vermieden werden. \TODO{Variation des Halteproblems. Welche Codepfade werden mit Sicherheit ausgeführt und welche nicht?}
@@ -477,11 +489,7 @@ Um dieses Verhalten auch in die Mikrowelt zu übertragen, wurde eine Implementie
 
 Durch Animationen kann das Benutzererlebnis noch einmal deutlich aufgewertet werden, indem sie den Ausführungsfluss der Anwendung verlangsamen und dadurch die Nachvollziehbarkeit der ausgeführten Befehle ermöglicht wird. Zwischen den Positionen des Lastwagens wird daher zeitlich interpoliert. Eine wichtige Grundlage dafür wurde mit der Welt-Objektstruktur bereits geschaffen \tref{sec:implementation:structure}: Jede Operation erzeugt einen neuen Zustand, der in einer Liste gespeichert wird. Dieses Vorgehen macht es leicht zwischen dem aktuellen und dem vorherigen Zustand zu interpolieren.
 
-Zur Darstellung einiger Operationen wird eine gewisse Zeit benötigt. So ist für die Operation des Vorwärtsfahren, ein Zeitschritt festgelegt, beim Setzen eines Blinkers kann die verbrauchte Zeit jedoch vernachlässigt werden, daher wird diese Operation mit null Zeitschritten bewertet. Die tatsächliche Zeit, die ein Zeitschritt verbraucht, kann separat festgelegt werden. Dadurch ist es möglich die Zeit (z.~B. für die Auswertung von Testfällen) kleiner zu stellen und dadurch die Animationen schneller laufen zu lassen. Als Standardeinstellung hat sich die Dauer von einer Sekunde für einen Zeitschritt als passend erwiesen.
-
-Auch sind die Zeitschritte für die Berechnung der Ampelphasen relevant. Für Ampeln kann die Dauer der Rot- und Grünphasen in Zeitschritten festgelegt werden. Eine Ampel mit einer Rotphase von einem Zeitschritt sowie einer Grünphase von ebenfalls einem Zeitschritt wird nun nach jeder Vorwärtsbewegung oder Aufruf des Warten-Befehls umspringen, jedoch nicht beim Wechsel der Blinkerseite.
-
-Um der Animationszeit im Programmablauf gerecht zu werden, stellt die \inlinec{World}-Klasse neben der \inlinec{command}-Methode zusätzlich die Methode \inlinec{commandAsync} bereit, die als asynchrone Funktion definiert ist und ein \inlinec{Promise} zurückgibt, welches erfüllt wird, sobald die für diesen Befehl vorgesehene Zeit abgelaufen ist. Das Warten auf das Promise übernimmt die in Abschnitt \ref{sec:implementation:program:evaluation} beschriebene Schleife, welche einen Iterationsschritt der Generatorfunktion ausführt und auf das zurückgegebene \inlinec{Promise} wartet, bevor sie den nächsten Iterationsschritt ausführt.
+Auch die in Abschnitt \TODO{Verweis} beschriebenen Zeitschritte spielen an dieser Stelle eine wehsentliche Rolle. Eine Animation der Bewegung des Lastwagens wird so z.~B. immer im Zeitraum eines Zeitschrittes animiert. Dadurch, dass die Ausführung des Programms genau diese Dauer als Ausführungszeit vorsieht, entsteht eine flüssige, nachvollziebare Animation über mehrere Zeitschritte hinweg.
 
 %************************************************
 % Integration
