@@ -11,6 +11,9 @@
 /e2e/*.js
 /e2e/*.map
 
+# Generated files
+src/environments/version.ts
+
 #System Files
 .DS_Store
 Thumbs.db
