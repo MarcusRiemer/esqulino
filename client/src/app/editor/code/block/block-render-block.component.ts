@@ -56,7 +56,6 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
     .pipe(
       map(loc => locationEquals(loc, this.node.location)),
       tap(_ => {
-        this._cd.markForCheck();
         this._cd.detectChanges();
       }),
     );

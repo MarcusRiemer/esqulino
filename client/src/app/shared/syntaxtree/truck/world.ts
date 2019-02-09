@@ -455,7 +455,7 @@ export class World {
         isOnTarget: () => this.sensor(Sensor.isOnTarget),
         isSolved: () => this.sensor(Sensor.isSolved),
 
-        _progress: (loc: NodeLocation) => progressCallback(loc)
+        _progress: progressCallback
       });
 
       await this._resumeCode();
