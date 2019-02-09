@@ -220,6 +220,8 @@ export function calculateDropTargetState(
   // it is actually required.
   const visibilityEvalFunc = evalExpression.bind(this, visibilityExpr, map);
 
+  const isEmbraceDrop = drag && drag.isEmbraceDrop;
+
   // Ongoing drags trump almost any other possibility
   if (drag) {
     // Highlight in case something is dragging over us. This can only happen if
@@ -236,7 +238,7 @@ export function calculateDropTargetState(
       }
     }
   } else {
-    if (visibilityEvalFunc()) {
+    if (!isEmbraceDrop && visibilityEvalFunc()) {
       return ("visible");
     } else {
       return ("none");

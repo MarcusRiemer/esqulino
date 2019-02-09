@@ -73,18 +73,28 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   ) {
   }
 
-  readonly showDropTarget = this._dragService.currentDrag.pipe(
-    withLatestFrom(this._dragService.isDragInProgress),
+  private readonly _latestDragData = this._dragService.currentDrag.pipe(
+    withLatestFrom(this._dragService.isDragInProgress)
+  );
+
+  /**
+   * If our location is targeted (and we are not embracing something) it
+   * would be nice to give the user a visual hint where something would
+   * be inserted.
+   *
+   * @return True, if there is an ongoing drag that would insert something
+   *         at the location of this drop target.
+   */
+  readonly showDropTarget = this._latestDragData.pipe(
     map(([currentDrag, inProgress]) => {
       if (inProgress) {
         if (this._currentTarget) {
           return (false);
         }
-        else if (arrayEqual(currentDrag.dropLocation, this.dropLocation)) {
+        else {
           // We would drop something in the location we are a placeholder.
-          return (true);
-        } else {
-          return (false);
+          return (arrayEqual(currentDrag.dropLocation, this.dropLocation)
+          );
         }
       } else {
         return (false);
@@ -93,7 +103,9 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
     debounceTime(0.016) // Don't trigger animations to hasty
   );
 
-  readonly thisBlock = this;
+  readonly showAnything = this._latestDragData.pipe(
+    map(([currentDrag, inProgress]) => inProgress && !currentDrag.isEmbraceDrop)
+  )
 
   /**
    * @return The location a drop should occur in. This depends on the configuration in the language model.
@@ -108,10 +120,14 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   readonly currentAvailability = this._dragService.currentDrag
     .pipe(map(drag => calculateDropTargetState(drag, this)));
 
+  /**
+   * A mouse has entered, we possibly need to ensure that the drop target
+   * does not vanish.
+   */
   onMouseEnter(evt: MouseEvent) {
     this._currentTarget = true;
     if (this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, this.dropLocation, this.node);
+      this._dragService.informDraggedOver(evt, this.dropLocation, this.node, false);
     }
   }
 

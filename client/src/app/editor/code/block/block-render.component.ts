@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { filter, map } from 'rxjs/operators';
-
-import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
+import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
@@ -17,6 +15,10 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
   animations: [
     trigger('isExecuted', [
       state('true', style({ "background": "lime" })),
+      transition('false <=> true', animate(200))
+    ]),
+    trigger('isEmbraced', [
+      state('true', style({ "transform": "scale(1.1)" })),
       transition('false <=> true', animate(200))
     ])
   ]
