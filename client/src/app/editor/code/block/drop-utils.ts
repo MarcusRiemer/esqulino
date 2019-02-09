@@ -1,4 +1,4 @@
-import { Node, NodeLocation, QualifiedTypeName } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, QualifiedTypeName, embraceNode } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { Restricted } from '../../../shared/block/bool-mini-expression.description'
 import { evalExpression } from '../../../shared/block/bool-mini-expression'
@@ -7,7 +7,6 @@ import { arrayEqual } from '../../../shared/util';
 import { CurrentDrag } from '../../drag.service';
 
 import { BlockDropProperties } from './block-drop-properties';
-import { embraceNode } from 'src/app/shared/syntaxtree/embrace';
 
 // Alias to shorten some typing
 type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;

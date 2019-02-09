@@ -321,7 +321,11 @@ export class DragService {
         // Insertion happens on valid drop locations
         const dropLocation = dragData.dropLocation;
         if (dropLocation && (dropLocation.length > 0 || this._currentCodeResource.peekResource.syntaxTreePeek.isEmpty)) {
-          this._currentCodeResource.peekResource.insertNode(dropLocation, desc[0]);
+          if (dragData.isEmbraceDrop) {
+            this._currentCodeResource.peekResource.embraceNode(dropLocation, desc);
+          } else {
+            this._currentCodeResource.peekResource.insertNode(dropLocation, desc[0]);
+          }
         }
         // Otherwise we might want to remove the current node?
         else if (dragData.hoverTrash) {

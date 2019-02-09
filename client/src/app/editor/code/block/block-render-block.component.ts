@@ -4,6 +4,7 @@ import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
+import { arrayEqual } from '../../../shared/util';
 import { canEmbraceNode } from '../../../shared/syntaxtree/embrace';
 
 import { DragService } from '../../drag.service';
@@ -11,8 +12,6 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { BlockDropProperties } from './block-drop-properties';
 import { calculateDropLocation } from './drop-utils';
-import { arrayEqual } from 'src/app/shared/util';
-
 
 /**
  * Renders a single and well known visual element of a node.
