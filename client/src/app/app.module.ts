@@ -24,15 +24,16 @@ if (typeof window !== "undefined") {
   (window as any)._paq = _paq;
 }
 
-// Configure Sentry error reporting
-const options: Sentry.BrowserOptions = {
-  dsn: environment.sentry.dsn,
-  environment: environment.production ? "production" : "development",
-  release: environment.version.hash
-};
+// Configure Sentry error reporting (if enabled)
+if (environment.sentry && environment.sentry.active) {
+  const options: Sentry.BrowserOptions = {
+    dsn: environment.sentry.dsn,
+    environment: environment.production ? "production" : "development",
+    release: environment.version.hash
+  };
 
-
-Sentry.init(options);
+  Sentry.init(options);
+}
 
 @NgModule({
   imports: [
