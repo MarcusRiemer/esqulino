@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, ApplicationRef } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { Observable } from 'rxjs';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -14,6 +15,8 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 @Component({
   templateUrl: 'templates/block-render.html',
   selector: `editor-block-render`,
+  // TODO: Move animations to host component
+  //       https://stackoverflow.com/questions/38975808/adding-an-angular-animation-to-a-host-element
   animations: [
     trigger('isExecuted', [
       state('true', style({ "background": "lime" })),
@@ -28,6 +31,7 @@ export class BlockRenderComponent {
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
+    public changeDetector: ChangeDetectorRef
   ) { }
 
   /**
@@ -86,6 +90,16 @@ export class BlockRenderComponent {
   iteratorGetEditorBlock(node: Node) {
     return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
   }
+
+  /**
+   * A duplicate of the execution detection in the child node, but this one taps
+   * this "parents" change detector.
+   */
+  readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
+    .pipe(
+      map(loc => locationEquals(loc, this.node.location)),
+      tap(_ => this.changeDetector.detectChanges()), // TODO: Also called from child
+    );
 
   /**
    * These instructions are used if something is dropped on the block itself.

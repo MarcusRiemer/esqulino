@@ -23,11 +23,12 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
+  @Input() public parentChangeDetector: ChangeDetectorRef
 
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
-    private _cd: ChangeDetectorRef
+    private _ownChangeDetector: ChangeDetectorRef
   ) {
   }
 
@@ -56,7 +57,10 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
     .pipe(
       map(loc => locationEquals(loc, this.node.location)),
       tap(_ => {
-        this._cd.detectChanges();
+        if (this.parentChangeDetector) {
+          this.parentChangeDetector.detectChanges(); // Also called from parent
+        }
       }),
+      tap(_ => this._ownChangeDetector.detectChanges()),
     );
 }
