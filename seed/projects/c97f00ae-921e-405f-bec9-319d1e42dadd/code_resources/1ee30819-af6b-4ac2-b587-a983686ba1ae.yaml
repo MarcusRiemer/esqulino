@@ -51,18 +51,29 @@ concise_attributes:
   value_before_type_cast: |-
     truck.meineFunktion = function*() {
       yield* truck.doNothing();
+      truck._progress([["procedures",0],["body",0]]);
       yield* truck.goForward();
+      truck._progress([["procedures",0],["body",1]]);
       yield* truck.load();
+      truck._progress([["procedures",0],["body",2]]);
       yield* truck.goForward();
+      truck._progress([["procedures",0],["body",3]]);
       yield* truck.goForward();
+      truck._progress([["procedures",0],["body",4]]);
       yield* truck.turnRight();
+      truck._progress([["procedures",0],["body",5]]);
       yield* truck.goForward();
+      truck._progress([["procedures",0],["body",6]]);
       yield* truck.unload();
     }
 
+    truck._progress([["main",0]]);
     yield* truck.meineFunktion();
+    truck._progress([["main",1]]);
     yield* truck.meineFunktion();
+    truck._progress([["main",2]]);
     yield* truck.meineFunktion();
+    truck._progress([["main",3]]);
     yield* truck.meineFunktion();
 new_record: false
 active_record_yaml_version: 2
