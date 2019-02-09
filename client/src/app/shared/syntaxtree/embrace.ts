@@ -108,3 +108,30 @@ export function embraceNode(
     return (tree.insertNode(loc, candidates[0]));
   }
 }
+
+/**
+ * Checks whether the node at the given location would be
+ * "embraced" by any of the given candidates.
+ *
+ * @param validator The rules that must hold after the embracing
+ * @param tree The tree to modify
+ * @param loc The location of the node to be embraced
+ * @param candidates All nodes that could possibly be used to embrace
+ * @return The modified tree
+ */
+export function canEmbraceNode(
+  validator: Validator,
+  tree: Tree,
+  loc: NodeLocation,
+  candidates: NodeDescription[]
+): boolean {
+  // Is there nothing at the embrace target? In that case we have a normal
+  // insertion at the given location
+  const targetNode = tree.locateOrUndefined(loc);
+  if (targetNode) {
+    // Find out where in the given candidates the target node could be placed
+    return (!!_findMatch(validator, targetNode, candidates))
+  } else {
+    return (false);
+  }
+}
