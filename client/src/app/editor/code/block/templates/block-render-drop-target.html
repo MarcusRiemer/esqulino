@@ -7,8 +7,7 @@
   <div *ngIf="!(showDropTarget | async)"
        [@availability]="currentAvailability | async"
        [blockBase]="visual"
-       [blockLayout]="visual"
-       [astDropTarget]="thisBlock">
+       [blockLayout]="visual">
     <!-- Render all components of this drop target -->
     <ng-container *ngFor="let childVisualBlock of visual.children">
       <editor-block-render [codeResource]="codeResource"
@@ -19,7 +18,6 @@
 
   <div *ngIf="(showDropTarget | async)"
        @dropTargetVisible
-       [astDropTarget]="thisBlock"
        class="drop-placeholder">
     Hier
   </div>

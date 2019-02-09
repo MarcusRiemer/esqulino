@@ -46,12 +46,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
 
-    // Swapping between editors
-    const btnChange = this._toolbarService.addButton("goblock", "Raw Editor", "tree", "b");
-    btnChange.onClick.subscribe(_ => {
-      this._router.navigate(["..", "raw"], { relativeTo: this._route });
-    });
-
     // Deleting this code resource
     const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
     btnDelete.onClick.subscribe(_ => {
