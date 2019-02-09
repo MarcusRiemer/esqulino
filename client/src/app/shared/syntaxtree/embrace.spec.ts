@@ -1,7 +1,7 @@
 import { Node, NodeDescription, Tree } from './syntaxtree'
 import { GrammarDescription } from './grammar.description';
 import { Validator } from './validator';
-import { embraceNode, _findPossibleLocations, _findMatch, _localEmbrace } from './embrace';
+import { embraceNode, _findPossibleLocations, _findMatch, _localEmbrace, canEmbraceNode } from './embrace';
 import { QualifiedTypeName } from './syntaxtree.description';
 
 const EXPRESSION_GRAMMAR: GrammarDescription = {
@@ -334,6 +334,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(false);
     });
 
     it('false => not(<false>)', () => {
@@ -368,6 +369,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
 
     it('not(false) => not(<not(false)>)', () => {
@@ -410,6 +412,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
 
     it('false => binary(<false>, <hole>)', () => {
@@ -446,6 +449,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
 
     it('false => binary(true, <false>)', () => {
@@ -490,6 +494,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
 
     it('binary(true, <hole>) => not(<binary(true, <hole>)>)', () => {
@@ -533,6 +538,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
 
     it(`true => true (candidates don't match)`, () => {
@@ -557,6 +563,7 @@ describe('AST: Embracing', () => {
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       expect(curr.toModel()).toEqual(inTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(false);
     });
 
     it(`true => not(<true>) (second candidate matches)`, () => {
@@ -595,6 +602,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
 
     it(`true => (<true>) (first candidate takes precedence)`, () => {
@@ -636,6 +644,7 @@ describe('AST: Embracing', () => {
         }
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
+      expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
     });
   });
 });

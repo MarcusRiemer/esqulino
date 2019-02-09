@@ -10,6 +10,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { BlockDropProperties } from './block-drop-properties'
 import { calculateDropLocation } from './drop-utils';
+import { canEmbraceNode } from 'src/app/shared/syntaxtree/embrace';
 
 
 /**
@@ -35,7 +36,14 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
    * @return The location a drop should occur in.
    */
   get dropLocation() {
-    return (calculateDropLocation(this.node, this.visual.dropTarget));
+    const validator = this._currentCodeResource.peekResource.validationLanguagePeek.validator;
+    const ownLocation = this.node.location;
+    const dropCandidates = this._dragService.peekDragData.draggedDescription;
+    if (canEmbraceNode(validator, this.node.tree, ownLocation, dropCandidates)) {
+      return (ownLocation);
+    } else {
+      return (calculateDropLocation(this.node, this.visual.dropTarget));
+    }
   }
 
   onStartDrag(evt: MouseEvent) {
