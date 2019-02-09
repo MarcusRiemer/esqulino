@@ -3,9 +3,7 @@ grammar "trucklino_program" {
   typedef "statement" ::= procedureCall | if | loopFor | loopWhile
   node "procedureCall" {
     prop "name" { string }
-    terminal "parenOpen" "("
     children sequence "arguments" ::= booleanExpression*
-    terminal "parenClose" ")"
   }
   ...
 }

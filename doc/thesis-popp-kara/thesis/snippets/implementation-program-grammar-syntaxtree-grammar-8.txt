@@ -1,13 +1,8 @@
 grammar "trucklino_program" {
   ...
   node "loopWhile" {
-    terminal "while" "while"
-    terminal "parenOpen" " ("
     children sequence "pred" ::= booleanExpression
-    terminal "parenClose" ")"
-    terminal "bodyOpen" " {"
     children sequence "body" ::= statement*
-    terminal "bodyClose" "}"
   }
   ...
 }

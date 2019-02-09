@@ -154,9 +154,9 @@ Bereits in der Anforderungsanalyse wurden die Begriffe "Grammatik" und "Syntaxba
 \subsection{Grammatik}
 \label{sec:implementation:datastructure:grammar}
 
-Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Generator-Anweisungen dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}. Es wird zunächst eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
+Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Ge\-ne\-ra\-tor-An\-wei\-sung\-en dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}. Es wird zunächst eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
 
-Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Funktionen später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:datastructure:grammar:1} zeigt den Einstieg in die Grammatik.
+Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Prozeduren später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:datastructure:grammar:1} zeigt den Einstieg in die Grammatik.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-1.txt}
@@ -164,9 +164,7 @@ Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig vie
   \label{fig:implementation:datastructure:grammar:1}
 \end{figure}
 
-Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:datastructure:grammar:2} dargestellt. Dieser beinhaltet Terminalsymbole, welche für die Darstellung der Elemente im Drag \& Drop-Editor in BlattWerkzeug genutzt werden, für den Syntaxbaum jedoch nicht relevant sind. Mit den Terminalsymbolen wird das spätere Aussehen dem der Syntax von JavaScript nachempfunden. Dadurch soll der spätere Umstieg auf diese Universalsprache erleichtert werden. JavaScript im Speziellen wurde gewählt, da auch die Kompilierung in diese Sprache erfolgt (siehe \ref{sec:implementation:evaluation}).
-
-Knoten können zusätzlich zu den Kindknoten auch Eigenschaften (\inlinec{prop}) aufnehmen. In diesem Fall kann in einer Eigenschaft der Name der Funktion angegeben werden. Eine Prozedur lässt sich mit Parametern (\inlinec{procedureParameter}) ausstatten und kann analog zum Hauptprogramm eine Liste von Anweisungen (\inlinec{statement}) als Kindknoten aufnehmen.
+Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:datastructure:grammar:2} dargestellt. Knoten können zusätzlich zu den Kindknoten auch Eigenschaften (\inlinec{prop}) aufnehmen. In diesem Fall kann in einer Eigenschaft der Name der Funktion angegeben werden. Eine Prozedur lässt sich mit Parametern (\inlinec{procedureParameter}) ausstatten und kann analog zum Hauptprogramm eine Liste von Anweisungen (\inlinec{statement}) als Kindknoten aufnehmen.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-2.txt}
@@ -198,7 +196,7 @@ Invertierte Ausdrücke (\inlinec{negateExpression}) nehmen lediglich einen ander
   \label{fig:implementation:datastructure:grammar:5}
 \end{figure}
 
-Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil, sowie im alternativen \inlinec{else}-Teil. Durch die feste Definition des alternativen Teils ist dieser auch sichtbar, wenn er nicht genutzt wird \TODO{weiter?}. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:datastructure:grammar:6} dargestellt.
+Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil und im alternativen \inlinec{else}-Teil. Dadurch werden mit nur einem Knoten alle Arten von Verzweigungen ermöglicht. Alternativ hätten auch zwei sperate Knoten für \inlinec{if}- und \inlinec{if...else}-Verzweigungen eingeführt werden können, oder einen \inlinec{if}-Knoten, der mehrere \inlinec{else if}-Knoten und höchstens einen \inlinec{else}-Knoten aufnehmen kann. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:datastructure:grammar:6} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-6.txt}
@@ -279,18 +277,18 @@ Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" als Anforderung vor
 \subsection{Codegenerator}
 \label{sec:implementation:evaluation:codegenerator}
 
-Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:evaluation:while} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:evaluation:tree-render} zeigt den Ausschnitt eines Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:evaluation:tree-result} gezeigten Code kompiliert wird.
+Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfügung gestellten Codegenerator-Strukturen zurückgegriffen, die es ermöglichen, einen Codegenerator zu implementieren, der Übersetzungsregeln für jeden Knotentyp definiert. Abbildung \ref{fig:implementation:evaluation:codegenerator} zeigt die Implementierung eines Codegenerators für Knoten, die eine While-Schleife repräsentieren. Zwischen den Klammern innerhalb der \inlinec{while}-Anweisung wird der Kindknoten für die Bedingung der Schleife eingefügt, gefolgt vom Inhalt der Schleife. Diese Kindknoten werden wiederum durch ähnlich aufgebaute Generatoren umgewandelt bis der vollständige Code des Wurzelknotens im Syntaxbaum übersetzt wurde. Abbildung \ref{fig:implementation:evaluation:tree-render} zeigt den Ausschnitt eines Syntaxbaumes, welcher durch den Codegenerator in den in Abbildung \ref{fig:implementation:evaluation:tree-result} gezeigten Code kompiliert wird.
 
 \begin{figure}
-  \lstinputlisting{snippets/implementation-program-evaluation-while.ts}
-  \caption{Implementierung des Codegenrator für eine kopfgesteuerte Schleife}
-  \label{fig:implementation:evaluation:while}
+  \lstinputlisting{snippets/implementation-program-evaluation-codegenerator.ts}
+  \caption{Implementierung des Codegenrator für eine Verzweigung}
+  \label{fig:implementation:evaluation:codegenerator}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.7\textwidth]{gfx/implementation-program-evaluation-tree.graphviz.pdf}
-  \caption{Beispielhafter Ausschnitt eines Syntaxbaum für eine kopfgesteuerte Schleife}
+  \includegraphics[width=\textwidth]{gfx/implementation-program-evaluation-tree.graphviz.pdf}
+  \caption{Beispielhafter Ausschnitt eines Syntaxbaum für eine Verzweigung}
   \label{fig:implementation:evaluation:tree-render}
 \end{figure}
 
@@ -300,23 +298,12 @@ Für die Kompilierung des Syntaxbaumes wird auf die von BlattWerkzeug zur Verfü
   \label{fig:implementation:evaluation:tree-result}
 \end{figure}
 
-\subsection{Syntaxfehler}
-\label{sec:implementation:syntax-errors}
-
-Es kann nicht garantiert werden, dass der Code, welcher vom Codegenerator erzeugt wurde, frei von Syntaxfehlern ist. Dies kann aus der Kompilierung eines unvollständigen Syntaxbaumes resultieren. So kann es z.~B. vorkommen, dass die Bedingung bei einer While-Schleife leer ist. JavaScript wirft bei der Erzeugung der Funktion einen \inlinec{SyntaxError}. Um diesen Fehler abzufangen, muss die Erzeugung der Funktion innerhalb einer try...catch-Anweisung\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/try...catch}} stattfinden \fref{fig:implementation:evaluation:try-catch}.
-
-\begin{figure}
-  \lstinputlisting{snippets/implementation-program-evaluation-try-catch.js}
-  \caption{Möglicher Syntaxfehler innerhalb des generierten Codes}
-  \label{fig:implementation:evaluation:try-catch}
-\end{figure}
-
 \subsection[Umgebung zur Ausführung]{Umgebung zur Ausführung\protect\footnotemark}
 \label{sec:implementation:evaluation:environment}
 
 \footnotetext{Zum Verständnis dieses und folgender Abschnitte werden grundlegende Kenntnisse über die Konzepte von Promises, asynchronen Funktionen und Generatorfunktionen in JavaScript vorausgesetzt.}
 
-Dem kompilierten Code muss zur Ausführung eine Umgebung bereitgestellt werden, welche die in Tabelle \ref{tbl:implementation:elements:cmds} gelisteten und als "atomaren Befehle" bezeichneten Funktionen, sowie Funktionen zur Ermittlung der Sensorwerte (siehe Tabelle \ref{tbl:implementation:elements:sensors}) zur Verfügung stellt. Für diese Aufgabe bietet sich der \inlinec{Function}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Function}} an. Im Gegensatz zu \inlinec{eval} ermöglicht der \inlinec{Function}-Konstruktor die Ausführung von Code im globalen Gültigkeitsbereich, was zu besseren Programmiergewohnheiten führt und eine effizientere Code-Minimierung ermöglicht~\cite{mdn-function}. In diesem speziellen Fall wird für die Ausführung des Codes der \inlinec{GeneratorFunction}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction}} verwendet (siehe dazu auch Abschnitt \ref{sec:implementation:rendering:animation}).
+Dem kompilierten Code muss zur Ausführung eine Umgebung bereitgestellt werden, welche die in Tabelle \ref{tbl:implementation:elements:cmds} gelisteten und als "atomaren Befehle" bezeichneten Funktionen, sowie Funktionen zur Ermittlung der Sensorwerte (siehe Tabelle \ref{tbl:implementation:elements:sensors}) zur Verfügung stellt. Für diese Aufgabe bietet sich der \inlinec{Function}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Function}} an. Dieser Konstruktor transfomiert einen String in eine ausführbare JavaScript-Funktion. Im Gegensatz zu \inlinec{eval} ermöglicht der \inlinec{Function}-Konstruktor die Ausführung von Code im globalen Gültigkeitsbereich, was zu besseren Programmiergewohnheiten führt und eine effizientere Code-Minimierung ermöglicht~\cite{mdn-function}. In diesem speziellen Fall wird für die Ausführung des Codes der \inlinec{GeneratorFunction}-Konstruktor\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction}} verwendet (siehe dazu auch Abschnitt \ref{sec:implementation:rendering:animation}).
 
 Für die Bereitstellung der Befehle und Sensoren werden im folgenden vier Varianten betrachtet. In Abbildung \ref{fig:implementation:environment} werden Implementationsbeispiele dieser Varianten einander gegenüber gestellt.
 
@@ -391,6 +378,17 @@ Dieses Problem wird mit der Nutzung von Generatorfunktionen umgangen. Der erzeug
 Im generierten Code muss dadurch allerdings jedem Funktionsaufruf ein \inlinec{yield*} vorangestellt werden. Außerdem müssen benutzerdefinierte Prozeduren ebenfalls als Generatorfunktionen definiert werden.
 
 Die in den vorigen Abschnitten besprochene Datenstruktur, sowie die Elemente der Sprache benötigen nun eine geeignete Darstellung, deren Implementierung im nächsten Abschnitt diskutiert wird.
+
+\subsection{Syntaxfehler}
+\label{sec:implementation:syntax-errors}
+
+Es kann nicht garantiert werden, dass der Code, welcher vom Codegenerator erzeugt wurde, frei von Syntaxfehlern ist. Dies kann aus der Kompilierung eines unvollständigen Syntaxbaumes resultieren. So kann es z.~B. vorkommen, dass die Bedingung bei einer While-Schleife leer ist. JavaScript wirft bei der Erzeugung der Funktion einen \inlinec{SyntaxError}. Um diesen Fehler abzufangen, muss die Erzeugung der Funktion innerhalb einer try...catch-Anweisung\footnote{\url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/try...catch}} stattfinden \fref{fig:implementation:evaluation:try-catch}.
+
+\begin{figure}
+  \lstinputlisting{snippets/implementation-program-evaluation-try-catch.js}
+  \caption{Möglicher Syntaxfehler innerhalb des generierten Codes}
+  \label{fig:implementation:evaluation:try-catch}
+\end{figure}
 
 %************************************************
 % Darstellung
@@ -505,7 +503,7 @@ Auch die in Abschnitt \ref{sec:implementation:evaluation:execution-time} beschri
 \section[Integration]{Integration\protect\footnotemark}
 \label{sec:implementation:integration}
 
-\footnotetext{Zum Verständnis dieses Abschnittes werden grundlegende Kenntnisse über das Angular (insbesondere Services und Komponenten) vorausgesetzt.}
+\footnotetext{Zum Verständnis dieses Abschnittes werden grundlegende Kenntnisse über Angular (insbesondere Services und Komponenten) vorausgesetzt.}
 
 Um mit möglichst wenigen Abhängigkeiten und dadurch geringerem Zeitaufwand verschiedene Ansätze ausprobieren zu können, wurde zunächst mit der Entwicklung eines Prototypen auf einer "grünen Wiese" begonnen. Auch wenn der Prototyp als Angular-Anwendung aufgesetzt wurde, erfolgte der Großteil der Entwicklung außerhalb dieser Umgebung. Nachdem der ursprüngliche Ansatz der Darstellung mittels SVG-Grafiken verworfen und die Darstellung auf Canvas-Rendering umgestellt wurde, sind die Objektstruktur, sowie der Renderer vollständig unabhängig von Angular implementiert, da sie von den von Angular bereitgestellten Strukturen nicht profitieren können. Diese Klassen konnten so ohne Anpassungen in die Umgebung von BlattWerkzeug übernommen werden. Lediglich die rudimentäre Benutzeroberfläche des Prototypen (siehe Abbildung \ref{fig:implementation:integration:prototype}) wurde mithilfe von Angular umgesetzt, für die Integration in BlattWerkzeug in dieser Form jedoch nicht mehr benötigt.
 
