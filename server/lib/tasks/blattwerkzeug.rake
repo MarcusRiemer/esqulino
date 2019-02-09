@@ -41,7 +41,6 @@ namespace :blattwerkzeug do
   end
 
   namespace :grammar do
-
     desc 'Load a grammar from its seed representation'
     task :load, [:grammar_id] => :environment do |t, args|
       m.load_grammar args[:grammar_id]
@@ -50,6 +49,18 @@ namespace :blattwerkzeug do
     desc 'Serialize a grammar to its seed representation'
     task :store, [:grammar_id] => :environment do |t, args|
       m.store_grammar args[:grammar_id]
+    end
+  end
+
+  namespace :block_language do
+    desc 'Load a block language from it on-disk representation'
+    task :load, [:block_language_id] => :environment do |t, args|
+      m.load_block_language(args[:block_language_id])
+    end
+
+    desc 'Serialize a block language to its seed representation'
+    task :store, [:block_language_id] => :environment do |t, args|
+      m.store_block_language(args[:block_language_id])
     end
   end
 
@@ -66,16 +77,6 @@ namespace :blattwerkzeug do
       m.store_all_grammars
       m.store_all_block_language_generators
       m.store_all_block_languages
-    end
-
-    desc 'Load a block language from it on-disk representation'
-    task :load, [:block_language_id] => :environment do |t, args|
-      m.load_block_language(args[:block_language_id])
-    end
-
-    desc 'Serialize a block language to its seed representation'
-    task :store, [:block_language_id] => :environment do |t, args|
-      m.store_block_language(args[:block_language_id])
     end
   end
 end

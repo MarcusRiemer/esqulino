@@ -183,7 +183,7 @@ export interface SidebarBlockDescription {
    * is needed. This happens e.g. when the user starts dragging this
    * block from the sidebar.
    */
-  defaultNode: NodeDescription;
+  defaultNode: NodeDescription | NodeDescription[];
 }
 
 /**

@@ -119,12 +119,23 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment("(", node);
         node.getChildrenInCategory("lhs").forEach(c => process.generateNode(c))
         process.addConvertedFragment(" ", node);
         node.getChildrenInCategory("operator").forEach(c => process.generateNode(c))
         process.addConvertedFragment(" ", node);
         node.getChildrenInCategory("rhs").forEach(c => process.generateNode(c))
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "parentheses"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment("(", node);
+        node.getChildrenInCategory("expression").forEach(c => process.generateNode(c))
         process.addConvertedFragment(")", node);
       }
     }
