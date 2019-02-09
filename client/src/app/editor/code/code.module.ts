@@ -6,19 +6,12 @@ import { RegistrationService } from '../registration.service'
 import { ResourceChangedGuard } from './resource-changed.guard'
 import { CodeGeneratorComponent } from './code-generator.component'
 import { CreateCodeResourceComponent } from './create-code-resource.component'
-import { DraggableDirective } from './draggable.directive'
-import { DropTargetDirective } from './drop-target.directive'
 import { EditorComponentsService } from './editor-components.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { LanguageEmittedSelectorComponent } from './language-emitted-selector.component'
 import { CodeSidebarComponent } from './code.sidebar'
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
-
-import { NodeComponent } from './raw/node.component'
-import { NodeChildrenComponent } from './raw/node-children.component'
-import { NodePlaceholderComponent } from './raw/node-placeholder.component'
-import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockLayoutDirective } from './block/block-layout.directive'
@@ -58,12 +51,6 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     CodeGeneratorComponent,
     CreateCodeResourceComponent,
     DatabaseSchemaSidebarComponent,
-    DraggableDirective,
-    DropTargetDirective,
-    NodeComponent,
-    NodeChildrenComponent,
-    NodePlaceholderComponent,
-    RawTreeEditorComponent,
     ValidationComponent,
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
