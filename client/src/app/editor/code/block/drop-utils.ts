@@ -7,6 +7,7 @@ import { arrayEqual } from '../../../shared/util';
 import { CurrentDrag } from '../../drag.service';
 
 import { BlockDropProperties } from './block-drop-properties';
+import { embraceNode } from 'src/app/shared/syntaxtree/embrace';
 
 // Alias to shorten some typing
 type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
@@ -155,25 +156,28 @@ const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
     return false;
   }
 
-  const newNodeType: QualifiedTypeName = {
-    languageName: drag.draggedDescription.language,
-    typeName: drag.draggedDescription.name
-  }
-  const currentTree = block.codeResource.syntaxTreePeek;
+  // If any of the described blocks is allowed, we assume the drag is allowed
+  return (drag.draggedDescription.some(dragged => {
+    const newNodeType: QualifiedTypeName = {
+      languageName: dragged.language,
+      typeName: dragged.name
+    }
+    const currentTree = block.codeResource.syntaxTreePeek;
 
-  // If the tree is empty, the drop is always forbidden.
-  // This happens if some block is rendered in the sidebar or as a dragged
-  // block and the current tree is empty.
-  if (!currentTree.isEmpty) {
-    const currentLanguage = block.codeResource.validationLanguagePeek;
+    // If the tree is empty, the drop is always forbidden.
+    // This happens if some block is rendered in the sidebar or as a dragged
+    // block and the current tree is empty.
+    if (!currentTree.isEmpty) {
+      const currentLanguage = block.codeResource.validationLanguagePeek;
 
-    const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
-    const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+      const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
+      const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
 
-    return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
-  } else {
-    return (true);
-  }
+      return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
+    } else {
+      return (true);
+    }
+  }));
 }
 
 /**
@@ -189,7 +193,7 @@ export function calculateDropTargetState(
     visibilityExpr = block.visual.dropTarget.visibility;
   }
 
-  // Would the new tree ba a valid tree?
+  // Would the new tree ba a completly valid tree?
   const isLegalChild = () => {
     if (!drag || block.dropLocation.length === 0) {
       return false;
@@ -197,8 +201,9 @@ export function calculateDropTargetState(
 
     const newNode = drag.draggedDescription;
     const oldTree = block.codeResource.syntaxTreePeek;
+    const validator = block.codeResource.validationLanguagePeek.validator;
 
-    const newTree = oldTree.insertNode(block.dropLocation, newNode);
+    const newTree = embraceNode(validator, oldTree, block.dropLocation, newNode)
     const result = block.codeResource.emittedLanguagePeek.validateTree(newTree);
     return (result.isValid);
   }

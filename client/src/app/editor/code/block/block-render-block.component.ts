@@ -38,12 +38,11 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
     return (calculateDropLocation(this.node, this.visual.dropTarget));
   }
 
-  /**
-   * Handles the drop events on the empty drop
-   */
-  onDrop() {
-    const desc = this._dragService.peekDragData.draggedDescription;
-    this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
+  onStartDrag(evt: MouseEvent) {
+    this._dragService.dragStart(evt, [this.node.toModel()], undefined, {
+      node: this.node,
+      codeResource: this.codeResource,
+    });
   }
 
   onMouseEnter(evt: MouseEvent) {

@@ -23,14 +23,19 @@ interface AvailableProcedure {
   name: string;
 }
 
-function makeCallBlock(proc: AvailableProcedure): NodeDescription {
-  return ({
-    language: "trucklino_program",
-    name: "procedureCall",
-    properties: {
-      "name": proc.name
+/**
+ * Create appropriate descriptions from the available procedure
+ */
+function makeCallBlock(proc: AvailableProcedure): NodeDescription[] {
+  return ([
+    {
+      language: "trucklino_program",
+      name: "procedureCall",
+      properties: {
+        "name": proc.name
+      }
     }
-  });
+  ]);
 }
 
 @Component({

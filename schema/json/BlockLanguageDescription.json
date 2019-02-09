@@ -202,7 +202,17 @@
       "description": "A block that is given statically",
       "properties": {
         "defaultNode": {
-          "$ref": "#/definitions/NodeDescription",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeDescription"
+              },
+              "type": "array"
+            }
+          ],
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
         "displayName": {
@@ -857,7 +867,17 @@
       "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
       "properties": {
         "defaultNode": {
-          "$ref": "#/definitions/NodeDescription",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeDescription"
+              },
+              "type": "array"
+            }
+          ],
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
         "displayName": {

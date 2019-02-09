@@ -213,23 +213,30 @@ export function prettyPrintSyntaxTree(desc: NodeDescription): string {
 /**
  * Pretty prints a node of a syntaxtree. This includes all children of the given node.
  */
-export function prettyPrintSyntaxTreeNode(desc: NodeDescription): NestedString {
-  const head = `node "${desc.language}.${desc.name}"`;
+export function prettyPrintSyntaxTreeNode(desc: NodeDescription | NodeDescription[]): NestedString {
+  let allDescriptions = Array.isArray(desc) ? desc : [desc];
 
-  const props = Object.entries(desc.properties || {}).map(([key, value]) => [`prop "${key}" ${value}`]);
-  const children = Object.entries(desc.children || {}).map(([key, value]) => {
-    return ([
-      `childGroup "${key}" {`,
-      ...value.map(prettyPrintSyntaxTreeNode),
-      `}`
-    ]);
+  let allCompiled = allDescriptions.map(desc => {
+    const head = `node "${desc.language}.${desc.name}"`;
+
+    const props = Object.entries(desc.properties || {}).map(([key, value]) => [`prop "${key}" ${value}`]);
+    const children = Object.entries(desc.children || {}).map(([key, value]) => {
+      return ([
+        `childGroup "${key}" {`,
+        ...value.map(prettyPrintSyntaxTreeNode),
+        `}`
+      ]);
+    });
+
+    if (props.length > 0 || children.length > 0) {
+      return ([head + ` {`, ...props, ...children, `}`]);
+    } else {
+      return ([head]);
+    }
   });
 
-  if (props.length > 0 || children.length > 0) {
-    return ([head + ` {`, ...props, ...children, `}`]);
-  } else {
-    return ([head]);
-  }
+  // TODO: Also return the other compiled nodes
+  return (allCompiled[0]);
 }
 
 /**

@@ -140,4 +140,16 @@ describe('Language: SQL (Codegen)', () => {
   it(`GROUP BY foo.id, bar.baz`, () => {
     verifyFiles("ast-27-group-by-foo-id-bar-baz", emitTree);
   });
+
+  it(`(1)`, () => {
+    verifyFiles("ast-28-exp-const-parentheses", emitTree);
+  });
+
+  it(`(1 + 1)`, () => {
+    verifyFiles("ast-29-exp-bin-op-parentheses", emitTree);
+  });
+
+  it(`((1 - 2) + 3)`, () => {
+    verifyFiles("ast-30-exp-nested-parentheses", emitTree);
+  });
 });

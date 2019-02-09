@@ -7,6 +7,7 @@ import { ProjectResource } from '../resource';
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
 import { ValidationResult } from './validation-result';
+import { embraceNode } from './embrace';
 
 /**
  * A resource that is described by a syntaxtree.
@@ -145,6 +146,19 @@ export class CodeResource extends ProjectResource {
     console.log(`Inserting node at ${JSON.stringify(loc)}`, desc);
 
     this.replaceSyntaxTree(this.syntaxTreePeek.insertNode(loc, desc));
+  }
+
+  /**
+   * Embraces the node at the given location.
+   *
+   * @param loc The location of the insertion.
+   * @param desc The node candidates to insert
+   */
+  embraceNode(loc: NodeLocation, desc: NodeDescription[]) {
+    console.log(`Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`, desc);
+
+    const validator = this.validationLanguagePeek.validator;
+    this.replaceSyntaxTree(embraceNode(validator, this.syntaxTreePeek, loc, desc));
   }
 
   /**

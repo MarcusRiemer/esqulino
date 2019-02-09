@@ -65,7 +65,7 @@
                                [codeResource]="codeResource"
                                [node]="node"
                                [visual]="visual"
-                               (drop)="currentBlock.onDrop()"
+                               (mousedown)="currentBlock.onStartDrag($event, block)"
                                (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>

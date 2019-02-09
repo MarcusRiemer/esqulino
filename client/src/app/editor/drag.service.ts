@@ -45,7 +45,7 @@ export interface CurrentDrag {
   // The location that would be dropped at
   dropLocation?: NodeLocation;
   // The JSON representation of the thing that is currently beeing dragged
-  draggedDescription: NodeDescription;
+  draggedDescription: NodeDescription[];
   // The node in the tree that is currently beeing dragged
   treeSource?: DragTree;
   // The node of the sidebar that is currently beeing dragged
@@ -148,8 +148,8 @@ export class DragService {
    * @param sourceTree The node with the corresponding tree that started the drag
    */
   public dragStart(
-    evt: DragEvent,
-    desc: NodeDescription,
+    evt: MouseEvent,
+    desc: NodeDescription[],
     sourceSidebar?: DragSidebar,
     sourceTree?: DragTree
   ) {
@@ -188,7 +188,7 @@ export class DragService {
 
     // Actually show the overlay and make sure it is removed afterwards
     this.setupDragEndHandlers(desc);
-    this.showOverlay(desc, evt);
+    this.showOverlay(desc[0], evt);
 
     console.log(`AST-Drag started:`, sourceSidebar);
 
@@ -196,7 +196,7 @@ export class DragService {
     this._analytics.trackEvent({
       category: TrackCategory.BlockEditor,
       action: "startDrag",
-      name: desc.language,
+      name: desc[0].language,
       value: desc
     });
   }
@@ -289,7 +289,7 @@ export class DragService {
    * Sets up and tears down the DOM event handlers that deal with our
    * hand rolled drag & drop implementation.
    */
-  private setupDragEndHandlers(desc: NodeDescription) {
+  private setupDragEndHandlers(desc: NodeDescription[]) {
     // Reset everything once the operation has ended
     const dragEndHandler = (cancelled: boolean) => {
       // Keep a reference to the now finished drag
@@ -304,7 +304,7 @@ export class DragService {
       this._analytics.trackEvent({
         category: TrackCategory.BlockEditor,
         action: "endDrag",
-        name: desc.language,
+        name: desc[0].language,
         value: desc
       });
 
@@ -314,7 +314,7 @@ export class DragService {
         // Insertion happens on valid drop locations
         const dropLocation = dragData.dropLocation;
         if (dropLocation && (dropLocation.length > 0 || this._currentCodeResource.peekResource.syntaxTreePeek.isEmpty)) {
-          this._currentCodeResource.peekResource.insertNode(dropLocation, desc);
+          this._currentCodeResource.peekResource.insertNode(dropLocation, desc[0]);
         }
         // Otherwise we might want to remove the current node?
         else if (dragData.hoverTrash) {
