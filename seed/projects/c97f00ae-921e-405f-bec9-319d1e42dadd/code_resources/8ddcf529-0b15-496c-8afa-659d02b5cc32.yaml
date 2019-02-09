@@ -63,27 +63,34 @@ concise_attributes:
     truck.smartGoForward = function*() {
       yield* truck.doNothing();
       if (truck.canTurnRight()) {
+        truck._progress([["procedures",0],["body",0],["body",0]]);
         yield* truck.turnRight();
       } else {
         if (truck.canTurnLeft()) {
+          truck._progress([["procedures",0],["body",0],["else",0],["body",0]]);
           yield* truck.turnLeft();
         }
       }
+      truck._progress([["procedures",0],["body",1]]);
       yield* truck.goForward();
     }
     truck.waitForTrafficLight = function*() {
       yield* truck.doNothing();
       while (truck.lightIsRed()) {
         yield* truck.doNothing();
+        truck._progress([["procedures",1],["body",0],["body",0]]);
         yield* truck.wait();
       }
     }
 
     while (!(truck.isOnTarget() && truck.canUnload())) {
       yield* truck.doNothing();
+      truck._progress([["main",0],["body",0]]);
       yield* truck.waitForTrafficLight();
+      truck._progress([["main",0],["body",1]]);
       yield* truck.smartGoForward();
     }
+    truck._progress([["main",1]]);
     yield* truck.unload();
 new_record: false
 active_record_yaml_version: 2

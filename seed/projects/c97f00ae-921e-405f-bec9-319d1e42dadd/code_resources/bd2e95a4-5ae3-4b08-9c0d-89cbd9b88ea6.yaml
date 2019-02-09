@@ -38,7 +38,9 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
+    truck._progress([["main",0]]);
     yield* truck.goForward();
+    truck._progress([["main",1]]);
     yield* truck.unload();
 new_record: false
 active_record_yaml_version: 2
