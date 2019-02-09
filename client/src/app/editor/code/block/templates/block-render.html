@@ -60,6 +60,7 @@
   <ng-container *ngSwitchCase="'block'">
     <editor-block-render-block #currentBlock
                                [@isExecuted]="currentBlock.isCurrentlyExecuted | async"
+                               [@isEmbraced]="currentBlock.isEmbraceDrop | async"
                                [blockLayout]="visual"
                                [blockBase]="visual"
                                [codeResource]="codeResource"

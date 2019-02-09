@@ -30,7 +30,7 @@ export interface DragSidebar {
  */
 export interface DragTree {
   node: Node,
-  codeResource: CodeResource
+  codeResource: CodeResource,
 }
 
 /**
@@ -44,6 +44,8 @@ export interface CurrentDrag {
   hoverTrash: boolean;
   // The location that would be dropped at
   dropLocation?: NodeLocation;
+  // True, if the current drop would result in an embrace
+  isEmbraceDrop: boolean;
   // The JSON representation of the thing that is currently beeing dragged
   draggedDescription: NodeDescription[];
   // The node in the tree that is currently beeing dragged
@@ -204,7 +206,12 @@ export class DragService {
   /**
    * Needs to be called by nodes when the drag operation currently drags over any placeholder.
    */
-  public informDraggedOver(evt: MouseEvent, dropLocation: NodeLocation, node: Node) {
+  public informDraggedOver(
+    evt: MouseEvent,
+    dropLocation: NodeLocation,
+    node: Node,
+    isEmbraceDrop: boolean
+  ) {
     const dragData = this._currentDrag.value;
     if (!dragData) {
       throw new Error("Can't drag over placeholder: No drag in progress");
@@ -217,10 +224,9 @@ export class DragService {
     dragData.hoverNode = node;
     dragData.dropLocation = dropLocation;
     dragData.hoverTrash = false;
+    dragData.isEmbraceDrop = isEmbraceDrop;
 
     this._currentDrag.next(dragData);
-
-    // console.log("Dragging over: ", dropLocation, node);
   }
 
   /**
@@ -236,9 +242,9 @@ export class DragService {
     delete dragData.hoverNode;
     delete dragData.dropLocation;
     dragData.hoverTrash = false;
+    dragData.isEmbraceDrop = false;
 
     this._currentDrag.next(dragData);
-    // console.log("Dragged over editor");
   }
 
   /**
@@ -250,6 +256,7 @@ export class DragService {
     // Get rid of everything that could be set ...
     delete dragData.hoverNode;
     delete dragData.dropLocation;
+    dragData.isEmbraceDrop = false;
 
     // .. but the trash
     dragData.hoverTrash = true;
