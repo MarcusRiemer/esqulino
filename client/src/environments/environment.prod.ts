@@ -7,7 +7,8 @@ export const environment = {
     id: 1
   },
   sentry: {
-    dsn: "http://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3"
+    dsn: "http://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
+    active: true
   },
   version: {
     hash: VERSION.GIT_REVISION,

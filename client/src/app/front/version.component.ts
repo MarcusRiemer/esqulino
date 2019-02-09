@@ -21,6 +21,8 @@ export class VersionComponent implements OnInit {
 
   readonly BUILD_DATE = environment.version.date;
 
+  readonly ERROR_REPORTING = environment.sentry && environment.sentry.active;
+
   onRaiseError() {
     throw new Error(`Deliberate error, caused by user!`);
   }
