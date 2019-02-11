@@ -14,6 +14,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { BlockDropProperties } from './block-drop-properties';
 import { calculateDropLocation, calculateDropTargetState } from './drop-utils';
 
+const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
 
 /**
  * Renders a single and well known visual element of a node.
@@ -100,11 +101,14 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
         return (false);
       }
     }),
-    debounceTime(0.016) // Don't trigger animations to hasty
   );
 
+  /**
+   * True if either the drop target or the drop location should be shown.
+   */
   readonly showAnything = this._latestDragData.pipe(
-    map(([currentDrag, inProgress]) => inProgress && !currentDrag.isEmbraceDrop)
+    map(([currentDrag, inProgress]) => inProgress && !currentDrag.isEmbraceDrop),
+    debounceTime(ANIMATION_DELAY) // Don't trigger animations to hasty
   )
 
   /**

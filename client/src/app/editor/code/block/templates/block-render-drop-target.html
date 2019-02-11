@@ -5,7 +5,7 @@
      (mouseover)="onMouseEnter($event)"
      (mouseout)="onMouseOut($event)">
   <!-- Ensure correct visual behaviour -->
-  <div *ngIf="!(showDropTarget | async) && (showAnything | async)"
+  <div *ngIf="!(showDropTarget | async); else dropPlaceholder;"
        [@availability]="currentAvailability | async"
        [blockBase]="visual"
        [blockLayout]="visual">
@@ -17,9 +17,10 @@
     </ng-container>
   </div>
 
-  <div *ngIf="(showDropTarget | async)"
-       @dropTargetVisible
-       class="drop-placeholder">
-    Hier
-  </div>
+  <ng-template #dropPlaceholder>
+    <div @dropTargetVisible
+         class="drop-placeholder">
+      Hier
+    </div>
+  </ng-template>
 </div>

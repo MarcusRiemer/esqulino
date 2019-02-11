@@ -90,7 +90,6 @@ export function calculateDropLocation(node: Node, drop: DropTargetProperties): N
 
       // Skipping too much? Thats the root
       if (lastLevel < 0) {
-        console.log("Dug too deep while dropping");
         return ([]);
       } else {
         // Calculate the index at which to insert
@@ -237,7 +236,7 @@ export function calculateDropTargetState(
       }
     }
   } else {
-    if (!isEmbraceDrop && visibilityEvalFunc()) {
+    if (visibilityEvalFunc()) {
       return ("visible");
     } else {
       return ("none");
