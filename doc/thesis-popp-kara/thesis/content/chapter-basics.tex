@@ -60,6 +60,8 @@ Eine Mikrowelt ist dabei eine einfache Darstellung der von für die Minisprache 
 
 Aus der Liste dieser Anforderungen ergeben sich direkte Anforderungen an die für diese Arbeit entwickelte Minisprache (siehe \ref{sec:requirements:program}). Sie sind auch -- soweit das beurteilt werden kann -- in allen im nächsten Kapitel genannten vergleichbaren Arbeiten berücksichtigt.
 
+In BlattWerkzeug wird die zu entwickelnde Minisprache mithilfe einer Grammatik definiert, die sich aus diesen Grammatiken ergebenden Syntaxbäume werden im nächsten Abschnitt vorgestellt.
+
 %************************************************
 % Syntaxbäume
 %************************************************
@@ -68,9 +70,9 @@ Aus der Liste dieser Anforderungen ergeben sich direkte Anforderungen an die fü
 
 Der Syntaxbaum repräsentiert die Struktur eines Quelltextes, der mit dem Drag \& Drop-Editor in BlattWerkzeug (siehe \ref{sec:requirements:existing:structure:drag-drop}) bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer Datei sprechen. Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf welcher Operationen zur Veränderung (einfügen, löschen, tauschen, \dots) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen~\cite[3]{riemer2018}.
 
-Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den Zeichenketten \inlinec{language} (im Sinne einer Programmiersprache) und \inlinec{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module, wie genau mit dem Knoten zu verfahren ist~\cite[4]{riemer2018}.
+Jeder Knoten eines Baumes entspricht mindestens einem Typen, welcher sich aus den Zeichenketten \inlinec{language} (im Sinne einer Programmiersprache) und \inlinec{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module, wie genau mit dem Knoten zu verfahren ist~\cite[4]{riemer2018}.
 
-Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung sogenannter Eigenschaften (engl. Properties). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte, welche über einen Schlüssel zugreifbar sind~\cite[4]{riemer2018}. In Abbildung \ref{fig:basics:syntaxtrees:1} ist ein Knoten \inlinec{const} einer Sprache \inlinec{math} dargestellt, welcher einen Integer-Wert repräsentiert. Dabei ist der eigentliche Wert in der Eigenschaft \inlinec{value} definiert.
+Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung sogenannter Eigenschaften (engl. Properties). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte, welche über einen Schlüssel zugreifbar sind~\cite[4]{riemer2018}. In Abbildung \ref{fig:basics:syntaxtrees:1} ist ein Knoten \inlinec{const} einer Sprache \inlinec{math} dargestellt, welcher einen Integerwert repräsentiert. Dabei ist der eigentliche Wert in der Eigenschaft \inlinec{value} definiert.
 
 \begin{figure}[h]
   \centering
@@ -107,9 +109,9 @@ Die Verwendung und Benennung von Eigenschaften und Kindknoten ist nicht beliebig
 \section{Grammatiken}
 \label{sec:basics:grammars}
 
-Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Ge\-ne\-ra\-tor-An\-wei\-sung\-en dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}.
+Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaumes. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Ge\-ne\-ra\-tor-An\-wei\-sung\-en dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}.
 
-Das folgende Beispiel leitet eine Grammatik her, welche sich zum Validieren von einfachen mathematischen Ausdrücken eigenen würde. Die damit validierbaren Syntaxbäume sind bereits aus dem vorherigen Abschnitt \ref{sec:basics:syntaxtrees} bekannt. Abbildung \ref{fig:basics:grammars:1} zeigt dafür eine Grammatik, welche lediglich Bäume aus einer Konstanten mit einem Wert als valide auffassen würde (in Anlehnung an~\cite[6]{riemer2018}).
+Das folgende Beispiel leitet eine Grammatik her, welche sich zum Validieren von einfachen mathematischen Ausdrücken eignen würde. Die damit validierbaren Syntaxbäume sind bereits aus dem vorherigen Abschnitt \ref{sec:basics:syntaxtrees} bekannt. Abbildung \ref{fig:basics:grammars:1} zeigt dafür eine Grammatik, welche lediglich Bäume aus einer Konstanten mit einem Wert als valide auffassen würde (in Anlehnung an~\cite[6]{riemer2018}).
 
 \begin{figure}[h]
   \lstinputlisting{snippets/baics-grammars-grammar-1.txt}
@@ -117,7 +119,7 @@ Das folgende Beispiel leitet eine Grammatik her, welche sich zum Validieren von 
   \label{fig:basics:grammars:1}
 \end{figure}
 
-Die Definition eines erlaubten Knotens wird mit node eingeleitet, der im Syntaxbaum zu verwendende Typname ergibt sich aus dem Namen der Grammatik (\inlinec{math}) und dem Namen des Knotens (\inlinec{const}). In diesem konkreten Fall darf ein valider Knoten lediglich über eine einzige Eigenschaft (\inlinec{prop}) \inlinec{value} verfügen, nicht jedoch über Kindknoten. Die mit \inlinec{prop} definierte Eigenschaft ist auf Integer-Werte beschränkt. Ein im Sinne dieser Grammatik valider Baum hätte also einen einzigen Knoten vom Typ \inlinec{math.const} mit einer Eigenschaft \inlinec{value} (in Anlehnung an~\cite[6]{riemer2018}).
+Die Definition eines erlaubten Knotens wird mit node eingeleitet, der im Syntaxbaum zu verwendende Typname ergibt sich aus dem Namen der Grammatik (\inlinec{math}) und dem Namen des Knotens (\inlinec{const}). In diesem konkreten Fall darf ein valider Knoten lediglich über eine einzige Eigenschaft (\inlinec{prop}) \inlinec{value} verfügen, nicht jedoch über Kindknoten. Die mit \inlinec{prop} definierte Eigenschaft ist auf Integerwerte beschränkt. Ein im Sinne dieser Grammatik valider Baum hätte also einen einzigen Knoten vom Typ \inlinec{math.const} mit einer Eigenschaft \inlinec{value} (in Anlehnung an~\cite[6]{riemer2018}).
 
 \begin{figure}[h]
   \lstinputlisting{snippets/baics-grammars-grammar-2.txt}
@@ -125,13 +127,13 @@ Die Definition eines erlaubten Knotens wird mit node eingeleitet, der im Syntaxb
   \label{fig:basics:grammars:2}
 \end{figure}
 
-Desweiteren ist es möglich Beziehungen zwischen Knoten zu definieren. Die Anweisung \inlinec{children} innerhalb einer \inlinec{node}-Definition erwartet zunächst die Angabe eines Namens und dann folgt mit \inlinec{::=} getrennt eine an Produktionsregeln angelehnte Aufzählung der zulässigen Typen in dieser Kindgruppe~\cite[6]{riemer2018}.
+Desweiteren ist es möglich, Beziehungen zwischen Knoten zu definieren. Die Anweisung \inlinec{children} innerhalb einer \inlinec{node}-Definition erwartet zunächst die Angabe eines Namens und dann folgt mit \inlinec{::=} getrennt eine an Produktionsregeln angelehnte Aufzählung der zulässigen Typen in dieser Kindgruppe~\cite[6]{riemer2018}.
 
 Innerhalb dieser "Produktionsregeln" können die Typen mit den bekannten Quantifizierern \inlinec{*} (beliebig häufig), \inlinec{+} (mindestens ein Mal) und \inlinec{?} (optional) versehen werden. Exakte Häufigkeitsangaben sind ebenfalls möglich, die Syntax lehnt sich dabei an die erweiterte Backus-Naur-Form an~\cite[6]{riemer2018}.
 
 Im konkreten Beispiel in Abbildung \ref{fig:basics:grammars:2} kann die Operation \inlinec{operation} sowohl auf ihrer linken, als auch auf ihrer rechten Seite genau eine Konstante aufnehmen. Außerdem ist die Eigenschaft des Operators auf eine der vier Grundrechenarten beschränkt.
 
-Schließlich ist es mithilfe eines \inlinec{typedef} möglich, eine Menge von Knotentypen als Kindknoten zuzulassen. Im konkreten Beispiel in Abbildung \ref{fig:basics:grammars:3} ist es für den \inlinec{operation}-Knoten möglich eine Konstante oder sich selbst als Kindknoten aufzunehmen. Ein Ausdruck in der Form \inlinec{(1 + (2 * 3))} kann so realisiert werden.
+Schließlich ist es mithilfe eines \inlinec{typedef} möglich, eine Menge von Knotentypen als Kindknoten zuzulassen. Im konkreten Beispiel in Abbildung \ref{fig:basics:grammars:3} ist es für den \inlinec{operation}-Knoten möglich, eine Konstante oder sich selbst als Kindknoten aufzunehmen. Ein Ausdruck in der Form \inlinec{(1 + (2 * 3))} kann so realisiert werden.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/baics-grammars-grammar-3.txt}

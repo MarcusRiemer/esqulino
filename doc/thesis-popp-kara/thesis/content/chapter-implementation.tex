@@ -151,7 +151,7 @@ Im nächsten Schritt müssen die hier beschriebenen Elemente der Sprache in eine
 
 Im Grundlagenkapitel \ref{sec:basics:grammars} wurden bereits Aufbau und Funktionweise von Grammatiken in BlattWerkzeug erklärt. Es wird nun eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
 
-Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Prozeduren später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:grammar:1} zeigt den Einstieg in die Grammatik.
+Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Prozeduren später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die Reihenfolge seiner Prozedurdefinitionen machen muss. Abbildung \ref{fig:implementation:grammar:1} zeigt den Einstieg in die Grammatik.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-1.txt}
@@ -175,11 +175,11 @@ Eine Anweisung (\inlinec{statement}) kann ein Prozeduraufruf (\inlinec{procedure
   \label{fig:implementation:grammar:3}
 \end{figure}
 
-Boolesche Werte (\inlinec{booleanExpression}) repräsentieren einen Sensor, einen invertierten Ausdruck, eine logische Verknüpfung oder eine boolesche Konstante. Sensoren (\inlinec{sensor}) haben die Eigenschaft \inlinec{type}, deren Wert aus der Liste der vorhandenen Sensortypen gewählt werden kann. Die Einschränkung, welche bei den Prozeduraufrufen aus den oben genannten Gründen nicht vorgenommen wurde, reduziert an dieser Stelle die Fehleranfälligkeit, bringt jedoch den Nachteil mit sich, dass neu hinzugefügte Sensoren zusätzlich eine Änderung der Grammatik erfordern. In Abbildung \ref{fig:implementation:grammar:4} sind diese Definitionen in der Grammatik dargestellt.
+Boolesche Werte (\inlinec{booleanExpression}) repräsentieren einen Sensor, einen invertierten Ausdruck, eine logische Verknüpfung oder eine boolesche Konstante. Sensoren (\inlinec{sensor}) haben die Eigenschaft \inlinec{type}, deren Wert aus der Liste der vorhandenen Sensortypen gewählt werden kann. Die Einschränkung, welche bei den Prozeduraufrufen aus den oben genannten Gründen nicht vorgenommen wurde, bringt den Nachteil mit sich, dass neu hinzugefügte Sensoren zusätzlich eine Änderung der Grammatik erfordern, reduziert jedoch an dieser Stelle die Fehleranfälligkeit. In Abbildung \ref{fig:implementation:grammar:4} sind diese Definitionen in der Grammatik dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-4.txt}
-  \caption{Grammatik mit Knoten für boolesche Ausdrück und Sensoren}
+  \caption{Grammatik mit Knoten für boolesche Ausdrücke und Sensoren}
   \label{fig:implementation:grammar:4}
 \end{figure}
 
@@ -191,7 +191,7 @@ Invertierte Ausdrücke (\inlinec{negateExpression}) nehmen lediglich einen ander
   \label{fig:implementation:grammar:5}
 \end{figure}
 
-Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil und im alternativen \inlinec{else}-Teil. Dadurch werden mit nur einem Knoten alle Arten von Verzweigungen ermöglicht. Alternativ hätten auch zwei sperate Knoten für \inlinec{if}- und \inlinec{if...else}-Verzweigungen eingeführt werden können, oder einen \inlinec{if}-Knoten, der mehrere \inlinec{else if}-Knoten und höchstens einen \inlinec{else}-Knoten aufnehmen kann. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:grammar:6} dargestellt.
+Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil und im alternativen \inlinec{else}-Teil. Dadurch werden mit nur einem Knoten alle Arten von Verzweigungen ermöglicht. Alternativ hätten auch zwei seperate Knoten für \inlinec{if}- und \inlinec{if...else}-Verzweigungen eingeführt werden können oder einen \inlinec{if}-Knoten, der mehrere \inlinec{else if}-Knoten und höchstens einen \inlinec{else}-Knoten aufnehmen kann. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:grammar:6} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-6.txt}
@@ -207,7 +207,7 @@ Die Zählerschleife bekommt einen Integerwert als Eigenschaft, der angibt, wie o
   \label{fig:implementation:grammar:7}
 \end{figure}
 
-Die Grammatik der kopfgesteuerten Schleife verfügt schließlich Kindknoten für ihr Prädikat, sowie ihren Schleifenrumpf und ist in Abbildung \ref{fig:implementation:grammar:8} dargestellt.
+Die Grammatik der kopfgesteuerten Schleife verfügt schließlich über Kindknoten für ihr Prädikat, sowie ihren Schleifenrumpf und ist in Abbildung \ref{fig:implementation:grammar:8} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-8.txt}
