@@ -1,0 +1,5 @@
+grammar "math" {
+  node "const" {
+    prop "value" { integer }
+  }
+}
