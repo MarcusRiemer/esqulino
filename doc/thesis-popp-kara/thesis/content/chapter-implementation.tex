@@ -141,123 +141,81 @@ Alle Prozeduren werden im Drag \& Drop-Editor in einem Deklarationsteil am Anfan
 
 Das im Abschnitt der kopfgesteuerten Schleife angesprochene Beispiel des Wartens auf Ampeln, ließe sich nun auch durch Rekursion lösen: Wenn die Ampel rot ist, führt sie den "Warten"-Befehl aus und ruft sich anschließend selbst wieder auf. Wird die Ampel grün, ist die Abbruchbedingung erfüllt und die Prozedur wird verlassen. Im Programm kann diese Funktionalität nun an verschiedenen Stellen wiederverwendet werden.
 
-Im nächsten Schritt müssen die hier beschriebenen Elemente der Sprache in eine Grammatik übersetzt werden, nach welcher ein Syntaxbaum erzeugt werden kann. Diese Elemente sind im nächsten Abschnitt beschrieben.
+Im nächsten Schritt müssen die hier beschriebenen Elemente der Sprache in eine Grammatik übersetzt werden, nach welcher ein Syntaxbaum erzeugt werden kann. Diese Grammatik ist im nächsten Abschnitt beschrieben.
 
 %************************************************
-% Datenstruktur
+% Grammatik
 %************************************************
-\section{Datenstruktur}
-\label{sec:implementation:datastructure}
+\section{Grammatik}
+\label{sec:implementation:grammar}
 
-Bereits in der Anforderungsanalyse wurden die Begriffe "Grammatik" und "Syntaxbaum" verwendet. Im Folgenden soll nun die für die Minisprache entwickelte Grammatik und die daraus resultierenden Syntaxbäume beschrieben werden.
+Im Grundlagenkapitel \ref{sec:basics:grammars} wurden bereits Aufbau und Funktionweise von Grammatiken in BlattWerkzeug erklärt. Es wird nun eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
 
-\subsection{Grammatik}
-\label{sec:implementation:datastructure:grammar}
-
-Die Grammatik definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle Ge\-ne\-ra\-tor-An\-wei\-sung\-en dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden~\cite[3]{riemer2018}. Es wird zunächst eine Grammatik definiert, welche die im vorherigen Abschnitt beschriebenen Elemente der Minisprache inkorporiert.
-
-Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Prozeduren später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:datastructure:grammar:1} zeigt den Einstieg in die Grammatik.
+Wurzel der entwickelten Minisprache ist immer ein Programm, welches beliebig viele Prozedurdefinitionen (\inlinec{procedureDeclaration}), sowie mehrere Anweisungen (\inlinec{statement}) eines Hauptprogramms als Kindknoten aufnehmen kann. Prozeduren lassen sich nur in diesem Deklarationsteil definieren. Vom alternativen Vorgehen, Prozedurdefinitionen und Befehle im Hauptprogramm zu mischen, wurde abgesehen, damit der Nutzer seine Prozeduren später in jedem Teil seines Programms gleichermaßen verwenden kann und sich nicht explizit Gedanken, über die die Reihenfolge seiner Prozedurdefinitionen sein muss. Abbildung \ref{fig:implementation:grammar:1} zeigt den Einstieg in die Grammatik.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-1.txt}
   \caption{Grammatik mit Programm-Knoten}
-  \label{fig:implementation:datastructure:grammar:1}
+  \label{fig:implementation:grammar:1}
 \end{figure}
 
-Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:datastructure:grammar:2} dargestellt. Knoten können zusätzlich zu den Kindknoten auch Eigenschaften (\inlinec{prop}) aufnehmen. In diesem Fall kann in einer Eigenschaft der Name der Funktion angegeben werden. Eine Prozedur lässt sich mit Parametern (\inlinec{procedureParameter}) ausstatten und kann analog zum Hauptprogramm eine Liste von Anweisungen (\inlinec{statement}) als Kindknoten aufnehmen.
+Der Knoten zur Prozedurdefinition (\inlinec{procedureDeclaration}) ist in Abbildung \ref{fig:implementation:grammar:2} dargestellt. In  einer Eigenschaft wird der Name der Funktion angegeben. Eine Prozedur lässt sich mit Parametern (\inlinec{procedureParameter}) ausstatten und kann analog zum Hauptprogramm eine Liste von Anweisungen (\inlinec{statement}) als Kindknoten aufnehmen.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-2.txt}
   \caption{Grammatik mit Prozedurdefinitions-Knoten}
-  \label{fig:implementation:datastructure:grammar:2}
+  \label{fig:implementation:grammar:2}
 \end{figure}
 
-Eine Anweisung (\inlinec{statement}) kann ein Prozeduraufruf (\inlinec{procedureCall}), eine Verzweigung (\inlinec{if}), eine Zählerschleife (\inlinec{loopFor}) oder eine kopfgesteuerte Schleife (\inlinec{loopWhile}) repräsentieren. Mit einem Prozeduraufruf kann sowohl eine selbst definierte Prozedur als auch ein vorgegebener atomarer Befehl aufgerufen werden. Diese Entscheidung führt dazu, dass eigene Prozeduren und vorgegebene atomare Befehle im gleichen Geltungsbereich definiert sein müssen. Das beinhaltet, dass es möglich ist, mit eigenen Prozedurdefinitionen atomare Befehle zu überschreiben, bringt aber den Vorteil mit sich, dass Prozeduraufrufe einheitlich dargestellt werden können. Für einen Prozeduraufruf wird ein Name sowie optional eine Liste von Argumenten festgelegt. Da Sensoren lediglich boolesche Werte enthalten, sind auch als Typen für Prozedurparameter lediglich boolesche Werte (\inlinec{booleanExpression}) vorgesehen. Eine Erweiterung der Minisprache um ein Typsystem wäre jedoch für eine spätere Version denkbar, sodass z.~B. auch Integerwerte für Zählerschleifen übergeben werden können. Abbildung \ref{fig:implementation:datastructure:grammar:3} zeigt die Definition von \inlinec{statement} und \inlinec{procedureCall}.
+Eine Anweisung (\inlinec{statement}) kann ein Prozeduraufruf (\inlinec{procedureCall}), eine Verzweigung (\inlinec{if}), eine Zählerschleife (\inlinec{loopFor}) oder eine kopfgesteuerte Schleife (\inlinec{loopWhile}) repräsentieren. Mit einem Prozeduraufruf kann sowohl eine selbst definierte Prozedur als auch ein vorgegebener atomarer Befehl aufgerufen werden. Diese Entscheidung führt dazu, dass eigene Prozeduren und vorgegebene atomare Befehle im gleichen Geltungsbereich definiert sein müssen. Das beinhaltet, dass es möglich ist, mit eigenen Prozedurdefinitionen atomare Befehle zu überschreiben, bringt aber den Vorteil mit sich, dass Prozeduraufrufe einheitlich dargestellt werden können. Für einen Prozeduraufruf wird ein Name sowie optional eine Liste von Argumenten festgelegt. Da Sensoren lediglich boolesche Werte enthalten, sind auch als Typen für Prozedurparameter lediglich boolesche Werte (\inlinec{booleanExpression}) vorgesehen. Eine Erweiterung der Minisprache um ein Typsystem wäre jedoch für eine spätere Version denkbar, sodass z.~B. auch Integerwerte für Zählerschleifen übergeben werden können. Abbildung \ref{fig:implementation:grammar:3} zeigt die Definition von \inlinec{statement} und \inlinec{procedureCall}.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-3.txt}
   \caption{Grammatik mit Prozeduraufruf-Knoten}
-  \label{fig:implementation:datastructure:grammar:3}
+  \label{fig:implementation:grammar:3}
 \end{figure}
 
-Boolesche Werte (\inlinec{booleanExpression}) repräsentieren einen Sensor, einen invertierten Ausdruck, eine logische Verknüpfung oder eine boolesche Konstante. Sensoren (\inlinec{sensor}) haben die Eigenschaft \inlinec{type}, deren Wert aus der Liste der vorhandenen Sensortypen gewählt werden kann. Die Einschränkung, welche bei den Prozeduraufrufen aus den oben genannten Gründen nicht vorgenommen wurde, reduziert an dieser Stelle die Fehleranfälligkeit, bringt jedoch den Nachteil mit sich, dass neu hinzugefügte Sensoren zusätzlich eine Änderung der Grammatik erfordern. In Abbildung \ref{fig:implementation:datastructure:grammar:4} sind diese Definitionen in der Grammatik dargestellt.
+Boolesche Werte (\inlinec{booleanExpression}) repräsentieren einen Sensor, einen invertierten Ausdruck, eine logische Verknüpfung oder eine boolesche Konstante. Sensoren (\inlinec{sensor}) haben die Eigenschaft \inlinec{type}, deren Wert aus der Liste der vorhandenen Sensortypen gewählt werden kann. Die Einschränkung, welche bei den Prozeduraufrufen aus den oben genannten Gründen nicht vorgenommen wurde, reduziert an dieser Stelle die Fehleranfälligkeit, bringt jedoch den Nachteil mit sich, dass neu hinzugefügte Sensoren zusätzlich eine Änderung der Grammatik erfordern. In Abbildung \ref{fig:implementation:grammar:4} sind diese Definitionen in der Grammatik dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-4.txt}
   \caption{Grammatik mit Knoten für boolesche Ausdrück und Sensoren}
-  \label{fig:implementation:datastructure:grammar:4}
+  \label{fig:implementation:grammar:4}
 \end{figure}
 
-Invertierte Ausdrücke (\inlinec{negateExpression}) nehmen lediglich einen anderen booleschen Ausdruck auf. Dadurch ist z.~B. auch ein doppeltes Invertieren möglich. Logische Verknüpfungen (\inlinec{booleanBinaryExpression}) nehmen hingegen jeweils einen booleschen Wert für die linke und die rechte Seite, sowie einen Operator (\inlinec{relationalOperator}) auf (siehe Abbildung \ref{fig:implementation:datastructure:grammar:5}).
+Invertierte Ausdrücke (\inlinec{negateExpression}) nehmen lediglich einen anderen booleschen Ausdruck auf. Dadurch ist z.~B. auch ein doppeltes Invertieren möglich. Logische Verknüpfungen (\inlinec{booleanBinaryExpression}) nehmen hingegen jeweils einen booleschen Wert für die linke und die rechte Seite, sowie einen Operator (\inlinec{relationalOperator}) auf (siehe Abbildung \ref{fig:implementation:grammar:5}).
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-5.txt}
   \caption{Grammatik mit Knoten für logische Operationen}
-  \label{fig:implementation:datastructure:grammar:5}
+  \label{fig:implementation:grammar:5}
 \end{figure}
 
-Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil und im alternativen \inlinec{else}-Teil. Dadurch werden mit nur einem Knoten alle Arten von Verzweigungen ermöglicht. Alternativ hätten auch zwei sperate Knoten für \inlinec{if}- und \inlinec{if...else}-Verzweigungen eingeführt werden können, oder einen \inlinec{if}-Knoten, der mehrere \inlinec{else if}-Knoten und höchstens einen \inlinec{else}-Knoten aufnehmen kann. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:datastructure:grammar:6} dargestellt.
+Ein Knoten für Verzweigungen beinhaltet ein boolesches Prädikat (\inlinec{booleanExpression}) sowie Anweisungen (\inlinec{statement}) im Hauptteil und im alternativen \inlinec{else}-Teil. Dadurch werden mit nur einem Knoten alle Arten von Verzweigungen ermöglicht. Alternativ hätten auch zwei sperate Knoten für \inlinec{if}- und \inlinec{if...else}-Verzweigungen eingeführt werden können, oder einen \inlinec{if}-Knoten, der mehrere \inlinec{else if}-Knoten und höchstens einen \inlinec{else}-Knoten aufnehmen kann. Die Grammatik für Verzweigungen ist in Abbildung \ref{fig:implementation:grammar:6} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-6.txt}
   \caption{Grammatik mit Knoten für Verzweigungen}
-  \label{fig:implementation:datastructure:grammar:6}
+  \label{fig:implementation:grammar:6}
 \end{figure}
 
-Die Zählerschleife bekommt einen Integerwert als Eigenschaft, der angibt, wie oft die Schleife wiederholt werden soll. Auch hier wird über Kindknoten der Schleifenrumpf definiert. Abbildung \ref{fig:implementation:datastructure:grammar:6} zeigt die Grammatik einer solchen Schleife.
+Die Zählerschleife bekommt einen Integerwert als Eigenschaft, der angibt, wie oft die Schleife wiederholt werden soll. Auch hier wird über Kindknoten der Schleifenrumpf definiert. Abbildung \ref{fig:implementation:grammar:6} zeigt die Grammatik einer solchen Schleife.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-7.txt}
   \caption{Grammatik mit Knoten für Zählerschleifen}
-  \label{fig:implementation:datastructure:grammar:7}
+  \label{fig:implementation:grammar:7}
 \end{figure}
 
-Die Grammatik der kopfgesteuerten Schleife verfügt schließlich Kindknoten für ihr Prädikat, sowie ihren Schleifenrumpf und ist in Abbildung \ref{fig:implementation:datastructure:grammar:8} dargestellt.
+Die Grammatik der kopfgesteuerten Schleife verfügt schließlich Kindknoten für ihr Prädikat, sowie ihren Schleifenrumpf und ist in Abbildung \ref{fig:implementation:grammar:8} dargestellt.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/implementation-program-grammar-syntaxtree-grammar-8.txt}
   \caption{Grammatik mit Knoten für kopfgesteuerte Schleifen}
-  \label{fig:implementation:datastructure:grammar:8}
+  \label{fig:implementation:grammar:8}
 \end{figure}
 
-Der sich aus dieser Grammatik ergebende Syntaxbaum wird im nächsten Abschnitt beschrieben.
-
-\subsection{Syntaxbaum}
-\label{sec:implementation:datastructure:syntaxtree}
-
-Der Syntaxbaum repräsentiert die Struktur eines Quelltextes, der mit dem Drag \& Drop-Editor in BlattWerkzeug bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer Datei sprechen. Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf welcher Operationen zur Veränderung (einfügen, löschen, tauschen, ...) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen~\cite[3]{riemer2018}.
-
-Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den Zeichenketten \inlinec{language} (im Sinne einer Programmiersprache) und \inlinec{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module, wie genau mit dem Knoten zu verfahren ist~\cite[4]{riemer2018}.
-
-Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung sogenannter Eigenschaften (engl. Properties). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte, welche über einen Schlüssel zugreifbar sind~\cite[4]{riemer2018}. Diese Eigenschaften wurden im vorigen Kapitel für z.~B. die Angabe des Prozedurnamens bei einem Prozeduraufruf verwendet. Ein solcher Aufruf der Prozedur \inlinec{wait}, sowie der Sensor \inlinec{lightIsRed} sind in Abbildung \ref{fig:implementation:datastructure:syntaxtree:1} dargestellt.
-
-\begin{figure}[h]
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{gfx/implementation-program-grammar-syntaxtree-tree-wait.graphviz.pdf}
-    \caption{Syntaxbaum des Aufrufs der Prozedur \inlinec|wait|}
-    \label{fig:implementation:datastructure:syntaxtree:1:wait}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{gfx/implementation-program-grammar-syntaxtree-tree-lightIsRed.graphviz.pdf}
-    \caption{Syntaxbaum des Sensors \inlinec|lightIsRed|}
-    \label{fig:implementation:datastructure:syntaxtree:1:lightIsRed}
-  \end{subfigure}\hfill
-  \caption{Prozeduraufruf \inlinec|wait| und Sensor \inlinec|lightIsRed|}
-  \label{fig:implementation:datastructure:syntaxtree:1}
-\end{figure}
-
-Kinder von Knoten werden in benannten Kindgruppen organisiert. Dabei handelt es sich um eine Verallgemeinerung der von XML bekannten Aufteilung in Attribut-Kinder und Element-Kinder. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren~\cite[4]{riemer2018}. So sind die in Abbildung \ref{fig:implementation:datastructure:syntaxtree:1} abgebildeten Knoten in Abbildung \ref{fig:implementation:datastructure:syntaxtree:2} als Kindknoten einer kopfgesteuerten Schleife dargestellt, welche wiederum als Kindknoten des Wurzelknotens des Programms eingebunden ist. Nachdem die Abbruchbedingung der Schleife erfüllt ist, ist ein \inlinec|goForward|-Prozeduraufruf enthalten.
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.7\textwidth]{gfx/implementation-program-grammar-syntaxtree-tree-program.graphviz.pdf}
-  \caption{Beispiel eines vollständigen Programms als Syntaxbaum}
-  \label{fig:implementation:datastructure:syntaxtree:2}
-\end{figure}
-
-Die gezeigten Graphen dienen an dieser Stelle der Übersicht. Intern werden Syntaxbäume als JSON-Dokumente verwaltet.
-
-Die Auswertung eines solchen Syntaxbaumes ist im folgenden Abschnitt beschrieben.
+Aus dieser Grammatik ergibt sich ein Syntaxbaum, dessen Auswertung im nächsten Abschnitt beschrieben wird.
 
 %************************************************
 % Auswertung

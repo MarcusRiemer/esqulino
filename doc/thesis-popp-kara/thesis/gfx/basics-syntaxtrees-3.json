@@ -1,0 +1,47 @@
+{
+  "language": "math",
+  "name": "operation",
+  "properties": {
+    "operator": "+"
+  },
+  "children": {
+    "lhs": [
+      {
+        "language": "math",
+        "name": "const",
+        "properties": {
+          "value": "2"
+        }
+      }
+    ],
+    "rhs": [
+      {
+        "language": "math",
+        "name": "operation",
+        "properties": {
+          "operator": "*"
+        },
+        "children": {
+          "lhs": [
+            {
+              "language": "math",
+              "name": "const",
+              "properties": {
+                "value": "4"
+              }
+            }
+          ],
+          "rhs": [
+            {
+              "language": "math",
+              "name": "const",
+              "properties": {
+                "value": "10"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
