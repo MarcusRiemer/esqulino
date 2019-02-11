@@ -39,7 +39,7 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
    * @return The location a drop should occur in.
    */
   get dropLocation() {
-    if (this._isEmbraceDrop) {
+    if (this._isEmbraceDrop()) {
       return (this.node.location);
     } else {
       return (calculateDropLocation(this.node, this.visual.dropTarget));
