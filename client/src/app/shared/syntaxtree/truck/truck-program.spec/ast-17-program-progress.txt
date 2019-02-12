@@ -1,0 +1,2 @@
+truck._progress([["main",0]]);
+yield* truck.goForward();

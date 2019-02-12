@@ -1,7 +1,8 @@
 import { NodeDescription } from '../syntaxtree'
 
 import {
-  FixedBlocksSidebarDescription, FixedBlocksSidebarCategoryDescription, SidebarBlockDescription
+  FixedBlocksSidebarDescription, FixedBlocksSidebarCategoryDescription,
+  SidebarBlockDescription
 } from './block.description'
 import { BlockLanguage } from './block-language.forward'
 import { Sidebar } from './sidebar'
@@ -37,7 +38,13 @@ export class FixedSidebarBlock {
 /**
  * Groups together blocks.
  */
-export class FixedBlocksSidebarCategory {
+export interface BlocksSidebarCategory {
+  readonly blocks: FixedSidebarBlock[];
+  readonly showDisplayName: boolean;
+  readonly displayName: string;
+}
+
+export class FixedBlocksSidebarCategory implements BlocksSidebarCategory {
   private _blocks: FixedSidebarBlock[] = [];
   private _caption: string;
   private _sidebar: FixedBlocksSidebar;
@@ -73,12 +80,14 @@ export class FixedBlocksSidebarCategory {
  */
 export class FixedBlocksSidebar implements Sidebar {
 
-  private _categories: FixedBlocksSidebarCategory[] = [];
+  private _categories: BlocksSidebarCategory[] = [];
   private _caption: string;
 
   constructor(_parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
     this._caption = desc.caption;
-    this._categories = desc.categories.map(catDesc => new FixedBlocksSidebarCategory(this, catDesc));
+    this._categories = desc.categories.map(catDesc => {
+      return (new FixedBlocksSidebarCategory(this, catDesc));
+    });
   }
 
   get displayName() {

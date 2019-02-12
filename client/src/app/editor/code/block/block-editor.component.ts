@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { map, switchMap, first } from 'rxjs/operators';
+import { MatRipple } from '@angular/material';
+
+import { map, switchMap, first, tap } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
@@ -12,6 +14,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 import { BlockLanguage } from '../../../shared/block';
+
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -35,6 +38,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
+    private _cd: ChangeDetectorRef
   ) {
   }
 
@@ -69,6 +73,11 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(_ => btnSave.isInProgress = false);
     });
+
+    let ref = this._currentCodeResource.currentExecutionLocation.subscribe(loc => {
+      // this._cd.detectChanges();
+    });
+    this._subscriptionRefs.push(ref);
   }
 
   /**
@@ -107,6 +116,9 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     return (this._editorComponentsService.createComponent(desc));
   }
 
+  /**
+   * The visual components that should be displayed.
+   */
   readonly editorComponents = this.currentResource
     .pipe(
       switchMap(codeResource => codeResource.blockLanguage),
@@ -119,7 +131,21 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * possibility anything is currently dragged over a node. So we inform the
    * drag service about that.
    */
-  public onDragEnter(_: DragEvent) {
-    this._dragService.informDraggedOverEditor();
+  public onEditorDragEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOverEditor();
+    }
   }
+
+  /**
+   * When something draggable enters the empty area a program may start with,
+   * there is not actually a node that could be referenced.
+   */
+  public onPlaceholderDragEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOver(evt, [], undefined);
+    }
+  }
+
+  readonly currentlyExecuted = this._currentCodeResource.currentExecutionLocation;
 }

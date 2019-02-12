@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router'
 import { Title } from '@angular/platform-browser'
 
 import { BehaviorSubject } from 'rxjs'
-import { switchMap, map, first, filter } from 'rxjs/operators'
+import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
 
 import { JsonSchemaValidationService } from '../json-schema-validation.service'
 
@@ -12,6 +12,7 @@ import { BlockLanguageDescription } from '../../shared/block/block-language.desc
 import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
 import { GeneratorError } from '../../shared/block/generator/error.description'
+import { prettyPrintGrammar } from '../../shared/syntaxtree';
 
 @Injectable()
 export class EditBlockLanguageService {
@@ -39,6 +40,7 @@ export class EditBlockLanguageService {
         this._editedSubject.next(blockLanguage);
       });
 
+    // Update the title of the page according to the current language
     this._editedSubject
       .pipe(filter(bl => !!bl))
       .subscribe(blockLanguage => {
@@ -46,6 +48,20 @@ export class EditBlockLanguageService {
         this.prettyPrintedBlockLanguage = prettyPrintBlockLanguage(this.editedSubject);
       });
   }
+
+  /**
+   * The grammar that is the basis for this block language.
+   */
+  readonly baseGrammar = this._editedSubject.pipe(
+    flatMap(blockLang => this._serverData.getGrammarDescription(blockLang.grammarId))
+  )
+
+  /**
+   * A human readable version of that grammar.
+   */
+  readonly baseGrammarPrettyPrinted = this.baseGrammar.pipe(
+    map(grammar => prettyPrintGrammar(grammar))
+  );
 
   /**
    * @return The currently edited block language
@@ -82,13 +98,14 @@ export class EditBlockLanguageService {
     const instructions = this.editedSubject.localGeneratorInstructions || {};
 
     // Ensure the instructions are valid
-    this.generatorErrors = await this._schemaValidator.validate("BlockLanguageGeneratorDocument", instructions);
+    // TODO: Do actual validation again
+    this.generatorErrors = []; // await this._schemaValidator.validate("BlockLanguageGeneratorDocument", instructions);
 
     // And do something meaningful if they are
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
       this._serverData
-        .getGrammarDescription(this.editedSubject.grammarId)
+        .getGrammarDescription(this.editedSubject.grammarId, true)
         .pipe(first())
         .subscribe(g => {
           this.generatorErrors.push(...validateGenerator(instructions));

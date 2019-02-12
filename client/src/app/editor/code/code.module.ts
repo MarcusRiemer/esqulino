@@ -8,7 +8,6 @@ import { CodeGeneratorComponent } from './code-generator.component'
 import { CreateCodeResourceComponent } from './create-code-resource.component'
 import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
-import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { EditorComponentsService } from './editor-components.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { LanguageEmittedSelectorComponent } from './language-emitted-selector.component'
@@ -24,7 +23,6 @@ import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockBaseDirective } from './block/block-base.directive'
-import { BlockFlexChildDirective } from './block/block-flex-child.directive'
 import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
@@ -37,8 +35,11 @@ import { QueryPreviewComponent } from './query/query-preview.component'
 import { QueryService } from './query/query.service'
 
 import { WorldRenderComponent } from './truck/world-render.component';
+import { WorldSelectorComponent } from './truck/world-selector.component';
 import { TruckWorldService } from './truck/truck-world.service';
-
+import { WorldControllerComponent } from './truck/world-controller.component';
+import { WorldSensorsComponent } from './truck/world-sensors.component';
+import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component';
 
 @NgModule({
   imports: [
@@ -54,13 +55,11 @@ import { TruckWorldService } from './truck/truck-world.service';
     BlockHostComponent,
     BlockLayoutDirective,
     BlockBaseDirective,
-    BlockFlexChildDirective,
     CodeGeneratorComponent,
     CreateCodeResourceComponent,
     DatabaseSchemaSidebarComponent,
     DraggableDirective,
     DropTargetDirective,
-    DropPlaceholderDirective,
     NodeComponent,
     NodeChildrenComponent,
     NodePlaceholderComponent,
@@ -71,7 +70,11 @@ import { TruckWorldService } from './truck/truck-world.service';
     LanguageModelSelectorComponent,
     LanguageEmittedSelectorComponent,
     QueryPreviewComponent,
-    WorldRenderComponent
+    WorldRenderComponent,
+    WorldControllerComponent,
+    WorldSensorsComponent,
+    WorldSelectorComponent,
+    UserFunctionsSidebarComponent
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
@@ -80,10 +83,16 @@ import { TruckWorldService } from './truck/truck-world.service';
     QueryPreviewComponent,
     ValidationComponent,
     CodeGeneratorComponent,
-    WorldRenderComponent
+    WorldRenderComponent,
+    WorldControllerComponent,
+    WorldSensorsComponent,
+    UserFunctionsSidebarComponent
   ],
   providers: [
     ResourceChangedGuard
+  ],
+  exports: [
+    BlockHostComponent
   ]
 })
 export class CodeEditorModule {

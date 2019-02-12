@@ -1,0 +1,15 @@
+{
+  "language": "trucklino_program",
+  "name": "program",
+  "children": {
+    "main": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "Go Forward"
+        }
+      }
+    ]
+  }
+}

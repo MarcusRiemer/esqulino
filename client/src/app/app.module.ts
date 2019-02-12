@@ -4,6 +4,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Angulartics2Module } from 'angulartics2';
+import * as Sentry from '@sentry/browser';
 
 import { environment } from '../environments/environment';
 
@@ -21,6 +22,17 @@ declare var _paq: any[];
 if (typeof window !== "undefined") {
   var _paq = (typeof (window as any)._paq === "undefined") ? [] : _paq;
   (window as any)._paq = _paq;
+}
+
+// Configure Sentry error reporting (if enabled)
+if (environment.sentry && environment.sentry.active) {
+  const options: Sentry.BrowserOptions = {
+    dsn: environment.sentry.dsn,
+    environment: environment.production ? "production" : "development",
+    release: environment.version.hash
+  };
+
+  Sentry.init(options);
 }
 
 @NgModule({

@@ -1,0 +1,34 @@
+{
+  "language": "trucklino_program",
+  "name": "procedureDeclaration",
+  "properties": {
+    "name": "Foo Bar"
+  },
+  "children": {
+    "arguments": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureParameter",
+        "properties": {
+          "name": "Foo"
+        }
+      },
+      {
+        "language": "trucklino_program",
+        "name": "procedureParameter",
+        "properties": {
+          "name": "Bar"
+        }
+      }
+    ],
+    "body": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "Go Forward"
+        }
+      }
+    ]
+  }
+}

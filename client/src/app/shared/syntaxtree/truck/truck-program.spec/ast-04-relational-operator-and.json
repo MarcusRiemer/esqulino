@@ -1,0 +1,7 @@
+{
+  "language": "trucklino_program",
+  "name": "relationalOperator",
+  "properties": {
+    "operator": "AND"
+  }
+}

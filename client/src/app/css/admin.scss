@@ -4,6 +4,11 @@
         height: 95vh;
     }
 
+    /* Typical height: Almost full screen, but inside a tab group */
+    mat-tab-group textarea.full-height, mat-tab-group json-editor.full-height ace-editor {
+        height: calc(95vh - 49px); /* Subtract height of tab group */
+    }
+
     /* Typical height: Half a screen */
     textarea.half-height, json-editor.half-height ace-editor {
         height: 50vh;

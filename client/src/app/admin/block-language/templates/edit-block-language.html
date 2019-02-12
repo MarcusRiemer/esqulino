@@ -37,7 +37,7 @@
               name="grammar_id"
               class="custom-select"
               required
-              [(ngModel)]="editedSubject.grammarId">
+              [(ngModel)]="baseGrammarId">
         <option *ngFor="let grammar of availableGrammars | async"
                 [value]="grammar.id">
           {{ grammar.name }}
@@ -87,18 +87,20 @@
       </div>
     </div>
     <div class="col-xl-6">
-      <!-- Pretty printed blockLanguage -->
-      <div class="form-group row">
-
-        <label for="block-language-pretty"
-               class="col-sm-2 col-form-label">Pretty Printed</label>
-        <div class="col-sm-10">
-          <textarea id="block-language-pretty"
-                    readonly
+      <mat-tab-group dynamicHeight>
+        <mat-tab label="Base Grammar">
+          <!-- Pretty printed base grammar -->
+          <textarea readonly
+                    class="form-control full-height"
+                    [value]="prettyPrintedGrammar | async"></textarea>
+        </mat-tab>
+        <mat-tab label="Generated Block Language">
+          <!-- Pretty printed blockLanguage -->
+          <textarea readonly
                     class="form-control full-height"
                     [value]="prettyPrintedBlockLanguage"></textarea>
-        </div>
-      </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </form>
