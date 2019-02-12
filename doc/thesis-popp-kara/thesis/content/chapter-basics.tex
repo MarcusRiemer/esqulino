@@ -42,7 +42,7 @@ Warum das Erlernen von Programmierfähigkeiten mithilfe von Minisprachen im Gege
 
 \begin{itemize}
     \item Universalsprachen sind zu groß und zu idiosynkratisch. Die konzeptionelle Basis der Sprache bildet zusammen mit den Hauptprinzipien der Programmierung eine große Menge an Material. Anstatt die Grundprinzipien hervorzuheben, rufen die Sprachen nebensächlich Begriffe auf, die die Feinheiten der jeweiligen Sprache und deren Umsetzung, nicht aber die Hauptprinzipien der Programmierung widerspiegeln.
-    \item Universalsprachen fördern nicht das Verständnis ihrer grundlegenden Aktionen und Kontrollstrukturen. Die Sprachen sind nicht visuell und ihre Grundfunktionen werden hinter einer undurchsichtigen Barriere ausgeführt. Wenn der Prozess der Programmausführung verborgen ist, entwickelt der Student ein Input-Output-orientiertes Verständnis. Auf diese Weise behindert das Fehlen von visuellem Feedback die Beherrschung der Sprachsemantik.
+    \item Universalsprachen fördern nicht das Verständnis ihrer grundlegenden Aktionen und Kontrollstrukturen. Die Sprachen sind nicht visuell und ihre Grundfunktionen werden hinter einer undurchsichtigen Barriere ausgeführt. Wenn der Prozess der Programmausführung verborgen ist, entwickelt der Student ein In\-put-Out\-put-ori\-en\-tiertes Verständnis. Auf diese Weise behindert das Fehlen von visuellem Feedback die Beherrschung der Sprachsemantik.
     \item Da sich Universalsprachen an der Zahlen- und Symbolverarbeitung orientieren, sind die ersten möglichen Aufgaben, die beim Unterrichten der Sprache umgesetzt werden können, weit von den Alltagserfahrungen der Schüler entfernt. Die Entwicklung von Anwendungen, die sowohl informativ als auch interessant sind, erfordert das Erlernen einer beträchtlichen Untermenge der Sprache und das Schreiben recht großer Programme.
 \end{itemize}
 
@@ -68,7 +68,7 @@ In BlattWerkzeug wird die zu entwickelnde Minisprache mithilfe einer Grammatik d
 \section{Syntaxbäume}
 \label{sec:basics:syntaxtrees}
 
-Der Syntaxbaum repräsentiert die Struktur eines Quelltextes, der mit dem Drag \& Drop-Editor in BlattWerkzeug (siehe \ref{sec:requirements:existing:structure:drag-drop}) bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer Datei sprechen. Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf welcher Operationen zur Veränderung (einfügen, löschen, tauschen, \dots) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen~\cite[3]{riemer2018}.
+Der Syntaxbaum repräsentiert die Struktur eines Quelltextes, der mit dem Drag \& Drop-Edi\-tor in BlattWerkzeug (siehe \ref{sec:requirements:existing:structure:drag-drop}) bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer Datei sprechen. Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf welcher Operationen zur Veränderung (einfügen, löschen, tauschen, \dots) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen~\cite[3]{riemer2018}.
 
 Jeder Knoten eines Baumes entspricht mindestens einem Typen, welcher sich aus den Zeichenketten \inlinec{language} (im Sinne einer Programmiersprache) und \inlinec{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module, wie genau mit dem Knoten zu verfahren ist~\cite[4]{riemer2018}.
 
@@ -81,7 +81,7 @@ Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung so
   \label{fig:basics:syntaxtrees:1}
 \end{figure}
 
-Kinder von Knoten werden in benannten Kindgruppen organisiert. Dabei handelt es sich um eine Verallgemeinerung der von XML bekannten Aufteilung in Attribut-Kinder und Element-Kinder. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren~\cite[4]{riemer2018}. So ist in Abbildung \ref{fig:basics:syntaxtrees:2} ein Knoten \inlinec{operation} dargestellt, der jeweils eine Konstante für die linke und die rechte Seite als Kindknoten führt. Außerdem enhält der Knoten die Eigenschaft \inlinec{operation}, durch welche eine mathematische Operation festgelegt wird. Dieser Knoten kann so als eine Darstellung für den Ausdruck \inlinec{(41 + 1)} verstanden werden.
+Kinder von Knoten werden in benannten Kindgruppen organisiert. Dabei handelt es sich um eine Verallgemeinerung der von XML bekannten Aufteilung in At\-tri\-but-Kin\-der und Ele\-ment-Kin\-der. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren~\cite[4]{riemer2018}. So ist in Abbildung \ref{fig:basics:syntaxtrees:2} ein Knoten \inlinec{operation} dargestellt, der jeweils eine Konstante für die linke und die rechte Seite als Kindknoten führt. Außerdem enhält der Knoten die Eigenschaft \inlinec{operation}, durch welche eine mathematische Operation festgelegt wird. Dieser Knoten kann so als eine Darstellung für den Ausdruck \inlinec{(41 + 1)} verstanden werden.
 
 \begin{figure}[h]
   \centering
@@ -99,7 +99,7 @@ Durch die Kindknoten ist eine Verschachtelung möglich. So ließe sich der Ausdr
   \label{fig:basics:syntaxtrees:3}
 \end{figure}
 
-Die gezeigten Graphen dienen an dieser Stelle der Übersicht. Intern werden Syntaxbäume in BlattWerkzeug als JSON-Dokumente verwaltet.
+Die gezeigten Graphen dienen an dieser Stelle der Übersicht. Intern werden Syntaxbäume in BlattWerkzeug als JSON-Do\-ku\-mente verwaltet.
 
 Die Verwendung und Benennung von Eigenschaften und Kindknoten ist nicht beliebig. Sie wird durch eine Grammatik definiert, welche im nächsten Abschnitt beschrieben ist.
 
@@ -127,13 +127,13 @@ Die Definition eines erlaubten Knotens wird mit node eingeleitet, der im Syntaxb
   \label{fig:basics:grammars:2}
 \end{figure}
 
-Desweiteren ist es möglich, Beziehungen zwischen Knoten zu definieren. Die Anweisung \inlinec{children} innerhalb einer \inlinec{node}-Definition erwartet zunächst die Angabe eines Namens und dann folgt mit \inlinec{::=} getrennt eine an Produktionsregeln angelehnte Aufzählung der zulässigen Typen in dieser Kindgruppe~\cite[6]{riemer2018}.
+Desweiteren ist es möglich, Beziehungen zwischen Knoten zu definieren. Die Anweisung \inlinec{children} innerhalb einer \inlinec{node}-De\-fi\-ni\-ti\-on erwartet zunächst die Angabe eines Namens und dann folgt mit \inlinec{::=} getrennt eine an Produktionsregeln angelehnte Aufzählung der zulässigen Typen in dieser Kindgruppe~\cite[6]{riemer2018}.
 
 Innerhalb dieser "Produktionsregeln" können die Typen mit den bekannten Quantifizierern \inlinec{*} (beliebig häufig), \inlinec{+} (mindestens ein Mal) und \inlinec{?} (optional) versehen werden. Exakte Häufigkeitsangaben sind ebenfalls möglich, die Syntax lehnt sich dabei an die erweiterte Backus-Naur-Form an~\cite[6]{riemer2018}.
 
 Im konkreten Beispiel in Abbildung \ref{fig:basics:grammars:2} kann die Operation \inlinec{operation} sowohl auf ihrer linken, als auch auf ihrer rechten Seite genau eine Konstante aufnehmen. Außerdem ist die Eigenschaft des Operators auf eine der vier Grundrechenarten beschränkt.
 
-Schließlich ist es mithilfe eines \inlinec{typedef} möglich, eine Menge von Knotentypen als Kindknoten zuzulassen. Im konkreten Beispiel in Abbildung \ref{fig:basics:grammars:3} ist es für den \inlinec{operation}-Knoten möglich, eine Konstante oder sich selbst als Kindknoten aufzunehmen. Ein Ausdruck in der Form \inlinec{(1 + (2 * 3))} kann so realisiert werden.
+Schließlich ist es mithilfe eines \inlinec{typedef} möglich, eine Menge von Knotentypen als Kindknoten zuzulassen. Im konkreten Beispiel in Abbildung \ref{fig:basics:grammars:3} ist es für den \inlinec{operation}-Kno\-ten möglich, eine Konstante oder sich selbst als Kindknoten aufzunehmen. Ein Ausdruck in der Form \inlinec{(1 + (2 * 3))} kann so realisiert werden.
 
 \begin{figure}[h]
   \lstinputlisting{snippets/baics-grammars-grammar-3.txt}

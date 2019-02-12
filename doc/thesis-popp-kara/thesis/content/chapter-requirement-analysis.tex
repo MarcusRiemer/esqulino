@@ -12,7 +12,7 @@ Ziel dieser Arbeit ist die Integration eines Tools zum spielerischen Erlernen vo
 \section{Vorhandenes Projekt}
 \label{sec:requirements:existing}
 
-Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt, die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Editoren, für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}. Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt. Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und wo möglich von den bestehenden Strukturen Gebrauch machen.
+Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt, die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Edi\-toren, für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}. Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt. Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und wo möglich von den bestehenden Strukturen Gebrauch machen.
 
 \subsection{Aufbau}
 
@@ -27,11 +27,11 @@ Der Client wurde als eine Single-Page Application mit rein clientseitiger Visual
 \subsection{Drag \& Drop-Editor}
 \label{sec:requirements:existing:structure:drag-drop}
 
-Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Editor von BlattWerkzeug. Auch wenn er vorgegeben und nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion mit dem zu erstellenden Programm abläuft. Programmcode soll zur Ausführung in der Mikrowelt nicht getippt, sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt werden. In einer Seitenleiste sind alle verwendbaren Bausteine aufgelistet. Auch wenn dieses Verhalten zunächst an Lightbot erinnert, soll es doch mit dem Drag \& Drop-Editor möglich sein, mehr als nur Icons in vorgegebene Kästen zu bewegen. Trotz des syntaxfreien Editors, soll die Anmutung von Programmcode entstehen und auch komplexere Strukturen möglich gemacht werden.
+Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Edi\-tor von BlattWerkzeug. Auch wenn er vorgegeben und nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion mit dem zu erstellenden Programm abläuft. Programmcode soll zur Ausführung in der Mikrowelt nicht getippt, sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt werden. In einer Seitenleiste sind alle verwendbaren Bausteine aufgelistet. Auch wenn dieses Verhalten zunächst an Lightbot erinnert, soll es doch mit dem Drag \& Drop-Edi\-tor möglich sein, mehr als nur Icons in vorgegebene Kästen zu bewegen. Trotz des syntaxfreien Editors, soll die Anmutung von Programmcode entstehen und auch komplexere Strukturen möglich gemacht werden.
 
-Die Bausteine des Drag \& Drop-Editors und deren Kombinationsmöglichkeiten werden durch eine Grammatik festgelegt, deren Anforderungen in Abschnitt \ref{sec:requirements:program} näher beschrieben werden. Ergebnis des Drag \& Drop-Editors ist nach dem Bearbeiten durch den Nutzer ein Syntaxbaum, der alle "programmierten" Operationen enthält und vom Programm weiterverarbeitet werden kann. Der Aufbau und die Funktionsweise von Grammatiken und Syntaxbäumen wird anhand der konkreten Implementierung in Abschnitt \ref{sec:implementation:grammar} erläutert.
+Die Bausteine des Drag \& Drop-Edi\-tors und deren Kombinationsmöglichkeiten werden durch eine Grammatik festgelegt, deren Anforderungen in Abschnitt \ref{sec:requirements:program} näher beschrieben werden. Ergebnis des Drag \& Drop-Edi\-tors ist nach dem Bearbeiten durch den Nutzer ein Syntaxbaum, der alle "programmierten" Operationen enthält und vom Programm weiterverarbeitet werden kann. Der Aufbau und die Funktionsweise von Grammatiken und Syntaxbäumen wird anhand der konkreten Implementierung in Abschnitt \ref{sec:implementation:grammar} erläutert.
 
-Abbildung \ref{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Editors, in dem eine SQL-Abfrage zusammengestellt wird. Im Block-Editor wird die SQL-Abfrage mit Elementen aus der Seitenleiste zusammengestellt. In den Komponenten darunter wird der daraus resultierende SQL-Befehl angezeigt. Außerdem wird eine Ergebnisvorschau mit dem Resultat der Abfrage angezeigt. Dieses Aussehen soll adaptiert und für die Zwecke dieser Arbeit weiterentwickelt werden.
+Abbildung \ref{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Edi\-tors, in dem eine SQL-Abfrage zusammengestellt wird. Im Block-Edi\-tor wird die SQL-Ab\-frage mit Elementen aus der Seitenleiste zusammengestellt. In den Komponenten darunter wird der daraus resultierende SQL-Be\-fehl angezeigt. Außerdem wird eine Ergebnisvorschau mit dem Resultat der Abfrage angezeigt. Dieses Aussehen soll adaptiert und für die Zwecke dieser Arbeit weiterentwickelt werden.
 
 \begin{figure}
     \centering
@@ -76,14 +76,14 @@ Um diese Funktionalität zu ermöglichen, stellt BlattWerkzeug eine Datenstruktu
 \section{Minisprache}
 \label{sec:requirements:program}
 
-Bewegungsabläufe wie z.~B. "vorwärts", "links", "rechts" oder "warten" werden vom Nutzer mithilfe des Drag \& Drop-Editors programmiert. Dafür wird eine Minisprache eingeführt, die im Vergleich zu Universalsprachen über einen deutlich reduzierten Funktionsumfang verfügt und dadurch den Nutzer behutsam an die Programmierung heranführen und ihn nicht wie Universalsprachen mit einem großen Sprachumfang und der damit verbundennen steileren Lernkurve überfordern soll.
+Bewegungsabläufe wie z.~B. "vorwärts", "links", "rechts" oder "warten" werden vom Nutzer mithilfe des Drag \& Drop-Edi\-tors programmiert. Dafür wird eine Minisprache eingeführt, die im Vergleich zu Universalsprachen über einen deutlich reduzierten Funktionsumfang verfügt und dadurch den Nutzer behutsam an die Programmierung heranführen und ihn nicht wie Universalsprachen mit einem großen Sprachumfang und der damit verbundennen steileren Lernkurve überfordern soll.
 
 Allgemeine Anforderungen an Minisprachen, sowie deren Vorteile wurden im Grundlagenkapitel \ref{sec:basics:mini-languages} genannt. Mindestanforderung an den Umfang der Minisprache ist die der Vorbild-Anwendung Lightbot (siehe \ref{sec:related:lightbot}), welche die Grundstruktur von Sequenzen, den Aufruf atomarer Befehle zur Navigation durch die Mikrowelt, sowie Definition und Aufruf von Prozeduren ermöglicht. Die Implementierung komplexerer Konzepte der Programmierung, wie Schleifen, Verzweigungen und Variablen, ist zusätzlich denkbar.
 
 \subsection{Auswertung}
 \label{sec:requirements:world:compile-interpret}
 
-Der Drag \& Drop-Editor von BlattWerkzeug \tref{sec:requirements:existing:structure:drag-drop} erzeugt aus den Eingaben des Nutzers einen Syntaxbaum. Dieser Syntaxbaum muss von der Software in einer Form ausgewertet werden können, die die im folgenden Punkt beschriebene Darstellung steuern kann.
+Der Drag \& Drop-Edi\-tor von BlattWerkzeug \tref{sec:requirements:existing:structure:drag-drop} erzeugt aus den Eingaben des Nutzers einen Syntaxbaum. Dieser Syntaxbaum muss von der Software in einer Form ausgewertet werden können, die die im folgenden Punkt beschriebene Darstellung steuern kann.
 
 \subsection{Darstellung der Ausführung}
 \label{sec:requirements:world:display}
