@@ -1,7 +1,0 @@
-{
-  "language": "trucklino_program",
-  "name": "sensor",
-  "properties": {
-    "type": "lightIsRed"
-  }
-}
