@@ -53,7 +53,6 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'BlattWerkzeug'
-copyright = '2017, Marcus Riemer'
 author = 'Marcus Riemer'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -124,6 +123,9 @@ html_sidebars = {
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'BlattWerkzeugdoc'
 
+html_show_copyright = False
+html_show_sphinx = True
+
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -187,4 +189,4 @@ def setup(app):
     app.add_stylesheet('graphviz_width.css')
 
 # Prefer SVG output for graphs
-graphviz_output_format = 'svg'    
+graphviz_output_format = 'svg'

@@ -1,6 +1,9 @@
 <ng-container [ngSwitch]="visual.blockType">
   <!-- Show a constant value directly specified in the block description -->
-  <span *ngSwitchCase="'constant'" [blockBase]="visual">{{ asBlockConstant(visual).text }}</span>
+  <span *ngSwitchCase="'constant'"
+        [blockBase]="visual">
+    {{ asBlockConstant(visual).text }}
+  </span>
   <!-- Show a value that is derived from the property of a node -->
   <span *ngSwitchCase="'interpolated'" [blockBase]="visual">{{ node.properties[asBlockInterpolated(visual).property] }}</span>
 
@@ -34,16 +37,19 @@
            properties can be applied.-->
       <ng-container *ngFor="let childVisualBlock of iteratorGetEditorBlock(childNode).visual">
         <editor-block-render class="from-iterator"
-                             [blockFlexChild]="childVisualBlock"
                              [codeResource]="codeResource"
                              [node]="childNode"
                              [visual]="childVisualBlock"></editor-block-render>
       </ng-container>
 
+      <editor-block-render-drop-target [codeResource]="codeResource"
+                                       [node]="childNode"
+                                       [visual]="defaultBetweenDropTarget">
+      </editor-block-render-drop-target>
+
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
-                             [blockFlexChild]="sepBlock"
                              [codeResource]="codeResource"
                              [visual]="sepBlock"
                              [node]="childNode"></editor-block-render>
@@ -53,16 +59,20 @@
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
     <editor-block-render-block #currentBlock
+                               [@isExecuted]="isCurrentlyExecuted | async"
+                               [parentChangeDetector]="changeDetector"
                                [blockLayout]="visual"
                                [blockBase]="visual"
-                               [astDropTarget]="node"
+                               [astDropTarget]="currentBlock"
                                [astDraggable]="node"
                                [codeResource]="codeResource"
                                [node]="node"
                                [visual]="visual"
-                               (drop)="currentBlock.onDrop()">>
+                               (drop)="currentBlock.onDrop()"
+                               (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
   <!-- Something is broken, display a error message -->
   <div *ngSwitchDefault>Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar</div>
 </ng-container>
+<div *ngIf="breakAfter" class="break-after"></div>

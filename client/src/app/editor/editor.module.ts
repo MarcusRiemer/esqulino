@@ -17,6 +17,7 @@ import { ProjectExistsGuard } from './project-exists.guard'
 
 import { CodeResourceService } from './coderesource.service'
 import { DragService } from './drag.service'
+import { DropBlockComponent } from './drop-block.component'
 import { ProjectService } from './project.service'
 import { ToolbarService } from './toolbar.service'
 import { ToolbarComponent } from './toolbar.component'
@@ -41,11 +42,15 @@ import { SettingsComponent } from './project-settings/settings.component'
     CodeEditorModule.forRoot(),
   ],
   declarations: [
+    DropBlockComponent,
     EditorComponent,
     ToolbarComponent,
     NavbarComponent,
     SidebarLoaderComponent,
     SettingsComponent,
+  ],
+  entryComponents: [
+    DropBlockComponent,
   ],
   providers: [
     CodeResourceService,

@@ -14,6 +14,20 @@ import {
 import { TypeInstructions } from './instructions'
 import { isHoleIfEmpty } from '../../syntaxtree/grammar-util';
 
+const TERMINAL_QUESTIONMARK: VisualBlockDescriptions.EditorConstant = {
+  blockType: "constant",
+  text: "❓",
+  style: {
+    "paddingLeft": "10px",
+    "paddingRight": "10px",
+    "border": "2px solid red",
+    "color": "darkred",
+    "backgroundColor": "orange",
+    "borderRadius": "500px",
+    "cursor": "default",
+  }
+};
+
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
  * symbol will appear as the text.
@@ -96,10 +110,12 @@ export function mapChildren(
   // A simple seperation character that is explicitly specified by the instructions?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
     // Create a single terminal character to go in between
-    between = [mapTerminal(
-      { type: "terminal", name: "t", symbol: instructions.between },
-      DefaultInstructions.terminalInstructions
-    )];
+    between = [
+      mapTerminal(
+        { type: "terminal", name: "t", symbol: instructions.between },
+        DefaultInstructions.terminalInstructions
+      )
+    ];
   }
   // "allowed" and "sequence" may provide fallbacks in the grammar
   else if (attr.type === "allowed" || attr.type === "sequence") {
@@ -110,7 +126,7 @@ export function mapChildren(
     }
   }
 
-  // Find out whether to show a drop target
+  // Find out whether to show a drop target, the position is determined later
   if (instructions.generateDropTargets !== "none") {
     const calculatedVisibility: VisualBlockDescriptions.VisibilityExpression =
       isHoleIfEmpty(attr)
@@ -127,21 +143,7 @@ export function mapChildren(
         visibility: calculatedVisibility
 
       },
-      children: [
-        {
-          blockType: "constant",
-          text: "❓",
-          style: {
-            "paddingLeft": "10px",
-            "paddingRight": "10px",
-            "border": "2px solid red",
-            "color": "darkred",
-            "backgroundColor": "orange",
-            "borderRadius": "500px",
-            "cursor": "default",
-          },
-        } as VisualBlockDescriptions.EditorConstant,
-      ],
+      children: [TERMINAL_QUESTIONMARK],
       direction: "horizontal",
     };
   }

@@ -111,6 +111,7 @@ export type NodeStringTypeRestrictions =
   | MinimumLengthRestrictionDescription
   | MaximumLengthRestrictionDescription
   | EnumRestrictionDescription
+  | RegularExpressionRestrictionDescription
 
 /**
  * Restricts the minimum length of things.
@@ -142,6 +143,14 @@ export interface LengthRestrictionDescription {
 export interface EnumRestrictionDescription {
   type: "enum",
   value: string[]
+}
+
+/**
+ * Restricts to match a regular expression
+ */
+export interface RegularExpressionRestrictionDescription {
+  type: "regex",
+  value: string
 }
 
 /**

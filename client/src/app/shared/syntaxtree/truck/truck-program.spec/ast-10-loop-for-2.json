@@ -1,0 +1,36 @@
+{
+  "language": "trucklino_program",
+  "name": "loopFor",
+  "properties": {
+    "times": 5
+  },
+  "children": {
+    "body": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "Go Forward"
+        }
+      },
+      {
+        "language": "trucklino_program",
+        "name": "loopFor",
+        "properties": {
+          "times": 10
+        },
+        "children": {
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Go Forward"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

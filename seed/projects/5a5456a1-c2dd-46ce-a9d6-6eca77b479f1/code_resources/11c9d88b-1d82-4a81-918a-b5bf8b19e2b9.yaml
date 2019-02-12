@@ -1,0 +1,52 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Lösung - Aufgabe 2
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 11c9d88b-1d82-4a81-918a-b5bf8b19e2b9
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "turnLeft"}},
+    {"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "goForward"}}, {"name": "procedureCall", "language": "trucklino_program", "properties":
+    {"name": "turnLeft"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "goForward"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "unload"}}]}, "language": "trucklino_program"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-01-23 13:20:44.498192'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-01-23 13:36:03.92488'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-lang
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    await this.goForward();
+    await this.turnLeft();
+    await this.goForward();
+    await this.turnLeft();
+    await this.goForward();
+    await this.unload();
+new_record: false
+active_record_yaml_version: 2

@@ -114,6 +114,9 @@ Rails.application.routes.draw do
     # Access to JSON schema files
     get 'json_schema/:schema_name', controller: 'static_files', action: :schema
 
+    # Generating errors
+    get 'raise-error', controller: 'debug', action: :raise_error
+
     # Fallback for unknown API endpoints
     match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
   end

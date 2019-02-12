@@ -1,55 +1,61 @@
-import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-
-interface World {
-  name: string;
-  size: { x: number, y: number };
-}
+import { World } from '../../../shared/syntaxtree/truck/world';
+import { readFromNode } from '../../../shared/syntaxtree/truck/world.description';
 
 @Injectable()
-export class TruckWorldService implements OnInit {
-  private readonly _worlds: { [id: string]: World } = {};
+export class TruckWorldService {
+  private readonly _worldIds: { [id: string]: string } = {};
+  private readonly _worlds: { [id: string]: { id: string, world: World } } = {};
+  private readonly _currentWorldId = new BehaviorSubject<string>(undefined);
 
-  constructor(private _currentCodeResource: CurrentCodeResourceService) {
-
-  }
-
-  private _selectedWorldId = new BehaviorSubject("ee006a2d-501a-42b0-9c19-9f7bb4df45ba");
-
-  readonly currentWorld = this._selectedWorldId
+  readonly currentWorld = this._currentWorldId
     .pipe(
-      // TODO: Create a world (if it does not exist yet)
-      map(id => {
+      filter(worldId => !!worldId),
+      map(worldId => {
         const currentProgram = this._currentCodeResource.peekResource;
-        const project = currentProgram.project;
-        const worldResource = project.getCodeResourceById(id);
-        const worldTree = worldResource.syntaxTreePeek.toModel();
-
-        // TODO: Move this translation somewhere else
-        // TODO: Decide when to replace the old world and when to simply return it
-        this._worlds[currentProgram.id] = {
-          name: worldResource.name,
-          size: {
-            x: +worldTree.children["size"][0].properties["x"],
-            y: +worldTree.children["size"][0].properties["y"]
+        if (this._worlds[currentProgram.id] && this._worlds[currentProgram.id].id === worldId) {
+          // An instance of the world for this program already exists
+          return this._worlds[currentProgram.id].world;
+        } else {
+          // Create a new instance of the world for this program
+          try {
+            const worldTree = currentProgram.project.getCodeResourceById(worldId).syntaxTreePeek.toModel();
+            this._worlds[currentProgram.id] = {
+              id: worldId,
+              world: new World(readFromNode(worldTree))
+            };
+            return this._worlds[currentProgram.id].world;
+          } catch (error) {
+            return null;
           }
         }
-
-        return (this._worlds[currentProgram.id]);
-      })
+      }),
+      filter(world => !!world)
     );
 
-  ngOnInit(): void {
-    this._currentCodeResource.currentResource.subscribe(program => {
-      this.setNewWorld(this._selectedWorldId.value);
+  constructor(private _currentCodeResource: CurrentCodeResourceService) {
+    this._currentCodeResource.currentResource.subscribe(currentProgram => {
+      if (currentProgram.emittedLanguageIdPeek === 'truck-world') {
+        // Current program is a world
+        this._worldIds[currentProgram.id] = currentProgram.id;
+        this._currentWorldId.next(currentProgram.id);
+      } else if (this._worldIds[currentProgram.id]) {
+        // Current program is a program and already has a world set
+        this._currentWorldId.next(this._worldIds[currentProgram.id]);
+      }
     });
   }
 
   setNewWorld(id: string) {
-    this._selectedWorldId.next(id);
+    if (id) {
+      const currentProgramId = this._currentCodeResource.peekResource.id;
+      this._worldIds[currentProgramId] = id;
+      this._currentWorldId.next(id);
+    }
   }
 }

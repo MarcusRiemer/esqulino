@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ApplicationRef } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs'
 import { tap } from 'rxjs/operators';
 
-import { CodeResource } from '../shared/syntaxtree';
+import { CodeResource, NodeLocation } from '../shared/syntaxtree';
 
 import { ProjectService } from './project.service';
 import { SidebarService } from './sidebar.service';
@@ -24,9 +24,12 @@ export class CurrentCodeResourceService {
    */
   private _codeResource = new BehaviorSubject<CodeResource>(undefined);
 
+  private _executionLocation = new BehaviorSubject<NodeLocation>(undefined);
+
   constructor(
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
+    private _applicationRef: ApplicationRef,
   ) {
     // Things that need to happen every time the resource changes
     this._codeResource
@@ -42,7 +45,12 @@ export class CurrentCodeResourceService {
       .subscribe();
   }
 
-  currentResourceChanged(codeResourceId: string) {
+  /**
+   * Allows to change the resource that is currently displayed.
+   *
+   * @remarks This is meant to be updated in conjunction with the URL.
+   */
+  _changeCurrentResource(codeResourceId: string) {
     // Knowing when resources change is handy for debugging
     console.log(`Current resource ID changed to: ${codeResourceId}`);
 
@@ -61,11 +69,27 @@ export class CurrentCodeResourceService {
   /**
    * Informs interested components about the current resource.
    */
-  get currentResource(): Observable<CodeResource> {
-    return (this._codeResource);
-  }
+  readonly currentResource: Observable<CodeResource> = this._codeResource;
 
+  /**
+   *
+   */
+  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation
+    .pipe(
+      // tap(_ => this._applicationRef.tick()) // TODO: This must not be necessary
+    );
+
+  /**
+   * The currently loaded resource
+   */
   get peekResource() {
     return (this._codeResource.value);
+  }
+
+  /**
+   * Broadcasts a new execution location.
+   */
+  setCurrentExecutionLocation(loc?: NodeLocation) {
+    this._executionLocation.next(loc);
   }
 }

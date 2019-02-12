@@ -1,0 +1,4 @@
+truck.fooBar = function*(foo, bar) {
+  yield* truck.doNothing();
+  yield* truck.goForward();
+}

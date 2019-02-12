@@ -247,8 +247,14 @@ export class ServerDataService {
 
   /**
    * @return The details of the specified grammar.
+   *
+   * @param id The id of the searched grammar
+   * @param refresh True, if the cache must be updated
    */
-  getGrammarDescription(id: string): Observable<GrammarDescription> {
+  getGrammarDescription(id: string, refresh = false): Observable<GrammarDescription> {
+    if (refresh) {
+      this.individualGrammars.refreshDescription(id);
+    }
     return (this.individualGrammars.getDescription(id));
   }
 }

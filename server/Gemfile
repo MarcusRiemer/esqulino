@@ -27,6 +27,9 @@ gem 'ruby-filemagic'
 # Used to resize images on the fly
 gem 'mini_magick'
 
+# Error reporting
+gem "sentry-raven"
+
 ############################
 # Rails dependencies
 ###########################

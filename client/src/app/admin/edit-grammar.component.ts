@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, TemplateRef, AfterViewInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, ParamMap } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { Title } from '@angular/platform-browser'
 
 import { switchMap, map, first } from 'rxjs/operators'
+
+import { ToolbarService } from '../shared/toolbar.service'
 import { ServerDataService, CachedRequest } from '../shared/server-data.service'
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
 import { GrammarDescription } from '../shared/syntaxtree'
@@ -13,7 +15,9 @@ import { ServerApiService } from '../shared/serverapi.service'
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
-export class EditGrammarComponent implements OnInit {
+export class EditGrammarComponent implements OnInit, AfterViewInit {
+
+  @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
 
   // The grammar that is beeing edited
   grammar: GrammarDescription;
@@ -31,6 +35,7 @@ export class EditGrammarComponent implements OnInit {
     private _serverApi: ServerApiService,
     private _serverData: ServerDataService,
     private _title: Title,
+    private _toolbarService: ToolbarService
   ) {
   }
 
@@ -53,6 +58,10 @@ export class EditGrammarComponent implements OnInit {
       const request = this._http.get<BlockLanguageListDescription[]>(relatedUrl);
       this.relatedBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(request);
     });
+  }
+
+  ngAfterViewInit() {
+    this._toolbarService.setItems(this.toolbarButtons);
   }
 
   onTypeDataUpdate(text: string) {
