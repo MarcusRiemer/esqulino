@@ -2,58 +2,123 @@ import { NodeLocation, NodeDescription, QualifiedTypeName } from "./syntaxtree.d
 import { Validator } from './validator';
 import { Tree, Node } from './syntaxtree';
 import { canEmbraceNode } from './embrace';
+import { ErrorCodes } from './validation-result';
 
+/**
+ * A drop operation that would not "worsen" the tree by violating
+ * basic type or cardinality laws.
+ */
 interface SmartDropLocation {
   location: NodeLocation;
-  operation: "embrace" | "drop"
+  operation: "embrace" | "drop";
 }
+
+// These errors signal cardinalty errors that would be triggered
+// by inserting a new node.
+const CARDINALITY_ERRORS: string[] = [
+  ErrorCodes.InvalidMaxOccurences // Suddenly too many nodes
+]
 
 /**
  * Determines whether something could be inserted at the given place
  * in the current node.
  */
-function allowsInsertion(
+export function _cardinalityAllowsInsertion(
+  validator: Validator,
   node: Node,
-  typeName: QualifiedTypeName,
+  candidate: NodeDescription,
   categoryName: string,
   index: number,
 ): boolean {
-  return (false);
+  // Build a new tree with the proposed insertion
+  const insertionLocation: NodeLocation = [...node.location, [categoryName, index]];
+  const modifiedTree = node.tree.insertNode(insertionLocation, candidate);
+
+  // Validate it and check the errors at the parenting node
+  const valResult = validator.validateFromRoot(modifiedTree);
+  const modifiedNode = modifiedTree.locate(node.location);
+  const errors = valResult.getErrorsOn(modifiedNode);
+
+  // Error out if there is any error that is explained by incorrect cardinality
+  return (
+    errors
+      // Only look at errors in our category
+      .filter(err => err.data.category == categoryName)
+      .every(err => !CARDINALITY_ERRORS.includes(err.code))
+  );
 }
 
 /**
- * Walks up the tree to find a meaningful place to insert any
+ * Walks up the tree to find valid places to insert any
  * of the given candidates.
+ *
+ * @param validator The rules that must hold after the embracing
+ * @param tree The tree to modify
+ * @param loc The location of the node to be inserted
+ * @param candidates All nodes that could possibly be used to embrace
  */
-function _parentAppendLocation(
+export function _insertAtAnyParent(
   validator: Validator,
   tree: Tree,
   loc: NodeLocation,
   candidates: NodeDescription[]
-) {
-  // Check each candidate
-  candidates.forEach(c => {
-    const fillType: QualifiedTypeName = { languageName: c.language, typeName: c.name };
+): SmartDropLocation[] {
+  const toReturn: SmartDropLocation[] = [];
 
-    // At each position
-    let curr = tree.locateOrUndefined(loc);
-    while (curr) {
-      const p = validator.getType(curr.qualifiedName);
+  // Check each candidate that could be appended somewhere ...
+  candidates.forEach(candidate => {
+    const fillType: QualifiedTypeName = { languageName: candidate.language, typeName: candidate.name };
+    let stepsUp = 0; // Number of steps made towards the root
 
-      const insert = p.allowedChildrenCategoryNames
-        .filter(existingCategory => p.allowsChildType(fillType, existingCategory));
+    // ... against each node up to the root
+    let currNode = tree.locateOrUndefined(loc);
 
-      curr = curr.nodeParent;
+    // If the searched node does not exist immediatly, we might try to insert
+    // something in a location that does not yet exist. In that case we simply
+    // assume that we may take the parent of the given location
+    if (!currNode) {
+      currNode = tree.locateOrUndefined(loc.slice(0, -1));
+      stepsUp++;
+    }
+
+    while (currNode) {
+      // Find out which categories could be theoretically used for
+      // the given type
+      const nodeValidator = validator.getType(currNode.qualifiedName);
+      const insertionCategories = nodeValidator.allowedChildrenCategoryNames
+        .filter(existingCategory => nodeValidator.allowsChildType(fillType, existingCategory));
+
+      // Find out which location indices could be used for the given type
+      insertionCategories.forEach(categoryName => {
+        const theoreticalIndices = currNode.getChildrenInCategory(categoryName).length;
+
+        // <= because insertions may also occur *after* an existing element
+        for (let i = 0; i <= theoreticalIndices; ++i) {
+          if (_cardinalityAllowsInsertion(validator, currNode, candidate, categoryName, i)) {
+            // Slicing needs to be omitted of stepsUp is 0, because [1,2,3].slice(0, 0)
+            // returns an empty array.
+            const pathBefore = stepsUp !== 0 ? loc.slice(0, -stepsUp) : loc;
+            toReturn.push({
+              location: [...pathBefore, [categoryName, i]],
+              operation: "drop",
+            });
+          }
+        }
+      });
+
+      currNode = currNode.nodeParent;
+      stepsUp++;
     }
   });
+
+  return (toReturn);
 }
 
 /**
  * Possibly meaningful approach:
- * 1) Valid embraces take precedence
+ * 1) Valid embraces
  * 2) Append after self (if cardinality and immediate type fits)
  * 3) Append after any parent (if cardinality and immediate type fits)
- * 4) No drop
  *
  * Basic rule: Do not build invalid trees according to cardinality. These
  * are errors that can not be fixed.
@@ -68,18 +133,23 @@ function _parentAppendLocation(
  * @param loc The location of the node to be embraced
  * @param candidates All nodes that could possibly be used to embrace
  */
-function smartDropLocation(
+export function smartDropLocation(
   validator: Validator,
   tree: Tree,
   loc: NodeLocation,
   candidates: NodeDescription[]
-): SmartDropLocation | undefined {
+): SmartDropLocation[] {
+  const toReturn: SmartDropLocation[] = [];
+
+  // Is embracing an option?
   if (canEmbraceNode(validator, tree, loc, candidates)) {
-    return ({
+    toReturn.push({
       location: loc,
       operation: "embrace"
     });
-  } else {
-
   }
+
+  // Is appending to any of the parents an option?
+
+  return (toReturn);
 }
