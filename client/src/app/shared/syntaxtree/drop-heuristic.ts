@@ -11,6 +11,7 @@ import { ErrorCodes } from './validation-result';
 interface SmartDropLocation {
   location: NodeLocation;
   operation: "embrace" | "drop";
+  nodeDescription: NodeDescription;
 }
 
 // These errors signal cardinalty errors that would be triggered
@@ -101,6 +102,7 @@ export function _insertAtAnyParent(
             toReturn.push({
               location: [...pathBefore, [categoryName, i]],
               operation: "drop",
+              nodeDescription: candidate
             });
           }
         }
