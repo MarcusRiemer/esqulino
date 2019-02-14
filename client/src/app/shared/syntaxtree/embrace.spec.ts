@@ -1,6 +1,6 @@
 import { Node, NodeDescription, Tree } from './syntaxtree'
 import { Validator } from './validator';
-import { embraceNode, _findPossibleLocations, _findMatch, _localEmbrace, canEmbraceNode } from './embrace';
+import { embraceNode, _findPossibleLocations, _findMatchInCandidate, _localEmbrace, canEmbraceNode, embraceMatches } from './embrace';
 import { QualifiedTypeName } from './syntaxtree.description';
 import { BOOLEAN_GRAMMAR } from './boolean-expression.spec';
 
@@ -199,7 +199,7 @@ describe('AST: Embracing', () => {
       const validator = new Validator([BOOLEAN_GRAMMAR]);
 
       const targetNode = new Tree(inTreeDesc).rootNode;
-      const res = _findMatch(validator, targetNode, embraceCandidates);
+      const res = _findMatchInCandidate(validator, targetNode, embraceCandidates);
 
 
       expect(res).toEqual([embraceCandidates[0], [["expr", 0]]]);
@@ -235,16 +235,15 @@ describe('AST: Embracing', () => {
       const validator = new Validator([BOOLEAN_GRAMMAR]);
 
       const targetNode = new Tree(inTreeDesc).rootNode;
-      const res = _findMatch(validator, targetNode, embraceCandidates);
+      const res = _findMatchInCandidate(validator, targetNode, embraceCandidates);
 
 
       expect(res).toBeUndefined();
     });
   });
-
   // ######################################################################
 
-  describe(`embraceNode()`, () => {
+  describe(`embraceNode(), canEmbraceNode and embraceMatches()`, () => {
 
     it('<emptyTree> => not(<hole>)', () => {
       const embraceCandidates: NodeDescription[] = [
@@ -271,6 +270,7 @@ describe('AST: Embracing', () => {
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
       expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(false);
+      expect(embraceMatches(validator, prev, [], embraceCandidates)).toEqual([]);
     });
 
     it('false => not(<false>)', () => {
@@ -306,6 +306,9 @@ describe('AST: Embracing', () => {
       };
       expect(curr.toModel()).toEqual(expTreeDesc);
       expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
+      expect(embraceMatches(validator, prev, [], embraceCandidates)).toEqual([
+        { location: [], nodeDescription: embraceCandidates[0], operation: "embrace", candidateHole: [["expr", 0]] }
+      ]);
     });
 
     it('not(false) => not(<not(false)>)', () => {

@@ -172,17 +172,17 @@ describe('Drop Heuristics', () => {
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       expect(_insertAtAnyParent(validator, inTree, [["lhs", 0]], [candidateDesc])).toEqual([
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
       ]);
 
       // Attempt to insert at the "correct" side, expect to get exactly that hole
       expect(_insertAtAnyParent(validator, inTree, [["rhs", 0]], [candidateDesc])).toEqual([
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
       ]);
 
       // Attempt to insert at the root itself
       expect(_insertAtAnyParent(validator, inTree, [], [candidateDesc])).toEqual([
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
       ]);
 
       // Working with multiple candidates
@@ -197,20 +197,20 @@ describe('Drop Heuristics', () => {
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       expect(_insertAtAnyParent(validator, inTree, [["lhs", 0]], twoCandidatesDesc)).toEqual([
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] }
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] }
       ]);
 
       // Attempt to insert at the "correct" side, expect to get exactly that hole
       expect(_insertAtAnyParent(validator, inTree, [["rhs", 0]], twoCandidatesDesc)).toEqual([
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] }
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] }
       ]);
 
       // Attempt to insert at the root itself
       expect(_insertAtAnyParent(validator, inTree, [], twoCandidatesDesc)).toEqual([
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] }
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] }
       ]);
 
     });
@@ -241,20 +241,20 @@ describe('Drop Heuristics', () => {
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       expect(_insertAtAnyParent(validator, inTree, [["lhs", 0]], [candidateDesc])).toEqual([
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: candidateDesc },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: candidateDesc },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
       ]);
 
       // Attempt to insert at the "correct" side, expect to get exactly that hole
       expect(_insertAtAnyParent(validator, inTree, [["rhs", 0]], [candidateDesc])).toEqual([
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: candidateDesc },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: candidateDesc },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
       ]);
 
       // Attempt to insert at the root itself
       expect(_insertAtAnyParent(validator, inTree, [], [candidateDesc])).toEqual([
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: candidateDesc },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: candidateDesc },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
       ]);
 
       // Working with multiple candidates
@@ -268,26 +268,26 @@ describe('Drop Heuristics', () => {
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       expect(_insertAtAnyParent(validator, inTree, [["lhs", 0]], twoCandidatesDesc)).toEqual([
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] }
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] }
       ]);
 
       // Attempt to insert at the "correct" side, expect to get exactly that hole
       expect(_insertAtAnyParent(validator, inTree, [["rhs", 0]], twoCandidatesDesc)).toEqual([
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] }
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] }
       ]);
 
       // Attempt to insert at the root itself
       expect(_insertAtAnyParent(validator, inTree, [], twoCandidatesDesc)).toEqual([
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[0] },
-        { location: [["lhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] },
-        { location: [["rhs", 0]], operation: "drop", nodeDescription: twoCandidatesDesc[1] }
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[0] },
+        { location: [["lhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] },
+        { location: [["rhs", 0]], operation: "insert", nodeDescription: twoCandidatesDesc[1] }
       ]);
     });
 
@@ -328,8 +328,8 @@ describe('Drop Heuristics', () => {
       expect(_insertAtAnyParent(validator, inTree, insertLocation, [candidateDesc]))
         .withContext(`Inserting at ${JSON.stringify(insertLocation)}`)
         .toEqual([
-          { location: [["expr", 0], ["lhs", 0]], operation: "drop", nodeDescription: candidateDesc },
-          { location: [["expr", 0], ["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+          { location: [["expr", 0], ["lhs", 0]], operation: "insert", nodeDescription: candidateDesc },
+          { location: [["expr", 0], ["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
         ], `Inserting at ${JSON.stringify(insertLocation)}`);
 
       // Attempt to insert at the "correct" side, expect to get exactly that hole
@@ -337,8 +337,8 @@ describe('Drop Heuristics', () => {
       expect(_insertAtAnyParent(validator, inTree, insertLocation, [candidateDesc]))
         .withContext(`Inserting at ${JSON.stringify(insertLocation)}`)
         .toEqual([
-          { location: [["expr", 0], ["lhs", 0]], operation: "drop", nodeDescription: candidateDesc },
-          { location: [["expr", 0], ["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+          { location: [["expr", 0], ["lhs", 0]], operation: "insert", nodeDescription: candidateDesc },
+          { location: [["expr", 0], ["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
         ]);
 
       // Attempt to insert at the binary expression itself, this offers the
@@ -347,8 +347,8 @@ describe('Drop Heuristics', () => {
       expect(_insertAtAnyParent(validator, inTree, insertLocation, [candidateDesc]))
         .withContext(`Inserting at ${JSON.stringify(insertLocation)}`)
         .toEqual([
-          { location: [["expr", 0], ["lhs", 0]], operation: "drop", nodeDescription: candidateDesc },
-          { location: [["expr", 0], ["rhs", 0]], operation: "drop", nodeDescription: candidateDesc }
+          { location: [["expr", 0], ["lhs", 0]], operation: "insert", nodeDescription: candidateDesc },
+          { location: [["expr", 0], ["rhs", 0]], operation: "insert", nodeDescription: candidateDesc }
         ]);
 
       // Attempt to insert at the root itself, there is no free place here
