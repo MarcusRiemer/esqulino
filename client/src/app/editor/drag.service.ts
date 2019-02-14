@@ -13,6 +13,8 @@ import { TrashService } from './shared/trash.service';
 
 import { DropBlockComponent } from './drop-block.component';
 import { CurrentCodeResourceService } from './current-coderesource.service';
+import { SmartDropOptions } from '../shared/syntaxtree/drop.description';
+import { smartDropLocation } from '../shared/syntaxtree/drop';
 
 
 /**
@@ -209,8 +211,8 @@ export class DragService {
   public informDraggedOver(
     evt: MouseEvent,
     dropLocation: NodeLocation,
-    node: Node,
-    isEmbraceDrop: boolean
+    node: Node | undefined,
+    smartDropOptions: SmartDropOptions = {}
   ) {
     const dragData = this._currentDrag.value;
     if (!dragData) {
@@ -220,11 +222,27 @@ export class DragService {
     // Ensure that no other block tells the same story
     evt.stopImmediatePropagation();
 
+    const currentCodeResource = this._currentCodeResource.peekResource;
+    const smartDropLocations = smartDropLocation(
+      smartDropOptions,
+      currentCodeResource.validationLanguagePeek.validator,
+      currentCodeResource.syntaxTreePeek,
+      dropLocation,
+      dragData.draggedDescription
+    );
+
     // Just in case: Reset all the data
     dragData.hoverNode = node;
-    dragData.dropLocation = dropLocation;
     dragData.hoverTrash = false;
-    dragData.isEmbraceDrop = isEmbraceDrop;
+
+    if (smartDropOptions.allowExact === true) {
+      // debugger;
+    }
+
+    // Temporarily: Smash down all the smart drop locations to a single option
+    dragData.dropLocation = smartDropLocations.length > 0 ? smartDropLocations[0].location : undefined;
+    dragData.isEmbraceDrop = smartDropLocations.length > 0 && smartDropLocations[0].operation === "embrace";
+
 
     this._currentDrag.next(dragData);
   }

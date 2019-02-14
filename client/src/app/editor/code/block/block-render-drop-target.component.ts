@@ -131,7 +131,10 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   onMouseEnter(evt: MouseEvent) {
     this._currentTarget = true;
     if (this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, this.dropLocation, this.node, false);
+      // TODO: Using `node.location` uses an incorrect drop location. But in the longer
+      //       the exact location should be used without relying on any "oldfashioned"
+      //       drop locations.
+      this._dragService.informDraggedOver(evt, this.dropLocation, this.node, { allowExact: true });
     }
   }
 

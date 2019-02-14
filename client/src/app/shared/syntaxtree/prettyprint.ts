@@ -173,7 +173,7 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
     case "sequence":
     case "allowed":
       // Figuring out the connector
-      let connector = (p) => {
+      let connector = (p: Desc.NodeTypesAllowedDescription | Desc.NodeTypesSequenceDescription) => {
         if (Desc.isNodeTypesAllowedDescription(p)) {
           return (' & ');
         } else {

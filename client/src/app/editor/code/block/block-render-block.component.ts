@@ -12,6 +12,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { BlockDropProperties } from './block-drop-properties';
 import { calculateDropLocation } from './drop-utils';
+import { DEFAULT_SMART_DROP_OPTIONS } from 'src/app/shared/syntaxtree/drop';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -79,7 +80,9 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
 
   onMouseEnter(evt: MouseEvent) {
     if (this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, this.dropLocation, this.node, this._isEmbraceDrop());
+      this._dragService.informDraggedOver(evt, this.node.location, this.node, {
+        allowAnyParent: true, allowEmbrace: true
+      });
     }
   }
 
