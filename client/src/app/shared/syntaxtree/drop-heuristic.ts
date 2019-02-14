@@ -1,18 +1,9 @@
 import { NodeLocation, NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
 import { Validator } from './validator';
 import { Tree, Node } from './syntaxtree';
-import { canEmbraceNode } from './embrace';
+import { _findMatchInCandidate, embraceMatches } from './embrace';
 import { ErrorCodes } from './validation-result';
-
-/**
- * A drop operation that would not "worsen" the tree by violating
- * basic type or cardinality laws.
- */
-interface SmartDropLocation {
-  location: NodeLocation;
-  operation: "embrace" | "drop";
-  nodeDescription: NodeDescription;
-}
+import { SmartDropLocation } from './drop-heuristic.description';
 
 // These errors signal cardinalty errors that would be triggered
 // by inserting a new node.
@@ -101,13 +92,14 @@ export function _insertAtAnyParent(
             const pathBefore = stepsUp !== 0 ? loc.slice(0, -stepsUp) : loc;
             toReturn.push({
               location: [...pathBefore, [categoryName, i]],
-              operation: "drop",
+              operation: "insert",
               nodeDescription: candidate
             });
           }
         }
       });
 
+      // Go one node up the chain
       currNode = currNode.nodeParent;
       stepsUp++;
     }
@@ -144,12 +136,7 @@ export function smartDropLocation(
   const toReturn: SmartDropLocation[] = [];
 
   // Is embracing an option?
-  if (canEmbraceNode(validator, tree, loc, candidates)) {
-    toReturn.push({
-      location: loc,
-      operation: "embrace"
-    });
-  }
+  toReturn.push(...embraceMatches(validator, tree, loc, candidates));
 
   // Is appending to any of the parents an option?
 

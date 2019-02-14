@@ -1,6 +1,7 @@
 import { NodeDescription, NodeLocation, QualifiedTypeName } from './syntaxtree.description';
 import { Tree, Node } from './syntaxtree';
 import { Validator } from './validator';
+import { SmartDropLocation, EmbraceDropLocation } from './drop-heuristic.description';
 
 /**
  * Calculates which holes of the given parent would like to be
@@ -53,7 +54,7 @@ export function _localEmbrace(
  * @return The node to be inserted and the position where the insert
  *         should take place in the given target node.
  */
-export function _findMatch(
+export function _findMatchInCandidate(
   validator: Validator,
   targetNode: Node,
   candidates: NodeDescription[]
@@ -67,6 +68,43 @@ export function _findMatch(
   }
 
   return (undefined);
+}
+
+/**
+ * Calculates all drop
+ *
+ * @param validator The rules that must hold after the embracing
+ * @param targetNode The node that would like to be embraced.
+ * @param candidates The nodes that could embrace the target node.
+ * @return The node to be inserted and the position where the insert
+ *         should take place in the given target node.
+ */
+export function embraceMatches(
+  validator: Validator,
+  tree: Tree,
+  loc: NodeLocation,
+  candidates: NodeDescription[]
+): EmbraceDropLocation[] {
+  const targetNode = tree.locateOrUndefined(loc);
+  if (targetNode) {
+    const toReturn: EmbraceDropLocation[] = [];
+    candidates.forEach(candidate => {
+      const candidateNode = new Tree(candidate).rootNode;
+      const holes = _findPossibleLocations(candidateNode, targetNode.qualifiedName, validator);
+      holes.forEach(hole => {
+        toReturn.push({
+          location: loc,
+          nodeDescription: candidate,
+          operation: "embrace",
+          candidateHole: hole
+        });
+      });
+    });
+
+    return (toReturn);
+  } else {
+    return ([]);
+  }
 }
 
 /**
@@ -90,7 +128,7 @@ export function embraceNode(
   const targetNode = tree.locateOrUndefined(loc);
   if (targetNode) {
     // Find out where in the given candidates the target node could be placed
-    const findMatchResult = _findMatch(validator, targetNode, candidates);
+    const findMatchResult = _findMatchInCandidate(validator, targetNode, candidates);
 
     if (findMatchResult) {
       // The target node exists and can be embraced
@@ -125,13 +163,5 @@ export function canEmbraceNode(
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): boolean {
-  // Is there nothing at the embrace target? In that case we have a normal
-  // insertion at the given location
-  const targetNode = tree.locateOrUndefined(loc);
-  if (targetNode) {
-    // Find out where in the given candidates the target node could be placed
-    return (!!_findMatch(validator, targetNode, candidates))
-  } else {
-    return (false);
-  }
+  return (embraceMatches(validator, tree, loc, candidates).length > 0);
 }
