@@ -1,7 +1,7 @@
 import { NodeDescription, NodeLocation, QualifiedTypeName } from './syntaxtree.description';
 import { Tree, Node } from './syntaxtree';
 import { Validator } from './validator';
-import { SmartDropLocation, EmbraceDropLocation } from './drop-heuristic.description';
+import { EmbraceDropLocation } from './drop.description';
 
 /**
  * Calculates which holes of the given parent would like to be

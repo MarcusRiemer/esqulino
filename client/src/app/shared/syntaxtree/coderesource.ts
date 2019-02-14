@@ -7,7 +7,7 @@ import { ProjectResource } from '../resource';
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
 import { ValidationResult } from './validation-result';
-import { embraceNode } from './embrace';
+import { embraceNode } from './drop-embrace';
 
 /**
  * A resource that is described by a syntaxtree.

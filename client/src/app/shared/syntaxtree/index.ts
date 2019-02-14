@@ -5,7 +5,6 @@ export * from './language'
 export * from './validator'
 export * from './grammar.description'
 export * from './validation-result'
-export * from './embrace'
 
 export { prettyPrintGrammar } from './prettyprint'
 

@@ -2,7 +2,7 @@ import { NodeDescription, NodeLocation } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
 import { BOOLEAN_GRAMMAR } from './boolean-expression.spec';
-import { _cardinalityAllowsInsertion, _insertAtAnyParent } from './drop-heuristic';
+import { _cardinalityAllowsInsertion, _insertAtAnyParent } from './drop-parent';
 import { ErrorCodes } from './validation-result';
 
 describe('Drop Heuristics', () => {
