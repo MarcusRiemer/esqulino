@@ -1,10 +1,13 @@
 import { Node, NodeDescription, Tree } from './syntaxtree'
 import { Validator } from './validator';
-import { embraceNode, _findPossibleLocations, _findMatchInCandidate, _localEmbrace, canEmbraceNode, embraceMatches } from './drop-embrace';
+import {
+  embraceNode, _findPossibleLocations, _findMatchInCandidate,
+  _localEmbrace, canEmbraceNode, embraceMatches
+} from './drop-embrace';
 import { QualifiedTypeName } from './syntaxtree.description';
 import { BOOLEAN_GRAMMAR } from './boolean-expression.spec';
 
-describe('AST: Embracing', () => {
+describe('Drop Embrace', () => {
 
   // ######################################################################
 

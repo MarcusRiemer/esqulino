@@ -1,8 +1,61 @@
 import { NodeLocation, NodeDescription } from "./syntaxtree.description";
 import { Validator } from './validator';
 import { Tree } from './syntaxtree';
-import { _findMatchInCandidate, embraceMatches } from './drop-embrace';
-import { SmartDropLocation } from './drop.description';
+import { embraceMatches } from './drop-embrace';
+import { SmartDropLocation, SmartDropOptions, InsertDropLocation } from './drop.description';
+import { insertAtAnyParent } from './drop-parent';
+import { _cardinalityAllowsInsertion } from './drop-util';
+
+export const DEFAULT_SMART_DROP_OPTIONS: SmartDropOptions = {
+  allowAnyParent: true,
+  allowEmbrace: true,
+};
+
+/**
+ * Attempts to insert all candidates exactly at the given location.
+ *
+ * @param validator The rules that must hold after the insertion
+ * @param tree The tree to modify
+ * @param loc The location of the insertion
+ * @param candidates All nodes that could possibly be used to insert
+ */
+export function _exactMatches(
+  validator: Validator,
+  tree: Tree,
+  loc: NodeLocation,
+  candidates: NodeDescription[]
+): InsertDropLocation[] {
+  // Replacing the root is another matter
+  if (loc.length > 0) {
+    const targetParent = tree.locate(loc.slice(0, -1));
+    const targetParentCategory = loc[loc.length - 1][0];
+    const targetParentIndex = loc[loc.length - 1][1];
+    const validType = validator.getType(targetParent);
+
+    return (
+      candidates
+        // The candidate must be of a valid type
+        .filter(candidate => {
+          const candidateType = { languageName: candidate.language, typeName: candidate.name };
+          return (validType.allowsChildType(candidateType, targetParentCategory));
+        })
+        // Insertion may not destroy cardinality rules
+        .filter(candidate => {
+          return (_cardinalityAllowsInsertion(validator, targetParent, candidate, targetParentCategory, targetParentIndex));
+        })
+        // Came so far? You may be inserted!
+        .map((candidate): InsertDropLocation => {
+          return ({
+            operation: "insert",
+            location: loc,
+            nodeDescription: candidate
+          });
+        })
+    );
+  } else {
+    return ([]);
+  }
+}
 
 /**
  * Possibly meaningful approach:
@@ -18,23 +71,41 @@ import { SmartDropLocation } from './drop.description';
  *   `COUNT` on `col` could either mean "add this COUNT to the list" or
  *   "COUNT(col)"
  *
- * @param validator The rules that must hold after the embracing
+ * @param validator The rules that must hold after the drop has been placed
  * @param tree The tree to modify
- * @param loc The location of the node to be embraced
- * @param candidates All nodes that could possibly be used to embrace
+ * @param loc The location of the insertion
+ * @param candidates All nodes that could possibly be used to embrace or insert
  */
 export function smartDropLocation(
+  options: SmartDropOptions,
   validator: Validator,
   tree: Tree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): SmartDropLocation[] {
-  const toReturn: SmartDropLocation[] = [];
+  // All advanced heuristics only make sense if there is a tree
+  if (tree) {
+    const toReturn: SmartDropLocation[] = [];
 
-  // Is embracing an option?
-  toReturn.push(...embraceMatches(validator, tree, loc, candidates));
+    if (options.allowExact) {
 
-  // Is appending to any of the parents an option?
+    }
 
-  return (toReturn);
+    // Possibly all embracing options
+    if (options.allowEmbrace) {
+      toReturn.push(...embraceMatches(validator, tree, loc, candidates));
+    }
+
+    // Possibly all insertion options
+    if (options.allowAnyParent) {
+      toReturn.push(...insertAtAnyParent(validator, tree, loc, candidates));
+    }
+
+    return (toReturn);
+  } else {
+    // No tree? Then there is only a single possibility.
+    return ([
+      { operation: "insert", location: [], nodeDescription: candidates[0] }
+    ]);
+  }
 }

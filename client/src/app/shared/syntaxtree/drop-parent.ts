@@ -1,44 +1,8 @@
 import { NodeLocation, NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
 import { Validator } from './validator';
-import { Tree, Node } from './syntaxtree';
-import { _findMatchInCandidate } from './drop-embrace';
-import { ErrorCodes } from './validation-result';
-import { SmartDropLocation } from './drop.description';
-
-// These errors signal cardinalty errors that would be triggered
-// by inserting a new node.
-const CARDINALITY_ERRORS: string[] = [
-  ErrorCodes.InvalidMaxOccurences // Suddenly too many nodes
-]
-
-/**
- * Determines whether something could be inserted at the given place
- * in the current node.
- */
-export function _cardinalityAllowsInsertion(
-  validator: Validator,
-  node: Node,
-  candidate: NodeDescription,
-  categoryName: string,
-  index: number,
-): boolean {
-  // Build a new tree with the proposed insertion
-  const insertionLocation: NodeLocation = [...node.location, [categoryName, index]];
-  const modifiedTree = node.tree.insertNode(insertionLocation, candidate);
-
-  // Validate it and check the errors at the parenting node
-  const valResult = validator.validateFromRoot(modifiedTree);
-  const modifiedNode = modifiedTree.locate(node.location);
-  const errors = valResult.getErrorsOn(modifiedNode);
-
-  // Error out if there is any error that is explained by incorrect cardinality
-  return (
-    errors
-      // Only look at errors in our category
-      .filter(err => err.data.category == categoryName)
-      .every(err => !CARDINALITY_ERRORS.includes(err.code))
-  );
-}
+import { Tree } from './syntaxtree';
+import { InsertDropLocation } from './drop.description';
+import { _cardinalityAllowsInsertion } from './drop-util';
 
 /**
  * Walks up the tree to find valid places to insert any
@@ -49,13 +13,13 @@ export function _cardinalityAllowsInsertion(
  * @param loc The location of the node to be inserted
  * @param candidates All nodes that could possibly be used to embrace
  */
-export function _insertAtAnyParent(
+export function insertAtAnyParent(
   validator: Validator,
   tree: Tree,
   loc: NodeLocation,
   candidates: NodeDescription[]
-): SmartDropLocation[] {
-  const toReturn: SmartDropLocation[] = [];
+): InsertDropLocation[] {
+  const toReturn: InsertDropLocation[] = [];
 
   // Check each candidate that could be appended somewhere ...
   candidates.forEach(candidate => {
