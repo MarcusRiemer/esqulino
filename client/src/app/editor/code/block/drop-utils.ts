@@ -1,4 +1,5 @@
-import { Node, NodeLocation, QualifiedTypeName, embraceNode } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, QualifiedTypeName } from '../../../shared/syntaxtree';
+import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { Restricted } from '../../../shared/block/bool-mini-expression.description'
 import { evalExpression } from '../../../shared/block/bool-mini-expression'

@@ -5,7 +5,7 @@ import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
 import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { arrayEqual } from '../../../shared/util';
-import { canEmbraceNode } from '../../../shared/syntaxtree/embrace';
+import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
