@@ -153,6 +153,10 @@ export class CodeResource extends ProjectResource {
    *
    * @param loc The location of the insertion.
    * @param desc The node candidates to insert
+   *
+   * TODO: This method should not do anything "smart", it should just
+   *       insert at the only possible location which must be provided
+   *       entirely.
    */
   embraceNode(loc: NodeLocation, desc: NodeDescription[]) {
     console.log(`Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`, desc);

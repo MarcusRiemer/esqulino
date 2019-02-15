@@ -29,14 +29,17 @@ export function insertAtAnyParent(
     // ... against each node up to the root
     let currNode = tree.locateOrUndefined(loc);
 
-    // If the searched node does not exist immediatly, we might try to insert
+    // If the searched node does not exist immediatly, we are probably asked to insert
     // something in a location that does not yet exist. In that case we simply
-    // assume that we may take the parent of the given location
-    if (!currNode) {
-      currNode = tree.locateOrUndefined(loc.slice(0, -1));
+    // assume that we may take *any* parent of the given location and start the search
+    // from there.
+    while (!currNode && loc.length > stepsUp) {
+      currNode = tree.locateOrUndefined(loc.slice(0, -(stepsUp + 1)));
       stepsUp++;
     }
 
+    // A similar game as before: We ultimately want to walk up the tree. But this time
+    // we have actual nodes so we may check each of these locations.
     while (currNode) {
       // Find out which categories could be theoretically used for
       // the given type

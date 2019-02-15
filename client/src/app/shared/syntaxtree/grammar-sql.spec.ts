@@ -2,6 +2,7 @@ import * as AST from '../syntaxtree';
 import * as Schema from './grammar.description';
 import { Validator } from './validator';
 import { ErrorCodes } from './validation-result';
+import { smartDropLocation, DEFAULT_SMART_DROP_OPTIONS } from './drop';
 
 /**
  * This grammar is close to the "real" grammar used for SQL (which is stored
@@ -565,382 +566,432 @@ export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
 
 
 
-describe("Language: SQL (Validation)", () => {
-  it("Invalid: Empty SELECT-query", () => {
-    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+describe("Complex Spec Grammar: SQL", () => {
+  describe("Validation", () => {
+    it("Invalid: Empty SELECT-query", () => {
+      const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
 
-    const astDesc: AST.NodeDescription = {
-      language: "sql",
-      name: "querySelect",
-    };
+      const astDesc: AST.NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+      };
 
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
+      const ast = new AST.Node(astDesc, undefined);
+      const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(2);
-    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild);
-    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
-  });
+      expect(res.errors.length).toEqual(2);
+      expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild);
+      expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
+    });
 
-  it("Valid: SELECT * FROM foo", () => {
-    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+    it("Valid: SELECT * FROM foo", () => {
+      const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
 
-    const astDesc: AST.NodeDescription = {
-      language: "sql",
-      name: "querySelect",
-      children: {
-        "select": [
-          {
-            language: "sql",
-            name: "select",
-            children: {
-              "columns": [
-                {
-                  language: "sql",
-                  name: "starOperator"
-                }
-              ]
-            }
-          }
-        ],
-        "from": [
-          {
-            language: "sql",
-            name: "from",
-            children: {
-              "tables": [
-                {
-                  language: "sql",
-                  name: "tableIntroduction",
-                  properties: {
-                    "name": "foo"
+      const astDesc: AST.NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [
+            {
+              language: "sql",
+              name: "select",
+              children: {
+                "columns": [
+                  {
+                    language: "sql",
+                    name: "starOperator"
                   }
-                }
-              ]
+                ]
+              }
             }
-          }
-        ]
-      }
-    };
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(0);
-  });
-
-  it("Valid: SELECT * FROM foo, bar", () => {
-    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "sql",
-      name: "querySelect",
-      children: {
-        "select": [
-          {
-            language: "sql",
-            name: "select",
-            children: {
-              "columns": [
-                {
-                  language: "sql",
-                  name: "starOperator"
-                }
-              ]
+          ],
+          "from": [
+            {
+              language: "sql",
+              name: "from",
+              children: {
+                "tables": [
+                  {
+                    language: "sql",
+                    name: "tableIntroduction",
+                    properties: {
+                      "name": "foo"
+                    }
+                  }
+                ]
+              }
             }
-          },
-        ],
-        "from": [
-          {
-            language: "sql",
-            name: "from",
-            children: {
-              "tables": [
-                {
-                  language: "sql",
-                  name: "tableIntroduction",
-                  properties: {
-                    "name": "foo"
-                  }
-                },
-              ],
-              "joins": [
-                {
-                  language: "sql",
-                  name: "crossJoin",
-                  children: {
-                    "table": [
-                      {
-                        "language": "sql",
-                        "name": "tableIntroduction",
-                        properties: {
-                          "name": "bar"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    };
+          ]
+        }
+      };
 
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
+      const ast = new AST.Node(astDesc, undefined);
+      const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
-  });
+      expect(res.errors.length).toEqual(0);
+    });
 
-  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
-    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+    it("Valid: SELECT * FROM foo, bar", () => {
+      const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
 
-    const astDesc: AST.NodeDescription = {
-      language: "sql",
-      name: "querySelect",
-      children: {
-        "select": [
-          {
-            language: "sql",
-            name: "select",
-            children: {
-              "columns": [
-                {
-                  language: "sql",
-                  name: "starOperator"
-                }
-              ]
-            }
-          },
-        ],
-        "from": [
-          {
-            language: "sql",
-            name: "from",
-            children: {
-              "tables": [
-                {
-                  language: "sql",
-                  name: "tableIntroduction",
-                  properties: {
-                    "name": "foo"
+      const astDesc: AST.NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [
+            {
+              language: "sql",
+              name: "select",
+              children: {
+                "columns": [
+                  {
+                    language: "sql",
+                    name: "starOperator"
                   }
-                },
-              ],
-              "joins": [
-                {
-                  language: "sql",
-                  name: "crossJoin",
-                  children: {
-                    "table": [
-                      {
-                        "language": "sql",
-                        "name": "tableIntroduction",
-                        properties: {
-                          "name": "bar"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-        ],
-        "where": [
-          {
-            language: "sql",
-            name: "where",
-            children: {
-              "expressions": [
-                {
-                  language: "sql",
-                  name: "binaryExpression",
-                  children: {
-                    "lhs": [
-                      {
-                        language: "sql",
-                        name: "columnName",
-                        properties: {
-                          "columnName": "id",
-                          "refTableName": "foo"
-                        }
-                      },
-                    ],
-                    "operator": [
-                      {
-                        language: "sql",
-                        name: "relationalOperator",
-                        properties: {
-                          "operator": "="
-                        }
-                      },
-                    ],
-                    "rhs": [
-                      {
-                        language: "sql",
-                        name: "columnName",
-                        properties: {
-                          "columnName": "id",
-                          "refTableName": "bar"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors).toEqual([]);
-  });
-
-  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
-    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "sql",
-      name: "querySelect",
-      children: {
-        "select": [
-          {
-            language: "sql",
-            name: "select",
-            children: {
-              "columns": [
-                {
-                  language: "sql",
-                  name: "starOperator"
-                }
-              ]
-            }
-          },
-        ],
-        "from": [
-          {
-            language: "sql",
-            name: "from",
-            children: {
-              "tables": [
-                {
-                  language: "sql",
-                  name: "tableIntroduction",
-                  properties: {
-                    "name": "foo"
-                  }
-                },
-              ],
-              "joins": [
-                {
-                  language: "sql",
-                  name: "crossJoin",
-                  children: {
-                    "table": [
-                      {
-                        "language": "sql",
-                        "name": "tableIntroduction",
-                        properties: {
-                          "name": "bar"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        "where": [
-          {
-            language: "sql",
-            name: "where",
-            children: {
-              "expressions": [
-                {
-                  language: "sql",
-                  name: "binaryExpression",
-                  children: {
-                    "lhs": [
-                      {
-                        language: "sql",
-                        name: "columnName",
-                        properties: {
-                          "columnName": "id",
-                          "refTableName": "foo"
-                        }
-                      },
-                    ],
-                    "operator": [
-                      {
-                        language: "sql",
-                        name: "relationalOperator",
-                        properties: {
-                          "operator": "="
-                        }
-                      },
-                    ],
-                    "rhs": [
-                      {
-                        language: "sql",
-                        name: "columnName",
-                        properties: {
-                          "columnName": "id",
-                          "refTableName": "bar"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  language: "sql",
-                  name: "whereAdditional",
-                  children: {
-                    "expression": [
-                      {
-                        language: "sql",
-                        name: "binaryExpression",
-                        children: {
-                          "lhs": [
-                            {
-                              language: "sql",
-                              name: "columnName",
-                              properties: {
-                                "columnName": "id",
-                                "refTableName": "foo"
-                              }
-                            },
-                          ],
-                          "operator": [
-                            {
-                              language: "sql",
-                              name: "relationalOperator",
-                              properties: {
-                                "operator": "="
-                              }
-                            },
-                          ],
-                          "rhs": [
-                            {
-                              language: "sql",
-                              name: "constant",
-                              properties: {
-                                "value": "2",
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
+                ]
+              }
+            },
+          ],
+          "from": [
+            {
+              language: "sql",
+              name: "from",
+              children: {
+                "tables": [
+                  {
+                    language: "sql",
+                    name: "tableIntroduction",
+                    properties: {
+                      "name": "foo"
+                    }
                   },
+                ],
+                "joins": [
+                  {
+                    language: "sql",
+                    name: "crossJoin",
+                    children: {
+                      "table": [
+                        {
+                          "language": "sql",
+                          "name": "tableIntroduction",
+                          properties: {
+                            "name": "bar"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+      const res = v.validateFromRoot(ast);
+
+      expect(res.errors.length).toEqual(0);
+    });
+
+    it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
+      const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [
+            {
+              language: "sql",
+              name: "select",
+              children: {
+                "columns": [
+                  {
+                    language: "sql",
+                    name: "starOperator"
+                  }
+                ]
+              }
+            },
+          ],
+          "from": [
+            {
+              language: "sql",
+              name: "from",
+              children: {
+                "tables": [
+                  {
+                    language: "sql",
+                    name: "tableIntroduction",
+                    properties: {
+                      "name": "foo"
+                    }
+                  },
+                ],
+                "joins": [
+                  {
+                    language: "sql",
+                    name: "crossJoin",
+                    children: {
+                      "table": [
+                        {
+                          "language": "sql",
+                          "name": "tableIntroduction",
+                          properties: {
+                            "name": "bar"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+          ],
+          "where": [
+            {
+              language: "sql",
+              name: "where",
+              children: {
+                "expressions": [
+                  {
+                    language: "sql",
+                    name: "binaryExpression",
+                    children: {
+                      "lhs": [
+                        {
+                          language: "sql",
+                          name: "columnName",
+                          properties: {
+                            "columnName": "id",
+                            "refTableName": "foo"
+                          }
+                        },
+                      ],
+                      "operator": [
+                        {
+                          language: "sql",
+                          name: "relationalOperator",
+                          properties: {
+                            "operator": "="
+                          }
+                        },
+                      ],
+                      "rhs": [
+                        {
+                          language: "sql",
+                          name: "columnName",
+                          properties: {
+                            "columnName": "id",
+                            "refTableName": "bar"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+      const res = v.validateFromRoot(ast);
+
+      expect(res.errors).toEqual([]);
+    });
+
+    it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
+      const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [
+            {
+              language: "sql",
+              name: "select",
+              children: {
+                "columns": [
+                  {
+                    language: "sql",
+                    name: "starOperator"
+                  }
+                ]
+              }
+            },
+          ],
+          "from": [
+            {
+              language: "sql",
+              name: "from",
+              children: {
+                "tables": [
+                  {
+                    language: "sql",
+                    name: "tableIntroduction",
+                    properties: {
+                      "name": "foo"
+                    }
+                  },
+                ],
+                "joins": [
+                  {
+                    language: "sql",
+                    name: "crossJoin",
+                    children: {
+                      "table": [
+                        {
+                          "language": "sql",
+                          "name": "tableIntroduction",
+                          properties: {
+                            "name": "bar"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "where": [
+            {
+              language: "sql",
+              name: "where",
+              children: {
+                "expressions": [
+                  {
+                    language: "sql",
+                    name: "binaryExpression",
+                    children: {
+                      "lhs": [
+                        {
+                          language: "sql",
+                          name: "columnName",
+                          properties: {
+                            "columnName": "id",
+                            "refTableName": "foo"
+                          }
+                        },
+                      ],
+                      "operator": [
+                        {
+                          language: "sql",
+                          name: "relationalOperator",
+                          properties: {
+                            "operator": "="
+                          }
+                        },
+                      ],
+                      "rhs": [
+                        {
+                          language: "sql",
+                          name: "columnName",
+                          properties: {
+                            "columnName": "id",
+                            "refTableName": "bar"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    language: "sql",
+                    name: "whereAdditional",
+                    children: {
+                      "expression": [
+                        {
+                          language: "sql",
+                          name: "binaryExpression",
+                          children: {
+                            "lhs": [
+                              {
+                                language: "sql",
+                                name: "columnName",
+                                properties: {
+                                  "columnName": "id",
+                                  "refTableName": "foo"
+                                }
+                              },
+                            ],
+                            "operator": [
+                              {
+                                language: "sql",
+                                name: "relationalOperator",
+                                properties: {
+                                  "operator": "="
+                                }
+                              },
+                            ],
+                            "rhs": [
+                              {
+                                language: "sql",
+                                name: "constant",
+                                properties: {
+                                  "value": "2",
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    properties: {
+                      "operator": "and"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+      const res = v.validateFromRoot(ast);
+
+      expect(res.errors).toEqual([]);
+    });
+  });
+
+  it('Smartly drops a "pure" SELECT on a partial Query', () => {
+    const astDesc: AST.NodeDescription = {
+      language: "sql",
+      name: "querySelect",
+      children: {
+        "from": [
+          {
+            language: "sql",
+            name: "from",
+            children: {
+              "tables": [
+                {
+                  language: "sql",
+                  name: "tableIntroduction",
                   properties: {
-                    "operator": "and"
+                    "name": "foo"
+                  }
+                },
+              ],
+              "joins": [
+                {
+                  language: "sql",
+                  name: "crossJoin",
+                  children: {
+                    "table": [
+                      {
+                        "language": "sql",
+                        "name": "tableIntroduction",
+                        properties: {
+                          "name": "bar"
+                        }
+                      }
+                    ]
                   }
                 }
               ]
@@ -950,9 +1001,50 @@ describe("Language: SQL (Validation)", () => {
       }
     };
 
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
+    const dropCandidates: AST.NodeDescription[] = [
+      {
+        "name": "querySelect",
+        "children": {
+          "from": [
+            {
+              "name": "from",
+              "language": "sql"
+            }
+          ],
+          "where": [],
+          "select": [
+            {
+              "name": "select",
+              "language": "sql"
+            }
+          ],
+          "groupBy": []
+        },
+        "language": "sql"
+      },
+      {
+        "name": "select",
+        "language": "sql"
+      }
+    ];
 
-    expect(res.errors).toEqual([]);
+    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+    const ast = new AST.Tree(astDesc);
+
+    expect(smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates))
+      .withContext(`Inserting at root`)
+      .toEqual([
+        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+      ]);
+    expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0]], dropCandidates))
+      .withContext(`Inserting at SELECT`)
+      .toEqual([
+        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+      ]);
+    expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0], ["columns", 0]], dropCandidates))
+      .withContext(`Inserting at first column of SELECT`)
+      .toEqual([
+        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+      ]);
   });
 });
