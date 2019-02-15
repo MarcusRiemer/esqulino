@@ -21,14 +21,30 @@ import { calculateDropLocation } from './drop-utils';
   selector: `editor-block-render-block`
 })
 export class BlockRenderBlockComponent implements BlockDropProperties {
+  /**
+   * The code resource that is rendered here.
+   */
   @Input() public codeResource: CodeResource;
+
+  /**
+   * The node to be rendered
+   */
   @Input() public node: Node;
+
+  /**
+   * The visualisation parameters for this block.
+   */
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
+
+  /**
+   * Disables any interaction with this block if true.
+   */
+  @Input() public readOnly = false;
 
   constructor(
     private _dragService: DragService,
+    private _cd: ChangeDetectorRef,
     private _currentCodeResource: CurrentCodeResourceService,
-    private _cd: ChangeDetectorRef
   ) {
   }
 
@@ -60,7 +76,7 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
    * @return True, if the current drop operation would result in an embrace.
    */
   private _isEmbraceDrop() {
-    const validator = this._currentCodeResource.peekResource.validationLanguagePeek.validator;
+    const validator = this.codeResource.validationLanguagePeek.validator;
     const ownLocation = this.node.location;
     const dropCandidates = this._dragService.peekDragData.draggedDescription;
 
@@ -71,14 +87,16 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
    * Notifies the drag service about the drag we have just started.
    */
   onStartDrag(evt: MouseEvent) {
-    this._dragService.dragStart(evt, [this.node.toModel()], undefined, {
-      node: this.node,
-      codeResource: this.codeResource
-    });
+    if (!this.readOnly) {
+      this._dragService.dragStart(evt, [this.node.toModel()], undefined, {
+        node: this.node,
+        codeResource: this.codeResource
+      });
+    }
   }
 
   onMouseEnter(evt: MouseEvent) {
-    if (this._dragService.peekIsDragInProgress) {
+    if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
         allowAnyParent: true, allowEmbrace: true
       });

@@ -28,9 +28,10 @@ export class BlockRenderComponent {
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
-  constructor(
-    private _currentCodeResource: CurrentCodeResourceService,
-  ) { }
+  /**
+   * Disables any interaction with this block if true.
+   */
+  @Input() public readOnly = false;
 
   /**
    * Dirty Hack: Template "Typecast"

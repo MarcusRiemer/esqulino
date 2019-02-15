@@ -30,6 +30,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   private _subscriptionRefs: any[] = [];
 
+  public readOnly = false;
+
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
@@ -73,6 +75,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     });
     this._subscriptionRefs.push(ref);
   }
+
 
   /**
    * Cleans up all acquired references

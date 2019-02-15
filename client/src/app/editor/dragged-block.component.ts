@@ -1,9 +1,9 @@
 import { Component, InjectionToken, Injector, Inject } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 import { PortalInjector, ComponentPortal } from '@angular/cdk/portal';
 
-import { NodeDescription, Node, Tree } from '../shared/syntaxtree';
+import { NodeDescription, Tree } from '../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from './current-coderesource.service';
 
@@ -13,8 +13,11 @@ export interface DropBlockData {
 
 export const DROP_BLOCK_DATA = new InjectionToken<{}>('DROP_BLOCK_DATA');
 
+/**
+ * Renders a hovering block that is not currently part of a syntaxtree.
+ */
 @Component({
-  templateUrl: 'templates/drop-block.html',
+  templateUrl: 'templates/dragged-block.html',
   selector: `drop-block`,
   animations: [
     trigger('visible', [
@@ -30,7 +33,7 @@ export const DROP_BLOCK_DATA = new InjectionToken<{}>('DROP_BLOCK_DATA');
     ])
   ]
 })
-export class DropBlockComponent {
+export class DraggedBlockComponent {
 
   constructor(
     @Inject(DROP_BLOCK_DATA) private _dropBlockData: DropBlockData,
@@ -42,6 +45,12 @@ export class DropBlockComponent {
 
   readonly draggedTree = new Tree(this._dropBlockData.desc);
 
+  /**
+   * Constructor function that deals with all the dynamically typed injection
+   * business.
+   *
+   * @param desc The node to show
+   */
   public static createPortalComponent(desc: NodeDescription, parentInjector: Injector) {
     // Build an injector that provides the relevant data for the component
     const injectorTokens = new WeakMap();
@@ -51,7 +60,7 @@ export class DropBlockComponent {
     injectorTokens.set(DROP_BLOCK_DATA, data);
     const injector = new PortalInjector(parentInjector, injectorTokens);
 
-    return (new ComponentPortal(DropBlockComponent, null, injector));
+    return (new ComponentPortal(DraggedBlockComponent, null, injector));
   }
 
 }

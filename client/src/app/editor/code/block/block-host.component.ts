@@ -15,6 +15,11 @@ export class BlockHostComponent {
   @Input() public node: Node;
 
   /**
+   * Disables any interaction with this block if true.
+   */
+  @Input() public readOnly = false;
+
+  /**
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
