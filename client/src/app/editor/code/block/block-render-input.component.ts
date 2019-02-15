@@ -16,6 +16,11 @@ export class BlockRenderInputComponent {
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorInput;
 
+  /**
+   * Disallows the change into edit mode
+   */
+  @Input() public readOnly = false;
+
   private _editedValue: string;
 
   /**
@@ -53,6 +58,16 @@ export class BlockRenderInputComponent {
   }
 
   /**
+   * Switches into editing mode (if permissible)
+   */
+  onActivateEditing(event: MouseEvent) {
+    event.stopPropagation();
+    if (!this.readOnly) {
+      this.currentlyEditing = true;
+    }
+  }
+
+  /**
    * @return The value of the property in the tree.
    */
   get currentValue() {
@@ -83,7 +98,7 @@ export class BlockRenderInputComponent {
   }
 
   /**
-   * 
+   *
    */
   set editedValue(value: string) {
     this._editedValue = value;
