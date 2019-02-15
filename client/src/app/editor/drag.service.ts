@@ -11,7 +11,7 @@ import { FixedSidebarBlock } from '../shared/block';
 
 import { TrashService } from './shared/trash.service';
 
-import { DropBlockComponent } from './drop-block.component';
+import { DraggedBlockComponent } from './dragged-block.component';
 import { CurrentCodeResourceService } from './current-coderesource.service';
 import { SmartDropOptions, SmartDropLocation } from '../shared/syntaxtree/drop.description';
 import { smartDropLocation } from '../shared/syntaxtree/drop';
@@ -129,7 +129,7 @@ export class DragService {
       hasBackdrop: false
     });
 
-    const portal = DropBlockComponent.createPortalComponent(desc, this._injector);
+    const portal = DraggedBlockComponent.createPortalComponent(desc, this._injector);
     this._currentDragOverlay.attach(portal);
 
     this._currentDragPos.apply();

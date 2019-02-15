@@ -84,7 +84,12 @@ trash {
     }
 
     editor-block-render-block {
-        background: white;
+        background-color: white;
+
+        .read-only {
+            background-color: #efefef;
+            cursor: unset;
+        }
     }
 
     .break-after {

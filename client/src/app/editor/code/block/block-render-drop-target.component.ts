@@ -66,11 +66,15 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorDropTarget;
 
+  /**
+   * Disables any interaction with this block if true.
+   */
+  @Input() public readOnly = false;
+
   private _currentTarget = false;
 
   constructor(
-    private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService,
+    private _dragService: DragService
   ) {
   }
 
@@ -88,7 +92,10 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
    */
   readonly showDropTarget = this._latestDragData.pipe(
     map(([currentDrag, inProgress]) => {
-      if (inProgress) {
+      if (this.readOnly) {
+        return (false);
+      }
+      else if (inProgress) {
         if (this._currentTarget) {
           return (false);
         }
@@ -122,7 +129,15 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
    * @return The current animation state
    */
   readonly currentAvailability = this._dragService.currentDrag
-    .pipe(map(drag => calculateDropTargetState(drag, this)));
+    .pipe(
+      map(drag => {
+        if (this.readOnly) {
+          return ("none");
+        } else {
+          return (calculateDropTargetState(drag, this));
+        }
+      })
+    );
 
   /**
    * A mouse has entered, we possibly need to ensure that the drop target
@@ -130,7 +145,7 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
    */
   onMouseEnter(evt: MouseEvent) {
     this._currentTarget = true;
-    if (this._dragService.peekIsDragInProgress) {
+    if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       // TODO: Using `node.location` uses an incorrect drop location. But in the longer run
       //       the exact location should be used without relying on any "oldfashioned"
       //       drop locations.
