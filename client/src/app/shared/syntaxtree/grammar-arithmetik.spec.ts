@@ -1,6 +1,6 @@
 import { GrammarDocument } from "./grammar.description";
 
-export const ARITHMETIC_GRAMMAR: GrammarDocument = {
+export const GRAMMAR_ARITHMETIC_DESCRIPTION: GrammarDocument = {
   root: "expression",
   technicalName: "expr",
   types: {

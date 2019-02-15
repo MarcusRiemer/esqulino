@@ -1,4 +1,4 @@
-import { BOOLEAN_GRAMMAR } from './boolean-expression.spec';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
 import { NodeDescription } from './syntaxtree.description';
 import { _exactMatches } from './drop';
 import { Tree } from './syntaxtree';
@@ -15,7 +15,7 @@ describe('Drop', () => {
         { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
       ];
 
-      const v = new Validator([BOOLEAN_GRAMMAR]);
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const treeIn = new Tree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
@@ -35,7 +35,7 @@ describe('Drop', () => {
         { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
       ];
 
-      const v = new Validator([BOOLEAN_GRAMMAR]);
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const treeIn = new Tree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
@@ -63,7 +63,7 @@ describe('Drop', () => {
         { language: "expr", name: "noMatch" }
       ];
 
-      const v = new Validator([BOOLEAN_GRAMMAR]);
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const treeIn = new Tree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);

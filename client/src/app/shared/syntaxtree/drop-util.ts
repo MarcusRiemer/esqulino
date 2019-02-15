@@ -34,7 +34,7 @@ export function _cardinalityAllowsInsertion(
   return (
     errors
       // Only look at errors in our category
-      .filter(err => err.data.category == categoryName)
+      .filter(err => err.data.category === categoryName)
       .every(err => !CARDINALITY_ERRORS.includes(err.code))
   );
 }

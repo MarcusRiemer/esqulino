@@ -1,7 +1,7 @@
 import { NodeDescription, NodeLocation } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
-import { BOOLEAN_GRAMMAR } from './boolean-expression.spec';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
 import { insertAtAnyParent } from './drop-parent';
 
 describe('Drop Parent', () => {
@@ -38,7 +38,7 @@ describe('Drop Parent', () => {
         }
       }
 
-      const validator = new Validator([BOOLEAN_GRAMMAR]);
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inTree = new Tree(inTreeDesc);
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
@@ -107,7 +107,7 @@ describe('Drop Parent', () => {
         }
       }
 
-      const validator = new Validator([BOOLEAN_GRAMMAR]);
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inTree = new Tree(inTreeDesc);
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
@@ -191,7 +191,7 @@ describe('Drop Parent', () => {
         }
       }
 
-      const validator = new Validator([BOOLEAN_GRAMMAR]);
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inTree = new Tree(inTreeDesc);
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
