@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
+import { map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -12,7 +12,6 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { BlockDropProperties } from './block-drop-properties';
 import { calculateDropLocation } from './drop-utils';
-import { DEFAULT_SMART_DROP_OPTIONS } from 'src/app/shared/syntaxtree/drop';
 
 /**
  * Renders a single and well known visual element of a node.
