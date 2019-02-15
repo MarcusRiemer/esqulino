@@ -20,7 +20,8 @@
   <ng-container *ngSwitchCase="'input'">
     <editor-block-render-input [codeResource]="codeResource"
                                [node]="node"
-                               [visual]="visual">
+                               [visual]="visual"
+                               [readOnly]="readOnly">
     </editor-block-render-input>
   </ng-container>
   <!-- Iterate over children of a node -->
