@@ -4,7 +4,7 @@ import { GrammarDescription } from './grammar.description';
  * This grammar describes a mini expression language for boolean values
  * and is used for testing.
  */
-export const BOOLEAN_GRAMMAR: GrammarDescription = {
+export const GRAMMAR_BOOLEAN_DESCRIPTION: GrammarDescription = {
   id: "2db01f1b-df39-48b1-8100-49803218f596",
   name: "Test Expressions",
   programmingLanguageId: "test",

@@ -13,9 +13,10 @@ export abstract class SpecializedValidator {
    * @param ast The root node where the validation should start.
    * @param context Main point of interaction during validation.
    */
-  abstract validateFromRoot(ast: AST.Node, context: ValidationContext);
+  abstract validateFromRoot(ast: AST.Node, context: ValidationContext): void;
 
 }
+
 
 export type SpecializedValidatorConstructor = typeof SpecializedValidator;
 

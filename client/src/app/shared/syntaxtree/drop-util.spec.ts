@@ -2,7 +2,7 @@ import { NodeDescription } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
 import { _cardinalityAllowsInsertion } from './drop-util';
-import { BOOLEAN_GRAMMAR } from './boolean-expression.spec';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
 import { ErrorCodes } from './validation-result';
 
 describe('Drop Utils', () => {
@@ -44,7 +44,7 @@ describe('Drop Utils', () => {
         }
       }
 
-      const validator = new Validator([BOOLEAN_GRAMMAR]);
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inNode = new Tree(inTreeDesc).rootNode;
 
       expect(validator.validateFromRoot(inNode).errors).toEqual([]);
@@ -90,7 +90,7 @@ describe('Drop Utils', () => {
         }
       }
 
-      const validator = new Validator([BOOLEAN_GRAMMAR]);
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inNode = new Tree(inTreeDesc).rootNode;
 
       expect(validator.validateFromRoot(inNode).errors.map(e => e.code))
@@ -126,12 +126,17 @@ describe('Drop Utils', () => {
         }
       }
 
-      const validator = new Validator([BOOLEAN_GRAMMAR]);
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inNode = new Tree(inTreeDesc).rootNode;
 
       // Insertion is valid at both sides
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "lhs", 0)).toBe(true);
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "rhs", 0)).toBe(true);
     });
+
+    it('Deals with unexpected errors', () => {
+
+    });
+
   });
 });

@@ -84,7 +84,7 @@ export type ErrorData =
 export interface ValidationError {
   code: string;
   node: AST.Node;
-  data?: ErrorData;
+  data: ErrorData;
 }
 
 /**
@@ -136,7 +136,7 @@ export class ValidationContext {
   ) {
   }
 
-  addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = undefined) {
+  addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = {}) {
     this._errors.push({ code: code, node: node, data: data });
   }
 
