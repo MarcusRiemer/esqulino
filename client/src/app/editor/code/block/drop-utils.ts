@@ -157,24 +157,29 @@ const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
 
   // If any of the described blocks is allowed, we assume the drag is allowed
   return (drag.draggedDescription.some(dragged => {
-    const newNodeType: QualifiedTypeName = {
-      languageName: dragged.language,
-      typeName: dragged.name
-    }
-    const currentTree = block.codeResource.syntaxTreePeek;
+    try {
+      const newNodeType: QualifiedTypeName = {
+        languageName: dragged.language,
+        typeName: dragged.name
+      }
+      const currentTree = block.codeResource.syntaxTreePeek;
 
-    // If the tree is empty, the drop is always forbidden.
-    // This happens if some block is rendered in the sidebar or as a dragged
-    // block and the current tree is empty.
-    if (!currentTree.isEmpty) {
-      const currentLanguage = block.codeResource.validationLanguagePeek;
+      // If the tree is empty, the drop is always forbidden.
+      // This happens if some block is rendered in the sidebar or as a dragged
+      // block and the current tree is empty.
+      if (!currentTree.isEmpty) {
+        const currentLanguage = block.codeResource.validationLanguagePeek;
 
-      const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
-      const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+        const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
+        const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
 
-      return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
-    } else {
-      return (true);
+        return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
+      } else {
+        return (false);
+      }
+    } catch (e) {
+      return (false);
+      //debugger;
     }
   }));
 }

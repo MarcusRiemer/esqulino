@@ -88,7 +88,7 @@ export function smartDropLocation(
     const toReturn: SmartDropLocation[] = [];
 
     if (options.allowExact) {
-
+      toReturn.push(..._exactMatches(validator, tree, loc, candidates));
     }
 
     // Possibly all embracing options

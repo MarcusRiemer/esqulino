@@ -13,7 +13,7 @@ import { TrashService } from './shared/trash.service';
 
 import { DropBlockComponent } from './drop-block.component';
 import { CurrentCodeResourceService } from './current-coderesource.service';
-import { SmartDropOptions } from '../shared/syntaxtree/drop.description';
+import { SmartDropOptions, SmartDropLocation } from '../shared/syntaxtree/drop.description';
 import { smartDropLocation } from '../shared/syntaxtree/drop';
 
 
@@ -54,6 +54,8 @@ export interface CurrentDrag {
   treeSource?: DragTree;
   // The node of the sidebar that is currently beeing dragged
   sidebarSource?: DragSidebar;
+  // All possibilities to drop something
+  smartDrops: SmartDropLocation[];
 }
 
 /**
@@ -168,18 +170,23 @@ export class DragService {
     evt.preventDefault();
 
     // Store drag information as long as this drags on
-    const hoverData = {
+    // (And initialize some default values)
+    const hoverData: CurrentDrag = {
       draggedDescription: desc,
-    } as CurrentDrag;
+      smartDrops: [],
+      hoverTrash: false,
+      isEmbraceDrop: false
+    };
 
+    // Attach source information (if any)
     if (sourceSidebar) {
       hoverData.sidebarSource = sourceSidebar;
     }
-
     if (sourceTree) {
       hoverData.treeSource = sourceTree;
     }
 
+    // And fire the drag out
     this._currentDrag.next(hoverData);
 
     // If we have a proper source: Wire it up to react to
@@ -234,14 +241,13 @@ export class DragService {
     // Just in case: Reset all the data
     dragData.hoverNode = node;
     dragData.hoverTrash = false;
-
-    if (smartDropOptions.allowExact === true) {
-      // debugger;
-    }
+    dragData.smartDrops = smartDropLocations;
 
     // Temporarily: Smash down all the smart drop locations to a single option
     dragData.dropLocation = smartDropLocations.length > 0 ? smartDropLocations[0].location : undefined;
     dragData.isEmbraceDrop = smartDropLocations.length > 0 && smartDropLocations[0].operation === "embrace";
+
+    console.log(`Dragging over ${JSON.stringify(dropLocation)}`, smartDropLocations);
 
 
     this._currentDrag.next(dragData);
@@ -261,6 +267,7 @@ export class DragService {
     delete dragData.dropLocation;
     dragData.hoverTrash = false;
     dragData.isEmbraceDrop = false;
+    dragData.smartDrops = [];
 
     this._currentDrag.next(dragData);
   }
@@ -275,6 +282,7 @@ export class DragService {
     delete dragData.hoverNode;
     delete dragData.dropLocation;
     dragData.isEmbraceDrop = false;
+    dragData.smartDrops = [];
 
     // .. but the trash
     dragData.hoverTrash = true;
@@ -334,19 +342,22 @@ export class DragService {
       });
 
       // Should something be inserted or removed?
-      // - Not if the operation has been cancelled
+      // - Not if the operation has been canceled
       if (!cancelled) {
         // Insertion happens on valid drop locations
-        const dropLocation = dragData.dropLocation;
-        if (dropLocation && (dropLocation.length > 0 || this._currentCodeResource.peekResource.syntaxTreePeek.isEmpty)) {
-          if (dragData.isEmbraceDrop) {
-            this._currentCodeResource.peekResource.embraceNode(dropLocation, desc);
-          } else {
-            this._currentCodeResource.peekResource.insertNode(dropLocation, desc[0]);
+        if (dragData.smartDrops.length > 0) {
+          const drop = dragData.smartDrops[0];
+          switch (drop.operation) {
+            case "embrace":
+              this._currentCodeResource.peekResource.embraceNode(drop.location, [drop.nodeDescription]);
+              break;
+            case "insert":
+              this._currentCodeResource.peekResource.insertNode(drop.location, drop.nodeDescription);
+              break;
           }
         }
         // Otherwise we might want to remove the current node?
-        else if (dragData.hoverTrash) {
+        if (dragData.hoverTrash) {
           this._trashService._fireDrop();
           console.log("Dropped on trash");
         }
