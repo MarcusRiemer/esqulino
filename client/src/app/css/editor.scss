@@ -33,7 +33,7 @@
     }
 
     /* Navigation inside a project, typically on the left hand side */
-    .navbar {        
+    .navbar {
         editor-navbar {
             height: 100%;
             display: flex;
@@ -42,18 +42,25 @@
 
             nav {
                 margin: 5px;
-                
-                
-                /* Ensure the linked items do not overflow */
+
+                /* Ensure the linked items do not overflow and have nice right aligned icons */
                 a {
                     text-decoration: none;
-
                     line-height: 1.1;
-                    display: inline-block;
-                    white-space: nowrap;
+                    display: inline-flex;
                     width: 100%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+
+
+                    .nav-target {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        flex-grow: 1;
+                        text-overflow: ellipsis;
+                    }
+
+                    .save-icon {
+                        margin-left: auto;
+                    }
                 }
 
                 /**
@@ -70,15 +77,9 @@
 
                 /* Nested lists get a little indentation */
                 ul ul {
-                    padding-left: 5px; 
+                    padding-left: 5px;
                 }
             }
-            
-            .label.dirty {
-                cursor: pointer;
-            }
-
-            
 
             .sources-host {
                 margin-top: auto;
@@ -100,7 +101,7 @@
                 transition-timing-function: ease-in-out;
                 background-color: cornflowerblue;
             }
-            
+
             .nav-query, .nav-page, .nav-database, .nav-image, .nav-code-resource {
                 margin-left: 15px;
             }
@@ -119,4 +120,3 @@
     display: flex;
     flex-wrap: wrap;
 }
-

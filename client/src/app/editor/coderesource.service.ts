@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
 import { Observable } from 'rxjs';
-import { catchError, delay, map } from 'rxjs/operators';
+import { catchError, delay, map, tap } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
 import { CodeResource } from '../shared/syntaxtree'
@@ -70,7 +70,8 @@ export class CodeResourceService {
     const toReturn = this._http.put(url, body, options)
       .pipe(
         catchError(this.handleError),
-        delay(250)
+        delay(250),
+        tap(_ => resource.markSaved())
       );
 
     return (toReturn);
