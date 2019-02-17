@@ -3,12 +3,10 @@
     <li>
       <a [routerLink]="['settings']"
          routerLinkActive="router-link-active">
-        <span class="fa fa-home fa-fw"></span>Projekt
+        <span class="fa fa-home fa-fw"></span>
+        <span class="nav-target">Projekt</span>
+        <span *ngIf="project?.isSavingRequired" class="save-icon fa fa-floppy-o"></span>
       </a>
-      <span *ngIf="project?.isSavingRequired"
-            class="dirty pull-right">
-        <span class="fa fa-floppy-o"></span>
-      </span>
     </li>
 
     <!-- Block Editors -->
@@ -23,7 +21,9 @@
             [title]="codeResource.name">
           <a [routerLink]="['ast', codeResource.id, 'block']"
              routerLinkActive="router-link-active">
-            <span class="fa fa-file-code-o fa-fw"></span> {{ codeResource.name }}
+            <span class="fa fa-file-code-o fa-fw"></span>
+            <span class="nav-target">{{ codeResource.name }}</span>
+            <span *ngIf="codeResource?.isSavingRequired" class="save-icon fa fa-floppy-o"></span>
           </a>
         </li>
       </ul>
@@ -57,7 +57,8 @@
         <li *ngFor="let table of project?.schema.tables">
           <a [routerLink]="['schema', currentDatabaseName, 'details', table.name]"
              routerLinkActive="router-link-active">
-            <span class="fa fa-table fa-fw"></span> {{ table.name }}
+            <span class="fa fa-table fa-fw"></span>
+            <span class="nav-target">{{ table.name }}</span>
           </a>
         </li>
       </ul>
@@ -70,7 +71,7 @@
   <div *ngFor="let source of project.sources"
        title="{{ source.display }}">
     <source-icon [source]="source"></source-icon>
-    
+
     <a [href]="source.url">{{ source.title }}</a>
-  </div>    
+  </div>
 </div>
