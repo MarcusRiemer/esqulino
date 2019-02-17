@@ -14,5 +14,5 @@
   <button (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
 </div>
 <ng-template #notEditing>
-  <span [blockBase]="visual" (mousedown)="onActivateEditing($event)">{{ currentValue }}</span>
+  <span [blockBase]="visual" (click)="onActivateEditing($event)">{{ currentValue }}</span>
 </ng-template>
