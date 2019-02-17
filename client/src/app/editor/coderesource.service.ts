@@ -55,8 +55,16 @@ export class CodeResourceService {
 
     const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
 
+    // The actual document that should be sent
     const bodyJson = resource.toModel();
+
+    // The actual document may not contain the ID (that's part of the URL)
     delete bodyJson.id;
+
+    // If there is no ast present: Ensure that an empty AST is transferred
+    if (resource.syntaxTreePeek.isEmpty) {
+      bodyJson.ast = null;
+    }
 
     const body = JSON.stringify(bodyJson);
     const toReturn = this._http.put(url, body, options)
