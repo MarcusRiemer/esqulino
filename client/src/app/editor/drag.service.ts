@@ -354,6 +354,11 @@ export class DragService {
             case "insert":
               this._currentCodeResource.peekResource.insertNode(drop.location, drop.nodeDescription);
               break;
+            case "replace":
+              this._currentCodeResource.peekResource.replaceNode(drop.location, drop.nodeDescription);
+              break;
+            default:
+              throw new Error(`Unhandled smart drop: ${JSON.stringify(drop)}`);
           }
         }
         // Otherwise we might want to remove the current node?

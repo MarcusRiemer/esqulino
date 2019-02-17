@@ -140,9 +140,14 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   public onPlaceholderDragEnter(evt: MouseEvent) {
     if (this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, [], undefined, {});
+      this._dragService.informDraggedOver(evt, [], undefined, {
+        allowExact: true
+      });
     }
   }
 
+  /**
+   * The subset of the tree that is currently somehow "executed"
+   */
   readonly currentlyExecuted = this._currentCodeResource.currentExecutionLocation;
 }

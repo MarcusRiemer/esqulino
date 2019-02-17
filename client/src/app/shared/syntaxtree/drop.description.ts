@@ -13,13 +13,22 @@ export interface SmartDropOptions {
  * A drop operation that would not "worsen" the tree by violating
  * basic type or cardinality laws.
  */
-export type SmartDropLocation = InsertDropLocation | EmbraceDropLocation;
+export type SmartDropLocation = InsertDropLocation | ReplaceDropLocation | EmbraceDropLocation;
 
 /**
  * An insertion at the given location.
  */
 export interface InsertDropLocation {
   operation: "insert";
+  location: NodeLocation;
+  nodeDescription: NodeDescription;
+}
+
+/**
+ * A replacement of whatever is at the given location.
+ */
+export interface ReplaceDropLocation {
+  operation: "replace";
   location: NodeLocation;
   nodeDescription: NodeDescription;
 }
