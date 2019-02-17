@@ -63,6 +63,13 @@
   </ng-container>
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
+    <!-- Okay, these properties are a convoluted mess that should probably be cleared
+         up sometime in the future. Lets see what we have:
+
+         * codeResource, node, visual and readOnly are basicly passed through
+         * TODO: The animations should be defined on the child
+         * draggable and (dragStart) offload the drag detection to the browser
+         * (mouseover) informs the global state about drag events -->
     <editor-block-render-block #currentBlock
                                [@isExecuted]="currentBlock.isCurrentlyExecuted | async"
                                [@isEmbraced]="currentBlock.isEmbraceDrop | async"
@@ -73,11 +80,12 @@
                                [visual]="visual"
                                [readOnly]="readOnly"
                                [class.read-only]="readOnly"
-                               (mousedown)="currentBlock.onStartDrag($event, block)"
+                               draggable="true"
+                               (dragstart)="currentBlock.onStartDrag($event, block)"
                                (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
-  <!-- Something is broken, display a error message -->
+  <!-- Something is broken, display an error message -->
   <div *ngSwitchDefault>Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar</div>
 </ng-container>
 <div *ngIf="breakAfter" class="break-after"></div>
