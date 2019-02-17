@@ -297,7 +297,7 @@ export class Node {
 export class Tree {
   private _root: Node;
 
-  constructor(rootDesc: NodeDescription) {
+  constructor(rootDesc?: NodeDescription) {
     if (rootDesc) {
       this._root = new Node(rootDesc, this);
     }

@@ -8,7 +8,6 @@ import {
 } from './validation-result'
 import { OccursSpecificDescription } from './grammar.description';
 import { resolveOccurs } from './grammar-util';
-import { QualifiedTypeName } from './syntaxtree.description';
 
 /**
  * Every type can be identified by its fully qualified name (language

@@ -75,6 +75,29 @@ describe('Drop', () => {
       expect(_exactMatches(v, treeIn, [["rhs", 0]], candidates))
         .toEqual([]);
     });
+
+
+    it('Empty tree filled with constants', () => {
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } },
+        { language: "expr", name: "noMatch" }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree();
+
+      expect(_exactMatches(v, treeIn, [], candidates))
+        .withContext("Two constants and a noMatch at root")
+        .toEqual([
+          { operation: "replace", location: [], nodeDescription: candidates[0] },
+          { operation: "replace", location: [], nodeDescription: candidates[1] },
+        ]);
+
+      expect(_exactMatches(v, treeIn, [["a", 12]], candidates))
+        .withContext("Two constants and a noMatch at invalid position")
+        .toEqual([]);
+    });
   });
 
   // ######################################################################

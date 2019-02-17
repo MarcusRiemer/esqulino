@@ -2,14 +2,21 @@ import { NodeLocation, NodeDescription } from "./syntaxtree.description";
 import { Validator } from './validator';
 import { Tree } from './syntaxtree';
 import { embraceMatches } from './drop-embrace';
-import { SmartDropLocation, SmartDropOptions, InsertDropLocation } from './drop.description';
+import { SmartDropLocation, SmartDropOptions, InsertDropLocation, ReplaceDropLocation } from './drop.description';
 import { insertAtAnyParent } from './drop-parent';
 import { _cardinalityAllowsInsertion } from './drop-util';
+import { ErrorCodes } from './validation-result';
 
 export const DEFAULT_SMART_DROP_OPTIONS: SmartDropOptions = {
   allowAnyParent: true,
   allowEmbrace: true,
 };
+
+// These errors signal errors that would be triggered by using an illegal
+// node as the root.
+const ROOT_ERRORS: string[] = [
+  ErrorCodes.UnknownRoot, ErrorCodes.UnknownRootLanguage, ErrorCodes.UnexpectedType
+]
 
 /**
  * Attempts to insert all candidates exactly at the given location.
@@ -24,9 +31,9 @@ export function _exactMatches(
   tree: Tree,
   loc: NodeLocation,
   candidates: NodeDescription[]
-): InsertDropLocation[] {
-  // Replacing the root is another matter
-  if (loc.length > 0) {
+): (InsertDropLocation | ReplaceDropLocation)[] {
+  // Replacing the root (or anything in an empty tree) is another matter
+  if (loc.length > 0 && tree && !tree.isEmpty) {
     const targetParent = tree.locate(loc.slice(0, -1));
     const targetParentCategory = loc[loc.length - 1][0];
     const targetParentIndex = loc[loc.length - 1][1];
@@ -52,13 +59,43 @@ export function _exactMatches(
           });
         })
     );
-  } else {
+  }
+  // Replacing the root is handled here
+  else if (loc.length === 0 && (!tree || tree.isEmpty)) {
+    return (
+      candidates
+        .filter(candidate => {
+          // Build a tree and see whether any of the candidates is "cardinality-valid" on its own.
+          const possibleTree = new Tree(candidate);
+          if (possibleTree.isEmpty) {
+            return (false);
+          }
+
+          const valResult = validator.validateFromRoot(possibleTree);
+          const rootNode = possibleTree.locate([]);
+          const rootErrors = valResult.getErrorsOn(rootNode);
+          return (rootErrors.every(err => !ROOT_ERRORS.includes(err.code)));
+        })
+        .map((candidate): ReplaceDropLocation => {
+          // It fits? Then we allow the insertion
+          return ({
+            operation: "replace",
+            location: [],
+            nodeDescription: candidate
+          });
+        })
+    );
+  }
+  // Sometimes there is nothing that could be proposed
+  else {
     return ([]);
   }
 }
 
 /**
  * Possibly meaningful approach:
+ *
+ * 0) If applicable: Take the exact match and try to make it happen.
  * 1) Valid embraces
  * 2) Append after self (if cardinality and immediate type fits)
  * 3) Append after any parent (if cardinality and immediate type fits)
@@ -87,6 +124,7 @@ export function smartDropLocation(
   if (tree) {
     const toReturn: SmartDropLocation[] = [];
 
+    // Possibly add the exact location that was requested.
     if (options.allowExact) {
       toReturn.push(..._exactMatches(validator, tree, loc, candidates));
     }
