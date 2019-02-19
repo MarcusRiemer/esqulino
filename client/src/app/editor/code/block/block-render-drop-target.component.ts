@@ -9,8 +9,6 @@ import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-
 import { BlockDropProperties } from './block-drop-properties';
 import { calculateDropLocation, calculateDropTargetState } from './drop-utils';
 
@@ -63,6 +61,8 @@ const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
 })
 export class BlockRenderDropTargetComponent implements BlockDropProperties {
   @Input() public codeResource: CodeResource;
+
+  // TODO: Drop targets should only depend on a position, not on a node!
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorDropTarget;
 

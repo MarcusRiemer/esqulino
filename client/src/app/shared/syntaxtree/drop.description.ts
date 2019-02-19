@@ -4,6 +4,7 @@ import { NodeLocation, NodeDescription } from "./syntaxtree.description";
  * Possibilities to take into account when making a smart drop.
  */
 export interface SmartDropOptions {
+  allowAppend?: boolean;
   allowEmbrace?: boolean;
   allowAnyParent?: boolean;
   allowExact?: boolean;
