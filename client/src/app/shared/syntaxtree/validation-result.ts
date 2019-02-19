@@ -16,9 +16,9 @@ export enum ErrorCodes {
   MissingChild = "MISSING_CHILD",
   // A specific child was entirely unexpected
   SuperflousChild = "SUPERFLOUS_CHILD",
-  // One or more children occur too often
+  // One or more children occur too often (for "allowed" restrictions)
   InvalidMaxOccurences = "INVALID_MAX_OCCURENCES",
-  // One or more children occur not often enough
+  // One or more children occur not often enough (for "allowed" restrictions)
   InvalidMinOccurences = "INVALID_MIN_OCCURENCES",
   // A property was expected, but simply did not exist
   MissingProperty = "MISSING_PROPERTY",
@@ -49,14 +49,22 @@ export interface ErrorUnexpectedType {
  * A child is not allowed in a certain position.
  */
 export interface ErrorIllegalChildType {
-  present: AST.QualifiedTypeName,
+  expected: AST.QualifiedTypeName
+  present: AST.QualifiedTypeName
+  category: string
   index: number
 }
 
 export interface ErrorMissingChild {
-  expected: AST.QualifiedTypeName,
-  index: number,
-  childrenCategory: string
+  expected: AST.QualifiedTypeName
+  category: string
+  index: number
+}
+
+export interface ErrorSuperflousChild {
+  present: AST.QualifiedTypeName
+  category: string
+  index: number
 }
 
 export interface ErrorMissingProperty {

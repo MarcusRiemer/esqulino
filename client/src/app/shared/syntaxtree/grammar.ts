@@ -4,7 +4,9 @@ import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import {
   ErrorCodes, ValidationContext, ErrorMissingChild, ErrorMissingProperty,
-  ErrorUnexpectedType
+  ErrorUnexpectedType,
+  ErrorIllegalChildType,
+  ErrorSuperflousChild
 } from './validation-result'
 import { OccursSpecificDescription } from './grammar.description';
 import { resolveOccurs } from './grammar-util';
@@ -409,22 +411,25 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
           // We would expect more of this type, but haven't got any.
           else {
             // Hand out a (more or less) detailed error message
-            context.addError(ErrorCodes.IllegalChildType, child, {
+            const errData: ErrorIllegalChildType = {
               present: child.qualifiedName,
               expected: expected.nodeType.description,
               index: childIndex,
-            });
+              category: this._group.categoryName,
+            };
+            context.addError(ErrorCodes.IllegalChildType, parent, errData);
           }
         }
         // There is no child, is that valid?
         else {
           if (subIndex < expected.minOccurs) {
             // There is no child present, but the current type expects it
-            context.addError(ErrorCodes.MissingChild, parent, {
-              childrenCategory: this._group.categoryName,
+            const errData: ErrorMissingChild = {
               expected: expected.nodeType.description,
-              index: childIndex
-            } as ErrorMissingChild);
+              index: childIndex,
+              category: this._group.categoryName,
+            };
+            context.addError(ErrorCodes.MissingChild, parent, errData);
           } else {
             // There is no child present, but thats OK
             return; // Effectively jumps to next `expected`
@@ -439,10 +444,12 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
 
     // Any children left at this point are errors
     for (; childIndex < children.length; childIndex++) {
-      context.addError(ErrorCodes.SuperflousChild, children[childIndex], {
+      const errData: ErrorSuperflousChild = {
+        present: children[childIndex].qualifiedName,
         index: childIndex,
-        present: children[childIndex].qualifiedName
-      });
+        category: this._group.categoryName,
+      };
+      context.addError(ErrorCodes.SuperflousChild, parent, errData);
     }
 
     return (toReturn);
