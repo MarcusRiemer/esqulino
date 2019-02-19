@@ -352,6 +352,30 @@ const langAllowedConstraint: Schema.GrammarDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
+const langSingleSequenceConstraint: Schema.GrammarDescription = {
+  id: "51a1230d-38d1-41a3-ad2e-16f2b3253b8f",
+  programmingLanguageId: "spec",
+  name: "single-sequence-constraint",
+  technicalName: "single-sequence-constraint",
+  types: {
+    "root": {
+      type: "concrete",
+      attributes: [
+        {
+          name: "nodes",
+          type: "sequence",
+          nodeTypes: ["a"]
+        }
+      ],
+    },
+    "a": { type: "concrete" }
+  },
+  root: "root"
+};
+
+/**
+ * A single root node that uses some children with the "sequence" constraint
+ */
 const langSequenceConstraint: Schema.GrammarDescription = {
   id: "51a1230d-38d1-41a3-ad2e-16f2b3253b8f",
   programmingLanguageId: "spec",
@@ -869,6 +893,59 @@ describe('Grammar Validation', () => {
     expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
   });
 
+  it('Invalid single "sequence": Completely Empty', () => {
+    const v = new Validator([langSingleSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "single-sequence-constraint",
+      name: "root",
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.MissingChild]);
+  });
+
+  it('Invalid single "sequence": Two items', () => {
+    const v = new Validator([langSingleSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "single-sequence-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          { language: "single-sequence-constraint", name: "a" },
+          { language: "single-sequence-constraint", name: "a" }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild]);
+  });
+
+  it('Invalid single "sequence": Unexpected item', () => {
+    const v = new Validator([langSingleSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "single-sequence-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          { language: "single-sequence-constraint", name: "root" }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
+  });
+
   it('Invalid "sequence": Completely Empty', () => {
     const v = new Validator([langSequenceConstraint]);
 
@@ -888,7 +965,7 @@ describe('Grammar Validation', () => {
         typeName: "a",
       },
       index: 0,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
@@ -897,7 +974,7 @@ describe('Grammar Validation', () => {
         typeName: "a",
       },
       index: 1,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
     expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[2].data).toEqual({
@@ -906,7 +983,7 @@ describe('Grammar Validation', () => {
         typeName: "c",
       },
       index: 2,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
   });
 
@@ -937,7 +1014,7 @@ describe('Grammar Validation', () => {
         typeName: "a"
       },
       index: 1,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
@@ -946,7 +1023,7 @@ describe('Grammar Validation', () => {
         typeName: "c"
       },
       index: 2,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
   });
 
@@ -981,7 +1058,7 @@ describe('Grammar Validation', () => {
         typeName: "c"
       },
       index: 2,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
   });
 
@@ -1012,7 +1089,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "sequence": Three required nodes + Optional "b"-node', () => {
@@ -1046,7 +1123,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "sequence": Three required nodes + two optional "b"-nodes', () => {
@@ -1084,7 +1161,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "sequence": Three required nodes + All optional "b"- and "c"-nodes', () => {
@@ -1126,7 +1203,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Invalid "sequence": Three required nodes + All optional "b"- and "c"-nodes + extra node', () => {
@@ -1172,7 +1249,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(1);
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
   it('Invalid "sequence": Three required nodes + three optional "b"-nodes', () => {

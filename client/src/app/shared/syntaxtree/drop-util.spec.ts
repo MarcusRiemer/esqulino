@@ -4,6 +4,7 @@ import { Validator } from './validator';
 import { _cardinalityAllowsInsertion } from './drop-util';
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
 import { ErrorCodes } from './validation-result';
+import { GRAMMAR_SQL_DESCRIPTION } from './grammar-sql.spec';
 
 describe('Drop Utils', () => {
   describe('_cardinalityAllowsInsertion', () => {
@@ -194,6 +195,35 @@ describe('Drop Utils', () => {
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "rhs", 0)).toBe(false);
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "foo", 0)).toBe(false);
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "bar", 0)).toBe(false);
+    });
+
+    it(`SQL: Insert second SELECT to "SELECT *"`, () => {
+      const inTreeDesc: NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [{
+            language: "sql",
+            name: "select",
+            children: {
+              "columns": [{ language: "sql", name: "starOperator" }]
+            }
+          }]
+        }
+      };
+
+      const candidateDesc: NodeDescription = {
+        language: "sql",
+        name: "select"
+      };
+
+      const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+      const inNode = new Tree(inTreeDesc).rootNode;
+
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "lhs", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "select", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "from", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "where", 0)).toBe(false);
     });
 
   });

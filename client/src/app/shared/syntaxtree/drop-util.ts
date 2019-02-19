@@ -7,7 +7,8 @@ import { ErrorCodes } from './validation-result';
 // These errors signal cardinality errors that would be triggered
 // by inserting a new node.
 const CARDINALITY_ERRORS: string[] = [
-  ErrorCodes.InvalidMaxOccurences // Suddenly too many nodes
+  ErrorCodes.InvalidMaxOccurences, // Suddenly too many nodes on "allowed"
+  ErrorCodes.SuperflousChild, // Suddenly too many nodes on "sequence"
 ]
 
 /**

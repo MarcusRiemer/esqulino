@@ -351,7 +351,10 @@ export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
           "name": "select",
           "type": "sequence",
           "nodeTypes": [
-            "select"
+            {
+              "occurs": "1",
+              "nodeType": "select"
+            }
           ]
         },
         {
@@ -957,6 +960,36 @@ describe("Complex Spec Grammar: SQL", () => {
 
       expect(res.errors).toEqual([]);
     });
+  });
+
+  it('Error: Two SELECT nodes in QUERY_SELECT, but no FROM', () => {
+    const astDesc: AST.NodeDescription = {
+      "name": "querySelect",
+      "language": "sql",
+      "children": {
+        "select": [
+          {
+            "name": "select",
+            "language": "sql",
+            children: {
+              "columns": [{ language: "sql", name: "starOperator" }]
+            }
+          },
+          {
+            "name": "select",
+            "language": "sql",
+            children: {
+              "columns": [{ language: "sql", name: "starOperator" }]
+            }
+          }
+        ]
+      }
+    };
+
+    const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+    const res = v.validateFromRoot(new AST.Tree(astDesc));
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild, ErrorCodes.MissingChild]);
   });
 
   it('Smartly drops a "pure" SELECT on a partial Query', () => {
