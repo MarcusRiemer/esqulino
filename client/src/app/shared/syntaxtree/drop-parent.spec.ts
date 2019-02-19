@@ -2,7 +2,8 @@ import { NodeDescription, NodeLocation } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
-import { insertAtAnyParent } from './drop-parent';
+import { GRAMMAR_SQL_DESCRIPTION } from './grammar-sql.spec'
+import { insertAtAnyParent, appendAtParent } from './drop-parent';
 
 describe('Drop Parent', () => {
 
@@ -226,6 +227,155 @@ describe('Drop Parent', () => {
       insertLocation = [];
       expect(insertAtAnyParent(validator, inTree, insertLocation, [candidateDesc]))
         .withContext(`Inserting at ${JSON.stringify(insertLocation)}`)
+        .toEqual([]);
+    });
+  });
+
+  describe(`appendAtParent`, () => {
+    it(`SQL: Insert new column with "SELECT *"`, () => {
+      const inTreeDesc: NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [{
+            language: "sql",
+            name: "select",
+            children: {
+              "columns": [{ language: "sql", name: "starOperator" }]
+            }
+          }]
+        }
+      };
+
+      const candidatesDesc: NodeDescription[] = [
+        {
+          language: "sql",
+          name: "columnName",
+          properties: {
+            "value": "false"
+          }
+        }
+      ];
+
+      const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+      const inTree = new Tree(inTreeDesc);
+
+      let loc: NodeLocation = [["select", 0], ["columns", 0]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
+        .toEqual([
+          {
+            location: [["select", 0], ["columns", 1]],
+            operation: "insert",
+            nodeDescription: candidatesDesc[0]
+          },
+        ]);
+
+      loc = [["select", 0], ["columns", 1]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location does not exist: ${JSON.stringify(loc)}`)
+        .toEqual([]);
+
+      loc = [["select", 0]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
+        .toEqual([]);
+
+      loc = [];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
+        .toEqual([]);
+    });
+
+    it(`SQL: Insert new column with "SELECT t.a, t.b, t.c"`, () => {
+      const inTreeDesc: NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [{
+            language: "sql",
+            name: "select",
+            children: {
+              "columns": [
+                {
+                  language: "sql",
+                  name: "columName",
+                  properties: {
+                    "columnName": "a",
+                    "refTableName": "t"
+                  }
+                },
+                {
+                  language: "sql",
+                  name: "columName",
+                  properties: {
+                    "columnName": "b",
+                    "refTableName": "t"
+                  }
+                },
+                {
+                  language: "sql",
+                  name: "columName",
+                  properties: {
+                    "columnName": "c",
+                    "refTableName": "t"
+                  }
+                }
+              ]
+            }
+          }]
+        }
+      };
+
+      const candidatesDesc: NodeDescription[] = [
+        {
+          language: "sql",
+          name: "columnName",
+          properties: {
+            "value": "false"
+          }
+        }
+      ];
+
+      const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+      const inTree = new Tree(inTreeDesc);
+
+      let loc: NodeLocation = [["select", 0], ["columns", 0]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
+        .toEqual([
+          {
+            location: [["select", 0], ["columns", 1]],
+            operation: "insert",
+            nodeDescription: candidatesDesc[0]
+          },
+        ]);
+
+      loc = [["select", 0], ["columns", 1]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
+        .toEqual([
+          {
+            location: [["select", 0], ["columns", 2]],
+            operation: "insert",
+            nodeDescription: candidatesDesc[0]
+          },
+        ]);
+
+      loc = [["select", 0], ["columns", 2]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
+        .toEqual([
+          {
+            location: [["select", 0], ["columns", 3]],
+            operation: "insert",
+            nodeDescription: candidatesDesc[0]
+          },
+        ]);
+
+      loc = [["select", 0], ["columns", 3]];
+      expect(appendAtParent(validator, inTree, loc, candidatesDesc))
+        .withContext(`Location: ${JSON.stringify(loc)}`)
         .toEqual([]);
     });
   });

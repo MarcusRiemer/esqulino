@@ -5,8 +5,8 @@ import { InsertDropLocation } from './drop.description';
 import { _cardinalityAllowsInsertion } from './drop-util';
 
 /**
- * Walks up the tree to find valid places to insert any
- * of the given candidates.
+ * Walks up the tree to find valid places in any of the existing
+ * child categories to insert any of the given candidates.
  *
  * @param validator The rules that must hold after the embracing
  * @param tree The tree to modify
@@ -73,4 +73,52 @@ export function insertAtAnyParent(
   });
 
   return (toReturn);
+}
+
+/**
+ * Attempts to insert the given candidates right after the given
+ * location.
+ *
+ * @param validator The rules that must hold after the embracing
+ * @param tree The tree to modify
+ * @param loc The location of the node to be inserted
+ * @param candidates All nodes that could possibly be used to embrace
+ */
+export function appendAtParent(
+  validator: Validator,
+  tree: Tree,
+  loc: NodeLocation,
+  candidates: NodeDescription[]
+): InsertDropLocation[] {
+  let parentPath = loc.slice(0, -1);
+  let parentNode = tree.locateOrUndefined(parentPath);
+
+  // We can't append anything if there is no parent or if the node
+  // to append after does not exist
+  if (loc.length > 0 && parentNode && tree.locateOrUndefined(loc)) {
+    // Appending happens after the location that was given.
+    const childLocation = loc[loc.length - 1];
+    let [cat, index] = childLocation;
+    index++;
+
+    const nodeValidator = validator.getType(parentNode.qualifiedName);
+
+    return (
+      candidates
+        // Type must be allowed in general
+        .filter(c => nodeValidator.allowsChildType({ languageName: c.language, typeName: c.name }, cat))
+        // Cardinality may not be violated
+        .filter(c => _cardinalityAllowsInsertion(validator, parentNode, c, cat, index))
+        .map((c): InsertDropLocation => {
+          return ({
+            operation: "insert",
+            location: [...parentPath, [cat, index]],
+            nodeDescription: c
+          });
+        })
+    );
+  } else {
+    return ([]);
+  }
+
 }
