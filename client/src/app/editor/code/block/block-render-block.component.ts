@@ -98,7 +98,7 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
   onMouseEnter(evt: MouseEvent) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
-        allowAnyParent: true, allowEmbrace: true
+        allowAnyParent: true, allowEmbrace: true, allowAppend: true
       });
     }
   }

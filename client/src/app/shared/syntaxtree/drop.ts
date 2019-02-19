@@ -3,7 +3,7 @@ import { Validator } from './validator';
 import { Tree } from './syntaxtree';
 import { embraceMatches } from './drop-embrace';
 import { SmartDropLocation, SmartDropOptions, InsertDropLocation, ReplaceDropLocation } from './drop.description';
-import { insertAtAnyParent } from './drop-parent';
+import { insertAtAnyParent, appendAtParent } from './drop-parent';
 import { _cardinalityAllowsInsertion } from './drop-util';
 import { ErrorCodes } from './validation-result';
 
@@ -100,6 +100,8 @@ export function _exactMatches(
  * 2) Append after self (if cardinality and immediate type fits)
  * 3) Append after any parent (if cardinality and immediate type fits)
  *
+ * TODO: This order should probably be flexible
+ *
  * Basic rule: Do not build invalid trees according to cardinality. These
  * are errors that can not be fixed.
  *
@@ -132,6 +134,11 @@ export function smartDropLocation(
     // Possibly all embracing options
     if (options.allowEmbrace) {
       toReturn.push(...embraceMatches(validator, tree, loc, candidates));
+    }
+
+    // Possibly appending
+    if (options.allowAppend) {
+      toReturn.push(...appendAtParent(validator, tree, loc, candidates));
     }
 
     // Possibly all insertion options
