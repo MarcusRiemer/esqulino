@@ -134,8 +134,66 @@ describe('Drop Utils', () => {
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "rhs", 0)).toBe(true);
     });
 
-    it('Deals with unexpected errors', () => {
+    it('Deals with unexpected existing trees', () => {
+      const inTreeDesc: NodeDescription = {
+        language: "unexpected",
+        name: "booleanBinary",
+        children: {
+          "lhs": [],
+          "rhs": []
+        },
+        properties: {
+          "operator": "+"
+        }
+      };
 
+      const candidateDesc: NodeDescription = {
+        language: "expr",
+        name: "booleanConstant",
+        properties: {
+          "value": "false"
+        }
+      }
+
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const inNode = new Tree(inTreeDesc).rootNode;
+
+      // Insertion is invalid whereever we look
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "lhs", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "rhs", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "foo", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "bar", 0)).toBe(false);
+    });
+
+    it('Deals with unexpected candidates', () => {
+      const inTreeDesc: NodeDescription = {
+        language: "expr",
+        name: "booleanBinary",
+        children: {
+          "lhs": [],
+          "rhs": []
+        },
+        properties: {
+          "operator": "+"
+        }
+      };
+
+      const candidateDesc: NodeDescription = {
+        language: "unexpected",
+        name: "booleanConstant",
+        properties: {
+          "value": "false"
+        }
+      }
+
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const inNode = new Tree(inTreeDesc).rootNode;
+
+      // Insertion is invalid whereever we look
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "lhs", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "rhs", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "foo", 0)).toBe(false);
+      expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "bar", 0)).toBe(false);
     });
 
   });

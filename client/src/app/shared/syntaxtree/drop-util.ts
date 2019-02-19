@@ -21,20 +21,28 @@ export function _cardinalityAllowsInsertion(
   categoryName: string,
   index: number,
 ): boolean {
-  // Build a new tree with the proposed insertion
-  const insertionLocation: NodeLocation = [...node.location, [categoryName, index]];
-  const modifiedTree = node.tree.insertNode(insertionLocation, candidate);
+  const candidateType = { languageName: candidate.language, typeName: candidate.name };
 
-  // Validate it and check the errors at the parenting node
-  const valResult = validator.validateFromRoot(modifiedTree);
-  const modifiedNode = modifiedTree.locate(node.location);
-  const errors = valResult.getErrorsOn(modifiedNode);
+  // Is the insertion generally possible?
+  if (validator.isKnownType(node.languageName, node.typeName)
+    && validator.getType(node).allowsChildType(candidateType, categoryName)) {
+    // Build a new tree with the proposed insertion
+    const insertionLocation: NodeLocation = [...node.location, [categoryName, index]];
+    const modifiedTree = node.tree.insertNode(insertionLocation, candidate);
 
-  // Error out if there is any error that is explained by incorrect cardinality
-  return (
-    errors
-      // Only look at errors in our category
-      .filter(err => err.data.category === categoryName)
-      .every(err => !CARDINALITY_ERRORS.includes(err.code))
-  );
+    // Validate it and check the errors at the parenting node
+    const valResult = validator.validateFromRoot(modifiedTree);
+    const modifiedNode = modifiedTree.locate(node.location);
+    const errors = valResult.getErrorsOn(modifiedNode);
+
+    // Error out if there is any error that is explained by incorrect cardinality
+    return (
+      errors
+        // Only look at errors in our category
+        .filter(err => err.data.category === categoryName)
+        .every(err => !CARDINALITY_ERRORS.includes(err.code))
+    );
+  } else {
+    return (false);
+  }
 }
