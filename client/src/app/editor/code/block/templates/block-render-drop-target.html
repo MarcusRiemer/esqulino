@@ -4,23 +4,23 @@
 <div *ngIf="(showAnything | async)"
      (mouseover)="onMouseEnter($event)"
      (mouseout)="onMouseOut($event)">
-  <!-- Ensure correct visual behaviour -->
-  <div *ngIf="!(showDropTarget | async); else dropPlaceholder;"
-       [@availability]="currentAvailability | async"
-       [blockBase]="visual"
-       [blockLayout]="visual">
-    <!-- Render all components of this drop target -->
-    <ng-container *ngFor="let childVisualBlock of visual.children">
-      <editor-block-render [codeResource]="codeResource"
-                           [visual]="childVisualBlock"
-                           [node]="node"></editor-block-render>
-    </ng-container>
+  <div *ngIf="(showDropPlaceholder | async); else dropTarget;"
+       @dropTargetVisible
+       class="drop-placeholder">
+    Hier
   </div>
 
-  <ng-template #dropPlaceholder>
-    <div @dropTargetVisible
-         class="drop-placeholder">
-      Hier
+  <!-- Ensure correct visual behaviour -->
+  <ng-template #dropTarget>
+    <div [@availability]="currentAvailability | async"
+         [blockBase]="visual"
+         [blockLayout]="visual">
+      <!-- Render all components of this drop target -->
+      <ng-container *ngFor="let childVisualBlock of visual.children">
+        <editor-block-render [codeResource]="codeResource"
+                             [visual]="childVisualBlock"
+                             [node]="node"></editor-block-render>
+      </ng-container>
     </div>
   </ng-template>
 </div>

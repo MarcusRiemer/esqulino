@@ -4,7 +4,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { map, withLatestFrom, debounceTime } from 'rxjs/operators';
 
 import { arrayEqual } from '../../../shared/util';
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { Node, CodeResource, NodeLocation } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
@@ -59,12 +59,28 @@ const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
     ])
   ]
 })
-export class BlockRenderDropTargetComponent implements BlockDropProperties {
+export class BlockRenderDropTargetComponent {
+  /**
+   * The code resource that is rendered here.
+   */
   @Input() public codeResource: CodeResource;
 
-  // TODO: Drop targets should only depend on a position, not on a node!
-  @Input() public node: Node;
+  /**
+   * If applicable: The node that has something dropped on to it.
+   */
+  @Input() public node?: Node;
+
+
+  /**
+   * The visualisation parameters for this block.
+   */
   @Input() public visual: VisualBlockDescriptions.EditorDropTarget;
+
+  /**
+   * The location this drop target would insert something if something
+   * would be dropped here.
+   */
+  @Input() public dropLocation: NodeLocation;
 
   /**
    * Disables any interaction with this block if true.
@@ -90,7 +106,7 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
    * @return True, if there is an ongoing drag that would insert something
    *         at the location of this drop target.
    */
-  readonly showDropTarget = this._latestDragData.pipe(
+  readonly showDropPlaceholder = this._latestDragData.pipe(
     map(([currentDrag, inProgress]) => {
       if (this.readOnly) {
         return (false);
@@ -101,8 +117,7 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
         }
         else {
           // We would drop something in the location we are a placeholder.
-          return (arrayEqual(currentDrag.dropLocation, this.dropLocation)
-          );
+          return (arrayEqual(currentDrag.dropLocation, this.dropLocation));
         }
       } else {
         return (false);
@@ -117,13 +132,6 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
     map(([currentDrag, inProgress]) => inProgress && !currentDrag.isEmbraceDrop),
     debounceTime(ANIMATION_DELAY) // Don't trigger animations to hasty
   )
-
-  /**
-   * @return The location a drop should occur in. This depends on the configuration in the language model.
-   */
-  get dropLocation() {
-    return (calculateDropLocation(this.node, this.visual.dropTarget));
-  }
 
   /**
    * @return The current animation state
@@ -146,10 +154,7 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
   onMouseEnter(evt: MouseEvent) {
     this._currentTarget = true;
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
-      // TODO: Using `node.location` uses an incorrect drop location. But in the longer run
-      //       the exact location should be used without relying on any "oldfashioned"
-      //       drop locations.
-      this._dragService.informDraggedOver(evt, this.dropLocation, this.node, { allowExact: true });
+      this._dragService.informDraggedOver(evt, this.dropLocation, undefined, { allowExact: true });
     }
   }
 
