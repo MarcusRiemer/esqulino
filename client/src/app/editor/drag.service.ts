@@ -85,7 +85,17 @@ export class DragService {
   // Indicates whether the current `mouseEnter` event could have been caused
   // by a mouse movement. This is an attempt to prevent unstable UI state in which
   // the animation of a drop target causes the drop location to shift.
-  private _mouseMoveCausedEnter = false;
+  private _mouseMoveCausedDragOver = false;
+
+  // If a drag has been ignored because the mouse did not move in between, the next
+  // mouse move might need to re-trigger that event. Otherwise the subsequent move
+  // might visually occur over an element that would change the drop location, but
+  // no visual feedback is provided because the `mouseenter`-event did not fire.
+  private _bufferedDragOver?: {
+    dropLocation: NodeLocation,
+    node: Node | undefined,
+    smartDropOptions: SmartDropOptions
+  } = undefined;
 
   /**
    * This service is involved  with *every* part of the UI and must therefore
@@ -127,11 +137,22 @@ export class DragService {
     }
 
     // The mouse was moved, this may cause a new drop location
-    this._mouseMoveCausedEnter = true;
-    console.log("MouseMove");
+    if (this._bufferedDragOver) {
+      this.informDraggedOverImpl(
+        this._bufferedDragOver.dropLocation,
+        this._bufferedDragOver.node,
+        this._bufferedDragOver.smartDropOptions
+      );
+    } else {
+      // Not yet, but the next movement may
+      this._mouseMoveCausedDragOver = true;
+    }
   }
 
-  private showOverlay(desc: NodeDescription, evt: MouseEvent) {
+  /**
+   * Creates an overlay for the dragged description.
+   */
+  private showDraggedBlock(desc: NodeDescription, evt: MouseEvent) {
     // Create a new overlay at an appropriate position
     this._currentDragPos = this._overlay.position().global()
       .left("" + evt.clientX + "px")
@@ -147,7 +168,7 @@ export class DragService {
     this._currentDragPos.apply();
   }
 
-  private hideOverlay() {
+  private hideDraggedBlock() {
     // Remove a previous overlay (if any)
     if (this._currentDragOverlay) {
       this._currentDragOverlay.dispose();
@@ -211,7 +232,7 @@ export class DragService {
 
     // Actually show the overlay and make sure it is removed afterwards
     this.setupDragEndHandlers(desc);
-    this.showOverlay(desc[0], evt);
+    this.showDraggedBlock(desc[0], evt);
 
     console.log(`AST-Drag started:`, sourceSidebar);
 
@@ -233,22 +254,39 @@ export class DragService {
     node: Node | undefined,
     smartDropOptions: SmartDropOptions
   ) {
-    const dragData = this._currentDrag.value;
-    if (!dragData) {
-      throw new Error("Can't drag over placeholder: No drag in progress");
-    }
-
     // Ensure that no other block tells the same story
     evt.stopImmediatePropagation();
 
-
-    // Don't accept any enter event unless the mouse has been moved.
-    if (!this._mouseMoveCausedEnter) {
-      return;
+    // Was this caused by a direct user interaction?
+    if (this._mouseMoveCausedDragOver) {
+      this.informDraggedOverImpl(dropLocation, node, smartDropOptions);
+    } else {
+      // Keep the event in mind for later
+      this._bufferedDragOver = {
+        dropLocation: dropLocation,
+        node: node,
+        smartDropOptions: smartDropOptions
+      };
     }
+  }
+
+  /**
+   * The actual implementation of drag notifications.
+   */
+  private informDraggedOverImpl(
+    dropLocation: NodeLocation,
+    node: Node | undefined,
+    smartDropOptions: SmartDropOptions
+  ) {
+    const dragData = this._currentDrag.value;
+    if (!dragData) {
+      throw new Error("Can't drag over anything: No drag in progress");
+    }
+
     // If another change comes (without the mouse beeing moved) we
     // are not interested.
-    this._mouseMoveCausedEnter = false;
+    this._mouseMoveCausedDragOver = false;
+    this._bufferedDragOver = undefined;
 
     const currentCodeResource = this._currentCodeResource.peekResource;
     const smartDropLocations = smartDropLocation(
@@ -288,6 +326,8 @@ export class DragService {
     dragData.isEmbraceDrop = false;
     dragData.smartDrops = [];
 
+    this._bufferedDragOver = undefined;
+
     this._currentDrag.next(dragData);
   }
 
@@ -305,6 +345,8 @@ export class DragService {
 
     // .. but the trash
     dragData.hoverTrash = true;
+
+    this._bufferedDragOver = undefined;
 
     this._currentDrag.next(dragData);
   }
@@ -349,7 +391,7 @@ export class DragService {
 
       // Do the strictly required internal bookkeeping
       removeDragHandlers();
-      this.hideOverlay();
+      this.hideDraggedBlock();
       this._currentDrag.next(undefined);
 
       // Tell the analytics API about the ended event
