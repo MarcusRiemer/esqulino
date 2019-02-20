@@ -61,16 +61,14 @@
                              [visual]="sepBlock"
                              [node]="childNode"></editor-block-render>
       </ng-container>
-
-      <!-- Show a drop target to insert after the last block -->
-      <ng-template #lastDrop>
-        <editor-block-render-drop-target [codeResource]="codeResource"
-                                         [dropLocation]="locationAppend(childNode.location)"
-                                         [visual]="visual"
-                                         [readOnly]="readOnly">
-        </editor-block-render-drop-target>
-      </ng-template>
     </ng-container>
+
+    <!-- Show a drop target to insert after the last block -->
+    <editor-block-render-drop-target [codeResource]="codeResource"
+                                     [dropLocation]="lastNodeLocation"
+                                     [visual]="visual"
+                                     [readOnly]="readOnly">
+    </editor-block-render-drop-target>
   </ng-container>
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
