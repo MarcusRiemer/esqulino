@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
+      precision: 
+      scale: 
+      limit: 
     value: 9b4716e7-9c02-4af2-8457-5965f58fff70
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
@@ -48,6 +48,6 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT Geschichte.Geschichte_Name
     FROM Geschichte
-    WHERE (Geschichte.Geschichte_Name LIKE '%Geist%')
+    WHERE Geschichte.Geschichte_Name LIKE '%Geist%'
 new_record: false
 active_record_yaml_version: 2
