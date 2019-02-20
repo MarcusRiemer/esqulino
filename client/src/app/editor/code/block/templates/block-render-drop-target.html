@@ -4,11 +4,11 @@
 <div *ngIf="(showAnything | async)"
      (mouseover)="onMouseEnter($event)"
      (mouseout)="onMouseOut($event)">
-  <div *ngIf="(showDropPlaceholder | async); else dropTarget;"
+  <span *ngIf="(showDropPlaceholder | async); else dropTarget;"
        @dropTargetVisible
        class="drop-placeholder">
     Hier
-  </div>
+  </span>
 
   <!-- Ensure correct visual behaviour -->
   <ng-template #dropTarget>
