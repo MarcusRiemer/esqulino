@@ -46,13 +46,6 @@
                              [readOnly]="readOnly"></editor-block-render>
       </ng-container>
 
-      <!-- TODO: This should be only inserted for the first or the last block -->
-      <!-- <editor-block-render-drop-target [codeResource]="codeResource"
-           [node]="childNode"
-           [visual]="defaultBetweenDropTarget"
-           [readOnly]="readOnly">
-           </editor-block-render-drop-target> -->
-
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"

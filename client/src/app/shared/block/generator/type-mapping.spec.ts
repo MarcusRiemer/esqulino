@@ -56,7 +56,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
     };
     const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
 
-    expect(res.length).toEqual(2);
+    expect(res.length).toEqual(1);
     expect(res[0]).toEqual({
       blockType: "iterator",
       childGroupName: "c1",
@@ -64,9 +64,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       wrapChildren: true,
       breakAfter: false
     });
-    expect(res[1]).toEqual(jasmine.objectContaining({
-      blockType: "dropTarget"
-    } as Partial<VisualBlockDescriptions.EditorDropTarget>));
   });
 
   it("Sequence (+Between) => Iterator", () => {
@@ -87,7 +84,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
         orientation: "horizontal",
         between: "ä",
         style: {},
-        generateDropTargets: "none",
         allowWrap: true,
         breakAfter: false
       }
