@@ -94,6 +94,26 @@ export class BlockRenderComponent {
     return (locationIncLastIndex(loc));
   }
 
+  get lastNode() {
+    const childNodes = this.iteratorChildNodes;
+    if (childNodes.length > 0) {
+      return (childNodes[childNodes.length - 1]);
+    } else {
+      return (undefined);
+    }
+  }
+
+  get lastNodeLocation() {
+    const lastNode = this.lastNode;
+    if (lastNode) {
+      return (this.locationAppend(lastNode.location));
+    } if (VisualBlockDescriptions.isEditorIterator(this.visual)) {
+      return ([...this.node.location, [this.visual.childGroupName, 0]]);
+    } else {
+      return ([]);
+    }
+  }
+
   /**
    * These instructions are used if something is dropped on the block itself.
    */
