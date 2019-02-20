@@ -36,14 +36,17 @@ concise_attributes:
     "language": "sql", "properties": {"name": "Charakter"}}]}, "language": "sql"}],
     "tables": [{"name": "tableIntroduction", "language": "sql", "properties": {"name":
     "Auftritt"}}]}, "language": "sql"}], "where": [], "select": [{"name": "select",
-    "children": {"columns": [{"name": "functionCall", "children": {"arguments": [{"name":
-    "columnName", "language": "sql", "properties": {"columnName": "Geschichte_Nr_Europa",
-    "refTableName": "Geschichte"}}]}, "language": "sql", "properties": {"name": "MIN"}},
-    {"name": "columnName", "language": "sql", "properties": {"columnName": "Charakter_Name",
-    "refTableName": "Charakter"}}]}, "language": "sql"}], "groupBy": [{"name": "groupBy",
-    "children": {"expressions": [{"name": "columnName", "language": "sql", "properties":
-    {"columnName": "Charakter_ID", "refTableName": "Charakter"}}]}, "language": "sql"}],
-    "orderBy": [{"name": "orderBy", "children": {"expressions": [{"name": "functionCall",
+    "children": {"columns": [{"name": "functionCall", "children": {"arguments": []},
+    "language": "sql", "properties": {"name": "COUNT"}}, {"name": "functionCall",
+    "children": {"arguments": [{"name": "columnName", "language": "sql", "properties":
+    {"columnName": "Geschichte_Nr_Europa", "refTableName": "Geschichte"}}]}, "language":
+    "sql", "properties": {"name": "MIN"}}, {"name": "columnName", "language": "sql",
+    "properties": {"columnName": "Charakter_Name", "refTableName": "Charakter"}}]},
+    "language": "sql"}], "groupBy": [{"name": "groupBy", "children": {"expressions":
+    [{"name": "columnName", "language": "sql", "properties": {"columnName": "Charakter_ID",
+    "refTableName": "Charakter"}}]}, "language": "sql"}], "orderBy": [{"name": "orderBy",
+    "children": {"expressions": [{"name": "functionCall", "children": {"arguments":
+    []}, "language": "sql", "properties": {"name": "COUNT"}}, {"name": "functionCall",
     "children": {"arguments": [{"name": "columnName", "language": "sql", "properties":
     {"columnName": "Geschichte_Nr_Europa", "refTableName": "Geschichte"}}]}, "language":
     "sql", "properties": {"name": "MIN"}}]}, "language": "sql"}]}, "language": "sql"}'
@@ -52,7 +55,7 @@ concise_attributes:
   value_before_type_cast: '2019-02-20 11:22:58.648948'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-20 11:35:56.036069'
+  value_before_type_cast: '2019-02-20 16:48:18.388204'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -61,9 +64,9 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT MIN(Geschichte.Geschichte_Nr_Europa), Charakter.Charakter_Name\nFROM
+  value_before_type_cast: "SELECT COUNT(), MIN(Geschichte.Geschichte_Nr_Europa), Charakter.Charakter_Name\nFROM
     Auftritt\n\tINNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID\n\tINNER
     JOIN Charakter ON Charakter.Charakter_ID = Auftritt.Charakter_ID\nGROUP BY Charakter.Charakter_ID\nORDER
-    BY MIN(Geschichte.Geschichte_Nr_Europa) DESC"
+    BY COUNT() DESC, MIN(Geschichte.Geschichte_Nr_Europa) DESC"
 new_record: false
 active_record_yaml_version: 2
