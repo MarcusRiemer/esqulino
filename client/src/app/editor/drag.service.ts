@@ -73,12 +73,19 @@ export class DragService {
 
   private _currentDragOverlay: OverlayRef = undefined;
 
+  // The drag position as maintained by Angular
   private _currentDragPos: GlobalPositionStrategy = undefined;
 
+  // The most recent mouse position
   private _mouse = {
     x: "0px",
     y: "0px"
   };
+
+  // Indicates whether the current `mouseEnter` event could have been caused
+  // by a mouse movement. This is an attempt to prevent unstable UI state in which
+  // the animation of a drop target causes the drop location to shift.
+  private _mouseMoveCausedEnter = false;
 
   /**
    * This service is involved  with *every* part of the UI and must therefore
@@ -96,17 +103,19 @@ export class DragService {
     @Inject(PLATFORM_ID) platformId: string
   ) {
     if (isPlatformBrowser(platformId)) {
-      // Most dirty hack: Track the mouse position
+      // Most dirty hack: Track the mouse position to emulate our own drag & drop
       document.addEventListener('mousemove', (evt) => this.updateMousePosition(evt))
       document.addEventListener('mouseenter', (evt) => this.updateMousePosition(evt))
     }
   }
 
+  /**
+   * This callback is fired whenever the mouse is moved. It moves the overlayed
+   * dragged block to the cursor.
+   */
   private updateMousePosition(evt: MouseEvent) {
     this._mouse.x = evt.clientX + "px";
     this._mouse.y = evt.clientY + "px";
-
-    //console.log("global", this._mouse);
 
     if (typeof (this._currentDragPos) !== "undefined") {
       const floatHeight = 10; // Show the dragged element below the cursor
@@ -115,8 +124,11 @@ export class DragService {
         .top("" + (evt.clientY + floatHeight) + "px");
 
       this._currentDragPos.apply();
-      //console.log("pos", this._mouse);
     }
+
+    // The mouse was moved, this may cause a new drop location
+    this._mouseMoveCausedEnter = true;
+    console.log("MouseMove");
   }
 
   private showOverlay(desc: NodeDescription, evt: MouseEvent) {
@@ -219,7 +231,7 @@ export class DragService {
     evt: MouseEvent,
     dropLocation: NodeLocation,
     node: Node | undefined,
-    smartDropOptions: SmartDropOptions = {}
+    smartDropOptions: SmartDropOptions
   ) {
     const dragData = this._currentDrag.value;
     if (!dragData) {
@@ -228,6 +240,15 @@ export class DragService {
 
     // Ensure that no other block tells the same story
     evt.stopImmediatePropagation();
+
+
+    // Don't accept any enter event unless the mouse has been moved.
+    if (!this._mouseMoveCausedEnter) {
+      return;
+    }
+    // If another change comes (without the mouse beeing moved) we
+    // are not interested.
+    this._mouseMoveCausedEnter = false;
 
     const currentCodeResource = this._currentCodeResource.peekResource;
     const smartDropLocations = smartDropLocation(
@@ -247,9 +268,7 @@ export class DragService {
     dragData.dropLocation = smartDropLocations.length > 0 ? smartDropLocations[0].location : undefined;
     dragData.isEmbraceDrop = smartDropLocations.length > 0 && smartDropLocations[0].operation === "embrace";
 
-    console.log(`Dragging over ${JSON.stringify(dropLocation)}`, smartDropLocations);
-
-
+    // console.log(`Dragging over ${JSON.stringify(dropLocation)}`, smartDropLocations);
     this._currentDrag.next(dragData);
   }
 

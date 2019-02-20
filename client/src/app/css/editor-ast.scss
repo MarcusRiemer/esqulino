@@ -68,6 +68,7 @@ trash {
     }
 
     .drop-placeholder {
+        display: inline-block;
         border: 1px dashed black;
         border-radius: 500px;
         background: repeating-linear-gradient(
