@@ -1,6 +1,9 @@
 import { Component } from '@angular/core'
 import { Observable, of } from 'rxjs'
 
+const LOGO_FHW_URL = "/vendor/logos/fhw.png";
+const LOGO_CAU_URL = "/vendor/logos/cau.png";
+
 interface Thesis {
   id: string
   title: string
@@ -8,7 +11,7 @@ interface Thesis {
   author: {
     name: string
   }
-  institutionLogo,
+  institutionLogo: string,
   abstract: string
   degree: string
   url: string
@@ -20,9 +23,6 @@ interface Thesis {
  * any dynamic third party service or server.
  */
 const THESIS_BASE_URL = "http://files.blattwerkzeug.de/theses";
-
-const LOGO_FHW_URL = "/vendor/logos/fhw.png";
-const LOGO_CAU_URL = "/vendor/logos/cau.png";
 
 /**
  * Knows everything about theses that have been written.
@@ -60,7 +60,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
         name: "Stefan Görgen"
       },
       institutionLogo: LOGO_CAU_URL,
-      degree: "Bachlor",
+      degree: "Bachelor",
       url: `${THESIS_BASE_URL}/stefan-görgen-thesis-db-mittelstufe.pdf`,
       abstract: `<p>Erarbeitung einer Unterrichtseinheit zu Datenbanken in der Mittelstufe.</p>`,
       date: new Date('October 14, 2016')
@@ -73,7 +73,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
         name: "Marco Pawlowski"
       },
       institutionLogo: LOGO_FHW_URL,
-      degree: "Bachlor",
+      degree: "Bachelor",
       url: `${THESIS_BASE_URL}/marco-pawlowski-thesis-schema-editor.pdf`,
       abstract: `
 <p>Mit dieser Arbeit wird eine Lernsoftware entwickelt, die an Anfänger gerichtet ist. Es werden die elementaren Funktionen zur Erstellung von Datenbanken zur Verfügung gestellt werden. Dabei sollen Fehler nicht von der Software automatisch gelöst werden, sondern an den Benutzer kommuniziert werden. Dadurch soll der Benutzer ein Verständnis dafür entwickeln, welche Bedingungen vorher erfüllt sein müssen, um bestimmte Aktionen durchzuführen zu können.</p>`,
@@ -87,14 +87,25 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
         name: "Ole Just"
       },
       institutionLogo: LOGO_FHW_URL,
-      degree: "Bachlor",
+      degree: "Bachelor",
       url: `${THESIS_BASE_URL}/ole-just-thesis-images.pdf`,
       abstract: `<p>SQLino ist eine webbasierte IDE für HTML und SQL auf Einsteigerniveau. Diese Arbeit beschreibt die Entwicklung einer prototypischen Bildverwaltung für SQLino, die neben der bloßen Speicherung und Einbettung der Bilder in die erstellen Webseiten auch rechtliche Aspekte im Umgang mit der Veröffentlichung von Bildern beachtet.</p>`,
       date: new Date('October 31, 2017')
+    },
+    {
+      id: "popp-trucklino",
+      title: "Konzeption und Implementierung einer visuellen Lernumgebung zur spielerischen Einführung in die Programmierung",
+      subtitle: "",
+      author: {
+        name: "Sebastian Popp"
+      },
+      institutionLogo: LOGO_FHW_URL,
+      degree: "Bachelor",
+      url: `${THESIS_BASE_URL}/sebastian-popp-trucklino.pdf`,
+      abstract: `<p>Klassische Universalsprachen wie Java oder Python haben einen sehr großen Sprachumfang und sind daher nur bedingt zur Einführung in die Konzepte der Programmierung geeignet. Diese Arbeit implementiert eine Minisprache – eine im Sprachumfang reduzierte Programmiersprache – welche es den Schülern ermöglichen soll, spielerisch Programmieren zu lernen, indem ihre Programme einen Lastwagen durch eine Welt steuern und dadurch Aufgaben lösen.</p>`,
+      date: new Date('Februar 13, 2019')
     }
   ]
 
-  public get theses(): Observable<Thesis[]> {
-    return (of(this._theses));
-  }
+  readonly theses: Observable<Thesis[]> = of(this._theses.sort((a, b) => b.date.getTime() - a.date.getTime()));
 }
