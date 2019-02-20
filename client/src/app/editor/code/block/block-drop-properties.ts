@@ -1,4 +1,4 @@
-import { Node, NodeLocation, CodeResource } from '../../../shared/syntaxtree';
+import { NodeLocation, CodeResource } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 /**
@@ -15,7 +15,4 @@ export interface BlockDropProperties {
 
   // The resource that is visualised
   readonly codeResource: CodeResource;
-
-  // The note this block represents
-  readonly node: Node;
 }

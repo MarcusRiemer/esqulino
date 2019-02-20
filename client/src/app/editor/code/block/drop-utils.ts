@@ -130,19 +130,21 @@ function isParentOrChildDrop(block: BlockDropProperties) {
 /**
  * @return The name of the referenced child group (if there is any)
  */
-function dropLocationChildGroupName(block: BlockDropProperties): string {
-  const dropLocation = calculateDropLocation(block.node, block.visual.dropTarget);
+function dropLocationChildGroupName(blockDrop: BlockDropProperties): string {
+  const node = blockDrop.codeResource.syntaxTreePeek.locate(blockDrop.dropLocation);
+  const dropLocation = calculateDropLocation(node, blockDrop.visual.dropTarget);
   return (dropLocation[dropLocation.length - 1][0]);
 }
 
 /**
  * @return true, if the targeted child group has any children.
  */
-function dropLocationHasChildren(blockDropProperties: BlockDropProperties) {
-  if (isParentOrChildDrop(blockDropProperties)) {
+function dropLocationHasChildren(dropBlock: BlockDropProperties) {
+  if (isParentOrChildDrop(dropBlock)) {
     // Count children in that category
-    const childGroupName = dropLocationChildGroupName(blockDropProperties);
-    return (blockDropProperties.node.getChildrenInCategory(childGroupName).length > 0);
+    const childGroupName = dropLocationChildGroupName(dropBlock);
+    const node = dropBlock.codeResource.syntaxTreePeek.locate(dropBlock.dropLocation);
+    return (node.getChildrenInCategory(childGroupName).length > 0);
   } else {
     // At least the given node is in the category
     return (true);
@@ -223,8 +225,6 @@ export function calculateDropTargetState(
   // Evaluation of the expression function may be costly. So we postpone it until
   // it is actually required.
   const visibilityEvalFunc = evalExpression.bind(this, visibilityExpr, map);
-
-  const isEmbraceDrop = drag && drag.isEmbraceDrop;
 
   // Ongoing drags trump almost any other possibility
   if (drag) {

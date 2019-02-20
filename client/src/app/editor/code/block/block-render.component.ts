@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { Node, CodeResource, NodeLocation, locationIncLastIndex } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
@@ -88,6 +88,10 @@ export class BlockRenderComponent {
    */
   iteratorGetEditorBlock(node: Node) {
     return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
+  }
+
+  locationAppend(loc: NodeLocation): NodeLocation {
+    return (locationIncLastIndex(loc));
   }
 
   /**
