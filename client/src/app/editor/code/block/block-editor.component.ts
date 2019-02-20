@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import { MatRipple } from '@angular/material';
 
-import { map, switchMap, first, tap } from 'rxjs/operators';
+import { map, switchMap, first, tap, filter } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
@@ -150,4 +150,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * The subset of the tree that is currently somehow "executed"
    */
   readonly currentlyExecuted = this._currentCodeResource.currentExecutionLocation;
+
+  readonly currentDropLocation = this._dragService.currentDrag.pipe(
+    map(d => (d && !!d.dropLocation) ? d.dropLocation : [])
+  );
 }

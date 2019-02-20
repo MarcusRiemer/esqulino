@@ -105,7 +105,6 @@ export function mapChildren(
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // Find out what goes between the elements
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
-  let dropTarget: VisualBlockDescriptions.ConcreteBlock = undefined;
 
   // A simple seperation character that is explicitly specified by the instructions?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
@@ -124,28 +123,6 @@ export function mapChildren(
         mapTerminal(attr.between, DefaultInstructions.terminalInstructions)
       ];
     }
-  }
-
-  // Find out whether to show a drop target, the position is determined later
-  if (instructions.generateDropTargets !== "none") {
-    const calculatedVisibility: VisualBlockDescriptions.VisibilityExpression =
-      isHoleIfEmpty(attr)
-        ? { $var: "ifEmpty" }
-        : { $every: [{ $var: "ifEmpty" }, { $var: "ifLegalDrag" }] };
-
-    dropTarget = {
-      blockType: "dropTarget",
-      dropTarget: {
-        children: {
-          category: attr.name,
-          order: "insertFirst"
-        },
-        visibility: calculatedVisibility
-
-      },
-      children: [TERMINAL_QUESTIONMARK],
-      direction: "horizontal",
-    };
   }
 
   // Build the actual iterator block
@@ -167,12 +144,8 @@ export function mapChildren(
     iteratorBlock.style = instructions.style;
   }
 
-  // At least the iteration block should go back
-  switch (instructions.generateDropTargets) {
-    case "start": return ([dropTarget, iteratorBlock]);
-    case "end": return ([iteratorBlock, dropTarget]);
-    case "none": return ([iteratorBlock]);
-  }
+  // Lets see whether we can eliminate drop targets from block descriptions
+  return ([iteratorBlock]);
 }
 
 export function mapAttribute(
