@@ -167,28 +167,12 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
  * Pretty prints properties for drop operations.
  */
 function prettyPrintDropTargetProperties(desc: VisualBlockDescriptions.DropTargetProperties): NestedString {
-  function prettyPrintCategoryInsert(catDesc: VisualBlockDescriptions.CategoryInsert) {
-    return (`"${catDesc.category}", ${catDesc.order}`);
-  }
-
   const head = `dropOptions {`;
 
   const middle: string[] = [];
 
   if (desc.visibility) {
     middle.push(`visible ${JSON.stringify(desc.visibility)}`)
-  }
-
-  if (desc.self) {
-    middle.push(`self ${desc.self.order}, parentSkip: ${desc.self.skipParents}`)
-  }
-
-  if (desc.children) {
-    middle.push(`children ` + prettyPrintCategoryInsert(desc.children));
-  }
-
-  if (desc.parent) {
-    middle.push(`parent ` + prettyPrintCategoryInsert(desc.parent));
   }
 
   const tail = `}`;

@@ -9,8 +9,7 @@ import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { BlockDropProperties } from './block-drop-properties';
-import { calculateDropLocation, calculateDropTargetState } from './drop-utils';
+import { calculateDropTargetState, BlockDropProperties } from './drop-utils';
 
 const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
 
@@ -59,7 +58,7 @@ const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
     ])
   ]
 })
-export class BlockRenderDropTargetComponent {
+export class BlockRenderDropTargetComponent implements BlockDropProperties {
   /**
    * The code resource that is rendered here.
    */

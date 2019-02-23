@@ -9,9 +9,7 @@ import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-
-import { BlockDropProperties } from './block-drop-properties';
-import { calculateDropLocation } from './drop-utils';
+import { BlockDropProperties } from './drop-utils';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -49,17 +47,10 @@ export class BlockRenderBlockComponent implements BlockDropProperties {
   }
 
   /**
-   * Some "fancy" heuristics to determine whether the use wants to embrace
-   * something at the current position or do something else.
-   *
    * @return The location a drop should occur in.
    */
   get dropLocation() {
-    if (this._isEmbraceDrop()) {
-      return (this.node.location);
-    } else {
-      return (calculateDropLocation(this.node, this.visual.dropTarget));
-    }
+    return (this.node.location);
   }
 
   private readonly _latestDragData = this._dragService.currentDrag.pipe(

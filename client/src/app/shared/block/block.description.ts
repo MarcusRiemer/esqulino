@@ -56,18 +56,6 @@ export namespace VisualBlockDescriptions {
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
-    // Drops something into the same category as the relevant node
-    self?: {
-      order: "insertBefore" | "insertAfter";
-      skipParents: number;
-    };
-
-    // Drops something into a category
-    children?: CategoryInsert;
-
-    // Drops something into a category of the parent
-    parent?: CategoryInsert;
-
     visibility?: VisibilityExpression;
   }
 
@@ -148,13 +136,7 @@ export namespace VisualBlockDescriptions {
 
   export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
 
-  // Default to inserting after the given node. This should be a meaningful default ...
-  export const DefaultDropTargetProperties: DropTargetProperties = {
-    self: {
-      order: "insertAfter",
-      skipParents: 0
-    }
-  }
+  export const DefaultDropTargetProperties: DropTargetProperties = {}
 
   // Type guard for EditorIterator
   export function isEditorIterator(obj?: EditorBlockBase): obj is EditorIterator {
