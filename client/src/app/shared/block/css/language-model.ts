@@ -18,10 +18,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           blockType: "block",
           direction: "vertical",
           dropTarget: {
-            children: {
-              category: "rules",
-              order: "insertFirst"
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -54,10 +50,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                children: {
-                  category: "selectors",
-                  order: "insertFirst",
-                },
                 visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
@@ -94,10 +86,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
         {
           blockType: "dropTarget",
           dropTarget: {
-            children: {
-              category: "declarations",
-              order: "insertFirst",
-            },
             visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
           },
           children: [
@@ -207,10 +195,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                children: {
-                  category: "name",
-                  order: "insertFirst",
-                },
                 visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
@@ -245,10 +229,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                children: {
-                  category: "value",
-                  order: "insertFirst",
-                },
                 visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [

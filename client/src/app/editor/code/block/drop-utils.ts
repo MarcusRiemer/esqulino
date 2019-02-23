@@ -1,4 +1,4 @@
-import { Node, NodeLocation, QualifiedTypeName } from '../../../shared/syntaxtree';
+import { QualifiedTypeName, NodeLocation, CodeResource } from '../../../shared/syntaxtree';
 import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { Restricted } from '../../../shared/block/bool-mini-expression.description'
@@ -7,108 +7,20 @@ import { arrayEqual } from '../../../shared/util';
 
 import { CurrentDrag } from '../../drag.service';
 
-import { BlockDropProperties } from './block-drop-properties';
-
-// Alias to shorten some typing
-type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
-
 /**
- * @return True, if the given drop target drops on a parent
+ * Common interface for blocks and drop targets. As both of these require
+ * must react to the same class of events they have quite a few properties
+ * in common.
  */
-function isParentDrop(dropTarget: DropTargetProperties) {
-  return (dropTarget && dropTarget.parent);
-}
+export interface BlockDropProperties {
+  // The location dragged things would be inserted when dropped here.
+  readonly dropLocation: NodeLocation;
 
-/**
- * @return True, if the given drop target drops on children
- */
-function isChildDrop(dropTarget: DropTargetProperties) {
-  return (dropTarget && dropTarget.children);
-}
+  // The description that is used to render this block.
+  readonly visual: VisualBlockDescriptions.EditorDropTarget | VisualBlockDescriptions.EditorBlock;
 
-/**
- * @return True, if the given drop target drops on itself
- */
-function isSelfDrop(dropTarget: DropTargetProperties) {
-  return (dropTarget && dropTarget.self);
-}
-
-/**
- * Calculates the exact drop location based on the node and the drop
- * instructions.
- */
-export function calculateDropLocation(node: Node, drop: DropTargetProperties): NodeLocation | undefined {
-  if (!node) {
-    return;
-  } else {
-    // No drop information available? Go for the standard
-    if (!drop) {
-      drop = VisualBlockDescriptions.DefaultDropTargetProperties;
-    }
-
-    // Are we dropping at the parent?
-    const parentDrop = isParentDrop(drop);
-    if (parentDrop) {
-      const calculateCategoryIndex = () => {
-        switch (parentDrop.order) {
-          case "insertFirst": return (0);
-          case "insertLast": return (node.nodeParent.getChildrenInCategory(parentDrop.category).length);
-        }
-      };
-
-      const index = calculateCategoryIndex();
-      return (node.location.slice(0, -1).concat([[parentDrop.category, index]]));
-    }
-
-    // Are we dropping at the children?
-    const childDrop = isChildDrop(drop);
-    if (childDrop) {
-      const calculateCategoryIndex = () => {
-        switch (childDrop.order) {
-          case "insertFirst": return (0);
-          case "insertLast": return (node.getChildrenInCategory(childDrop.category).length);
-        }
-      };
-
-      const index = calculateCategoryIndex();
-      return (node.location.concat([[childDrop.category, index]]));
-    }
-
-    // Or are we dropping on the node itself?
-    const selfDrop = isSelfDrop(drop);
-    if (selfDrop) {
-      const lastIndexOffset = () => {
-        switch (selfDrop.order) {
-          case "insertAfter": return (+1);
-          case "insertBefore": return (0);
-        }
-      }
-
-      const nodeLocation = node.location;
-
-      // Possibly skip some parents
-      const lastLevel = nodeLocation.length - selfDrop.skipParents - 1;
-
-      // Skipping too much? Thats the root
-      if (lastLevel < 0) {
-        return ([]);
-      } else {
-        // Calculate the index at which to insert
-        const lastNodeLocationStep = nodeLocation[lastLevel];
-        const adjustedLastLocationStep: NodeLocation = [
-          [lastNodeLocationStep[0], lastNodeLocationStep[1] + lastIndexOffset()]
-        ];
-
-        // And stick together the new location. The last step is always replaced
-        // with the step containing the modified index.
-        return (nodeLocation.slice(0, lastLevel).concat(adjustedLastLocationStep));
-      }
-    }
-    // There are no other drop options
-    else {
-      throw new Error(`Unknown drop description: ` + JSON.stringify(drop));
-    }
-  }
+  // The resource that is visualised
+  readonly codeResource: CodeResource;
 }
 
 /**
@@ -120,19 +32,10 @@ export function calculateDropLocation(node: Node, drop: DropTargetProperties): N
 export type DropTargetState = "none" | "self" | "visible" | "available"
 
 /**
- * @return True, if this drop will be made into a strictly defined category.
- */
-function isParentOrChildDrop(block: BlockDropProperties) {
-  const dropTarget = block.visual && block.visual.dropTarget;
-  return (dropTarget.children || dropTarget.parent);
-}
-
-/**
  * @return The name of the referenced child group (if there is any)
  */
 function dropLocationChildGroupName(blockDrop: BlockDropProperties): string {
-  const node = blockDrop.codeResource.syntaxTreePeek.locate(blockDrop.dropLocation);
-  const dropLocation = calculateDropLocation(node, blockDrop.visual.dropTarget);
+  const dropLocation = blockDrop.dropLocation;
   return (dropLocation[dropLocation.length - 1][0]);
 }
 
@@ -140,13 +43,12 @@ function dropLocationChildGroupName(blockDrop: BlockDropProperties): string {
  * @return true, if the targeted child group has any children.
  */
 function dropLocationHasChildren(dropBlock: BlockDropProperties) {
-  if (isParentOrChildDrop(dropBlock)) {
-    // Count children in that category
-    const childGroupName = dropLocationChildGroupName(dropBlock);
-    const node = dropBlock.codeResource.syntaxTreePeek.locate(dropBlock.dropLocation);
-    return (node.getChildrenInCategory(childGroupName).length > 0);
+  if (dropBlock.dropLocation.length > 0) {
+    const parentLocation = dropBlock.dropLocation.slice(0, -1);
+    const parentCategory = dropLocationChildGroupName(dropBlock);
+    const parentNode = dropBlock.codeResource.syntaxTreePeek.locateOrUndefined(parentLocation);
+    return (parentNode && parentNode.getChildrenInCategory(parentCategory));
   } else {
-    // At least the given node is in the category
     return (true);
   }
 }
@@ -193,8 +95,8 @@ export function calculateDropTargetState(
   drag: CurrentDrag,
   block: BlockDropProperties
 ): DropTargetState {
-  // Does the description come with a visibility expression? If not simply assume false
-  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $value: false };
+  // Does the description come with a visibility expression? If not assume isEmpty
+  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $var: "ifEmpty" };
   if (block.visual && block.visual.dropTarget && block.visual.dropTarget.visibility) {
     visibilityExpr = block.visual.dropTarget.visibility;
   }

@@ -113,18 +113,4 @@ export class BlockRenderComponent {
       return ([]);
     }
   }
-
-  /**
-   * These instructions are used if something is dropped on the block itself.
-   */
-  readonly defaultBetweenDropTarget: VisualBlockDescriptions.EditorDropTarget = {
-    blockType: "dropTarget",
-    dropTarget: {
-      self: {
-        order: "insertAfter",
-        skipParents: 0
-      }
-    },
-    direction: "horizontal"
-  };
 }
