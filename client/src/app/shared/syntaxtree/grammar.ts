@@ -89,6 +89,11 @@ export abstract class NodeType {
   abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
 
   /**
+   * Valid amounts of children inside a certain category.
+   */
+  abstract validCardinality(categoryName: string): OccursSpecificDescription;
+
+  /**
    * These names are valid child categories
    */
   abstract get allowedChildrenCategoryNames(): string[];
@@ -127,6 +132,18 @@ export class NodeConcreteType extends NodeType {
    */
   get allowedChildrenCategoryNames() {
     return (Object.keys(this._allowedChildren));
+  }
+
+  /**
+   * @return Cardinality bounds for the given category.
+   */
+  validCardinality(categoryName: string): OccursSpecificDescription {
+    const category = this._allowedChildren[categoryName];
+    if (category) {
+      return (category.validCardinality());
+    } else {
+      return ({ maxOccurs: 0, minOccurs: 0 });
+    }
   }
 
   /**
@@ -266,6 +283,13 @@ class NodeTypeChildren {
   }
 
   /**
+   * Valid amounts of children inside this category
+   */
+  validCardinality(): OccursSpecificDescription {
+    return (this._childValidator.validCardinality());
+  };
+
+  /**
    * @return The node that is the parent to all of these node.
    */
   get parent() {
@@ -313,6 +337,11 @@ abstract class NodeComplexTypeChildrenValidator {
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName): boolean;
+
+  /**
+   * Valid amounts of children inside this category
+   */
+  abstract validCardinality(): OccursSpecificDescription;
 }
 
 /**
@@ -461,6 +490,20 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
     return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
   }
+
+  /**
+   * @return The minimum and maximum number of children in this category as a whole
+   */
+  validCardinality(): Desc.OccursSpecificDescription {
+    return (
+      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+        return ({
+          maxOccurs: akku.maxOccurs + curr.maxOccurs,
+          minOccurs: akku.minOccurs + curr.minOccurs
+        });
+      }, { minOccurs: 0, maxOccurs: 0 })
+    );
+  }
 }
 
 /**
@@ -540,6 +583,20 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
     return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
   }
+
+  /**
+   * @return The minimum and maximum number of children in this category as a whole
+   */
+  validCardinality(): Desc.OccursSpecificDescription {
+    return (
+      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+        return ({
+          maxOccurs: akku.maxOccurs + curr.maxOccurs,
+          minOccurs: akku.minOccurs + curr.minOccurs
+        });
+      }, { minOccurs: 0, maxOccurs: 0 })
+    );
+  }
 }
 
 /**
@@ -608,6 +665,13 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
     return (this._desc.choices
       .map(choice => this.typeNameFromChoice(choice))
       .some(choiceType => AST.typenameEquals(childType, choiceType)));
+  }
+
+  /**
+ * @return The minimum and maximum number of children in this category as a whole
+ */
+  validCardinality(): Desc.OccursSpecificDescription {
+    return ({ maxOccurs: 0, minOccurs: 0 });
   }
 
 }
@@ -790,6 +854,14 @@ class NodeOneOfType extends NodeType {
    */
   get allowedChildrenCategoryNames() {
     return ([]);
+  }
+
+  /**
+   * As this node should never physically appear in a tree, asking
+   * it for valid cardinalities is meaningless.
+   */
+  validCardinality(_: string): OccursSpecificDescription {
+    return ({ maxOccurs: 0, minOccurs: 0 });
   }
 
   /**

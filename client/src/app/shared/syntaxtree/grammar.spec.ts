@@ -831,7 +831,7 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
   });
 
-  it('oneOf: allowsChildType()', () => {
+  it('oneOf: allowsChildType() and validCardinality()', () => {
     const v = new Validator([langOneOfNodes]);
 
     const vRoot = v.availableTypes[0];
@@ -848,38 +848,62 @@ describe('Grammar Validation', () => {
     expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
     expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeFalsy("c in root");
     expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
+    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
 
     expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBe(false);
+    expect(vNodeA.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
 
     expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBe(false);
+    expect(vNodeB.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
 
     expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBe(false);
+    expect(vNodeC.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+  });
 
+  it('"sequence": validCardinality()', () => {
+    const v = new Validator([langSequenceConstraint]);
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
+
+    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 3, maxOccurs: 6 });
+    expect(vRoot.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+
+    expect(vNodeA.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeB.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeC.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
   });
 
   it('"sequence": allowsChildType()', () => {
     const v = new Validator([langSequenceConstraint]);
-    const vNodeA = v.availableTypes[0];
-    const vNodeB = v.availableTypes[1];
-    const vNodeC = v.availableTypes[2];
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
 
     const tNodeA = { languageName: langSequenceConstraint.name, typeName: "a" };
     const tNodeB = { languageName: langSequenceConstraint.name, typeName: "b" };
     const tNodeC = { languageName: langSequenceConstraint.name, typeName: "c" };
     const tNodeD = { languageName: langSequenceConstraint.name, typeName: "d" };
 
-    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeTruthy();
-    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeTruthy();
-    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeFalsy();
     expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
 
     expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
@@ -1292,6 +1316,21 @@ describe('Grammar Validation', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
+  });
+
+  it('"allowed": validCardinality()', () => {
+    const v = new Validator([langAllowedConstraint]);
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
+
+    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 1, maxOccurs: Infinity });
+    expect(vRoot.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+
+    expect(vNodeA.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeB.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeC.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
   });
 
   it('"allowed": allowsChildType', () => {
