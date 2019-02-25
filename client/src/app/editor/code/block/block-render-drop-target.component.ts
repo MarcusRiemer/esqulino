@@ -9,7 +9,7 @@ import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { calculateDropTargetState, BlockDropProperties } from './drop-utils';
+import { calculateDropTargetState } from './drop-target-state';
 
 const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
 
@@ -29,6 +29,9 @@ const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
       })),
       state('available', style({
         backgroundColor: 'green',
+      })),
+      state('unavailable', style({
+        backgroundColor: 'orange',
       })),
       state('self', style({
         backgroundColor: 'yellow',
@@ -58,7 +61,7 @@ const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
     ])
   ]
 })
-export class BlockRenderDropTargetComponent implements BlockDropProperties {
+export class BlockRenderDropTargetComponent {
   /**
    * The code resource that is rendered here.
    */
@@ -141,7 +144,9 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
         if (this.readOnly) {
           return ("none");
         } else {
-          return (calculateDropTargetState(drag, this));
+          const validator = this.codeResource.validationLanguagePeek.validator;
+          const tree = this.codeResource.syntaxTreePeek;
+          return (calculateDropTargetState(drag, this.dropLocation, this.visual, validator, tree));
         }
       })
     );

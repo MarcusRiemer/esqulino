@@ -137,7 +137,7 @@ export class DragService {
     }
 
     // The mouse was moved, this may cause a new drop location
-    if (this._bufferedDragOver) {
+    if (this._bufferedDragOver && this.peekIsDragInProgress) {
       this.informDraggedOverImpl(
         this._bufferedDragOver.dropLocation,
         this._bufferedDragOver.node,
