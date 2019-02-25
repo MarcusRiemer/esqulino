@@ -12,7 +12,8 @@ export namespace VisualBlockDescriptions {
   /**
    * These variables are available when evaluating drop target visibility.
    */
-  export type VisibilityVars = "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty";
+  export type VisibilityVars =
+    "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "ifChildrenRequired";
 
   /**
    * This expression is evaluated to determine whether a drop target should be shown.

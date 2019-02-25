@@ -10,7 +10,7 @@ describe('Drop Parent', () => {
   // ######################################################################
 
   describe('_insertAtAnyParent', () => {
-    it('(<lhs> AND <hole>), inserting [<true>] and [<true>,<false>]', () => {
+    it('(TRUE AND <hole>), inserting [<true>] and [<true>,<false>]', () => {
       const inTreeDesc: NodeDescription = {
         language: "expr",
         name: "booleanBinary",

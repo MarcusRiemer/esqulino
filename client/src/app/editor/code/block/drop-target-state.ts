@@ -1,4 +1,4 @@
-import { QualifiedTypeName, NodeLocation, Validator, Tree } from '../../../shared/syntaxtree';
+import { QualifiedTypeName, NodeLocation, Validator, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { Restricted } from '../../../shared/block/bool-mini-expression.description'
@@ -6,6 +6,7 @@ import { evalExpression } from '../../../shared/block/bool-mini-expression'
 import { arrayEqual } from '../../../shared/util';
 
 import { CurrentDrag } from '../../drag.service';
+import { _cardinalityAllowsInsertion } from 'src/app/shared/syntaxtree/drop-util';
 
 /**
  * These states control how a drop target should react to a drag
@@ -63,8 +64,10 @@ const isLegalImmediateChild = (
       if (!tree.isEmpty) {
         const parentNode = tree.locate(loc.slice(0, -1));
         const parentNodeType = validator.getType(parentNode.qualifiedName);
+        const [category, index] = loc[loc.length - 1];
 
-        return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(loc)));
+        return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(loc))
+          && _cardinalityAllowsInsertion(validator, parentNode, dragged, category, index));
       } else {
         return (false);
       }
@@ -73,6 +76,32 @@ const isLegalImmediateChild = (
       //debugger;
     }
   }));
+}
+
+/**
+ * @return True, if the given location generally requires children.
+ */
+export const _isChildRequired = (
+  validator: Validator,
+  tree: Tree,
+  dropLocation: NodeLocation
+) => {
+  // Only empty trees want insertions at the root
+  if (dropLocation.length === 0) {
+    return (tree.isEmpty);
+  }
+
+  const parentLoc = dropLocation.slice(0, -1);
+  const parentNode = tree.locateOrUndefined(parentLoc);
+  if (!parentNode) {
+    return (false);
+  }
+
+  const category = dropLocationChildGroupName(dropLocation);
+  const parentType = validator.getType(parentNode);
+  const cardinality = parentType.validCardinality(category);
+
+  return (cardinality.minOccurs > parentNode.getChildrenInCategory(category).length);
 }
 
 /**
@@ -87,7 +116,10 @@ export function calculateDropTargetState(
 ): DropTargetState {
   // Does the description come with a visibility expression? If not assume isEmpty
   let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = {
-    "$every": [{ $var: "ifLegalDrag" }, { $var: "ifEmpty" }]
+    $some: [
+      { $var: "ifChildrenRequired" },
+      { $every: [{ $var: "ifLegalDrag" }, { $var: "ifEmpty" }] }
+    ]
   };
   if (visual && visual.dropTarget && visual.dropTarget.visibility) {
     visibilityExpr = visual.dropTarget.visibility;
@@ -111,7 +143,8 @@ export function calculateDropTargetState(
     ifAnyDrag: !!drag,
     ifEmpty: () => !dropLocationHasChildren(tree, dropLocation),
     ifLegalChild: isLegalSubtree.bind(this),
-    ifLegalDrag: isLegalImmediateChild.bind(this, drag, validator, tree, dropLocation)
+    ifLegalDrag: isLegalImmediateChild.bind(this, drag, validator, tree, dropLocation),
+    ifChildrenRequired: _isChildRequired.bind(this, validator, tree, dropLocation)
   };
 
   // Evaluation of the expression function may be costly. So we postpone it until

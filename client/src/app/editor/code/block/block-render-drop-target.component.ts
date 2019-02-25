@@ -46,16 +46,16 @@ const ANIMATION_DELAY = 1.0 / 60.0; // Assume 60 FPS
         }),
         animate('0.5s ease', style({
           "width": '*',
-          "transform": "scaleX(1)"
+          "transform": "scaleX(1)",
         })),
       ]),
       transition(':leave', [
         style({
-          "white-space": "nowrap"
+          "white-space": "nowrap",
         }),
         animate('0.5s ease', style({
           "width": '0px',
-          "transform": "scaleX(0)"
+          "transform": "scaleX(0)",
         })),
       ])
     ])
@@ -115,7 +115,7 @@ export class BlockRenderDropTargetComponent {
       }
       else if (inProgress) {
         if (this._currentTarget) {
-          return (false);
+          return (true);
         }
         else {
           // We would drop something in the location we are a placeholder.
