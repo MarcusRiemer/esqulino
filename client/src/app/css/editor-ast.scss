@@ -59,15 +59,13 @@ trash {
         background-color: transparent;
     }
 
-    .from-iterator {
-        //border: 5px solid blue;
-    }
-
-    .from-block {
-        //border: 5px solid red;
-    }
-
     .drop-placeholder {
+        display: inline-block;
+        border: 2px dashed blue;
+        border-radius: 500px;
+    }
+
+    .drop-target {
         display: inline-block;
         border: 1px dashed black;
         border-radius: 500px;
