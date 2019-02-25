@@ -1,4 +1,4 @@
-import { QualifiedTypeName, NodeLocation, CodeResource } from '../../../shared/syntaxtree';
+import { QualifiedTypeName, NodeLocation, Validator, Tree } from '../../../shared/syntaxtree';
 import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { Restricted } from '../../../shared/block/bool-mini-expression.description'
@@ -6,22 +6,6 @@ import { evalExpression } from '../../../shared/block/bool-mini-expression'
 import { arrayEqual } from '../../../shared/util';
 
 import { CurrentDrag } from '../../drag.service';
-
-/**
- * Common interface for blocks and drop targets. As both of these require
- * must react to the same class of events they have quite a few properties
- * in common.
- */
-export interface BlockDropProperties {
-  // The location dragged things would be inserted when dropped here.
-  readonly dropLocation: NodeLocation;
-
-  // The description that is used to render this block.
-  readonly visual: VisualBlockDescriptions.EditorDropTarget | VisualBlockDescriptions.EditorBlock;
-
-  // The resource that is visualised
-  readonly codeResource: CodeResource;
-}
 
 /**
  * These states control how a drop target should react to a drag
@@ -34,28 +18,34 @@ export type DropTargetState = "none" | "self" | "visible" | "available"
 /**
  * @return The name of the referenced child group (if there is any)
  */
-function dropLocationChildGroupName(blockDrop: BlockDropProperties): string {
-  const dropLocation = blockDrop.dropLocation;
-  return (dropLocation[dropLocation.length - 1][0]);
+function dropLocationChildGroupName(loc: NodeLocation): string {
+  return (loc[loc.length - 1][0]);
 }
 
 /**
  * @return true, if the targeted child group has any children.
  */
-function dropLocationHasChildren(dropBlock: BlockDropProperties) {
-  if (dropBlock.dropLocation.length > 0) {
-    const parentLocation = dropBlock.dropLocation.slice(0, -1);
-    const parentCategory = dropLocationChildGroupName(dropBlock);
-    const parentNode = dropBlock.codeResource.syntaxTreePeek.locateOrUndefined(parentLocation);
-    return (parentNode && parentNode.getChildrenInCategory(parentCategory));
+function dropLocationHasChildren(tree: Tree, loc: NodeLocation) {
+  if (loc.length > 0) {
+    const dropLocation = loc.slice(0, -1);
+    const dropCategory = dropLocationChildGroupName(loc);
+    const dropNode = tree.locateOrUndefined(dropLocation);
+    return (dropNode && dropNode.getChildrenInCategory(dropCategory).length > 0);
   } else {
     return (true);
   }
 }
 
-// Would the immediate child be allowed?
-const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
-  if (!drag || block.dropLocation.length === 0) {
+/**
+ *
+ */
+const isLegalImmediateChild = (
+  drag: CurrentDrag,
+  validator: Validator,
+  tree: Tree,
+  loc: NodeLocation
+) => {
+  if (!drag || loc.length === 0) {
     return false;
   }
 
@@ -66,18 +56,15 @@ const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
         languageName: dragged.language,
         typeName: dragged.name
       }
-      const currentTree = block.codeResource.syntaxTreePeek;
 
       // If the tree is empty, the drop is always forbidden.
       // This happens if some block is rendered in the sidebar or as a dragged
       // block and the current tree is empty.
-      if (!currentTree.isEmpty) {
-        const currentLanguage = block.codeResource.validationLanguagePeek;
+      if (!tree.isEmpty) {
+        const parentNode = tree.locate(loc.slice(0, -1));
+        const parentNodeType = validator.getType(parentNode.qualifiedName);
 
-        const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
-        const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
-
-        return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
+        return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(loc)));
       } else {
         return (false);
       }
@@ -93,35 +80,38 @@ const isLegalDrag = (drag: CurrentDrag, block: BlockDropProperties) => {
  */
 export function calculateDropTargetState(
   drag: CurrentDrag,
-  block: BlockDropProperties
+  dropLocation: NodeLocation,
+  visual: VisualBlockDescriptions.EditorDropTarget | VisualBlockDescriptions.EditorBlock,
+  validator: Validator,
+  tree: Tree
 ): DropTargetState {
   // Does the description come with a visibility expression? If not assume isEmpty
-  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $var: "ifEmpty" };
-  if (block.visual && block.visual.dropTarget && block.visual.dropTarget.visibility) {
-    visibilityExpr = block.visual.dropTarget.visibility;
+  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = {
+    "$every": [{ $var: "ifLegalDrag" }, { $var: "ifEmpty" }]
+  };
+  if (visual && visual.dropTarget && visual.dropTarget.visibility) {
+    visibilityExpr = visual.dropTarget.visibility;
   }
 
   // Would the new tree ba a completly valid tree?
-  const isLegalChild = () => {
-    if (!drag || block.dropLocation.length === 0) {
+  const isLegalSubtree = () => {
+    if (!drag || dropLocation.length === 0) {
       return false;
     }
 
     const newNode = drag.draggedDescription;
-    const oldTree = block.codeResource.syntaxTreePeek;
-    const validator = block.codeResource.validationLanguagePeek.validator;
 
-    const newTree = embraceNode(validator, oldTree, block.dropLocation, newNode)
-    const result = block.codeResource.emittedLanguagePeek.validateTree(newTree);
+    const newTree = embraceNode(validator, tree, dropLocation, newNode)
+    const result = validator.validateFromRoot(newTree);
     return (result.isValid);
   }
 
   // Build the value map that corresponds to the state for the current block
   const map: Restricted.VariableMap<VisualBlockDescriptions.VisibilityVars> = {
     ifAnyDrag: !!drag,
-    ifEmpty: () => !dropLocationHasChildren(block),
-    ifLegalChild: isLegalChild.bind(this),
-    ifLegalDrag: isLegalDrag.bind(this, drag, block)
+    ifEmpty: () => !dropLocationHasChildren(tree, dropLocation),
+    ifLegalChild: isLegalSubtree.bind(this),
+    ifLegalDrag: isLegalImmediateChild.bind(this, drag, validator, tree, dropLocation)
   };
 
   // Evaluation of the expression function may be costly. So we postpone it until
@@ -132,7 +122,7 @@ export function calculateDropTargetState(
   if (drag) {
     // Highlight in case something is dragging over us. This can only happen if
     // we have been visible before, so there is no need for any additional checking
-    const onThis = arrayEqual(drag.dropLocation, block.dropLocation);
+    const onThis = arrayEqual(drag.dropLocation, dropLocation);
 
     if (onThis) {
       return ("self");

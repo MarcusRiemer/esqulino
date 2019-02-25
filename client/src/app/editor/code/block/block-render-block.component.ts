@@ -9,7 +9,6 @@ import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { BlockDropProperties } from './drop-utils';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -18,7 +17,7 @@ import { BlockDropProperties } from './drop-utils';
   templateUrl: 'templates/block-render-block.html',
   selector: `editor-block-render-block`
 })
-export class BlockRenderBlockComponent implements BlockDropProperties {
+export class BlockRenderBlockComponent {
   /**
    * The code resource that is rendered here.
    */
