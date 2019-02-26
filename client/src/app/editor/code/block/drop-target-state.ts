@@ -1,12 +1,12 @@
 import { QualifiedTypeName, NodeLocation, Validator, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
+import { _cardinalityAllowsInsertion } from '../../../shared/syntaxtree/drop-util';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { Restricted } from '../../../shared/block/bool-mini-expression.description'
 import { evalExpression } from '../../../shared/block/bool-mini-expression'
 import { arrayEqual } from '../../../shared/util';
 
 import { CurrentDrag } from '../../drag.service';
-import { _cardinalityAllowsInsertion } from 'src/app/shared/syntaxtree/drop-util';
 
 /**
  * These states control how a drop target should react to a drag
