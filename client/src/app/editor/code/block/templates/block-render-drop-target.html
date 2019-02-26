@@ -1,19 +1,10 @@
 <!-- The outer div ensures that the mouse enter events are not
      re-triggered when the drop placeholder is swapped out with
      the pre-rendered block.-->
-<div (mouseover)="onMouseEnter($event)"
-     (mouseout)="onMouseOut($event)">
-  <span *ngIf="(showDropPlaceholder | async); else dropTarget;"
-        @dropTargetVisible
-        class="drop-placeholder">
-    &nbsp;Hier&nbsp;
-  </span>
+<div *ngIf="(showAnything | async)"
 
-  <!-- Ensure correct visual behaviour -->
-  <ng-template #dropTarget>
-    <div [@availability]="currentAvailability | async"
-         class="drop-target">
-      &nbsp;?&nbsp;
-    </div>
-  </ng-template>
+     [@background-color]="targetState | async"
+     (mouseover)="onMouseEnter($event)"
+     (mouseout)="onMouseOut($event)">
+  &nbsp;{{ displayText | async }}&nbsp;
 </div>
