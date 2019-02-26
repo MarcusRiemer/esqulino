@@ -1,4 +1,4 @@
-import { QualifiedTypeName, NodeLocation, Validator, Tree, CodeResource } from '../../../shared/syntaxtree';
+import { QualifiedTypeName, NodeLocation, Validator, Tree } from '../../../shared/syntaxtree';
 import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
 import { _cardinalityAllowsInsertion } from '../../../shared/syntaxtree/drop-util';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -8,13 +8,7 @@ import { arrayEqual } from '../../../shared/util';
 
 import { CurrentDrag } from '../../drag.service';
 
-/**
- * These states control how a drop target should react to a drag
- * operation. "none" means the location wouldn't be valid, "self"
- * if the operation is currently over the target itself and
- * "available" signals ... well ... availability to the drag.
- */
-export type DropTargetState = "none" | "self" | "visible" | "available"
+export type DragTargetState = "unknown" | "validTarget" | "invalidTarget" | "targeted";
 
 /**
  * @return The name of the referenced child group (if there is any)
@@ -26,7 +20,7 @@ function dropLocationChildGroupName(loc: NodeLocation): string {
 /**
  * @return true, if the targeted child group has any children.
  */
-function dropLocationHasChildren(tree: Tree, loc: NodeLocation) {
+export function dropLocationHasChildren(tree: Tree, loc: NodeLocation) {
   if (loc.length > 0) {
     const dropLocation = loc.slice(0, -1);
     const dropCategory = dropLocationChildGroupName(loc);
@@ -104,27 +98,13 @@ export const _isChildRequired = (
   return (cardinality.minOccurs > parentNode.getChildrenInCategory(category).length);
 }
 
-/**
- * Calculates how the given block should react to the given drag.
- */
-export function calculateDropTargetState(
+function _buildExpression(
   drag: CurrentDrag,
   dropLocation: NodeLocation,
-  visual: VisualBlockDescriptions.EditorDropTarget | VisualBlockDescriptions.EditorBlock,
   validator: Validator,
-  tree: Tree
-): DropTargetState {
-  // Does the description come with a visibility expression? If not assume isEmpty
-  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = {
-    $some: [
-      { $var: "ifChildrenRequired" },
-      { $every: [{ $var: "ifLegalDrag" }, { $var: "ifEmpty" }] }
-    ]
-  };
-  if (visual && visual.dropTarget && visual.dropTarget.visibility) {
-    visibilityExpr = visual.dropTarget.visibility;
-  }
-
+  tree: Tree,
+  visibilityExpr: VisualBlockDescriptions.VisibilityExpression
+): () => boolean {
   // Would the new tree ba a completly valid tree?
   const isLegalSubtree = () => {
     if (!drag || dropLocation.length === 0) {
@@ -151,6 +131,25 @@ export function calculateDropTargetState(
   // it is actually required.
   const visibilityEvalFunc = evalExpression.bind(this, visibilityExpr, map);
 
+  return (visibilityEvalFunc);
+}
+
+/**
+ * Calculates what the given drop location "thinks" about the given
+ * drag operation.
+ */
+export function targetState(
+  drag: CurrentDrag,
+  dropLocation: NodeLocation,
+  validator: Validator,
+  tree: Tree
+): DragTargetState {
+  // Does the description come with a visibility expression? If not assume isEmpty
+  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $var: "ifLegalDrag" };
+
+  // Build the value map that corresponds to the state for the current block
+  const stateFunc = _buildExpression(drag, dropLocation, validator, tree, visibilityExpr);
+
   // Ongoing drags trump almost any other possibility
   if (drag) {
     // Highlight in case something is dragging over us. This can only happen if
@@ -158,19 +157,15 @@ export function calculateDropTargetState(
     const onThis = arrayEqual(drag.dropLocation, dropLocation);
 
     if (onThis) {
-      return ("self");
+      return ("targeted");
     } else {
-      if (visibilityEvalFunc()) {
-        return ("available");
+      if (stateFunc()) {
+        return ("validTarget");
       } else {
-        return ("none");
+        return ("invalidTarget");
       }
     }
   } else {
-    if (visibilityEvalFunc()) {
-      return ("visible");
-    } else {
-      return ("none");
-    }
+    return ("unknown");
   }
 }

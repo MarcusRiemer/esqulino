@@ -59,25 +59,6 @@ trash {
         background-color: transparent;
     }
 
-    .drop-placeholder {
-        display: inline-block;
-        border: 2px dashed blue;
-        border-radius: 500px;
-    }
-
-    .drop-target {
-        display: inline-block;
-        border: 1px dashed black;
-        border-radius: 500px;
-        background: repeating-linear-gradient(
-            45deg,
-            RGBA(255, 255, 0, 0.2),
-            RGBA(255, 255, 0, 0.2) 10px,
-            RGBA(0, 0, 0, 0.2) 10px,
-            RGBA(0, 0, 0, 0.2) 20px
-        );
-    }
-
     editor-block-render {
         display: contents;
     }
