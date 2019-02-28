@@ -91,24 +91,22 @@ concise_attributes:
     \"direction\": \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true,
     \"childGroupName\": \"else\"}, {\"text\": \"}\", \"style\": {\"display\": \"inline-block\"},
     \"blockType\": \"constant\", \"breakAfter\": false}], \"blockType\": \"block\",
-    \"direction\": \"horizontal\", \"breakAfter\": true, \"dropTarget\": {\"self\":
-    {\"order\": \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
-    {\"typeName\": \"if\", \"languageName\": \"trucklino_program\"}}, {\"visual\":
-    [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\":
-    \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\":
-    {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\": \"default\",
-    \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\": \"500px\",
-    \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    \"direction\": \"horizontal\", \"breakAfter\": true, \"dropTarget\": {}, \"wrapChildren\":
+    true}], \"describedType\": {\"typeName\": \"if\", \"languageName\": \"trucklino_program\"}},
+    {\"visual\": [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\",
+    \"margin\": \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\":
+    [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\":
+    \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\":
+    \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
     [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"style\": {\"display\": \"inline-block\"},
     \"property\": \"type\", \"blockType\": \"input\"}], \"blockType\": \"block\",
-    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {\"self\":
-    {\"order\": \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
-    {\"typeName\": \"sensor\", \"languageName\": \"trucklino_program\"}}, {\"visual\":
-    [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\":
-    \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\":
-    {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\": \"default\",
-    \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\": \"500px\",
-    \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {}, \"wrapChildren\":
+    true}], \"describedType\": {\"typeName\": \"sensor\", \"languageName\": \"trucklino_program\"}},
+    {\"visual\": [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\",
+    \"margin\": \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\":
+    [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\":
+    \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\":
+    \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
     [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"text\": \"for\", \"style\":
     {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
     false}, {\"text\": \" (\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
@@ -120,23 +118,22 @@ concise_attributes:
     \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
     \"body\"}, {\"text\": \"}\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
     \"constant\", \"breakAfter\": false}], \"blockType\": \"block\", \"direction\":
-    \"horizontal\", \"breakAfter\": true, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\",
-    \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
-    \"loopFor\", \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\":
+    \"horizontal\", \"breakAfter\": true, \"dropTarget\": {}, \"wrapChildren\": true}],
+    \"describedType\": {\"typeName\": \"loopFor\", \"languageName\": \"trucklino_program\"}},
+    {\"visual\": [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\",
+    \"margin\": \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\":
+    [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\":
+    \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\":
+    \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"blockType\": \"iterator\",
+    \"direction\": \"horizontal\", \"breakAfter\": true, \"wrapChildren\": true, \"childGroupName\":
+    \"procedures\"}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\",
+    \"breakAfter\": true, \"wrapChildren\": true, \"childGroupName\": \"main\"}],
+    \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\": false,
+    \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
+    \"program\", \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\":
     {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\": \"2px\", \"padding\":
     \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\",
-    \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\",
-    \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
-    \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
-    {\"blockType\": \"iterator\", \"direction\": \"horizontal\", \"breakAfter\": true,
-    \"wrapChildren\": true, \"childGroupName\": \"procedures\"}, {\"blockType\": \"iterator\",
-    \"direction\": \"horizontal\", \"breakAfter\": true, \"wrapChildren\": true, \"childGroupName\":
-    \"main\"}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
-    false, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\", \"skipParents\":
-    0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"program\",
-    \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\": {\"border\":
-    \"1px solid blue\", \"cursor\": \"grab\", \"margin\": \"2px\", \"padding\": \"2px\",
-    \"borderRadius\": \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\",
     \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\",
     \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
     \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
@@ -151,22 +148,21 @@ concise_attributes:
     \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\": \"body\"},
     {\"text\": \"}\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
     \"breakAfter\": false}], \"blockType\": \"block\", \"direction\": \"horizontal\",
-    \"breakAfter\": true, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\",
-    \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
-    \"loopWhile\", \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\":
-    {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\": \"2px\", \"padding\":
-    \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\",
-    \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\",
-    \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
-    \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
-    {\"style\": {\"display\": \"inline-block\"}, \"property\": \"name\", \"blockType\":
-    \"input\"}, {\"text\": \"(\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
-    \"constant\", \"breakAfter\": false}, {\"blockType\": \"iterator\", \"direction\":
-    \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
-    \"arguments\"}, {\"text\": \")\", \"style\": {\"display\": \"inline-block\"},
-    \"blockType\": \"constant\", \"breakAfter\": false}], \"blockType\": \"block\",
-    \"direction\": \"horizontal\", \"breakAfter\": true, \"dropTarget\": {\"self\":
-    {\"order\": \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
+    \"breakAfter\": true, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\":
+    {\"typeName\": \"loopWhile\", \"languageName\": \"trucklino_program\"}}, {\"visual\":
+    [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\":
+    \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\":
+    {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\": \"default\",
+    \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\": \"500px\",
+    \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"style\": {\"display\": \"inline-block\"},
+    \"property\": \"name\", \"blockType\": \"input\"}, {\"text\": \"(\", \"style\":
+    {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
+    false}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\", \"breakAfter\":
+    false, \"wrapChildren\": true, \"childGroupName\": \"arguments\"}, {\"text\":
+    \")\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
+    \"breakAfter\": false}], \"blockType\": \"block\", \"direction\": \"horizontal\",
+    \"breakAfter\": true, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\":
     {\"typeName\": \"procedureCall\", \"languageName\": \"trucklino_program\"}}, {\"visual\":
     [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\":
     \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\":
@@ -175,21 +171,19 @@ concise_attributes:
     \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
     [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"style\": {\"display\": \"inline-block\"},
     \"property\": \"value\", \"blockType\": \"input\"}], \"blockType\": \"block\",
-    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {\"self\":
-    {\"order\": \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
-    {\"typeName\": \"booleanConstant\", \"languageName\": \"trucklino_program\"}},
-    {\"visual\": [{\"children\": [{\"style\": {\"color\": \"white\", \"border\": \"2px
-    solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\":
-    \"1ch\", \"border-radius\": \"500px\", \"background-color\": \"red\"}, \"blockType\":
-    \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
+    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {}, \"wrapChildren\":
+    true}], \"describedType\": {\"typeName\": \"booleanConstant\", \"languageName\":
+    \"trucklino_program\"}}, {\"visual\": [{\"children\": [{\"style\": {\"color\":
+    \"white\", \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\":
+    \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
+    \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
     {\"text\": \"(NOT \", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
     \"constant\", \"breakAfter\": false}, {\"blockType\": \"iterator\", \"direction\":
     \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
     \"expr\"}, {\"text\": \")\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
     \"constant\", \"breakAfter\": false}], \"blockType\": \"block\", \"direction\":
-    \"horizontal\", \"breakAfter\": false, \"dropTarget\": {\"self\": {\"order\":
-    \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
-    {\"typeName\": \"negateExpression\", \"languageName\": \"trucklino_program\"}},
+    \"horizontal\", \"breakAfter\": false, \"dropTarget\": {}, \"wrapChildren\": true}],
+    \"describedType\": {\"typeName\": \"negateExpression\", \"languageName\": \"trucklino_program\"}},
     {\"visual\": [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\",
     \"margin\": \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\":
     [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\":
@@ -197,43 +191,41 @@ concise_attributes:
     \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
     [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"style\": {\"display\": \"inline-block\"},
     \"property\": \"name\", \"blockType\": \"input\"}], \"blockType\": \"block\",
-    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {\"self\":
-    {\"order\": \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
-    {\"typeName\": \"procedureParameter\", \"languageName\": \"trucklino_program\"}},
-    {\"visual\": [{\"children\": [{\"style\": {\"color\": \"white\", \"border\": \"2px
-    solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\":
-    \"1ch\", \"border-radius\": \"500px\", \"background-color\": \"red\"}, \"blockType\":
-    \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
+    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {}, \"wrapChildren\":
+    true}], \"describedType\": {\"typeName\": \"procedureParameter\", \"languageName\":
+    \"trucklino_program\"}}, {\"visual\": [{\"children\": [{\"style\": {\"color\":
+    \"white\", \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\":
+    \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
+    \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
     {\"style\": {\"display\": \"inline-block\"}, \"property\": \"operator\", \"blockType\":
     \"input\"}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
-    false, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\", \"skipParents\":
-    0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"relationalOperator\",
-    \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\": {\"border\":
-    \"1px solid blue\", \"cursor\": \"grab\", \"margin\": \"2px\", \"padding\": \"2px\",
-    \"borderRadius\": \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\",
-    \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\",
-    \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
-    \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
-    {\"text\": \"function \", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
-    \"constant\", \"breakAfter\": false}, {\"style\": {\"display\": \"inline-block\"},
-    \"property\": \"name\", \"blockType\": \"input\"}, {\"text\": \"(\", \"style\":
+    false, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
+    \"relationalOperator\", \"languageName\": \"trucklino_program\"}}, {\"visual\":
+    [{\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\":
+    \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\":
+    {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\": \"default\",
+    \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\": \"500px\",
+    \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"text\": \"function \", \"style\":
     {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
-    false}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\", \"breakAfter\":
-    false, \"wrapChildren\": true, \"childGroupName\": \"arguments\"}, {\"text\":
-    \")\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
-    \"breakAfter\": false}, {\"text\": \" {\", \"style\": {\"display\": \"inline-block\"},
-    \"blockType\": \"constant\", \"breakAfter\": true}, {\"blockType\": \"iterator\",
-    \"direction\": \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true,
-    \"childGroupName\": \"body\"}, {\"text\": \"}\", \"style\": {\"display\": \"inline-block\"},
-    \"blockType\": \"constant\", \"breakAfter\": true}], \"blockType\": \"block\",
-    \"direction\": \"horizontal\", \"breakAfter\": false, \"dropTarget\": {\"self\":
-    {\"order\": \"insertAfter\", \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\":
-    {\"typeName\": \"procedureDeclaration\", \"languageName\": \"trucklino_program\"}},
-    {\"visual\": [{\"children\": [{\"style\": {\"color\": \"white\", \"border\": \"2px
-    solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\":
-    \"1ch\", \"border-radius\": \"500px\", \"background-color\": \"red\"}, \"blockType\":
-    \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
-    {\"text\": \"(\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
+    false}, {\"style\": {\"display\": \"inline-block\"}, \"property\": \"name\", \"blockType\":
+    \"input\"}, {\"text\": \"(\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
+    \"constant\", \"breakAfter\": false}, {\"blockType\": \"iterator\", \"direction\":
+    \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
+    \"arguments\"}, {\"text\": \")\", \"style\": {\"display\": \"inline-block\"},
+    \"blockType\": \"constant\", \"breakAfter\": false}, {\"text\": \" {\", \"style\":
+    {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
+    true}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\", \"breakAfter\":
+    false, \"wrapChildren\": true, \"childGroupName\": \"body\"}, {\"text\": \"}\",
+    \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
+    true}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
+    false, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
+    \"procedureDeclaration\", \"languageName\": \"trucklino_program\"}}, {\"visual\":
+    [{\"children\": [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\",
+    \"cursor\": \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\",
+    \"border-radius\": \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\",
+    \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"text\":
+    \"(\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
     \"breakAfter\": false}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\",
     \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\": \"lhs\"}, {\"text\":
     \" \", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
@@ -244,28 +236,30 @@ concise_attributes:
     \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\": \"rhs\"}, {\"text\":
     \")\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
     \"breakAfter\": false}], \"blockType\": \"block\", \"direction\": \"horizontal\",
-    \"breakAfter\": false, \"dropTarget\": {\"self\": {\"order\": \"insertAfter\",
-    \"skipParents\": 0}}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
-    \"booleanBinaryExpression\", \"languageName\": \"trucklino_program\"}}], \"editorComponents\":
-    [{\"componentType\": \"truck-controller\"}, {\"componentType\": \"truck-world\"},
-    {\"componentType\": \"truck-sensors\"}, {\"componentType\": \"generated-code\"}],
-    \"localGeneratorInstructions\": {\"traits\": {\"vertical\": {\"applyMode\": \"deepMerge\",
-    \"instructions\": {\"orientation\": \"vertical\"}}, \"breakAfter\": {\"applyMode\":
-    \"deepMerge\", \"instructions\": {\"breakAfter\": true}}, \"blockBorder\": {\"applyMode\":
-    \"deepMerge\", \"instructions\": {\"style\": {\"border\": \"1px solid blue\",
-    \"cursor\": \"grab\", \"margin\": \"2px\", \"padding\": \"2px\", \"borderRadius\":
-    \"5px\"}}}}, \"traitScopes\": [{\"blocks\": {\"trucklino_program\": {\"if\": [0],
-    \"loopFor\": [0], \"loopWhile\": [0], \"procedureCall\": [0]}}, \"traits\": [\"breakAfter\"],
-    \"attributes\": {\"trucklino_program\": {\"if\": [\"bodyOpen\", \"elseOpen\"],
-    \"loopFor\": [\"bodyOpen\"], \"program\": [\"procedures\", \"main\"], \"loopWhile\":
-    [\"bodyOpen\"], \"procedureDeclaration\": [\"bodyOpen\", \"bodyClose\"]}}}, {\"blocks\":
-    {\"trucklino_program\": {\"if\": [0], \"sensor\": [0], \"loopFor\": [0], \"program\":
-    [0], \"loopWhile\": [0], \"procedureCall\": [0], \"booleanConstant\": [0], \"procedureParameter\":
-    [0], \"procedureDeclaration\": [0]}}, \"traits\": [\"blockBorder\"]}], \"staticSidebars\":
-    [{\"type\": \"fixedBlocks\", \"caption\": \"Trucklino Programm\", \"categories\":
-    [{\"blocks\": [{\"defaultNode\": {\"name\": \"program\", \"children\": {\"main\":
-    []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Leeres Programm\"},
-    {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
+    \"breakAfter\": false, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\":
+    {\"typeName\": \"booleanBinaryExpression\", \"languageName\": \"trucklino_program\"}}],
+    \"editorComponents\": [{\"componentType\": \"truck-controller\"}, {\"componentType\":
+    \"truck-world\"}, {\"componentType\": \"truck-sensors\"}, {\"componentType\":
+    \"generated-code\"}], \"localGeneratorInstructions\": {\"traits\": {\"softHole\":
+    {\"applyMode\": \"deepMerge\", \"instructions\": {\"emptyDropTarget\": true}},
+    \"vertical\": {\"applyMode\": \"deepMerge\", \"instructions\": {\"orientation\":
+    \"vertical\"}}, \"breakAfter\": {\"applyMode\": \"deepMerge\", \"instructions\":
+    {\"breakAfter\": true}}, \"blockBorder\": {\"applyMode\": \"deepMerge\", \"instructions\":
+    {\"style\": {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\":
+    \"2px\", \"padding\": \"2px\", \"borderRadius\": \"5px\"}}}}, \"traitScopes\":
+    [{\"blocks\": {\"trucklino_program\": {\"if\": [0], \"loopFor\": [0], \"loopWhile\":
+    [0], \"procedureCall\": [0]}}, \"traits\": [\"breakAfter\"], \"attributes\": {\"trucklino_program\":
+    {\"if\": [\"bodyOpen\", \"elseOpen\"], \"loopFor\": [\"bodyOpen\"], \"program\":
+    [\"procedures\", \"main\"], \"loopWhile\": [\"bodyOpen\"], \"procedureDeclaration\":
+    [\"bodyOpen\", \"bodyClose\"]}}}, {\"blocks\": {\"trucklino_program\": {\"if\":
+    [0], \"sensor\": [0], \"loopFor\": [0], \"program\": [0], \"loopWhile\": [0],
+    \"procedureCall\": [0], \"booleanConstant\": [0], \"procedureParameter\": [0],
+    \"procedureDeclaration\": [0]}}, \"traits\": [\"blockBorder\"]}, {\"traits\":
+    [\"softHole\"], \"attributes\": {\"trucklino_program\": {\"if\": [\"body\", \"else\"]}}}],
+    \"staticSidebars\": [{\"type\": \"fixedBlocks\", \"caption\": \"Trucklino Programm\",
+    \"categories\": [{\"blocks\": [{\"defaultNode\": {\"name\": \"program\", \"children\":
+    {\"main\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Leeres
+    Programm\"}, {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
     \"properties\": {\"name\": \"goForward\"}}, \"displayName\": \"←\U0001F69A Vorwärts
     fahren\"}, {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
     \"properties\": {\"name\": \"turnRight\"}}, \"displayName\": \"↱ Blinker rechts\"},
@@ -329,7 +323,7 @@ concise_attributes:
   value_before_type_cast: '2019-01-09 12:30:41.478228'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-20 12:55:12.707067'
+  value_before_type_cast: '2019-02-28 16:20:50.151658'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang
