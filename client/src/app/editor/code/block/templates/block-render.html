@@ -39,7 +39,7 @@
       <editor-block-render-drop-target [codeResource]="codeResource"
                                        [node]="childNode"
                                        [dropLocation]="childNode.location"
-                                       [visual]="visual"
+                                       [visual]="iteratorDropTargetVisual"
                                        [readOnly]="readOnly">
       </editor-block-render-drop-target>
 
@@ -66,7 +66,7 @@
     <!-- Show a drop target to insert after the last block -->
     <editor-block-render-drop-target [codeResource]="codeResource"
                                      [dropLocation]="lastNodeLocation"
-                                     [visual]="visual"
+                                     [visual]="iteratorDropTargetVisual"
                                      [readOnly]="readOnly">
     </editor-block-render-drop-target>
   </ng-container>

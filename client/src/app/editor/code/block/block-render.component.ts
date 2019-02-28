@@ -4,8 +4,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { Node, CodeResource, NodeLocation, locationIncLastIndex } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-
 /**
  * Renders a single and well known visual element of a node.
  */
@@ -50,8 +48,15 @@ export class BlockRenderComponent {
   /**
    * Dirty Hack: Template "Typecast"
    */
-  asBlockInput(block: VisualBlockDescriptions.EditorInput) {
+  asBlockInput(block: VisualBlockDescriptions.EditorBlockBase) {
     return (block as VisualBlockDescriptions.EditorInput);
+  }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockIterator(block: VisualBlockDescriptions.EditorBlockBase) {
+    return (block as VisualBlockDescriptions.EditorIterator);
   }
 
   /**
@@ -112,5 +117,16 @@ export class BlockRenderComponent {
     } else {
       return ([]);
     }
+  }
+
+  /**
+   * The visual options passed to each drop marker of an iteration
+   */
+  get iteratorDropTargetVisual(): VisualBlockDescriptions.EditorDropTarget {
+    return ({
+      blockType: "dropTarget",
+      direction: "horizontal", // TODO: Drop target block should not have children
+      emptyDropTarget: this.asBlockIterator(this.visual).emptyDropTarget
+    });
   }
 }

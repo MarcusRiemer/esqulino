@@ -357,7 +357,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -612,7 +612,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },

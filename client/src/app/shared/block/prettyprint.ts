@@ -104,9 +104,13 @@ function prettyPrintVisualIterator(desc: VisualBlockDescriptions.EditorIterator)
     ? ["between {", ...desc.between.map(prettyPrintVisual), "}"]
     : [];
 
+  const emptyDropTarget = (desc.emptyDropTarget)
+    ? [`emptyDropTarget ${desc.emptyDropTarget}`]
+    : [];
+
   const tail = `}`;
 
-  return ([head, [...props, ...between, ...prettyPrintStyle(desc.style)], tail]);
+  return ([head, [...props, ...between, ...emptyDropTarget, ...prettyPrintStyle(desc.style)], tail]);
 }
 
 /**

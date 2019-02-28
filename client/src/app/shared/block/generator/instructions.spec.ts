@@ -75,6 +75,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
         "orientation": "horizontal",
         "breakAfter": false,
         "allowWrap": true,
+        "emptyDropTarget": false,
         "style": {
           "display": "block",
           "color": "red"
