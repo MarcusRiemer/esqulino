@@ -55,15 +55,19 @@ describe("BlockLanguage Generator Type Mapping", () => {
       ]
     };
     const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
+    debugger;
 
-    expect(res.length).toEqual(1);
-    expect(res[0]).toEqual({
-      blockType: "iterator",
-      childGroupName: "c1",
-      direction: DefaultInstructions.iteratorInstructions.orientation,
-      wrapChildren: true,
-      breakAfter: false
-    });
+
+    expect(res).toEqual([
+      {
+        blockType: "iterator",
+        childGroupName: "c1",
+        direction: DefaultInstructions.iteratorInstructions.orientation,
+        wrapChildren: true,
+        breakAfter: false,
+        emptyDropTarget: false
+      }
+    ]);
   });
 
   it("Sequence (+Between) => Iterator", () => {
@@ -97,6 +101,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
         direction: "horizontal",
         wrapChildren: true,
         breakAfter: false,
+        emptyDropTarget: false,
         between: [
           {
             blockType: "constant",
