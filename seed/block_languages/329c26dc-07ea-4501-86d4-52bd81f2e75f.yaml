@@ -117,7 +117,7 @@ concise_attributes:
     false}, {\"text\": \" {\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
     \"constant\", \"breakAfter\": true}, {\"blockType\": \"iterator\", \"direction\":
     \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
-    \"body\", \"emptyDropTarget\": false}, {\"text\": \"}\", \"style\": {\"display\":
+    \"body\", \"emptyDropTarget\": true}, {\"text\": \"}\", \"style\": {\"display\":
     \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": false}], \"blockType\":
     \"block\", \"direction\": \"horizontal\", \"breakAfter\": true, \"dropTarget\":
     {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"loopFor\", \"languageName\":
@@ -131,7 +131,7 @@ concise_attributes:
     \"wrapChildren\": true, \"childGroupName\": \"procedures\", \"emptyDropTarget\":
     false}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\", \"breakAfter\":
     true, \"wrapChildren\": true, \"childGroupName\": \"main\", \"emptyDropTarget\":
-    false}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
+    true}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
     false, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
     \"program\", \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\":
     {\"border\": \"1px solid blue\", \"cursor\": \"grab\", \"margin\": \"2px\", \"padding\":
@@ -148,7 +148,7 @@ concise_attributes:
     false}, {\"text\": \" {\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
     \"constant\", \"breakAfter\": true}, {\"blockType\": \"iterator\", \"direction\":
     \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
-    \"body\", \"emptyDropTarget\": false}, {\"text\": \"}\", \"style\": {\"display\":
+    \"body\", \"emptyDropTarget\": true}, {\"text\": \"}\", \"style\": {\"display\":
     \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": false}], \"blockType\":
     \"block\", \"direction\": \"horizontal\", \"breakAfter\": true, \"dropTarget\":
     {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"loopWhile\",
@@ -259,13 +259,14 @@ concise_attributes:
     [0], \"loopFor\": [0], \"program\": [0], \"loopWhile\": [0], \"procedureCall\":
     [0], \"booleanConstant\": [0], \"procedureParameter\": [0], \"procedureDeclaration\":
     [0]}}, \"traits\": [\"blockBorder\"]}, {\"traits\": [\"softHole\"], \"attributes\":
-    {\"trucklino_program\": {\"if\": [\"body\", \"else\"]}}}], \"staticSidebars\":
-    [{\"type\": \"fixedBlocks\", \"caption\": \"Trucklino Programm\", \"categories\":
-    [{\"blocks\": [{\"defaultNode\": {\"name\": \"program\", \"children\": {\"main\":
-    []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Leeres Programm\"},
+    {\"trucklino_program\": {\"if\": [\"body\", \"else\"], \"loopFor\": [\"body\"],
+    \"program\": [\"main\"], \"loopWhile\": [\"body\"]}}}], \"staticSidebars\": [{\"type\":
+    \"fixedBlocks\", \"caption\": \"Trucklino Programm\", \"categories\": [{\"blocks\":
+    [{\"defaultNode\": {\"name\": \"program\", \"children\": {\"main\": []}, \"language\":
+    \"trucklino_program\"}, \"displayName\": \"Leeres Programm\"}, {\"defaultNode\":
+    {\"name\": \"procedureCall\", \"language\": \"trucklino_program\", \"properties\":
+    {\"name\": \"goForward\"}}, \"displayName\": \"←\U0001F69A Vorwärts fahren\"},
     {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
-    \"properties\": {\"name\": \"goForward\"}}, \"displayName\": \"←\U0001F69A Vorwärts
-    fahren\"}, {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
     \"properties\": {\"name\": \"turnRight\"}}, \"displayName\": \"↱ Blinker rechts\"},
     {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
     \"properties\": {\"name\": \"turnLeft\"}}, \"displayName\": \"↰ Blinker links\"},
@@ -327,7 +328,7 @@ concise_attributes:
   value_before_type_cast: '2019-01-09 12:30:41.478228'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-28 19:55:58.476139'
+  value_before_type_cast: '2019-02-28 20:05:27.484529'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang
