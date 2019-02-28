@@ -131,7 +131,8 @@ export function mapChildren(
     childGroupName: attr.name,
     direction: instructions.orientation,
     wrapChildren: instructions.allowWrap,
-    breakAfter: instructions.breakAfter
+    breakAfter: instructions.breakAfter,
+    emptyDropTarget: instructions.emptyDropTarget
   }
 
   // And only add between instructions if there are any
@@ -144,6 +145,7 @@ export function mapChildren(
     iteratorBlock.style = instructions.style;
   }
 
+  debugger;
   // Lets see whether we can eliminate drop targets from block descriptions
   return ([iteratorBlock]);
 }
