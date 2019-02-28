@@ -441,7 +441,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -703,7 +703,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -992,30 +992,6 @@
       "description": "We currently allow any CSS style to be used.\n\nTODO: This could be a Readonly__ type but that causes the JSON-\nschema generator to (sort of rightfully) emit false for\n\"additionalProperties\" and that in turn makes this type rather\npointless.",
       "type": "object"
     },
-    "VisualBlockDescriptions.CategoryInsert": {
-      "additionalProperties": false,
-      "properties": {
-        "category": {
-          "type": "string"
-        },
-        "order": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsertPosition"
-        }
-      },
-      "required": [
-        "order",
-        "category"
-      ],
-      "type": "object"
-    },
-    "VisualBlockDescriptions.CategoryInsertPosition": {
-      "description": "The locations of categories at which insertions may occur.",
-      "enum": [
-        "insertFirst",
-        "insertLast"
-      ],
-      "type": "string"
-    },
     "VisualBlockDescriptions.ConcreteBlock": {
       "anyOf": [
         {
@@ -1045,32 +1021,6 @@
       "additionalProperties": false,
       "description": "These properties are required to specify drop targets.",
       "properties": {
-        "children": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "parent": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "self": {
-          "additionalProperties": false,
-          "properties": {
-            "order": {
-              "enum": [
-                "insertBefore",
-                "insertAfter"
-              ],
-              "type": "string"
-            },
-            "skipParents": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "order",
-            "skipParents"
-          ],
-          "type": "object"
-        },
         "visibility": {
           "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
         }
@@ -1172,6 +1122,9 @@
         },
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+        },
+        "emptyDropTarget": {
+          "type": "boolean"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
@@ -1297,6 +1250,9 @@
         "direction": {
           "$ref": "#/definitions/Orientation"
         },
+        "emptyDropTarget": {
+          "type": "boolean"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -1321,7 +1277,8 @@
         "ifAnyDrag",
         "ifLegalDrag",
         "ifLegalChild",
-        "ifEmpty"
+        "ifEmpty",
+        "ifChildrenRequired"
       ],
       "type": "string"
     }

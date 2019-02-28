@@ -85,7 +85,8 @@ describe("BlockLanguage Generator Type Mapping", () => {
         between: "ä",
         style: {},
         allowWrap: true,
-        breakAfter: false
+        breakAfter: false,
+        emptyDropTarget: false,
       }
     );
 

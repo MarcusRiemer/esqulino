@@ -43,17 +43,6 @@ export namespace VisualBlockDescriptions {
   }
 
   /**
-   * The locations of categories at which insertions may occur.
-   */
-  export type CategoryInsertPosition = "insertFirst" | "insertLast";
-
-
-  export type CategoryInsert = {
-    order: CategoryInsertPosition;
-    category: string;
-  };
-
-  /**
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
@@ -87,8 +76,10 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorDropTarget extends EditorLayout {
     blockType: "dropTarget";
-    children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
+    // True, if a drop target should be shown even though an empty
+    // child group is a perfectly valid syntax tree
+    emptyDropTarget?: boolean;
   }
 
   /**
@@ -96,8 +87,12 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorIterator extends EditorLayout {
     blockType: "iterator";
+    // The child group to iterate over
     childGroupName: string;
-    between?: ConcreteBlock[]
+    between?: ConcreteBlock[];
+    // True, if a drop marker should be shown even though an empty
+    // child group is a perfectly valid syntax tree
+    emptyDropTarget?: boolean;
   }
 
   /**

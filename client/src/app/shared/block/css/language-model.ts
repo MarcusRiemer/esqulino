@@ -27,12 +27,12 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               style: {
                 color: "#006400"
               }
-            } as VisualBlockDescriptions.EditorConstant,
+            },
             {
               blockType: "iterator",
               childGroupName: "rules",
               direction: "vertical",
-            } as VisualBlockDescriptions.EditorIterator,
+            },
           ]
         },
       ]
@@ -65,7 +65,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                     "borderRadius": "500px",
                     "cursor": "default",
                   },
-                } as VisualBlockDescriptions.EditorConstant,
+                },
               ],
               direction: "horizontal"
             },
@@ -73,14 +73,14 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "iterator",
               childGroupName: "selectors",
               direction: "horizontal",
-            } as VisualBlockDescriptions.EditorIterator,
+            },
             {
               blockType: "constant",
               text: "{",
               style: {
                 "marginLeft": "1ch"
               }
-            } as VisualBlockDescriptions.EditorConstant,
+            },
           ]
         },
         {
@@ -102,7 +102,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 "borderRadius": "500px",
                 "cursor": "default",
               },
-            } as VisualBlockDescriptions.EditorConstant,
+            },
           ],
           direction: "horizontal",
         },
@@ -113,11 +113,11 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           style: {
             "marginLeft": "2ch"
           }
-        } as VisualBlockDescriptions.EditorIterator,
+        },
         {
           blockType: "constant",
           text: "}",
-        } as VisualBlockDescriptions.EditorConstant,
+        },
       ]
     },
     {
@@ -151,7 +151,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "constant",
               text: "."
-            } as VisualBlockDescriptions.EditorConstant,
+            },
             {
               blockType: "input",
               property: "value",
@@ -172,8 +172,8 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           children: [
             {
               blockType: "constant",
-              text: "#"
-            } as VisualBlockDescriptions.EditorConstant,
+              text: "#",
+            },
             {
               blockType: "input",
               property: "value",
@@ -210,7 +210,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                     "borderRadius": "500px",
                     "cursor": "default",
                   },
-                } as VisualBlockDescriptions.EditorConstant,
+                },
               ],
               direction: "horizontal",
             },
@@ -218,14 +218,14 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "iterator",
               childGroupName: "name",
               direction: "horizontal"
-            } as VisualBlockDescriptions.EditorIterator,
+            },
             {
               blockType: "constant",
               text: ":",
               style: {
                 "marginRight": "1ch"
               }
-            } as VisualBlockDescriptions.EditorConstant,
+            },
             {
               blockType: "dropTarget",
               dropTarget: {
@@ -244,7 +244,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                     "borderRadius": "500px",
                     "cursor": "default",
                   },
-                } as VisualBlockDescriptions.EditorConstant,
+                },
               ],
               direction: "horizontal",
             },
@@ -252,11 +252,11 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "iterator",
               childGroupName: "value",
               direction: "horizontal"
-            } as VisualBlockDescriptions.EditorIterator,
+            },
             {
               blockType: "constant",
               text: ";"
-            } as VisualBlockDescriptions.EditorConstant,
+            },
           ]
         }
       ]
