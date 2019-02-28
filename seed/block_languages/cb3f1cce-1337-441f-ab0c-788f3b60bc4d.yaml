@@ -87,7 +87,7 @@ concise_attributes:
     "property": "distinct", "blockType": "input"}, {"between": [{"text": ",", "style":
     {"display": "inline-block"}, "blockType": "constant", "breakAfter": false}], "blockType":
     "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
-    "childGroupName": "columns", "emptyDropTarget": false}], "blockType": "block",
+    "childGroupName": "columns", "emptyDropTarget": true}], "blockType": "block",
     "direction": "horizontal", "breakAfter": false, "dropTarget": {}, "wrapChildren":
     false}], "describedType": {"typeName": "select", "languageName": "sql"}}, {"visual":
     [{"style": {"border": "1px solid red", "cursor": "grab", "margin": "2px", "padding":
@@ -271,7 +271,8 @@ concise_attributes:
     {}, "wrapChildren": true}], "describedType": {"typeName": "relationalOperator",
     "languageName": "sql"}}], "editorComponents": [{"componentType": "validator"},
     {"componentType": "generated-code"}, {"componentType": "query-preview"}], "localGeneratorInstructions":
-    {"traits": {"breakAfter": {"applyMode": "deepMerge", "instructions": {"breakAfter":
+    {"traits": {"softHole": {"applyMode": "deepMerge", "instructions": {"emptyDropTarget":
+    true}}, "breakAfter": {"applyMode": "deepMerge", "instructions": {"breakAfter":
     true}}, "blockBorder": {"applyMode": "deepMerge", "instructions": {"style": {"border":
     "1px solid red", "cursor": "grab", "margin": "2px", "padding": "2px", "borderRadius":
     "5px"}}}, "keywordComponent": {"applyMode": "deepMerge", "instructions": {"style":
@@ -285,10 +286,11 @@ concise_attributes:
     [0], "having": [0], "select": [0], "groupBy": [0], "orderBy": [0], "constant":
     [0], "parameter": [0], "columnName": [0], "innerJoinOn": [0], "parentheses": [0],
     "functionCall": [0], "starOperator": [0], "binaryExpression": [0], "tableIntroduction":
-    [0]}}, "traits": ["blockBorder"]}], "staticSidebars": [{"type": "databaseSchema"},
-    {"type": "fixedBlocks", "caption": "SQL", "categories": [{"blocks": [{"defaultNode":
-    {"name": "starOperator", "language": "sql"}, "displayName": "★"}, {"defaultNode":
-    {"name": "parameter", "language": "sql", "properties": {"name": "param"}}, "displayName":
+    [0]}}, "traits": ["blockBorder"]}, {"traits": ["softHole"], "attributes": {"sql":
+    {"select": ["columns"]}}}], "staticSidebars": [{"type": "databaseSchema"}, {"type":
+    "fixedBlocks", "caption": "SQL", "categories": [{"blocks": [{"defaultNode": {"name":
+    "starOperator", "language": "sql"}, "displayName": "★"}, {"defaultNode": {"name":
+    "parameter", "language": "sql", "properties": {"name": "param"}}, "displayName":
     ":parameter"}, {"defaultNode": {"name": "constant", "language": "sql", "properties":
     {"value": "wert"}}, "displayName": "Konstante"}, {"defaultNode": {"name": "binaryExpression",
     "children": {"lhs": [], "rhs": [], "operator": [{"name": "relationalOperator",
@@ -336,7 +338,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-28 19:55:31.97327'
+  value_before_type_cast: '2019-02-28 20:08:19.009448'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
