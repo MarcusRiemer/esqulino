@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ApplicationRef } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs'
 import { tap, flatMap } from 'rxjs/operators';
@@ -29,6 +29,7 @@ export class CurrentCodeResourceService {
   constructor(
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
+    private _applicationRef: ApplicationRef,
   ) {
     // Things that need to happen every time the resource changes
     this._codeResource
@@ -80,7 +81,10 @@ export class CurrentCodeResourceService {
   /**
    *
    */
-  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation;
+  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation
+    .pipe(
+      // tap(_ => this._applicationRef.tick()) // TODO: This must not be necessary
+    );
 
   /**
    * The currently loaded resource
