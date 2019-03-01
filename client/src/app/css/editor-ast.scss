@@ -1,16 +1,6 @@
 /* Any editor that works with an AST */
 .ast {
-    /* Basic outline for each node */
-    .node {
-        border: 1px solid black;
-        padding: 5px;
-    }
-
-    /* Indent each node after the first */
-    .node .node {
-        margin: 10px;
-    }
-
+    /* The "hey, you should start programming by dragging something here"-notice */
     .empty-tree {
         border: 4px dashed blue;
         border-radius: 20px;
@@ -32,6 +22,7 @@
     }
 }
 
+/* An icon of a trashbin that hovers over anything and may be used to remove blocks */
 trash {
     font-size: 6rem;
     position: fixed;
@@ -41,8 +32,11 @@ trash {
     z-index: 1;
 }
 
-.drop-block {
-    pointer-events: none;
+/* A virtual block that is dragged over the scene. */
+.dragged {
+    editor-block-render-block {
+        background: white;
+    }
 }
 
 /* The "block" AST editor */
@@ -59,13 +53,18 @@ trash {
         background-color: transparent;
     }
 
+    /* This component is purely virtual and must be disregarded with respect
+       to e.g. flex-box layouts. */
     editor-block-render {
         display: contents;
     }
 
+    /* An actual block being rendered */
     editor-block-render-block {
         background-color: white;
+        cursor: grab;
 
+        /* A block that is readonly */
         .read-only {
             background-color: #efefef;
             cursor: unset;
@@ -74,12 +73,6 @@ trash {
 
     .break-after {
         width: 100%;
-    }
-}
-
-.dragged {
-    editor-block-render-block {
-        background: white;
     }
 }
 
