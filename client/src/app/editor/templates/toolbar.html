@@ -1,13 +1,8 @@
 <app-toolbar>
   <ng-container position="start">
-    <a mat-raised-button [routerLink]="'/about'">
-      <img src="/vendor/logos/blattwerkzeug-logo.svg"
-           height="20px"
-           title="BlattWerkzeug">
-      <img src="/vendor/logos/blattwerkzeug-caption.svg"
-           height="20px"
-           title="BlattWerkzeug">
-    </a>
+    <button mat-icon-button (click)="toggleNavbar()">
+      <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
 
     <button *ngFor="let item of toolbarService.items"
             (click)="item.fire()"
