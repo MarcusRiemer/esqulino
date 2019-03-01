@@ -1,9 +1,11 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { map, tap } from 'rxjs/operators';
 
-import { Node, CodeResource, NodeLocation, locationEquals, locationIncLastIndex } from '../../../shared/syntaxtree';
+import {
+  Node, CodeResource, NodeLocation, locationEquals, locationIncLastIndex
+} from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
@@ -37,8 +39,7 @@ export class BlockRenderComponent {
   @Input() public readOnly = false;
 
   constructor(
-    private _currentCodeResource: CurrentCodeResourceService,
-    public changeDetector: ChangeDetectorRef
+    private _currentCodeResource: CurrentCodeResourceService
   ) { }
 
   /**
@@ -128,16 +129,6 @@ export class BlockRenderComponent {
       return ([]);
     }
   }
-
-  /**
-   * A duplicate of the execution detection in the child node, but this one taps
-   * this "parents" change detector.
-   */
-  readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
-    .pipe(
-      map(loc => locationEquals(loc, this.node.location)),
-      tap(_ => this.changeDetector.detectChanges()), // TODO: Also called from child
-    );
 
   /**
    * The visual options passed to each drop marker of an iteration

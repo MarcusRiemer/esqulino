@@ -1,6 +1,6 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { map, tap, withLatestFrom } from 'rxjs/operators';
+import { map, withLatestFrom } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -32,7 +32,6 @@ export class BlockRenderBlockComponent {
    * The visualisation parameters for this block.
    */
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
-  @Input() public parentChangeDetector: ChangeDetectorRef
 
   /**
    * Disables any interaction with this block if true.
@@ -41,8 +40,7 @@ export class BlockRenderBlockComponent {
 
   constructor(
     private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService,
-    private _ownChangeDetector: ChangeDetectorRef
+    private _currentCodeResource: CurrentCodeResourceService
   ) {
   }
 
@@ -96,19 +94,9 @@ export class BlockRenderBlockComponent {
 
   /**
    * Determines whether a certain codeblock is currently beeing executed.
-   * Also triggers change detection
-   *
-   * TODO: The change detector of the PARENT needs to be triggered because
-   *       the animation is checked there!
    */
   readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
     .pipe(
-      map(loc => locationEquals(loc, this.node.location)),
-      tap(_ => {
-        if (this.parentChangeDetector) {
-          this.parentChangeDetector.detectChanges(); // Also called from parent
-        }
-      }),
-      tap(_ => this._ownChangeDetector.detectChanges()),
+      map(loc => locationEquals(loc, this.node.location))
     );
 }
