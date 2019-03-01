@@ -41,14 +41,6 @@
             </div>
           </div>
 
-          <div class="card-body">
-            Debug output (current execution position):{{ currentlyExecuted | async | json }}
-          </div>
-
-          <div class="card-body">
-            Debug output (current drop location):{{ currentDropLocation | async | json }}
-          </div>
-
           <!-- Ensuring there is a tree -->
           <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
             <!-- If the tree is empty, allow the user to populate it -->
