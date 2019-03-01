@@ -7,13 +7,14 @@ require 'uri'
 require 'csv'
 require 'set'
 
-def is_numeric?(obj) 
+def is_numeric?(obj)
   obj.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
 end
 
+# Downloads a certain episode and represents it as a DOM-parser
 def download_info(europa_num)
   num = europa_num.to_s.rjust(3, "0")
-  request_uri = URI.parse("http://www.rocky-beach.com/hoerspiel/folgen/#{num}.html")
+  request_uri = URI.parse("https://www.rocky-beach.com/hoerspiel/folgen/#{num}.html")
   response = Net::HTTP.get_response(request_uri)
 
   source = response.body
@@ -25,6 +26,7 @@ def download_info(europa_num)
   doc
 end
 
+# Rocky-Beach.com is not consistent with their character names
 $character_synonyms = {
   "Mathilda" => "Mathilda Jonas",
   "Tante Mathilda Jonas" => "Mathilda Jonas",
@@ -36,12 +38,24 @@ $character_synonyms = {
   "Dr. Franklin" => "Clarissa Franklin"
 }
 
+# Maps character names to character IDs
 $characters = Hash.new
-$stories = Hash.new
+# Maps actor names to actor IDs
 $actors = Hash.new
+# Maps europa story numbers to story IDs
+$stories = Hash.new
+# Associations of actors with characters
+# TODO: This is possibly obsolete, some characters habe been played
+#       by multiple actors
 $actor_char = Set.new
-$occurence = []
 
+# List of pairs with occurences: (actor_id, char_id)
+#
+# TODO: This should be a triple: (story_id, actor_id, char_id)
+$occurence = Set.new
+
+# rocky-beach.com uses the "Europa" numbering, so we need
+# to build an index of them to our internal IDs (which are different).
 CSV.foreach("Geschichte.csv") do |row|
   if is_numeric? row[0] and is_numeric? row[3] then
     unique_id = row[0].to_i
@@ -51,15 +65,17 @@ CSV.foreach("Geschichte.csv") do |row|
   end
 end
 
-def scrape_info(num) 
-
+def scrape_info(num)
+  # The actor data is in a deeply nested table ...
   doc = download_info(num).css("body > table:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > center:nth-child(3) > table:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > table:nth-child(1)")
 
   doc.css('tr').each do |row|
-    if row.text == "Neuabmischung:" or row.text.strip.empty? or row.text.strip.match? /Teil ./ then
-      
+    if row.text == "Neuabmischung:"
+      # We are not interested in the new re-releases
+      break
+    elsif row.text.strip.empty? or row.text.strip.match? /Teil ./ then
+      # Do nothing, this could possibly be expressed nicer
     else
-      
       character_td = row.children[0].children[0]
       actor_td = if row.children.length == 2 then row.children[1] else row.children[2] end
 
@@ -99,7 +115,7 @@ def scrape_info(num)
         if question_index then
           a = a[0..(question_index - 1)]
         end
-        
+
         # Possibly add this actor as a new actor
         if not $actors.key? a then
           $actors[a] = $actors.length + 1
@@ -113,18 +129,22 @@ def scrape_info(num)
   end
 end
 
+# Read limits from where to parse
 from = ARGV[0].to_i
 to = ARGV[1].to_i
 
 puts "Scrape #{from} to #{to}"
 
+# Progress output and actual scraping
 from.upto(to) do |i|
+  # Episode 29 is the music episode
   if i != 29 then
     $stdout.write "#{i} "
     scrape_info(i)
   end
 end
 
+# File output
 puts ""
 
 puts "Charaktere: #{$characters.length}"
@@ -156,5 +176,3 @@ CSV.open("Auftritt.csv", "w") do |file|
     file << [story_id.to_i, char_id.to_i]
   end
 end
-
-

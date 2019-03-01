@@ -32,6 +32,7 @@ export class BlockRenderBlockComponent {
    * The visualisation parameters for this block.
    */
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
+  @Input() public parentChangeDetector: ChangeDetectorRef
 
   /**
    * Disables any interaction with this block if true.
@@ -40,8 +41,8 @@ export class BlockRenderBlockComponent {
 
   constructor(
     private _dragService: DragService,
-    private _cd: ChangeDetectorRef,
     private _currentCodeResource: CurrentCodeResourceService,
+    private _ownChangeDetector: ChangeDetectorRef
   ) {
   }
 
@@ -104,7 +105,10 @@ export class BlockRenderBlockComponent {
     .pipe(
       map(loc => locationEquals(loc, this.node.location)),
       tap(_ => {
-        this._cd.detectChanges();
+        if (this.parentChangeDetector) {
+          this.parentChangeDetector.detectChanges(); // Also called from parent
+        }
       }),
+      tap(_ => this._ownChangeDetector.detectChanges()),
     );
 }
