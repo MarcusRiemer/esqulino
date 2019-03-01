@@ -8,7 +8,7 @@ import { Tree } from '../../../shared/syntaxtree';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { ToolbarService, ToolbarItem } from '../../toolbar.service';
 
-import { QueryService, QueryResult, QueryParamsDescription } from './query.service'
+import { QueryService, QueryResultRows, QueryParamsDescription } from './query.service'
 
 /**
  * Extracts the names of required query parameters out of a syntaxtree.
@@ -39,8 +39,8 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public result: QueryResult;
-  public error: any;
+  public result: QueryResultRows;
+  public error: DatabaseQueryErrorDescription;
   public queryParameters: QueryParamsDescription = {};
 
   // The toolbar button that is added by this component
@@ -81,14 +81,14 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           res => {
-            // Succesful query, store it and remove the error
-            this.result = res;
-            this.error = undefined;
-          },
-          err => {
-            // Error in the query, display it "as is" for now.
-            this.result = undefined;
-            this.error = err.json();
+            if (res instanceof QueryResultRows) {
+              // Succesful query, store it and remove the error
+              this.result = res;
+              this.error = undefined;
+            } else {
+              this.result = undefined;
+              this.error = res.data;
+            }
           });
     });
 
@@ -103,10 +103,6 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
     this._subscriptions.push(subResource);
   }
-
-  /*get queryParameters(): QueryParamsDescription {
-    return (JSON.parse(window.localStorage.getItem("queryParameters")) as QueryParamsDescription);
-    }*/
 
   /**
    * Saves the current state of the query parameters in the browsers local storage.
