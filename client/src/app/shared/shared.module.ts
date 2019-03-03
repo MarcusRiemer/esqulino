@@ -9,9 +9,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import {
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule,
-  MatNavList,
-  MatListModule
+  MatSidenavModule, MatListModule, MatCardModule
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
@@ -29,7 +27,7 @@ import { ToolbarService } from './toolbar.service'
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule, MatListModule
+  MatSidenavModule, MatListModule, MatCardModule
 ]
 
 /**

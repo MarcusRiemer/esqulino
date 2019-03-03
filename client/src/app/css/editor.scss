@@ -9,6 +9,11 @@
         width: $sidebar-width;
     }
 
+    .content {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
     /* Navigation inside a project, typically on the left hand side */
     .navbar {
         editor-navbar {

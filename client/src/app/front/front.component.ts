@@ -11,6 +11,9 @@ export interface NavLink {
   icon?: string;
 }
 
+/**
+ * A faint horizontal divider
+ */
 export interface NavDivider {
   type: "divider"
 }

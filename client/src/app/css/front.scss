@@ -37,6 +37,7 @@
     /* The carousel-like thing on the main page */
     .jumbotron {
         border: 1px solid rgba(0,0,0,.125);
+        background-color: white;
 
         h1 img {
             height: 1.2em;
@@ -44,7 +45,7 @@
     }
 
     /* Information about academical projects */
-    .card.academia-item {
+    .academia-item {
         margin-bottom: 1rem;
 
         .institution-logo {

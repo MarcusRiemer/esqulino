@@ -4,7 +4,8 @@
       <button mat-icon-button (click)="sideNav.toggle()">
         <span class="fa fa-bars" aria-hidden="true"></span>
       </button>
-      <a mat-raised-button [routerLink]="'/about'">
+      <a mat-button
+         [routerLink]="'/about'">
         <img src="/vendor/logos/blattwerkzeug-logo.svg"
              height="20px"
              title="BlattWerkzeug">
@@ -19,7 +20,7 @@
     <mat-sidenav #sideNav
                  [mode]="isMobile ? 'over' : 'side'"
                  [opened]="!isMobile">
-      <mat-nav-list id="front-nav">
+      <mat-nav-list id="front-nav" >
         <ng-container *ngFor="let nav of navItems">
           <ng-container [ngSwitch]="nav.type">
             <!-- Rendering Links -->
@@ -37,7 +38,10 @@
     </mat-sidenav>
 
     <mat-sidenav-content class="content">
-      <div class="container front">
+      <!-- container comes from Bootstrap, it sets up the different "snapping" viewport widths#
+           front comes from the framework and is used in various CSS rules that should only apply at front
+           mat-typography comes from angular material and styles native elements-->
+      <div class="container front mat-typography">
         <flash-message-list></flash-message-list>
         <router-outlet></router-outlet>
 

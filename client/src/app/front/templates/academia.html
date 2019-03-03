@@ -14,36 +14,33 @@
   </li>
 </ul>
 
-<div *ngFor="let proposal of projectProposals"
-     class="card academia-item">
-  <div class="card-body">
-    <h2 class="card-title">{{ proposal.title }}</h2>
-    <div [innerHTML]="proposal.text">
-    </div>
+<mat-card *ngFor="let proposal of projectProposals"
+          class="academia-item">
+  <mat-card-title>{{ proposal.title }}</mat-card-title>
+  <mat-card-content>
+    <div [innerHTML]="proposal.text"></div>
     <p><strong>Umgebung:</strong> {{ proposal.tools }}</p>
-  </div>
-</div>
+  </mat-card-content>
+</mat-card>
 
 <h1>Wissenschaftliche Arbeiten</h1>
 <p>
   Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <a href="http://www.fh-wedel.de/mitarbeiter/mri/esqulino">Marcus Riemer (Fachhochschule Wedel)</a> unter der Betreuung von <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch (CAU Kiel)</a>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
 </p>
 
-<div *ngFor="let thesis of theses | async"
-     class="card academia-item">
-  <div class="card-body">
-    <img class="institution-logo" src="{{ thesis.institutionLogo }}">
-    <h2 class="card-title">{{ thesis.title }}</h2>
-    <h3 class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</h3>
-    Eingereicht von {{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}
-  </div>
-  <div class="card-body">
-    <h4>Abstrakt</h4>
-    <blockquote [innerHTML]="thesis.abstract"></blockquote>
-    <a class="btn btn-block btn-secondary"
-       href="{{ thesis.url }}">
+<mat-card *ngFor="let thesis of theses | async"
+          class="academia-item">
+  <mat-card-title class="card-title">{{ thesis.title }}</mat-card-title>
+  <mat-card-subtitle class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</mat-card-subtitle>
+  <mat-card-content>
+    <h3>Eingereicht von {{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}</h3>
+    <div [innerHTML]="thesis.abstract"></div>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-button
+       [href]="thesis.url">
       <span class="fa fa-download" aria-hidden="true"></span>
       Download der Thesis
     </a>
-  </div>
-</div>
+  </mat-card-actions>
+</mat-card>
