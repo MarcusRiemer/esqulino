@@ -1,8 +1,9 @@
-.front {    
-    nav {
-        /* Put some space below the navigation */
-        margin-bottom: 15px;
-    }
+#front-nav {
+    padding-top: 0px; /* Angular Material defines some padding that we dont want */
+}
+
+.front {
+    padding-top: $toolbar-margin-bottom;
 
     .project-list-item h2 {
         font-weight: bold;
@@ -33,21 +34,12 @@
         hyphens: auto;
     }
 
+    /* The carousel-like thing on the main page */
     .jumbotron {
         border: 1px solid rgba(0,0,0,.125);
-        
+
         h1 img {
             height: 1.2em;
-        }
-    }
-
-    #toolbar {
-        .right {
-            margin-left: auto;
-        }
-        
-        .brand {
-            padding-left: 10px;
         }
     }
 
