@@ -29,7 +29,7 @@ trash {
     padding: 5px;
     right: 350px;
     top: 45px;
-    z-index: 1;
+    z-index: 2; /* 1 is not elevated enough, it conflicts with the material sidebar */
 }
 
 /* A virtual block that is dragged over the scene. */
