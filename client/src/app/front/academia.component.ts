@@ -77,7 +77,16 @@ export class AboutAcademiaComponent {
   <li>Wie können Formulardaten verarbeitet werden?</li>
 </ul>
 `,
-      tools: "Ruby on Rails für das serverseitige Datenmodell und Angular mit Typescript für die Verwaltung im Frontend."
+      tools: "Typescript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug"
+    },
+    {
+      id: "visual-database-editor",
+      title: "Visueller Drag & Drop Editor für Datenbanken",
+      text: `
+<p>
+  Aufbauend auf der Bachelor-Thesis von Marco Pawloski soll ein Datenbank-Editor mit Drag & Drop-Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL-Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+</p>`,
+      tools: "TypeScript mit Angular"
     }
   ];
 
@@ -131,7 +140,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
     {
       id: "just-images",
       title: "Verwaltung und Integration von Bildern",
-      subtitle: "",
+      subtitle: "Implementierung und rechtliche Aspekte",
       author: {
         name: "Ole Just"
       },
@@ -143,8 +152,8 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
     },
     {
       id: "popp-trucklino",
-      title: "Konzeption und Implementierung einer visuellen Lernumgebung zur spielerischen Einführung in die Programmierung",
-      subtitle: "",
+      title: "Konzeption und Implementierung einer visuellen Lernumgebung",
+      subtitle: "zur spielerischen Einführung in die Programmierung",
       author: {
         name: "Sebastian Popp"
       },
