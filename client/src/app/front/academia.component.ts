@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs'
 const LOGO_FHW_URL = "/vendor/logos/fhw.png";
 const LOGO_CAU_URL = "/vendor/logos/cau.png";
 
+/** Required front end information for a thesis */
 interface Thesis {
   id: string
   title: string
@@ -16,6 +17,13 @@ interface Thesis {
   degree: string
   url: string
   date: Date
+}
+
+interface ProjectProposal {
+  id: string;
+  title: string;
+  text: string;
+  tools: string;
 }
 
 /**
@@ -31,6 +39,47 @@ const THESIS_BASE_URL = "http://files.blattwerkzeug.de/theses";
   templateUrl: 'templates/academia.html',
 })
 export class AboutAcademiaComponent {
+
+  readonly projectProposals: ProjectProposal[] = [
+    {
+      id: "usermanagement",
+      title: "Benutzermanagement",
+      text: `
+<p>Aktuell sieht die Webseite keinerlei Registrierung von Benutzern vor, stattdessen hat jedes erstellte Projekt gewissermaßen eine eigene Benutzerdatenbank. Dieser Umstand soll sich im Rahmen eines Projektes ändern. Dabei ist die eigentliche Registrierung und Verwaltung von Benutzern mehr eine technische Formalität und nicht besonders herausfordernd. Viel interessanter sind die besonderen Anforderungen, die sich aus dem Einsatz an Schulen ergeben:</p>
+
+<ul>
+  <li>
+    Registrierte Benutzer fallen typischerweise in eine von drei Rollen: Schüler, Lehrer oder Administrator. Dabei ist ein Lehrer für mehrere Schüler zuständig und die Schüler organisieren sich ggfs. in Gruppen (gemäß dem Klassenverband).
+  </li>
+  <li>
+    Lehrer und Administratoren müssen Batch-Operationen vornehmen können. Darunter fällt insbesondere das Anlegen von Projekten für ganze Klassenverbände.
+  </li>
+</ul>
+`,
+      tools: "Ruby on Rails für das serverseitige Datenmodell und Angular mit Typescript für die Verwaltung im Frontend."
+    },
+    {
+      id: "web-environment",
+      title: "Web-Umgebung",
+      text: `
+<p>
+  Ein Prototyp der Entwicklungsumgebung hat Anwender schon in die Lage versetzt, direkt aus dem Webbrowser heraus eigene Webseiten zu entwickeln. Mit der Umstellung auf eine neue Art und Weise die Blocksprachen zu definieren, ist dieser Funktionsumfang zunächst wieder entfallen. Im Rahmen dieser Aufgabe soll eine Möglichgeit zum Bearbeiten und anschauen von Webseiten re-implementiert werden. Von dem mittlerweile abgeschalteten Prototyp existiert neben dem rechtsstehenden Screenshot noch ein Video, welches gerne zur Inspiration genutzt werden kann.
+</p>
+
+<p>
+  Die erstellten Webseiten sollen auf den SQL-Datenbestand eines Projekts zugreifen können und müssen dementsprechend dynamisch über eine Templatingsprache erzeugt werden. Inhaltlich ergeben sich bei dieser Aufgabe unter anderem die folgenden Fragestellungen:
+</p>
+
+<ul>
+  <li>Welche HTML-Elemente sind für Schüler relevant?</li>
+  <li>Welche Templatingsprache sollte verwendet werden?</li>
+  <li>Wie kann eine Seite die Datenquellen angeben, die zur Darstellung benötigt werden?</li>
+  <li>Wie können Formulardaten verarbeitet werden?</li>
+</ul>
+`,
+      tools: "Ruby on Rails für das serverseitige Datenmodell und Angular mit Typescript für die Verwaltung im Frontend."
+    }
+  ];
 
   private _theses: Thesis[] = [
     {

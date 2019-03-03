@@ -1,24 +1,47 @@
-<h1>Abschlussarbeiten</h1>
+<h1>Projektvorschläge</h1>
+<p>
+  Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
+</p>
+<ul>
+  <li>
+    Anfertigung einer internen <strong>Bachelor</strong>- oder <strong>Master-Thesis</strong>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch</a> vorgenommen.
+  </li>
+  <li>
+    In von mir angebotenen <strong>Seminaren</strong> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
+  </li>
+  <li>
+    Für Bachelor Medieninformatiker ist es möglich das <strong>Medien-Projekt</strong> zu absolvieren, Informatik-Master-Studierende können das <strong>Master-Projekt</strong> einbringen.
+  </li>
+</ul>
 
+<div *ngFor="let proposal of projectProposals"
+     class="card academia-item">
+  <div class="card-body">
+    <h2 class="card-title">{{ proposal.title }}</h2>
+    <div [innerHTML]="proposal.text">
+    </div>
+    <p><strong>Umgebung:</strong> {{ proposal.tools }}</p>
+  </div>
+</div>
+
+<h1>Wissenschaftliche Arbeiten</h1>
 <p>
   Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <a href="http://www.fh-wedel.de/mitarbeiter/mri/esqulino">Marcus Riemer (Fachhochschule Wedel)</a> unter der Betreuung von <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch (CAU Kiel)</a>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
 </p>
 
 <div *ngFor="let thesis of theses | async"
-     class="card thesis">
+     class="card academia-item">
   <div class="card-body">
     <img class="institution-logo" src="{{ thesis.institutionLogo }}">
     <h2 class="card-title">{{ thesis.title }}</h2>
     <h3 class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</h3>
-    Eingereicht von {{ thesis.author.name }} am {{ thesis.date | date: 'd.M.y' }}
+    Eingereicht von {{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}
   </div>
   <div class="card-body">
     <h4>Abstrakt</h4>
     <blockquote [innerHTML]="thesis.abstract"></blockquote>
     <a class="btn btn-block btn-secondary"
-       id="about-developers"
-       href="{{ thesis.url }}"
-       role="button">
+       href="{{ thesis.url }}">
       <span class="fa fa-download" aria-hidden="true"></span>
       Download der Thesis
     </a>
