@@ -8,14 +8,16 @@
     <p>Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</p>
     <p>
       <a [routerLink]="['/about', 'projects']"
-         class="btn btn-primary btn-lg mb-1"
-         id="about-examples"
-         role="button">
+         class="mat-button-large"
+         mat-raised-button
+         color="primary"
+         id="about-examples">
         &raquo; Das kann man damit machen
       </a>
       &ngsp;
       <a [routerLink]="['/about', 'create']"
-         class="btn btn-primary btn-lg mb-1"
+         mat-raised-button
+         color="primary"
          id="about-examples"
          role="button">
         &raquo; Neues Projekt anlegen
@@ -79,4 +81,3 @@
     </div>
   </div>
 </div>
-

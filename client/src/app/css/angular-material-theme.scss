@@ -1,0 +1,59 @@
+@import '~@angular/material/theming';
+
+// The default fonts are too tiny
+$custom-typography: mat-typography-config(
+  $font-family: 'Roboto',
+  $headline: mat-typography-level(32px, 48px, 500),
+  $body-1: mat-typography-level(16px, 24px, 400)
+);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core($custom-typography);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ide-app-primary: mat-palette($mat-yellow);
+$ide-app-accent:  mat-palette($mat-lime, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ide-app-warn:    mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ide-app-theme: mat-light-theme($ide-app-primary, $ide-app-accent, $ide-app-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ide-app-theme);
+
+/* Bootstraps reboot re-introduces underlines for links. We need to
+   remove them manually for the moment. */
+a, a:hover {
+    text-decoration: none;
+}
+a.mat-menu-item, a.mat-menu-item:hover {
+    text-decoration: none;
+}
+
+app-toolbar {
+    /* Allows to align the following items on the right */
+    .fill-space {
+        flex: 1 1 auto;
+    }
+
+    /* Angular material defaults to a ridiculous height */
+    .mat-toolbar-row, .mat-toolbar-single-row {
+        height: 48px;
+    }
+}
+
+.mat-drawer-container {
+    background-color: mat-color($ide-app-primary, 50);
+}
+
+mat-card.alert-warning {
+    background-color: mat-color($ide-app-warn, 100);
+}
