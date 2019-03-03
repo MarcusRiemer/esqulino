@@ -14,6 +14,7 @@ CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.con
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
+NG_LOCALE       ?= "de"
 
 all : dist
 
@@ -38,10 +39,10 @@ src/environments/version.ts :
 # Webclient
 ##################################
 client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --prod $(NG_OPTS)
+	$(NG_BIN) build --aot --prod $(NG_OPTS) --i18n-locale $(NG_LOCALE)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot $(NG_OPTS)
+	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE)
 
 client-test : src/environments/version.ts
 	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true
