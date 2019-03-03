@@ -17,8 +17,8 @@
 
   <mat-sidenav-container>
     <mat-sidenav #sideNav
-                 [mode]="'side'"
-                 opened>
+                 [mode]="isMobile ? 'over' : 'side'"
+                 [opened]="!isMobile">
       <mat-nav-list id="front-nav">
         <ng-container *ngFor="let nav of navItems">
           <ng-container [ngSwitch]="nav.type">

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { Platform } from '@angular/cdk/platform';
 
 /**
  * A clickable link in the side navigation.
@@ -20,6 +21,11 @@ export type NavItem = NavLink | NavDivider;
   templateUrl: 'templates/index.html',
 })
 export class FrontComponent {
+
+  constructor(public readonly platform: Platform) { }
+
+  public readonly isMobile = this.platform.IOS || this.platform.ANDROID;
+
   readonly navItems: NavItem[] = [
     {
       type: "link",
