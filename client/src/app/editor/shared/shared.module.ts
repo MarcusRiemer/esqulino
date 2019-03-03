@@ -2,7 +2,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
-import { MatSidenavModule } from '@angular/material'
 
 import { SharedAppModule } from '../../shared/shared.module'
 
@@ -20,7 +19,6 @@ import { SourceIconComponent } from './source-icon.component'
     FormsModule,
     RouterModule,
     SharedAppModule,
-    MatSidenavModule
   ],
   declarations: [
     QueryIconComponent,
@@ -35,7 +33,6 @@ import { SourceIconComponent } from './source-icon.component'
     FormsModule,
     RouterModule,
     SharedAppModule,
-    MatSidenavModule,
 
     QueryIconComponent,
     SidebarItemHost,

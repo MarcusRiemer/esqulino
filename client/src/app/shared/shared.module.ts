@@ -8,7 +8,10 @@ import { HttpModule } from '@angular/http';
 import { PortalModule } from '@angular/cdk/portal';
 import {
   MatToolbarModule, MatButtonModule, MatMenuModule,
-  MatTooltipModule, MatSnackBarModule, MatTabsModule
+  MatTooltipModule, MatSnackBarModule, MatTabsModule,
+  MatSidenavModule,
+  MatNavList,
+  MatListModule
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
@@ -25,7 +28,8 @@ import { ToolbarService } from './toolbar.service'
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
-  MatTooltipModule, MatSnackBarModule, MatTabsModule
+  MatTooltipModule, MatSnackBarModule, MatTabsModule,
+  MatSidenavModule, MatListModule
 ]
 
 /**
