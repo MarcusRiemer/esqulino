@@ -2,13 +2,23 @@ import { Component } from '@angular/core'
 import { Platform } from '@angular/cdk/platform';
 
 /**
- * A clickable link in the side navigation.
+ * A clickable internal link in the side navigation.
  */
 export interface NavLink {
   type: "link",
-  text: string; // The text to display
-  route: string[];
-  icon?: string;
+  text: string, // The text to display
+  route: string[],
+  icon?: string
+}
+
+/**
+ * A clickable external link in the side navigation.
+ */
+export interface NavLinkExternal {
+  type: "external",
+  text: string, // The text to display
+  url: string,
+  icon?: string
 }
 
 /**
@@ -18,7 +28,23 @@ export interface NavDivider {
   type: "divider"
 }
 
-export type NavItem = NavLink | NavDivider;
+/**
+ * Fills space and pushes other content as far away as possible
+ */
+export interface NavFill {
+  type: "fill"
+}
+
+
+/**
+ * A non-interactive caption text
+ */
+export interface NavHeader {
+  type: "header",
+  text: string
+}
+
+export type NavItem = NavLink | NavDivider | NavFill | NavLinkExternal | NavHeader;
 
 @Component({
   templateUrl: 'templates/index.html',
@@ -27,8 +53,15 @@ export class FrontComponent {
 
   constructor(public readonly platform: Platform) { }
 
-  public readonly isMobile = this.platform.IOS || this.platform.ANDROID;
+  /**
+   * El cheapo platform detection. Used to possibly hide various UI
+   * elements on mobile.
+   */
+  readonly isMobile = this.platform.IOS || this.platform.ANDROID;
 
+  /**
+   * All items that need to be shown in the general navigation
+   */
   readonly navItems: NavItem[] = [
     {
       type: "link",
@@ -62,6 +95,25 @@ export class FrontComponent {
       text: "Datenschutz",
       route: ["/about/privacy"],
       icon: "user-secret"
+    },
+    {
+      type: "fill"
+    },
+    {
+      type: "header",
+      text: "Administration",
+    },
+    {
+      type: "link",
+      text: "Sprachen",
+      route: ["/admin"],
+      icon: "puzzle-piece"
+    },
+    {
+      type: "external",
+      text: "Manual 🇬🇧",
+      url: "http://manual.blattwerkzeug.de/",
+      icon: "book"
     },
   ];
 }

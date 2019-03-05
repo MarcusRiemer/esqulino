@@ -50,6 +50,17 @@ app-toolbar {
     }
 }
 
+/* Hack angulars lists do use a flex box to ease filling */
+mat-nav-list#front-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .fill {
+        flex: 1 1 auto;
+    }
+}
+
 .mat-drawer-container {
     background-color: mat-color($ide-app-primary, 50);
 }
