@@ -23,15 +23,26 @@
       <mat-nav-list id="front-nav" >
         <ng-container *ngFor="let nav of navItems">
           <ng-container [ngSwitch]="nav.type">
-            <!-- Rendering Links -->
+            <!-- Rendering internal links -->
             <a *ngSwitchCase="'link'"
                mat-list-item
                [routerLink]="nav.route" >
               <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
               {{nav.text}}
             </a>
+            <!-- Rendering external links -->
+            <a *ngSwitchCase="'external'"
+               mat-list-item
+               [href]="nav.url" >
+              <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
+              {{nav.text}}
+            </a>
             <!-- Rendering Dividers -->
             <mat-divider *ngSwitchCase="'divider'"></mat-divider>
+            <!-- Rendering Headers -->
+            <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text }}</h3>
+            <!-- Rendering fillers -->
+            <div *ngSwitchCase="'fill'" class="fill"></div>
           </ng-container>
         </ng-container>
       </mat-nav-list>
