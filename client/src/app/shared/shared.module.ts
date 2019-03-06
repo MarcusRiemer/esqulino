@@ -13,6 +13,7 @@ import {
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
+import { BrowserService } from './browser.service'
 import { DefaultValuePipe } from './default-value.pipe'
 import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
@@ -72,6 +73,7 @@ export class SharedAppModule {
       ngModule: SharedAppModule,
       providers: [
         AnalyticsService,
+        BrowserService,
         FlashService,
         ServerApiService,
         ServerDataService,

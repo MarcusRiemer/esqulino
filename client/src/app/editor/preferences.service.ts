@@ -1,6 +1,8 @@
 import { Observable, BehaviorSubject, of } from 'rxjs'
 
 import { Injectable } from '@angular/core'
+import { BrowserService } from '../shared/browser.service';
+import { withLatestFrom, map } from 'rxjs/operators';
 
 /**
  * The order the sidepanes should appear in.
@@ -18,21 +20,22 @@ export interface PaneOrder {
 @Injectable()
 export class PreferencesService {
 
-  // The side navigation is visible by default.
+  // The side is normally not visible on mobile devices
   private _showSideNav = new BehaviorSubject(true);
 
-  /**
-   * @return Whether the side navigation should currently be visible.
-   */
-  get showSideNav(): Observable<boolean> {
-    return (this._showSideNav);
-  }
+  readonly showSideNav$ = this._showSideNav.pipe(
+
+  );
 
   /**
    * Toggles the display of the side navigation.
    */
   toggleSideNav() {
     this._showSideNav.next(!this._showSideNav.value);
+  }
+
+  setShowSideNav(val: boolean) {
+    this._showSideNav.next(val);
   }
 
   /**

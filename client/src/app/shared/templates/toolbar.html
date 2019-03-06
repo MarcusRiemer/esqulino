@@ -1,5 +1,18 @@
 <mat-toolbar color="primary">
-  <!-- Static contentent at the beginning of this toolbar -->
+  <!-- The menu toggle (if applicable) -->
+  <ng-content select="[position=toggle]"></ng-content>
+
+  <a mat-button
+     [routerLink]="'/about'">
+    <img src="/vendor/logos/blattwerkzeug-logo.svg"
+         height="20px"
+         title="BlattWerkzeug">
+    <img src="/vendor/logos/blattwerkzeug-caption.svg"
+         height="20px"
+         title="BlattWerkzeug">
+  </a>
+
+  <!-- Static content at the beginning of this toolbar -->
   <ng-content select="[position=start]"></ng-content>
 
   <!-- Things the user might do here -->
