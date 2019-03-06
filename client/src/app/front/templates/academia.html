@@ -46,14 +46,14 @@
   <mat-card-title class="card-title">{{ thesis.title }}</mat-card-title>
   <mat-card-subtitle class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</mat-card-subtitle>
   <mat-card-content>
-    <h3>Eingereicht von {{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}</h3>
+    <h3>{{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}</h3>
     <div [innerHTML]="thesis.abstract"></div>
   </mat-card-content>
   <mat-card-actions>
     <a mat-button
        [href]="thesis.url">
       <span class="fa fa-download" aria-hidden="true"></span>
-      Download der Thesis
+      Download
     </a>
   </mat-card-actions>
 </mat-card>

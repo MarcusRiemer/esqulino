@@ -14,7 +14,7 @@ interface Thesis {
   }
   institutionLogo: string,
   abstract: string
-  degree: string
+  degree?: string
   url: string
   date: Date
 }
@@ -179,9 +179,21 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       },
       institutionLogo: LOGO_FHW_URL,
       degree: "Bachelor",
-      url: `${THESIS_BASE_URL}/sebastian-popp-trucklino.pdf`,
+      url: `${THESIS_BASE_URL}/sebastian-popp-thesis-trucklino.pdf`,
       abstract: `<p>Klassische Universalsprachen wie Java oder Python haben einen sehr großen Sprachumfang und sind daher nur bedingt zur Einführung in die Konzepte der Programmierung geeignet. Diese Arbeit implementiert eine Minisprache – eine im Sprachumfang reduzierte Programmiersprache – welche es den Schülern ermöglichen soll, spielerisch Programmieren zu lernen, indem ihre Programme einen Lastwagen durch eine Welt steuern und dadurch Aufgaben lösen.</p>`,
       date: new Date('Februar 13, 2019')
+    },
+    {
+      id: "riemer-dissertation-project",
+      title: "Generierung von syntaxfreien Entwicklungsumgebungen",
+      subtitle: "für beliebige Programmiersprachen",
+      author: {
+        name: "Marcus Riemer"
+      },
+      institutionLogo: LOGO_FHW_URL,
+      url: `${THESIS_BASE_URL}/marcus-riemer-project-ide-generation.pdf`,
+      abstract: `<p>Im Rahmen dieser Promotion soll erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche syntaxfreie Entwicklungsumgebungen erzeugen lassen. Letztendlich soll Lehrkräften ein Werkzeug an die Hand gegeben werden, welches die Einstiegshürde in die Programmierung mit konventionellen Programmiersprachen wie SQL, HTML, CSS oder JavaScript senkt.</p>`,
+      date: new Date('December 1, 2018')
     }
   ]
 
