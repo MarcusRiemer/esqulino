@@ -1,25 +1,16 @@
 <div class="body-nav-container">
   <app-toolbar>
-    <ng-container position="start">
+    <ng-container position="toggle">
       <button mat-icon-button (click)="sideNav.toggle()">
         <span class="fa fa-bars" aria-hidden="true"></span>
       </button>
-      <a mat-button
-         [routerLink]="'/about'">
-        <img src="/vendor/logos/blattwerkzeug-logo.svg"
-             height="20px"
-             title="BlattWerkzeug">
-        <img src="/vendor/logos/blattwerkzeug-caption.svg"
-             height="20px"
-             title="BlattWerkzeug">
-      </a>
     </ng-container>
   </app-toolbar>
 
   <mat-sidenav-container>
     <mat-sidenav #sideNav
-                 [mode]="isMobile ? 'over' : 'side'"
-                 [opened]="!isMobile">
+                 [mode]="sidebarMode$ | async"
+                 [opened]="!(isMobile$ | async)">
       <mat-nav-list id="front-nav" >
         <ng-container *ngFor="let nav of navItems">
           <ng-container [ngSwitch]="nav.type">

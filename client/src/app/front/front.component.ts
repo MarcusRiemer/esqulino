@@ -1,5 +1,7 @@
-import { Component } from '@angular/core'
-import { Platform } from '@angular/cdk/platform';
+import { Component, ChangeDetectorRef } from '@angular/core'
+
+import { BrowserService } from '../shared/browser.service';
+import { first, tap } from 'rxjs/operators';
 
 /**
  * A clickable internal link in the side navigation.
@@ -51,13 +53,13 @@ export type NavItem = NavLink | NavDivider | NavFill | NavLinkExternal | NavHead
 })
 export class FrontComponent {
 
-  constructor(public readonly platform: Platform) { }
+  constructor(
+    private readonly _browser: BrowserService,
+  ) { }
 
-  /**
-   * El cheapo platform detection. Used to possibly hide various UI
-   * elements on mobile.
-   */
-  readonly isMobile = this.platform.IOS || this.platform.ANDROID;
+  readonly isMobile$ = this._browser.isMobile$;
+
+  readonly sidebarMode$ = this._browser.sidebarMode$;
 
   /**
    * All items that need to be shown in the general navigation

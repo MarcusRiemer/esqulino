@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, Inject, Optional, InjectionToken } from '@angular/core'
+import { Injectable, PLATFORM_ID, Inject, Optional } from '@angular/core'
 import { isPlatformServer } from '@angular/common'
 
 import { ServerApi } from './serverapi'

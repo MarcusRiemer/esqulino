@@ -7,12 +7,15 @@
 
   <!-- Three column layout -->
   <mat-sidenav-container class="editor">
-    <mat-sidenav [opened]="(preferences.showSideNav | async)"
-                 mode="side"
+    <!-- Navigation -->
+    <mat-sidenav [opened]="showSideNav$ | async"
+                 [mode]="sidebarMode$ | async"
+                 (closedStart)="onSideNavClosed()"
                  class="navbar">
       <editor-navbar [project]="project"></editor-navbar>
     </mat-sidenav>
 
+    <!-- Toolbox -->
     <mat-sidenav [opened]="isSidebarVisible$ | async"
                  mode="side"
                  position="end"
