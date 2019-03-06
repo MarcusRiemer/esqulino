@@ -87,6 +87,26 @@ export class AboutAcademiaComponent {
   Aufbauend auf der Bachelor-Thesis von Marco Pawloski soll ein Datenbank-Editor mit Drag & Drop-Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL-Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
 </p>`,
       tools: "TypeScript mit Angular"
+    },
+    {
+      id: "code-sandbox",
+      title: "Umgebung zur Ausführung von nicht vertrauenswürdigen Programmen",
+      text: `
+<p>
+  Es liegt in der Natur von BlattWerkzeug, dass prinzipiell beliebigen Personen die Ausführungen ihrer Programme auf dem BlattWerkzeug-Server gestattet werden muss. Und weil nicht jede beliebige Person vertrauenswürdig ist, müssen diese Programme vom restlichen System isoliert werden. Mögliche Mechanismen existieren dafür in großer Zahl, anders wären Webhosting-Dienste oder Online-Compiler wie <a href="https://ideone.com/">ideone.com</a> schließlich überhaupt nicht denkbar.
+</p>
+<p>
+  Im Rahmen dieses Projektvorschlags soll untersucht werden:
+  <ul>
+    <li>Welche Isolationsmechaniken lassen sich für den BlattWerkzeug-Server sinnvoll anwenden? Angedacht sind klassische Linux-Benutzerrechte, AppArmor oder möglicherweise auch Docker.</li>
+    <li>Welche Lücken nutzen bösartige Programme klassischerweise aus?</li>
+  </ul>
+</p>
+<p>
+  Dazu sollen eigens geschriebene, bösartige Programme in einer Testsuite zusammengefasst und (möglichst) mit den gewählten Isolationsverfahren korrekt eingeschränkt werden. Die Bandbreite umfasst dabei schlicht schädliche Skripten (<code>rm -rf /</code>), triviale Versuche Passwörter auszulesen (<code>cat /etc/shadow</code>), über (BitCoin-)Miner (oder profane Endlosschleifen) bis hin zu Versuchen, einen <q>Command and Control</q>-Server aufzusetzen.
+</p>
+`,
+      tools: "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), Docker"
     }
   ];
 

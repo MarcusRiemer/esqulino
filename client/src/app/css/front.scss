@@ -52,8 +52,17 @@
     .academia-item {
         margin-bottom: 1rem;
 
+        &:target {
+            background-color: mat-color($ide-app-accent, 200);
+        }
+
         .institution-logo {
             float: right;
+        }
+
+        p {
+            text-align: justify;
+            hyphens: auto;
         }
     }
 }
