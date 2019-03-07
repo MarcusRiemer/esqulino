@@ -2,7 +2,7 @@ import * as AST from '../syntaxtree';
 import * as Schema from './grammar.description';
 import { Validator } from './validator';
 import { ErrorCodes } from './validation-result';
-import { smartDropLocation, DEFAULT_SMART_DROP_OPTIONS } from './drop';
+import { smartDropLocation } from './drop';
 
 /**
  * This grammar is close to the "real" grammar used for SQL (which is stored

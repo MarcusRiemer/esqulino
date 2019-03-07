@@ -2,9 +2,10 @@ import { NodeDescription } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
 import { _cardinalityAllowsInsertion } from './drop-util';
-import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
 import { ErrorCodes } from './validation-result';
-import { GRAMMAR_SQL_DESCRIPTION } from './grammar-sql.spec';
+
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar.spec.boolean';
+import { GRAMMAR_SQL_DESCRIPTION } from './grammar.spec.sql';
 
 describe('Drop Utils', () => {
   describe('_cardinalityAllowsInsertion', () => {

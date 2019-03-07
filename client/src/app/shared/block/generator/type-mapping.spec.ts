@@ -55,8 +55,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       ]
     };
     const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
-    debugger;
-
 
     expect(res).toEqual([
       {

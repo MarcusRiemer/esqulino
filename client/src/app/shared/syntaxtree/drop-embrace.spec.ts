@@ -5,7 +5,7 @@ import {
   _localEmbrace, canEmbraceNode, embraceMatches
 } from './drop-embrace';
 import { QualifiedTypeName } from './syntaxtree.description';
-import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar.spec.boolean';
 
 describe('Drop Embrace', () => {
 

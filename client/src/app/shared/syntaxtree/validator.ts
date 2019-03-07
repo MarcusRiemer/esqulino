@@ -20,7 +20,7 @@ export abstract class SpecializedValidator {
 
 export type SpecializedValidatorConstructor = typeof SpecializedValidator;
 
-export type SubValidator = SpecializedValidatorConstructor | Desc.GrammarDescription;
+export type SubValidator = SpecializedValidatorConstructor | Desc.GrammarDocument;
 
 /**
  * A validator receives instances of one or multiple schemas and will
@@ -30,6 +30,10 @@ export class Validator {
   private _registeredGrammars: { [langName: string]: GrammarValidator } = {};
   private _registeredSpecialized: SpecializedValidatorConstructor[] = [];
 
+  /**
+   * Constructs a new validator that can check against grammars or custom
+   * code validators.
+   */
   constructor(subValidators: SubValidator[]) {
     subValidators.forEach(sub => {
       if (sub instanceof Function) {
@@ -66,7 +70,7 @@ export class Validator {
   /**
    * Registers a new language with this validator
    */
-  private registerGrammar(desc: Desc.GrammarDescription) {
+  private registerGrammar(desc: Desc.GrammarDocument) {
     if (this.isKnownLanguage(desc.technicalName)) {
       throw new Error(`Attempted to register language "${desc.technicalName}" twice`);
     }

@@ -2,7 +2,7 @@ import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes } from './validation-result'
-import { NodePropertyIntegerValidator } from '.';
+import { NodePropertyIntegerValidator } from './grammar';
 
 /**
  * Describes a language where each document would be the equivalent
@@ -606,6 +606,7 @@ describe('Grammar Validation', () => {
     });
 
     expect(v.validateFromRoot(ast).isValid).toBe(true);
+    expect(v.getGrammarValidator(g.technicalName).technicalName).toEqual(g.technicalName);
   });
 
 
@@ -614,8 +615,7 @@ describe('Grammar Validation', () => {
 
     const ast = new AST.Tree(undefined);
     const res = v.validateFromRoot(ast);
-    expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.Empty);
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.Empty]);
   });
 
 
@@ -637,7 +637,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('String Constraints (Invalid)', () => {

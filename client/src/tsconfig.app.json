@@ -9,6 +9,6 @@
     "src/test.ts",
     "main.cli.ts",
     "cli/**",
-    "**/*.spec.ts"
+    "**/*.spec*.ts"
   ]
 }

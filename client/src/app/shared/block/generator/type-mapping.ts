@@ -145,7 +145,6 @@ export function mapChildren(
     iteratorBlock.style = instructions.style;
   }
 
-  debugger;
   // Lets see whether we can eliminate drop targets from block descriptions
   return ([iteratorBlock]);
 }
