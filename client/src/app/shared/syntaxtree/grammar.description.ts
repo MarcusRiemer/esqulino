@@ -258,7 +258,8 @@ export interface NodeTypesParenthesesDescription {
     type: "sequence" | "allowed",
     nodeTypes: NodeTypesChildReference[]
   },
-  cardinality: OccursDescription
+  cardinality: OccursDescription,
+  between?: NodeTerminalSymbolDescription
 }
 
 /**

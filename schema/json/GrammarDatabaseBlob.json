@@ -186,6 +186,9 @@
         },
         {
           "$ref": "#/definitions/NodeTypesChoiceDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeTypesParenthesesDescription"
         }
       ],
       "description": "All children group types that are available"
@@ -482,6 +485,57 @@
         "type",
         "name",
         "choices"
+      ],
+      "type": "object"
+    },
+    "NodeTypesParenthesesDescription": {
+      "additionalProperties": false,
+      "description": "Allows to group different children together and to\napply a cardinality to them. Mixing different child group semantics is explicitly\nforbidden, each group may be either nothing but \"allowed\" or nothing but \"sequence\"\ncombinators.",
+      "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        "cardinality": {
+          "$ref": "#/definitions/OccursDescription"
+        },
+        "group": {
+          "additionalProperties": false,
+          "properties": {
+            "nodeTypes": {
+              "items": {
+                "$ref": "#/definitions/NodeTypesChildReference"
+              },
+              "type": "array"
+            },
+            "type": {
+              "enum": [
+                "sequence",
+                "allowed"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "nodeTypes"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "parentheses"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "group",
+        "cardinality"
       ],
       "type": "object"
     },
