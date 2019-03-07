@@ -2,7 +2,9 @@
  Programming Languages
 =======================
 
-As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages. The validation concept is losely based on ``XML Schema`` and ``RelaxNG``, the syntax of the latter is also used to describe the grammars in a user friendly textformat.
+As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages. The validation concept is losely based on ``XML Schema`` and ``RelaxNG``, the syntax of the latter is also used as the inspiration to describe the grammars in a user friendly textual representation.
+
+.. _traditional_grammar:
 
 The traditional approach
 ========================
@@ -69,21 +71,26 @@ In BlattWerkzeug the predicate may be omitted without touching the ``positive`` 
 .. graphviz:: generated/ast-example-if-no-pred.graphviz
    :align: center
 
-Grammar Validation
-==================
+Grammar Examples
+================
 
-.. todo::
+The following chapters give various examples of language grammars that could be used in BlattWerkzeug. They are meant to serve as meaningful tutorials, not as a thorugh documentation.
 
-   Give an example for the ``if``-statement that has been used above.
+BlattWerkzeug uses its own grammar language that is very losely inspired by the `RelaxNG compact notation <http://relaxng.org/compact-tutorial-20030326.html>`_. The mental model however is very similar to typical grammars, but is strictly concerned with the structure of the syntaxtree. A BlattWerkzeug grammar consists of a name and multiple node definitions.
 
-BlattWerkzeug uses its own grammar language that is very losely inspired by the `RelaxNG compact notation <http://relaxng.org/compact-tutorial-20030326.html>`_. The mental model however is very similar to typical grammars, but is strictly concerned with the structure of the syntaxtree. A BlattWerkzeug grammar consists of a name and multiple node definitions::
+XML
+---
+
+In this example we will create a grammar that is able to describe ``XML`` like trees. Lets start with an almost empty grammar::
 
   grammar "ex1" {
     node "element" {
     }
   }
 
-This grammer defines a language named ``ex1`` which allows a single node with the name ``element`` to be present in the syntax tree. Allowed properties of nodes are defined as follows::
+This grammer defines a language named ``ex1`` which allows a single node with the name ``element`` to be present in the syntax tree. This node may not have any children or properties, so the only valid syntaxtree would consist of a single node.
+
+In order to allow nodes to be named, we introduce a ``property``::
 
   grammar "ex2" {
     node "element" {
@@ -91,9 +98,9 @@ This grammer defines a language named ``ex1`` which allows a single node with th
     }
   }
 
-The curly brackets for the property need to denote at least the type of the property, valid values are ``string`` and ``number``. Both of these properties may be limited further, see the section :ref:`property_restrictions` for more details.
+The curly brackets for the property need to denote at least the type of the property, valid values are ``boolean``,  ``string`` and ``number``. The latter of these properties may be limited further, see the section :ref:`grammar_property_restrictions` for more details.
 
-Multiple node definitions can be simply stated on after another as part of the ``grammar`` section::
+Multiple node definitions can be simply stated one after another as part of the ``grammar`` section::
 
   grammar "ex3" {
     node "element" {
@@ -119,18 +126,7 @@ Valid children of a node are defined via the ``children`` directive, a name and 
     }
   }
 
-.. _property_restrictions:
-
-Property Restrictions
----------------------
-
-.. _children_restrictions:
-
-Children Restrictions
----------------------
-
-
-Example Grammar: ``XML``
+Example Grammar: Dynamic ``XML``
 ------------------------
 
 .. literalinclude:: ./generated/dxml.grammar
