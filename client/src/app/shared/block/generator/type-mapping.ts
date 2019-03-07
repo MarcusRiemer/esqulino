@@ -158,6 +158,7 @@ export function mapAttribute(
     case "allowed":
     case "sequence":
     case "choice":
+    case "parentheses":
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
     case "terminal":
       return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
