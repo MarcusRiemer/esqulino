@@ -33,7 +33,9 @@ export enum ErrorCodes {
   // There should have been a node but there wasn't
   NoChoiceNodeAvailable = "NO_CHOICE_NODE_AVAILABLE",
   // There should have been exactly one node but there where too many
-  SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE"
+  SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE",
+  // A parentheses group had no types and is therefore undecidable
+  ParenthesesEmptyTypes = "PARENTHESES_EMPTY_TYPES"
 }
 
 /**

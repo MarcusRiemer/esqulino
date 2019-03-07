@@ -1,5 +1,5 @@
 import { NodeDescription, Validator, Tree } from "../../../shared/syntaxtree";
-import { GRAMMAR_BOOLEAN_DESCRIPTION } from '../../../shared/syntaxtree/grammar-boolean.spec';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from '../../../shared/syntaxtree/grammar.spec.boolean';
 import { _isChildRequired } from './drop-target-state';
 
 describe("Drop Target State", () => {

@@ -1,8 +1,8 @@
 import { NodeDescription, NodeLocation } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
-import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
-import { GRAMMAR_SQL_DESCRIPTION } from './grammar-sql.spec'
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar.spec.boolean';
+import { GRAMMAR_SQL_DESCRIPTION } from './grammar.spec.sql'
 import { insertAtAnyParent, appendAtParent } from './drop-parent';
 
 describe('Drop Parent', () => {

@@ -1,4 +1,4 @@
-import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar-boolean.spec';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar.spec.boolean';
 import { NodeDescription } from './syntaxtree.description';
 import { _exactMatches } from './drop';
 import { Tree } from './syntaxtree';
