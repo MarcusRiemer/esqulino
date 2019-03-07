@@ -1,23 +1,27 @@
 module Seed
   class ProjectSeed < Base
-    attr_reader :project, :project_directory
-
     DEPENDENCIES = {
       "project_uses_block_languages" => "used_block_languages",
       "code_resources" => "code_resources",
       "project_sources" => "sources",
       "project_databases" => "databases"
     }
-  
-    def initialize(project_id)
-      @project = project_id
+    attr_reader :project_id, :project_directory
+
+    def initialize(project_id = nil)
+      @project_id = project_id
       @project_directory = File.join BASE_SEED_DIRECTORY, "projects"
     end
 
-    def project_id
-      project.is_a?(Project) ? project : Project.with_exclusive.where(id: project).or(Project.with_exclusive.where(slug: project)).first
+    def project
+      project_id.is_a?(Project) ? project_id : find_project(project_id)
     end
 
+    def find_project(slug_or_id)
+      project_data = Project.where(id: slug_or_id).or(Project.where(slug: slug_or_id))
+      raise ActiveRecord::RecordNotFound, "project not found" if project_data.nil?
+      project_data
+    end
     # Stores a specific project with all of its dependencies
     def store_project
       # Storing the actual project itself
