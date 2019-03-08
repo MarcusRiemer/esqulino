@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative "boot"
 
 require "rails/all"
 # Pick the frameworks you want:
@@ -29,6 +29,5 @@ module Server
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-    config.autoload_paths += Dir["#{config.root}/lib/"]
   end
 end
