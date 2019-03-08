@@ -1,7 +1,7 @@
 .editor {
     .navbar {
+        max-width: $navbar-width;
         flex: 1;
-        width: $navbar-width;
     }
 
     .sidebar {
@@ -24,25 +24,7 @@
             nav {
                 margin: 5px;
 
-                /* Ensure the linked items do not overflow and have nice right aligned icons */
-                a {
-                    text-decoration: none;
-                    line-height: 1.1;
-                    display: inline-flex;
-                    width: 100%;
 
-
-                    .nav-target {
-                        white-space: nowrap;
-                        overflow: hidden;
-                        flex-grow: 1;
-                        text-overflow: ellipsis;
-                    }
-
-                    .save-icon {
-                        margin-left: auto;
-                    }
-                }
 
                 /**
                  * Disable the usual bullet points
@@ -70,17 +52,8 @@
                 }
             }
 
-            /* Active links must be visually distinguishable from all the other links  */
-            .router-link-active {
-                font-weight: bold;
-                border-radius: 500px;
-                padding-left: 0.5em;
-                padding-right: 0.5em;
-                color: black;
-                transition: background-color, padding, border-radius;
-                transition-duration: 200ms;
-                transition-timing-function: ease-in-out;
-                background-color: cornflowerblue;
+            a.indent {
+                padding-left: 15px;
             }
 
             .nav-query, .nav-page, .nav-database, .nav-image, .nav-code-resource {

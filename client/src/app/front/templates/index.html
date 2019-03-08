@@ -11,13 +11,15 @@
     <mat-sidenav #sideNav
                  [mode]="sidebarMode$ | async"
                  [opened]="!(isMobile$ | async)">
-      <mat-nav-list id="front-nav" >
+      <mat-nav-list id="main-nav">
         <ng-container *ngFor="let nav of navItems">
           <ng-container [ngSwitch]="nav.type">
             <!-- Rendering internal links -->
             <a *ngSwitchCase="'link'"
                mat-list-item
-               [routerLink]="nav.route" >
+               [routerLink]="nav.route"
+               routerLinkActive="router-link-active"
+               [routerLinkActiveOptions]="{exact: true}">
               <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
               {{nav.text}}
             </a>

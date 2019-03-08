@@ -51,13 +51,19 @@ app-toolbar {
 }
 
 /* Hack angulars lists do use a flex box to ease filling */
-mat-nav-list#front-nav {
+mat-nav-list#main-nav {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding-top: 0px;
 
     .fill {
         flex: 1 1 auto;
+    }
+
+    /* Active links must be visually distinguishable from all the other links  */
+    .router-link-active {
+        background-color: mat-color($ide-app-primary);
     }
 }
 
