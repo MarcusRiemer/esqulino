@@ -9,61 +9,60 @@ end
 # Own dependencies
 ###########################
 
-# Securing passwords with scrypt
-gem 'scrypt'
-
 # Currently using sqlite as a database for projects
 gem 'sqlite3'
 
-# Rendering pages with liquid
-gem 'liquid'
-
 # Validating requests against a schema
-gem 'json_schemer'
+gem 'json_schemer', '~> 0.1'
 
 # Used to check the filetypes of uploaded files
-gem 'ruby-filemagic'
+gem 'ruby-filemagic', '~> 0.7'
 
 # Used to resize images on the fly
-gem 'mini_magick'
+gem 'mini_magick', '~> 4.9'
 
 # Error reporting
-gem "sentry-raven"
+gem 'sentry-raven', '~> 2.9'
 
 ############################
 # Rails dependencies
 ###########################
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails'
+gem 'rails', '5.2.2'
 
 # Connecting to postgres databases
 gem 'pg'
 
 # Use falcon as the server, puma has shown to hang under certain
 # hard to reproduce load scenarios.
-gem 'falcon'
+gem 'falcon', '~> 0.19'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   # Generate code coverage reports
-  gem 'simplecov'
+  gem 'simplecov', '~> 0.16'
 
   # Factories seem to be so much nicer then fixtures
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '~> 4.11'
 end
 
 # Use rspec for unit test
 group :development, :test do
-  gem "database_cleaner"
-  gem "rspec-rails"
-  gem "rspec_junit_formatter"
+  gem 'database_cleaner', '~> 1.7'
+  gem 'rspec-rails', '~> 3.8'
+  gem 'rspec_junit_formatter'
   # Mocking calls to FileUtils
+<<<<<<< HEAD
   gem "fakefs", require: "fakefs/safe"
   gem "guard-rspec", require: false
   gem 'pry', '~> 0.12.2'
+=======
+  gem 'fakefs', require: 'fakefs/safe'
+  gem 'guard-rspec', require: false
+>>>>>>> 21a8e609... Server: Gemfile maintenance
 end
 
 group :development do
