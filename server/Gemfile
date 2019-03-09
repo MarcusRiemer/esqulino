@@ -55,14 +55,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'rspec_junit_formatter'
   # Mocking calls to FileUtils
-<<<<<<< HEAD
-  gem "fakefs", require: "fakefs/safe"
-  gem "guard-rspec", require: false
-  gem 'pry', '~> 0.12.2'
-=======
   gem 'fakefs', require: 'fakefs/safe'
   gem 'guard-rspec', require: false
->>>>>>> 21a8e609... Server: Gemfile maintenance
 end
 
 group :development do
