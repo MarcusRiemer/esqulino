@@ -1,0 +1,52 @@
+# Validates all projects.
+#
+# @return [Array<ApplicationRecord>] All invalid resources
+def verify_all_projects
+  invalid = []
+
+  Project.all.each do |proj|
+    invalid.concat(verify_project(proj))
+  end
+
+  return invalid
+end
+
+# Verifies all resources of a project that may be invalid
+#
+# @param proj [Project] The project to use as entry point for validation
+# @return [Array<ApplicationRecord>] All invalid resources
+def verify_project(proj)
+  invalid_models = []
+
+  # The project itself might be invalid
+  invalid_models << proj if (not proj.validate)
+
+  proj.code_resources.each do |c|
+    invalid_models << c if (not c.validate)
+  end
+
+  return invalid_models
+end
+
+# Prints all models that have been identified as invalid
+def output_invalid_models(invalid_models)
+  invalid_models.each do |m|
+    puts m.readable_identification
+    puts m.errors
+    puts
+  end
+end
+
+namespace :blattwerkzeug do
+  namespace :project do
+    desc 'Validate integrity of a single project'
+    task :validate, [:project_id] => :environment do |t, args|
+      output_invalid_models verify_project(Project.find_by_slug_or_id!(args[:project_id]))
+    end
+
+    desc 'Validate integrity of all projects'
+    task :validate_all => :environment do |t, args|
+      output_invalid_models verify_all_projects
+    end
+  end
+end
