@@ -43,14 +43,6 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (9.0.0)
-<<<<<<< HEAD
-    async (1.15.1)
-      nio4r (~> 2.3)
-      timers (~> 4.1)
-    async-container (0.9.0)
-      async (~> 1.0)
-      async-io (~> 1.4)
-=======
     async (1.15.5)
       nio4r (~> 2.3)
       timers (~> 4.1)
@@ -58,19 +50,13 @@ GEM
       async (~> 1.0)
       async-io (~> 1.4)
       process-group
->>>>>>> 21a8e609... Server: Gemfile maintenance
     async-http (0.38.1)
       async (~> 1.14)
       async-io (~> 1.18)
       http-protocol (~> 0.15)
-<<<<<<< HEAD
-    async-io (1.18.5)
-      async (~> 1.14)
-=======
     async-io (1.20.0)
       async (~> 1.14)
     build-environment (1.7.0)
->>>>>>> 21a8e609... Server: Gemfile maintenance
     builder (3.2.3)
     byebug (11.0.0)
     coderay (1.1.2)
@@ -82,19 +68,6 @@ GEM
     ecma-re-validator (0.2.0)
       regexp_parser (~> 1.2)
     erubi (1.8.0)
-<<<<<<< HEAD
-    factory_bot (5.0.2)
-      activesupport (>= 4.2.0)
-    factory_bot_rails (5.0.1)
-      factory_bot (~> 5.0.0)
-      railties (>= 4.2.0)
-    fakefs (0.19.2)
-    falcon (0.24.0)
-      async (~> 1.13)
-      async-container (~> 0.9.0)
-      async-http (~> 0.38.0)
-      async-io (~> 1.18)
-=======
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
     factory_bot_rails (4.11.1)
@@ -107,7 +80,6 @@ GEM
       async-http (~> 0.38.0)
       async-io (~> 1.20)
       build-environment (~> 1.6)
->>>>>>> 21a8e609... Server: Gemfile maintenance
       http-protocol (~> 0.15)
       localhost (~> 1.1)
       rack (>= 1.0)
@@ -136,11 +108,7 @@ GEM
     http-hpack (0.1.1)
     http-protocol (0.15.0)
       http-hpack (~> 0.1.0)
-<<<<<<< HEAD
-    i18n (1.5.3)
-=======
     i18n (1.6.0)
->>>>>>> 21a8e609... Server: Gemfile maintenance
       concurrent-ruby (~> 1.0)
     json (2.2.0)
     json_schemer (0.1.10)
@@ -287,14 +255,8 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   mini_magick (~> 4.9)
   pg
-<<<<<<< HEAD
-  pry (~> 0.12.2)
-  rails
-  rspec-rails
-=======
   rails (= 5.2.2)
   rspec-rails (~> 3.8)
->>>>>>> 21a8e609... Server: Gemfile maintenance
   rspec_junit_formatter
   ruby-filemagic (~> 0.7)
   sentry-raven (~> 2.9)
