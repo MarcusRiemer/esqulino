@@ -81,6 +81,7 @@
          * (mouseover) informs the global state about drag events -->
     <editor-block-render-block #currentBlock
                                [@isExecuted]="currentBlock.isCurrentlyExecuted | async"
+                               [@isOnExecutionPath]="currentBlock.isOnExecutionPath | async"
                                [@isEmbraced]="currentBlock.isEmbraceDrop | async"
                                [blockLayout]="visual"
                                [blockBase]="visual"
