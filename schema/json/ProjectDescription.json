@@ -242,7 +242,17 @@
       "description": "A block that is given statically",
       "properties": {
         "defaultNode": {
-          "$ref": "#/definitions/NodeDescription",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeDescription"
+              },
+              "type": "array"
+            }
+          ],
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
         "displayName": {
@@ -533,7 +543,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -728,6 +738,9 @@
         },
         {
           "$ref": "#/definitions/NodeTypesChoiceDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeTypesParenthesesDescription"
         }
       ],
       "description": "All children group types that are available"
@@ -1060,6 +1073,57 @@
         "type",
         "name",
         "choices"
+      ],
+      "type": "object"
+    },
+    "NodeTypesParenthesesDescription": {
+      "additionalProperties": false,
+      "description": "Allows to group different children together and to\napply a cardinality to them. Mixing different child group semantics is explicitly\nforbidden, each group may be either nothing but \"allowed\" or nothing but \"sequence\"\ncombinators.",
+      "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        "cardinality": {
+          "$ref": "#/definitions/OccursDescription"
+        },
+        "group": {
+          "additionalProperties": false,
+          "properties": {
+            "nodeTypes": {
+              "items": {
+                "$ref": "#/definitions/NodeTypesChildReference"
+              },
+              "type": "array"
+            },
+            "type": {
+              "enum": [
+                "sequence",
+                "allowed"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "nodeTypes"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "parentheses"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "group",
+        "cardinality"
       ],
       "type": "object"
     },
@@ -1450,7 +1514,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -1634,7 +1698,17 @@
       "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
       "properties": {
         "defaultNode": {
-          "$ref": "#/definitions/NodeDescription",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeDescription"
+              },
+              "type": "array"
+            }
+          ],
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
         "displayName": {
@@ -1760,30 +1834,6 @@
       "description": "We currently allow any CSS style to be used.\n\nTODO: This could be a Readonly__ type but that causes the JSON-\nschema generator to (sort of rightfully) emit false for\n\"additionalProperties\" and that in turn makes this type rather\npointless.",
       "type": "object"
     },
-    "VisualBlockDescriptions.CategoryInsert": {
-      "additionalProperties": false,
-      "properties": {
-        "category": {
-          "type": "string"
-        },
-        "order": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsertPosition"
-        }
-      },
-      "required": [
-        "order",
-        "category"
-      ],
-      "type": "object"
-    },
-    "VisualBlockDescriptions.CategoryInsertPosition": {
-      "description": "The locations of categories at which insertions may occur.",
-      "enum": [
-        "insertFirst",
-        "insertLast"
-      ],
-      "type": "string"
-    },
     "VisualBlockDescriptions.ConcreteBlock": {
       "anyOf": [
         {
@@ -1813,32 +1863,6 @@
       "additionalProperties": false,
       "description": "These properties are required to specify drop targets.",
       "properties": {
-        "children": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "parent": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "self": {
-          "additionalProperties": false,
-          "properties": {
-            "order": {
-              "enum": [
-                "insertBefore",
-                "insertAfter"
-              ],
-              "type": "string"
-            },
-            "skipParents": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "order",
-            "skipParents"
-          ],
-          "type": "object"
-        },
         "visibility": {
           "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
         }
@@ -1940,6 +1964,9 @@
         },
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+        },
+        "emptyDropTarget": {
+          "type": "boolean"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
@@ -2065,6 +2092,9 @@
         "direction": {
           "$ref": "#/definitions/Orientation"
         },
+        "emptyDropTarget": {
+          "type": "boolean"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -2089,7 +2119,8 @@
         "ifAnyDrag",
         "ifLegalDrag",
         "ifLegalChild",
-        "ifEmpty"
+        "ifEmpty",
+        "ifChildrenRequired"
       ],
       "type": "string"
     }

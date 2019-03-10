@@ -167,10 +167,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "dropTarget",
               direction: "horizontal",
               dropTarget: {
-                self: {
-                  order: "insertAfter",
-                  skipParents: 1
-                },
                 visibility: { $var: "ifLegalChild" }
               },
               children: [
@@ -189,10 +185,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   blockType: "dropTarget",
                   direction: "horizontal",
                   dropTarget: {
-                    self: {
-                      order: "insertAfter",
-                      skipParents: 1
-                    },
                     visibility: { $var: "ifLegalChild" }
                   },
                   children: [

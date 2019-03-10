@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import { MatRipple } from '@angular/material';
 
-import { map, switchMap, first, tap } from 'rxjs/operators';
+import { map, switchMap, first, tap, filter } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
@@ -30,6 +30,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   private _subscriptionRefs: any[] = [];
 
+  public readOnly = false;
+
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
@@ -45,12 +47,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
-
-    // Swapping between editors
-    const btnChange = this._toolbarService.addButton("goblock", "Raw Editor", "tree", "b");
-    btnChange.onClick.subscribe(_ => {
-      this._router.navigate(["..", "raw"], { relativeTo: this._route });
-    });
 
     // Deleting this code resource
     const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
@@ -74,11 +70,14 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         .subscribe(_ => btnSave.isInProgress = false);
     });
 
-    let ref = this._currentCodeResource.currentExecutionLocation.subscribe(loc => {
-      // this._cd.detectChanges();
+    // Trigger change detection for the whole tree if the executed code
+    // location changes.
+    let ref = this._currentCodeResource.currentExecutionLocation.subscribe(_ => {
+      this._cd.detectChanges();
     });
     this._subscriptionRefs.push(ref);
   }
+
 
   /**
    * Cleans up all acquired references
@@ -143,9 +142,9 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   public onPlaceholderDragEnter(evt: MouseEvent) {
     if (this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, [], undefined);
+      this._dragService.informDraggedOver(evt, [], undefined, {
+        allowExact: true
+      });
     }
   }
-
-  readonly currentlyExecuted = this._currentCodeResource.currentExecutionLocation;
 }

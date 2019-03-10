@@ -30,26 +30,9 @@ export class SqlValidator extends SpecializedValidator {
     } else {
       const schema = context.additional.databaseSchema;
 
-      this.validateFilledSelect(ast, schema, context);
       this.validateColumnAndTableNames(ast, schema, context);
       this.validateAggregationGroupBy(ast, schema, context);
     }
-  }
-
-  /**
-   * Currently the grammar can't express that (Star* & Column*)+, the problem is the
-   * outer "+".
-   */
-  private validateFilledSelect(ast: AST.Node, _: Schema, context: ValidationContext) {
-    // No SELECT may be completly empty
-    const allSelects = ast.getNodesOfType({ languageName: "sql", typeName: "select" });
-    allSelects.forEach(select => {
-      // Ensure there are children
-      const immediateColumns = select.getChildrenInCategory("columns");
-      if (immediateColumns.length === 0) {
-        context.addError("EMPTY_SELECT", select);
-      }
-    });
   }
 
   /**

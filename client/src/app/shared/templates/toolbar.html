@@ -1,22 +1,9 @@
-<!-- Static contentent at the beginning of this toolbar -->
-<ng-content select="[position=start]"></ng-content>
+<mat-toolbar color="primary">
+  <!-- The menu toggle (if applicable) -->
+  <ng-content select="[position=toggle]"></ng-content>
 
-<!-- Things the user might do here -->
-<ng-container *ngIf="itemsPortal$ | async as itemsPortal"
-              [cdkPortalOutlet]="itemsPortal"></ng-container>
-
-<!-- Filling out the space in the middle -->
-<span class="fill-space"></span>
-
-<!-- Static contentent at the end of this toolbar -->
-<ng-content select="[position=end]"></ng-content>
-
-<!-- Navigation -->
-<button mat-flat-button [matMenuTriggerFor]="menu">Navigation</button>
-
-<!-- The generic navigation menu -->
-<mat-menu #menu="matMenu" yPosition="below">
-  <a mat-menu-item [routerLink]="'/'">
+  <a mat-button
+     [routerLink]="'/about'">
     <img src="/vendor/logos/blattwerkzeug-logo.svg"
          height="20px"
          title="BlattWerkzeug">
@@ -24,13 +11,17 @@
          height="20px"
          title="BlattWerkzeug">
   </a>
-  <a mat-menu-item [routerLink]="'/admin'">
-    <span class="fa fa-fw fa-puzzle-piece" aria-hidden="true"></span>
-    Administration
-  </a>
-  
-  <a mat-menu-item href="http://manual.blattwerkzeug.de/">
-    <span class="fa fa-fw fa-book" aria-hidden="true"></span>
-    Manual 🇬🇧
-  </a>
-</mat-menu>
+
+  <!-- Static content at the beginning of this toolbar -->
+  <ng-content select="[position=start]"></ng-content>
+
+  <!-- Things the user might do here -->
+  <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
+                [cdkPortalOutlet]="itemsPortal"></ng-container>
+
+  <!-- Filling out the space in the middle -->
+  <span class="fill-space"></span>
+
+  <!-- Static contentent at the end of this toolbar -->
+  <ng-content select="[position=end]"></ng-content>
+</mat-toolbar>

@@ -36,26 +36,28 @@
     </div>
   </div>
   <!--Table of table entrys-->
-  <table class="table table-striped table-sm table-hover"
-         [ngClass]="{'table-condensed' : isChild}">
-    <!--Header with every column name in the table-->
-    <thead>
-      <tr>
-	<th *ngFor="let column of table.columns; let i = index"
-            [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}">
-	  {{ column.name }}
-	</th>
-      </tr>
-    </thead>
-    <!--Table body, with every entry-->
-    <tbody>
-      <!--expected 2d array with tabledata[row][column]-->
-      <tr *ngFor="let row of tableData; let i = index">
-	<td *ngFor="let column of table.columns; let j = index"
-            [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}">
-	  {{ row[column.index] }}
-	</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm table-hover"
+           [ngClass]="{'table-condensed' : isChild}">
+      <!--Header with every column name in the table-->
+      <thead>
+        <tr>
+	  <th *ngFor="let column of table.columns; let i = index"
+              [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}">
+	    {{ column.name }}
+	  </th>
+        </tr>
+      </thead>
+      <!--Table body, with every entry-->
+      <tbody>
+        <!--expected 2d array with tabledata[row][column]-->
+        <tr *ngFor="let row of tableData; let i = index">
+	  <td *ngFor="let column of table.columns; let j = index"
+              [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}">
+	    {{ row[column.index] }}
+	  </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

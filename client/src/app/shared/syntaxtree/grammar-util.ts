@@ -3,7 +3,8 @@ import {
   NodeTypesChildReference, OccursSpecificDescription,
   isQualifiedTypeName, isOccursSpecificDescription,
   NodeAttributeDescription, isNodeConcreteTypeDescription,
-  GrammarDocument
+  GrammarDocument,
+  OccursDescription
 } from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
 
@@ -11,21 +12,23 @@ import { QualifiedTypeName } from "./syntaxtree.description";
  * Takes any kind of reference and returns the number of occurences this reference
  * could legally make.
  */
-export function resolveOccurs(typeDesc: NodeTypesChildReference): OccursSpecificDescription {
+export function resolveChildOccurs(typeDesc: NodeTypesChildReference): OccursSpecificDescription {
   if (typeof typeDesc === "string" || isQualifiedTypeName(typeDesc)) {
     return ({ minOccurs: 1, maxOccurs: 1 });
+  } else if (isOccursSpecificDescription(typeDesc.occurs)) {
+    return typeDesc.occurs;
   } else {
-    if (isOccursSpecificDescription(typeDesc.occurs)) {
-      return typeDesc.occurs;
-    } else {
-      switch (typeDesc.occurs) {
-        case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
-        case "?": return ({ minOccurs: 0, maxOccurs: 1 });
-        case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
-        case "1": return ({ minOccurs: 1, maxOccurs: 1 });
-        default: throw new Error(`Unknown occurences: "${JSON.stringify(typeDesc)}"`);
-      }
-    }
+    return (resolveOccurs(typeDesc.occurs));
+  }
+}
+
+export function resolveOccurs(desc: OccursDescription): OccursSpecificDescription {
+  switch (desc) {
+    case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
+    case "?": return ({ minOccurs: 0, maxOccurs: 1 });
+    case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
+    case "1": return ({ minOccurs: 1, maxOccurs: 1 });
+    default: throw new Error(`Unknown occurences: "${JSON.stringify(desc)}"`);
   }
 }
 
@@ -38,7 +41,7 @@ export function isHoleIfEmpty(attrDescription: NodeChildrenGroupDescription) {
     case "allowed":
     case "sequence":
       // Can we find any evidence that this should be a hole?
-      return (attrDescription.nodeTypes.some(c => resolveOccurs(c).minOccurs > 0));
+      return (attrDescription.nodeTypes.some(c => resolveChildOccurs(c).minOccurs > 0));
     case "choice":
       return (true);
     default:

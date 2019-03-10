@@ -8,10 +8,12 @@ import { HttpModule } from '@angular/http';
 import { PortalModule } from '@angular/cdk/portal';
 import {
   MatToolbarModule, MatButtonModule, MatMenuModule,
-  MatTooltipModule, MatSnackBarModule, MatTabsModule
+  MatTooltipModule, MatSnackBarModule, MatTabsModule,
+  MatSidenavModule, MatListModule, MatCardModule
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
+import { BrowserService } from './browser.service'
 import { DefaultValuePipe } from './default-value.pipe'
 import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
@@ -25,7 +27,8 @@ import { ToolbarService } from './toolbar.service'
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
-  MatTooltipModule, MatSnackBarModule, MatTabsModule
+  MatTooltipModule, MatSnackBarModule, MatTabsModule,
+  MatSidenavModule, MatListModule, MatCardModule
 ]
 
 /**
@@ -70,6 +73,7 @@ export class SharedAppModule {
       ngModule: SharedAppModule,
       providers: [
         AnalyticsService,
+        BrowserService,
         FlashService,
         ServerApiService,
         ServerDataService,

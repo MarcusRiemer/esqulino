@@ -52,6 +52,7 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
       case "allowed":
       case "sequence":
       case "choice":
+      case "parentheses":
         return (prettyPrintChildGroup(a));
     }
   });
@@ -110,43 +111,45 @@ export function prettyPrintProperty(p: Desc.NodePropertyTypeDescription): Nested
 }
 
 /**
- * Takes a node reference, possibly with its cardinality description,
- * and returns a pretty string version of it. The cardinalities are
- * mapped to the standard regex operators ?,+ and * or expressed using
+ * Cardinalities are  mapped to the standard regex operators ?,+ and * or expressed using
  * the {min,max}-bracket notation.
+ */
+export function prettyPrintCardinality(t: Desc.OccursDescription) {
+  if (typeof t === "string") {
+    if (t !== "1") {
+      return (t);
+    } else {
+      return ("");
+    }
+  } else {
+    if (t.minOccurs === 0 && t.maxOccurs === 1) {
+      return ("?");
+    } else if (t.minOccurs === 1 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
+      return ("+");
+    } else if (t.minOccurs === 0 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
+      return ("*");
+    } else {
+      if (t.minOccurs === undefined) {
+        return (`{,${t.maxOccurs}}`);
+      } else if (t.maxOccurs === undefined) {
+        return (`{${t.minOccurs},}`);
+      } else {
+        return (`{${t.minOccurs},${t.maxOccurs}}`);
+      }
+    }
+  }
+}
+
+/**
+ * Takes a node reference, possibly with its cardinality description,
+ * and returns a pretty string version of it.
  */
 export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
   if (Desc.isQualifiedTypeName(t)) {
     return (`${t.languageName}.${t.typeName}`);
   } else if (Desc.isChildCardinalityDescription(t)) {
-    const printCardinality = (t: Desc.OccursDescription) => {
-      if (typeof t === "string") {
-        if (t !== "1") {
-          return (t);
-        } else {
-          return ("");
-        }
-      } else {
-        if (t.minOccurs === 0 && t.maxOccurs === 1) {
-          return ("?");
-        } else if (t.minOccurs === 1 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
-          return ("+");
-        } else if (t.minOccurs === 0 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
-          return ("*");
-        } else {
-          if (t.minOccurs === undefined) {
-            return (`{,${t.maxOccurs}}`);
-          } else if (t.maxOccurs === undefined) {
-            return (`{${t.minOccurs},}`);
-          } else {
-            return (`{${t.minOccurs},${t.maxOccurs}}`);
-          }
-        }
-      }
-    };
-
     const printedName = prettyPrintTypeReference(t.nodeType);
-    return (`${printedName}${printCardinality(t.occurs)}`);
+    return (`${printedName}${prettyPrintCardinality(t.occurs)}`);
   } else {
     return (t);
   }
@@ -160,7 +163,8 @@ export function prettyPrintChildGroup(p: Desc.NodeChildrenGroupDescription): Nes
   if ((p.type === "allowed" || p.type === "sequence") && p.between) {
     sep = `, between: "${p.between.symbol}"`
   }
-  return ([`children ${p.type} "${p.name}"${sep} ::= ` + prettyPrintChildGroupElements(p)]);
+  const prettyType = p.type === "parentheses" ? p.group.type : p.type;
+  return ([`children ${prettyType} "${p.name}"${sep} ::= ` + prettyPrintChildGroupElements(p)]);
 }
 
 /**
@@ -173,7 +177,7 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
     case "sequence":
     case "allowed":
       // Figuring out the connector
-      let connector = (p) => {
+      let connector = (p: Desc.NodeTypesAllowedDescription | Desc.NodeTypesSequenceDescription) => {
         if (Desc.isNodeTypesAllowedDescription(p)) {
           return (' & ');
         } else {
@@ -186,6 +190,18 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
           .map(prettyPrintTypeReference)
           .join(connector(p))
       );
+    case "parentheses":
+      // We want to re-use the existing code above, so we need to construct
+      // a child group with a name on the fly. As the name is not used on this
+      // level it **should** not matter.
+      const hackedChildGroup: Desc.NodeTypesAllowedDescription | Desc.NodeTypesSequenceDescription = {
+        type: p.group.type as any,
+        nodeTypes: p.group.nodeTypes,
+        name: "dirtyHack"
+      }
+      const prettyChildren = prettyPrintChildGroupElements(hackedChildGroup);
+      const prettyCardinality = prettyPrintCardinality(p.cardinality);
+      return (`(${prettyChildren})${prettyCardinality}`);
 
     case "choice":
       return (
@@ -213,23 +229,30 @@ export function prettyPrintSyntaxTree(desc: NodeDescription): string {
 /**
  * Pretty prints a node of a syntaxtree. This includes all children of the given node.
  */
-export function prettyPrintSyntaxTreeNode(desc: NodeDescription): NestedString {
-  const head = `node "${desc.language}.${desc.name}"`;
+export function prettyPrintSyntaxTreeNode(desc: NodeDescription | NodeDescription[]): NestedString {
+  let allDescriptions = Array.isArray(desc) ? desc : [desc];
 
-  const props = Object.entries(desc.properties || {}).map(([key, value]) => [`prop "${key}" ${value}`]);
-  const children = Object.entries(desc.children || {}).map(([key, value]) => {
-    return ([
-      `childGroup "${key}" {`,
-      ...value.map(prettyPrintSyntaxTreeNode),
-      `}`
-    ]);
+  let allCompiled = allDescriptions.map(desc => {
+    const head = `node "${desc.language}.${desc.name}"`;
+
+    const props = Object.entries(desc.properties || {}).map(([key, value]) => [`prop "${key}" ${value}`]);
+    const children = Object.entries(desc.children || {}).map(([key, value]) => {
+      return ([
+        `childGroup "${key}" {`,
+        ...value.map(prettyPrintSyntaxTreeNode),
+        `}`
+      ]);
+    });
+
+    if (props.length > 0 || children.length > 0) {
+      return ([head + ` {`, ...props, ...children, `}`]);
+    } else {
+      return ([head]);
+    }
   });
 
-  if (props.length > 0 || children.length > 0) {
-    return ([head + ` {`, ...props, ...children, `}`]);
-  } else {
-    return ([head]);
-  }
+  // TODO: Also return the other compiled nodes
+  return (allCompiled[0]);
 }
 
 /**

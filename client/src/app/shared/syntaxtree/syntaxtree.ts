@@ -35,6 +35,18 @@ export function locationEquals(lhs: NodeLocation, rhs: NodeLocation): boolean {
 }
 
 /**
+ *
+ */
+export function locationIncLastIndex(loc: NodeLocation): NodeLocation {
+  if (loc.length > 0) {
+    const [c, i] = loc[loc.length - 1];
+    return ([...loc.slice(0, -1), [c, i + 1]]);
+  } else {
+    return ([]);
+  }
+}
+
+/**
  * Properties of a node are atomic and always stored as string.
  * Certain validators may be used to check whether the string
  * contains something useful.
@@ -297,7 +309,7 @@ export class Node {
 export class Tree {
   private _root: Node;
 
-  constructor(rootDesc: NodeDescription) {
+  constructor(rootDesc?: NodeDescription) {
     if (rootDesc) {
       this._root = new Node(rootDesc, this);
     }

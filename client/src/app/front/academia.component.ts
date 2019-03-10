@@ -1,6 +1,10 @@
 import { Component } from '@angular/core'
 import { Observable, of } from 'rxjs'
 
+const LOGO_FHW_URL = "/vendor/logos/fhw.png";
+const LOGO_CAU_URL = "/vendor/logos/cau.png";
+
+/** Required front end information for a thesis */
 interface Thesis {
   id: string
   title: string
@@ -8,11 +12,18 @@ interface Thesis {
   author: {
     name: string
   }
-  institutionLogo,
+  institutionLogo: string,
   abstract: string
-  degree: string
+  degree?: string
   url: string
   date: Date
+}
+
+interface ProjectProposal {
+  id: string;
+  title: string;
+  text: string;
+  tools: string;
 }
 
 /**
@@ -21,9 +32,6 @@ interface Thesis {
  */
 const THESIS_BASE_URL = "http://files.blattwerkzeug.de/theses";
 
-const LOGO_FHW_URL = "/vendor/logos/fhw.png";
-const LOGO_CAU_URL = "/vendor/logos/cau.png";
-
 /**
  * Knows everything about theses that have been written.
  */
@@ -31,6 +39,76 @@ const LOGO_CAU_URL = "/vendor/logos/cau.png";
   templateUrl: 'templates/academia.html',
 })
 export class AboutAcademiaComponent {
+
+  readonly projectProposals: ProjectProposal[] = [
+    {
+      id: "usermanagement",
+      title: "Benutzermanagement",
+      text: `
+<p>Aktuell sieht die Webseite keinerlei Registrierung von Benutzern vor, stattdessen hat jedes erstellte Projekt gewissermaßen eine eigene Benutzerdatenbank. Dieser Umstand soll sich im Rahmen eines Projektes ändern. Dabei ist die eigentliche Registrierung und Verwaltung von Benutzern mehr eine technische Formalität und nicht besonders herausfordernd. Viel interessanter sind die besonderen Anforderungen, die sich aus dem Einsatz an Schulen ergeben:</p>
+
+<ul>
+  <li>
+    Registrierte Benutzer fallen typischerweise in eine von drei Rollen: Schüler, Lehrer oder Administrator. Dabei ist ein Lehrer für mehrere Schüler zuständig und die Schüler organisieren sich ggfs. in Gruppen (gemäß dem Klassenverband).
+  </li>
+  <li>
+    Lehrer und Administratoren müssen Batch-Operationen vornehmen können. Darunter fällt insbesondere das Anlegen von Projekten für ganze Klassenverbände.
+  </li>
+</ul>
+`,
+      tools: "Ruby on Rails für das serverseitige Datenmodell und Angular mit Typescript für die Verwaltung im Frontend."
+    },
+    {
+      id: "web-environment",
+      title: "Web-Umgebung",
+      text: `
+<p>
+  Ein Prototyp der Entwicklungsumgebung hat Anwender schon in die Lage versetzt, direkt aus dem Webbrowser heraus eigene Webseiten zu entwickeln. Mit der Umstellung auf eine neue Art und Weise die Blocksprachen zu definieren, ist dieser Funktionsumfang zunächst wieder entfallen. Im Rahmen dieser Aufgabe soll eine Möglichgeit zum Bearbeiten und anschauen von Webseiten re-implementiert werden. Von dem mittlerweile abgeschalteten Prototyp existiert neben dem rechtsstehenden Screenshot noch ein Video, welches gerne zur Inspiration genutzt werden kann.
+</p>
+
+<p>
+  Die erstellten Webseiten sollen auf den SQL-Datenbestand eines Projekts zugreifen können und müssen dementsprechend dynamisch über eine Templatingsprache erzeugt werden. Inhaltlich ergeben sich bei dieser Aufgabe unter anderem die folgenden Fragestellungen:
+</p>
+
+<ul>
+  <li>Welche HTML-Elemente sind für Schüler relevant?</li>
+  <li>Welche Templatingsprache sollte verwendet werden?</li>
+  <li>Wie kann eine Seite die Datenquellen angeben, die zur Darstellung benötigt werden?</li>
+  <li>Wie können Formulardaten verarbeitet werden?</li>
+</ul>
+`,
+      tools: "Typescript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug"
+    },
+    {
+      id: "visual-database-editor",
+      title: "Visueller Drag & Drop Editor für Datenbanken",
+      text: `
+<p>
+  Aufbauend auf der Bachelor-Thesis von Marco Pawloski soll ein Datenbank-Editor mit Drag & Drop-Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL-Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+</p>`,
+      tools: "TypeScript mit Angular"
+    },
+    {
+      id: "code-sandbox",
+      title: "Umgebung zur Ausführung von nicht vertrauenswürdigen Programmen",
+      text: `
+<p>
+  Es liegt in der Natur von BlattWerkzeug, dass prinzipiell beliebigen Personen die Ausführungen ihrer Programme auf dem BlattWerkzeug-Server gestattet werden muss. Und weil nicht jede beliebige Person vertrauenswürdig ist, müssen diese Programme vom restlichen System isoliert werden. Mögliche Mechanismen existieren dafür in großer Zahl, anders wären Webhosting-Dienste oder Online-Compiler wie <a href="https://ideone.com/">ideone.com</a> schließlich überhaupt nicht denkbar.
+</p>
+<p>
+  Im Rahmen dieses Projektvorschlags soll untersucht werden:
+  <ul>
+    <li>Welche Isolationsmechaniken lassen sich für den BlattWerkzeug-Server sinnvoll anwenden? Angedacht sind klassische Linux-Benutzerrechte, AppArmor oder möglicherweise auch Docker.</li>
+    <li>Welche Lücken nutzen bösartige Programme klassischerweise aus?</li>
+  </ul>
+</p>
+<p>
+  Dazu sollen eigens geschriebene, bösartige Programme in einer Testsuite zusammengefasst und (möglichst) mit den gewählten Isolationsverfahren korrekt eingeschränkt werden. Die Bandbreite umfasst dabei schlicht schädliche Skripten (<code>rm -rf /</code>), triviale Versuche Passwörter auszulesen (<code>cat /etc/shadow</code>), über (BitCoin-)Miner (oder profane Endlosschleifen) bis hin zu Versuchen, einen <q>Command and Control</q>-Server aufzusetzen.
+</p>
+`,
+      tools: "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), Docker"
+    }
+  ];
 
   private _theses: Thesis[] = [
     {
@@ -60,7 +138,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
         name: "Stefan Görgen"
       },
       institutionLogo: LOGO_CAU_URL,
-      degree: "Bachlor",
+      degree: "Bachelor",
       url: `${THESIS_BASE_URL}/stefan-görgen-thesis-db-mittelstufe.pdf`,
       abstract: `<p>Erarbeitung einer Unterrichtseinheit zu Datenbanken in der Mittelstufe.</p>`,
       date: new Date('October 14, 2016')
@@ -73,7 +151,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
         name: "Marco Pawlowski"
       },
       institutionLogo: LOGO_FHW_URL,
-      degree: "Bachlor",
+      degree: "Bachelor",
       url: `${THESIS_BASE_URL}/marco-pawlowski-thesis-schema-editor.pdf`,
       abstract: `
 <p>Mit dieser Arbeit wird eine Lernsoftware entwickelt, die an Anfänger gerichtet ist. Es werden die elementaren Funktionen zur Erstellung von Datenbanken zur Verfügung gestellt werden. Dabei sollen Fehler nicht von der Software automatisch gelöst werden, sondern an den Benutzer kommuniziert werden. Dadurch soll der Benutzer ein Verständnis dafür entwickeln, welche Bedingungen vorher erfüllt sein müssen, um bestimmte Aktionen durchzuführen zu können.</p>`,
@@ -82,19 +160,42 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
     {
       id: "just-images",
       title: "Verwaltung und Integration von Bildern",
-      subtitle: "",
+      subtitle: "Implementierung und rechtliche Aspekte",
       author: {
         name: "Ole Just"
       },
       institutionLogo: LOGO_FHW_URL,
-      degree: "Bachlor",
+      degree: "Bachelor",
       url: `${THESIS_BASE_URL}/ole-just-thesis-images.pdf`,
       abstract: `<p>SQLino ist eine webbasierte IDE für HTML und SQL auf Einsteigerniveau. Diese Arbeit beschreibt die Entwicklung einer prototypischen Bildverwaltung für SQLino, die neben der bloßen Speicherung und Einbettung der Bilder in die erstellen Webseiten auch rechtliche Aspekte im Umgang mit der Veröffentlichung von Bildern beachtet.</p>`,
       date: new Date('October 31, 2017')
+    },
+    {
+      id: "popp-trucklino",
+      title: "Konzeption und Implementierung einer visuellen Lernumgebung",
+      subtitle: "zur spielerischen Einführung in die Programmierung",
+      author: {
+        name: "Sebastian Popp"
+      },
+      institutionLogo: LOGO_FHW_URL,
+      degree: "Bachelor",
+      url: `${THESIS_BASE_URL}/sebastian-popp-thesis-trucklino.pdf`,
+      abstract: `<p>Klassische Universalsprachen wie Java oder Python haben einen sehr großen Sprachumfang und sind daher nur bedingt zur Einführung in die Konzepte der Programmierung geeignet. Diese Arbeit implementiert eine Minisprache – eine im Sprachumfang reduzierte Programmiersprache – welche es den Schülern ermöglichen soll, spielerisch Programmieren zu lernen, indem ihre Programme einen Lastwagen durch eine Welt steuern und dadurch Aufgaben lösen.</p>`,
+      date: new Date('Februar 13, 2019')
+    },
+    {
+      id: "riemer-dissertation-project",
+      title: "Generierung von syntaxfreien Entwicklungsumgebungen",
+      subtitle: "für beliebige Programmiersprachen",
+      author: {
+        name: "Marcus Riemer"
+      },
+      institutionLogo: LOGO_FHW_URL,
+      url: `${THESIS_BASE_URL}/marcus-riemer-project-ide-generation.pdf`,
+      abstract: `<p>Im Rahmen dieser Promotion soll erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche syntaxfreie Entwicklungsumgebungen erzeugen lassen. Letztendlich soll Lehrkräften ein Werkzeug an die Hand gegeben werden, welches die Einstiegshürde in die Programmierung mit konventionellen Programmiersprachen wie SQL, HTML, CSS oder JavaScript senkt.</p>`,
+      date: new Date('December 1, 2018')
     }
   ]
 
-  public get theses(): Observable<Thesis[]> {
-    return (of(this._theses));
-  }
+  readonly theses: Observable<Thesis[]> = of(this._theses.sort((a, b) => b.date.getTime() - a.date.getTime()));
 }

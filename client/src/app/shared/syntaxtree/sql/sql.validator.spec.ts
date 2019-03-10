@@ -13,33 +13,6 @@ function specContext(schemaDescription = SPEC_TABLES): DatabaseSchemaAdditionalC
 }
 
 describe(`Specialized SQL Validator`, () => {
-  it(`Error: EMPTY_SELECT`, () => {
-    const context = new ValidationContext(specContext());
-    const sqlValidator = new SqlValidator();
-
-    const astDesc: NodeDescription = {
-      "name": "querySelect",
-      "language": "sql",
-      "children": {
-        "select": [
-          {
-            "name": "select",
-            "language": "sql",
-            "children": {
-              "columns": []
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    sqlValidator.validateFromRoot(ast, context);
-
-    expect(context.errors.length).toEqual(1);
-    expect(context.errors[0].code).toEqual("EMPTY_SELECT");
-  });
-
   it(`Error: UNKNOWN_TABLE`, () => {
     const context = new ValidationContext(specContext());
     const sqlValidator = new SqlValidator();

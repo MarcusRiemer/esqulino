@@ -16,9 +16,9 @@ export enum ErrorCodes {
   MissingChild = "MISSING_CHILD",
   // A specific child was entirely unexpected
   SuperflousChild = "SUPERFLOUS_CHILD",
-  // One or more children occur too often
+  // One or more children occur too often (for "allowed" restrictions)
   InvalidMaxOccurences = "INVALID_MAX_OCCURENCES",
-  // One or more children occur not often enough
+  // One or more children occur not often enough (for "allowed" restrictions)
   InvalidMinOccurences = "INVALID_MIN_OCCURENCES",
   // A property was expected, but simply did not exist
   MissingProperty = "MISSING_PROPERTY",
@@ -33,7 +33,9 @@ export enum ErrorCodes {
   // There should have been a node but there wasn't
   NoChoiceNodeAvailable = "NO_CHOICE_NODE_AVAILABLE",
   // There should have been exactly one node but there where too many
-  SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE"
+  SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE",
+  // A parentheses group had no types and is therefore undecidable
+  ParenthesesEmptyTypes = "PARENTHESES_EMPTY_TYPES"
 }
 
 /**
@@ -49,14 +51,22 @@ export interface ErrorUnexpectedType {
  * A child is not allowed in a certain position.
  */
 export interface ErrorIllegalChildType {
-  present: AST.QualifiedTypeName,
+  expected: AST.QualifiedTypeName
+  present: AST.QualifiedTypeName
+  category: string
   index: number
 }
 
 export interface ErrorMissingChild {
-  expected: AST.QualifiedTypeName,
-  index: number,
-  childrenCategory: string
+  expected: AST.QualifiedTypeName
+  category: string
+  index: number
+}
+
+export interface ErrorSuperflousChild {
+  present: AST.QualifiedTypeName
+  category: string
+  index: number
 }
 
 export interface ErrorMissingProperty {
@@ -84,7 +94,7 @@ export type ErrorData =
 export interface ValidationError {
   code: string;
   node: AST.Node;
-  data?: ErrorData;
+  data: ErrorData;
 }
 
 /**
@@ -136,7 +146,7 @@ export class ValidationContext {
   ) {
   }
 
-  addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = undefined) {
+  addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = {}) {
     this._errors.push({ code: code, node: node, data: data });
   }
 

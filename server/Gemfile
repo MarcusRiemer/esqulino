@@ -57,7 +57,10 @@ group :development, :test do
   # Mocking calls to FileUtils
   gem 'fakefs', require: 'fakefs/safe'
   gem 'guard-rspec', require: false
+<<<<<<< HEAD
   gem 'pry', '~> 0.12.2'
+=======
+>>>>>>> master
 end
 
 group :development do

@@ -6,7 +6,7 @@ class BlockLanguage < ApplicationRecord
 
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true, length: { minimum: 1 }
-  
+
   # The JSON document needs to be a valid block language
   validates :model, json_schema: 'BlockLanguageDocument'
 
@@ -52,10 +52,10 @@ class BlockLanguage < ApplicationRecord
       to_json_api_response
         .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId")
     end
-    
+
     # basic_fields = ["id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId"]
     # calculatedFields = basic_fields + ["automaticallyGenerated"]
-    
+
     # to_json_api_response
     #  .slice(include_list_calculations ? *calculatedFields : basic_fields)
   end
