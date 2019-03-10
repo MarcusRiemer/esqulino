@@ -8,8 +8,9 @@ module Seed
       self.class::SEED_IDENTIFIER
     end
 
-    def initialize(seed_id)
+    def initialize(seed_id, dependencies = [])
       @seed_id = seed_id
+      @dependencies = dependencies
     end
 
     def seed
@@ -34,21 +35,28 @@ module Seed
       File.join seed_directory, "#{seed.id}.yaml"
     end
 
+    def project_dependent_file(directory, deps_id)
+      File.join directory, "#{deps_id}-deps.yaml"
+    end
+
     def start_store
       store(Set.new)
     end
 
     def store(processed)
-      if processed.include? self
+      if processed.include? [seed_directory, seed_id.id]
       else
         store_seed
-        processed << self
+        processed << [seed_directory, seed_id.id]
         store_dependencies(processed)
+      end
+      File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
+        YAML::dump(processed, file)
       end
     end
 
     def store_dependencies(processed)
-      (dependencies || []).each do |dependent_seed_name, seed_model_attribute|
+      dependencies.each do |dependent_seed_name, seed_model_attribute|
         data = seed.send(seed_model_attribute)
         to_serialize = (data || [])
         if not to_serialize.respond_to?(:each)
