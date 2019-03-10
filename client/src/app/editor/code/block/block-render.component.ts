@@ -4,7 +4,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { map, tap } from 'rxjs/operators';
 
 import {
-  Node, CodeResource, NodeLocation, locationEquals, locationIncLastIndex
+  Node, CodeResource, NodeLocation, locationIncLastIndex
 } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
@@ -20,6 +20,10 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
   animations: [
     trigger('isExecuted', [
       state('true', style({ "background": "lime" })),
+      transition('false <=> true', animate(200))
+    ]),
+    trigger('isOnExecutionPath', [
+      state('true', style({ "background": "#b9ffb7" })),
       transition('false <=> true', animate(200))
     ]),
     trigger('isEmbraced', [

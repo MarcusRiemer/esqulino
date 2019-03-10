@@ -95,6 +95,17 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
+  readonly isOnExecutionPath = this._currentCodeResource.currentExecutionLocation
+    .pipe(
+      map(loc => {
+        const matchingLength = locationMatchingLength(this.node.location, loc);
+        return (matchingLength !== false && matchingLength > 0 && matchingLength - 1 < loc.length);
+      })
+    );
+
+  /**
+   * Determines whether a certain codeblock is currently beeing executed.
+   */
   readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
     .pipe(
       map(loc => locationEquals(loc, this.node.location))
