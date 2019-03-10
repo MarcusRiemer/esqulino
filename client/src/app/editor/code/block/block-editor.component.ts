@@ -1,9 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { MatRipple } from '@angular/material';
-
-import { map, switchMap, first, tap, filter } from 'rxjs/operators';
+import { map, switchMap, first } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
