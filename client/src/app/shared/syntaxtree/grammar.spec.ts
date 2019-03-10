@@ -2,7 +2,7 @@ import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes } from './validation-result'
-import { NodePropertyIntegerValidator } from '.';
+import { NodePropertyIntegerValidator } from './grammar';
 
 /**
  * Describes a language where each document would be the equivalent
@@ -352,6 +352,30 @@ const langAllowedConstraint: Schema.GrammarDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
+const langSingleSequenceConstraint: Schema.GrammarDescription = {
+  id: "51a1230d-38d1-41a3-ad2e-16f2b3253b8f",
+  programmingLanguageId: "spec",
+  name: "single-sequence-constraint",
+  technicalName: "single-sequence-constraint",
+  types: {
+    "root": {
+      type: "concrete",
+      attributes: [
+        {
+          name: "nodes",
+          type: "sequence",
+          nodeTypes: ["a"]
+        }
+      ],
+    },
+    "a": { type: "concrete" }
+  },
+  root: "root"
+};
+
+/**
+ * A single root node that uses some children with the "sequence" constraint
+ */
 const langSequenceConstraint: Schema.GrammarDescription = {
   id: "51a1230d-38d1-41a3-ad2e-16f2b3253b8f",
   programmingLanguageId: "spec",
@@ -582,6 +606,7 @@ describe('Grammar Validation', () => {
     });
 
     expect(v.validateFromRoot(ast).isValid).toBe(true);
+    expect(v.getGrammarValidator(g.technicalName).technicalName).toEqual(g.technicalName);
   });
 
 
@@ -590,8 +615,7 @@ describe('Grammar Validation', () => {
 
     const ast = new AST.Tree(undefined);
     const res = v.validateFromRoot(ast);
-    expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.Empty);
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.Empty]);
   });
 
 
@@ -613,7 +637,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('String Constraints (Invalid)', () => {
@@ -807,7 +831,7 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
   });
 
-  it('oneOf: allowsChildType()', () => {
+  it('oneOf: allowsChildType() and validCardinality()', () => {
     const v = new Validator([langOneOfNodes]);
 
     const vRoot = v.availableTypes[0];
@@ -824,38 +848,62 @@ describe('Grammar Validation', () => {
     expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
     expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeFalsy("c in root");
     expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
+    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
 
     expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBe(false);
+    expect(vNodeA.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
 
     expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBe(false);
+    expect(vNodeB.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
 
     expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBe(false);
+    expect(vNodeC.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+  });
 
+  it('"sequence": validCardinality()', () => {
+    const v = new Validator([langSequenceConstraint]);
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
+
+    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 3, maxOccurs: 6 });
+    expect(vRoot.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+
+    expect(vNodeA.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeB.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeC.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
   });
 
   it('"sequence": allowsChildType()', () => {
     const v = new Validator([langSequenceConstraint]);
-    const vNodeA = v.availableTypes[0];
-    const vNodeB = v.availableTypes[1];
-    const vNodeC = v.availableTypes[2];
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
 
     const tNodeA = { languageName: langSequenceConstraint.name, typeName: "a" };
     const tNodeB = { languageName: langSequenceConstraint.name, typeName: "b" };
     const tNodeC = { languageName: langSequenceConstraint.name, typeName: "c" };
     const tNodeD = { languageName: langSequenceConstraint.name, typeName: "d" };
 
-    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeTruthy();
-    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeTruthy();
-    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeTruthy();
+    expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeFalsy();
     expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
 
     expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
@@ -867,6 +915,59 @@ describe('Grammar Validation', () => {
     expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBeFalsy();
     expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBeFalsy();
     expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+  });
+
+  it('Invalid single "sequence": Completely Empty', () => {
+    const v = new Validator([langSingleSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "single-sequence-constraint",
+      name: "root",
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.MissingChild]);
+  });
+
+  it('Invalid single "sequence": Two items', () => {
+    const v = new Validator([langSingleSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "single-sequence-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          { language: "single-sequence-constraint", name: "a" },
+          { language: "single-sequence-constraint", name: "a" }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild]);
+  });
+
+  it('Invalid single "sequence": Unexpected item', () => {
+    const v = new Validator([langSingleSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "single-sequence-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          { language: "single-sequence-constraint", name: "root" }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
   });
 
   it('Invalid "sequence": Completely Empty', () => {
@@ -888,7 +989,7 @@ describe('Grammar Validation', () => {
         typeName: "a",
       },
       index: 0,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
@@ -897,7 +998,7 @@ describe('Grammar Validation', () => {
         typeName: "a",
       },
       index: 1,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
     expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[2].data).toEqual({
@@ -906,7 +1007,7 @@ describe('Grammar Validation', () => {
         typeName: "c",
       },
       index: 2,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
   });
 
@@ -937,7 +1038,7 @@ describe('Grammar Validation', () => {
         typeName: "a"
       },
       index: 1,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
@@ -946,7 +1047,7 @@ describe('Grammar Validation', () => {
         typeName: "c"
       },
       index: 2,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
   });
 
@@ -981,7 +1082,7 @@ describe('Grammar Validation', () => {
         typeName: "c"
       },
       index: 2,
-      childrenCategory: "nodes"
+      category: "nodes"
     });
   });
 
@@ -1012,7 +1113,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "sequence": Three required nodes + Optional "b"-node', () => {
@@ -1046,7 +1147,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "sequence": Three required nodes + two optional "b"-nodes', () => {
@@ -1084,7 +1185,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "sequence": Three required nodes + All optional "b"- and "c"-nodes', () => {
@@ -1126,7 +1227,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Invalid "sequence": Three required nodes + All optional "b"- and "c"-nodes + extra node', () => {
@@ -1172,7 +1273,7 @@ describe('Grammar Validation', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(1);
+    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
   it('Invalid "sequence": Three required nodes + three optional "b"-nodes', () => {
@@ -1215,6 +1316,21 @@ describe('Grammar Validation', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
+  });
+
+  it('"allowed": validCardinality()', () => {
+    const v = new Validator([langAllowedConstraint]);
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
+
+    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 1, maxOccurs: Infinity });
+    expect(vRoot.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+
+    expect(vNodeA.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeB.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeC.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
   });
 
   it('"allowed": allowsChildType', () => {

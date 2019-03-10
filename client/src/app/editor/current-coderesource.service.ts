@@ -1,9 +1,9 @@
-import { Injectable, ApplicationRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs'
-import { tap } from 'rxjs/operators';
+import { tap, flatMap } from 'rxjs/operators';
 
-import { CodeResource, NodeLocation } from '../shared/syntaxtree';
+import { CodeResource, NodeLocation, Tree } from '../shared/syntaxtree';
 
 import { ProjectService } from './project.service';
 import { SidebarService } from './sidebar.service';
@@ -29,7 +29,6 @@ export class CurrentCodeResourceService {
   constructor(
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
-    private _applicationRef: ApplicationRef,
   ) {
     // Things that need to happen every time the resource changes
     this._codeResource
@@ -70,6 +69,13 @@ export class CurrentCodeResourceService {
    * Informs interested components about the current resource.
    */
   readonly currentResource: Observable<CodeResource> = this._codeResource;
+
+  /**
+   * Informs interested components about the tree behind the current resource
+   */
+  readonly currentTree: Observable<Tree> = this._codeResource.pipe(
+    flatMap(c => c.syntaxTree)
+  );
 
   /**
    *

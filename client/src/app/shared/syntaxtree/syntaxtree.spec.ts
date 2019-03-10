@@ -1,4 +1,20 @@
-import { Node, NodeDescription, NodeLocation, Tree, locationEquals } from './syntaxtree'
+import {
+  Node, NodeDescription, NodeLocation, Tree,
+  locationEquals, locationIncLastIndex
+} from './syntaxtree'
+
+describe('locationIncLastIndex(loc)', () => {
+  it('Does nothing for empty arrays', () => {
+    expect(locationIncLastIndex([])).toEqual([]);
+  });
+
+  it('Increments all other arrays', () => {
+    expect(locationIncLastIndex([["a", 0]])).toEqual([["a", 1]]);
+    expect(locationIncLastIndex([["a", 1]])).toEqual([["a", 2]]);
+    expect(locationIncLastIndex([["a", 1], ["b", 2]])).toEqual([["a", 1], ["b", 3]]);
+    expect(locationIncLastIndex([["a", 2], ["b", 1]])).toEqual([["a", 2], ["b", 2]]);
+  });
+});
 
 describe('locationEquals(lhs, rhs)', () => {
   it('undefined & null', () => {

@@ -14,6 +14,9 @@ import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
 import { generateSidebar } from './sidebar'
 
+/**
+ * These components are assumed to be part of every editor.
+ */
 const defaultEditorComponents: EditorComponentDescription[] = [
   {
     "componentType": "validator"

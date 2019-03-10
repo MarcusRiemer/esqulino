@@ -28,12 +28,12 @@ export interface Instructions {
   readOnly: boolean;
   // Controls how things dropped on this block will be treated
   onDrop: DropTargetProperties;
-  // Where (and if) drop targets should be created
-  generateDropTargets: Position;
   // Where (and if) to generate error indicators
   generateErrorIndicator: Position;
   // Should a break be inserted after this element?
   breakAfter: boolean;
+  // Should the drop marker be shown, even if it is valid without children?
+  emptyDropTarget: boolean;
 };
 
 /**
@@ -47,7 +47,7 @@ export type ReferenceableInstructions = ParameterReferenceable<Instructions>;
 /**
  * Instructions that are useful on an iterating visual.
  */
-export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style" | "generateDropTargets" | "breakAfter" | "allowWrap">>;
+export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style" | "breakAfter" | "allowWrap" | "emptyDropTarget">>;
 
 /**
  * Instructions that are useful on a block visual.
@@ -72,9 +72,9 @@ export module DefaultInstructions {
     orientation: "horizontal",
     between: "",
     style: {},
-    generateDropTargets: "end",
     breakAfter: false,
-    allowWrap: true
+    allowWrap: true,
+    emptyDropTarget: false
   }
 
   export const blockInstructions: BlockInstructions = {

@@ -14,17 +14,24 @@ import { Sidebar } from './sidebar'
 export class FixedSidebarBlock {
 
   private _description: SidebarBlockDescription;
+  private _defaultNode: NodeDescription[];
 
   constructor(desc: SidebarBlockDescription) {
     this._description = desc;
+
+    if (Array.isArray(this._description.defaultNode)) {
+      this._defaultNode = this._description.defaultNode;
+    } else {
+      this._defaultNode = [this._description.defaultNode];
+    }
   }
 
   /**
    * @return The node that should be created when this block
    *         needs to be instanciated.
    */
-  get defaultNode(): NodeDescription {
-    return (this._description.defaultNode);
+  get defaultNode(): NodeDescription[] {
+    return (this._defaultNode);
   }
 
   /**

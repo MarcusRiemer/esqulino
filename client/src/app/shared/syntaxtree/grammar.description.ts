@@ -229,9 +229,9 @@ export interface NodeTypesSequenceDescription {
  * in which these children appear in is not relevant.
  */
 export interface NodeTypesAllowedDescription {
-  type: "allowed"
-  name: string
-  nodeTypes: NodeTypesChildReference[]
+  type: "allowed",
+  name: string,
+  nodeTypes: NodeTypesChildReference[],
   between?: NodeTerminalSymbolDescription
 }
 
@@ -241,8 +241,25 @@ export interface NodeTypesAllowedDescription {
  */
 export interface NodeTypesChoiceDescription {
   type: "choice",
-  name: string
+  name: string,
   choices: TypeReference[]
+}
+
+/**
+ * Allows to group different children together and to
+ * apply a cardinality to them. Mixing different child group semantics is explicitly
+ * forbidden, each group may be either nothing but "allowed" or nothing but "sequence"
+ * combinators.
+ */
+export interface NodeTypesParenthesesDescription {
+  type: "parentheses",
+  name: string,
+  group: {
+    type: "sequence" | "allowed",
+    nodeTypes: NodeTypesChildReference[]
+  },
+  cardinality: OccursDescription,
+  between?: NodeTerminalSymbolDescription
 }
 
 /**
@@ -251,7 +268,8 @@ export interface NodeTypesChoiceDescription {
 export type NodeChildrenGroupDescription =
   NodeTypesSequenceDescription
   | NodeTypesAllowedDescription
-  | NodeTypesChoiceDescription;
+  | NodeTypesChoiceDescription
+  | NodeTypesParenthesesDescription;
 
 /**
  * Listing data about grammars

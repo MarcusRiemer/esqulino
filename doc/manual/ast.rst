@@ -52,13 +52,13 @@ The simplest tree consists of a single, empty node. You can infer from its name 
    :align: center
    :caption: Expression ``null``
 
-Properties of nodes are listed inside the node itself. The following tree corresponds to an expression that simply consists of a single variable named ``numRattle`` that is mentioned.
+Properties of nodes are listed inside the node itself. The following tree corresponds to an expression that simply consists of a single variable named ``numRattles`` that is mentioned.
 
 .. literalinclude:: examples/syntaxtree/ast-example-expr-variable.json
 
 .. graphviz:: generated/ast-example-expr-variable.graphviz
    :align: center
-   :caption: Expression ``numRattle``
+   :caption: Expression ``numRattles``
 
 Children of trees are simply denoted by arrows that are connecting them. They are grouped into named boxes that define the name of the child group in which they appear in. So the following tree represents a binary expression that has two child groups (``lhs`` for "left hand side" and ``rhs`` for "right hand side") and defines the used operation with the property ``op``.
 
@@ -66,7 +66,4 @@ Children of trees are simply denoted by arrows that are connecting them. They ar
 
 .. graphviz:: generated/ast-example-expr-binary.graphviz
    :align: center
-   :caption: Expression ``null == numRattle``
-
-
-
+   :caption: Expression ``numRattles == null``

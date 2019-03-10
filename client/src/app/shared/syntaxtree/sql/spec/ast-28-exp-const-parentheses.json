@@ -1,0 +1,15 @@
+{
+  "language": "sql",
+  "name": "parentheses",
+  "children": {
+    "expression": [
+      {
+        "language": "sql",
+        "name": "constant",
+        "properties": {
+          "value": "1"
+        }
+      }
+    ]
+  }
+}

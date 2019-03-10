@@ -63,19 +63,11 @@ describe('BlockLanguage PrettyPrinter', () => {
     verifyFiles('011-sidebar-single-category', prettyPrintBlockLanguage);
   });
 
-  it('012 Block: Drop child category', () => {
-    verifyFiles('012-block-drop-child', prettyPrintBlockLanguage);
+  it('012 Block: Styled constant', () => {
+    verifyFiles('012-block-constant-style', prettyPrintBlockLanguage);
   });
 
-  it('013 Block: Drop parent category', () => {
-    verifyFiles('013-block-drop-parent', prettyPrintBlockLanguage);
-  });
-
-  it('014 Block: Drop self', () => {
-    verifyFiles('014-block-drop-self', prettyPrintBlockLanguage);
-  });
-
-  it('015 Block: Styled constant', () => {
-    verifyFiles('015-block-constant-style', prettyPrintBlockLanguage);
+  it('013 Block: Iterator Empty Drop Target', () => {
+    verifyFiles('013-block-iterator-empty-drop-target', prettyPrintBlockLanguage);
   });
 });

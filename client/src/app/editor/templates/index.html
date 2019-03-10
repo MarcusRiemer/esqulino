@@ -1,29 +1,34 @@
-<!-- Toolbar at the top -->
-<editor-toolbar></editor-toolbar>
+<div class="body-nav-container">
+  <!-- Toolbar at the top -->
+  <editor-toolbar></editor-toolbar>
 
-<!-- There needs to be an option to trash things -->
-<trash></trash>
+  <!-- There needs to be an option to trash things -->
+  <trash></trash>
 
-<!-- Three column layout in any order -->
-<div class="editor">
-  <div [style.display]="(preferences.showSideNav | async) ? 'block' : 'none'"
-       [style.order]="(preferences.paneOrder | async).navbar"
-       class="navbar card">
-    <editor-navbar [project]="project"></editor-navbar>
-  </div>
+  <!-- Three column layout -->
+  <mat-sidenav-container class="editor">
+    <!-- Navigation -->
+    <mat-sidenav [opened]="showSideNav$ | async"
+                 [mode]="sidebarMode$ | async"
+                 (closedStart)="onSideNavClosed()"
+                 class="navbar">
+      <editor-navbar [project]="project"></editor-navbar>
+    </mat-sidenav>
 
-  <div [style.order]="(preferences.paneOrder | async).content"
-       class="content">
-    <!-- Show flash messages -->
-    <flash-message-list></flash-message-list>
-    <!-- And actual content -->
-    <router-outlet></router-outlet>
-  </div>
+    <!-- Toolbox -->
+    <mat-sidenav [opened]="isSidebarVisible$ | async"
+                 mode="side"
+                 position="end"
+                 class="navbar">
+      <sidebar-loader>
+      </sidebar-loader>
+    </mat-sidenav>
 
-  <div [style.display]="isSidebarVisible ? 'block' : 'none'"
-       [style.order]="(preferences.paneOrder | async).sidebar"
-       class="sidebar">
-    <sidebar-loader>
-    </sidebar-loader>
-  </div>
+    <mat-sidenav-content class="content">
+      <!-- Show flash messages -->
+      <flash-message-list></flash-message-list>
+      <!-- And actual content -->
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

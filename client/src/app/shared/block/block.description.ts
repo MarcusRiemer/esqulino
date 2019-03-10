@@ -12,7 +12,8 @@ export namespace VisualBlockDescriptions {
   /**
    * These variables are available when evaluating drop target visibility.
    */
-  export type VisibilityVars = "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty";
+  export type VisibilityVars =
+    "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "ifChildrenRequired";
 
   /**
    * This expression is evaluated to determine whether a drop target should be shown.
@@ -42,32 +43,9 @@ export namespace VisualBlockDescriptions {
   }
 
   /**
-   * The locations of categories at which insertions may occur.
-   */
-  export type CategoryInsertPosition = "insertFirst" | "insertLast";
-
-
-  export type CategoryInsert = {
-    order: CategoryInsertPosition;
-    category: string;
-  };
-
-  /**
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
-    // Drops something into the same category as the relevant node
-    self?: {
-      order: "insertBefore" | "insertAfter";
-      skipParents: number;
-    };
-
-    // Drops something into a category
-    children?: CategoryInsert;
-
-    // Drops something into a category of the parent
-    parent?: CategoryInsert;
-
     visibility?: VisibilityExpression;
   }
 
@@ -98,8 +76,10 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorDropTarget extends EditorLayout {
     blockType: "dropTarget";
-    children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
+    // True, if a drop target should be shown even though an empty
+    // child group is a perfectly valid syntax tree
+    emptyDropTarget?: boolean;
   }
 
   /**
@@ -107,8 +87,12 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorIterator extends EditorLayout {
     blockType: "iterator";
+    // The child group to iterate over
     childGroupName: string;
-    between?: ConcreteBlock[]
+    between?: ConcreteBlock[];
+    // True, if a drop marker should be shown even though an empty
+    // child group is a perfectly valid syntax tree
+    emptyDropTarget?: boolean;
   }
 
   /**
@@ -148,13 +132,7 @@ export namespace VisualBlockDescriptions {
 
   export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
 
-  // Default to inserting after the given node. This should be a meaningful default ...
-  export const DefaultDropTargetProperties: DropTargetProperties = {
-    self: {
-      order: "insertAfter",
-      skipParents: 0
-    }
-  }
+  export const DefaultDropTargetProperties: DropTargetProperties = {}
 
   // Type guard for EditorIterator
   export function isEditorIterator(obj?: EditorBlockBase): obj is EditorIterator {
@@ -183,7 +161,7 @@ export interface SidebarBlockDescription {
    * is needed. This happens e.g. when the user starts dragging this
    * block from the sidebar.
    */
-  defaultNode: NodeDescription;
+  defaultNode: NodeDescription | NodeDescription[];
 }
 
 /**

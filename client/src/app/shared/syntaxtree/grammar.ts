@@ -4,10 +4,12 @@ import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import {
   ErrorCodes, ValidationContext, ErrorMissingChild, ErrorMissingProperty,
-  ErrorUnexpectedType
+  ErrorUnexpectedType,
+  ErrorIllegalChildType,
+  ErrorSuperflousChild
 } from './validation-result'
 import { OccursSpecificDescription } from './grammar.description';
-import { resolveOccurs } from './grammar-util';
+import { resolveChildOccurs, resolveOccurs } from './grammar-util';
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -87,6 +89,11 @@ export abstract class NodeType {
   abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
 
   /**
+   * Valid amounts of children inside a certain category.
+   */
+  abstract validCardinality(categoryName: string): OccursSpecificDescription;
+
+  /**
    * These names are valid child categories
    */
   abstract get allowedChildrenCategoryNames(): string[];
@@ -113,8 +120,14 @@ export class NodeConcreteType extends NodeType {
           case "allowed":
           case "sequence":
           case "choice":
+          case "parentheses":
             this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
             break;
+          case "terminal":
+            // Do nothing
+            break;
+          default:
+            throw new Error(`Unknown validator requested: ${JSON.stringify(a)}`);
         }
       });
     }
@@ -125,6 +138,18 @@ export class NodeConcreteType extends NodeType {
    */
   get allowedChildrenCategoryNames() {
     return (Object.keys(this._allowedChildren));
+  }
+
+  /**
+   * @return Cardinality bounds for the given category.
+   */
+  validCardinality(categoryName: string): OccursSpecificDescription {
+    const category = this._allowedChildren[categoryName];
+    if (category) {
+      return (category.validCardinality());
+    } else {
+      return ({ maxOccurs: 0, minOccurs: 0 });
+    }
   }
 
   /**
@@ -216,6 +241,8 @@ function instanciateChildGroupValidator(group: NodeTypeChildren, desc: Desc.Node
       return (new NodeComplexTypeChildrenSequence(group, desc));
     case "choice":
       return (new NodeComplexTypeChildrenChoice(group, desc));
+    case "parentheses":
+      return (new NodeComplexTypeChildrenParentheses(group, desc));
     default:
       throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
   }
@@ -236,7 +263,7 @@ class NodeTypeChildren {
   }
 
   /**
-   * Checks the children of this group.
+   * Checks the given children.
    */
   validate(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
     // Check the top-level structure of the children
@@ -262,6 +289,13 @@ class NodeTypeChildren {
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
     return (this._childValidator.allowsChildType(childType));
   }
+
+  /**
+   * Valid amounts of children inside this category
+   */
+  validCardinality(): OccursSpecificDescription {
+    return (this._childValidator.validCardinality());
+  };
 
   /**
    * @return The node that is the parent to all of these node.
@@ -311,6 +345,11 @@ abstract class NodeComplexTypeChildrenValidator {
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName): boolean;
+
+  /**
+   * Valid amounts of children inside this category
+   */
+  abstract validCardinality(): OccursSpecificDescription;
 }
 
 /**
@@ -322,7 +361,7 @@ class ChildCardinality {
 
   constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren) {
     const parent = group.parent;
-    this._occurs = resolveOccurs(typeDesc);
+    this._occurs = resolveChildOccurs(typeDesc);
 
     if (typeof (typeDesc) === "string") {
       // Simple strings always refer to the language of the parent.
@@ -358,6 +397,115 @@ class ChildCardinality {
 }
 
 /**
+ * A function that takes the given list of nodes and attempts to
+ * match them against the given list of children.
+ *
+ * @param nodeTypes The nodes (and the cardinality) that are expected to be present.
+ * @param group The child group these children are placed in.
+ * @param parent The parent node that is involved.
+ * @param children The actual children to check.
+ * @param firstIndex The first child index to check.
+ * @param context Allows to report errors.
+ */
+type ChildrenValidationFunc = (
+  nodeTypes: ChildCardinality[],
+  group: NodeTypeChildren,
+  parent: AST.Node,
+  children: AST.Node[],
+  firstIndex: number,
+  context: ValidationContext
+) => {
+  firstUncheckedIndex: number,
+  validNodes: AST.Node[]
+};
+
+/**
+ * Greedily ensures that the given nodes (and their cardinality) are present in the same
+ * order in the children.
+ *
+ * @see ChildrenValidationFunc
+ */
+const validateSequence: ChildrenValidationFunc = (
+  nodeTypes: ChildCardinality[],
+  group: NodeTypeChildren,
+  parent: AST.Node,
+  children: AST.Node[],
+  firstIndex: number,
+  context: ValidationContext
+) => {
+  // These indices are expected
+  const validIndices: AST.Node[] = [];
+
+  // Used to step through all children of `ast`
+  let childIndex = firstIndex;
+
+  // Using `foreach` over the node types to ensure that all types
+  // we are expecting are actually present
+  nodeTypes.forEach(expected => {
+    // This index starts counting for every type. It is used
+    // to track whether minOccurences and maxOccurences are
+    // satisfied or not.
+    let subIndex = 0;
+
+    // Try to "eat" as many children as possible
+    while (subIndex < expected.maxOccurs) {
+
+      // Is a child actually present?
+      let child = children[childIndex];
+
+      if (child) {
+        // Yes, does it's type match?
+        if (expected.nodeType.matchesType(child.qualifiedName)) {
+          // Fine, we need to remember it
+          validIndices.push(child);
+        }
+        // Is the minimum number of expected elements met? Then
+        // we are done checking this child and allow the
+        // next element in the sequence to take over.
+        else if (subIndex >= expected.minOccurs) {
+          return; // Effectively jumps to next `expected`
+        }
+        // We would expect more of this type, but haven't got any.
+        else {
+          // Hand out a (more or less) detailed error message
+          const errData: ErrorIllegalChildType = {
+            present: child.qualifiedName,
+            expected: expected.nodeType.description,
+            index: childIndex,
+            category: group.categoryName,
+          };
+          context.addError(ErrorCodes.IllegalChildType, parent, errData);
+        }
+      }
+      // There is no child, is that valid?
+      else {
+        if (subIndex < expected.minOccurs) {
+          // There is no child present, but the current type expects it
+          const errData: ErrorMissingChild = {
+            expected: expected.nodeType.description,
+            index: childIndex,
+            category: group.categoryName,
+          };
+          context.addError(ErrorCodes.MissingChild, parent, errData);
+        } else {
+          // There is no child present, but thats OK
+          return; // Effectively jumps to next `expected`
+        }
+      }
+
+      // Go for the next child
+      childIndex++;
+      subIndex++;
+    }
+  });
+
+  return ({
+    firstUncheckedIndex: childIndex,
+    validNodes: validIndices
+  });
+}
+
+/**
  * Enforces a specific sequence of child-nodes of a parent node.
  */
 class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
@@ -374,78 +522,26 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   /**
    * Ensures the sequence is correct
    */
-  validateChildrenImpl(parent: AST.Node, children: AST.Node[], context: ValidationContext): AST.Node[] {
-    // Valid children that should be checked more thorughly
-    const toReturn = [];
-
-    // Used to step through all children of `ast`
-    let childIndex = 0;
-
-    // Ensure that all types we are expecting are actually present
-    this._nodeTypes.forEach(expected => {
-      // This index starts counting for every type. It is used
-      // to track whether minOccurences and maxOccurences are
-      // satisfied or not.
-      let subIndex = 0;
-
-      // Try to "eat" as many children as possible
-      while (subIndex < expected.maxOccurs) {
-
-        // Is a child actually present?
-        let child = children[childIndex];
-
-        if (child) {
-          // Yes, does it's type match?
-          if (expected.nodeType.matchesType(child.qualifiedName)) {
-            // Sign up for further validation
-            toReturn.push(children[childIndex]);
-          }
-          // Is the minimum number of expected elements met? Then
-          // we are done checking this child and allow the
-          // next element in the sequence to take over.
-          else if (subIndex >= expected.minOccurs) {
-            return; // Effectively jumps to next `expected`
-          }
-          // We would expect more of this type, but haven't got any.
-          else {
-            // Hand out a (more or less) detailed error message
-            context.addError(ErrorCodes.IllegalChildType, child, {
-              present: child.qualifiedName,
-              expected: expected.nodeType.description,
-              index: childIndex,
-            });
-          }
-        }
-        // There is no child, is that valid?
-        else {
-          if (subIndex < expected.minOccurs) {
-            // There is no child present, but the current type expects it
-            context.addError(ErrorCodes.MissingChild, parent, {
-              childrenCategory: this._group.categoryName,
-              expected: expected.nodeType.description,
-              index: childIndex
-            } as ErrorMissingChild);
-          } else {
-            // There is no child present, but thats OK
-            return; // Effectively jumps to next `expected`
-          }
-        }
-
-        // Go for the next child
-        childIndex++;
-        subIndex++;
-      }
-    });
+  validateChildrenImpl(
+    parent: AST.Node,
+    children: AST.Node[],
+    context: ValidationContext
+  ): AST.Node[] {
+    // The actual sequence validation walks over the existing node types
+    let res = validateSequence(this._nodeTypes, this._group, parent, children, 0, context);
 
     // Any children left at this point are errors
-    for (; childIndex < children.length; childIndex++) {
-      context.addError(ErrorCodes.SuperflousChild, children[childIndex], {
-        index: childIndex,
-        present: children[childIndex].qualifiedName
-      });
+    for (let i = res.firstUncheckedIndex; i < children.length; i++) {
+      const errData: ErrorSuperflousChild = {
+        present: children[i].qualifiedName,
+        index: i,
+        category: this._group.categoryName,
+      };
+      context.addError(ErrorCodes.SuperflousChild, parent, errData);
     }
 
-    return (toReturn);
+    // Valid children that should be checked more thorughly
+    return (res.validNodes);
   }
 
   /**
@@ -454,6 +550,87 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
     return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
   }
+
+  /**
+   * @return The minimum and maximum number of children in this category as a whole
+   */
+  validCardinality(): Desc.OccursSpecificDescription {
+    return (
+      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+        return ({
+          maxOccurs: akku.maxOccurs + curr.maxOccurs,
+          minOccurs: akku.minOccurs + curr.minOccurs
+        });
+      }, { minOccurs: 0, maxOccurs: 0 })
+    );
+  }
+}
+
+const validateAllowed: ChildrenValidationFunc = function(
+  this: void,
+  nodeTypes: ChildCardinality[],
+  group: NodeTypeChildren,
+  parent: AST.Node,
+  children: AST.Node[],
+  firstIndex: number,
+  context: ValidationContext
+) {
+  let index = firstIndex;
+
+  // These children are expected
+  const toReturn: AST.Node[] = [];
+  // Initially no node has occured so far
+  const occurences: number[] = nodeTypes.map(_ => 0);
+
+  // The "allowed" restriction can be checked by iterating over children
+  // directly, the types are resolved on demand.
+  for (; index < children.length; ++index) {
+    const node = children[index];
+    // Find a matching type
+    const cardinalityRef = nodeTypes.find(type => type.nodeType.matchesType(node.qualifiedName));
+    if (!cardinalityRef) {
+      // The node is entirely unexpected
+      context.addError(ErrorCodes.IllegalChildType, node, {
+        index: index,
+        present: node.qualifiedName,
+        expected: nodeTypes.map(t => t.nodeType.description)
+      });
+    } else {
+      // The node is expected, but may occur too often. For the moment we simply count it.
+      const cardinalityIndex = nodeTypes.indexOf(cardinalityRef);
+      occurences[cardinalityIndex]++;
+      toReturn.push(node);
+    }
+  }
+
+  // Ensure that all cardinality limits have been respected
+  occurences.forEach((num, index) => {
+    const cardinalityRef = nodeTypes[index];
+    if (num < cardinalityRef.minOccurs) {
+      // A specific type appeared not often enough
+      context.addError(ErrorCodes.InvalidMinOccurences, parent, {
+        category: group.categoryName,
+        type: nodeTypes[index].nodeType.description,
+        minOccurs: cardinalityRef.minOccurs,
+        actual: num
+      });
+    }
+
+    if (num > cardinalityRef.maxOccurs) {
+      // A specific type appeared too often
+      context.addError(ErrorCodes.InvalidMaxOccurences, parent, {
+        category: group.categoryName,
+        type: nodeTypes[index].nodeType.description,
+        maxOccurs: cardinalityRef.maxOccurs,
+        actual: num
+      });
+    }
+  });
+
+  return ({
+    firstUncheckedIndex: index,
+    validNodes: [],
+  });
 }
 
 /**
@@ -462,69 +639,19 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
  */
 class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
-  private _categoryName: string;
 
-  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
+  constructor(private _group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
     super();
 
-    this._categoryName = group.categoryName;
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, _group));
   }
 
   /**
    * Ensures that every child has at least a matching type.
    */
   validateChildrenImpl(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
-    // These children are expected
-    const toReturn: AST.Node[] = [];
-    // Initially no node has occured so far
-    const occurences: number[] = this._nodeTypes.map(_ => 0);
-
-    // The "allowed" restriction can be checked by iterating over children
-    // directly, the types are resolved on demand.
-    children.forEach((node, index) => {
-      // Find a matching type
-      const cardinalityRef = this._nodeTypes.find(type => type.nodeType.matchesType(node.qualifiedName));
-      if (!cardinalityRef) {
-        // The node is entirely unexpected
-        context.addError(ErrorCodes.IllegalChildType, node, {
-          index: index,
-          present: node.qualifiedName,
-          expected: this._nodeTypes.map(t => t.nodeType.description)
-        });
-      } else {
-        // The node is expected, but may occur too often. For the moment we simply count it.
-        const cardinalityIndex = this._nodeTypes.indexOf(cardinalityRef);
-        occurences[cardinalityIndex]++;
-        toReturn.push(node);
-      }
-    });
-
-    // Ensure that all cardinality limits have been respected
-    occurences.forEach((num, index) => {
-      const cardinalityRef = this._nodeTypes[index];
-      if (num < cardinalityRef.minOccurs) {
-        // A specific type appeared not often enough
-        context.addError(ErrorCodes.InvalidMinOccurences, parent, {
-          category: this._categoryName,
-          type: this._nodeTypes[index].nodeType.description,
-          minOccurs: cardinalityRef.minOccurs,
-          actual: num
-        });
-      }
-
-      if (num > cardinalityRef.maxOccurs) {
-        // A specific type appeared too often
-        context.addError(ErrorCodes.InvalidMaxOccurences, parent, {
-          category: this._categoryName,
-          type: this._nodeTypes[index].nodeType.description,
-          maxOccurs: cardinalityRef.maxOccurs,
-          actual: num
-        });
-      }
-    });
-
-    return (toReturn);
+    const res = validateAllowed(this._nodeTypes, this._group, parent, children, 0, context);
+    return (res.validNodes);
   }
 
   /**
@@ -532,6 +659,20 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
     return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+  }
+
+  /**
+   * @return The minimum and maximum number of children in this category as a whole
+   */
+  validCardinality(): Desc.OccursSpecificDescription {
+    return (
+      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+        return ({
+          maxOccurs: akku.maxOccurs + curr.maxOccurs,
+          minOccurs: akku.minOccurs + curr.minOccurs
+        });
+      }, { minOccurs: 0, maxOccurs: 0 })
+    );
   }
 }
 
@@ -603,6 +744,115 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
       .some(choiceType => AST.typenameEquals(childType, choiceType)));
   }
 
+  /**
+   * @return The minimum and maximum number of children in this category as a whole
+   */
+  validCardinality(): Desc.OccursSpecificDescription {
+    return ({ maxOccurs: 0, minOccurs: 0 });
+  }
+}
+
+/**
+ * A child group in parentheses to verify the cardinality of more then a single item.
+ */
+class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidator {
+
+  private _group: NodeTypeChildren;
+  private _cardinality: Desc.OccursSpecificDescription;
+  private _nodeTypes: ChildCardinality[];
+  private _subChildValidator: ChildrenValidationFunc;
+
+  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesParenthesesDescription) {
+    super();
+    this._cardinality = resolveOccurs(desc.cardinality);
+    this._nodeTypes = desc.group.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
+    this._group = group;
+
+    switch (desc.group.type) {
+      case "sequence":
+        this._subChildValidator = validateSequence;
+        break;
+      case "allowed":
+        this._subChildValidator = validateAllowed;
+        break;
+      default:
+        throw new Error(`Unknown parentheses group validator: ${JSON.stringify(desc.group)}`);
+    }
+  }
+
+  /**
+   * Checks whether the grouping is valid and appears an appropriate number of times.
+   */
+  protected validateChildrenImpl(p: AST.Node, children: AST.Node[], c: ValidationContext): AST.Node[] {
+    let currChildIndex = 0;
+    let validNodes: AST.Node[] = [];
+
+    let numIterations = 0;
+
+    // Empty expected types should not occur, but if they would
+    // this loop would run endlessly: As there is no expected type
+    // to validate any child the child index is never incremented.
+    if (this._nodeTypes.length > 0) {
+      // Try to do as many iterations over the existing children as possible
+      while (currChildIndex < children.length) {
+        const res = this._subChildValidator(this._nodeTypes, this._group, p, children, currChildIndex, c);
+
+        validNodes.push(...res.validNodes);
+        currChildIndex = res.firstUncheckedIndex;
+
+        numIterations++;
+      }
+
+      // Did we find enough children?
+      if (numIterations < this._cardinality.minOccurs) {
+        c.addError(ErrorCodes.InvalidMinOccurences, p);
+      } else if (numIterations > this._cardinality.maxOccurs) {
+        c.addError(ErrorCodes.InvalidMaxOccurences, p);
+      }
+    } else {
+      // None of these children was expected (because no type was expected at all)
+      // This is probably an error in the grammar and should never occur to a
+      // normal end user.
+      c.addError(ErrorCodes.ParenthesesEmptyTypes, p);
+    }
+
+    // Return only children that have been explicitly marked as valid
+    return (validNodes);
+  }
+
+  /**
+   * @return True, if any of the mentioned children matches the given type.
+   */
+  allowsChildType(childType: AST.QualifiedTypeName): boolean {
+    return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+  }
+
+  /**
+   * Checks the cardinalities of all children and then takes the cardinality
+   * of the whole parentheses into account.
+   *
+   * @return The actual range of children that could occur.
+   */
+  validCardinality(): Desc.OccursSpecificDescription {
+    const childCardinality: Desc.OccursSpecificDescription =
+      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+        return ({
+          maxOccurs: akku.maxOccurs + curr.maxOccurs,
+          minOccurs: akku.minOccurs + curr.minOccurs
+        });
+      }, { minOccurs: 0, maxOccurs: 0 })
+
+    // A group that is not optional requires at least a single child,
+    // Or to be more precise: There must be at least as many children as the cardinality
+    // of the group itself requires.
+    return ({
+      maxOccurs: childCardinality.maxOccurs * this._cardinality.maxOccurs,
+      minOccurs: Math.max(
+        childCardinality.minOccurs * this._cardinality.minOccurs,
+        this._cardinality.minOccurs
+      ),
+    });
+  }
 }
 
 /**
@@ -786,6 +1036,14 @@ class NodeOneOfType extends NodeType {
   }
 
   /**
+   * As this node should never physically appear in a tree, asking
+   * it for valid cardinalities is meaningless.
+   */
+  validCardinality(_: string): OccursSpecificDescription {
+    return ({ maxOccurs: 0, minOccurs: 0 });
+  }
+
+  /**
    * Checks whether the given node is one of the nodes.
    */
   validate(ast: AST.Node, context: ValidationContext): void {
@@ -899,26 +1157,33 @@ class TypeReference {
  */
 export class GrammarValidator {
   private _validator: Validator;
-  private _grammarName: string;
+  private _technicalName: string;
   private _registeredTypes: { [name: string]: NodeType } = {};
   private _rootType: TypeReference;
 
+  /**
+   * Construct a new validator for a specific grammar.
+   *
+   * @param validator The parenting validator of this grammar, used to look
+   *                  up possible cross references to other grammars.
+   * @param desc The description of the grammar to validate.
+   */
   constructor(validator: Validator, desc: Desc.GrammarDocument) {
     this._validator = validator;
-    this._grammarName = desc.technicalName;
+    this._technicalName = desc.technicalName;
 
     Object.entries(desc.types).forEach(([typeName, typeDesc]) => {
       this.registerTypeValidator(typeName, typeDesc)
     });
 
-    this._rootType = new TypeReference(validator, desc.root, this._grammarName);
+    this._rootType = new TypeReference(validator, desc.root, this._technicalName);
   }
 
   /**
    * @return The technical name of this grammar
    */
-  get grammarName() {
-    return (this._grammarName);
+  get technicalName() {
+    return (this._technicalName);
   }
 
   /**
@@ -959,7 +1224,7 @@ export class GrammarValidator {
    */
   getType(typename: string) {
     if (!this.isKnownType(typename)) {
-      throw new Error(`Language "${this._grammarName}" does not have type "${typename}"`);
+      throw new Error(`Language "${this._technicalName}" does not have type "${typename}"`);
     } else {
       return (this._registeredTypes[typename]);
     }
@@ -970,13 +1235,13 @@ export class GrammarValidator {
    */
   private registerTypeValidator(nodeName: string, desc: Desc.NodeTypeDescription) {
     if (this.isKnownType(nodeName)) {
-      throw new Error(`Attempted to register node "${nodeName}" twice for "${this._grammarName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
+      throw new Error(`Attempted to register node "${nodeName}" twice for "${this._technicalName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
     if (Desc.isNodeConcreteTypeDescription(desc)) {
-      this._registeredTypes[nodeName] = new NodeConcreteType(this._validator, desc, this._grammarName, nodeName);
+      this._registeredTypes[nodeName] = new NodeConcreteType(this._validator, desc, this._technicalName, nodeName);
     } else if (Desc.isNodeOneOfTypeDescription(desc)) {
-      this._registeredTypes[nodeName] = new NodeOneOfType(this._validator, desc, this._grammarName, nodeName);
+      this._registeredTypes[nodeName] = new NodeOneOfType(this._validator, desc, this._technicalName, nodeName);
     }
   }
 }

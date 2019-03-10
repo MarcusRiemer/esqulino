@@ -61,7 +61,7 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT Charakter.Charakter_ID, Charakter.Charakter_Name, COUNT(Charakter.Charakter_ID)
     FROM Charakter, Auftritt
-    WHERE (Charakter.Charakter_ID = Auftritt.Charakter_ID)
+    WHERE Charakter.Charakter_ID = Auftritt.Charakter_ID
     GROUP BY Charakter.Charakter_ID
     ORDER BY COUNT(Charakter.Charakter_ID) DESC, Charakter.Charakter_Name DESC
 new_record: false

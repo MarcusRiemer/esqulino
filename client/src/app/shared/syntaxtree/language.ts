@@ -49,6 +49,13 @@ export class Language {
   }
 
   /**
+   * @return The validator that is assoicated with this language
+   */
+  get validator() {
+    return (this._validator);
+  }
+
+  /**
    * A new language that uses the exact same custom code assets (code
    * generator, additional validators) but a different grammar.
    */

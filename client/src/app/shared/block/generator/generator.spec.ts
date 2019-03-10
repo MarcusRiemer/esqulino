@@ -304,37 +304,28 @@ describe("BlockLanguage Generator", () => {
         text: "t"
       } as Partial<VisualBlockDescriptions.EditorConstant>));
 
-      // The next three blocks are iterators and their drop targets
+      // The next three blocks are iterators
 
       // #1
       expect(b.children[2]).toEqual(jasmine.objectContaining({
         blockType: "iterator",
         childGroupName: "c1"
       } as Partial<VisualBlockDescriptions.EditorIterator>));
-      expect(b.children[3]).toEqual(jasmine.objectContaining({
-        blockType: "dropTarget"
-      } as Partial<VisualBlockDescriptions.EditorDropTarget>));
 
       // #2
-      expect(b.children[4]).toEqual(jasmine.objectContaining({
+      expect(b.children[3]).toEqual(jasmine.objectContaining({
         blockType: "iterator",
         childGroupName: "c2"
       } as Partial<VisualBlockDescriptions.EditorIterator>));
-      expect(b.children[5]).toEqual(jasmine.objectContaining({
-        blockType: "dropTarget"
-      } as Partial<VisualBlockDescriptions.EditorDropTarget>));
 
       // #3
-      expect(b.children[6]).toEqual(jasmine.objectContaining({
+      expect(b.children[4]).toEqual(jasmine.objectContaining({
         blockType: "iterator",
         childGroupName: "c3"
       } as Partial<VisualBlockDescriptions.EditorIterator>));
-      expect(b.children[7]).toEqual(jasmine.objectContaining({
-        blockType: "dropTarget"
-      } as Partial<VisualBlockDescriptions.EditorDropTarget>));
 
       // And then we have a property
-      expect(b.children[8]).toEqual(jasmine.objectContaining({
+      expect(b.children[5]).toEqual(jasmine.objectContaining({
         blockType: "input",
         property: "p1"
       } as Partial<VisualBlockDescriptions.EditorInput>));
