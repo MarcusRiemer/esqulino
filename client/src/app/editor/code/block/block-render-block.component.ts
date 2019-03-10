@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map, withLatestFrom, distinctUntilChanged, tap } from 'rxjs/operators';
 
-import { Node, CodeResource, locationEquals } from '../../../shared/syntaxtree';
+import { Node, CodeResource, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { arrayEqual } from '../../../shared/util';
 import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
@@ -40,7 +40,8 @@ export class BlockRenderBlockComponent {
 
   constructor(
     private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _changeDetector: ChangeDetectorRef
   ) {
   }
 
@@ -100,7 +101,9 @@ export class BlockRenderBlockComponent {
       map(loc => {
         const matchingLength = locationMatchingLength(this.node.location, loc);
         return (matchingLength !== false && matchingLength > 0 && matchingLength - 1 < loc.length);
-      })
+      }),
+      distinctUntilChanged(),
+      tap(_ => this._changeDetector.markForCheck())
     );
 
   /**
@@ -108,6 +111,8 @@ export class BlockRenderBlockComponent {
    */
   readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
     .pipe(
-      map(loc => locationEquals(loc, this.node.location))
+      map(loc => locationEquals(loc, this.node.location)),
+      distinctUntilChanged(),
+      tap(_ => this._changeDetector.markForCheck())
     );
 }
