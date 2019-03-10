@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { flatMap, first } from 'rxjs/operators';
 
@@ -36,7 +36,8 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
 
   constructor(
     private _truckWorld: TruckWorldService,
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _zone: NgZone
   ) {
   }
 
@@ -84,9 +85,17 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
 
   runCode() {
     this.generatedCode.then((generatedCode) => {
+      // We start a new program, that means the program is currently not running.
       this._currentCodeResource.setCurrentExecutionLocation(undefined);
 
-      this.world.runCode(generatedCode, this._progressCallback.bind(this)).then(() => {
+      this.world.runCode(generatedCode,
+        // Run the executed callback inside the angular zone
+        (loc: NodeLocation) => {
+          this._zone.run(_ => {
+            this._progressCallback(loc);
+          });
+        }
+      ).then(() => {
         // success, nothing to do
       }).catch((error) => {
         console.error(error);

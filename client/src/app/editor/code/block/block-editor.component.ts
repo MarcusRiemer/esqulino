@@ -71,7 +71,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     // Trigger change detection for the whole tree if the executed code
     // location changes.
     let ref = this._currentCodeResource.currentExecutionLocation.subscribe(_ => {
-      this._cd.detectChanges();
+      // this._cd.detectChanges();
     });
     this._subscriptionRefs.push(ref);
   }
