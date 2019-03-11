@@ -8,6 +8,7 @@ export interface SmartDropOptions {
   allowEmbrace?: boolean;
   allowAnyParent?: boolean;
   allowExact?: boolean;
+  allowReplace?: boolean;
 };
 
 /**

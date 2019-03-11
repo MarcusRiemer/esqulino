@@ -206,6 +206,9 @@ export class NodeConcreteType extends NodeType {
     });
   }
 
+  /**
+   * @return True if the given type is allowed in the given category.
+   */
   allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean {
     const category = this._allowedChildren[categoryName];
     return !!(category && category.allowsChildType(childType));
