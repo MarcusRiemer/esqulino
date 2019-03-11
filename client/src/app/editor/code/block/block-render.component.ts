@@ -18,11 +18,12 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
   // TODO: Move animations to host component
   //       https://stackoverflow.com/questions/38975808/adding-an-angular-animation-to-a-host-element
   animations: [
-    trigger('isExecuted', [
-      state('false', style({ "background": "white" })),
-      state('true', style({ "background": "lime" })),
-      transition('false => true', animate(0)),
-      transition('true => false', animate(1000))
+    trigger('background', [
+      state('neutral', style({ "background": "white" })),
+      state('executed', style({ "background": "lime" })),
+      state('replaced', style({ "background": "red" })),
+      // Easings function examples at https://easings.net/
+      transition('executed => neutral', animate('2000ms cubic-bezier(0.215, 0.61, 0.355, 1)'))
     ]),
     trigger('isEmbraced', [
       state('false', style({ "transform": "scale(1.0)" })),

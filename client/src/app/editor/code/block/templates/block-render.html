@@ -80,7 +80,7 @@
          * draggable and (dragStart) offload the drag detection to the browser
          * (mouseover) informs the global state about drag events -->
     <editor-block-render-block #currentBlock
-                               [@isExecuted]="currentBlock.isCurrentlyExecuted | async"
+                               [@background]="currentBlock.backgroundState | async"
                                [@isEmbraced]="currentBlock.isEmbraceDrop | async"
                                [blockLayout]="visual"
                                [blockBase]="visual"
@@ -89,12 +89,15 @@
                                [visual]="visual"
                                [readOnly]="readOnly"
                                [class.read-only]="readOnly"
+                               [class.being-replaced]="(currentBlock.isBeingReplaced | async) || true"
                                draggable="true"
                                (dragstart)="currentBlock.onStartDrag($event, block)"
                                (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
   <!-- Something is broken, display an error message -->
-  <div *ngSwitchDefault>Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar</div>
+  <div *ngSwitchDefault>
+    Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar
+  </div>
 </ng-container>
 <div *ngIf="breakAfter" class="break-after"></div>
