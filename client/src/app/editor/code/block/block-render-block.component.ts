@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { map, withLatestFrom, distinctUntilChanged, tap } from 'rxjs/operators';
+import { map, withLatestFrom, distinctUntilChanged, tap, combineLatest } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -9,6 +9,8 @@ import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
+
+export type BackgroundState = "executed" | "replaced" | "neutral";
 
 /**
  * Renders a single and well known visual element of a node.
@@ -85,10 +87,13 @@ export class BlockRenderBlockComponent {
     }
   }
 
+  /**
+   * A mouse has entered the block and might want to drop something.
+   */
   onMouseEnter(evt: MouseEvent) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
-        allowAnyParent: true, allowEmbrace: true, allowAppend: true
+        allowAnyParent: true, allowEmbrace: true, allowAppend: true, allowReplace: true
       });
     }
   }
@@ -115,4 +120,38 @@ export class BlockRenderBlockComponent {
       distinctUntilChanged(),
       tap(_ => this._changeDetector.markForCheck())
     );
+
+  /**
+   * True, if this block is currently being replaced.
+   */
+  readonly isBeingReplaced = this._latestDragData.pipe(
+    map(([currentDrag, inProgress]) => {
+      if (inProgress && currentDrag.smartDrops.length > 0) {
+        const smartDrop = currentDrag.smartDrops[0];
+
+        return (
+          smartDrop.operation === "replace"
+          && locationEquals(this.node.location, smartDrop.location)
+        );
+      } else {
+        return (false);
+      }
+    })
+  );
+
+  /**
+   * All different background states.
+   */
+  readonly backgroundState = this.isBeingReplaced.pipe(
+    combineLatest(this.isCurrentlyExecuted),
+    map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
+      if (isBeingReplaced && !this.readOnly) {
+        return ("replaced");
+      } else if (isCurrentlyExecuted) {
+        return ("executed");
+      } else {
+        return ("neutral");
+      }
+    })
+  );
 }

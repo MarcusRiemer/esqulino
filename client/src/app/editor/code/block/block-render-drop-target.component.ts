@@ -178,7 +178,12 @@ export class BlockRenderDropTargetComponent {
   /** @return True, if this drop target is currently targeted by a drag */
   private readonly _isCurrentDropLocation = this._latestDragData.pipe(
     map(([currentDrag, inProgress]) => {
-      return (inProgress && arrayEqual(currentDrag.dropLocation, this.dropLocation));
+      if (inProgress && currentDrag.smartDrops.length > 0) {
+        return (currentDrag.smartDrops[0].operation === "insert"
+          && arrayEqual(currentDrag.dropLocation, this.dropLocation));
+      } else {
+        return (false);
+      }
     })
   );
 
