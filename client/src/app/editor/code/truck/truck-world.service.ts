@@ -7,6 +7,9 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { World } from '../../../shared/syntaxtree/truck/world';
 import { readFromNode } from '../../../shared/syntaxtree/truck/world.description';
 
+/**
+ * Keeps track of different states for Trucklino.
+ */
 @Injectable()
 export class TruckWorldService {
   private readonly _worldIds: { [id: string]: string } = {};
