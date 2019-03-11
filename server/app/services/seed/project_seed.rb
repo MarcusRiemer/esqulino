@@ -9,8 +9,11 @@ module Seed
         CodeResourceSeed => "code_resources",
         ProjectSourceSeed => "project_sources",
         ProjectDatabaseSeed => "project_databases",
-        ProjectDefaultDatabaseSeed => "default_database",
+        ProjectDatabaseSeed => "default_database",
       })
     end
+
+    # Storing images
+
   end
 end
