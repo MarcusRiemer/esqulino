@@ -19,14 +19,13 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
   //       https://stackoverflow.com/questions/38975808/adding-an-angular-animation-to-a-host-element
   animations: [
     trigger('isExecuted', [
+      state('false', style({ "background": "white" })),
       state('true', style({ "background": "lime" })),
-      transition('false <=> true', animate(200))
-    ]),
-    trigger('isOnExecutionPath', [
-      state('true', style({ "background": "#b9ffb7" })),
-      transition('false <=> true', animate(200))
+      transition('false => true', animate(0)),
+      transition('true => false', animate(1000))
     ]),
     trigger('isEmbraced', [
+      state('false', style({ "transform": "scale(1.0)" })),
       state('true', style({ "transform": "scale(1.1)" })),
       transition('false <=> true', animate(200))
     ])
