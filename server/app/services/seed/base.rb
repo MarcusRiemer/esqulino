@@ -39,6 +39,13 @@ module Seed
       File.join directory, "#{deps_id}-deps.yaml"
     end
 
+    def store_image
+      if File.directory? seed.images_directory_path
+        puts "Storing images"
+        FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
+      end
+    end
+
     def start_store
       store(Set.new)
     end
@@ -47,6 +54,7 @@ module Seed
       if processed.include? [seed_directory, seed_id.id]
       else
         store_seed
+        store_image if seed.respond_to?(:images_directory_path)
         processed << [seed_directory, seed_id.id]
         store_dependencies(processed)
       end
