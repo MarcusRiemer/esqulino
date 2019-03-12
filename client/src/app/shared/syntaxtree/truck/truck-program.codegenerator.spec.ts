@@ -86,11 +86,11 @@ describe('Language: Trucklino Program (Codegen)', () => {
     verifyFiles("ast-06-boolean-binary-expression", emitTree);
   });
 
-  it('If: If', () => {
+  it('If: if', () => {
     verifyFiles("ast-07-if", emitTree);
   });
 
-  it('If: If Else', () => {
+  it('If: if ... else', () => {
     verifyFiles("ast-08-if-else", emitTree);
   });
 
@@ -138,5 +138,13 @@ describe('Language: Trucklino Program (Codegen)', () => {
   it('Program: Example', () => {
     verifyFiles("ast-18-program-example", emitTree);
     verifySuffixFiles("ast-18-program-example", "progress", emitTreeWithProgressCallbacks);
+  });
+
+  it('If: if ... else if', () => {
+    verifyFiles("ast-19-if-elsif", emitTree);
+  });
+
+  it('If: if ... else if ... else', () => {
+    verifyFiles("ast-20-if-elsif-else", emitTree);
   });
 });

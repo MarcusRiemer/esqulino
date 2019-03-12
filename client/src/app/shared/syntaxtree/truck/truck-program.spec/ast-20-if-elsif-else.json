@@ -20,6 +20,32 @@
         }
       }
     ],
+    "elseIf": [
+      {
+        "language": "trucklino_program",
+        "name": "ifElseIf",
+        "children" : {
+          "pred": [
+            {
+              "language": "trucklino_program",
+              "name": "booleanConstant",
+              "properties": {
+                "value": "true"
+              }
+            }
+          ],
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Wait"
+              }
+            }
+          ]
+        }
+      }
+    ],
     "else": [
       {
         "language": "trucklino_program",
