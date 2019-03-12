@@ -23,7 +23,8 @@
      routerLinkActive="router-link-active">
     <span class="fa fa-file-code-o fa-fw"></span>
     <span class="nav-target">{{ codeResource.name }}</span>
-    <span *ngIf="codeResource?.isSavingRequired" class="save-icon fa fa-floppy-o"></span>
+    <span [style.visibility]="codeResource?.isSavingRequired ? 'visible' : 'hidden'"
+          class="save-icon fa fa-floppy-o"></span>
   </a>
   <mat-divider></mat-divider>
 
