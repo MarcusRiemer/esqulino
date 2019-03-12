@@ -10,14 +10,14 @@
     </a>
     <a mat-button [routerLink]="'/about/projects'">
       <i class="fa fa-cubes" aria-hidden="true"></i>
-      Verfügbare Projekte
+      <span i18n="available projects button text">Verfügbare Projekte</span>
     </a>
   </ng-container>
 
   <ng-container position="end">
     <a mat-button [routerLink]="['/about','academia']">
       <span class="fa fa-flask" aria-hidden="true"></span>
-      Forschung
+      <span i18n="research button text">Forschung</span>
     </a>
   </ng-container>
 </app-toolbar>
@@ -27,13 +27,13 @@
   <router-outlet></router-outlet>
   <nav class="footer">
     <div>
-      <a [routerLink]="['/about','imprint']">
+      <a [routerLink]="['/about','imprint']" i18n="imprint footer link text">
         Impressum
       </a>
-      <a [routerLink]="['/about','privacy']">
+      <a [routerLink]="['/about','privacy']" i18n="privacy footer link text">
         Datenschutz
       </a>
-      <a [routerLink]="['/about','academia']">
+      <a [routerLink]="['/about','academia']" i18n="academica footer link text">
         Forschung
       </a>
     </div>

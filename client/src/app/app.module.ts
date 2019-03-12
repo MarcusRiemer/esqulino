@@ -1,5 +1,5 @@
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, registerLocaleData } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -16,12 +16,19 @@ import { routing } from './app.routes';
 
 import { NotifyErrorHandler } from './error-handler';
 
+import localeDe from '@angular/common/locales/de';
+import localeFr from '@angular/common/locales/fr';
+
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
 if (typeof window !== "undefined") {
   var _paq = (typeof (window as any)._paq === "undefined") ? [] : _paq;
   (window as any)._paq = _paq;
 }
+
+// registering local data for custom locales
+registerLocaleData(localeDe, 'de');
+registerLocaleData(localeFr, 'fr');
 
 @NgModule({
   imports: [
