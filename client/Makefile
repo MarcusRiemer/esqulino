@@ -29,6 +29,7 @@ dist-dev: client-compile cli-compile universal-compile
 ##################################
 client-compile : msg-pre-build
 	$(NG_BIN) build --aot --prod $(NG_OPTS)
+	$(NG_BIN) build --aot --prod --configuration=production-en $(NG_OPTS)
 
 client-compile-dev : msg-pre-build
 	$(NG_BIN) build --aot $(NG_OPTS)
@@ -63,6 +64,7 @@ cli-update-block-languages: cli-compile
 dist/server.js: $(CLIENT_ALL_SOURCES)
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
 	$(NG_BIN) run blattwerkzeug-client:server
+	$(NG_BIN) run blattwerkzeug-client:server --configuration=en
 	node_modules/.bin/webpack --config webpack.server.config.js --progress
 
 universal-run: dist/server.js

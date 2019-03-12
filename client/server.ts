@@ -28,28 +28,70 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
+// import your bundles
+const defaultBundle = require('./dist/server/de/main');
+const enBundle = require('./dist/server/en/main');
+
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
+// const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
+
+const languageEngines = [{
+  id: 'en',
+  base: '/en/',
+  engine: ngExpressEngine({
+    bootstrap: enBundle.AppServerModuleNgFactory,
+    providers: [provideModuleMap(enBundle.LAZY_MODULE_MAP)]
+  })
+},
+{
+  id: 'de',
+  base: '',
+  engine: ngExpressEngine({
+    bootstrap: defaultBundle.AppServerModuleNgFactory,
+    providers: [provideModuleMap(defaultBundle.LAZY_MODULE_MAP)]
+  })
+}];
 
 // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-app.engine('html', ngExpressEngine({
-  bootstrap: AppServerModuleNgFactory,
-  providers: [
-    provideModuleMap(LAZY_MODULE_MAP)
-  ]
-}));
+// app.engine('html', ngExpressEngine({
+//   bootstrap: AppServerModuleNgFactory,
+//   providers: [
+//     provideModuleMap(LAZY_MODULE_MAP)
+//   ]
+// }));
+
+app.engine('html', (filePath, options, callback) => {
+  options.engine(
+    filePath,
+    { req: options.req, res: options.res},
+    callback
+  )
+});
 
 app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, 'browser'));
 
 // Example Express Rest API endpoints
-// app.get('/api/**', (req, res) => { });
+app.get('/api/**', (req, res) => { res.send('OK') });
 // Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
+app.get('/en/**.*', express.static(join(DIST_FOLDER, 'browser'), {
+  maxAge: '1y'
+}));
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de'), {
   maxAge: '1y'
 }));
 
 // All regular routes use the Universal engine
+languageEngines.forEach(languageEngine => {
+  app.get(`${languageEngine.base}*`, (req, res) => {
+    res.render(`./${languageEngine.id}/index`, {
+      req,
+      res,
+      engine: languageEngine.engine
+    })
+  })
+});
+
 app.get('*', (req, res) => {
   res.render('index', { req });
 });
