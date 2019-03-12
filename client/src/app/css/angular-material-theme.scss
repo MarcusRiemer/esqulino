@@ -65,6 +65,17 @@ mat-nav-list#main-nav {
     .router-link-active {
         background-color: mat-color($ide-app-primary);
     }
+
+    /* Don't break in menu items */
+    .mat-list-item {
+        white-space: nowrap;
+
+        .nav-target {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 16ch;
+        }
+    }
 }
 
 .mat-drawer-container {
