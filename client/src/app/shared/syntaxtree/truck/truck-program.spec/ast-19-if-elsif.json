@@ -20,11 +20,20 @@
         }
       }
     ],
-    "else": [
+    "elseIf": [
       {
         "language": "trucklino_program",
-        "name": "ifElse",
+        "name": "ifElseIf",
         "children" : {
+          "pred": [
+            {
+              "language": "trucklino_program",
+              "name": "sensor",
+              "properties": {
+                "type": "lightIsRed"
+              }
+            }
+          ],
           "body": [
             {
               "language": "trucklino_program",

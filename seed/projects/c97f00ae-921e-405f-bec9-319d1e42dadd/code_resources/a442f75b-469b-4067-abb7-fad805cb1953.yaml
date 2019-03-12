@@ -31,12 +31,12 @@ concise_attributes:
     "language": "trucklino_program", "properties": {"name": "unload"}}], "procedures":
     [{"name": "procedureDeclaration", "children": {"body": [{"name": "if", "children":
     {"body": [{"name": "procedureCall", "language": "trucklino_program", "properties":
-    {"name": "turnRight"}}], "else": [{"name": "if", "children": {"body": [{"name":
-    "procedureCall", "language": "trucklino_program", "properties": {"name": "turnLeft"}}],
-    "pred": [{"name": "sensor", "language": "trucklino_program", "properties": {"type":
-    "canTurnLeft"}}]}, "language": "trucklino_program"}], "pred": [{"name": "sensor",
-    "language": "trucklino_program", "properties": {"type": "canTurnRight"}}]}, "language":
-    "trucklino_program"}, {"name": "procedureCall", "language": "trucklino_program",
+    {"name": "turnRight"}}], "else": [], "pred": [{"name": "sensor", "language": "trucklino_program",
+    "properties": {"type": "canTurnRight"}}], "elseIf": [{"name": "ifElseIf", "children":
+    {"body": [{"name": "procedureCall", "language": "trucklino_program", "properties":
+    {"name": "turnLeft"}}], "pred": [{"name": "sensor", "language": "trucklino_program",
+    "properties": {"type": "canTurnLeft"}}]}, "language": "trucklino_program"}]},
+    "language": "trucklino_program"}, {"name": "procedureCall", "language": "trucklino_program",
     "properties": {"name": "goForward"}}], "arguments": []}, "language": "trucklino_program",
     "properties": {"name": "smartGoForward"}}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -44,7 +44,7 @@ concise_attributes:
   value_before_type_cast: '2019-02-05 11:25:31.852172'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-05 18:36:01.913718'
+  value_before_type_cast: '2019-03-12 14:10:14.754907'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
@@ -59,11 +59,11 @@ concise_attributes:
       if (truck.canTurnRight()) {
         truck._progress([["procedures",0],["body",0],["body",0]]);
         yield* truck.turnRight();
-      } else {
-        if (truck.canTurnLeft()) {
-          truck._progress([["procedures",0],["body",0],["else",0],["body",0]]);
-          yield* truck.turnLeft();
-        }
+      }
+      else if (
+      truck.canTurnLeft()) {
+        truck._progress([["procedures",0],["body",0],["elseIf",0],["body",0]]);
+        yield* truck.turnLeft();
       }
       truck._progress([["procedures",0],["body",1]]);
       yield* truck.goForward();
