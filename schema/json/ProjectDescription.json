@@ -551,7 +551,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -1522,7 +1522,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -2020,6 +2020,9 @@
           "type": "string"
         },
         "breakAfter": {
+          "type": "boolean"
+        },
+        "propReadOnly": {
           "type": "boolean"
         },
         "property": {

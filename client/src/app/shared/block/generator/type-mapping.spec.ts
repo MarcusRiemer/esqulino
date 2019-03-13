@@ -29,7 +29,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
   it("Writeable Property => Input", () => {
     const res = mapProperty(
       { type: "property", name: "prop", base: "string" },
-      { readOnly: false, style: {} }
+      { propReadOnly: false, style: {} }
     );
     expect(res).toEqual({ blockType: "input", property: "prop" });
   });
@@ -37,7 +37,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
   it("Readonly Property => Interpolated", () => {
     const res = mapProperty(
       { type: "property", name: "prop", base: "string" },
-      { readOnly: true, style: {} }
+      { propReadOnly: true, style: {} }
     );
     expect(res).toEqual({ blockType: "interpolated", property: "prop" });
   });

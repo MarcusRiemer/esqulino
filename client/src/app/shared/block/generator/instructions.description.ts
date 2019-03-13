@@ -24,8 +24,6 @@ export interface Instructions {
   attributeMapping: AttributeMappingOrder;
   // General CSS styling instructions
   style: { [attribute: string]: string };
-  // Controls whether the user may interactively change this attribute
-  readOnly: boolean;
   // Controls how things dropped on this block will be treated
   onDrop: DropTargetProperties;
   // Where (and if) to generate error indicators
@@ -34,6 +32,8 @@ export interface Instructions {
   breakAfter: boolean;
   // Should the drop marker be shown, even if it is valid without children?
   emptyDropTarget: boolean;
+  // Some properties are not meant to be edited.
+  propReadOnly: boolean;
 };
 
 /**
@@ -62,7 +62,7 @@ export type TerminalInstructions = Readonly<Pick<Instructions, "style" | "breakA
 /**
  * Instructions that are useful on a property.
  */
-export type PropertyInstructions = Readonly<Pick<Instructions, "style" | "readOnly">>;
+export type PropertyInstructions = Readonly<Pick<Instructions, "style" | "propReadOnly">>;
 
 /**
  * Default options for the various types of blocks
@@ -95,7 +95,7 @@ export module DefaultInstructions {
   }
 
   export const propertyInstructions: PropertyInstructions = {
-    readOnly: false,
+    propReadOnly: false,
     style: {
       "display": "inline-block"
     }

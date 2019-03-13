@@ -119,6 +119,8 @@ export namespace VisualBlockDescriptions {
     blockType: "input";
     // The property that is going to be edited
     property: string;
+    // Some properties are not meant to be edited
+    propReadOnly?: boolean;
   }
 
   /**

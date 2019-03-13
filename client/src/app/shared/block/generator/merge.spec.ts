@@ -44,10 +44,10 @@ describe(`Merging TypeInstructions`, () => {
 
   it(`Clashing and unrelated attributes`, () => {
     expect(mergeTypeInstructions(
-      { "g1": { "t1": { attributes: { "a1": { between: "1", "readOnly": true } } } } },
+      { "g1": { "t1": { attributes: { "a1": { between: "1", "propReadOnly": true } } } } },
       { "g1": { "t1": { attributes: { "a1": { between: "2", "orientation": "vertical" } } } } }
     )).toEqual({
-      "g1": { "t1": { attributes: { "a1": { between: "2", "readOnly": true, "orientation": "vertical" } } }, },
+      "g1": { "t1": { attributes: { "a1": { between: "2", "propReadOnly": true, "orientation": "vertical" } } }, },
     });
   });
 
