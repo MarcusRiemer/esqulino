@@ -365,7 +365,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -620,7 +620,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }

@@ -62,7 +62,7 @@ export function mapProperty(
   attr: NodePropertyTypeDescription,
   instructions: PropertyInstructions
 ): VisualBlockDescriptions.EditorInput | VisualBlockDescriptions.EditorInterpolated {
-  if (instructions.readOnly) {
+  if (instructions.propReadOnly) {
     // If the instructions demand this value to be read only: Treat it as an interpolated value
     return (mapInterpolated(attr, instructions));
   } else {

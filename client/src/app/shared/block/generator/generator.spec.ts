@@ -53,7 +53,7 @@ describe("BlockLanguage Generator", () => {
             "t1": {
               attributes: {
                 "p1": {
-                  readOnly: { $ref: "missing" }
+                  propReadOnly: { $ref: "missing" }
                 }
               }
             }
@@ -176,7 +176,7 @@ describe("BlockLanguage Generator", () => {
             "t1": {
               attributes: {
                 "p1": {
-                  readOnly: { $ref: "allowModifications" }
+                  propReadOnly: { $ref: "allowModifications" }
                 }
               }
             }
