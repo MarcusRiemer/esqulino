@@ -29,10 +29,15 @@
 <mat-card *ngFor="let proposal of projectProposals"
           class="academia-item"
           [id]="proposal.id">
-  <mat-card-title>{{ proposal.title }}</mat-card-title>
+  <mat-card-title>
+    {{ proposal.title }}
+  </mat-card-title>
   <mat-card-content>
     <div [innerHTML]="proposal.text"></div>
-    <p><strong>Umgebung:</strong> {{ proposal.tools }}</p>
+    <p>
+      <strong>Umgebung: </strong>
+      <span [innerHTML]="proposal.tools"></span>
+    </p>
   </mat-card-content>
 </mat-card>
 
