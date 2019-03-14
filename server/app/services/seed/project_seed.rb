@@ -13,7 +13,11 @@ module Seed
       })
     end
 
-    # Storing images
-
+    def store_image
+      if File.directory? seed.images_directory_path
+        puts "Storing images"
+        FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
+      end
+    end
   end
 end

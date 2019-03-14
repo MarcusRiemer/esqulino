@@ -31,19 +31,14 @@ module Seed
       File.join seed_directory, seed.id
     end
 
+    def store_image; end
+
     def seed_file_path
       File.join seed_directory, "#{seed.id}.yaml"
     end
 
     def project_dependent_file(directory, deps_id)
       File.join directory, "#{deps_id}-deps.yaml"
-    end
-
-    def store_image
-      if File.directory? seed.images_directory_path
-        puts "Storing images"
-        FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
-      end
     end
 
     def start_store
@@ -54,7 +49,7 @@ module Seed
       if processed.include? [seed_directory, seed_id.id]
       else
         store_seed
-        store_image if seed.respond_to?(:images_directory_path)
+        store_image
         processed << [seed_directory, seed_id.id]
         store_dependencies(processed)
       end
@@ -83,11 +78,5 @@ module Seed
         YAML::dump(seed, file)
       end
     end
-
-    # projects/a123.yml db record
-    # projects/a123-deps.yml dependent seeds [(source, b456), (db, 7891)]
-    # projects/a123
-    # projects/a123/images.json
-
   end
 end
