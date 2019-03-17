@@ -1,14 +1,22 @@
-import { Component, ChangeDetectorRef } from '@angular/core'
+import { Component, ChangeDetectorRef, Inject, LOCALE_ID } from '@angular/core'
 
 import { BrowserService } from '../shared/browser.service';
 import { first, tap } from 'rxjs/operators';
+
+/**
+ * A object of strings for multiple languages.
+ */
+export interface MultiLangString {
+  de: string;
+  en: string;
+}
 
 /**
  * A clickable internal link in the side navigation.
  */
 export interface NavLink {
   type: "link",
-  text: string, // The text to display
+  text: MultiLangString, // The text to display
   route: string[],
   icon?: string
 }
@@ -18,7 +26,7 @@ export interface NavLink {
  */
 export interface NavLinkExternal {
   type: "external",
-  text: string, // The text to display
+  text: MultiLangString, // The text to display
   url: string,
   icon?: string
 }
@@ -43,7 +51,7 @@ export interface NavFill {
  */
 export interface NavHeader {
   type: "header",
-  text: string
+  text: MultiLangString
 }
 
 export type NavItem = NavLink | NavDivider | NavFill | NavLinkExternal | NavHeader;
@@ -54,6 +62,7 @@ export type NavItem = NavLink | NavDivider | NavFill | NavLinkExternal | NavHead
 export class FrontComponent {
 
   constructor(
+    @Inject(LOCALE_ID) private readonly localeId: string, 
     private readonly _browser: BrowserService,
   ) { }
 
@@ -61,19 +70,27 @@ export class FrontComponent {
 
   readonly sidebarMode$ = this._browser.sidebarMode$;
 
+  readonly locale = this.localeId;
+
   /**
    * All items that need to be shown in the general navigation
    */
   readonly navItems: NavItem[] = [
     {
       type: "link",
-      text: "Hauptseite",
+      text: {
+        de: "Hauptseite",
+        en: "Home",
+      },
       route: ["/about/"],
-      icon: "home"
+      icon: "home",
     },
     {
       type: "link",
-      text: "Beispielprojekte",
+      text: {
+        de: "Beispielprojekte",
+        en: "Example Projects",
+      },
       route: ["/about/projects"],
       icon: "cubes"
     },
@@ -82,19 +99,28 @@ export class FrontComponent {
     },
     {
       type: "link",
-      text: "Forschung",
+      text: {
+        de: "Forschung",
+        en: "Academia",
+      },
       route: ["/about/academia"],
       icon: "flask"
     },
     {
       type: "link",
-      text: "Impressum",
+      text: {
+        de: "Impressum",
+        en: "Imprint",
+      },
       route: ["/about/imprint"],
       icon: "file-text-o"
     },
     {
       type: "link",
-      text: "Datenschutz",
+      text: {
+        de: "Datenschutz",
+        en: "Privacy",
+      },
       route: ["/about/privacy"],
       icon: "user-secret"
     },
@@ -103,17 +129,26 @@ export class FrontComponent {
     },
     {
       type: "header",
-      text: "Administration",
+      text: {
+        de: "Administration",
+        en: "Administration",
+      },
     },
     {
       type: "link",
-      text: "Sprachen",
+      text: {
+        de: "Sprachen",
+        en: "Languages",
+      },
       route: ["/admin"],
       icon: "puzzle-piece"
     },
     {
       type: "external",
-      text: "Manual 🇬🇧",
+      text: {
+        de: "Anleitung 🇬🇧",
+        en: "Manual 🇬🇧",
+      },
       url: "http://manual.blattwerkzeug.de/",
       icon: "book"
     },
