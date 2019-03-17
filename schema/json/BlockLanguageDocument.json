@@ -167,7 +167,17 @@
       "description": "A block that is given statically",
       "properties": {
         "defaultNode": {
-          "$ref": "#/definitions/NodeDescription",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeDescription"
+              },
+              "type": "array"
+            }
+          ],
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
         "displayName": {
@@ -239,6 +249,12 @@
         },
         {
           "$ref": "#/definitions/TruckWorldComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckControllerComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckSensorsComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -390,7 +406,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -398,7 +414,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -652,7 +668,7 @@
               },
               "breakAfter": {
               },
-              "generateDropTargets": {
+              "emptyDropTarget": {
               },
               "generateErrorIndicator": {
               },
@@ -660,7 +676,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -816,7 +832,17 @@
       "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
       "properties": {
         "defaultNode": {
-          "$ref": "#/definitions/NodeDescription",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeDescription"
+              },
+              "type": "array"
+            }
+          ],
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
         "displayName": {
@@ -837,9 +863,60 @@
         },
         {
           "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckProgramUserFunctionsSidebarDescription"
         }
       ],
       "description": "All possible sidebar types"
+    },
+    "TruckControllerComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck controller",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-controller"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckProgramUserFunctionsSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "truckProgramUserFunctions"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "TruckSensorsComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a trucks sensors",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-sensors"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     },
     "TruckWorldComponentDescription": {
       "additionalProperties": false,
@@ -880,30 +957,6 @@
       "description": "We currently allow any CSS style to be used.\n\nTODO: This could be a Readonly__ type but that causes the JSON-\nschema generator to (sort of rightfully) emit false for\n\"additionalProperties\" and that in turn makes this type rather\npointless.",
       "type": "object"
     },
-    "VisualBlockDescriptions.CategoryInsert": {
-      "additionalProperties": false,
-      "properties": {
-        "category": {
-          "type": "string"
-        },
-        "order": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsertPosition"
-        }
-      },
-      "required": [
-        "order",
-        "category"
-      ],
-      "type": "object"
-    },
-    "VisualBlockDescriptions.CategoryInsertPosition": {
-      "description": "The locations of categories at which insertions may occur.",
-      "enum": [
-        "insertFirst",
-        "insertLast"
-      ],
-      "type": "string"
-    },
     "VisualBlockDescriptions.ConcreteBlock": {
       "anyOf": [
         {
@@ -933,32 +986,6 @@
       "additionalProperties": false,
       "description": "These properties are required to specify drop targets.",
       "properties": {
-        "children": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "parent": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "self": {
-          "additionalProperties": false,
-          "properties": {
-            "order": {
-              "enum": [
-                "insertBefore",
-                "insertAfter"
-              ],
-              "type": "string"
-            },
-            "skipParents": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "order",
-            "skipParents"
-          ],
-          "type": "object"
-        },
         "visibility": {
           "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
         }
@@ -1061,6 +1088,9 @@
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
         },
+        "emptyDropTarget": {
+          "type": "boolean"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -1113,6 +1143,9 @@
           "type": "string"
         },
         "breakAfter": {
+          "type": "boolean"
+        },
+        "propReadOnly": {
           "type": "boolean"
         },
         "property": {
@@ -1185,6 +1218,9 @@
         "direction": {
           "$ref": "#/definitions/Orientation"
         },
+        "emptyDropTarget": {
+          "type": "boolean"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -1209,7 +1245,8 @@
         "ifAnyDrag",
         "ifLegalDrag",
         "ifLegalChild",
-        "ifEmpty"
+        "ifEmpty",
+        "ifChildrenRequired"
       ],
       "type": "string"
     }

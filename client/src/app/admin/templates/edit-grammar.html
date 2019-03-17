@@ -1,14 +1,13 @@
+<ng-template cdkPortal #toolbarButtons>
+  <button (click)="onSave()"
+          mat-button>
+    <span class="fa fa-floppy-o" aria-hidden="t"></span>
+    Speichern
+  </button>
+</ng-template>
+
 <form *ngIf="grammar">
   <h2>Grammatik <q>{{ grammar.name }}</q></h2>
-
-  <div class="form-group row">
-    <div class="col-sm-2">
-      <button (click)="onSave()"
-              class="btn btn-primary btn-block">
-        Speichern
-      </button>
-    </div>
-  </div>
 
   <!-- Editable user defined name of the grammar -->
   <div class="form-group row">

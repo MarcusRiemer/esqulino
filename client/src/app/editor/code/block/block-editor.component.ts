@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { map, switchMap, first } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 import { BlockLanguage } from '../../../shared/block';
+
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -27,6 +28,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   private _subscriptionRefs: any[] = [];
 
+  public readOnly = false;
+
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
@@ -35,18 +38,13 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
+    private _cd: ChangeDetectorRef
   ) {
   }
 
   ngOnInit(): void {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
-
-    // Swapping between editors
-    const btnChange = this._toolbarService.addButton("goblock", "Raw Editor", "tree", "b");
-    btnChange.onClick.subscribe(_ => {
-      this._router.navigate(["..", "raw"], { relativeTo: this._route });
-    });
 
     // Deleting this code resource
     const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
@@ -69,7 +67,15 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(_ => btnSave.isInProgress = false);
     });
+
+    // Trigger change detection for the whole tree if the executed code
+    // location changes.
+    let ref = this._currentCodeResource.currentExecutionLocation.subscribe(_ => {
+      // this._cd.detectChanges();
+    });
+    this._subscriptionRefs.push(ref);
   }
+
 
   /**
    * Cleans up all acquired references
@@ -107,6 +113,9 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     return (this._editorComponentsService.createComponent(desc));
   }
 
+  /**
+   * The visual components that should be displayed.
+   */
   readonly editorComponents = this.currentResource
     .pipe(
       switchMap(codeResource => codeResource.blockLanguage),
@@ -119,7 +128,21 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * possibility anything is currently dragged over a node. So we inform the
    * drag service about that.
    */
-  public onDragEnter(_: DragEvent) {
-    this._dragService.informDraggedOverEditor();
+  public onEditorDragEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOverEditor();
+    }
+  }
+
+  /**
+   * When something draggable enters the empty area a program may start with,
+   * there is not actually a node that could be referenced.
+   */
+  public onPlaceholderDragEnter(evt: MouseEvent) {
+    if (this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOver(evt, [], undefined, {
+        allowExact: true
+      });
+    }
   }
 }

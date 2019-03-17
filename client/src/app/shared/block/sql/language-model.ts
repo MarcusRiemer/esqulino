@@ -298,10 +298,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            children: {
-              order: "insertFirst",
-              category: "columns"
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -613,10 +609,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                children: {
-                  category: "operator",
-                  order: "insertFirst"
-                },
                 visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
@@ -644,10 +636,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                children: {
-                  category: "rhs",
-                  order: "insertFirst"
-                },
                 visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
@@ -719,10 +707,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "block",
               direction: "horizontal",
               dropTarget: {
-                children: {
-                  category: "tables",
-                  order: "insertFirst",
-                },
                 visibility: { $var: "ifLegalChild" }
               },
               children: [
@@ -738,10 +722,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 {
                   blockType: "dropTarget",
                   dropTarget: {
-                    children: {
-                      category: "tables",
-                      order: "insertFirst"
-                    },
                     visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
                   },
                   children: [
@@ -760,7 +740,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                     } as VisualBlockDescriptions.EditorConstant,
                   ],
                   direction: "horizontal",
-                } as VisualBlockDescriptions.EditorDropTarget,
+                },
                 {
                   blockType: "iterator",
                   childGroupName: "tables",
@@ -771,7 +751,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                       text: ","
                     }
                   ]
-                } as VisualBlockDescriptions.EditorIterator,
+                }
               ],
             },
             {
@@ -811,10 +791,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            children: {
-              category: "table",
-              order: "insertFirst",
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -847,10 +823,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            children: {
-              category: "table",
-              order: "insertFirst",
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -953,10 +925,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            children: {
-              category: "table",
-              order: "insertFirst",
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -1087,10 +1055,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            children: {
-              category: "expressions",
-              order: "insertFirst",
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -1157,10 +1121,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             "cursor": "grab",
           },
           dropTarget: {
-            children: {
-              category: "expressions",
-              order: "insertFirst",
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [
@@ -1227,10 +1187,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             "cursor": "grab",
           },
           dropTarget: {
-            children: {
-              category: "expressions",
-              order: "insertFirst",
-            },
             visibility: { $var: "ifLegalChild" }
           },
           children: [

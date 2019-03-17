@@ -29,7 +29,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
   it("Writeable Property => Input", () => {
     const res = mapProperty(
       { type: "property", name: "prop", base: "string" },
-      { readOnly: false, style: {} }
+      { propReadOnly: false, style: {} }
     );
     expect(res).toEqual({ blockType: "input", property: "prop" });
   });
@@ -37,7 +37,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
   it("Readonly Property => Interpolated", () => {
     const res = mapProperty(
       { type: "property", name: "prop", base: "string" },
-      { readOnly: true, style: {} }
+      { propReadOnly: true, style: {} }
     );
     expect(res).toEqual({ blockType: "interpolated", property: "prop" });
   });
@@ -56,17 +56,16 @@ describe("BlockLanguage Generator Type Mapping", () => {
     };
     const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
 
-    expect(res.length).toEqual(2);
-    expect(res[0]).toEqual({
-      blockType: "iterator",
-      childGroupName: "c1",
-      direction: DefaultInstructions.iteratorInstructions.orientation,
-      wrapChildren: true,
-      breakAfter: false
-    });
-    expect(res[1]).toEqual(jasmine.objectContaining({
-      blockType: "dropTarget"
-    } as Partial<VisualBlockDescriptions.EditorDropTarget>));
+    expect(res).toEqual([
+      {
+        blockType: "iterator",
+        childGroupName: "c1",
+        direction: DefaultInstructions.iteratorInstructions.orientation,
+        wrapChildren: true,
+        breakAfter: false,
+        emptyDropTarget: false
+      }
+    ]);
   });
 
   it("Sequence (+Between) => Iterator", () => {
@@ -87,9 +86,9 @@ describe("BlockLanguage Generator Type Mapping", () => {
         orientation: "horizontal",
         between: "ä",
         style: {},
-        generateDropTargets: "none",
         allowWrap: true,
-        breakAfter: false
+        breakAfter: false,
+        emptyDropTarget: false,
       }
     );
 
@@ -100,6 +99,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
         direction: "horizontal",
         wrapChildren: true,
         breakAfter: false,
+        emptyDropTarget: false,
         between: [
           {
             blockType: "constant",

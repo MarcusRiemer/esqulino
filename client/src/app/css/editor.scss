@@ -1,60 +1,30 @@
 .editor {
-    display: flex;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-    backface-visibility: hidden;
-    will-change: overflow;
-    height: $sidebar-height;
-
-    /* Every pane may use a scrollbar */
-    .navbar, .content, .sidebar {
-        overflow: auto;
-        height: auto;
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-
-    /* Things on the sides should always have their own scrollbars */
-    .navbar, .sidebar {
-        height: $sidebar-height;
-    }
-
     .navbar {
-        flex: 0 0 $navbar-width;
+        max-width: $navbar-width;
+        flex: 1;
     }
 
     .sidebar {
-        flex: 0 0 $sidebar-width;
+        flex: 1;
+        width: $sidebar-width;
     }
 
     .content {
-        flex: 1 1;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     /* Navigation inside a project, typically on the left hand side */
-    .navbar {        
+    .navbar {
         editor-navbar {
-            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
 
             nav {
                 margin: 5px;
-                
-                
-                /* Ensure the linked items do not overflow */
-                a {
-                    text-decoration: none;
 
-                    line-height: 1.1;
-                    display: inline-block;
-                    white-space: nowrap;
-                    width: 100%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
+
 
                 /**
                  * Disable the usual bullet points
@@ -70,15 +40,9 @@
 
                 /* Nested lists get a little indentation */
                 ul ul {
-                    padding-left: 5px; 
+                    padding-left: 5px;
                 }
             }
-            
-            .label.dirty {
-                cursor: pointer;
-            }
-
-            
 
             .sources-host {
                 margin-top: auto;
@@ -88,19 +52,10 @@
                 }
             }
 
-            /* Active links must be visually distinguishable from all the other links  */
-            .router-link-active {
-                font-weight: bold;
-                border-radius: 500px;
-                padding-left: 0.5em;
-                padding-right: 0.5em;
-                color: black;
-                transition: background-color, padding, border-radius;
-                transition-duration: 200ms;
-                transition-timing-function: ease-in-out;
-                background-color: cornflowerblue;
+            a.indent {
+                padding-left: 15px;
             }
-            
+
             .nav-query, .nav-page, .nav-database, .nav-image, .nav-code-resource {
                 margin-left: 15px;
             }
@@ -119,4 +74,3 @@
     display: flex;
     flex-wrap: wrap;
 }
-

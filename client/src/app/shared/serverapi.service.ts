@@ -1,15 +1,7 @@
-import { Injectable, PLATFORM_ID, Inject, Optional, InjectionToken } from '@angular/core'
+import { Injectable, PLATFORM_ID, Inject, Optional } from '@angular/core'
 import { isPlatformServer } from '@angular/common'
 
 import { ServerApi } from './serverapi'
-
-const BASE_URL = new InjectionToken<string>(
-  "serverApiBaseUrl",
-  {
-    factory: () => undefined,
-    providedIn: "root"
-  }
-);
 
 /**
  * Instead of constructing URLs on the fly, they should be created using

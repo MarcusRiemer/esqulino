@@ -1,0 +1,1 @@
+yield* truck.someFunctionWithArguments(truck.lightIsGreen());

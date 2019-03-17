@@ -1,24 +1,42 @@
-/* The "raw" AST editor */
+/* Any editor that works with an AST */
 .ast {
-    /* Basic outline for each node */
-    .node {
-        border: 1px solid black;
-        padding: 5px;
-    }
+    /* The "hey, you should start programming by dragging something here"-notice */
+    .empty-tree {
+        border: 4px dashed blue;
+        border-radius: 20px;
+        min-height: 200px;
+        padding: 15px;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
 
-    /* Indent each node after the first */
-    .node .node {
-        margin: 10px;
+
+        h3, p {
+            text-align: center;
+        }
+
+        p {
+            margin: 0px;
+        }
     }
 }
 
+/* An icon of a trashbin that hovers over anything and may be used to remove blocks */
 trash {
     font-size: 6rem;
     position: fixed;
     padding: 5px;
     right: 350px;
     top: 45px;
-    z-index: 1;
+    z-index: 2; /* 1 is not elevated enough, it conflicts with the material sidebar */
+}
+
+/* A virtual block that is dragged over the scene. */
+.dragged {
+    editor-block-render-block {
+        background: white;
+    }
 }
 
 /* The "block" AST editor */
@@ -27,20 +45,44 @@ trash {
     font-family: $monospace-font;
     font-size: 1.2rem;
 
-    // Input fields for users need to somehow "blend in" with the rest of the
-    // blocks but also be recognizable.
-    input {
-        border: 0px;
-        border-bottom: 1px dashed black;
-        background-color: transparent;
+    /* This component is purely virtual and must be disregarded with respect
+       to e.g. flex-box layouts. */
+    editor-block-render {
+        display: contents;
     }
 
-    .from-iterator {
-        //border: 5px solid blue;
+    /* An actual block being rendered */
+    editor-block-render-block {
+        background-color: white;
+        cursor: grab;
+
+        /* A block that is readonly */
+        .read-only {
+            background-color: #efefef;
+            cursor: unset;
+        }
+
+        .being-replaced {
+            background-color: red;
+        }
     }
 
-    .from-block {
-        //border: 5px solid red;
+    editor-block-render-input {
+        > span {
+            border-bottom: 1px dashed black;
+        }
+
+        // Input fields for users need to somehow "blend in" with the rest of the
+        // blocks but also be recognizable.
+        input {
+            border: 0px;
+            border-bottom: 1px dashed black;
+            background-color: transparent;
+        }
+    }
+
+    .break-after {
+        width: 100%;
     }
 }
 

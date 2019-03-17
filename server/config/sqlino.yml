@@ -16,6 +16,8 @@ development:
   seed:
     data_dir: ../seed
     output: true
+  sentry:
+    dsn: <%= ENV["SENTRY_DSN"] %>
 
 test:
   name: "Blattwerkzeug (Test)"
@@ -60,3 +62,5 @@ production:
   seed:
     data_dir: ../seed
     output: true
+  sentry:
+    dsn: <%= ENV["SENTRY_DSN"] %>

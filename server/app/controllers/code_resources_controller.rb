@@ -23,7 +23,15 @@ class CodeResourcesController < ApplicationController
   # Updates a specific resource
   def update
     resource = CodeResource.find(params[:code_resource_id])
-    if resource.update_attributes(code_resource_update_params)
+    update_params = code_resource_update_params.to_hash
+
+    # Explicitly include an empty AST if it has not been sent. Without this
+    # the user could never delete a syntax tree that existed previously
+    if params.has_key? "ast"
+      update_params["ast"] ||= nil
+    end
+
+    if resource.update_attributes(update_params)
       render :json => resource, :status => 200
     else
       render :json => { 'errors' => resource.errors }, :status => 400

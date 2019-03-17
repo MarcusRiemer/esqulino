@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
 import { Observable } from 'rxjs';
-import { catchError, delay, map } from 'rxjs/operators';
+import { catchError, delay, map, tap } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
 import { CodeResource } from '../shared/syntaxtree'
@@ -55,14 +55,23 @@ export class CodeResourceService {
 
     const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
 
+    // The actual document that should be sent
     const bodyJson = resource.toModel();
+
+    // The actual document may not contain the ID (that's part of the URL)
     delete bodyJson.id;
+
+    // If there is no ast present: Ensure that an empty AST is transferred
+    if (resource.syntaxTreePeek.isEmpty) {
+      bodyJson.ast = null;
+    }
 
     const body = JSON.stringify(bodyJson);
     const toReturn = this._http.put(url, body, options)
       .pipe(
         catchError(this.handleError),
-        delay(250)
+        delay(250),
+        tap(_ => resource.markSaved())
       );
 
     return (toReturn);

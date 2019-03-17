@@ -14,36 +14,48 @@ CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.con
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
+NG_LOCALE       ?= "de"
 
 all : dist
 
 clean : msg-pre-clean
 	rm -rf dist
+	rm -f src/environments/version.ts
 
 dist: client-compile cli-compile universal-compile
 
 dist-dev: client-compile cli-compile universal-compile
 
 ##################################
+# Revision tracking file
+##################################
+
+# This file is used to tag each and every build that was made. This allows to
+# match logged errors to different states of the codebase.
+src/environments/version.ts :
+	./gen-git-revision.ts.sh > $@
+
+##################################
 # Webclient
 ##################################
-client-compile : msg-pre-build
-	$(NG_BIN) build --aot --prod $(NG_OPTS)
+
+client-compile : msg-pre-build src/environments/version.ts
+	$(NG_BIN) build --aot --prod $(NG_OPTS) --i18n-locale $(NG_LOCALE)
 	$(NG_BIN) build --aot --prod --configuration=production-en $(NG_OPTS)
 
-client-compile-dev : msg-pre-build
-	$(NG_BIN) build --aot $(NG_OPTS)
+client-compile-dev : msg-pre-build src/environments/version.ts
+	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE)
 
-client-test :
+client-test : src/environments/version.ts
 	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true
 
-client-test-watch:
+client-test-watch: src/environments/version.ts
 	$(NG_BIN) test --watch --browsers $(TEST_BROWSERS) --code-coverage true
 
 ##################################
 # Commandline Client
 ##################################
-dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES)
+dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) -p src/tsconfig.cli.json
 
@@ -61,7 +73,7 @@ cli-update-block-languages: cli-compile
 ##################################
 # Universal Rendering Server
 ##################################
-dist/server.js: $(CLIENT_ALL_SOURCES)
+dist/server.js: $(CLIENT_ALL_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
 	$(NG_BIN) run blattwerkzeug-client:server
 	$(NG_BIN) run blattwerkzeug-client:server --configuration=en
@@ -110,4 +122,4 @@ msg-pre-clean-deps :
 msg-pre-install-deps :
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Installing dependencies ..."; $(TPUT_BIN) sgr0
 
-.PHONY : all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills
+.PHONY : all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills src/environments/version.ts

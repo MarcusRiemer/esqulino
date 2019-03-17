@@ -60,6 +60,20 @@ RSpec.describe "Seed Manager" do
 
       expect(identifying_attributes(gOrig)).to eq identifying_attributes(gLoad)
     end
+
+    xit "stores and reloads many grammars (CREATE)" do
+      3.times do
+        FactoryBot.create(:grammar, name: "Test Grammar")
+      end
+
+      # Store everything and wipe the database
+      seedManager.store_all_grammars
+      Grammar.delete_all
+
+      seedManager.load_all_grammars
+
+      expect(Grammar.count).to eq 3
+    end
   end
 
   context "BlockLanguage" do
@@ -98,6 +112,38 @@ RSpec.describe "Seed Manager" do
 
       expect(identifying_attributes(bOrig)).to eq identifying_attributes(gLoad)
     end
+
+    it "stores, destroys and loads an empty block language by slug (CREATE)" do
+      pOrig = FactoryBot.create(:block_language, slug: "test123")
+
+      seedManager.store_block_language(pOrig.id)
+
+      pOrig.destroy!
+      pLoad = seedManager.load_block_language(pOrig.slug)
+
+      expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoad)
+    end
+
+    it "throws if project cant be found by slug" do
+      expect do
+        seedManager.load_block_language("nonexistant")
+      end.to raise_exception RuntimeError
+    end
+
+
+    xit "stores and reloads many block languages (CREATE)" do
+      3.times do
+        FactoryBot.create(:block_language)
+      end
+
+      # Store everything and wipe the database
+      seedManager.store_all_block_languages
+      BlockLanguage.delete_all
+
+      seedManager.load_all_block_languages
+
+      expect(BlockLanguage.count).to eq 3
+    end
   end
 
   context "BlockLanguageGenerator" do
@@ -123,7 +169,7 @@ RSpec.describe "Seed Manager" do
       expect(identifying_attributes(bOrig)).to eq identifying_attributes(bLoad)
     end
 
-    it "stores and reloads an empty block language (CREATE)" do
+    it "stores and reloads an empty block language generator (UPDATE)" do
       bOrig = FactoryBot.create(:block_language_generator)
 
       seedManager.store_block_language_generator(bOrig)
@@ -136,6 +182,21 @@ RSpec.describe "Seed Manager" do
 
       expect(identifying_attributes(bOrig)).to eq identifying_attributes(gLoad)
     end
+
+    xit "stores and reloads many block language generators (CREATE)" do
+      3.times do
+        FactoryBot.create(:block_language_generator)
+      end
+
+      # Store everything and wipe the database
+      seedManager.store_all_block_language_generators
+      BlockLanguageGenerator.delete_all
+
+      seedManager.load_all_block_language_generators
+
+      expect(BlockLanguageGenerator.count).to eq 3
+    end
+
   end
 
   context "Project" do
@@ -170,6 +231,37 @@ RSpec.describe "Seed Manager" do
       pLoad = seedManager.load_project(seedManager.seed_projects_file pOrig.id)
 
       expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoad)
+    end
+
+    it "stores, destroys and loads an empty project by slug (CREATE)" do
+      pOrig = FactoryBot.create(:project, slug: "test123")
+
+      seedManager.store_project(pOrig.id)
+
+      pOrig.destroy!
+      pLoad = seedManager.load_project(pOrig.slug)
+
+      expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoad)
+    end
+
+    it "throws if project cant be found by slug" do
+      expect do
+        seedManager.load_project("nonexistant")
+      end.to raise_exception RuntimeError
+    end
+
+    xit "stores and reloads many projects (CREATE)" do
+      3.times do
+        FactoryBot.create(:project)
+      end
+
+      # Store everything and wipe the database
+      seedManager.store_all_projects
+      Project.delete_all
+
+      seedManager.load_all_projects
+
+      expect(Project.count).to eq 3
     end
 
     it "stores, destroys and loads (via slug) an empty project (CREATE)" do

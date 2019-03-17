@@ -1,12 +1,13 @@
 import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
 
-import { FixedBlocksSidebar } from './fixed-blocks-sidebar'
+import { FixedBlocksSidebar } from './sidebar-blocks'
 import { Sidebar } from './sidebar'
 import { BlockLanguageDescription, EditorComponentDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
 import * as Forward from './block-language.forward'
 
 import { DatabaseSchemaSidebar } from './sql/database-schema-sidebar'
+import { ProgramUserFunctionsSidebar } from './truck/program-user-functions-sidebar'
 
 /**
  * Augments an existing language with additional information on how to
@@ -35,6 +36,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
       switch (sidebarDesc.type) {
         case "fixedBlocks": return new FixedBlocksSidebar(this, sidebarDesc);
         case "databaseSchema": return new DatabaseSchemaSidebar();
+        case "truckProgramUserFunctions": return new ProgramUserFunctionsSidebar();
         default: throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
       }
     });
@@ -155,7 +157,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
     const t = language.getType(typeName);
 
     // Are there any children categories that could be added preemptively?
-    const reqCat = t.requiredChildrenCategoryNames;
+    const reqCat = t.allowedChildrenCategoryNames;
     if (reqCat.length > 0) {
       toReturn.children = {};
       reqCat.forEach(c => {

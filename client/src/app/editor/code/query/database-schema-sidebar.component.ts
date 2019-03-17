@@ -9,7 +9,6 @@ import { DragService } from '../../drag.service';
 
 @Component({
   templateUrl: 'templates/database-schema-sidebar.html',
-  selector: "database-schema-sidebar"
 })
 export class DatabaseSchemaSidebarComponent {
   constructor(
@@ -37,13 +36,15 @@ export class DatabaseSchemaSidebarComponent {
    */
   startTableDrag(evt: DragEvent, table: Table) {
     try {
-      this._dragService.dragStart(evt, {
-        language: "sql",
-        name: "tableIntroduction",
-        properties: {
-          "name": table.name
+      this._dragService.dragStart(evt, [
+        {
+          language: "sql",
+          name: "tableIntroduction",
+          properties: {
+            "name": table.name
+          }
         }
-      });
+      ]);
     } catch (e) {
       alert(e);
     }
@@ -54,17 +55,18 @@ export class DatabaseSchemaSidebarComponent {
    */
   startColumnDrag(evt: DragEvent, table: Table, column: Column) {
     try {
-      this._dragService.dragStart(evt, {
-        language: "sql",
-        name: "columnName",
-        properties: {
-          "columnName": column.name,
-          "refTableName": table.name
+      this._dragService.dragStart(evt, [
+        {
+          language: "sql",
+          name: "columnName",
+          properties: {
+            "columnName": column.name,
+            "refTableName": table.name
+          }
         }
-      });
+      ]);
     } catch (e) {
       alert(e);
     }
   }
-
 }

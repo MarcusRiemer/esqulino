@@ -1,0 +1,24 @@
+truck.warteAufAmpel = function*() {
+  yield* truck.doNothing();
+  while (truck.lightIsRed()) {
+    yield* truck.doNothing();
+    truck._progress([["procedures",0],["body",0],["body",0]]);
+    yield* truck.wait();
+  }
+}
+truck.fahrenUndRechtsAbbiegen = function*() {
+  yield* truck.doNothing();
+  if (truck.canTurnRight()) {
+    truck._progress([["procedures",1],["body",0],["body",0]]);
+    yield* truck.turnRight();
+  }
+  truck._progress([["procedures",1],["body",1]]);
+  yield* truck.warteAufAmpel();
+  truck._progress([["procedures",1],["body",2]]);
+  yield* truck.goForward();
+  truck._progress([["procedures",1],["body",3]]);
+  yield* truck.fahrenUndRechtsAbbiegen();
+}
+
+truck._progress([["main",0]]);
+yield* truck.fahrenUndRechtsAbbiegen();

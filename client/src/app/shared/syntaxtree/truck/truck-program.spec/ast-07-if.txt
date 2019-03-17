@@ -1,0 +1,3 @@
+if (truck.lightIsGreen()) {
+  yield* truck.goForward();
+}

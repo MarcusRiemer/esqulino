@@ -12,7 +12,6 @@ import {
 } from './instructions.description'
 
 import { TypeInstructions } from './instructions'
-import { isHoleIfEmpty } from '../../syntaxtree/grammar-util';
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
@@ -63,7 +62,7 @@ export function mapProperty(
   attr: NodePropertyTypeDescription,
   instructions: PropertyInstructions
 ): VisualBlockDescriptions.EditorInput | VisualBlockDescriptions.EditorInterpolated {
-  if (instructions.readOnly) {
+  if (instructions.propReadOnly) {
     // If the instructions demand this value to be read only: Treat it as an interpolated value
     return (mapInterpolated(attr, instructions));
   } else {
@@ -91,15 +90,16 @@ export function mapChildren(
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // Find out what goes between the elements
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
-  let dropTarget: VisualBlockDescriptions.ConcreteBlock = undefined;
 
   // A simple seperation character that is explicitly specified by the instructions?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
     // Create a single terminal character to go in between
-    between = [mapTerminal(
-      { type: "terminal", name: "t", symbol: instructions.between },
-      DefaultInstructions.terminalInstructions
-    )];
+    between = [
+      mapTerminal(
+        { type: "terminal", name: "t", symbol: instructions.between },
+        DefaultInstructions.terminalInstructions
+      )
+    ];
   }
   // "allowed" and "sequence" may provide fallbacks in the grammar
   else if (attr.type === "allowed" || attr.type === "sequence") {
@@ -110,49 +110,14 @@ export function mapChildren(
     }
   }
 
-  // Find out whether to show a drop target
-  if (instructions.generateDropTargets !== "none") {
-    const calculatedVisibility: VisualBlockDescriptions.VisibilityExpression =
-      isHoleIfEmpty(attr)
-        ? { $var: "ifEmpty" }
-        : { $every: [{ $var: "ifEmpty" }, { $var: "ifLegalDrag" }] };
-
-    dropTarget = {
-      blockType: "dropTarget",
-      dropTarget: {
-        children: {
-          category: attr.name,
-          order: "insertFirst"
-        },
-        visibility: calculatedVisibility
-
-      },
-      children: [
-        {
-          blockType: "constant",
-          text: "❓",
-          style: {
-            "paddingLeft": "10px",
-            "paddingRight": "10px",
-            "border": "2px solid red",
-            "color": "darkred",
-            "backgroundColor": "orange",
-            "borderRadius": "500px",
-            "cursor": "default",
-          },
-        } as VisualBlockDescriptions.EditorConstant,
-      ],
-      direction: "horizontal",
-    };
-  }
-
   // Build the actual iterator block
   const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
     direction: instructions.orientation,
     wrapChildren: instructions.allowWrap,
-    breakAfter: instructions.breakAfter
+    breakAfter: instructions.breakAfter,
+    emptyDropTarget: instructions.emptyDropTarget
   }
 
   // And only add between instructions if there are any
@@ -165,12 +130,8 @@ export function mapChildren(
     iteratorBlock.style = instructions.style;
   }
 
-  // At least the iteration block should go back
-  switch (instructions.generateDropTargets) {
-    case "start": return ([dropTarget, iteratorBlock]);
-    case "end": return ([iteratorBlock, dropTarget]);
-    case "none": return ([iteratorBlock]);
-  }
+  // Lets see whether we can eliminate drop targets from block descriptions
+  return ([iteratorBlock]);
 }
 
 export function mapAttribute(
@@ -182,6 +143,7 @@ export function mapAttribute(
     case "allowed":
     case "sequence":
     case "choice":
+    case "parentheses":
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
     case "terminal":
       return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];

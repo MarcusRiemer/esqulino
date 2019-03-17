@@ -1,14 +1,82 @@
 import {
-  NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName, locateNode
+  NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName,
+  locateNode
 } from './syntaxtree.description'
+import { arrayEqual } from '../util';
 
-export { NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName };
+export { NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName, locateNode };
 
 /**
  * @return True, if both parameters denote the same type.
  */
 export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
   return (lhs.languageName === rhs.languageName && lhs.typeName === rhs.typeName);
+}
+
+/**
+ * @return True, if both locations are identical
+ */
+export function locationEquals(lhs: NodeLocation, rhs: NodeLocation): boolean {
+  if (!lhs || !rhs) {
+    return (false);
+  }
+
+  if (lhs === rhs) {
+    return (true);
+  }
+
+  if (lhs.length != rhs.length) {
+    return (false);
+  }
+
+  // Length is the same, so it does not matter which side is checked
+  return (lhs.every((_, i) => {
+    return (arrayEqual(lhs[i], rhs[i]));
+  }));
+}
+
+/**
+ * @param loc The path that may partially appear
+ * @param fullPath The path that is traced from the root.
+ * @return The number of path segments that match beginning at the root.
+ */
+export function locationMatchingLength(loc: NodeLocation, fullPath: NodeLocation): number | false {
+  if (!loc || !fullPath) {
+    return (false);
+  }
+
+  if (loc === fullPath) {
+    return (loc.length);
+  }
+
+  // The full path must be at least as long as the given path
+  if (loc.length > fullPath.length) {
+    return (false);
+  }
+
+  // Count number of matching segments from the root
+  let count = 0;
+  for (let i = 0; i < loc.length; ++i) {
+    if (arrayEqual(loc[i], fullPath[i])) {
+      count++;
+    } else {
+      break;
+    }
+  }
+
+  return (count);
+}
+
+/**
+ *
+ */
+export function locationIncLastIndex(loc: NodeLocation): NodeLocation {
+  if (loc.length > 0) {
+    const [c, i] = loc[loc.length - 1];
+    return ([...loc.slice(0, -1), [c, i + 1]]);
+  } else {
+    return ([]);
+  }
 }
 
 /**
@@ -274,7 +342,7 @@ export class Node {
 export class Tree {
   private _root: Node;
 
-  constructor(rootDesc: NodeDescription) {
+  constructor(rootDesc?: NodeDescription) {
     if (rootDesc) {
       this._root = new Node(rootDesc, this);
     }
@@ -343,6 +411,17 @@ export class Tree {
     })
 
     return (current);
+  }
+
+  /**
+   * @return The node at the given location or `undefined` if no such node exists.
+   */
+  locateOrUndefined(loc: NodeLocation): Node | undefined {
+    try {
+      return (this.locate(loc));
+    } catch {
+      return (undefined);
+    }
   }
 
   /**

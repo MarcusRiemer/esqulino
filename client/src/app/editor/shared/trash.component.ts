@@ -1,10 +1,12 @@
 import { Component } from '@angular/core'
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs'
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { DragService } from '../drag.service';
 
 import { TrashService } from './trash.service'
-import { map } from 'rxjs/operators';
 
 type AnimationState = "available" | "over" | "hidden";
 
@@ -23,7 +25,8 @@ type AnimationState = "available" | "over" | "hidden";
       })),
       state('hidden', style({
         opacity: 0,
-        transform: 'scale(0)'
+        transform: 'scale(0)',
+        display: 'none',
       })),
       /* Hmmpf, surely there must be a way to state "all transitions except
          :enter and :leave"? The "* => *"-syntax takes those into account and
@@ -39,7 +42,10 @@ type AnimationState = "available" | "over" | "hidden";
 })
 export class TrashComponent {
 
-  constructor(private _trashService: TrashService) {
+  constructor(
+    private _trashService: TrashService,
+    private _dragService: DragService
+  ) {
   }
 
   /**
@@ -67,36 +73,18 @@ export class TrashComponent {
 
   mouseEnter() {
     this._mouseOver.next(true);
+    this._dragService.informDraggedOverTrash();
   }
 
   mouseLeave() {
     this._mouseOver.next(false);
+    if (this._dragService && this._dragService.peekIsDragInProgress) {
+      this._dragService.informDraggedOverEditor();
+    }
   }
 
   /**
-   * @return An observable that indicates whether the trash would be shown.
+   * @Return An observable that indicates whether the trash would be shown.
    */
   readonly isTrashShown = this._trashService.isTrashShown;
-
-  /**
-   * Something is being dragged over the trash
-   */
-  onTrashDrag(event: DragEvent) {
-    event.preventDefault();
-  }
-
-  /**
-   * Something was being dropped on the trash
-   */
-  onTrashDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Tell the log
-    const dragData = event.dataTransfer.getData("text/plain");
-    console.log(`Trash Component Drop: "${dragData}"`);
-
-    // Tell the listeners
-    this._trashService._fireDrop(event.dataTransfer);
-  }
 }

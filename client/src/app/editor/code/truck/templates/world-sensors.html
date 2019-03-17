@@ -1,0 +1,60 @@
+<table class="table table-striped table-sm">
+  <tr>
+    <th width="40%">Sensor</th>
+    <th width="60%">Wert</th>
+  </tr>
+  <tr>
+    <td>Ampel ist rot</td>
+    <td [ngClass]="className(sensorLightIsRed)">
+      {{ sensorLightIsRed ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Ampel ist grün</td>
+    <td [ngClass]="className(sensorLightIsGreen)">
+      {{ sensorLightIsGreen ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Kann geradeaus fahren</td>
+    <td [ngClass]="className(sensorCanGoStraight)">
+      {{ sensorCanGoStraight ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Kann rechts abbiegen</td>
+    <td [ngClass]="className(sensorCanTurnRight)">
+      {{ sensorCanTurnRight ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Kann links abbiegen</td>
+    <td [ngClass]="className(sensorCanTurnLeft)">
+      {{ sensorCanTurnLeft ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Kann abladen</td>
+    <td [ngClass]="className(sensorCanLoad)">
+      {{ sensorCanLoad ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Kann aufladen</td>
+    <td [ngClass]="className(sensorCanUnload)">
+      {{ sensorCanUnload ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Ist auf Ziel</td>
+    <td [ngClass]="className(sensorIsOnTarget)">
+      {{ sensorIsOnTarget ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+  <tr>
+    <td>Welt ist gelöst</td>
+    <td [ngClass]="className(sensorIsSolved)">
+      {{ sensorIsSolved ? 'Wahr' : 'Falsch' }}
+    </td>
+  </tr>
+</table>

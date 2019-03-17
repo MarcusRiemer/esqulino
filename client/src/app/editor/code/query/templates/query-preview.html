@@ -30,21 +30,23 @@
     </div>
   </ng-container>
 
-  <table *ngIf="result"
-         class="table">
-    <thead>
-      <tr>
-        <th *ngFor="let column of result.columns">{{ column }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of result.rows">
-        <td *ngFor="let column of row">
-          {{ column }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive-sm">
+    <table *ngIf="result"
+           class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let column of result.columns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of result.rows">
+          <td *ngFor="let column of row">
+            {{ column }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <pre *ngIf="error"
        [innerText]="error | json"></pre>

@@ -1,0 +1,18 @@
+truck.warteAufAmpel = function*() {
+  yield* truck.doNothing();
+  while (truck.lightIsRed()) {
+    yield* truck.doNothing();
+    yield* truck.wait();
+  }
+}
+truck.fahrenUndRechtsAbbiegen = function*() {
+  yield* truck.doNothing();
+  if (truck.canTurnRight()) {
+    yield* truck.turnRight();
+  }
+  yield* truck.warteAufAmpel();
+  yield* truck.goForward();
+  yield* truck.fahrenUndRechtsAbbiegen();
+}
+
+yield* truck.fahrenUndRechtsAbbiegen();
