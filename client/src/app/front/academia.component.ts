@@ -41,5 +41,5 @@ export class AboutAcademiaComponent {
 
   readonly projectProposals: Observable<ProjectProposal[]> = of(projectProposals.filter(p => p.language === this.localeId));
 
-  constructor(@Inject(LOCALE_ID) protected localeId: string) { }
+  constructor(@Inject(LOCALE_ID) private readonly localeId: string) { }
 }

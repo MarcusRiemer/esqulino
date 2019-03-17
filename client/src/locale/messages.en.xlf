@@ -310,7 +310,7 @@
       </trans-unit>
       <trans-unit id="imprintHeadlineLawParagraph" datatype="html">
         <source> nach §5 TMG</source>
-        <target state="translated">according to §5 TMG</target>
+        <target state="translated"> according to §5 TMG</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">3</context>
@@ -381,7 +381,7 @@
         <note priority="1" from="description">imprint signed email note</note>
       </trans-unit>
       <trans-unit id="imprintSignedEmailInstructions" datatype="html">
-        <source>Wer seine digitale Kommunikation ebenfalls verschlüsseln möchte, findet eine gute Anleitung bei</source>
+        <source>Wer seine digitale Kommunikation ebenfalls verschlüsseln möchte, findet eine gute Anleitung bei </source>
         <target state="translated">If you also want to encrypt your digital communication, you will find good instructions at </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
@@ -409,7 +409,8 @@
       </trans-unit>
       <trans-unit id="exampleVideosAlertDescription" datatype="html">
         <source>Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen.</source>
-        <target state="translated">They are to offer interested teachers only a very short "moving" impression of this software and make it as curious as possible.</target>
+        <target state="translated">
+        They are to offer interested teachers only a very short "moving" impression of this software and make it as curious as possible.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
           <context context-type="linenumber">4</context>
@@ -458,7 +459,9 @@
         <source>
     Für den Augenblick suchen wir vor allem nach Lehrkräften, die zu unserem Projekt Feedback geben.
   </source>
-        <target state="translated">For the moment we are looking for teachers who give feedback on our project.</target>
+        <target state="translated">
+         For the moment we are looking for teachers who give feedback on our project.
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/pupil.html</context>
           <context context-type="linenumber">4</context>
