@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ToolbarService } from './toolbar.service';
+import { PreferencesService } from './preferences.service';
 
 @Component({
   templateUrl: 'templates/toolbar.html',
@@ -8,10 +9,15 @@ import { ToolbarService } from './toolbar.service';
 })
 export class ToolbarComponent {
   constructor(
-    private _toolbarService: ToolbarService
+    private _toolbarService: ToolbarService,
+    private _preferences: PreferencesService,
   ) { }
 
   get toolbarService() {
     return (this._toolbarService);
+  }
+
+  toggleNavbar() {
+    this._preferences.toggleSideNav();
   }
 }

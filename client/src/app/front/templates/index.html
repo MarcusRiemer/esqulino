@@ -1,45 +1,55 @@
-<app-toolbar>
-  <ng-container position="start">
-    <a mat-raised-button [routerLink]="'/about'">
-      <img src="/vendor/logos/blattwerkzeug-logo.svg"
-           height="20px"
-           title="BlattWerkzeug">
-      <img src="/vendor/logos/blattwerkzeug-caption.svg"
-           height="20px"
-           title="BlattWerkzeug">
-    </a>
-    <a mat-button [routerLink]="'/about/projects'">
-      <i class="fa fa-cubes" aria-hidden="true"></i>
-      <span i18n="available projects button text">Verfügbare Projekte</span>
-    </a>
-  </ng-container>
+<div class="body-nav-container">
+  <app-toolbar>
+    <ng-container position="toggle">
+      <button mat-icon-button (click)="sideNav.toggle()">
+        <span class="fa fa-bars" aria-hidden="true"></span>
+      </button>
+    </ng-container>
+  </app-toolbar>
 
-  <ng-container position="end">
-    <a mat-button [routerLink]="['/about','academia']">
-      <span class="fa fa-flask" aria-hidden="true"></span>
-      <span i18n="research button text">Forschung</span>
-    </a>
-  </ng-container>
-</app-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav #sideNav
+                 [mode]="sidebarMode$ | async"
+                 [opened]="!(isMobile$ | async)">
+      <mat-nav-list id="main-nav">
+        <ng-container *ngFor="let nav of navItems">
+          <ng-container [ngSwitch]="nav.type">
+            <!-- Rendering internal links -->
+            <a *ngSwitchCase="'link'"
+               mat-list-item
+               [routerLink]="nav.route"
+               routerLinkActive="router-link-active"
+               [routerLinkActiveOptions]="{exact: true}">
+              <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
+              {{nav.text}}
+            </a>
+            <!-- Rendering external links -->
+            <a *ngSwitchCase="'external'"
+               mat-list-item
+               [href]="nav.url" >
+              <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
+              {{nav.text}}
+            </a>
+            <!-- Rendering Dividers -->
+            <mat-divider *ngSwitchCase="'divider'"></mat-divider>
+            <!-- Rendering Headers -->
+            <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text }}</h3>
+            <!-- Rendering fillers -->
+            <div *ngSwitchCase="'fill'" class="fill"></div>
+          </ng-container>
+        </ng-container>
+      </mat-nav-list>
+    </mat-sidenav>
 
-<div class="container front">
-  <flash-message-list></flash-message-list>
-  <router-outlet></router-outlet>
-  <nav class="footer">
-    <div>
-      <a [routerLink]="['/about','imprint']" i18n="imprint footer link text">
-        Impressum
-      </a>
-      <a [routerLink]="['/about','privacy']" i18n="privacy footer link text">
-        Datenschutz
-      </a>
-      <a [routerLink]="['/about','academia']" i18n="academica footer link text">
-        Forschung
-      </a>
-    </div>
-    <div class="logos">
-      <a href="http://www.fh-wedel.de/mitarbeiter/mri/sql-web-ide"><img src="/vendor/logos/fhw.png" title="Fachhochschule Wedel - Marcus Riemer" height="35px" /></a>
-      <a href="http://www-ps.informatik.uni-kiel.de/~fhu/"><img src="/vendor/logos/cau.png" title="Christian-Albrechts-Universität Kiel- Frank Huch" height="35px" /></a>
-    </div>
-  </nav>
+    <mat-sidenav-content class="content">
+      <!-- container comes from Bootstrap, it sets up the different "snapping" viewport widths#
+           front comes from the framework and is used in various CSS rules that should only apply at front
+           mat-typography comes from angular material and styles native elements-->
+      <div class="container front mat-typography">
+        <flash-message-list></flash-message-list>
+        <router-outlet></router-outlet>
+
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

@@ -1,0 +1,77 @@
+{
+  "language": "sql",
+  "name": "parentheses",
+  "children": {
+    "expression": [
+      {
+        "language": "sql",
+        "name": "binaryExpression",
+        "children": {
+          "lhs": [
+            {
+              "language": "sql",
+              "name": "parentheses",
+              "children": {
+                "expression": [
+                  {
+                    "language": "sql",
+                    "name": "binaryExpression",
+                    "children": {
+                      "lhs": [
+                        {
+                          "language": "sql",
+                          "name": "constant",
+                          "properties": {
+                            "value": "1"
+                          }
+                        }
+                      ],
+                      "operator": [
+                        {
+                          "language": "sql",
+                          "name": "relationalOperator",
+                          "properties": {
+                            "operator": "-"
+                          }
+                        }
+                      ],
+                      "rhs": [
+                        {
+                          "language": "sql",
+                          "name": "constant",
+                          "properties": {
+                            "value": "2"
+                          }
+                        }
+                      ]
+                    }
+                  }
+
+                ]
+              }
+            }
+          ],
+          "operator": [
+            {
+              "language": "sql",
+              "name": "relationalOperator",
+              "properties": {
+                "operator": "+"
+              }
+            }
+          ],
+          "rhs": [
+            {
+              "language": "sql",
+              "name": "constant",
+              "properties": {
+                "value": "3"
+              }
+            }
+          ]
+        }
+      }
+
+    ]
+  }
+}

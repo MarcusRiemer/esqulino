@@ -10,6 +10,7 @@ import { PrivacyComponent } from './privacy.component'
 import { AboutPupilComponent } from './pupil.component'
 import { AboutTeacherComponent } from './teacher.component'
 import { VideoDisplayComponent } from './video-display.component'
+import { VersionComponent } from './version.component';
 
 export const frontRoutes: Routes = [
   {
@@ -24,6 +25,7 @@ export const frontRoutes: Routes = [
       { path: 'privacy', component: PrivacyComponent },
       { path: 'teacher', component: AboutTeacherComponent },
       { path: 'videos', component: VideoDisplayComponent },
+      { path: 'version', component: VersionComponent },
       { path: '', component: AboutComponent },
     ]
   }

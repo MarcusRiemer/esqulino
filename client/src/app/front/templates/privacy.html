@@ -1,39 +1,67 @@
-<h1 i18n="@@privacyHeadline">Datenschutz</h1>
-<div i18n="@@privacyText">
-  <p>
-    Dieses Projekt verwendet die <a href="https://matomo.org/">Open Source-Software Matomo (ehemals Piwik)</a> um Besucherzugriffe statistisch auswerten zu können. Die dabei erhobenen Daten werden ausschließlich im Rahmen der Weiterentwicklung und der Forschung eingesetzt. Im Klartext:
-  </p>
-  <ul>
-    <li>
-      Die erfassten Daten werden auf <strong>unseren Servern</strong> gespeichert.
-    </li>
-    <li>
-      Ihre Aktivitäten auf dieser Seite werden folglich <strong>nicht an Drittanbietern</strong> wie Google, Facebook, Microsoft, ... <strong>übertragen</strong>.
-    </li>
-    <li>
-      Es erfolgt ausdrückliche <strong>keine kommerzielle Verwertung</strong> der gesammelten Informationen.
-    </li>
-  </ul>
+<h1>Datenschutz</h1>
+<p>
+  Bei der Verwendung von BlattWerkzeug teilst du uns persönliche Daten mit. Welche das sind und wozu wir diese Daten brauchen wird auf dieser Seite erklärt.
+</p>
 
-  <p>
-    Stattdessen werden die Daten verwendet, um zum Beispiel die folgenden Fragestellungen zu klären:
-  </p>
-  <ul>
-    <li>Wie viele Besucher nutzen das Angebot zu welchen Zeiten und an welchen Orten?</li>
-    <li>Welche technischen Voraussetzungen (Browser, Bildschirmauflösung, ...) haben die von den Benutzern verwendeten Geräte?</li>
-    <li>Die Editoren für welche Programmiersprachen werden am häufigsten verwendet?</li>
-    <li>An welchen Stellen treten bei den Anwendern Fehler auf?</li>
-  </ul>
+<p>
+  Für alle Daten die auf dieser Seite gesammelt werden, gelten die folgenden Grundregeln:
+</p>
 
-  <h2>Erfasste Daten</h2>
-  <p>
-    Piwik verwendet so genannte <a href="https://de.wikipedia.org/wiki/Cookie">Cookies</a> die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert.
-  </p>
+<ul>
+  <li>
+    Die erfassten Daten werden auf <strong>unseren Servern</strong> gespeichert.
+  </li>
+  <li>
+    Ihre Aktivitäten auf dieser Seite werden folglich <strong>nicht an Drittanbietern</strong> wie Google, Facebook, Microsoft, ... <strong>übertragen</strong>.
+  </li>
+  <li>
+    Es erfolgt ausdrückliche <strong>keine kommerzielle Verwertung</strong> der gesammelten Informationen.
+  </li>
+</ul>
 
-  <h2>Widerspruch</h2>
-  <p>
-    Sie können das Anlegen der Cookies auf dieser Seite mit dem unten stehenden Dialog auf dem aktuell genutzten Rechner unterbinden.
-  </p>
-</div>
+<h2>Benutzeranalyse mit Matomo</h2>
+<p>
+  Dieses Projekt verwendet die <a href="https://matomo.org/">Open Source-Software Matomo (ehemals Piwik)</a> um Besucherzugriffe statistisch auswerten zu können. Die dabei erhobenen Daten werden ausschließlich im Rahmen der Weiterentwicklung und der Forschung eingesetzt. Zum Beispiel um Fragestellungen wie die folgenden zu klären:
+</p>
+<ul>
+  <li>Wie viele Besucher nutzen das Angebot zu welchen Zeiten und an welchen Orten?</li>
+  <li>Welche technischen Voraussetzungen (Browser, Bildschirmauflösung, ...) haben die von den Benutzern verwendeten Geräte?</li>
+  <li>Die Editoren für welche Programmiersprachen werden am häufigsten verwendet?</li>
+</ul>
+
+<h3>Erfasste Daten</h3>
+<p>
+  Piwik verwendet so genannte <a href="https://de.wikipedia.org/wiki/Cookie">Cookies</a> die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Wir merken uns, zusammen mit dieser anonymisierten IP und mit einem Zeitstempel, welche Seiten du benutzt oder wie du mit dem Block-Editor interagierst.
+</p>
+
+<h3>Widerspruch</h3>
+<p>
+  Du kannst das Anlegen der Cookies auf dieser Seite mit dem unten stehenden Dialog auf dem aktuell genutzten Rechner unterbinden.
+</p>
 
 <iframe style="border: 1px solid black; height: 180px; width: 100%;" src="https://piwik.blattwerkzeug.de/index.php?module=CoreAdminHome&action=optOut&language=de"></iframe>
+
+<h2>Fehleranalyse mit Sentry</h2>
+<p>
+  Wenn ein Fehler auftritt ist das ärgerlich! Für dich als Benutzer, weil unser Programm nicht so funktioniert, wie es sollte. Und für uns als Entwickler, weil wir im Normalfall nichts von Fehlern erfahren. Und dann ist es für beide Seiten eine potenziell ziemlich mühselige Angelegenheit den Fehler einzugrenzen und schließlich zu beheben.
+</p>
+<p>
+  Deswegen gibt es auf dieser Seite einen automatischen Fehlerreporter namens <a href="https://sentry.io/">Sentry</a>. Das ist eine Open Source-Software, die wir auf unseren eigenen Servern betreiben. Immer wenn es bei dir zu einem unerwarteten Fehler kommt färbt sich der Seitenhintergrund rot. Und zusätzlich bekommen wir noch einen ausführlichen Fehlerreport.
+</p>
+
+<h3>Erfasste Daten</h3>
+<p>
+  Sentry schreibt die folgenden Daten automatisch mit und schickt Sie <em>im Fehlerfall</em> an unseren Server:
+</p>
+<ul>
+  <li>Logeinträge, die von BlattWerkzeug selbst erzeugt werden.</li>
+  <li>Anfragen an den BlattWerkzeug.de-Server, zum Beispiel wenn Projekte geladen oder gespeichert werden.</li>
+  <li>Die technischen Namen der Elemente, auf die du im Browser klickst.</li>
+  <li>Die Namen der Unterseiten, zwischen denen du navigierst.</li>
+</ul>
+<p>
+  Das ist dir zu abstrakt? <a href="/vendor/privacy/screenshot-sentry-breadcrumbs.png">Dann haben wir ein Beispielbild für dich vorbereitet</a>. Hier kannst du für einen Beispielfehler sehen, welche Art von Daten an uns übermittelt wird.
+</p>
+<p>
+  Mit diesen Informationen können wir, ohne dich nochmal zu fragen, recht gut nachvollziehen wo der Fehler aufgetreten ist und was du dabei gemacht hast. Und im besten Fall können wir den Fehler damit auch beheben, ohne dass du dafür irgendetwas tun musst.
+</p>

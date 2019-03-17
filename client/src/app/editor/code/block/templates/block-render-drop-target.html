@@ -1,13 +1,9 @@
-<!-- Ensure correct visual behaviour -->
-<div [@availability]="currentAvailability | async"
-     [blockBase]="visual"
-     [blockLayout]="visual"
-     [astDropPlaceholder]="dropLocation"
-     (drop)="onDrop($event)">
-  <!-- Render all components of this drop target -->
-  <ng-container *ngFor="let childVisualBlock of visual.children">
-    <editor-block-render [codeResource]="codeResource"
-                         [visual]="childVisualBlock"
-                         [node]="node"></editor-block-render>
-  </ng-container>
+<!-- The outer div ensures that the mouse enter events are not
+     re-triggered when the drop placeholder is swapped out with
+     the pre-rendered block.-->
+<div *ngIf="(showAnything | async)"
+     [@background-color]="targetState | async"
+     (mouseover)="onMouseEnter($event)"
+     (mouseout)="onMouseOut($event)">
+  &nbsp;{{ displayText | async }}&nbsp;
 </div>

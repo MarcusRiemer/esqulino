@@ -1,0 +1,18 @@
+{
+  "language": "trucklino_program",
+  "name": "procedureCall",
+  "properties": {
+    "name": "Some Function with Arguments"
+  },
+  "children": {
+    "arguments": [
+      {
+        "language": "trucklino_program",
+        "name": "sensor",
+        "properties": {
+          "type": "lightIsGreen"
+        }
+      }
+    ]
+  }
+}

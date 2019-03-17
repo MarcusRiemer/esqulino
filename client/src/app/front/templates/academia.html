@@ -1,26 +1,64 @@
-<h1 i18n="@@academicaHeadline">Abschlussarbeiten</h1>
+<h1>Projektvorschläge</h1>
+<p>
+  Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
+</p>
+<ul>
+  <li>
+    Anfertigung einer internen <strong>Bachelor</strong>- oder <strong>Master-Thesis</strong>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch</a> vorgenommen.
+  </li>
+  <li>
+    In von mir angebotenen <strong>Seminaren</strong> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
+  </li>
+  <li>
+    Für Bachelor Medieninformatiker ist es möglich das <strong>Medien-Projekt</strong> zu absolvieren, Informatik-Master-Studierende können das <strong>Master-Projekt</strong> einbringen.
+  </li>
+</ul>
 
-<p i18n="@@academicaIntro">
+<p>
+  BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich hervorragend um viele typische Verfahren moderner Softwareentwicklung kennenzulernen:
+</p>
+<dl>
+  <dt>Test Driven Development</dt>
+  <dd>Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</dd>
+  <dt>Docker &amp; Continuous Integration</dt>
+  <dd>Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</dd>
+  <dt>Single Page Applications &amp; API-Server</dt>
+  <dd>Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</dd>
+</dl>
+
+<mat-card *ngFor="let proposal of projectProposals"
+          class="academia-item"
+          [id]="proposal.id">
+  <mat-card-title>
+    {{ proposal.title }}
+  </mat-card-title>
+  <mat-card-content>
+    <div [innerHTML]="proposal.text"></div>
+    <p>
+      <strong>Umgebung: </strong>
+      <span [innerHTML]="proposal.tools"></span>
+    </p>
+  </mat-card-content>
+</mat-card>
+
+<h1>Wissenschaftliche Arbeiten</h1>
+<p>
   Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <a href="http://www.fh-wedel.de/mitarbeiter/mri/esqulino">Marcus Riemer (Fachhochschule Wedel)</a> unter der Betreuung von <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch (CAU Kiel)</a>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
 </p>
 
-<div *ngFor="let thesis of theses | async"
-     class="card thesis">
-  <div class="card-body">
-    <img class="institution-logo" src="{{ thesis.institutionLogo }}">
-    <h2 class="card-title">{{ thesis.title }}</h2>
-    <h3 class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</h3>
-    <ng-container i18n="@@academicaAuthor">Eingereicht von</ng-container> {{ thesis.author.name }} <ng-container i18n="@@academicaDateAt">am</ng-container> {{ thesis.date | date: 'd. MMMM y' }}.
-  </div>
-  <div class="card-body">
-    <h4 i18n="@@academicaAbstract">Abstrakt</h4>
-    <blockquote [innerHTML]="thesis.abstract"></blockquote>
-    <a class="btn btn-block btn-secondary"
-       id="about-developers"
-       href="{{ thesis.url }}"
-       role="button">
+<mat-card *ngFor="let thesis of theses | async"
+          class="academia-item">
+  <mat-card-title class="card-title">{{ thesis.title }}</mat-card-title>
+  <mat-card-subtitle class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</mat-card-subtitle>
+  <mat-card-content>
+    <h3>{{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}</h3>
+    <div [innerHTML]="thesis.abstract"></div>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-button
+       [href]="thesis.url">
       <span class="fa fa-download" aria-hidden="true"></span>
-      &nbsp;<ng-container i18n="@@academicaDownloadButtonText">Download der Thesis</ng-container>
+      Download
     </a>
-  </div>
-</div>
+  </mat-card-actions>
+</mat-card>

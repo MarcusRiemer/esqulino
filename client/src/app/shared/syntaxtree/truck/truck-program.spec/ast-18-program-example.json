@@ -1,0 +1,111 @@
+{
+  "language": "trucklino_program",
+  "name": "program",
+  "children": {
+    "procedures": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureDeclaration",
+        "properties": {
+          "name": "warte auf Ampel"
+        },
+        "children": {
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "loopWhile",
+              "properties": {
+                "times": 5
+              },
+              "children": {
+                "pred": [
+                  {
+                    "language": "trucklino_program",
+                    "name": "sensor",
+                    "properties": {
+                      "type": "lightIsRed"
+                    }
+                  }
+                ],
+                "body": [
+                  {
+                    "language": "trucklino_program",
+                    "name": "procedureCall",
+                    "properties": {
+                      "name": "Wait"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "language": "trucklino_program",
+        "name": "procedureDeclaration",
+        "properties": {
+          "name": "Fahren und rechts abbiegen"
+        },
+        "children": {
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "if",
+              "children": {
+                "pred": [
+                  {
+                    "language": "trucklino_program",
+                    "name": "sensor",
+                    "properties": {
+                      "type": "canTurnRight"
+                    }
+                  }
+                ],
+                "body": [
+                  {
+                    "language": "trucklino_program",
+                    "name": "procedureCall",
+                    "properties": {
+                      "name": "Turn Right"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "warte auf Ampel"
+              }
+            },
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Go Forward"
+              }
+            },
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Fahren und rechts abbiegen"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "main": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "Fahren und rechts abbiegen"
+        }
+      }
+    ]
+  }
+}

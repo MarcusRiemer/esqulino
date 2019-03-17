@@ -1,6 +1,6 @@
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { catchError, delay, map } from 'rxjs/operators';
 
 import {
@@ -14,7 +14,7 @@ export { QueryParamsDescription }
 /**
  * A nicely wrapped result of a query.
  */
-export class QueryResult {
+export class QueryResultRows {
   public readonly columns: string[];
   public readonly rows: string[][];
   public readonly totalCount: number | "unknown";
@@ -47,6 +47,12 @@ export class QueryResult {
   }
 }
 
+export class QueryResultError {
+  constructor(public readonly data: DatabaseQueryErrorDescription) { }
+}
+
+export type QueryResult = QueryResultRows | QueryResultError;
+
 
 /**
  * Allows interaction with the query specific operations
@@ -58,7 +64,7 @@ export class QueryService {
    * @param _server Used to figure out paths for HTTP requests
    */
   constructor(
-    private _http: Http,
+    private _http: HttpClient,
     private _server: ServerApiService
   ) {
   }
@@ -71,8 +77,7 @@ export class QueryService {
    * @param params The parameters to run this query.
    */
   runArbitraryQuery(sqlResource: CodeResource, params: QueryParamsDescription) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const url = this._server.getRunQueryUrl(sqlResource.project.slug);
 
@@ -81,20 +86,19 @@ export class QueryService {
       params: params
     };
 
-    const toReturn = this._http.post(url, JSON.stringify(body), options)
-      .pipe(
-        catchError(this.handleError),
-        delay(500),
-        map(res => new QueryResult(res.json()))
-      );
+    const toReturn: Observable<QueryResult> =
+      this._http.post<QueryResponseDescription>(url, JSON.stringify(body), {
+        headers: headers
+      })
+        .pipe(
+          catchError((error: HttpErrorResponse) => {
+            const errorData = error.error as DatabaseQueryErrorDescription;
+            return (of(new QueryResultError(errorData)));
+          }),
+          delay(500),
+          map(res => res instanceof QueryResultError ? res : new QueryResultRows(res))
+        );
 
     return (toReturn);
-  }
-
-  private handleError(error: Response) {
-    // in a real world app, we may send the error to some remote logging infrastructure
-    // instead of just logging it to the console
-    console.error(error);
-    return Observable.throw(error);
   }
 }

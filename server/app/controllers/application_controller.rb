@@ -13,6 +13,8 @@ class ApplicationController < ActionController::API
 
   # An instance of EsqulinoError was thrown
   def handle_internal_exception(exception)
+    Raven.capture_exception(exception)
+
     # Handle errors that might be seen by users with a slightly nicer
     # representation than pure JSON.
     if exception.is_a? EsqulinoMessageError then

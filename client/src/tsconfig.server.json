@@ -14,7 +14,7 @@
     "cli/**",
     "admin/**",
     "editor/**",
-    "**/*.spec.ts"
+    "**/*.spec.*ts"
   ],
   "angularCompilerOptions": {
     "entryModule": "app/app.server.module#AppServerModule"

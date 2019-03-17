@@ -1,11 +1,17 @@
 import {
-  Component, OnInit, OnDestroy, ChangeDetectorRef
+  Component, OnInit, OnDestroy
 } from '@angular/core'
 import { Title } from '@angular/platform-browser'
+
+import { delay, map, tap } from 'rxjs/operators';
+
+import { BrowserService } from '../shared/browser.service';
 
 import { ProjectService, Project } from './project.service'
 import { SidebarService } from './sidebar.service'
 import { PreferencesService } from './preferences.service'
+import { combineLatest } from 'rxjs';
+
 
 @Component({
   templateUrl: 'templates/index.html',
@@ -17,12 +23,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   private _project: Project = null;
 
   /**
-   * Cached state of the sidebar, the UI template doesn't
-   * like observables.
-   */
-  private _sidebarVisible = false;
-
-  /**
    * All subscriptions of this editor component.
    */
   private _subscriptions: any[] = [];
@@ -31,12 +31,16 @@ export class EditorComponent implements OnInit, OnDestroy {
    * Used for dependency injection.
    */
   constructor(
-    private _projectService: ProjectService,
-    private _sidebarService: SidebarService,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _preferences: PreferencesService,
-    private _title: Title
+    private readonly _projectService: ProjectService,
+    private readonly _sidebarService: SidebarService,
+    private readonly _preferences: PreferencesService,
+    private readonly _title: Title,
+    private readonly _browser: BrowserService,
   ) { }
+
+  readonly sidebarMode$ = this._browser.sidebarMode$;
+
+  readonly showSideNav$ = this._preferences.showSideNav$;
 
   /**
    * Load the project for all sub-components.
@@ -48,19 +52,21 @@ export class EditorComponent implements OnInit, OnDestroy {
       this._title.setTitle(`${res.name} - BlattWerkzeug`)
     });
     this._subscriptions.push(subRef);
-
-    subRef = this._sidebarService.isSidebarVisible.subscribe(v => {
-      // Fixed?: Causes change-detection-error on change
-      // This more or less globally changes the application state,
-      // we need to tell the change detector we are aware of this
-      // otherwise Angular freaks out:
-      // http://stackoverflow.com/questions/38262707/
-      this._changeDetectorRef.markForCheck();
-      this._sidebarVisible = v;
-    });
-
-    this._subscriptions.push(subRef);
   }
+
+  readonly isSidebarVisible$ = combineLatest(
+    this._browser.isMobile$, this._sidebarService.isSidebarVisible)
+    .pipe(
+      // Don't show the sidebar on mobile devices
+      map(([isMobile, isSidebarVisible]) => isSidebarVisible && !isMobile),
+      // Unfortunate hack: Without this slight delay Angular freaks about because it
+      // thinks it has perceived an expression with a side-effect. Strangely this only
+      // happens when going from "open" to "closed" and never surfaced the over way round.
+      //
+      // This has the not-so-nice side-effect of sliding the sidebar in on the inital page
+      // load, well ...
+      delay(1),
+    );
 
   /**
    * Subscriptions need to be explicitly released
@@ -72,11 +78,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._projectService.forgetCurrentProject();
   }
 
-  /**
-   * @return True, if the sidebar should be visible.
-   */
-  get isSidebarVisible() {
-    return (this._sidebarVisible);
+  onSideNavClosed() {
+    this._preferences.setShowSideNav(false);
   }
 
   /**

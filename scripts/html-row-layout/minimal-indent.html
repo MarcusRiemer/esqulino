@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <style>
+     .block {
+         border: 2px solid blue;
+         border-radius: 5px;
+         padding: 5px;
+
+         display: inline-flex;
+         flex-flow: row wrap;
+         align-items: baseline;
+     }
+
+     .artificial {
+         display: contents;
+     }
+
+     .line-break {
+         width: 100%;
+     }
+
+     .forward {
+         cursor: pointer;
+     }
+
+     .hide {
+         display: none;
+     }
+    </style>
+  </head>
+  <body>
+    <div class="block">
+      <div class="terminal">while(</div>
+      <div class="block">true</div>
+      <div class="terminal">)</div>
+      <div class="line-break"></div>
+      <div class="block forward">
+        <div class="terminal">goForward()</div>
+      </div>
+      <div class="line-break"></div>
+      <div class="block forward">
+        <div class="terminal">goForward()</div>
+      </div>
+    </div>
+    <script>
+     Array.from(document.querySelectorAll(".forward")).forEach(
+         elem => elem.addEventListener('click', () => elem.classList.add("hide"))
+     );
+    </script>
+  </body>
+</html>

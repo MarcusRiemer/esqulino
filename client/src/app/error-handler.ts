@@ -1,5 +1,7 @@
 import { Injectable, ErrorHandler } from '@angular/core'
 
+import * as Sentry from '@sentry/browser';
+
 /**
  * Not actually a different way to handle errors, but with this
  * they may not go unnoticed so easily.
@@ -10,7 +12,10 @@ export class NotifyErrorHandler extends ErrorHandler {
     // Let Angular do it's normal reporting
     super.handleError(error);
 
-    // But let the user know about it
+    // "IN YOUR FACE"-feedback
     document.querySelector('body').style.backgroundColor = 'red';
+
+    // And send the error on its way to be archived
+    Sentry.captureException(error.originalError || error);
   }
 }

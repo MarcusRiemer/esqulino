@@ -7,11 +7,16 @@ import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.com
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
+import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component'
 
+/**
+ * Maps ids of sidebar components to their actual components.
+ */
 function resolvePortalComponentId(id: string): any {
   switch (id) {
     case "fixedBlocks": return (CodeSidebarFixedBlocksComponent);
     case "databaseSchema": return (DatabaseSchemaSidebarComponent);
+    case "truckProgramUserFunctions": return (UserFunctionsSidebarComponent);
   }
 }
 
@@ -51,4 +56,3 @@ export class CodeSidebarComponent {
     }))
   );
 }
-

@@ -19,12 +19,17 @@ concise_attributes:
   value_before_type_cast: 54d03e94-7f1e-4e37-85e7-a3997cc05186
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
+  value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "goForward"}},
+    {"name": "if", "children": {"body": [], "pred": []}, "language": "trucklino_program"}]},
+    "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-01-09 12:47:52.812753'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-09 12:47:52.812753'
+  value_before_type_cast: '2019-01-12 16:48:24.644971'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
@@ -33,5 +38,6 @@ concise_attributes:
   value_before_type_cast: truck-lang
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
+  value_before_type_cast: TODO!
 new_record: false
 active_record_yaml_version: 2

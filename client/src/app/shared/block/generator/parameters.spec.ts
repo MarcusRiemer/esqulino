@@ -193,7 +193,6 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
             "a1": {
               "between": ",",
               "onDrop": {
-                "self": { "order": "insertAfter", skipParents: 0 }
               }
             }
           }

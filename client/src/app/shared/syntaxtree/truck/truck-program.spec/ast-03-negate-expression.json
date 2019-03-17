@@ -1,0 +1,13 @@
+{
+  "language": "trucklino_program",
+  "name": "negateExpression",
+  "children": {
+    "expr": [{
+      "language": "trucklino_program",
+      "name": "sensor",
+      "properties": {
+        "type": "lightIsRed"
+      }
+    }]
+  }
+}
