@@ -28,12 +28,9 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
-// import your bundles
+// import language bundles
 const defaultBundle = require('./dist/server/de/main');
 const enBundle = require('./dist/server/en/main');
-
-// * NOTE :: leave this as require() since this file is built Dynamically from webpack
-// const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
 
 const languageEngines = [{
   id: 'en',
@@ -51,14 +48,6 @@ const languageEngines = [{
     providers: [provideModuleMap(defaultBundle.LAZY_MODULE_MAP)]
   })
 }];
-
-// Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-// app.engine('html', ngExpressEngine({
-//   bootstrap: AppServerModuleNgFactory,
-//   providers: [
-//     provideModuleMap(LAZY_MODULE_MAP)
-//   ]
-// }));
 
 app.engine('html', (filePath, options, callback) => {
   options.engine(
@@ -83,17 +72,14 @@ app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de'), {
 
 // All regular routes use the Universal engine
 languageEngines.forEach(languageEngine => {
-  app.get(`${languageEngine.base}*`, (req, res) => {
+  const paths = languageEngine.base ? [languageEngine.base, `${languageEngine.base}*`] : '*'
+  app.get(paths, (req, res) => {
     res.render(`./${languageEngine.id}/index`, {
       req,
       res,
       engine: languageEngine.engine
     })
   })
-});
-
-app.get('*', (req, res) => {
-  res.render('index', { req });
 });
 
 // Start up the Node server
