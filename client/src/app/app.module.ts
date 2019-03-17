@@ -1,5 +1,5 @@
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser, registerLocaleData } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -17,7 +17,8 @@ import { routing } from './app.routes';
 
 import { NotifyErrorHandler } from './error-handler';
 
-import localeDe from '@angular/common/locales/de';
+import registerLanguages from './locale-registration';
+
 
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
@@ -26,8 +27,7 @@ if (typeof window !== "undefined") {
   (window as any)._paq = _paq;
 }
 
-// registering local data for custom locales
-registerLocaleData(localeDe, 'de');
+registerLanguages()
 
 // Configure Sentry error reporting (if enabled)
 if (environment.sentry && environment.sentry.active) {
