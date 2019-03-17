@@ -29,12 +29,12 @@ const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
 // import language bundles
-const defaultBundle = require('./dist/server/de/main');
+const defaultBundle = require('./dist/server/main');
 const enBundle = require('./dist/server/en/main');
 
 const languageEngines = [{
   id: 'en',
-  base: '/en/',
+  base: '/en',
   engine: ngExpressEngine({
     bootstrap: enBundle.AppServerModuleNgFactory,
     providers: [provideModuleMap(enBundle.LAZY_MODULE_MAP)]
@@ -63,21 +63,21 @@ app.set('views', join(DIST_FOLDER, 'browser'));
 // Example Express Rest API endpoints
 app.get('/api/**', (req, res) => { res.send('OK') });
 // Server static files from /browser
-app.get('/en/**.*', express.static(join(DIST_FOLDER, 'browser'), {
-  maxAge: '1y'
-}));
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de'), {
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
   maxAge: '1y'
 }));
 
-// workaround for server crash caused by favicon.ico, tests should now pass
+// workaround for server crash caused by favicon.ico
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
 // All regular routes use the Universal engine
 languageEngines.forEach(languageEngine => {
-  const paths = languageEngine.base ? [languageEngine.base, `${languageEngine.base}*`] : '*'
+
+  const paths = languageEngine.base ? [languageEngine.base, `${languageEngine.base}/*`] : '*'
+  const view = languageEngine.base ? `.${languageEngine.base}/index` : 'index'
+
   app.get(paths, (req, res) => {
-    res.render(`./${languageEngine.id}/index`, {
+    res.render(view, {
       req,
       res,
       engine: languageEngine.engine
