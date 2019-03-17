@@ -1,7 +1,9 @@
-<h2>Beispielvideos</h2>
+<h2 i18n="example videos headline@@exampleVideosHeadline">Beispielvideos</h2>
 
 <div class="alert alert-danger" role="alert">
-  <strong>Diese Videos sind kein Lehrmaterial!</strong> Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen. Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte <a [routerLink]="['/about/imprint']">per Mail direkt an Marcus Riemer</a>.
+  <strong i18n="example videos alert@@exampleVideosAlert">Diese Videos sind kein Lehrmaterial!</strong> <ng-container i18n="example videos alert description@@exampleVideosAlertDescription">Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen.</ng-container> <ng-container i18n="example videos alert contact@@exampleVideosAlertContact">
+    Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte
+  </ng-container> <a [routerLink]="['/about/imprint']" i18n="example videos alert contact email link text@@exampleVideosAlertContactEmailLink">per Mail direkt an Marcus Riemer</a>.
 </div>
 
 <div *ngFor="let video of videos | async"

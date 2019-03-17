@@ -1,18 +1,18 @@
 <div class="jumbotron">
   <div class="container">
-    <h1><ng-container i18n="welcome message">Willkommen bei</ng-container>
+    <h1><ng-container i18n="welcome message@@welcomeMessage">Willkommen bei</ng-container>
       <img src="/vendor/logos/blattwerkzeug-logo.svg"
            title="BlattWerkzeug"><img src="/vendor/logos/blattwerkzeug-caption.svg"
                                       title="BlattWerkzeug">
     </h1>
-    <p i18n="short project introduction">Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</p>
+    <p i18n="short project introduction@@shortProjectIntroduction">Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</p>
     <p>
       <a [routerLink]="['/about', 'projects']"
          class="mat-button-large"
          mat-raised-button
          color="primary"
          id="about-examples">
-        &raquo; Das kann man damit machen
+        &raquo; <ng-container i18n="learn more link text@@learnMoreLinkText">Das kann man damit machen</ng-container>
       </a>
       &ngsp;
       <a [routerLink]="['/about', 'create']"
@@ -20,7 +20,7 @@
          color="primary"
          id="about-examples"
          role="button">
-        &raquo; <span i18n="create project button title">Neues Projekt anlegen</span>
+        &raquo; <ng-container i18n="create project button title@@createProjectButtonTitle">Neues Projekt anlegen</ng-container>
       </a>
     </p>
   </div>
@@ -29,8 +29,8 @@
 <div class="card-group">
   <div class="card">
     <div class="card-body">
-      <h2 class="card-title" i18n="for students headline">Für Schüler</h2>
-      <p class="card-text about-text" i18n="for students description">
+      <h2 class="card-title" i18n="for pupils headline@@forPupilsHeadline">Für Schüler</h2>
+      <p class="card-text about-text" i18n="for pupils description@@forPupilsDescription">
         Du wolltest schon immer mal deine eigene Blog&shy;software entwickeln? Oder deine stärksten Pokémon präsentieren? Interaktive Abenteuer&shy;geschichten schreiben? (Fast) egal worum es geht, mit BlattWerkzeug kannst du deine eigenen Webseiten programmieren und sie deinen Freunden zeigen.
       </p>
     </div>
@@ -40,14 +40,14 @@
          id="about-pupils"
          role="button">
         <span class="fa fa-play" aria-hidden="true"></span>
-        <span i18n="get started button text">So legst du los</span>
+        <span i18n="get started button text@@getStartedButtonText">So legst du los</span>
       </a>
     </div>
   </div>
   <div class="card">
     <div class="card-body">
-      <h2 class="card-title" i18n="for teachers headline">Für Lehrkräfte</h2>
-      <p class="card-text about-text" i18n="for teachers description">
+      <h2 class="card-title" i18n="for teachers headline@@forTeachersHeadline">Für Lehrkräfte</h2>
+      <p class="card-text about-text" i18n="for teachers description@@forTeachersDescription">
         Konventionelle Ent&shy;wick&shy;lungs&shy;um&shy;ge&shy;bun&shy;gen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. BlattWerkzeug hingegen kann an den Lernfortschritt der Klassengemeinschaft angepasst werden!
       </p>
     </div>
@@ -57,17 +57,17 @@
          id="about-teachers"
          role="button">
         <span class="fa fa-cogs" aria-hidden="true"></span>
-        <span i18n="concept">Konzept</span>
+        <span i18n="concept@@wordConcept">Konzept</span>
         &amp;
         <span class="fa fa-film" aria-hidden="true"></span>
-        <span i18n="demo videos">Demo-Videos</span>
+        <span i18n="demo videos@@wordDemoVideos">Demo-Videos</span>
       </a>
     </div>
   </div>
   <div class="card">
     <div class="card-body">
-      <h2 class="card-title" i18n="for developers headline">Für Entwickler</h2>
-      <p class="card-text about-text" i18n="for developers description">
+      <h2 class="card-title" i18n="for developers headline@@forDevelopersHeadline">Für Entwickler</h2>
+      <p class="card-text about-text" i18n="for developers description@@forDevelopersDescription">
         Leider gibt es viel zu wenig Lern&shy;software für den Einstieg in die Web&shy;entwicklung. Wenn du dabei helfen möchtest, Kinder und Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu eingeladen zum quelloffenen BlattWerkzeug Projekt beizutragen.
       </p>
     </div>
@@ -77,7 +77,7 @@
          href="https://bitbucket.org/marcusriemer/esqulino"
          role="button">
         <span class="fa fa-code-fork" aria-hidden="true"></span>
-        <span i18n="project git repo link title">BlattWerkzeug Git-Repository</span>
+        <span i18n="project git repo link title@@projectGitRepoLinkTitle">BlattWerkzeug Git-Repository</span>
       </a>
     </div>
   </div>

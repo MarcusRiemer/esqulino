@@ -18,7 +18,6 @@ import { routing } from './app.routes';
 import { NotifyErrorHandler } from './error-handler';
 
 import localeDe from '@angular/common/locales/de';
-import localeFr from '@angular/common/locales/fr';
 
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
@@ -29,7 +28,6 @@ if (typeof window !== "undefined") {
 
 // registering local data for custom locales
 registerLocaleData(localeDe, 'de');
-registerLocaleData(localeFr, 'fr');
 
 // Configure Sentry error reporting (if enabled)
 if (environment.sentry && environment.sentry.active) {

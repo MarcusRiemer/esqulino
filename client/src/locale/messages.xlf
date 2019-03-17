@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="de" datatype="plaintext" original="ng2.template" target-language="en">
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei</source>
@@ -8,7 +8,7 @@
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <note priority="1" from="description">welcome message</note><target>Welcome to</target>
+        <note priority="1" from="description">welcome message</note>
       </trans-unit>
       <trans-unit id="shortProjectIntroduction" datatype="html">
         <source>Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</source>
@@ -16,11 +16,10 @@
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
-        <note priority="1" from="description">short project introduction</note><target state="translated">A beginner-friendly development environment for dealing with SQL and web programming.</target>
+        <note priority="1" from="description">short project introduction</note>
       </trans-unit>
       <trans-unit id="learnMoreLinkText" datatype="html">
         <source>Das kann man damit machen</source>
-        <target state="translated">What you can do with it</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">15</context>
@@ -29,7 +28,6 @@
       </trans-unit>
       <trans-unit id="createProjectButtonTitle" datatype="html">
         <source>Neues Projekt anlegen</source>
-        <target state="translated">Create new project</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">23</context>
@@ -38,7 +36,6 @@
       </trans-unit>
       <trans-unit id="forPupilsHeadline" datatype="html">
         <source>Für Schüler</source>
-        <target state="translated">For Students</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">32</context>
@@ -49,7 +46,6 @@
         <source>
         Du wolltest schon immer mal deine eigene Blog­software entwickeln? Oder deine stärksten Pokémon präsentieren? Interaktive Abenteuer­geschichten schreiben? (Fast) egal worum es geht, mit BlattWerkzeug kannst du deine eigenen Webseiten programmieren und sie deinen Freunden zeigen.
       </source>
-        <target state="translated">Ever wanted to develop your own blog software? Or present your strongest Pokémon? Write interactive adventure stories? (Almost) no matter what, it’s easy to use BlattWerkzeug to program your own web pages and show them to your friends.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">33</context>
@@ -58,7 +54,6 @@
       </trans-unit>
       <trans-unit id="getStartedButtonText" datatype="html">
         <source>So legst du los</source>
-        <target state="translated">How to get started</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">43</context>
@@ -67,7 +62,6 @@
       </trans-unit>
       <trans-unit id="forTeachersHeadline" datatype="html">
         <source>Für Lehrkräfte</source>
-        <target state="translated">For Teachers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">49</context>
@@ -78,7 +72,6 @@
         <source>
         Konventionelle Ent­wick­lungs­um­ge­bun­gen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. BlattWerkzeug hingegen kann an den Lernfortschritt der Klassengemeinschaft angepasst werden!
       </source>
-        <target state="translated">Conventional development environments are programs for professionals by professionals and offer a correspondingly aligned range of functions. In contrast, the leaf tool can be adapted to the learning progress of the class community!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">50</context>
@@ -87,7 +80,6 @@
       </trans-unit>
       <trans-unit id="wordConcept" datatype="html">
         <source>Konzept</source>
-        <target state="translated">Concept</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">60</context>
@@ -96,7 +88,6 @@
       </trans-unit>
       <trans-unit id="wordDemoVideos" datatype="html">
         <source>Demo-Videos</source>
-        <target state="translated">Demo-Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">63</context>
@@ -105,7 +96,6 @@
       </trans-unit>
       <trans-unit id="forDevelopersHeadline" datatype="html">
         <source>Für Entwickler</source>
-        <target state="translated">For Developers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">69</context>
@@ -116,7 +106,6 @@
         <source>
         Leider gibt es viel zu wenig Lern­software für den Einstieg in die Web­entwicklung. Wenn du dabei helfen möchtest, Kinder und Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu eingeladen zum quelloffenen BlattWerkzeug Projekt beizutragen.
       </source>
-        <target state="translated">Unfortunately, there is far too little learning software for getting started with web development. If you want to help to get children and teenagers interested in SQL and HTML, you are welcome to contribute to the Open Source BlattWerkzeug project.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">70</context>
@@ -125,7 +114,6 @@
       </trans-unit>
       <trans-unit id="projectGitRepoLinkTitle" datatype="html">
         <source>BlattWerkzeug Git-Repository</source>
-        <target state="translated">BlattWerkzeug Git-Repository</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">80</context>
@@ -134,7 +122,6 @@
       </trans-unit>
       <trans-unit id="academiaPageHeadline" datatype="html">
         <source>Projektvorschläge</source>
-        <target state="translated">Project Proposals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">1</context>
@@ -145,8 +132,6 @@
         <source>
   Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
 </source>
-        <target state="translated">Interested students will find suggested topics here, at the University of Applied Sciences Wedel they can also be worked on in various projects, seminars or final papers:
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">2</context>
@@ -157,7 +142,6 @@
         <source>
     Anfertigung einer internen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vorgenommen.
   </source>
-        <target state="translated">Preparation of an internal <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. In this case the processing takes place in co-operation with the CAU Kiel, the initial evaluation is done by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">6</context>
@@ -168,7 +152,6 @@
         <source>
     In von mir angebotenen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Seminaren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
   </source>
-        <target state="translated">In <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>seminars<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> offered by me are always given appropriate themes. If you come to me with an interesting topic from the web environment, I would also like to receive suggestions.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">9</context>
@@ -179,7 +162,6 @@
         <source>
     Für Bachelor Medieninformatiker ist es möglich das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Medien-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> zu absolvieren, Informatik-Master-Studierende können das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> einbringen.
   </source>
-        <target state="translated">For Bachelor Media Informatics it is possible to complete the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>media project<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, computer science master students can bring in the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>master project<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">12</context>
@@ -190,8 +172,6 @@
         <source>
   BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich hervorragend um viele typische Verfahren moderner Softwareentwicklung kennenzulernen:
 </source>
-        <target state="translated">BlattWerkzeug is now a complex software product and is ideal for getting to know many typical processes of modern software development:
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">17</context>
@@ -200,7 +180,6 @@
       </trans-unit>
       <trans-unit id="testDrivenDevelopment" datatype="html">
         <source>Test Driven Development</source>
-        <target state="translated">Test Driven Development</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">21</context>
@@ -209,7 +188,6 @@
       </trans-unit>
       <trans-unit id="testDrivenDevelopmentDescription" datatype="html">
         <source>Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</source>
-        <target state="translated">Whenever possible, the development of a new feature begins with the formulation of test cases. Only complex graphical interfaces are currently excluded.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">22</context>
@@ -218,7 +196,6 @@
       </trans-unit>
       <trans-unit id="dockerAndCi" datatype="html">
         <source>Docker &amp; Continuous Integration</source>
-        <target state="translated">Docker &amp; Continuous Integration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">23</context>
@@ -227,7 +204,6 @@
       </trans-unit>
       <trans-unit id="dockerAndCiDescription" datatype="html">
         <source>Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</source>
-        <target state="translated">Based on Docker images, BlattWerkzeug is regularly automatically translated and tested after commits.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">24</context>
@@ -236,7 +212,6 @@
       </trans-unit>
       <trans-unit id="singlePageAndApi" datatype="html">
         <source>Single Page Applications &amp; API-Server</source>
-        <target state="translated">Single Page Applications &amp; API-Server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">25</context>
@@ -245,7 +220,6 @@
       </trans-unit>
       <trans-unit id="singlePageAndApiDescription" datatype="html">
         <source>Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</source>
-        <target state="translated">The BlattWerkzeug frontend is an Angular application, the server side part uses Ruby on Rails.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">26</context>
@@ -254,7 +228,6 @@
       </trans-unit>
       <trans-unit id="devEnvironmentUsed" datatype="html">
         <source>Umgebung: </source>
-        <target state="translated">Environment:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">38</context>
@@ -263,7 +236,6 @@
       </trans-unit>
       <trans-unit id="scientificWorkHeadline" datatype="html">
         <source>Wissenschaftliche Arbeiten</source>
-        <target state="translated">Scientific work</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">44</context>
@@ -278,12 +250,10 @@
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <note priority="1" from="description">scientific work description</note><target state="translated">This page brings together the scientific work that has been developed within the framework of this project. At the beginning there was the master thesis of <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Marcus Riemer (Fachhochschule Wedel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> under the supervision of <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch (CAU Kiel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. In addition, students from both universities have developed their theses in the context of this project.
-</target>
+        <note priority="1" from="description">scientific work description</note>
       </trans-unit>
       <trans-unit id="academiaThesisDatePrefix" datatype="html">
         <source>am</source>
-        <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">54</context>
@@ -292,7 +262,6 @@
       </trans-unit>
       <trans-unit id="academiaThesisDownloadLinkText" datatype="html">
         <source>Download</source>
-        <target state="translated">Download</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
           <context context-type="linenumber">61</context>
@@ -301,7 +270,6 @@
       </trans-unit>
       <trans-unit id="imprintContactInformationHeadline" datatype="html">
         <source>Kontakt-Informationen</source>
-        <target state="translated">Contact Information</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">3</context>
@@ -310,7 +278,6 @@
       </trans-unit>
       <trans-unit id="imprintHeadlineLawParagraph" datatype="html">
         <source> nach §5 TMG</source>
-        <target state="translated">according to §5 TMG</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">3</context>
@@ -319,7 +286,6 @@
       </trans-unit>
       <trans-unit id="imprintContactInformationText" datatype="html">
         <source>Im einfachsten Fall erreichen Sie mich per E-Mail oder über die nebenstehenden Platformen. In allen anderen Fällen erreichen Sie mich auch postalisch:</source>
-        <target state="translated">In the simplest case, you can reach me by e-mail or via the adjacent platforms. In all other cases you can reach me also by post:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">4</context>
@@ -328,7 +294,6 @@
       </trans-unit>
       <trans-unit id="imprintWebsiteLinkTitle" datatype="html">
         <source>FH Wedel Mitarbeiterseite</source>
-        <target state="translated">FH Wedel staff page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">15</context>
@@ -337,7 +302,6 @@
       </trans-unit>
       <trans-unit id="imprintWebsiteDescription" datatype="html">
         <source>Übersicht &amp; Informationen zu meiner Tätigkeit an der FH Wedel.</source>
-        <target state="translated">Overview &amp; information about my work at the FH Wedel.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">16</context>
@@ -346,7 +310,6 @@
       </trans-unit>
       <trans-unit id="imprintBitbucketLinkText" datatype="html">
         <source>BlattWerkzeug auf Bitbucket</source>
-        <target state="translated">BlattWerkzeug on Bitbucket</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">17</context>
@@ -355,7 +318,6 @@
       </trans-unit>
       <trans-unit id="imprintBitbucketLinkDescription" datatype="html">
         <source>Hier finden sich die vollständigen Quellen zum herunterladen.</source>
-        <target state="translated">Here you can download the complete sources.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">18</context>
@@ -364,7 +326,6 @@
       </trans-unit>
       <trans-unit id="imprintContactEmailDescription" datatype="html">
         <source>Anfragen zu BlattWerkzeug bitte an diese Adresse</source>
-        <target state="translated">Requests for BlattWerkzeug to this address</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">20</context>
@@ -373,7 +334,6 @@
       </trans-unit>
       <trans-unit id="imprintSignedEmailNote" datatype="html">
         <source>Ich verschicke meine E-Mails grundsätzlich digital signiert, wenn möglich auch verschlüsselt.</source>
-        <target state="translated">I always send my e-mails digitally signed, if possible also encrypted.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">23</context>
@@ -382,7 +342,6 @@
       </trans-unit>
       <trans-unit id="imprintSignedEmailInstructions" datatype="html">
         <source>Wer seine digitale Kommunikation ebenfalls verschlüsseln möchte, findet eine gute Anleitung bei</source>
-        <target state="translated">If you also want to encrypt your digital communication, you will find good instructions at </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/imprint.html</context>
           <context context-type="linenumber">23</context>
@@ -391,7 +350,6 @@
       </trans-unit>
       <trans-unit id="exampleVideosHeadline" datatype="html">
         <source>Beispielvideos</source>
-        <target state="translated">Example Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
           <context context-type="linenumber">1</context>
@@ -400,7 +358,6 @@
       </trans-unit>
       <trans-unit id="exampleVideosAlert" datatype="html">
         <source>Diese Videos sind kein Lehrmaterial!</source>
-        <target state="translated">These videos are not educational material!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
           <context context-type="linenumber">4</context>
@@ -408,8 +365,7 @@
         <note priority="1" from="description">example videos alert</note>
       </trans-unit>
       <trans-unit id="exampleVideosAlertDescription" datatype="html">
-        <source>Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen.</source>
-        <target state="translated">They are to offer interested teachers only a very short "moving" impression of this software and make it as curious as possible.</target>
+        <source>Sie sollen interessierten Lehrkräften nur einen sehr kurzen &quot;bewegten&quot; Eindruck von dieser Software bieten und möglichst neugierig machen.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
           <context context-type="linenumber">4</context>
@@ -420,7 +376,6 @@
         <source>
     Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte
   </source>
-        <target state="translated">For inquiries about operation, please contact Marcus Riemer </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
           <context context-type="linenumber">4</context>
@@ -429,7 +384,6 @@
       </trans-unit>
       <trans-unit id="exampleVideosAlertContactEmailLink" datatype="html">
         <source>per Mail direkt an Marcus Riemer</source>
-        <target state="translated">directly by e-mail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
           <context context-type="linenumber">6</context>
@@ -438,7 +392,6 @@
       </trans-unit>
       <trans-unit id="pupilPageHeadline" datatype="html">
         <source>Dein Einstieg in die Web-Entwicklung</source>
-        <target state="translated">Your entry into web development</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/pupil.html</context>
           <context context-type="linenumber">1</context>
@@ -447,7 +400,6 @@
       </trans-unit>
       <trans-unit id="pupilPageAlertText" datatype="html">
         <source>Sorry, so weit ist dieses Projekt noch nicht 😞</source>
-        <target state="translated">Sorry, this project is not ready yet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/pupil.html</context>
           <context context-type="linenumber">4</context>
@@ -458,7 +410,6 @@
         <source>
     Für den Augenblick suchen wir vor allem nach Lehrkräften, die zu unserem Projekt Feedback geben.
   </source>
-        <target state="translated">For the moment we are looking for teachers who give feedback on our project.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/pupil.html</context>
           <context context-type="linenumber">4</context>
@@ -467,7 +418,6 @@
       </trans-unit>
       <trans-unit id="teacherPageHeadline" datatype="html">
         <source>Datenbanken und HTML für den Unterricht</source>
-        <target state="translated">Databases and HTML for teaching</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/teacher.html</context>
           <context context-type="linenumber">1</context>
@@ -475,8 +425,7 @@
         <note priority="1" from="description">teacher page headline</note>
       </trans-unit>
       <trans-unit id="teacherPageDescription" datatype="html">
-        <source>Bei BlattWerkzeug handelt es sich um eine Web-Anwendung, mit der Schülerinnen und Schüler an Datenbanken und Webentwicklung herangeführt werden können. Der Arbeitstitel für dieses Projekt lautete "Scratch für Datenbanken Webanwendungen" und beschreibt das Selbstverständnis von BlattWerkzeug recht sprechend.</source>
-        <target state="translated">BlattWerkzeug is a web application that allows students to access databases and web development. The working title for this project was "Scratch for Databases Web Applications" and describes the self-image of BlattWerkzeug quite well.</target>
+        <source>Bei BlattWerkzeug handelt es sich um eine Web-Anwendung, mit der Schülerinnen und Schüler an Datenbanken und Webentwicklung herangeführt werden können. Der Arbeitstitel für dieses Projekt lautete &quot;Scratch für Datenbanken Webanwendungen&quot; und beschreibt das Selbstverständnis von BlattWerkzeug recht sprechend.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/teacher.html</context>
           <context context-type="linenumber">2</context>
@@ -485,7 +434,6 @@
       </trans-unit>
       <trans-unit id="privacyHeadline" datatype="html">
         <source>Datenschutz</source>
-        <target state="translated">Privacy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">1</context>
@@ -496,8 +444,6 @@
         <source>
   Bei der Verwendung von BlattWerkzeug teilst du uns persönliche Daten mit. Welche das sind und wozu wir diese Daten brauchen wird auf dieser Seite erklärt.
 </source>
-        <target state="translated">When using a sheet tool, you provide us with personal information. What these are and what we need these data for is explained on this page.
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">2</context>
@@ -508,8 +454,6 @@
         <source>
   Für alle Daten die auf dieser Seite gesammelt werden, gelten die folgenden Grundregeln:
 </source>
-        <target state="translated">For all data collected on this site, the following basic rules apply:
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">6</context>
@@ -520,7 +464,6 @@
         <source>
     Die erfassten Daten werden auf <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>unseren Servern<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> gespeichert.
   </source>
-        <target state="translated">The collected data is stored on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>our servers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">11</context>
@@ -531,7 +474,6 @@
         <source>
     Ihre Aktivitäten auf dieser Seite werden folglich <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht an Drittanbietern<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> wie Google, Facebook, Microsoft, ... <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>übertragen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
   </source>
-        <target state="translated">As a result, your activity on this site <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>will not be transferred to third parties<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> such as Google, Facebook, Microsoft, ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">14</context>
@@ -542,7 +484,6 @@
         <source>
     Es erfolgt ausdrückliche <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>keine kommerzielle Verwertung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> der gesammelten Informationen.
   </source>
-        <target state="translated">There is expressly <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>no commercial exploitation<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of the information collected.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">17</context>
@@ -551,7 +492,6 @@
       </trans-unit>
       <trans-unit id="privacyMatomoHeadline" datatype="html">
         <source>Benutzeranalyse mit Matomo</source>
-        <target state="translated">User analysis with Matomo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">22</context>
@@ -562,8 +502,6 @@
         <source>
   Dieses Projekt verwendet die <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Open Source-Software Matomo (ehemals Piwik)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> um Besucherzugriffe statistisch auswerten zu können. Die dabei erhobenen Daten werden ausschließlich im Rahmen der Weiterentwicklung und der Forschung eingesetzt. Zum Beispiel um Fragestellungen wie die folgenden zu klären:
 </source>
-        <target state="translated">This project uses the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>open source software Matomo (formerly Piwik)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to statistically evaluate visitor traffic. The data collected are used exclusively in the context of further development and research. For example to clarify questions like the following:
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">23</context>
@@ -572,7 +510,6 @@
       </trans-unit>
       <trans-unit id="privacyMatomoUserDetailsTracked" datatype="html">
         <source>Wie viele Besucher nutzen das Angebot zu welchen Zeiten und an welchen Orten?</source>
-        <target state="translated">How many visitors use the offer at what times and in which places?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">27</context>
@@ -581,7 +518,6 @@
       </trans-unit>
       <trans-unit id="privacyMatomoTechnicalDetailsTracked" datatype="html">
         <source>Welche technischen Voraussetzungen (Browser, Bildschirmauflösung, ...) haben die von den Benutzern verwendeten Geräte?</source>
-        <target state="translated">Which technical requirements (browser, screen resolution, ...) do the devices used by the users have?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">28</context>
@@ -590,7 +526,6 @@
       </trans-unit>
       <trans-unit id="privacyMatomoEditorDetailsTracked" datatype="html">
         <source>Die Editoren für welche Programmiersprachen werden am häufigsten verwendet?</source>
-        <target state="translated">The editors for which programming languages are most commonly used?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">29</context>
@@ -599,7 +534,6 @@
       </trans-unit>
       <trans-unit id="privacyMatomoTrackedDataHeadline" datatype="html">
         <source>Erfasste Daten</source>
-        <target state="translated">Collected Data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">32</context>
@@ -610,8 +544,6 @@
         <source>
   Piwik verwendet so genannte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Cookies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Wir merken uns, zusammen mit dieser anonymisierten IP und mit einem Zeitstempel, welche Seiten du benutzt oder wie du mit dem Block-Editor interagierst.
 </source>
-        <target state="translated">Piwik uses so-called <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>cookies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> which allow an analysis of the use of the website by you. The IP address is anonymized immediately after processing and prior to its storage. We remember, along with this anonymized IP and with a timestamp, which pages you use or how you interact with the block editor.
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">33</context>
@@ -620,7 +552,6 @@
       </trans-unit>
       <trans-unit id="privacyMatomoDissentHeadline" datatype="html">
         <source>Widerspruch</source>
-        <target state="translated">Dissent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">37</context>
@@ -631,17 +562,22 @@
         <source>
   Du kannst das Anlegen der Cookies auf dieser Seite mit dem unten stehenden Dialog auf dem aktuell genutzten Rechner unterbinden.
 </source>
-        <target state="translated">You can prevent the creation of cookies on this page with the dialog below on the currently used computer.
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
         <note priority="1" from="description">privacy dissent text</note>
       </trans-unit>
+      <trans-unit id="privacyMatomoOptOutUrl" datatype="html">
+        <source>https://piwik.blattwerkzeug.de/index.php?module=CoreAdminHome&amp;action=optOut&amp;language=de</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/privacy.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+        <note priority="1" from="description">privacy matomo opt out url</note>
+      </trans-unit>
       <trans-unit id="privacyBugTrackingHeadline" datatype="html">
         <source>Fehleranalyse mit Sentry</source>
-        <target state="translated">Error analysis with Sentry</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">44</context>
@@ -652,29 +588,16 @@
         <source>
   Wenn ein Fehler auftritt ist das ärgerlich! Für dich als Benutzer, weil unser Programm nicht so funktioniert, wie es sollte. Und für uns als Entwickler, weil wir im Normalfall nichts von Fehlern erfahren. Und dann ist es für beide Seiten eine potenziell ziemlich mühselige Angelegenheit den Fehler einzugrenzen und schließlich zu beheben.
 </source>
-        <target state="translated">If an error occurs that is annoying! For you as a user, because our program does not work as it should. And for us as developers, because we normally do not learn about mistakes. And then, for both sides, it's a potentially rather arduous task to narrow down the error and eventually fix it.
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
         <note priority="1" from="description">privacy bug tracking description</note>
       </trans-unit>
-      <trans-unit id="privacyMatomoOptOutUrl" datatype="html">
-        <source>https://piwik.blattwerkzeug.de/index.php?module=CoreAdminHome&amp;action=optOut&amp;language=de</source>
-        <target state="translated">https://piwik.blattwerkzeug.de/index.php?module=CoreAdminHome&amp;action=optOut&amp;language=en</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/privacy.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-        <note priority="1" from="description">privacy matomo opt out url</note>
-      </trans-unit>
       <trans-unit id="privacySentryDescription" datatype="html">
         <source>
   Deswegen gibt es auf dieser Seite einen automatischen Fehlerreporter namens <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Sentry<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Das ist eine Open Source-Software, die wir auf unseren eigenen Servern betreiben. Immer wenn es bei dir zu einem unerwarteten Fehler kommt färbt sich der Seitenhintergrund rot. Und zusätzlich bekommen wir noch einen ausführlichen Fehlerreport.
 </source>
-        <target state="translated">That's why there's an automatic bug reporter called <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Sentry<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on this page. This is open source software that we run on our own servers. Whenever an unexpected error occurs in you, the page background turns red. And in addition we get a detailed error report.
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">48</context>
@@ -683,7 +606,6 @@
       </trans-unit>
       <trans-unit id="privacySentryTrackedDataHeadline" datatype="html">
         <source>Erfasste Daten</source>
-        <target state="translated">Collected Data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">52</context>
@@ -694,8 +616,6 @@
         <source>
   Sentry schreibt die folgenden Daten automatisch mit und schickt Sie <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>im Fehlerfall<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> an unseren Server:
 </source>
-        <target state="translated">Sentry automatically writes down the following data and sends it to our server <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>in the event of an error<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>:
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">53</context>
@@ -704,7 +624,6 @@
       </trans-unit>
       <trans-unit id="privacySentryTrackedLogs" datatype="html">
         <source>Logeinträge, die von BlattWerkzeug selbst erzeugt werden.</source>
-        <target state="translated">Log entries generated by BlattWerkzeug itself.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">57</context>
@@ -713,7 +632,6 @@
       </trans-unit>
       <trans-unit id="privacySentryTrackedRequests" datatype="html">
         <source>Anfragen an den BlattWerkzeug.de-Server, zum Beispiel wenn Projekte geladen oder gespeichert werden.</source>
-        <target state="translated">Requets to the BlattWerkzeug.de server, for example when loading or saving projects.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">58</context>
@@ -722,7 +640,6 @@
       </trans-unit>
       <trans-unit id="privacySentryTrackedClickedElements" datatype="html">
         <source>Die technischen Namen der Elemente, auf die du im Browser klickst.</source>
-        <target state="translated">The technical names of the items that you click in the browser.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">59</context>
@@ -731,7 +648,6 @@
       </trans-unit>
       <trans-unit id="privacySentryTrackedPages" datatype="html">
         <source>Die Namen der Unterseiten, zwischen denen du navigierst.</source>
-        <target state="translated">The names of the subpages you navigate between.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">60</context>
@@ -740,7 +656,6 @@
       </trans-unit>
       <trans-unit id="privacySentryTooAbstract" datatype="html">
         <source>Das ist dir zu abstrakt? </source>
-        <target state="translated">This is too abstract for you?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">63</context>
@@ -749,7 +664,6 @@
       </trans-unit>
       <trans-unit id="privacySentryImageLinkText" datatype="html">
         <source>Dann haben wir ein Beispielbild für dich vorbereitet</source>
-        <target state="translated">Then we have prepared a sample picture for you</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">63</context>
@@ -758,7 +672,6 @@
       </trans-unit>
       <trans-unit id="privacySentryImageDescription" datatype="html">
         <source>Hier kannst du für einen Beispielfehler sehen, welche Art von Daten an uns übermittelt wird.</source>
-        <target state="translated">Here you can see for an example error, what kind of data is transmitted to us.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">63</context>
@@ -769,8 +682,6 @@
         <source>
   Mit diesen Informationen können wir, ohne dich nochmal zu fragen, recht gut nachvollziehen wo der Fehler aufgetreten ist und was du dabei gemacht hast. Und im besten Fall können wir den Fehler damit auch beheben, ohne dass du dafür irgendetwas tun musst.
 </source>
-        <target state="translated">With this information we can, without asking you again, quite well understand where the error occurred and what you have done. And at best, we can fix it with no need for you to do anything about it.
-</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">65</context>
