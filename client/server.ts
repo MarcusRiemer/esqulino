@@ -70,6 +70,9 @@ app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de'), {
   maxAge: '1y'
 }));
 
+// workaround for server crash caused by favicon.ico, tests should now pass
+app.get('/favicon.ico', (req, res) => res.sendStatus(204));
+
 // All regular routes use the Universal engine
 languageEngines.forEach(languageEngine => {
   const paths = languageEngine.base ? [languageEngine.base, `${languageEngine.base}*`] : '*'
