@@ -26,7 +26,7 @@
   <dd i18n="single page and api description@@singlePageAndApiDescription">Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</dd>
 </dl>
 
-<mat-card *ngFor="let proposal of projectProposals"
+<mat-card *ngFor="let proposal of projectProposals | async"
           class="academia-item"
           [id]="proposal.id">
   <mat-card-title>
