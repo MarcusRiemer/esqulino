@@ -1,0 +1,7 @@
+grammar "trucklino_program" {
+  node "program" {
+    children sequence "procedures" ::= procedureDeclaration*
+    children sequence "main" ::= statement*
+  }
+  ...
+}

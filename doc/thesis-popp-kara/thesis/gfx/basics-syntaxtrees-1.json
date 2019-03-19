@@ -1,0 +1,7 @@
+{
+  "language": "math",
+  "name": "const",
+  "properties": {
+    "value": "42"
+  }
+}

@@ -1,0 +1,9 @@
+grammar "trucklino_program" {
+  ...
+  node "if" {
+    children sequence "pred" ::= booleanExpression
+    children sequence "body" ::= statement*
+    children sequence "else" ::= statement*
+  }
+  ...
+}
