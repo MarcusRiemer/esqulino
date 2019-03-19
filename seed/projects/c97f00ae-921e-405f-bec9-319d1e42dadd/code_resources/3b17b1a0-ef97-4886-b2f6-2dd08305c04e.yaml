@@ -41,17 +41,17 @@ concise_attributes:
     "language": "trucklino_program"}], "arguments": []}, "language": "trucklino_program",
     "properties": {"name": "tryLoad"}}, {"name": "procedureDeclaration", "children":
     {"body": [{"name": "if", "children": {"body": [{"name": "procedureCall", "language":
-    "trucklino_program", "properties": {"name": "turnLeft"}}], "else": [{"name": "if",
-    "children": {"body": [{"name": "procedureCall", "language": "trucklino_program",
-    "properties": {"name": "turnRight"}}], "pred": [{"name": "booleanBinaryExpression",
-    "children": {"lhs": [{"name": "sensor", "language": "trucklino_program", "properties":
-    {"type": "canTurnRight"}}], "rhs": [{"name": "negateExpression", "children": {"expr":
-    [{"name": "sensor", "language": "trucklino_program", "properties": {"type": "canGoStraight"}}]},
-    "language": "trucklino_program"}], "operator": [{"name": "relationalOperator",
-    "language": "trucklino_program", "properties": {"operator": "AND"}}]}, "language":
-    "trucklino_program"}]}, "language": "trucklino_program"}], "pred": [{"name": "sensor",
-    "language": "trucklino_program", "properties": {"type": "canTurnLeft"}}]}, "language":
-    "trucklino_program"}, {"name": "procedureCall", "language": "trucklino_program",
+    "trucklino_program", "properties": {"name": "turnLeft"}}], "else": [], "pred":
+    [{"name": "sensor", "language": "trucklino_program", "properties": {"type": "canTurnLeft"}}],
+    "elseIf": [{"name": "ifElseIf", "children": {"body": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "turnRight"}}], "pred":
+    [{"name": "booleanBinaryExpression", "children": {"lhs": [{"name": "sensor", "language":
+    "trucklino_program", "properties": {"type": "canTurnRight"}}], "rhs": [{"name":
+    "negateExpression", "children": {"expr": [{"name": "sensor", "language": "trucklino_program",
+    "properties": {"type": "canGoStraight"}}]}, "language": "trucklino_program"}],
+    "operator": [{"name": "relationalOperator", "language": "trucklino_program", "properties":
+    {"operator": "AND"}}]}, "language": "trucklino_program"}]}, "language": "trucklino_program"}]},
+    "language": "trucklino_program"}, {"name": "procedureCall", "language": "trucklino_program",
     "properties": {"name": "goForward"}}], "arguments": []}, "language": "trucklino_program",
     "properties": {"name": "move"}}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -59,7 +59,7 @@ concise_attributes:
   value_before_type_cast: '2019-03-13 11:12:00.33096'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-13 11:26:36.908787'
+  value_before_type_cast: '2019-03-19 09:30:32.54744'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
@@ -88,11 +88,11 @@ concise_attributes:
       if (truck.canTurnLeft()) {
         truck._progress([["procedures",2],["body",0],["body",0]]);
         yield* truck.turnLeft();
-      } else {
-        if ((truck.canTurnRight() && !truck.canGoStraight())) {
-          truck._progress([["procedures",2],["body",0],["else",0],["body",0]]);
-          yield* truck.turnRight();
-        }
+      }
+      else if (
+      (truck.canTurnRight() && !truck.canGoStraight())) {
+        truck._progress([["procedures",2],["body",0],["elseIf",0],["body",0]]);
+        yield* truck.turnRight();
       }
       truck._progress([["procedures",2],["body",1]]);
       yield* truck.goForward();

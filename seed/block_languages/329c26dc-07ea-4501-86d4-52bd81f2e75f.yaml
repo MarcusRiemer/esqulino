@@ -15,49 +15,31 @@ concise_attributes:
     \"program\", \"children\": {\"main\": []}, \"language\": \"trucklino_program\"},
     \"displayName\": \"Leeres Programm\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
     \"language\": \"trucklino_program\", \"properties\": {\"name\": \"goForward\"}},
-    \"displayName\": \"←\U0001F69A Vorwärts fahren\"}, {\"defaultNode\": {\"name\":
+    \"displayName\": \"←\U0001F69A Fahren\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"turnRight\"}},
+    \"displayName\": \"↱ Blinker rechts\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"turnLeft\"}},
+    \"displayName\": \"↰ Blinker links\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"noTurn\"}},
+    \"displayName\": \"☓ Blinker aus\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"load\"}}, \"displayName\":
+    \"\U0001F4E6→\U0001F69A Aufladen\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"unload\"}},
+    \"displayName\": \"\U0001F4E6←\U0001F69A Abladen\"}, {\"defaultNode\": {\"name\":
     \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"turnRight\"}}, \"displayName\": \"↱ Blinker rechts\"}, {\"defaultNode\": {\"name\":
-    \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"turnLeft\"}}, \"displayName\": \"↰ Blinker links\"}, {\"defaultNode\": {\"name\":
-    \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"noTurn\"}}, \"displayName\": \"☓ Blinker aus\"}, {\"defaultNode\": {\"name\":
-    \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"load\"}}, \"displayName\": \"\U0001F4E6→\U0001F69A Aufladen\"}, {\"defaultNode\":
-    {\"name\": \"procedureCall\", \"language\": \"trucklino_program\", \"properties\":
-    {\"name\": \"unload\"}}, \"displayName\": \"\U0001F4E6←\U0001F69A Abladen\"},
-    {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
-    \"properties\": {\"name\": \"wait\"}}, \"displayName\": \"⏳ Warten\"}, {\"defaultNode\":
-    {\"name\": \"procedureCall\", \"language\": \"trucklino_program\", \"properties\":
-    {\"name\": \"pause\"}}, \"displayName\": \"⏸️ Pause\"}, {\"defaultNode\": {\"name\":
-    \"if\", \"children\": {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"},
-    \"displayName\": \"Wenn … dann …\"}, {\"defaultNode\": {\"name\": \"ifElseIf\",
-    \"children\": {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"},
-    \"displayName\": \"… sonst … wenn … dann …\"}, {\"defaultNode\": {\"name\": \"ifElse\",
-    \"children\": {\"body\": []}, \"language\": \"trucklino_program\"}, \"displayName\":
-    \"… sonst …\"}, {\"defaultNode\": {\"name\": \"loopWhile\", \"children\": {\"body\":
-    [], \"pred\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Wiederhole
-    solange …\"}, {\"defaultNode\": {\"name\": \"loopFor\", \"children\": {\"body\":
-    []}, \"language\": \"trucklino_program\", \"properties\": {\"times\": \"3\"}},
-    \"displayName\": \"Wiederhole … mal\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"lightIsRed\"}},
-    \"displayName\": \"Sensor: \U0001F6A6Rot?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"lightIsGreen\"}},
-    \"displayName\": \"Sensor: \U0001F6A6Grün?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canGoStraight\"}},
-    \"displayName\": \"Sensor: ↑ frei?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canTurnRight\"}},
-    \"displayName\": \"Sensor: ↱ frei?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canTurnLeft\"}},
-    \"displayName\": \"Sensor: ↰ frei?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canLoad\"}},
-    \"displayName\": \"Sensor: \U0001F4E6 Aufladen?\"}, {\"defaultNode\": {\"name\":
-    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canUnload\"}},
-    \"displayName\": \"Sensor: \U0001F4E6 Abladen?\"}, {\"defaultNode\": {\"name\":
-    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isOnTarget\"}},
-    \"displayName\": \"Sensor: \U0001F3AF Auf Ziel?\"}, {\"defaultNode\": {\"name\":
-    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isSolved\"}},
-    \"displayName\": \"Sensor: ✅ Gelöst?\"}, {\"defaultNode\": {\"name\": \"booleanBinaryExpression\",
+    \"wait\"}}, \"displayName\": \"⏳ Warten\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"pause\"}}, \"displayName\":
+    \"⏸️ Pause\"}], \"categoryCaption\": \"Truck\"}, {\"blocks\": [{\"defaultNode\":
+    {\"name\": \"if\", \"children\": {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"},
+    \"displayName\": \"Wenn …\"}, {\"defaultNode\": {\"name\": \"ifElseIf\", \"children\":
+    {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"}, \"displayName\":
+    \"… sonst … wenn …\"}, {\"defaultNode\": {\"name\": \"ifElse\", \"children\":
+    {\"body\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"… sonst
+    …\"}, {\"defaultNode\": {\"name\": \"loopWhile\", \"children\": {\"body\": [],
+    \"pred\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Wiederhole
+    …\"}, {\"defaultNode\": {\"name\": \"loopFor\", \"children\": {\"body\": []},
+    \"language\": \"trucklino_program\", \"properties\": {\"times\": \"3\"}}, \"displayName\":
+    \"Wiederhole … mal\"}, {\"defaultNode\": {\"name\": \"booleanBinaryExpression\",
     \"children\": {\"lhs\": [], \"rhs\": [], \"operator\": [{\"name\": \"relationalOperator\",
     \"language\": \"trucklino_program\", \"properties\": {\"operator\": \"AND\"}}]},
     \"language\": \"trucklino_program\"}, \"displayName\": \"… und …\"}, {\"defaultNode\":
@@ -70,53 +52,71 @@ concise_attributes:
     \"trucklino_program\", \"properties\": {\"value\": \"true\"}}, \"displayName\":
     \"Wahr\"}, {\"defaultNode\": {\"name\": \"booleanConstant\", \"language\": \"trucklino_program\",
     \"properties\": {\"value\": \"false\"}}, \"displayName\": \"Falsch\"}], \"categoryCaption\":
-    \"Truck\"}, {\"blocks\": [{\"defaultNode\": {\"name\": \"procedureDeclaration\",
-    \"children\": {\"body\": [], \"arguments\": []}, \"language\": \"trucklino_program\",
-    \"properties\": {\"name\": \"Neue_Funktion\"}}, \"displayName\": \"Eigene Prozedur\"}],
-    \"categoryCaption\": \"Eigene Funktionen\"}]}, {\"type\": \"truckProgramUserFunctions\"}],
-    \"editorBlocks\": [{\"visual\": [{\"style\": {\"border\": \"1px solid blue\",
-    \"margin\": \"2px\", \"padding\": \"2px\", \"marginLeft\": \"2px\", \"borderRadius\":
-    \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\", \"border\": \"2px
-    solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\":
-    \"1ch\", \"border-radius\": \"500px\", \"background-color\": \"red\"}, \"blockType\":
-    \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
-    {\"text\": \"if\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
-    \"constant\", \"breakAfter\": false}, {\"text\": \" (\", \"style\": {\"display\":
-    \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": false}, {\"blockType\":
-    \"iterator\", \"direction\": \"horizontal\", \"breakAfter\": false, \"wrapChildren\":
-    true, \"childGroupName\": \"pred\", \"emptyDropTarget\": false}, {\"text\": \")\",
-    \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
+    \"Steuerung\"}, {\"blocks\": [{\"defaultNode\": {\"name\": \"sensor\", \"language\":
+    \"trucklino_program\", \"properties\": {\"type\": \"lightIsRed\"}}, \"displayName\":
+    \"\U0001F6A6Rot?\"}, {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"lightIsGreen\"}}, \"displayName\": \"\U0001F6A6Grün?\"},
+    {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"canGoStraight\"}}, \"displayName\": \"↑ frei?\"},
+    {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"canTurnRight\"}}, \"displayName\": \"↱ frei?\"},
+    {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"canTurnLeft\"}}, \"displayName\": \"↰ frei?\"}, {\"defaultNode\":
+    {\"name\": \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\":
+    \"canLoad\"}}, \"displayName\": \"\U0001F4E6 Aufladen?\"}, {\"defaultNode\": {\"name\":
+    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canUnload\"}},
+    \"displayName\": \"\U0001F4E6 Abladen?\"}, {\"defaultNode\": {\"name\": \"sensor\",
+    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isOnTarget\"}},
+    \"displayName\": \"\U0001F3AF Auf Ziel?\"}, {\"defaultNode\": {\"name\": \"sensor\",
+    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isSolved\"}},
+    \"displayName\": \"✅ Gelöst?\"}], \"categoryCaption\": \"Sensoren\"}, {\"blocks\":
+    [{\"defaultNode\": {\"name\": \"procedureDeclaration\", \"children\": {\"body\":
+    [], \"arguments\": []}, \"language\": \"trucklino_program\", \"properties\": {\"name\":
+    \"Neue_Funktion\"}}, \"displayName\": \"Eigene Prozedur\"}], \"categoryCaption\":
+    \"Eigene Funktionen\"}]}, {\"type\": \"truckProgramUserFunctions\"}], \"editorBlocks\":
+    [{\"visual\": [{\"style\": {\"border\": \"1px solid blue\", \"margin\": \"2px\",
+    \"padding\": \"2px\", \"marginLeft\": \"2px\", \"borderRadius\": \"5px\"}, \"children\":
+    [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\":
+    \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\":
+    \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"text\": \"if\", \"style\":
+    {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
+    false}, {\"text\": \" (\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
+    \"constant\", \"breakAfter\": false}, {\"blockType\": \"iterator\", \"direction\":
+    \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
+    \"pred\", \"emptyDropTarget\": false}, {\"text\": \")\", \"style\": {\"display\":
+    \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": false}, {\"text\":
+    \" {\", \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\",
+    \"breakAfter\": true}, {\"blockType\": \"iterator\", \"direction\": \"horizontal\",
+    \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\": \"body\", \"emptyDropTarget\":
+    true}, {\"text\": \"}\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
+    \"constant\", \"breakAfter\": true}, {\"blockType\": \"iterator\", \"direction\":
+    \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
+    \"elseIf\", \"emptyDropTarget\": false}, {\"blockType\": \"iterator\", \"direction\":
+    \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
+    \"else\", \"emptyDropTarget\": false}], \"blockType\": \"block\", \"direction\":
+    \"horizontal\", \"breakAfter\": true, \"dropTarget\": {}, \"wrapChildren\": true}],
+    \"describedType\": {\"typeName\": \"if\", \"languageName\": \"trucklino_program\"}},
+    {\"visual\": [{\"style\": {\"border\": \"1px solid blue\", \"margin\": \"2px\",
+    \"padding\": \"2px\", \"marginLeft\": \"2px\", \"borderRadius\": \"5px\"}, \"children\":
+    [{\"style\": {\"color\": \"white\", \"border\": \"2px solid red\", \"cursor\":
+    \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\": \"1ch\", \"border-radius\":
+    \"500px\", \"background-color\": \"red\"}, \"blockType\": \"error\", \"excludedErrors\":
+    [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]}, {\"text\": \"else\", \"style\":
+    {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
     false}, {\"text\": \" {\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
     \"constant\", \"breakAfter\": true}, {\"blockType\": \"iterator\", \"direction\":
     \"horizontal\", \"breakAfter\": false, \"wrapChildren\": true, \"childGroupName\":
     \"body\", \"emptyDropTarget\": true}, {\"text\": \"}\", \"style\": {\"display\":
-    \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": true}, {\"blockType\":
-    \"iterator\", \"direction\": \"horizontal\", \"breakAfter\": false, \"wrapChildren\":
-    true, \"childGroupName\": \"elseIf\", \"emptyDropTarget\": false}, {\"blockType\":
-    \"iterator\", \"direction\": \"horizontal\", \"breakAfter\": false, \"wrapChildren\":
-    true, \"childGroupName\": \"else\", \"emptyDropTarget\": false}], \"blockType\":
+    \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": true}], \"blockType\":
     \"block\", \"direction\": \"horizontal\", \"breakAfter\": true, \"dropTarget\":
-    {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"if\", \"languageName\":
+    {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\": \"ifElse\", \"languageName\":
     \"trucklino_program\"}}, {\"visual\": [{\"style\": {\"border\": \"1px solid blue\",
     \"margin\": \"2px\", \"padding\": \"2px\", \"marginLeft\": \"2px\", \"borderRadius\":
     \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\", \"border\": \"2px
     solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\", \"paddingRight\":
     \"1ch\", \"border-radius\": \"500px\", \"background-color\": \"red\"}, \"blockType\":
     \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
-    {\"text\": \"else\", \"style\": {\"display\": \"inline-block\"}, \"blockType\":
-    \"constant\", \"breakAfter\": false}, {\"text\": \" {\", \"style\": {\"display\":
-    \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\": true}, {\"blockType\":
-    \"iterator\", \"direction\": \"horizontal\", \"breakAfter\": false, \"wrapChildren\":
-    true, \"childGroupName\": \"body\", \"emptyDropTarget\": true}, {\"text\": \"}\",
-    \"style\": {\"display\": \"inline-block\"}, \"blockType\": \"constant\", \"breakAfter\":
-    true}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
-    true, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
-    \"ifElse\", \"languageName\": \"trucklino_program\"}}, {\"visual\": [{\"style\":
-    {\"border\": \"1px solid blue\", \"margin\": \"2px\", \"padding\": \"2px\", \"marginLeft\":
-    \"2px\", \"borderRadius\": \"5px\"}, \"children\": [{\"style\": {\"color\": \"white\",
-    \"border\": \"2px solid red\", \"cursor\": \"default\", \"paddingLeft\": \"1ch\",
-    \"paddingRight\": \"1ch\", \"border-radius\": \"500px\", \"background-color\":
-    \"red\"}, \"blockType\": \"error\", \"excludedErrors\": [\"MISSING_CHILD\", \"INVALID_MIN_OCCURENCES\"]},
     {\"style\": {\"display\": \"inline-block\"}, \"property\": \"type\", \"blockType\":
     \"interpolated\"}], \"blockType\": \"block\", \"direction\": \"horizontal\", \"breakAfter\":
     false, \"dropTarget\": {}, \"wrapChildren\": true}], \"describedType\": {\"typeName\":
@@ -306,49 +306,31 @@ concise_attributes:
     {\"name\": \"program\", \"children\": {\"main\": []}, \"language\": \"trucklino_program\"},
     \"displayName\": \"Leeres Programm\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
     \"language\": \"trucklino_program\", \"properties\": {\"name\": \"goForward\"}},
-    \"displayName\": \"←\U0001F69A Vorwärts fahren\"}, {\"defaultNode\": {\"name\":
+    \"displayName\": \"←\U0001F69A Fahren\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"turnRight\"}},
+    \"displayName\": \"↱ Blinker rechts\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"turnLeft\"}},
+    \"displayName\": \"↰ Blinker links\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"noTurn\"}},
+    \"displayName\": \"☓ Blinker aus\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"load\"}}, \"displayName\":
+    \"\U0001F4E6→\U0001F69A Aufladen\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"unload\"}},
+    \"displayName\": \"\U0001F4E6←\U0001F69A Abladen\"}, {\"defaultNode\": {\"name\":
     \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"turnRight\"}}, \"displayName\": \"↱ Blinker rechts\"}, {\"defaultNode\": {\"name\":
-    \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"turnLeft\"}}, \"displayName\": \"↰ Blinker links\"}, {\"defaultNode\": {\"name\":
-    \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"noTurn\"}}, \"displayName\": \"☓ Blinker aus\"}, {\"defaultNode\": {\"name\":
-    \"procedureCall\", \"language\": \"trucklino_program\", \"properties\": {\"name\":
-    \"load\"}}, \"displayName\": \"\U0001F4E6→\U0001F69A Aufladen\"}, {\"defaultNode\":
-    {\"name\": \"procedureCall\", \"language\": \"trucklino_program\", \"properties\":
-    {\"name\": \"unload\"}}, \"displayName\": \"\U0001F4E6←\U0001F69A Abladen\"},
-    {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
-    \"properties\": {\"name\": \"wait\"}}, \"displayName\": \"⏳ Warten\"}, {\"defaultNode\":
-    {\"name\": \"procedureCall\", \"language\": \"trucklino_program\", \"properties\":
-    {\"name\": \"pause\"}}, \"displayName\": \"⏸️ Pause\"}, {\"defaultNode\": {\"name\":
-    \"if\", \"children\": {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"},
-    \"displayName\": \"Wenn … dann …\"}, {\"defaultNode\": {\"name\": \"ifElseIf\",
-    \"children\": {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"},
-    \"displayName\": \"… sonst … wenn … dann …\"}, {\"defaultNode\": {\"name\": \"ifElse\",
-    \"children\": {\"body\": []}, \"language\": \"trucklino_program\"}, \"displayName\":
-    \"… sonst …\"}, {\"defaultNode\": {\"name\": \"loopWhile\", \"children\": {\"body\":
-    [], \"pred\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Wiederhole
-    solange …\"}, {\"defaultNode\": {\"name\": \"loopFor\", \"children\": {\"body\":
-    []}, \"language\": \"trucklino_program\", \"properties\": {\"times\": \"3\"}},
-    \"displayName\": \"Wiederhole … mal\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"lightIsRed\"}},
-    \"displayName\": \"Sensor: \U0001F6A6Rot?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"lightIsGreen\"}},
-    \"displayName\": \"Sensor: \U0001F6A6Grün?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canGoStraight\"}},
-    \"displayName\": \"Sensor: ↑ frei?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canTurnRight\"}},
-    \"displayName\": \"Sensor: ↱ frei?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canTurnLeft\"}},
-    \"displayName\": \"Sensor: ↰ frei?\"}, {\"defaultNode\": {\"name\": \"sensor\",
-    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canLoad\"}},
-    \"displayName\": \"Sensor: \U0001F4E6 Aufladen?\"}, {\"defaultNode\": {\"name\":
-    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canUnload\"}},
-    \"displayName\": \"Sensor: \U0001F4E6 Abladen?\"}, {\"defaultNode\": {\"name\":
-    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isOnTarget\"}},
-    \"displayName\": \"Sensor: \U0001F3AF Auf Ziel?\"}, {\"defaultNode\": {\"name\":
-    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isSolved\"}},
-    \"displayName\": \"Sensor: ✅ Gelöst?\"}, {\"defaultNode\": {\"name\": \"booleanBinaryExpression\",
+    \"wait\"}}, \"displayName\": \"⏳ Warten\"}, {\"defaultNode\": {\"name\": \"procedureCall\",
+    \"language\": \"trucklino_program\", \"properties\": {\"name\": \"pause\"}}, \"displayName\":
+    \"⏸️ Pause\"}], \"categoryCaption\": \"Truck\"}, {\"blocks\": [{\"defaultNode\":
+    {\"name\": \"if\", \"children\": {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"},
+    \"displayName\": \"Wenn …\"}, {\"defaultNode\": {\"name\": \"ifElseIf\", \"children\":
+    {\"body\": [], \"pred\": []}, \"language\": \"trucklino_program\"}, \"displayName\":
+    \"… sonst … wenn …\"}, {\"defaultNode\": {\"name\": \"ifElse\", \"children\":
+    {\"body\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"… sonst
+    …\"}, {\"defaultNode\": {\"name\": \"loopWhile\", \"children\": {\"body\": [],
+    \"pred\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Wiederhole
+    …\"}, {\"defaultNode\": {\"name\": \"loopFor\", \"children\": {\"body\": []},
+    \"language\": \"trucklino_program\", \"properties\": {\"times\": \"3\"}}, \"displayName\":
+    \"Wiederhole … mal\"}, {\"defaultNode\": {\"name\": \"booleanBinaryExpression\",
     \"children\": {\"lhs\": [], \"rhs\": [], \"operator\": [{\"name\": \"relationalOperator\",
     \"language\": \"trucklino_program\", \"properties\": {\"operator\": \"AND\"}}]},
     \"language\": \"trucklino_program\"}, \"displayName\": \"… und …\"}, {\"defaultNode\":
@@ -361,19 +343,36 @@ concise_attributes:
     \"trucklino_program\", \"properties\": {\"value\": \"true\"}}, \"displayName\":
     \"Wahr\"}, {\"defaultNode\": {\"name\": \"booleanConstant\", \"language\": \"trucklino_program\",
     \"properties\": {\"value\": \"false\"}}, \"displayName\": \"Falsch\"}], \"categoryCaption\":
-    \"Truck\"}, {\"blocks\": [{\"defaultNode\": {\"name\": \"procedureDeclaration\",
-    \"children\": {\"body\": [], \"arguments\": []}, \"language\": \"trucklino_program\",
-    \"properties\": {\"name\": \"Neue_Funktion\"}}, \"displayName\": \"Eigene Prozedur\"}],
-    \"categoryCaption\": \"Eigene Funktionen\"}]}, {\"type\": \"truckProgramUserFunctions\"}],
-    \"editorComponents\": [{\"componentType\": \"truck-controller\"}, {\"componentType\":
-    \"truck-world\"}, {\"componentType\": \"truck-sensors\"}, {\"componentType\":
-    \"generated-code\"}]}}"
+    \"Steuerung\"}, {\"blocks\": [{\"defaultNode\": {\"name\": \"sensor\", \"language\":
+    \"trucklino_program\", \"properties\": {\"type\": \"lightIsRed\"}}, \"displayName\":
+    \"\U0001F6A6Rot?\"}, {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"lightIsGreen\"}}, \"displayName\": \"\U0001F6A6Grün?\"},
+    {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"canGoStraight\"}}, \"displayName\": \"↑ frei?\"},
+    {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"canTurnRight\"}}, \"displayName\": \"↱ frei?\"},
+    {\"defaultNode\": {\"name\": \"sensor\", \"language\": \"trucklino_program\",
+    \"properties\": {\"type\": \"canTurnLeft\"}}, \"displayName\": \"↰ frei?\"}, {\"defaultNode\":
+    {\"name\": \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\":
+    \"canLoad\"}}, \"displayName\": \"\U0001F4E6 Aufladen?\"}, {\"defaultNode\": {\"name\":
+    \"sensor\", \"language\": \"trucklino_program\", \"properties\": {\"type\": \"canUnload\"}},
+    \"displayName\": \"\U0001F4E6 Abladen?\"}, {\"defaultNode\": {\"name\": \"sensor\",
+    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isOnTarget\"}},
+    \"displayName\": \"\U0001F3AF Auf Ziel?\"}, {\"defaultNode\": {\"name\": \"sensor\",
+    \"language\": \"trucklino_program\", \"properties\": {\"type\": \"isSolved\"}},
+    \"displayName\": \"✅ Gelöst?\"}], \"categoryCaption\": \"Sensoren\"}, {\"blocks\":
+    [{\"defaultNode\": {\"name\": \"procedureDeclaration\", \"children\": {\"body\":
+    [], \"arguments\": []}, \"language\": \"trucklino_program\", \"properties\": {\"name\":
+    \"Neue_Funktion\"}}, \"displayName\": \"Eigene Prozedur\"}], \"categoryCaption\":
+    \"Eigene Funktionen\"}]}, {\"type\": \"truckProgramUserFunctions\"}], \"editorComponents\":
+    [{\"componentType\": \"truck-controller\"}, {\"componentType\": \"truck-world\"},
+    {\"componentType\": \"truck-sensors\"}, {\"componentType\": \"generated-code\"}]}}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-01-09 12:30:41.478228'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-13 15:28:31.442885'
+  value_before_type_cast: '2019-03-19 09:53:18.800697'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang
