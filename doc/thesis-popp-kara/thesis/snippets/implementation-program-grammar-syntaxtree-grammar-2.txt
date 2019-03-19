@@ -1,0 +1,12 @@
+grammar "trucklino_program" {
+  ...
+  node "procedureDeclaration" {
+    prop "name" { string }
+    children sequence "arguments" ::= procedureParameter*
+    children sequence "body" ::= statement*
+  }
+  node "procedureParameter" {
+    prop "name" { string }
+  }
+  ...
+}

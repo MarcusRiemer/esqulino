@@ -1,0 +1,15 @@
+grammar "trucklino_program" {
+  ...
+  node "negateExpression" {
+    children sequence "expr" ::= booleanExpression
+  }
+  node "booleanBinaryExpression" {
+    children sequence "lhs" ::= booleanExpression
+    children sequence "operator" ::= relationalOperator
+    children sequence "rhs" ::= booleanExpression
+  }
+  node "relationalOperator" {
+    prop "operator" { string { enum "AND" "OR" } }
+  }
+  ...
+}

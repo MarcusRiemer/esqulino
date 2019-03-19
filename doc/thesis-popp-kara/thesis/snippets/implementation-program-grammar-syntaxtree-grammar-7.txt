@@ -1,0 +1,8 @@
+grammar "trucklino_program" {
+  ...
+  node "loopFor" {
+    prop "times" { integer }
+    children sequence "body" ::= statement*
+  }
+  ...
+}

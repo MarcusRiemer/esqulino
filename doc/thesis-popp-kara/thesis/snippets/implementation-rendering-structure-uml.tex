@@ -1,0 +1,68 @@
+\begin{tikzpicture}
+  \tikzstyle{every node}=[font=\small]
+
+  \begin{class}[text width=7cm]{Renderer}{1,0}
+    \attribute{running: boolean}
+
+    \operation{constructor(world: World, ctx: CanvasContext)}
+    \operation{stop()}
+    \operation{render(timestamp: TimeStamp)}
+  \end{class}
+
+  \begin{class}[text width=5cm]{RenderingContext}{9,0}
+    \attribute{ctx: CanvasRenderingContext2D}
+    \attribute{width: number}
+    \attribute{height: number}
+    \attribute{start: TimeStamp}
+    \attribute{previousFrame: TimeStamp}
+    \attribute{currentFrame: TimeStamp}
+
+    \operation{animationSpeed(): number}
+  \end{class}
+
+  \begin{interface}[text width=5cm]{ObjectRenderer}{3.5,-3}
+    \operation{draw(ctx: RenderingContext)}
+  \end{interface}
+
+  \begin{class}[text width=3cm]{WorldRenderer}{-1,-5}
+    \implement{ObjectRenderer}
+
+    \attribute{world: World}
+
+  \end{class}
+
+  \begin{class}[text width=4cm]{WorldStateRenderer}{-0.5,-7.5}
+    \implement{ObjectRenderer}
+
+    \attribute{state: WorldState}
+    \attribute{freightTarget: Freight}
+
+    \operation{update(state: WorldState)}
+  \end{class}
+
+  \begin{class}[text width=2.75cm]{TileRenderer}{5.5,-6}
+    \implement{ObjectRenderer}
+
+    \attribute{tile: Tile}
+
+    \operation{update(tile: Tile)}
+  \end{class}
+
+  \begin{class}[text width=3.5cm]{TruckRenderer}{9.75,-7}
+    % \implement{ObjectRenderer}
+
+    \attribute{truck: Truck}
+    \attribute{prevTruck: Truck}
+    \attribute{initial: number}
+
+    \operation{update(truck: Truck)}
+  \end{class}
+
+  \composition{Renderer}{ctx}{1}{RenderingContext}
+  \composition{Renderer}{worldRenderer}{1}{WorldRenderer}
+  \composition{WorldRenderer}{stateRenderer}{1}{WorldStateRenderer}
+  \composition{WorldStateRenderer}{truckRenderer}{1}{TruckRenderer}
+  \composition{WorldStateRenderer}{tileRenderers}{0..*}{TileRenderer}
+
+  \draw[umlcd style implement line](ObjectRenderer) -- (TruckRenderer.north);
+\end{tikzpicture}

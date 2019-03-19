@@ -29,7 +29,7 @@
 %
 % **************************************************
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{cleanthesis}[2015/08/26 v0.3.1 Clean-looking thesis style inspired by Apple's user guide documents]
+\ProvidesPackage{sty/cleanthesis}[2015/08/26 v0.3.1 Clean-looking thesis style inspired by Apple's user guide documents]
 %
 % **************************************************
 % Package options
@@ -309,7 +309,7 @@
 % **************************************************
 % Text Format
 % **************************************************
-\setstretch{1.2}					% value for line spacing, use \setstretch{} or \singlespacing or \onehalfspacing or \doublespacing
+\setstretch{1.35}					% value for line spacing, use \setstretch{} or \singlespacing or \onehalfspacing or \doublespacing
 \setlength{\parindent}{0em}			% value for paragraph indentation
 \clubpenalty = 10000				% prevent single lines at the beginning of a paragraph (Schusterjungen)
 \widowpenalty = 10000				% prevent single lines at the end of a paragraph (Hurenkinder)
@@ -344,8 +344,9 @@
 
 \renewcommand{\descriptionlabel}[1]{%
 	\hspace*{\labelsep}%
-	\color{ctcolorlistlabel}%
-	\tgherosfont\textbf{#1}%
+	% \color{ctcolorlistlabel}%
+	\tgherosfont\textit{#1}%
+	% \tgherosfont{#1}%
 }
 \newenvironment{my_list_desc}
 	{\begin{description}[%
@@ -497,6 +498,7 @@
 %\newcommand{\thesissectionfont}{\color{ctcolormain}\LARGE\bfseries \tgherosfont}
 \newcommand{\thesissectionfont}{\color{ctcolorsection}\LARGE \tgherosfont}
 \newcommand{\thesissubsectionfont}{\color{ctcolorsubsection}\Large \tgherosfont}
+\newcommand{\thesissubsubsectionfont}{\color{ctcolorsubsection}\large \tgherosfont}
 \newcommand{\thesisparagraphfont}{\color{ctcolorparagraph}\tgherosfont\small\bfseries}
 %
 % headings
@@ -504,7 +506,7 @@
 \setkomafont{chapter}{\thesischapterfont} % for chapter entries
 \setkomafont{section}{\thesissectionfont} % for section entries
 \setkomafont{subsection}{\thesissubsectionfont} % for section entries
-\addtokomafont{subsubsection}{\tgherosfont}
+\addtokomafont{subsubsection}{\thesissubsubsectionfont}
 %\addtokomafont{paragraph}{\tgherosfont}
 \setkomafont{paragraph}{\thesisparagraphfont}
 
@@ -608,6 +610,28 @@
 			{0pt}%
 			{\raggedright}%
 			[\phantomsection]
+%	}
+\fi
+%
+% > formats: \subsubsection
+\titlespacing{\subsubsection}{0em}{0em}{0em}%[0pt]
+%\ifthenelse{\boolean{@subsectionlabeloutside}}%
+\ifct@cthesis@hangsubsection
+%	{%
+		\titleformat{\subsubsection}[hang]%
+			{\usekomafont{subsubsection}}%
+			{\thesubsubsection}%
+			{0pt}%
+			{\raggedright}%
+			[]
+%	}{%
+\else
+		\titleformat{\subsubsection}[hang]%
+			{\usekomafont{subsubsection}}%
+			{\thesubsubsection}%
+			{0pt}%
+			{\raggedright}%
+			[]
 %	}
 \fi
 %
