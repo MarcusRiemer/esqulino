@@ -9,6 +9,10 @@ class LoadSeed
   require_dependency "block_language_generator" # Rails won't autoload this class properly
 
   BASE_SEED_DIRECTORY = Rails.configuration.sqlino["seed"]["data_dir"]
+  PROJECT_SEED_ROOT = "projects"
+  GRAMMAR_SEED_ROOT = "grammars"
+  BLOCK_LANGUAGE_GENERATOR_SEED_ROOT = "block_language_generators"
+  BLOCK_LANGUAGE_SEED_ROOT = "block_languages"
 
   attr_reader :seed_id
 
@@ -16,9 +20,9 @@ class LoadSeed
     @seed_id = seed_id
   end
 
-  def seed_file
-    root = File.join BASE_SEED_DIRECTORY, seed_root
-    File.join root, "#{seed_id}.yaml"
+  def find_seed_file(seed_root:, seed_id:)
+    db_instance = File.join seed_directory(seed_root), "#{seed_id}.yaml"
+    YAML.load_file(db_instance)
   end
 
   def find_seed_project_files(seed_root, seed_id)
@@ -26,21 +30,36 @@ class LoadSeed
     YAML.load_file(project_file)
   end
 
-  def seed_directory(seed_root:)
+  def seed_directory(seed_root)
     File.join BASE_SEED_DIRECTORY, seed_root
   end
 
-  def available_seed_files_for_project
-    Dir.glob(File.join(seed_project_dir, "*.yaml"))
-  end
-
+  # loads the dependecy menifest first which is a set of dependent file path and seed_id
+  # including project and then upserts the data accordingly
   def load_project
-    deps = File.join seed_directory(seed_root: "projects"), "#{seed_id}-deps.yaml"
+    deps = File.join seed_directory(PROJECT_SEED_ROOT), "#{seed_id}-deps.yaml"
     dependencies = YAML.load_file(deps)
     dependencies.each do |path, seed|
       upsert_seed_data(find_seed_project_files(path, seed))
     end
   end
+
+  def load_grammar
+    seed_instance = find_seed_file(seed_root: GRAMMAR_SEED_ROOT, seed_id: seed_id)
+    upsert_seed_data(seed_instance)
+  end
+
+  def load_block_language_generator
+    seed_instance = find_seed_file(seed_root: BLOCK_LANGUAGE_GENERATOR_SEED_ROOT, seed_id: seed_id)
+    upsert_seed_data(seed_instance)
+  end
+
+  def load_block_language
+    seed_instance = find_seed_file(seed_root: BLOCK_LANGUAGE_SEED_ROOT, seed_id: seed_id)
+    upsert_seed_data(seed_instance)
+  end
+
+  protected
 
   def upsert_seed_data(seed)
     puts " Upserting data for #{seed.class}"
