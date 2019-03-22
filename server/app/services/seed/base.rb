@@ -53,13 +53,13 @@ module Seed
       if processed.include? [seed_directory, seed.id, self.class]
       else
         store_seed
-        store_image
         processed << [seed_directory, seed.id, self.class]
         store_dependencies(processed)
       end
       File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
         YAML::dump(processed, file)
       end
+      store_image
     end
 
     def store_dependencies(processed)
