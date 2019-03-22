@@ -28,7 +28,7 @@ RSpec.describe Seed::ProjectSeed do
       let(:project_payload) { project.id }
 
       it "returns object" do
-        expect(subject.seed.first).to be_a Project
+        expect(subject.seed).to be_a Project
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Seed::ProjectSeed do
       let(:project_payload) { project.slug }
 
       it "returns project" do
-        expect(subject.seed.first).to be_a Project
+        expect(subject.seed).to be_a Project
       end
     end
   end
