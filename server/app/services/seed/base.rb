@@ -17,10 +17,14 @@ module Seed
       @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : find_seed(seed_id)
     end
 
+    def load_seed_id
+      return seed_id unless seed_id.is_a?(seed_name)
+    end
+
     def find_seed(slug_or_id)
       seed_data = seed_name.where(id: slug_or_id).or(seed_name.where(slug: slug_or_id))
       raise ActiveRecord::RecordNotFound, "#{seed_name} not found" if seed_data.nil?
-      seed_data
+      seed_data.first
     end
 
     def seed_directory
@@ -28,13 +32,13 @@ module Seed
     end
 
     def seed_specific_directory
-      File.join seed_directory, seed.id
+      File.join seed_directory, load_seed_id || seed.id
     end
 
     def store_image; end
 
     def seed_file_path
-      File.join seed_directory, "#{seed.id}.yaml"
+      File.join seed_directory, "#{load_seed_id || seed.id}.yaml"
     end
 
     def project_dependent_file(directory, deps_id)
@@ -46,11 +50,11 @@ module Seed
     end
 
     def store(processed)
-      if processed.include? [seed_directory, seed_id.id]
+      if processed.include? [seed_directory, seed.id, self.class]
       else
         store_seed
         store_image
-        processed << [seed_directory, seed_id.id]
+        processed << [seed_directory, seed.id, self.class]
         store_dependencies(processed)
       end
       File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
@@ -76,6 +80,33 @@ module Seed
       FileUtils.mkdir_p seed_directory
       File.open(seed_file_path, "w") do |file|
         YAML::dump(seed, file)
+      end
+    end
+
+    def start_load
+      upsert_seed_data
+      dep = File.join seed_directory, "#{load_seed_id}-deps.yaml"
+      load_dependencies if File.exist? dep
+    end
+
+    def seed_instance
+      YAML.load_file(seed_file_path)
+    end
+
+    def upsert_seed_data
+      raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
+      puts " Upserting data for #{seed_name}"
+      db_instance = seed_name.find_or_initialize_by(id: load_seed_id)
+      db_instance.assign_attributes(seed_instance.attributes)
+      db_instance.save! if db_instance.changed?
+      db_instance
+    end
+
+    def load_dependencies
+      deps = File.join seed_directory, "#{load_seed_id}-deps.yaml"
+      deps = YAML.load_file(deps)
+      deps.each do |_, seed_id, seed|
+        seed.new(seed_id).upsert_seed_data
       end
     end
   end
