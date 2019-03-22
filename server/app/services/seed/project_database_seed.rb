@@ -8,6 +8,7 @@ module Seed
       File.open(seed_file_path, "w") do |file|
         YAML::dump(seed, file)
       end
+      return unless File.exist? seed.sqlite_file_path
       Rails.logger.info "Copying database file"
       FileUtils.cp(seed.sqlite_file_path, seed_directory)
     end
