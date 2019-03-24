@@ -29,16 +29,18 @@ The instance varible ``seed_id`` is the id of the Model that will be stored or p
     * ``SEED_IDENTIFIER = Project`` is the name of the model
     * ``SEED_DIRECTORY = "projects"`` is the seed directory to store the seed
 * optional dependencies
+
 ::
-      def initialize(seed_id)
-        super(seed_id, dependencies = {
-          ProjectUsesBlockLanguageSeed => "project_uses_block_languages",
-          CodeResourceSeed => "code_resources",
-          ProjectSourceSeed => "project_sources",
-          ProjectDatabaseSeed => "project_databases",
-          ProjectDatabaseSeed => "default_database",
-        })
-      end
+
+    def initialize(seed_id)
+      super(seed_id, dependencies = {
+        ProjectUsesBlockLanguageSeed => "project_uses_block_languages",
+        CodeResourceSeed => "code_resources",
+        ProjectSourceSeed => "project_sources",
+        ProjectDatabaseSeed => "project_databases",
+        ProjectDatabaseSeed => "default_database",
+      })
+    end
 
 Seed are stored in a yaml file with a prefix of ``seed_id`` in corresponding directory
 
@@ -59,17 +61,62 @@ Seed class can handle both Object or Object id
 Seed class has designed to handle one id at a time, For a bulk storage or to store all data, the example call will look like:
 ``Project.all {|p| Seed::ProjectSeed.new(p.id).start_store}``
 
+`start_store` calls ``store`` method which takes a Set object as argument. Which has been used for storing dependencies.
+
+::
+ 
+    def store_dependencies(processed)
+      dependencies.each do |dependent_seed_name, seed_model_attribute|
+        data = seed.send(seed_model_attribute)
+        to_serialize = (data || [])
+        if not to_serialize.respond_to?(:each)
+          to_serialize = [to_serialize]
+        end
+        to_serialize.each do |dep_seed|
+          dependent_seed_name.new(dep_seed)
+            .store(processed)
+        end
+      end
+    end
+
+``seed`` is the Model object we are storing either provided as constructor arguments or it calls a ``find`` on Model if provided seed_id is a id.
+
+``dependencies`` hash contains ``{key => value}`` where key is dependent seed and value is the model attribute to call the on the parent model to get all relative records.
+
+if the return data is not an array incase it has only one record its need to be serialized. And then each record has passed to store with corresponding seed model.
+
+``processed`` is a set param with three values as the ``store`` method is designed to break the circular dependencies
+
+::
+
+    def store(processed)
+      if processed.include? [seed_directory, seed.id, self.class]
+      else
+        store_seed
+        processed << [seed_directory, seed.id, self.class]
+        store_dependencies(processed)
+      end
+      File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
+        YAML::dump(processed, file)
+      end
+      store_image
+    end
+
+Method itself describes the steps ``processed.first`` contains the parent class information
+
+If the Seed does not have any dependencies, no problem as the default value of the ``dependencies`` is an empty array.
 
 Load procedure
 --------------
 
-Load procedure of the seed also declared in `Seed::Base`` class
+Load procedure of the seed also declared in ``Seed::Base`` class
 
 It follows very simple pattern. It takes ``seed_load_id`` aka ``seed_id`` if seed_id is not a object itself.
 
 defined as:
 
 ::
+
     def load_seed_id
       return seed_id unless seed_id.is_a?(seed_name)
     end
@@ -89,7 +136,7 @@ Upsert is meant to Insert or Update. As seed data is stored in a yaml file, we c
       YAML.load_file(seed_file_path)
     end
 
-Now upserting data
+Now upserting data from seed file path
 
 ::
 
@@ -109,6 +156,7 @@ Code explains the steps of of intializng attributes for the model
 It also handles dependencies by reading the the dependency manifest writtend during store procedure.
 
 ::
+
     def load_dependencies
       deps = File.join seed_directory, "#{load_seed_id}-deps.yaml"
       deps = YAML.load_file(deps)
@@ -123,6 +171,16 @@ Then it follwos the usual way to call ``upsert_seed_data`` method on seed instan
 
 To load a particular seed, the example call would look like:
 
-``Seed::ProjectSeed(seed_id).start_load``
+``Seed::ProjectSeed.new(seed_id).start_load``
 
+``start_load`` is defined as follows
 
+::
+
+    def start_load
+      upsert_seed_data
+      dep = File.join seed_directory, "#{load_seed_id}-deps.yaml"
+      load_dependencies if File.exist? dep
+    end
+
+It calls dependencies if only deps file are present in the seed directory
