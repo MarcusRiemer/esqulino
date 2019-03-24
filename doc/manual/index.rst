@@ -25,6 +25,7 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    project-structure
    compilation
    configuration
+   seed-manager
 
 .. toctree::
    :caption: Design Documents
