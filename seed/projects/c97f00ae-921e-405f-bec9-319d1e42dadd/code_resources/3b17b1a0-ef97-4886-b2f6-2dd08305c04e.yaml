@@ -1,0 +1,111 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: c97f00ae-921e-405f-bec9-319d1e42dadd
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Lösung - Verteidigung
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3b17b1a0-ef97-4886-b2f6-2dd08305c04e
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "loopWhile",
+    "children": {"body": [{"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "move"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "tryLoad"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "tryUnload"}}], "pred": [{"name": "negateExpression", "children":
+    {"expr": [{"name": "sensor", "language": "trucklino_program", "properties": {"type":
+    "isSolved"}}]}, "language": "trucklino_program"}]}, "language": "trucklino_program"}],
+    "procedures": [{"name": "procedureDeclaration", "children": {"body": [{"name":
+    "if", "children": {"body": [{"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "unload"}}], "pred": [{"name": "booleanBinaryExpression",
+    "children": {"lhs": [{"name": "sensor", "language": "trucklino_program", "properties":
+    {"type": "canUnload"}}], "rhs": [{"name": "sensor", "language": "trucklino_program",
+    "properties": {"type": "isOnTarget"}}], "operator": [{"name": "relationalOperator",
+    "language": "trucklino_program", "properties": {"operator": "AND"}}]}, "language":
+    "trucklino_program"}]}, "language": "trucklino_program"}], "arguments": []}, "language":
+    "trucklino_program", "properties": {"name": "tryUnload"}}, {"name": "procedureDeclaration",
+    "children": {"body": [{"name": "if", "children": {"body": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "load"}}], "pred": [{"name":
+    "sensor", "language": "trucklino_program", "properties": {"type": "canLoad"}}]},
+    "language": "trucklino_program"}], "arguments": []}, "language": "trucklino_program",
+    "properties": {"name": "tryLoad"}}, {"name": "procedureDeclaration", "children":
+    {"body": [{"name": "if", "children": {"body": [{"name": "procedureCall", "language":
+    "trucklino_program", "properties": {"name": "turnLeft"}}], "else": [], "pred":
+    [{"name": "sensor", "language": "trucklino_program", "properties": {"type": "canTurnLeft"}}],
+    "elseIf": [{"name": "ifElseIf", "children": {"body": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "turnRight"}}], "pred":
+    [{"name": "booleanBinaryExpression", "children": {"lhs": [{"name": "sensor", "language":
+    "trucklino_program", "properties": {"type": "canTurnRight"}}], "rhs": [{"name":
+    "negateExpression", "children": {"expr": [{"name": "sensor", "language": "trucklino_program",
+    "properties": {"type": "canGoStraight"}}]}, "language": "trucklino_program"}],
+    "operator": [{"name": "relationalOperator", "language": "trucklino_program", "properties":
+    {"operator": "AND"}}]}, "language": "trucklino_program"}]}, "language": "trucklino_program"}]},
+    "language": "trucklino_program"}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "goForward"}}], "arguments": []}, "language": "trucklino_program",
+    "properties": {"name": "move"}}]}, "language": "trucklino_program"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-03-13 11:12:00.33096'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-03-19 09:30:32.54744'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-lang
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    truck.tryUnload = function*() {
+      yield* truck.doNothing();
+      if ((truck.canUnload() && truck.isOnTarget())) {
+        truck._progress([["procedures",0],["body",0],["body",0]]);
+        yield* truck.unload();
+      }
+    }
+    truck.tryLoad = function*() {
+      yield* truck.doNothing();
+      if (truck.canLoad()) {
+        truck._progress([["procedures",1],["body",0],["body",0]]);
+        yield* truck.load();
+      }
+    }
+    truck.move = function*() {
+      yield* truck.doNothing();
+      if (truck.canTurnLeft()) {
+        truck._progress([["procedures",2],["body",0],["body",0]]);
+        yield* truck.turnLeft();
+      }
+      else if (
+      (truck.canTurnRight() && !truck.canGoStraight())) {
+        truck._progress([["procedures",2],["body",0],["elseIf",0],["body",0]]);
+        yield* truck.turnRight();
+      }
+      truck._progress([["procedures",2],["body",1]]);
+      yield* truck.goForward();
+    }
+
+    while (!truck.isSolved()) {
+      yield* truck.doNothing();
+      truck._progress([["main",0],["body",0]]);
+      yield* truck.move();
+      truck._progress([["main",0],["body",1]]);
+      yield* truck.tryLoad();
+      truck._progress([["main",0],["body",2]]);
+      yield* truck.tryUnload();
+    }
+new_record: false
+active_record_yaml_version: 2
