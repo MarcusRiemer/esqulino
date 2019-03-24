@@ -1,0 +1,11 @@
+grammar "math" {
+  typedef "expression" ::= const | operation
+  node "operation" {
+    children sequence "lhs" ::= expression
+    prop "operator" { string { enum "+" "-" "*" "/" } }
+    children sequence "rhs" ::= expression
+  }
+  node "const" {
+    prop "value" { integer }
+  }
+}

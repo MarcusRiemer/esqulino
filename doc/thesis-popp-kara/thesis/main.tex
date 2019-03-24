@@ -1,7 +1,7 @@
 % **************************************************
 % Information and Commands for Reuse
 % **************************************************
-\newcommand{\thesisTitle}{Kara-Umgebung (working title)}
+\newcommand{\thesisTitle}{Konzeption und Implementierung einer visuellen Lernumgebung zur spielerischen Einführung in die Programmierung}
 \newcommand{\thesisSubtitle}{Bachelor-Thesis im Fachbereich Informatik}
 \newcommand{\thesisDate}{13. Februar 2019}
 \newcommand{\thesisVersion}{\input{GIT_REV}}
@@ -13,7 +13,7 @@
 \newcommand{\thesisFirstReviewer}{Dr. Michael Predeschly}
 \newcommand{\thesisFirstReviewerEmail}{\protect{mpr@fh-wedel.de}}
 
-\newcommand{\thesisSecondReviewer}{Marcus Riemer}
+\newcommand{\thesisSecondReviewer}{M.~Sc. Marcus Riemer}
 \newcommand{\thesisSecondReviewerEmail}{\protect{mri@fh-wedel.de}}
 
 \newcommand{\thesisUniversity}{\protect{Fachhochschule Wedel}}
@@ -55,36 +55,20 @@
 \cthesissetcolor{cmyk}{1, .87, .27, .12}{1, .87, .27, .12}
 \usepackage{fontspec}
 
-\setmainfont{Dax Pro}
-\renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
-\renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
-\renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
-\renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
+% \setmainfont{Dax Pro}
+% \renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
+% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
 
-% \setmainfont{Futura PT}
-% \renewcommand{\helv}{\fontspec{Futura PT}\fontsize{9}{11}\selectfont}
-% \renewcommand{\book}{\fontspec{Futura PT}\fontsize{11}{13}\selectfont}
-% \renewcommand{\tgherosfont}{\fontspec{Futura PT}}
-% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Futura PT}}
+% \renewcommand{\ttfamily}{\fontspec{Ubuntu Mono}}
 
-% \setmainfont{Neue Haas Grotesk Text Pro}
-% \renewcommand{\helv}{\fontspec{Neue Haas Grotesk Text Pro}\fontsize{9}{11}\selectfont}
-% \renewcommand{\book}{\fontspec{Neue Haas Grotesk Text Pro}\fontsize{11}{13}\selectfont}
-% \renewcommand{\tgherosfont}{\fontspec{Neue Haas Grotesk Text Pro}}
-% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Neue Haas Grotesk Text Pro}}
-
-\renewcommand{\ttfamily}{\fontspec{Source Code Pro}}
 \renewcommand{\cftchapfont}{\normalfont\bfseries}
 \renewcommand{\cftchappagefont}{\normalfont\bfseries}
 \usepackage{multicol}
 \addtokomafont{caption}{\normalfont}
 \addtokomafont{captionlabel}{\normalfont}
-% \usepackage{url}
 \urlstyle{rm}
-% \renewcommand{\UrlBreaks}{\do\/\do\-\do\_\do\.\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
-% \setcounter{biburllcpenalty}{9000}% Kleinbuchstaben
-% \setcounter{biburlucpenalty}{9000}% Großbuchstaben
-% \DeclareFieldFormat{url}{\url{#1}}
 \makeatletter
 \def\blx@maxline{77}
 \makeatother
@@ -107,7 +91,7 @@
 \lstset{
    backgroundcolor=\color{white},
    extendedchars=true,
-   basicstyle=\ttfamily,
+   basicstyle=\scriptsize\ttfamily,
    showstringspaces=false,
    showspaces=false,
    numbers=left,
@@ -118,8 +102,21 @@
    breaklines=true,
    showtabs=false,
    captionpos=b,
-   autogobble=true
+   autogobble=true,
+   frame=single
 }
+
+\usepackage[simplified]{sty/pgf-umlcd}
+\usepackage{float}
+
+% https://tex.stackexchange.com/a/42620
+\usepackage{amssymb}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\usepackage{nameref}
+\usepackage[multidot]{grffile}
 
 % **************************************************
 % Document CONTENT
@@ -156,26 +153,18 @@
 \setcounter{page}{1}              % set page counter
 \pagestyle{maincontentstyle}      % fancy header and footer
 
-\input{content/chapter-1-introduction} % INCLUDE: introduction
-\input{content/chapter-2-related-work} % INCLUDE: related work
-\input{content/chapter-3-requirement-analysis} % INCLUDE: system
-\input{content/chapter-4-implementation} % INCLUDE: concepts
-\input{content/chapter-5-conclusion} % INCLUDE: conclusion
-\cleardoublepage
+\input{content/chapter-introduction}
+\input{content/chapter-basics}
+\input{content/chapter-related-work}
+\input{content/chapter-requirement-analysis}
+\input{content/chapter-implementation}
+\input{content/chapter-conclusion}
 
-% --------------------------
-% Back matter
-% --------------------------
-{%
-\setstretch{1.1}
-\renewcommand{\bibfont}{\normalfont\small}
-\setlength{\biblabelsep}{0pt}
-\setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
-% \printbibliography
-\printbibliography[title=Literaturverzeichnis,nottype=online]
-\printbibliography[heading=subbibliography,title={Quellen im Internet},type=online,prefixnumbers={@}]
-}
-\cleardoublepage
+\appendix{}
+
+\input{content/appendix-bliography}
+\input{content/appendix-exercises}
+\input{content/appendix-cd-rom}
 
 % \listoffigures
 % \cleardoublepage
@@ -183,5 +172,5 @@
 % \listoftables
 % \cleardoublepage
 
-\input{content/declaration}
+\input{content/appendix-declaration}
 \cleardoublepage

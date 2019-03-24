@@ -1,0 +1,33 @@
+{
+  "language": "trucklino_program",
+  "name": "if",
+  "children": {
+    "pred": [
+      {
+        "language": "trucklino_program",
+        "name": "sensor",
+        "properties": {
+          "type": "lightIsGreen"
+        }
+      }
+    ],
+    "body": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "goForward"
+        }
+      }
+    ],
+    "else": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "wait"
+        }
+      }
+    ]
+  }
+}
