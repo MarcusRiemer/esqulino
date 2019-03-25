@@ -14,11 +14,14 @@ module Seed
     end
 
     def seed
+      return nil if File.extname(seed_id.to_s).present?
       @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : find_seed(seed_id)
     end
 
     def load_seed_id
+      return File.basename(seed_id, ".*") if File.extname(seed_id.to_s).present? && File.extname(seed_id.to_s) == ".yaml"
       return seed_id unless seed_id.is_a?(seed_name)
+      nil
     end
 
     def find_seed(slug_or_id)
@@ -100,6 +103,7 @@ module Seed
       db_instance.assign_attributes(seed_instance.attributes)
       db_instance.save! if db_instance.changed?
       db_instance
+      puts "Done with #{seed_name}"
     end
 
     def load_dependencies
@@ -108,6 +112,22 @@ module Seed
       deps.each do |_, seed_id, seed|
         seed.new(seed_id).upsert_seed_data
       end
+    end
+
+    # has to be class method to load files started outside of instance scope or from global scope
+    def self.load_all
+      Dir.glob(File.join load_directory, "*.yaml").each do |f|
+        next if f =~ /deps/
+        new(File.basename(f)).start_load
+      end
+    end
+
+    def self.load_directory
+      File.join BASE_SEED_DIRECTORY, self::SEED_DIRECTORY
+    end
+
+    def self.store_all
+      self::SEED_IDENTIFIER.all.each { |s| new(s.id).start_store }
     end
   end
 end
