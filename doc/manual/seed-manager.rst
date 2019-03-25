@@ -58,9 +58,6 @@ e.g: ``Seed::ProjectSeed.new(Project.first/Project.first.id).start_store``
 
 Seed class can handle both Object or Object id
 
-Seed class has designed to handle one id at a time, For a bulk storage or to store all data, the example call will look like:
-``Project.all {|p| Seed::ProjectSeed.new(p.id).start_store}``
-
 `start_store` calls ``store`` method which takes a Set object as argument. Which has been used for storing dependencies.
 
 ::
@@ -96,8 +93,10 @@ if the return data is not an array incase it has only one record its need to be 
         processed << [seed_directory, seed.id, self.class]
         store_dependencies(processed)
       end
-      File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
-        YAML::dump(processed, file)
+      if dependencies.present?
+        File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
+          YAML::dump(processed, file)
+        end
       end
       store_image
     end
@@ -105,6 +104,21 @@ if the return data is not an array incase it has only one record its need to be 
 Method itself describes the steps ``processed.first`` contains the parent class information
 
 If the Seed does not have any dependencies, no problem as the default value of the ``dependencies`` is an empty array.
+
+Store all seed of a seed class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To store all data, the example call will look like:
+
+``Seed::ProjectSeed.store_all`` or ``Seed::GrammarSeed.store_all``
+
+Its a class method which calls ``store_all`` method on Seed class, defined as:
+
+::
+
+    def self.store_all
+      self::SEED_IDENTIFIER.all.each { |s| new(s.id).start_store }
+    end
+
 
 Load procedure
 --------------
@@ -184,3 +198,21 @@ To load a particular seed, the example call would look like:
     end
 
 It calls dependencies if only deps file are present in the seed directory
+
+Load all seed data of a seed class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It's also a class method which calls ``load_all`` on seed class to be loaded, examle call will look like:
+
+``Seed::ProjectSeed.load_all`` or ``Seed::GrammarSeed.load_all`` and defined as:
+
+::
+
+    def self.load_all
+      Dir.glob(File.join load_directory, "*.yaml").each do |f|
+        next if f =~ /deps/
+        new(File.basename(f)).start_load
+      end
+    end
+
+Which excludes dependecy files because deps are extendted name of the the processed ``seed_id`` which is constructed based on availabilty of dependencies and ``load_dependencies`` method takes care of those files.
