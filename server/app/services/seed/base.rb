@@ -59,8 +59,10 @@ module Seed
         processed << [seed_directory, seed.id, self.class]
         store_dependencies(processed)
       end
-      File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
-        YAML::dump(processed, file)
+      if dependencies.present?
+        File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
+          YAML::dump(processed, file)
+        end
       end
       store_image
     end
@@ -126,6 +128,7 @@ module Seed
       File.join BASE_SEED_DIRECTORY, self::SEED_DIRECTORY
     end
 
+    # class method to call on seed instance on identifier
     def self.store_all
       self::SEED_IDENTIFIER.all.each { |s| new(s.id).start_store }
     end
