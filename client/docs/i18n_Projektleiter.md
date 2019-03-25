@@ -172,3 +172,18 @@ export interface MultiLangString {
 }
 ```
 
+### Anpassen der `xliffmerge` Konfiguration
+Damit das Script `extract-i18n` auch für die neu hinzugefügte Sprache und deren Übersetzungsdatei berücksichtigt, muss die `xliffmerge.json` Datei angepasst werden.
+
+Die Option `languages` muss um die Sprache Französich erweitert werden.
+
+Beispiel: 
+```
+{
+    "xliffmergeOptions": {
+        ...
+        "languages": ["en", "fr"],
+        ...
+    }
+}
+```
