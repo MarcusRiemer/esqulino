@@ -37,6 +37,16 @@ if (environment.sentry && environment.sentry.active) {
     release: environment.version.hash
   };
 
+  // Possibly also show a helpful dialogue
+  if (environment.sentry.showDialogue) {
+    options.beforeSend = event => {
+      Sentry.showReportDialog({
+        dsn: options.dsn
+      });
+      return event;
+    };
+  }
+
   Sentry.init(options);
 }
 

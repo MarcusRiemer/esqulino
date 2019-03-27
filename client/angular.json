@@ -98,7 +98,7 @@
             "sourceMap": true,
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.test.json",
+            "tsConfig": "src/tsconfig.test.json"
           }
         },
         "lint": {
@@ -162,6 +162,11 @@
     },
     "@schematics/angular:directive": {
       "prefix": "app"
+    }
+  },
+  "cli": {
+    "warnings": {
+      "typescriptMismatch": true
     }
   }
 }
