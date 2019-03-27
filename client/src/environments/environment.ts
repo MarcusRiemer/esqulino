@@ -13,8 +13,9 @@ export const environment: EnvironmentDescription = {
     id: 2
   },
   sentry: {
-    dsn: "http://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
-    active: false
+    dsn: "https://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
+    active: true,
+    showDialogue: false
   },
   version: {
     hash: VERSION.GIT_REVISION,

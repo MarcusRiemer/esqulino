@@ -1,13 +1,21 @@
 export interface EnvironmentDescription {
   production: boolean;
+  // Find out which part of the app are actually used
+  // with Matomo
   piwik: {
     host: string;
     id: number;
   };
-  sentry?: {
-    dsn?: string;
-    active?: boolean;
-  };
+  // Tracking bugs in the live environment with Sentry
+  sentry: {
+    dsn: string;
+  } & ({
+    active: true;
+    showDialogue: boolean;
+  } | {
+    active: false;
+  });
+  // Build information
   version: {
     hash: string;
     date: string;
