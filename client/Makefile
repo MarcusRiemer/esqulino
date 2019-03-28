@@ -16,7 +16,7 @@ TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
 
 # Default to german locale in dev build
-NG_LOCALE       ?= "de"
+NG_LOCALE       ?= de
 # Default to production build in complete build
 NG_PROD         ?= --prod
 
@@ -52,7 +52,7 @@ client-compile-en : src/environments/version.ts
 	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf"  --i18nLocale="en" --outputPath="dist/browser/en"
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE)
+	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE) --outputPath="dist/browser/$(NG_LOCALE)"
 
 client-test : src/environments/version.ts
 	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true

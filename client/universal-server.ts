@@ -74,7 +74,7 @@ app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 // All paths that remain now are part of Angular
 app.get('*', (req, res) => {
   // Trust the user to provide some meaningful language
-  let locale = req.query['lang']
+  let locale = req.subdomains[0] || "de";
 
   // Check whether such a language actually exists
   let app = angularApps[locale];

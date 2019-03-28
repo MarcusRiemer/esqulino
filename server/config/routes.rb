@@ -1,37 +1,4 @@
-# This constraint kicks in for every project subdomain that should
-# be rendered.
-class RenderProjectConstraint
-  def project_domains
-    Rails.configuration.sqlino[:project_domains] || []
-  end
-
-  # True, if the request in question probably is a project
-  def matches?(request)
-    (self.project_domains.include? request.domain) or not(['', 'www', 'mri-tp'].include? request.subdomain)
-  end
-end
-
 Rails.application.routes.draw do
-  # First stop: We might need to render a project for an end user
-  constraints RenderProjectConstraint.new do
-    root via: [:get, :post], controller: 'render_projects', action: :render_page
-
-    # TODO: find out how to represent this with a single route
-    get '*path/favicon.ico', controller: 'render_projects', action: :favicon
-    get '/favicon.ico', controller: 'render_projects', action: :favicon
-
-    # Catch all requests for static files that are provided upstream
-    get '/vendor/*path', format: false, controller: 'render_projects', action: :vendor_file
-
-    get 'image/:image_id', controller: 'render_projects', action: :file_show
-
-    # Running a query
-    post '/(:page_name_or_id/)query/:query_id', controller: 'render_projects', action: :run_query
-
-    # We assume these are pages
-    match '*page_name_or_id', via: [:get, :post], controller: 'render_projects', action: :render_page
-  end
-
   # Second stop: The API for the editor
   scope '/api' do
     # Everything in the context of projects

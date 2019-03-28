@@ -57,8 +57,8 @@ Rails.application.configure do
   # Allow requests from the localhost
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins 'localhost.localdomain:4000', 'localhost:4000',
-              'localhost.localdomain:9292', 'localhost:9292'
+      # The CORS spec is all-or-nothing. It only supports *, null or the exact protocol + domain + port
+      origins '*'
 
       resource '*',
                headers: :any,
