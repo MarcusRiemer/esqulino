@@ -62,7 +62,7 @@ export type NavItem = NavLink | NavDivider | NavFill | NavLinkExternal | NavHead
 export class FrontComponent {
 
   constructor(
-    @Inject(LOCALE_ID) private readonly localeId: string, 
+    @Inject(LOCALE_ID) private readonly _localeId: string,
     private readonly _browser: BrowserService,
   ) { }
 
@@ -70,7 +70,7 @@ export class FrontComponent {
 
   readonly sidebarMode$ = this._browser.sidebarMode$;
 
-  readonly locale = this.localeId;
+  readonly locale = this._localeId;
 
   /**
    * All items that need to be shown in the general navigation

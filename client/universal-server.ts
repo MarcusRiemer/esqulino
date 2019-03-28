@@ -29,7 +29,7 @@ const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
 // import language bundles
-const defaultBundle = require('./dist/server/main');
+const defaultBundle = require('./dist/server/de/main');
 const enBundle = require('./dist/server/en/main');
 
 const languageEngines = [{
@@ -52,7 +52,7 @@ const languageEngines = [{
 app.engine('html', (filePath, options, callback) => {
   options.engine(
     filePath,
-    { req: options.req, res: options.res},
+    { req: options.req, res: options.res },
     callback
   )
 });
@@ -61,9 +61,15 @@ app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, 'browser'));
 
 // Example Express Rest API endpoints
-app.get('/api/**', (req, res) => { res.send('OK') });
+app.get('/api/**', (req, res) => {
+  res.status(500);
+  res.send('Universal Server has no /api endpoint')
+});
+
+
+
 // Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de'), {
   maxAge: '1y'
 }));
 
@@ -74,7 +80,7 @@ app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 languageEngines.forEach(languageEngine => {
 
   const paths = languageEngine.base ? [languageEngine.base, `${languageEngine.base}/*`] : '*'
-  const view = languageEngine.base ? `.${languageEngine.base}/index` : 'index'
+  const view = `./${languageEngine.id}/index`
 
   app.get(paths, (req, res) => {
     res.render(view, {

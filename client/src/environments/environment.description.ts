@@ -1,5 +1,7 @@
 export interface EnvironmentDescription {
   production: boolean;
+  // URL-prefix for all API requests
+  apiEndpoint: string;
   // Find out which part of the app are actually used
   // with Matomo
   piwik: {

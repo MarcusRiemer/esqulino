@@ -10,11 +10,15 @@ NODE_BIN = node
 BUNDLE_FILES = $(shell find dist/browser -iregex ".*\.\(js\|css\|svg\|eot\|ttf\)" 2> /dev/null)
 BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 
-CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.config.js package.json package-lock.json
+CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) universal-server.ts webpack.server.config.js package.json package-lock.json
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
+
+# Default to german locale in dev build
 NG_LOCALE       ?= "de"
+# Default to production build in complete build
+NG_PROD         ?= --prod
 
 all : dist
 
@@ -39,9 +43,13 @@ src/environments/version.ts :
 # Webclient
 ##################################
 
-client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --prod $(NG_OPTS) --i18n-locale $(NG_LOCALE)
-	$(NG_BIN) build --aot --prod --configuration=production-en $(NG_OPTS)
+client-compile : msg-pre-build client-compile-de client-compile-en
+
+client-compile-de : src/environments/version.ts
+	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS)
+
+client-compile-en : src/environments/version.ts
+	$(NG_BIN) build --aot --no-progress $(NG_PROD) --configuration=production-en $(NG_OPTS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE)
@@ -73,17 +81,24 @@ cli-update-block-languages: cli-compile
 ##################################
 # Universal Rendering Server
 ##################################
-dist/server.js: $(CLIENT_ALL_SOURCES) src/environments/version.ts
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
-	$(NG_BIN) run blattwerkzeug-client:server
-	$(NG_BIN) run blattwerkzeug-client:server --configuration=en
-	node_modules/.bin/webpack --config webpack.server.config.js --progress
 
-universal-run: dist/server.js
+# The german Angular universal app
+dist/server/de/server.js: $(CLIENT_ALL_SOURCES)
+	$(NG_BIN) run blattwerkzeug-client:server --no-progress
+
+# The english Angular universal app
+dist/server/en/server.js: $(CLIENT_ALL_SOURCES)
+	$(NG_BIN) run blattwerkzeug-client:server --no-progress --configuration=en
+
+# The Angular universal server that does the actual rendering and routing
+dist/server/universal-server.js: universal-server.ts $(CLIENT_ALL_SOURCES) # dist/server/de/server.js dist/server/en/server.js
+	node_modules/.bin/webpack --config webpack.server.config.js --no-progress
+
+universal-compile: msg-pre-universal-build dist/server/universal-server.js
+
+universal-run: universal-compile
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
-	$(NODE_BIN) dist/server.js
-
-universal-compile: dist/server.js
+	$(NODE_BIN) dist/server/universal-server.js
 
 %.gz : %
 	gzip --keep $^
@@ -109,6 +124,9 @@ clean-deps : msg-pre-clean-deps
 ##################################
 # Messaging targets
 ##################################
+
+msg-pre-universal-build :
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
 
 msg-pre-build :
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling ..."; $(TPUT_BIN) sgr0

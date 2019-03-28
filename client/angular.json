@@ -11,11 +11,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/browser",
+            "outputPath": "dist/browser/de",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "aot": true,
             "assets": [
               "src/vendor"
             ],
@@ -28,17 +29,17 @@
                 "node_modules/bootstrap/scss"
               ]
             },
-            "scripts": []
+            "scripts": [],
+            "i18nLocale": "de"
           },
           "configurations": {
             "production": {
-              "outputPath": "dist/browser",
+              "outputPath": "dist/browser/de",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -47,8 +48,7 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ],
-              "i18nLocale": "de"
+              ]
             },
             "production-en": {
               "outputPath": "dist/browser/en",
@@ -57,7 +57,6 @@
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -114,7 +113,7 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/server",
+            "outputPath": "dist/server/de",
             "main": "src/main.server.ts",
             "tsConfig": "src/tsconfig.server.json",
             "i18nLocale": "de"
