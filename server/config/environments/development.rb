@@ -53,4 +53,16 @@ Rails.application.configure do
     password:  ENV["SMTP_PASS"],
     enable_starttls_auto: true
   }
+
+  # Allow requests from the localhost
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins 'localhost.localdomain:4000', 'localhost:4000',
+              'localhost.localdomain:9292', 'localhost:9292'
+
+      resource '*',
+               headers: :any,
+               methods: [:get, :post, :put, :patch, :delete, :options, :head]
+    end
+  end
 end
