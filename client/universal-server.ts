@@ -65,9 +65,8 @@ app.get('/api/**', (req, res) => {
 });
 
 // Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
-  maxAge: '1y'
-}));
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de')));
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser/en')));
 
 // workaround for server crash caused by favicon.ico
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
@@ -86,7 +85,7 @@ app.get('*', (req, res) => {
   }
 
   // And render the given language
-  res.render("index", {
+  res.render(`${locale}/index`, {
     req,
     res,
     engine: angularApps[locale]

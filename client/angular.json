@@ -48,22 +48,6 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
-            },
-            "production-en": {
-              "outputPath": "dist/browser",
-              "optimization": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "i18nFile": "src/locale/messages.en.xlf",
-              "i18nFormat": "xlf",
-              "i18nLocale": "en"
             }
           }
         },

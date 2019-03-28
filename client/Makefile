@@ -46,10 +46,10 @@ src/environments/version.ts :
 client-compile : msg-pre-build client-compile-de client-compile-en
 
 client-compile-de : src/environments/version.ts
-	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS)
+	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --outputPath="dist/browser/de"
 
 client-compile-en : src/environments/version.ts
-	$(NG_BIN) build --aot --no-progress $(NG_PROD) --configuration=production-en $(NG_OPTS)
+	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf"  --i18nLocale="en" --outputPath="dist/browser/en"
 
 client-compile-dev : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE)
@@ -91,12 +91,14 @@ dist/server/en/server.js: $(CLIENT_ALL_SOURCES)
 	$(NG_BIN) run blattwerkzeug-client:server --no-progress --configuration=en
 
 # The Angular universal server that does the actual rendering and routing
-dist/server/universal-server.js: universal-server.ts $(CLIENT_ALL_SOURCES) # dist/server/de/server.js dist/server/en/server.js
+dist/server/universal-server.js: universal-server.ts $(CLIENT_ALL_SOURCES)
 	node_modules/.bin/webpack --config webpack.server.config.js --no-progress
 
-universal-compile: msg-pre-universal-build dist/server/universal-server.js
+universal-compile-langs: dist/server/de/server.js dist/server/en/server.js
 
-universal-run: universal-compile
+universal-compile: msg-pre-universal-build universal-compile-langs dist/server/universal-server.js
+
+universal-run: dist/server/universal-server.js
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
 	$(NODE_BIN) dist/server/universal-server.js
 
