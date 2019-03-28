@@ -11,12 +11,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/browser/de",
+            "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "aot": true,
+            "extractCss": true,
+            "sourceMap": true,
+            "outputHashing": "all",
             "assets": [
               "src/vendor"
             ],
@@ -34,12 +37,8 @@
           },
           "configurations": {
             "production": {
-              "outputPath": "dist/browser/de",
+              "outputPath": "dist/browser",
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -51,12 +50,8 @@
               ]
             },
             "production-en": {
-              "outputPath": "dist/browser/en",
+              "outputPath": "dist/browser",
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -68,8 +63,7 @@
               ],
               "i18nFile": "src/locale/messages.en.xlf",
               "i18nFormat": "xlf",
-              "i18nLocale": "en",
-              "baseHref": "/en/"
+              "i18nLocale": "en"
             }
           }
         },

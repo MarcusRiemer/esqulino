@@ -28,26 +28,22 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
+const FALLBACK_LANG = 'de';
+
 // import language bundles
-const defaultBundle = require('./dist/server/de/main');
+const deBundle = require('./dist/server/de/main');
 const enBundle = require('./dist/server/en/main');
 
-const languageEngines = [{
-  id: 'en',
-  base: '/en',
-  engine: ngExpressEngine({
+const angularApps = {
+  de: ngExpressEngine({
+    bootstrap: deBundle.AppServerModuleNgFactory,
+    providers: [provideModuleMap(deBundle.LAZY_MODULE_MAP)]
+  }),
+  en: ngExpressEngine({
     bootstrap: enBundle.AppServerModuleNgFactory,
     providers: [provideModuleMap(enBundle.LAZY_MODULE_MAP)]
   })
-},
-{
-  id: 'de',
-  base: '',
-  engine: ngExpressEngine({
-    bootstrap: defaultBundle.AppServerModuleNgFactory,
-    providers: [provideModuleMap(defaultBundle.LAZY_MODULE_MAP)]
-  })
-}];
+}
 
 app.engine('html', (filePath, options, callback) => {
   options.engine(
@@ -58,37 +54,43 @@ app.engine('html', (filePath, options, callback) => {
 });
 
 app.set('view engine', 'html');
+
+// Top level directory of compiled Angular applications
 app.set('views', join(DIST_FOLDER, 'browser'));
 
-// Example Express Rest API endpoints
+// API targets should never reach the universal sever
 app.get('/api/**', (req, res) => {
   res.status(500);
   res.send('Universal Server has no /api endpoint')
 });
 
-
-
 // Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de'), {
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
   maxAge: '1y'
 }));
 
 // workaround for server crash caused by favicon.ico
 app.get('/favicon.ico', (req, res) => res.sendStatus(204));
 
-// All regular routes use the Universal engine
-languageEngines.forEach(languageEngine => {
+// All paths that remain now are part of Angular
+app.get('*', (req, res) => {
+  // Trust the user to provide some meaningful language
+  let locale = req.query['lang']
 
-  const paths = languageEngine.base ? [languageEngine.base, `${languageEngine.base}/*`] : '*'
-  const view = `./${languageEngine.id}/index`
+  // Check whether such a language actually exists
+  let app = angularApps[locale];
+  if (!app) {
+    // Fall back if the user has supplied something invalid
+    app = angularApps[FALLBACK_LANG];
+    locale = FALLBACK_LANG;
+  }
 
-  app.get(paths, (req, res) => {
-    res.render(view, {
-      req,
-      res,
-      engine: languageEngine.engine
-    })
-  })
+  // And render the given language
+  res.render("index", {
+    req,
+    res,
+    engine: angularApps[locale]
+  });
 });
 
 // Start up the Node server
