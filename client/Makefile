@@ -112,6 +112,10 @@ universal-run: dist/server/universal-server.js
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
 	$(NODE_BIN) dist/server/universal-server.js
 
+universal-run-nodeps:
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
+	$(NODE_BIN) dist/server/universal-server.js
+
 %.gz : %
 	gzip --keep $^
 
