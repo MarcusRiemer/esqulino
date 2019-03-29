@@ -98,15 +98,15 @@ dist/server/de/server.js: $(CLIENT_ALL_SOURCES)
 
 # The english Angular universal app
 dist/server/en/server.js: $(CLIENT_ALL_SOURCES)
-	$(NG_BIN) run blattwerkzeug-client:server --no-progress --configuration=en
+	$(NG_BIN) run blattwerkzeug-client:server --no-progress --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf" --i18nLocale="en" --outputPath="dist/server/en"
 
 # The Angular universal server that does the actual rendering and routing
-dist/server/universal-server.js: universal-server.ts $(CLIENT_ALL_SOURCES)
+dist/server/universal-server.js: universal-server.ts universal-compile-langs
 	node_modules/.bin/webpack --config webpack.server.config.js --no-progress
 
 universal-compile-langs: dist/server/de/server.js dist/server/en/server.js
 
-universal-compile: msg-pre-universal-build universal-compile-langs dist/server/universal-server.js
+universal-compile: msg-pre-universal-build universal-compile-langs client-compile dist/server/universal-server.js
 
 universal-run: dist/server/universal-server.js
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0

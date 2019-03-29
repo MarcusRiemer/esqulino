@@ -95,14 +95,6 @@
             "main": "src/main.server.ts",
             "tsConfig": "src/tsconfig.server.json",
             "i18nLocale": "de"
-          },
-          "configurations": {
-            "en": {
-              "outputPath": "dist/server/en",
-              "i18nFile": "src/locale/messages.en.xlf",
-              "i18nFormat": "xlf",
-              "i18nLocale": "en"
-            }
           }
         }
       }
