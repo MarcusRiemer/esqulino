@@ -73,7 +73,7 @@ client-test-watch: src/environments/version.ts
 ##################################
 # Commandline Client
 ##################################
-dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES) src/environments/version.ts
+dist/cli/main.cli.js : $(CLIENT_NON_XLF_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) -p src/tsconfig.cli.json
 
@@ -93,11 +93,11 @@ cli-update-block-languages: cli-compile
 ##################################
 
 # The german Angular universal app
-dist/server/de/server.js: $(CLIENT_ALL_SOURCES)
+dist/server/de/server.js: $(CLIENT_NON_XLF_SOURCES)
 	$(NG_BIN) run blattwerkzeug-client:server --no-progress
 
 # The english Angular universal app
-dist/server/en/server.js: $(CLIENT_ALL_SOURCES)
+dist/server/en/server.js: $(CLIENT_NON_XLF_SOURCES)
 	$(NG_BIN) run blattwerkzeug-client:server --no-progress --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf" --i18nLocale="en" --outputPath="dist/server/en"
 
 # The Angular universal server that does the actual rendering and routing
