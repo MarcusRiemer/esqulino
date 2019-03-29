@@ -56,6 +56,11 @@ describe('Utility: arrayEqual', () => {
     expect(Util.arrayEqual([2, 2], [2, 2, 2])).toBeFalsy();
   })
 
+  it('Different datatypes', () => {
+    expect(Util.arrayEqual(['1', '2'], [1, 2])).toBeFalsy();
+    expect(Util.arrayEqual(['2', '1'], [2, 1])).toBeFalsy();
+  });
+
   it('Nested arrays', () => {
     expect(Util.arrayEqual([[1, 2]], [[1, 2]])).toBeTruthy();
     expect(Util.arrayEqual([[2, 1]], [[2, 1]])).toBeTruthy();
@@ -63,4 +68,19 @@ describe('Utility: arrayEqual', () => {
     expect(Util.arrayEqual([[2, 1]], [[]])).toBeFalsy();
     expect(Util.arrayEqual([[2, 1]], [])).toBeFalsy();
   })
+
+  it('Same Object', () => {
+    const obj = { x: 0, y: 1 };
+    expect(Util.arrayEqual([obj], [obj])).toBeTruthy();
+    expect(Util.arrayEqual([[obj]], [[obj]])).toBeTruthy();
+    expect(Util.arrayEqual([[obj], obj], [[obj], obj])).toBeTruthy();
+  });
+
+  it('Identical, but different Object', () => {
+    const lhs = { x: 0, y: 1 };
+    const rhs = { x: 0, y: 1 };
+    expect(Util.arrayEqual([lhs], [rhs])).toBeFalsy();
+    expect(Util.arrayEqual([[lhs]], [[rhs]])).toBeFalsy();
+    expect(Util.arrayEqual([[lhs], lhs], [[rhs], rhs])).toBeFalsy();
+  });
 });
