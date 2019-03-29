@@ -89,10 +89,14 @@ export function arrayEqual(lhs: any[], rhs: any[]) {
       if (!arrayEqual(lhs[i], rhs[i]))
         return (false);
     }
-    else if (lhs[i] != rhs[i]) {
-      // Warning - two different object instances will never be equal: {x:20} != {x:20}
+    // Warning - two different object instances will never be equal: {x:20} !== {x:20}
+    // In this case this is desireable, but there may be situations where that is not
+    // the case.
+    else if (lhs[i] !== rhs[i]) {
       return (false);
     }
   }
+
+  // No counter proof found, these arrays must be equal
   return (true);
 }

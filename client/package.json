@@ -6,10 +6,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
     "test": "ng test",
-    "pree2e": "webdriver-manager update --standalone false --gecko false && make -C .. test-reset",
-    "e2e": "protractor"
+    "extract-i18n": "ng xi18n --i18n-locale de --output-path locale && xliffmerge --profile xliffmerge.json"
   },
   "dependencies": {
     "@angular/animations": "7.2.11",
@@ -19,7 +17,7 @@
     "@angular/core": "7.2.11",
     "@angular/forms": "7.2.11",
     "@angular/http": "7.2.11",
-    "@angular/material": "^7.3.6",
+    "@angular/material": "7.3.6",
     "@angular/platform-browser": "7.2.11",
     "@angular/platform-browser-dynamic": "7.2.11",
     "@angular/platform-server": "7.2.11",
@@ -32,7 +30,7 @@
     "bootstrap": "4.3.1",
     "brace": "0.11.1",
     "core-js": "2.6.5",
-    "express": "^4.16.4",
+    "express": "4.16.4",
     "font-awesome": "4.7.0",
     "ng2-ace-editor": "0.3.9",
     "rxjs": "6.4.0",
@@ -46,6 +44,8 @@
     "@angular/cli": "7.3.6",
     "@angular/compiler-cli": "7.2.11",
     "@angular/language-service": "7.2.11",
+    "@ngx-i18nsupport/ngx-i18nsupport": "1.1.2",
+    "@types/express": "4.16.1",
     "@types/jasmine": "3.3.12",
     "@types/jasminewd2": "2.0.6",
     "@types/node": "11.12.0",

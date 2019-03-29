@@ -15,7 +15,7 @@ Environment Dependencies
 
 At its core the server is a "typical" Ruby on Rails application which relies on the following software. The given versions are a known konfiguration, more recent versions will probably work as well.
 
-* `Ruby >= 2.2.2 <http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#ruby-versions>`_ (Because of Rails 5.1)
+* Ruby >= 2.2.2 (`Because of Rails 5.1 <http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#ruby-versions>`_)
 * Postgres >= 9.4 (Because of JSON support)
 * ImageMagick 7.0.8 (Version 6 should work as well)
 * FileMagick 5.32
@@ -32,12 +32,12 @@ Alternatively you may use Docker to run the server and compile the client.
 Ubuntu Packages
 ---------------
 
-Execute this command (works with Ubuntu 18.04)::
+Execute this command to install the dependencies in a single step (works with Ubuntu 18.04)::
 
    sudo apt install ruby ruby-bundler ruby-dev postgresql-10 libpq-dev \
-   imagemagick libmagickcore-dev libmagickwand-dev \
-   magic libmagic-dev graphviz sqlite libsqlite3-dev \
-   nodejs npm
+     imagemagick libmagickcore-dev libmagickwand-dev \
+     magic libmagic-dev graphviz sqlite libsqlite3-dev sqlite3-pcre \
+     nodejs npm
 
 
 SQLite and PCRE
@@ -45,22 +45,25 @@ SQLite and PCRE
 
 Database schemas created with BlattWerkzeug make use of regular expressions which are usually not compiled into the ``sqlite3`` binary. To work around this most distributions provide some kind of ``sqlite3-pcre``-package which provides the regex implementation.
 
-* Ubuntu: sqlite3-pcre
-* Arch Linux: `sqlite-pcre-git (AUR) <https://aur.archlinux.org/packages/sqlite-pcre-git/>`_
+* Ubuntu: ``sqlite3-pcre``
+* Arch Linux: ``sqlite-pcre-git`` (`AUR <https://aur.archlinux.org/packages/sqlite-pcre-git/>`_)
 
 These packages should install a single library at ``/usr/lib/sqlite3/pcre.so`` which can be loaded with ``.load /usr/lib/sqlite3/pcre.so`` from the ``sqlite3``-REPL. If you wish, you can write the same line into a file at ``~/.sqliterc`` which will be executed by ``sqlite3`` on startup.
 
 DNS and Subdomains
 ------------------
 
-BlattWerkzeug makes use of subdomains to render the public representation of a project. The development environment assumes, that any subdomains of ``localhost.localdomain`` will be routed to the ``localhost``. The URL ``http://cyoa.localhost.localdomain`` should for example resolve to your ``localhost`` and would display the rendered index-page of the project ``cyoa``. This works out of the box on various GNU/Linux-distributions, but as this behaviour is not standardised it should not be relied upon. To reliably resolve project-subdomains you should either write custom entries for each project in ``/etc/hosts`` or use a lightweight local DNS-server like `Dnsmasq <http://www.thekelleys.org.uk/dnsmasq/doc.html>`_.
+The development environment assumes that any subdomains of ``localdomain`` will be routed to the ``localhost``. This works out of the box on various GNU/Linux-distributions, but as this behaviour is not standardised it should not be relied upon. To reliably resolve project-subdomains you should either write custom entries for each project in ``/etc/hosts`` or use a lightweight local DNS-server like `Dnsmasq <http://www.thekelleys.org.uk/dnsmasq/doc.html>`_. In a production environment you should run the server on a dedicated domain and route all subdomains to the same server instance.
 
-In a production environment you should run the server on a dedicated domain and route all subdomains to the same server instance.
+These subomdains are required for under two different circumstances:
+
+* The application itself is available in multiple languages. ``en.blattwerkzeug.localdomain`` should render the english version, ``de.blattwerkzeug.localdomain`` the german version.
+* The web-projects will be rendered on their own subdomains.
 
 PostgreSQL
 ----------
 
-The actual project code is stored in a PostgreSQL database. You will need to provide a user who is able to create databases.
+The actual project code is stored in a PostgreSQL database. You will need to provide a user who is able to create databases. For development you should stick to the default options that are provided in the ``server/config/database.yml`` file.
 
 Compiling and Running
 =====================
@@ -81,11 +84,9 @@ Ensure you have the "main" dependencies installed (``ruby`` and ``bundle`` for t
 2. Running the server requires the following steps in the ``server`` folder:
 
    1. ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
-   2. Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases. You can alternatively specify your own user (see :ref:`database_configuration`).
-   3. Setup the database (``make setup-database``). This will create all required tables.
+   2. Start a PostgreSQL-server that has a user who is allowed to create databases.
+   3. Setup the database and fill the database (``make reset-live-databases``). This will create all required tables and load some sample data.
    4. You may now run the server, to do this locally simply use ``make run-dev`` and it will spin up a local server instance listening on port ``9292``. You can alternatively run a production server using ``make run``.
-
-3. You then need to seed the initial data that is part of this instance using ``make load-all-data``. This will setup a pre-configured environment with some programming languages, block languages and projects.
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
@@ -117,6 +118,15 @@ After running tests the folder ``coverage`` will contain a navigateable code cov
 Tests for the server are run in the same fashion: Call ``make test`` in the ``server`` folder to run them once, ``make test-watch`` run them continously. And again the folder ``coverage`` will contain a code coverage report:
 
 .. image :: screenshots/dev-coverage-server.png
+
+Modifying seed data
+-------------------
+
+BlattWerkzeug comes with a complex set of required objects to work properly. This includes grammars, block languages, example projects, ... The "normal" Rails way of providing those objects via ``db/seeds.rb`` does not work for these structures at all: They are simply to complex to be meaningfully edited by hand.
+
+The ``Makefile`` therefore exposes the ``store-live-data`` target which stores the current state of the programing languages and projects in the ``seed`` folder. This allows programmers to edit grammars, block languages and projects using the web-IDE and to persist those changes in the git repository.
+
+.. important:: The YAML-files in the ``seed``-folder are **very** prone to merge conflicts. Please make sure to only ever commit as small changes as possible. It is good practive to routinely use ``make reset-live-data run-dev`` when starting the server to ensure that your database-state is always up do date. If you run ``store-live-data`` from an old database state you may override newer changes that are part of the repository already.
 
 Running via Docker
 ------------------
