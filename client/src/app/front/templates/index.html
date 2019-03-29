@@ -1,9 +1,24 @@
 <div class="body-nav-container">
   <app-toolbar>
+    <!-- Toggle for the menu -->
     <ng-container position="toggle">
       <button mat-icon-button (click)="sideNav.toggle()">
         <span class="fa fa-bars" aria-hidden="true"></span>
       </button>
+    </ng-container>
+    <!-- Language selection -->
+    <ng-container position="end">
+      <button mat-icon-button [matMenuTriggerFor]="naturalLang" aria-label="Language Selection">
+        {{ localeFlag }}
+      </button>
+      <mat-menu #naturalLang="matMenu">
+        <button mat-menu-item (click)="changeLanguage('de')">
+          <span>🇩🇪 Deutsch</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage('en')">
+          <span>🇬🇧 English</span>
+        </button>
+      </mat-menu>
     </ng-container>
   </app-toolbar>
 
