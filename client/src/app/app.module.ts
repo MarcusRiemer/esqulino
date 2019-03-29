@@ -17,12 +17,17 @@ import { routing } from './app.routes';
 
 import { NotifyErrorHandler } from './error-handler';
 
+import registerLanguages from './locale-registration';
+
+
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
 if (typeof window !== "undefined") {
   var _paq = (typeof (window as any)._paq === "undefined") ? [] : _paq;
   (window as any)._paq = _paq;
 }
+
+registerLanguages()
 
 // Configure Sentry error reporting (if enabled)
 if (environment.sentry && environment.sentry.active) {

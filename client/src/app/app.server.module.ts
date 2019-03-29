@@ -5,6 +5,10 @@ import { ModuleMapLoaderModule } from '@nguniversal/module-map-ngfactory-loader'
 import { AppModule } from './app.module'
 import { SqlScratchComponent } from './app.component';
 
+import registerLanguages from './locale-registration';
+
+registerLanguages()
+
 @NgModule({
   imports: [
     AppModule,

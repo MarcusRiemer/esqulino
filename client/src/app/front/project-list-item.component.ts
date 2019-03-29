@@ -2,7 +2,6 @@ import { Component, Input, PLATFORM_ID, Inject } from '@angular/core'
 import { isPlatformBrowser } from '@angular/common'
 
 import { ProjectFullDescription } from '../shared/project.description.service'
-import { ServerApiService } from '../shared/serverapi.service'
 
 /**
  * A single project list item entry.
@@ -20,8 +19,7 @@ export class ProjectListItemComponent {
   useSobdomain = true;
 
   public constructor(
-    @Inject(PLATFORM_ID) private _platformId: Object,
-    private _serverApiService: ServerApiService
+    @Inject(PLATFORM_ID) private _platformId: Object
   ) {
   }
 
@@ -32,8 +30,7 @@ export class ProjectListItemComponent {
    * @return The image URL of this project.
    */
   get imageUrl(): string {
-    const toReturn = this._serverApiService.getImageUrl(this.project.slug, this.project.preview);
-    return (toReturn.replace(/https?:/, ''));
+    return (`/api/project/${this.project.slug}/image/${this.project.preview}`);
   }
 
   /**

@@ -1,32 +1,32 @@
-<h1>Projektvorschläge</h1>
-<p>
+<h1 i18n="academia page headline@@academiaPageHeadline">Projektvorschläge</h1>
+<p i18n="academia page intro@@academiaPageIntro">
   Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
 </p>
 <ul>
-  <li>
+  <li i18n="academia theses info@@academiaThesesInfo">
     Anfertigung einer internen <strong>Bachelor</strong>- oder <strong>Master-Thesis</strong>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch</a> vorgenommen.
   </li>
-  <li>
+  <li i18n="academia seminar info@@academiaSeminarInfo">
     In von mir angebotenen <strong>Seminaren</strong> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
   </li>
-  <li>
+  <li i18n="academia media project info@@academiaMediaProjectInfo">
     Für Bachelor Medieninformatiker ist es möglich das <strong>Medien-Projekt</strong> zu absolvieren, Informatik-Master-Studierende können das <strong>Master-Projekt</strong> einbringen.
   </li>
 </ul>
 
-<p>
+<p i18n="software stack intro@@softwareStackIntro">
   BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich hervorragend um viele typische Verfahren moderner Softwareentwicklung kennenzulernen:
 </p>
 <dl>
-  <dt>Test Driven Development</dt>
-  <dd>Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</dd>
-  <dt>Docker &amp; Continuous Integration</dt>
-  <dd>Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</dd>
-  <dt>Single Page Applications &amp; API-Server</dt>
-  <dd>Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</dd>
+  <dt i18n="test driven development@@testDrivenDevelopment">Test Driven Development</dt>
+  <dd i18n="test driven development description@@testDrivenDevelopmentDescription">Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</dd>
+  <dt i18n="docker and ci@@dockerAndCi">Docker &amp; Continuous Integration</dt>
+  <dd i18n="docker and ci description@@dockerAndCiDescription">Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</dd>
+  <dt i18n="single page and api@@singlePageAndApi">Single Page Applications &amp; API-Server</dt>
+  <dd i18n="single page and api description@@singlePageAndApiDescription">Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</dd>
 </dl>
 
-<mat-card *ngFor="let proposal of projectProposals"
+<mat-card *ngFor="let proposal of projectProposals | async"
           class="academia-item"
           [id]="proposal.id">
   <mat-card-title>
@@ -35,14 +35,14 @@
   <mat-card-content>
     <div [innerHTML]="proposal.text"></div>
     <p>
-      <strong>Umgebung: </strong>
+      <strong i18n="dev environment used@@devEnvironmentUsed">Umgebung: </strong>
       <span [innerHTML]="proposal.tools"></span>
     </p>
   </mat-card-content>
 </mat-card>
 
-<h1>Wissenschaftliche Arbeiten</h1>
-<p>
+<h1 i18n="scientific work headline@@scientificWorkHeadline">Wissenschaftliche Arbeiten</h1>
+<p i18n="scientific work description@@scientificWorkDescription">
   Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <a href="http://www.fh-wedel.de/mitarbeiter/mri/esqulino">Marcus Riemer (Fachhochschule Wedel)</a> unter der Betreuung von <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch (CAU Kiel)</a>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
 </p>
 
@@ -51,14 +51,14 @@
   <mat-card-title class="card-title">{{ thesis.title }}</mat-card-title>
   <mat-card-subtitle class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</mat-card-subtitle>
   <mat-card-content>
-    <h3>{{ thesis.author.name }} am {{ thesis.date | date: 'd. MMMM y' }}</h3>
+    <h3>{{ thesis.author.name }} <ng-container i18n="academia thesis date prefix@@academiaThesisDatePrefix">am</ng-container> {{ thesis.date | date: 'd. MMMM y' }}</h3>
     <div [innerHTML]="thesis.abstract"></div>
   </mat-card-content>
   <mat-card-actions>
     <a mat-button
        [href]="thesis.url">
       <span class="fa fa-download" aria-hidden="true"></span>
-      Download
+      <ng-container i18n="academia thesis download link text@@academiaThesisDownloadLinkText">Download</ng-container>
     </a>
   </mat-card-actions>
 </mat-card>
