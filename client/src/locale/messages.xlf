@@ -348,6 +348,34 @@
         </context-group>
         <note priority="1" from="description">imprint signed email instructions</note>
       </trans-unit>
+      <trans-unit id="headlineExampleProjects" datatype="html">
+        <source>Projektvorlagen für Einsteiger</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Headline example projects</note>
+      </trans-unit>
+      <trans-unit id="explanationExampleProjects" datatype="html">
+        <source>
+  Die auf dieser Seite vorgestellten Projekte eignen sich, um erste Schritte mit Datenbanken oder der Entwicklung von Webseiten zu machen.
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Example project explanation</note>
+      </trans-unit>
+      <trans-unit id="deactivatedWebFunctions" datatype="html">
+        <source>
+    <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Die Web-Funktionalität ist aktuell leider deaktiviert 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten, aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Some functionality is currently deactivated</note>
+      </trans-unit>
       <trans-unit id="exampleVideosHeadline" datatype="html">
         <source>Beispielvideos</source>
         <context-group purpose="location">
@@ -368,7 +396,7 @@
         <source>Sie sollen interessierten Lehrkräften nur einen sehr kurzen &quot;bewegten&quot; Eindruck von dieser Software bieten und möglichst neugierig machen.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">5</context>
         </context-group>
         <note priority="1" from="description">example videos alert description</note>
       </trans-unit>
@@ -378,7 +406,7 @@
   </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">6</context>
         </context-group>
         <note priority="1" from="description">example videos alert contact</note>
       </trans-unit>
@@ -386,7 +414,7 @@
         <source>per Mail direkt an Marcus Riemer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/video-display.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">example videos alert contact email link text</note>
       </trans-unit>
@@ -431,6 +459,13 @@
           <context context-type="linenumber">2</context>
         </context-group>
         <note priority="1" from="description">teacher page description</note>
+      </trans-unit>
+      <trans-unit id="edit" datatype="html">
+        <source>Bearbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list-item.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="privacyHeadline" datatype="html">
         <source>Datenschutz</source>
