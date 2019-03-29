@@ -3,14 +3,24 @@
 
 include ../Makefile.common
 
+# Various tools may be installed in different locations
+# * npm dependencies should not be installed globally
+# * Some platforms call the "node" binary "nodejs"
 NG_BIN = node_modules/.bin/ng
 TSC_BIN = node_modules/.bin/tsc
+XLIFFMERGE_BIN = node_modules/.bin/xliffmerge
 NODE_BIN = node
 
 BUNDLE_FILES = $(shell find dist/browser -iregex ".*\.\(js\|css\|svg\|eot\|ttf\)" 2> /dev/null)
 BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 
-CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) universal-server.ts webpack.server.config.js package.json package-lock.json
+# All files that together define the client in its various forms
+# The `version.ts` file is excluded because it is automatically generated
+# and shouldn't trigger a rebuild.
+CLIENT_ALL_SOURCES = $(shell find src ! -name 'version.ts' 2> /dev/null) universal-server.ts webpack.server.config.js package.json package-lock.json
+
+# All sources except the translation files
+CLIENT_NON_XLF_SOURCES = $(filter-out %.xlf, $(CLIENT_ALL_SOURCES))
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
@@ -109,6 +119,18 @@ gzipped-bundles : $(BUNDLE_FILES_GZIP)
 
 gzipped-clean :
 	rm -f $(BUNDLE_FILES_GZIP)
+
+##################################
+# Translation
+##################################
+
+src/locale/messages.xlf : $(CLIENT_NON_XLF_SOURCES)
+	$(NG_BIN) xi18n --i18n-locale de --output-path locale
+
+src/locale/messages.en.xlf : src/locale/messages.xlf xliffmerge.json
+	$(XLIFFMERGE_BIN) --profile xliffmerge.json
+
+update-xlf : src/locale/messages.en.xlf
 
 ##################################
 # Dependencies
