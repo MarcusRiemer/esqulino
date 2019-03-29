@@ -56,6 +56,17 @@ export interface NavHeader {
 
 export type NavItem = NavLink | NavDivider | NavFill | NavLinkExternal | NavHeader;
 
+/**
+ * @return The unicode string that represents a flag for the given locale
+ */
+function localeToFlag(locale: string): string {
+  switch (locale) {
+    case "de": return ("🇩🇪");
+    case "en": return ("🇬🇧");
+    default: return ("🏳");
+  }
+}
+
 @Component({
   templateUrl: 'templates/index.html',
 })
@@ -70,7 +81,24 @@ export class FrontComponent {
 
   readonly sidebarMode$ = this._browser.sidebarMode$;
 
+  // The actual locale that is currently in use
   readonly locale = this._localeId;
+
+  // The unicode flag for the current locale
+  readonly localeFlag = localeToFlag(this.locale);
+
+  /**
+   * Changes the natural language of the application.
+   *
+   * @param locale The locale to change to, should probably be "de" or "en"
+   */
+  public changeLanguage(locale: string) {
+    const upperDomain = location.hostname.split('.').slice(-2).join('.');
+    const newDomain = locale + "." + upperDomain;
+    const newUrl = location.href.replace(location.hostname, newDomain);
+
+    document.location.href = newUrl;
+  }
 
   /**
    * All items that need to be shown in the general navigation
