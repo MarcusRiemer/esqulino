@@ -388,6 +388,32 @@
           <context context-type="linenumber">23</context>
         </context-group>
         <note priority="1" from="description">imprint signed email instructions</note>
+      </trans-unit><trans-unit id="headlineExampleProjects" datatype="html">
+        <source>Projektvorlagen für Einsteiger</source><target state="translated">Example projects for beginners</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Headline example projects</note>
+      </trans-unit><trans-unit id="explanationExampleProjects" datatype="html">
+        <source>
+  Die auf dieser Seite vorgestellten Projekte eignen sich, um erste Schritte mit Datenbanken oder der Entwicklung von Webseiten zu machen.
+</source><target state="translated">The projects that are presented on this page may be used to make first steps with databases or web development.
+</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Example project explanation</note>
+      </trans-unit><trans-unit id="deactivatedWebFunctions" datatype="html">
+        <source>
+    <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Die Web-Funktionalität ist aktuell leider deaktiviert 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten, aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
+  </source><target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Sorry, the web functionality is currently disabled 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> A previous version of this application allowed the creation of websites, but that functionality had to be deactivated in the context of a major overhaul.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Some functionality is currently deactivated</note>
       </trans-unit>
       <trans-unit id="exampleVideosHeadline" datatype="html">
         <source>Beispielvideos</source>
@@ -411,32 +437,23 @@
         <source>Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen.</source>
         <target state="translated">
         They are to offer interested teachers only a very short "moving" impression of this software and make it as curious as possible.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/video-display.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
+        
         <note priority="1" from="description">example videos alert description</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/video-display.html</context><context context-type="linenumber">5</context></context-group></trans-unit>
       <trans-unit id="exampleVideosAlertContact" datatype="html">
         <source>
     Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte
   </source>
         <target state="translated">For inquiries about operation, please contact Marcus Riemer </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/video-display.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
+        
         <note priority="1" from="description">example videos alert contact</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/video-display.html</context><context context-type="linenumber">6</context></context-group></trans-unit>
       <trans-unit id="exampleVideosAlertContactEmailLink" datatype="html">
         <source>per Mail direkt an Marcus Riemer</source>
         <target state="translated">directly by e-mail.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/video-display.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
+        
         <note priority="1" from="description">example videos alert contact email link text</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/video-display.html</context><context context-type="linenumber">8</context></context-group></trans-unit>
       <trans-unit id="pupilPageHeadline" datatype="html">
         <source>Dein Einstieg in die Web-Entwicklung</source>
         <target state="translated">Your entry into web development</target>
@@ -485,6 +502,12 @@
           <context context-type="linenumber">2</context>
         </context-group>
         <note priority="1" from="description">teacher page description</note>
+      </trans-unit><trans-unit id="edit" datatype="html">
+        <source>Bearbeiten</source><target state="translated">Edit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list-item.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="privacyHeadline" datatype="html">
         <source>Datenschutz</source>
