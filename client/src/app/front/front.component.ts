@@ -93,10 +93,16 @@ export class FrontComponent {
    * @param locale The locale to change to, should probably be "de" or "en"
    */
   public changeLanguage(locale: string) {
+    // extract "main" domain: blattwerkzeug.tld
     const upperDomain = location.hostname.split('.').slice(-2).join('.');
-    const newDomain = locale + "." + upperDomain;
+
+    // The production domain already ends in ".de", so there is no reason to repeat that
+    const newDomain = locale === "de" ? upperDomain : locale + "." + upperDomain;
+
+    // Replace previous domain with new domain
     const newUrl = location.href.replace(location.hostname, newDomain);
 
+    // And navigate there
     document.location.href = newUrl;
   }
 
