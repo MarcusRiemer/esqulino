@@ -583,7 +583,7 @@ class TruckRenderer implements ObjectRenderer {
           const p0 = prevTruckPosition;
           const p1 = {
             x: tileWidth * this.prevTruck.position.x + tileWidth / 2,
-            y:  tileHeight * this.prevTruck.position.y + tileHeight / 2
+            y: tileHeight * this.prevTruck.position.y + tileHeight / 2
           };
           const p2 = truckPosition;
           // De Casteljau
