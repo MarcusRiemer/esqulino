@@ -39,6 +39,7 @@ module Seed
     end
 
     def store_image; end
+    def copy_database; end
 
     def seed_file_path
       File.join seed_directory, "#{load_seed_id || seed.id}.yaml"
@@ -65,6 +66,7 @@ module Seed
         end
       end
       store_image
+      copy_database
     end
 
     def store_dependencies(processed)
