@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { map, switchMap, first } from 'rxjs/operators';
@@ -12,7 +12,6 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 import { BlockLanguage } from '../../../shared/block';
-
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -38,7 +37,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
-    private _cd: ChangeDetectorRef
   ) {
   }
 
