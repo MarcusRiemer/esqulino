@@ -304,7 +304,7 @@ class TileRenderer implements ObjectRenderer {
   startAnimation: DOMHighResTimeStamp;
 
   /** Overlap of the tile to avoid ugly edges. */
-  overlap = 1;
+  overlap = -1;
 
   /**
    * Initializes the TileRenderer.
