@@ -64,44 +64,65 @@ export interface BlockLanguageListDescription {
 }
 
 /**
+ * Every component may define the following properties
+ */
+export interface EditorComponentBaseDescription {
+  columnClasses?: string[]
+}
+
+/**
+ * Displays the actual block editor
+ */
+export interface CodeResourceSettingsComponentDescription extends EditorComponentBaseDescription {
+  componentType: "code-resource-settings"
+}
+
+/**
+ * Displays the actual block editor
+ */
+export interface BlockRootComponentDescription extends EditorComponentBaseDescription {
+  componentType: "block-root"
+}
+
+/**
  * Displays (limited) results of SQL-queries
  */
-export interface QueryPreviewComponentDescription {
+export interface QueryPreviewComponentDescription extends EditorComponentBaseDescription {
   componentType: "query-preview"
 }
 
 /**
  * Displays validation results
  */
-export interface ValidatorComponentDescription {
+export interface ValidatorComponentDescription extends EditorComponentBaseDescription {
   componentType: "validator"
 }
 
 /**
  * Displays the compiled program
  */
-export interface CodeGeneratorComponentDescription {
+export interface CodeGeneratorComponentDescription extends EditorComponentBaseDescription {
   componentType: "generated-code"
 }
 
 /**
  * Displays a truck world
  */
-export interface TruckWorldComponentDescription {
+export interface TruckWorldComponentDescription extends EditorComponentBaseDescription {
   componentType: "truck-world"
 }
 
 /**
  * Displays a truck controller
  */
-export interface TruckControllerComponentDescription {
+export interface TruckControllerComponentDescription extends EditorComponentBaseDescription {
   componentType: "truck-controller"
 }
 
 /**
  * Displays a trucks sensors
  */
-export interface TruckSensorsComponentDescription {
+export interface TruckSensorsComponentDescription extends EditorComponentBaseDescription {
   componentType: "truck-sensors"
 }
 
@@ -109,7 +130,9 @@ export interface TruckSensorsComponentDescription {
  * Any component that could be displayed in the actual editor view.
  */
 export type EditorComponentDescription =
-  QueryPreviewComponentDescription
+  CodeResourceSettingsComponentDescription
+  | BlockRootComponentDescription
+  | QueryPreviewComponentDescription
   | ValidatorComponentDescription
   | CodeGeneratorComponentDescription
   | TruckWorldComponentDescription

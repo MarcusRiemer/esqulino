@@ -6,8 +6,7 @@
     <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
       <!-- If the tree is empty, allow the user to populate it -->
       <div *ngIf="currentTree.isEmpty; else renderTree;"
-           (mouseover)="onPlaceholderDragEnter($event)"
-           class="card-body">
+           (mouseover)="onPlaceholderDragEnter($event)">
         <div class="empty-tree">
           <h3>Hey, hier sollte eigentlich Code stehen!</h3>
           <p>
@@ -18,7 +17,7 @@
 
       <!-- If the tree is not empty, it wants to be rendered -->
       <ng-template #renderTree>
-        <div class="card-body block-editor-root">
+        <div class="block-editor-root">
           <editor-block-host  *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
                               [codeResource]="currentResource"
                               [node]="currentTree.rootNode"

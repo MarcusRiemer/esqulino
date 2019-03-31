@@ -270,24 +270,25 @@ concise_attributes:
     {"style": {"display": "inline-block"}, "property": "operator", "blockType": "input"}],
     "blockType": "block", "direction": "horizontal", "breakAfter": false, "dropTarget":
     {}, "wrapChildren": true}], "describedType": {"typeName": "relationalOperator",
-    "languageName": "sql"}}], "editorComponents": [{"componentType": "validator"},
-    {"componentType": "generated-code"}, {"componentType": "query-preview"}], "localGeneratorInstructions":
-    {"traits": {"softHole": {"applyMode": "deepMerge", "instructions": {"emptyDropTarget":
-    true}}, "breakAfter": {"applyMode": "deepMerge", "instructions": {"breakAfter":
-    true}}, "blockBorder": {"applyMode": "deepMerge", "instructions": {"style": {"border":
-    "1px solid red", "margin": "2px", "padding": "2px", "borderRadius": "5px"}}},
-    "keywordComponent": {"applyMode": "deepMerge", "instructions": {"style": {"color":
-    {"$ref": "keywordColor"}, "width": "9ch"}}}, "readOnlyProperty": {"applyMode":
-    "deepMerge", "instructions": {"propReadOnly": true}}}, "traitScopes": [{"blocks":
-    {"sql": {"from": [0], "where": [0], "select": [], "groupBy": [], "orderBy": [],
-    "innerJoinOn": [0], "innerJoinUsing": [0], "whereAdditional": [0]}}, "traits":
-    ["breakAfter"], "attributes": {"sql": {"from": ["tables"], "querySelect": ["select",
-    "from", "where", "orderBy", "groupBy"]}}}, {"traits": ["keywordComponent"], "attributes":
-    {"sql": {"from": ["keyword"], "where": ["keyword"], "select": ["keyword"], "groupBy":
-    ["keyword"], "orderBy": ["keyword"]}}}, {"blocks": {"sql": {"from": [0], "where":
-    [0], "having": [0], "select": [0], "groupBy": [0], "orderBy": [0], "constant":
-    [0], "parameter": [0], "columnName": [0], "innerJoinOn": [0], "parentheses": [0],
-    "functionCall": [0], "starOperator": [0], "binaryExpression": [0], "tableIntroduction":
+    "languageName": "sql"}}], "editorComponents": [{"componentType": "block-root"},
+    {"columnClasses": ["col-lg-6"], "componentType": "validator"}, {"columnClasses":
+    ["col-lg-6"], "componentType": "generated-code"}, {"componentType": "query-preview"}],
+    "localGeneratorInstructions": {"traits": {"softHole": {"applyMode": "deepMerge",
+    "instructions": {"emptyDropTarget": true}}, "breakAfter": {"applyMode": "deepMerge",
+    "instructions": {"breakAfter": true}}, "blockBorder": {"applyMode": "deepMerge",
+    "instructions": {"style": {"border": "1px solid red", "margin": "2px", "padding":
+    "2px", "borderRadius": "5px"}}}, "keywordComponent": {"applyMode": "deepMerge",
+    "instructions": {"style": {"color": {"$ref": "keywordColor"}, "width": "9ch"}}},
+    "readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
+    true}}}, "traitScopes": [{"blocks": {"sql": {"from": [0], "where": [0], "select":
+    [], "groupBy": [], "orderBy": [], "innerJoinOn": [0], "innerJoinUsing": [0], "whereAdditional":
+    [0]}}, "traits": ["breakAfter"], "attributes": {"sql": {"from": ["tables"], "querySelect":
+    ["select", "from", "where", "orderBy", "groupBy"]}}}, {"traits": ["keywordComponent"],
+    "attributes": {"sql": {"from": ["keyword"], "where": ["keyword"], "select": ["keyword"],
+    "groupBy": ["keyword"], "orderBy": ["keyword"]}}}, {"blocks": {"sql": {"from":
+    [0], "where": [0], "having": [0], "select": [0], "groupBy": [0], "orderBy": [0],
+    "constant": [0], "parameter": [0], "columnName": [0], "innerJoinOn": [0], "parentheses":
+    [0], "functionCall": [0], "starOperator": [0], "binaryExpression": [0], "tableIntroduction":
     [0]}}, "traits": ["blockBorder"]}, {"traits": ["softHole"], "attributes": {"sql":
     {"select": ["columns"]}}}, {"traits": ["readOnlyProperty"], "attributes": {"sql":
     {"columnName": ["refTableName", "columnName"], "functionCall": ["name"], "tableIntroduction":
@@ -327,22 +328,23 @@ concise_attributes:
     "sql"}, "displayName": "GROUP BY"}, {"defaultNode": {"name": "orderBy", "children":
     {"expressions": []}, "language": "sql"}, "displayName": "ORDER BY"}], "categoryCaption":
     "Komponenten"}]}], "parameterValues": {}, "editorComponents": [{"componentType":
-    "validator"}, {"componentType": "generated-code"}, {"componentType": "query-preview"}],
-    "typeInstructions": {"sql": {"select": {"blocks": [{"allowWrap": false}]}, "innerJoinOn":
-    {"blocks": [{"style": {"margin-left": {"$ref": "indentSubComponent"}}}], "attributes":
-    {"keyword": {"style": {"color": {"$ref": "keywordColor"}, "margin-right": "1ch"}},
-    "keywordOn": {"style": {"color": {"$ref": "keywordColor"}, "margin-left": "1ch",
-    "margin-right": "1ch"}}}}, "querySelect": {"blocks": [{"allowWrap": true}]}, "binaryExpression":
-    {"attributes": {"operator": {"style": {"margin-left": "1ch", "margin-right": "1ch"}}}}}},
-    "parameterDeclarations": {"keywordColor": {"type": {"type": "color"}, "defaultValue":
-    "#0000ff"}, "indentSubComponent": {"type": {"type": "string"}, "defaultValue":
-    "2ch"}}}}'
+    "block-root"}, {"columnClasses": ["col-lg-6"], "componentType": "validator"},
+    {"columnClasses": ["col-lg-6"], "componentType": "generated-code"}, {"componentType":
+    "query-preview"}], "typeInstructions": {"sql": {"select": {"blocks": [{"allowWrap":
+    false}]}, "innerJoinOn": {"blocks": [{"style": {"margin-left": {"$ref": "indentSubComponent"}}}],
+    "attributes": {"keyword": {"style": {"color": {"$ref": "keywordColor"}, "margin-right":
+    "1ch"}}, "keywordOn": {"style": {"color": {"$ref": "keywordColor"}, "margin-left":
+    "1ch", "margin-right": "1ch"}}}}, "querySelect": {"blocks": [{"allowWrap": true}]},
+    "binaryExpression": {"attributes": {"operator": {"style": {"margin-left": "1ch",
+    "margin-right": "1ch"}}}}}}, "parameterDeclarations": {"keywordColor": {"type":
+    {"type": "color"}, "defaultValue": "#0000ff"}, "indentSubComponent": {"type":
+    {"type": "string"}, "defaultValue": "2ch"}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-13 15:22:19.519598'
+  value_before_type_cast: '2019-03-31 18:51:08.24129'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

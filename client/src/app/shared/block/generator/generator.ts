@@ -19,6 +19,9 @@ import { generateSidebar } from './sidebar'
  */
 const defaultEditorComponents: EditorComponentDescription[] = [
   {
+    "componentType": "block-root"
+  },
+  {
     "componentType": "validator"
   },
   {
