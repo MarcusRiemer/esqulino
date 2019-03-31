@@ -4,22 +4,10 @@
     <!-- The actual editor is composed based on the instructions of the block
          language. -->
     <div class="row">
-      <div class="col-lg-12">
-        <div class="card card-body mb-3">
-          <code-resource-settings></code-resource-settings>
-        </div>
-      </div>
-
-      <div class="col-lg-12">
-        <div class="card card-body mb-3">
-          <block-root></block-root>
-        </div>
-      </div>
-
       <div *ngFor="let editorComponent of (editorComponents | async)"
-           class="col-lg-6">
+           [ngClass]="editorComponent.columnClasses">
         <div class="card card-body mb-3">
-          <ng-template [cdkPortalOutlet]="editorComponent"></ng-template>
+          <ng-template [cdkPortalOutlet]="editorComponent.portal"></ng-template>
         </div>
       </div>
     </div>

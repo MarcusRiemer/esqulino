@@ -2,6 +2,8 @@ import { ComponentPortal } from '@angular/cdk/portal';
 
 import { EditorComponentDescription } from '../../shared/block/block-language.description';
 
+import { BlockRootComponent } from './block/block-root.component';
+import { CodeResourceSettingsComponent } from './block/code-resource-settings.component'
 import { QueryPreviewComponent } from './query/query-preview.component';
 import { WorldRenderComponent } from './truck/world-render.component';
 import { ValidationComponent } from './validation.component';
@@ -16,6 +18,8 @@ import { WorldSensorsComponent } from './truck/world-sensors.component';
 export class EditorComponentsService {
   createComponent(description: EditorComponentDescription): ComponentPortal<{}> {
     switch (description.componentType) {
+      case "block-root": return (new ComponentPortal(BlockRootComponent));
+      case "code-resource-settings": return (new ComponentPortal(CodeResourceSettingsComponent));
       case "query-preview": return (new ComponentPortal(QueryPreviewComponent));
       case "validator": return (new ComponentPortal(ValidationComponent));
       case "generated-code": return (new ComponentPortal(CodeGeneratorComponent));

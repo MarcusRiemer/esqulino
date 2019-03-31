@@ -12,6 +12,13 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 import { BlockLanguage } from '../../../shared/block';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { Observable } from 'rxjs';
+
+interface PlacedEditorComponent {
+  portal: ComponentPortal<{}>;
+  columnClasses: string[];
+}
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -65,13 +72,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(_ => btnSave.isInProgress = false);
     });
-
-    // Trigger change detection for the whole tree if the executed code
-    // location changes.
-    let ref = this._currentCodeResource.currentExecutionLocation.subscribe(_ => {
-      // this._cd.detectChanges();
-    });
-    this._subscriptionRefs.push(ref);
   }
 
 
@@ -114,11 +114,17 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   /**
    * The visual components that should be displayed.
    */
-  readonly editorComponents = this.currentResource
+  readonly editorComponents: Observable<PlacedEditorComponent[]> = this.currentResource
     .pipe(
       switchMap(codeResource => codeResource.blockLanguage),
       map((blockLanguage: BlockLanguage) => blockLanguage.editorComponents),
-      map(components => components.map(c => this.getEditorComponentPortal(c)))
+      map((components): PlacedEditorComponent[] => components.map(c => {
+        // Resolved component and sane defaults for components that are displayed
+        return ({
+          portal: this.getEditorComponentPortal(c),
+          columnClasses: c.columnClasses || ['col-12']
+        });
+      }))
     );
 
   /**
