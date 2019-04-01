@@ -24,6 +24,7 @@ import { ServerDataService } from './server-data.service'
 import { VideoService } from './video.service';
 import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
+import { ChangeLanguageComponent } from './change-language.component';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -54,6 +55,7 @@ const materialModules = [
     DefaultValuePipe,
     FlashMessageListComponent,
     ToolbarComponent,
+    ChangeLanguageComponent
   ],
   exports: [
     CommonModule,
@@ -65,6 +67,7 @@ const materialModules = [
     ToolbarComponent,
     FlashMessageListComponent,
     DefaultValuePipe,
+    ChangeLanguageComponent
   ]
 })
 export class SharedAppModule {
