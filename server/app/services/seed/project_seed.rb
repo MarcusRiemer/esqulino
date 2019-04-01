@@ -18,7 +18,8 @@ module Seed
     end
 
     # define base's abstract class to copy images of the project in project directory with under the project file
-    def store_image
+    # this method is called after store_seed is called
+    def after_store_seed
       if File.directory? seed.images_directory_path
         puts "Storing images"
         FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)

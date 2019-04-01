@@ -8,7 +8,7 @@ module Seed
 
     # seed is overridden as BlockLanguageGenerator does not have any slug
     def seed
-      @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : find_by(id: seed_id)
+      @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : seed_name.find_by(id: seed_id)
     end
   end
 end

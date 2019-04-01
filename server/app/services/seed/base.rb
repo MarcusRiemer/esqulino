@@ -55,8 +55,7 @@ module Seed
     end
 
     # Abstract methods for seed specific cases
-    def store_image; end
-    def copy_database; end
+    def after_store_seed; end
 
     # Constructs a storing seed or loading seed file path
     def seed_file_path
@@ -84,11 +83,13 @@ module Seed
     # store is responsible to store the seed
     # checks the if one has been already processed, usally when there is a dependecy,
     # it's required to break circular dependecy in the recursion process
-    # calls store_seed and writes dependency mafifest(-deps.yaml) and all other things need to be stored
+    # calls store_seed and the after_store_seed which is seed specific case if something else needed to be stored after seed is stored
+    # and writes dependency mafifest(-deps.yaml) and all other things need to be stored
     def store(processed)
       if processed.include? [seed_directory, seed.id, self.class]
       else
         store_seed
+        after_store_seed
         processed << [seed_directory, seed.id, self.class]
         store_dependencies(processed)
       end
@@ -97,8 +98,6 @@ module Seed
           YAML::dump(processed, file)
         end
       end
-      store_image
-      copy_database
     end
 
     # calls the dependent model on parent using send and serialize it
