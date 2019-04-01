@@ -137,16 +137,4 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       this._dragService.informDraggedOverEditor();
     }
   }
-
-  /**
-   * When something draggable enters the empty area a program may start with,
-   * there is not actually a node that could be referenced.
-   */
-  public onPlaceholderDragEnter(evt: MouseEvent) {
-    if (this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, [], undefined, {
-        allowExact: true
-      });
-    }
-  }
 }
