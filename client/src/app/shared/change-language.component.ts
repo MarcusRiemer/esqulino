@@ -4,12 +4,12 @@ import { Component, Inject, LOCALE_ID } from '@angular/core';
  * @return The unicode string that represents a flag for the given locale
  */
 function localeToFlag(locale: string): string {
-    switch (locale) {
-      case "de": return ("🇩🇪");
-      case "en": return ("🇬🇧");
-      default: return ("🏳");
-    }
+  switch (locale) {
+    case "de": return ("🇩🇪");
+    case "en": return ("🇬🇧");
+    default: return ("🏳");
   }
+}
 
 
 @Component({
@@ -18,8 +18,6 @@ function localeToFlag(locale: string): string {
   templateUrl: './templates/change-language.html'
 })
 export class ChangeLanguageComponent {
-
-
   // The actual locale that is currently in use
   readonly locale = this._localeId;
 
@@ -30,7 +28,7 @@ export class ChangeLanguageComponent {
     @Inject(LOCALE_ID) private readonly _localeId: string,
   ) { }
 
-      /**
+  /**
    * Changes the natural language of the application.
    *
    * @param locale The locale to change to, should probably be "de" or "en"
@@ -49,4 +47,3 @@ export class ChangeLanguageComponent {
     document.location.href = newUrl;
   }
 }
-
