@@ -6,11 +6,11 @@ import { Title } from '@angular/platform-browser'
 import { switchMap, map, first } from 'rxjs/operators'
 
 import { ToolbarService } from '../shared/toolbar.service'
-import { ServerDataService, CachedRequest } from '../shared/server-data.service'
+import { ServerDataService, CachedRequest } from '../shared'
+import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
 import { GrammarDescription } from '../shared/syntaxtree'
 import { BlockLanguageListDescription } from '../shared/block/block-language.description'
-import { ServerApiService } from '../shared/serverapi.service'
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
