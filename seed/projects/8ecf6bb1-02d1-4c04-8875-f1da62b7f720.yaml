@@ -1,0 +1,36 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Abenteuer
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: Schreibe deine eigene interaktive Abenteuergeschichte.
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: true
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+  value_before_type_cast: 9a253ae0-8af1-4056-8984-50cb37b79c55
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+  value_before_type_cast: 352150eb-88bf-451b-821e-9fed8ce02cc2
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-20 20:48:21.695552'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-04-02 21:35:09.529639'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: cyoa
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: api_version
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+  value_before_type_cast: 9ba2daa8-d66a-4e95-b52b-535edac64f58
+new_record: false
+active_record_yaml_version: 2

@@ -1,13 +1,11 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Trucklino Program
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino Program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: "{\"sidebars\": [{\"type\": \"fixedBlocks\", \"caption\":
@@ -327,6 +325,8 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2019-03-01 14:14:30.081552'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang

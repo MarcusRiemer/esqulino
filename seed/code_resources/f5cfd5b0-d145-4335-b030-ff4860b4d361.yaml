@@ -1,0 +1,55 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f5cfd5b0-d145-4335-b030-ff4860b4d361
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Zeiten
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"joins": [], "tables": [{"name": "tableIntroduction", "language":
+    "sql", "properties": {"name": "termin"}}, {"name": "tableIntroduction", "language":
+    "sql", "properties": {"name": "block"}}]}, "language": "sql"}], "where": [{"name":
+    "where", "children": {"expressions": [{"name": "binaryExpression", "children":
+    {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
+    "BLOCK", "refTableName": "termin"}}], "rhs": [{"name": "columnName", "language":
+    "sql", "properties": {"columnName": "BLOCK", "refTableName": "block"}}], "operator":
+    [{"name": "relationalOperator", "language": "sql", "properties": {"operator":
+    "="}}]}, "language": "sql"}]}, "language": "sql"}], "select": [{"name": "select",
+    "children": {"columns": [{"name": "columnName", "language": "sql", "properties":
+    {"columnName": "TAG", "refTableName": "termin"}}, {"name": "columnName", "language":
+    "sql", "properties": {"columnName": "STARTZEIT", "refTableName": "block"}}, {"name":
+    "columnName", "language": "sql", "properties": {"columnName": "ENDZEIT", "refTableName":
+    "block"}}]}, "language": "sql"}], "groupBy": []}, "language": "sql"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-12-12 12:52:31.930149'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-12-12 12:56:24.460581'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    SELECT termin.TAG, block.STARTZEIT, block.ENDZEIT
+    FROM termin, block
+    WHERE (termin.BLOCK = block.BLOCK)
+new_record: false
+active_record_yaml_version: 2

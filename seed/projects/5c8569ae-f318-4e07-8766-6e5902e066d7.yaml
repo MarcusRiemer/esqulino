@@ -1,0 +1,36 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Test: Sequence DB'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: Dieses Projekt wird für automatische Tests benutzt und hat
+    keine inhaltliche  Bedeutung.
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: false
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+  value_before_type_cast: 159ba814-445d-4167-a483-e3fc0db85cae
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-20 20:48:21.717254'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-04-02 21:35:10.576004'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: db-sequence
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: api_version
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+  value_before_type_cast: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
+new_record: false
+active_record_yaml_version: 2
