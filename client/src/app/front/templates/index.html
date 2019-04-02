@@ -10,38 +10,13 @@
     <ng-container position="end"></ng-container>
   </app-toolbar>
 
+  <!-- Sidebar -->
   <mat-sidenav-container>
     <mat-sidenav #sideNav
-                 [mode]="sidebarMode$ | async"
-                 [opened]="!(isMobile$ | async)">
-      <mat-nav-list id="main-nav">
-        <ng-container *ngFor="let nav of navItems">
-          <ng-container [ngSwitch]="nav.type">
-            <!-- Rendering internal links -->
-            <a *ngSwitchCase="'link'"
-               mat-list-item
-               [routerLink]="nav.route"
-               routerLinkActive="router-link-active"
-               [routerLinkActiveOptions]="{exact: true}">
-              <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
-              {{nav.text[locale]}}
-            </a>
-            <!-- Rendering external links -->
-            <a *ngSwitchCase="'external'"
-               mat-list-item
-               [href]="nav.url" >
-              <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
-              {{nav.text[locale]}}
-            </a>
-            <!-- Rendering Dividers -->
-            <mat-divider *ngSwitchCase="'divider'"></mat-divider>
-            <!-- Rendering Headers -->
-            <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text[locale] }}</h3>
-            <!-- Rendering fillers -->
-            <div *ngSwitchCase="'fill'" class="fill"></div>
-          </ng-container>
-        </ng-container>
-      </mat-nav-list>
+      [mode]="sidebarMode$ | async"
+      [opened]="!(isMobile$ | async)">
+      <!-- Sidebar item output -->
+      <side-nav-selector [items]="adminItems"></side-nav-selector>
     </mat-sidenav>
 
     <mat-sidenav-content class="content">
@@ -51,8 +26,8 @@
       <div class="container front mat-typography">
         <flash-message-list></flash-message-list>
         <router-outlet></router-outlet>
-
       </div>
+
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
