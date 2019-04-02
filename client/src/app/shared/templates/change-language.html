@@ -1,13 +1,11 @@
-
 <button mat-icon-button [matMenuTriggerFor]="naturalLang" aria-label="Language Selection">
-    {{ localeFlag }}
+  {{ localeFlag }}
 </button>
 <mat-menu #naturalLang="matMenu">
-    <button mat-menu-item (click)="changeLanguage('de')">
+  <button mat-menu-item (click)="changeLanguage('de')">
     <span>🇩🇪 Deutsch</span>
-    </button>
-    <button mat-menu-item (click)="changeLanguage('en')">
+  </button>
+  <button mat-menu-item (click)="changeLanguage('en')">
     <span>🇬🇧 English</span>
-    </button>
+  </button>
 </mat-menu>
-
