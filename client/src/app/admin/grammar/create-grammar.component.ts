@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { ServerDataService } from '../../shared/server-data.service';
-import { ServerApiService } from '../../shared/serverapi.service';
+import { ServerApiService, ServerDataService } from '../../shared';
 import { GrammarDescription } from '../../shared/syntaxtree';
 import { LanguageService } from '../../shared/language.service';
 

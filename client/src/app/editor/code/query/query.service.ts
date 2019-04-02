@@ -6,7 +6,7 @@ import { catchError, delay, map } from 'rxjs/operators';
 import {
   ArbitraryQueryRequestDescription, QueryParamsDescription, QueryResponseDescription
 } from '../../../shared/syntaxtree/sql/query.description';
-import { ServerApiService } from '../../../shared/serverapi.service';
+import { ServerApiService } from '../../../shared';
 import { CodeResource } from '../../../shared/syntaxtree';
 
 export { QueryParamsDescription }

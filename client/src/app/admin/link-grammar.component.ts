@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { map, filter } from 'rxjs/operators';
 
-import { ServerDataService } from '../shared/server-data.service';
+import { ServerDataService } from '../shared';
 
 /**
  * Creates a link to the grammar with the specified ID. Will attempt to

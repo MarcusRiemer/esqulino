@@ -4,18 +4,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { shareReplay, first, map, switchMap, tap, scan } from 'rxjs/operators';
 
-import { ServerApiService } from '../shared/serverapi.service';
-
 import {
   BlockLanguageDescription, BlockLanguageListResponseDescription
-} from '../shared/block/block-language.description';
+} from '../../shared/block/block-language.description';
 import {
   BlockLanguageGeneratorListDescription
-} from '../shared/block/generator/generator.description'
+} from '../../shared/block/generator/generator.description'
 import {
   GrammarDescription, GrammarListDescription
-} from '../shared/syntaxtree/grammar.description';
-import { fieldCompare } from './util';
+} from '../../shared/syntaxtree/grammar.description';
+
+import { fieldCompare } from '../util';
+
+import { ServerApiService } from './serverapi.service';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular

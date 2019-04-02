@@ -1,8 +1,9 @@
 import { Injectable, PLATFORM_ID, Inject, Optional } from '@angular/core'
 import { isPlatformServer } from '@angular/common'
 
+import { environment } from '../../../environments/environment'
+
 import { ServerApi } from './serverapi'
-import { environment } from '../../environments/environment'
 
 /**
  * Instead of constructing URLs on the fly, they should be created using

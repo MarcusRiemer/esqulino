@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 
-import { ServerDataService } from '../shared/server-data.service';
+import { ServerDataService } from '../shared';
 
 /**
  * Administrative Overview, this is the "greeting" page for every

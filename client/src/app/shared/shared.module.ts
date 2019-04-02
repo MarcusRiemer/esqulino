@@ -19,8 +19,8 @@ import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
 import { ProjectDescriptionService } from './project.description.service';
 import { LanguageService } from './language.service';
-import { ServerApiService } from './serverapi.service';
-import { ServerDataService } from './server-data.service'
+import { ServerApiService } from './serverdata/serverapi.service';
+import { ServerDataService } from './serverdata/server-data.service'
 import { VideoService } from './video.service';
 import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'

@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material';
 
 import * as Parser from '../../shared/csv-parser';
 import { Table } from '../../shared/schema';
-import { ServerApiService } from '../../shared/serverapi.service';
+import { ServerApiService } from '../../shared';
 import { ResponseTabularInsertDescription } from '../../shared/schema/schema.description';
 
 import { ProjectService } from '../project.service';
