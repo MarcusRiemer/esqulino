@@ -1,0 +1,55 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 22f0000d-394e-4b10-ab9e-5756bbad3b60
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Hörspieltitel mit ...
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"tables": [{"name": "tableIntroduction", "language": "sql",
+    "properties": {"name": "Geschichte"}}]}, "language": "sql"}], "where": [{"name":
+    "where", "children": {"expressions": [{"name": "binaryExpression", "children":
+    {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
+    "Geschichte_Name", "refTableName": "Geschichte"}}], "rhs": [{"name": "parameter",
+    "language": "sql", "properties": {"name": "titel"}}], "operator": [{"name": "relationalOperator",
+    "language": "sql", "properties": {"operator": "LIKE"}}]}, "language": "sql"}]},
+    "language": "sql"}], "select": [{"name": "select", "children": {"columns": [{"name":
+    "columnName", "language": "sql", "properties": {"columnName": "Geschichte_Name",
+    "refTableName": "Geschichte"}}, {"name": "columnName", "language": "sql", "properties":
+    {"columnName": "Geschichte_Nr_Europa", "refTableName": "Geschichte"}}, {"name":
+    "columnName", "language": "sql", "properties": {"columnName": "Geschichte_Jahr_Europa",
+    "refTableName": "Geschichte"}}]}, "language": "sql"}], "groupBy": []}, "language":
+    "sql"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-11-25 11:27:18.64507'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-11-25 11:30:14.480794'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    SELECT Geschichte.Geschichte_Name, Geschichte.Geschichte_Nr_Europa, Geschichte.Geschichte_Jahr_Europa
+    FROM Geschichte
+    WHERE (Geschichte.Geschichte_Name LIKE :titel)
+new_record: false
+active_record_yaml_version: 2
