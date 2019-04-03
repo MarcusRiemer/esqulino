@@ -7,7 +7,7 @@ import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
 
 import { JsonSchemaValidationService } from '../json-schema-validation.service'
 
-import { ServerDataService } from '../../shared/server-data.service'
+import { ServerDataService } from '../../shared'
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
