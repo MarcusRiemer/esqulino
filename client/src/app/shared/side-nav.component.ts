@@ -18,4 +18,3 @@ export class SideNavComponent {
   // The actual locale that is currently in use
   readonly locale = this._localeId;
 }
- 

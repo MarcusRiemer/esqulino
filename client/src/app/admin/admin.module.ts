@@ -29,6 +29,8 @@ import { EditSingleTraitScopeComponent } from './block-language/edit-single-trai
 import { ErrorListComponent } from './block-language/error-list.component'
 
 import { CreateGrammarComponent } from './grammar/create-grammar.component'
+import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
+import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
 
 const materialModules = [
   MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule
@@ -56,6 +58,8 @@ const materialModules = [
     EditSingleTraitScopeComponent,
     LinkGrammarComponent,
     JsonEditor,
+    OverviewGrammarComponent,
+    OverviewBlockLanguageComponent
   ],
   providers: [
     JsonSchemaValidationService
