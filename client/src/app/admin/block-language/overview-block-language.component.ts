@@ -1,4 +1,4 @@
-import { ServerDataService } from 'src/app/shared/serverdata/server-data.service';
+import { ServerDataService } from '../../shared';
 import { Component } from "@angular/core";
 
 

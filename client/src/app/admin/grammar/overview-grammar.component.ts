@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ServerDataService } from 'src/app/shared/serverdata/server-data.service';
+import { ServerDataService } from '../../shared';
 
 @Component ({
   selector: 'grammar-overview-selector',
