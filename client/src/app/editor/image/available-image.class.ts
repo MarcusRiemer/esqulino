@@ -3,7 +3,7 @@ import { Project } from '../project.service'
 import { ProjectResource, ProjectResourceDescription } from '../../shared/resource'
 import { CURRENT_API_VERSION } from '../../shared/resource.description'
 
-import { ServerApiService } from '../../shared/serverapi.service'
+import { ServerApiService } from '../../shared/'
 
 export interface AvailableImageDescription extends ProjectResourceDescription {
   "author-name": string;

@@ -4,7 +4,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs';
 import { catchError, delay, map, tap } from 'rxjs/operators';
 
-import { ServerApiService } from '../shared/serverapi.service'
+import { ServerApiService } from '../shared'
 import { CodeResource } from '../shared/syntaxtree'
 import { Project } from '../shared/project'
 

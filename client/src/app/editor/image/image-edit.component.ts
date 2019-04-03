@@ -4,7 +4,7 @@ import { Http } from '@angular/http'
 
 import { map } from 'rxjs/operators';
 
-import { ServerApiService } from '../../shared/serverapi.service'
+import { ServerApiService } from '../../shared'
 import { ProjectService } from '../../editor/project.service'
 import { ToolbarService } from '../toolbar.service'
 import { SidebarService } from '../sidebar.service'
@@ -108,4 +108,3 @@ export class ImageEditComponent {
     return (this._lastModified);
   }
 }
-

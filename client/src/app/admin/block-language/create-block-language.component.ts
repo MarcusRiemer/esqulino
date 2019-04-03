@@ -8,8 +8,7 @@ import { BlockLanguageDescription } from '../../shared/block/block-language.desc
 import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../../shared/block/generator/generator'
 
-import { ServerDataService } from '../../shared/server-data.service';
-import { ServerApiService } from '../../shared/serverapi.service';
+import { ServerApiService, ServerDataService } from '../../shared';
 
 /**
  * A comprehensive way to create new block languages

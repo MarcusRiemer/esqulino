@@ -4,7 +4,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material';
 
 import { first, map, tap } from 'rxjs/operators';
 
-import { ServerDataService } from '../../shared/server-data.service';
+import { ServerDataService } from '../../shared';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
 import { FullNodeAttributeDescription, getFullAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
 

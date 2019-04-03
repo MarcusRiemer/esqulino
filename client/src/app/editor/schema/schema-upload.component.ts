@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http'
 import { ActivatedRoute } from '@angular/router';
 
-import { ServerApiService } from '../../shared/serverapi.service'
+import { ServerApiService } from '../../shared/'
 
 import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';
