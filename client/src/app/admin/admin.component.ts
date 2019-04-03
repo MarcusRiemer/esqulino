@@ -33,6 +33,24 @@ export class AdminComponent {
       icon: "puzzle-piece",
     },
     {
+      type: "link",
+      text: {
+        de: "Grammatiken",
+        en: "Grammar",
+      },
+      route: ["/admin/grammar"],
+      icon: "puzzle-piece",
+    },
+    {
+      type: "link",
+      text: {
+        de: "Blocksprachen",
+        en: "Block languages",
+      },
+      route: ["/admin/block-language"],
+      icon: "puzzle-piece",
+    },
+    {
       type: "external",
       text: {
         de: "Anleitung 🇬🇧",
