@@ -48,6 +48,19 @@ export class BlockRenderBlockComponent {
   }
 
   /**
+   * @return True, if embracing should be enabled for things dropped on this block
+   */
+  get allowEmbrace() {
+    // This is currently a hack: We control embracing globally based on an URL parameter
+    if (window && window.location) {
+      const url = new URL(window.location.href);
+      return (url.searchParams.has("allowEmbrace"));
+    } else {
+      return (false);
+    }
+  }
+
+  /**
    * @return The location a drop should occur in.
    */
   get dropLocation() {
@@ -93,7 +106,7 @@ export class BlockRenderBlockComponent {
   onMouseEnter(evt: MouseEvent) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
-        allowAnyParent: true, allowEmbrace: false, allowAppend: true, allowReplace: true
+        allowAnyParent: true, allowEmbrace: this.allowEmbrace, allowAppend: true, allowReplace: true
       });
     }
   }
