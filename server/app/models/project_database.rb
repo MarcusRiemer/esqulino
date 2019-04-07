@@ -1,9 +1,9 @@
-require 'fileutils'
+require "fileutils"
 
-require_dependency 'error'
-require_dependency 'schema_alter'
-require_dependency 'schema_utils'
-require_dependency 'schema'
+require_dependency "error"
+require_dependency "schema_alter"
+require_dependency "schema_utils"
+require_dependency "schema"
 
 # This is a database that is part of a certain project. In the current state
 # of affairs we only support SQLite for these databases, but this might change
@@ -46,7 +46,7 @@ class ProjectDatabase < ApplicationRecord
 
   # Retrieves the schema for a specific table
   def table_schema(table_name)
-    schema.find{ |table| table['name'] == table_name} unless schema.nil?
+    schema.find { |table| table["name"] == table_name } unless schema.nil?
   end
 
   # Creates a new table in the schema of this database
@@ -54,8 +54,8 @@ class ProjectDatabase < ApplicationRecord
   # @param table_description
   #   The table with all its properties, see the 'TableDescription' schema
   def table_create(table_description)
-    if table_exists? table_description['name'] then
-      raise CreateDuplicateTableNameDatabaseError.new(self, table_description['name'])
+    if table_exists? table_description["name"]
+      raise CreateDuplicateTableNameDatabaseError.new(self, table_description["name"])
     else
       db_connection_admin.execute(table_to_create_statement(table_description))
       refresh_schema
@@ -65,7 +65,7 @@ class ProjectDatabase < ApplicationRecord
   # Alters the database according to the given commands
   def table_alter(table_name, alter_commands_description)
     schema = table_schema(table_name)
-    if schema then
+    if schema
       # Do the actual altering and store the new schema
       database_alter_schema(self, table_name, alter_commands_description)
       refresh_schema
@@ -79,7 +79,7 @@ class ProjectDatabase < ApplicationRecord
   # @param table_description
   #   The table with all its properties, see the 'TableDescription' schema
   def table_delete(table_name)
-    if table_exists? table_name then
+    if table_exists? table_name
       db_connection_admin.execute("DROP TABLE #{table_name}")
       refresh_schema
     else
@@ -94,9 +94,9 @@ class ProjectDatabase < ApplicationRecord
   # @param amount [Integer] The number of rows to fetch.
   # @return [Array<Array<String>>]] An array of strings for each row
   def table_row_data(table_name, from, amount)
-    if table_exists? table_name then
+    if table_exists? table_name
       result = execute_sql("SELECT * FROM #{table_name} LIMIT ? OFFSET ?", [amount.to_i, from.to_i], true)
-      result['rows']
+      result["rows"]
     else
       raise UnknownDatabaseTableError.new(self, table_name)
     end
@@ -107,9 +107,9 @@ class ProjectDatabase < ApplicationRecord
   # @param table_name [string] The name of the table.
   # @return [Integer] The number of rows
   def table_row_count(table_name)
-    if table_exists? table_name then
+    if table_exists? table_name
       result = execute_sql("SELECT COUNT(*) FROM #{table_name}", [], true)
-      result['rows'].first.first.to_i
+      result["rows"].first.first.to_i
     else
       raise UnknownDatabaseTableError.new(self, table_name)
     end
@@ -120,13 +120,13 @@ class ProjectDatabase < ApplicationRecord
   # @param table_name [string] The name of the table.
   # @param column_names [Array<string>] The name of the columns
   def table_bulk_insert(table_name, column_names, rows)
-    if table_exists? table_name then
+    if table_exists? table_name
       sql_column_names = column_names
-                           .map {|n| "'#{n}'" }
-                           .join(',')
+        .map { |n| "'#{n}'" }
+        .join(",")
       sql_data = rows
-                   .map { |r| "(" + r.map {|n| "'#{n}'" }.join(',') + ")" }
-                   .join(",\n")
+        .map { |r| "(" + r.map { |n| "'#{n}'" }.join(",") + ")" }
+        .join(",\n")
 
       sql = "INSERT INTO '#{table_name}' (#{sql_column_names}) VALUES\n#{sql_data}"
 
@@ -140,7 +140,7 @@ class ProjectDatabase < ApplicationRecord
   def refresh_schema
     # Not so nice: Explicitly calling this complicated version of serializable_hash here
     self.schema = database_describe_schema(db_connection_admin)
-                    .map { |t| t.serializable_hash(include: { columns: { }, foreign_keys: {} }) }
+      .map { |t| t.serializable_hash(include: { columns: {}, foreign_keys: {} }) }
   end
 
   # Refreshes and persists a possibly changed schema.
@@ -163,11 +163,11 @@ class ProjectDatabase < ApplicationRecord
       begin
         result = db.execute2(sql, params)
         return {
-          'columns' => result.first,
-          'rows' => result.drop(1),
-          'totalCount' => result.length - 1,
-          'changes' => db.changes
-        }
+                 "columns" => result.first,
+                 "rows" => result.drop(1),
+                 "totalCount" => result.length - 1,
+                 "changes" => db.changes,
+               }
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault
         # of the caller in some way.
@@ -182,17 +182,17 @@ class ProjectDatabase < ApplicationRecord
 
   # This method is hopefully unnecessary
   def flush!
-    if not @db_connection.nil? then
+    if not @db_connection.nil?
       @db_connection.close
       @db_connection = nil
     end
 
-    if not @db_connection_readonly.nil? then
+    if not @db_connection_readonly.nil?
       @db_connection_readonly.close
       @db_connection_readonly = nil
     end
 
-    if not @db_connection_admin.nil? then
+    if not @db_connection_admin.nil?
       @db_connection_admin.close
       @db_connection_admin = nil
     end
@@ -250,7 +250,7 @@ end
 class AlterProjectDatabaseError < EsqulinoError
   # @param project_database [ProjectDatabase]
   #   The database the error occured in
-  def initialize(project_database, data, code=400)
+  def initialize(project_database, data, code = 400)
     super "Could not alter database \"#{project_database.id}\" of project \"#{project_database.project_id}\"", code
     @data = data
   end
