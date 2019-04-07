@@ -35,6 +35,17 @@ module Seed
       nil
     end
 
+    # load_id can be UUID(id) or slug
+    def load_id
+      if load_seed_id
+        if string_is_uuid? load_seed_id.to_s
+          load_seed_id.to_s
+        else
+          find_load_seed_id(load_seed_id.to_s)
+        end
+      end
+    end
+
     # if seed_id is an id or slug of the object, return the object
     def find_seed(slug_or_id)
       seed_data = seed_name.where(id: slug_or_id).or(seed_name.where(slug: slug_or_id))
@@ -51,15 +62,16 @@ module Seed
     # this directory is used to store particular seed model related seeds under the that seed_id,
     # such as store image for ProjectSeed
     def seed_specific_directory
-      File.join seed_directory, load_seed_id || seed.id
+      File.join seed_directory, load_id || seed.id
     end
 
     # Abstract methods for seed specific cases
     def after_store_seed; end
+    def after_load_seed; end
 
     # Constructs a storing seed or loading seed file path
     def seed_file_path
-      File.join seed_directory, "#{load_seed_id || seed.id}.yaml"
+      File.join seed_directory, "#{load_id || seed.id}.yaml"
     end
 
     # if there is any depedency of a particular Seed model, it creates a manifest file
@@ -128,32 +140,34 @@ module Seed
     # load dependecies of a particular project if there is any
     def start_load
       upsert_seed_data
-      dep = File.join seed_directory, "#{load_seed_id}-deps.yaml"
+      dep = File.join seed_directory, "#{load_id}-deps.yaml"
       load_dependencies if File.exist? dep
     end
 
     # load yaml dump as seed instaces ready to be loaded
     def seed_instance
+      raise "Could not find project with slug or ID \"#{load_id}\"" unless File.exist? seed_file_path
       YAML.load_file(seed_file_path)
     end
 
     # raise if the seed_instance class does not match with the seed_name (model or Identifier) are not matched
-    # instantiate a new record if there is none by the provided load_seed_id or find the the existing one
+    # instantiate a new record if there is none by the provided load_id or find the the existing one
     # save the instance if theere is a change
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
       puts " Upserting data for #{seed_name}"
-      db_instance = seed_name.find_or_initialize_by(id: load_seed_id)
+      db_instance = seed_name.find_or_initialize_by(id: load_id)
       db_instance.assign_attributes(seed_instance.attributes)
       db_instance.save! if db_instance.changed?
       db_instance
       puts "Done with #{seed_name}"
+      after_load_seed
     end
 
     # reads the dependency file and takes the seed_id and seed class
     # call the seed class with upsert_seed_data method to load the dependent data tables
     def load_dependencies
-      deps = File.join seed_directory, "#{load_seed_id}-deps.yaml"
+      deps = File.join seed_directory, "#{load_id}-deps.yaml"
       deps = YAML.load_file(deps)
       deps.each do |_, seed_id, seed|
         seed.new(seed_id).upsert_seed_data
@@ -173,6 +187,19 @@ module Seed
     # builds the load directroy used for loading all data under it outside the scope of class instance
     def self.load_directory
       File.join BASE_SEED_DIRECTORY, self::SEED_DIRECTORY
+    end
+
+    private
+
+    def find_load_seed_id(load_seed_id)
+      Dir.glob(File.join seed_directory, "*.yaml").each do |f|
+        next if f =~ /deps/
+        seed_file_data = YAML.load_file(f)
+        return load_seed_id unless seed_file_data.has_attribute?(:slug)
+        if seed_file_data.slug == load_seed_id
+          return seed_file_data.id
+        end
+      end
     end
   end
 end
