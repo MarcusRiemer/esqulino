@@ -1,11 +1,12 @@
 import { Routes, RouterModule } from '@angular/router'
 
-import { AdminComponent } from './admin.component'
+import { AdminComponent, adminItems } from './admin.component'
 import { AdminOverviewComponent } from './admin-overview.component'
 import { EditGrammarComponent } from './edit-grammar.component'
 import { EditBlockLanguageComponent } from './block-language/edit-block-language.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component'
+import { NavSiteComponent } from '../shared/nav-page.component';
 
 export const adminRoutes: Routes = [
   {
@@ -16,6 +17,11 @@ export const adminRoutes: Routes = [
         path: '',
         component: AdminOverviewComponent,
         pathMatch: 'full'
+      },
+      {
+        path: 'nav',
+        component: NavSiteComponent,
+        data: {items: adminItems}
       },
       {
         path: 'grammar',
@@ -32,7 +38,7 @@ export const adminRoutes: Routes = [
       {
         path: 'block-language/:blockLanguageId',
         component: EditBlockLanguageComponent
-      },
+      }
     ]
   }
 ];

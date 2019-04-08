@@ -1,15 +1,11 @@
-<style>
-  ng-content {
-    display:contents
-  }
-</style>
 
+<div *ngIf="showMessage" class="alert alert-danger" role="alert">
+  <strong>{{ headline }}</strong><br>
+  {{ message }}
+</div>
 
-  <div *ngIf="buildOnServer" class="alert alert-danger" role="alert">
-    {{ warn_message }} | {{ buildOnServer }}
-  </div>
-
-
-<ng-content *ngIf="!buildOnServer">
+<ng-content *ngIf="jsDisabled" select="[inactive]">
 
 </ng-content>
+
+<ng-content *ngIf="!jsDisabled || forceDisplay" select="[active]"></ng-content>

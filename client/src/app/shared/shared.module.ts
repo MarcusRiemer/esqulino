@@ -27,8 +27,8 @@ import { ToolbarService } from './toolbar.service'
 import { ChangeLanguageComponent } from './change-language.component';
 import { JavascriptRequiredWrapperComponent } from './javascript-required-wrapper.component';
 import { SideNavComponent } from './side-nav.component';
-import { SelectLanguagePageComponent } from './select-language-page.component';
 import { NavSiteComponent } from './nav-page.component';
+import { SelectLanguagePageComponent } from './select-language-page.component';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -60,9 +60,10 @@ const materialModules = [
     FlashMessageListComponent,
     ToolbarComponent,
     ChangeLanguageComponent,
+    JavascriptRequiredWrapperComponent,
     SideNavComponent,
-    SelectLanguagePageComponent,
-    NavSiteComponent
+    NavSiteComponent,
+    SelectLanguagePageComponent
   ],
   exports: [
     CommonModule,
@@ -75,6 +76,7 @@ const materialModules = [
     FlashMessageListComponent,
     DefaultValuePipe,
     ChangeLanguageComponent,
+    JavascriptRequiredWrapperComponent,
     SideNavComponent,
     NavSiteComponent,
     SelectLanguagePageComponent
