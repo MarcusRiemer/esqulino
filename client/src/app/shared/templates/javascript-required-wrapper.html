@@ -1,0 +1,15 @@
+<style>
+  ng-content {
+    display:contents
+  }
+</style>
+
+
+  <div *ngIf="buildOnServer" class="alert alert-danger" role="alert">
+    {{ warn_message }} | {{ buildOnServer }}
+  </div>
+
+
+<ng-content *ngIf="!buildOnServer">
+
+</ng-content>
