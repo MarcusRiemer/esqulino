@@ -2,7 +2,8 @@ default: &default
   adapter: postgresql
   database: esqulino
   host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
-  username: esqulino
+  username: <%= ENV['DATABASE_USER'] || 'esqulino' %>
+  password: <%= ENV['DATABASE_PASS'] || '' %>
   encoding: unicode
 
 development:
