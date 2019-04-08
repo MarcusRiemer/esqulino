@@ -1,13 +1,30 @@
 <app-toolbar>
-  <ng-container position="start">
-    <!-- Big backlink -->
-    <a mat-raised-button [routerLink]="'/admin'">
-      Administration
-    </a>
+  <ng-container position="start"></ng-container>
+
+   <!-- Toggle for the menu -->
+  <ng-container position="toggle">
+    <button mat-icon-button (click)="sideNav.toggle()">
+      <span class="fa fa-bars" aria-hidden="true"></span>
+    </button>
   </ng-container>
+  <!-- Language selection -->
+  <ng-container position="end"></ng-container>
 </app-toolbar>
-<div class="container-fluid admin">
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-</div>
+
+<!-- Sidebar -->
+<mat-sidenav-container>
+  <mat-sidenav #sideNav
+    [mode]="sidebarMode$ | async"
+    [opened]="!(isMobile$ | async)">
+    <!-- Sidebar item output -->
+    <side-nav-selector [items]="adminItems"></side-nav-selector>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <div class="container-fluid admin">
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
