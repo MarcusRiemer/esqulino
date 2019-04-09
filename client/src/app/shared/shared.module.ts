@@ -25,7 +25,7 @@ import { VideoService } from './video.service';
 import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
 import { ChangeLanguageComponent } from './change-language.component';
-import { JavascriptRequiredWrapperComponent } from './javascript-required-wrapper.component';
+import { JavascriptRequiredComponent } from './javascript-required.component';
 import { SideNavComponent } from './side-nav.component';
 import { NavSiteComponent } from './nav-page.component';
 
@@ -59,7 +59,7 @@ const materialModules = [
     FlashMessageListComponent,
     ToolbarComponent,
     ChangeLanguageComponent,
-    JavascriptRequiredWrapperComponent,
+    JavascriptRequiredComponent,
     SideNavComponent,
     NavSiteComponent
   ],
@@ -74,7 +74,7 @@ const materialModules = [
     FlashMessageListComponent,
     DefaultValuePipe,
     ChangeLanguageComponent,
-    JavascriptRequiredWrapperComponent,
+    JavascriptRequiredComponent,
     SideNavComponent,
     NavSiteComponent
   ]

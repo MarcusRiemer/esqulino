@@ -1,16 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChangeLanguageComponent } from '../change-language.component';
+import { MatMenuModule, MatButtonModule } from '@angular/material'
 
-describe('HomeComponent', () => {
+import { ChangeLanguageComponent } from '../change-language.component';
+import { JavascriptRequiredComponent } from '../javascript-required.component';
+
+describe('ChangeLanguageComponent', () => {
   let component: ChangeLanguageComponent;
   let fixture: ComponentFixture<ChangeLanguageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChangeLanguageComponent ]
+      imports: [
+        MatMenuModule,
+        MatButtonModule
+      ],
+      declarations: [
+        ChangeLanguageComponent,
+        JavascriptRequiredComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
