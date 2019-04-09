@@ -118,7 +118,7 @@ module Seed
     # calls the dependent model on parent using send and serialize it
     # recursively calls store method to handle all the dependencies
     def store_dependencies(processed)
-      dependencies.each do |dependent_seed_name, seed_model_attribute|
+      dependencies.each do |seed_model_attribute, dependent_seed_name|
         data = seed.send(seed_model_attribute)
         to_serialize = (data || [])
         if not to_serialize.respond_to?(:each)

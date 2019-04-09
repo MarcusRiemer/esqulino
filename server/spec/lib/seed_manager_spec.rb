@@ -328,6 +328,7 @@ RSpec.describe "Seed Manager" do
       expect(identifying_attributes(cOrig)).to eq identifying_attributes(cLoad)
     end
 
+    # need to  migrate
     it "stores and reloads a project with a single code resource (UPDATE)" do
       pOrig = FactoryBot.create(:project, name: "Test")
       cOrig = FactoryBot.create(:code_resource, project: pOrig)
@@ -381,7 +382,6 @@ RSpec.describe "Seed Manager" do
       expect(identifying_attributes(sOrig)).to eq identifying_attributes(sLoad)
     end
 
-    #TODO: Why do we need to solve circular dependency?
     it "stores, destroys and loads a project with a single database (CREATE)" do
       pOrig = FactoryBot.create(:project, name: "Test")
       dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)
@@ -395,7 +395,6 @@ RSpec.describe "Seed Manager" do
         dOrig.destroy!
         pOrig.destroy!
       end
-      # binding.pry
 
       pLoad = seedManager.load_project(pOrig.id)
       pLoadData = Project.find_by(id: pOrig.id)
@@ -464,7 +463,7 @@ RSpec.describe "Seed Manager" do
       # Ensure that the databases are identical again
       expect(FileUtils.compare_file(seed_db_file, data_db_file)).to be true
     end
-
+    # need to migrate
     it "fails to load a project with a code resource with an unavailable block language" do
       pOrig = FactoryBot.create(:project, name: "Test")
       cOrig = FactoryBot.create(:code_resource, project: pOrig)
@@ -486,7 +485,7 @@ RSpec.describe "Seed Manager" do
       # Loading the project must now result in an error
       expect { seedManager.load_project(pOrig.id) }.to raise_error(ActiveRecord::RecordInvalid)
     end
-
+    # need to migrate
     it "moves back the data folder if an error occurs" do
       pOrig = FactoryBot.create(:project, name: "Test")
       dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)

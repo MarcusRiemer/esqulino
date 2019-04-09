@@ -9,11 +9,11 @@ module Seed
     # takes an optional arguments dependencies as hash with key as the Model and value as the directory
     def initialize(seed_id)
       super(seed_id, dependencies = {
-        ProjectUsesBlockLanguageSeed => "project_uses_block_languages",
-        CodeResourceSeed => "code_resources",
-        ProjectSourceSeed => "project_sources",
-        ProjectDatabaseSeed => "project_databases",
-        ProjectDatabaseSeed => "default_database",
+        "project_uses_block_languages" => ProjectUsesBlockLanguageSeed,
+        "code_resources" => CodeResourceSeed,
+        "project_sources" => ProjectSourceSeed,
+        "project_databases" => ProjectDatabaseSeed,
+        "default_database" => ProjectDatabaseSeed,
       }, defer_referential_checks = true)
     end
 
