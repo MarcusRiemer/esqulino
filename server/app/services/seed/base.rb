@@ -29,6 +29,10 @@ module Seed
       @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : find_seed(seed_id)
     end
 
+    def loaded_seed
+      seed_name.find_by!(id: load_id)
+    end
+
     # When loading a seed, it's usualy the case that the provided seed_id is a yaml file
     # returns the seed_id as load_seed_id extracted form the yaml file
     # otherwise return nil
@@ -71,6 +75,7 @@ module Seed
     # Abstract methods for seed specific cases
     def after_store_seed; end
     def after_load_seed; end
+    def move_data_from_tmp_to_data_directory; end
 
     # Constructs a storing seed or loading seed file path
     def seed_file_path
@@ -158,6 +163,7 @@ module Seed
         db_instance.touch
         db_instance.save!
       end
+      move_data_from_tmp_to_data_directory
     end
 
     # load yaml dump as seed instaces ready to be loaded
@@ -171,7 +177,7 @@ module Seed
     # save the instance if theere is a change
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
-      puts " Upserting data for #{seed_name}"
+      Rails.logger.info " Upserting data for #{seed_name}"
 
       db_instance = seed_name.find_or_initialize_by(id: load_id)
       db_instance.assign_attributes(seed_instance.attributes)
