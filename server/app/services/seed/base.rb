@@ -156,10 +156,11 @@ module Seed
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
       puts " Upserting data for #{seed_name}"
-      db_instance = seed_name.find_or_initialize_by(id: load_id)
-      db_instance.assign_attributes(seed_instance.attributes)
-      db_instance.save! if db_instance.changed?
-      db_instance
+      ActiveRecord::Base.connection.disable_referential_integrity do
+        db_instance = seed_name.find_or_initialize_by(id: load_id)
+        db_instance.assign_attributes(seed_instance.attributes)
+        db_instance.save! if db_instance.changed?
+      end
       puts "Done with #{seed_name}"
       after_load_seed
     end

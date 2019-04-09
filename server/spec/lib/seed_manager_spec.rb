@@ -382,18 +382,20 @@ RSpec.describe "Seed Manager" do
     end
 
     #TODO: Why do we need to solve circular dependency?
-    xit "stores, destroys and loads a project with a single database (CREATE)" do
+    it "stores, destroys and loads a project with a single database (CREATE)" do
       pOrig = FactoryBot.create(:project, name: "Test")
       dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)
 
       seedManager.store_project(pOrig)
 
       # Break circular dependency
-      pOrig.default_database = nil
-      pOrig.save!
-
-      dOrig.destroy!
-      pOrig.destroy!
+      #pOrig.default_database = nil
+      #pOrig.save!
+      ActiveRecord::Base.connection.disable_referential_integrity do
+        dOrig.destroy!
+        pOrig.destroy!
+      end
+      # binding.pry
 
       pLoad = seedManager.load_project(pOrig.id)
       pLoadData = Project.find_by(id: pOrig.id)
@@ -404,7 +406,8 @@ RSpec.describe "Seed Manager" do
       expect(identifying_attributes(dOrig)).to eq identifying_attributes(dLoad)
 
       # Ensure that the databases are identical
-      seed_db_file = seedManager.seed_project_databases_sqlite_file(pOrig.id, dOrig.id)
+      seed_db_file = File.join Seed::ProjectDatabaseSeed.load_directory, "#{dOrig.id}.sqlite"
+      # seed_db_file = seedManager.seed_project_databases_sqlite_file(pOrig.id, dOrig.id)
       data_db_file = dOrig.sqlite_file_path
       expect(FileUtils.compare_file(seed_db_file, data_db_file)).to be true
     end

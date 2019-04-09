@@ -23,7 +23,7 @@ module Seed
       Rails.logger.info "Copying database file #{seed.project.data_directory_path}"
       seed_file = File.join seed_directory, "#{seed.id}.yaml"
       sqlite_seed_file = Pathname(seed_file).sub_ext(".sqlite")
-      database_target_folder = File.join seed.project.data_directory_path, "databases"
+      database_target_folder = File.join seed.project.data_directory_path, SEED_DIRECTORY
       FileUtils.mkdir_p database_target_folder
       FileUtils.cp(sqlite_seed_file, database_target_folder)
     end
