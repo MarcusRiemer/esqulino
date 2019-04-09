@@ -13,7 +13,7 @@ RSpec.describe Seed::BlockLanguageGeneratorSeed do
     FileUtils.rm_rf(seed_data_dir, :secure => true)
   end
 
-  describe "grammar seed" do
+  describe "blcok language generator seed" do
     context "when payload is grammar object"
     let(:payload) { block_language_generator }
     it "returns object" do

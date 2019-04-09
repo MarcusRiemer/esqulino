@@ -278,7 +278,7 @@ RSpec.describe Seed::ProjectSeed do
 
         pOrig.destroy!
 
-        expect { Seed::ProjectSeed.new(pOrig.id).start_load }.to raise_error
+        expect { Seed::ProjectSeed.new(pOrig.id).start_load }.to raise_error(ActiveRecord::InvalidForeignKey)
       end
     end
   end
