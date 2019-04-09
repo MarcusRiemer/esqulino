@@ -177,7 +177,7 @@ module Seed
       db_instance.assign_attributes(seed_instance.attributes)
       db_instance.save! if db_instance.changed?
 
-      puts "Done with #{seed_name}"
+      Rails.logger.info "Done with #{seed_name}"
       after_load_seed
     end
 
