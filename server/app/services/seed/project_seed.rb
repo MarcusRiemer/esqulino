@@ -14,7 +14,7 @@ module Seed
         ProjectSourceSeed => "project_sources",
         ProjectDatabaseSeed => "project_databases",
         ProjectDatabaseSeed => "default_database",
-      })
+      }, defer_referential_checks = true)
     end
 
     # define base's abstract class to copy images of the project in project directory with under the project file

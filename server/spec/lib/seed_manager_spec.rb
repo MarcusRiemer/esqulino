@@ -412,6 +412,19 @@ RSpec.describe "Seed Manager" do
       expect(FileUtils.compare_file(seed_db_file, data_db_file)).to be true
     end
 
+    it "Does not load a project with a non existant database (CREATE)" do
+      pOrig = FactoryBot.create(:project, name: "Test")
+
+      # Set a database that does not exist
+      pOrig.default_database_id = "375b793b-7ae6-4f9e-ad0e-28d8e62a97b1"
+
+      seedManager.store_project(pOrig)
+
+      pOrig.destroy!
+
+      expect { seedManager.load_project(pOrig.id) }.to raise_error
+    end
+
     it "stores and reloads a project with a single database (UPDATE)" do
       pOrig = FactoryBot.create(:project, name: "Test")
       dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)

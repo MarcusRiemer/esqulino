@@ -16,9 +16,10 @@ module Seed
 
     # @param seed_id is either an id or an object and dependencies param with default value empty array
     # dependencies are passed if there is any
-    def initialize(seed_id, dependencies = [])
+    def initialize(seed_id, dependencies = {}, defer_referential_checks = false)
       @seed_id = seed_id
       @dependencies = dependencies
+      @defer_referential_checks = defer_referential_checks
     end
 
     # returns seed as Object of the model if one is not provided
@@ -141,9 +142,22 @@ module Seed
     # Loads the data from the yaml to database
     # load dependecies of a particular project if there is any
     def start_load
-      upsert_seed_data
-      dep = File.join seed_directory, "#{load_id}-deps.yaml"
-      load_dependencies if File.exist? dep
+      run_within_correct_transaction do
+        upsert_seed_data
+        dep = File.join seed_directory, "#{load_id}-deps.yaml"
+        load_dependencies if File.exist? dep
+      end
+
+      if @defer_referential_checks
+        # TODO: Horrible hack to ensure that the record inserted was actually valid
+        # Nicer: Defer the constraint checks instead of outright disabling them,
+        #        but this does not seem to be possible from Rails.
+        # See:  https://wiki.postgresql.org/wiki/Referential_Integrity_Tutorial_%26_Hacking_the_Referential_Integrity_tables#Deferring_transactions
+        # See also: https://github.com/nullobject/rein
+        db_instance = seed_name.find_or_initialize_by(id: load_id)
+        db_instance.touch
+        db_instance.save!
+      end
     end
 
     # load yaml dump as seed instaces ready to be loaded
@@ -158,11 +172,11 @@ module Seed
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
       puts " Upserting data for #{seed_name}"
-      ActiveRecord::Base.connection.disable_referential_integrity do
-        db_instance = seed_name.find_or_initialize_by(id: load_id)
-        db_instance.assign_attributes(seed_instance.attributes)
-        db_instance.save! if db_instance.changed?
-      end
+
+      db_instance = seed_name.find_or_initialize_by(id: load_id)
+      db_instance.assign_attributes(seed_instance.attributes)
+      db_instance.save! if db_instance.changed?
+
       puts "Done with #{seed_name}"
       after_load_seed
     end
@@ -202,6 +216,16 @@ module Seed
         if seed_file_data.slug == load_seed_id
           return seed_file_data.id
         end
+      end
+    end
+
+    def run_within_correct_transaction
+      if @defer_referential_checks
+        ActiveRecord::Base.connection.disable_referential_integrity do
+          yield
+        end
+      else
+        yield
       end
     end
   end
