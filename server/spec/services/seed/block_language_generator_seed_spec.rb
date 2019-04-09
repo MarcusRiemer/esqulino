@@ -4,12 +4,12 @@ require "fileutils"    # To ease file comparision
 
 RSpec.describe Seed::BlockLanguageGeneratorSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino["seed"]["data_dir"] }
-  let!(:block_language_generator) { FactoryBot.create(:block_language_generator, name: "Test Grammar") }
-  let!(:payload) { block_language_generator }
+  let(:block_language_generator) { FactoryBot.create(:block_language_generator) }
+  let(:payload) { block_language_generator }
 
-  let!(:subject) { described_class.new(payload) }
+  let(:subject) { described_class.new(payload) }
 
-  before do
+  before(:each) do
     FileUtils.rm_rf(seed_data_dir, :secure => true)
   end
 
