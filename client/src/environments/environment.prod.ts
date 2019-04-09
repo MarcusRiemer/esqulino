@@ -3,6 +3,7 @@ import * as VERSION from './version'
 
 export const environment: EnvironmentDescription = {
   production: true,
+  canonicalHost: "blattwerkzeug.de",
   apiEndpoint: "/api",
   piwik: {
     host: "https://piwik.blattwerkzeug.de",
