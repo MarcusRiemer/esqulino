@@ -11,13 +11,14 @@ function localeToFlag(locale: string): string {
   }
 }
 
+// TODO: Use `canonicalHost` from environment
+// TODO: Use protocol relative URL (`//`), do *not* write "http" or "https"
 export const locales = [
-  {token: 'de', link: 'http://de.localhost:4000', flag: localeToFlag('de')},
-  {token: 'en', link: 'http://en.localhost:4000', flag: localeToFlag('en')},
+  { token: 'de', link: 'http://de.localhost:4000', flag: localeToFlag('de') },
+  { token: 'en', link: 'http://en.localhost:4000', flag: localeToFlag('en') },
 ]
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'natural-language-selector',
   templateUrl: './templates/change-language.html'
 })

@@ -1,5 +1,7 @@
 export interface EnvironmentDescription {
   production: boolean;
+  // Host-part of the URL where the project is available
+  canonicalHost: string;
   // URL-prefix for all API requests
   apiEndpoint: string;
   // Find out which part of the app are actually used
