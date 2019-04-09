@@ -25,5 +25,8 @@ module Seed
         FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
       end
     end
+
+    # TODO: Hook to run after all dependencies have been loaded
+    # FileUtils.mv path_to_data_directory(seed.id) seed.data_directory_path
   end
 end
