@@ -14,8 +14,10 @@ module Seed
       self.class::SEED_IDENTIFIER
     end
 
-    # @param seed_id is either an id or an object and dependencies param with default value empty array
-    # dependencies are passed if there is any
+    # @param seed_id UUID, is either an id or an object and dependencies param with default value empty array
+    # @param dependencies {}, is an empty hash by default unless any seed class provides any dependecy hash
+    # @param defer_referential_checks boolean, is false by default unleass any seed class provides other value
+    # based on seed models foreign key constraints
     def initialize(seed_id, dependencies = {}, defer_referential_checks = false)
       @seed_id = seed_id
       @dependencies = dependencies
@@ -29,8 +31,9 @@ module Seed
       @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : find_seed(seed_id)
     end
 
+    # returns seed model object after loading
     def loaded_seed
-      seed_name.find_by!(id: load_id)
+      @loaded_seed_data ||= seed_name.find_by!(id: load_id)
     end
 
     # When loading a seed, it's usualy the case that the provided seed_id is a yaml file
@@ -43,6 +46,7 @@ module Seed
     end
 
     # load_id can be UUID(id) or slug
+    # if load_seed_id is neither a UUID nor a slug `find_load_seed_id` simply returns the provided seed_id during construction
     def load_id
       if load_seed_id
         if string_is_uuid? load_seed_id.to_s
@@ -54,6 +58,7 @@ module Seed
     end
 
     # if seed_id is an id or slug of the object, return the object
+    # @param slug_or_id UUID or Slug provided as seed_id via initialization
     def find_seed(slug_or_id)
       seed_data = seed_name.where(id: slug_or_id).or(seed_name.where(slug: slug_or_id))
       raise ActiveRecord::RecordNotFound, "#{seed_name} not found" if seed_data.nil?
@@ -146,6 +151,9 @@ module Seed
 
     # Loads the data from the yaml to database
     # load dependecies of a particular project if there is any
+    # `run_within_correct_transaction` disables the foreign_key constraints
+    # if @defer_referential_checks is true then save it by just updating the timestamp to enable the referential initigirty of the model
+    # `move_data_from_tmp_to_data_directory` moves the assests from tmp to origial directory after loading process is done
     def start_load
       run_within_correct_transaction do
         upsert_seed_data
@@ -167,6 +175,7 @@ module Seed
     end
 
     # load yaml dump as seed instaces ready to be loaded
+    # raise in case no file is found with provided load_id
     def seed_instance
       raise "Could not find project with slug or ID \"#{load_id}\"" unless File.exist? seed_file_path
       YAML.load_file(seed_file_path)
@@ -175,6 +184,7 @@ module Seed
     # raise if the seed_instance class does not match with the seed_name (model or Identifier) are not matched
     # instantiate a new record if there is none by the provided load_id or find the the existing one
     # save the instance if theere is a change
+    # runs the `after_load_seed` hook when upsert is done
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
       Rails.logger.info " Upserting data for #{seed_name}"
@@ -214,6 +224,9 @@ module Seed
 
     private
 
+    # if `load_seed_id` is not an UUID then it tries to match the slug in yaml files
+    # upon iterating through all the files in correspoinding seed directory it finds a match and returns
+    # returns early before iteration process if seed_file_data YAML dump or seed does not contain any slug attribute
     def find_load_seed_id(load_seed_id)
       Dir.glob(File.join seed_directory, "*.yaml").each do |f|
         next if f =~ /deps/
@@ -225,6 +238,8 @@ module Seed
       end
     end
 
+    # Takes a block and yeild insed `disable_referential_integrity` if defer_referential_checks is true
+    # otherwise just yields the block
     def run_within_correct_transaction
       if @defer_referential_checks
         ActiveRecord::Base.connection.disable_referential_integrity do
