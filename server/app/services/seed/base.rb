@@ -1,4 +1,6 @@
 module Seed
+  require_dependency "util"
+
   class Base
     # base seed class as a parent class designed as a service to store and load seed classes with all the supported methods
     # BASE_SEED_DIRECTORY is a autoloaded pathe defined in sqlino.yaml in the config
