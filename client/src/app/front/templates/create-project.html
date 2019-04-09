@@ -1,4 +1,11 @@
-<app-requires-javascript [headline]="'Warnung'" [message]="'Leider funktioniert das nicht so wie du willst'">
+<app-requires-javascript>
+  <ng-container inactive>
+    <div class="alert alert-danger" role="alert">
+      <strong>Warnung</strong><br>
+      Zum Anlegen von Projekten muss Javascript aktiviert sein.
+    </div>
+  </ng-container>
+  
   <ng-container active>
     <mat-card class="alert-warning mb-3" role="alert">
       <p>

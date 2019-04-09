@@ -1,26 +1,16 @@
-import { isPlatformServer, isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, PLATFORM_ID, Inject, Input, AfterViewInit, SimpleChanges } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, PLATFORM_ID, Inject, Input } from '@angular/core';
 
-import { first } from 'rxjs/operators';
-
-import { BrowserService } from './browser.service';
-import { WSASERVICE_NOT_FOUND } from 'constants';
-import { Subject } from 'rxjs';
-import { showReportDialog } from '@sentry/browser';
-
-
+/**
+ * Wrapper component
+ * Should be used if Javascript is disabled
+ */
 @Component({
     selector: 'app-requires-javascript',
     templateUrl: './templates/javascript-required-wrapper.html'
 })
 export class JavascriptRequiredWrapperComponent {
-    // @ViewChild('content') content: ContentRe
-
-    @Input('headline') readonly headline: String;
-    @Input('message') readonly message: String;
-    @Input('alwaysShowInactive') readonly forceDisplay: boolean;
-    @Input('showMessage') readonly showMessage: boolean = this.showMessage || true;
-
+    @Input() readonly forceDisplay: boolean;
     constructor (
         @Inject(PLATFORM_ID)
         private readonly _platformId: Object

@@ -1,11 +1,5 @@
 
-<div *ngIf="showMessage" class="alert alert-danger" role="alert">
-  <strong>{{ headline }}</strong><br>
-  {{ message }}
-</div>
 
-<ng-content *ngIf="jsDisabled" select="[inactive]">
-
-</ng-content>
+<ng-content *ngIf="jsDisabled" select="[inactive]"></ng-content>
 
 <ng-content *ngIf="!jsDisabled || forceDisplay" select="[active]"></ng-content>

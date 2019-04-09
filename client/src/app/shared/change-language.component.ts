@@ -11,6 +11,10 @@ function localeToFlag(locale: string): string {
   }
 }
 
+export const locales = [
+  {token: 'de', link: 'http://de.localhost:4000', flag: localeToFlag('de')},
+  {token: 'en', link: 'http://en.localhost:4000', flag: localeToFlag('en')},
+]
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -20,6 +24,8 @@ function localeToFlag(locale: string): string {
 export class ChangeLanguageComponent {
   // The actual locale that is currently in use
   readonly locale = this._localeId;
+
+  readonly locales = locales;
 
   // The unicode flag for the current locale
   readonly localeFlag = localeToFlag(this.locale);
