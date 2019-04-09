@@ -19,7 +19,7 @@ module Seed
       FileUtils.cp(seed.sqlite_file_path, seed_directory)
     end
 
-    # store sqlite to a tmp direcotry after laoding
+    # store sqlite from databases path to a tmp direcotry after laoding is finished
     def after_load_seed
       Rails.logger.info "Copying database file #{seed.project.data_directory_path}"
       seed_file = File.join seed_directory, "#{seed.id}.yaml"

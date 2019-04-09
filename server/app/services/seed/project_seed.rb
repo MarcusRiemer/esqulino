@@ -3,6 +3,7 @@ module Seed
     # configuration
     # SEED_IDENTIFER is the class to stored or loaded
     # SEED_DIRECTORY is directory where the data will be stored or loaded
+    # IMAGE_DIRECTORY is the image directory for the data storage
     SEED_IDENTIFIER = Project
     SEED_DIRECTORY = "projects"
     IMAGE_DIRECTORY = "images"
@@ -27,7 +28,7 @@ module Seed
       end
     end
 
-    # store image into a tmp directory after loading
+    # store image from proejct path into a tmp directory after loading
     def after_load_seed
       if File.directory? seed_specific_directory
         Rails.logger.info "  COPY   Images"
