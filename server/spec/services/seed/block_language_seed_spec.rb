@@ -4,12 +4,12 @@ require "fileutils"    # To ease file comparision
 
 RSpec.describe Seed::BlockLanguageSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino["seed"]["data_dir"] }
-  let!(:block_language) { FactoryBot.create(:block_language, name: "Test Grammar") }
-  let!(:payload) { block_language }
+  let(:block_language) { FactoryBot.create(:block_language) }
+  let(:payload) { block_language }
 
-  let!(:subject) { described_class.new(payload) }
+  let(:subject) { described_class.new(payload) }
 
-  before do
+  before(:each) do
     FileUtils.rm_rf(seed_data_dir, :secure => true)
   end
 

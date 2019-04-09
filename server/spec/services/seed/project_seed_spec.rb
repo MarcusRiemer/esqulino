@@ -4,12 +4,12 @@ require "fileutils"    # To ease file comparision
 
 RSpec.describe Seed::ProjectSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino["seed"]["data_dir"] }
-  let!(:project) { FactoryBot.create(:project, name: "Test Proejct") }
-  let!(:payload) { project }
+  let(:project) { FactoryBot.create(:project, name: "Test Proejct") }
+  let(:payload) { project }
 
   let!(:subject) { described_class.new(payload) }
 
-  before do
+  before(:each) do
     FileUtils.rm_rf(seed_data_dir, :secure => true)
   end
 
