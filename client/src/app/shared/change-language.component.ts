@@ -1,5 +1,6 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
 
+import { environment } from './../../environments/environment';
 /**
  * @return The unicode string that represents a flag for the given locale
  */
@@ -14,8 +15,8 @@ function localeToFlag(locale: string): string {
 // TODO: Use `canonicalHost` from environment
 // TODO: Use protocol relative URL (`//`), do *not* write "http" or "https"
 export const locales = [
-  { token: 'de', link: 'http://de.localhost:4000', flag: localeToFlag('de') },
-  { token: 'en', link: 'http://en.localhost:4000', flag: localeToFlag('en') },
+  {token: 'de', name: 'Deutsch' ,subdomain: 'de.' + environment.canonicalHost, flag: localeToFlag('de')},
+  {token: 'en', name: 'English', subdomain: 'en.' + environment.canonicalHost, flag: localeToFlag('en')},
 ]
 
 @Component({

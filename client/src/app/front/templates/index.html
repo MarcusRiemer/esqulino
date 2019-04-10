@@ -2,6 +2,8 @@
   <app-toolbar>
     <!-- Toggle for the menu -->
     <ng-container position="toggle">
+      <!-- Enabled javaScript [active]: sidebar fly in/out -->
+      <!-- Disabled javaScript [inactive]: forwarding to select-nav-page component -->
       <app-requires-javascript>
         <ng-container active>
           <button mat-icon-button (click)="sideNav.toggle()">

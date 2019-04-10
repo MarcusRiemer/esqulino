@@ -4,17 +4,16 @@
         {{ localeFlag }}
     </button>
     <mat-menu #naturalLang="matMenu">
-      <button mat-menu-item (click)="changeLanguage('de')">
-        <span>🇩🇪 Deutsch</span>
-      </button>
-      <button mat-menu-item (click)="changeLanguage('en')">
-        <span>🇬🇧 English</span>
-      </button>
+      <ng-container *ngFor="let localItem of locales">
+        <button mat-menu-item (click)="changeLanguage(localItem.token)">
+          <span>{{localItem.flag}} {{localItem.name}}</span>
+        </button>
+      </ng-container>
     </mat-menu>
   </ng-container>
   <ng-container inactive>
     <ng-container *ngFor="let localItem of locales">
-      <a href='{{localItem.link}}'>
+      <a href='{{localItem.subdomain}}'>
         {{ localItem.flag }}
       </a>
     </ng-container>
