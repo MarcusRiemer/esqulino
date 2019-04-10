@@ -1,0 +1,9 @@
+grammar "trucklino_program" {
+  ...
+  typedef "statement" ::= procedureCall | if | loopFor | loopWhile
+  node "procedureCall" {
+    prop "name" { string }
+    children sequence "arguments" ::= booleanExpression*
+  }
+  ...
+}

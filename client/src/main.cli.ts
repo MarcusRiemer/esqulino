@@ -6,7 +6,7 @@ import { httpRequest } from './cli/request-promise'
 
 import { Tree } from './app/shared/syntaxtree/syntaxtree'
 
-import { ServerApi } from './app/shared/serverapi';
+import { ServerApi } from './app/shared/serverdata/serverapi';
 
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'

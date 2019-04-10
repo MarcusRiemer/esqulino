@@ -52,7 +52,7 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT pokedex.name, pokedex.nummer, COUNT()
     FROM gefangen, pokedex
-    WHERE (gefangen.pokedex_nummer = pokedex.nummer)
+    WHERE gefangen.pokedex_nummer = pokedex.nummer
     GROUP BY pokedex.nummer
 new_record: false
 active_record_yaml_version: 2

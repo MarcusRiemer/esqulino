@@ -23,9 +23,17 @@
     "else": [
       {
         "language": "trucklino_program",
-        "name": "procedureCall",
-        "properties": {
-          "name": "Wait"
+        "name": "ifElse",
+        "children" : {
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Wait"
+              }
+            }
+          ]
         }
       }
     ]

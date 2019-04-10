@@ -22,7 +22,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-26 10:13:30.534056'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-02 21:35:09.981178'
+  value_before_type_cast: '2019-04-10 10:34:51.712966'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: pokemon

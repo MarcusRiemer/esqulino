@@ -1,0 +1,79 @@
+\begin{tikzpicture}
+  \tikzstyle{every node}=[font=\small]
+
+  \begin{class}[text width=5cm]{World}{4.75,0}
+    \attribute{commands}
+    \attribute{sensors}
+
+    \operation{command(command: Command)}
+    \operation{sensor(sensor: Sensor): boolean}
+  \end{class}
+
+  \begin{class}[text width=3cm]{Size}{-1.5,-1}
+    \attribute{width: number}
+    \attribute{height: number}
+  \end{class}
+
+  \begin{class}[text width=3cm]{WorldState}{11,-1.5}
+    \attribute{step: number}
+    \attribute{time: number}
+    \attribute{prev: WorldState}
+  \end{class}
+
+  \begin{class}[text width=4cm]{Tile}{-1,-3.5}
+    \attribute{position: Position}
+    \attribute{freightTarget: Freight}
+
+    \operation{addFreight(freight: Freight)}
+    \operation{removeFreight(): Freight}
+  \end{class}
+
+  \begin{class}[text width=5cm]{Truck}{10,-5}
+    \attribute{position: Position}
+    \attribute{facing: number}
+
+    \operation{loadFreight(freight: Freight)}
+    \operation{unloadFreight(): Freight}
+    \operation{turn(turnDirection: TurnDirection)}
+    \operation{move()}
+  \end{class}
+
+  \begin{class}[text width=6cm]{TrafficLight}{4.75,-10}
+    \attribute{redPhase: number}
+    \attribute{greenPhase: number}
+    \attribute{initial: number}
+
+    \operation{isRed(step: number): boolean}
+    \operation{isGreen(step: number): boolean}
+  \end{class}
+
+  \begin{enumeration}[text width=4cm]{TileOpening}{-1,-8}
+    \attribute{None}
+    \attribute{North}
+    \attribute{East}
+    \attribute{South}
+    \attribute{West}
+  \end{enumeration}
+
+  \begin{enumeration}[text width=3.5cm]{Freight}{4.25,-4.5}
+    \attribute{Red}
+    \attribute{Green}
+    \attribute{Blue}
+  \end{enumeration}
+
+  \begin{enumeration}[text width=4cm]{TurnDirection}{10.5,-10.5}
+    \attribute{Straight}
+    \attribute{Left}
+    \attribute{Right}
+  \end{enumeration}
+
+  \aggregation{World}{size}{1}{Size}
+  \aggregation{World}{states}{*}{WorldState}
+  \aggregation{WorldState}{tiles}{*}{Tile}
+  \aggregation{WorldState}{truck}{1}{Truck}
+  \aggregation{Tile}{trafficLights}{0..4}{TrafficLight}
+  \unidirectionalAssociation{Truck}{turning}{1}{TurnDirection}
+  \unidirectionalAssociation{Tile}{openings}{1..4}{TileOpening}
+  \unidirectionalAssociation{Truck}{freight}{0..*}{Freight}
+  \unidirectionalAssociation{Tile}{freight}{0..*}{Freight}
+\end{tikzpicture}

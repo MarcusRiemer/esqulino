@@ -4,7 +4,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, map, catchError } from 'rxjs/operators';
 
-import { ServerApiService } from '../shared/serverapi.service'
+import { ServerApiService } from '../shared'
 
 import { Project, ProjectService } from './project.service'
 import { Table } from '../shared/schema/'
@@ -68,7 +68,7 @@ export class SchemaService {
   }
 
   /**
-   * @return The change stack that describes changes to the 
+   * @return The change stack that describes changes to the
    *         currently edited table.
    */
   getCurrentlyEditedStack(): TableCommandHolder {

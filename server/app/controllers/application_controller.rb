@@ -21,7 +21,10 @@ class ApplicationController < ActionController::API
       @exception = exception
       @admin_mail = Rails.configuration.sqlino["mail"]["admin"]
 
-      render template: "static_files/message_error", layout: "application_error"
+      render status: @exception.code,
+             template: "static_files/message_error",
+             layout: "application_error",
+             formats: [:html]
     else
       # Simply react to internal errors by presenting them in a JSON representation
       render status: exception.code, json: exception.to_liquid

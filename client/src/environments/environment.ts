@@ -8,12 +8,13 @@ import * as VERSION from './version'
 
 export const environment: EnvironmentDescription = {
   production: false,
+  apiEndpoint: "http://localhost:9292/api",
   piwik: {
     host: "https://piwik.blattwerkzeug.de",
     id: 2
   },
   sentry: {
-    dsn: "http://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
+    dsn: "https://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
     active: false
   },
   version: {

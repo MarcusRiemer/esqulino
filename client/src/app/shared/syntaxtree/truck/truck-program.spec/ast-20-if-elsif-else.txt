@@ -1,0 +1,9 @@
+if (truck.lightIsGreen()) {
+  yield* truck.goForward();
+}
+else if (true) {
+  yield* truck.wait();
+}
+else {
+  yield* truck.wait();
+}

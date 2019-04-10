@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { ServerApiService } from './serverapi.service'
+import { ServerApiService } from './serverdata/serverapi.service'
 import { ProjectFullDescription } from './project.description'
 import { FlashService } from './flash.service'
 

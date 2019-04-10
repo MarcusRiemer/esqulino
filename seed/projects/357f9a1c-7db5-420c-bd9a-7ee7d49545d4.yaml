@@ -25,7 +25,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.693124'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-02 21:35:10.362857'
+  value_before_type_cast: '2019-04-10 10:34:47.523626'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: events

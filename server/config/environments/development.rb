@@ -53,4 +53,16 @@ Rails.application.configure do
     password:  ENV["SMTP_PASS"],
     enable_starttls_auto: true
   }
+
+  # Allow requests from the localhost
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      # The CORS spec is all-or-nothing. It only supports *, null or the exact protocol + domain + port
+      origins '*'
+
+      resource '*',
+               headers: :any,
+               methods: [:get, :post, :put, :patch, :delete, :options, :head]
+    end
+  end
 end

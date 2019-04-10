@@ -1,6 +1,6 @@
 import {
   Node, NodeDescription, NodeLocation, Tree,
-  locationEquals, locationIncLastIndex
+  locationEquals, locationIncLastIndex, locationMatchingLength
 } from './syntaxtree'
 
 describe('locationIncLastIndex(loc)', () => {
@@ -32,30 +32,78 @@ describe('locationEquals(lhs, rhs)', () => {
 
   it('equal locations', () => {
     expect(locationEquals([], [])).toEqual(true);
-    expect(locationEquals([["body", 1]], [["body", 1]])).toEqual(true);
-    expect(locationEquals([["body", 1], ["body", 1]], [["body", 1], ["body", 1]])).toEqual(true);
+    expect(locationEquals([["a", 1]], [["a", 1]])).toEqual(true);
+    expect(locationEquals([["a", 1], ["a", 1]], [["a", 1], ["a", 1]])).toEqual(true);
   });
 
   it('identical location', () => {
-    const both: NodeLocation = [["body", 1], ["body", 1]];
+    const both: NodeLocation = [["a", 1], ["a", 1]];
     expect(locationEquals(both, both)).toEqual(true);
   });
 
   it('different locations', () => {
-    expect(locationEquals([["body", 1]], [])).toEqual(false);
-    expect(locationEquals([], [["body", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1]], [])).toEqual(false);
+    expect(locationEquals([], [["a", 1]])).toEqual(false);
 
-    expect(locationEquals([["body", 2], ["body", 1]], [["body", 1], ["body", 1]])).toEqual(false);
-    expect(locationEquals([["body", 1], ["body", 2]], [["body", 1], ["body", 1]])).toEqual(false);
-    expect(locationEquals([["body", 1], ["body", 1]], [["body", 2], ["body", 1]])).toEqual(false);
-    expect(locationEquals([["body", 1], ["body", 1]], [["body", 1], ["body", 2]])).toEqual(false);
+    expect(locationEquals([["a", 1]], [["a", 1], ["a", 1]])).toEqual(false);
 
-    expect(locationEquals([["    ", 1], ["body", 1]], [["body", 1], ["body", 1]])).toEqual(false);
-    expect(locationEquals([["body", 1], ["    ", 1]], [["body", 1], ["body", 1]])).toEqual(false);
-    expect(locationEquals([["body", 1], ["body", 1]], [["    ", 1], ["body", 1]])).toEqual(false);
-    expect(locationEquals([["body", 1], ["body", 1]], [["body", 1], ["    ", 1]])).toEqual(false);
+    expect(locationEquals([["a", 2], ["a", 1]], [["a", 1], ["a", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1], ["a", 2]], [["a", 1], ["a", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1], ["a", 1]], [["a", 2], ["a", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1], ["a", 1]], [["a", 1], ["a", 2]])).toEqual(false);
+
+    expect(locationEquals([[" ", 1], ["a", 1]], [["a", 1], ["a", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1], [" ", 1]], [["a", 1], ["a", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1], ["a", 1]], [[" ", 1], ["a", 1]])).toEqual(false);
+    expect(locationEquals([["a", 1], ["a", 1]], [["a", 1], [" ", 1]])).toEqual(false);
   });
 });
+
+describe('locationStartsWith(loc, fullPath)', () => {
+  it('undefined & null', () => {
+    expect(locationMatchingLength(undefined, undefined)).toEqual(false);
+    expect(locationMatchingLength(undefined, null)).toEqual(false);
+    expect(locationMatchingLength(null, undefined)).toEqual(false);
+    expect(locationMatchingLength(null, null)).toEqual(false);
+
+    expect(locationMatchingLength([], null)).toEqual(false);
+    expect(locationMatchingLength(null, [])).toEqual(false);
+
+    expect(locationMatchingLength([], undefined)).toEqual(false);
+    expect(locationMatchingLength(undefined, [])).toEqual(false);
+  });
+
+  it('equal locations', () => {
+    expect(locationMatchingLength([], [])).toEqual(0);
+    expect(locationMatchingLength([["a", 1]], [["a", 1]])).toEqual(1);
+    expect(locationMatchingLength([["a", 1], ["a", 1]], [["a", 1], ["a", 1]])).toEqual(2);
+  });
+
+  it('identical location', () => {
+    const both: NodeLocation = [["a", 1], ["a", 1]];
+    expect(locationMatchingLength(both, both)).toEqual(2);
+  });
+
+  it('different locations', () => {
+    expect(locationMatchingLength([["a", 1]], [])).toEqual(false);
+    expect(locationMatchingLength([], [["a", 1]])).toEqual(0);
+
+    expect(locationMatchingLength([["a", 1]], [["a", 1], ["b", 1]])).toEqual(1);
+    expect(locationMatchingLength([["a", 1]], [["a", 1], ["b", 1], ["c", 1]])).toEqual(1);
+    expect(locationMatchingLength([["a", 1], ["b", 1]], [["a", 1], ["b", 1], ["c", 1]])).toEqual(2);
+
+    expect(locationMatchingLength([["a", 2], ["a", 1]], [["a", 1], ["a", 1]])).toEqual(0);
+    expect(locationMatchingLength([["a", 1], ["a", 2]], [["a", 1], ["a", 1]])).toEqual(1);
+    expect(locationMatchingLength([["a", 1], ["a", 1]], [["a", 2], ["a", 1]])).toEqual(0);
+    expect(locationMatchingLength([["a", 1], ["a", 1]], [["a", 1], ["a", 2]])).toEqual(1);
+
+    expect(locationMatchingLength([[" ", 1], ["a", 1]], [["a", 1], ["a", 1]])).toEqual(0);
+    expect(locationMatchingLength([["a", 1], [" ", 1]], [["a", 1], ["a", 1]])).toEqual(1);
+    expect(locationMatchingLength([["a", 1], ["a", 1]], [[" ", 1], ["a", 1]])).toEqual(0);
+    expect(locationMatchingLength([["a", 1], ["a", 1]], [["a", 1], [" ", 1]])).toEqual(1);
+  });
+});
+
 
 describe('AST: Basic Operations', () => {
   it('Node "all in one"-test', () => {

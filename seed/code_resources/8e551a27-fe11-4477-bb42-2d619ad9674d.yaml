@@ -46,6 +46,6 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT *
     FROM adresse
-    WHERE (adresse.LKZ <> 'D')
+    WHERE adresse.LKZ <> 'D'
 new_record: false
 active_record_yaml_version: 2

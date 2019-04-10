@@ -1,5 +1,10 @@
 /* Any editor that works with an AST */
 .ast {
+    /* Some space to the toolbar */
+    .content {
+        margin-top: 5px;
+    }
+
     /* The "hey, you should start programming by dragging something here"-notice */
     .empty-tree {
         border: 4px dashed blue;
@@ -45,14 +50,6 @@ trash {
     font-family: $monospace-font;
     font-size: 1.2rem;
 
-    // Input fields for users need to somehow "blend in" with the rest of the
-    // blocks but also be recognizable.
-    input {
-        border: 0px;
-        border-bottom: 1px dashed black;
-        background-color: transparent;
-    }
-
     /* This component is purely virtual and must be disregarded with respect
        to e.g. flex-box layouts. */
     editor-block-render {
@@ -68,6 +65,24 @@ trash {
         .read-only {
             background-color: #efefef;
             cursor: unset;
+        }
+
+        .being-replaced {
+            background-color: red;
+        }
+    }
+
+    editor-block-render-input {
+        > span {
+            border-bottom: 1px dashed black;
+        }
+
+        // Input fields for users need to somehow "blend in" with the rest of the
+        // blocks but also be recognizable.
+        input {
+            border: 0px;
+            border-bottom: 1px dashed black;
+            background-color: transparent;
         }
     }
 

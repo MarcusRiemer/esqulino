@@ -10,12 +10,13 @@ FactoryBot.define do
     # project and block language (if the are given).
     after(:build) do |code_resource|
       project = code_resource.project
-      block_language = code_resource.block_language 
+      block_language = code_resource.block_language
       if (project and block_language and not project.block_languages.include? block_language) then
         project.block_languages << block_language
       end
     end
 
+    # A query that re-uses the same columns in the SELECT portion
     trait :sql_key_value_select_double do |query|
       query.ast {
         ({

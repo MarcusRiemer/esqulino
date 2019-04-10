@@ -154,13 +154,63 @@
       },
       "type": "object"
     },
+    "BlockRootComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the actual block editor",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "block-root"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
     "CodeGeneratorComponentDescription": {
       "additionalProperties": false,
       "description": "Displays the compiled program",
       "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "componentType": {
           "enum": [
             "generated-code"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "CodeResourceSettingsComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the actual block editor",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "code-resource-settings"
           ],
           "type": "string"
         }
@@ -273,6 +323,12 @@
     },
     "EditorComponentDescription": {
       "anyOf": [
+        {
+          "$ref": "#/definitions/CodeResourceSettingsComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/BlockRootComponentDescription"
+        },
         {
           "$ref": "#/definitions/QueryPreviewComponentDescription"
         },
@@ -449,7 +505,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -667,6 +723,12 @@
       "additionalProperties": false,
       "description": "Displays (limited) results of SQL-queries",
       "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "componentType": {
           "enum": [
             "query-preview"
@@ -711,7 +773,7 @@
               },
               "orientation": {
               },
-              "readOnly": {
+              "propReadOnly": {
               },
               "style": {
               }
@@ -909,6 +971,12 @@
       "additionalProperties": false,
       "description": "Displays a truck controller",
       "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "componentType": {
           "enum": [
             "truck-controller"
@@ -941,6 +1009,12 @@
       "additionalProperties": false,
       "description": "Displays a trucks sensors",
       "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "componentType": {
           "enum": [
             "truck-sensors"
@@ -957,6 +1031,12 @@
       "additionalProperties": false,
       "description": "Displays a truck world",
       "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "componentType": {
           "enum": [
             "truck-world"
@@ -973,6 +1053,12 @@
       "additionalProperties": false,
       "description": "Displays validation results",
       "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "componentType": {
           "enum": [
             "validator"
@@ -1178,6 +1264,9 @@
           "type": "string"
         },
         "breakAfter": {
+          "type": "boolean"
+        },
+        "propReadOnly": {
           "type": "boolean"
         },
         "property": {

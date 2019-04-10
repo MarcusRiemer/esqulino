@@ -50,6 +50,6 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT termin.TAG, block.STARTZEIT, block.ENDZEIT
     FROM termin, block
-    WHERE (termin.BLOCK = block.BLOCK)
+    WHERE termin.BLOCK = block.BLOCK
 new_record: false
 active_record_yaml_version: 2

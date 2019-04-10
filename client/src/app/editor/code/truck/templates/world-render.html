@@ -1,1 +1,3 @@
-<canvas #canvas width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>
+<canvas #canvas
+        width="{{ parentWidth | async }}"
+        height="{{ parentWidth | async }}"></canvas>

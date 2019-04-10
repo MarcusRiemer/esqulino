@@ -65,6 +65,20 @@ mat-nav-list#main-nav {
     .router-link-active {
         background-color: mat-color($ide-app-primary);
     }
+
+    /* Don't break in menu items */
+    .mat-list-item {
+        white-space: nowrap;
+
+        /* Ensure that the actual name of the target is never wrapped, has a sensible
+           minimum width but grows to fill all available space. */
+        .nav-target {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 16ch;
+            flex-grow: 1;
+        }
+    }
 }
 
 .mat-drawer-container {

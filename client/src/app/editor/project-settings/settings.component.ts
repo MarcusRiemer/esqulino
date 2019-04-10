@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { ServerDataService } from '../../shared/server-data.service'
+import { ServerDataService } from '../../shared'
 
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'

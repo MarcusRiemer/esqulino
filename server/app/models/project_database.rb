@@ -5,6 +5,9 @@ require_dependency "schema_alter"
 require_dependency "schema_utils"
 require_dependency "schema"
 
+# The maximum number of rows a user facing query may return
+USER_RESULT_MAX_ROWS = 1000
+
 # This is a database that is part of a certain project. In the current state
 # of affairs we only support SQLite for these databases, but this might change
 # sometime in the future.
@@ -161,7 +164,16 @@ class ProjectDatabase < ApplicationRecord
     # those to go in a hash with explicit names.
     execute_sql_raw(read_only) do |db|
       begin
-        result = db.execute2(sql, params)
+        result = []
+        num_rows = 0;
+        db.execute2(sql, params) do |row|
+          result << row
+          num_rows += 1
+
+          if (num_rows > USER_RESULT_MAX_ROWS) then
+            raise DatabaseResultTooLargeError.new(self, sql, params)
+          end
+        end
         return {
                  "columns" => result.first,
                  "rows" => result.drop(1),
