@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { AboutComponent } from './about.component'
 import { AboutAcademiaComponent } from './academia.component'
 import { CreateProjectComponent } from './create-project.component'
-import { FrontComponent } from './front.component'
+import { FrontComponent, indexItems } from './front.component'
 import { ImprintComponent } from './imprint.component'
 import { ProjectListComponent } from './project-list.component'
 import { PrivacyComponent } from './privacy.component'
@@ -11,6 +11,7 @@ import { AboutPupilComponent } from './pupil.component'
 import { AboutTeacherComponent } from './teacher.component'
 import { VideoDisplayComponent } from './video-display.component'
 import { VersionComponent } from './version.component';
+import { NavSiteComponent } from '../shared/nav-page.component';
 
 export const frontRoutes: Routes = [
   {
@@ -26,6 +27,7 @@ export const frontRoutes: Routes = [
       { path: 'teacher', component: AboutTeacherComponent },
       { path: 'videos', component: VideoDisplayComponent },
       { path: 'version', component: VersionComponent },
+      { path: 'nav', component: NavSiteComponent, data: {items: indexItems} },
       { path: '', component: AboutComponent },
     ]
   }

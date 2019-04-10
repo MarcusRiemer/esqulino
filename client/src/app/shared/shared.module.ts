@@ -25,6 +25,9 @@ import { VideoService } from './video.service';
 import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
 import { ChangeLanguageComponent } from './change-language.component';
+import { JavascriptRequiredComponent } from './javascript-required.component';
+import { SideNavComponent } from './side-nav.component';
+import { NavSiteComponent } from './nav-page.component';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -55,7 +58,10 @@ const materialModules = [
     DefaultValuePipe,
     FlashMessageListComponent,
     ToolbarComponent,
-    ChangeLanguageComponent
+    ChangeLanguageComponent,
+    JavascriptRequiredComponent,
+    SideNavComponent,
+    NavSiteComponent
   ],
   exports: [
     CommonModule,
@@ -67,7 +73,10 @@ const materialModules = [
     ToolbarComponent,
     FlashMessageListComponent,
     DefaultValuePipe,
-    ChangeLanguageComponent
+    ChangeLanguageComponent,
+    JavascriptRequiredComponent,
+    SideNavComponent,
+    NavSiteComponent
   ]
 })
 export class SharedAppModule {
