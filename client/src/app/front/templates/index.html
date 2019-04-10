@@ -1,10 +1,13 @@
 <div class="body-nav-container">
   <app-toolbar>
+    <!-- Toggle for the menu -->
     <ng-container position="toggle">
       <button mat-icon-button (click)="sideNav.toggle()">
         <span class="fa fa-bars" aria-hidden="true"></span>
       </button>
     </ng-container>
+    <!-- Language selection -->
+    <ng-container position="end"></ng-container>
   </app-toolbar>
 
   <mat-sidenav-container>
@@ -21,19 +24,19 @@
                routerLinkActive="router-link-active"
                [routerLinkActiveOptions]="{exact: true}">
               <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
-              {{nav.text}}
+              {{nav.text[locale]}}
             </a>
             <!-- Rendering external links -->
             <a *ngSwitchCase="'external'"
                mat-list-item
                [href]="nav.url" >
               <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
-              {{nav.text}}
+              {{nav.text[locale]}}
             </a>
             <!-- Rendering Dividers -->
             <mat-divider *ngSwitchCase="'divider'"></mat-divider>
             <!-- Rendering Headers -->
-            <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text }}</h3>
+            <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text[locale] }}</h3>
             <!-- Rendering fillers -->
             <div *ngSwitchCase="'fill'" class="fill"></div>
           </ng-container>

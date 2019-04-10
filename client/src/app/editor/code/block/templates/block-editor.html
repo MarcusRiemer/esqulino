@@ -1,80 +1,15 @@
 <div class="ast"
      (mouseover)="onEditorDragEnter($event)">
-  <!-- Ensuring there is a selected resource -->
-  <ng-container *ngIf="(currentResource | async); let currentResource">
-    <!-- Ensuring there is a selected language model -->
-    <ng-container *ngIf="(currentResource.blockLanguage | async); let currentBlockLanguage;">
-      <div class="content">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h4 class="card-title">Block-Editor</h4>
-            <div class="row">
-              <div class="col-sm-6">
-                Name:
-              </div>
-              <div class="col-sm-6">
-                <input [(ngModel)]="currentResource.name"
-                       class="form-control">
-              </div>
-              <div class="col-sm-6">
-                Generierte Sprache:
-              </div>
-              <div class="col-sm-6">
-                <language-emitted-selector [codeResource]="currentResource">
-                </language-emitted-selector>
-              </div>
-              <div class="col-sm-6">
-                Blocksprache:
-              </div>
-              <div class="col-sm-6">
-                <language-model-selector [codeResource]="currentResource">
-                </language-model-selector>
-              </div>
-              <div class="col-sm-12">
-                <label>
-                  Nur lesen:
-                  <input type="checkbox"
-                         [(ngModel)]="readOnly"
-                         style="vertical-align: middle;">
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Ensuring there is a tree -->
-          <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
-            <!-- If the tree is empty, allow the user to populate it -->
-            <div *ngIf="currentTree.isEmpty; else renderTree;"
-                 (mouseover)="onPlaceholderDragEnter($event)"
-                 class="card-body">
-              <div class="empty-tree">
-                <h3>Hey, hier sollte eigentlich Code stehen!</h3>
-                <p>
-                  Ziehe einen Block aus der Seitenleiste auf diesen freien Platz um mit der Programmierung zu beginnen!
-                </p>
-              </div>
-            </div>
-
-            <!-- If the tree is not empty, it wants to be rendered -->
-            <ng-template #renderTree>
-              <div class="card-body block-editor-root">
-                <editor-block-host  *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
-                                    [codeResource]="currentResource"
-                                    [node]="currentTree.rootNode"
-                                    [readOnly]="readOnly"></editor-block-host>
-              </div>
-              <ng-template #noRender>
-                Darstellung nicht möglich
-              </ng-template>
-            </ng-template>
-          </ng-container>
-        </div>
-
-        <!-- Render the editor components the block language demands -->
-        <div class="card card-body mb-3" *ngFor="let editorComponent of (editorComponents | async)">
-          <ng-template [cdkPortalOutlet]="editorComponent"></ng-template>
+  <div class="content">
+    <!-- The actual editor is composed based on the instructions of the block
+         language. -->
+    <div class="row">
+      <div *ngFor="let editorComponent of (editorComponents | async)"
+           [ngClass]="editorComponent.columnClasses">
+        <div class="card card-body mb-3">
+          <ng-template [cdkPortalOutlet]="editorComponent.portal"></ng-template>
         </div>
       </div>
-    </ng-container>
-  </ng-container>
+    </div>
+  </div>
 </div>

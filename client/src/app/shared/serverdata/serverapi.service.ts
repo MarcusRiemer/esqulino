@@ -1,6 +1,8 @@
 import { Injectable, PLATFORM_ID, Inject, Optional } from '@angular/core'
 import { isPlatformServer } from '@angular/common'
 
+import { environment } from '../../../environments/environment'
+
 import { ServerApi } from './serverapi'
 
 /**
@@ -26,7 +28,7 @@ export class ServerApiService extends ServerApi {
     @Optional()
     private _platformId: Object
   ) {
-    super(undefined);
+    super(environment.apiEndpoint);
 
     // Was a specific base URL provided? Then we simply take that.
     if (!this._apiBaseUrl) {

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ProjectCreationDescription, StringValidator } from '../shared/project.description'
-import { ServerApiService } from '../shared/serverapi.service'
+import { ServerApiService } from '../shared'
 import { CURRENT_API_VERSION } from '../shared/resource.description'
 
 @Component({

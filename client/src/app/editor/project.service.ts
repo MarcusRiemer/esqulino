@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http'
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, delay, first, filter, tap, map } from 'rxjs/operators';
 
-import { ServerApiService } from '../shared/serverapi.service'
+import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
 
 import { LanguageService } from '../shared/language.service'

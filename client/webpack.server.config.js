@@ -7,7 +7,7 @@ module.exports = {
   mode: 'none',
   entry: {
     // This is our Express server for Dynamic universal
-    server: './server.ts',
+    server: './universal-server.ts',
   },
   target: 'node',
   resolve: { extensions: ['.ts', '.js'] },
@@ -15,8 +15,8 @@ module.exports = {
   externals: [/node_modules/],
   output: {
     // Puts the output at the root of the dist folder
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js'
+    path: path.join(__dirname, 'dist/server'),
+    filename: 'universal-server.js'
   },
   /*module: {
     rules: [

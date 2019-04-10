@@ -65,8 +65,8 @@ concise_attributes:
   name: compiled
   value_before_type_cast: "SELECT Sprecher.Sprecher_Name, COUNT(Charakter.Charakter_ID),
     GROUP_CONCAT(Charakter.Charakter_Name)\nFROM Sprecher\n\tINNER JOIN Charakter_Sprecher
-    ON (Sprecher.Sprecher_ID = Charakter_Sprecher.Sprecher_Id)\n\tINNER JOIN Charakter
-    ON (Charakter_Sprecher.Charakter_ID = Charakter.Charakter_ID)\nGROUP BY Sprecher.Sprecher_ID\nORDER
+    ON Sprecher.Sprecher_ID = Charakter_Sprecher.Sprecher_Id\n\tINNER JOIN Charakter
+    ON Charakter_Sprecher.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Sprecher.Sprecher_ID\nORDER
     BY COUNT(Charakter.Charakter_ID) DESC"
 new_record: false
 active_record_yaml_version: 2

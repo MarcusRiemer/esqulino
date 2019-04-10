@@ -45,6 +45,6 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT *
     FROM person
-    WHERE (person.PIN = :param)
+    WHERE person.PIN = :param
 new_record: false
 active_record_yaml_version: 2

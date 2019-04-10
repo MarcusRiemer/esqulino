@@ -1,0 +1,8 @@
+grammar "trucklino_program" {
+  ...
+  node "loopWhile" {
+    children sequence "pred" ::= booleanExpression
+    children sequence "body" ::= statement*
+  }
+  ...
+}

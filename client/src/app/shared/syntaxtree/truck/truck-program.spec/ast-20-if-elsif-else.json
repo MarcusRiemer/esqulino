@@ -1,0 +1,67 @@
+{
+  "language": "trucklino_program",
+  "name": "if",
+  "children": {
+    "pred": [
+      {
+        "language": "trucklino_program",
+        "name": "sensor",
+        "properties": {
+          "type": "lightIsGreen"
+        }
+      }
+    ],
+    "body": [
+      {
+        "language": "trucklino_program",
+        "name": "procedureCall",
+        "properties": {
+          "name": "Go Forward"
+        }
+      }
+    ],
+    "elseIf": [
+      {
+        "language": "trucklino_program",
+        "name": "ifElseIf",
+        "children" : {
+          "pred": [
+            {
+              "language": "trucklino_program",
+              "name": "booleanConstant",
+              "properties": {
+                "value": "true"
+              }
+            }
+          ],
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Wait"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "else": [
+      {
+        "language": "trucklino_program",
+        "name": "ifElse",
+        "children" : {
+          "body": [
+            {
+              "language": "trucklino_program",
+              "name": "procedureCall",
+              "properties": {
+                "name": "Wait"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

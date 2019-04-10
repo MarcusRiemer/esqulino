@@ -439,6 +439,26 @@ RSpec.describe ProjectDatabase, type: :model do
     end
   end
 
+  describe 'execute_sql' do
+    before(:each) do
+      @db = FactoryBot.create(:project_database, :table_numbers, row_count: 700)
+    end
+
+    after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
+      @db.destroy!
+      @db.project.destroy! if @db.project
+    end
+
+    it 'Errors on far too large result sets' do
+      expect do
+        @db.execute_sql("SELECT * FROM numbers a, numbers b", Hash.new, true);
+      end.to raise_exception DatabaseResultTooLargeError
+    end
+  end
+
   # This spec can't be run with FakeFS as the C-bindings of SQLite
   # don't know anything about the faking that goes on in the background.
   it 'creates database files' do

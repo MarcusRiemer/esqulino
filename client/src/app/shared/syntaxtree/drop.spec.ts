@@ -1,6 +1,6 @@
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar.spec.boolean';
 import { NodeDescription } from './syntaxtree.description';
-import { _exactMatches } from './drop';
+import { _exactMatches, _singleChildReplace } from './drop';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
 
@@ -44,6 +44,28 @@ describe('Drop', () => {
           { operation: "insert", location: [["expr", 0]], nodeDescription: candidates[0] },
           { operation: "insert", location: [["expr", 0]], nodeDescription: candidates[1] }
         ]);
+    });
+
+    it('Not(<true>)', () => {
+      const parentDesc: NodeDescription = {
+        language: "expr",
+        name: "negate",
+        children: {
+          "expr": [
+            { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
+          ]
+        }
+      };
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree(parentDesc);
+
+      expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
+      expect(_exactMatches(v, treeIn, [["expr", 0]], candidates)).toEqual([]);
     });
 
     it('Binary(<hole>, <false>)', () => {
@@ -101,4 +123,146 @@ describe('Drop', () => {
   });
 
   // ######################################################################
+
+  describe('_singleChildReplace()', () => {
+
+    it('<false>', () => {
+      const parentDesc: NodeDescription = {
+        language: "expr", name: "booleanConstant", properties: { "value": "false" }
+      };
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree(parentDesc);
+
+      expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates)).toEqual([]);
+    });
+
+    it('Not(<hole>)', () => {
+      const parentDesc: NodeDescription = {
+        language: "expr",
+        name: "negate",
+        children: {
+          "expr": []
+        }
+      };
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree(parentDesc);
+
+      expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates)).toEqual([]);
+    });
+
+    it('Not(<true>)', () => {
+      const parentDesc: NodeDescription = {
+        language: "expr",
+        name: "negate",
+        children: {
+          "expr": [
+            { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
+          ]
+        }
+      };
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree(parentDesc);
+
+      expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates))
+        .toEqual([
+          { operation: "replace", location: [["expr", 0]], nodeDescription: candidates[0] },
+          { operation: "replace", location: [["expr", 0]], nodeDescription: candidates[1] }
+        ]);
+    });
+
+    it('Binary(<hole>, <false>)', () => {
+      const parentDesc: NodeDescription = {
+        language: "expr",
+        name: "booleanBinary",
+        children: {
+          "lhs": [],
+          "rhs": [
+            { language: "expr", name: "booleanConstant", properties: { "value": "false" } }
+          ]
+        }
+      };
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } },
+        { language: "expr", name: "noMatch" }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree(parentDesc);
+
+      expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["lhs", 0]], candidates))
+        .toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["rhs", 0]], candidates))
+        .toEqual([
+          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[0] },
+          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[1] }
+        ]);
+    });
+
+    it('Binary(<hole>, not(<false>))', () => {
+      const parentDesc: NodeDescription = {
+        language: "expr",
+        name: "booleanBinary",
+        children: {
+          "lhs": [],
+          "rhs": [
+            {
+              language: "expr",
+              name: "negate",
+              children: {
+                "expr": [
+                  { language: "expr", name: "booleanConstant", properties: { "value": "false" } }
+                ]
+              }
+            }
+          ]
+        }
+      };
+      const candidates: NodeDescription[] = [
+        { language: "expr", name: "booleanConstant", properties: { "value": "false" } },
+        { language: "expr", name: "booleanConstant", properties: { "value": "true" } },
+        { language: "expr", name: "noMatch" }
+      ];
+
+      const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const treeIn = new Tree(parentDesc);
+
+      expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["lhs", 0]], candidates))
+        .toEqual([]);
+      expect(_singleChildReplace(v, treeIn, [["lhs", 0], ["expr", 0]], candidates))
+        .toEqual([]);
+
+      expect(_singleChildReplace(v, treeIn, [["rhs", 0]], candidates))
+        .toEqual([
+          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[0] },
+          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[1] }
+        ]);
+      expect(_singleChildReplace(v, treeIn, [["rhs", 0], ["expr", 0]], candidates))
+        .toEqual([
+          { operation: "replace", location: [["rhs", 0], ["expr", 0]], nodeDescription: candidates[0] },
+          { operation: "replace", location: [["rhs", 0], ["expr", 0]], nodeDescription: candidates[1] }
+        ]);
+    });
+
+  });
 });

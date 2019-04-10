@@ -1,0 +1,10 @@
+grammar "math" {
+  node "operation" {
+    children sequence "lhs" ::= const
+    prop "operator" { string { enum "+" "-" "*" "/" } }
+    children sequence "rhs" ::= const
+  }
+  node "const" {
+    prop "value" { integer }
+  }
+}

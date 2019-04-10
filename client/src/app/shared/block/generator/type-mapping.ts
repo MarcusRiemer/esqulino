@@ -12,21 +12,6 @@ import {
 } from './instructions.description'
 
 import { TypeInstructions } from './instructions'
-import { isHoleIfEmpty } from '../../syntaxtree/grammar-util';
-
-const TERMINAL_QUESTIONMARK: VisualBlockDescriptions.EditorConstant = {
-  blockType: "constant",
-  text: "❓",
-  style: {
-    "paddingLeft": "10px",
-    "paddingRight": "10px",
-    "border": "2px solid red",
-    "color": "darkred",
-    "backgroundColor": "orange",
-    "borderRadius": "500px",
-    "cursor": "default",
-  }
-};
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
@@ -77,7 +62,7 @@ export function mapProperty(
   attr: NodePropertyTypeDescription,
   instructions: PropertyInstructions
 ): VisualBlockDescriptions.EditorInput | VisualBlockDescriptions.EditorInterpolated {
-  if (instructions.readOnly) {
+  if (instructions.propReadOnly) {
     // If the instructions demand this value to be read only: Treat it as an interpolated value
     return (mapInterpolated(attr, instructions));
   } else {

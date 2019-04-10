@@ -23,7 +23,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.717254'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-02 21:35:10.576004'
+  value_before_type_cast: '2019-04-10 10:34:51.849138'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: db-sequence

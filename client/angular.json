@@ -16,6 +16,10 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "aot": true,
+            "extractCss": true,
+            "sourceMap": true,
+            "outputHashing": "all",
             "assets": [
               "src/vendor"
             ],
@@ -28,16 +32,13 @@
                 "node_modules/bootstrap/scss"
               ]
             },
-            "scripts": []
+            "scripts": [],
+            "i18nLocale": "de"
           },
           "configurations": {
             "production": {
+              "outputPath": "dist/browser",
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -74,7 +75,7 @@
             "sourceMap": true,
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.test.json",
+            "tsConfig": "src/tsconfig.test.json"
           }
         },
         "lint": {
@@ -90,9 +91,10 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/server",
+            "outputPath": "dist/server/de",
             "main": "src/main.server.ts",
-            "tsConfig": "src/tsconfig.server.json"
+            "tsConfig": "src/tsconfig.server.json",
+            "i18nLocale": "de"
           }
         }
       }
@@ -129,6 +131,11 @@
     },
     "@schematics/angular:directive": {
       "prefix": "app"
+    }
+  },
+  "cli": {
+    "warnings": {
+      "typescriptMismatch": true
     }
   }
 }

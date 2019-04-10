@@ -47,6 +47,6 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT Geschichte.Geschichte_Name
     FROM Geschichte
-    WHERE (Geschichte.Geschichte_Name LIKE '%Geist%')
+    WHERE Geschichte.Geschichte_Name LIKE '%Geist%'
 new_record: false
 active_record_yaml_version: 2

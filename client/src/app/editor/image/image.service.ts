@@ -3,7 +3,7 @@ import { Http } from '@angular/http'
 
 import { map } from 'rxjs/operators';
 
-import { ServerApiService } from '../../shared/serverapi.service'
+import { ServerApiService } from '../../shared'
 
 import { ProjectService } from '../project.service'
 
@@ -36,4 +36,3 @@ export class ImageService {
   }
 
 }
-

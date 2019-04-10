@@ -1,9 +1,11 @@
 import { Injectable, Inject, Optional, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common'
-
 import { Platform } from '@angular/cdk/platform';
-import { BehaviorSubject, Observable, Subject, ReplaySubject } from 'rxjs';
+
+import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import * as Sentry from '@sentry/browser';
 
 /** The meaningful modes of the sidebar */
 export type SidebarMode = "over" | "side";
@@ -38,15 +40,37 @@ export class BrowserService {
   ) {
     // On Browsers: Use an actual media Query
     if (this._platformId && isPlatformBrowser(_platformId)) {
-      const mq = window.matchMedia(`(min-width: ${DEVICE_MIN_WIDTH.md}px)`);
-      this._isMobile.next(!mq.matches);
+      // But some browsers seem to have trouble with `matchMedia`
+      // or the adding of an event listener
+      try {
+        const mq = window.matchMedia(`(min-width: ${DEVICE_MIN_WIDTH.md}px)`);
+        this._isMobile.next(!mq.matches);
 
-      mq.addEventListener("change", (evt) => this._isMobile.next(!evt.matches));
+        mq.addEventListener("change", (evt) => this._isMobile.next(!evt.matches));
+      }
+      // In that case we default to the user agent check
+      catch (error) {
+        this._isMobile.next(this.isPlatformMobile);
+
+        Sentry.configureScope(s => {
+          s.setLevel(Sentry.Severity.Info);
+          s.setTag("mobile-detection", "true");
+
+          Sentry.captureException(error.originalError || error);
+        });
+      }
     }
     // Otherwise: Use the user agent
     else {
-      this._isMobile.next(this._platform.IOS || this._platform.ANDROID);
+      this._isMobile.next(this.isPlatformMobile);
     }
+  }
+
+  /**
+   * Uses the user agent as fallback for mobile detection
+   */
+  private get isPlatformMobile() {
+    return (this._platform.IOS || this._platform.ANDROID);
   }
 
   /**

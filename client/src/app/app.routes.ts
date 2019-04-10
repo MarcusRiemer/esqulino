@@ -5,11 +5,6 @@ import { frontRoutes } from './front/front.routes'
 
 const AppRoutes: Routes = [
   {
-    path: '',
-    redirectTo: '/about',
-    pathMatch: 'full',
-  },
-  {
     path: 'editor/:projectId',
     children: editorRoutes
   },
@@ -22,9 +17,16 @@ const AppRoutes: Routes = [
     // therefore not bundled with the main application.
     path: 'admin',
     loadChildren: './admin/admin.module#AdminModule'
-  }
+  },
+  {
+    path: '',
+    redirectTo: '/about',
+    pathMatch: 'full',
+  },
 ]
 
+// Ensure that "global" parameters (especially the projectId)
+// is passed down to the editor modules.
 export const routing = RouterModule.forRoot(AppRoutes, {
   paramsInheritanceStrategy: "always",
 });

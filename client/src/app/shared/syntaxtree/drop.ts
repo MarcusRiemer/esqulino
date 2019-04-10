@@ -51,7 +51,7 @@ export function _exactMatches(
           return (_cardinalityAllowsInsertion(validator, targetParent, candidate, targetParentCategory, targetParentIndex));
         })
         // Came so far? You may be inserted!
-        .map((candidate): InsertDropLocation => {
+        .map((candidate): (InsertDropLocation | ReplaceDropLocation) => {
           return ({
             operation: "insert",
             location: loc,
@@ -90,6 +90,57 @@ export function _exactMatches(
   else {
     return ([]);
   }
+}
+
+/**
+ * Issues a "replace" action if the target location is a hole that
+ * does not
+ *
+ * @param validator The rules that must hold after the insertion
+ * @param tree The tree to modify
+ * @param loc The location of the insertion
+ * @param candidates All nodes that could possibly be used to insert
+ */
+export function _singleChildReplace(
+  validator: Validator,
+  tree: Tree,
+  loc: NodeLocation,
+  candidates: NodeDescription[]
+): ReplaceDropLocation[] {
+  // We don't deal with replacing the root here
+  if (loc.length > 0) {
+    const targetParent = tree.locateOrUndefined(loc.slice(0, -1));
+
+    // The target must exist
+    if (targetParent) {
+      const targetParentCategory = loc[loc.length - 1][0];
+      const validType = validator.getType(targetParent);
+      const validCardinality = validType.validCardinality(targetParentCategory);
+      const isHole = validCardinality.minOccurs === 1 && validCardinality.maxOccurs === 1;
+      const isFilled = targetParent.getChildrenInCategory(targetParentCategory).length === 1
+
+      if (isHole && isFilled) {
+        return (
+          candidates
+            // The candidate must be of a valid type
+            .filter(candidate => {
+              const candidateType = { languageName: candidate.language, typeName: candidate.name };
+              return (validType.allowsChildType(candidateType, targetParentCategory));
+            })
+            .map((candidate): ReplaceDropLocation => {
+              return ({
+                operation: "replace",
+                location: loc,
+                nodeDescription: candidate
+              })
+            })
+        );
+      }
+    }
+  }
+
+  // We are either at the root or did not have a hole
+  return ([]);
 }
 
 /**
@@ -134,6 +185,11 @@ export function smartDropLocation(
     // Possibly all embracing options
     if (options.allowEmbrace) {
       toReturn.push(...embraceMatches(validator, tree, loc, candidates));
+    }
+
+    // Possibly all replacement options
+    if (options.allowReplace) {
+      toReturn.push(..._singleChildReplace(validator, tree, loc, candidates));
     }
 
     // Possibly appending

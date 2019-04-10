@@ -23,7 +23,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-26 10:41:22.283084'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-02 21:35:14.378967'
+  value_before_type_cast: '2019-04-10 10:34:47.360137'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: drei-fragezeichen

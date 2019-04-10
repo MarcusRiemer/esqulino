@@ -179,6 +179,14 @@ RSpec.describe ProjectDatabasesController, type: :request do
       expect(response.status).to eq 200
       expect(response.body.to_i).to eq 0
     end
+
+    it 'getting rowcount of a table with 100 entries' do
+      db = FactoryBot.create(:project_database, :table_numbers, row_count: 100)
+
+      get "#{default_db_api_url db.project}/count/numbers"
+      expect(response.status).to eq 200
+      expect(response.body.to_i).to eq 100
+    end
   end
 
   describe 'GET /api/project/:project_id/db/:database_id/rows/:tablename/:from/:amount' do

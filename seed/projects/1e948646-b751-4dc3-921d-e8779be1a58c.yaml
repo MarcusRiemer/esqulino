@@ -23,7 +23,7 @@ concise_attributes:
   value_before_type_cast: '2018-12-11 10:07:21.942602'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-02 21:35:07.416299'
+  value_before_type_cast: '2019-04-10 10:34:52.239011'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: fhw-abbild

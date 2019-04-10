@@ -133,12 +133,41 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
         process.indent(() => {
           node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
         });
-        if (node.getChildrenInCategory('else').length > 0) {
-          process.addConvertedFragment('} else {', node, OutputSeparator.NEW_LINE_AFTER);
-          process.indent(() => {
-            node.getChildrenInCategory('else').forEach((c) => process.generateNode(c));
-          });
-        }
+        process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
+
+        node.getChildrenInCategory('elseIf').forEach((c) => process.generateNode(c));
+        node.getChildrenInCategory('else').forEach((c) => process.generateNode(c));
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "trucklino_program",
+      typeName: "ifElseIf"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess<State>) {
+        process.addConvertedFragment('else if (', node);
+        node.getChildrenInCategory('pred').forEach((c) => process.generateNode(c));
+        process.addConvertedFragment(') {', node, OutputSeparator.NEW_LINE_AFTER);
+        process.indent(() => {
+          node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
+        });
+        process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
+      }
+    },
+  },
+  {
+    type: {
+      languageName: "trucklino_program",
+      typeName: "ifElse"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess<State>) {
+        process.addConvertedFragment('else {', node, OutputSeparator.NEW_LINE_AFTER);
+        process.indent(() => {
+          node.getChildrenInCategory('body').forEach((c) => process.generateNode(c));
+        });
         process.addConvertedFragment('}', node, OutputSeparator.NEW_LINE_AFTER);
       }
     }

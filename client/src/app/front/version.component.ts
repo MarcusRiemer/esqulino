@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { environment } from '../../environments/environment'
@@ -11,7 +11,10 @@ import { environment } from '../../environments/environment'
 })
 export class VersionComponent implements OnInit {
 
-  constructor(private _title: Title) { }
+  constructor(
+    private _title: Title,
+    @Inject(LOCALE_ID) private readonly _localeId: string
+  ) { }
 
   ngOnInit() {
     this._title.setTitle("BlattWerkzeug");
@@ -22,6 +25,8 @@ export class VersionComponent implements OnInit {
   readonly BUILD_DATE = environment.version.date;
 
   readonly ERROR_REPORTING = environment.sentry && environment.sentry.active;
+
+  readonly LOCALE_ID = this._localeId;
 
   onRaiseError() {
     throw new Error(`Deliberate error, caused by user!`);
