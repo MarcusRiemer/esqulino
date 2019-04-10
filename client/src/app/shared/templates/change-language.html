@@ -1,7 +1,7 @@
 <app-requires-javascript>
   <ng-container active>
     <button mat-icon-button [matMenuTriggerFor]="naturalLang" aria-label="Language Selection">
-        {{ localeFlag }}
+      {{ localeFlag }}
     </button>
     <mat-menu #naturalLang="matMenu">
       <ng-container *ngFor="let localItem of locales">
@@ -12,10 +12,9 @@
     </mat-menu>
   </ng-container>
   <ng-container inactive>
-    <ng-container *ngFor="let localItem of locales">
-      <a href='{{localItem.subdomain}}'>
+      <a *ngFor="let localItem of locales"
+         [href]='currentUrlForLanguage(localItem.token)'>
         {{ localItem.flag }}
       </a>
-    </ng-container>
   </ng-container>
 </app-requires-javascript>
