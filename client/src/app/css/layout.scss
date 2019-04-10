@@ -9,7 +9,7 @@
     left: 0;
     right: 0;
 
-    .content {
+    .content, .admin {
         min-height: calc(100vh - (#{$toolbar-height} + #{$toolbar-margin-bottom}));
     }
 }
