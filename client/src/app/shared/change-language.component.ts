@@ -15,8 +15,8 @@ function localeToFlag(locale: string): string {
 // TODO: Use `canonicalHost` from environment
 // TODO: Use protocol relative URL (`//`), do *not* write "http" or "https"
 export const locales = [
-  {token: 'de', name: 'Deutsch' ,subdomain: 'de.' + environment.canonicalHost, flag: localeToFlag('de')},
-  {token: 'en', name: 'English', subdomain: 'en.' + environment.canonicalHost, flag: localeToFlag('en')},
+  {token: 'de', name: 'Deutsch' ,subdomain: '//de.' + environment.canonicalHost, flag: localeToFlag('de')},
+  {token: 'en', name: 'English', subdomain: '//en.' + environment.canonicalHost, flag: localeToFlag('en')},
 ]
 
 @Component({
