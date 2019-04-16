@@ -6,7 +6,10 @@ require_dependency "schema_utils"
 require_dependency "schema"
 
 # The maximum number of rows a user facing query may return
-USER_RESULT_MAX_ROWS = 1000
+USER_RESULT_MAX_ROWS = 100
+
+# The maximum number of rows that are tested
+COUNT_RESULT_MAX_ROWS = 5000
 
 # This is a database that is part of a certain project. In the current state
 # of affairs we only support SQLite for these databases, but this might change
@@ -157,28 +160,41 @@ class ProjectDatabase < ApplicationRecord
   #
   # @param sql [string] The SQL query
   # @param params [Hash] Query parameters
+  # @param read_only [boolean] Execute in read only mode?
+  # @param user_row_limit [integer] Maximum number of returned rows
   #
   # @return [Hash] { columns :: List, rows :: List of List }
-  def execute_sql(sql, params, read_only = false)
+  def execute_sql(sql, params,
+                  read_only = false,
+                  user_row_limit = USER_RESULT_MAX_ROWS,
+                  count_row_limit = COUNT_RESULT_MAX_ROWS)
     # The SQLite driver returns the names of the columns in the first row. But we want
     # those to go in a hash with explicit names.
     execute_sql_raw(read_only) do |db|
       begin
         result = []
-        num_rows = 0;
+        num_rows = 0
+        unknown_total = false
         db.execute2(sql, params) do |row|
-          result << row
+          # Possibly remember the row
+          if num_rows <= user_row_limit
+            result << row
+          end
+
           num_rows += 1
 
-          if (num_rows > USER_RESULT_MAX_ROWS) then
-            raise DatabaseResultTooLargeError.new(self, sql, params)
+          # Break out of reading further SQL statements once we are over the hard limit
+          if (num_rows > count_row_limit) then
+            unknown_total = true
+            break
           end
         end
         return {
                  "columns" => result.first,
                  "rows" => result.drop(1),
-                 "totalCount" => result.length - 1,
+                 "totalCount" => num_rows - 1, # First row are columns
                  "changes" => db.changes,
+                 "unknownTotal" => unknown_total
                }
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault
