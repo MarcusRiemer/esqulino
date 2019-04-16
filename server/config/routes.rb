@@ -76,7 +76,7 @@ Rails.application.routes.draw do
     # Getting the News as JSON
     scope 'news' do
       root via: [:get], controller: 'news', action: :index
-      get ':id', controller: 'news', action: :show
+      get 'details/:id', controller: 'news', action: :show
 
       scope 'admin' do
         root via: [:get], controller: 'news', action: :index_admin
