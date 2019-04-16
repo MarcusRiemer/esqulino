@@ -46,7 +46,7 @@ app-toolbar {
 
     /* Angular material defaults to a ridiculous height */
     .mat-toolbar-row, .mat-toolbar-single-row {
-        height: 48px;
+        height: $toolbar-height;
     }
 }
 

@@ -1,0 +1,41 @@
+<h2>
+  <span *ngIf="(availableBlockLanguages.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
+  Blocksprachen
+</h2>
+<button (click)="availableBlockLanguages.refresh()">Refresh</button>
+<table class="table table-sm">
+  <tr>
+    <th>Name</th>
+    <th>Slug</th>
+    <th>ID</th>
+    <th>Grammatik</th>
+    <th>Generator</th>
+    <th>Aktionen</th>
+  </tr>
+  <!-- Each row represents a block language -->
+  <tr *ngFor="let blockLanguage of availableBlockLanguages.value | async">
+    <td>
+      <a [routerLink]="['block-language', blockLanguage.id]">{{ blockLanguage.name }}</a>
+    </td>
+    <td><code>{{ blockLanguage.slug | defaultValue }}</code></td>
+    <td><code>{{ blockLanguage.id }}</code></td>
+    <td><link-grammar [grammarId]="blockLanguage.grammarId"></link-grammar></td>
+    <td>
+      <ng-container *ngIf="blockLanguage.generated; else manual;">
+        ✔
+      </ng-container>
+      <ng-template #manual>
+        ✗
+      </ng-template>
+    </td>
+    <td>
+      <button (click)="deleteBlockLanguage(blockLanguage.id)"
+              type="button"
+              class="btn btn-outline-danger btn-sm">
+        <span class="fa fa-trash-o" aria-hidden="true"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+<!-- Classes hack in some visual spacing between creation forms -->
+<create-block-language class="mb-5 d-block"></create-block-language>
