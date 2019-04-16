@@ -28,6 +28,8 @@ import { ChangeLanguageComponent } from './change-language.component';
 import { JavascriptRequiredComponent } from './javascript-required.component';
 import { SideNavComponent } from './side-nav.component';
 import { NavSiteComponent } from './nav-page.component';
+import { NewsComponent } from './news.component';
+import { NewsDetailsComponent } from './news-details.component';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -61,7 +63,9 @@ const materialModules = [
     ChangeLanguageComponent,
     JavascriptRequiredComponent,
     SideNavComponent,
-    NavSiteComponent
+    NavSiteComponent,
+    NewsComponent,
+    NewsDetailsComponent
   ],
   exports: [
     CommonModule,
@@ -76,7 +80,9 @@ const materialModules = [
     ChangeLanguageComponent,
     JavascriptRequiredComponent,
     SideNavComponent,
-    NavSiteComponent
+    NavSiteComponent,
+    NewsComponent,
+    NewsDetailsComponent
   ]
 })
 export class SharedAppModule {

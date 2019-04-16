@@ -1,0 +1,59 @@
+<style>
+  tbody tr {
+    cursor: pointer;
+  }
+
+  table {
+    word-wrap: break-word; 
+    table-layout: fixed;
+  }
+
+  .row {
+    margin: 1vh 0 1vh 0;
+  }
+</style>
+
+
+<form>
+  <div class="row">
+    <div class="col-md-3">
+      <label>Wähle eine Sprache</label>
+      <select class="custom-select"  name="language" required [(ngModel)]="selectedLanguage">
+        <option *ngFor="let item of languages" [value]="item.token">{{item.name}}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label>Wähle einen Editor</label>
+      <select class="custom-select" required>
+        <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
+      </select>
+    </div>
+  </div>
+</form>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Titel</th>
+      <th scope="col">Text</th>
+      <th scope="col">Freigegeben ab</th>
+      <th scope="col">Erstellt am</th>
+      <th scope="col">Geändert am</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of (adminNewsList.value | async)" [routerLink]="['edit', item.id]">
+      <td scope="row">{{item.id}}</td>
+      <td>{{item.title ? item.title[selectedLanguage] || '' : ''}}</td>
+      <td>{{item.text ? item.text[selectedLanguage] || '' : ''}}</td>
+      <!-- TomFrage: warum publishFrom und nicht publish_from -->
+      <td>{{(item.publishFrom | date: 'dd.MM.yyyy') || ''}}</td>
+      <td>{{item.createdAt}}</td>
+      <td>{{item.updatedAt}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+

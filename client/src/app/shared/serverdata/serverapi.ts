@@ -133,6 +133,27 @@ export class ServerApi {
   }
 
   /**
+   * Getting a List of User News
+   */
+  getUserNewsListUrl(): string {
+    return (`${this._apiBaseUrl}/news`)
+  }
+
+  /**
+   * Getting a single news
+   */
+  getUserNewsDetails(id: string): string {
+    return (`${this._apiBaseUrl}/news/details/${id}`)
+  }
+
+  /**
+   * Getting a List of User News
+   */
+  getAdminNewsListUrl(): string {
+    return (`${this._apiBaseUrl}/news/admin`)
+  }
+
+  /**
    * Retrieves the URL to access code resources
    */
   getCodeResourceUrl(projectId: string, codeResourceId: string): string {

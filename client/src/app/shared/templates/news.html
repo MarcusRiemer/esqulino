@@ -1,0 +1,10 @@
+<div class="d-flex flex-row">
+  <div *ngFor="let item of (userNewsList.value | async)" class="card" style="width: 18rem; margin: 1vh 0 0 1vw;">
+    <div class="card-body">
+      <h1 class="card-title">{{item.title[locale]}}</h1>
+      <p class="card-text">Vom {{item.publishFrom | date:'dd.MM.yyyy'}}</p>
+      <p class="card-text">{{item.text[locale]}}</p>
+      <a [routerLink]="[ '/news/details', item.id ]" class="btn btn-primary">Weiterlesen...</a>
+    </div>
+  </div>
+</div>
