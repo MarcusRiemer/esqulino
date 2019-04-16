@@ -452,10 +452,28 @@ RSpec.describe ProjectDatabase, type: :model do
       @db.project.destroy! if @db.project
     end
 
-    it 'Errors on far too large result sets' do
-      expect do
-        @db.execute_sql("SELECT * FROM numbers a, numbers b", Hash.new, true);
-      end.to raise_exception DatabaseResultTooLargeError
+    it 'Truncates too large result sets' do
+      res = @db.execute_sql("SELECT * FROM numbers a, numbers b", Hash.new, true, 10, 100)
+
+      expect(res['unknownTotal']).to be true
+      expect(res['totalCount']).to eq 100
+      expect(res['rows'].length).to eq 10
+    end
+
+    it 'Delivers entirely fitting result sets' do
+      res = @db.execute_sql("SELECT * FROM numbers a, numbers b LIMIT 10", Hash.new, true, 10, 100)
+
+      expect(res['unknownTotal']).to be false
+      expect(res['totalCount']).to eq 10
+      expect(res['rows'].length).to eq 10
+    end
+
+    it 'Delivers partially fitting result sets' do
+      res = @db.execute_sql("SELECT * FROM numbers a, numbers b LIMIT 20", Hash.new, true, 10, 100)
+
+      expect(res['unknownTotal']).to be false
+      expect(res['totalCount']).to eq 20
+      expect(res['rows'].length).to eq 10
     end
   end
 
