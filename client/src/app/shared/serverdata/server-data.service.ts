@@ -17,6 +17,8 @@ import {
 import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
+import { UserNewsDescription } from '../syntaxtree/news.description';
+import { AdminNewsComponent } from './../../admin/news.component';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -124,7 +126,6 @@ class IndividualDescriptionCache<T> {
   public getDescription(id: string): Observable<T> {
     if (!this.cache[id]) {
       this.cache[id] = new CachedRequest<T>(this.http.get<T>(this.idCallback(id)))
-
     }
 
     return (this.cache[id].value);
@@ -187,6 +188,19 @@ export class ServerDataService {
       .pipe(
         map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
       )
+  );
+
+  readonly getUserNewsList = new CachedRequest<UserNewsDescription[]>(
+    this._http.get<UserNewsDescription[]>(this._serverApi.getUserNewsListUrl())
+  );
+
+  readonly getAdminNewsList = new CachedRequest<AdminNewsComponent[]>(
+    this._http.get<AdminNewsComponent[]>(this._serverApi.getAdminNewsListUrl())
+  );
+
+  readonly getUserNewsDetails = new IndividualDescriptionCache<UserNewsDescription>(
+    this._http,
+    id => this._serverApi.getUserNewsDetails(id)
   );
 
   /**

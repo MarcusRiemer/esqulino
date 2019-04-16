@@ -44,7 +44,8 @@ import { VersionComponent } from './version.component'
     FrontComponent,
     ImprintComponent,
     ProjectListComponent,
-    VideoDisplayComponent
+    VideoDisplayComponent,
+
   ]
 })
 export class FrontModule { }
