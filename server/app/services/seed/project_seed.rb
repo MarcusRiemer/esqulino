@@ -23,7 +23,7 @@ module Seed
     # this method is called after store_seed is called
     def after_store_seed
       if File.directory? seed.images_directory_path
-        Rails.logger.info "Storing images"
+        info "Storing images"
         FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
       end
     end

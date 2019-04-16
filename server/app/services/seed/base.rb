@@ -6,7 +6,6 @@ module Seed
   class Base
     # Global indentation level for log output
     @@indent = 0
-    @@logger = TEST_ENV ? Rails.logger : Logger.new(STDOUT)
 
     # base seed class as a parent class designed as a service to store and load seed classes with all the supported methods
     # BASE_SEED_DIRECTORY is a autoloaded pathe defined in sqlino.yaml in the config
@@ -28,10 +27,6 @@ module Seed
       @seed_id = seed_id
       @dependencies = dependencies
       @defer_referential_checks = defer_referential_checks
-
-      # @@logger.formatter = proc do |severity, time, progname, msg|
-      #   "#{('  ' * @@indent)}[#{seed_name}] #{msg}\n"
-      # end
     end
 
     # Logs the given message on the "info" logging channel. Any block that follow will have its "info" output
@@ -39,7 +34,7 @@ module Seed
     #
     # @param msg [string] The
     def info(msg = nil)
-      @@logger.info("#{('  ' * @@indent)}[#{seed_name}] #{msg}") unless msg.nil?
+      puts ("#{('  ' * @@indent)}[#{seed_name}] #{msg}") unless msg.nil? || TEST_ENV
 
       if block_given?
         @@indent += 1
