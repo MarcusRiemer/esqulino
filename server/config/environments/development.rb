@@ -65,10 +65,4 @@ Rails.application.configure do
                methods: [:get, :post, :put, :patch, :delete, :options, :head]
     end
   end
-
-  # Log to stdout
-  config.logger = Logger.new(STDOUT)
-
-  # Configurable log level
-  config.log_level = ENV.fetch("LOG_LEVEL", "DEBUG")
 end
