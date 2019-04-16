@@ -31,7 +31,7 @@ module Seed
     # store image from proejct path into a tmp directory after loading
     def after_load_seed
       if File.directory? seed_specific_directory
-        Rails.logger.info "  COPY   Images"
+        info "COPY Images"
 
         tmp_directory = path_to_data_directory + "_tmp"
         FileUtils.mkdir_p tmp_directory

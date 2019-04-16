@@ -1,7 +1,13 @@
+TEST_ENV = Rails.env == "test"
+
 module Seed
   require_dependency "util"
 
   class Base
+    # Global indentation level for log output
+    @@indent = 0
+    @@logger = TEST_ENV ? Rails.logger : Logger.new(STDOUT)
+
     # base seed class as a parent class designed as a service to store and load seed classes with all the supported methods
     # BASE_SEED_DIRECTORY is a autoloaded pathe defined in sqlino.yaml in the config
     BASE_SEED_DIRECTORY = Rails.configuration.sqlino["seed"]["data_dir"]
@@ -22,6 +28,24 @@ module Seed
       @seed_id = seed_id
       @dependencies = dependencies
       @defer_referential_checks = defer_referential_checks
+
+      # @@logger.formatter = proc do |severity, time, progname, msg|
+      #   "#{('  ' * @@indent)}[#{seed_name}] #{msg}\n"
+      # end
+    end
+
+    # Logs the given message on the "info" logging channel. Any block that follow will have its "info" output
+    # printed in an indented manner.
+    #
+    # @param msg [string] The
+    def info(msg = nil)
+      @@logger.info("#{('  ' * @@indent)}[#{seed_name}] #{msg}") unless msg.nil?
+
+      if block_given?
+        @@indent += 1
+        yield
+        @@indent -= 1
+      end
     end
 
     # returns seed as Object of the model if one is not provided
@@ -113,10 +137,12 @@ module Seed
     def store(processed)
       if processed.include? [seed_directory, seed.id, self.class]
       else
-        store_seed
-        after_store_seed
-        processed << [seed_directory, seed.id, self.class]
-        store_dependencies(processed)
+        info "Storing #{seed.readable_identification}" do
+          store_seed
+          after_store_seed
+          processed << [seed_directory, seed.id, self.class]
+          store_dependencies(processed)
+        end
       end
       if dependencies.present?
         File.open(project_dependent_file(processed.first[0], processed.first[1]), "w") do |file|
@@ -152,26 +178,33 @@ module Seed
     # Loads the data from the yaml to database
     # load dependecies of a particular project if there is any
     # `run_within_correct_transaction` disables the foreign_key constraints
-    # if @defer_referential_checks is true then save it by just updating the timestamp to enable the referential initigirty of the model
+    # if @defer_referential_checks is true then save it by just updating the timestamp to enable the referential integrity of the model
     # `move_data_from_tmp_to_data_directory` moves the assests from tmp to origial directory after loading process is done
-    def start_load
-      run_within_correct_transaction do
-        upsert_seed_data
-        dep = File.join seed_directory, "#{load_id}-deps.yaml"
-        load_dependencies if File.exist? dep
-      end
+    #
+    # @param loaded [Set<String>] IDs that have been loaded already
+    def start_load(loaded = Set.new)
+      info "Loading #{seed_instance.readable_identification}" do
+        run_within_correct_transaction do
+          upsert_seed_data
 
-      if @defer_referential_checks
-        # TODO: Horrible hack to ensure that the record inserted was actually valid
-        # Nicer: Defer the constraint checks instead of outright disabling them,
-        #        but this does not seem to be possible from Rails.
-        # See:  https://wiki.postgresql.org/wiki/Referential_Integrity_Tutorial_%26_Hacking_the_Referential_Integrity_tables#Deferring_transactions
-        # See also: https://github.com/nullobject/rein
-        db_instance = seed_name.find_or_initialize_by(id: load_id)
-        db_instance.touch
-        db_instance.save!
+          loaded << seed_instance.id
+
+          dep = File.join seed_directory, "#{load_id}-deps.yaml"
+          load_dependencies(loaded) if File.exist? dep
+        end
+
+        if @defer_referential_checks
+          # TODO: Horrible hack to ensure that the record inserted was actually valid
+          # Nicer: Defer the constraint checks instead of outright disabling them,
+          #        but this does not seem to be possible from Rails.
+          # See:  https://wiki.postgresql.org/wiki/Referential_Integrity_Tutorial_%26_Hacking_the_Referential_Integrity_tables#Deferring_transactions
+          # See also: https://github.com/nullobject/rein
+          db_instance = seed_name.find_or_initialize_by(id: load_id)
+          db_instance.touch
+          db_instance.save!
+        end
+        move_data_from_tmp_to_data_directory
       end
-      move_data_from_tmp_to_data_directory
     end
 
     # load yaml dump as seed instaces ready to be loaded
@@ -187,24 +220,22 @@ module Seed
     # runs the `after_load_seed` hook when upsert is done
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
-      Rails.logger.info " Upserting data for #{seed_name}"
+        db_instance = seed_name.find_or_initialize_by(id: load_id)
+        db_instance.assign_attributes(seed_instance.attributes)
+        db_instance.save! if db_instance.changed?
 
-      db_instance = seed_name.find_or_initialize_by(id: load_id)
-      db_instance.assign_attributes(seed_instance.attributes)
-      db_instance.save! if db_instance.changed?
-
-      Rails.logger.info "Done with #{seed_name}"
-      after_load_seed
+        after_load_seed
     end
 
     # reads the dependency file and takes the seed_id and seed class
     # call the seed class with upsert_seed_data method to load the dependent data tables
-    def load_dependencies
+    # @param loaded [Set<String>] IDs that have been loaded already
+    def load_dependencies(loaded)
       deps = File.join seed_directory, "#{load_id}-deps.yaml"
       deps = YAML.load_file(deps)
-      deps.each do |_, seed_id, seed|
-        seed.new(seed_id).upsert_seed_data
-      end
+      deps
+        .filter do |_, seed_id| not loaded.include? seed_id end
+        .each do |_, seed_id, seed| seed.new(seed_id).start_load(loaded) end
     end
 
     # class method to load files started outside of instance scope or from global scope
@@ -238,8 +269,9 @@ module Seed
       end
     end
 
-    # Takes a block and yeild insed `disable_referential_integrity` if defer_referential_checks is true
-    # otherwise just yields the block
+    # Takes a block and yield `disable_referential_integrity` if `defer_referential_checks` is true
+    # otherwise just yields the block. This allows certain seed configurations to temporarily disable
+    # consistency checks (which is sometimes required for circular dependencies).
     def run_within_correct_transaction
       if @defer_referential_checks
         ActiveRecord::Base.connection.disable_referential_integrity do

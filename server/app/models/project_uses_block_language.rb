@@ -4,7 +4,11 @@ class ProjectUsesBlockLanguage < ApplicationRecord
   belongs_to :block_language
 
   def readable_identification
-    block_language.readable_identification
+    if block_language
+      block_language.readable_identification
+    else
+      "(unknown used language: #{block_language_id})"
+    end
   end
 
   # Returns a hash that contains the ID of the referenced block
