@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe NewsController, type: :request do
   it 'nothing published' do
-    news = create(:news, publish_from: Date.new(2019, 11, 1) )
+    news = create(:news, published_from: Date.new(2019, 11, 1) )
     get '/api/news'
     json_data = JSON.parse(response.body)
     expect(json_data.length).to eq(0)
@@ -10,7 +10,7 @@ RSpec.describe NewsController, type: :request do
   end
 
   it 'something published' do
-    news = create(:news, publish_from: Date.new(2019, 1, 1) )
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
     get '/api/news'
     json_data = JSON.parse(response.body)
     expect(json_data.length).to eq(1)
@@ -18,9 +18,9 @@ RSpec.describe NewsController, type: :request do
   end
 
   it 'getting all news in multiple languages' do
-    create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, publish_from: Date.new(2019, 1, 1) )
-    create(:news, publish_from: Date.new(2019, 12, 1) )
-    create(:news, publish_from: Date.new(2019, 11, 1) )
+    create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    create(:news, published_from: Date.new(2019, 12, 1) )
+    create(:news, published_from: Date.new(2019, 11, 1) )
     get '/api/news/admin'
     json_data = JSON.parse(response.body)
     expect(json_data[0]['title']['de']).to eq("Schlagzeile 1")
