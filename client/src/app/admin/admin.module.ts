@@ -32,7 +32,6 @@ import { CreateGrammarComponent } from './grammar/create-grammar.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
 
-import { EditNewsComponent } from './edit-news.component';
 import { AdminNewsComponent } from './news.component';
 
 const materialModules = [
@@ -64,7 +63,6 @@ const materialModules = [
     OverviewGrammarComponent,
     OverviewBlockLanguageComponent,
     AdminNewsComponent,
-    EditNewsComponent
   ],
   providers: [
     JsonSchemaValidationService

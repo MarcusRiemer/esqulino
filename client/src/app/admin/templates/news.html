@@ -24,12 +24,14 @@
     </div>
     <div class="col-md-3">
       <label>Wähle einen Editor</label>
-      <select class="custom-select" required>
+      <select class="custom-select" name="editor" required [(ngModel)]="selectedEditor">
         <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
       </select>
     </div>
   </div>
 </form>
+
+{{selectedEditor}}
 
 <table class="table table-hover">
   <thead>
@@ -43,7 +45,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of (adminNewsList.value | async)" [routerLink]="['edit', item.id]">
+    <tr *ngFor="let item of (adminNewsList.value | async)"
+        [routerLink]="['edit']"
+        [queryParams]="{ mode: selectedEditor, language: selectedLanguage }">
       <td scope="row">{{item.id}}</td>
       <td>{{item.title ? item.title[selectedLanguage] || '' : ''}}</td>
       <td>{{item.text ? item.text[selectedLanguage] || '' : ''}}</td>

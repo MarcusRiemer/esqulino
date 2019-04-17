@@ -30,6 +30,7 @@ import { SideNavComponent } from './side-nav.component';
 import { NavSiteComponent } from './nav-page.component';
 import { NewsComponent } from './news.component';
 import { NewsDetailsComponent } from './news-details.component';
+import { MultiLangualEditorComponent } from './multilangual-editor.component';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -65,7 +66,8 @@ const materialModules = [
     SideNavComponent,
     NavSiteComponent,
     NewsComponent,
-    NewsDetailsComponent
+    NewsDetailsComponent,
+    MultiLangualEditorComponent
   ],
   exports: [
     CommonModule,
@@ -82,7 +84,8 @@ const materialModules = [
     SideNavComponent,
     NavSiteComponent,
     NewsComponent,
-    NewsDetailsComponent
+    NewsDetailsComponent,
+    MultiLangualEditorComponent
   ]
 })
 export class SharedAppModule {

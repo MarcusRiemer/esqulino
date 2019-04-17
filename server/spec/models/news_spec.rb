@@ -57,7 +57,7 @@ RSpec.describe News, type: :model do
     n = News.scope_single_language('de').first
     expect(n.id).to eq(orig.id)
     expect(n.publish_from).to eq(orig.publish_from)
-    expect(n.created_at).to eq(orig.created_at)
-    expect(n.updated_at).to eq(orig.updated_at)
+    expect(n.updated_at).to be_within(1.second).of Time.now
+    expect(n.created_at).to be_within(1.second).of Time.now
   end
 end
