@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { first, filter, finalize, flatMap, map } from 'rxjs/operators';
 
+import { DatabaseQueryErrorDescription } from '../../../shared';
 import { Tree } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';

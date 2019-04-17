@@ -1,0 +1,122 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 6b114674-ff31-447d-8722-e5437656958f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Welt B
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "world", "children": {"size": [{"name": "vec2",
+    "language": "truck_world", "properties": {"x": "5", "y": "5"}}], "roads": [{"name":
+    "road", "children": {"freight": [], "openings": [{"name": "direction", "language":
+    "truck_world", "properties": {"direction": "E"}}], "position": [{"name": "vec2",
+    "language": "truck_world", "properties": {"x": "0", "y": "0"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [{"name": "direction", "language": "truck_world",
+    "properties": {"direction": "E"}}, {"name": "direction", "language": "truck_world",
+    "properties": {"direction": "W"}}], "position": [{"name": "vec2", "language":
+    "truck_world", "properties": {"x": "1", "y": "0"}}], "trafficLights": [], "unloading_bay":
+    []}, "language": "truck_world"}, {"name": "road", "children": {"freight": [{"name":
+    "freight", "language": "truck_world", "properties": {"colour": "Red"}}], "openings":
+    [{"name": "direction", "language": "truck_world", "properties": {"direction":
+    "E"}}, {"name": "direction", "language": "truck_world", "properties": {"direction":
+    "W"}}], "position": [{"name": "vec2", "language": "truck_world", "properties":
+    {"x": "2", "y": "0"}}], "trafficLights": [], "unloading_bay": []}, "language":
+    "truck_world"}, {"name": "road", "children": {"freight": [], "openings": [{"name":
+    "direction", "language": "truck_world", "properties": {"direction": "E"}}, {"name":
+    "direction", "language": "truck_world", "properties": {"direction": "W"}}], "position":
+    [{"name": "vec2", "language": "truck_world", "properties": {"x": "3", "y": "0"}}],
+    "trafficLights": [], "unloading_bay": []}, "language": "truck_world"}, {"name":
+    "road", "children": {"freight": [], "openings": [{"name": "direction", "language":
+    "truck_world", "properties": {"direction": "S"}}, {"name": "direction", "language":
+    "truck_world", "properties": {"direction": "W"}}], "position": [{"name": "vec2",
+    "language": "truck_world", "properties": {"x": "4", "y": "0"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "0", "y": "1"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [], "position": [{"name": "vec2", "language": "truck_world", "properties": {"x":
+    "1", "y": "1"}}], "trafficLights": [], "unloading_bay": []}, "language": "truck_world"},
+    {"name": "road", "children": {"freight": [], "openings": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "2", "y": "1"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "3", "y": "1"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [{"name": "direction", "language": "truck_world", "properties": {"direction":
+    "N"}}], "position": [{"name": "vec2", "language": "truck_world", "properties":
+    {"x": "4", "y": "1"}}], "trafficLights": [], "unloading_bay": [{"name": "unloading_bay",
+    "language": "truck_world", "properties": {"colour": "Red"}}]}, "language": "truck_world"},
+    {"name": "road", "children": {"freight": [], "openings": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "0", "y": "2"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "1", "y": "2"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [], "position": [{"name": "vec2", "language": "truck_world", "properties": {"x":
+    "2", "y": "2"}}], "trafficLights": [], "unloading_bay": []}, "language": "truck_world"},
+    {"name": "road", "children": {"freight": [], "openings": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "3", "y": "2"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "4", "y": "2"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [], "position": [{"name": "vec2", "language": "truck_world", "properties": {"x":
+    "0", "y": "3"}}], "trafficLights": [], "unloading_bay": []}, "language": "truck_world"},
+    {"name": "road", "children": {"freight": [], "openings": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "1", "y": "3"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "2", "y": "3"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [], "position": [{"name": "vec2", "language": "truck_world", "properties": {"x":
+    "3", "y": "3"}}], "trafficLights": [], "unloading_bay": []}, "language": "truck_world"},
+    {"name": "road", "children": {"freight": [], "openings": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "4", "y": "3"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "0", "y": "4"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [], "position": [{"name": "vec2", "language": "truck_world", "properties": {"x":
+    "1", "y": "4"}}], "trafficLights": [], "unloading_bay": []}, "language": "truck_world"},
+    {"name": "road", "children": {"freight": [], "openings": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "2", "y": "4"}}], "trafficLights":
+    [], "unloading_bay": []}, "language": "truck_world"}, {"name": "road", "children":
+    {"freight": [], "openings": [], "position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "3", "y": "4"}}], "trafficLights": [], "unloading_bay": []},
+    "language": "truck_world"}, {"name": "road", "children": {"freight": [], "openings":
+    [], "position": [{"name": "vec2", "language": "truck_world", "properties": {"x":
+    "4", "y": "4"}}], "trafficLights": [], "unloading_bay": []}, "language": "truck_world"}],
+    "trucks": [{"name": "truck", "children": {"freight": [], "position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "1", "y": "0"}}], "orientation":
+    [{"name": "direction", "language": "truck_world", "properties": {"direction":
+    "E"}}]}, "language": "truck_world"}]}, "language": "truck_world"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-02-05 10:28:39.482699'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-02-05 11:16:11.178452'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: d3909e4c-e40a-4815-8966-9b9a4555a009
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-world
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: '{"name":"world","language":"truck_world","children":{"size":[{"name":"vec2","language":"truck_world","properties":{"x":"5","y":"5"}}],"roads":[{"name":"road","language":"truck_world","children":{"freight":[],"openings":[{"name":"direction","language":"truck_world","properties":{"direction":"E"}}],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"0","y":"0"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[{"name":"direction","language":"truck_world","properties":{"direction":"E"}},{"name":"direction","language":"truck_world","properties":{"direction":"W"}}],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"1","y":"0"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[{"name":"freight","language":"truck_world","properties":{"colour":"Red"}}],"openings":[{"name":"direction","language":"truck_world","properties":{"direction":"E"}},{"name":"direction","language":"truck_world","properties":{"direction":"W"}}],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"2","y":"0"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[{"name":"direction","language":"truck_world","properties":{"direction":"E"}},{"name":"direction","language":"truck_world","properties":{"direction":"W"}}],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"3","y":"0"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[{"name":"direction","language":"truck_world","properties":{"direction":"S"}},{"name":"direction","language":"truck_world","properties":{"direction":"W"}}],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"4","y":"0"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"0","y":"1"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"1","y":"1"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"2","y":"1"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"3","y":"1"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[{"name":"direction","language":"truck_world","properties":{"direction":"N"}}],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"4","y":"1"}}],"trafficLights":[],"unloading_bay":[{"name":"unloading_bay","language":"truck_world","properties":{"colour":"Red"}}]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"0","y":"2"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"1","y":"2"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"2","y":"2"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"3","y":"2"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"4","y":"2"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"0","y":"3"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"1","y":"3"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"2","y":"3"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"3","y":"3"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"4","y":"3"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"0","y":"4"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"1","y":"4"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"2","y":"4"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"3","y":"4"}}],"trafficLights":[],"unloading_bay":[]}},{"name":"road","language":"truck_world","children":{"freight":[],"openings":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"4","y":"4"}}],"trafficLights":[],"unloading_bay":[]}}],"trucks":[{"name":"truck","language":"truck_world","children":{"freight":[],"position":[{"name":"vec2","language":"truck_world","properties":{"x":"1","y":"0"}}],"orientation":[{"name":"direction","language":"truck_world","properties":{"direction":"E"}}]}}]}}'
+new_record: false
+active_record_yaml_version: 2

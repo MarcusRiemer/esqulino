@@ -1,13 +1,13 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: ef57a1ef-810c-4133-839d-2c02763a8504
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Trucklino Program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: ef57a1ef-810c-4133-839d-2c02763a8504
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": "program", "types": {"if": {"type": "concrete",

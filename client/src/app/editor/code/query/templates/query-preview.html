@@ -5,11 +5,11 @@
     <ng-container *ngIf="result">
       <span *ngIf="result.isPartial"
             class="float-right badge badge-warning">
-        {{ result.rowCount }} von {{ result.totalCount }} Zeilen
+        {{ result.subsetRowCount }} von {{ result.totalRowCount }} Zeilen
       </span>
       <span *ngIf="!result.isPartial"
             class="float-right badge badge-success">
-        {{ result.rowCount }} Zeilen
+        {{ result.subsetRowCount }} Zeilen
       </span>
     </ng-container>
   </h4>

@@ -1,4 +1,4 @@
-require_dependency 'util' # Checking whether Strings are UUIDs
+require_dependency "util" # Checking whether Strings are UUIDs
 
 # A project is a group of resources that logically belong together.
 # Currently every project is assumed to be somewhat web-centric
