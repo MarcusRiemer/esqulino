@@ -8,6 +8,8 @@ import { locales } from '../shared/change-language.component';
 })
 export class AdminNewsComponent {
   @Input() selectedLanguage: string;
+  @Input() selectedEditor: string;
+  
   constructor(
     private readonly _serverData: ServerDataService,
   ) {

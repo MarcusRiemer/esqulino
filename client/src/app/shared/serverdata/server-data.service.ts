@@ -164,7 +164,7 @@ export class ServerDataService {
     this._http,
     id => this._serverApi.individualBlockLanguageUrl(id)
   );
-
+  
   // Backing cache for listing of all block languages
   readonly listBlockLanguages = new CachedRequest<BlockLanguageListResponseDescription[]>(
     this._http.get<BlockLanguageListResponseDescription[]>(this._serverApi.getBlockLanguageListUrl())
