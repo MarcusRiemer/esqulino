@@ -110,6 +110,7 @@ GEM
       http-hpack (~> 0.1.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
+    irb (1.0.0)
     json (2.2.0)
     json_schemer (0.1.10)
       ecma-re-validator (~> 0.2.0)
@@ -252,10 +253,12 @@ DEPENDENCIES
   fakefs
   falcon (~> 0.19)
   guard-rspec
+  irb
   json_schemer (~> 0.1)
   listen (>= 3.0.5, < 3.2)
   mini_magick (~> 4.9)
   pg
+  pry (~> 0.12.2)
   rack-cors
   rails (= 5.2.2)
   rspec-rails (~> 3.8)

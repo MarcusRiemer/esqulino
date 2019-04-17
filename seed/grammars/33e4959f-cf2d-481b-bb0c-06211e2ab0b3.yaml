@@ -1,14 +1,14 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 33e4959f-cf2d-481b-bb0c-06211e2ab0b3
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: JSON
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: json
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 33e4959f-cf2d-481b-bb0c-06211e2ab0b3
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": "value", "types": {"null": {"type": "concrete",

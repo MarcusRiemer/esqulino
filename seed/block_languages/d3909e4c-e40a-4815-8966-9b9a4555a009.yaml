@@ -1,13 +1,11 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Trucklino World
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: d3909e4c-e40a-4815-8966-9b9a4555a009
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino World
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "Trucklino
@@ -165,6 +163,8 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2019-02-28 19:56:05.941799'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-world
