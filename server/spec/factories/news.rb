@@ -12,6 +12,6 @@ FactoryBot.define do
         'en' => "This is a test"
       }
     }
-    publish_from { Date.new(2019, 4, 10) }
+    published_from { Date.new(2019, 4, 10) }
   end
 end

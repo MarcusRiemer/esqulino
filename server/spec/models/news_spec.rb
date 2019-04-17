@@ -9,7 +9,7 @@ RSpec.describe News, type: :model do
     expect(news.title['en']).to eq('Headline')
     expect(news.text['de']).to eq('Das ist ein Test')
     expect(news.text['en']).to eq('This is a test')
-    expect(news.publish_from.strftime('%F')).to eq("2019-04-10")
+    expect(news.published_from.strftime('%F')).to eq("2019-04-10")
   end
 
   it 'can news be published?' do
@@ -56,7 +56,7 @@ RSpec.describe News, type: :model do
     orig = create(:news)
     n = News.scope_single_language('de').first
     expect(n.id).to eq(orig.id)
-    expect(n.publish_from).to eq(orig.publish_from)
+    expect(n.published_from).to eq(orig.published_from)
     expect(n.updated_at).to be_within(1.second).of Time.now
     expect(n.created_at).to be_within(1.second).of Time.now
   end
