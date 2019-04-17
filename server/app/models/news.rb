@@ -24,6 +24,6 @@ class News < ApplicationRecord
 
   def to_list_api_response
     to_json_api_response
-      .slice("id", "title", "text", "publishFrom")
+      .slice("id", "title", "text", "publishedFrom")
   end
 end
