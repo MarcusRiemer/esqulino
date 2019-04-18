@@ -80,6 +80,7 @@ Rails.application.routes.draw do
 
       scope 'admin' do
         root via: [:get], controller: 'news', action: :index_admin
+        get 'single/:id', controller: 'news', action: :show_admin
       end
     end
 

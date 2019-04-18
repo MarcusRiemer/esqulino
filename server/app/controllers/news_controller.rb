@@ -20,5 +20,8 @@ class NewsController < ApplicationController
 
   def show_admin
     render :json => News.all
+                      .where("id = ?", params[:id])
+                      .first
+                      .to_list_api_response
   end
 end
