@@ -33,6 +33,7 @@ import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
 
 import { AdminNewsComponent } from './news.component';
+import { AdminNewsEditing } from './edit-news.component';
 
 const materialModules = [
   MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule
@@ -63,6 +64,7 @@ const materialModules = [
     OverviewGrammarComponent,
     OverviewBlockLanguageComponent,
     AdminNewsComponent,
+    AdminNewsEditing
   ],
   providers: [
     JsonSchemaValidationService

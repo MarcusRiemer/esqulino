@@ -26,21 +26,6 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the News for the user
-   */
-  getUserNews(): string {
-    return (`${this._apiBaseUrl}/news`)
-  }
-
-
-  /**
-   * Retrieves the News for the admin
-   */
-  getAdminNews(): string {
-    return (`${this._apiBaseUrl}/news/admin`)
-  }
-
-  /**
    * Retrieves the URL that is used to list all public block languages.
    */
   getBlockLanguageListUrl(): string {
@@ -159,6 +144,13 @@ export class ServerApi {
    */
   getUserNewsDetails(id: string): string {
     return (`${this._apiBaseUrl}/news/details/${id}`)
+  }
+
+  /**
+   * Getting a single news
+   */
+  getAdminNewsSingle(id: string): string {
+    return (`${this._apiBaseUrl}/news/admin/single/${id}`)
   }
 
   /**

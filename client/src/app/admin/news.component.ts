@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Inject, LOCALE_ID } from "@angular/core";
 
 import { ServerDataService } from '../shared';
 import { locales } from '../shared/change-language.component';
@@ -7,17 +7,13 @@ import { locales } from '../shared/change-language.component';
   templateUrl: './templates/news.html'
 })
 export class AdminNewsComponent {
-  @Input() selectedLanguage: string;
-  @Input() selectedEditor: string;
+  @Input() selectedLanguage: string = this.localeId;
+  @Input() selectedEditor: string = 'single';
   
   constructor(
-    private readonly _serverData: ServerDataService,
-  ) {
-    this.adminNewsList.value.subscribe(list => {
-      console.log(list)
-    })
-
-  }
+    @Inject(LOCALE_ID) readonly localeId: string,
+    private readonly _serverData: ServerDataService
+  ) { }
 
   readonly languages = locales;
   readonly editors = [

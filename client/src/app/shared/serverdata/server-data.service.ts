@@ -18,7 +18,7 @@ import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
 import { UserNewsDescription } from '../syntaxtree/news.description';
-import { AdminNewsComponent } from './../../admin/news.component';
+import { AdminNewsDescription } from './../syntaxtree/news.description';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -194,8 +194,13 @@ export class ServerDataService {
     this._http.get<UserNewsDescription[]>(this._serverApi.getUserNewsListUrl())
   );
 
-  readonly getAdminNewsList = new CachedRequest<AdminNewsComponent[]>(
-    this._http.get<AdminNewsComponent[]>(this._serverApi.getAdminNewsListUrl())
+  readonly getAdminNewsList = new CachedRequest<AdminNewsDescription[]>(
+    this._http.get<AdminNewsDescription[]>(this._serverApi.getAdminNewsListUrl())
+  );
+
+  readonly getAdminNewsSingle = new IndividualDescriptionCache<UserNewsDescription>(
+    this._http,
+    id => this._serverApi.getAdminNewsSingle(id)
   );
 
   readonly getUserNewsDetails = new IndividualDescriptionCache<UserNewsDescription>(
