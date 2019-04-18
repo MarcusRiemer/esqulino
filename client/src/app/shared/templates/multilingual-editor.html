@@ -1,0 +1,32 @@
+<style>
+  select, input, textarea { margin-top: 2vh }
+</style>
+
+<ng-container *ngIf="control == 'input'">
+  <div class="row" style="margin-left: 0">
+    <div class="col-md-2">
+      <select class="custom-select"  name="language" required [(ngModel)]="language">
+        <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <input type="text" [value]="editingString[language]" class="form-control">
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="control == 'textarea'">
+  <div class="column">
+    <div class="col-md-3">
+      <select class="custom-select"  name="language" required [(ngModel)]="language">
+        <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-9">
+      <div class="form-group">
+        <textarea class="form-control" id="edit-text" [value]="editingString[language]" rows="10"></textarea>
+      </div>
+    </div>
+  </div>
+</ng-container> 

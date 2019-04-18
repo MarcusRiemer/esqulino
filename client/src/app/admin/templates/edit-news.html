@@ -1,0 +1,18 @@
+
+<ng-container class="single" *ngIf="queryParams.mode == 'single'">
+  <multilingual-editor [editingString]="( editingNews | async)?.title" [language]="queryParams.language" [control]="'input'"></multilingual-editor>
+  <multilingual-editor [editingString]="( editingNews | async)?.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-editor>
+</ng-container>
+
+<ng-container *ngIf="queryParams.mode == 'translation'">
+  <multilingual-editor [editingString]="( editingNews | async)?.title" [language]="queryParams.language" [control]="'input'"></multilingual-editor>
+  <multilingual-editor [editingString]="( editingNews | async)?.title" [control]="'input'"></multilingual-editor>
+  <div class="row">
+    <div class="col-md-6">
+      <multilingual-editor [editingString]="( editingNews | async)?.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-editor>
+    </div>
+    <div class="col-md-6">
+      <multilingual-editor [editingString]="( editingNews | async)?.text" [control]="'textarea'"></multilingual-editor>
+    </div>
+  </div>
+</ng-container>

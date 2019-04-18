@@ -38,7 +38,7 @@ export const adminItems: NavItem[] = [
       en: "News",
     },
     route: ["/admin/news"],
-    icon: "puzzle-piece",
+    icon: "newspaper-o",
   },
   {
     type: "external",
