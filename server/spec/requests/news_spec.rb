@@ -34,9 +34,9 @@ RSpec.fdescribe NewsController, type: :request do
   end
 
   it 'updating a news' do
-    a = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
-      "id" => a.id,
+      "id" => news.id,
       "title" => { 'de': "Test" }
     }
 
@@ -53,9 +53,9 @@ RSpec.fdescribe NewsController, type: :request do
   end
 
   it 'updating a news without a valid language' do
-    a = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
-      "id" => a.id,
+      "id" => news.id,
       "title" => { 'ab': "Test" }
     }
 
@@ -71,9 +71,9 @@ RSpec.fdescribe NewsController, type: :request do
   end
 
   it 'updating a news with a valid language and an invalid language' do
-    a = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
-      "id" => a.id,
+      "id" => news.id,
       "title" => { 'ab': "Test", 'de': "test2" }
     }
 
@@ -90,9 +90,9 @@ RSpec.fdescribe NewsController, type: :request do
   end
 
   it 'updating a news with an invalid date' do
-    a = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
-      "id" => a.id,
+      "id" => news.id,
       "title" => { 'de': "Test" },
       "publishedFrom" => "test"
     }
@@ -107,5 +107,22 @@ RSpec.fdescribe NewsController, type: :request do
     end
 
     expect(json_data['publishedFrom']).to eq("2019-01-01T00:00:00.000Z")
+  end
+
+  it 'deleting a news' do
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+
+    delete "/api/news/admin/single/#{news.id}"
+
+    expect(News.all.where('id = ?', news.id).first).to be_nil
+  end
+
+  it 'deleting a news with an invalid id' do
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    count_news = News.all.count
+    uuid = SecureRandom.uuid
+    delete "/api/news/admin/single/#{uuid}"
+
+    expect(count_news).to eq(News.all.count)
   end
 end

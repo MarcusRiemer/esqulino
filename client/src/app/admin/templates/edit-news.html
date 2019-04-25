@@ -3,14 +3,14 @@
 </style>
 
 <ng-container *ngIf="newsData">
-  <ng-container class="single" *ngIf="queryParams.mode == 'single'">
-    <multilingual-input [(editingString)]="newsData.title" [control]="'input'"></multilingual-input>
-    <multilingual-input [(editingString)]="newsData.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-input>
+  <ng-container class="single" *ngIf="queryParamsMode == 'single'">
+    <multilingual-input [(editingString)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-input>
+    <multilingual-input [(editingString)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-input>
   </ng-container>
 
-  <ng-container *ngIf="queryParams.mode == 'translation'">
-    <multilingual-editor [(firstString)]="newsData.title" [(secondString)]="newsData.title" [language]="queryParams.language" [control]="'input'"></multilingual-editor>
-    <multilingual-editor [(firstString)]="newsData.text" [(secondString)]="newsData.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-editor>
+  <ng-container *ngIf="queryParamsMode == 'translation'">
+    <multilingual-editor [(firstString)]="newsData.title" [(secondString)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-editor>
+    <multilingual-editor [(firstString)]="newsData.text" [(secondString)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-editor>
   </ng-container>
 
   <mat-form-field>
@@ -19,6 +19,7 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
+  <button (click)="deleteNews()" type="button" class="btn btn-primary">News Löschen</button>
   <button (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
 </ng-container>
 

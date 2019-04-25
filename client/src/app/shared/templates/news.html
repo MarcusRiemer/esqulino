@@ -3,7 +3,7 @@
     <div class="card-body">
       <h1 class="card-title">{{item.title[locale]}}</h1>
       <p class="card-text">Vom {{item.publishedFrom | date:'dd.MM.yyyy'}}</p>
-      <p class="card-text">{{item.text[locale]}}</p>
+      <p class="card-text">{{item.text[locale] | slice:0:60 }}</p>
       <a [routerLink]="[ '/news/details', item.id ]" class="btn btn-primary">Weiterlesen...</a>
     </div>
   </div>

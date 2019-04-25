@@ -82,6 +82,7 @@ Rails.application.routes.draw do
         root via: [:get], controller: 'news', action: :index_admin
         root via: [:put], controller: 'news', action: :update
         get 'single/:id', controller: 'news', action: :show_admin
+        delete 'single/:id', controller: 'news', action: :delete_news
       end
     end
 

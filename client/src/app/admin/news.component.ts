@@ -26,15 +26,20 @@ export class AdminNewsComponent {
   public adminNewsList = this._serverData.getAdminNewsList.value;
   public searchList = this.adminNewsList;
 
-  change(): void {
+  public change(): void {
     this.searchList = this.adminNewsList;
+    this.searchFor = this.searchFor.toLowerCase();
     this.searchList = this.searchList.pipe(
       map(item => item.filter(entry =>
           entry.id.includes(this.searchFor)
-        || (entry.text ? (entry.text[this.selectedLanguage] ? entry.text[this.selectedLanguage].includes(this.searchFor) : null) : null)
-        || (entry.title ? (entry.title[this.selectedLanguage] ? entry.title[this.selectedLanguage].includes(this.searchFor) : null) : null)
+        || (entry.text ? (entry.text[this.selectedLanguage] ? entry.text[this.selectedLanguage].toLowerCase().includes(this.searchFor) : null) : null)
+        || (entry.title ? (entry.title[this.selectedLanguage] ? entry.title[this.selectedLanguage].toLowerCase().includes(this.searchFor) : null) : null)
         || (entry.published_from ? entry.published_from : null)
       ))
     )
+  }
+
+  public createNews(): void {
+    
   }
 }

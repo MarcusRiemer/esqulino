@@ -2,6 +2,7 @@
 <style>
   label { margin-top: 1vh; }
   input { margin-bottom: 1vh; }
+  button { margin-top: 4vh; }
 </style>
 <ng-container id="news">
   <form>
@@ -21,6 +22,9 @@
       <div class="col-md-3">
         <label>Suche:</label>
         <input class="form-control" name="search-for" (ngModelChange)="change()" [(ngModel)]="searchFor">
+      </div>
+      <div class="col-md-3">
+        <button (click)="createNews()" class="btn btn-primary">Erstellen</button>
       </div>
     </div>
   </form>
@@ -43,7 +47,6 @@
         <td scope="row">{{item.id}}</td>
         <td>{{item.title ? item.title[selectedLanguage] || '' : ''}}</td>
         <td>{{item.text ? item.text[selectedLanguage] || '' : ''}}</td>
-        <!-- TomFrage: warum publishFrom und nicht published_from -->
         <td>{{(item.publishedFrom | date: 'dd.MM.yyyy') || ''}}</td>
         <td>{{item.createdAt}}</td>
         <td>{{item.updatedAt}}</td>

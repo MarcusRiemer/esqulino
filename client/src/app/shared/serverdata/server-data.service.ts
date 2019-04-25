@@ -221,6 +221,18 @@ export class ServerDataService {
       });
   }
 
+    /**
+   * Deletes the news with the given ID.
+   */
+  deleteNews(id: string) {
+    this._http.delete(this._serverApi.getAdminNewsSingle(id))
+      .pipe(first())
+      .subscribe(_ => {
+        console.log(`Deleted news "${id}"`);
+        this.getAdminNewsList.refresh();
+      });
+  }
+
   /**
    * @return The details of the specified grammar.
    */

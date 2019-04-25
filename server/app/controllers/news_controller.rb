@@ -31,13 +31,19 @@ class NewsController < ApplicationController
                   .first
 
     transformed_data = transform_updated_news
-
     transformed_data[:published_from] = parse_date(transformed_data[:published_from], news[:published_from])
-
-
     news.update(transformed_data)
 
     render :json => news.to_full_api_response
+  end
+
+  def delete_news
+    news = News.all
+                  .where('id = ?', params[:id])
+                  .first
+    if (news)
+      news.destroy
+    end
   end
 
   def transform_updated_news
