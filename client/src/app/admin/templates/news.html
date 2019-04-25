@@ -1,3 +1,8 @@
+
+<style>
+  label { margin-top: 1vh; }
+  input { margin-bottom: 1vh; }
+</style>
 <ng-container id="news">
   <form>
     <div class="row">
@@ -12,6 +17,10 @@
         <select class="custom-select" name="editor" required [(ngModel)]="selectedEditor">
           <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
         </select>
+      </div>
+      <div class="col-md-3">
+        <label>Suche:</label>
+        <input class="form-control" name="search-for" (ngModelChange)="change()" [(ngModel)]="searchFor">
       </div>
     </div>
   </form>
@@ -28,7 +37,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of (adminNewsList.value | async)"
+      <tr *ngFor="let item of (searchList | async)"
           [routerLink]="['edit', item.id]"
           [queryParams]="{ mode: selectedEditor, language: selectedLanguage }">
         <td scope="row">{{item.id}}</td>
