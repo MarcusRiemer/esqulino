@@ -161,6 +161,13 @@ export class ServerApi {
   }
 
   /**
+   * Getting the URL for the news update route
+   */
+  getNewsUpdateUrl(): string {
+    return (`${this._apiBaseUrl}/news/admin`)
+  }
+
+  /**
    * Retrieves the URL to access code resources
    */
   getCodeResourceUrl(projectId: string, codeResourceId: string): string {

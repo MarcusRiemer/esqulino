@@ -1,32 +1,11 @@
-<style>
-  select, input, textarea { margin-top: 2vh }
-</style>
+<multilingual-input *ngIf="control == 'input'" [(editingString)]="firstString" [control]="'input'"></multilingual-input>
+<multilingual-input *ngIf="control == 'input'" [(editingString)]="secondString" [language]="language" [control]="'input'"></multilingual-input>
 
-<ng-container *ngIf="control == 'input'">
-  <div class="row" style="margin-left: 0">
-    <div class="col-md-2">
-      <select class="custom-select"  name="language" required [(ngModel)]="language">
-        <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
-      </select>
-    </div>
-    <div class="col-md-6">
-      <input type="text" [value]="editingString[language]" class="form-control">
-    </div>
+<div class="row" *ngIf="control == 'textarea'">
+  <div class="col-md-6">
+    <multilingual-input [(editingString)]="firstString" [control]="'textarea'"></multilingual-input>
   </div>
-</ng-container>
-
-<ng-container *ngIf="control == 'textarea'">
-  <div class="column">
-    <div class="col-md-3">
-      <select class="custom-select"  name="language" required [(ngModel)]="language">
-        <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
-      </select>
-    </div>
-
-    <div class="col-md-9">
-      <div class="form-group">
-        <textarea class="form-control" id="edit-text" [value]="editingString[language]" rows="10"></textarea>
-      </div>
-    </div>
+  <div class="col-md-6">
+    <multilingual-input [(editingString)]="secondString" [language]="language" [control]="'textarea'"></multilingual-input>
   </div>
-</ng-container> 
+</div>

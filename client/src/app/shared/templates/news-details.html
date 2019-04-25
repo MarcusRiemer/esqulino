@@ -1,5 +1,5 @@
 
 
-<h1>{{ (news | async).title[locale] }}</h1>
-<h2>Datum: {{ (news | async).publishFrom | date:'dd.MM.yyyy' }}</h2>
-<p>{{ (news | async).text[locale] }}</p>
+<h1>{{ (news | async)?.title[locale] }}</h1>
+<h2>Datum: {{ (news | async)?.publishFrom | date:'dd.MM.yyyy' }}</h2>
+<p>{{ (news | async)?.text[locale] }}</p>

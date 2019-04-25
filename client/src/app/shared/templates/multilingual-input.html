@@ -1,0 +1,37 @@
+<style>
+  select, input, textarea, button { margin-top: 2vh }
+</style>
+
+<ng-container *ngIf="control == 'input'">
+  <div class="row" style="margin-left: 0">
+    <div class="col-md-2">
+      <select class="custom-select"  name="language" required [(ngModel)]="language">
+        <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <input *ngIf="currentString && currentString[language] != undefined" type="text" name="edited-input" [value]="currentString[language] || ''" class="form-control" required [(ngModel)]="editingString[language]">
+      <button *ngIf="!currentString || currentString[language] == undefined" (click)="addObject()" type="button" class="btn btn-primary">Hinzufügen</button>
+      <button *ngIf="currentString && currentString[language] != undefined" (click)="deleteObject()" type="button" class="btn btn-primary">Löschen</button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="control == 'textarea'">
+  <div class="column">
+    <div class="col-md-3">
+      <select class="custom-select"  name="language" required [(ngModel)]="language">
+        <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-9">
+      <div class="form-group">
+        <textarea *ngIf="currentString && currentString[language] != undefined" class="form-control" name="edited-text" id="edit-text" [value]="currentString[language] || ''" rows="10" required [(ngModel)]="editingString[language]"></textarea>
+        <button *ngIf="!currentString || currentString[language] == undefined" (click)="addObject()" type="button" class="btn btn-primary">Hinzufügen</button>
+        <button *ngIf="currentString && currentString[language] != undefined" (click)="deleteObject()" type="button" class="btn btn-primary">Löschen</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+

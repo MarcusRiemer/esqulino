@@ -1,4 +1,5 @@
-import { Component, Input, Inject, LOCALE_ID } from "@angular/core";
+import { filter, map } from 'rxjs/operators';
+import { Component, Input, Inject, LOCALE_ID, OnChanges, SimpleChanges } from "@angular/core";
 
 import { ServerDataService } from '../shared';
 import { locales } from '../shared/change-language.component';
@@ -9,6 +10,7 @@ import { locales } from '../shared/change-language.component';
 export class AdminNewsComponent {
   @Input() selectedLanguage: string = this.localeId;
   @Input() selectedEditor: string = 'single';
+  @Input() searchFor: string = '';
   
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
@@ -20,5 +22,19 @@ export class AdminNewsComponent {
     {name: 'single',  description: 'Einfacher Bearbeitungsmodus'},
     {name: 'translation',  description: 'Übersetzungsmodus'},
   ]
-  readonly adminNewsList = this._serverData.getAdminNewsList;
+
+  public adminNewsList = this._serverData.getAdminNewsList.value;
+  public searchList = this.adminNewsList;
+
+  change(): void {
+    this.searchList = this.adminNewsList;
+    this.searchList = this.searchList.pipe(
+      map(item => item.filter(entry =>
+          entry.id.includes(this.searchFor)
+        || (entry.text ? (entry.text[this.selectedLanguage] ? entry.text[this.selectedLanguage].includes(this.searchFor) : null) : null)
+        || (entry.title ? (entry.title[this.selectedLanguage] ? entry.title[this.selectedLanguage].includes(this.searchFor) : null) : null)
+        || (entry.published_from ? entry.published_from : null)
+      ))
+    )
+  }
 }

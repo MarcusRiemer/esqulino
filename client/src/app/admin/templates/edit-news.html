@@ -1,18 +1,25 @@
+<style>
+  button, mat-form-field { margin-left: 1vw; }
+</style>
 
-<ng-container class="single" *ngIf="queryParams.mode == 'single'">
-  <multilingual-editor [editingString]="( editingNews | async)?.title" [language]="queryParams.language" [control]="'input'"></multilingual-editor>
-  <multilingual-editor [editingString]="( editingNews | async)?.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-editor>
+<ng-container *ngIf="newsData">
+  <ng-container class="single" *ngIf="queryParams.mode == 'single'">
+    <multilingual-input [(editingString)]="newsData.title" [control]="'input'"></multilingual-input>
+    <multilingual-input [(editingString)]="newsData.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-input>
+  </ng-container>
+
+  <ng-container *ngIf="queryParams.mode == 'translation'">
+    <multilingual-editor [(firstString)]="newsData.title" [(secondString)]="newsData.title" [language]="queryParams.language" [control]="'input'"></multilingual-editor>
+    <multilingual-editor [(firstString)]="newsData.text" [(secondString)]="newsData.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-editor>
+  </ng-container>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
 </ng-container>
 
-<ng-container *ngIf="queryParams.mode == 'translation'">
-  <multilingual-editor [editingString]="( editingNews | async)?.title" [language]="queryParams.language" [control]="'input'"></multilingual-editor>
-  <multilingual-editor [editingString]="( editingNews | async)?.title" [control]="'input'"></multilingual-editor>
-  <div class="row">
-    <div class="col-md-6">
-      <multilingual-editor [editingString]="( editingNews | async)?.text" [language]="queryParams.language" [control]="'textarea'"></multilingual-editor>
-    </div>
-    <div class="col-md-6">
-      <multilingual-editor [editingString]="( editingNews | async)?.text" [control]="'textarea'"></multilingual-editor>
-    </div>
-  </div>
-</ng-container>
+

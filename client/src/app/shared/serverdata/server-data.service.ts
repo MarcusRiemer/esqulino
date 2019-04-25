@@ -198,7 +198,7 @@ export class ServerDataService {
     this._http.get<AdminNewsDescription[]>(this._serverApi.getAdminNewsListUrl())
   );
 
-  readonly getAdminNewsSingle = new IndividualDescriptionCache<UserNewsDescription>(
+  readonly getAdminNewsSingle = new IndividualDescriptionCache<AdminNewsDescription>(
     this._http,
     id => this._serverApi.getAdminNewsSingle(id)
   );
@@ -207,6 +207,19 @@ export class ServerDataService {
     this._http,
     id => this._serverApi.getUserNewsDetails(id)
   );
+
+    /**
+   * Updates the given news
+   */
+  updateNews(desc: AdminNewsDescription) {
+    const url = this._serverApi.getNewsUpdateUrl();
+    this._http.put(url, desc)
+      .subscribe(_ => {
+        console.log(`Updated news "${desc.id}"`);
+        this.getAdminNewsList.refresh();
+        this.getAdminNewsSingle.refreshDescription(desc.id);
+      });
+  }
 
   /**
    * @return The details of the specified grammar.
