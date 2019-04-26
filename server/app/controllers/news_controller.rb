@@ -37,6 +37,12 @@ class NewsController < ApplicationController
     render :json => news.to_full_api_response
   end
 
+  def create_news
+    news = News.create(title: { 'de': "", 'en': ""}, text: { 'de': "", 'en': "" }, published_from: Date.new(2019, 1, 1))
+
+    render :json => news.to_full_api_response
+  end
+
   def delete_news
     news = News.all
                   .where('id = ?', params[:id])

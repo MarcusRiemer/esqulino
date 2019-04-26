@@ -1,9 +1,9 @@
-import { filter, map } from 'rxjs/operators';
+import {  map, first } from 'rxjs/operators';
 import { Component, Input, Inject, LOCALE_ID, OnChanges, SimpleChanges } from "@angular/core";
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ServerDataService } from '../shared';
 import { locales } from '../shared/change-language.component';
-
 @Component({
   templateUrl: './templates/news.html'
 })
@@ -14,7 +14,9 @@ export class AdminNewsComponent {
   
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
-    private readonly _serverData: ServerDataService
+    private readonly _serverData: ServerDataService,
+    private _router: Router,
+    private _active: ActivatedRoute
   ) { }
 
   readonly languages = locales;
@@ -40,6 +42,8 @@ export class AdminNewsComponent {
   }
 
   public createNews(): void {
-    
+    this._serverData.createNews.value.pipe(
+      first()
+    ).subscribe(newNews => this._router.navigate(['edit', newNews.id], { relativeTo: this._active }))
   }
 }
