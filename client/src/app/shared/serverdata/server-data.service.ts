@@ -208,6 +208,11 @@ export class ServerDataService {
     id => this._serverApi.getUserNewsDetails(id)
   );
 
+  readonly createNews = new CachedRequest<AdminNewsDescription>(
+    this._http.get<AdminNewsDescription>(this._serverApi.getCreateNewsUrl())
+  );
+
+
     /**
    * Updates the given news
    */

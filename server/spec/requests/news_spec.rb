@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe NewsController, type: :request do
+RSpec.describe NewsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
   
   it 'nothing published' do
@@ -124,5 +124,20 @@ RSpec.fdescribe NewsController, type: :request do
     delete "/api/news/admin/single/#{uuid}"
 
     expect(count_news).to eq(News.all.count)
+  end
+
+  it 'creating a news' do
+    count_news = News.all.count
+    get "/api/news/admin/create"
+
+    if (not response.body.blank?) then
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+    end
+
+    expect(json_data['id']).to_not be_nil
+    expect(json_data['text']).to_not be_nil
+    expect(json_data['title']).to_not be_nil
+    expect(count_news).to_not eq(News.all.count)
   end
 end

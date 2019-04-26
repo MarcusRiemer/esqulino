@@ -139,6 +139,7 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/news`)
   }
 
+
   /**
    * Getting a single news
    */
@@ -158,6 +159,13 @@ export class ServerApi {
    */
   getAdminNewsListUrl(): string {
     return (`${this._apiBaseUrl}/news/admin`)
+  }
+
+  /**
+   * Creating/Getting a new News 
+   */
+  getCreateNewsUrl(): string {
+    return (`${this._apiBaseUrl}/news/admin/create`)
   }
 
   /**
