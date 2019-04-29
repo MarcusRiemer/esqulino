@@ -28,9 +28,30 @@ export class AdminNewsEditing implements OnInit {
   //interval = interval(5000).subscribe(test => {console.log(this.newsData)})
 
   public ngOnInit(): void {
-    this._serverData.getAdminNewsSingle.getDescription(this._id).pipe(
-      first()
-    ).subscribe(news => this.newsData = news);
+    if (this.isCreatingNews) {
+      this.newsData = {
+        id: '',
+        title: {},
+        text: {},
+        published_from: '01.01.2019',
+        created_at: '',
+        updated_at: ''
+      };
+    } else {
+      this._serverData.getAdminNewsSingle.getDescription(this._id).pipe(
+        first()
+      ).subscribe(news => this.newsData = news);
+    }
+  }
+
+  public get isCreatingNews():boolean {
+    return this._id === undefined
+  }
+
+  public createNews(): void {
+    console.log(this.newsData);
+    this._serverService.createNews(this.newsData);
+    this._router.navigate(['admin/news']);
   }
 
   public updateData(): void{

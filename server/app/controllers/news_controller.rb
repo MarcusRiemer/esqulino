@@ -38,7 +38,9 @@ class NewsController < ApplicationController
   end
 
   def create_news
-    news = News.create(title: { 'de': "", 'en': ""}, text: { 'de': "", 'en': "" }, published_from: Date.new(2019, 1, 1))
+    transformed_data = transform_updated_news
+    transformed_data[:published_from] = parse_date(transformed_data[:published_from], Date.today)
+    news = News.create(transformed_data)
 
     render :json => news.to_full_api_response
   end

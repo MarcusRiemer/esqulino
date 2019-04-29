@@ -42,8 +42,6 @@ export class AdminNewsComponent {
   }
 
   public createNews(): void {
-    this._serverData.createNews.value.pipe(
-      first()
-    ).subscribe(newNews => this._router.navigate(['edit', newNews.id], { relativeTo: this._active }))
+    this._router.navigate(['edit', 'create'], { relativeTo: this._active })
   }
 }
