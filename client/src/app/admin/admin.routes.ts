@@ -46,7 +46,11 @@ export const adminRoutes: Routes = [
         component: AdminNewsComponent
       },
       {
-        path: 'news/edit/:id',
+        path: 'news/edit/:newsId',
+        component: AdminNewsEditing
+      },
+      {
+        path: 'news/create',
         component: AdminNewsEditing
       }
     ]

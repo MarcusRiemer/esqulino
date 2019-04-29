@@ -207,13 +207,20 @@ export class ServerDataService {
     this._http,
     id => this._serverApi.getUserNewsDetails(id)
   );
+  
+  /**
+   * creating a new news
+   */
+  createNews(desc: AdminNewsDescription) {
+    const url = this._serverApi.getCreateNewsUrl();
+    this._http.post(url, desc)
+      .subscribe(_ => {
+        console.log(`Created news "${desc.id}"`);
+        this.getAdminNewsList.refresh();
+      });
+  }
 
-  readonly createNews = new CachedRequest<AdminNewsDescription>(
-    this._http.get<AdminNewsDescription>(this._serverApi.getCreateNewsUrl())
-  );
-
-
-    /**
+  /**
    * Updates the given news
    */
   updateNews(desc: AdminNewsDescription) {

@@ -20,7 +20,8 @@
   </mat-form-field>
 
   <button (click)="deleteNews()" type="button" class="btn btn-primary">News Löschen</button>
-  <button (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
+  <button *ngIf="newsData.id != ''" (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
+  <button *ngIf="newsData.id == ''" (click)="createNews()" type="button" class="btn btn-primary">Erstellen</button>
 </ng-container>
 
 
