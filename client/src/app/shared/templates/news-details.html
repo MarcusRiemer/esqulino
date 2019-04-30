@@ -1,5 +1,7 @@
 
+<ng-container *ngIf="news | async; let news">
+  <h1>{{ news.title[locale] }}</h1>
+  <h2>Datum: {{ news.publishedFrom | date:'dd.MM.yyyy' }}</h2>
+  <p>{{ news.text[locale] }}</p>
+</ng-container>
 
-<h1>{{ (news | async)?.title[locale] }}</h1>
-<h2>Datum: {{ (news | async)?.publishedFrom | date:'dd.MM.yyyy' }}</h2>
-<p>{{ (news | async)?.text[locale] }}</p>

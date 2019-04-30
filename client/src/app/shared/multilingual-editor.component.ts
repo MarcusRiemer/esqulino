@@ -7,10 +7,10 @@ import { MultilingualString } from './multilingual-string.description';
   templateUrl: './templates/multilingual-editor.html'
 })
 export class MultiLingualEditorComponent implements OnChanges {
-  @Input() firstString: MultilingualString;
-  @Input() secondString: MultilingualString;
-  @Output() firstStringChange = new EventEmitter<MultilingualString>();
-  @Output() secondStringChange = new EventEmitter<MultilingualString>();
+  @Input() original: MultilingualString;
+  @Input() translated: MultilingualString;
+  @Output() originalChange = new EventEmitter<MultilingualString>();
+  @Output() translatedChange = new EventEmitter<MultilingualString>();
   @Input() control: string = 'input';
   @Input() language: string = this.localeID;
 
@@ -19,10 +19,10 @@ export class MultiLingualEditorComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes['firstString'].isFirstChange())
-      this.firstStringChange.emit(this.firstString);
+    if (!changes['original'].isFirstChange())
+      this.originalChange.emit(this.original);
 
-    if (!changes['secondString'].isFirstChange())
-      this.secondStringChange.emit(this.secondString);
+    if (!changes['translated'].isFirstChange())
+      this.translatedChange.emit(this.translated);
   }
 }

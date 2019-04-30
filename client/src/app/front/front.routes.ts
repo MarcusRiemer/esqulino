@@ -29,7 +29,7 @@ export const frontRoutes: Routes = [
       { path: 'videos', component: VideoDisplayComponent },
       { path: 'version', component: VersionComponent },
       { path: 'nav', component: NavSiteComponent, data: {items: indexItems} },
-      { path: 'news/details/:id', component: NewsDetailsComponent },
+      { path: 'news/details/:newsId', component: NewsDetailsComponent },
       { path: '', component: AboutComponent }
     ]
   }
