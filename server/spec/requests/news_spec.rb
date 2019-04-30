@@ -128,7 +128,7 @@ RSpec.describe NewsController, type: :request do
 
   it 'creating a news' do
     count_news = News.all.count
-    get "/api/news/admin/create"
+    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' } }
 
     if (not response.body.blank?) then
       json_data = JSON.parse(response.body)
