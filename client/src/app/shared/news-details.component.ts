@@ -13,7 +13,7 @@ export class NewsDetailsComponent {
     private readonly _activeRoute: ActivatedRoute,
   ) { }
 
-  private readonly _id = this._activeRoute.snapshot.paramMap.get('id');
+  private readonly _id = this._activeRoute.snapshot.paramMap.get('newsId');
   
   readonly locale = this._localeId;
   readonly news = this._serverData.getUserNewsDetails.getDescription(this._id);

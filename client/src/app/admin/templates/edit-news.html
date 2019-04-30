@@ -9,8 +9,8 @@
   </ng-container>
 
   <ng-container *ngIf="queryParamsMode == 'translation'">
-    <multilingual-editor [(firstString)]="newsData.title" [(secondString)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-editor>
-    <multilingual-editor [(firstString)]="newsData.text" [(secondString)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-editor>
+    <multilingual-editor [(original)]="newsData.title" [(translated)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-editor>
+    <multilingual-editor [(original)]="newsData.text" [(translated)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-editor>
   </ng-container>
 
   <mat-form-field>
@@ -20,8 +20,8 @@
   </mat-form-field>
 
   <button (click)="deleteNews()" type="button" class="btn btn-primary">News Löschen</button>
-  <button *ngIf="newsData.id != ''" (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
-  <button *ngIf="newsData.id == ''" (click)="createNews()" type="button" class="btn btn-primary">Erstellen</button>
+  <button *ngIf="!isCreatingNews" (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
+  <button *ngIf="isCreatingNews" (click)="createNews()" type="button" class="btn btn-primary">Erstellen</button>
 </ng-container>
 
 
