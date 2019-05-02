@@ -1,6 +1,8 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, LOCALE_ID, Inject } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+
 
 import { AdminNewsDescription } from './../shared/syntaxtree/news.description';
 import { ServerDataService } from '../shared';
@@ -15,6 +17,7 @@ export class AdminNewsEditComponent implements OnInit {
     private _activeRoute: ActivatedRoute,
     private _router: Router,
     private _serverService: ServerDataService,
+    private _snackBar: MatSnackBar,
     @Inject(LOCALE_ID) private readonly localeID: string,
   ) {}
 
@@ -31,7 +34,7 @@ export class AdminNewsEditComponent implements OnInit {
         id: '',
         title: {},
         text: {},
-        published_from: '01.01.2019',
+        published_from: undefined,
         created_at: '',
         updated_at: ''
       };
@@ -48,20 +51,42 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   public createNews(): void {
-    this._serverService.createNews(this.newsData);
-    this._router.navigate(['admin/news']);
+    this._serverService.createNews(this.newsData).subscribe(
+      _ => { 
+        this._router.navigate(['admin/news']); 
+        this._snackBar.open('Created succesful', 'Undo', {
+          duration: 3000
+        });
+       },
+      err => alert('Please select a valid date')
+    );
   }
 
-  public updateData(): void{
-    this._serverService.updateNews(this.newsData);
-    this._router.navigate(['admin/news']);
+  public updateData(): void {
+    this._serverService.updateNews(this.newsData).subscribe(
+      _ => { 
+        this._router.navigate(['admin/news']); 
+        this._snackBar.open('Updated succesful', 'Undo', {
+          duration: 3000
+        });
+      },
+      err => alert('Please select a valid date')
+    );
   }
 
   public deleteNews(): void {
     let question = confirm('Ganze Nachricht löschen ?')
     if (question) {
-      this._serverService.deleteNews(this._id);
-      this._router.navigate(['admin/news']);
+      this._serverService.deleteNews(this._id).subscribe(
+        _ => {
+          this._router.navigate(['admin/news']);
+          this._snackBar.open('Deleted succesful', 'Undo', {
+            duration: 3000
+          });
+        },
+        err => alert(`Can´t delete the news with the id: ${this._id}`)
+      );
+
     }
   }
 }
