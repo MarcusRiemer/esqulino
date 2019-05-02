@@ -1,8 +1,4 @@
-<style>
-  select, input, textarea, button { margin-top: 2vh }
-</style>
-
-<ng-container *ngIf="control == 'input'">
+<div id="multilingual-input" *ngIf="control == 'input'">
   <div class="row" style="margin-left: 0">
     <div class="col-md-2">
       <select class="custom-select"  name="language" required [(ngModel)]="language">
@@ -15,9 +11,9 @@
       <button *ngIf="currentString && currentString[language] != undefined" (click)="deleteObject()" type="button" class="btn btn-primary">Löschen</button>
     </div>
   </div>
-</ng-container>
+</div>
 
-<ng-container *ngIf="control == 'textarea'">
+<div id="multilingual-input" *ngIf="control == 'textarea'">
   <div class="column">
     <div class="col-md-3">
       <select class="custom-select"  name="language" required [(ngModel)]="language">
@@ -33,5 +29,5 @@
       </div>
     </div>
   </div>
-</ng-container>
+</div>
 
