@@ -57,7 +57,8 @@ RSpec.describe NewsController, type: :request do
     news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
       "id" => news.id,
-      "title" => { 'ab': "Test" }
+      "title" => { 'ab': "Test" },
+      "publishedFrom" => news.published_from
     }
 
     put "/api/news/admin",
