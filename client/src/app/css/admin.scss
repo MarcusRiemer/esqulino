@@ -44,19 +44,18 @@
     }
 
     #news {
-        tbody tr {
-            cursor: pointer;
-        }
-
+        tbody tr { cursor: pointer; }
         table {
             word-wrap: break-word; 
             table-layout: fixed;
         }
-
-        .row {
-            margin: 1vh 0 1vh 0;
-        }
+        .row { margin: 1vh 0 1vh 0;}
+        label { margin-top: 1vh; }
+        input { margin-bottom: 1vh; }
+        button { margin-top: 4vh; }
     }
 
-   
+    #edit-news  {
+        button, mat-form-field { margin-left: 1vw; }
+    }
 }

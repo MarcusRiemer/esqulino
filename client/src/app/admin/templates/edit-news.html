@@ -1,8 +1,4 @@
-<style>
-  button, mat-form-field { margin-left: 1vw; }
-</style>
-
-<ng-container *ngIf="newsData">
+<div id="edit-news" *ngIf="newsData">
   <ng-container class="single" *ngIf="queryParamsMode == 'single'">
     <multilingual-input [(editingString)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-input>
     <multilingual-input [(editingString)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-input>
@@ -22,6 +18,6 @@
   <button (click)="deleteNews()" type="button" class="btn btn-primary">News Löschen</button>
   <button *ngIf="!isCreatingNews" (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
   <button *ngIf="isCreatingNews" (click)="createNews()" type="button" class="btn btn-primary">Erstellen</button>
-</ng-container>
+</div>
 
 
