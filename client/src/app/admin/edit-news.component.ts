@@ -57,7 +57,7 @@ export class AdminNewsEditComponent implements OnInit {
         this._snackBar.open('Created succesful', 'Undo', {
           duration: 3000
         });
-       },
+      },
       err => alert('Please select a valid date')
     );
   }

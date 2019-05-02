@@ -37,7 +37,8 @@ RSpec.describe NewsController, type: :request do
     news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
       "id" => news.id,
-      "title" => { 'de': "Test" }
+      "title" => { 'de': "Test" },
+      "publishedFrom" => news.published_from
     }
 
     put "/api/news/admin",
@@ -74,7 +75,8 @@ RSpec.describe NewsController, type: :request do
     news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     news_params = {
       "id" => news.id,
-      "title" => { 'ab': "Test", 'de': "test2" }
+      "title" => { 'ab': "Test", 'de': "test2" },
+      "publishedFrom" => news.published_from
     }
 
     put "/api/news/admin",
@@ -128,7 +130,7 @@ RSpec.describe NewsController, type: :request do
 
   it 'creating a news' do
     count_news = News.all.count
-    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' } }
+    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' }, publishedFrom: Date.new(2019, 1, 1) }
 
     if (not response.body.blank?) then
       json_data = JSON.parse(response.body)

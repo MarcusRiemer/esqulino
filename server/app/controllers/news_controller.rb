@@ -28,25 +28,25 @@ class NewsController < ApplicationController
     news = News.all.find_by(id: params[:id])
     transformed_data = params_updated_news
     begin 
-      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
+      transformed_data[:published_from] = parse_date(transformed_data[:published_from] || "")
       news.update(transformed_data)
-    rescue ArgumentError => e
-      status = 400
-    end
 
-    render status: (status || 200), :json => news.to_full_api_response
+      render :json => news.to_full_api_response
+    rescue ArgumentError => e
+      render status: 400, :json => news.to_full_api_response
+    end
   end
 
   def create_news
     transformed_data = params_updated_news
     begin 
-      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
+      transformed_data[:published_from] = parse_date(transformed_data[:published_from] || "")
       news = News.create(transformed_data)
-    rescue ArgumentError => e
-      status = 400
-    end
 
-    render status: (status || 200), :json => news.to_full_api_response
+      render :json => news.to_full_api_response
+    rescue ArgumentError => e
+      render status: 400
+    end
   end
 
   def delete_news
