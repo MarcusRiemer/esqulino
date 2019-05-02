@@ -26,26 +26,35 @@ class NewsController < ApplicationController
 
   def update
     news = News.all.find_by(id: params[:id])
-
     transformed_data = params_updated_news
-    transformed_data[:published_from] = parse_date(transformed_data[:published_from], news[:published_from])
-    news.update(transformed_data)
+    begin 
+      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
+      news.update(transformed_data)
+    rescue ArgumentError => e
+      status = 400
+    end
 
-    render :json => news.to_full_api_response
+    render status: (status || 200), :json => news.to_full_api_response
   end
 
   def create_news
     transformed_data = params_updated_news
-    transformed_data[:published_from] = parse_date(transformed_data[:published_from], Date.today)
-    news = News.create(transformed_data)
+    begin 
+      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
+      news = News.create(transformed_data)
+    rescue ArgumentError => e
+      status = 400
+    end
 
-    render :json => news.to_full_api_response
+    render status: (status || 200), :json => news.to_full_api_response
   end
 
   def delete_news
     news = News.all.find_by(id: params[:id])
     if (news)
       news.destroy
+    else
+      render status: 400
     end
   end
 
@@ -54,10 +63,10 @@ class NewsController < ApplicationController
       .transform_keys { |k| k.underscore }
   end
 
-  def parse_date(date_str, current_date)
+  def parse_date(date_str)
     Date.parse(date_str)
-  rescue
-    current_date
+  rescue ArgumentError => e
+    raise ArgumentError.new("Error: #{e} invalid date")
   end
   
 end

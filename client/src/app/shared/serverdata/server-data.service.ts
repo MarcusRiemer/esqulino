@@ -211,38 +211,47 @@ export class ServerDataService {
   /**
    * creating a new news
    */
-  createNews(desc: AdminNewsDescription) {
+  createNews(desc: AdminNewsDescription): Observable<AdminNewsDescription> {
     const url = this._serverApi.getCreateNewsUrl();
-    this._http.post(url, desc)
-      .subscribe(_ => {
+    const toReturn = this._http.post<AdminNewsDescription>(url, desc).pipe(
+      tap((desc) => {
         console.log(`Created news "${desc.id}"`);
         this.getAdminNewsList.refresh();
-      });
+      })
+    );
+
+    return (toReturn);
   }
 
   /**
    * Updates the given news
    */
-  updateNews(desc: AdminNewsDescription) {
+  updateNews(desc: AdminNewsDescription): Observable<AdminNewsDescription> {
     const url = this._serverApi.getNewsUpdateUrl();
-    this._http.put(url, desc)
-      .subscribe(_ => {
+    const toReturn = this._http.put<AdminNewsDescription>(url, desc).pipe(
+      tap(desc_ => {
         console.log(`Updated news "${desc.id}"`);
         this.getAdminNewsList.refresh();
         this.getAdminNewsSingle.refreshDescription(desc.id);
-      });
+      })  
+    );
+
+    return (toReturn);
   }
 
     /**
    * Deletes the news with the given ID.
    */
-  deleteNews(id: string) {
-    this._http.delete(this._serverApi.getAdminNewsSingle(id))
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Deleted news "${id}"`);
-        this.getAdminNewsList.refresh();
-      });
+  deleteNews(id: string): Observable<Object> {
+    const toReturn = this._http.delete(this._serverApi.getAdminNewsSingle(id))
+      .pipe(
+        tap(_ => {
+          console.log(`Deleted news "${id}"`);
+          this.getAdminNewsList.refresh();
+        }),
+        first()
+      )
+    return (toReturn);
   }
 
   /**
