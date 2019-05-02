@@ -27,8 +27,8 @@ class NewsController < ApplicationController
   def update
     news = News.all.find_by(id: params[:id])
     transformed_data = params_updated_news
-    begin 
-      transformed_data[:published_from] = parse_date(transformed_data[:published_from] || "")
+    begin
+      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
       news.update(transformed_data)
 
       render :json => news.to_full_api_response
@@ -39,8 +39,8 @@ class NewsController < ApplicationController
 
   def create_news
     transformed_data = params_updated_news
-    begin 
-      transformed_data[:published_from] = parse_date(transformed_data[:published_from] || "")
+    begin
+      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
       news = News.create(transformed_data)
 
       render :json => news.to_full_api_response

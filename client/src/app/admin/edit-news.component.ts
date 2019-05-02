@@ -34,7 +34,7 @@ export class AdminNewsEditComponent implements OnInit {
         id: '',
         title: {},
         text: {},
-        published_from: undefined,
+        publishedFrom: undefined,
         created_at: '',
         updated_at: ''
       };

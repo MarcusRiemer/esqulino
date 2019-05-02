@@ -5,7 +5,7 @@ export interface AdminNewsDescription {
   id: string;
   title: MultilingualString;
   text: MultilingualString;
-  published_from: string;
+  publishedFrom: string;
   created_at: string;
   updated_at: string;
 }
@@ -14,6 +14,6 @@ export interface UserNewsDescription {
   id: string;
   title: MultilingualString;
   text: MultilingualString;
-  published_from: string;
+  publishedFrom: string;
 }
 

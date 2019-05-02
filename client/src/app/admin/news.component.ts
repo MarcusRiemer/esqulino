@@ -35,7 +35,7 @@ export class AdminNewsListComponent {
           entry.id.includes(this.searchFor)
         || (entry.text ? (entry.text[this.selectedLanguage] ? entry.text[this.selectedLanguage].toLowerCase().includes(this.searchFor) : null) : null)
         || (entry.title ? (entry.title[this.selectedLanguage] ? entry.title[this.selectedLanguage].toLowerCase().includes(this.searchFor) : null) : null)
-        || (entry.published_from ? entry.published_from : null)
+        || (entry.publishedFrom ? entry.publishedFrom : null)
       ))
     )
   }
