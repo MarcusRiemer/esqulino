@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
 import {
-  MatAutocompleteModule, MatChipsModule, MatFormFieldModule
+  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, MatCheckboxModule
 } from '@angular/material'
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -36,7 +36,7 @@ import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
 
 const materialModules = [
-  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule
+  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule
 ]
 
 @NgModule({

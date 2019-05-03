@@ -1,5 +1,9 @@
 # Utility methods to pick the correct locale
 module LocaleHelper
+
+  def self.allowed_languages
+    return [:de, :en]
+  end
   # Determines the locale of a request. If no locale can be determined,
   # it falls back to the default locale.
   def request_locale

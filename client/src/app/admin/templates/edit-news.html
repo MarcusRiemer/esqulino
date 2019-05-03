@@ -1,21 +1,35 @@
+<!-- still waiting for the data from the server  -->
 <div id="edit-news" *ngIf="newsData">
+  <!-- single mode -->
   <ng-container class="single" *ngIf="queryParamsMode == 'single'">
     <multilingual-input [(editingString)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-input>
     <multilingual-input [(editingString)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-input>
   </ng-container>
 
+  <!-- translation mode -->
   <ng-container *ngIf="queryParamsMode == 'translation'">
     <multilingual-editor [(original)]="newsData.title" [(translated)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'"></multilingual-editor>
     <multilingual-editor [(original)]="newsData.text" [(translated)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'"></multilingual-editor>
   </ng-container>
 
+  <!-- checkbox: publishedFrom disable/enabled -->
+  <div class="form-check form-check-inline" style="margin-right: 1vw;">
+    <input class="form-check-input" type="checkbox" name="published-from-checkbox" id="published-from" value="option1" checked [(ngModel)]="ableToPublish">
+    <label class="form-check-label" for="published-from">
+      Veröffentlichen am
+    </label>
+  </div>
+
+  <!-- materials datepicker -->
   <mat-form-field>
     <input matInput [matDatepicker]="picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
+
   <button (click)="deleteNews()" type="button" class="btn btn-primary">News Löschen</button>
-  <button *ngIf="!isCreatingNews" (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren</button>
+  <button *ngIf="!isCreatingNews" (click)="updateData('redirect')" type="button" class="btn btn-primary">Aktualisieren</button>
+  <button *ngIf="!isCreatingNews" (click)="updateData()" type="button" class="btn btn-primary">Aktualisieren (bleiben)</button>
   <button *ngIf="isCreatingNews" (click)="createNews()" type="button" class="btn btn-primary">Erstellen</button>
 </div>
