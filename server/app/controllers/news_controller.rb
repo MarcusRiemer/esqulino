@@ -26,9 +26,8 @@ class NewsController < ApplicationController
 
   def update
     news = News.all.find_by(id: params[:id])
-    transformed_data = params_updated_news
     begin
-      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
+      transformed_data = parse_publish_from(params_updated_news)
       news.update(transformed_data)
 
       render :json => news.to_full_api_response
@@ -38,9 +37,8 @@ class NewsController < ApplicationController
   end
 
   def create_news
-    transformed_data = params_updated_news
     begin
-      transformed_data[:published_from] = parse_date(transformed_data[:published_from])
+      transformed_data = parse_publish_from(params_updated_news)
       news = News.create(transformed_data)
 
       render :json => news.to_full_api_response
@@ -59,7 +57,7 @@ class NewsController < ApplicationController
   end
 
   def params_updated_news
-    params.permit(:publishedFrom, title: [:de, :en], text: [:de, :en])
+    params.permit(:publishedFrom, title: LocaleHelper.allowed_languages, text: [:de, :en])
       .transform_keys { |k| k.underscore }
   end
 
@@ -68,5 +66,13 @@ class NewsController < ApplicationController
   rescue ArgumentError => e
     raise ArgumentError.new("Error: #{e} invalid date")
   end
-  
+
+  def parse_publish_from(data)
+    if (data.key?(:published_from))
+      data[:published_from] = parse_date(data[:published_from])
+    else
+      data[:published_from] = nil
+    end
+    return data
+  end
 end

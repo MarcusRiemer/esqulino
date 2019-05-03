@@ -112,6 +112,25 @@ RSpec.describe NewsController, type: :request do
     expect(json_data['publishedFrom']).to eq("2019-01-01T00:00:00.000Z")
   end
 
+  it 'updating a news with an disabled date' do
+    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    news_params = {
+      "id" => news.id,
+      "title" => { 'de': "Test" }
+    }
+
+    put "/api/news/admin",
+        :headers => json_headers,
+        :params => news_params.to_json
+
+    if (not response.body.blank?) then
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+    end
+
+    expect(json_data['publishedFrom']).to be_nil
+  end
+
   it 'deleting a news' do
     news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
 
@@ -142,5 +161,33 @@ RSpec.describe NewsController, type: :request do
     expect(json_data['text']).to_not be_nil
     expect(json_data['title']).to_not be_nil
     expect(count_news).to_not eq(News.all.count)
+  end
+
+  it 'creating a news with an disabled date' do
+    count_news = News.all.count
+    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' } }
+
+    if (not response.body.blank?) then
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+    end
+
+    expect(json_data['id']).to_not be_nil
+    expect(json_data['text']).to_not be_nil
+    expect(json_data['title']).to_not be_nil
+    expect(json_data['published_from']).to be_nil
+    expect(count_news).to_not eq(News.all.count)
+  end
+
+  it 'creating a news with an invalid date' do
+    count_news = News.all.count
+    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' }, publishedFrom: 'tom' }
+
+    if (not response.body.blank?) then
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+    end
+
+    expect(response).to have_http_status(400)
   end
 end
