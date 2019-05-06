@@ -19,7 +19,6 @@ export class OverviewBlockLanguageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._toolbarService.clearItems();
     this._toolbarService.addItem(this.toolbarItems);
   }
 

@@ -9,15 +9,17 @@ import { MultilingualString } from './multilingual-string.description';
 export class MultiLingualEditorComponent implements OnChanges {
   @Input() original: MultilingualString;
   @Input() translated: MultilingualString;
-  @Output() originalChange = new EventEmitter<MultilingualString>();
-  @Output() translatedChange = new EventEmitter<MultilingualString>();
   @Input() control: string = 'input';
   @Input() language: string = this.localeID;
+  @Input() placeholder: string = '';
+
+  @Output() originalChange = new EventEmitter<MultilingualString>();
+  @Output() translatedChange = new EventEmitter<MultilingualString>();
 
   constructor(
     @Inject(LOCALE_ID) readonly localeID: string
   ) {}
-
+  
   ngOnChanges(changes: SimpleChanges) {
     if (!changes['original'].isFirstChange())
       this.originalChange.emit(this.original);
