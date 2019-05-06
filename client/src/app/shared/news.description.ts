@@ -1,4 +1,4 @@
-import { MultilingualString } from '../multilingual-string.description';
+import { MultilingualString } from './multilingual-string.description';
 
 
 export interface AdminNewsDescription {
@@ -6,9 +6,10 @@ export interface AdminNewsDescription {
   title: MultilingualString;
   text: MultilingualString;
   publishedFrom: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
 
 export interface UserNewsDescription {
   id: string;

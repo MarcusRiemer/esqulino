@@ -1,0 +1,44 @@
+{
+  "$ref": "#/definitions/AdminNewsDescription",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "AdminNewsDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "publishedFrom": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/MultilingualString"
+        },
+        "title": {
+          "$ref": "#/definitions/MultilingualString"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "text",
+        "publishedFrom",
+        "createdAt",
+        "updatedAt"
+      ],
+      "type": "object"
+    },
+    "MultilingualString": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  }
+}

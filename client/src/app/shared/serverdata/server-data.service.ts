@@ -17,8 +17,8 @@ import {
 import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
-import { UserNewsDescription } from '../syntaxtree/news.description';
-import { AdminNewsDescription } from './../syntaxtree/news.description';
+import { UserNewsDescription } from '../news.description';
+import { AdminNewsDescription } from '../news.description';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
