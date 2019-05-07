@@ -1,23 +1,57 @@
 <form ngNativeValidate>
   <ng-template cdkPortal #toolbarItems>
-    <button (click)="deleteNews()" type="submit" mat-button>News Löschen</button>
-    <button *ngIf="!isCreatingNews" (click)="updateData('redirect')" type="submit" mat-button>Aktualisieren</button>
-    <button *ngIf="!isCreatingNews" (click)="updateData()" type="submit" mat-button>Aktualisieren (bleiben)</button>
-    <button *ngIf="isCreatingNews" (click)="createNews()" type="submit" mat-button>Erstellen</button>
+    <button (click)="deleteNews()" type="submit" mat-button>
+      <span class="fa fa-trash"></span>
+      News Löschen
+    </button>
+    <button *ngIf="!isCreatingNews" (click)="updateData('redirect')" type="submit" mat-button>
+      <span class="fa fa-pencil"></span>
+      Aktualisieren
+    </button>
+    <button *ngIf="!isCreatingNews" (click)="updateData()" type="submit" mat-button>
+      <span class="fa fa-pencil"></span>
+      Aktualisieren (bleiben)
+    </button>
+    <button *ngIf="isCreatingNews" (click)="createNews()" type="submit" mat-button>
+      <span class="fa fa-plus-circle"></span>
+      Erstellen
+    </button>
   </ng-template>
 
   <!-- still waiting for the data from the server  -->
   <div id="edit-news" *ngIf="newsData">
     <!-- single mode -->
     <ng-container class="single" *ngIf="queryParamsMode == 'single'">
-      <multilingual-input [(editingString)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'" [placeholder]="'Titel'"></multilingual-input>
-      <multilingual-input [(editingString)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'" [placeholder]="'Informationen'"></multilingual-input>
+      <multilingual-input 
+        [(editingString)]="newsData.title" 
+        [language]="queryParamsLanguage" 
+        [control]="'input'" 
+        [placeholder]="'Titel'">
+      </multilingual-input>
+      <multilingual-input 
+        [(editingString)]="newsData.text" 
+        [language]="queryParamsLanguage" 
+        [control]="'textarea'"
+        [placeholder]="'Informationen'">
+      </multilingual-input>
     </ng-container>
 
     <!-- translation mode -->
     <ng-container *ngIf="queryParamsMode == 'translation'">
-      <multilingual-editor [(original)]="newsData.title" [(translated)]="newsData.title" [language]="queryParamsLanguage" [control]="'input'" [placeholder]="'Titel'"></multilingual-editor>
-      <multilingual-editor [(original)]="newsData.text" [(translated)]="newsData.text" [language]="queryParamsLanguage" [control]="'textarea'" [placeholder]="'Informationen'"></multilingual-editor>
+      <multilingual-editor 
+        [(original)]="newsData.title" 
+        [(translated)]="newsData.title" 
+        [language]="queryParamsLanguage" 
+        [control]="'input'" 
+        [placeholder]="'Titel'">
+      </multilingual-editor>
+      <multilingual-editor 
+        [(original)]="newsData.text"
+        [(translated)]="newsData.text" 
+        [language]="queryParamsLanguage" 
+        [control]="'textarea'" 
+        [placeholder]="'Informationen'">
+      </multilingual-editor>
     </ng-container>
 
     <!-- checkbox: publishedFrom disable/enabled -->
@@ -30,7 +64,7 @@
 
     <!-- materials datepicker -->
     <mat-form-field *ngIf="ableToPublish">
-      <input matInput [matDatepicker]="picker" name="date-picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom">
+      <input matInput [matDatepicker]="picker" name="date-picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom" >
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>

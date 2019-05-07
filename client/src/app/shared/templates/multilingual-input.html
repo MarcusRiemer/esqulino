@@ -6,7 +6,12 @@
       </select>
     </div>
     <div class="col-md-6">
-      <input *ngIf="isCurrentLanguageAvailable" type="text" name="edited-input" [value]="currentString[language] || ''" class="form-control" [placeholder]="placeholder" required [(ngModel)]="editingString[language]">
+      <input *ngIf="isCurrentLanguageAvailable"
+        type="text" name="edited-input"
+        [value]="currentString[language] || ''"
+        class="form-control"
+        [placeholder]="placeholder"
+        [(ngModel)]="editingString[language]">
       <button *ngIf="isNeedAnObject" (click)="addObject()" type="button" class="btn btn-primary">Hinzufügen</button>
       <button *ngIf="isCurrentLanguageAvailable" (click)="deleteLanguage()" type="button" class="btn btn-primary">Löschen</button>
     </div>
@@ -23,7 +28,14 @@
 
     <div class="col-md-9">
       <div class="form-group">
-        <textarea *ngIf="isCurrentLanguageAvailable" class="form-control" name="edited-text" id="edit-text" [value]="currentString[language] || ''" rows="10" [placeholder]="placeholder" required [(ngModel)]="editingString[language]"></textarea>
+        <textarea *ngIf="isCurrentLanguageAvailable"
+          class="form-control"
+          name="edited-text"
+          id="edit-text"
+          [value]="currentString[language] || ''"
+          rows="10" [placeholder]="placeholder" 
+          [(ngModel)]="editingString[language]">
+        </textarea>
         <button *ngIf="isNeedAnObject" (click)="addObject()" type="button" class="btn btn-primary">Hinzufügen</button>
         <button *ngIf="isCurrentLanguageAvailable" (click)="deleteLanguage()" type="button" class="btn btn-primary">Löschen</button>
       </div>

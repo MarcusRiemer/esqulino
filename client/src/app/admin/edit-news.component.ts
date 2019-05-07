@@ -1,4 +1,5 @@
-import { AfterViewInit } from '@angular/core';
+import { SimpleChanges, ElementRef } from '@angular/core';
+import { AfterViewInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, LOCALE_ID, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { first } from 'rxjs/operators';
@@ -32,10 +33,10 @@ export class AdminNewsEditComponent implements OnInit {
   public readonly queryParamsMode = this.queryParams.mode || 'single';
 
   public ngOnInit(): void {
+    this._toolbar.addItem(this.toolbarItems)
     if (this.isCreatingNews) {
       this.newNews()
     } else {
-      this._toolbar.addItem(this.toolbarItems)
       this._serverData.getAdminNewsSingle.getDescription(this._id).pipe(
         first()
       ).subscribe(
@@ -73,7 +74,7 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   protected get isCreatingNews(): boolean {
-    return this._id === undefined || this._id === null
+    return this._id == undefined || this._id == null
   }
 
   protected get isPublished(): boolean {
