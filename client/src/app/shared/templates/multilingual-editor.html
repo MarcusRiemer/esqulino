@@ -1,11 +1,34 @@
-<multilingual-input *ngIf="control == 'input'" [(editingString)]="original" [control]="'input'" [placeholder]="placeholder"></multilingual-input>
-<multilingual-input *ngIf="control == 'input'" [(editingString)]="translated" [language]="language" [control]="'input'" [placeholder]="placeholder"></multilingual-input>
+
+<ng-container *ngIf="control == 'input'">
+  <multilingual-input
+    [(editingString)]="original"
+    [control]="'input'"
+    [placeholder]="placeholder">
+  </multilingual-input>
+
+  <multilingual-input
+    [(editingString)]="translated" 
+    [language]="language" 
+    [control]="'input'" 
+    [placeholder]="placeholder">
+  </multilingual-input>
+</ng-container>
+
 
 <div class="row" *ngIf="control == 'textarea'">
   <div class="col-md-6">
-    <multilingual-input [(editingString)]="original" [control]="'textarea'" [placeholder]="placeholder"></multilingual-input>
+    <multilingual-input 
+      [(editingString)]="original" 
+      [control]="'textarea'" 
+      [placeholder]="placeholder">
+    </multilingual-input>
   </div>
   <div class="col-md-6">
-    <multilingual-input [(editingString)]="translated" [language]="language" [control]="'textarea'" [placeholder]="placeholder"></multilingual-input>
+    <multilingual-input
+      [(editingString)]="translated"
+      [language]="language"
+      [control]="'textarea'"
+      [placeholder]="placeholder">
+    </multilingual-input>
   </div>
 </div>
