@@ -64,9 +64,10 @@
 
     <!-- materials datepicker -->
     <mat-form-field *ngIf="ableToPublish">
-      <input matInput [matDatepicker]="picker" name="date-picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom" >
+      <input [focus]="ableToPublish" matInput [matDatepicker]="picker" name="date-picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom" >
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="!newsData.publishedFrom">Please select an another date</mat-error>
     </mat-form-field>
   </div>
 </form>
