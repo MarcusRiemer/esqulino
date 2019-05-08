@@ -6,10 +6,6 @@ module Seed
     SEED_IDENTIFIER = ProjectDatabase
     SEED_DIRECTORY = "databases"
 
-    def seed
-      @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : seed_name.find_by(id: seed_id)
-    end
-
     # defines copy_database from base class
     # copy the sqlite file from early loaded path to the specific seed
     # this method is called after store_seed is called

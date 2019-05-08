@@ -15,7 +15,7 @@ module Seed
 
     # look-up method for the model we want to process for seeding
     # SEED_IDENTIFIER defines the class of the Model, e.g  SEED_IDENTIFIER = Project
-    def seed_name
+    def seed_class
       self.class::SEED_IDENTIFIER
     end
 
@@ -34,7 +34,7 @@ module Seed
     #
     # @param msg [string] The
     def info(msg = nil)
-      puts ("#{('  ' * @@indent)}[#{seed_name}] #{msg}") unless msg.nil? || TEST_ENV
+      puts ("#{('  ' * @@indent)}[#{seed_class}] #{msg}") unless msg.nil? || TEST_ENV
 
       if block_given?
         @@indent += 1
@@ -47,12 +47,12 @@ module Seed
     # returns nil if seed_id is not an object_id or object
     def seed
       return nil if File.extname(seed_id.to_s).present?
-      @seed_data ||= seed_id.is_a?(seed_name) ? seed_id : find_seed(seed_id)
+      @seed_data ||= seed_id.is_a?(seed_class) ? seed_id : find_seed(seed_id)
     end
 
     # returns seed model object after loading
     def loaded_seed
-      @loaded_seed_data ||= seed_name.find_by!(id: load_id)
+      @loaded_seed_data ||= seed_class.find_by!(id: load_id)
     end
 
     # When loading a seed, it's usualy the case that the provided seed_id is a yaml file
@@ -60,7 +60,7 @@ module Seed
     # otherwise return nil
     def load_seed_id
       return File.basename(seed_id, ".*") if File.extname(seed_id.to_s).present? && File.extname(seed_id.to_s) == ".yaml"
-      return seed_id unless seed_id.is_a?(seed_name)
+      return seed_id unless seed_id.is_a?(seed_class)
       nil
     end
 
@@ -79,9 +79,15 @@ module Seed
     # if seed_id is an id or slug of the object, return the object
     # @param slug_or_id UUID or Slug provided as seed_id via initialization
     def find_seed(slug_or_id)
-      seed_data = seed_name.where(id: slug_or_id).or(seed_name.where(slug: slug_or_id))
-      raise ActiveRecord::RecordNotFound, "#{seed_name} not found" if seed_data.nil?
-      seed_data.first
+      # All models have an "id" column
+      query = seed_class.where(id: slug_or_id)
+
+      # Some models have a "slug" column
+      if (seed_class.column_names.include? "slug")
+        query = query.or(seed_class.where(slug: slug_or_id))
+      end
+
+      query.first!
     end
 
     # seed_direcotry is defined in combination with
@@ -125,7 +131,7 @@ module Seed
     end
 
     # store is responsible to store the seed
-    # checks the if one has been already processed, usally when there is a dependecy,
+    # checks the if one has been already processed, usually when there is a dependecy,
     # it's required to break circular dependecy in the recursion process
     # calls store_seed and the after_store_seed which is seed specific case if something else needed to be stored after seed is stored
     # and writes dependency mafifest(-deps.yaml) and all other things need to be stored
@@ -194,7 +200,7 @@ module Seed
           #        but this does not seem to be possible from Rails.
           # See:  https://wiki.postgresql.org/wiki/Referential_Integrity_Tutorial_%26_Hacking_the_Referential_Integrity_tables#Deferring_transactions
           # See also: https://github.com/nullobject/rein
-          db_instance = seed_name.find_or_initialize_by(id: load_id)
+          db_instance = seed_class.find_or_initialize_by(id: load_id)
           db_instance.touch
           db_instance.save!
         end
@@ -209,13 +215,13 @@ module Seed
       YAML.load_file(seed_file_path)
     end
 
-    # raise if the seed_instance class does not match with the seed_name (model or Identifier) are not matched
+    # raise if the seed_instance class does not match with the seed_class (model or Identifier) are not matched
     # instantiate a new record if there is none by the provided load_id or find the the existing one
     # save the instance if theere is a change
     # runs the `after_load_seed` hook when upsert is done
     def upsert_seed_data
-      raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_name.name}" if seed_instance.class != seed_name
-        db_instance = seed_name.find_or_initialize_by(id: load_id)
+      raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_class.name}" if seed_instance.class != seed_class
+        db_instance = seed_class.find_or_initialize_by(id: load_id)
         db_instance.assign_attributes(seed_instance.attributes)
         db_instance.save! if db_instance.changed?
 
