@@ -36,4 +36,13 @@ class ApplicationRecord < ActiveRecord::Base
       raise RuntimeError.new ("Searching for keys requires a PK")
     end
   end
+
+  # Some models can show a "nice" identification string when prompted to
+  # do so (they might have a name or a slug), but the id itself is always
+  # fine as a baseline.
+  #
+  # @return [string] A human friendly representation of the ID
+  def readable_identification
+    self.id
+  end
 end

@@ -1,0 +1,25 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 89bca86a-88ac-4659-9281-94b12bc10ae7
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"Willkommen bei BlattWerkzeug!", "en"=>"Welcome to
+    BlattWerkzeug!"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: '"de"=>"Mittlerweile ist BlattWerkzeug.de schon eine Weile
+    live, aber ein News-System haben wir halt erst jetzt.", "en"=>"BlattWerkzeug.de
+    is now online for a while, but a news system has only been added recently."'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: '2019-04-30 00:00:00'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-05-08 14:20:43.253857'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-05-08 14:58:40.155151'
+new_record: false
+active_record_yaml_version: 2
