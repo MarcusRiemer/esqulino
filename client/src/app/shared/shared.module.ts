@@ -32,6 +32,7 @@ import { NewsComponent } from './news.component';
 import { NewsDetailsComponent } from './news-details.component';
 import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
+import { FocusDirective } from './focus-element.directive';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -70,7 +71,8 @@ const materialModules = [
     NewsComponent,
     NewsDetailsComponent,
     MultiLingualInputComponent,
-    MultiLingualEditorComponent
+    MultiLingualEditorComponent,
+    FocusDirective
   ],
   exports: [
     CommonModule,
@@ -90,6 +92,7 @@ const materialModules = [
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
+    FocusDirective
   ]
 })
 export class SharedAppModule {
