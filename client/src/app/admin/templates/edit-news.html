@@ -67,25 +67,36 @@
       </multilingual-editor>
     </ng-container>
 
+    <h1>Veröffentlichung planen</h1>
+
     <!-- checkbox: publishedFrom disable/enabled -->
-    <div class="form-check form-check-inline" style="margin-right: 1vw;">
-      <input class="form-check-input" type="checkbox" name="published-from-checkbox" id="published-from" value="option1" checked [(ngModel)]="ableToPublish">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" 
+        type="checkbox" 
+        name="published-from-checkbox" 
+        id="published-from" 
+        value="option1" 
+        checked 
+        [(ngModel)]="ableToPublish">
       <label class="form-check-label" for="published-from">
         Veröffentlichen am
       </label>
     </div>
 
-    <h1>Veröffentlichung planen</h1>
-    <!-- materials datepicker -->
-    <mat-form-field *ngIf="ableToPublish">
-      <input [focus]="ableToPublish" matInput [matDatepicker]="picker" name="date-picker" [value]="newsData.publishedFrom" required [(ngModel)]="newsData.publishedFrom" >
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="newsData.publishedFrom === nil">Please select an another date</mat-error>
-    </mat-form-field>
-    <input type="date"
-           class="form-control"
-           required
-           [(ngModel)]="newsData.publishedFrom">
+    <div *ngIf="ableToPublish">
+      <!-- materials datepicker -->
+      <mat-form-field *ngIf="ableToPublish">
+        <input matInput
+          name="date-picker"
+          [focus]="ableToPublish" 
+          [matDatepicker]="picker"
+          [value]="newsData.publishedFrom" 
+          [(ngModel)]="newsData.publishedFrom" 
+          required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="newsData.publishedFrom === nil">Please select an another date</mat-error>
+      </mat-form-field>
+    </div>
   </div>
 </form>

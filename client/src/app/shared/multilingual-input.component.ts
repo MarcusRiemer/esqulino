@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, Input, LOCALE_ID, Inject, Output, EventEmitter} from '@angular/core';
 
 import { locales } from './change-language.component'
@@ -16,30 +17,37 @@ export class MultiLingualInputComponent {
   @Output() editingStringChange = new EventEmitter<MultilingualString>();
 
   constructor(
-    @Inject(LOCALE_ID) readonly localeId: string
+    @Inject(LOCALE_ID) readonly localeId: string,
+    private _activeRoute: ActivatedRoute
   ) {}
 
-  protected readonly languages = locales;
+  public readonly languages = locales;
 
-  protected get currentString() {
+  public readonly mode = this._activeRoute.snapshot.queryParams.mode || 'single'
+
+  public get currentString() {
     return (this.editingString)
   }
 
   /**
    * Is there an Object with the selected language
    */
-  protected get isCurrentLanguageAvailable() {
+  public get isCurrentLanguageAvailable() {
     return (this.currentString && this.currentString[this.language] != undefined)
+  }
+
+  public get isTranslationTextarea() {
+    return (this.mode === 'translation' && this.control === 'textarea')
   }
 
   /**
    * Check if there is an Object needed
    */
-  protected get isNeedAnObject() {
+  public get isNeedAnObject() {
     return (!this.currentString || this.currentString[this.language] == undefined)
   }
 
-  protected set currentString(val: MultilingualString) {
+  public set currentString(val: MultilingualString) {
     this.editingString = val;
     this.editingStringChange.emit(this.editingString);
   }
@@ -48,7 +56,7 @@ export class MultiLingualInputComponent {
    * Add a new Object to the current String if there´s no one  
    * and add an empty string to the current language
    */
-  protected addObject(): void {
+  public addObject(): void {
     if (!this.currentString)
       this.currentString = {};
 
@@ -61,7 +69,7 @@ export class MultiLingualInputComponent {
   /**
    * Deletes an entry of an object with the current language
    */
-  protected deleteLanguage(): void {
+  public deleteLanguage(): void {
     delete this.currentString[this.language]
   }
 }
