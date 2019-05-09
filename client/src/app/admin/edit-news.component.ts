@@ -49,7 +49,7 @@ export class AdminNewsEditComponent implements OnInit {
     }
   }
 
-  protected newNews(): void {
+  public newNews(): void {
     this.newsData = {
       id: '',
       title: {},
@@ -64,7 +64,7 @@ export class AdminNewsEditComponent implements OnInit {
    * undefined = isn't able to publish,
    * null = is able to publish but there's no valid value
    */
-  protected checkCheckboxPublishFrom(): void {
+  public checkCheckboxPublishFrom(): void {
     if (!this.ableToPublish)
       this.newsData.publishedFrom = undefined
     else
@@ -91,14 +91,14 @@ export class AdminNewsEditComponent implements OnInit {
       this._serverService.createNews(this.newsData).subscribe(
         _ => {
           this._router.navigate(['admin/news']);
-          this._snackBar.open('Created succesful', 'Undo', { duration: 3000 });
+          this._snackBar.open('Created succesful', '', { duration: 3000 });
         },
         _ => alert('Please select a valid date')
       );
     }
   }
 
-  protected updateData(option: string): void {
+  public updateData(option: string): void {
     this.checkCheckboxPublishFrom();
     if (this.isDateValid) {
       this._serverService.updateNews(this.newsData).subscribe(
@@ -106,20 +106,20 @@ export class AdminNewsEditComponent implements OnInit {
           if (option == "redirect")
             this._router.navigate(['admin/news'])
 
-          this._snackBar.open('Updated succesful', 'Undo', { duration: 3000 });
+          this._snackBar.open('Updated succesful', '', { duration: 3000 });
         },
         _ => alert('Please select a valid date')
       );
     }
   }
 
-  deleteNews(): void {
+  public deleteNews(): void {
     let question = confirm('Ganze Nachricht löschen ?')
     if (question) {
       this._serverService.deleteNews(this._id).subscribe(
         _ => {
           this._router.navigate(['admin/news']);
-          this._snackBar.open('Deleted succesful', 'Undo', { duration: 3000 });
+          this._snackBar.open('Deleted succesful', '', { duration: 3000 });
         },
         _ => alert(`Can´t delete the news with the id: ${this._id}`)
       );
