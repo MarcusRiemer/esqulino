@@ -85,5 +85,10 @@ namespace :blattwerkzeug do
     task :store_all => :environment do |t, args|
       m.store_all_news
     end
+
+    desc 'Serialize all news to their seed representation'
+    task :load_all => :environment do |t, args|
+      m.load_all_news
+    end
   end
 end

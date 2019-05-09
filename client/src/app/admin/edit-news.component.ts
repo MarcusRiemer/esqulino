@@ -22,7 +22,7 @@ export class AdminNewsEditComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private _toolbar: ToolbarService,
     @Inject(LOCALE_ID) private readonly localeID: string,
-  ) {}
+  ) { }
 
   private readonly _id = this._activeRoute.snapshot.paramMap.get('newsId');
   private readonly queryParams = this._activeRoute.snapshot.queryParams;
@@ -73,19 +73,19 @@ export class AdminNewsEditComponent implements OnInit {
 
   }
 
-  protected get isCreatingNews(): boolean {
+  get isCreatingNews(): boolean {
     return this._id == undefined || this._id == null
   }
 
-  protected get isPublished(): boolean {
+  get isPublished(): boolean {
     return this.newsData.publishedFrom !== undefined && this.newsData.publishedFrom !== null;
   }
 
-  protected get isDateValid(): boolean {
+  get isDateValid(): boolean {
     return this.newsData.publishedFrom !== null
   }
 
-  protected createNews(): void {
+  createNews(): void {
     this.checkCheckboxPublishFrom();
     if (this.isDateValid) {
       this._serverService.createNews(this.newsData).subscribe(
@@ -93,7 +93,7 @@ export class AdminNewsEditComponent implements OnInit {
           this._router.navigate(['admin/news']);
           this._snackBar.open('Created succesful', 'Undo', { duration: 3000 });
         },
-        err => alert('Please select a valid date')
+        _ => alert('Please select a valid date')
       );
     }
   }
@@ -108,12 +108,12 @@ export class AdminNewsEditComponent implements OnInit {
 
           this._snackBar.open('Updated succesful', 'Undo', { duration: 3000 });
         },
-        err => alert('Please select a valid date')
+        _ => alert('Please select a valid date')
       );
     }
   }
 
-  protected deleteNews(): void {
+  deleteNews(): void {
     let question = confirm('Ganze Nachricht löschen ?')
     if (question) {
       this._serverService.deleteNews(this._id).subscribe(
@@ -121,7 +121,7 @@ export class AdminNewsEditComponent implements OnInit {
           this._router.navigate(['admin/news']);
           this._snackBar.open('Deleted succesful', 'Undo', { duration: 3000 });
         },
-        err => alert(`Can´t delete the news with the id: ${this._id}`)
+        _ => alert(`Can´t delete the news with the id: ${this._id}`)
       );
     }
   }
