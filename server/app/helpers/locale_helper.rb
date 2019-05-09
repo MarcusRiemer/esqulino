@@ -4,6 +4,10 @@ module LocaleHelper
   def self.allowed_languages
     return [:de, :en]
   end
+
+  def self.allowed_languages_s
+    return self.allowed_languages.map  { |i| i.to_s }
+  end
   # Determines the locale of a request. If no locale can be determined,
   # it falls back to the default locale.
   def request_locale
