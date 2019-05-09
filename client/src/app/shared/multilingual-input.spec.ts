@@ -6,7 +6,7 @@ import { MultiLingualInputComponent } from './multilingual-input.component';
 import { LOCALE_ID } from '@angular/core';
 import { MultilingualString } from './multilingual-string.description';
 
-fdescribe('Component: MultilingualInput', () => {
+describe('Component: MultilingualInput', () => {
   async function createComponent(localeId: string) {
     await TestBed.configureTestingModule({
       imports: [

@@ -2,14 +2,14 @@
 <ng-container *ngIf="control == 'input'">
   <multilingual-input
     [(editingString)]="original"
-    [control]="'input'"
+    [control]="control"
     [placeholder]="placeholder">
   </multilingual-input>
 
   <multilingual-input
     [(editingString)]="translated" 
     [language]="language" 
-    [control]="'input'" 
+    [control]="control" 
     [placeholder]="placeholder">
   </multilingual-input>
 </ng-container>
@@ -18,7 +18,7 @@
   <div class="col-md-6">
     <multilingual-input 
       [(editingString)]="original" 
-      [control]="'textarea'" 
+      [control]="control" 
       [placeholder]="placeholder">
     </multilingual-input>
   </div>
@@ -27,7 +27,7 @@
     <multilingual-input
       [(editingString)]="translated"
       [language]="language"
-      [control]="'textarea'"
+      [control]="control"
       [placeholder]="placeholder">
     </multilingual-input>
   </div>
