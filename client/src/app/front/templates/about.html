@@ -72,12 +72,11 @@
       </p>
     </div>
     <div class="card-footer">
-      <a class="btn btn-block btn-primary"
-         id="about-developers"
-         href="https://bitbucket.org/marcusriemer/esqulino"
-         role="button">
+      <a [routerLink]="['/about', 'development']"
+         class="btn btn-block btn-primary"
+         id="about-developers">
         <span class="fa fa-code-fork" aria-hidden="true"></span>
-        <span i18n="project git repo link title@@projectGitRepoLinkTitle">BlattWerkzeug Git-Repository</span>
+        <span i18n="project git repo link title@@projectGitRepoLinkTitle">BlattWerkzeug Entwicklung</span>
       </a>
     </div>
   </div>
