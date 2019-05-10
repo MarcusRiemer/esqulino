@@ -2,8 +2,31 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="de" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="news" datatype="html">
+        <source>Neuigkeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newsPublicationDate" datatype="html">
+        <source>
+      Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:&apos;dd.MM.yyyy&apos;}}"/>
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="continueReading" datatype="html">
+        <source>Weiterlesen ...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="welcomeMessage" datatype="html">
-        <source>Willkommen bei</source>
+        <source>Willkommen bei </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">3</context>
@@ -113,132 +136,18 @@
         <note priority="1" from="description">for developers description</note>
       </trans-unit>
       <trans-unit id="projectGitRepoLinkTitle" datatype="html">
-        <source>BlattWerkzeug Git-Repository</source>
+        <source>BlattWerkzeug Entwicklung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <note priority="1" from="description">project git repo link title</note>
-      </trans-unit>
-      <trans-unit id="academiaPageHeadline" datatype="html">
-        <source>Projektvorschläge</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <note priority="1" from="description">academia page headline</note>
-      </trans-unit>
-      <trans-unit id="academiaPageIntro" datatype="html">
-        <source>
-  Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
-</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">2</context>
-        </context-group>
-        <note priority="1" from="description">academia page intro</note>
-      </trans-unit>
-      <trans-unit id="academiaThesesInfo" datatype="html">
-        <source>
-    Anfertigung einer internen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vorgenommen.
-  </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-        <note priority="1" from="description">academia theses info</note>
-      </trans-unit>
-      <trans-unit id="academiaSeminarInfo" datatype="html">
-        <source>
-    In von mir angebotenen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Seminaren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
-  </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">9</context>
-        </context-group>
-        <note priority="1" from="description">academia seminar info</note>
-      </trans-unit>
-      <trans-unit id="academiaMediaProjectInfo" datatype="html">
-        <source>
-    Für Bachelor Medieninformatiker ist es möglich das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Medien-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> zu absolvieren, Informatik-Master-Studierende können das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> einbringen.
-  </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-        <note priority="1" from="description">academia media project info</note>
-      </trans-unit>
-      <trans-unit id="softwareStackIntro" datatype="html">
-        <source>
-  BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich hervorragend um viele typische Verfahren moderner Softwareentwicklung kennenzulernen:
-</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-        <note priority="1" from="description">software stack intro</note>
-      </trans-unit>
-      <trans-unit id="testDrivenDevelopment" datatype="html">
-        <source>Test Driven Development</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-        <note priority="1" from="description">test driven development</note>
-      </trans-unit>
-      <trans-unit id="testDrivenDevelopmentDescription" datatype="html">
-        <source>Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-        <note priority="1" from="description">test driven development description</note>
-      </trans-unit>
-      <trans-unit id="dockerAndCi" datatype="html">
-        <source>Docker &amp; Continuous Integration</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-        <note priority="1" from="description">docker and ci</note>
-      </trans-unit>
-      <trans-unit id="dockerAndCiDescription" datatype="html">
-        <source>Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-        <note priority="1" from="description">docker and ci description</note>
-      </trans-unit>
-      <trans-unit id="singlePageAndApi" datatype="html">
-        <source>Single Page Applications &amp; API-Server</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-        <note priority="1" from="description">single page and api</note>
-      </trans-unit>
-      <trans-unit id="singlePageAndApiDescription" datatype="html">
-        <source>Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-        <note priority="1" from="description">single page and api description</note>
-      </trans-unit>
-      <trans-unit id="devEnvironmentUsed" datatype="html">
-        <source>Umgebung: </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-        <note priority="1" from="description">dev environment used</note>
       </trans-unit>
       <trans-unit id="scientificWorkHeadline" datatype="html">
         <source>Wissenschaftliche Arbeiten</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="description">scientific work headline</note>
       </trans-unit>
@@ -248,7 +157,7 @@
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">2</context>
         </context-group>
         <note priority="1" from="description">scientific work description</note>
       </trans-unit>
@@ -256,7 +165,7 @@
         <source>am</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">11</context>
         </context-group>
         <note priority="1" from="description">academia thesis date prefix</note>
       </trans-unit>
@@ -264,9 +173,51 @@
         <source>Download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <note priority="1" from="description">academia thesis download link text</note>
+      </trans-unit>
+      <trans-unit id="pupilPageHeadline" datatype="html">
+        <source>Dein Einstieg in die Web-Entwicklung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/pupil.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">pupil page headline</note>
+      </trans-unit>
+      <trans-unit id="pupilPageAlertText" datatype="html">
+        <source>Sorry, so weit ist dieses Projekt noch nicht 😞</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/pupil.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">pupil page alert text</note>
+      </trans-unit>
+      <trans-unit id="pupilPageAlertDescription" datatype="html">
+        <source>
+    Für den Augenblick suchen wir vor allem nach Lehrkräften, die zu unserem Projekt Feedback geben.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/pupil.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">pupil page alert description</note>
+      </trans-unit>
+      <trans-unit id="teacherPageHeadline" datatype="html">
+        <source>Datenbanken und HTML für den Unterricht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/teacher.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">teacher page headline</note>
+      </trans-unit>
+      <trans-unit id="teacherPageDescription" datatype="html">
+        <source>Bei BlattWerkzeug handelt es sich um eine Web-Anwendung, mit der Schülerinnen und Schüler an Datenbanken und Webentwicklung herangeführt werden können. Der Arbeitstitel für dieses Projekt lautete &quot;Scratch für Datenbanken Webanwendungen&quot; und beschreibt das Selbstverständnis von BlattWerkzeug recht sprechend.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/teacher.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">teacher page description</note>
       </trans-unit>
       <trans-unit id="imprintContactInformationHeadline" datatype="html">
         <source>Kontakt-Informationen</source>
@@ -376,6 +327,13 @@
         </context-group>
         <note priority="1" from="description">Some functionality is currently deactivated</note>
       </trans-unit>
+      <trans-unit id="edit" datatype="html">
+        <source>Bearbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/project-list-item.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="exampleVideosHeadline" datatype="html">
         <source>Beispielvideos</source>
         <context-group purpose="location">
@@ -417,55 +375,6 @@
           <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">example videos alert contact email link text</note>
-      </trans-unit>
-      <trans-unit id="pupilPageHeadline" datatype="html">
-        <source>Dein Einstieg in die Web-Entwicklung</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/pupil.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <note priority="1" from="description">pupil page headline</note>
-      </trans-unit>
-      <trans-unit id="pupilPageAlertText" datatype="html">
-        <source>Sorry, so weit ist dieses Projekt noch nicht 😞</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/pupil.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <note priority="1" from="description">pupil page alert text</note>
-      </trans-unit>
-      <trans-unit id="pupilPageAlertDescription" datatype="html">
-        <source>
-    Für den Augenblick suchen wir vor allem nach Lehrkräften, die zu unserem Projekt Feedback geben.
-  </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/pupil.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <note priority="1" from="description">pupil page alert description</note>
-      </trans-unit>
-      <trans-unit id="teacherPageHeadline" datatype="html">
-        <source>Datenbanken und HTML für den Unterricht</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/teacher.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <note priority="1" from="description">teacher page headline</note>
-      </trans-unit>
-      <trans-unit id="teacherPageDescription" datatype="html">
-        <source>Bei BlattWerkzeug handelt es sich um eine Web-Anwendung, mit der Schülerinnen und Schüler an Datenbanken und Webentwicklung herangeführt werden können. Der Arbeitstitel für dieses Projekt lautete &quot;Scratch für Datenbanken Webanwendungen&quot; und beschreibt das Selbstverständnis von BlattWerkzeug recht sprechend.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/teacher.html</context>
-          <context context-type="linenumber">2</context>
-        </context-group>
-        <note priority="1" from="description">teacher page description</note>
-      </trans-unit>
-      <trans-unit id="edit" datatype="html">
-        <source>Bearbeiten</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/project-list-item.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="privacyHeadline" datatype="html">
         <source>Datenschutz</source>
@@ -722,6 +631,126 @@
           <context context-type="linenumber">65</context>
         </context-group>
         <note priority="1" from="description">privacy sentry conclusion</note>
+      </trans-unit>
+      <trans-unit id="developmentPageHeadline" datatype="html">
+        <source>BlattWerkzeug-Entwicklung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="developmentPageText" datatype="html">
+        <source>
+  BlattWerkzeug ist ein OpenSource-Projekt, konkret wird es unter der AGPL-3.0 bereitgestellt.
+  Es hat also jeder (auch du!) das Recht, in den Quelltext hineinzuschauen oder ihn sogar zu
+  verändern.
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="projectProposalsHeadline" datatype="html">
+        <source>Projektvorschläge</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="projectProposalsIntro" datatype="html">
+        <source>
+  Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="academiaThesesInfo" datatype="html">
+        <source>
+    Anfertigung einer internen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vorgenommen.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="academiaSeminarInfo" datatype="html">
+        <source>
+    In von mir angebotenen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Seminaren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="academiaMediaProjectInfo" datatype="html">
+        <source>
+    Für Bachelor Medieninformatiker ist es möglich das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Medien-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> zu absolvieren, Informatik-Master-Studierende können das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> einbringen.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="softwareStackIntro" datatype="html">
+        <source>
+  BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich hervorragend um viele typische Verfahren moderner Softwareentwicklung kennenzulernen:
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="testDrivenDevelopment" datatype="html">
+        <source>Test Driven Development</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="testDrivenDevelopmentDescription" datatype="html">
+        <source>Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dockerAndCi" datatype="html">
+        <source>Docker &amp; Continuous Integration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dockerAndCiDescription" datatype="html">
+        <source>Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="singlePageAndApi" datatype="html">
+        <source>Single Page Applications &amp; API-Server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="singlePageAndApiDescription" datatype="html">
+        <source>Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="devEnvironmentUsed" datatype="html">
+        <source>Umgebung: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/development.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <note priority="1" from="description">dev environment used</note>
       </trans-unit>
     </body>
   </file>
