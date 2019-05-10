@@ -38,6 +38,15 @@ export const indexItems: NavItem[] = [
   {
     type: "link",
     text: {
+      de: "Entwicklung",
+      en: "Development",
+    },
+    route: ["/about/development"],
+    icon: "code-fork"
+  },
+  {
+    type: "link",
+    text: {
       de: "Impressum",
       en: "Imprint",
     },

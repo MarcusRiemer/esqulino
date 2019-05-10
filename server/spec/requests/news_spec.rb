@@ -2,24 +2,44 @@ require 'rails_helper'
 
 RSpec.describe NewsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
-  
-  it 'nothing published' do
+
+  it 'User: retrieving news without anything published' do
     news = create(:news, published_from: Date.new(2019, 11, 1) )
     get '/api/news'
     json_data = JSON.parse(response.body)
     expect(json_data.length).to eq(0)
-    # expect(json_data[0]['title']['en']).to be_nil
   end
 
-  it 'something published' do
+  it 'User: retrieving the only existing news (default language)' do
     news = create(:news, published_from: Date.new(2019, 1, 1) )
     get '/api/news'
     json_data = JSON.parse(response.body)
     expect(json_data.length).to eq(1)
-    # expect(json_data[0]['title']['en']).to be_nil
   end
 
-  it 'getting all news in multiple languages' do
+  it 'User: retrieving the only existing news (english)' do
+    host! 'en.example.com'
+
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
+    get '/api/news'
+    json_data = JSON.parse(response.body)
+    expect(json_data.length).to eq(1)
+    expect(json_data[0]['title']).to eq({ "en" =>  news.title['en'] })
+    expect(json_data[0]['text']).to eq({ "en" =>  news.text['en'] })
+  end
+
+  it 'User: retrieving the only existing news (german)' do
+    host! 'de.example.com'
+
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
+    get '/api/news'
+    json_data = JSON.parse(response.body)
+    expect(json_data.length).to eq(1)
+    expect(json_data[0]['title']).to eq({ "de" =>  news.title['de'] })
+    expect(json_data[0]['text']).to eq({ "de" =>  news.text['de'] })
+  end
+
+  it 'Admin: getting all news in multiple languages' do
     create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
     create(:news, published_from: Date.new(2019, 12, 1) )
     create(:news, published_from: Date.new(2019, 11, 1) )
