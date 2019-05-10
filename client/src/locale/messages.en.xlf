@@ -2,7 +2,27 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="de" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
-      <trans-unit id="welcomeMessage" datatype="html">
+      <trans-unit id="news" datatype="html">
+        <source>Neuigkeiten</source><target state="translated">News</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="newsPublicationDate" datatype="html">
+        <source>
+      Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:'dd.MM.yyyy'}}"/>
+    </source><target state="translated">News from <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:'dd.MM.yyyy'}}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit><trans-unit id="continueReading" datatype="html">
+        <source>Weiterlesen ...</source><target state="translated">Continue reading ...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit><trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>

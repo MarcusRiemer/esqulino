@@ -48,6 +48,10 @@
         }
     }
 
+    mat-card > mat-card-header > img.news-avatar {
+        object-fit: contain;
+    }
+
     /* Information about academical projects */
     .academia-item {
         margin-bottom: 1rem;
