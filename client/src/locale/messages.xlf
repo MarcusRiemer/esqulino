@@ -2,6 +2,29 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="de" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="news" datatype="html">
+        <source>Neuigkeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newsPublicationDate" datatype="html">
+        <source>
+      Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:&apos;dd.MM.yyyy&apos;}}"/>
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="continueReading" datatype="html">
+        <source>Weiterlesen ...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei </source>
         <context-group purpose="location">

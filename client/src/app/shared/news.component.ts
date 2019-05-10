@@ -8,9 +8,10 @@ import { ServerDataService } from './serverdata/server-data.service';
 })
 export class NewsComponent {
   constructor(
-    @Inject(LOCALE_ID) private readonly _localeId: string,
-    private _serverData: ServerDataService)
-  {}
+    @Inject(LOCALE_ID)
+    private readonly _localeId: string,
+    private _serverData: ServerDataService) {
+  }
 
   readonly userNewsList = this._serverData.getUserNewsList;
   readonly locale = this._localeId;
