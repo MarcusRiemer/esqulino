@@ -6,15 +6,15 @@
     <img src="/vendor/logos/blattwerkzeug-logo.svg"
          class="news-avatar"
          mat-card-avatar>
-    <mat-card-title>
-      {{item.title[locale]}}
+    <mat-card-title 
+      [innerHTML]="item.title[locale]">
     </mat-card-title>
     <mat-card-subtitle i18n="@@newsPublicationDate">
       Neuigkeiten vom {{item.publishedFrom | date:'dd.MM.yyyy'}}
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
-    {{ item.text[locale] }}
+  <mat-card-content
+    [innerHTML]="item.text[locale]">
   </mat-card-content>
   <mat-card-actions>
     <a mat-button

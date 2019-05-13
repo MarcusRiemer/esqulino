@@ -25,7 +25,7 @@ RSpec.describe NewsController, type: :request do
     json_data = JSON.parse(response.body)
     expect(json_data.length).to eq(1)
     expect(json_data[0]['title']).to eq({ "en" =>  news.title['en'] })
-    expect(json_data[0]['text']).to eq({ "en" =>  news.text['en'] })
+    expect(json_data[0]['text']).to eq({ "en" =>  news.rendered_text()['en'] })
   end
 
   it 'User: retrieving the only existing news (german)' do
@@ -36,7 +36,7 @@ RSpec.describe NewsController, type: :request do
     json_data = JSON.parse(response.body)
     expect(json_data.length).to eq(1)
     expect(json_data[0]['title']).to eq({ "de" =>  news.title['de'] })
-    expect(json_data[0]['text']).to eq({ "de" =>  news.text['de'] })
+    expect(json_data[0]['text']).to eq({ "de" =>  news.rendered_text()['de'] })
   end
 
   it 'Admin: getting all news in multiple languages' do
@@ -191,6 +191,8 @@ RSpec.describe NewsController, type: :request do
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
     end
+
+    
 
     expect(json_data['id']).to_not be_nil
     expect(json_data['text']).to_not be_nil

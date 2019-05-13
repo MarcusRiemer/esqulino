@@ -65,15 +65,31 @@ RSpec.describe News, type: :model do
     orig = build(:news, text: { "de" => "# Überschrift", "en" => "#Headline"})
 
     expect(orig.rendered_text).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n"})
-    expect(orig.rendered_text(["de"])).to eq({ "de" => "<h1>Überschrift</h1>\n"})
-    expect(orig.rendered_text(["en"])).to eq({ "en" => "<h1>Headline</h1>\n"})
+    expect(orig.rendered_text(:full, ["de"])).to eq({ "de" => "<h1>Überschrift</h1>\n"})
+    expect(orig.rendered_text(:full, ["en"])).to eq({ "en" => "<h1>Headline</h1>\n"})
   end
 
   it 'rendering texts in unknown languages' do
     orig = build(:news, text: { "de" => "# Überschrift"})
 
-    expect{ orig.rendered_text }.to raise_exception(EsqulinoMessageError)
     expect{ orig.rendered_text(["en"]) }.to raise_exception(EsqulinoMessageError)
     expect{ orig.rendered_text(["en", "de"]) }.to raise_exception(EsqulinoMessageError)
+  end
+
+  it 'renders the text (start)' do
+    orig = build(:news, text: { "de" => "<!-- SNIP --> # Überschrift", "en" => "#Headline"})
+    expect(orig.rendered_text(:short, ['de', 'en'])).to eq({ "de" => "", "en" => "<h1>Headline</h1>\n"})
+  end
+
+  it 'renders the text (mid)' do
+    orig = build(:news, text: { "de" => "# Überschrift <!-- SNIP --> Test", "en" => "#Headline <!-- SNIP --> Test"})
+
+    expect(orig.rendered_text(:short, ['de', 'en'])).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n"})
+  end
+
+  it 'renders the text (end)' do
+    orig = build(:news, text: { "de" => "# Überschrift Test <!-- SNIP -->", "en" => "#Headline Test <!-- SNIP -->"})
+
+    expect(orig.rendered_text(:short, ['de', 'en'])).to eq({ "de" => "<h1>Überschrift Test</h1>\n", "en" => "<h1>Headline Test</h1>\n"})
   end
 end
