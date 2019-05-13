@@ -1,14 +1,13 @@
 class NewsController < ApplicationController
   include LocaleHelper
-  
+  include JsonSchemaHelper
+
   def index
-    locale = request_locale
-    render :json => News.scope_single_language(locale).map{|l| l.to_list_api_response}  
+    render :json => News.scope_single_language(request_locale).map{|l| l.to_list_api_response}  
   end
 
   def show
-    locale = request_locale
-    render :json => News.scope_single_language(locale)
+    render :json => News.scope_single_language(request_locale)
                       .where("id = ?", params[:id])
                       .first
                       .to_list_api_response
@@ -25,6 +24,7 @@ class NewsController < ApplicationController
   end
 
   def update
+    # request_data = ensure_request("AdminNewsDescription", request.body.read)
     news = News.all.find_by(id: params[:id])
     begin
       transformed_data = parse_publish_from(params_updated_news)
@@ -38,6 +38,7 @@ class NewsController < ApplicationController
 
   def create_news
     begin
+      # request_data = ensure_request("AdminNewsDescription", request.body.read)
       transformed_data = parse_publish_from(params_updated_news)
       news = News.create(transformed_data)
 
@@ -49,7 +50,7 @@ class NewsController < ApplicationController
 
   def delete_news
     news = News.all.find_by(id: params[:id])
-    if (news)
+    if news
       news.destroy
     else
       render status: 400
@@ -68,11 +69,7 @@ class NewsController < ApplicationController
   end
 
   def parse_publish_from(data)
-    if (data.key?(:published_from))
-      data[:published_from] = parse_date(data[:published_from])
-    else
-      data[:published_from] = nil
-    end
+    data[:published_from] = data.key?(:published_from) ? parse_date(data[:published_from]) : nil
     return data
   end
 end

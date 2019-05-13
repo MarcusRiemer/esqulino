@@ -210,6 +210,4 @@ RSpec.describe NewsController, type: :request do
 
     expect(response).to have_http_status(400)
   end
-
-  # TODO: Structurally invalid JSON requests
 end

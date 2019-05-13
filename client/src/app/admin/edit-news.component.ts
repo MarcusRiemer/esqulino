@@ -42,9 +42,7 @@ export class AdminNewsEditComponent implements OnInit {
       ).subscribe(
         news => this.newsData = news,
         err => alert(err),
-        () => {
-          this.ableToPublish = this.isPublished
-        }
+        () => { this.ableToPublish = this.isPublished }
       );
     }
   }

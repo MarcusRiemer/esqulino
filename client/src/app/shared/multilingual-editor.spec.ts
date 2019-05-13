@@ -49,7 +49,7 @@ describe('Component: MultiLingualEditor', () => {
   it('testing the textarea control', async () => {
     let c = await createComponent("de")
 
-    const mulString: MultilingualString = {}
+    const mulString: MultilingualString = { }
 
     c.component.original = mulString;
     c.component.translated = mulString;
@@ -58,7 +58,7 @@ describe('Component: MultiLingualEditor', () => {
     c.fixture.detectChanges();
 
     expect(c.component).toBeTruthy();
-    expect(c.element.querySelectorAll('multilingual-input').length).toEqual(2);
+    expect(c.element.querySelectorAll('input').length).toEqual(0);
   })
 
   it('testing the output of the inputs', async () => {
@@ -75,12 +75,19 @@ describe('Component: MultiLingualEditor', () => {
 
     c.fixture.detectChanges();
     expect(c.component).toBeTruthy();
+    // 
+
+    c.component.translatedChange.subscribe(value => newString = value);
+
+    c.component.original = changed.original;
+    c.component.translated = changed.translated;
+
 
     c.component.ngOnChanges({
       original: new SimpleChange(c.component.original, changed.original, false),
       translated: new SimpleChange(c.component.translated, changed.translated, false)
     });
-    c.fixture.detectChanges();
-    // expect(c.component.translated['en']).toEqual('Test');
+
+    expect(newString['en']).toEqual('Test');
   })
 })
