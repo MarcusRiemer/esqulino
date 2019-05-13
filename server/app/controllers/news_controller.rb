@@ -3,7 +3,7 @@ class NewsController < ApplicationController
   include JsonSchemaHelper
 
   def index
-    render :json => News.scope_single_language(request_locale).map{|l| l.to_list_api_response}  
+    render :json => News.scope_single_language(request_locale).map{|l| l.to_list_api_response(:short, [request_locale])}  
   end
 
   def show
@@ -29,7 +29,6 @@ class NewsController < ApplicationController
     begin
       transformed_data = parse_publish_from(params_updated_news)
       news.update(transformed_data)
-
       render :json => news.to_full_api_response
     rescue ArgumentError => e
       render status: 400, :json => news.to_full_api_response

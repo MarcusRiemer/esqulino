@@ -25,12 +25,17 @@ export class AdminNewsEditComponent implements OnInit {
   ) { }
 
   private readonly _id = this._activeRoute.snapshot.paramMap.get('newsId');
-  private readonly queryParams = this._activeRoute.snapshot.queryParams;
+  private readonly _queryParams = this._activeRoute.snapshot.queryParams;
+
+  readonly editors = [
+    {name: 'single',  description: 'Einfacher Bearbeitungsmodus'},
+    {name: 'translation',  description: 'Übersetzungsmodus'},
+  ]
 
   public newsData: AdminNewsDescription;
   public ableToPublish: boolean;
-  public readonly queryParamsLanguage = this.queryParams.language || this.localeID;
-  public readonly queryParamsMode = this.queryParams.mode || 'single';
+  public readonly queryParamsLanguage = this._queryParams.language || this.localeID;
+  public queryParamsMode = this._queryParams.mode || 'single';
 
   public ngOnInit(): void {
     this._toolbar.addItem(this.toolbarItems)

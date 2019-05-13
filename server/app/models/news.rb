@@ -19,20 +19,28 @@ class News < ApplicationRecord
   #
   # @param languages [String] Language codes to render. Renders all languages
   #                           if parameter is nil.
+  # @param text_length choose between short/extended text
   # @return [Hash<String, String>] Rendered content in asked languages
-  def rendered_text(languages = nil)
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
+  def rendered_text(text_length = :full, languages = nil)
+    raise EsqulinoMessageError.new("Invalid text_length") unless [:short, :full].include? text_length
 
-    if (languages)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
+    if languages
       check_languages(languages)
       rendered_hash = self.text.slice(*languages)
     else
-      check_languages(LocaleHelper.allowed_languages_s)
       rendered_hash = self.text
     end
 
-    rendered_hash.map { |key, value| rendered_hash[key] = markdown.render(value) }
-
+    rendered_hash.each do |key, value|
+      if text_length == :short
+        pos = value.index('<!-- SNIP -->')
+        if (pos)
+          value = value.slice(0, pos)
+        end
+      end
+      rendered_hash[key] = markdown.render(value)
+    end
     return rendered_hash
   end
 
@@ -46,12 +54,25 @@ class News < ApplicationRecord
     Date.today >= self.published_from
   end
 
-  def to_full_api_response
-    to_json_api_response
+  def to_full_api_response(text_length = :full, languages = nil)
+    to_return = to_json_api_response
+
+    if (to_return['text'])
+      to_return['text'] = self.rendered_text(text_length)
+    end
+
+    return (to_return)
   end
 
-  def to_list_api_response
-    to_json_api_response
-      .slice("id", "title", "text", "publishedFrom")
+  def to_list_api_response(text_length = :full, languages = nil)
+
+    to_return = to_json_api_response
+                  .slice("id", "title", "text", "publishedFrom")
+
+    if (to_return['text'])
+      to_return['text'] = self.rendered_text(text_length)
+    end
+
+    return (to_return)
   end
 end

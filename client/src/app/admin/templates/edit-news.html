@@ -25,6 +25,15 @@
   </button>
 </ng-template>
 
+<div class="row">
+  <div class="col-md-2">
+    <label>Wähle einen Editor</label>
+    <select class="custom-select" name="editor" required [(ngModel)]="queryParamsMode">
+      <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
+    </select>
+  </div>
+</div>
+
 <form ngNativeValidate>
   <!-- still waiting for the data from the server  -->
   <div *ngIf="newsData"
