@@ -1,7 +1,17 @@
-
-<ng-container *ngIf="news | async; let news">
-  <h1>{{ news.title[locale] }}</h1>
-  <h2>Datum: {{ news.publishedFrom | date:'dd.MM.yyyy' }}</h2>
-  <p>{{ news.text[locale] }}</p>
-</ng-container>
-
+<mat-card *ngIf="news | async; let news"
+          class="mb-3">
+  <mat-card-header>
+    <img src="/vendor/logos/blattwerkzeug-logo.svg"
+         class="news-avatar"
+         mat-card-avatar>
+    <mat-card-title>
+      {{news.title[locale]}}
+    </mat-card-title>
+    <mat-card-subtitle i18n="@@newsPublicationDate">
+      Neuigkeiten vom {{news.publishedFrom | date:'dd.MM.yyyy'}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    {{ news.text[locale] }}
+  </mat-card-content>
+</mat-card>
