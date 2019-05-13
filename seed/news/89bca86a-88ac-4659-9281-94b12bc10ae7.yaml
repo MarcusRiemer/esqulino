@@ -8,12 +8,16 @@ concise_attributes:
   value_before_type_cast: '"de"=>"Neues von BlattWerkzeug!", "en"=>"News from BlattWerkzeug!"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: text
-  value_before_type_cast: '"de"=>"Mittlerweile ist BlattWerkzeug.de schon eine Weile
-    live, aber ein News-System haben wir halt erst jetzt. Wir werden an dieser Stelle
-    nun immer wieder über neu ausgerollte Features, spannende Projekte oder andere
-    relevante Themen berichten.", "en"=>"BlattWerkzeug.de is now online for a while,
-    but a news system has only been added recently. From now on we will inform you
-    about new features, interesting projects or other topics that seem to be relevant."'
+  value_before_type_cast: |-
+    "de"=>"Mittlerweile ist BlattWerkzeug.de schon eine Weile live, aber ein News-System haben wir halt erst jetzt. Wir werden an dieser Stelle nun immer wieder über neu ausgerollte Features, spannende Projekte oder andere relevante Themen berichten.
+
+    <!-- SNIP -->
+
+    Unter anderem sind in der nächsten Zeit die folgenden Neuerungen geplant:
+
+    * Vernünftige Benutzerregistrierung
+    * Entflechtung der visuellen & der internen Darstellung von Programmiersprachen
+    * Unterstützung von `HTML`", "en"=>"BlattWerkzeug.de is now online for a while, but a news system has only been added recently. From now on we will inform you about new features, interesting projects or other topics that seem to be relevant."
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: published_from
   value_before_type_cast: '2019-04-30 00:00:00'
@@ -22,6 +26,6 @@ concise_attributes:
   value_before_type_cast: '2019-05-08 14:20:43.253857'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-10 12:24:39.987689'
+  value_before_type_cast: '2019-05-13 10:18:56.167147'
 new_record: false
 active_record_yaml_version: 2
