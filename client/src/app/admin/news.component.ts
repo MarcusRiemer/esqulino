@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { Component, Input, Inject, LOCALE_ID } from "@angular/core";
+import { Component, Inject, LOCALE_ID } from "@angular/core";
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ServerDataService } from '../shared';
@@ -7,7 +7,7 @@ import { locales } from '../shared/change-language.component';
 @Component({
   templateUrl: './templates/news.html'
 })
-export class AdminNewsListComponent {  
+export class AdminNewsListComponent {
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
     private readonly _serverData: ServerDataService,
@@ -17,8 +17,8 @@ export class AdminNewsListComponent {
 
   readonly languages = locales;
   readonly editors = [
-    {name: 'single',  description: 'Einfacher Bearbeitungsmodus'},
-    {name: 'translation',  description: 'Übersetzungsmodus'},
+    { name: 'single', description: 'Einfacher Bearbeitungsmodus' },
+    { name: 'translation', description: 'Übersetzungsmodus' },
   ]
 
   public adminNewsList = this._serverData.getAdminNewsList.value;
@@ -32,7 +32,7 @@ export class AdminNewsListComponent {
     this.searchFor = this.searchFor.toLowerCase();
     this.searchList = this.searchList.pipe(
       map(item => item.filter(entry =>
-          entry.id.includes(this.searchFor)
+        entry.id.includes(this.searchFor)
         || (entry.text ? (entry.text[this.selectedLanguage] ? entry.text[this.selectedLanguage].toLowerCase().includes(this.searchFor) : null) : null)
         || (entry.title ? (entry.title[this.selectedLanguage] ? entry.title[this.selectedLanguage].toLowerCase().includes(this.searchFor) : null) : null)
         || (entry.publishedFrom ? entry.publishedFrom : null)
