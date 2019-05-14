@@ -28,7 +28,7 @@
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Titel</th>
-        <th scope="col">Text</th>
+        <th scope="col">Verfügbar in</th>
         <th scope="col">Freigegeben ab</th>
         <th scope="col">Erstellt am</th>
         <th scope="col">Geändert am</th>
@@ -40,7 +40,7 @@
           [queryParams]="{ mode: selectedEditor, language: selectedLanguage }">
         <td scope="row">{{item.id}}</td>
         <td>{{item.title ? item.title[selectedLanguage] || '' : ''}}</td>
-        <td>{{item.text ? item.text[selectedLanguage] || '' : ''}}</td>
+        <td>{{getLanguagesFlags(item.text)}}</td>
         <td>{{(item.publishedFrom | date: 'dd.MM.yyyy') || ''}}</td>
         <td>{{item.createdAt}}</td>
         <td>{{item.updatedAt}}</td>
