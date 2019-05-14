@@ -17,6 +17,10 @@
           <context context-type="sourcefile">app/shared/templates/news.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news-details.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="continueReading" datatype="html">
         <source>Weiterlesen ...</source>
@@ -34,34 +38,22 @@
         <note priority="1" from="description">welcome message</note>
       </trans-unit>
       <trans-unit id="shortProjectIntroduction" datatype="html">
-        <source>Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</source>
+        <source>
+      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">short project introduction</note>
       </trans-unit>
-      <trans-unit id="learnMoreLinkText" datatype="html">
-        <source>Das kann man damit machen</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-        <note priority="1" from="description">learn more link text</note>
-      </trans-unit>
-      <trans-unit id="createProjectButtonTitle" datatype="html">
-        <source>Neues Projekt anlegen</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-        <note priority="1" from="description">create project button title</note>
-      </trans-unit>
       <trans-unit id="forPupilsHeadline" datatype="html">
-        <source>Für Schüler</source>
+        <source>
+        Für Schüler
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">19</context>
         </context-group>
         <note priority="1" from="description">for pupils headline</note>
       </trans-unit>
@@ -71,7 +63,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <note priority="1" from="description">for pupils description</note>
       </trans-unit>
@@ -79,15 +71,17 @@
         <source>So legst du los</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">30</context>
         </context-group>
         <note priority="1" from="description">get started button text</note>
       </trans-unit>
       <trans-unit id="forTeachersHeadline" datatype="html">
-        <source>Für Lehrkräfte</source>
+        <source>
+        Für Lehrkräfte
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <note priority="1" from="description">for teachers headline</note>
       </trans-unit>
@@ -97,7 +91,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <note priority="1" from="description">for teachers description</note>
       </trans-unit>
@@ -105,7 +99,7 @@
         <source>Konzept</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <note priority="1" from="description">concept</note>
       </trans-unit>
@@ -113,17 +107,18 @@
         <source>Demo-Videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <note priority="1" from="description">demo videos</note>
       </trans-unit>
       <trans-unit id="forDevelopersHeadline" datatype="html">
-        <source>Für Entwickler</source>
+        <source>
+        Für Entwickler
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">64</context>
         </context-group>
-        <note priority="1" from="description">for developers headline</note>
       </trans-unit>
       <trans-unit id="forDevelopersDescription" datatype="html">
         <source>
@@ -131,15 +126,14 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">67</context>
         </context-group>
-        <note priority="1" from="description">for developers description</note>
       </trans-unit>
       <trans-unit id="projectGitRepoLinkTitle" datatype="html">
         <source>BlattWerkzeug Entwicklung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">75</context>
         </context-group>
         <note priority="1" from="description">project git repo link title</note>
       </trans-unit>
@@ -751,6 +745,56 @@
           <context context-type="linenumber">63</context>
         </context-group>
         <note priority="1" from="description">dev environment used</note>
+      </trans-unit>
+      <trans-unit id="deleteNews" datatype="html">
+        <source>News Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="saveNewsAndBack" datatype="html">
+        <source>Aktualisieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="saveNewsAndStay" datatype="html">
+        <source>Aktualisieren (bleiben)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createNews" datatype="html">
+        <source>Neue News speichern</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newsTitle" datatype="html">
+        <source>Titel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newsText" datatype="html">
+        <source>Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
       </trans-unit>
     </body>
   </file>

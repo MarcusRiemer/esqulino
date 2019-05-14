@@ -12,11 +12,8 @@
         <source>
       Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:'dd.MM.yyyy'}}"/>
     </source><target state="translated">News from <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:'dd.MM.yyyy'}}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit><trans-unit id="continueReading" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news-details.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="continueReading" datatype="html">
         <source>Weiterlesen ...</source><target state="translated">Continue reading ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/templates/news.html</context>
@@ -31,124 +28,89 @@
         <note priority="1" from="description">welcome message</note><target>Welcome to</target>
       </trans-unit>
       <trans-unit id="shortProjectIntroduction" datatype="html">
-        <source>Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</source>
+        <source>
+      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">short project introduction</note><target state="translated">A beginner-friendly development environment for dealing with SQL and web programming.</target>
       </trans-unit>
-      <trans-unit id="learnMoreLinkText" datatype="html">
-        <source>Das kann man damit machen</source>
-        <target state="translated">What you can do with it</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-        <note priority="1" from="description">learn more link text</note>
-      </trans-unit>
-      <trans-unit id="createProjectButtonTitle" datatype="html">
-        <source>Neues Projekt anlegen</source>
-        <target state="translated">Create new project</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-        <note priority="1" from="description">create project button title</note>
-      </trans-unit>
+      
+      
       <trans-unit id="forPupilsHeadline" datatype="html">
-        <source>Für Schüler</source>
+        <source>
+        Für Schüler
+      </source>
         <target state="translated">For Students</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
+        
         <note priority="1" from="description">for pupils headline</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
       <trans-unit id="forPupilsDescription" datatype="html">
         <source>
         Du wolltest schon immer mal deine eigene Blog­software entwickeln? Oder deine stärksten Pokémon präsentieren? Interaktive Abenteuer­geschichten schreiben? (Fast) egal worum es geht, mit BlattWerkzeug kannst du deine eigenen Webseiten programmieren und sie deinen Freunden zeigen.
       </source>
         <target state="translated">Ever wanted to develop your own blog software? Or present your strongest Pokémon? Write interactive adventure stories? (Almost) no matter what, it’s easy to use BlattWerkzeug to program your own web pages and show them to your friends.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
+        
         <note priority="1" from="description">for pupils description</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="getStartedButtonText" datatype="html">
         <source>So legst du los</source>
         <target state="translated">How to get started</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
+        
         <note priority="1" from="description">get started button text</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">30</context></context-group></trans-unit>
       <trans-unit id="forTeachersHeadline" datatype="html">
-        <source>Für Lehrkräfte</source>
+        <source>
+        Für Lehrkräfte
+      </source>
         <target state="translated">For Teachers</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">49</context>
-        </context-group>
+        
         <note priority="1" from="description">for teachers headline</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="forTeachersDescription" datatype="html">
         <source>
         Konventionelle Ent­wick­lungs­um­ge­bun­gen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. BlattWerkzeug hingegen kann an den Lernfortschritt der Klassengemeinschaft angepasst werden!
       </source>
         <target state="translated">Conventional development environments are programs for professionals by professionals and offer a correspondingly aligned range of functions. In contrast, the leaf tool can be adapted to the learning progress of the class community!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
+        
         <note priority="1" from="description">for teachers description</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
       <trans-unit id="wordConcept" datatype="html">
         <source>Konzept</source>
         <target state="translated">Concept</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
+        
         <note priority="1" from="description">concept</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">51</context></context-group></trans-unit>
       <trans-unit id="wordDemoVideos" datatype="html">
         <source>Demo-Videos</source>
         <target state="translated">Demo-Videos</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
+        
         <note priority="1" from="description">demo videos</note>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">54</context></context-group></trans-unit>
       <trans-unit id="forDevelopersHeadline" datatype="html">
-        <source>Für Entwickler</source>
+        <source>
+        Für Entwickler
+      </source>
         <target state="translated">For Developers</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-        <note priority="1" from="description">for developers headline</note>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">64</context></context-group></trans-unit>
       <trans-unit id="forDevelopersDescription" datatype="html">
         <source>
         Leider gibt es viel zu wenig Lern­software für den Einstieg in die Web­entwicklung. Wenn du dabei helfen möchtest, Kinder und Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu eingeladen zum quelloffenen BlattWerkzeug Projekt beizutragen.
       </source>
         <target state="translated">Unfortunately, there is far too little learning software for getting started with web development. If you want to help to get children and teenagers interested in SQL and HTML, you are welcome to contribute to the Open Source BlattWerkzeug project.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-        <note priority="1" from="description">for developers description</note>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">67</context></context-group></trans-unit>
       <trans-unit id="projectGitRepoLinkTitle" datatype="html">
         <source>BlattWerkzeug Entwicklung</source>
         <target state="translated">BlattWerkzeug Development</target>
         
         <note priority="1" from="description">project git repo link title</note>
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/about.html</context><context context-type="linenumber">75</context></context-group></trans-unit>
       
       
       <trans-unit id="academiaThesesInfo" datatype="html">
@@ -225,7 +187,51 @@
         <target state="translated">Environment: </target>
         
         <note priority="1" from="description">dev environment used</note>
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">63</context></context-group></trans-unit><trans-unit id="deleteNews" datatype="html">
+        <source>News Löschen</source><target state="translated">Delete News</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit><trans-unit id="saveNewsAndBack" datatype="html">
+        <source>Aktualisieren</source><target state="translated">Save</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit><trans-unit id="saveNewsAndStay" datatype="html">
+        <source>Aktualisieren (bleiben)</source><target state="translated">Save and Stay</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit><trans-unit id="createNews" datatype="html">
+        <source>Neue News speichern</source><target state="translated">Save new News</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit><trans-unit id="newsTitle" datatype="html">
+        <source>Titel</source><target state="translated">Title</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit><trans-unit id="newsText" datatype="html">
+        <source>Text</source><target state="new">Text</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="scientificWorkHeadline" datatype="html">
         <source>Wissenschaftliche Arbeiten</source>
         <target state="translated">Scientific work</target>

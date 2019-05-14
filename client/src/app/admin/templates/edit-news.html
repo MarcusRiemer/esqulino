@@ -2,52 +2,48 @@
   <button *ngIf="!isCreatingNews"
           (click)="deleteNews()"
           mat-button>
-    <span class="fa fa-trash"></span>
-    News Löschen
+    <span class="fa fa-trash"></span>&nbsp;
+    <span i18n="@@deleteNews">News Löschen</span>
   </button>
   <button *ngIf="!isCreatingNews"
           (click)="updateData('redirect')"
           mat-button>
-    <span class="fa fa-pencil"></span>
-    Aktualisieren
+    <span class="fa fa-pencil"></span>&nbsp;
+    <span i18n="@@saveNewsAndBack">Aktualisieren</span>
   </button>
   <button *ngIf="!isCreatingNews"
           (click)="updateData()"
           mat-button>
-    <span class="fa fa-pencil"></span>
-    Aktualisieren (bleiben)
+    <span class="fa fa-pencil"></span>&nbsp;
+    <span i18n="@@saveNewsAndStay">Aktualisieren (bleiben)</span>
   </button>
   <button *ngIf="isCreatingNews"
           (click)="createNews()"
           mat-button>
-    <span class="fa fa-plus-circle"></span>
-    Neue News speichern
+    <span class="fa fa-plus-circle"></span>&nbsp;
+    <span i18n="@@createNews">Neue News speichern</span>
   </button>
+  <select [(ngModel)]="queryParamsMode"
+          name="editor"
+          required>
+    <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
+  </select>
 </ng-template>
 
-<div class="row">
-  <div class="col-md-2">
-    <label>Wähle einen Editor</label>
-    <select class="custom-select" name="editor" required [(ngModel)]="queryParamsMode">
-      <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
-    </select>
-  </div>
-</div>
-
 <form ngNativeValidate>
-  <!-- still waiting for the data from the server  -->
+  <!-- Possibly still waiting for the data from the server  -->
   <div *ngIf="newsData"
        id="edit-news">
     <!-- single mode -->
     <ng-container class="single" *ngIf="queryParamsMode == 'single'">
-      <h1>Titel</h1>
+      <h1 i18n="@@newsTitle">Titel</h1>
       <multilingual-input
           [(editingString)]="newsData.title"
           [language]="queryParamsLanguage"
           [control]="'input'"
           [placeholder]="'Titel'">
       </multilingual-input>
-      <h1>Text</h1>
+      <h1 i18n="@@newsText">Text</h1>
       <multilingual-input
           [(editingString)]="newsData.text"
           [language]="queryParamsLanguage"
@@ -58,7 +54,7 @@
 
     <!-- translation mode -->
     <ng-container *ngIf="queryParamsMode == 'translation'">
-      <h1>Titel</h1>
+      <h1 i18n="@@newsTitle">Titel</h1>
       <multilingual-editor
           [(original)]="newsData.title"
           [(translated)]="newsData.title"
@@ -66,7 +62,7 @@
           [control]="'input'"
           [placeholder]="'Titel'">
       </multilingual-editor>
-      <h1>Text</h1>
+      <h1 i18n="@@newsText">Text</h1>
       <multilingual-editor
           [(original)]="newsData.text"
           [(translated)]="newsData.text"
@@ -80,13 +76,13 @@
 
     <!-- checkbox: publishedFrom disable/enabled -->
     <div class="form-check form-check-inline">
-      <input class="form-check-input" 
-        type="checkbox" 
-        name="published-from-checkbox" 
-        id="published-from" 
-        value="option1" 
-        checked 
-        [(ngModel)]="ableToPublish">
+      <input class="form-check-input"
+             type="checkbox"
+             name="published-from-checkbox"
+             id="published-from"
+             value="option1"
+             checked
+             [(ngModel)]="ableToPublish">
       <label class="form-check-label" for="published-from">
         Veröffentlichen am
       </label>
@@ -96,12 +92,12 @@
       <!-- materials datepicker -->
       <mat-form-field *ngIf="ableToPublish">
         <input matInput
-          name="date-picker"
-          [focus]="ableToPublish" 
-          [matDatepicker]="picker"
-          [value]="newsData.publishedFrom" 
-          [(ngModel)]="newsData.publishedFrom" 
-          required>
+               name="date-picker"
+               [focus]="ableToPublish"
+               [matDatepicker]="picker"
+               [value]="newsData.publishedFrom"
+               [(ngModel)]="newsData.publishedFrom"
+               required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error *ngIf="newsData.publishedFrom === nil">Please select an another date</mat-error>
