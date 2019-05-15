@@ -5,9 +5,12 @@ import { Component, OnInit, LOCALE_ID, Inject, ViewChild, TemplateRef } from '@a
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 
-import { AdminNewsDescription } from '../shared/news.description';
+import { NewsUpdateDescription } from '../shared/news.description';
 import { ServerDataService, ToolbarService } from '../shared';
 
+/**
+ * Administrative UI to edit or create news.
+ */
 @Component({
   templateUrl: './templates/edit-news.html'
 })
@@ -24,25 +27,33 @@ export class AdminNewsEditComponent implements OnInit {
     @Inject(LOCALE_ID) private readonly localeID: string,
   ) { }
 
-  private readonly _id = this._activeRoute.snapshot.paramMap.get('newsId');
+  // ID of the news being edited
+  private readonly _newsId = this._activeRoute.snapshot.paramMap.get('newsId');
+
+  // Current query parameters of the route
   private readonly _queryParams = this._activeRoute.snapshot.queryParams;
 
   readonly editors = [
-    {name: 'single',  description: 'Einfacher Bearbeitungsmodus'},
-    {name: 'translation',  description: 'Übersetzungsmodus'},
+    { name: 'single', description: 'Einfacher Bearbeitungsmodus' },
+    { name: 'translation', description: 'Übersetzungsmodus' },
   ]
 
-  public newsData: AdminNewsDescription;
+  public newsData: NewsUpdateDescription;
   public ableToPublish: boolean;
   public readonly queryParamsLanguage = this._queryParams.language || this.localeID;
   public queryParamsMode = this._queryParams.mode || 'single';
 
   public ngOnInit(): void {
+    // Add these specific toolbar items to the global toolbar
     this._toolbar.addItem(this.toolbarItems)
+
+    // Provide something to edit
     if (this.isCreatingNews) {
+      // Create a new news to be edited
       this.newNews()
     } else {
-      this._serverData.getAdminNewsSingle.getDescription(this._id).pipe(
+      // Retrieve the news that should be edited
+      this._serverData.getAdminNewsSingle.getDescription(this._newsId).pipe(
         first()
       ).subscribe(
         news => this.newsData = news,
@@ -52,14 +63,14 @@ export class AdminNewsEditComponent implements OnInit {
     }
   }
 
+  /**
+   * Creates a new news which is ready to be edited.
+   */
   public newNews(): void {
     this.newsData = {
-      id: '',
       title: {},
       text: {},
-      publishedFrom: undefined,
-      createdAt: '',
-      updatedAt: ''
+      publishedFrom: null // Field needs to be sent, even if empty
     };
   }
 
@@ -77,7 +88,7 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   get isCreatingNews(): boolean {
-    return this._id == undefined || this._id == null
+    return this._newsId == undefined || this._newsId == null
   }
 
   get isPublished(): boolean {
@@ -88,7 +99,10 @@ export class AdminNewsEditComponent implements OnInit {
     return this.newsData.publishedFrom !== null
   }
 
-  createNews(): void {
+  /**
+   * Send our new news to the server.
+   */
+  onCreate(): void {
     this.checkCheckboxPublishFrom();
     if (this.isDateValid) {
       this._serverService.createNews(this.newsData).subscribe(
@@ -96,35 +110,43 @@ export class AdminNewsEditComponent implements OnInit {
           this._router.navigate(['admin/news']);
           this._snackBar.open('Created succesful', '', { duration: 3000 });
         },
-        _ => alert('Please select a valid date')
+        err => alert(`Error: ${JSON.stringify(err)}`)
       );
     }
   }
 
-  public updateData(option: string): void {
+  /**
+   * Update the news on the server.
+   *
+   * @param option May be "redirect" to redirect the user back to the overview page
+   */
+  public onUpdate(option: string): void {
     this.checkCheckboxPublishFrom();
     if (this.isDateValid) {
-      this._serverService.updateNews(this.newsData).subscribe(
+      this._serverService.updateNews(this._newsId , this.newsData).subscribe(
         _ => {
           if (option == "redirect")
             this._router.navigate(['admin/news'])
 
           this._snackBar.open('Updated succesful', '', { duration: 3000 });
         },
-        _ => alert('Please select a valid date')
+        err => alert(`Error: ${JSON.stringify(err)}`)
       );
     }
   }
 
-  public deleteNews(): void {
-    let question = confirm('Ganze Nachricht löschen ?')
+  /**
+   * Delete the news on the server.
+   */
+  public onDelete(): void {
+    let question = confirm('Ganze Nachricht löschen?')
     if (question) {
-      this._serverService.deleteNews(this._id).subscribe(
+      this._serverService.deleteNews(this._newsId).subscribe(
         _ => {
           this._router.navigate(['admin/news']);
           this._snackBar.open('Deleted succesful', '', { duration: 3000 });
         },
-        _ => alert(`Can´t delete the news with the id: ${this._id}`)
+        err => alert(`Error: ${JSON.stringify(err)}`)
       );
     }
   }

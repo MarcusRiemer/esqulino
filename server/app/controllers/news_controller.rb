@@ -2,10 +2,13 @@ class NewsController < ApplicationController
   include LocaleHelper
   include JsonSchemaHelper
 
+  # All news that are visible on the frontpage
   def index
-    render :json => News.scope_single_language(request_locale).map{|l| l.to_list_api_response(:short, [request_locale])}  
+    render :json => News.scope_single_language(request_locale)
+                      .map{|l| l.to_list_api_response(:short, [request_locale])}
   end
 
+  # A single news that is visible on the frontpage
   def show
     render :json => News.scope_single_language(request_locale)
                       .where("id = ?", params[:id])
@@ -13,62 +16,66 @@ class NewsController < ApplicationController
                       .to_list_api_response
   end
 
+  # All news that are visible in the admin backend
   def index_admin
     render :json => News.all.map{|l| l.to_full_api_response}
   end
 
+  # A single news that is visible in the admin backend
   def show_admin
     render :json => News.all
                       .find_by(id: params[:id])
                       .to_full_api_response
   end
 
+  # A single news is updated via the admin backend
   def update
-    # request_data = ensure_request("AdminNewsDescription", request.body.read)
-    news = News.all.find_by(id: params[:id])
-    begin
-      transformed_data = parse_publish_from(params_updated_news)
-      news.update(transformed_data)
+    news = News.find(params[:id])
+    request_data = ensure_request("NewsUpdateDescription", request.body.read)
+
+    # TODO: This is a general pattern, it could be moved to the application controller
+    news.assign_attributes(request_data)
+    if news.save
       render :json => news.to_full_api_response
-    rescue ArgumentError => e
-      render status: 400, :json => news.to_full_api_response
-    end
-  end
-
-  def create_news
-    begin
-      # request_data = ensure_request("AdminNewsDescription", request.body.read)
-      transformed_data = parse_publish_from(params_updated_news)
-      news = News.create(transformed_data)
-
-      render :json => news.to_full_api_response
-    rescue ArgumentError => e
-      render status: 400
-    end
-  end
-
-  def delete_news
-    news = News.all.find_by(id: params[:id])
-    if news
-      news.destroy
     else
-      render status: 400
+      render json: { 'errors' => news.errors.as_json }, :status => 400
     end
+
   end
 
-  def params_updated_news
-    params.permit(:publishedFrom, title: LocaleHelper.allowed_languages, text: [:de, :en])
-      .transform_keys { |k| k.underscore }
+  # Creation of single news
+  def create
+    request_data = ensure_request("NewsUpdateDescription", request.body.read)
+    news = News.create(request_data)
+
+    render :json => news.to_full_api_response
   end
 
+  # Deletion of a single news
+  def delete
+    news = News.all.find(params[:id])
+    news.destroy
+  end
+
+  private
+
+  # Ensures that the date of the request is a proper ruby object
+  def ensure_request(schema_name, body_string)
+    # Do the basic loading and checking
+    data = super
+
+    # Possibly replace the date with a proper Date object. If there is no
+    # date available it should be set to nil when applying this requests data.
+    data["published_from"] = data.key?("published_from") ? parse_date(data["published_from"]) : nil
+
+    return data
+  end
+
+  # Parses the given date, possibly throws an Error if the string
+  # is not actually a valid date.
   def parse_date(date_str)
     Date.parse(date_str)
   rescue ArgumentError => e
-    raise ArgumentError.new("Error: #{e} invalid date")
-  end
-
-  def parse_publish_from(data)
-    data[:published_from] = data.key?(:published_from) ? parse_date(data[:published_from]) : nil
-    return data
+    raise EsqulinoError.new("Invalid date #{date_str}", 400)
   end
 end

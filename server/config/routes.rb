@@ -75,16 +75,16 @@ Rails.application.routes.draw do
 
     # Getting the News as JSON
     scope 'news' do
-      root via: [:get], controller: 'news', action: :index
-      get 'details/:id', controller: 'news', action: :show
-
       scope 'admin' do
         root via: [:get], controller: 'news', action: :index_admin
-        root via: [:put], controller: 'news', action: :update
-        post 'create', controller: 'news', action: :create_news
-        get 'single/:id', controller: 'news', action: :show_admin
-        delete 'single/:id', controller: 'news', action: :delete_news
+        get ':id', controller: 'news', action: :show_admin
       end
+
+      root via: [:get], controller: 'news', action: :index
+      root via: [:post], controller: 'news', action: :create
+      get ':id', controller: 'news', action: :show
+      put ':id', controller: 'news', action: :update
+      delete ':id', controller: 'news', action: :delete
     end
 
     resources :block_languages, only: [:create, :index, :show, :update, :destroy]

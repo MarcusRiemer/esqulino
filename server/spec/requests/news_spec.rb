@@ -53,163 +53,167 @@ RSpec.describe NewsController, type: :request do
     expect(json_data[2]['title']['en']).to eq("Headline")
   end
 
-  it 'updating a news' do
-    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-    news_params = {
-      "id" => news.id,
-      "title" => { 'de': "Test" },
-      "publishedFrom" => news.published_from
-    }
+  it 'updating the title of a news (removing a language)' do
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
+    news_params = news.api_attributes.merge({ "title" => { "de" => "Test" } })
 
-    put "/api/news/admin",
+    put "/api/news/#{news.id}",
         :headers => json_headers,
         :params => news_params.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
-    expect(json_data['title']['de']).to eq("Test")
-    expect(json_data['title']['en']).to be_nil
+    # Ensure that no error was reported
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).to eq []
+    expect(response).to have_http_status(200)
+
+    # Ensure the news has changed
+    curr_news = News.find(news.id)
+    expect(curr_news.title).to eq news_params["title"]
   end
 
   it 'updating a news without a valid language' do
-    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-    news_params = {
-      "id" => news.id,
-      "title" => { 'ab': "Test" },
-      "publishedFrom" => news.published_from
-    }
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
+    news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }})
 
-    put "/api/news/admin",
+    put "/api/news/#{news.id}",
         :headers => json_headers,
         :params => news_params.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
-    expect(json_data['title']['ab']).to be_nil
+    # Ensure some kind of error was reported
+    expect(response).to have_http_status(400)
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).not_to eq []
+
+    # Ensure the news has not changed
+    curr_news = News.find(news.id)
+    expect(curr_news.title).to eq news.title
   end
 
   it 'updating a news with a valid language and an invalid language' do
-    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-    news_params = {
-      "id" => news.id,
-      "title" => { 'ab': "Test", 'de': "test2" },
-      "publishedFrom" => news.published_from
-    }
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
 
-    put "/api/news/admin",
+    news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }})
+
+    put "/api/news/#{news.id}",
         :headers => json_headers,
         :params => news_params.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
-    expect(json_data['title']['ab']).to be_nil
-    expect(json_data['title']['de']).to eq('test2')
+    # Ensure some kind of error was reported
+    expect(response).to have_http_status(400)
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).not_to eq []
+
+    # Ensure the news has not changed
+    curr_news = News.find(news.id)
+    expect(curr_news.title).to eq news.title
   end
 
   it 'updating a news with an invalid date' do
     news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-    news_params = {
-      "id" => news.id,
-      "title" => { 'de': "Test" },
-      "publishedFrom" => "test"
-    }
+    news_params = news.api_attributes.merge({ "publishedFrom" => "test" })
 
-    put "/api/news/admin",
+    put "/api/news/#{news.id}",
         :headers => json_headers,
         :params => news_params.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
+    # Ensure some kind of error was reported
+    json_data = JSON.parse(response.body)
+    expect(response).to have_http_status(400)
 
-    expect(json_data['publishedFrom']).to eq("2019-01-01T00:00:00.000Z")
+    # Ensure the news has not changed
+    curr_news = News.find(news.id)
+    expect(curr_news.title).to eq news.title
   end
 
-  it 'updating a news with an disabled date' do
-    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-    news_params = {
-      "id" => news.id,
-      "title" => { 'de': "Test" }
-    }
+  it 'updating a news with a disabled date' do
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
+    news_params = news.api_attributes_except(["published_from"])
 
-    put "/api/news/admin",
+    put "/api/news/#{news.id}",
         :headers => json_headers,
         :params => news_params.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
+    # Ensure that no error was reported
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).to eq []
 
-    expect(json_data['publishedFrom']).to be_nil
+    # Ensure the news has changed
+    curr_news = News.find(news.id)
+    expect(curr_news.published_from).to eq nil
+
+    expect(response).to have_http_status(200)
   end
 
   it 'deleting a news' do
     news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
 
-    delete "/api/news/admin/single/#{news.id}"
+    delete "/api/news/#{news.id}"
 
-    expect(News.all.where('id = ?', news.id).first).to be_nil
+    expect(response).to have_http_status(204)
+    expect(News.find_by(id: news.id)).to be_nil
   end
 
   it 'deleting a news with an invalid id' do
-    news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+    news = create(:news)
     count_news = News.all.count
-    uuid = SecureRandom.uuid
-    delete "/api/news/admin/single/#{uuid}"
 
+    delete "/api/news/#{SecureRandom.uuid}"
+
+    expect(response).to have_http_status(404)
     expect(count_news).to eq(News.all.count)
   end
 
   it 'creating a news' do
     count_news = News.all.count
-    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' }, publishedFrom: Date.new(2019, 1, 1) }
+    post "/api/news",
+         headers: json_headers,
+         params: {
+           title: { 'de': 'Test' },
+           text: { 'de': 'Test2' },
+           publishedFrom: Date.new(2019, 1, 1)
+         }.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).to eq []
 
     expect(json_data['id']).to_not be_nil
     expect(json_data['text']).to_not be_nil
     expect(json_data['title']).to_not be_nil
+    expect(json_data['publishedFrom']).to_not be_nil
     expect(count_news).to_not eq(News.all.count)
   end
 
-  it 'creating a news with an disabled date' do
+  it 'creating a news without a publishing date' do
     count_news = News.all.count
-    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' } }
+    post "/api/news",
+         headers: json_headers,
+         params: {
+           title: { 'de': 'Test' },
+           text: { 'de': 'Test2' },
+         }.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
-
-    
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).to eq []
 
     expect(json_data['id']).to_not be_nil
     expect(json_data['text']).to_not be_nil
     expect(json_data['title']).to_not be_nil
-    expect(json_data['published_from']).to be_nil
+    expect(json_data['publishedFrom']).to be_nil
     expect(count_news).to_not eq(News.all.count)
   end
 
   it 'creating a news with an invalid date' do
     count_news = News.all.count
-    post "/api/news/admin/create", params: { title: { 'de': 'Test' }, text: { 'de': 'Test2' }, publishedFrom: 'tom' }
+    post "/api/news",
+         headers: json_headers,
+         params: {
+           title: { 'de': 'Test' },
+           text: { 'de': 'Test2' },
+           publishedFrom: 'tom'
+         }.to_json
 
-    if (not response.body.blank?) then
-      json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-    end
-
+    json_data = JSON.parse(response.body)
+    expect(json_data.fetch('errors', [])).to eq []
     expect(response).to have_http_status(400)
   end
 end

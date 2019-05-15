@@ -1,10 +1,21 @@
 require_dependency 'error'
 
+# A news with a title and some text. May be published on a certain
+# date and is multilingual.
 class News < ApplicationRecord
   include LocaleHelper
 
+  # Title may only use allowed languages
+  validates :title, valid_languages: []
+
+  # Text may only use allowed languages
+  validates :text, valid_languages: []
+
+  # Retrieve a certain news in a single language
+  #
+  # @param language [String] A valid language that is hopefully stored with the news
   scope :scope_single_language, -> (language) {
-    raise EsqulinoMessageError.new("Invalid language: #{language}") unless ["de", "en"].include? language
+    raise EsqulinoMessageError.new("Invalid language: #{language}") unless LocaleHelper.allowed_languages_s.include? language
 
      where("title->? != '' AND text->? != ''", language, language)
     .where("published_from <= ?", Date.today)
@@ -17,21 +28,22 @@ class News < ApplicationRecord
 
   # Compiles the text in the given languages to HTML
   #
-  # @param languages [String] Language codes to render. Renders all languages
+  # @param languages [String[]] Language codes to render. Renders all languages
   #                           if parameter is nil.
-  # @param text_length choose between short/extended text
+  # @param text_length [:full | :short] choose between short/full text
   # @return [Hash<String, String>] Rendered content in asked languages
   def rendered_text(text_length = :full, languages = nil)
     raise EsqulinoMessageError.new("Invalid text_length") unless [:short, :full].include? text_length
 
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
+    # Possibly restrict the languages to be rendered
     if languages
-      check_languages(languages)
+      assert_languages(languages)
       rendered_hash = self.text.slice(*languages)
     else
       rendered_hash = self.text
     end
 
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
     rendered_hash.each do |key, value|
       if text_length == :short
         pos = value.index('<!-- SNIP -->')
@@ -44,24 +56,18 @@ class News < ApplicationRecord
     return rendered_hash
   end
 
-  def check_languages(languages)
+  # Asserts that the given languages are part of the text
+  def assert_languages(languages)
     if (!languages.all? { |entry| self.text.key? entry })
       raise EsqulinoMessageError.new("A language in your array wasn't found")
     end
   end
 
-  def published?
-    Date.today >= self.published_from
-  end
-
-  def to_full_api_response(text_length = :full, languages = nil)
-    to_return = to_json_api_response
-
-    if (to_return['text'])
-      to_return['text'] = self.rendered_text(text_length)
-    end
-
-    return (to_return)
+  # API response for the data that is of interest in the administrative backend
+  # Does **not** render the markdown, because the Admin UI should show the
+  # actual markdown text.
+  def to_full_api_response()
+    to_json_api_response
   end
 
   def to_list_api_response(text_length = :full, languages = nil)

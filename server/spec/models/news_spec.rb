@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'rails_helper'
 
 require_dependency 'error'
@@ -5,22 +6,21 @@ require_dependency 'error'
 RSpec.describe News, type: :model do
   it 'default values of news' do
     news = build(:news)
-    expect(news.title['de']).to eq('Schlagzeile')
-    expect(news.title['en']).to eq('Headline')
-    expect(news.text['de']).to eq('Das ist ein Test')
-    expect(news.text['en']).to eq('This is a test')
-    expect(news.published_from.strftime('%F')).to eq("2019-04-10")
+    expect(news.valid?).to be true
   end
 
-  it 'can news be published?' do
-    news = create(:news)
-    expect(news.published?).to eq(true)
-    expect(News.count).to eq(1)
+  it 'invalid language in title' do
+    news = build(:news, title: { "nope" => "t" })
+
+    news.validate
+    expect(news.errors["title"].length).to eq 1
   end
 
-  it 'id is generated' do
-    n = create(:news)
-    expect(n.id).not_to be_nil
+  it 'invalid language in text' do
+    news = build(:news, text: { "nope" => "t" })
+
+    news.validate
+    expect(news.errors["text"].length).to eq 1
   end
 
   it 'creating 2 news' do

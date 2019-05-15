@@ -12,6 +12,7 @@ interface DevelopmentLink {
   content: MultiLangString;
 }
 
+// Online resources where development happens
 const DevelopmentLinks: DevelopmentLink[] = [
   {
     icon: "bitbucket",
@@ -47,6 +48,9 @@ const DevelopmentLinks: DevelopmentLink[] = [
   }
 ]
 
+/**
+ * Information for developers that might want to contribute to the project.
+ */
 @Component({
   templateUrl: 'templates/development.html',
 })
