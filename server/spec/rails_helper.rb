@@ -65,6 +65,27 @@ module Helpers
   end
 end
 
+# Extensions to the core models that ease working with the specs
+module ApplicationRecordSpecExtensions
+  def api_attributes_except(exclude = [], include_boilerplate = false)
+    # Timestamps and ID are not included by default
+    if not include_boilerplate
+      exclude += ["created_at", "updated_at", "id"]
+    end
+
+    # Retrieve relevant attributes and properly name them
+    attributes
+      .except(*exclude)
+      .transform_keys { |k| k.camelize(:lower) }
+  end
+
+  def api_attributes(include_timestamp = false)
+    api_attributes_except([], include_timestamp)
+  end
+end
+
+ApplicationRecord.include ApplicationRecordSpecExtensions
+
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

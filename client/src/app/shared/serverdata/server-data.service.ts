@@ -17,8 +17,8 @@ import {
 import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
-import { UserNewsDescription } from '../news.description';
-import { AdminNewsDescription } from '../news.description';
+import { NewsFrontpageDescription, NewsUpdateDescription } from '../news.description';
+import { NewsDescription } from '../news.description';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -164,7 +164,7 @@ export class ServerDataService {
     this._http,
     id => this._serverApi.individualBlockLanguageUrl(id)
   );
-  
+
   // Backing cache for listing of all block languages
   readonly listBlockLanguages = new CachedRequest<BlockLanguageListResponseDescription[]>(
     this._http.get<BlockLanguageListResponseDescription[]>(this._serverApi.getBlockLanguageListUrl())
@@ -190,30 +190,30 @@ export class ServerDataService {
       )
   );
 
-  readonly getUserNewsList = new CachedRequest<UserNewsDescription[]>(
-    this._http.get<UserNewsDescription[]>(this._serverApi.getUserNewsListUrl())
+  readonly getUserNewsList = new CachedRequest<NewsFrontpageDescription[]>(
+    this._http.get<NewsFrontpageDescription[]>(this._serverApi.getUserNewsListUrl())
   );
 
-  readonly getAdminNewsList = new CachedRequest<AdminNewsDescription[]>(
-    this._http.get<AdminNewsDescription[]>(this._serverApi.getAdminNewsListUrl())
+  readonly getAdminNewsList = new CachedRequest<NewsDescription[]>(
+    this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl())
   );
 
-  readonly getAdminNewsSingle = new IndividualDescriptionCache<AdminNewsDescription>(
+  readonly getAdminNewsSingle = new IndividualDescriptionCache<NewsDescription>(
     this._http,
     id => this._serverApi.getAdminNewsSingle(id)
   );
 
-  readonly getUserNewsDetails = new IndividualDescriptionCache<UserNewsDescription>(
+  readonly getUserNewsDetails = new IndividualDescriptionCache<NewsFrontpageDescription>(
     this._http,
-    id => this._serverApi.getUserNewsDetails(id)
+    id => this._serverApi.getNewsSingle(id)
   );
-  
+
   /**
    * creating a new news
    */
-  createNews(desc: AdminNewsDescription): Observable<AdminNewsDescription> {
+  createNews(desc: NewsDescription): Observable<NewsDescription> {
     const url = this._serverApi.getCreateNewsUrl();
-    const toReturn = this._http.post<AdminNewsDescription>(url, desc).pipe(
+    const toReturn = this._http.post<NewsDescription>(url, desc).pipe(
       tap((desc) => {
         console.log(`Created news "${desc.id}"`);
         this.getAdminNewsList.refresh();
@@ -226,24 +226,33 @@ export class ServerDataService {
   /**
    * Updates the given news
    */
-  updateNews(desc: AdminNewsDescription): Observable<AdminNewsDescription> {
-    const url = this._serverApi.getNewsUpdateUrl();
-    const toReturn = this._http.put<AdminNewsDescription>(url, desc).pipe(
-      tap(desc_ => {
-        console.log(`Updated news "${desc.id}"`);
+  updateNews(id: string, desc: NewsUpdateDescription): Observable<NewsDescription> {
+    // The given description may have to many fields, we need to strip
+    // every unneeded field.
+    desc = {
+      publishedFrom: desc.publishedFrom,
+      text: desc.text,
+      title: desc.title
+    };
+
+    const url = this._serverApi.getNewsUpdateUrl(id);
+    const toReturn = this._http.put<NewsDescription>(url, desc).pipe(
+      // Refresh our local caches
+      tap(_ => {
+        console.log(`Updated news "${id}"`);
         this.getAdminNewsList.refresh();
-        this.getAdminNewsSingle.refreshDescription(desc.id);
-      })  
+        this.getAdminNewsSingle.refreshDescription(id);
+      })
     );
 
     return (toReturn);
   }
 
-    /**
-   * Deletes the news with the given ID.
-   */
+  /**
+ * Deletes the news with the given ID.
+ */
   deleteNews(id: string): Observable<Object> {
-    const toReturn = this._http.delete(this._serverApi.getAdminNewsSingle(id))
+    const toReturn = this._http.delete(this._serverApi.getNewsSingle(id))
       .pipe(
         tap(_ => {
           console.log(`Deleted news "${id}"`);

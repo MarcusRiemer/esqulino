@@ -1,24 +1,24 @@
 <ng-template cdkPortal #toolbarItems>
   <button *ngIf="!isCreatingNews"
-          (click)="deleteNews()"
+          (click)="onDelete()"
           mat-button>
     <span class="fa fa-trash"></span>&nbsp;
     <span i18n="@@deleteNews">News Löschen</span>
   </button>
   <button *ngIf="!isCreatingNews"
-          (click)="updateData('redirect')"
+          (click)="onUpdate('redirect')"
           mat-button>
     <span class="fa fa-pencil"></span>&nbsp;
     <span i18n="@@saveNewsAndBack">Aktualisieren</span>
   </button>
   <button *ngIf="!isCreatingNews"
-          (click)="updateData()"
+          (click)="onUpdate()"
           mat-button>
     <span class="fa fa-pencil"></span>&nbsp;
     <span i18n="@@saveNewsAndStay">Aktualisieren (bleiben)</span>
   </button>
   <button *ngIf="isCreatingNews"
-          (click)="createNews()"
+          (click)="onCreate()"
           mat-button>
     <span class="fa fa-plus-circle"></span>&nbsp;
     <span i18n="@@createNews">Neue News speichern</span>

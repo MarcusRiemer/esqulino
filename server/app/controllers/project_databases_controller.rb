@@ -134,7 +134,7 @@ class ProjectDatabasesController < ApplicationController
 
       result = current_database.table_bulk_insert(
         table_name,
-        tabular_data['columnNames'],
+        tabular_data['column_names'],
         tabular_data['data']
       )
 

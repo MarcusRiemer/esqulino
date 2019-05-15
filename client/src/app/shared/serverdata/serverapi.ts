@@ -143,15 +143,15 @@ export class ServerApi {
   /**
    * Getting a single news
    */
-  getUserNewsDetails(id: string): string {
-    return (`${this._apiBaseUrl}/news/details/${id}`)
+  getNewsSingle(id: string): string {
+    return (`${this._apiBaseUrl}/news/${id}`)
   }
 
   /**
    * Getting a single news
    */
   getAdminNewsSingle(id: string): string {
-    return (`${this._apiBaseUrl}/news/admin/single/${id}`)
+    return (`${this._apiBaseUrl}/news/admin/${id}`)
   }
 
   /**
@@ -162,17 +162,17 @@ export class ServerApi {
   }
 
   /**
-   * Creating/Getting a new News 
+   * Creating/Getting a new News
    */
   getCreateNewsUrl(): string {
-    return (`${this._apiBaseUrl}/news/admin/create`)
+    return (`${this._apiBaseUrl}/news/`)
   }
 
   /**
    * Getting the URL for the news update route
    */
-  getNewsUpdateUrl(): string {
-    return (`${this._apiBaseUrl}/news/admin`)
+  getNewsUpdateUrl(id: string): string {
+    return (`${this._apiBaseUrl}/news/${id}`)
   }
 
   /**

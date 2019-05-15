@@ -1,11 +1,18 @@
 {
-  "$ref": "#/definitions/AdminNewsDescription",
+  "$ref": "#/definitions/NewsDescription",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "AdminNewsDescription": {
+    "MultilingualString": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "NewsDescription": {
       "additionalProperties": false,
+      "description": "Complete description of a news that may not have been published.",
       "properties": {
-        "created_at": {
+        "createdAt": {
           "type": "string"
         },
         "id": {
@@ -15,29 +22,20 @@
           "type": "string"
         },
         "text": {
-          "$ref": "#/definitions/MultilingualString"
+          "$ref": "#/definitions/MultilingualString",
+          "description": "Internal Markdown version of the text"
         },
         "title": {
           "$ref": "#/definitions/MultilingualString"
         },
-        "updated_at": {
+        "updatedAt": {
           "type": "string"
         }
       },
       "required": [
-        "id",
         "title",
-        "text",
-        "publishedFrom",
-        "createdAt",
-        "updatedAt"
+        "text"
       ],
-      "type": "object"
-    },
-    "MultilingualString": {
-      "additionalProperties": {
-        "type": "string"
-      },
       "type": "object"
     }
   }
