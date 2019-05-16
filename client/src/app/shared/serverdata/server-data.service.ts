@@ -211,7 +211,15 @@ export class ServerDataService {
   /**
    * creating a new news
    */
-  createNews(desc: NewsDescription): Observable<NewsDescription> {
+  createNews(desc: NewsUpdateDescription): Observable<NewsDescription> {
+    // The given description may have to many fields, we need to strip
+    // every unneeded field.
+    desc = {
+      publishedFrom: desc.publishedFrom || null,
+      text: desc.text,
+      title: desc.title
+    };
+
     const url = this._serverApi.getCreateNewsUrl();
     const toReturn = this._http.post<NewsDescription>(url, desc).pipe(
       tap((desc) => {
@@ -230,7 +238,7 @@ export class ServerDataService {
     // The given description may have to many fields, we need to strip
     // every unneeded field.
     desc = {
-      publishedFrom: desc.publishedFrom,
+      publishedFrom: desc.publishedFrom || null,
       text: desc.text,
       title: desc.title
     };

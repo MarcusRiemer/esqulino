@@ -39,7 +39,6 @@ export class AdminNewsEditComponent implements OnInit {
   ]
 
   public newsData: NewsUpdateDescription;
-  public ableToPublish: boolean;
   public readonly queryParamsLanguage = this._queryParams.language || this.localeID;
   public queryParamsMode = this._queryParams.mode || 'single';
 
@@ -57,8 +56,7 @@ export class AdminNewsEditComponent implements OnInit {
         first()
       ).subscribe(
         news => this.newsData = news,
-        err => alert(err),
-        () => { this.ableToPublish = this.isPublished }
+        err => alert(err)
       );
     }
   }
@@ -75,44 +73,27 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   /**
-   * undefined = isn't able to publish,
-   * null = is able to publish but there's no valid value
+   *
    */
-  public checkCheckboxPublishFrom(): void {
-    if (!this.ableToPublish)
-      this.newsData.publishedFrom = undefined
-    else
-      if (this.newsData.publishedFrom == undefined)
-        this.newsData.publishedFrom = null
-
-  }
-
   get isCreatingNews(): boolean {
-    return this._newsId == undefined || this._newsId == null
+    return this._newsId == undefined;
   }
 
   get isPublished(): boolean {
     return this.newsData.publishedFrom !== undefined && this.newsData.publishedFrom !== null;
   }
 
-  get isDateValid(): boolean {
-    return this.newsData.publishedFrom !== null
-  }
-
   /**
    * Send our new news to the server.
    */
   onCreate(): void {
-    this.checkCheckboxPublishFrom();
-    if (this.isDateValid) {
-      this._serverService.createNews(this.newsData).subscribe(
-        _ => {
-          this._router.navigate(['admin/news']);
-          this._snackBar.open('Created succesful', '', { duration: 3000 });
-        },
-        err => alert(`Error: ${JSON.stringify(err)}`)
-      );
-    }
+    this._serverService.createNews(this.newsData).subscribe(
+      _ => {
+        this._router.navigate(['admin/news']);
+        this._snackBar.open('Created succesful', '', { duration: 3000 });
+      },
+      err => alert(`Error: ${JSON.stringify(err)}`)
+    );
   }
 
   /**
@@ -121,18 +102,15 @@ export class AdminNewsEditComponent implements OnInit {
    * @param option May be "redirect" to redirect the user back to the overview page
    */
   public onUpdate(option: string): void {
-    this.checkCheckboxPublishFrom();
-    if (this.isDateValid) {
-      this._serverService.updateNews(this._newsId , this.newsData).subscribe(
-        _ => {
-          if (option == "redirect")
-            this._router.navigate(['admin/news'])
+    this._serverService.updateNews(this._newsId, this.newsData).subscribe(
+      _ => {
+        if (option == "redirect")
+          this._router.navigate(['admin/news'])
 
-          this._snackBar.open('Updated succesful', '', { duration: 3000 });
-        },
-        err => alert(`Error: ${JSON.stringify(err)}`)
-      );
-    }
+        this._snackBar.open('Updated succesful', '', { duration: 3000 });
+      },
+      err => alert(`Error: ${JSON.stringify(err)}`)
+    );
   }
 
   /**

@@ -16,13 +16,13 @@ export interface NewsFrontpageDescription {
  * Complete description of a news that may not have been published.
  */
 export interface NewsDescription {
-  id?: string;
+  id: string;
   title: MultilingualString;
   /** Internal Markdown version of the text */
   text: MultilingualString;
-  publishedFrom?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  publishedFrom: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 /**
@@ -36,5 +36,5 @@ export interface NewsUpdateDescription {
   title: MultilingualString;
   /** Internal Markdown version of the text */
   text: MultilingualString;
-  publishedFrom?: string;
+  publishedFrom: string | null;
 }
