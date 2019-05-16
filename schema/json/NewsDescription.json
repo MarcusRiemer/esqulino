@@ -19,7 +19,10 @@
           "type": "string"
         },
         "publishedFrom": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "text": {
           "$ref": "#/definitions/MultilingualString",
@@ -34,7 +37,8 @@
       },
       "required": [
         "title",
-        "text"
+        "text",
+        "publishedFrom"
       ],
       "type": "object"
     }

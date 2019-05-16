@@ -66,7 +66,14 @@ class NewsController < ApplicationController
 
     # Possibly replace the date with a proper Date object. If there is no
     # date available it should be set to nil when applying this requests data.
-    data["published_from"] = data.key?("published_from") ? parse_date(data["published_from"]) : nil
+    if not data.key? "published_from"
+      data["published_from"] = nil
+    end
+
+    published_from = data["published_from"]
+    if published_from
+      data["published_from"] = parse_date(published_from)
+    end
 
     return data
   end

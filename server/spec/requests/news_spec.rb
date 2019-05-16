@@ -89,6 +89,27 @@ RSpec.describe NewsController, type: :request do
     expect(curr_news.title).to eq news.title
   end
 
+  it 'updating a news to remove a previously set publishing date' do
+    news = create(:news, published_from: Date.new(2019, 1, 1) )
+
+    news_params = news.api_attributes.merge({ "publishedFrom" => nil })
+
+    put "/api/news/#{news.id}",
+        :headers => json_headers,
+        :params => news_params.to_json
+
+    news.reload
+
+    aggregate_failures "update response" do
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+
+      expect(news.published_from).to be nil
+    end
+  end
+
   it 'updating a news with a valid language and an invalid language' do
     news = create(:news, published_from: Date.new(2019, 1, 1) )
 
@@ -123,25 +144,6 @@ RSpec.describe NewsController, type: :request do
     # Ensure the news has not changed
     curr_news = News.find(news.id)
     expect(curr_news.title).to eq news.title
-  end
-
-  it 'updating a news with a disabled date' do
-    news = create(:news, published_from: Date.new(2019, 1, 1) )
-    news_params = news.api_attributes_except(["published_from"])
-
-    put "/api/news/#{news.id}",
-        :headers => json_headers,
-        :params => news_params.to_json
-
-    # Ensure that no error was reported
-    json_data = JSON.parse(response.body)
-    expect(json_data.fetch('errors', [])).to eq []
-
-    # Ensure the news has changed
-    curr_news = News.find(news.id)
-    expect(curr_news.published_from).to eq nil
-
-    expect(response).to have_http_status(200)
   end
 
   it 'deleting a news' do
@@ -190,6 +192,7 @@ RSpec.describe NewsController, type: :request do
          params: {
            title: { 'de': 'Test' },
            text: { 'de': 'Test2' },
+           publishedFrom: nil
          }.to_json
 
     json_data = JSON.parse(response.body)
