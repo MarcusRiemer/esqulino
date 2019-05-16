@@ -17,15 +17,23 @@ concise_attributes:
 
     * Vernünftige Benutzerregistrierung
     * Entflechtung der visuellen & der internen Darstellung von Programmiersprachen
-    * Unterstützung von `HTML`", "en"=>"BlattWerkzeug.de is now online for a while, but a news system has only been added recently. From now on we will inform you about new features, interesting projects or other topics that seem to be relevant."
+    * Unterstützung von `HTML`", "en"=>"BlattWerkzeug.de is now online for a while, but a news system has only been added recently. From now on we will inform you about new features, interesting projects or other topics that seem to be relevant.
+
+    <!-- SNIP -->
+
+    We are currently planning the following upcoming features:
+
+    * Proper user registration
+    * Decouple the internal and the visual representation of programming languages
+    * Support for `HTML`"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: published_from
-  value_before_type_cast: '2019-04-30 00:00:00'
+  value_before_type_cast: '2019-05-15 00:00:00'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-05-08 14:20:43.253857'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-13 10:18:56.167147'
+  value_before_type_cast: '2019-05-16 14:41:23.949988'
 new_record: false
 active_record_yaml_version: 2

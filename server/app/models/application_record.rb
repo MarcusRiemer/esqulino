@@ -7,17 +7,22 @@ class ApplicationRecord < ActiveRecord::Base
   #
   # * All keys must be in "camelCase" instead of "snake_case"
   # * The "created_at" and "updated_at" fields must be strings
-  # * "Empty" values should be omitted
+  # * "Empty" values should possibly be omitted
   #
   # This basic implementation does *not* remove any unnecessary attributes,
   # a deriving class will probably want to use "slice" to narrow down the
   # set of attributes.
   #
+  # @param compact [Boolean] True, if empty values should be omitted.
+  #
   # @return [Hash] All attributes of this model as the client expects it.
-  def to_json_api_response
-    # Build a hash of all properties that are currently set
+  def to_json_api_response(compact: true)
+    # Build a hash of all properties
     to_return = self.serializable_hash
-                  .compact
+
+    # Possibly remove empty values
+    to_return = to_return.compact if compact
+
     # Update the created_at and updated_at fields
     ["created_at", "updated_at"].each do |k|
       to_return[k] = to_return[k].to_s

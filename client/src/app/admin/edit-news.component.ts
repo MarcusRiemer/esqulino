@@ -55,7 +55,14 @@ export class AdminNewsEditComponent implements OnInit {
       this._serverData.getAdminNewsSingle.getDescription(this._newsId).pipe(
         first()
       ).subscribe(
-        news => this.newsData = news,
+        news => {
+          this.newsData = news
+          if (this.newsData.publishedFrom) {
+            this.newsData.publishedFrom = new Date(this.newsData.publishedFrom)
+              .toISOString()
+              .slice(0, 10);
+          }
+        },
         err => alert(err)
       );
     }

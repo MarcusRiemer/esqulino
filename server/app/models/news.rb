@@ -32,7 +32,7 @@ class News < ApplicationRecord
   #                           if parameter is nil.
   # @param text_length [:full | :short] choose between short/full text
   # @return [Hash<String, String>] Rendered content in asked languages
-  def rendered_text(text_length = :full, languages = nil)
+  def rendered_text(text_length: :full, languages: nil)
     raise EsqulinoMessageError.new("Invalid text_length") unless [:short, :full].include? text_length
 
     # Possibly restrict the languages to be rendered
@@ -67,16 +67,18 @@ class News < ApplicationRecord
   # Does **not** render the markdown, because the Admin UI should show the
   # actual markdown text.
   def to_full_api_response()
-    to_json_api_response
+    to_json_api_response(compact: false)
   end
 
-  def to_list_api_response(text_length = :full, languages = nil)
+  # API response for data that is rendered on the frontpage. May restrict
+  # length of the text and returned languages
+  def to_frontpage_api_response(text_length: :full, languages: nil)
 
     to_return = to_json_api_response
                   .slice("id", "title", "text", "publishedFrom")
 
     if (to_return['text'])
-      to_return['text'] = self.rendered_text(text_length)
+      to_return['text'] = rendered_text(text_length, languages)
     end
 
     return (to_return)
