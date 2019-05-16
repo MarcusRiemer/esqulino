@@ -11,7 +11,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 # TYPESCRIPT_JSON_SCHEMA_BIN = /home/marcus/projects/ts-json-schema-generator/bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json NewsDescription.json NewsUpdateDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json NewsDescription.json NewsUpdateDescription.json NewsFrontpageDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -104,4 +104,7 @@ NewsDescription.json : $(SRC_PATH)/shared/news.description.ts
 	$(CONVERT_COMMAND)
 
 NewsUpdateDescription.json : $(SRC_PATH)/shared/news.description.ts
+	$(CONVERT_COMMAND)
+
+NewsFrontpageDescription.json : $(SRC_PATH)/shared/news.description.ts
 	$(CONVERT_COMMAND)

@@ -1,0 +1,38 @@
+{
+  "$ref": "#/definitions/NewsFrontpageDescription",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "MultilingualString": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "NewsFrontpageDescription": {
+      "additionalProperties": false,
+      "description": "News as it is displayed on the frontpage. The text may or may not\nbe shortened from the full version.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "publishedFrom": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/MultilingualString",
+          "description": "Rendered HTML version of the text"
+        },
+        "title": {
+          "$ref": "#/definitions/MultilingualString"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "text",
+        "publishedFrom"
+      ],
+      "type": "object"
+    }
+  }
+}

@@ -46,6 +46,7 @@ module ValidateAgainstMatcher
         @error
       else
         @result
+          .map {|r| JSON.pretty_generate(r) }
           .join "\n"
       end
     end
