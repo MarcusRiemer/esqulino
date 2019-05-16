@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { map, flatMap } from 'rxjs/operators'
+import { map, flatMap, tap } from 'rxjs/operators'
 
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { CurrentCodeResourceService } from '../current-coderesource.service';
@@ -51,6 +51,7 @@ export class CodeSidebarComponent {
    * The actual sidebars that need to be spawned for the current language.
    */
   readonly portalInstances = this.currentBlockLanguage.pipe(
+    tap(b => console.log("Code Sidebar Component: BlockLanguage", b)),
     map(blockLanguage => blockLanguage.sidebars.map(s => {
       return (new ComponentPortal(resolvePortalComponentId(s.portalComponentTypeId)));
     }))
