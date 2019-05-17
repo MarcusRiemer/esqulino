@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>
+  Authentication
+</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="general">
+    <div class="row">
+      <mat-form-field>
+        <input matInput 
+          type="email"
+          placeholder="Email"
+          formGroupName="email">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field>
+        <input matInput 
+          type="password"
+          placeholder="Password"
+          formGroupName="password">
+      </mat-form-field>
+    </div>
+
+
+    <ng-container *ngIf="register">
+
+    </ng-container>
+
+    <ng-container *ngIf="!register">
+
+    </ng-container>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onChange()">Register</button>
+  <button mat-button (click)="onNoClick()">close</button>
+</div>
