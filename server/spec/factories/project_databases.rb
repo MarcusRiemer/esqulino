@@ -9,6 +9,13 @@ FactoryBot.define do
       db.project.update!(default_database: db)
     end
 
+    # A simple table that stores the nams of all digits
+    #
+    # Key | Value
+    # ----+------
+    # 0   | Null
+    # 1   | Eins
+    # ... | ...
     trait :table_key_value do
       after(:create) do |db|
         db.table_create(
@@ -51,6 +58,47 @@ FactoryBot.define do
             ['8', 'acht'],
             ['9', 'neun'],
           ]
+        )
+
+        db.refresh_schema!
+      end
+    end
+
+    # A simple table that simply counts
+    #
+    # number
+    # ---
+    # 0
+    # 1
+    # ...
+    trait :table_numbers do
+      transient do
+        row_count { 10 }
+      end
+
+
+      after(:create) do |db, options|
+        db.table_create(
+          {
+            "name" => "numbers",
+            "columns" => [
+              {
+                "name" => "number",
+                "type" => "INTEGER",
+                "index" => 0,
+                "primary" => true,
+                "not_null" => true,
+                "dflt_value" => nil
+              },
+            ],
+            "foreign_keys" => []
+          }
+        )
+
+        db.table_bulk_insert(
+          "numbers",
+          ['number'],
+          (1..options.row_count).map { |i| [i] }
         )
 
         db.refresh_schema!

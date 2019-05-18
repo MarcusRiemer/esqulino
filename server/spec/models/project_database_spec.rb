@@ -439,6 +439,44 @@ RSpec.describe ProjectDatabase, type: :model do
     end
   end
 
+  describe 'execute_sql' do
+    before(:each) do
+      @db = FactoryBot.create(:project_database, :table_numbers, row_count: 700)
+    end
+
+    after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
+      @db.destroy!
+      @db.project.destroy! if @db.project
+    end
+
+    it 'Truncates too large result sets' do
+      res = @db.execute_sql("SELECT * FROM numbers a, numbers b", Hash.new, true, 10, 100)
+
+      expect(res['unknownTotal']).to be true
+      expect(res['totalCount']).to eq 100
+      expect(res['rows'].length).to eq 10
+    end
+
+    it 'Delivers entirely fitting result sets' do
+      res = @db.execute_sql("SELECT * FROM numbers a, numbers b LIMIT 10", Hash.new, true, 10, 100)
+
+      expect(res['unknownTotal']).to be false
+      expect(res['totalCount']).to eq 10
+      expect(res['rows'].length).to eq 10
+    end
+
+    it 'Delivers partially fitting result sets' do
+      res = @db.execute_sql("SELECT * FROM numbers a, numbers b LIMIT 20", Hash.new, true, 10, 100)
+
+      expect(res['unknownTotal']).to be false
+      expect(res['totalCount']).to eq 20
+      expect(res['rows'].length).to eq 10
+    end
+  end
+
   # This spec can't be run with FakeFS as the C-bindings of SQLite
   # don't know anything about the faking that goes on in the background.
   it 'creates database files' do

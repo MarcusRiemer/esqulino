@@ -1,11 +1,11 @@
 --- !ruby/object:BlockLanguageGenerator
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Static XML (Core)
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: c15f2d22-1b5e-4496-85ae-033c4fe72413
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Static XML (Core)
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"editorComponents": []}'

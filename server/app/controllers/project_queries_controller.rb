@@ -20,11 +20,7 @@ class ProjectQueriesController < ApplicationController
     sql_ast = request_data['ast']
     begin
       sql = IdeService.guaranteed_instance.emit_code(sql_ast, sql_ast['language'])
-      result = database.execute_sql(sql, request_data['params'])
-
-      if result['rows'].length > preview_max_rows then
-        result['rows'] = result['rows'].first preview_max_rows
-      end
+      result = database.execute_sql(sql, request_data['params'], preview_max_rows)
 
       render json: result
     end
