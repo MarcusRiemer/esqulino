@@ -1,0 +1,47 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 489fe72d-918e-462b-95ef-9763560cb1c5
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 1) Vorwärts
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "loopWhile",
+    "children": {"body": [{"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "goForward"}}], "pred": [{"name": "booleanConstant", "language":
+    "trucklino_program", "properties": {"value": "true"}}]}, "language": "trucklino_program"}]},
+    "language": "trucklino_program"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-01-09 12:31:53.160508'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-01-16 15:30:34.789355'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-lang
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    while (true) {
+      yield* truck.doNothing();
+      truck._progress([["main",0],["body",0]]);
+      yield* truck.goForward();
+    }
+new_record: false
+active_record_yaml_version: 2

@@ -1,0 +1,76 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c66012f1-5a31-4f82-9715-47c70fca7629
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 5) Schleife für Quadrat
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "goForward"}},
+    {"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "turnRight"}}, {"name": "procedureCall", "language": "trucklino_program", "properties":
+    {"name": "goForward"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "turnLeft"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "goForward"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "turnRight"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "goForward"}}, {"name": "loopFor", "children": {"body":
+    [{"name": "procedureCall", "language": "trucklino_program", "properties": {"name":
+    "goForward"}}, {"name": "procedureCall", "language": "trucklino_program", "properties":
+    {"name": "goForward"}}, {"name": "procedureCall", "language": "trucklino_program",
+    "properties": {"name": "turnRight"}}]}, "language": "trucklino_program", "properties":
+    {"times": "4"}}]}, "language": "trucklino_program"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-01-30 13:53:27.526343'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-01-30 13:55:47.096953'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-lang
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    truck._progress([["main",0]]);
+    yield* truck.goForward();
+    truck._progress([["main",1]]);
+    yield* truck.goForward();
+    truck._progress([["main",2]]);
+    yield* truck.turnRight();
+    truck._progress([["main",3]]);
+    yield* truck.goForward();
+    truck._progress([["main",4]]);
+    yield* truck.turnLeft();
+    truck._progress([["main",5]]);
+    yield* truck.goForward();
+    truck._progress([["main",6]]);
+    yield* truck.turnRight();
+    truck._progress([["main",7]]);
+    yield* truck.goForward();
+    for (let i0 = 0; i0 < 4; i0++) {
+      truck._progress([["main",8],["body",0]]);
+      yield* truck.goForward();
+      truck._progress([["main",8],["body",1]]);
+      yield* truck.goForward();
+      truck._progress([["main",8],["body",2]]);
+      yield* truck.turnRight();
+    }
+new_record: false
+active_record_yaml_version: 2

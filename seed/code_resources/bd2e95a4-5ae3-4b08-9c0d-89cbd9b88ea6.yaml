@@ -1,0 +1,45 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: bd2e95a4-5ae3-4b08-9c0d-89cbd9b88ea6
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Lösung - Aufgabe 1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "procedureCall",
+    "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "unload"}}]},
+    "language": "trucklino_program"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-02-05 10:28:28.861568'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-02-05 10:33:25.964302'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-lang
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    truck._progress([["main",0]]);
+    yield* truck.goForward();
+    truck._progress([["main",1]]);
+    yield* truck.unload();
+new_record: false
+active_record_yaml_version: 2

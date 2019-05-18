@@ -6,7 +6,7 @@ import { catchError, delay, map } from 'rxjs/operators';
 import {
   ArbitraryQueryRequestDescription, QueryParamsDescription, QueryResponseDescription
 } from '../../../shared/syntaxtree/sql/query.description';
-import { ServerApiService } from '../../../shared';
+import { ServerApiService, DatabaseQueryErrorDescription } from '../../../shared';
 import { CodeResource } from '../../../shared/syntaxtree';
 
 export { QueryParamsDescription }
@@ -15,35 +15,29 @@ export { QueryParamsDescription }
  * A nicely wrapped result of a query.
  */
 export class QueryResultRows {
-  public readonly columns: string[];
-  public readonly rows: string[][];
-  public readonly totalCount: number | "unknown";
-
-  constructor(desc: QueryResponseDescription) {
-    this.columns = desc.columns;
-    this.rows = desc.rows;
-    this.totalCount = desc.totalCount;
+  constructor(private readonly _desc: QueryResponseDescription) {
   }
 
-  /**
-   * @return The number of rows in this result.
-   */
-  get rowCount() {
-    return (this.rows.length);
-  }
+  // The columns for the current result set
+  readonly columns = this._desc.columns;
+
+  // The rows of the current result set
+  readonly rows = this._desc.rows;
+
+  // The number of data rows that got returned
+  readonly subsetRowCount = this.rows.length;
+
+  // True, if the total number of rows is unknown
+  readonly unknownTotal = this._desc.unknownTotal;
+
+  // The user facing number of rows
+  readonly totalRowCount = this.unknownTotal ? "???" : this._desc.totalCount;
 
   /**
    * @return True, if the result is only a partial result.
    */
   get isPartial() {
-    return (!this.hasKnownCount || this.rows.length < this.totalCount);
-  }
-
-  /**
-   * @return True, if the size of the result set is known.
-   */
-  get hasKnownCount() {
-    return (this.totalCount !== "unknown");
+    return (this.unknownTotal || this._desc.totalCount > this.subsetRowCount);
   }
 }
 
