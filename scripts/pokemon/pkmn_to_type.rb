@@ -9,7 +9,7 @@ require_relative 'fetch_list'
 # CSV output >> pkmn_ID, type_ID
 
 result = fetch('https://pokeapi.co/api/v2/pokemon/')
-csv_file = './csv/type-to-move.csv'
+csv_file = './csv/pkmn-to-type.csv'
 
 puts '### -- Getting info for each move...'
 puts '### -- Writing into CSV: ' + csv_file
