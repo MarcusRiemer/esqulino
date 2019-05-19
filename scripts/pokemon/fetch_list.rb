@@ -5,7 +5,6 @@ require 'csv'
 require 'json'
 require 'uri'
 
-# Output move_ID,de,en,fr,type_ID
 def fetch(url_in)
 
   tmp = JSON.parse(Nokogiri::HTML(open(url_in)))

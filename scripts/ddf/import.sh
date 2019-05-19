@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sqlite3 $1 <<EOF
+#sqlite3 $1 <<EOF
+sqlite3 test.db <<EOF
 .mode csv
 DELETE FROM Auftritt;
 DELETE FROM Charakter_Sprecher;
