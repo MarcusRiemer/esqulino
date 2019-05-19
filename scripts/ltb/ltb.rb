@@ -6,17 +6,31 @@ require 'json'
 require 'uri'
 require 'set'
 
-first_url ="https://www.lustiges-taschenbuch.de/ausgaben/alle-ausgaben/ltb-1-der-kolumbusfalter/"
-#first_url = "https://www.lustiges-taschenbuch.de/ausgaben/alle-ausgaben/ltb-240-die-glorreiche-gaense-garde/"
 $base_url = "https://www.lustiges-taschenbuch.de"
 
-$tmp_csv = Array.new
-$book_to_geschichte = Array.new
-$tmp_geschichte = Array.new
-$tmp_char = Array.new
-$tmp_gesch_Set = Set.new()
-$tmp_url = Array.new
+first_node = 3829
+$last_node = 0
+first_url = Net::HTTP.get_response(URI($base_url + '/node/' + first_node.to_s))['location']
+last_url = Net::HTTP.get_response(URI($base_url + '/aktuelle-ausgabe'))['location']
+exit_loop = false
 
+# ausgabe_nr, Titel, Auflage_NR, Datum, Bild_Path, Seitenanzahl
+$tmp_csv = Array.new
+
+# ausgabe_nr, geschichte_code
+$book_to_geschichte = Array.new
+
+# geschichte_code, Titel
+$tmp_geschichte = Array.new
+
+#$tmp_char = Array.new
+
+# Check existing Geschichten
+$tmp_gesch_Set = Set.new()
+
+# Picture URL
+$pic_url = Array.new
+ 
 
 def download_info(url_str)
   request_uri = URI.parse(url_str)
@@ -31,68 +45,89 @@ def download_info(url_str)
   doc
 end
 
-def _info(doc,nr,auflage)
-  title = doc.xpath('//*[@id="page-top"]/div[1]/div[2]/h1/span[2]').text
+def _info(doc,ausgabe_nr,auflagen_nr,title)
+  
+  story_cnt = doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[3]').text.to_i
+  erschienen = doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[2]/time').text.tr(" \"\t\r\n", '')
+  pic_url = '/pics' + doc.xpath('//*[@id="page-sidebar"]/div/link[1]').attribute('href').value
+  pages = doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[4]').text.strip.to_i
 
   $tmp_csv << [
-    nr,
+    ausgabe_nr,
     title,
-    auflage,
-    doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[2]/time').text.tr(" \"\t\r\n", ''),
-    '/pics/'+doc.xpath('//*[@id="page-sidebar"]/div/link[1]').attribute('href').value,
-    doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[4]').text.strip
+    auflagen_nr,
+    erschienen,
+    pic_url,
+    pages
   ]
 
-  $tmp_url << $base_url + doc.xpath('//*[@id="page-sidebar"]/div/link[1]').attribute('href').value
-  
-  for i in 1..(doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[3]')).text.to_i do
+  $pic_url << $base_url + doc.xpath('//*[@id="page-sidebar"]/div/link[1]').attribute('href').value
+
+  # For each Geschichte
+  for i in 1..story_cnt do
     code = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small[3]').text.tr(" \"\t\r\n", '').sub('Code:','')
-    g_titel = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr(" \t\r\n", '')
+    story_titel = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr("\t\r\n", '').sub('  ','')
+    p story_titel
+    $book_to_geschichte << [ausgabe_nr,code]
 
-    $book_to_geschichte << [nr,code]
-
+    # If Geschichte exists
     if !$tmp_gesch_Set.include?(code) then
-    $tmp_geschichte << [
-      code,
-      g_titel
-    ]
-    $tmp_gesch_Set.add(code)
+      $tmp_geschichte << [
+        code,
+        story_titel
+      ]
+      $tmp_gesch_Set.add(code)
     end
   
   end
+  # Return Node of current URL
+  tmp = doc.xpath('/html/head/link[5]').attribute('href').value[/([^\/]+)$/].to_i
+  p tmp
+  tmp
 end
 
 def get_auflagen(url_str)
+  # Get Document from URL
   doc = download_info(url_str)
-  nr = doc.xpath('//*[@id="page-top"]/div[1]/div[2]/h1/span[1]').text.tr(" \t\r\n", '').delete('Nr.').to_i
-  tmp_doc = doc.xpath('//*[@id="page-top"]/div[2]/div/div[2]/div/ul/li')
+  # Get the Ausgabe Nr
+  ausgabe_nr = doc.xpath('//*[@id="page-top"]/div[1]/div[2]/h1/span[1]').text.tr(" \t\r\n", '').delete('Nr.').to_i
+  # Get the HTML-li-elements for the Auflagen
+  auflagen_li = doc.xpath('//*[@id="page-top"]/div[2]/div/div[2]/div/ul/li')
+  # Get the title
+  title = doc.xpath('//*[@id="page-top"]/div[1]/div[2]/h1/span[2]').text
 
-  if (tmp_doc.empty?)then
-    _info(doc,nr,1)
-  else
-    doc = tmp_doc
-    doc.each do |x|  
-    tmp = download_info($base_url + x.child.attribute('href').value)
-    _info(tmp,nr,x.text.tr('\"\"', '\"').delete('Nr.').to_i)
+  tmp_node = false
+
+  auflagen_nr = 1
+
+  # If there are auflagen
+  if (!auflagen_li.empty?) then
+    auflagen_li.each do |x|  
+      # Get the document of the current Auflage
+      tmp_doc = download_info($base_url + x.child.attribute('href').value)
+      # Get the Nr of the Auflage
+      auflagen_nr = x.text.tr('\"\"', '\"').delete('Nr.').to_i
+      tmp_node = tmp_node || $last_node == _info(tmp_doc,ausgabe_nr,auflagen_nr,title)
     end
+  else
+    tmp_node = tmp_node || $last_node == _info(doc,ausgabe_nr,auflagen_nr,title)
   end
+  tmp_node
 end
 
-# //*[@id="page-top"]/div[1]/div[2]/h1/span[1]
-# //*[@id="page-content"]/div[2]/table/tbody[3]/tr/td[1]/div/div[2]/small[3]/text()
 
+$last_node = download_info(last_url).xpath('/html/head/link[5]').attribute('href').value[/([^\/]+)$/].to_i
 next_url = first_url
+#for i in 0..5 do
+p $last_node
 
-for i in 0..500 do
-  #p i
-  get_auflagen(next_url)
+while !exit_loop do
+  exit_loop = get_auflagen(next_url)
+
   tmp = download_info(next_url)
-
   len = tmp.xpath('//*[@id="page-top"]/div[1]/a').length
 
   next_url = $base_url + tmp.xpath('//*[@id="page-top"]/div[1]/a['+len.to_s+']').attribute('href').value
-  
-  p next_url
 end
 
 CSV.open("ltb.csv", "w") do |file|
@@ -114,7 +149,7 @@ CSV.open("ltb-buch-gesch.csv", "w") do |file|
 end
 
 CSV.open("ltb-url.csv", "w") do |file|
-  $tmp_url.each do |x|
+  $pic_url.each do |x|
     file << [x]
   end
 end
