@@ -5,7 +5,7 @@ class NewsController < ApplicationController
   # All news that are visible on the frontpage
   def index
     render :json => News.scope_single_language(request_locale)
-                      .map{|l| l.to_frontpage_api_response(text_length: :short, languages: [request_locale])}
+                      .map { |l| l.to_frontpage_api_response(text_length: :short, languages: [request_locale]) }
   end
 
   # A single news that is visible on the frontpage
