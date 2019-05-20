@@ -38,7 +38,7 @@ export class ServerApiService extends ServerApi {
     @Inject(LOCALE_ID)
     readonly localeId: string,
   ) {
-    super(insertLanguageSubdomain(environment.apiEndpoint, localeId));
+    super(isPlatformServer(_platformId) ? environment.apiEndpoint : "/api");
 
     // Was a specific base URL provided? Then we simply take that.
     if (!this._apiBaseUrl) {
