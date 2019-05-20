@@ -325,6 +325,34 @@ RSpec.describe ProjectDatabasesController, type: :request do
       expect(json_data['errors'].length).to eq 1
     end
 
+    it 'Uploads if there wasn\'t a database previously' do
+      project = FactoryBot.create(:project)
+
+      dbFile = Tempfile.new('db.sqlite')
+      db = SQLite3::Database.new dbFile.path
+
+      db.execute "create table numbers (name varchar(30),val int);"
+
+      # Upload the file
+      post "/api/project/#{project.slug}/db/default/upload",
+           :headers => json_headers,
+           :params => {
+             "database" => Rack::Test::UploadedFile.new(dbFile.path)
+           }
+
+      expect(response.status).to eq 200
+      json_data = JSON.parse(response.body)
+
+      # And retrieve it again
+      project.reload
+
+      expect(project.default_database).not_to be nil
+
+      get "#{default_db_api_url project}/download"
+      expect(response.status).to eq 200
+      expect(response.body).to eq File.open(dbFile, "rb") { |f| f.read }
+    end
+
     it 'Accepts valid databases' do
       project = FactoryBot.create(:project_with_default_database)
 
