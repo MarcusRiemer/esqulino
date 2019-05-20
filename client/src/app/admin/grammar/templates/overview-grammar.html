@@ -12,7 +12,7 @@
   </tr>
   <tr *ngFor="let grammar of availableGrammars.value | async">
     <td>
-      <a [routerLink]="['grammar', grammar.id]">{{ grammar.name }}</a>
+      <a [routerLink]="[grammar.id]">{{ grammar.name }}</a>
     </td>
     <td><code>{{ grammar.technicalName }}</code></td>
     <td><code>{{ grammar.slug | defaultValue }}</code></td>

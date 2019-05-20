@@ -1,9 +1,20 @@
-import { Injectable, PLATFORM_ID, Inject, Optional } from '@angular/core'
+import { Injectable, PLATFORM_ID, Inject, Optional, LOCALE_ID } from '@angular/core'
 import { isPlatformServer } from '@angular/common'
 
 import { environment } from '../../../environments/environment'
 
 import { ServerApi } from './serverapi'
+
+/**
+ * Inserts the given language string into the URL.
+ */
+function insertLanguageSubdomain(url: string, lang: string) {
+  if (url.includes("://")) {
+    return (url.replace("://", "://" + lang + "."));
+  } else {
+    return (lang + "." + url);
+  }
+}
 
 /**
  * Instead of constructing URLs on the fly, they should be created using
@@ -20,15 +31,14 @@ import { ServerApi } from './serverapi'
 @Injectable()
 export class ServerApiService extends ServerApi {
 
-  /**
-   *
-   */
   public constructor(
     @Inject(PLATFORM_ID)
     @Optional()
-    private _platformId: Object
+    private _platformId: Object,
+    @Inject(LOCALE_ID)
+    readonly localeId: string,
   ) {
-    super(environment.apiEndpoint);
+    super(insertLanguageSubdomain(environment.apiEndpoint, localeId));
 
     // Was a specific base URL provided? Then we simply take that.
     if (!this._apiBaseUrl) {

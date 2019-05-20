@@ -31,7 +31,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   readonly prettyPrintedGrammar = this._current.baseGrammarPrettyPrinted;
 
   ngAfterViewInit() {
-    this._toolbarService.setItems(this.toolbarButtons);
+    this._toolbarService.addItem(this.toolbarButtons);
   }
 
   get baseGrammarId() {

@@ -131,8 +131,8 @@ gzipped-clean :
 src/locale/messages.xlf : $(CLIENT_NON_XLF_SOURCES)
 	$(NG_BIN) xi18n --i18n-locale de --output-path locale
 
-src/locale/messages.en.xlf : src/locale/messages.xlf xliffmerge.json
-	$(XLIFFMERGE_BIN) --profile xliffmerge.json
+src/locale/messages.en.xlf : src/locale/messages.xlf
+	$(NG_BIN) run "blattwerkzeug-client:xliffmerge"
 
 update-xlf : src/locale/messages.en.xlf
 

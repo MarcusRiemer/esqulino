@@ -79,4 +79,16 @@ namespace :blattwerkzeug do
       m.store_all_block_languages
     end
   end
+
+  namespace :news do
+    desc 'Serialize all news to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_news
+    end
+
+    desc 'Serialize all news to their seed representation'
+    task :load_all => :environment do |t, args|
+      m.load_all_news
+    end
+  end
 end

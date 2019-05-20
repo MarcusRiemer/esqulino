@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
 import {
-  MatAutocompleteModule, MatChipsModule, MatFormFieldModule
+  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, MatCheckboxModule
 } from '@angular/material'
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -32,8 +32,11 @@ import { CreateGrammarComponent } from './grammar/create-grammar.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
 
+import { AdminNewsListComponent } from './news.component';
+import { AdminNewsEditComponent } from './edit-news.component';
+
 const materialModules = [
-  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule
+  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule
 ]
 
 @NgModule({
@@ -59,7 +62,9 @@ const materialModules = [
     LinkGrammarComponent,
     JsonEditor,
     OverviewGrammarComponent,
-    OverviewBlockLanguageComponent
+    OverviewBlockLanguageComponent,
+    AdminNewsListComponent,
+    AdminNewsEditComponent
   ],
   providers: [
     JsonSchemaValidationService
