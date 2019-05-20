@@ -12,7 +12,7 @@ class NewsController < ApplicationController
   def show
     render :json => News.scope_single_language(request_locale)
                       .where("id = ?", params[:id])
-                      .first
+                      .first!
                       .to_frontpage_api_response(languages: [request_locale])
   end
 
@@ -64,12 +64,7 @@ class NewsController < ApplicationController
     # Do the basic loading and checking
     data = super
 
-    # Possibly replace the date with a proper Date object. If there is no
-    # date available it should be set to nil when applying this requests data.
-    if not data.key? "published_from"
-      data["published_from"] = nil
-    end
-
+    # Turn the date-string into a proper date object
     published_from = data["published_from"]
     if published_from
       data["published_from"] = parse_date(published_from)
