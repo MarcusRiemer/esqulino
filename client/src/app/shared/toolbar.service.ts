@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs'
 @Injectable()
 export class ToolbarService {
   // Backing storage for items to show
-  private _itemsPortal = new BehaviorSubject<Portal<any>>(undefined);
+  private _itemsPortal = new BehaviorSubject<Portal<any>[]>([]);
 
   constructor(
     router: Router
@@ -32,15 +32,16 @@ export class ToolbarService {
   /**
    * Indicate that a new set of components should be shown.
    */
-  setItems(templateRef: TemplateRef<any>) {
-    const templatePortal = new TemplatePortal(templateRef, undefined, {});
-    this._itemsPortal.next(templatePortal);
+  addItem(templateRef: TemplateRef<any>) {
+    const newItem = new TemplatePortal(templateRef, undefined, {});
+    const currentItems = this._itemsPortal.value;
+    this._itemsPortal.next(currentItems.concat(newItem));
   }
 
   /**
    * Indicates that no components should be shown at all.
    */
   clearItems() {
-    this._itemsPortal.next(undefined);
+    this._itemsPortal.next([]);
   }
 }

@@ -4,7 +4,7 @@
      (dragstart)="onDragStart($event)"
      [blockBase]="visual"
      draggable="true">
-  <input [(ngModel)]="editedValue"
+  <input [focus]="true" [(ngModel)]="editedValue"
          (keyup)="onInputKeyUp($event)"
          [size]="inputSize"
          type="text"

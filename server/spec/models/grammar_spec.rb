@@ -11,15 +11,15 @@ RSpec.describe Grammar, type: :model do
       res = FactoryBot.build(:grammar, slug: "")
 
       res.validate
-      expect(res.errors["slug"].length).to be 1
+      expect(res.errors["slug"].length).to eq 1
     end
 
     it "stores two grammars with empty slugs" do
       FactoryBot.create(:grammar, slug: nil)
       FactoryBot.create(:grammar, slug: nil)
 
-      expect(Grammar.all.count).to be 2
-      expect(Grammar.where(slug: nil).count).to be 2
+      expect(Grammar.all.count).to eq 2
+      expect(Grammar.where(slug: nil).count).to eq 2
     end
   end
 
@@ -28,7 +28,7 @@ RSpec.describe Grammar, type: :model do
       res = FactoryBot.build(:grammar, name: nil)
 
       res.validate
-      expect(res.errors["name"].length).to be 1
+      expect(res.errors["name"].length).to eq 1
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe Grammar, type: :model do
 
       res.validate
       # Empty and does not match the regex
-      expect(res.errors["technical_name"].length).to be 2
+      expect(res.errors["technical_name"].length).to eq 2
     end
 
     it "accepts valid names" do
@@ -46,7 +46,7 @@ RSpec.describe Grammar, type: :model do
         res = FactoryBot.build(:grammar, technical_name: name)
 
         res.validate
-        expect(res.errors["technical_name"].length).to be 0
+        expect(res.errors["technical_name"].length).to eq 0
       end
     end
 

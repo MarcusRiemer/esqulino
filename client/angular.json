@@ -68,6 +68,21 @@
             "browserTarget": "blattwerkzeug-client:build"
           }
         },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "srcDir": "src/locale",
+              "genDir": "src/locale",
+              "i18nFile": "messages.xlf",
+              "i18nBaseFile": "messages",
+              "i18nFormat": "xlf",
+              "encoding": "UTF-8",
+              "defaultLanguage": "de",
+              "languages": ["en"]
+            }
+          }
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {

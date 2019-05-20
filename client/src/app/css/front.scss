@@ -30,15 +30,24 @@
         transition: opacity 0.3s;
     }
 
+    .target-groups {
+        .mat-card {
+            height: 100%;
+
+            .mat-card-content {
+                min-height: 170px;
+                margin-bottom: unset;
+            }
+        }
+    }
+
     .about-text {
         hyphens: auto;
+        text-align: justify;
     }
 
     /* The carousel-like thing on the main page */
     .jumbotron {
-        border: 1px solid rgba(0,0,0,.125);
-        background-color: white;
-
         h1 img {
             height: 1.2em;
         }
@@ -46,6 +55,10 @@
         a.mat-button-large {
             margin-bottom: 10px;
         }
+    }
+
+    mat-card > mat-card-header > img.news-avatar {
+        object-fit: contain;
     }
 
     /* Information about academical projects */

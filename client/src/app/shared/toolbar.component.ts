@@ -11,7 +11,7 @@ export class ToolbarComponent {
     private _toolbarService: ToolbarService
   ) { }
 
-  get itemsPortal$() {
+  get toolbarItems$() {
     return (this._toolbarService.itemsPortal);
   }
 }

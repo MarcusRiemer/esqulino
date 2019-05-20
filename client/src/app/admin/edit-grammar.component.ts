@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, AfterViewInit, ViewChild } from '@angular/core'
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute, ParamMap } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { Title } from '@angular/platform-browser'
@@ -15,7 +15,7 @@ import { BlockLanguageListDescription } from '../shared/block/block-language.des
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
-export class EditGrammarComponent implements OnInit, AfterViewInit {
+export class EditGrammarComponent implements OnInit {
 
   @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
 
@@ -58,10 +58,9 @@ export class EditGrammarComponent implements OnInit, AfterViewInit {
       const request = this._http.get<BlockLanguageListDescription[]>(relatedUrl);
       this.relatedBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(request);
     });
-  }
 
-  ngAfterViewInit() {
-    this._toolbarService.setItems(this.toolbarButtons);
+    // Setup the toolbar buttons
+    this._toolbarService.addItem(this.toolbarButtons);
   }
 
   onTypeDataUpdate(text: string) {

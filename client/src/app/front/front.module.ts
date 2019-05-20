@@ -17,6 +17,7 @@ import { ProjectListItemComponent } from './project-list-item.component'
 import { PrivacyComponent } from './privacy.component'
 import { VideoDisplayComponent } from './video-display.component'
 import { VersionComponent } from './version.component'
+import { DevelopmentComponent } from './development.component'
 
 @NgModule({
   imports: [
@@ -36,15 +37,9 @@ import { VersionComponent } from './version.component'
     ProjectListItemComponent,
     VideoDisplayComponent,
     PrivacyComponent,
-    VersionComponent
+    VersionComponent,
+    DevelopmentComponent
   ],
-  exports: [
-    AboutComponent,
-    AboutAcademiaComponent,
-    FrontComponent,
-    ImprintComponent,
-    ProjectListComponent,
-    VideoDisplayComponent
-  ]
+  exports: []
 })
 export class FrontModule { }

@@ -9,7 +9,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import {
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule, MatListModule, MatCardModule
+  MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatFormFieldModule
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
@@ -28,11 +28,17 @@ import { ChangeLanguageComponent } from './change-language.component';
 import { JavascriptRequiredComponent } from './javascript-required.component';
 import { SideNavComponent } from './side-nav.component';
 import { NavSiteComponent } from './nav-page.component';
+import { NewsComponent } from './news.component';
+import { NewsDetailsComponent } from './news-details.component';
+import { MultiLingualInputComponent } from './multilingual-input.component';
+import { MultiLingualEditorComponent } from './multilingual-editor.component';
+import { FocusDirective } from './focus-element.directive';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule, MatListModule, MatCardModule
+  MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
+  MatNativeDateModule, MatInputModule, MatFormFieldModule
 ]
 
 /**
@@ -61,7 +67,12 @@ const materialModules = [
     ChangeLanguageComponent,
     JavascriptRequiredComponent,
     SideNavComponent,
-    NavSiteComponent
+    NavSiteComponent,
+    NewsComponent,
+    NewsDetailsComponent,
+    MultiLingualInputComponent,
+    MultiLingualEditorComponent,
+    FocusDirective
   ],
   exports: [
     CommonModule,
@@ -76,7 +87,12 @@ const materialModules = [
     ChangeLanguageComponent,
     JavascriptRequiredComponent,
     SideNavComponent,
-    NavSiteComponent
+    NavSiteComponent,
+    NewsComponent,
+    NewsDetailsComponent,
+    MultiLingualInputComponent,
+    MultiLingualEditorComponent,
+    FocusDirective
   ]
 })
 export class SharedAppModule {

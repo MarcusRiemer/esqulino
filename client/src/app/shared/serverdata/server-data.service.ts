@@ -17,6 +17,8 @@ import {
 import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
+import { NewsFrontpageDescription, NewsUpdateDescription } from '../news.description';
+import { NewsDescription } from '../news.description';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -124,7 +126,6 @@ class IndividualDescriptionCache<T> {
   public getDescription(id: string): Observable<T> {
     if (!this.cache[id]) {
       this.cache[id] = new CachedRequest<T>(this.http.get<T>(this.idCallback(id)))
-
     }
 
     return (this.cache[id].value);
@@ -188,6 +189,87 @@ export class ServerDataService {
         map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
       )
   );
+
+  readonly getUserNewsList = new CachedRequest<NewsFrontpageDescription[]>(
+    this._http.get<NewsFrontpageDescription[]>(this._serverApi.getUserNewsListUrl())
+  );
+
+  readonly getAdminNewsList = new CachedRequest<NewsDescription[]>(
+    this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl())
+  );
+
+  readonly getAdminNewsSingle = new IndividualDescriptionCache<NewsDescription>(
+    this._http,
+    id => this._serverApi.getAdminNewsSingle(id)
+  );
+
+  readonly getUserNewsDetails = new IndividualDescriptionCache<NewsFrontpageDescription>(
+    this._http,
+    id => this._serverApi.getNewsSingle(id)
+  );
+
+  /**
+   * creating a new news
+   */
+  createNews(desc: NewsUpdateDescription): Observable<NewsDescription> {
+    // The given description may have to many fields, we need to strip
+    // every unneeded field.
+    desc = {
+      publishedFrom: desc.publishedFrom || null,
+      text: desc.text,
+      title: desc.title
+    };
+
+    const url = this._serverApi.getCreateNewsUrl();
+    const toReturn = this._http.post<NewsDescription>(url, desc).pipe(
+      tap((desc) => {
+        console.log(`Created news "${desc.id}"`);
+        this.getAdminNewsList.refresh();
+      })
+    );
+
+    return (toReturn);
+  }
+
+  /**
+   * Updates the given news
+   */
+  updateNews(id: string, desc: NewsUpdateDescription): Observable<NewsDescription> {
+    // The given description may have to many fields, we need to strip
+    // every unneeded field.
+    desc = {
+      publishedFrom: desc.publishedFrom || null,
+      text: desc.text,
+      title: desc.title
+    };
+
+    const url = this._serverApi.getNewsUpdateUrl(id);
+    const toReturn = this._http.put<NewsDescription>(url, desc).pipe(
+      // Refresh our local caches
+      tap(_ => {
+        console.log(`Updated news "${id}"`);
+        this.getAdminNewsList.refresh();
+        this.getAdminNewsSingle.refreshDescription(id);
+      })
+    );
+
+    return (toReturn);
+  }
+
+  /**
+ * Deletes the news with the given ID.
+ */
+  deleteNews(id: string): Observable<Object> {
+    const toReturn = this._http.delete(this._serverApi.getNewsSingle(id))
+      .pipe(
+        tap(_ => {
+          console.log(`Deleted news "${id}"`);
+          this.getAdminNewsList.refresh();
+        }),
+        first()
+      )
+    return (toReturn);
+  }
 
   /**
    * @return The details of the specified grammar.

@@ -1,4 +1,4 @@
-# Provides access to a globally available Validator instance 
+# Provides access to a globally available Validator instance
 module JsonSchemaHelper
   @@json_schema_storage = JsonSchemaStorage.new Rails.configuration.sqlino['schema_dir']
 
@@ -12,7 +12,7 @@ module JsonSchemaHelper
     schemer = JSONSchemer.schema(schema)
     schemer.validate(document).to_a
   end
-  
+
   # Ensures that the given body of a request matches the given schema
   #
   # @param schema_name [string] The ID of the schema to validate against
@@ -28,7 +28,8 @@ module JsonSchemaHelper
     if result.length > 0 then
       raise InvalidSchemaError.new(schema_name, result)
     else
-      return body
+      # All keys should be in "snake_case"
+      return body.transform_keys { |k| k.underscore }
     end
   end
 
