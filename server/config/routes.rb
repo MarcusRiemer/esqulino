@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
+
   # Second stop: The API for the editor
   scope '/api' do
 
+    resources :identities
+
+    scope 'auth' do
+      get 'login', :to => 'sessions#new', :as => :login
+      match ":provider/callback", to: "sessions#create", via: [:get, :post]
+      match 'failure', :to => 'sessions#failure', via: [:get, :post]
+    end
+  
     # Everything in the context of projects
     scope 'project' do
       root via: [:get], controller: 'projects', action: :index
