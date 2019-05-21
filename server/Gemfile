@@ -27,6 +27,15 @@ gem 'sentry-raven', '~> 2.9'
 # Markdown rendering
 gem 'redcarpet', '~> 3.4'
 
+# Jason Web Token handling
+gem 'jwt'
+
+# oAuth2 authentication
+gem 'omniauth', '~> 1.9.0'
+
+# Provider with login/password
+gem 'omniauth-identity', '~> 1.1.1'
+
 ############################
 # Rails dependencies
 ###########################

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_17_133042) do
+ActiveRecord::Schema.define(version: 2019_05_20_105930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -63,6 +63,14 @@ ActiveRecord::Schema.define(version: 2019_04_17_133042) do
     t.string "technical_name"
     t.index ["programming_language_id"], name: "index_grammars_on_programming_language_id"
     t.index ["slug"], name: "index_grammars_on_slug", unique: true
+  end
+
+  create_table "identities", id: false, force: :cascade do |t|
+    t.string "id"
+    t.string "email"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "news", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -118,6 +126,16 @@ ActiveRecord::Schema.define(version: 2019_04_17_133042) do
     t.uuid "default_database_id"
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "provider"
+    t.string "uid"
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "block_languages", "block_language_generators"
