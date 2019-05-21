@@ -34,25 +34,14 @@ export class ServerApiService extends ServerApi {
   public constructor(
     @Inject(PLATFORM_ID)
     @Optional()
-    private _platformId: Object,
+    platformId: Object,
     @Inject(LOCALE_ID)
     readonly localeId: string,
   ) {
-    super(isPlatformServer(_platformId) ? environment.apiEndpoint : "/api");
-
-    // Was a specific base URL provided? Then we simply take that.
-    if (!this._apiBaseUrl) {
-      // No specific URL, we fall back to the absolute default URL
-      this._apiBaseUrl = "/api";
-
-      // If we are running the universal server, there is no "parenting"
-      // base URL that would contain the protocol and the hostname. In that
-      // case the official server is used as a fallback.
-      //
-      // Beware: This may not be what you expect during development.
-      if (this._platformId && isPlatformServer(this._platformId)) {
-        this._apiBaseUrl = ServerApiService.BASE_HOST + this._apiBaseUrl;
-      }
-    }
+    super(
+      isPlatformServer(platformId)
+        ? insertLanguageSubdomain(environment.apiEndpoint, localeId)
+        : "/api"
+    );
   }
 }
