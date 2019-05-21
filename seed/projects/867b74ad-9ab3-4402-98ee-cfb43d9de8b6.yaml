@@ -7,6 +7,9 @@ concise_attributes:
   name: name
   value_before_type_cast: Olympia
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: olympic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Statistiken zu olympischen Sommerspielen
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -22,10 +25,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-26 10:35:11.345867'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-10 10:34:47.54907'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-  value_before_type_cast: olympic
+  value_before_type_cast: '2019-05-21 14:22:01.817985'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 - !ruby/object:ActiveModel::Attribute::FromDatabase

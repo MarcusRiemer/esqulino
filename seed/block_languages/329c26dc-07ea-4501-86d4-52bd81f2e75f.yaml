@@ -7,6 +7,8 @@ concise_attributes:
   name: name
   value_before_type_cast: Trucklino Program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: "{\"sidebars\": [{\"type\": \"fixedBlocks\", \"caption\":
     \"Trucklino Programm\", \"categories\": [{\"blocks\": [{\"defaultNode\": {\"name\":
@@ -373,8 +375,6 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2019-03-31 18:55:46.059699'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang
