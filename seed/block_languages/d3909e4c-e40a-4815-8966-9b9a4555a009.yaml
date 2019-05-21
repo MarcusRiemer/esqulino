@@ -7,6 +7,8 @@ concise_attributes:
   name: name
   value_before_type_cast: Trucklino World
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "Trucklino
     World", "categories": [{"blocks": [{"defaultNode": {"name": "world", "children":
@@ -163,8 +165,6 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2019-02-28 19:56:05.941799'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-world

@@ -7,6 +7,9 @@ concise_attributes:
   name: name
   value_before_type_cast: Ereignisse
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: events
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen
     Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen
@@ -25,10 +28,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.693124'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-10 10:34:47.523626'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-  value_before_type_cast: events
+  value_before_type_cast: '2019-05-21 14:22:01.967283'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 - !ruby/object:ActiveModel::Attribute::FromDatabase
