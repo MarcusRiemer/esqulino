@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
@@ -33,6 +33,8 @@ import { NewsDetailsComponent } from './news-details.component';
 import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
 import { FocusDirective } from './focus-element.directive';
+import { LoginButtonComponent } from './auth/login-button.component';
+import { AuthDialogComponent } from './auth/auth-dialog.component';
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -58,6 +60,7 @@ const materialModules = [
     HttpModule,
     HttpClientModule,
     PortalModule,
+    ReactiveFormsModule,
     ...materialModules
   ],
   declarations: [
@@ -72,6 +75,8 @@ const materialModules = [
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
+    AuthDialogComponent,
+    LoginButtonComponent,
     FocusDirective
   ],
   exports: [
@@ -92,8 +97,11 @@ const materialModules = [
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
+    AuthDialogComponent,
+    LoginButtonComponent,
     FocusDirective
-  ]
+  ],
+  entryComponents: [AuthDialogComponent]
 })
 export class SharedAppModule {
   static forRoot(): ModuleWithProviders {
