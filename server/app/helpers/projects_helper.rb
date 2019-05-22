@@ -28,5 +28,7 @@ module ProjectsHelper
       auth_realm = Rails.configuration.sqlino['name']
       self.request_http_basic_authentication auth_realm
     end
+
+    return success
   end
 end

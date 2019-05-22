@@ -4,7 +4,7 @@ RSpec.describe NewsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   describe 'GET /api/news' do
-    it 'User: retrieving news without anything published' do
+    it 'Frontpage: retrieving news without anything published' do
       news = create(:news, published_from: Date.new(2019, 11, 1) )
       get '/api/news'
       json_data = JSON.parse(response.body)
@@ -13,32 +13,35 @@ RSpec.describe NewsController, type: :request do
       expect(json_data.length).to eq(0)
     end
 
-    it 'User: retrieving the only existing news (default language)' do
+    it 'Frontpage: retrieving the only existing news (default language)' do
       news = create(:news)
       get '/api/news'
 
       json_data = JSON.parse(response.body)
       expect(json_data.length).to eq(1)
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+      expect(response).to have_http_status(200)
     end
 
-    it 'User: retrieving only published news, skipping unpublished ones' do
+    it 'Frontpage: retrieving only published news, skipping unpublished ones' do
       create(:news, published_from: nil)
       get '/api/news'
 
       json_data = JSON.parse(response.body)
       expect(json_data.length).to eq(0)
+      expect(response).to have_http_status(200)
     end
 
-    it 'User: retrieving only published news, skipping future ones' do
+    it 'Frontpage: retrieving only published news, skipping future ones' do
       create(:news, published_from: Date.new(9999, 1, 1))
       get '/api/news'
 
       json_data = JSON.parse(response.body)
       expect(json_data.length).to eq(0)
+      expect(response).to have_http_status(200)
     end
 
-    it 'User: Three news exist, only one is eligible' do
+    it 'Frontpage: Three news exist, only one is eligible' do
       create(:news, published_from: Date.new(9999, 1, 1)) # Future
       create(:news, published_from: nil) # Unpublished
       create(:news) # Published
@@ -47,13 +50,15 @@ RSpec.describe NewsController, type: :request do
       json_data = JSON.parse(response.body)
       expect(json_data.length).to eq(1)
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+      expect(response).to have_http_status(200)
     end
 
-    it 'User: retrieving the only existing news (english)' do
+    it 'Frontpage: retrieving the only existing news (english)' do
       host! 'en.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       get '/api/news'
+
       json_data = JSON.parse(response.body)
       expect(json_data.length).to eq(1)
       expect(json_data[0]['title']).to eq({ "en" =>  news.title['en'] })
@@ -62,7 +67,7 @@ RSpec.describe NewsController, type: :request do
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
     end
 
-    it 'User: retrieving the only existing news (german)' do
+    it 'Frontpage: retrieving the only existing news (german)' do
       host! 'de.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1) )
@@ -73,6 +78,41 @@ RSpec.describe NewsController, type: :request do
       expect(json_data[0]['text']).to eq({ "de" =>  news.rendered_text()['de'] })
 
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+    end
+
+    it 'Frontpage: News are shortened' do
+      news = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
+
+      get '/api/news'
+      json_data = JSON.parse(response.body)
+
+      aggregate_failures "frontpage response" do
+        expect(json_data.length).to eq(1)
+        expect(json_data[0]['text']['de']).to include("1")
+        expect(json_data[0]['text']['de']).not_to include("2")
+        expect(json_data[0]['text']['de']).not_to eq(news.text['de'])
+      end
+    end
+  end
+
+  describe 'GET /api/news/:id' do
+    it 'Frontpage: Existing news' do
+      n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
+
+      get "/api/news/#{n.id}"
+      json_data = JSON.parse(response.body)
+
+      aggregate_failures "frontpage detail response" do
+        expect(json_data['text']['de']).to include("1")
+        expect(json_data['text']['de']).to include("2")
+        expect(json_data['text']['de']).not_to eq(n.text['de'])
+      end
+    end
+
+    it 'Frontpage: non existant news' do
+      get "/api/news/63ed0067-7bef-4a54-bac7-06831c0fccbd"
+
+      expect(response).to have_http_status(404)
     end
   end
 
@@ -92,6 +132,27 @@ RSpec.describe NewsController, type: :request do
 
       expect(json_data[0]).to validate_against "NewsDescription"
       expect(json_data[1]).to validate_against "NewsDescription"
+    end
+  end
+
+  describe 'GET /api/news/admin/:id' do
+    it 'Admin: Existing news' do
+      n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
+
+      get "/api/news/admin/#{n.id}"
+      json_data = JSON.parse(response.body)
+
+      aggregate_failures "frontpage detail response" do
+        expect(json_data['text']['de']).to include("1")
+        expect(json_data['text']['de']).to include("2")
+        expect(json_data['text']).to eq(n.text)
+      end
+    end
+
+    it 'Admin: non existant news' do
+      get "/api/news/63ed0067-7bef-4a54-bac7-06831c0fccbd"
+
+      expect(response).to have_http_status(404)
     end
   end
 
@@ -194,6 +255,23 @@ RSpec.describe NewsController, type: :request do
       expect(curr_news.title).to eq news.title
     end
 
+    it 'updating a news without a date' do
+      news = create(:news)
+      news_params = news.api_attributes.except("publishedFrom")
+
+      put "/api/news/#{news.id}",
+          :headers => json_headers,
+          :params => news_params.to_json
+
+      # Ensure some kind of error was reported
+      json_data = JSON.parse(response.body)
+      expect(response).to have_http_status(400)
+
+      # Ensure the news has not changed
+      curr_news = News.find(news.id)
+      expect(curr_news.title).to eq news.title
+    end
+
   end
 
 
@@ -239,7 +317,7 @@ RSpec.describe NewsController, type: :request do
       expect(count_news).to_not eq(News.all.count)
     end
 
-    it 'creating a news without a publishing date' do
+    it 'creating a news with an empty publishing date' do
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -272,6 +350,22 @@ RSpec.describe NewsController, type: :request do
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
       expect(response).to have_http_status(400)
+    end
+
+    it 'creating a news without a date' do
+      news = build(:news)
+      news_params = news.api_attributes.except("publishedFrom")
+
+      post "/api/news",
+          :headers => json_headers,
+          :params => news_params.to_json
+
+      # Ensure some kind of error was reported
+      json_data = JSON.parse(response.body)
+      expect(response).to have_http_status(400)
+
+      # Ensure the news has not changed
+      expect(News.count).to eq 0
     end
   end
 end

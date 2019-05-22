@@ -78,7 +78,7 @@ class News < ApplicationRecord
                   .slice("id", "title", "text", "publishedFrom")
 
     if (to_return['text'])
-      to_return['text'] = rendered_text(text_length, languages)
+      to_return['text'] = rendered_text(text_length: text_length, languages: languages)
     end
 
     return (to_return)

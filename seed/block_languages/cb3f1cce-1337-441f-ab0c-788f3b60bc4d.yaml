@@ -7,6 +7,9 @@ concise_attributes:
   name: name
   value_before_type_cast: Generated SQL
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "databaseSchema"}, {"type": "fixedBlocks",
     "caption": "SQL", "categories": [{"blocks": [{"defaultNode": {"name": "starOperator",
@@ -342,9 +345,6 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2019-03-31 18:51:08.24129'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-  value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

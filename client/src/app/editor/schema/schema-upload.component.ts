@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http'
-import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ServerApiService } from '../../shared/'
+import { TableDescription, Schema } from '../../shared/schema';
 
 import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';
 import { SidebarService } from '../sidebar.service';
+import { SchemaService } from '../schema.service';
 
 /**
  * Allows to replace the serverside database as a single blob.
@@ -20,9 +22,11 @@ export class SchemaUploadComponent {
     private _projectService: ProjectService,
     private _toolbarService: ToolbarService,
     private _sidebarService: SidebarService,
+    private _schemaService: SchemaService,
     private _server: ServerApiService,
-    private _http: Http,
+    private _http: HttpClient,
     private _route: ActivatedRoute,
+    private _router: Router,
   ) {
     this._sidebarService.hideSidebar();
 
@@ -44,7 +48,13 @@ export class SchemaUploadComponent {
     const url = this._server.uploadDatabase(this._projectService.cachedProject.id, schemaName)
     const data = new FormData(uploadForm);
 
-    this._http.post(url, data)
-      .subscribe(_ => console.log("Upload complete"));
+    // Actually sending the data
+    this._http.post<{ schema: TableDescription[] }>(url, data)
+      .subscribe(response => {
+        // Inform everyone involved about the new scheme
+        this._schemaService.onSchemaUpdated(response.schema);
+
+        this._router.navigate([".."], { relativeTo: this._route })
+      });
   }
 }

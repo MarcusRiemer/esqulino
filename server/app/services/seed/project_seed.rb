@@ -11,12 +11,12 @@ module Seed
     # takes an optional arguments dependencies as hash with key as the Model and value as the directory
     def initialize(seed_id)
       super(seed_id, dependencies = {
-        "project_uses_block_languages" => ProjectUsesBlockLanguageSeed,
-        "code_resources" => CodeResourceSeed,
-        "project_sources" => ProjectSourceSeed,
-        "project_databases" => ProjectDatabaseSeed,
-        "default_database" => ProjectDatabaseSeed,
-      }, defer_referential_checks = true)
+              "project_uses_block_languages" => ProjectUsesBlockLanguageSeed,
+              "code_resources" => CodeResourceSeed,
+              "project_sources" => ProjectSourceSeed,
+              "project_databases" => ProjectDatabaseSeed,
+              "default_database" => ProjectDatabaseSeed,
+            }, defer_referential_checks = true)
     end
 
     # define base's abstract class to copy images of the project in project directory with under the project file
@@ -40,10 +40,10 @@ module Seed
       end
     end
 
-    # move the tmp directory to the main data directory after laoding process is finished
+    # move the tmp directory to the main data directory after loading process is finished
     def move_data_from_tmp_to_data_directory
-      FileUtils.remove_dir(path_to_data_directory)
-      FileUtils.mv path_to_data_directory + "_tmp", path_to_data_directory
+      FileUtils.remove_dir(path_to_data_directory) # Remove existing folder
+      FileUtils.mv path_to_data_directory + "_tmp", path_to_data_directory # Move tmp folder in place
     end
 
     # make static method availbale as instance method for this class

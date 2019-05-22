@@ -163,14 +163,24 @@ class SeedManager
     Seed::NewsSeed.load_all
   end
 
+  #############################################
+  # Programming Languages
+  #############################################
+
+  def store_all_programming_languages
+    Seed::ProgrammingLanguageSeed.store_all
+  end
+
+  def load_all_programming_languages
+    Seed::ProgrammingLanguageSeed.load_all
+  end
+
   private
 
   # Singleton instance of the SeedManager
   def self.instance
     @@instance ||= SeedManager.new
   end
-
-  private
 
   # We probably don't want to output during testing, so this is configurable
   def puts(*args)
