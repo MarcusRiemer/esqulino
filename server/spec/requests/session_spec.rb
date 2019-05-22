@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.fdescribe "sessions controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
-
-
   it 'testing the developer strategy' do
 
     byebug
@@ -12,7 +10,7 @@ RSpec.fdescribe "sessions controller" do
       name: "2@gmail.com", email: "123",
       session: {name: "2@gmail.com", email: "123"}
     }
-    post '/api/auth/developer/callback',
+    post '/api/auth/developer',
       :headers => json_headers,
       :params => params.to_json
 
