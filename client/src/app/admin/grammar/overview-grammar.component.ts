@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ServerDataService } from '../../shared';
 
-@Component ({
+@Component({
   selector: 'grammar-overview-selector',
   templateUrl: './templates/overview-grammar.html'
 })
@@ -9,7 +9,7 @@ import { ServerDataService } from '../../shared';
 export class OverviewGrammarComponent {
   constructor(
     private _serverData: ServerDataService
-  ) {}
+  ) { }
 
   public get availableGrammars() {
     return (this._serverData.listGrammars);

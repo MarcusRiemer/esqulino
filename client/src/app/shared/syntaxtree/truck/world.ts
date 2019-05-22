@@ -125,13 +125,13 @@ export class World {
     },
 
     // Pause execution until further notice
-    [Command.pause]: (state: WorldState): WorldState => {
+    [Command.pause]: (_state: WorldState): WorldState => {
       this.codeShouldPause.next(true);
       return null;
     },
 
     // Do nothing, but still check if program should terminate
-    [Command.doNothing]: (state: WorldState): WorldState => {
+    [Command.doNothing]: (_state: WorldState): WorldState => {
       return null;
     },
   };
@@ -333,7 +333,7 @@ export class World {
    */
   mutateStateAsync(f: (state: WorldState) => WorldState): Promise<void> {
     const state = this.mutateState(f);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       setTimeout(
         () => resolve(),
         Math.max(
