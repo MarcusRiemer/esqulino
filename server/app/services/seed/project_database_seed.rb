@@ -17,7 +17,6 @@ module Seed
 
     # store sqlite from databases path to a tmp direcotry after laoding is finished
     def after_load_seed
-      info "Copying database file #{seed.project.data_directory_path}"
       seed_file = File.join seed_directory, "#{seed.id}.yaml"
       sqlite_seed_file = Pathname(seed_file).sub_ext(".sqlite")
 
@@ -25,6 +24,8 @@ module Seed
       database_target_folder = File.join tmp_directory, SEED_DIRECTORY
 
       FileUtils.mkdir_p database_target_folder
+
+      info "Copying database file from #{sqlite_seed_file}"
       FileUtils.cp(sqlite_seed_file, database_target_folder)
     end
   end

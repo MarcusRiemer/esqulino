@@ -6,6 +6,7 @@ import { FixedSidebarBlock } from '../../shared/block';
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
 
 import { DragService } from '../drag.service';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -38,4 +39,8 @@ export class CodeSidebarFixedBlocksComponent {
   get currentLanguage() {
     return (this._codeResource.blockLanguage);
   }
+
+  readonly fixedBlockSidebars = this._codeResource.blockLanguage.pipe(
+    map(b => b.sidebars.filter(s => s.portalComponentTypeId === "fixedBlocks"))
+  );
 }

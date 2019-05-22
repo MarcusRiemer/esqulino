@@ -1,0 +1,4 @@
+---
+- - "../seed/programming_language"
+  - truck-lang
+  - !ruby/class 'Seed::ProgrammingLanguageSeed'

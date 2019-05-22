@@ -1,10 +1,4 @@
---- !ruby/object:Set
-hash:
-  ? - "../seed/projects"
-    - 32056357-a38a-4258-9046-b8814cc35a55
-    - !ruby/class 'Seed::ProjectSeed'
-  : true
-  ? - "../seed/databases"
-    - ca22b86c-b1a6-4420-a91a-c222110bb0e1
-    - !ruby/class 'Seed::ProjectDatabaseSeed'
-  : true
+---
+- - "../seed/databases"
+  - ca22b86c-b1a6-4420-a91a-c222110bb0e1
+  - !ruby/class 'Seed::ProjectDatabaseSeed'

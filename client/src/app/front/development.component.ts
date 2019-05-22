@@ -44,7 +44,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
       "de": `An welchen Features wird gerade gearbeitet? Wer macht eigentlich was? Diese organisatorischen Fragen werden mit dem Kanban-Board geklärt.`,
       "en": `Which feature is currently being worked on? Who is working on what? These organisational questions are organised with Trello.`
     },
-    href: "https://bitbucket.org/marcusriemer/esqulino/"
+    href: "https://trello.com/b/vQ5vkMpV/esqulino"
   }
 ]
 
