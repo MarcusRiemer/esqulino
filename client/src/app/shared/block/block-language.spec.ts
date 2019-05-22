@@ -119,7 +119,7 @@ describe("Block Language", () => {
     expect(lm.hasMultipleSidebars).toBeTruthy();
 
     expect(lm.getEditorBlock({ languageName: "emptyBlocks", typeName: "a" })).toBeTruthy();
-    expect(_ => { lm.getEditorBlock({ languageName: "x", typeName: "x" }) }).toThrowError();
+    expect(() => { lm.getEditorBlock({ languageName: "x", typeName: "x" }) }).toThrowError();
   });
 
   it("Rejects to render a tree with only unknown types", () => {

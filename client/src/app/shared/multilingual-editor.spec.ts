@@ -49,7 +49,7 @@ describe('Component: MultiLingualEditor', () => {
   it('testing the textarea control', async () => {
     let c = await createComponent("de")
 
-    const mulString: MultilingualString = { }
+    const mulString: MultilingualString = {}
 
     c.component.original = mulString;
     c.component.translated = mulString;
@@ -66,7 +66,7 @@ describe('Component: MultiLingualEditor', () => {
 
     let newString: MultilingualString;
     const mulString: MultilingualString = {};
-    const changed = { original: { de: "Test" }, translated: { en: 'Test' }};
+    const changed = { original: { de: "Test" }, translated: { en: 'Test' } };
 
     c.component.original = mulString;
     c.component.translated = mulString;
@@ -75,9 +75,9 @@ describe('Component: MultiLingualEditor', () => {
 
     c.fixture.detectChanges();
     expect(c.component).toBeTruthy();
-    // 
+    //
 
-    c.component.translatedChange.subscribe(value => newString = value);
+    c.component.translatedChange.subscribe((value: MultilingualString) => newString = value);
 
     c.component.original = changed.original;
     c.component.translated = changed.translated;

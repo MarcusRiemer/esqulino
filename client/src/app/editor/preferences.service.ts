@@ -1,8 +1,6 @@
 import { Observable, BehaviorSubject, of } from 'rxjs'
 
 import { Injectable } from '@angular/core'
-import { BrowserService } from '../shared/browser.service';
-import { withLatestFrom, map } from 'rxjs/operators';
 
 /**
  * The order the sidepanes should appear in.

@@ -1,7 +1,5 @@
-import { Component, Inject, LOCALE_ID, Input, ViewChild, ElementRef, EventEmitter, Output, AfterViewInit } from "@angular/core";
-import { BrowserService } from './browser.service';
+import { Component, Inject, LOCALE_ID, Input } from "@angular/core";
 import { NavItem } from './nav-interfaces';
-import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'side-nav-selector',
