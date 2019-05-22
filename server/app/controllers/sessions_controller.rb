@@ -5,14 +5,8 @@ class SessionsController < ApplicationController
   def create
     user = User.from_omniauth(request.env["omniauth.auth"])
     session[:user_id] = user.id
-    token = JWT.encode(
-      {user_id: 10, role: 'user'},
-      "HS256"
-    )
-
-    puts token
-    puts JWT.decode(token, "HS256")
-    redirect_to root_url
+    token = JWT.encode({user_id: 10, role: 'user'}, 'HS256')
+    render json: {token: token}, status: :ok
   end
 
   def destroy
