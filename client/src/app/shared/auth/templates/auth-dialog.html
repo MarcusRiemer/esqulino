@@ -3,37 +3,50 @@
 </h1>
 
 <div mat-dialog-content>
-  <form [formGroup]="general">
-    <div class="row">
-      <mat-form-field>
-        <input matInput 
-          type="email"
-          placeholder="Email"
-          formGroupName="email">
-      </mat-form-field>
+  <div class="d-flex">
+    <div class="container">
+      <div *ngFor="let item of provider" class="row">
+        <button>{{item}}</button>
+      </div>
     </div>
+    <div class="container">
+      <form [formGroup]="general">
+        <div class="row">
+          <mat-form-field>
+            <input matInput 
+              type="email"
+              placeholder="Email"
+              formGroupName="email">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field>
+            <input matInput 
+              type="password"
+              placeholder="Password"
+              formGroupName="password">
+          </mat-form-field>
+        </div>
+        <div *ngIf="register" class="row">
+          <mat-form-field>
+            <input matInput
+              type="password" 
+              placeholder="Retype password">
+          </mat-form-field>
+        </div>
+      </form>
 
-    <div class="row">
-      <mat-form-field>
-        <input matInput 
-          type="password"
-          placeholder="Password"
-          formGroupName="password">
-      </mat-form-field>
+      <div mat-dialog-actions>
+        <button mat-button 
+          (click)="onSend()">
+          {{ register ? 'Register' : 'Login' }}
+        </button>
+        <button mat-button
+            (click)="onChange()">
+            {{ register ? 'Sign in' : 'Sign up' }}
+        </button>
+        <button mat-button (click)="onNoClick()">close</button>
+      </div>
     </div>
-
-
-    <ng-container *ngIf="register">
-
-    </ng-container>
-
-    <ng-container *ngIf="!register">
-
-    </ng-container>
-  </form>
-</div>
-
-<div mat-dialog-actions>
-  <button mat-button (click)="onChange()">Register</button>
-  <button mat-button (click)="onNoClick()">close</button>
+  </div>
 </div>
