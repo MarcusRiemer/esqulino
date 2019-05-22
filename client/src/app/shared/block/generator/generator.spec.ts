@@ -3,7 +3,7 @@ import { GrammarDocument } from '../../syntaxtree/grammar.description'
 import { VisualBlockDescriptions } from '../block.description';
 
 import { BlockLanguageGeneratorDocument } from './generator.description'
-import { convertGrammar } from './generator'
+import { convertGrammarManualInstructions } from './generator'
 
 describe("BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
@@ -20,10 +20,11 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: []
       };
 
-      const r = convertGrammar(generator, grammar);
+      const r = convertGrammarManualInstructions(generator, grammar);
 
       expect(r.editorBlocks.length).toEqual(1);
     });
@@ -44,6 +45,7 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: [],
         parameterDeclarations: {
           "allowModifications": { "type": { "type": "boolean" } }
@@ -61,7 +63,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      expect(() => convertGrammar(generator, grammar)).toThrowError();
+      expect(() => convertGrammarManualInstructions(generator, grammar)).toThrowError();
     });
 
     it("Almost empty grammar with two blocks for a single type", () => {
@@ -80,6 +82,7 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: [],
         typeInstructions: {
           "g1": {
@@ -93,7 +96,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const blockLang = convertGrammar(generator, grammar);
+      const blockLang = convertGrammarManualInstructions(generator, grammar);
       expect(blockLang.editorBlocks.length).toEqual(1);
 
       const visualBlock = blockLang.editorBlocks[0];
@@ -123,6 +126,7 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: [],
         typeInstructions: {
           "g1": {
@@ -135,7 +139,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const blockLang = convertGrammar(generator, grammar);
+      const blockLang = convertGrammarManualInstructions(generator, grammar);
       expect(blockLang.editorBlocks.length).toEqual(1);
 
       const visualBlock = blockLang.editorBlocks[0];
@@ -164,6 +168,7 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: [],
         parameterDeclarations: {
           "allowModifications": { "type": { "type": "boolean" } }
@@ -184,7 +189,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const b = convertGrammar(generator, grammar);
+      const b = convertGrammarManualInstructions(generator, grammar);
       expect(b.editorBlocks.length).toEqual(1);
 
       type Interpoloated = VisualBlockDescriptions.EditorInterpolated;
@@ -224,10 +229,11 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: [],
       };
 
-      const r = convertGrammar(generator, grammar);
+      const r = convertGrammarManualInstructions(generator, grammar);
 
       expect(r.editorBlocks.length).toEqual(2);
     });
@@ -281,10 +287,11 @@ describe("BlockLanguage Generator", () => {
       };
 
       const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
         editorComponents: []
       };
 
-      const r = convertGrammar(generator, grammar);
+      const r = convertGrammarManualInstructions(generator, grammar);
 
       // There should be exactly 1 block
       expect(r.editorBlocks.length).toEqual(1);
