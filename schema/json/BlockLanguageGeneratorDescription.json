@@ -49,41 +49,11 @@
       "additionalProperties": false,
       "description": "Describes how a grammar might be converted to a block language",
       "properties": {
-        "editorComponents": {
-          "items": {
-            "$ref": "#/definitions/EditorComponentDescription"
-          },
-          "type": "array"
-        },
         "id": {
           "type": "string"
         },
         "name": {
           "type": "string"
-        },
-        "parameterDeclarations": {
-          "$ref": "#/definitions/ParameterDeclarations"
-        },
-        "parameterValues": {
-          "$ref": "#/definitions/ParameterValues"
-        },
-        "staticSidebars": {
-          "items": {
-            "$ref": "#/definitions/AnySidebarDescription"
-          },
-          "type": "array"
-        },
-        "traitScopes": {
-          "items": {
-            "$ref": "#/definitions/ScopeTraitAdd"
-          },
-          "type": "array"
-        },
-        "traits": {
-          "$ref": "#/definitions/ReferenceableTraits"
-        },
-        "typeInstructions": {
-          "$ref": "#/definitions/AllReferenceableTypeInstructions"
         }
       },
       "required": [
@@ -457,6 +427,52 @@
       },
       "type": "object"
     },
+    "ManualBlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "description": "A very manual approach to block language generation. Uses specific type\ninstructions and traits to",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "traitScopes": {
+          "items": {
+            "$ref": "#/definitions/ScopeTraitAdd"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "$ref": "#/definitions/ReferenceableTraits"
+        },
+        "type": {
+          "enum": [
+            "manual"
+          ],
+          "type": "string"
+        },
+        "typeInstructions": {
+          "$ref": "#/definitions/AllReferenceableTypeInstructions"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
     "MixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
       "description": "A category description that may use partly generated blocks and\npartly constant blocks.",
@@ -783,6 +799,39 @@
         }
       ],
       "description": "All possible sidebar types"
+    },
+    "TreeBlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "tree"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
     },
     "TruckControllerComponentDescription": {
       "additionalProperties": false,
