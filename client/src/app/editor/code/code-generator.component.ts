@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
-import { CodeResource } from '../../shared/syntaxtree';
-
 /**
  * Shows a compiled AST.
  */

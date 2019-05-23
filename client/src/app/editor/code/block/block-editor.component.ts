@@ -132,7 +132,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * possibility anything is currently dragged over a node. So we inform the
    * drag service about that.
    */
-  public onEditorDragEnter(evt: MouseEvent) {
+  public onEditorDragEnter(_evt: MouseEvent) {
     if (this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOverEditor();
     }

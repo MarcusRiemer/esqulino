@@ -3,7 +3,7 @@ import {
 } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 
-import { delay, map, tap } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 
 import { BrowserService } from '../shared/browser.service';
 

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ServerApiService } from '../../shared/'
-import { TableDescription, Schema } from '../../shared/schema';
+import { TableDescription } from '../../shared/schema';
 
 import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';

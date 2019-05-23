@@ -1,5 +1,3 @@
-import { SimpleChanges, ElementRef } from '@angular/core';
-import { AfterViewInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, LOCALE_ID, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { first } from 'rxjs/operators';
