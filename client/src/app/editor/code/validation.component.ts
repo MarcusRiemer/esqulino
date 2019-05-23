@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
-import { CodeResource } from '../../shared/syntaxtree';
-
 /**
  * Informs the user about possible errors in his trees,
  */

@@ -1,13 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { map, tap } from 'rxjs/operators';
-
 import {
   Node, CodeResource, NodeLocation, locationIncLastIndex
 } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -41,10 +38,6 @@ export class BlockRenderComponent {
    * Disables any interaction with this block if true.
    */
   @Input() public readOnly = false;
-
-  constructor(
-    private _currentCodeResource: CurrentCodeResourceService
-  ) { }
 
   /**
    * Dirty Hack: Template "Typecast"

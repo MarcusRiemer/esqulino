@@ -218,8 +218,7 @@ module Seed
               # See:  https://wiki.postgresql.org/wiki/Referential_Integrity_Tutorial_%26_Hacking_the_Referential_Integrity_tables#Deferring_transactions
               # See also: https://github.com/nullobject/rein
               db_instance = seed_class.find_or_initialize_by(id: load_id)
-              db_instance.touch
-              db_instance.save!
+              db_instance.save!(touch: false)
             end
 
             move_data_from_tmp_to_data_directory
@@ -241,11 +240,12 @@ module Seed
     # runs the `after_load_seed` hook when upsert is done
     def upsert_seed_data
       raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_class.name}" if seed_instance.class != seed_class
-        db_instance = seed_class.find_or_initialize_by(id: load_id)
-        db_instance.assign_attributes(seed_instance.attributes)
-        db_instance.save! if db_instance.changed?
 
-        after_load_seed
+      db_instance = seed_class.find_or_initialize_by(id: load_id)
+      db_instance.assign_attributes(seed_instance.attributes)
+      db_instance.save!(touch: false) if db_instance.changed?
+
+      after_load_seed
     end
 
     # reads the dependency file and takes the seed_id and seed class

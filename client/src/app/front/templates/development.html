@@ -13,7 +13,7 @@
     </div>
     <mat-card-title>{{ link.title[localeId] }}</mat-card-title>
     <mat-card-subtitle>
-      <a href="https://bitbucket.org/marcusriemer/esqulino/">
+      <a [href]="link.href">
         {{ link.subtitle[localeId] }}
       </a>
     </mat-card-subtitle>

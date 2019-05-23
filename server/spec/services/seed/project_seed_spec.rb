@@ -267,19 +267,6 @@ RSpec.describe Seed::ProjectSeed do
         # Loading the project must now result in an error
         expect { Seed::ProjectSeed.new(pOrig.id).start_load }.to raise_error(ActiveRecord::RecordInvalid)
       end
-
-      it "does not load a project with a non existant database (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
-
-        # Set a database that does not exist
-        pOrig.default_database_id = "375b793b-7ae6-4f9e-ad0e-28d8e62a97b1"
-
-        Seed::ProjectSeed.new(pOrig).start_store
-
-        pOrig.destroy!
-
-        expect { Seed::ProjectSeed.new(pOrig.id).start_load }.to raise_error(ActiveRecord::InvalidForeignKey)
-      end
     end
   end
 
