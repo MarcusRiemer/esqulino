@@ -10,19 +10,20 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
 
 
-  def authorize_request
-    header = request.headers['Authorization']
-    header = header.split(' ').last if header
-    puts header
-    begin
-      @decoded = Auth.decode(header)
-      @current_user = User.find(@decoded[:email])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message }, status: :unauthorized
-    rescue JWT::DecodeError => e
-      render json: { errors: e.message }, status: :unauthorized
-    end
-  end
+  # TODO refactor
+  # def authorize_request
+  #   header = request.headers['Authorization']
+  #   header = header.split(' ').last if header
+  #   puts header
+  #   begin
+  #     @decoded = Auth.decode(header)
+  #     @current_user = User.find(@decoded[:email])
+  #   rescue ActiveRecord::RecordNotFound => e
+  #     render json: { errors: e.message }, status: :unauthorized
+  #   rescue JWT::DecodeError => e
+  #     render json: { errors: e.message }, status: :unauthorized
+  #   end
+  # end
 
   protected
 
