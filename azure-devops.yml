@@ -1,0 +1,7 @@
+pool:
+  vmImage: 'ubuntu-16.04'
+
+container: ubuntu:16.04
+
+steps:
+- script: printenv
