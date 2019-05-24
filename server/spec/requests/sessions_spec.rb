@@ -12,9 +12,22 @@ RSpec.fdescribe "sessions controller" do
 
   it "login a user with developer strategy" do
     get '/api/auth/developer/callback'
+    expect(response.cookies['XSRF-TOKEN']).to be_truthy  
+    expect(response.status).to eq(200)
+  end
 
+  it "logout a user with developer strategy" do
+    get '/api/auth/developer/callback'
+    expect(response.cookies['XSRF-TOKEN']).to be_truthy  
+
+    get '/api/auth/sign_out'
+    expect(response.cookies['XSRF-TOKEN']).to be_nil
+    expect(response.status).to eq(200)
+  end
+
+  it "testing the json response of a sign_in" do
+    get '/api/auth/developer/callback'
     json_data = JSON.parse(response.body)
-
-    expect(json_data['token']).to be_truthy  
+    expect(json_data['role']).to eq('user')  
   end
 end

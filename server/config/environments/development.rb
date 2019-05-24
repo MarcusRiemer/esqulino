@@ -54,9 +54,6 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
-  # omniauth test
-  # config.middleware.insert_after ActiveRecord::Migration::CheckPending, ActionDispatch::Cookies
-  # config.middleware.insert_after ActionDispatch::Cookies, ActionDispatch::Session::CookieStore
   config.session_store :cookie_store, key: '_interslice_session'
   config.middleware.use ActionDispatch::Cookies # Required for all session management
   config.middleware.use ActionDispatch::Session::CookieStore, config.session_options

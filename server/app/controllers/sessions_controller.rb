@@ -1,20 +1,33 @@
 
 
 class SessionsController < ApplicationController
+  before_action :authenticate_user!
+
   def create
-    user = User.from_omniauth(request.env["omniauth.auth"])
-    token = JWT.encode({user_id: 10}, 'HS256')
-    response.set_cookie('jwt', {value: token, httponly: true})
+    auth = request.env["omniauth.auth"]
+    @identity = Identity.search(auth)
+    if !@identity
+      @identity = Identity.create_with_auth(auth, current_user)
+    end
+
+    if !signed_in?
+      @current_user = @identity.user
+      token = Auth.encode({user_id: @identity.user_id})
+
+      response.set_cookie('XSRF-TOKEN', {
+        value: token, 
+        httponly: true, 
+        expires: 1.day.from_now
+      })
+    end
 
     render json: { role: 'user' }, status: :ok
   end
 
   def destroy
-    redirect_to root_url
-  end
-
-  def failure
-    redirect_to root_url
+    @current_user = nil
+    response.delete_cookie('XSRF-TOKEN')
+    render json: { message: 'signed out' }, status: :ok
   end
 end
 
