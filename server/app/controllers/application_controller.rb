@@ -27,6 +27,24 @@ class ApplicationController < ActionController::API
 
   protected
 
+  def signed_in?
+    return !@current_user.nil?
+  end
+
+  def authenticate_user!
+    current_user()
+  end
+
+  def current_user
+    token = request.cookies['XSRF-TOKEN']
+    if token
+      user_id =  Auth.decode(token)[:user_id]
+      @current_user = User.find(user_id.to_s)
+    else
+      @current_user = nil
+    end
+  end
+
   # An instance of EsqulinoError was thrown
   def handle_internal_exception(exception)
     Raven.capture_exception(exception)

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :identities
 
     scope 'auth' do
-      get 'login', :to => 'sessions#new', :as => :login
+      get 'sign_out', controller: 'sessions', action: :destroy
       match ":provider/callback", to: "sessions#create", via: [:get, :post]
       match 'failure', :to => 'sessions#failure', via: [:get, :post]
     end
