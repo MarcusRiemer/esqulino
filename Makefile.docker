@@ -58,7 +58,7 @@ build-dev: build-server-dev build-client-dev
 
 # Builds the base image
 build-base:
-	docker pull archimg/base-devel
+	docker pull archlinux/base
 	docker-compose -f docker-compose.base.yml build base
 
 # Builds the server image that runs Rails
@@ -97,5 +97,3 @@ push-test : push-base
 
 # Pushes all local images to the docker hub, requires privileges
 push-all: push-base push-server-dev push-client-dev push-test
-
-
