@@ -3,16 +3,24 @@ version: "2"
 services:
   test:
     image: marcusriemer/sqlino:test
+    entrypoint:
+      - export TEST_SINGLE_RUN=true
+      - groupadd -g "$USER_GID" user
+      - useradd -m -u "$USER_UID" -g "$USER_GID" user
+      - su user -c "make --no-print-directory install-deps"
+      - su user -c "make --no-print-directory -C client dist-dev"
+      - su user -c "make --no-print-directory -C server setup-database-schema test"
+      - su user -c "make --no-print-directory -C client client-test"
     build:
       dockerfile: Dockerfile.test
       context: .
+      args:
+        - USER_UID=1000
+        - USER_GID=1000
+        - TPUT_BIN=true
+        - DATABASE_HOST=db
     volumes:
       - .:/srv/esqulino
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - TPUT_BIN=true
-      - DATABASE_HOST=db
     depends_on:
       - db
   db:
