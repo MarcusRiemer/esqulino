@@ -5,9 +5,6 @@ import { Observable } from 'rxjs';
 import { first, map, tap } from 'rxjs/operators';
 
 import {
-  BlockLanguageDescription, BlockLanguageListResponseDescription
-} from '../../shared/block/block-language.description';
-import {
   BlockLanguageGeneratorListDescription
 } from '../../shared/block/generator/generator.description'
 
@@ -29,20 +26,6 @@ export class ServerDataService {
     private _http: HttpClient
   ) {
   }
-
-  // Caching individual block languages
-  private readonly individualBlockLanguages = new IndividualDescriptionCache<BlockLanguageDescription>(
-    this._http,
-    id => this._serverApi.individualBlockLanguageUrl(id)
-  );
-
-  // Backing cache for listing of all block languages
-  readonly listBlockLanguages = new CachedRequest<BlockLanguageListResponseDescription[]>(
-    this._http.get<BlockLanguageListResponseDescription[]>(this._serverApi.getBlockLanguageListUrl())
-      .pipe(
-        map(list => list.sort(fieldCompare<BlockLanguageListResponseDescription>("name")))
-      )
-  );
 
   /**
    * @return All block language generators that are known on the server.
@@ -130,37 +113,5 @@ export class ServerDataService {
         first()
       )
     return (toReturn);
-  }
-
-  /**
-   * @return The details of the specified block language.
-   */
-  getBlockLanguage(id: string): Observable<BlockLanguageDescription> {
-    return (this.individualBlockLanguages.getDescription(id));
-  }
-
-  /**
-   * Deletes the block language with the given ID.
-   */
-  deleteBlockLanguage(id: string) {
-    this._http.delete(this._serverApi.individualBlockLanguageUrl(id))
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Deleted BlockLanguage "${id}"`);
-        this.listBlockLanguages.refresh();
-      });
-  }
-
-  /**
-   * Updates the given block language
-   */
-  updateBlockLanguage(desc: BlockLanguageDescription) {
-    const url = this._serverApi.individualBlockLanguageUrl(desc.id);
-    this._http.put(url, desc)
-      .subscribe(_ => {
-        console.log(`Updated BlockLanguage "${desc.id}"`);
-        this.listBlockLanguages.refresh();
-        this.individualBlockLanguages.refreshDescription(desc.id);
-      });
   }
 }

@@ -21,12 +21,4 @@ export class AdminOverviewComponent implements OnInit {
   ngOnInit(): void {
     this._title.setTitle(`Admin - BlattWerkzeug`)
   }
-
-  public get availableBlockLanguages() {
-    return (this._serverData.listBlockLanguages);
-  }
-
-  public deleteBlockLanguage(id: string) {
-    this._serverData.deleteBlockLanguage(id);
-  }
 }
