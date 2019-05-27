@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
-import { ActivatedRoute, ParamMap } from '@angular/router'
+import { ActivatedRoute, ParamMap, Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { Title } from '@angular/platform-browser'
 
@@ -31,6 +31,7 @@ export class EditGrammarComponent implements OnInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _router: Router,
     private _http: HttpClient,
     private _serverApi: ServerApiService,
     private _grammarData: GrammarDataService,
@@ -73,8 +74,19 @@ export class EditGrammarComponent implements OnInit {
     }
   }
 
+  /**
+   * User has decided to save.
+   */
   onSave() {
-    this._grammarData.updateGrammar(this.grammar);
+    this._grammarData.updateSingle(this.grammar);
+  }
+
+  /**
+   * User has decided to delete.
+   */
+  async onDelete() {
+    await this._grammarData.deleteSingle(this.grammar.id);
+    this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 
   /**

@@ -1,6 +1,7 @@
 import { Component, ViewChild, TemplateRef, AfterViewInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { GrammarDataService } from '../../shared/serverdata'
+import { GrammarDataService, BlockLanguageDataService } from '../../shared/serverdata'
 import { ToolbarService } from '../../shared/toolbar.service'
 
 import { EditBlockLanguageService } from './edit-block-language.service'
@@ -14,7 +15,10 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
 
   constructor(
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router,
     private _grammarData: GrammarDataService,
+    private _blockLanguageData: BlockLanguageDataService,
     private _current: EditBlockLanguageService,
     private _toolbarService: ToolbarService
   ) {
@@ -71,6 +75,14 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    */
   onSave() {
     this._current.save();
+  }
+
+  /**
+   * User has decided to delete.
+   */
+  async onDelete() {
+    await this._blockLanguageData.deleteSingle(this.editedSubject.id);
+    this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 
   /**
