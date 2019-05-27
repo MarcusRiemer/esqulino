@@ -36,19 +36,4 @@ export class GrammarDataService extends DataService<GrammarListDescription, Gram
   readonly list = this.listCache.value.pipe(
     map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
   );
-
-  /**
-   * Deletes the grammar with the given ID.
-   */
-  deleteGrammar(id: string) {
-    this.deleteSingle(id);
-  }
-
-
-  /**
-   * Updates the given grammar
-   */
-  updateGrammar(desc: GrammarDescription) {
-    this.updateSingle(desc);
-  }
 }

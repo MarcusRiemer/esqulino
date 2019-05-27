@@ -2,13 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
-
-import {
-  BlockLanguageGeneratorListDescription
-} from '../../shared/block/generator/generator.description'
-
-import { fieldCompare } from '../util';
+import { first, tap } from 'rxjs/operators';
 
 import { NewsFrontpageDescription, NewsUpdateDescription } from '../news.description';
 import { NewsDescription } from '../news.description';
@@ -26,13 +20,6 @@ export class ServerDataService {
     private _http: HttpClient
   ) {
   }
-
-  /**
-   * @return All block language generators that are known on the server.
-   */
-  readonly listBlockLanguageGenerators = new CachedRequest<BlockLanguageGeneratorListDescription[]>(
-    this._http.get<BlockLanguageGeneratorListDescription[]>(this._serverApi.getBlockLanguageGeneratorListUrl())
-  );
 
   readonly getUserNewsList = new CachedRequest<NewsFrontpageDescription[]>(
     this._http.get<NewsFrontpageDescription[]>(this._serverApi.getUserNewsListUrl())

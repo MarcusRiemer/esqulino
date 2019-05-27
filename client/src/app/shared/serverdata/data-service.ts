@@ -5,11 +5,14 @@ import { Observable } from 'rxjs';
 
 import { CachedRequest, IndividualDescriptionCache } from './request-cache';
 import { first } from 'rxjs/operators';
+import { IdentifiableResourceDescription } from '../resource.description';
 
 /**
  * Basic building block to access "typically" structured data from the server.
  */
-export abstract class DataService<TList, TSingle> {
+export abstract class DataService<
+  TList extends IdentifiableResourceDescription,
+  TSingle extends IdentifiableResourceDescription> {
   public constructor(
     protected _http: HttpClient,
     private _snackBar: MatSnackBar,
@@ -64,14 +67,21 @@ export abstract class DataService<TList, TSingle> {
    * Updates an individual resource on the server. Uses the same
    * URL as the individual data access, but with HTTP PUT.
    */
-  updateSingle(desc: any) {
-    this._http.put(this.resolveIndividualUrl(desc.id), desc)
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Updated ${this._speakingName} with  "${desc.id}"`);
-        this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
-        this.listCache.refresh();
-      });
+  updateSingle(desc: TSingle): Promise<TSingle> {
+    const toReturn = new Promise<TSingle>((resolve, reject) => {
+      this._http.put<TSingle>(this.resolveIndividualUrl(desc.id), desc)
+        .pipe(first())
+        .subscribe(updatedDesc => {
+          console.log(`Updated ${this._speakingName} with  "${desc.id}"`);
+          this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
+          this.listCache.refresh();
+          resolve(updatedDesc);
+        }, err => {
+          reject(err);
+        });
+    });
+
+    return (toReturn);
   }
 
   /**
@@ -80,13 +90,22 @@ export abstract class DataService<TList, TSingle> {
    *
    * @param id The ID of the resouce.
    */
-  deleteSingle(id: string) {
-    this._http.delete(this.resolveIndividualUrl(id))
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Deleted ${this._speakingName} with  "${id}"`);
-        this._snackBar.open(`Deleted ${this._speakingName} with ID "${id}"`, "", { duration: 3000 });
-        this.listCache.refresh();
-      });
+  deleteSingle(id: string): Promise<void> {
+    const toReturn = new Promise<void>((resolve, reject) => {
+
+      this._http.delete(this.resolveIndividualUrl(id))
+        .pipe(first())
+        .subscribe(_ => {
+          console.log(`Deleted ${this._speakingName} with  "${id}"`);
+          this._snackBar.open(`Deleted ${this._speakingName} with ID "${id}"`, "", { duration: 3000 });
+          this.listCache.refresh();
+
+          resolve();
+        }, err => {
+          reject(err);
+        });
+    });
+
+    return (toReturn);
   }
 }

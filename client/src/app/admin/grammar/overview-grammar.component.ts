@@ -16,6 +16,6 @@ export class OverviewGrammarComponent {
   }
 
   public deleteGrammar(id: string) {
-    this._serverData.deleteGrammar(id);
+    this._serverData.deleteSingle(id);
   }
 }
