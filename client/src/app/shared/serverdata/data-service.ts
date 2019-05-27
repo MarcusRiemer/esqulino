@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
 import { CachedRequest, IndividualDescriptionCache } from './request-cache';
+import { first } from 'rxjs/operators';
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -10,7 +12,9 @@ import { CachedRequest, IndividualDescriptionCache } from './request-cache';
 export abstract class DataService<TList, TSingle> {
   public constructor(
     protected _http: HttpClient,
+    private _snackBar: MatSnackBar,
     private _listUrl: string,
+    private _speakingName: string,
   ) {
   }
 
@@ -54,5 +58,35 @@ export abstract class DataService<TList, TSingle> {
     }
 
     return (this._individualCache.getDescription(id));
+  }
+
+  /**
+   * Updates an individual resource on the server. Uses the same
+   * URL as the individual data access, but with HTTP PUT.
+   */
+  updateSingle(desc: any) {
+    this._http.put(this.resolveIndividualUrl(desc.id), desc)
+      .pipe(first())
+      .subscribe(_ => {
+        console.log(`Updated ${this._speakingName} with  "${desc.id}"`);
+        this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
+        this.listCache.refresh();
+      });
+  }
+
+  /**
+   * Deletes a individual server on the server. Uses the same
+   * URL as the individual data access, but with HTTP DELETE.
+   *
+   * @param id The ID of the resouce.
+   */
+  deleteSingle(id: string) {
+    this._http.delete(this.resolveIndividualUrl(id))
+      .pipe(first())
+      .subscribe(_ => {
+        console.log(`Deleted ${this._speakingName} with  "${id}"`);
+        this._snackBar.open(`Deleted ${this._speakingName} with ID "${id}"`, "", { duration: 3000 });
+        this.listCache.refresh();
+      });
   }
 }

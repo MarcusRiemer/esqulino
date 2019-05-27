@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 
 import { BlockLanguageListDescription, BlockLanguageDescription } from '../block/block-language.description';
 
 import { ServerApiService } from './serverapi.service';
 import { DataService } from './data-service';
-import { first } from 'rxjs/operators';
 
 /**
  * Convenient and cached access to server side grammar descriptions.
@@ -15,9 +15,10 @@ export class BlockLanguageDataService extends DataService<BlockLanguageListDescr
 
   public constructor(
     private _serverApi: ServerApiService,
+    snackBar: MatSnackBar,
     http: HttpClient
   ) {
-    super(http, _serverApi.getGrammarListUrl());
+    super(http, snackBar, _serverApi.getGrammarListUrl(), "BlockLanguage");
   }
 
   protected resolveIndividualUrl(id: string): string {
@@ -28,24 +29,13 @@ export class BlockLanguageDataService extends DataService<BlockLanguageListDescr
    * Deletes the block language with the given ID.
    */
   deleteBlockLanguage(id: string) {
-    this._http.delete(this._serverApi.individualBlockLanguageUrl(id))
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Deleted BlockLanguage "${id}"`);
-        this.listCache.refresh();
-      });
+    this.deleteSingle(id);
   }
 
   /**
    * Updates the given block language
    */
   updateBlockLanguage(desc: BlockLanguageDescription) {
-    const url = this._serverApi.individualBlockLanguageUrl(desc.id);
-    this._http.put(url, desc)
-      .subscribe(_ => {
-        console.log(`Updated BlockLanguage "${desc.id}"`);
-        this.listCache.refresh();
-        this._individualCache.refreshDescription(desc.id);
-      });
+    this.updateSingle(desc);
   }
 }
