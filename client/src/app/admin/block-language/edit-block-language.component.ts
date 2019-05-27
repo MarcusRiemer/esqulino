@@ -1,6 +1,6 @@
 import { Component, ViewChild, TemplateRef, AfterViewInit } from '@angular/core'
 
-import { ServerDataService } from '../../shared'
+import { GrammarDataService } from '../../shared/serverdata'
 import { ToolbarService } from '../../shared/toolbar.service'
 
 import { EditBlockLanguageService } from './edit-block-language.service'
@@ -14,7 +14,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
 
   constructor(
-    private _serverData: ServerDataService,
+    private _grammarData: GrammarDataService,
     private _current: EditBlockLanguageService,
     private _toolbarService: ToolbarService
   ) {
@@ -23,7 +23,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   /**
    * All grammars that may be selected for the edited block language.
    */
-  readonly availableGrammars = this._serverData.listGrammars.value;
+  readonly availableGrammars = this._grammarData.list;
 
   /**
    * A readable version of the grammar that is beeing edited.

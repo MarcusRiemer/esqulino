@@ -10,9 +10,6 @@ import {
 import {
   BlockLanguageGeneratorListDescription
 } from '../../shared/block/generator/generator.description'
-import {
-  GrammarDescription, GrammarListDescription
-} from '../../shared/syntaxtree/grammar.description';
 
 import { fieldCompare } from '../util';
 
@@ -33,12 +30,6 @@ export class ServerDataService {
   ) {
   }
 
-  // Caching individual grammars
-  private readonly individualGrammars = new IndividualDescriptionCache<GrammarDescription>(
-    this._http,
-    id => this._serverApi.individualGrammarUrl(id)
-  );
-
   // Caching individual block languages
   private readonly individualBlockLanguages = new IndividualDescriptionCache<BlockLanguageDescription>(
     this._http,
@@ -58,16 +49,6 @@ export class ServerDataService {
    */
   readonly listBlockLanguageGenerators = new CachedRequest<BlockLanguageGeneratorListDescription[]>(
     this._http.get<BlockLanguageGeneratorListDescription[]>(this._serverApi.getBlockLanguageGeneratorListUrl())
-  );
-
-  /**
-   * @return All grammars that are known on the server
-   */
-  readonly listGrammars = new CachedRequest<GrammarListDescription[]>(
-    this._http.get<GrammarListDescription[]>(this._serverApi.getGrammarListUrl())
-      .pipe(
-        map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
-      )
   );
 
   readonly getUserNewsList = new CachedRequest<NewsFrontpageDescription[]>(
@@ -152,7 +133,7 @@ export class ServerDataService {
   }
 
   /**
-   * @return The details of the specified grammar.
+   * @return The details of the specified block language.
    */
   getBlockLanguage(id: string): Observable<BlockLanguageDescription> {
     return (this.individualBlockLanguages.getDescription(id));
@@ -181,43 +162,5 @@ export class ServerDataService {
         this.listBlockLanguages.refresh();
         this.individualBlockLanguages.refreshDescription(desc.id);
       });
-  }
-
-  /**
-   * Updates the given grammar
-   */
-  updateGrammar(desc: GrammarDescription) {
-    const url = this._serverApi.individualGrammarUrl(desc.id);
-    this._http.put(url, desc)
-      .subscribe(_ => {
-        console.log(`Updated Grammar "${desc.id}"`);
-        this.listGrammars.refresh();
-        this.individualGrammars.refreshDescription(desc.id);
-      });
-  }
-
-  /**
-   * Deletes the grammar with the given ID.
-   */
-  deleteGrammar(id: string) {
-    this._http.delete(this._serverApi.individualGrammarUrl(id))
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Deleted Grammar "${id}"`);
-        this.listGrammars.refresh();
-      });
-  }
-
-  /**
-   * @return The details of the specified grammar.
-   *
-   * @param id The id of the searched grammar
-   * @param refresh True, if the cache must be updated
-   */
-  getGrammarDescription(id: string, refresh = false): Observable<GrammarDescription> {
-    if (refresh) {
-      this.individualGrammars.refreshDescription(id);
-    }
-    return (this.individualGrammars.getDescription(id));
   }
 }

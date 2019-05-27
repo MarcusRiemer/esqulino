@@ -26,15 +26,7 @@ export class AdminOverviewComponent implements OnInit {
     return (this._serverData.listBlockLanguages);
   }
 
-  public get availableGrammars() {
-    return (this._serverData.listGrammars);
-  }
-
   public deleteBlockLanguage(id: string) {
     this._serverData.deleteBlockLanguage(id);
-  }
-
-  public deleteGrammar(id: string) {
-    this._serverData.deleteGrammar(id);
   }
 }
