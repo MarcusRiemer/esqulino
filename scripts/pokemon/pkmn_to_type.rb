@@ -17,6 +17,7 @@ puts '### -- Writing into CSV: ' + csv_file
 #For every row in result
 CSV.open(csv_file, "w") do |csv|
   result.each_with_index do |row , i|
+    # Pokemon with an ID starting from 10000 are from newer editions that have different result structures
     if URI(row['url']).path.split('/').last.to_i < 10000 then
       tmp = JSON.parse(Nokogiri::HTML(open(row['url'])))
       tmp['types'].each do |m|
