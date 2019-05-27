@@ -4,6 +4,13 @@
     <span class="fa fa-floppy-o" aria-hidden="t"></span>
     Speichern
   </button>
+
+  <button (click)="onDelete()"
+          mat-button
+          class="btn btn-outline-danger btn-sm">
+    <span class="fa fa-trash-o" aria-hidden="true"></span>
+    Löschen
+  </button>
 </ng-template>
 
 <form *ngIf="grammar">

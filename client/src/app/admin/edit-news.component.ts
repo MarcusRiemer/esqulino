@@ -112,7 +112,7 @@ export class AdminNewsEditComponent implements OnInit {
         if (option == "redirect")
           this._router.navigate(['admin/news'])
 
-        this._snackBar.open('Updated succesful', '', { duration: 3000 });
+        this._snackBar.open('Update succesful', '', { duration: 3000 });
       },
       err => alert(`Error: ${JSON.stringify(err)}`)
     );

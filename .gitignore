@@ -2,4 +2,5 @@
 seed-test
 **/.directory
 **/.vagrant
+**/.envrc
 **/~$*x
