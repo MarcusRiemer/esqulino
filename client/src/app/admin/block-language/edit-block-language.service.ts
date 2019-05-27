@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser'
 import { BehaviorSubject } from 'rxjs'
 import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
 
-import { ServerDataService } from '../../shared'
+import { GrammarDataService, BlockLanguageDataService } from '../../shared/serverdata'
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
@@ -25,7 +25,8 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _serverData: ServerDataService,
+    private _serverData: BlockLanguageDataService,
+    private _grammarData: GrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _title: Title,
   ) {
@@ -33,7 +34,7 @@ export class EditBlockLanguageService {
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get('blockLanguageId')),
-        switchMap((id: string) => this._serverData.getBlockLanguage(id).pipe(first())),
+        switchMap((id: string) => this._serverData.getSingle(id).pipe(first())),
       ).subscribe(blockLanguage => {
         this._editedSubject.next(blockLanguage);
       });
@@ -51,7 +52,7 @@ export class EditBlockLanguageService {
    * The grammar that is the basis for this block language.
    */
   readonly baseGrammar = this._editedSubject.pipe(
-    flatMap(blockLang => this._serverData.getGrammarDescription(blockLang.grammarId))
+    flatMap(blockLang => this._grammarData.getSingle(blockLang.grammarId))
   )
 
   /**
@@ -102,8 +103,8 @@ export class EditBlockLanguageService {
     // And do something meaningful if they are
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
-      this._serverData
-        .getGrammarDescription(this.editedSubject.grammarId, true)
+      this._grammarData
+        .getSingle(this.editedSubject.grammarId, true)
         .pipe(first())
         .subscribe(g => {
           this.generatorErrors.push(...validateGenerator(instructions));
