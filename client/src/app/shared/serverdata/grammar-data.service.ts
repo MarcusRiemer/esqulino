@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 
 import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
 import { fieldCompare } from '../util';
@@ -7,7 +8,7 @@ import { fieldCompare } from '../util';
 import { ServerApiService } from './serverapi.service';
 import { DataService } from './data-service';
 
-import { map, first } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 /**
  * Convenient and cached access to server side grammar descriptions.
@@ -17,9 +18,10 @@ export class GrammarDataService extends DataService<GrammarListDescription, Gram
 
   public constructor(
     private _serverApi: ServerApiService,
+    snackBar: MatSnackBar,
     http: HttpClient
   ) {
-    super(http, _serverApi.getGrammarListUrl());
+    super(http, snackBar, _serverApi.getGrammarListUrl(), "Grammar");
   }
 
   protected resolveIndividualUrl(id: string): string {
@@ -39,12 +41,7 @@ export class GrammarDataService extends DataService<GrammarListDescription, Gram
    * Deletes the grammar with the given ID.
    */
   deleteGrammar(id: string) {
-    this._http.delete(this._serverApi.individualGrammarUrl(id))
-      .pipe(first())
-      .subscribe(_ => {
-        console.log(`Deleted Grammar "${id}"`);
-        this.listCache.refresh();
-      });
+    this.deleteSingle(id);
   }
 
 
@@ -52,12 +49,6 @@ export class GrammarDataService extends DataService<GrammarListDescription, Gram
    * Updates the given grammar
    */
   updateGrammar(desc: GrammarDescription) {
-    const url = this._serverApi.individualGrammarUrl(desc.id);
-    this._http.put(url, desc)
-      .subscribe(_ => {
-        console.log(`Updated Grammar "${desc.id}"`);
-        this.listCache.refresh();
-        this._individualCache.refreshDescription(desc.id);
-      });
+    this.updateSingle(desc);
   }
 }
