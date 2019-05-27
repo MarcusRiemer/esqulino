@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser'
 import { switchMap, map, first } from 'rxjs/operators'
 
 import { ToolbarService } from '../shared/toolbar.service'
-import { ServerDataService, CachedRequest } from '../shared'
+import { CachedRequest, GrammarDataService } from '../shared/serverdata'
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
 import { GrammarDescription } from '../shared/syntaxtree'
@@ -33,7 +33,7 @@ export class EditGrammarComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _http: HttpClient,
     private _serverApi: ServerApiService,
-    private _serverData: ServerDataService,
+    private _grammarData: GrammarDataService,
     private _title: Title,
     private _toolbarService: ToolbarService
   ) {
@@ -44,7 +44,7 @@ export class EditGrammarComponent implements OnInit {
     // the server data changes.
     this._activatedRoute.paramMap.pipe(
       map((params: ParamMap) => params.get('grammarId')),
-      switchMap((id: string) => this._serverData.getGrammarDescription(id).pipe(first())),
+      switchMap((id: string) => this._grammarData.getSingle(id).pipe(first())),
     ).subscribe(g => {
       this.grammar = g;
       this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`)
@@ -74,7 +74,7 @@ export class EditGrammarComponent implements OnInit {
   }
 
   onSave() {
-    this._serverData.updateGrammar(this.grammar);
+    this._grammarData.updateGrammar(this.grammar);
   }
 
   /**

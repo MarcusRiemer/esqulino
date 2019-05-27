@@ -1,33 +1,4 @@
 <h2>
-  <span *ngIf="(availableGrammars.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
-  Grammatiken
-</h2>
-<table class="table table-sm">
-  <tr>
-    <th>Name</th>
-    <th>Technischer Name</th>
-    <th>Slug</th>
-    <th>ID</th>
-    <th>Aktionen</th>
-  </tr>
-  <tr *ngFor="let grammar of availableGrammars.value | async">
-    <td>
-      <a [routerLink]="['grammar', grammar.id]">{{ grammar.name }}</a>
-    </td>
-    <td><code>{{ grammar.technicalName }}</code></td>
-    <td><code>{{ grammar.slug | defaultValue }}</code></td>
-    <td><code>{{ grammar.id }}</code></td>
-    <td>
-      <button (click)="deleteGrammar(grammar.id)"
-              type="button"
-              class="btn btn-outline-danger btn-sm">
-        <span class="fa fa-trash-o" aria-hidden="true"></span>
-      </button>
-    </td>
-  </tr>
-</table>
-
-<h2>
   <span *ngIf="(availableBlockLanguages.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
   Blocksprachen
 </h2>
