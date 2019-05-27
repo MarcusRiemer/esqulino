@@ -34,7 +34,9 @@ import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
 import { FocusDirective } from './focus-element.directive';
 
-import { GrammarDataService } from './serverdata'
+import { GrammarDataService, BlockLanguageDataService } from './serverdata'
+
+const dataServices = [GrammarDataService, BlockLanguageDataService];
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -107,11 +109,11 @@ export class SharedAppModule {
         FlashService,
         ServerApiService,
         ServerDataService,
-        GrammarDataService,
         ProjectDescriptionService,
         VideoService,
         LanguageService,
         ToolbarService,
+        ...dataServices
       ]
     });
   }

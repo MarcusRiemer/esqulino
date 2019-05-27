@@ -5,8 +5,7 @@ import { Title } from '@angular/platform-browser'
 import { BehaviorSubject } from 'rxjs'
 import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
 
-
-import { ServerDataService, GrammarDataService } from '../../shared/serverdata'
+import { GrammarDataService, BlockLanguageDataService } from '../../shared/serverdata'
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
@@ -25,7 +24,7 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _serverData: ServerDataService,
+    private _serverData: BlockLanguageDataService,
     private _grammarData: GrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _title: Title,
@@ -34,7 +33,7 @@ export class EditBlockLanguageService {
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get('blockLanguageId')),
-        switchMap((id: string) => this._serverData.getBlockLanguage(id).pipe(first())),
+        switchMap((id: string) => this._serverData.getSingle(id).pipe(first())),
       ).subscribe(blockLanguage => {
         this._editedSubject.next(blockLanguage);
       });

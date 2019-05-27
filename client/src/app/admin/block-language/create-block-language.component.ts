@@ -8,7 +8,7 @@ import { BlockLanguageDescription } from '../../shared/block/block-language.desc
 import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../../shared/block/generator/generator'
 
-import { ServerApiService, ServerDataService, GrammarDataService } from '../../shared/serverdata';
+import { ServerApiService, BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
 
 /**
  * A comprehensive way to create new block languages
@@ -35,7 +35,7 @@ export class CreateBlockLanguageComponent {
   useSlug = false;
 
   constructor(
-    private _serverData: ServerDataService,
+    private _serverData: BlockLanguageDataService,
     private _grammarData: GrammarDataService,
     private _serverApi: ServerApiService,
     private _http: HttpClient,
@@ -75,7 +75,7 @@ export class CreateBlockLanguageComponent {
         this._http
           .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
           .subscribe(res => {
-            this._serverData.listBlockLanguages.refresh();
+            this._serverData.listCache.refresh();
             this._router.navigateByUrl(`/admin/block-language/${res.id}`);
           }, err => {
             console.log(err);
