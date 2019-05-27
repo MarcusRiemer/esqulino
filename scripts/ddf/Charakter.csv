@@ -2,9 +2,1465 @@
 2,Justus Jonas
 3,Peter Shaw
 4,Bob Andrews
-5,Constance
-6,Slater
-7,Donner
-8,Kommissar Reynolds
-9,Fischer
-10,Ocean-World-Mitarbeiter
+5,Mr. Fentriss
+6,Mr. Claudius
+7,Mrs. Claudius
+8,Miss Waggoner
+9,Carlos
+10,Onkel Ramos
+11,Hugenay
+12,Morton
+13,Mathilda Jonas
+14,Patrick Kenneth
+15,Java-Jim
+16,Mrs. Flora Gunn
+17,Cluny Gunn
+18,Rory
+19,Stebins
+20,Mr. Widner
+21,Verwalter von Powder Gulch
+22,Bibliothekarin
+23,Mr. Prentice
+24,Niedland
+25,Pfarrer
+26,Mrs. Boogle
+27,Sonny Elmquist
+28,Mr. Murphy
+29,Miss Chalmers
+30,Mr. Hassel
+31,Polizist
+32,Andy Carson
+33,Mr. Carson
+34,Khan
+35,Einzigartiger Gabbo
+36,Iwan
+37,Junge
+38,Hauptkommissar Reynolds
+39,Der alte Mann
+40,Wachmann
+41,Jungen
+42,Jahrmarktfrau
+43,Funksprecher
+44,August August
+45,Mr. Dwiggins
+46,Mr. Rhandur
+47,Joe
+48,Lisa
+49,Mutter
+50,Bauarbeiter
+51,Gulliver
+52,Mr. Maximillian
+53,Mrs. Miller
+54,Mr. Grant
+55,Auktionator
+56,Fred Brown
+57,Hauswirt
+58,Mann
+59,H. H. Allen
+60,Mr. Shelby
+61,Mr. Carter
+62,Jack Morgan
+63,Harry Morgan
+64,Telephonistin
+65,Chang
+66,Miss Lydia Green
+67,Harold Carlson
+68,Jensen
+69,Won
+70,Wongs Diener
+71,Li
+72,Männer bei Greens Haus
+73,Titus Jonas
+74,Professor Carswell
+75,Hal Carswell
+76,Gräfin
+77,Armand Marechal
+78,De Groot
+79,Skinny Norris
+80,Maxwell James
+81,Patrick
+82,Professor Yarborough
+83,Wilkins
+84,Professor Freeman
+85,Achmed
+86,Hamid
+87,Harry
+88,Uhrenmacher
+89,Stephen Terrill
+90,Felix
+91,Mrs. Smith
+92,Mrs. King
+93,Julie Taylor
+94,Martha Harris
+95,Gerald Cramer
+96,Gerald Watson
+97,Mr Jankins
+98,Mr. Harris
+99,Miss Sanchez
+100,Ted Sanchez
+101,Sanders
+102,Natches
+103,Prof. Meeker
+104,Mr. Smathers
+105,Mr. Jensen
+106,Kenneth
+107,Kathleen
+108,Mr. Joe Hammond
+109,Mrs. Hammond
+110,Richardsen
+111,Lieferant
+112,Miß Larson
+113,Jim Hall
+114,Mike Hall
+115,Eastland
+116,Olsen
+117,Hank Murphy
+118,Doc Dawson
+119,Dobbsie
+120,Mrs. Darnley
+121,Jeff Darnley
+122,Jenny Darnley
+123,Senior Santora
+124,Gomez
+125,Brotverkäufer
+126,Nelly Towne
+127,Billy Towne
+128,Ordner
+129,Lopez
+130,Dillon
+131,Roger Callow
+132,Kellnerin
+133,Sam
+134,Chris Markos
+135,Kommissar Nostigon
+136,Mr. Shaw
+137,Denton
+138,Farraday
+139,Jeff
+140,Bill Ballinger
+141,Jim Ballinger
+142,Mr. Norris
+143,Mrs. Barton
+144,Dalton
+145,Mrs. Dalton
+146,Hardin
+147,Prof. Walsh
+148,Ben Jackson
+149,Wreston
+150,Cardigo
+151,Waldo Turner
+152,Taucher
+153,Mihai Eftimin
+154,Dr. Radulescu
+155,Potter
+156,Mrs. Dobson
+157,Tom Dobson
+158,Farrier
+159,Christina Dalton
+160,Frankie Bender
+161,H. P. Clay
+162,Jim Clay
+163,Walter Quail
+164,Trödler Hummer
+165,Jason Wilkes
+166,Chiang
+167,Diakon Kastner
+168,Butler
+169,Mrs. Shaw
+170,Rawley
+171,Mr. Frank
+172,Mr. Togati
+173,Taro
+174,Miss Agawam
+175,Jordan
+176,Chuck
+177,Liliputaner
+178,Wachmann im Museum
+179,Hafenpolizist
+180,Cody
+181,Diego Alvaro
+182,Pico Alvaro
+183,Assistent
+184,Sheriff
+185,Tulsa
+186,Cap
+187,Pike
+188,Mr Shaw
+189,Bengt
+190,Britta
+191,Lars Holmqvist
+192,Young
+193,Forsborg
+194,Frau
+195,Köhler
+196,Wärter
+197,Kellner
+198,Allie Jamison
+199,Asmodi
+200,Dr. Shaitan
+201,Noxworth
+202,Prof. Barrister
+203,Marie
+204,"der ""Clochard"""
+205,Patricia Osborne
+206,Margaret Compton
+207,Mann am Grundstück
+208,Harrison Osborne
+209,Thurgood
+210,Mrs. Macomber
+211,Atkinson
+212,Manny
+213,Gasper
+214,Horace Tremayne
+215,William Tremayne
+216,Marvin Gray
+217,Madeline Bainbridge
+218,Mr. Thomas
+219,Jefferson
+220,Clara Adams
+221,Grean
+222,Schrottplatzwart
+223,Kommissar Reynolds
+224,Reporter
+225,Fred
+226,Walt
+227,Gordon Mackenzie
+228,Adam Ndula
+229,Jan Carew
+230,Polizist im Suchtrupp
+231,Mr. Andrews
+232,Crowe
+233,Käptn Jason
+234,MacGruder
+235,Hanley
+236,Torao
+237,Berg
+238,Yamura
+239,Die Gebrüder Connors
+240,Weston
+241,Shelby Tuckerman
+242,Mr. Hitfield
+243,Mr. Bonestell
+244,Mrs. Denicola
+245,Eileen
+246,Ernie
+247,Hoang Van Dong
+248,Frau an der Bushaltestelle
+249,Nachrichtensprecher
+250,Dr. Woolley
+251,Larry Conklin
+252,Letitia Radford
+253,Mrs. Chumley
+254,Mrs. Burroughs
+255,Mr. Burroughs
+256,Gary Malz
+257,Mr. Agnier
+258,Mr. Barron
+259,Mrs. Barron
+260,Hank Detweiler
+261,Elsie Spratt
+262,Leutnant Ferrante
+263,Bones
+264,vermeintlicher US-Präsident
+265,Omeganer
+266,Simon deLuca
+267,""
+268,Kapitän Joy
+269,Jeremy Joy
+270,Joshua Evans
+271,Major Karnes
+272,Sam Davis
+273,Hubert
+274,Carl
+275,Eleonor
+276,Birkensteen
+277,Terreano
+278,Brandon
+279,Hoffer
+280,McGee
+281,Thalia
+282,Stefano
+283,John
+284,Tankwart
+285,LKW-Fahrer
+286,Mann am Bahnhof
+287,Bürgermeister
+288,Constance
+289,Slater
+290,Donner
+291,Fischer
+292,Ocean-World-Mitarbeiter
+293,Regina
+294,Teddy
+295,Mrs. Peabody
+296,Burton
+297,Kommissar
+298,Mooch
+299,Mr. Conine
+300,Fergus
+301,Mr. Peck
+302,Ed Snabel
+303,Bartlett
+304,FBI-Agent Anderson
+305,Passantin
+306,Blinky
+307,Miss Melody
+308,Frisbee
+309,Mr. Jacobs
+310,Paul Jacobs
+311,Mr. Temple
+312,Sarah Temple
+313,Willard Temple
+314,Polizeileutnant
+315,Hauptkomm. Reynolds
+316,Margon
+317,William Margon
+318,Passanten
+319,Brewster
+320,Clifford
+321,Zindler
+322,Pamir
+323,Martin
+324,Botin
+325,Michael Cross
+326,Mrs. Cross
+327,Mr. Cross
+328,Grady Markels
+329,Brackmann
+330,Margie
+331,Sawyer
+332,Museumsbesucherin
+333,Gärtner
+334,Mr. Rossing
+335,Rossings Assistentin
+336,Lucille
+337,Charles
+338,McLain
+339,Verleiher
+340,Sears
+341,Evans
+342,Pelzhändler
+343,[Kom. Reynolds]
+344,Lucilles Mutter
+345,Sekretärin
+346,Mädchen
+347,Junge 1
+348,Junge 2
+349,Milton
+350,Bonehead
+351,Peggy
+352,Footsie
+353,Bloodhound
+354,Lomax
+355,Gordon Harker
+356,Ingmar Ragnarson
+357,Karl Ragnarson
+358,Sam Ragnarson
+359,Mr. Manning
+360,Mrs. Manning
+361,Mrs. Andrews
+362,Harry Burnside
+363,Millionär Pilcher
+364,Marilyn Pilcher
+365,Sekretär Sanchez
+366,Harald Durham
+367,Frau Durham
+368,Jim Westerbrook
+369,Mrs. Westerbrook
+370,Dr. Gonzaga
+371,Ramon Navarro
+372,Kelly
+373,Julia Crown
+374,Big Barney Crown
+375,Schwester Lazar
+376,Don Dellasandro
+377,Pandro Mischkin
+378,Kranführer Dick
+379,Herr Andrews
+380,Daniel
+381,Mary
+382,Häuptling Turner
+383,Schamane
+384,Unternehmer Nancarrow
+385,Ganove Biff
+386,Ganove George
+387,Axel Griswold
+388,Purvis
+389,Dan DeMento
+390,Leo Rottweiler
+391,Steve Trash
+392,Rainey Fields
+393,Jon Travis
+394,Marty Morningbaum
+395,Diller Rourke
+396,Marble Ackbourne-Smith
+397,Margo
+398,Kevin
+399,Mercedes
+400,Brit
+401,Dusty Rice
+402,Ascension
+403,Brick
+404,Thanom
+405,Prem
+406,Sax
+407,Celeste
+408,Lara
+409,Rivers
+410,Hansen
+411,Maxi
+412,Quill
+413,Tony
+414,Ty Cassey
+415,Inspektor Cole
+416,Kommissar Maxim
+417,Gilbar
+418,Torres
+419,Jake Hatch
+420,Tiburon
+421,Buzz Newman
+422,George Brandon
+423,Jim Bernardie
+424,Firestone
+425,Crocker
+426,Lovell Madeira
+427,Vic Hammell
+428,Dan
+429,Trainer Tong
+430,Trainer Duggan
+431,Präsident Harper
+432,Jerri
+433,Nora
+434,Cory
+435,Norman
+436,Powers
+437,Liz
+438,Harold
+439,Dose
+440,Silas Ek
+441,Sekretär
+442,Jan
+443,Lys
+444,Branson Barr
+445,Norton Rome
+446,Feuerwehrmann
+447,Winkler
+448,Pipo
+449,Cotta
+450,Alma
+451,Schwester
+452,[Shirley Kubinski]
+453,William Ashley
+454,Burt Ashley
+455,Pecker
+456,Axel
+457,Mrs. Bloomingdale
+458,Stella
+459,Ruth
+460,Jean Baxter
+461,Van Well
+462,Sinagua
+463,Chosmo
+464,Monsieur Jaubert
+465,René Hancock
+466,Joan Brown
+467,Hendrik Walton
+468,Glenn Miles
+469,Benny
+470,Tom Descanso
+471,Field
+472,Hutchins
+473,Dr. Landman
+474,Stan
+475,Eleonore Sharp
+476,Milton Mitchell
+477,Fred Hall
+478,Anne
+479,Portland
+480,Inspektor Cotta
+481,Charlie
+482,Kundin
+483,Adams
+484,Amanda Black
+485,Mrs. Silverstone
+486,Mr. Garfield
+487,Mr. Hartford
+488,Mrs. Hartford
+489,Mrs. Green
+490,Henry
+491,Linda
+492,Jimboy-Jonas
+493,Mr. Bow
+494,Eric Randolph
+495,Elizabeth
+496,Tamara Mostowsky
+497,Inspektor Capistrano
+498,Sergeant Hawthrone
+499,Simon Oames
+500,Silvie Oames
+501,Michael Julius Oames
+502,Mandy Taylor
+503,Deborah Street
+504,Greenwater
+505,Alex Burlington
+506,Richard Applebloome
+507,Robert Applebloome
+508,John Smith
+509,Jenkins
+510,Thomas
+511,Andrew
+512,Mrs. Rodriguez
+513,Hoteldirektor
+514,Blondine
+515,Alberto Bergamelli
+516,Alexandra
+517,Ignazio
+518,Sofia
+519,Franca
+520,Italienerin
+521,1. Italiener
+522,2. Italiener
+523,Babette Eberle
+524,Bruder Benedikt
+525,Mylná
+526,Wirt
+527,Wirtin
+528,Max
+529,1. Polizist
+530,2. Polizist
+531,Jerzy
+532,Mariana
+533,1. Mann
+534,2. Mann
+535,Erna Fiedler
+536,Dr. Ferguson
+537,John Brady
+538,Matt Brady
+539,Godween
+540,Alan
+541,Sally Samson
+542,Sofie Samson
+543,Dr. Harris
+544,John Davis
+545,Homer Washington
+546,Fahrer
+547,Brenda
+548,Mrs. Lu Kwan
+549,Dimitrios
+550,Dan Jordan
+551,Olivia
+552,Santoria
+553,Portier
+554,Sergeant
+555,Irma
+556,Laura McLaughin
+557,Malcolm King
+558,Lansana King
+559,Hester Dalton
+560,Billie
+561,2. Wächter
+562,Mrs. Madigan
+563,Eathon Easton
+564,Mrs. Lydia Cartier
+565,Sigourney
+566,Inspektor Kershaw
+567,Museumswärterin
+568,Mr. Whitehead
+569,Steven Robinshaw
+570,Jeffrey
+571,Dr. Wright
+572,Carrie Hanson
+573,Tim Conrad
+574,Detective Gregston
+575,Nora Sethons
+576,Mrs. Aston
+577,Mr. Krieger
+578,Lisa Manninger
+579,Abigail Holligan
+580,Metzla Holligan
+581,Clarissa Franklin
+582,Dr. Miller
+583,Mrs. Petersen
+584,Sekretariat
+585,Mr. Brian
+586,Mrs. Dream
+587,Jack Cliffwater
+588,Erzähler
+589,Karen Sulzenberger
+590,Nicola
+591,McMannoman
+592,Mrs. Seven
+593,Trainer
+594,Roger
+595,Uli
+596,Albert Hitfield
+597,J.J.
+598,Julius Jonas
+599,Catherine Jonas
+600,Arturo
+601,Autovermieter
+602,Al Parker
+603,William Needle
+604,Stevens
+605,Bart
+606,Luke
+607,Frank
+608,Joan
+609,Hank
+610,Billy
+611,Angestellter
+612,Cosma
+613,Vladimir Contreras
+614,Roger Carpenter
+615,Kelly Madigan
+616,DaElba
+617,Alberto
+618,Mr. Toll
+619,Franke
+620,Mr. Burt
+621,Boris
+622,Papagei
+623,Milva Summer
+624,Professor Steed
+625,Daniel Art
+626,Mike Hanson
+627,Professor Clark
+628,Carol Ford
+629,Dr. Helprin
+630,Mr. Evans
+631,Enrique Serra
+632,Jelena
+633,Mr. Charkov
+634,Vanderhell
+635,Walker
+636,Monica
+637,Lady MacWeiden
+638,Mac George
+639,Chris
+640,Campingwart
+641,Frau des Campingwarts
+642,Mr. Peacock
+643,Alpha
+644,Beth
+645,Dog
+646,Ceewee
+647,Mrs. Harding
+648,Mr. Ambler
+649,Rodder
+650,Mr. Laurent
+651,Mr. Stepelton
+652,Ray
+653,Sandy
+654,Doe Dungeon
+655,Lili Buschfort
+656,Tom Beker
+657,Märchenerzähler
+658,Königin Trulie
+659,Vinton
+660,Amme
+661,Medusa
+662,Oinki Hinki
+663,Vampir-Frau
+664,Hexe
+665,Oma
+666,Wache
+667,Computerstimme
+668,Mr. Gilbert
+669,Mrs. Grayson
+670,Mr. Perkins
+671,Mac Dunno
+672,Aaron Moore
+673,Roxanne
+674,Bruce Black
+675,Stanley Truman
+676,Mrs. Jones
+677,Mrs. Shoemaker
+678,Gregstone
+679,Butch
+680,Ramirez
+681,Radiosprecher
+682,Mr. Quin
+683,Mr. Conrad Farnham
+684,Mrs. Mathilda Jonas
+685,Deborah Snell
+686,Alois Copper
+687,Miss Lilly
+688,Frau des Bürgermeisters
+689,Stewart
+690,Pico
+691,Jelena Charkov
+692,Dr. Arroway
+693,Janet
+694,Tom Gordon
+695,Dixon
+696,Detective Frank
+697,Dave Rawling
+698,Praktikantin Lesley
+699,Mr. Smith
+700,Sheppard
+701,Janet Hazelwood
+702,Laura Stryker
+703,Mrs. White
+704,Mr. Collins
+705,Ann Sullivan
+706,Mr. Martin
+707,Mr. Caddy
+708,Lady Day
+709,Mann aus der Wüste
+710,Miller
+711,Debby
+712,Kevin Anderson
+713,Dr. Freeman
+714,Mrs. Brighton
+715,Mrs. Wheel
+716,Schwester Whitney
+717,Besucher
+718,Bote
+719,Goodween
+720,Dr. Svenson
+721,Mr. Schwarz
+722,Mr. Olin
+723,Juan
+724,Professor Phoenix
+725,Rachel Hadden
+726,Al
+727,Giorgio Cade
+728,Monique Carrera
+729,Jenny Collins
+730,Jeremy Scott
+731,Mrs. Scott
+732,Oma Scott
+733,Acer
+734,King
+735,Tricia Wilson
+736,Brittany
+737,Victor Hugenay
+738,Wilbur Graham
+739,Bruder Raphael
+740,Inspektor Berger
+741,Baldwin
+742,Dick Perry
+743,Mrs. Meg Baker
+744,Mrs. Wood
+745,Jack Sharky
+746,Betty Shutton
+747,Joanna Masterson
+748,Jack Masterson
+749,Sarah Masterson
+750,Mr Harry Falkner
+751,Harvey Ashford
+752,Marc
+753,Amy Scream
+754,Ellen
+755,Pam
+756,Jim Cowley
+757,Mandy Robin
+758,1. Sanitäter
+759,2. Sanitäter
+760,Bardame
+761,Diskothekenbesucher
+762,Lama Geshe
+763,Tai Sutsi
+764,Vinaya
+765,Mr Zhang
+766,Lesley Dimple
+767,Mrs. Wilbur
+768,Caspar Carter
+769,Enid
+770,Albert
+771,Montgomery
+772,Nick Nobel
+773,Bill
+774,Mike Pherson
+775,Clarissa
+776,Veronica
+777,Pablo
+778,Dr. Brolin
+779,Bürgermeister Hoover
+780,Mike
+781,Clark
+782,Maggie Jones
+783,Lythia Waterstone
+784,Elisabeth Waterstone
+785,John Stanley
+786,Jack Donelly
+787,Althena
+788,Corona
+789,Fahrer Ken
+790,John Fairbanks
+791,Hal Fairbanks
+792,Blackeye
+793,Donovan
+794,Pit
+795,Cowboy
+796,Creeklong
+797,Brad Fleming
+798,Emily
+799,Mrs Silverstone
+800,Dr.Wakefield
+801,Alruna
+802,Marcus Lake
+803,Bernadette O'Donnell
+804,Cecilia Jones
+805,Elouise Adams
+806,Mrs Willow
+807,Möbelpacker
+808,Escovedo
+809,Anita Caballero
+810,Regina Pearson
+811,Mr Horowitz
+812,Mr Rothman
+813,Mrs O'Rien
+814,Mr Applegate
+815,Julia Applegate
+816,Teddy Applegate
+817,Rafter
+818,Archie
+819,Godwin
+820,Wagner
+821,Beaumont
+822,Calhoon
+823,Zia
+824,Ralph
+825,Robbie
+826,Jack
+827,Dennis
+828,Gina
+829,Charly
+830,Turnbull
+831,Dizzy
+832,Caitlin Kopperschmidt
+833,Jeremy Kopperschmidt
+834,Craig Kopperschmidt
+835,George
+836,Anthony Quinn
+837,Martha
+838,Felix Kopperschmidt
+839,Ken Parker
+840,Dr. Robinson
+841,Mickey McQuire
+842,Mrs. Bancroft
+843,Trevis
+844,Zuschauer
+845,Strandgirl
+846,Shawn
+847,Jolene
+848,Leah
+849,Sue
+850,Kimberly Lloyd
+851,William Boyd
+852,Thorndike
+853,Fred Jenkins
+854,Mr Campbell
+855,Sam Reilly
+856,Carl Sheehan
+857,Collins
+858,Mr Kingsley
+859,Mrs Kingsley
+860,Devlin Reno
+861,Dr. Long
+862,Emiliano
+863,Pancho
+864,Esperanza
+865,Pedro
+866,Abelardo
+867,---
+868,Mr. O'Sullivan
+869,Butler Paul
+870,Aufsicht
+871,Jaccard (Off-Stimme)
+872,Andy Miller
+873,Sharon Lockwood
+874,Rubbish George
+875,Charles Knox
+876,Graham
+877,Julianne Wallace
+878,Mrs. Albright
+879,Mr. Myers
+880,Mr. Barker
+881,Lkw-Fahrer
+882,Moderator
+883,Ansager
+884,Nachtschatten
+885,Polizist 1
+886,Polizist 2
+887,Dr. Chandler
+888,Austin
+889,Dwain
+890,Mr. Monroe
+891,Professor Rosenberg
+892,José
+893,Steve Bright
+894,Brian Smith
+895,Wächter
+896,Mrs. Osborne
+897,Mr. Pentecost
+898,Senora Gonzales
+899,Mrs Bennett
+900,Crowle
+901,Casey Wye
+902,Oliver Taper
+903,Layla
+904,Alaa Edine
+905,Abazza
+906,Kamelhändler
+907,Kamelführer
+908,Ägypter
+909,Aisha
+910,Verkäufer
+911,Dick Vincent
+912,Taxifahrer
+913,Beverly Leung
+914,Thomas Johnson
+915,James
+916,Daniel Baker
+917,Mr. Grogan
+918,Lloyd Scanvenger
+919,Jack Lowell
+920,Alexander Nolan
+921,Jaqueline William
+922,Ian Parsley
+923,Mary Parsley
+924,Jasper Kittle
+925,Shawne Davison
+926,Officer Wood
+927,Miss Bennett
+928,Karen
+929,Becky
+930,Felicia Sparing
+931,Mrs. Amelia Sparing
+932,Mr. Sparing
+933,Professor Alkurah
+934,Erroll
+935,Mrs. Featherstone
+936,Sergeant Ludlow
+937,Banden-Chef
+938,Eddy Reardon
+939,Spanier
+940,Italiener
+941,Gauner
+942,Gehilfe
+943,Christine
+944,Mr. Bambridge
+945,Lo Wang
+946,Anthony Hearst
+947,Truckfahrer
+948,Avercromby
+949,Pilot
+950,Liolotta
+951,Sarah Livingston
+952,Elvira Zuckerman
+953,Darren Duff
+954,Paul Brooks
+955,Joe Wilcox
+956,Cassandra Wilcox
+957,Doktor Holloway
+958,Cedric Duff
+959,Winston Granville
+960,Matthew Granville
+961,Smithy
+962,Mr. Jackmore
+963,Professor Frazier
+964,Davy Swann
+965,Craig Holden
+966,Löwenritter
+967,Helena Darraz
+968,Pritchard
+969,Sid
+970,Caroline
+971,Steven
+972,Ernest
+973,Radioansagerin
+974,Harvey Griscom
+975,John Dellcourt
+976,Miss Darraz
+977,Josy McDonaghough
+978,Homer Diesel
+979,Mary Stamper
+980,Otis Stamper
+981,Jonathan Black
+982,Miles Black
+983,Klara Kowalski
+984,Silvester Proud
+985,Pfarrer Clark
+986,Jeffrey Seaman
+987,Eric
+988,Mr. Settler
+989,Patrick O'Brian
+990,William de Haas
+991,Theodor Brewster
+992,Francis Studstill
+993,Baxter Norsworthy
+994,Gordon Hoke
+995,Jared Fox
+996,Candace Duskin
+997,George Bennet
+998,Greg Harper
+999,Woodland
+1000,Reporterin
+1001,Wellford
+1002,Richie Hanson
+1003,Benni
+1004,Jacki Jin
+1005,Croupier
+1006,Arthur Sinclair
+1007,Mr. Peastone
+1008,Jeremy Witherspoon
+1009,Barnaby Witherspoon
+1010,Takasi Yukawa
+1011,Frank Hektor
+1012,Sean Doherty
+1013,Mandy
+1014,Zeno Daniels
+1015,Percy
+1016,Keko
+1017,Anthony Fender
+1018,Quentin Wadleigh
+1019,Dr. Winston Wadleigh
+1020,Dr. John Frears
+1021,Jamie
+1022,Sammy
+1023,Mrs. Pitkätossu
+1024,Jackall Madson
+1025,Tiger Madson
+1026,Vivian
+1027,Fitzwilliam Waterfield
+1028,Sanitäter
+1029,Adam Campbell
+1030,Henry Campbell
+1031,John Taylor
+1032,Edward Crockett
+1033,Mrs. Harkort
+1034,Mr. Prescott
+1035,Jack Leech
+1036,Einbrecher
+1037,ERZÄHLER
+1038,Ursula Burns
+1039,Emerald Pendragon
+1040,Carl Parsley
+1041,Sunshine
+1042,Cynthia McGowan
+1043,Mina Parker
+1044,Brandon Fraser
+1045,Beatrix Fraser
+1046,Roxy
+1047,Josh
+1048,Paul
+1049,Frank Mason
+1050,Miles Dempster
+1051,Mr. Sapchevsky
+1052,Gerry
+1053,Ismael
+1054,Carla Fenton
+1055,Mrs. Maruthers
+1056,Inspektor Havilland
+1057,Taylor
+1058,Angelica
+1059,Schwester 1
+1060,Schwester 2
+1061,Pfleger
+1062,Curtis Fisher
+1063,Amrita Chakyar
+1064,Sergeant Madhu
+1065,Mr. Raffer
+1066,Kapitän
+1067,John Fisher
+1068,Mr. Castro
+1069,Anudhara
+1070,Laurence Seinfeld
+1071,Denzel Hopkins
+1072,Goldie Hopkins
+1073,Neil Rockwell
+1074,Mrs. Summer Hopkins
+1075,Brooks
+1076,Mr. Elroy Follister
+1077,Wayne
+1078,Gefängniswärter
+1079,Greis
+1080,Beamter
+1081,Bert Young
+1082,Mrs. Johnson
+1083,Chapman
+1084,Blake
+1085,1.Mann
+1086,2.Mann
+1087,Sunny
+1088,Fernsehr-Sprecher
+1089,Blacky
+1090,Sean O'Donnell
+1091,Alexander Chilton
+1092,Mann im Stadion
+1093,Frau im Police Department
+1094,Mrs. Gardiner
+1095,Inspektor Craig
+1096,Tom Chilton
+1097,Junger Mann auf der Pier
+1098,Junge im Stadion
+1099,Live-Kommentator
+1100,Prof. Jane Heathcliff
+1101,Mr. Grey
+1102,Lester Price
+1103,Cinelly
+1104,Miss Deborah Cassidy
+1105,Mr. Burke
+1106,Miss Trimble
+1107,Mr. Weston
+1108,Nachbarin
+1109,Michael Kowalski
+1110,Zack Martin
+1111,Mary-Ann Leigh
+1112,Latona Johnson
+1113,Frank Norman
+1114,Mrs. Robinson
+1115,Angela Sciutto
+1116,Federico Sciutto
+1117,Mr. Torrance
+1118,Ryan Holbrooke
+1119,Sheriff Pickett
+1120,Stephen Baron
+1121,Zyklon
+1122,Al Dahab
+1123,Matthew
+1124,Zabriski
+1125,Riese
+1126,Hunnicutt
+1127,Sheila
+1128,Felicity
+1129,Chester
+1130,Michelle
+1131,Ronald Pounder
+1132,Maurice Blight
+1133,Betsy
+1134,Isabella
+1135,Vladas Abakulow
+1136,Moody Firthway
+1137,Jenna
+1138,3. Mann
+1139,Caroline Cotta
+1140,Sergeant Donatelli
+1141,Barbara
+1142,Professor Mathewson
+1143,Arthur
+1144,Alan Jones
+1145,Shu Liin
+1146,Stadtverwalter
+1147,Greenwalt
+1148,Brock
+1149,Deforge
+1150,Mrs. Kretchmer
+1151,Mrs. Espenson
+1152,Mrs. Wondratschek
+1153,Mrs. Field
+1154,Prof. Arnold Brewster
+1155,Miss Daggett
+1156,Hold
+1157,Hank Tornby
+1158,Mike Cobble
+1159,Martin Ishniak
+1160,Samuel Cobble
+1161,William Prescott
+1162,Jim Sesto
+1163,Fynch
+1164,Lenni
+1165,John Greyfox
+1166,Clay Carson
+1167,Walter
+1168,Freddy Hays
+1169,Randy
+1170,Jeanne
+1171,Ginette
+1172,Tara
+1173,Ranger Thornton
+1174,Mr. Louis
+1175,Busfahrer
+1176,Lindsey
+1177,Mr. Bennet
+1178,Mrs. Dearing
+1179,Conrad Nash
+1180,Mrs. Hampton
+1181,Nicky DeLores
+1182,Miss Woodrow
+1183,Judy Nigel
+1184,Direktor Grayston
+1185,Gregory Katic
+1186,Mr. Clark
+1187,Tarzan
+1188,Mr. Callister
+1189,Lionel Pengrim
+1190,Ned
+1191,Deborah Rodman
+1192,Samuel Rodman
+1193,Benjamin Rodman
+1194,Nigel Tillerman
+1195,Josh Reilly
+1196,Lexington
+1197,Journalistin
+1198,Prescott
+1199,Sergeant Morales
+1200,Mr. Arvidson
+1201,Mrs. Arvidson
+1202,Bradley
+1203,Bishop Blake
+1204,Junge Frau
+1205,Derek
+1206,Mrs. Kretschmer
+1207,Chastity
+1208,Charity
+1209,Sam Chiccarelli
+1210,Griffin Silverman
+1211,Mitch Palmer
+1212,Dimitri
+1213,Roy
+1214,Boss
+1215,Cindy
+1216,Rockford
+1217,Casino-Besucher
+1218,Casino-Besucherin
+1219,Rezeption 1
+1220,Rezeption 2
+1221,Fernfahrer
+1222,Putzfrau
+1223,Harry Salas
+1224,Vanessa Goodstein
+1225,Eliah Cristobal
+1226,Albert Goodstein
+1227,Ben Kramer
+1228,Fiona Kramer
+1229,Jimmy Blue Eye
+1230,Rosaria
+1231,Silvie
+1232,Jessy
+1233,Rikuo Yamamoto
+1234,Drago Martinez
+1235,Fred Osborne
+1236,Cecile Jezero
+1237,Deborah
+1238,Short
+1239,Anthony
+1240,Heavy Metal
+1241,Arthur Pepper
+1242,Rupert
+1243,Gwendolyn Pembroke
+1244,Lance Vaughn
+1245,'The Destroyer'
+1246,Darby Farnham
+1247,Earl Forrester
+1248,Alvin Cray
+1249,Mr. Lloyd
+1250,Guillermo
+1251,Stanley Morgan
+1252,Grace Powell
+1253,Angus
+1254,Inspektor Cottahol
+1255,Baxter
+1256,Kranführer
+1257,Jeremy Bright
+1258,Taylor-Jackson
+1259,Francine Breckenridge
+1260,A.C. Berany
+1261,Samantha
+1262,Corvy
+1263,Lemuel Garvine
+1264,Prof. Roalstad
+1265,Gamma
+1266,Barfrau
+1267,Lederhose
+1268,1.Polizist
+1269,2.Polizist
+1270,Stimme (TS)
+1271,Jason
+1272,Mrs. Roalstad
+1273,Mrs. Fernandez
+1274,Emery
+1275,Ginger
+1276,Ivy
+1277,Prof. Haynthorb
+1278,Dr. Wilcomb
+1279,Sidney
+1280,Tiffany
+1281,Salma Hutchinson
+1282,Trevor Pomery
+1283,Beatrice
+1284,Claire
+1285,Pflegerin
+1286,Roger Wolf
+1287,Dusty Kirkpatrick
+1288,Miranda Kramer
+1289,Barclay
+1290,Holly
+1291,Brian
+1292,Raven
+1293,Dr. Hardwick
+1294,Robert
+1295,Manolo
+1296,Barbara Mathewson
+1297,Zacharias Faring
+1298,Malone
+1299,Ben Crane
+1300,Timothy Jackson
+1301,Reginald
+1302,Evander Whiteside
+1303,Wendy Brown
+1304,Christopher Barclay
+1305,Edgar Bristol
+1306,Carter Godfrey
+1307,Chuck Foster
+1308,Busfahrer Sam
+1309,Officer Ossietzky
+1310,Matt
+1311,Stephen
+1312,Polizist Jerry
+1313,Michael Rompa
+1314,Afton
+1315,Chef
+1316,Ron
+1317,Ansage
+1318,Quinn
+1319,Nightingale
+1320,Mrs. Thompson
+1321,Mrs. Kato
+1322,Sullivan
+1323,Angelina
+1324,Joshua
+1325,1. Junge
+1326,2. Junge
+1327,Randy Carlisle
+1328,Mia
+1329,Mrs. Crouch
+1330,Edna Shinefield
+1331,Ronny
+1332,Loreen
+1333,TV-Moderatorin
+1334,Daphne
+1335,Kiera
+1336,Luther Litti
+1337,Kyle Caldwell
+1338,Hay
+1339,Lenny The Rock
+1340,Sue Tamara
+1341,Sax Sandler
+1342,Tim Durnell
+1343,Keith
+1344,Debbie Peterson
+1345,Frank Wheeler
+1346,Clayton
+1347,Partygäste
+1348,Jesse
+1349,Jaden
+1350,April
+1351,Autumn
+1352,Charles Morland
+1353,Tanika Frost
+1354,Savannah Frost
+1355,Dennis Frost
+1356,Jane Thompson
+1357,Tyler
+1358,Gardener
+1359,Adam Quinn
+1360,Mr. Carrington
+1361,Mrs. Carrington
+1362,Liza Hawkins
+1363,Mr. Hawkins
+1364,Mrs. Hawkins
+1365,Leslie Louge-Smith
+1366,Schauspieler
+1367,Britney Rogers
+1368,Mr. Sisko
+1369,Ben Peck
+1370,Sandra
+1371,TV-Nachrichtensprecher
+1372,Dokor Burke
+1373,Mrs. Penny
+1374,Schwester Beatrixe
+1375,Mr. Hooper
+1376,Ellyn Djawadi
+1377,Mr. Turner
+1378,Kramer
+1379,Emma Bailey
+1380,Lewis Geriwell
+1381,Henry Appleton
+1382,Amber
+1383,Laura
+1384,Gerald
+1385,Nat
+1386,Nadar Rope
+1387,Anruferin
+1388,Anrufer
+1389,Regisseur
+1390,Redakteurin
+1391,Mr. Whitty
+1392,Cowboy Dick
+1393,Mr. Arbuthnott
+1394,Mrs. Lockwood
+1395,Einsatzleiter
+1396,Mechaniker
+1397,Jeff Ronaldo
+1398,Mr. McBrandon
+1399,Roboter
+1400,Bruce Torino
+1401,Priscilla Sicktree
+1402,Ashlyn
+1403,Rosie Wrenwick
+1404,Sheriff Stone
+1405,Hilfssheriff Jonathan
+1406,Zuku
+1407,Katara
+1408,Xiang Than
+1409,Fan Quoc
+1410,Fan Yuen
+1411,Dealerin
+1412,1. Chinese
+1413,2. Chinese
+1414,Fan Haro
+1415,Einlass
+1416,Angler
+1417,Mac Anderson
+1418,Grady
+1419,Pettengill
+1420,Sheriff Rolins
+1421,Farragut
+1422,Cynthia Wetmore
+1423,Hotelier
+1424,Gladys Pixie
+1425,Frank Firhouse
+1426,Maggy Smith
+1427,Aurora
+1428,Angela
+1429,Conchita Dominguez
+1430,Heather
+1431,Folder
+1432,Hopper
+1433,Rezeptionist
+1434,Wally Robertson
+1435,Charmayne Robertson
+1436,Dwaight Hayward
+1437,Mrs. Flagstaff
+1438,Osiris
+1439,Vandaan
+1440,Frank Corman/Mr Giggles
+1441,Trixie Stiles
+1442,Bryan Bonfanti
+1443,Henson
+1444,Matthew Kooning
+1445,Doktor Kooning
+1446,Mrs. Kooning
+1447,Finnley Stenseth
+1448,Farryn Stenseth
+1449,Mrs. Stenseth
+1450,Stacey Warren
+1451,Surferin
+1452,Surfer
+1453,Dylan
+1454,M. Keen
+1455,Elliot Littlehorn
+1456,Tobin Muller
+1457,Amalia
+1458,Zauberer Miller
+1459,Kelvin Mitchell
+1460,Leigh
+1461,Zoey
+1462,Mabel
+1463,Glatzkopf
+1464,Dustin Cooper
+1465,Wahrsagerin Susannah
+1466,Dr. Benchfield
