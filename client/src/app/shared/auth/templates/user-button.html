@@ -1,0 +1,20 @@
+
+
+<mat-menu #userMenu="matMenu">
+  <is-logged-in>
+    <ng-container logged_in>
+      <button mat-menu-item>Profil</button>
+      <button mat-menu-item (click)="onLogout()">Logout</button>
+    </ng-container>
+
+    <ng-container logged_out>
+      <button mat-menu-item (click)="openDialog()">
+        Login
+      </button>
+    </ng-container>
+  </is-logged-in>
+</mat-menu>
+
+<button mat-icon-button [matMenuTriggerFor]="userMenu">
+  <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+</button>

@@ -33,8 +33,10 @@ import { NewsDetailsComponent } from './news-details.component';
 import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
 import { FocusDirective } from './focus-element.directive';
-import { LoginButtonComponent } from './auth/login-button.component';
+import { UserButtonComponent } from './auth/user-button.component';
 import { AuthDialogComponent } from './auth/auth-dialog.component';
+import { LoginWrapperComponent } from './auth/login-wrapper.component';
+
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -76,7 +78,8 @@ const materialModules = [
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
     AuthDialogComponent,
-    LoginButtonComponent,
+    UserButtonComponent,
+    LoginWrapperComponent,
     FocusDirective
   ],
   exports: [
@@ -98,7 +101,8 @@ const materialModules = [
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
     AuthDialogComponent,
-    LoginButtonComponent,
+    UserButtonComponent,
+    LoginWrapperComponent,
     FocusDirective
   ],
   entryComponents: [AuthDialogComponent]

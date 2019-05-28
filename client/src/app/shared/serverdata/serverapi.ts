@@ -18,6 +18,23 @@ export class ServerApi {
   ) {
   }
 
+  // TODO NEEDS COMMENTS
+  getSignInUrl(provider: string): string {
+    return (`${this._apiBaseUrl}/auth/${provider}`)
+  }
+
+  getUserDataUrl(): string {
+    return (`${this._apiBaseUrl}/user`)
+  }
+
+  getSignUpUrl(): string {
+    return (`${this._apiBaseUrl}/auth/identity/register`)
+  }
+
+  getSignOutUrl(): string {
+    return (`${this._apiBaseUrl}/auth/sign_out`)
+  }
+
   /**
    * Retrieves a specific schema
    */
