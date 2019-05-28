@@ -19,6 +19,7 @@ import { fieldCompare } from '../util';
 import { ServerApiService } from './serverapi.service';
 import { NewsFrontpageDescription, NewsUpdateDescription } from '../news.description';
 import { NewsDescription } from '../news.description';
+import { UserDescription } from '../auth/user.description';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -207,6 +208,24 @@ export class ServerDataService {
     this._http,
     id => this._serverApi.getNewsSingle(id)
   );
+
+
+
+  // TODO COMMENTS
+  readonly getUserData = new CachedRequest<UserDescription>(
+    this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
+  );
+
+
+  onLogout(): Observable<UserDescription> {
+    return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl())
+      .pipe(
+        tap(_ => {
+          console.log("logged out");
+          this.getUserData.refresh;
+        })
+      )
+  }
 
   /**
    * creating a new news

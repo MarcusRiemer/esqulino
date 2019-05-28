@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ServerApi } from './../serverdata/serverapi';
 import { Component } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
-import * as jwt_decode from 'jwt-decode';
+
+import { ServerApiService } from '../serverdata/serverapi.service';
 
 @Component({
   templateUrl: './templates/auth-dialog.html'
@@ -10,11 +11,24 @@ import * as jwt_decode from 'jwt-decode';
 export class AuthDialogComponent {
   constructor(
     private _dialogRef: MatDialogRef<AuthDialogComponent>,
-    private _http: HttpClient
+    private _serverApi: ServerApiService,
   ) {}
 
   public register: boolean = false;
-  public readonly provider = ['Google', 'Github']
+  public readonly providers = [ 
+    {
+      "name": "Github",
+      "urlName": "github"
+    },
+    {
+      "name": "Google",
+      "urlName": "google_oauth2"
+    },
+    {
+      "name": "Developer",
+      "urlName": "developer"
+    }
+  ]
 
   public readonly general = new FormGroup({
     email: new FormControl('', [
@@ -25,7 +39,7 @@ export class AuthDialogComponent {
     ])
   })
 
-  public onNoClick(): void {
+  public onClose(): void {
     this._dialogRef.close();
   }
 
@@ -33,16 +47,14 @@ export class AuthDialogComponent {
     this.register = !this.register;
   }
 
-  public onSend(): void {
-    let headers = new HttpHeaders().set('Authorization',  `Bearer dasdasdasdasd`)
-    this._http.post<{["token"]: string}>('/api/auth/developer/callback', 
-    { "name": "email", "email": "tom.hilge"}, {headers: headers}).subscribe(log => console.log(jwt_decode(log.token)))
+  public onSignIn(provider: string) {
+    window.location.href = this._serverApi.getSignInUrl(provider);
   }
 
-  public static show(dialog: MatDialog) {
+  public static showDialog(dialog: MatDialog) {
     dialog.open(AuthDialogComponent, {
-      width: '800px',
-      height: '400px'
+      width: '700px',
+      height: '340px'
     });
   }
 }
