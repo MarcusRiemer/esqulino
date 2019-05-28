@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ServerDataService } from '../../shared';
+import { GrammarDataService } from '../../shared/serverdata';
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -8,14 +8,14 @@ import { ServerDataService } from '../../shared';
 
 export class OverviewGrammarComponent {
   constructor(
-    private _serverData: ServerDataService
+    private _serverData: GrammarDataService
   ) { }
 
   public get availableGrammars() {
-    return (this._serverData.listGrammars);
+    return (this._serverData.listCache);
   }
 
   public deleteGrammar(id: string) {
-    this._serverData.deleteGrammar(id);
+    this._serverData.deleteSingle(id);
   }
 }
