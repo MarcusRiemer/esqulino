@@ -23,4 +23,6 @@ coverage
 /vendor/bundle
 test-results
 
+run-dev.sh
+
 ../seed
