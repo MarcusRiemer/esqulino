@@ -38,6 +38,10 @@ import { AuthDialogComponent } from './auth/auth-dialog.component';
 import { LoginWrapperComponent } from './auth/login-wrapper.component';
 
 
+import { GrammarDataService, BlockLanguageDataService } from './serverdata'
+
+const dataServices = [GrammarDataService, BlockLanguageDataService];
+
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
@@ -121,6 +125,7 @@ export class SharedAppModule {
         VideoService,
         LanguageService,
         ToolbarService,
+        ...dataServices
       ]
     });
   }

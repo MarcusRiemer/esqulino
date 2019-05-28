@@ -8,7 +8,7 @@ import { BlockLanguageDescription } from '../../shared/block/block-language.desc
 import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../../shared/block/generator/generator'
 
-import { ServerApiService, ServerDataService } from '../../shared';
+import { ServerApiService, BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
 
 /**
  * A comprehensive way to create new block languages
@@ -35,7 +35,8 @@ export class CreateBlockLanguageComponent {
   useSlug = false;
 
   constructor(
-    private _serverData: ServerDataService,
+    private _serverData: BlockLanguageDataService,
+    private _grammarData: GrammarDataService,
     private _serverApi: ServerApiService,
     private _http: HttpClient,
     private _router: Router,
@@ -46,7 +47,7 @@ export class CreateBlockLanguageComponent {
    * Grammars that may be used for creation
    */
   public get availableGrammars() {
-    return (this._serverData.listGrammars.value);
+    return (this._grammarData.list);
   }
 
   /**
@@ -55,8 +56,8 @@ export class CreateBlockLanguageComponent {
   public submitForm() {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
-    this._serverData
-      .getGrammarDescription(this.blockLanguage.grammarId)
+    this._grammarData
+      .getSingle(this.blockLanguage.grammarId)
       .pipe(first())
       .subscribe(g => {
         // Generate some default blocks
@@ -74,7 +75,7 @@ export class CreateBlockLanguageComponent {
         this._http
           .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
           .subscribe(res => {
-            this._serverData.listBlockLanguages.refresh();
+            this._serverData.listCache.refresh();
             this._router.navigateByUrl(`/admin/block-language/${res.id}`);
           }, err => {
             console.log(err);
