@@ -6,5 +6,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     config.path_prefix = '/api/auth'
   end
   provider :developer, :fields => [:name, :email], :uid_field => :email unless Rails.env.production?
-  provider :google_oauth2, "50823651702-ac7sk3121616fhile3kvropmff2lmc5i.apps.googleusercontent.com", ENV['GOOGLE_CLIENT_SECRET']
+  provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET']
+  provider :github, ENV['GITHUB_CLIENT_ID'], ENV['GITHUB_CLIENT_SECRET']
 end

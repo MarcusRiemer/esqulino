@@ -5,10 +5,14 @@ Rails.application.routes.draw do
 
     resources :identities
 
+    scope 'user' do
+      root via: [:get], controller: 'user', action: :index
+    end
+
     scope 'auth' do
-      get 'sign_out', controller: 'sessions', action: :destroy
-      match ":provider/callback", to: "sessions#create", via: [:get, :post]
-      match 'failure', :to => 'sessions#failure', via: [:get, :post]
+      delete 'sign_out', controller: 'auth', action: :destroy
+      match ":provider/callback", to: "auth#create", via: [:get, :post]
+      match 'failure', :to => 'auth#failure', via: [:get, :post]
     end
   
     # Everything in the context of projects

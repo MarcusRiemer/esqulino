@@ -8,27 +8,32 @@ class ApplicationController < ActionController::API
 
   # Hand out 404 errors as fallbacks if Active Record doesn't find something
   rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
-
-
-  # TODO refactor
-  # def authorize_request
-  #   header = request.headers['Authorization']
-  #   header = header.split(' ').last if header
-  #   puts header
-  #   begin
-  #     @decoded = Auth.decode(header)
-  #     @current_user = User.find(@decoded[:email])
-  #   rescue ActiveRecord::RecordNotFound => e
-  #     render json: { errors: e.message }, status: :unauthorized
-  #   rescue JWT::DecodeError => e
-  #     render json: { errors: e.message }, status: :unauthorized
-  #   end
-  # end
-
   protected
+
+  # AUTHENTICATION METHODS
 
   def signed_in?
     return !@current_user.nil?
+  end
+
+  def sign_out!
+    if signed_in?
+      @current_user = nil
+      delete_jwt_cookie!
+    end
+  end
+
+  def response_jwt_cookie(value, expires = 1.day.from_now)
+    response.set_cookie('JWT-TOKEN', {
+      value: value,
+      httponly: true,
+      expires: expires,
+      path: '/'
+    })
+  end
+
+  def delete_jwt_cookie!()
+    response_jwt_cookie("", 0.seconds.from_now)
   end
 
   def authenticate_user!
@@ -36,12 +41,20 @@ class ApplicationController < ActionController::API
   end
 
   def current_user
-    token = request.cookies['XSRF-TOKEN']
+    token = request.cookies['JWT-TOKEN']
     if token
-      user_id =  Auth.decode(token)[:user_id]
-      @current_user = User.find(user_id.to_s)
+      begin
+        user_id =  Auth.decode(token)[:user_id]
+        @current_user = User.find(user_id.to_s)
+      rescue ActiveRecord::RecordNotFound => e
+        sign_out!
+        render json: { errors: e.message }, status: :unauthorized
+      rescue JWT::DecodeError => e
+        sign_out!
+        render json: { errors: e.message }, status: :unauthorized
+      end
     else
-      @current_user = nil
+      sign_out!
     end
   end
 

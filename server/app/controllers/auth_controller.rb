@@ -1,6 +1,6 @@
 
 
-class SessionsController < ApplicationController
+class AuthController < ApplicationController
   before_action :authenticate_user!
 
   def create
@@ -13,21 +13,21 @@ class SessionsController < ApplicationController
     if !signed_in?
       @current_user = @identity.user
       token = Auth.encode({user_id: @identity.user_id})
-
-      response.set_cookie('XSRF-TOKEN', {
-        value: token, 
-        httponly: true, 
-        expires: 1.day.from_now
-      })
+      response_jwt_cookie(token)
     end
 
-    render json: { role: 'user' }, status: :ok
+    redirect_to "/"
+  end
+
+  def failure
+    render json: { error: "something got wrong" }, status: :bad_request
   end
 
   def destroy
-    @current_user = nil
-    response.delete_cookie('XSRF-TOKEN')
-    render json: { message: 'signed out' }, status: :ok
+    sign_out!
+    delete_jwt_cookie!
+    render json: { loggged_in: false }
+      .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 end
 
