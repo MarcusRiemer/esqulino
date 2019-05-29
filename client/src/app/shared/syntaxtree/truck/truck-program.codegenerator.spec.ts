@@ -1,5 +1,5 @@
 import { CodeGenerator } from '../codegenerator'
-import { Node, NodeDescription, Tree } from '../syntaxtree'
+import { NodeDescription, Tree } from '../syntaxtree'
 
 import { PROGRAM_NODE_CONVERTER, DEFAULT_STATE } from './truck-program.codegenerator'
 

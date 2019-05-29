@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { ServerDataService } from '../../shared';
+import { Component } from '@angular/core';
+import { GrammarDataService } from '../../shared/serverdata';
 
-@Component ({
+@Component({
   selector: 'grammar-overview-selector',
   templateUrl: './templates/overview-grammar.html'
 })
 
 export class OverviewGrammarComponent {
   constructor(
-    private _serverData: ServerDataService
-  ) {}
+    private _serverData: GrammarDataService
+  ) { }
 
   public get availableGrammars() {
-    return (this._serverData.listGrammars);
+    return (this._serverData.listCache);
   }
 
   public deleteGrammar(id: string) {
-    this._serverData.deleteGrammar(id);
+    this._serverData.deleteSingle(id);
   }
 }

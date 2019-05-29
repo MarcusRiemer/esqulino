@@ -7,8 +7,8 @@ import { tap, map, catchError } from 'rxjs/operators';
 import { ServerApiService } from '../shared'
 
 import { Project, ProjectService } from './project.service'
-import { Table } from '../shared/schema/'
-import { RawTableDataDescription } from '../shared/schema/schema.description'
+import { Table, Schema } from '../shared/schema/'
+import { RawTableDataDescription, TableDescription } from '../shared/schema/schema.description'
 import { TableCommandHolder } from '../shared/schema/table-commands'
 
 interface CurrentlyEdited {
@@ -214,6 +214,14 @@ export class SchemaService {
         catchError(this.handleError)
       )
     return (toReturn);
+  }
+
+  /**
+   * React to a new schema that was sent by the server.
+   */
+  onSchemaUpdated(newSchema: TableDescription[]) {
+    this._projectService.cachedProject.schema = new Schema(newSchema);
+    this.incrementChangeCount();
   }
 
 

@@ -67,6 +67,7 @@ namespace :blattwerkzeug do
   namespace :programming_language do
     desc '(Re)load all block languages and grammars from their seed representation'
     task :load_all => :environment do |t, args|
+      m.load_all_programming_languages
       m.load_all_grammars
       m.load_all_block_language_generators
       m.load_all_block_languages
@@ -74,9 +75,22 @@ namespace :blattwerkzeug do
 
     desc 'Serialize all block languages and grammars to their seed representation'
     task :store_all => :environment do |t, args|
+      m.store_all_programming_languages
       m.store_all_grammars
       m.store_all_block_language_generators
       m.store_all_block_languages
+    end
+  end
+
+  namespace :news do
+    desc 'Serialize all news to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_news
+    end
+
+    desc 'Serialize all news to their seed representation'
+    task :load_all => :environment do |t, args|
+      m.load_all_news
     end
   end
 end

@@ -7,6 +7,8 @@ import { EditBlockLanguageComponent } from './block-language/edit-block-language
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component'
 import { NavSiteComponent } from '../shared/nav-page.component';
+import { AdminNewsListComponent } from './news.component';
+import { AdminNewsEditComponent } from './edit-news.component';
 
 export const adminRoutes: Routes = [
   {
@@ -38,6 +40,18 @@ export const adminRoutes: Routes = [
       {
         path: 'block-language/:blockLanguageId',
         component: EditBlockLanguageComponent
+      },
+      {
+        path: 'news',
+        component: AdminNewsListComponent
+      },
+      {
+        path: 'news/edit/:newsId',
+        component: AdminNewsEditComponent
+      },
+      {
+        path: 'news/create',
+        component: AdminNewsEditComponent
       }
     ]
   }

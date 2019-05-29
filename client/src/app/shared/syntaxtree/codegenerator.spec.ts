@@ -32,7 +32,7 @@ describe('Codegeneration', () => {
       }
     ];
 
-    expect(_ => new CodeGenerator(desc)).toThrowError();
+    expect(() => new CodeGenerator(desc)).toThrowError();
   });
 
   it('Gives access to a mutable state', () => {
@@ -127,7 +127,7 @@ describe('Codegeneration', () => {
     const codeGen = new CodeGenerator([]);
     const process = new CodeGeneratorProcess(codeGen);
 
-    expect(_ => process.generateNode(undefined)).toThrowError();
+    expect(() => process.generateNode(undefined)).toThrowError();
   });
 
   it('Empty Tree', () => {

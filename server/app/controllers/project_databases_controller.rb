@@ -65,6 +65,11 @@ class ProjectDatabasesController < ApplicationController
       uploaded = params['database']
 
       if uploaded and uploaded.size > 0 then
+        # There might not be a current database, therefore it has to be created
+        if not current_database then
+          create_new_default_database!
+        end
+
         # The path of the currently loaded database
         db_path = current_database.sqlite_file_path
 
@@ -134,7 +139,7 @@ class ProjectDatabasesController < ApplicationController
 
       result = current_database.table_bulk_insert(
         table_name,
-        tabular_data['columnNames'],
+        tabular_data['column_names'],
         tabular_data['data']
       )
 
@@ -172,5 +177,14 @@ class ProjectDatabasesController < ApplicationController
   def current_database
     database_id = nil # params['database_id']
     @current_database = current_project.database_by_id_or_default(database_id)
+  end
+
+  private
+
+  # Creates a new default database
+  def create_new_default_database!
+    db = current_project.create_default_database(name: "default", project_id: current_project.id)
+    db.save!
+    current_project.save!
   end
 end

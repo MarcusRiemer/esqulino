@@ -1,9 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { flatMap, map } from 'rxjs/operators';
-import { CodeResource, QualifiedTypeName, NodeDescription } from '../../../shared/syntaxtree';
+import { QualifiedTypeName, NodeDescription } from '../../../shared/syntaxtree';
 
-import { SIDEBAR_MODEL_TOKEN } from '../../editor.token';
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 

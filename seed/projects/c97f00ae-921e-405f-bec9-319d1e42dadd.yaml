@@ -7,6 +7,9 @@ concise_attributes:
   name: name
   value_before_type_cast: Trucklino
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: trucklino
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Eine Welt voller Waren und ein einsamer Truck der sie an
     den Bestimmungsort bringen muss. Und dein Programm muss sagen wie das geht!
@@ -23,10 +26,7 @@ concise_attributes:
   value_before_type_cast: '2019-02-05 10:27:35.009362'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-09 07:42:40.774616'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-  value_before_type_cast: trucklino
+  value_before_type_cast: '2019-05-21 14:22:01.785097'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 - !ruby/object:ActiveModel::Attribute::FromDatabase

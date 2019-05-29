@@ -16,10 +16,11 @@
   <ng-content select="[position=start]"></ng-content>
 
   <!-- Things the user might do here -->
-  <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
-                [cdkPortalOutlet]="itemsPortal"></ng-container>
+  <ng-container *ngFor="let toolbarItem of (toolbarItems$ | async)"
+                [cdkPortalOutlet]="toolbarItem">
+  </ng-container>
 
-  <!-- Filling out the space in the middle -->
+    <!-- Filling out the space in the middle -->
   <span class="fill-space"></span>
 
   <!-- Static contentent at the end of this toolbar -->

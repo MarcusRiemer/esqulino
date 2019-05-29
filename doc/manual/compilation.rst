@@ -65,6 +65,24 @@ PostgreSQL
 
 The actual project code is stored in a PostgreSQL database. You will need to provide a user who is able to create databases. For development you should stick to the default options that are provided in the ``server/config/database.yml`` file.
 
+Environment Variables
+---------------------
+
+The default environment assumes a readily available database which is configured via the ``server/config/database.yml`` file which happily picks up environment variables. As long as you are happy with those defaults, there is nothing to worry about. But some services do require customized information via environment variables.
+
+* Various login providers that work via OAuth2 require a client ID and a client secret:
+
+  * Google: ``GOOGLE_CLIENT_ID``, ``GOOGLE_CLIENT_SECRET``, these values are available from the `Google Developer Console <https://console.developers.google.com/apis/credentials>`_ (if you are part of the BlattWerkzeug-project).
+
+* Sending mails requires a configured ``SMTP``-server: ``SMTP_HOST``, ``SMTP_USER``, ``SMTP_PASS``
+
+You probably want to use some tool like `direnv (available for most Linux distros) <https://github.com/direnv/direnv>`_ to automatically manage these variables. Just install a hook to ``direnv`` in the ``rc``-file of your shell and restart the shell. Then you can create a ``.envrc`` file in the server folder that contains something along the lines of::
+
+  export GOOGLE_CLIENT_ID=foo
+  export GOOGLE_CLIENT_SECRET=bar
+
+Entering and leaving the folder will then automatically load and unload the mentioned environment variables.
+
 Compiling and Running
 =====================
 

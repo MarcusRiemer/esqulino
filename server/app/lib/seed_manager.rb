@@ -29,6 +29,10 @@ require_dependency "util"
 # robust (but very verbose) on-disk representation of our models.
 class SeedManager
 
+  #############################################
+  # Projects
+  #############################################
+
   # Writes all projects to their seed representation
   def store_all_projects
     Seed::ProjectSeed.store_all
@@ -57,7 +61,7 @@ class SeedManager
   end
 
   #############################################
-  # Redudant code for block languages ahead
+  # Block languages
   #############################################
 
   # Stores all block languages
@@ -86,7 +90,7 @@ class SeedManager
   end
 
   #############################################
-  # Redudant code for block language generators ahead
+  # Block language generators
   #############################################
 
   # Stores all block language generators
@@ -117,7 +121,7 @@ class SeedManager
   end
 
   #############################################
-  # Redudant code for grammars ahead
+  # Grammars
   #############################################
 
   # Stores all grammars
@@ -145,14 +149,38 @@ class SeedManager
     Seed::GrammarSeed.new(path_slug_or_id).start_load
   end
 
+  #############################################
+  # News
+  #############################################
+
+  # Stores all news
+  def store_all_news
+    Seed::NewsSeed.store_all
+  end
+
+  # Loads all news that are available as seeds
+  def load_all_news
+    Seed::NewsSeed.load_all
+  end
+
+  #############################################
+  # Programming Languages
+  #############################################
+
+  def store_all_programming_languages
+    Seed::ProgrammingLanguageSeed.store_all
+  end
+
+  def load_all_programming_languages
+    Seed::ProgrammingLanguageSeed.load_all
+  end
+
   private
 
   # Singleton instance of the SeedManager
   def self.instance
     @@instance ||= SeedManager.new
   end
-
-  private
 
   # We probably don't want to output during testing, so this is configurable
   def puts(*args)

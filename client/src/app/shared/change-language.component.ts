@@ -14,8 +14,6 @@ function localeToFlag(locale: string): string {
   }
 }
 
-// TODO: Use `canonicalHost` from environment
-// TODO: Use protocol relative URL (`//`), do *not* write "http" or "https"
 export const locales = [
   { token: 'de', name: 'Deutsch', flag: localeToFlag('de') },
   { token: 'en', name: 'English', flag: localeToFlag('en') },
