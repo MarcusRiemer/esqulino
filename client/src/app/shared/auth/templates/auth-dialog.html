@@ -19,7 +19,7 @@
           <input matInput 
             type="email"
             placeholder="Email"
-            formGroupName="email">
+            formControlName="email">
         </mat-form-field>
       </div>
       <div class="row">
@@ -27,7 +27,7 @@
           <input matInput 
             type="password"
             placeholder="Password"
-            formGroupName="password">
+            formControlName="password">
         </mat-form-field>
       </div>
       <div *ngIf="register" class="row">
@@ -41,7 +41,7 @@
 
     <div mat-dialog-actions>
       <button mat-button 
-        (click)="onChange()">
+        (click)="onSubmit()">
         {{ register ? 'Register' : 'Login' }}
       </button>
       <button mat-button

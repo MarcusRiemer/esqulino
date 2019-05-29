@@ -47,13 +47,19 @@ export class ServerDataService {
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
 
+  signUp(data: any): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data).pipe(
+      first()
+    )
+  }
+
 
   onLogout(): Observable<UserDescription> {
     return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl())
       .pipe(
         tap(_ => {
           console.log("logged out");
-          this.getUserData.refresh;
+          this.getUserData.refresh();
         })
       )
   }
