@@ -133,6 +133,49 @@ export class ServerApi {
   }
 
   /**
+   * Getting a List of User News
+   */
+  getUserNewsListUrl(): string {
+    return (`${this._apiBaseUrl}/news`)
+  }
+
+
+  /**
+   * Getting a single news
+   */
+  getNewsSingle(id: string): string {
+    return (`${this._apiBaseUrl}/news/${id}`)
+  }
+
+  /**
+   * Getting a single news
+   */
+  getAdminNewsSingle(id: string): string {
+    return (`${this._apiBaseUrl}/news/admin/${id}`)
+  }
+
+  /**
+   * Getting a List of User News
+   */
+  getAdminNewsListUrl(): string {
+    return (`${this._apiBaseUrl}/news/admin`)
+  }
+
+  /**
+   * Creating/Getting a new News
+   */
+  getCreateNewsUrl(): string {
+    return (`${this._apiBaseUrl}/news/`)
+  }
+
+  /**
+   * Getting the URL for the news update route
+   */
+  getNewsUpdateUrl(id: string): string {
+    return (`${this._apiBaseUrl}/news/${id}`)
+  }
+
+  /**
    * Retrieves the URL to access code resources
    */
   getCodeResourceUrl(projectId: string, codeResourceId: string): string {

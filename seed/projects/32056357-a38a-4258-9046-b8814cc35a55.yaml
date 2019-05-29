@@ -7,6 +7,9 @@ concise_attributes:
   name: name
   value_before_type_cast: Blog
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: blog
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Dein Blog, deine Regeln! Schreibe über Themen die dir am
     Herzen liegen und tausche dich in den Kommentaren mit deinen Lesern aus.
@@ -24,10 +27,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.690301'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-10 10:34:51.538397'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-  value_before_type_cast: blog
+  value_before_type_cast: '2019-05-21 14:21:58.271449'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 - !ruby/object:ActiveModel::Attribute::FromDatabase

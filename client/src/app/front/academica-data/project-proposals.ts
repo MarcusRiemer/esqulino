@@ -1,4 +1,12 @@
-export default [
+export interface ProjectProposal {
+  id: string;
+  language: string;
+  title: string;
+  text: string;
+  tools: string;
+}
+
+export const ProjectProposals: ProjectProposal[] = [
   {
     id: "usermanagement",
     language: "de",

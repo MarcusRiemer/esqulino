@@ -1,19 +1,30 @@
-import { ServerDataService } from '../../shared';
-import { Component } from "@angular/core";
+import { Component, ViewChild, TemplateRef, OnInit } from "@angular/core";
 
+import { ToolbarService } from '../../shared';
+import { BlockLanguageDataService } from '../../shared/serverdata';
 
+/**
+ * Shows All block languages that are known to the server.
+ */
 @Component({
-  selector: 'block-language-overview-selector',
   templateUrl: './templates/overview-block-language.html'
 })
 
-export class OverviewBlockLanguageComponent {
+export class OverviewBlockLanguageComponent implements OnInit {
+  @ViewChild('toolbarItems')
+  toolbarItems: TemplateRef<any>;
+
   constructor(
-    private _serverData: ServerDataService
-  ) {}
+    private _serverData: BlockLanguageDataService,
+    private _toolbarService: ToolbarService,
+  ) { }
+
+  ngOnInit(): void {
+    this._toolbarService.addItem(this.toolbarItems);
+  }
 
   public get availableBlockLanguages() {
-    return (this._serverData.listBlockLanguages);
+    return (this._serverData.listCache);
   }
 
   public deleteBlockLanguage(id: string) {

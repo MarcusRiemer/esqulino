@@ -1,12 +1,12 @@
-import { Component, OnInit, TemplateRef, AfterViewInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, ParamMap } from '@angular/router'
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { ActivatedRoute, ParamMap, Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { Title } from '@angular/platform-browser'
 
 import { switchMap, map, first } from 'rxjs/operators'
 
 import { ToolbarService } from '../shared/toolbar.service'
-import { ServerDataService, CachedRequest } from '../shared'
+import { CachedRequest, GrammarDataService } from '../shared/serverdata'
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
 import { GrammarDescription } from '../shared/syntaxtree'
@@ -15,7 +15,7 @@ import { BlockLanguageListDescription } from '../shared/block/block-language.des
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
-export class EditGrammarComponent implements OnInit, AfterViewInit {
+export class EditGrammarComponent implements OnInit {
 
   @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
 
@@ -31,9 +31,10 @@ export class EditGrammarComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _router: Router,
     private _http: HttpClient,
     private _serverApi: ServerApiService,
-    private _serverData: ServerDataService,
+    private _grammarData: GrammarDataService,
     private _title: Title,
     private _toolbarService: ToolbarService
   ) {
@@ -44,7 +45,7 @@ export class EditGrammarComponent implements OnInit, AfterViewInit {
     // the server data changes.
     this._activatedRoute.paramMap.pipe(
       map((params: ParamMap) => params.get('grammarId')),
-      switchMap((id: string) => this._serverData.getGrammarDescription(id).pipe(first())),
+      switchMap((id: string) => this._grammarData.getSingle(id).pipe(first())),
     ).subscribe(g => {
       this.grammar = g;
       this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`)
@@ -58,10 +59,9 @@ export class EditGrammarComponent implements OnInit, AfterViewInit {
       const request = this._http.get<BlockLanguageListDescription[]>(relatedUrl);
       this.relatedBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(request);
     });
-  }
 
-  ngAfterViewInit() {
-    this._toolbarService.setItems(this.toolbarButtons);
+    // Setup the toolbar buttons
+    this._toolbarService.addItem(this.toolbarButtons);
   }
 
   onTypeDataUpdate(text: string) {
@@ -74,8 +74,19 @@ export class EditGrammarComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * User has decided to save.
+   */
   onSave() {
-    this._serverData.updateGrammar(this.grammar);
+    this._grammarData.updateSingle(this.grammar);
+  }
+
+  /**
+   * User has decided to delete.
+   */
+  async onDelete() {
+    await this._grammarData.deleteSingle(this.grammar.id);
+    this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 
   /**

@@ -1,6 +1,0 @@
---- !ruby/object:Set
-hash:
-  ? - "../seed/projects"
-    - bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
-    - !ruby/class 'Seed::ProjectSeed'
-  : true

@@ -7,6 +7,9 @@ concise_attributes:
   name: name
   value_before_type_cast: Pokémon Vorstellung
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: pokemon
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Zeige deinen Freunden, welche Pokémon du gefangen hast!
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -22,10 +25,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-26 10:13:30.534056'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-04-10 10:34:51.712966'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
-  value_before_type_cast: pokemon
+  value_before_type_cast: '2019-05-21 14:21:58.459437'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 - !ruby/object:ActiveModel::Attribute::FromDatabase

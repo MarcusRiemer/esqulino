@@ -1,9 +1,20 @@
-import { Injectable, PLATFORM_ID, Inject, Optional } from '@angular/core'
+import { Injectable, PLATFORM_ID, Inject, Optional, LOCALE_ID } from '@angular/core'
 import { isPlatformServer } from '@angular/common'
 
 import { environment } from '../../../environments/environment'
 
 import { ServerApi } from './serverapi'
+
+/**
+ * Inserts the given language string into the URL.
+ */
+function insertLanguageSubdomain(url: string, lang: string) {
+  if (url.includes("://")) {
+    return (url.replace("://", "://" + lang + "."));
+  } else {
+    return (lang + "." + url);
+  }
+}
 
 /**
  * Instead of constructing URLs on the fly, they should be created using
@@ -20,29 +31,17 @@ import { ServerApi } from './serverapi'
 @Injectable()
 export class ServerApiService extends ServerApi {
 
-  /**
-   *
-   */
   public constructor(
     @Inject(PLATFORM_ID)
     @Optional()
-    private _platformId: Object
+    platformId: Object,
+    @Inject(LOCALE_ID)
+    readonly localeId: string,
   ) {
-    super(environment.apiEndpoint);
-
-    // Was a specific base URL provided? Then we simply take that.
-    if (!this._apiBaseUrl) {
-      // No specific URL, we fall back to the absolute default URL
-      this._apiBaseUrl = "/api";
-
-      // If we are running the universal server, there is no "parenting"
-      // base URL that would contain the protocol and the hostname. In that
-      // case the official server is used as a fallback.
-      //
-      // Beware: This may not be what you expect during development.
-      if (this._platformId && isPlatformServer(this._platformId)) {
-        this._apiBaseUrl = ServerApiService.BASE_HOST + this._apiBaseUrl;
-      }
-    }
+    super(
+      isPlatformServer(platformId)
+        ? insertLanguageSubdomain(environment.apiEndpoint, localeId)
+        : "/api"
+    );
   }
 }

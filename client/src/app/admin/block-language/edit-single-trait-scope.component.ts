@@ -4,13 +4,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material';
 
 import { first, map, tap } from 'rxjs/operators';
 
-import { ServerDataService } from '../../shared';
+import { GrammarDataService } from '../../shared/serverdata';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
 import { FullNodeAttributeDescription, getFullAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
 
 import { EditBlockLanguageService } from './edit-block-language.service';
-
-
 
 /**
  * Complete path to a targeted attribute.
@@ -40,7 +38,7 @@ interface TargetBlock {
 export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
   constructor(
     private _editedBlockLanguageService: EditBlockLanguageService,
-    private _serverData: ServerDataService,
+    private _grammarData: GrammarDataService,
   ) { }
 
   /**
@@ -73,7 +71,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
    * Used to get hold of the grammar that is used by this block language.
    */
   ngOnInit() {
-    this._serverData.getGrammarDescription(this._editedBlockLanguageService.editedSubject.grammarId)
+    this._grammarData.getSingle(this._editedBlockLanguageService.editedSubject.grammarId)
       .pipe(first())
       .subscribe(g => {
         this.allPossibleAttributes = getFullAttributes(g);

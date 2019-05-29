@@ -32,6 +32,15 @@ export const adminItems: NavItem[] = [
     icon: "puzzle-piece",
   },
   {
+    type: "link",
+    text: {
+      de: "Neuigkeiten",
+      en: "News",
+    },
+    route: ["/admin/news"],
+    icon: "newspaper-o",
+  },
+  {
     type: "external",
     text: {
       de: "Anleitung 🇬🇧",

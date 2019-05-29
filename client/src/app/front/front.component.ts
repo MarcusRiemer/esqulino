@@ -1,7 +1,6 @@
 import { Component } from '@angular/core'
 
 import { BrowserService } from '../shared/browser.service';
-import { first, tap } from 'rxjs/operators';
 import { NavItem } from '../shared/nav-interfaces';
 
 export const indexItems: NavItem[] = [
@@ -34,6 +33,15 @@ export const indexItems: NavItem[] = [
     },
     route: ["/about/academia"],
     icon: "flask"
+  },
+  {
+    type: "link",
+    text: {
+      de: "Entwicklung",
+      en: "Development",
+    },
+    route: ["/about/development"],
+    icon: "code-fork"
   },
   {
     type: "link",
@@ -83,17 +91,26 @@ export const indexItems: NavItem[] = [
   },
 ];
 
+/**
+ * The "frame" around the about pages, contains stuff like the navigation
+ * but not the actual content.
+ */
 @Component({
   templateUrl: 'templates/index.html',
 })
 export class FrontComponent {
 
+  /**
+   * Used for dependency injection
+   */
   constructor(
     private readonly _browser: BrowserService,
   ) { }
 
+  // Pass through: Mobile device detection
   readonly isMobile$ = this._browser.isMobile$;
 
+  // Pass through: Rendering mode for sidebar
   readonly sidebarMode$ = this._browser.sidebarMode$;
 
   /**

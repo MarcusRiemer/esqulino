@@ -46,13 +46,10 @@ function validate(fileName: string, isValid: boolean) {
 /**
  *
  */
-function runTestcase(fileName: string, valid = true, check?: (result) => void) {
+function runTestcase(fileName: string) {
   it(fileName, () => {
-    validate(fileName, valid);
-    const result = verifyEmitted(fileName, emitTree);
-    if (check) {
-      check(result);
-    }
+    validate(fileName, true);
+    verifyEmitted(fileName, emitTree);
   });
 }
 

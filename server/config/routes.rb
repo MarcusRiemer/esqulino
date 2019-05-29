@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # Second stop: The API for the editor
   scope '/api' do
+
     # Everything in the context of projects
     scope 'project' do
       root via: [:get], controller: 'projects', action: :index
@@ -70,6 +71,20 @@ Rails.application.routes.draw do
           get 'download', controller: 'project_databases', action: :database_download
         end
       end
+    end
+
+    # Getting the News as JSON
+    scope 'news' do
+      scope 'admin' do
+        root via: [:get], controller: 'news', action: :index_admin
+        get ':id', controller: 'news', action: :show_admin
+      end
+
+      root via: [:get], controller: 'news', action: :index
+      root via: [:post], controller: 'news', action: :create
+      get ':id', controller: 'news', action: :show
+      put ':id', controller: 'news', action: :update
+      delete ':id', controller: 'news', action: :delete
     end
 
     resources :block_languages, only: [:create, :index, :show, :update, :destroy]

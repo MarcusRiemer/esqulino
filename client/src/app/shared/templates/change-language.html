@@ -12,9 +12,9 @@
     </mat-menu>
   </ng-container>
   <ng-container inactive>
-      <a *ngFor="let localItem of locales"
-         [href]='currentUrlForLanguage(localItem.token)'>
-        {{ localItem.flag }}
+      <a *ngFor="let localeItem of locales"
+         [href]='currentUrlForLanguage(localeItem.token)'>
+        {{ localeItem.flag }}
       </a>
   </ng-container>
 </app-requires-javascript>

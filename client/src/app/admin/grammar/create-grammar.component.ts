@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { ServerApiService, ServerDataService } from '../../shared';
+import { ServerApiService, GrammarDataService } from '../../shared/serverdata';
 import { GrammarDescription } from '../../shared/syntaxtree';
 import { LanguageService } from '../../shared/language.service';
 
@@ -26,7 +26,7 @@ export class CreateGrammarComponent {
   };
 
   constructor(
-    private _serverData: ServerDataService,
+    private _serverData: GrammarDataService,
     private _serverApi: ServerApiService,
     private _languageService: LanguageService,
     private _http: HttpClient,
@@ -48,7 +48,7 @@ export class CreateGrammarComponent {
     this._http
       .post<{ id: string }>(this._serverApi.createGrammarUrl(), this.grammar)
       .subscribe(res => {
-        this._serverData.listGrammars.refresh();
+        this._serverData.listCache.refresh();
         this._router.navigateByUrl(`/admin/grammar/${res.id}`);
       }, err => {
         console.log(err);

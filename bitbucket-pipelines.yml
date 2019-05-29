@@ -20,7 +20,7 @@ pipelines:
           - make -C client install-deps
           - make -C client client-compile
           - make -C client cli-compile
-          - make -C client universal-compile
+          - make -C client universal-compile-langs
           - make -C client client-test
         services:
           - db

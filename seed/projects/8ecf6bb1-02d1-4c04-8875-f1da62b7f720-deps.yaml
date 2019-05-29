@@ -1,14 +1,7 @@
---- !ruby/object:Set
-hash:
-  ? - "../seed/projects"
-    - 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
-    - !ruby/class 'Seed::ProjectSeed'
-  : true
-  ? - "../seed/sources"
-    - 1
-    - !ruby/class 'Seed::ProjectSourceSeed'
-  : true
-  ? - "../seed/databases"
-    - 9ba2daa8-d66a-4e95-b52b-535edac64f58
-    - !ruby/class 'Seed::ProjectDatabaseSeed'
-  : true
+---
+- - "../seed/sources"
+  - 1
+  - !ruby/class 'Seed::ProjectSourceSeed'
+- - "../seed/databases"
+  - 9ba2daa8-d66a-4e95-b52b-535edac64f58
+  - !ruby/class 'Seed::ProjectDatabaseSeed'
