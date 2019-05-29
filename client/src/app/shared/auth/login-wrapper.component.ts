@@ -7,14 +7,10 @@ import { UserService } from './user.service';
   selector: 'is-logged-in',
   templateUrl: './templates/login-wrapper.html'
 })
-export class LoginWrapperComponent implements OnInit {
+export class LoginWrapperComponent {
   constructor(
     private _userData: UserService
   ) {}
-
-    ngOnInit(): void {
-      this.isLoggedIn.subscribe(bol => console.log(bol))
-    }
 
   readonly isLoggedIn = this._userData.isLoggedIn
 

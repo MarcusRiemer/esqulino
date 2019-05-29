@@ -1,9 +1,10 @@
-import { ServerApi } from './../serverdata/serverapi';
 import { Component } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { ServerApiService } from '../serverdata/serverapi.service';
+import { UserService } from './user.service';
+import { providers } from './providers';
 
 @Component({
   templateUrl: './templates/auth-dialog.html'
@@ -12,25 +13,24 @@ export class AuthDialogComponent {
   constructor(
     private _dialogRef: MatDialogRef<AuthDialogComponent>,
     private _serverApi: ServerApiService,
+    private _snackBar: MatSnackBar,
+    private _userService: UserService
   ) {}
 
   public register: boolean = false;
-  public readonly providers = [ 
-    {
-      "name": "Github",
-      "urlName": "github"
-    },
-    {
-      "name": "Google",
-      "urlName": "google_oauth2"
-    },
-    {
-      "name": "Developer",
-      "urlName": "developer"
-    }
-  ]
+  public readonly providers = providers
 
-  public readonly general = new FormGroup({
+  private registerUserWithPassword(): void {
+    this._userService.signIn(this.general.value).subscribe(
+      data => console.log(JSON.stringify(data))
+    )
+  }
+
+  private loginUserWithPassword(): void {
+    
+  }
+
+  public general = new FormGroup({
     email: new FormControl('', [
       Validators.email, Validators.required
     ]),
@@ -41,6 +41,19 @@ export class AuthDialogComponent {
 
   public onClose(): void {
     this._dialogRef.close();
+  }
+
+
+  public onSubmit(): void {
+    if (this.general.valid) {
+      if (this.register) {
+        this.registerUserWithPassword()
+      } else {
+        this.loginUserWithPassword()
+      }
+    } else {
+      // TODO ERROR MESSAGE
+    }
   }
 
   public onChange(): void {
