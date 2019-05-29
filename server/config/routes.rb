@@ -3,15 +3,13 @@ Rails.application.routes.draw do
   # Second stop: The API for the editor
   scope '/api' do
 
-    resources :identities
-
     scope 'user' do
       root via: [:get], controller: 'user', action: :index
     end
 
     scope 'auth' do
       delete 'sign_out', controller: 'auth', action: :destroy
-      match ":provider/callback", to: "auth#create", via: [:get, :post]
+      match ":provider/callback", to: "auth#callback", via: [:get, :post]
       match 'failure', :to => 'auth#failure', via: [:get, :post]
     end
   

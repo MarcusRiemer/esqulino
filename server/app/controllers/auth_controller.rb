@@ -3,24 +3,28 @@
 class AuthController < ApplicationController
   before_action :authenticate_user!
 
-  def create
-    auth = request.env["omniauth.auth"]
-    @identity = Identity.search(auth)
-    if !@identity
-      @identity = Identity.create_with_auth(auth, current_user)
-    end
-
-    if !signed_in?
-      @current_user = @identity.user
-      token = Auth.encode({user_id: @identity.user_id})
-      response_jwt_cookie(token)
-    end
-
+  def callback
+    create_identity
+    sign_in
     redirect_to "/"
   end
 
-  def failure
-    render json: { error: "something got wrong" }, status: :bad_request
+  def register
+    auth = {
+      provider: "identity",
+      uid: params[:email],
+      info: {
+        name: params[:user_name]
+      },
+      data: {
+        email: params[:email],
+        password: params[:password],
+        verify_token: gen_random_uuid()
+      }
+    }
+    
+    create_identity(auth, true)
+    render json: { loggged_in: false }
   end
 
   def destroy

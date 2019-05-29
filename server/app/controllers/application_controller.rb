@@ -16,6 +16,24 @@ class ApplicationController < ActionController::API
     return !@current_user.nil?
   end
 
+  def create_identity(auth = request.env["omniauth.auth"], email = false)
+    @identity = Identity.search(auth)
+    if !@identity
+      if (email) 
+        RegisterMailer.registered_user(auth[:data]).deliver
+      end
+      @identity = Identity.create_with_auth(auth, current_user)
+    end
+  end
+
+  def sign_in
+    if !signed_in?
+      @current_user = @identity.user
+      token = Auth.encode({user_id: @identity.user_id})
+      response_jwt_cookie(token)
+    end
+  end
+
   def sign_out!
     if signed_in?
       @current_user = nil
