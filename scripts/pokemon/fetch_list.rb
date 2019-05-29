@@ -23,9 +23,12 @@ def fetch(url_in)
   puts '### -- Fetching List from ' + url_in
 
   while !tmp['next'].nil? do
-      tmp = fetch_utf8(tmp['next'])
+      tmp = JSON.parse(fetch_utf8(tmp['next']))
       result.concat(tmp['results'])
+      print "."
   end
+
+  puts
 
   puts '  Count:   ' + tmp_count.to_s
   puts '  Results: ' + result.length.to_s
@@ -42,5 +45,5 @@ def output_progress(i,total,steps)
   x = total / steps
   if (i + 1) % x == 0 then
     puts 'Item: ' + (i + 1).to_s + ' at ' + (((i + 1) * 100 / total) + 1).to_s + "%"
-s  end
+  end
 end
