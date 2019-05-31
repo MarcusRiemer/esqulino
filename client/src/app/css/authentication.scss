@@ -1,0 +1,56 @@
+$height: 320px;
+$button-size: 12rem;
+
+
+.authentication {
+  .mat-tab-header {
+    margin-bottom: 3vh;
+  }
+
+  .mat-tab-labels {
+    justify-content: center;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  hr {
+    margin: 1em 0 1em 0;
+    background-color: rgba($color: #a1a1a1, $alpha: 0.5);
+  }
+}
+
+.provider-list {
+  .mat-raised-button {
+    width: $button-size;
+    margin-bottom: 0.5em;
+  }
+}
+
+.reset-password {
+  width: $height;
+
+  .mat-raised-button {
+    width: $button-size;
+  }
+}
+
+.sign-in {
+  .mat-raised-button {
+    width: $button-size
+  }
+
+  a {
+    color: rgba($color: #1f54a5, $alpha: 1.0) !important;
+    cursor: pointer;
+  }
+
+  .reset-password-link-text {
+    font-size: 0.8em;
+  }
+
+  .email-input {
+    height: 3.2em;
+  }
+}

@@ -1,0 +1,1 @@
+export type AuthContentDescription = 'SignIn' | 'SignOut' | 'ResetPassword' | 'VerifyEmail'

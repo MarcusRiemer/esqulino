@@ -39,6 +39,9 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 
 
 import { GrammarDataService, BlockLanguageDataService } from './serverdata'
+import { ResetPasswordComponent } from './auth/reset-password.component';
+import { ProviderAuthComponent } from './auth/provider-auth.component';
+import { SignInComponent } from './auth/sign-in.component';
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -84,6 +87,9 @@ const materialModules = [
     AuthDialogComponent,
     UserButtonComponent,
     LoginWrapperComponent,
+    ProviderAuthComponent,
+    SignInComponent,
+    ResetPasswordComponent,
     FocusDirective
   ],
   exports: [
@@ -107,6 +113,9 @@ const materialModules = [
     AuthDialogComponent,
     UserButtonComponent,
     LoginWrapperComponent,
+    ResetPasswordComponent,
+    ProviderAuthComponent,
+    SignInComponent,
     FocusDirective
   ],
   entryComponents: [AuthDialogComponent]

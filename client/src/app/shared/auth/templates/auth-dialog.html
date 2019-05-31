@@ -1,54 +1,81 @@
-<h4 class="d-flex justify-content-center" mat-dialog-title>
-  Authentication
-</h4>
+<div mat-dialog-content
+  class="d-flex justify-content-center authentication">
+    <mat-tab-group
+      mat-dialog-content>
 
-<div class="d-flex" mat-dialog-content>
-  <div class="container d-flex align-items-center flex-column">
-    <div *ngFor="let provider of providers;" class="row">
-      <button 
-        class="btn btn-primary"
-        (click)="onSignIn(provider.urlName)">
-        {{provider.name}}
-      </button>
-    </div>
-  </div>
-  <div class="container d-flex align-items-center flex-column">
-    <form [formGroup]="general">
-      <div class="row">
-        <mat-form-field>
-          <input matInput 
-            type="email"
-            placeholder="Email"
-            formControlName="email">
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field>
-          <input matInput 
-            type="password"
-            placeholder="Password"
-            formControlName="password">
-        </mat-form-field>
-      </div>
-      <div *ngIf="register" class="row">
-        <mat-form-field>
-          <input matInput
-            type="password" 
-            placeholder="Retype password">
-        </mat-form-field>
-      </div>
-    </form>
+    <mat-tab label="SignIn">
+      <sign-in
+        *ngIf="shouldDisplaySignIn()" 
+        (content)="changeContent($event)">
+      </sign-in>
 
-    <div mat-dialog-actions>
-      <button mat-button 
-        (click)="onSubmit()">
-        {{ register ? 'Register' : 'Login' }}
-      </button>
-      <button mat-button
-          (click)="onChange()">
-          {{ register ? 'Sign in' : 'Sign up' }}
-      </button>
-      <button mat-button (click)="onClose()">close</button>
-    </div>
-  </div>
+      <reset-password 
+        *ngIf="shouldDisplayResetPassword()">
+      </reset-password>
+
+      <hr>
+      <provider-auth></provider-auth>  
+    </mat-tab>
+    <mat-tab label="SignUp">
+
+    </mat-tab>
+
+  </mat-tab-group>
+
 </div>
+<!--
+<div class="d-flex" >
+    <div class="container d-flex align-items-center flex-column">
+      <div *ngFor="let provider of providers;" class="row">
+        <button 
+          class="btn btn-primary"
+          (click)="onSignIn(provider.urlName)">
+          {{provider.name}}
+        </button>
+      </div>
+    </div>
+    <div class="container d-flex align-items-center flex-column">
+      <form [formGroup]="general">
+        <div class="row">
+          <mat-form-field>
+            <input matInput 
+              type="email"
+              placeholder="Email"
+              formControlName="email">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field>
+            <input matInput 
+              type="password"
+              placeholder="Password"
+              formControlName="password">
+          </mat-form-field>
+        </div>
+        <div *ngIf="register" class="row">
+          <mat-form-field>
+            <input matInput
+              type="password" 
+              placeholder="Retype password">
+          </mat-form-field>
+        </div>
+      </form>
+  
+      <div mat-dialog-actions>
+        <button mat-button
+          (click)="onResetPassword()">
+          Reset password?
+        </button>
+        <button mat-button 
+          (click)="onSubmit()">
+          {{ register ? 'Register' : 'Login' }}
+        </button>
+        <button mat-button
+            (click)="onChange()">
+            {{ register ? 'Sign in' : 'Sign up' }}
+        </button>
+        <button mat-button (click)="onClose()">close</button>
+      </div>
+    </div>
+  </div> -->
+
