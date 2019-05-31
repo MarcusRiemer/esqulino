@@ -1,0 +1,36 @@
+<div class="d-flex align-items-center flex-column sign-in">
+  <form [formGroup]="general">
+    <div class="row email-input">
+      <mat-form-field>
+        <input matInput 
+          type="email"
+          placeholder="Email"
+          formControlName="email">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field>
+        <input matInput 
+          type="password"
+          placeholder="Password"
+          formControlName="password">
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div class="row reset-password-link-text">
+    <div>
+      Forgot your password?
+      <a (click)="onResetPassword()">
+        Click here
+      </a>
+    </div>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary">
+
+    Sign in
+  </button>
+</div>

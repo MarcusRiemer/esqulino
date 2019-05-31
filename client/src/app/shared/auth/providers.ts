@@ -3,16 +3,16 @@ export const providers = [
   {
     "name": "Github",
     "urlName": "github",
-    "icon": ""
+    "icon": "fa-github"
   },
   {
     "name": "Google",
     "urlName": "google_oauth2",
-    "icon": ""
+    "icon": "fa-google"
   },
   {
     "name": "Developer",
     "urlName": "developer",
-    "icon": ""
+    "icon": "fa-user"
   }
 ]

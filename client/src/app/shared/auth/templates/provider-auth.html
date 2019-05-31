@@ -1,0 +1,12 @@
+<div class="d-flex align-items-center flex-column provider-list">
+  <div *ngFor="let provider of providers;">
+    <button 
+      mat-raised-button 
+      color="primary"
+      (click)="onSignIn(provider.urlName)">
+
+      <i class="fa {{provider.icon}}" aria-hidden="true"></i>
+      {{provider.name}}
+    </button>
+  </div>
+</div>

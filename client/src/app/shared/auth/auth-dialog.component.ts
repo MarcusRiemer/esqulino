@@ -1,3 +1,4 @@
+import { AuthContentDescription } from './auth-dialog-content.description';
 import { Component } from '@angular/core';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
@@ -17,57 +18,60 @@ export class AuthDialogComponent {
     private _userService: UserService
   ) {}
 
-  public register: boolean = false;
+  public displayingContent: AuthContentDescription = "SignIn";
   public readonly providers = providers
 
-  private registerUserWithPassword(): void {
-    this._userService.signIn(this.general.value).subscribe(
-      data => console.log(JSON.stringify(data))
-    )
-  }
+  // private registerUserWithPassword(): void {
+  //   this._userService.signIn(this.general.value).subscribe(
+  //     data => console.log(JSON.stringify(data))
+  //   )
+  // }
 
   private loginUserWithPassword(): void {
     
   }
 
-  public general = new FormGroup({
-    email: new FormControl('', [
-      Validators.email, Validators.required
-    ]),
-    password: new FormControl('', [
-      Validators.minLength(6), Validators.required
-    ])
-  })
+  public changeContent(content: AuthContentDescription): void {
+    this.displayingContent = content;
+  }
 
   public onClose(): void {
     this._dialogRef.close();
   }
 
 
-  public onSubmit(): void {
-    if (this.general.valid) {
-      if (this.register) {
-        this.registerUserWithPassword()
-      } else {
-        this.loginUserWithPassword()
-      }
-    } else {
-      // TODO ERROR MESSAGE
-    }
+  // public onSubmit(): void {
+  //   if (this.general.valid) {
+  //     if (this.register) {
+  //       this.registerUserWithPassword()
+  //     } else {
+  //       this.loginUserWithPassword()
+  //     }
+  //   } else {
+  //     // TODO ERROR MESSAGE
+  //   }
+  // }
+
+  public shouldDisplayResetPassword(): boolean {
+    return this.displayingContent === 'ResetPassword';
   }
 
-  public onChange(): void {
-    this.register = !this.register;
+  public shouldDisplaySignIn(): boolean {
+    return this.displayingContent === 'SignIn';
   }
 
-  public onSignIn(provider: string) {
-    window.location.href = this._serverApi.getSignInUrl(provider);
+  public shouldDisplaySignOut(): boolean {
+    return this.displayingContent === 'SignOut';
   }
+
+  public shouldDisplayVerifyEmail(): boolean {
+    return this.displayingContent === 'VerifyEmail';
+  }
+
 
   public static showDialog(dialog: MatDialog) {
     dialog.open(AuthDialogComponent, {
-      width: '700px',
-      height: '340px'
+      height: '500px'
     });
   }
 }
