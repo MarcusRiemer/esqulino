@@ -1,6 +1,6 @@
-1,1,3,Der Kolumbusfalter,01.01.1997,250,1978
-2,1,1,Der Kolumbusfalter,01.10.1967,250,3829
-3,1,2,Der Kolumbusfalter,01.01.1990,250,3830
+1,1,1,Der Kolumbusfalter,01.10.1967,250,3829
+2,1,2,Der Kolumbusfalter,01.01.1990,250,3830
+3,1,3,Der Kolumbusfalter,01.01.1997,250,1978
 4,2,3,"""Hallo...Hier Micky!""",01.01.1997,250,1976
 5,2,1,"""Hallo...Hier Micky!""",01.01.1968,250,3831
 6,2,2,"""Hallo...Hier Micky!""",01.01.1990,250,3832
@@ -16,9 +16,9 @@
 16,6,3,Micky-Parade,01.01.1997,250,1974
 17,6,1,Micky-Parade,01.01.1968,250,3840
 18,6,2,Micky-Parade,01.01.1990,250,3841
-19,7,2,Donald in 1000 Nöten,01.01.1990,249,3843
-20,7,3,Donald in 1000 Nöten,01.01.1997,249,1973
-21,7,1,Donald in 1000 Nöten,22.05.1969,249,3842
+19,7,3,Donald in 1000 Nöten,01.01.1997,249,1973
+20,7,1,Donald in 1000 Nöten,22.05.1969,249,3842
+21,7,2,Donald in 1000 Nöten,01.01.1990,249,3843
 22,8,3,Donald gibt nicht auf,01.01.1997,250,1977
 23,8,1,Donald gibt nicht auf,01.01.1969,250,3844
 24,8,2,Donald gibt nicht auf,01.01.1990,250,3845
@@ -94,18 +94,18 @@
 94,32,3,Donald im Glück,01.01.1998,250,2075
 95,32,1,Donald im Glück,10.02.1975,250,4075
 96,32,2,Donald im Glück,01.01.1991,250,4076
-97,33,3,Ein Milliardär hat's schwer,01.01.1998,250,2076
-98,33,1,Ein Milliardär hat's schwer,14.04.1975,250,3781
-99,33,2,Ein Milliardär hat's schwer,01.01.1991,250,3782
-100,34,3,Supermicky,01.01.1998,250,2077
-101,34,1,Supermicky,01.05.1975,250,3783
-102,34,2,Supermicky,01.01.1991,250,3784
+97,33,1,Ein Milliardär hat's schwer,14.04.1975,250,3781
+98,33,2,Ein Milliardär hat's schwer,01.01.1991,250,3782
+99,33,3,Ein Milliardär hat's schwer,01.01.1998,250,2076
+100,34,1,Supermicky,01.05.1975,250,3783
+101,34,2,Supermicky,01.01.1991,250,3784
+102,34,3,Supermicky,01.01.1998,250,2077
 103,35,3,Aus Onkel Donalds Memoiren,01.01.1998,250,2078
 104,35,1,Aus Onkel Donalds Memoiren,11.08.1975,250,3785
 105,35,2,Aus Onkel Donalds Memoiren,01.01.1991,250,3786
-106,36,2,Onkel Donald auf heißer Spur,01.01.1991,251,3788
-107,36,3,Onkel Donald auf heißer Spur,01.01.1998,251,2079
-108,36,1,Onkel Donald auf heißer Spur,13.10.1975,251,3787
+106,36,3,Onkel Donald auf heißer Spur,01.01.1998,251,2079
+107,36,1,Onkel Donald auf heißer Spur,13.10.1975,251,3787
+108,36,2,Onkel Donald auf heißer Spur,01.01.1991,251,3788
 109,37,3,Ehrlich spart am längsten,01.01.1998,250,2080
 110,37,1,Ehrlich spart am längsten,24.11.1975,250,3789
 111,37,2,Ehrlich spart am längsten,01.01.1991,250,3790
@@ -115,33 +115,33 @@
 115,39,3,"Eins, zwei, drei - große Hexerei",01.01.1998,250,2082
 116,39,1,"Eins, zwei, drei - große Hexerei",12.04.1976,250,3793
 117,39,2,"Eins, zwei, drei - große Hexerei",01.01.1991,250,3794
-118,40,3,Auf geht's Micky!,01.01.1998,250,2083
-119,40,1,Auf geht's Micky!,14.06.1976,250,3795
-120,40,2,Auf geht's Micky!,01.01.1991,250,3796
+118,40,1,Auf geht's Micky!,14.06.1976,250,3795
+119,40,2,Auf geht's Micky!,01.01.1991,250,3796
+120,40,3,Auf geht's Micky!,01.01.1998,250,2083
 121,41,3,Donald mal ganz anders,01.01.1998,250,2084
 122,41,1,Donald mal ganz anders,09.08.1976,250,3797
 123,41,2,Donald mal ganz anders,01.01.1992,250,3798
 124,42,3,Micky denkt am schnellsten,01.01.1998,250,2085
 125,42,1,Micky denkt am schnellsten,01.10.1976,250,3799
 126,42,2,Micky denkt am schnellsten,01.01.1992,250,3800
-127,43,3,Unterwegs in Sachen Gold,01.01.1998,250,2086
-128,43,1,Unterwegs in Sachen Gold,22.11.1976,250,3801
-129,43,2,Unterwegs in Sachen Gold,01.01.1992,250,3802
+127,43,1,Unterwegs in Sachen Gold,22.11.1976,250,3801
+128,43,2,Unterwegs in Sachen Gold,01.01.1992,250,3802
+129,43,3,Unterwegs in Sachen Gold,01.01.1998,250,2086
 130,44,3,Phantomias fliegt wieder,01.01.1998,250,2087
 131,44,1,Phantomias fliegt wieder,01.01.1977,250,3803
 132,44,2,Phantomias fliegt wieder,01.01.1992,250,3804
-133,45,3,Bahn frei für Donald,01.01.1998,250,2088
-134,45,1,Bahn frei für Donald,01.01.1977,250,3805
-135,45,2,Bahn frei für Donald,01.01.1992,250,3806
+133,45,1,Bahn frei für Donald,01.01.1977,250,3805
+134,45,2,Bahn frei für Donald,01.01.1992,250,3806
+135,45,3,Bahn frei für Donald,01.01.1998,250,2088
 136,46,3,Micky hat den Bogen raus,01.01.1998,250,2089
 137,46,1,Micky hat den Bogen raus,01.01.1977,250,3807
 138,46,2,Micky hat den Bogen raus,01.01.1992,250,3808
 139,47,3,"Hoppla, die Ducks kommen!",01.01.1998,250,2090
 140,47,1,"Hoppla, die Ducks kommen!",01.06.1977,250,3809
 141,47,2,"Hoppla, die Ducks kommen!",01.01.1992,250,3810
-142,48,2,Volltreffer für Micky,01.01.1992,250,3812
-143,48,3,Volltreffer für Micky,01.01.1998,250,2091
-144,48,1,Volltreffer für Micky,11.07.1977,250,3811
+142,48,3,Volltreffer für Micky,01.01.1998,250,2091
+143,48,1,Volltreffer für Micky,11.07.1977,250,3811
+144,48,2,Volltreffer für Micky,01.01.1992,250,3812
 145,49,3,Ohne Fleiß kein Preis,01.01.1998,250,2092
 146,49,1,Ohne Fleiß kein Preis,12.09.1977,250,4013
 147,49,2,Ohne Fleiß kein Preis,01.01.1992,250,4014
@@ -160,9 +160,9 @@
 160,54,3,"Micky, der Meisterdetektiv",01.01.1998,250,2097
 161,54,1,"Micky, der Meisterdetektiv",05.06.1978,250,4023
 162,54,2,"Micky, der Meisterdetektiv",01.01.1992,250,4024
-163,55,3,Dagobert macht Geschichten,01.01.1998,250,2098
-164,55,1,Dagobert macht Geschichten,10.07.1978,250,4025
-165,55,2,Dagobert macht Geschichten,01.01.1992,250,4026
+163,55,2,Dagobert macht Geschichten,01.01.1992,250,4026
+164,55,3,Dagobert macht Geschichten,01.01.1998,250,2098
+165,55,1,Dagobert macht Geschichten,10.07.1978,250,4025
 166,56,3,Achtung-Fertig-Los!,01.01.1998,250,2099
 167,56,1,Achtung-Fertig-Los!,11.09.1978,250,4027
 168,56,2,Achtung-Fertig-Los!,01.01.1992,250,4028
@@ -172,30 +172,30 @@
 172,58,3,"Donald, der Held des Tages",01.01.1998,248,2101
 173,58,1,"Donald, der Held des Tages",08.01.1979,248,4031
 174,58,2,"Donald, der Held des Tages",01.01.1992,248,4032
-175,59,3,Frisch erzählt ist halb gewonnen,01.01.1998,250,2102
-176,59,1,Frisch erzählt ist halb gewonnen,12.03.1979,250,4033
-177,59,2,Frisch erzählt ist halb gewonnen,01.01.1992,250,4034
-178,60,2,Donald ohne Furcht und Tadel,01.01.1992,249,4036
-179,60,3,Donald ohne Furcht und Tadel,01.01.1998,249,2103
-180,60,1,Donald ohne Furcht und Tadel,07.05.1979,249,4035
+175,59,1,Frisch erzählt ist halb gewonnen,12.03.1979,250,4033
+176,59,2,Frisch erzählt ist halb gewonnen,01.01.1992,250,4034
+177,59,3,Frisch erzählt ist halb gewonnen,01.01.1998,250,2102
+178,60,3,Donald ohne Furcht und Tadel,01.01.1998,249,2103
+179,60,1,Donald ohne Furcht und Tadel,07.05.1979,249,4035
+180,60,2,Donald ohne Furcht und Tadel,01.01.1992,249,4036
 181,61,3,Ohne Donald geht es nicht,01.01.1998,252,2104
 182,61,1,Ohne Donald geht es nicht,11.06.1979,252,4037
 183,61,2,Ohne Donald geht es nicht,01.01.1988,252,4038
 184,62,3,Micky auf Gespensterjagd,01.01.1998,250,2105
 185,62,1,Micky auf Gespensterjagd,09.07.1979,250,4039
 186,62,2,Micky auf Gespensterjagd,01.01.1988,250,4040
-187,63,2,"Micky, der rasende Reporter",01.01.1988,250,4042
-188,63,3,"Micky, der rasende Reporter",01.01.1998,250,2106
-189,63,1,"Micky, der rasende Reporter",10.09.1979,250,4041
-190,64,3,Onkel Dagoberts Traumreisen,01.01.1998,250,2107
-191,64,1,Onkel Dagoberts Traumreisen,12.11.1979,250,4043
-192,64,2,Onkel Dagoberts Traumreisen,01.01.1988,250,4044
+187,63,3,"Micky, der rasende Reporter",01.01.1998,250,2106
+188,63,1,"Micky, der rasende Reporter",10.09.1979,250,4041
+189,63,2,"Micky, der rasende Reporter",01.01.1988,250,4042
+190,64,1,Onkel Dagoberts Traumreisen,12.11.1979,250,4043
+191,64,2,Onkel Dagoberts Traumreisen,01.01.1988,250,4044
+192,64,3,Onkel Dagoberts Traumreisen,01.01.1998,250,2107
 193,65,3,Spaß mit Micky und Minni,01.01.1998,250,2108
 194,65,1,Spaß mit Micky und Minni,14.01.1980,250,3748
 195,65,2,Spaß mit Micky und Minni,01.01.1988,250,3749
-196,66,2,Donald dreht durch,01.01.1988,250,3751
-197,66,3,Donald dreht durch,01.01.1998,250,2109
-198,66,1,Donald dreht durch,10.03.1980,250,3750
+196,66,3,Donald dreht durch,01.01.1998,250,2109
+197,66,1,Donald dreht durch,10.03.1980,250,3750
+198,66,2,Donald dreht durch,01.01.1988,250,3751
 199,67,3,Micky Maus - Superstar,01.01.1998,250,2110
 200,67,1,Micky Maus - Superstar,12.05.1980,250,3752
 201,67,2,Micky Maus - Superstar,01.01.1988,250,3753
@@ -205,9 +205,9 @@
 205,69,3,Dagoberts große Schau,01.01.1998,250,2112
 206,69,1,Dagoberts große Schau,14.07.1980,250,3756
 207,69,2,Dagoberts große Schau,01.01.1988,250,3757
-208,70,2,Rund um die Welt mit Micky Maus,01.01.1988,250,3759
-209,70,3,Rund um die Welt mit Micky Maus,01.01.1998,250,2113
-210,70,1,Rund um die Welt mit Micky Maus,15.09.1980,250,3758
+208,70,3,Rund um die Welt mit Micky Maus,01.01.1998,250,2113
+209,70,1,Rund um die Welt mit Micky Maus,15.09.1980,250,3758
+210,70,2,Rund um die Welt mit Micky Maus,01.01.1988,250,3759
 211,71,3,Die Geschäfte des Onkel Dagobert,01.01.1998,250,2114
 212,71,1,Die Geschäfte des Onkel Dagobert,10.11.1980,250,3760
 213,71,2,Die Geschäfte des Onkel Dagobert,01.01.1989,250,3761
@@ -259,9 +259,9 @@
 259,87,3,Micky ist wieder da!,01.01.1998,250,2130
 260,87,1,Micky ist wieder da!,14.03.1983,250,3875
 261,87,2,Micky ist wieder da!,01.01.1988,250,3876
-262,88,3,Donald sticht in See,01.01.1998,250,2131
-263,88,1,Donald sticht in See,19.05.1983,250,3877
-264,88,2,Donald sticht in See,01.01.1988,250,3878
+262,88,2,Donald sticht in See,01.01.1988,250,3878
+263,88,3,Donald sticht in See,01.01.1998,250,2131
+264,88,1,Donald sticht in See,19.05.1983,250,3877
 265,89,3,Der Boß bin ich!,01.01.1998,250,2132
 266,89,1,Der Boß bin ich!,13.06.1983,250,3879
 267,89,2,Der Boß bin ich!,01.01.1988,250,3880
@@ -277,18 +277,18 @@
 277,93,3,Die Macht des Goldes,01.01.1999,251,2136
 278,93,1,Die Macht des Goldes,09.01.1984,251,3887
 279,93,2,Die Macht des Goldes,01.01.1989,251,3888
-280,94,2,Micky groß in Form,01.01.1989,250,3890
-281,94,3,Micky groß in Form,01.01.1999,250,2137
-282,94,1,Micky groß in Form,12.03.1984,250,3889
+280,94,3,Micky groß in Form,01.01.1999,250,2137
+281,94,1,Micky groß in Form,12.03.1984,250,3889
+282,94,2,Micky groß in Form,01.01.1989,250,3890
 283,95,3,Onkel Dagobert erzählt,01.01.1999,251,2138
 284,95,1,Onkel Dagobert erzählt,07.05.1984,251,3891
 285,95,2,Onkel Dagobert erzählt,01.01.1989,251,3892
 286,96,3,Donald bleibt auf Kurs,01.01.1999,250,2139
 287,96,1,Donald bleibt auf Kurs,01.06.1984,250,3893
 288,96,2,Donald bleibt auf Kurs,01.01.1989,250,3894
-289,97,3,Olympisches Allerlei,01.01.1999,249,2140
-290,97,1,Olympisches Allerlei,06.07.1984,249,3716
-291,97,2,Olympisches Allerlei,01.01.1989,249,3717
+289,97,2,Olympisches Allerlei,01.01.1989,249,3717
+290,97,3,Olympisches Allerlei,01.01.1999,249,2140
+291,97,1,Olympisches Allerlei,06.07.1984,249,3716
 292,98,3,Vorhang auf für Micky und Gamma,01.01.1999,250,2141
 293,98,1,Vorhang auf für Micky und Gamma,03.08.1984,250,3718
 294,98,2,Vorhang auf für Micky und Gamma,01.01.1989,250,3719
@@ -304,24 +304,24 @@
 304,102,3,"Du bist ein As, Phantomias!",01.01.1999,250,2146
 305,102,1,"Du bist ein As, Phantomias!",22.02.1985,250,3726
 306,102,2,"Du bist ein As, Phantomias!",01.01.1989,250,3727
-307,103,3,Der Duck Clan,01.01.1999,250,2147
-308,103,1,Der Duck Clan,04.04.1985,250,3728
-309,103,2,Der Duck Clan,01.01.1989,250,3729
-310,104,2,Dagobert das Finanzgenie,01.01.1989,250,3731
-311,104,3,Dagobert das Finanzgenie,01.01.1999,250,2148
-312,104,1,Dagobert das Finanzgenie,24.05.1985,250,3730
+307,103,1,Der Duck Clan,04.04.1985,250,3728
+308,103,2,Der Duck Clan,01.01.1989,250,3729
+309,103,3,Der Duck Clan,01.01.1999,250,2147
+310,104,1,Dagobert das Finanzgenie,24.05.1985,250,3730
+311,104,2,Dagobert das Finanzgenie,01.01.1989,250,3731
+312,104,3,Dagobert das Finanzgenie,01.01.1999,250,2148
 313,105,3,Ich bin die Nummer Eins,01.01.1999,250,2149
 314,105,1,Ich bin die Nummer Eins,05.07.1985,250,3732
 315,105,2,Ich bin die Nummer Eins,01.01.1989,250,3733
 316,106,3,Donald der Tausendsassa,01.01.1999,250,2150
 317,106,1,Donald der Tausendsassa,23.08.1985,250,3734
 318,106,2,Donald der Tausendsassa,01.01.1989,250,3735
-319,107,3,Wer zuletzt lacht...,01.01.1999,250,2151
-320,107,1,Wer zuletzt lacht...,11.10.1985,250,3736
-321,107,2,Wer zuletzt lacht...,01.01.1989,250,3737
-322,108,2,Donald ist im Bilde,01.01.1989,249,3739
-323,108,3,Donald ist im Bilde,01.01.1999,249,2152
-324,108,1,Donald ist im Bilde,29.11.1985,249,3738
+319,107,1,Wer zuletzt lacht...,11.10.1985,250,3736
+320,107,2,Wer zuletzt lacht...,01.01.1989,250,3737
+321,107,3,Wer zuletzt lacht...,01.01.1999,250,2151
+322,108,3,Donald ist im Bilde,01.01.1999,249,2152
+323,108,1,Donald ist im Bilde,29.11.1985,249,3738
+324,108,2,Donald ist im Bilde,01.01.1989,249,3739
 325,109,3,Das Lied der Prärie,01.01.1999,250,2153
 326,109,1,Das Lied der Prärie,10.01.1986,250,3740
 327,109,2,Das Lied der Prärie,01.01.1989,250,3741
@@ -343,9 +343,9 @@
 343,115,3,Riesenspaß beim Ringelpiez,01.01.1999,250,2159
 344,115,1,Riesenspaß beim Ringelpiez,30.09.1986,250,3931
 345,115,2,Riesenspaß beim Ringelpiez,01.01.1990,250,3932
-346,116,2,Ohne Netz und doppelten Boden,01.01.1990,250,3934
-347,116,3,Ohne Netz und doppelten Boden,01.01.1999,250,2160
-348,116,1,Ohne Netz und doppelten Boden,28.11.1986,250,3933
+346,116,3,Ohne Netz und doppelten Boden,01.01.1999,250,2160
+347,116,1,Ohne Netz und doppelten Boden,28.11.1986,250,3933
+348,116,2,Ohne Netz und doppelten Boden,01.01.1990,250,3934
 349,117,3,Die Ducks...vom Winde verweht,01.01.1999,250,2161
 350,117,1,Die Ducks...vom Winde verweht,13.01.1987,250,3935
 351,117,2,Die Ducks...vom Winde verweht,01.01.1990,250,3936
@@ -356,14 +356,14 @@
 356,119,1,Fern von Entenhausen,21.04.1987,258,3939
 357,120,2,Entenhausener Wunschkonzert,09.06.1987,258,2164
 358,120,1,Entenhausener Wunschkonzert,09.06.1987,258,3940
-359,121,2,Phantomias und seine Freunde,21.07.1987,258,2165
-360,121,1,Phantomias und seine Freunde,21.07.1987,258,3941
+359,121,1,Phantomias und seine Freunde,21.07.1987,258,3941
+360,121,2,Phantomias und seine Freunde,21.07.1987,258,2165
 361,122,2,Querfeldein über Stock und Stein,01.09.1987,258,2166
 362,122,1,Querfeldein über Stock und Stein,01.09.1987,258,3942
 363,123,2,Onkel Dagobert lebe hoch!,13.10.1987,258,2167
 364,123,1,Onkel Dagobert lebe hoch!,13.10.1987,258,3943
-365,124,2,Wettlauf ins Ungewisse,01.12.1987,258,2168
-366,124,1,Wettlauf ins Ungewisse,01.12.1987,258,3944
+365,124,1,Wettlauf ins Ungewisse,01.12.1987,258,3944
+366,124,2,Wettlauf ins Ungewisse,01.12.1987,258,2168
 367,125,2,Freie Fahrt für Phantomias,12.01.1988,258,2169
 368,125,1,Freie Fahrt für Phantomias,12.01.1988,258,3945
 369,126,2,"Donald, der Pechvogel",01.03.1988,258,2170
@@ -410,20 +410,20 @@
 410,147,1,Gold unter Wasser,19.06.1990,258,3913
 411,148,2,Der magische Ring,24.07.1990,258,2192
 412,148,1,Der magische Ring,24.07.1990,258,3914
-413,149,2,Der goldene Krieger,21.08.1990,258,2193
-414,149,1,Der goldene Krieger,21.08.1990,258,3915
+413,149,1,Der goldene Krieger,21.08.1990,258,3915
+414,149,2,Der goldene Krieger,21.08.1990,258,2193
 415,150,2,Jubiläums-Ausgabe,18.09.1990,258,2194
 416,150,1,Jubiläums-Ausgabe,18.09.1990,258,3916
-417,151,2,Der Dimensions-Sprung,23.10.1990,258,2195
-418,151,1,Der Dimensions-Sprung,23.10.1990,258,3917
+417,151,1,Der Dimensions-Sprung,23.10.1990,258,3917
+418,151,2,Der Dimensions-Sprung,23.10.1990,258,2195
 419,152,2,Der Unglücksbringer,20.11.1990,258,2196
 420,152,1,Der Unglücksbringer,20.11.1990,258,3918
 421,153,2,Der Schatz der Teufelszinne,18.12.1990,258,2197
 422,153,1,Der Schatz der Teufelszinne,18.12.1990,258,3919
 423,154,2,Phantomias und die Dünnli-Diät,22.01.1991,258,2198
 424,154,1,Phantomias und die Dünnli-Diät,22.01.1991,258,3920
-425,155,2,Abenteuer im Regenwald,19.02.1991,258,2199
-426,155,1,Abenteuer im Regenwald,19.02.1991,258,3921
+425,155,1,Abenteuer im Regenwald,19.02.1991,258,3921
+426,155,2,Abenteuer im Regenwald,19.02.1991,258,2199
 427,156,2,Antike Geschäfte,19.03.1991,258,2200
 428,156,1,Antike Geschäfte,19.03.1991,258,3922
 429,157,2,Phantomias jagt Spectaculus,23.04.1991,258,2201
@@ -434,8 +434,8 @@
 434,159,1,Das Geheimnis von Paris,18.06.1991,258,3925
 435,160,2,Der wahre Pioniergeist,23.07.1991,258,2204
 436,160,1,Der wahre Pioniergeist,23.07.1991,258,3926
-437,161,2,Der Hexentaler,20.08.1991,258,2205
-438,161,1,Der Hexentaler,20.08.1991,258,3981
+437,161,1,Der Hexentaler,20.08.1991,258,3981
+438,161,2,Der Hexentaler,20.08.1991,258,2205
 439,162,2,Der goldene Totempfahl,17.09.1991,258,2206
 440,162,1,Der goldene Totempfahl,17.09.1991,258,3982
 441,163,2,Das Schloß der Glenna O'Duck,22.10.1991,258,2207
@@ -466,8 +466,8 @@
 466,175,1,Jubiläums-Ausgabe,08.09.1992,250,3995
 467,176,2,Das Tal der sieben Sonnen,13.10.1992,250,2220
 468,176,1,Das Tal der sieben Sonnen,13.10.1992,250,3996
-469,177,2,Die Jagd auf Karte Nr.1,10.11.1992,250,2221
-470,177,1,Die Jagd auf Karte Nr.1,10.11.1992,250,3895
+469,177,1,Die Jagd auf Karte Nr.1,10.11.1992,250,3895
+470,177,2,Die Jagd auf Karte Nr.1,10.11.1992,250,2221
 471,178,2,Der verhinderte Entdecker,09.12.1992,250,2222
 472,178,1,Der verhinderte Entdecker,08.12.1992,250,3896
 473,179,2,Die neue Statue,12.01.1993,250,2223
@@ -480,8 +480,8 @@
 480,182,1,Die Suche nach dem Feuer,13.04.1993,250,3900
 481,183,2,Die Zauberglocke,11.05.1993,250,2227
 482,183,1,Die Zauberglocke,11.05.1993,250,3901
-483,184,2,Eine fantastische Reise,08.06.1993,250,2228
-484,184,1,Eine fantastische Reise,08.06.1993,250,3902
+483,184,1,Eine fantastische Reise,08.06.1993,250,3902
+484,184,2,Eine fantastische Reise,08.06.1993,250,2228
 485,185,2,Das Wunderpferd,13.07.1993,250,2229
 486,185,1,Das Wunderpferd,13.07.1993,250,3903
 487,186,2,Graf Frost und das Zepter der Zeit,10.08.1993,250,2230
@@ -490,8 +490,8 @@
 490,187,1,Der Held der Pharaonen,14.09.1993,250,3905
 491,188,2,Die Perle der Südsee,12.10.1993,250,2232
 492,188,1,Die Perle der Südsee,12.10.1993,250,3906
-493,189,2,Abenteuer in Absurdistan,09.11.1993,250,2233
-494,189,1,Abenteuer in Absurdistan,09.11.1993,250,3907
+493,189,1,Abenteuer in Absurdistan,09.11.1993,250,3907
+494,189,2,Abenteuer in Absurdistan,09.11.1993,250,2233
 495,190,2,Prallball im Weltall,14.12.1993,250,2234
 496,190,1,Prallball im Weltall,14.12.1993,250,3908
 497,191,2,Phantomias auf Abwegen?,11.01.1994,250,2235
@@ -518,8 +518,8 @@
 518,202,1,Ein wahrer Held,08.11.1994,250,3974
 519,203,2,Der Ritter ohne Furcht und Adel,13.12.1994,250,2247
 520,203,1,Der Ritter ohne Furcht und Adel,13.12.1994,250,3975
-521,204,1,Der Palast des Dagomesch,10.01.1995,250,3976
-522,204,2,Der Palast des Dagomesch,10.01.1995,250,2248
+521,204,2,Der Palast des Dagomesch,10.01.1995,250,2248
+522,204,1,Der Palast des Dagomesch,10.01.1995,250,3976
 523,205,2,Die Adelsprüfung,07.02.1995,250,2249
 524,205,1,Die Adelsprüfung,07.02.1995,250,3977
 525,206,2,Im Indianerland,07.03.1995,250,2250
@@ -536,8 +536,8 @@
 536,212,1,Wo ist Onkel Dagobert ?,05.09.1995,250,3952
 537,213,2,Die verlorene Welt,03.10.1995,250,2257
 538,213,1,Die verlorene Welt,02.10.1995,250,3953
-539,214,2,Der Dieb von Bagdad,07.11.1995,250,2258
-540,214,1,Der Dieb von Bagdad,07.11.1995,250,3954
+539,214,1,Der Dieb von Bagdad,07.11.1995,250,3954
+540,214,2,Der Dieb von Bagdad,07.11.1995,250,2258
 541,215,2,DonLeon der Schreckliche,05.12.1995,250,2259
 542,215,1,DonLeon der Schreckliche,05.12.1995,250,3955
 543,216,2,Der doppelte Dagobert,09.01.1996,250,2260
@@ -546,12 +546,12 @@
 546,217,1,Die Formel des Reichtums,06.02.1996,250,3957
 547,218,2,Die Glückstaler-Allergie,05.03.1996,250,2262
 548,218,1,Die Glückstaler-Allergie,05.03.1996,250,3958
-549,219,2,Der Zauber-Zylinder,02.04.1996,250,2263
-550,219,1,Der Zauber-Zylinder,02.04.1996,250,3959
+549,219,1,Der Zauber-Zylinder,02.04.1996,250,3959
+550,219,2,Der Zauber-Zylinder,02.04.1996,250,2263
 551,220,2,Das Geheimnis des 313,30.04.1996,250,2264
 552,220,1,Das Geheimnis des 313,30.04.1996,250,3960
-553,221,2,Das Buch der Wünsche,28.05.1996,250,2266
-554,221,1,Das Buch der Wünsche,28.05.1996,250,3961
+553,221,1,Das Buch der Wünsche,28.05.1996,250,3961
+554,221,2,Das Buch der Wünsche,28.05.1996,250,2266
 555,222,2,Der erste Held von Olympia,25.06.1996,250,2267
 556,222,1,Der erste Held von Olympia,25.06.1996,250,3962
 557,223,2,Die Zeitwanne,23.07.1996,250,2268
@@ -574,8 +574,8 @@
 574,231,1,Phantomias und die Zauberer,04.02.1997,250,4003
 575,233,2,Zeit ist Geld,01.04.1997,250,2278
 576,233,1,Zeit ist Geld,01.04.1997,250,4005
-577,234,2,Die Jagd nach dem Sumpfmonster,06.05.1997,250,2279
-578,234,1,Die Jagd nach dem Sumpfmonster,06.05.1997,250,4006
+577,234,1,Die Jagd nach dem Sumpfmonster,06.05.1997,250,4006
+578,234,2,Die Jagd nach dem Sumpfmonster,06.05.1997,250,2279
 579,235,2,Der Schulbusfahrer,03.06.1997,250,2280
 580,235,1,Der Schulbusfahrer,03.06.1997,250,4007
 581,236,2,50 Jahre Onkel Dagobert,01.07.1997,250,2281

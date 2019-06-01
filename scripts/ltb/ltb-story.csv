@@ -84,7 +84,7 @@
 84,I TL384-C,In den Fängen der Spionageabwehr,Kriminalgeschichte,Topolino e l'ingranaggio del controspionaggio,Italien,30
 85,I TL417-B,Astronaut Micky,"Abenteuer,Kriminalgeschichte",Topolino e l'impresa cosmosubacquea,Italien,31
 86,I TL 234-AP,Die Reise zum Mond,Science-Fiction,Astralpippo n. 9999 !,Italien,60
-87,"",Wer entführt wen?,"","","",0
+87,,Wer entführt wen?,,,,0
 88,I CWD28-A,Vorgeschichte,Rahmengeschichte,Prologo a Topolino ole',Italien,38
 89,I TL 266-BP,Micky löst das Rätsel von Kariba,"Kriminalgeschichte,Abenteuer",Topolino nella valle di Kariba,Italien,61
 90,I TL384-C,Micky und Goofy in den Fängen der Spionageabwehr,Kriminalgeschichte,Topolino e l'ingranaggio del controspionaggio,Italien,30
@@ -98,17 +98,17 @@
 98,I TL 234-AP,Die Reise zum Mond,Science-Fiction,Astralpippo n. 9999 !,Italien,60
 99,I TL432-A,Wer entführt wen?,"Wild West,Kriminalgeschichte",Topolino e le rapine facili,Italien,30
 100,I CWD27-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino cocktail,Italien,28
-101,I TL 101-AP,Donald eröffnet eine Musterschule!,Gagstory,Paperino e la scuola modello,Italien,58
-102,I TL385-A,Daniel Düsentrieb als Eulenspiegel,Science-Fiction,Archimede e il signor Scherzo,Italien,38
-103,I TL 302-AP,Auf der Suche nach dem Füllhorn,"Schatzsuche,Historisches Thema",Paperino e il corno dell'abbondanza,Italien,60
-104,I TL386-A,Onkel Dagobert ist ein Schatz,Wirtschaftskampf,Zio Paperone e le lucciole industriali,Italien,32
-105,I TL285-A,Donald und der Goldspürhund,"Schatzsuche,Abenteuer",Paperino e il cane dollarosus,Italien,33
+101,I TL 101-AP,Die Musterschule,Gagstory,Paperino e la scuola modello,Italien,58
+102,I TL385-A,Der Eulenspiegel geht um,Science-Fiction,Archimede e il signor Scherzo,Italien,38
+103,I TL 302-AP,Die Suche nach dem Füllhorn,"Schatzsuche,Historisches Thema",Paperino e il corno dell'abbondanza,Italien,60
+104,I TL386-A,Ein wahrer Schatz!,Wirtschaftskampf,Zio Paperone e le lucciole industriali,Italien,32
+105,I TL285-A,Der Goldspürhund,"Schatzsuche,Abenteuer",Paperino e il cane dollarosus,Italien,33
 106,I CWD27-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino cocktail,Italien,28
-107,I TL 101-AP,Die Musterschule,Gagstory,Paperino e la scuola modello,Italien,58
-108,I TL385-A,Der Eulenspiegel geht um,Science-Fiction,Archimede e il signor Scherzo,Italien,38
-109,I TL 302-AP,Die Suche nach dem Füllhorn,"Schatzsuche,Historisches Thema",Paperino e il corno dell'abbondanza,Italien,60
-110,I TL386-A,Ein wahrer Schatz!,Wirtschaftskampf,Zio Paperone e le lucciole industriali,Italien,32
-111,I TL285-A,Der Goldspürhund,"Schatzsuche,Abenteuer",Paperino e il cane dollarosus,Italien,33
+107,I TL 101-AP,Donald eröffnet eine Musterschule!,Gagstory,Paperino e la scuola modello,Italien,58
+108,I TL385-A,Daniel Düsentrieb als Eulenspiegel,Science-Fiction,Archimede e il signor Scherzo,Italien,38
+109,I TL 302-AP,Auf der Suche nach dem Füllhorn,"Schatzsuche,Historisches Thema",Paperino e il corno dell'abbondanza,Italien,60
+110,I TL386-A,Onkel Dagobert ist ein Schatz,Wirtschaftskampf,Zio Paperone e le lucciole industriali,Italien,32
+111,I TL285-A,Donald und der Goldspürhund,"Schatzsuche,Abenteuer",Paperino e il cane dollarosus,Italien,33
 112,I CWD27-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino cocktail,Italien,28
 113,I TL 101-AP,Donald eröffnet eine Musterschule!,Gagstory,Paperino e la scuola modello,Italien,58
 114,I TL385-A,Daniel Düsentrieb als Eulenspiegel,Science-Fiction,Archimede e il signor Scherzo,Italien,38
@@ -118,17 +118,17 @@
 118,I CWD10-A,Vorgeschichte,Rahmengeschichte,Prologo a Superpaperissimo,Italien,32
 119,I TL195-AP,Die Unglücksschule,Gagstory,Paperino e la scuola dei guai,Italien,58
 120,I TL174-AP,Der Fliegende Schotte,Historisches Thema,Paperino e la leggenda dello Â«scozzese volanteÂ»,Italien,48
-121,"W OS649-01(-02,-03,-04,-05,-06)",Das Filmfestival,"Abenteuer,Gagstory","",U.S.-Comichefte,45
+121,"W OS649-01(-02,-03,-04,-05,-06)",Das Filmfestival,"Abenteuer,Gagstory",,U.S.-Comichefte,45
 122,"W USGD1-01 (-02,-05,-06)",Der Zauberspiegel,Abenteuer,Uncle Scrooge Goes to Disneyland,U.S.-Comichefte,67
 123,I CWD10-A,Vorgeschichte,Rahmengeschichte,Prologo a Superpaperissimo,Italien,32
 124,I TL195-AP,Onkel Donald und die Unglücksschule,Gagstory,Paperino e la scuola dei guai,Italien,58
 125,I TL174-AP,"Donald und der ""Fliegende Schotte""",Historisches Thema,Paperino e la leggenda dello Â«scozzese volanteÂ»,Italien,48
-126,"W OS649-01(-02,-03,-04,-05,-06)",Donald und das Filmfestival,"Abenteuer,Gagstory","",U.S.-Comichefte,45
+126,"W OS649-01(-02,-03,-04,-05,-06)",Donald und das Filmfestival,"Abenteuer,Gagstory",,U.S.-Comichefte,45
 127,"W USGD1-01 (-02,-05,-06)",Onkel Dagobert und der Zauberspiegel,Abenteuer,Uncle Scrooge Goes to Disneyland,U.S.-Comichefte,67
 128,I CWD10-A,Vorgeschichte,Rahmengeschichte,Prologo a Superpaperissimo,Italien,32
 129,I TL195-AP,Onkel Donald und die Unglücksschule,Gagstory,Paperino e la scuola dei guai,Italien,58
 130,I TL174-AP,"Donald und der ""Fliegende Schotte""",Historisches Thema,Paperino e la leggenda dello Â«scozzese volanteÂ»,Italien,48
-131,"W OS649-01(-02,-03,-04,-05,-06)",Donald und das Filmfestival,"Abenteuer,Gagstory","",U.S.-Comichefte,45
+131,"W OS649-01(-02,-03,-04,-05,-06)",Donald und das Filmfestival,"Abenteuer,Gagstory",,U.S.-Comichefte,45
 132,"W USGD1-01 (-02,-05,-06)",Onkel Dagobert und der Zauberspiegel,Abenteuer,Uncle Scrooge Goes to Disneyland,U.S.-Comichefte,67
 133,I CWD18-A,Vorgeschichte,Rahmengeschichte,Prologo a Arcitopolino,Italien,31
 134,I TL230-AP,Die Irokesenkette,Kriminalgeschichte,Topolino e la collana Chirikawa,Italien,58
@@ -652,10 +652,10 @@
 652,I TL729-C,Wie gewonnen so zerronnen,Gagstory,Paperino e le perle sott'aceto,Italien,35
 653,I CWD55-A,Vorgeschichte,Rahmengeschichte,Prologo a Zio Paperone mumble...mumble!,Italien,18
 654,I TL802-C,Das Allheilmittel,Gagstory,Zio Paperone e la triÃ ca veneziana,Italien,33
-655,I TL816-A,Die Klunker aus Klunkerpur,"Wirtschaftskampf,Abenteuer",Paperino e la percentuale in loco,Italien,39
-656,I TL667-A,Wettflug um die Welt,"Wirtschaftskampf,Gagstory",Zio Paperone e il traguardo difficile,Italien,33
+655,I TL816-A,Zahlbar an Ort und Stelle,"Wirtschaftskampf,Abenteuer",Paperino e la percentuale in loco,Italien,39
+656,I TL667-A,Die Wette,"Wirtschaftskampf,Gagstory",Zio Paperone e il traguardo difficile,Italien,33
 657,I TL724-D,Der Schatz des Odysseus,Historisches Thema,Zio Paperone e il tesoro di Ulisse,Italien,32
-658,I TL650-A,Das Gold-Embargo,Dagobert in Not,Zio Paperone e la psicosi dell'oro,Italien,33
+658,I TL650-A,Goldrausch,Dagobert in Not,Zio Paperone e la psicosi dell'oro,Italien,33
 659,I TL 806-AP,"Wer wagt, gewinnt!","Wirtschaftskampf,Abenteuer",Paperino e il pacco dinamitardo,Italien,62
 660,I CWD55-A,Vorgeschichte,Rahmengeschichte,Prologo a Zio Paperone mumble...mumble!,Italien,18
 661,I TL802-C,Das Allheilmittel,Gagstory,Zio Paperone e la triÃ ca veneziana,Italien,33
@@ -666,16 +666,16 @@
 666,I TL 806-AP,"Wer wagt, gewinnt!","Wirtschaftskampf,Abenteuer",Paperino e il pacco dinamitardo,Italien,62
 667,I CWD55-A,Vorgeschichte,Rahmengeschichte,Prologo a Zio Paperone mumble...mumble!,Italien,18
 668,I TL802-C,Das Allheilmittel,Gagstory,Zio Paperone e la triÃ ca veneziana,Italien,33
-669,I TL816-A,Zahlbar an Ort und Stelle,"Wirtschaftskampf,Abenteuer",Paperino e la percentuale in loco,Italien,39
-670,I TL667-A,Die Wette,"Wirtschaftskampf,Gagstory",Zio Paperone e il traguardo difficile,Italien,33
+669,I TL816-A,Die Klunker aus Klunkerpur,"Wirtschaftskampf,Abenteuer",Paperino e la percentuale in loco,Italien,39
+670,I TL667-A,Wettflug um die Welt,"Wirtschaftskampf,Gagstory",Zio Paperone e il traguardo difficile,Italien,33
 671,I TL724-D,Der Schatz des Odysseus,Historisches Thema,Zio Paperone e il tesoro di Ulisse,Italien,32
-672,I TL650-A,Goldrausch,Dagobert in Not,Zio Paperone e la psicosi dell'oro,Italien,33
+672,I TL650-A,Das Gold-Embargo,Dagobert in Not,Zio Paperone e la psicosi dell'oro,Italien,33
 673,I TL 806-AP,"Wer wagt, gewinnt!","Wirtschaftskampf,Abenteuer",Paperino e il pacco dinamitardo,Italien,62
 674,I CWD56-A,Vorgeschichte,Rahmengeschichte,Prologo a Supertopolino,Italien,27
 675,I TL 659-AP,Die Rebellen von Halunkistan,"Kriminalgeschichte,Abenteuer",Topolino e i ribelli di Brillifrilly,Italien,60
-676,I TL674-B,Der vertrackte Schnappschuß,"Kriminalgeschichte,Abenteuer",Topolino e la tribù ribelle,Italien,33
+676,I TL674-B,Der Schnappschuß,"Kriminalgeschichte,Abenteuer",Topolino e la tribù ribelle,Italien,33
 677,I TL547-A,Der Superchampion,Abenteuer,Topolino e il match di Bomba City,Italien,37
-678,I TL568-A,Eine Stadt in Hypnose,"Kriminalgeschichte,Science-Fiction",Topolino e la cittÃ  cavia,Italien,32
+678,I TL568-A,Stadt in Hypnose,"Kriminalgeschichte,Science-Fiction",Topolino e la cittÃ  cavia,Italien,32
 679,I TL 711-AP,Der Mann im Mond,"Kriminalgeschichte,Science-Fiction",Topolino e l'imperatore della luna,Italien,61
 680,I CWD56-A,Vorgeschichte,Rahmengeschichte,Prologo a Supertopolino,Italien,27
 681,I TL 659-AP,Die Rebellen von Halunkistan,"Kriminalgeschichte,Abenteuer",Topolino e i ribelli di Brillifrilly,Italien,60
@@ -685,9 +685,9 @@
 685,I TL 711-AP,Der Mann im Mond,"Kriminalgeschichte,Science-Fiction",Topolino e l'imperatore della luna,Italien,61
 686,I CWD56-A,Vorgeschichte,Rahmengeschichte,Prologo a Supertopolino,Italien,27
 687,I TL 659-AP,Die Rebellen von Halunkistan,"Kriminalgeschichte,Abenteuer",Topolino e i ribelli di Brillifrilly,Italien,60
-688,I TL674-B,Der Schnappschuß,"Kriminalgeschichte,Abenteuer",Topolino e la tribù ribelle,Italien,33
+688,I TL674-B,Der vertrackte Schnappschuß,"Kriminalgeschichte,Abenteuer",Topolino e la tribù ribelle,Italien,33
 689,I TL547-A,Der Superchampion,Abenteuer,Topolino e il match di Bomba City,Italien,37
-690,I TL568-A,Stadt in Hypnose,"Kriminalgeschichte,Science-Fiction",Topolino e la cittÃ  cavia,Italien,32
+690,I TL568-A,Eine Stadt in Hypnose,"Kriminalgeschichte,Science-Fiction",Topolino e la cittÃ  cavia,Italien,32
 691,I TL 711-AP,Der Mann im Mond,"Kriminalgeschichte,Science-Fiction",Topolino e l'imperatore della luna,Italien,61
 692,I CWD53-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino racconta...,Italien,32
 693,I TL 795-AP,Späte Postzug-Beute,"Wild West,Abenteuer,Schatzsuche",Paperino e la grande rapina di Tucson,Italien,48
@@ -711,20 +711,20 @@
 711,I TL675-C,Gold-Ginster,Schatzsuche,Paperino e le ginestre aurifere,Italien,33
 712,I TL726-D,Die Geschichte vom fliegenden Zelt,Abenteuer,Paperino e i visoni del Nord-Ovest,Italien,37
 713,I CWD 7-A,Vorgeschichte,Rahmengeschichte,Prologo a I gialli di Paperino,Italien,25
-714,I TL 108-AP,Donald und der mysteriöse Mister Moster,Kriminalgeschichte,"","",59
-715,I TL 132-AP,Donald und die Krebse in Burgunder,Kriminalgeschichte,"","",49
-716,I TL 118-BP,Donald und die indianische Erbschaft,"Gagstory,Wild West",Paperino e l'ereditÃ  indiana,Italien,60
-717,I TL 172-AP,Donald und der große Sarani,Gagstory,"","",58
+714,I TL 108-AP,Der mysteriöse Mister Moster,Kriminalgeschichte,,,59
+715,I TL 132-AP,"Der ""Rasende Kurier""",Kriminalgeschichte,,,49
+716,I TL 118-BP,Die indianische Erbschaft,"Gagstory,Wild West",Paperino e l'ereditÃ  indiana,Italien,60
+717,I TL 172-AP,Der große Maroni,Gagstory,,,58
 718,I CWD 7-A,Vorgeschichte,Rahmengeschichte,Prologo a I gialli di Paperino,Italien,25
-719,I TL 108-AP,Der mysteriöse Mister Moster,Kriminalgeschichte,"","",59
-720,I TL 132-AP,"Der ""Rasende Kurier""",Kriminalgeschichte,"","",49
-721,I TL 118-BP,Die indianische Erbschaft,"Gagstory,Wild West",Paperino e l'ereditÃ  indiana,Italien,60
-722,I TL 172-AP,Der große Maroni,Gagstory,"","",58
+719,I TL 108-AP,Donald und der mysteriöse Mister Moster,Kriminalgeschichte,,,59
+720,I TL 132-AP,Donald und die Krebse in Burgunder,Kriminalgeschichte,,,49
+721,I TL 118-BP,Donald und die indianische Erbschaft,"Gagstory,Wild West",Paperino e l'ereditÃ  indiana,Italien,60
+722,I TL 172-AP,Donald und der große Sarani,Gagstory,,,58
 723,I CWD 7-A,Vorgeschichte,Rahmengeschichte,Prologo a I gialli di Paperino,Italien,25
-724,I TL 108-AP,Donald und der mysteriöse Mister Moster,Kriminalgeschichte,"","",59
-725,I TL 132-AP,Donald und die Krebse in Burgunder,Kriminalgeschichte,"","",49
+724,I TL 108-AP,Donald und der mysteriöse Mister Moster,Kriminalgeschichte,,,59
+725,I TL 132-AP,Donald und die Krebse in Burgunder,Kriminalgeschichte,,,49
 726,I TL 118-BP,Donald und die indianische Erbschaft,"Gagstory,Wild West",Paperino e l'ereditÃ  indiana,Italien,60
-727,I TL 172-AP,Donald und der große Sarani,Gagstory,"","",58
+727,I TL 172-AP,Donald und der große Sarani,Gagstory,,,58
 728,I CWD58-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperone il magnifico,Italien,22
 729,I TL 800-AP,Das Wikingerschiff,"Wirtschaftskampf,Abenteuer",Zio Paperone e il drakkar volante,Italien,54
 730,I TL790-A,Der Seifengold-Fluß,Schatzsuche,Zio Paperone e le fonti dell'Elettrone,Italien,37
@@ -789,11 +789,11 @@
 789,I TL812-A,Gundel in Aktion,Dagobert in Not,Zio Paperone e le streghe in azione,Italien,37
 790,I TL817-A,Der Gast Nr. 13,Wirtschaftskampf,Zio Paperone e il tredicesimo invitato,Italien,39
 791,I CWD60-A,Vorgeschichte,Rahmengeschichte,"Prologo a Forza, Topolino!",Italien,28
-792,I TL684-B,Die verräterische Augenklappe,Kriminalgeschichte,Topolino e l'occhio parlante,Italien,32
-793,I TL 762-AP,Anglerferien mit Hindernissen,Kriminalgeschichte,Topolino e la Baia delle Triglie,Italien,57
-794,I TL710-A,Ein musikalisches Erbe,Kriminalgeschichte,Topolino e l'erede musicofilo,Italien,35
-795,I TL670-A,Der Kompass des großen Khan,"Zeitreisen,Abenteuer",Topolino e la bussola del Khan,Italien,40
-796,I TL 675-AP,Die geheimnisvolle Ziehharmonika,Kriminalgeschichte,Topolino e i ladri d'ombre,Italien,58
+792,I TL684-B,Das sprechende Auge,Kriminalgeschichte,Topolino e l'occhio parlante,Italien,32
+793,I TL 762-AP,Die Seebarbenbucht,Kriminalgeschichte,Topolino e la Baia delle Triglie,Italien,57
+794,I TL710-A,Der musikalische Erbe,Kriminalgeschichte,Topolino e l'erede musicofilo,Italien,35
+795,I TL670-A,Der Kompass des Khan,"Zeitreisen,Abenteuer",Topolino e la bussola del Khan,Italien,40
+796,I TL 675-AP,Micky und die Schattendiebe,Kriminalgeschichte,Topolino e i ladri d'ombre,Italien,58
 797,I CWD60-A,Vorgeschichte,Rahmengeschichte,"Prologo a Forza, Topolino!",Italien,28
 798,I TL684-B,Das sprechende Auge,Kriminalgeschichte,Topolino e l'occhio parlante,Italien,32
 799,I TL 762-AP,Die Seebarbenbucht,Kriminalgeschichte,Topolino e la Baia delle Triglie,Italien,57
@@ -801,11 +801,11 @@
 801,I TL670-A,Der Kompass des Khan,"Zeitreisen,Abenteuer",Topolino e la bussola del Khan,Italien,40
 802,I TL 675-AP,Micky und die Schattendiebe,Kriminalgeschichte,Topolino e i ladri d'ombre,Italien,58
 803,I CWD60-A,Vorgeschichte,Rahmengeschichte,"Prologo a Forza, Topolino!",Italien,28
-804,I TL684-B,Das sprechende Auge,Kriminalgeschichte,Topolino e l'occhio parlante,Italien,32
-805,I TL 762-AP,Die Seebarbenbucht,Kriminalgeschichte,Topolino e la Baia delle Triglie,Italien,57
-806,I TL710-A,Der musikalische Erbe,Kriminalgeschichte,Topolino e l'erede musicofilo,Italien,35
-807,I TL670-A,Der Kompass des Khan,"Zeitreisen,Abenteuer",Topolino e la bussola del Khan,Italien,40
-808,I TL 675-AP,Micky und die Schattendiebe,Kriminalgeschichte,Topolino e i ladri d'ombre,Italien,58
+804,I TL684-B,Die verräterische Augenklappe,Kriminalgeschichte,Topolino e l'occhio parlante,Italien,32
+805,I TL 762-AP,Anglerferien mit Hindernissen,Kriminalgeschichte,Topolino e la Baia delle Triglie,Italien,57
+806,I TL710-A,Ein musikalisches Erbe,Kriminalgeschichte,Topolino e l'erede musicofilo,Italien,35
+807,I TL670-A,Der Kompass des großen Khan,"Zeitreisen,Abenteuer",Topolino e la bussola del Khan,Italien,40
+808,I TL 675-AP,Die geheimnisvolle Ziehharmonika,Kriminalgeschichte,Topolino e i ladri d'ombre,Italien,58
 809,I CWD57-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperinik il diabolico,Italien,30
 810,I TL 706-AP,Jetzt kommt Phantomias!,Superhelden,Paperinik il diabolico vendicatore,Italien,59
 811,I TL 743-AP,Phantomias tritt in Aktion,Superhelden,Paperinik alla riscossa,Italien,59
@@ -837,12 +837,12 @@
 837,I TL736-A,Der geheimnisvolle Flug,Kriminalgeschichte,Topolino e il volo nel mistero,Italien,40
 838,I TL 745-AP,Das große Geheimnis,Kriminalgeschichte,Topolino e il segreto di Zeta Bi,Italien,60
 839,I CWD64-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperone,Italien,29
-840,I TL791-A,Volldampf im Geldspeicher,"Dagobert in Not,Gagstory",Zio Paperone e il trenino poliziotto,Italien,40
-841,I TL798-A,Der Schatz des Pharaos,Schatzsuche,Zio Paperone e il tesoro del faraone,Italien,37
-842,I TL 800-B,Partner in der Not,Dagobert in Not,Zio Paperone e l'alleanza posticcia,Italien,40
-843,I TL792-A,Schonungsloser Schuhkampf,Wirtschaftskampf,Zio Paperone e le scarpe integrate,Italien,37
-844,I TL726-A,Der geheimnisvolle Geppi,"Schatzsuche,Gagstory",Zio Paperone e il misterioso Ghepi,Italien,33
-845,I TL670-C,Das Gold der Wüste,Schatzsuche,Zio Paperone e il tempio d'oro,Italien,34
+840,I TL791-A,Onkel Dagobert und die Modelleisenbahn,"Dagobert in Not,Gagstory",Zio Paperone e il trenino poliziotto,Italien,40
+841,I TL798-A,Onkel Dagobert und der Schatz des Pharao,Schatzsuche,Zio Paperone e il tesoro del faraone,Italien,37
+842,I TL 800-B,Kampf dem gemeinsamen Gegner,Dagobert in Not,Zio Paperone e l'alleanza posticcia,Italien,40
+843,I TL792-A,Ein hartnäckiger Gegner,Wirtschaftskampf,Zio Paperone e le scarpe integrate,Italien,37
+844,I TL726-A,Onkel Dagobert und der geheimnisvolle Geppi,"Schatzsuche,Gagstory",Zio Paperone e il misterioso Ghepi,Italien,33
+845,I TL670-C,Onkel Dagobert und das Gold der Wüste,Schatzsuche,Zio Paperone e il tempio d'oro,Italien,34
 846,I CWD64-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperone,Italien,29
 847,I TL791-A,Onkel Dagobert und die Modelleisenbahn,"Dagobert in Not,Gagstory",Zio Paperone e il trenino poliziotto,Italien,40
 848,I TL798-A,Onkel Dagobert und der Schatz des Pharao,Schatzsuche,Zio Paperone e il tesoro del faraone,Italien,37
@@ -851,12 +851,12 @@
 851,I TL726-A,Onkel Dagobert und der geheimnisvolle Geppi,"Schatzsuche,Gagstory",Zio Paperone e il misterioso Ghepi,Italien,33
 852,I TL670-C,Onkel Dagobert und das Gold der Wüste,Schatzsuche,Zio Paperone e il tempio d'oro,Italien,34
 853,I CWD64-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperone,Italien,29
-854,I TL791-A,Onkel Dagobert und die Modelleisenbahn,"Dagobert in Not,Gagstory",Zio Paperone e il trenino poliziotto,Italien,40
-855,I TL798-A,Onkel Dagobert und der Schatz des Pharao,Schatzsuche,Zio Paperone e il tesoro del faraone,Italien,37
-856,I TL 800-B,Kampf dem gemeinsamen Gegner,Dagobert in Not,Zio Paperone e l'alleanza posticcia,Italien,40
-857,I TL792-A,Ein hartnäckiger Gegner,Wirtschaftskampf,Zio Paperone e le scarpe integrate,Italien,37
-858,I TL726-A,Onkel Dagobert und der geheimnisvolle Geppi,"Schatzsuche,Gagstory",Zio Paperone e il misterioso Ghepi,Italien,33
-859,I TL670-C,Onkel Dagobert und das Gold der Wüste,Schatzsuche,Zio Paperone e il tempio d'oro,Italien,34
+854,I TL791-A,Volldampf im Geldspeicher,"Dagobert in Not,Gagstory",Zio Paperone e il trenino poliziotto,Italien,40
+855,I TL798-A,Der Schatz des Pharaos,Schatzsuche,Zio Paperone e il tesoro del faraone,Italien,37
+856,I TL 800-B,Partner in der Not,Dagobert in Not,Zio Paperone e l'alleanza posticcia,Italien,40
+857,I TL792-A,Schonungsloser Schuhkampf,Wirtschaftskampf,Zio Paperone e le scarpe integrate,Italien,37
+858,I TL726-A,Der geheimnisvolle Geppi,"Schatzsuche,Gagstory",Zio Paperone e il misterioso Ghepi,Italien,33
+859,I TL670-C,Das Gold der Wüste,Schatzsuche,Zio Paperone e il tempio d'oro,Italien,34
 860,I CWD63-A,Vorgeschichte,Rahmengeschichte,Prologo a Il trionfo di Paperinik,Italien,24
 861,I TL821-C,Kampf um die Diamantenmine,Dagobert in Not,Zio Paperone e il giubileo scozzese,Italien,33
 862,I TL 822-AP,Phantomias ist wieder da!,Superhelden,Il doppio trionfo di Paperinik,Italien,59
@@ -876,13 +876,13 @@
 876,I TL804-A,Gold im Weltraum,"Dagobert in Not,Düsentrieb´sche Erfindungen",Zio Paperone e la soluzione orbitale,Italien,37
 877,I TL 835-AP,Phantomias ist phänomenal,Superhelden,Paperinik e la scuola del krimen,Italien,60
 878,I CWD65-A,Vorgeschichte,Rahmengeschichte,Prologo a O.K. Paperino,Italien,30
-879,I TL853-C,Die Goldruten-Farm,"Abenteuer,Schatzsuche",Paperino e le mazze d'oro,Italien,32
-880,I TL850-B,Ausgerechnet Bananen!,Schatzsuche,Zio Paperone e le banane polifrutto,Italien,28
-881,I TL777-A,Die Weltraum-Kur,Schatzsuche,Zio Paperone e la ricerca spaziale,Italien,28
-882,I TL775-A,Die Zauberfeder,Schatzsuche,Zio Paperone e l'avvoltoio grifone,Italien,31
+879,I TL853-C,Goldlilien,"Abenteuer,Schatzsuche",Paperino e le mazze d'oro,Italien,32
+880,I TL850-B,Ausgerechnet Bananen,Schatzsuche,Zio Paperone e le banane polifrutto,Italien,28
+881,I TL777-A,Auf Suche im Weltraum,Schatzsuche,Zio Paperone e la ricerca spaziale,Italien,28
+882,I TL775-A,Der Vogel Greif,Schatzsuche,Zio Paperone e l'avvoltoio grifone,Italien,31
 883,I TL795-B,Der Blitzanzieher,"Gagstory,Düsentrieb´sche Erfindungen,Dagobert in Not",Paperino e la macchina acchiappafulmini,Italien,30
-884,I TL764-B,Der Zaubertrank,Dagobert in Not,Zio Paperone e lo sciroppo portentoso,Italien,29
-885,I TL854-A,Dem Tabu auf der Spur,Schatzsuche,Zio Paperone e il tabù calciatore,Italien,42
+884,I TL764-B,Geht Onkel Dagobert ins Netz?,Dagobert in Not,Zio Paperone e lo sciroppo portentoso,Italien,29
+885,I TL854-A,Auf den Spuren des Tabus,Schatzsuche,Zio Paperone e il tabù calciatore,Italien,42
 886,I CWD65-A,Vorgeschichte,Rahmengeschichte,Prologo a O.K. Paperino,Italien,30
 887,I TL853-C,Goldlilien,"Abenteuer,Schatzsuche",Paperino e le mazze d'oro,Italien,32
 888,I TL850-B,Ausgerechnet Bananen,Schatzsuche,Zio Paperone e le banane polifrutto,Italien,28
@@ -892,13 +892,13 @@
 892,I TL764-B,Geht Onkel Dagobert ins Netz?,Dagobert in Not,Zio Paperone e lo sciroppo portentoso,Italien,29
 893,I TL854-A,Auf den Spuren des Tabus,Schatzsuche,Zio Paperone e il tabù calciatore,Italien,42
 894,I CWD65-A,Vorgeschichte,Rahmengeschichte,Prologo a O.K. Paperino,Italien,30
-895,I TL853-C,Goldlilien,"Abenteuer,Schatzsuche",Paperino e le mazze d'oro,Italien,32
-896,I TL850-B,Ausgerechnet Bananen,Schatzsuche,Zio Paperone e le banane polifrutto,Italien,28
-897,I TL777-A,Auf Suche im Weltraum,Schatzsuche,Zio Paperone e la ricerca spaziale,Italien,28
-898,I TL775-A,Der Vogel Greif,Schatzsuche,Zio Paperone e l'avvoltoio grifone,Italien,31
+895,I TL853-C,Die Goldruten-Farm,"Abenteuer,Schatzsuche",Paperino e le mazze d'oro,Italien,32
+896,I TL850-B,Ausgerechnet Bananen!,Schatzsuche,Zio Paperone e le banane polifrutto,Italien,28
+897,I TL777-A,Die Weltraum-Kur,Schatzsuche,Zio Paperone e la ricerca spaziale,Italien,28
+898,I TL775-A,Die Zauberfeder,Schatzsuche,Zio Paperone e l'avvoltoio grifone,Italien,31
 899,I TL795-B,Der Blitzanzieher,"Gagstory,Düsentrieb´sche Erfindungen,Dagobert in Not",Paperino e la macchina acchiappafulmini,Italien,30
-900,I TL764-B,Geht Onkel Dagobert ins Netz?,Dagobert in Not,Zio Paperone e lo sciroppo portentoso,Italien,29
-901,I TL854-A,Auf den Spuren des Tabus,Schatzsuche,Zio Paperone e il tabù calciatore,Italien,42
+900,I TL764-B,Der Zaubertrank,Dagobert in Not,Zio Paperone e lo sciroppo portentoso,Italien,29
+901,I TL854-A,Dem Tabu auf der Spur,Schatzsuche,Zio Paperone e il tabù calciatore,Italien,42
 902,I CWD66-A,Vorgeschichte,Rahmengeschichte,Prologo a Topolino '76,Italien,32
 903,I TL832-A,Der Überfall auf Fort Protz,Kriminalgeschichte,Topolino e l'operazione scambio,Italien,34
 904,I TL636-A,Zwei und zwei ist vier,Kriminalgeschichte,Topolino e il problema del due più due,Italien,33
@@ -943,16 +943,16 @@
 943,I TL829-A,Der Schatz des Montezuma,Schatzsuche,Zio Paperone e il tesoro di Montezuma,Italien,39
 944,I CWD69-A,Vorgeschichte,Rahmengeschichte,Prologo a Topolino super,Italien,38
 945,I TL 807-DP,Geheimnisvolle Klänge,Kriminalgeschichte,Topolino e il mistero del solfeggio,Italien,62
-946,I TL813-A,Micky und die Kopperbande,Kriminalgeschichte,Topolino e la banda dei tre kappa,Italien,41
-947,I TL824-C,Micky und der Doppelraub,Kriminalgeschichte,Topolino e la rapina duplex,Italien,39
+946,I TL813-A,Die Copperbande,Kriminalgeschichte,Topolino e la banda dei tre kappa,Italien,41
+947,I TL824-C,Der trickreiche Doppelraub,Kriminalgeschichte,Topolino e la rapina duplex,Italien,39
 948,I TL838-B,Der verbotene Schatz,"Abenteuer,Schatzsuche,Kriminalgeschichte",Topolino e il tesoro tabù,Italien,32
-949,I TL866-A,Der rote Drache,Kriminalgeschichte,Topolino e il drago rosso,Italien,38
+949,I TL866-A,Der Rote Drache,Kriminalgeschichte,Topolino e il drago rosso,Italien,38
 950,I CWD69-A,Vorgeschichte,Rahmengeschichte,Prologo a Topolino super,Italien,38
 951,I TL 807-DP,Geheimnisvolle Klänge,Kriminalgeschichte,Topolino e il mistero del solfeggio,Italien,62
-952,I TL813-A,Die Copperbande,Kriminalgeschichte,Topolino e la banda dei tre kappa,Italien,41
-953,I TL824-C,Der trickreiche Doppelraub,Kriminalgeschichte,Topolino e la rapina duplex,Italien,39
+952,I TL813-A,Micky und die Kopperbande,Kriminalgeschichte,Topolino e la banda dei tre kappa,Italien,41
+953,I TL824-C,Micky und der Doppelraub,Kriminalgeschichte,Topolino e la rapina duplex,Italien,39
 954,I TL838-B,Der verbotene Schatz,"Abenteuer,Schatzsuche,Kriminalgeschichte",Topolino e il tesoro tabù,Italien,32
-955,I TL866-A,Der Rote Drache,Kriminalgeschichte,Topolino e il drago rosso,Italien,38
+955,I TL866-A,Der rote Drache,Kriminalgeschichte,Topolino e il drago rosso,Italien,38
 956,I CWD69-A,Vorgeschichte,Rahmengeschichte,Prologo a Topolino super,Italien,38
 957,I TL 807-DP,Geheimnisvolle Klänge,Kriminalgeschichte,Topolino e il mistero del solfeggio,Italien,62
 958,I TL813-A,Micky und die Kopperbande,Kriminalgeschichte,Topolino e la banda dei tre kappa,Italien,41
@@ -1001,21 +1001,21 @@
 1001,I TL864-A,Onkel Dagobert und die Inkaziege,Schatzsuche,Zio Paperone e la capra degli Incas,Italien,32
 1002,I TL865-A,Onkel Dagobert und die Physik,"Schatzsuche,Gagstory",Zio Paperone e l'oro calamitoso,Italien,36
 1003,I TL871-A,Onkel Dagobert und das Zauberelixier,"Dagobert in Not,Gagstory",Zio Paperone e la formula della sfortuna,Italien,33
-1004,I CD 2-A,Vorgeschichte,Rahmengeschichte,"","",35
+1004,I CD 2-A,Vorgeschichte,Rahmengeschichte,,,35
 1005,I TL859-C,Die Nichtbesteigung des Mount Everest,Gagstory,Paperino e il losco inghippo della mappa,Italien,31
 1006,I TL878-B,Die Goldbaum-Allee,Schatzsuche,Zio Paperone e la via dell'oro,Italien,29
 1007,I TL 873-AP,König Drachoberts Dukaten,Mittelalter,Paperino e il tesoro di Papero Magno,Italien,56
 1008,I TL879-A,Der vertrackte Vertrag,Gagstory,Paperino e la norma delle regole,Italien,37
 1009,I TL873-C,Das Reich unter dem Meer,Science-Fiction,Paperino e l'avventura sottomarina,Italien,32
 1010,I TL878-A,Ein Held auf Zeit,"Science-Fiction,Gagstory",Paperino e la macchina dell'eroismo,Italien,30
-1011,I CD 2-A,Vorgeschichte,Rahmengeschichte,"","",35
+1011,I CD 2-A,Vorgeschichte,Rahmengeschichte,,,35
 1012,I TL859-C,Die Nichtbesteigung des Mount Everest,Gagstory,Paperino e il losco inghippo della mappa,Italien,31
 1013,I TL878-B,Der Goldzylinder,Schatzsuche,Zio Paperone e la via dell'oro,Italien,29
 1014,I TL 873-AP,Der Schatz König Drachoberts des Großen,Mittelalter,Paperino e il tesoro di Papero Magno,Italien,56
 1015,I TL879-A,Der vertrackte Vertrag,Gagstory,Paperino e la norma delle regole,Italien,37
 1016,I TL873-C,Unterwasserjagd,Science-Fiction,Paperino e l'avventura sottomarina,Italien,32
 1017,I TL878-A,Der Held aus der Maschine,"Science-Fiction,Gagstory",Paperino e la macchina dell'eroismo,Italien,30
-1018,I CD 2-A,Vorgeschichte,Rahmengeschichte,"","",35
+1018,I CD 2-A,Vorgeschichte,Rahmengeschichte,,,35
 1019,I TL859-C,Die Nichtbesteigung des Mount Everest,Gagstory,Paperino e il losco inghippo della mappa,Italien,31
 1020,I TL878-B,Der Goldzylinder,Schatzsuche,Zio Paperone e la via dell'oro,Italien,29
 1021,I TL 873-AP,Der Schatz König Drachoberts des Großen,Mittelalter,Paperino e il tesoro di Papero Magno,Italien,56
@@ -1084,19 +1084,19 @@
 1084,I TL 633-AP,Micky und das Geheimnis der grünen Sphinx,Kriminalgeschichte,Topolino e l'enigma della Sfinge Verde,Italien,60
 1085,I CD6-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperoniana,Italien,14
 1086,I TL687-B,Im Kittchen ist kein Zimmer frei,Gagstory,Zio Paperone e la claustromania,Italien,30
-1087,I TL 156-AP,Der Löwenbändiger,Gagstory,Paperin di Tarascona,Italien,43
-1088,I TL734-B,Goldene Träume,"Fantasy,Schatzsuche",Zio Paperone e il regno dell'oro,Italien,31
-1089,I TL756-C,Die Erdölfresser schlagen zu,"Science-Fiction,Dagobert in Not",Zio Paperone e i bevitori di petrolio,Italien,34
+1087,I TL 156-AP,Donald als Löwenbändiger,Gagstory,Paperin di Tarascona,Italien,43
+1088,I TL734-B,Goldige Aussichten,"Fantasy,Schatzsuche",Zio Paperone e il regno dell'oro,Italien,31
+1089,I TL756-C,Onkel Dagobert und die Erdölfresser,"Science-Fiction,Dagobert in Not",Zio Paperone e i bevitori di petrolio,Italien,34
 1090,I TL767-A,Schach dem Rubin,"Schatzsuche,Abenteuer",Zio Paperone e lo scacco al... rubino,Italien,31
-1091,I TL 159-AP,Die Millionärseisenbahn,Literarische Parodie,Paperino e il conte di Montecristo,Italien,58
+1091,I TL 159-AP,Der Schatz des Grafen von Monte Cristo,Literarische Parodie,Paperino e il conte di Montecristo,Italien,58
 1092,S 72265,Die Abkürzung,Gagstory,Donald Duck The Short Cut,Disney Studio (foreign market stories),6
 1093,I CD6-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperoniana,Italien,14
 1094,I TL687-B,Im Kittchen ist kein Zimmer frei,Gagstory,Zio Paperone e la claustromania,Italien,30
-1095,I TL 156-AP,Donald als Löwenbändiger,Gagstory,Paperin di Tarascona,Italien,43
-1096,I TL734-B,Goldige Aussichten,"Fantasy,Schatzsuche",Zio Paperone e il regno dell'oro,Italien,31
-1097,I TL756-C,Onkel Dagobert und die Erdölfresser,"Science-Fiction,Dagobert in Not",Zio Paperone e i bevitori di petrolio,Italien,34
+1095,I TL 156-AP,Der Löwenbändiger,Gagstory,Paperin di Tarascona,Italien,43
+1096,I TL734-B,Goldene Träume,"Fantasy,Schatzsuche",Zio Paperone e il regno dell'oro,Italien,31
+1097,I TL756-C,Die Erdölfresser schlagen zu,"Science-Fiction,Dagobert in Not",Zio Paperone e i bevitori di petrolio,Italien,34
 1098,I TL767-A,Schach dem Rubin,"Schatzsuche,Abenteuer",Zio Paperone e lo scacco al... rubino,Italien,31
-1099,I TL 159-AP,Der Schatz des Grafen von Monte Cristo,Literarische Parodie,Paperino e il conte di Montecristo,Italien,58
+1099,I TL 159-AP,Die Millionärseisenbahn,Literarische Parodie,Paperino e il conte di Montecristo,Italien,58
 1100,S 72265,Die Abkürzung,Gagstory,Donald Duck The Short Cut,Disney Studio (foreign market stories),6
 1101,I CD6-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperoniana,Italien,14
 1102,I TL687-B,Im Kittchen ist kein Zimmer frei,Gagstory,Zio Paperone e la claustromania,Italien,30
@@ -1158,12 +1158,12 @@
 1158,I TL223-AP,Im Kielwasser der Schönen Leokadia,Abenteuer,Le straordinarie avventure di Paperino Girandola,Italien,82
 1159,I TL219-AP,El Cid Pampeador,Literarische Parodie,El Kid Pampeador,Italien,66
 1160,I CD14-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino 10 e lode,Italien,24
-1161,I TL687-A,Die Millionenwette,Wirtschaftskampf,Paperino e il miliardollaro,Italien,31
-1162,I TL733-A,Die Rennschnecken,"Gagstory,Fantasy",Paperino e le lumache da corsa,Italien,31
-1163,I TL769-B,Segen der Technik,Science-Fiction,Paperino e la macchina del risparmio,Italien,31
-1164,I TL 1074-B,Das Probe-Erbe,Gagstory,Paperino e l'ereditÃ  in prova,Italien,38
-1165,I TL732-A,Die Zauberschuhe,Schatzsuche,Paperino e gli zoccoli di cristallo,Italien,30
-1166,I TL916-C,Der Traum vom Reichtum,"Gagstory,Abenteuer",Paperino e il lavoro per arricchire,Italien,33
+1161,I TL687-A,Onkel Dagobert und die Millionenwette,Wirtschaftskampf,Paperino e il miliardollaro,Italien,31
+1162,I TL733-A,Donald und die Rennschnecken,"Gagstory,Fantasy",Paperino e le lumache da corsa,Italien,31
+1163,I TL769-B,Der Segen der Technik,Science-Fiction,Paperino e la macchina del risparmio,Italien,31
+1164,I TL 1074-B,Donald und das Probe-Erbe,Gagstory,Paperino e l'ereditÃ  in prova,Italien,38
+1165,I TL732-A,Donald und die Zauberschuhe,Schatzsuche,Paperino e gli zoccoli di cristallo,Italien,30
+1166,I TL916-C,Donalds Traum vom Reichtum,"Gagstory,Abenteuer",Paperino e il lavoro per arricchire,Italien,33
 1167,I TL744-B,Die Schneespiele,Gagstory,Paperino e il certame delle nevi,Italien,32
 1168,I CD14-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino 10 e lode,Italien,24
 1169,I TL687-A,Onkel Dagobert und die Millionenwette,Wirtschaftskampf,Paperino e il miliardollaro,Italien,31
@@ -1174,24 +1174,24 @@
 1174,I TL916-C,Donalds Traum vom Reichtum,"Gagstory,Abenteuer",Paperino e il lavoro per arricchire,Italien,33
 1175,I TL744-B,Die Schneespiele,Gagstory,Paperino e il certame delle nevi,Italien,32
 1176,I CD14-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperino 10 e lode,Italien,24
-1177,I TL687-A,Onkel Dagobert und die Millionenwette,Wirtschaftskampf,Paperino e il miliardollaro,Italien,31
-1178,I TL733-A,Donald und die Rennschnecken,"Gagstory,Fantasy",Paperino e le lumache da corsa,Italien,31
-1179,I TL769-B,Der Segen der Technik,Science-Fiction,Paperino e la macchina del risparmio,Italien,31
-1180,I TL 1074-B,Donald und das Probe-Erbe,Gagstory,Paperino e l'ereditÃ  in prova,Italien,38
-1181,I TL732-A,Donald und die Zauberschuhe,Schatzsuche,Paperino e gli zoccoli di cristallo,Italien,30
-1182,I TL916-C,Donalds Traum vom Reichtum,"Gagstory,Abenteuer",Paperino e il lavoro per arricchire,Italien,33
+1177,I TL687-A,Die Millionenwette,Wirtschaftskampf,Paperino e il miliardollaro,Italien,31
+1178,I TL733-A,Die Rennschnecken,"Gagstory,Fantasy",Paperino e le lumache da corsa,Italien,31
+1179,I TL769-B,Segen der Technik,Science-Fiction,Paperino e la macchina del risparmio,Italien,31
+1180,I TL 1074-B,Das Probe-Erbe,Gagstory,Paperino e l'ereditÃ  in prova,Italien,38
+1181,I TL732-A,Die Zauberschuhe,Schatzsuche,Paperino e gli zoccoli di cristallo,Italien,30
+1182,I TL916-C,Der Traum vom Reichtum,"Gagstory,Abenteuer",Paperino e il lavoro per arricchire,Italien,33
 1183,I TL744-B,Die Schneespiele,Gagstory,Paperino e il certame delle nevi,Italien,32
 1184,I CWD1-A,Vorgeschichte,Rahmengeschichte,Prologo a I classici di Walt Disney,Italien,7
-1185,I TL162-AP,Donald und die drei Musketiere,Literarische Parodie,Paperino e i tre moschettieri,Italien,61
+1185,I TL162-AP,Die drei Musketiere,Literarische Parodie,Paperino e i tre moschettieri,Italien,61
 1186,I TL 137-AP,Don Quichotte,Literarische Parodie,Don Chisciotte,Italien,76
 1187,I TL935-C,"Ein Geschenk, das hinhaut!",Gagstory,Zio Paperone e il dono prestigioso,Italien,32
-1188,I TL919-A,Onkel Dagobert und die Jungbrunnen-Mahlzeit,Schatzsuche,Zio Paperone e il tesoro commestibile,Italien,36
+1188,I TL919-A,Bei den Nachtwandler-Indianern,Schatzsuche,Zio Paperone e il tesoro commestibile,Italien,36
 1189,I TL909-B,Die gekaufte Erbschaft,Gagstory,Zio Paperone e le memorie dello smemorato,Italien,37
 1190,I CWD1-A,Vorgeschichte,Rahmengeschichte,Prologo a I classici di Walt Disney,Italien,7
-1191,I TL162-AP,Die drei Musketiere,Literarische Parodie,Paperino e i tre moschettieri,Italien,61
+1191,I TL162-AP,Donald und die drei Musketiere,Literarische Parodie,Paperino e i tre moschettieri,Italien,61
 1192,I TL 137-AP,Don Quichotte,Literarische Parodie,Don Chisciotte,Italien,76
 1193,I TL935-C,"Ein Geschenk, das hinhaut!",Gagstory,Zio Paperone e il dono prestigioso,Italien,32
-1194,I TL919-A,Bei den Nachtwandler-Indianern,Schatzsuche,Zio Paperone e il tesoro commestibile,Italien,36
+1194,I TL919-A,Onkel Dagobert und die Jungbrunnen-Mahlzeit,Schatzsuche,Zio Paperone e il tesoro commestibile,Italien,36
 1195,I TL909-B,Die gekaufte Erbschaft,Gagstory,Zio Paperone e le memorie dello smemorato,Italien,37
 1196,I CWD1-A,Vorgeschichte,Rahmengeschichte,Prologo a I classici di Walt Disney,Italien,7
 1197,I TL162-AP,Donald und die drei Musketiere,Literarische Parodie,Paperino e i tre moschettieri,Italien,61
@@ -1260,12 +1260,12 @@
 1260,I TL905-A,Der verschwundene Transporter,Kriminalgeschichte,Topolino e lo strano caso del furgone scomparso,Italien,37
 1261,I TL889-A,Doppelt genäht hält besser,Kriminalgeschichte,Topolino e il colpo impossibile,Italien,34
 1262,I CD22-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperologia,Italien,36
-1263,I TL937-AP,Der Schatz der Belladonna,Schatzsuche,Zio Paperone e l' Operazione Galeone,Italien,56
-1264,I TL913-C,Der Geldwahngegner schlägt zu,Dagobert in Not,Zio Paperone e l'antimonetario,Italien,32
-1265,I TL929-A,Düsentrieb unter Verdacht,Dagobert in Not,Paperino spia,Italien,32
-1266,I TL911-C,Streifzug durch die Jahrhunderte,Zeitreisen,Zio Paperone e la scorribanda nei secoli,Italien,32
+1263,I TL937-AP,Operation Galeone!,Schatzsuche,Zio Paperone e l' Operazione Galeone,Italien,56
+1264,I TL913-C,"Onkel Dagobert und der ""Geldwahngegner""",Dagobert in Not,Zio Paperone e l'antimonetario,Italien,32
+1265,I TL929-A,Donald als Spion,Dagobert in Not,Paperino spia,Italien,32
+1266,I TL911-C,Onkel Dagoberts Streifzug durch die Jahrhunderte,Zeitreisen,Zio Paperone e la scorribanda nei secoli,Italien,32
 1267,I TL932-A,Das verschwundene Entenhausen,Dagobert in Not,Zio Paperone e la scomparsa di Paperopoli,Italien,32
-1268,I TL779-B,Die Ruhe selbst...,Gagstory,Paperino e le lezioni di violino,Italien,30
+1268,I TL779-B,Donald und der Geigenunterricht,Gagstory,Paperino e le lezioni di violino,Italien,30
 1269,I CD22-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperologia,Italien,36
 1270,I TL937-AP,Operation Galeone!,Schatzsuche,Zio Paperone e l' Operazione Galeone,Italien,56
 1271,I TL913-C,"Onkel Dagobert und der ""Geldwahngegner""",Dagobert in Not,Zio Paperone e l'antimonetario,Italien,32
@@ -1274,12 +1274,12 @@
 1274,I TL932-A,Das verschwundene Entenhausen,Dagobert in Not,Zio Paperone e la scomparsa di Paperopoli,Italien,32
 1275,I TL779-B,Donald und der Geigenunterricht,Gagstory,Paperino e le lezioni di violino,Italien,30
 1276,I CD22-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperologia,Italien,36
-1277,I TL937-AP,Operation Galeone!,Schatzsuche,Zio Paperone e l' Operazione Galeone,Italien,56
-1278,I TL913-C,"Onkel Dagobert und der ""Geldwahngegner""",Dagobert in Not,Zio Paperone e l'antimonetario,Italien,32
-1279,I TL929-A,Donald als Spion,Dagobert in Not,Paperino spia,Italien,32
-1280,I TL911-C,Onkel Dagoberts Streifzug durch die Jahrhunderte,Zeitreisen,Zio Paperone e la scorribanda nei secoli,Italien,32
+1277,I TL937-AP,Der Schatz der Belladonna,Schatzsuche,Zio Paperone e l' Operazione Galeone,Italien,56
+1278,I TL913-C,Der Geldwahngegner schlägt zu,Dagobert in Not,Zio Paperone e l'antimonetario,Italien,32
+1279,I TL929-A,Düsentrieb unter Verdacht,Dagobert in Not,Paperino spia,Italien,32
+1280,I TL911-C,Streifzug durch die Jahrhunderte,Zeitreisen,Zio Paperone e la scorribanda nei secoli,Italien,32
 1281,I TL932-A,Das verschwundene Entenhausen,Dagobert in Not,Zio Paperone e la scomparsa di Paperopoli,Italien,32
-1282,I TL779-B,Donald und der Geigenunterricht,Gagstory,Paperino e le lezioni di violino,Italien,30
+1282,I TL779-B,Die Ruhe selbst...,Gagstory,Paperino e le lezioni di violino,Italien,30
 1283,I CD24-A,Vorgeschichte,Rahmengeschichte,Prologo a Topolino e Minni,Italien,32
 1284,I TL845-B,"Klunker, made in Tollyhood",Kriminalgeschichte,Topolino e i cocci hollywoodiani,Italien,30
 1285,I TL610-AP,Der schurkische Magnetofix,"Kriminalgeschichte,Science-Fiction",Topolino e il terribile Kala-Mit,Italien,63
@@ -1302,12 +1302,12 @@
 1302,I TL822-C,Verräterischer Apfelsaft,Kriminalgeschichte,Topolino e l'investigatore lampo,Italien,29
 1303,I TL859-B,Die Werbekampagne,Kriminalgeschichte,Topolino e il dominatore del pensiero,Italien,30
 1304,I CWD8-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperepopea,Italien,29
-1305,I TL 202-AP,Die Reistafel,"Abenteuer,Schatzsuche",Paperiade,Italien,83
-1306,I TL 210-AP,Rheingold,Literarische Parodie,Paperino e l'oro di Reno ovvero L'anello dei nani lunghi,Italien,79
+1305,I TL 202-AP,Kampf um die Reistafel,"Abenteuer,Schatzsuche",Paperiade,Italien,83
+1306,I TL 210-AP,Reingold,Literarische Parodie,Paperino e l'oro di Reno ovvero L'anello dei nani lunghi,Italien,79
 1307,I TL 180-AP,Baron Donald von Münchhausen,Literarische Parodie,Paperino di Münchhausen,Italien,59
 1308,I CWD8-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperepopea,Italien,29
-1309,I TL 202-AP,Kampf um die Reistafel,"Abenteuer,Schatzsuche",Paperiade,Italien,83
-1310,I TL 210-AP,Reingold,Literarische Parodie,Paperino e l'oro di Reno ovvero L'anello dei nani lunghi,Italien,79
+1309,I TL 202-AP,Die Reistafel,"Abenteuer,Schatzsuche",Paperiade,Italien,83
+1310,I TL 210-AP,Rheingold,Literarische Parodie,Paperino e l'oro di Reno ovvero L'anello dei nani lunghi,Italien,79
 1311,I TL 180-AP,Baron Donald von Münchhausen,Literarische Parodie,Paperino di Münchhausen,Italien,59
 1312,I CWD8-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperepopea,Italien,29
 1313,I TL 202-AP,Die Reistafel,"Abenteuer,Schatzsuche",Paperiade,Italien,83
@@ -1367,23 +1367,23 @@
 1367,I TL144-AP,Eine Wette mit Konsequenzen,Gagstory,Paperino e la disfida dei tromboni,Italien,47
 1368,I TL950-A,Geisterstunde auf Schloß Schreckenstein,"Gagstory,Abenteuer",Paperino e la paura fa 90... dollari,Italien,35
 1369,I TL96-AP,Der verlorene Ziegelstein,"Gagstory,Abenteuer",Paperino e il muro del riso,Italien,47
-1370,I CD 36-A + I CD 30-A,Vorgeschichte,Rahmengeschichte,"","",24
+1370,I CD 36-A + I CD 30-A,Vorgeschichte,Rahmengeschichte,,,24
 1371,I TL917-C,Galante Duelle,Mittelalter,Topolino e le quattro sfide,Italien,32
 1372,I TL793-B,Der Lampen-Trick,Kriminalgeschichte,Topolino e la polena d'oro,Italien,29
 1373,I TL925-D,Die Helden des Weltraums,Science-Fiction,Topolino ranger dello spazio,Italien,31
 1374,I TL790-B,Heimfahrt auf Umwegen,Kriminalgeschichte,Topolino e la caccia al RajÃ ,Italien,30
-1375,I TL938-B,Das Wettrennen um den Rennfahrer,Kriminalgeschichte,Topolino e il ratto del campione,Italien,31
+1375,I TL938-B,Der entführte Rennfahrer,Kriminalgeschichte,Topolino e il ratto del campione,Italien,31
 1376,I TL642-B,Der Schmelzstrahl,Kriminalgeschichte,Topolino e il raggio fusore,Italien,31
 1377,I TL975-A,Wer andern eine Grube gräbt...,Kriminalgeschichte,Topolino e il misterioso Organizzatore,Italien,42
-1378,I CD 36-A + I CD 30-A,Vorgeschichte,Rahmengeschichte,"","",24
+1378,I CD 36-A + I CD 30-A,Vorgeschichte,Rahmengeschichte,,,24
 1379,I TL917-C,Galante Duelle,Mittelalter,Topolino e le quattro sfide,Italien,32
 1380,I TL793-B,Der Lampen-Trick,Kriminalgeschichte,Topolino e la polena d'oro,Italien,29
 1381,I TL925-D,Die Helden des Weltraums,Science-Fiction,Topolino ranger dello spazio,Italien,31
 1382,I TL790-B,Heimfahrt auf Umwegen,Kriminalgeschichte,Topolino e la caccia al RajÃ ,Italien,30
-1383,I TL938-B,Der entführte Rennfahrer,Kriminalgeschichte,Topolino e il ratto del campione,Italien,31
+1383,I TL938-B,Das Wettrennen um den Rennfahrer,Kriminalgeschichte,Topolino e il ratto del campione,Italien,31
 1384,I TL642-B,Der Schmelzstrahl,Kriminalgeschichte,Topolino e il raggio fusore,Italien,31
 1385,I TL975-A,Wer andern eine Grube gräbt...,Kriminalgeschichte,Topolino e il misterioso Organizzatore,Italien,42
-1386,I CD 36-A + I CD 30-A,Vorgeschichte,Rahmengeschichte,"","",24
+1386,I CD 36-A + I CD 30-A,Vorgeschichte,Rahmengeschichte,,,24
 1387,I TL917-C,Galante Duelle,Mittelalter,Topolino e le quattro sfide,Italien,32
 1388,I TL793-B,Der Lampen-Trick,Kriminalgeschichte,Topolino e la polena d'oro,Italien,29
 1389,I TL925-D,Die Helden des Weltraums,Science-Fiction,Topolino ranger dello spazio,Italien,31
@@ -1478,21 +1478,21 @@
 1478,I CD44-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperin Sansone,Italien,8
 1479,I TL976-A,Überfall an der Geisterbrücke,"Abenteuer,Kriminalgeschichte",Paperino e il ponte di Ferragosto,Italien,40
 1480,I TL999-A,Die eisige Glücks-Melodie,"Schatzsuche,Gagstory",Paperino e il disco della fortuna,Italien,39
-1481,I TL 907-A,Der kopflose Totempfahl,Superhelden,"","",28
+1481,I TL 907-A,Der kopflose Totempfahl,Superhelden,,,28
 1482,I TL 1275-AP,Phantomias greift durch!,Superhelden,Paperinik e la banda dei dodici,Italien,65
 1483,I TL 1285-BP,Phantomias und die Schule,Superhelden,Paperinik e il primo giorno di scuola,Italien,65
 1484,S 78175,Die Störenfriede,Gagstory,Donald Duck Read Any Good Books?,Disney Studio (foreign market stories),5
 1485,I CD44-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperin Sansone,Italien,8
 1486,I TL976-A,Ferienzeit - Urlaubszeit,"Abenteuer,Kriminalgeschichte",Paperino e il ponte di Ferragosto,Italien,40
 1487,I TL999-A,Donald und die Glücks-Melodie,"Schatzsuche,Gagstory",Paperino e il disco della fortuna,Italien,39
-1488,I TL 907-A,Phantomias und der kopflose Totempfahl,Superhelden,"","",28
+1488,I TL 907-A,Phantomias und der kopflose Totempfahl,Superhelden,,,28
 1489,I TL 1275-AP,Phantomias in den Händen der Panzerknacker,Superhelden,Paperinik e la banda dei dodici,Italien,65
 1490,I TL 1285-BP,Phantomias und der erste Schultag,Superhelden,Paperinik e il primo giorno di scuola,Italien,65
 1491,S 78175,Phantasie und Wirklichkeit,Gagstory,Donald Duck Read Any Good Books?,Disney Studio (foreign market stories),5
 1492,I CD44-A,Vorgeschichte,Rahmengeschichte,Prologo a Paperin Sansone,Italien,8
 1493,I TL976-A,Ferienzeit - Urlaubszeit,"Abenteuer,Kriminalgeschichte",Paperino e il ponte di Ferragosto,Italien,40
 1494,I TL999-A,Donald und die Glücks-Melodie,"Schatzsuche,Gagstory",Paperino e il disco della fortuna,Italien,39
-1495,I TL 907-A,Phantomias und der kopflose Totempfahl,Superhelden,"","",28
+1495,I TL 907-A,Phantomias und der kopflose Totempfahl,Superhelden,,,28
 1496,I TL 1275-AP,Phantomias in den Händen der Panzerknacker,Superhelden,Paperinik e la banda dei dodici,Italien,65
 1497,I TL 1285-BP,Phantomias und der erste Schultag,Superhelden,Paperinik e il primo giorno di scuola,Italien,65
 1498,S 78175,Phantasie und Wirklichkeit,Gagstory,Donald Duck Read Any Good Books?,Disney Studio (foreign market stories),5
@@ -1514,26 +1514,26 @@
 1514,I TL 542-AP,AGENT QQ7,"Literarische Parodie,Film Parodie",Paperino missione Bob Fingher,Italien,60
 1515,I TL993-A,Käpt´n Golds Schätze,Abenteuer,Zio Paperone e il viaggio nel paese-che-non-c'Ã¨,Italien,30
 1516,I TL992-B,Ungewohnte Geschäftsgebaren,"Abenteuer,Science-Fiction",Zio Paperone e il condizionatore decumbalionico,Italien,27
-1517,I TL915-A,Die Gesetze der Philatelie,Gagstory,"","",28
+1517,I TL915-A,Die Gesetze der Philatelie,Gagstory,,,28
 1518,I TL989-A,Das verlorene Glück,"Gagstory,Science-Fiction",Paperino e la voce che venne dal nulla,Italien,34
 1519,W JW25-01,Ein wundersamer Fischzug,"Düsentrieb´sche Erfindungen,Abenteuer",The Junior Woodchucks Captains Outrageous,U.S.-Comichefte,20
-1520,I TL909-A,Das verschwundene Grautier,Wild West,"","",19
+1520,I TL909-A,Das verschwundene Grautier,Wild West,,,19
 1521,I TL906-AP,Einrätselhafter Roboter,Gagstory,(Il segreto del totem decapitato),Italien,19
 1522,I TL 542-AP,Donald in geheimer Mission,"Literarische Parodie,Film Parodie",Paperino missione Bob Fingher,Italien,60
 1523,I TL993-A,Käpt´n Gold und seine Schätze,Abenteuer,Zio Paperone e il viaggio nel paese-che-non-c'Ã¨,Italien,30
 1524,I TL992-B,Die Sauerstoffdusche aus dem All,"Abenteuer,Science-Fiction",Zio Paperone e il condizionatore decumbalionico,Italien,27
-1525,I TL915-A,Die Gesetze der Philatelie,Gagstory,"","",28
+1525,I TL915-A,Die Gesetze der Philatelie,Gagstory,,,28
 1526,I TL989-A,Donald und das verlorene Glück,"Gagstory,Science-Fiction",Paperino e la voce che venne dal nulla,Italien,34
 1527,W JW25-01,Der wundersame Fischzug,"Düsentrieb´sche Erfindungen,Abenteuer",The Junior Woodchucks Captains Outrageous,U.S.-Comichefte,20
-1528,I TL909-A,Das verschwundene Grautier,Wild West,"","",19
+1528,I TL909-A,Das verschwundene Grautier,Wild West,,,19
 1529,I TL906-AP,Ein recht rätselhafter Roboter,Gagstory,(Il segreto del totem decapitato),Italien,19
 1530,I TL 542-AP,Donald in geheimer Mission,"Literarische Parodie,Film Parodie",Paperino missione Bob Fingher,Italien,60
 1531,I TL993-A,Käpt´n Gold und seine Schätze,Abenteuer,Zio Paperone e il viaggio nel paese-che-non-c'Ã¨,Italien,30
 1532,I TL992-B,Die Sauerstoffdusche aus dem All,"Abenteuer,Science-Fiction",Zio Paperone e il condizionatore decumbalionico,Italien,27
-1533,I TL915-A,Die Gesetze der Philatelie,Gagstory,"","",28
+1533,I TL915-A,Die Gesetze der Philatelie,Gagstory,,,28
 1534,I TL989-A,Donald und das verlorene Glück,"Gagstory,Science-Fiction",Paperino e la voce che venne dal nulla,Italien,34
 1535,W JW25-01,Der wundersame Fischzug,"Düsentrieb´sche Erfindungen,Abenteuer",The Junior Woodchucks Captains Outrageous,U.S.-Comichefte,20
-1536,I TL909-A,Das verschwundene Grautier,Wild West,"","",19
+1536,I TL909-A,Das verschwundene Grautier,Wild West,,,19
 1537,I TL906-AP,Ein recht rätselhafter Roboter,Gagstory,(Il segreto del totem decapitato),Italien,19
 1538,I TL986-C,Die doppelte Gitta,Dagobert in Not,Zio Paperone e il decino di Las Tregas,Italien,28
 1539,I TL 1272-AP,Gefährliche Versteckspiele,Dagobert in Not,Zio Paperone e la fuga nel tempo,Italien,64
@@ -1605,20 +1605,20 @@
 1605,I TL 1313-B,Micky Maus und die Generalprobe,Kriminalgeschichte,Topolino e gli allenamenti ladreschi,Italien,34
 1606,S 73206,Fahrradrennen mit Hindernissen,Gagstory,Morty and Ferdie Uphill Racer,Disney Studio (foreign market stories),8
 1607,ZM 43-06-13,Transportprobleme,Einseiter,Mickey Mouse,Sunday pages (USA),1
-1608,I TL266-A,Die Abenteuer des Donaldin Temuzin,Abenteuer,"","",32
+1608,I TL266-A,Die Abenteuer des Donaldin Temuzin,Abenteuer,,,32
 1609,I TL 1317-AP,Der Kampf ums Gold,Science-Fiction,Storie stellari,Italien,71
 1610,I TL833-B,Der Umweltschützer,Dagobert in Not,Zio Paperone e il mare inquinato,Italien,13
-1611,I TL270-A,Duck Dorado der Goldkönig,Literarische Parodie,"","",31
-1612,I TL266-A,Die Abenteuer des Donaldin Temuzin,Abenteuer,"","",68
+1611,I TL270-A,Duck Dorado der Goldkönig,Literarische Parodie,,,31
+1612,I TL266-A,Die Abenteuer des Donaldin Temuzin,Abenteuer,,,68
 1613,I TL 1317-AP,Duck-Film präsentiert: Der Kampf ums Gold,Science-Fiction,Storie stellari,Italien,71
 1614,I TL833-B,Der Umweltschützer,Dagobert in Not,Zio Paperone e il mare inquinato,Italien,13
-1615,I TL270-A,Duck Dorado - Der Goldkönig,Literarische Parodie,"","",98
-1616,I TL266-A,Die Abenteuer des Donaldin Temuzin,Abenteuer,"","",68
+1615,I TL270-A,Duck Dorado - Der Goldkönig,Literarische Parodie,,,98
+1616,I TL266-A,Die Abenteuer des Donaldin Temuzin,Abenteuer,,,68
 1617,I TL 1317-AP,Duck-Film präsentiert: Der Kampf ums Gold,Science-Fiction,Storie stellari,Italien,71
 1618,I TL833-B,Der Umweltschützer,Dagobert in Not,Zio Paperone e il mare inquinato,Italien,13
-1619,I TL270-A,Duck Dorado - Der Goldkönig,Literarische Parodie,"","",98
+1619,I TL270-A,Duck Dorado - Der Goldkönig,Literarische Parodie,,,98
 1620,I CWD54-A,Das erste Fußballspiel der Welt,Sport,Paperino ai mondiali di calcio,Italien,92
-1621,"",Ein Tag im Leben des Franz Dribbelbauer,"","","",0
+1621,,Ein Tag im Leben des Franz Dribbelbauer,,,,0
 1622,I CWD 54-B,"Donald, der Libero",Sport,Paperino calciatore,Italien,80
 1623,S 79257,Der absolute Traumjob,Gagstory,Donald Duck Plan Ahead,Disney Studio (foreign market stories),6
 1624,S 74042,Ein erfolgreicher Vertreter,Gagstory,Donald Duck The Poochchaser,Disney Studio (foreign market stories),7
@@ -1723,7 +1723,7 @@
 1723,I TL593-B,Daniel Düsentriebs Superfäustling,"Düsentrieb´sche Erfindungen,Dagobert in Not",Archimede Pitagorico e il superguanto,Italien,30
 1724,YD 69-02-01,Donald und die Hundedressur,Einseiter,Donald Duck,Daily strips (USA),1
 1725,W BB29-01,Die Tücke des Objekts,Dagobert in Not,The Beagle Boys The Fish Island Fiasco,U.S.-Comichefte,15
-1726,I CD 32-A + I CD 56-A,Vorgeschichte,Rahmengeschichte,"","",13
+1726,I CD 32-A + I CD 56-A,Vorgeschichte,Rahmengeschichte,,,13
 1727,I TL977-A,Ein gefährlicher Auftrag,Dagobert in Not,Zio Paperone contro il progettista,Italien,32
 1728,I TL977-B,Klub der Besserungswilligen,Dagobert in Not,Zio Paperone e il club dei bravi soggetti,Italien,27
 1729,I TL946-A,Der Fluch des Goldes,"Dagobert in Not,Fantasy",Zio Paperone e la minaccia monetaria,Italien,45
@@ -1732,7 +1732,7 @@
 1732,D 5145,Ideen muß man haben!,Einseiter,Donald Duck Missing Pincenez,Dänemark,1
 1733,I TL955-AP,Die schwimmende Raffinerie,Dagobert in Not,Zio Paperone e la raffineria galleggiante,Italien,62
 1734,I TL989-B,Ein schicksalsschweres Horoskop,Dagobert in Not,Zio Paperone e l'odissea della memoria perduta,Italien,31
-1735,I CD 32-A + I CD 56-A,Vorgeschichte,Rahmengeschichte,"","",13
+1735,I CD 32-A + I CD 56-A,Vorgeschichte,Rahmengeschichte,,,13
 1736,I TL977-A,"Onkel Dagobert und der ""Hecker""!",Dagobert in Not,Zio Paperone contro il progettista,Italien,32
 1737,I TL977-B,Der Klub der Besserungswilligen,Dagobert in Not,Zio Paperone e il club dei bravi soggetti,Italien,27
 1738,I TL946-A,Onkel Dagobert und der Fluch des Goldes,"Dagobert in Not,Fantasy",Zio Paperone e la minaccia monetaria,Italien,45
@@ -1741,7 +1741,7 @@
 1741,D 5145,Ideen muß man haben,Einseiter,Donald Duck Missing Pincenez,Dänemark,1
 1742,I TL955-AP,Onkel Dagoberts schwimmende Raffinerie,Dagobert in Not,Zio Paperone e la raffineria galleggiante,Italien,62
 1743,I TL989-B,Das schicksalsschwere Horoskop,Dagobert in Not,Zio Paperone e l'odissea della memoria perduta,Italien,31
-1744,I CD 32-A + I CD 56-A,Vorgeschichte,Rahmengeschichte,"","",13
+1744,I CD 32-A + I CD 56-A,Vorgeschichte,Rahmengeschichte,,,13
 1745,I TL977-A,"Onkel Dagobert und der ""Hecker""!",Dagobert in Not,Zio Paperone contro il progettista,Italien,32
 1746,I TL977-B,Der Klub der Besserungswilligen,Dagobert in Not,Zio Paperone e il club dei bravi soggetti,Italien,27
 1747,I TL946-A,Onkel Dagobert und der Fluch des Goldes,"Dagobert in Not,Fantasy",Zio Paperone e la minaccia monetaria,Italien,45
@@ -1756,7 +1756,7 @@
 1756,I TL 1324-B,Wer ist der Meisterschütze?,"Kriminalgeschichte,Wild West",Topolino e il mistero della moneta spezzata,Italien,27
 1757,S 73166,Eine Hand wäscht die andere,Gagstory,Mickey Mouse No Account!,Disney Studio (foreign market stories),2
 1758,I TL443-A,Die Musterkofferbande,Kriminalgeschichte,Topolino e la banda del campionario,Italien,29
-1759,Z?M ?16,Wer andern eine Grube gräbt ...,Gagstory,"","",2
+1759,Z?M ?16,Wer andern eine Grube gräbt ...,Gagstory,,,2
 1760,I TL 1134-A,Die Falschmünzerei,Kriminalgeschichte,Topolino e la zecca clandestina,Italien,29
 1761,I TL407-B,Das geklaute Manuskript,Kriminalgeschichte,Topolino e il finale giallo,Italien,29
 1762,ZM 69-12-14,Zeugnistag,Gagstory,Mickey Mouse,Sunday pages (USA),2
@@ -1767,7 +1767,7 @@
 1767,I TL 1324-B,Das Geheimnis der halben Münzen,"Kriminalgeschichte,Wild West",Topolino e il mistero della moneta spezzata,Italien,27
 1768,S 73166,Eine Hand wäscht die andere...,Gagstory,Mickey Mouse No Account!,Disney Studio (foreign market stories),2
 1769,I TL443-A,Die Musterkofferbande,Kriminalgeschichte,Topolino e la banda del campionario,Italien,29
-1770,Z?M ?16,Wer andern eine Grube gräbt ...,Gagstory,"","",2
+1770,Z?M ?16,Wer andern eine Grube gräbt ...,Gagstory,,,2
 1771,I TL 1134-A,Die Falschmünzerei,Kriminalgeschichte,Topolino e la zecca clandestina,Italien,29
 1772,I TL407-B,Wer ist der Mörder?,Kriminalgeschichte,Topolino e il finale giallo,Italien,29
 1773,ZM 69-12-14,Zeugnistag,Gagstory,Mickey Mouse,Sunday pages (USA),2
@@ -1780,28 +1780,28 @@
 1780,I TL 1324-B,Das Geheimnis der halben Münzen,"Kriminalgeschichte,Wild West",Topolino e il mistero della moneta spezzata,Italien,27
 1781,S 73166,Eine Hand wäscht die andere...,Gagstory,Mickey Mouse No Account!,Disney Studio (foreign market stories),2
 1782,I TL443-A,Die Musterkofferbande,Kriminalgeschichte,Topolino e la banda del campionario,Italien,29
-1783,Z?M ?16,Wer andern eine Grube gräbt ...,Gagstory,"","",2
+1783,Z?M ?16,Wer andern eine Grube gräbt ...,Gagstory,,,2
 1784,I TL 1134-A,Die Falschmünzerei,Kriminalgeschichte,Topolino e la zecca clandestina,Italien,29
 1785,I TL407-B,Wer ist der Mörder?,Kriminalgeschichte,Topolino e il finale giallo,Italien,29
 1786,ZM 69-12-14,Zeugnistag,Gagstory,Mickey Mouse,Sunday pages (USA),2
 1787,S 79055,Der seltsame Köder,Gagstory,Mickey Mouse A Bully Fish Story,Disney Studio (foreign market stories),12
 1788,S 74056,Der Kunde ist König,Einseiter,Mickey Mouse Mickey's Desire,Disney Studio (foreign market stories),1
 1789,I TL560-C,Wie man einen Einbrecher fängt,"Kriminalgeschichte,Gagstory",Topolino e lo svaligiatore solitario,Italien,18
-1790,I CD,Vorgeschichte,Rahmengeschichte,"","",7
-1791,I TL 1140-AP,Der schwarze Korsar,"Literarische Parodie,Zeitreisen",Paperino e la nipote del Corsaro Nero,Italien,60
+1790,I CD,Vorgeschichte,Rahmengeschichte,,,7
+1791,I TL 1140-AP,Der Traum vom Schwarzen Korsaren,"Literarische Parodie,Zeitreisen",Paperino e la nipote del Corsaro Nero,Italien,60
 1792,I TL 1086-AP,Alte Liebe rostet nicht,"Mittelalter,Romanze,Literarische Parodie",I promessi paperi,Italien,74
 1793,I TL 1253-B,Carmen olé,Literarische Parodie,Paperin Caramba y Carmen OlÃ¨,Italien,16
 1794,I TL 1254-B,Holde Aida,Literarische Parodie,Paper-DamÃ¨s e Celest'Aida,Italien,16
 1795,I TL 1261-B,Die schöne Francesca,Literarische Parodie,Paolino Pocatesta e la bella Franceschina,Italien,16
 1796,I TL 1096-AP,Die Perle von Labuan,Literarische Parodie,Sandopaper e la perla di Labuan,Italien,61
-1797,I CD,Vorgeschichte,Rahmengeschichte,"","",7
-1798,I TL 1140-AP,Der Traum vom Schwarzen Korsaren,"Literarische Parodie,Zeitreisen",Paperino e la nipote del Corsaro Nero,Italien,60
+1797,I CD,Vorgeschichte,Rahmengeschichte,,,7
+1798,I TL 1140-AP,Der schwarze Korsar,"Literarische Parodie,Zeitreisen",Paperino e la nipote del Corsaro Nero,Italien,60
 1799,I TL 1086-AP,Alte Liebe rostet nicht,"Mittelalter,Romanze,Literarische Parodie",I promessi paperi,Italien,74
 1800,I TL 1253-B,Carmen olé,Literarische Parodie,Paperin Caramba y Carmen OlÃ¨,Italien,16
 1801,I TL 1254-B,Holde Aida,Literarische Parodie,Paper-DamÃ¨s e Celest'Aida,Italien,16
 1802,I TL 1261-B,Die schöne Francesca,Literarische Parodie,Paolino Pocatesta e la bella Franceschina,Italien,16
 1803,I TL 1096-AP,Die Perle von Labuan,Literarische Parodie,Sandopaper e la perla di Labuan,Italien,61
-1804,I CD,Vorgeschichte,Rahmengeschichte,"","",7
+1804,I CD,Vorgeschichte,Rahmengeschichte,,,7
 1805,I TL 1140-AP,Der Traum vom Schwarzen Korsaren,"Literarische Parodie,Zeitreisen",Paperino e la nipote del Corsaro Nero,Italien,60
 1806,I TL 1086-AP,Alte Liebe rostet nicht,"Mittelalter,Romanze,Literarische Parodie",I promessi paperi,Italien,74
 1807,I TL 1253-B,Carmen olé,Literarische Parodie,Paperin Caramba y Carmen OlÃ¨,Italien,16
@@ -2245,8 +2245,8 @@
 2245,I TL373-A,Der Eierkrieg,Wirtschaftskampf,Paperino e il traforo di straforo,Italien,29
 2246,S 72364,Ein Dia mit Knalleffekt,Gagstory,Donald Duck Donald's Slide Show,Disney Studio (foreign market stories),2
 2247,I TL455-D,Der Tierpsychologe,Gagstory,Paperino istruttore cinofilo,Italien,20
-2248,I TL443-B,Eine begehrte Briefmarke,Gagstory,Paperino e la missione filatelica,Italien,28
-2249,I TL423-B,Ein komischer Kampfhahn,Gagstory,Paperino e il pollo da combattimento,Italien,22
+2248,I TL443-B,Der Briefmarken-Ausflug,Gagstory,Paperino e la missione filatelica,Italien,28
+2249,I TL423-B,Der Kampfhahn,Gagstory,Paperino e il pollo da combattimento,Italien,22
 2250,ZD 69-12-14,Der Schlaftrunk,Gagstory,Donald Duck,Sunday pages (USA),2
 2251,I TL432-B,Ein saftiges Geschäft,Gagstory,Paperino e l'aranciata Qui Quo Qua,Italien,29
 2252,I TL318-B,Duell im Schnee,Gagstory,Paperino e la pista sfasciaossa,Italien,33
@@ -2273,8 +2273,8 @@
 2273,I TL373-A,Der Eierkrieg,Wirtschaftskampf,Paperino e il traforo di straforo,Italien,29
 2274,S 72364,Ein Dia mit Knalleffekt,Gagstory,Donald Duck Donald's Slide Show,Disney Studio (foreign market stories),2
 2275,I TL455-D,Der Tierpsychologe,Gagstory,Paperino istruttore cinofilo,Italien,20
-2276,I TL443-B,Der Briefmarken-Ausflug,Gagstory,Paperino e la missione filatelica,Italien,28
-2277,I TL423-B,Der Kampfhahn,Gagstory,Paperino e il pollo da combattimento,Italien,22
+2276,I TL443-B,Eine begehrte Briefmarke,Gagstory,Paperino e la missione filatelica,Italien,28
+2277,I TL423-B,Ein komischer Kampfhahn,Gagstory,Paperino e il pollo da combattimento,Italien,22
 2278,ZD 69-12-14,Der Schlaftrunk,Gagstory,Donald Duck,Sunday pages (USA),2
 2279,I TL432-B,Ein saftiges Geschäft,Gagstory,Paperino e l'aranciata Qui Quo Qua,Italien,29
 2280,I TL318-B,Duell im Schnee,Gagstory,Paperino e la pista sfasciaossa,Italien,33
@@ -2293,7 +2293,7 @@
 2293,S 72405,Der Helfer der Unterdrückten,Gagstory,Hard Haid Moe Robin Hood Moe,Disney Studio (foreign market stories),10
 2294,I TL557-A,Die Macht der Sterne,Dagobert in Not,Zio Paperone e l'influsso astrale,Italien,29
 2295,ZD 70-09-20,Der Besuch,Gagstory,Donald Duck,Sunday pages (USA),2
-2296,I TL758-C,Heilung auf Umwegen,"Gagstory,Abenteuer",Zio Paperone e la ricetta indiretta,Italien,30
+2296,I TL758-C,Das indirekte Rezept,"Gagstory,Abenteuer",Zio Paperone e la ricetta indiretta,Italien,30
 2297,S 72325,Geschützte Tiere,Gagstory,The Beagle Boys The Animal Sanctuary,Disney Studio (foreign market stories),2
 2298,I TL579-B,Das Glück liegt auf dem Müll,Gagstory,Zio Paperone e il segreto di Paperino,Italien,28
 2299,I TL569-B,Der magische Zylinder,Dagobert in Not,Zio Paperone e il cilindro magico,Italien,27
@@ -2301,13 +2301,13 @@
 2301,I TL448-A,Kanonendonner,Dagobert in Not,Zio Paperone artigliere d'eccezione,Italien,17
 2302,W WDC87-16,Der letzte Tropfen,Gagstory,Donald Duck Drip-Dippy Donald,U.S.-Comichefte,3
 2303,I TL517-A,Die Räuberbienen,Dagobert in Not,Zio Paperone e la sabbiatura funesta,Italien,29
-2304,ZD 69-01-19,Ein doppelter Effekt,Gagstory,Donald Duck,Sunday pages (USA),2
-2305,I TL489-A,Der gespaltene Berg,Wirtschaftskampf,Zio Paperone e la gara ferroviaria,Italien,25
-2306,I TL504-A,Der falsche Maharadscha,Wirtschaftskampf,Zio Paperone e il grande party,Italien,25
-2307,S 72405,Ein verrückter Robin Hood,Gagstory,Hard Haid Moe Robin Hood Moe,Disney Studio (foreign market stories),10
+2304,ZD 69-01-19,Die Knoblauchfalle,Gagstory,Donald Duck,Sunday pages (USA),2
+2305,I TL489-A,Der geteilte Berg,Wirtschaftskampf,Zio Paperone e la gara ferroviaria,Italien,25
+2306,I TL504-A,Die große Party,Wirtschaftskampf,Zio Paperone e il grande party,Italien,25
+2307,S 72405,Der Helfer der Unterdrückten,Gagstory,Hard Haid Moe Robin Hood Moe,Disney Studio (foreign market stories),10
 2308,I TL557-A,Die Macht der Sterne,Dagobert in Not,Zio Paperone e l'influsso astrale,Italien,29
 2309,ZD 70-09-20,Der Besuch,Gagstory,Donald Duck,Sunday pages (USA),2
-2310,I TL758-C,Das indirekte Rezept,"Gagstory,Abenteuer",Zio Paperone e la ricetta indiretta,Italien,30
+2310,I TL758-C,Heilung auf Umwegen,"Gagstory,Abenteuer",Zio Paperone e la ricetta indiretta,Italien,30
 2311,S 72325,Geschützte Tiere,Gagstory,The Beagle Boys The Animal Sanctuary,Disney Studio (foreign market stories),2
 2312,I TL579-B,Das Glück liegt auf dem Müll,Gagstory,Zio Paperone e il segreto di Paperino,Italien,28
 2313,I TL569-B,Der magische Zylinder,Dagobert in Not,Zio Paperone e il cilindro magico,Italien,27
@@ -2315,10 +2315,10 @@
 2315,I TL448-A,Kanonendonner,Dagobert in Not,Zio Paperone artigliere d'eccezione,Italien,17
 2316,W WDC87-16,Der letzte Tropfen,Gagstory,Donald Duck Drip-Dippy Donald,U.S.-Comichefte,3
 2317,I TL517-A,Die Räuberbienen,Dagobert in Not,Zio Paperone e la sabbiatura funesta,Italien,29
-2318,ZD 69-01-19,Die Knoblauchfalle,Gagstory,Donald Duck,Sunday pages (USA),2
-2319,I TL489-A,Der geteilte Berg,Wirtschaftskampf,Zio Paperone e la gara ferroviaria,Italien,25
-2320,I TL504-A,Die große Party,Wirtschaftskampf,Zio Paperone e il grande party,Italien,25
-2321,S 72405,Der Helfer der Unterdrückten,Gagstory,Hard Haid Moe Robin Hood Moe,Disney Studio (foreign market stories),10
+2318,ZD 69-01-19,Ein doppelter Effekt,Gagstory,Donald Duck,Sunday pages (USA),2
+2319,I TL489-A,Der gespaltene Berg,Wirtschaftskampf,Zio Paperone e la gara ferroviaria,Italien,25
+2320,I TL504-A,Der falsche Maharadscha,Wirtschaftskampf,Zio Paperone e il grande party,Italien,25
+2321,S 72405,Ein verrückter Robin Hood,Gagstory,Hard Haid Moe Robin Hood Moe,Disney Studio (foreign market stories),10
 2322,I TL557-A,Die Macht der Sterne,Dagobert in Not,Zio Paperone e l'influsso astrale,Italien,29
 2323,ZD 70-09-20,Der Besuch,Gagstory,Donald Duck,Sunday pages (USA),2
 2324,I TL490-A,Der Schatz der Götter,Dagobert in Not,Zio Paperone e il raggiro mitologico,Italien,28
@@ -2394,17 +2394,17 @@
 2394,I TL569-A,Der Polo-Pokal,Kriminalgeschichte,Topolino e la coppa Topis,Italien,30
 2395,I TL502-B,Düsentriebs Düsen-Dauer-Drops,Düsentrieb´sche Erfindungen,Archimede e la caramella eterna,Italien,18
 2396,I TL429-A,Ein Bombengeschäft,Gagstory,Paperino e l'affarone d'occasione,Italien,19
-2397,I TL481-A,Fliegende Banknoten,Dagobert in Not,Paperino e le banconote volanti,Italien,21
-2398,I TL561-A,Wer zuletzt lacht...,"Gagstory,Schatzsuche",Paperino e gli elefanti tascabili,Italien,23
+2397,I TL481-A,Die fliegenden Banknoten,Dagobert in Not,Paperino e le banconote volanti,Italien,21
+2398,I TL561-A,Donalds Elefantenzucht,"Gagstory,Schatzsuche",Paperino e gli elefanti tascabili,Italien,23
 2399,I TL528-A,Optische Täuschungen,Gagstory,Paperino e l'illusionista,Italien,22
-2400,ZD 66-10-30,Ein tierischer Trick,Gagstory,Donald Duck,Sunday pages (USA),2
-2401,I TL399-D,Das Schnauferl-Rennen,"Sport,Gagstory",Paperino e il supermodello,Italien,21
-2402,I TL344-B,Wilde Wasserspiele,"Sport,Gagstory",Paperino pentatleta lacustre,Italien,30
-2403,S 82102,Arbeitsplatz-Probleme,Gagstory,Donald Duck New Job,Disney Studio (foreign market stories),14
+2400,ZD 66-10-30,Donald als Tierarzt,Gagstory,Donald Duck,Sunday pages (USA),2
+2401,I TL399-D,"Das ""Goldene-Schnauferl-Rennen""","Sport,Gagstory",Paperino e il supermodello,Italien,21
+2402,I TL344-B,Wässrige Kämpfe,"Sport,Gagstory",Paperino pentatleta lacustre,Italien,30
+2403,S 82102,Arbeitsplatzprobleme,Gagstory,Donald Duck New Job,Disney Studio (foreign market stories),14
 2404,I TL532-C,Der Gesundheitsapostel,Gagstory,Paperino e la cena degli intellettuali,Italien,17
 2405,S 81033,Heiteres Melodienraten,Gagstory,The Junior Woodchucks What's This Song?,Disney Studio (foreign market stories),15
 2406,I TL396-A,Der Fußball-Kaiser,"Sport,Gagstory",Paperino centravanti intellettuale,Italien,16
-2407,I TL707-C,Das Spezialfutter,Gagstory,Paperino e l'alimentazione spinta,Italien,28
+2407,I TL707-C,Das Spezial-Futter,Gagstory,Paperino e l'alimentazione spinta,Italien,28
 2408,I TL518-D,Autofahrer des Jahres,Gagstory,Paperino automobilista modello,Italien,22
 2409,I TL429-A,Ein Bombengeschäft,Gagstory,Paperino e l'affarone d'occasione,Italien,19
 2410,I TL481-A,Die fliegenden Banknoten,Dagobert in Not,Paperino e le banconote volanti,Italien,21
@@ -2420,22 +2420,22 @@
 2420,I TL707-C,Das Spezial-Futter,Gagstory,Paperino e l'alimentazione spinta,Italien,28
 2421,I TL518-D,Autofahrer des Jahres,Gagstory,Paperino automobilista modello,Italien,22
 2422,I TL429-A,Ein Bombengeschäft,Gagstory,Paperino e l'affarone d'occasione,Italien,19
-2423,I TL481-A,Die fliegenden Banknoten,Dagobert in Not,Paperino e le banconote volanti,Italien,21
-2424,I TL561-A,Donalds Elefantenzucht,"Gagstory,Schatzsuche",Paperino e gli elefanti tascabili,Italien,23
+2423,I TL481-A,Fliegende Banknoten,Dagobert in Not,Paperino e le banconote volanti,Italien,21
+2424,I TL561-A,Wer zuletzt lacht...,"Gagstory,Schatzsuche",Paperino e gli elefanti tascabili,Italien,23
 2425,I TL528-A,Optische Täuschungen,Gagstory,Paperino e l'illusionista,Italien,22
-2426,ZD 66-10-30,Donald als Tierarzt,Gagstory,Donald Duck,Sunday pages (USA),2
-2427,I TL399-D,"Das ""Goldene-Schnauferl-Rennen""","Sport,Gagstory",Paperino e il supermodello,Italien,21
-2428,I TL344-B,Wässrige Kämpfe,"Sport,Gagstory",Paperino pentatleta lacustre,Italien,30
-2429,S 82102,Arbeitsplatzprobleme,Gagstory,Donald Duck New Job,Disney Studio (foreign market stories),14
+2426,ZD 66-10-30,Ein tierischer Trick,Gagstory,Donald Duck,Sunday pages (USA),2
+2427,I TL399-D,Das Schnauferl-Rennen,"Sport,Gagstory",Paperino e il supermodello,Italien,21
+2428,I TL344-B,Wilde Wasserspiele,"Sport,Gagstory",Paperino pentatleta lacustre,Italien,30
+2429,S 82102,Arbeitsplatz-Probleme,Gagstory,Donald Duck New Job,Disney Studio (foreign market stories),14
 2430,I TL532-C,Der Gesundheitsapostel,Gagstory,Paperino e la cena degli intellettuali,Italien,17
 2431,S 81033,Heiteres Melodienraten,Gagstory,The Junior Woodchucks What's This Song?,Disney Studio (foreign market stories),15
 2432,I TL396-A,Der Fußball-Kaiser,"Sport,Gagstory",Paperino centravanti intellettuale,Italien,16
-2433,I TL707-C,Das Spezial-Futter,Gagstory,Paperino e l'alimentazione spinta,Italien,28
+2433,I TL707-C,Das Spezialfutter,Gagstory,Paperino e l'alimentazione spinta,Italien,28
 2434,I TL518-D,Autofahrer des Jahres,Gagstory,Paperino automobilista modello,Italien,22
 2435,I TL460-A,Künstlerpech,Gagstory,Paperino e il ghirigoro,Italien,28
 2436,S 81083,Gold in der Kehle,Gagstory,Donald Duck Donald's New Voice,Disney Studio (foreign market stories),19
 2437,I TL627-B,Der Eichhörnchen-Komplex,Gagstory,Paperino e il complesso dello scoiattolo,Italien,21
-2438,I TL 466-A,Die Kürassier-Rosen,Gagstory,Paperino e lo spartito inedito,Italien,29
+2438,I TL 466-A,Rosen für die Künstlerin,Gagstory,Paperino e lo spartito inedito,Italien,29
 2439,ZD 70-06-28,Echter Naturalismus,Gagstory,Donald Duck,Sunday pages (USA),2
 2440,I TL462-A,Die Pflichtregatta,"Sport,Gagstory",Paperino e la regata obbligatoria,Italien,29
 2441,I TL 1161-B,Trautes Heim - Glück allein,Gagstory,Paperino e la perfezione domestica,Italien,26
@@ -2447,7 +2447,7 @@
 2447,I TL460-A,Künstlerpech,Gagstory,Paperino e il ghirigoro,Italien,28
 2448,S 81083,Gold in der Kehle,Gagstory,Donald Duck Donald's New Voice,Disney Studio (foreign market stories),19
 2449,I TL627-B,Der Eichhörnchen-Komplex,Gagstory,Paperino e il complesso dello scoiattolo,Italien,21
-2450,I TL 466-A,Rosen für die Künstlerin,Gagstory,Paperino e lo spartito inedito,Italien,29
+2450,I TL 466-A,Die Kürassier-Rosen,Gagstory,Paperino e lo spartito inedito,Italien,29
 2451,ZD 70-06-28,Echter Naturalismus,Gagstory,Donald Duck,Sunday pages (USA),2
 2452,I TL462-A,Die Pflichtregatta,"Sport,Gagstory",Paperino e la regata obbligatoria,Italien,29
 2453,I TL 1161-B,Trautes Heim - Glück allein,Gagstory,Paperino e la perfezione domestica,Italien,26
@@ -2708,23 +2708,23 @@
 2708,S 84016,Begegnung mit der Kunst,Gagstory,Daisy Duck Chipmunks In Art,Disney Studio (foreign market stories),5
 2709,S 81147,Der Meisterdetektiv,Gagstory,Donald Duck Defective Detective,Disney Studio (foreign market stories),15
 2710,I TL 1065-A,Der mobile Geldspeicher,Dagobert in Not,Zio Paperone e il deposito semovente,Italien,39
-2711,I TL 1396-A,Die Ducks... vom Winde verweht,Literarische Parodie,"","",129
+2711,I TL 1396-A,Die Ducks... vom Winde verweht,Literarische Parodie,,,129
 2712,I TL 1545-A,Das Reich der Töne,"Schatzsuche,Fantasy",Paperino e il popolo Lira,Italien,43
 2713,I TL 1280-A,Das Geheimnis der Inka-Prinzessin,Schatzsuche,Zio Paperone e la leggenda di Coniraya,Italien,27
 2714,I TL 1446-BP,Der Retter von Venedig,Abenteuer,Zio Paperone Doge di Venezia,Italien,51
-2715,I TL 1396-A,Die Ducks... vom Winde verweht - Kapitel 1,Literarische Parodie,"","",26
-2716,I TL 1397-A,Die Ducks... vom Winde verweht - Kapitel 2,Literarische Parodie,"","",23
-2717,I TL 1398-A,Die Ducks... vom Winde verweht - Kapitel 3,Literarische Parodie,"","",23
-2718,I TL 1399-A,Die Ducks... vom Winde verweht - Kapitel 4,Literarische Parodie,"","",29
-2719,I TL 1400-A,Die Ducks... vom Winde verweht - Kapitel 5 und Schluß,Literarische Parodie,"","",28
+2715,I TL 1396-A,Die Ducks... vom Winde verweht - Kapitel 1,Literarische Parodie,,,26
+2716,I TL 1397-A,Die Ducks... vom Winde verweht - Kapitel 2,Literarische Parodie,,,23
+2717,I TL 1398-A,Die Ducks... vom Winde verweht - Kapitel 3,Literarische Parodie,,,23
+2718,I TL 1399-A,Die Ducks... vom Winde verweht - Kapitel 4,Literarische Parodie,,,29
+2719,I TL 1400-A,Die Ducks... vom Winde verweht - Kapitel 5 und Schluß,Literarische Parodie,,,28
 2720,I TL 1545-A,Das Reich der Töne,"Schatzsuche,Fantasy",Paperino e il popolo Lira,Italien,43
 2721,I TL 1280-A,Das Geheimnis der Inka-Prinzessin,Schatzsuche,Zio Paperone e la leggenda di Coniraya,Italien,27
 2722,I TL 1446-BP,Der Retter von Venedig,Abenteuer,Zio Paperone Doge di Venezia,Italien,51
-2723,I TL 1396-A,Die Ducks... vom Winde verweht - Kapitel 1,Literarische Parodie,"","",26
-2724,I TL 1397-A,Die Ducks... vom Winde verweht - Kapitel 2,Literarische Parodie,"","",23
-2725,I TL 1398-A,Die Ducks... vom Winde verweht - Kapitel 3,Literarische Parodie,"","",23
-2726,I TL 1399-A,Die Ducks... vom Winde verweht - Kapitel 4,Literarische Parodie,"","",29
-2727,I TL 1400-A,Die Ducks... vom Winde verweht - Kapitel 5 und Schluß,Literarische Parodie,"","",28
+2723,I TL 1396-A,Die Ducks... vom Winde verweht - Kapitel 1,Literarische Parodie,,,26
+2724,I TL 1397-A,Die Ducks... vom Winde verweht - Kapitel 2,Literarische Parodie,,,23
+2725,I TL 1398-A,Die Ducks... vom Winde verweht - Kapitel 3,Literarische Parodie,,,23
+2726,I TL 1399-A,Die Ducks... vom Winde verweht - Kapitel 4,Literarische Parodie,,,29
+2727,I TL 1400-A,Die Ducks... vom Winde verweht - Kapitel 5 und Schluß,Literarische Parodie,,,28
 2728,I TL 1545-A,Das Reich der Töne,"Schatzsuche,Fantasy",Paperino e il popolo Lira,Italien,43
 2729,I TL 1280-A,Das Geheimnis der Inka-Prinzessin,Schatzsuche,Zio Paperone e la leggenda di Coniraya,Italien,27
 2730,I TL 1446-BP,Der Retter von Venedig,Abenteuer,Zio Paperone Doge di Venezia,Italien,51
@@ -2743,22 +2743,22 @@
 2743,S 83137,Die Schule des Glücks,Gagstory,Donald Duck Gladstone's School For Good Luck,Disney Studio (foreign market stories),15
 2744,I TL 1438-AP,Die elektronische Revolution,Historisches Thema,Zio Paperone e la rivoluzione elettronica,Italien,53
 2745,I TL 1555-BP,Der Kiwi-Krieg,Wirtschaftskampf,Zio Paperone il dolce Problema,Italien,58
-2746,I TL 1409-A,Die Abenteuer von Marco Polo,Literarische Parodie,"","",126
+2746,I TL 1409-A,Die Abenteuer von Marco Polo,Literarische Parodie,,,126
 2747,B 850070,Die Sternenamazone,"Science-Fiction,Düsentrieb´sche Erfindungen",Prof. Pardal A Guerreira Estelar,Brasilien,9
-2748,I TL 1466-B,Die Reise zum Mittelpunkt der Erde,Literarische Parodie,"","",59
+2748,I TL 1466-B,Die Reise zum Mittelpunkt der Erde,Literarische Parodie,,,59
 2749,YD 68-11-27,Das Rundschreiben,Einseiter,Donald Duck,Daily strips (USA),1
-2750,I TL 1491-A,Dollivers Reisen - Im Lande Liliput,Literarische Parodie,"","",31
-2751,I TL 1492-A,Dollivers Reisen - Im Reich der Riesen,Literarische Parodie,"","",32
-2752,I TL 1409-A,Die Abenteuer von Marco Polo Episode 1 - Die Arche,Literarische Parodie,"","",30
-2753,I TL 1410-A,Die Abenteuer von Marco Polo Episode 2 - Bis zur großen Mauer,Literarische Parodie,"","",30
-2754,I TL 1411-A,Die Abenteuer von Marco Polo Episode 3 - Mission in Saianfu,Literarische Parodie,"","",32
-2755,I TL 1412-B,Die Abenteuer von Marco Polo Episode 4 und Schluß - Die Prinzessin Cocacin,Literarische Parodie,"","",34
+2750,I TL 1491-A,Dollivers Reisen - Im Lande Liliput,Literarische Parodie,,,31
+2751,I TL 1492-A,Dollivers Reisen - Im Reich der Riesen,Literarische Parodie,,,32
+2752,I TL 1409-A,Die Abenteuer von Marco Polo Episode 1 - Die Arche,Literarische Parodie,,,30
+2753,I TL 1410-A,Die Abenteuer von Marco Polo Episode 2 - Bis zur großen Mauer,Literarische Parodie,,,30
+2754,I TL 1411-A,Die Abenteuer von Marco Polo Episode 3 - Mission in Saianfu,Literarische Parodie,,,32
+2755,I TL 1412-B,Die Abenteuer von Marco Polo Episode 4 und Schluß - Die Prinzessin Cocacin,Literarische Parodie,,,34
 2756,B 850070,Die Sternenamazone,"Science-Fiction,Düsentrieb´sche Erfindungen",Prof. Pardal A Guerreira Estelar,Brasilien,9
-2757,I TL 1466-B,Die Reise zum Mittelpunkt der Erde Teil 1,Literarische Parodie,"","",30
-2758,I TL 1467-AP,Die Reise zum Mittelpunkt der Erde Teil 2,Literarische Parodie,"","",29
+2757,I TL 1466-B,Die Reise zum Mittelpunkt der Erde Teil 1,Literarische Parodie,,,30
+2758,I TL 1467-AP,Die Reise zum Mittelpunkt der Erde Teil 2,Literarische Parodie,,,29
 2759,YD 68-11-27,Das Rundschreiben,Einseiter,Donald Duck,Daily strips (USA),1
-2760,I TL 1491-A,Dollivers Reisen - Ein Abenteuer in Lilliput,Literarische Parodie,"","",31
-2761,I TL 1492-A,Dollivers Reisen - Im Reich der Riesen,Literarische Parodie,"","",32
+2760,I TL 1491-A,Dollivers Reisen - Ein Abenteuer in Lilliput,Literarische Parodie,,,31
+2761,I TL 1492-A,Dollivers Reisen - Im Reich der Riesen,Literarische Parodie,,,32
 2762,I TL 1512-AP,Die Lichterkrone,Science-Fiction,Zio Paperone e la corona di luce,Italien,62
 2763,ZX 75-02-16,"Köpfchen, Köpfchen",Einseiter,Scamp,Sunday pages (USA),1
 2764,I TL 1565-A,Das Geheimnis des alten Schlosses,Interaktiv,Topolino e il segreto del Castello,Italien,38
@@ -2778,13 +2778,13 @@
 2778,I TL 1341-AP,Das Erbe des Boy Bongo,Schatzsuche,Paperino e l'ereditÃ  di Babe,Italien,59
 2779,S 73070,Dreifach genäht hält besser,Einseiter,Uncle Scrooge It All Adds Up,Disney Studio (foreign market stories),1
 2780,I TL 1561-AP,Der Schatz des Priamos,"Historisches Thema,Zeitreisen",Topolino e la guerra di Troia,Italien,61
-2781,I TL 1573-A,Der vergessene Schrein,"Film Parodie,Superhelden",Parodie di grandi film,Italien,46
+2781,I TL 1573-A,Phantomias und der vergessene Schrein,"Film Parodie,Superhelden",Parodie di grandi film,Italien,46
 2782,D7962,Die Hochseeregatta,"Abenteuer,Schatzsuche,Zeitreisen",Donald Duck Tall Ship Trip,Dänemark,35
 2783,I TL 1486-AP,Das Gespenst in der Oper,Literarische Parodie,Topolino e il fantasma dell'opera,Italien,56
 2784,I TL 1341-AP,Das Erbe des Boy Bongo,Schatzsuche,Paperino e l'ereditÃ  di Babe,Italien,59
 2785,S 73070,Dreifach genäht hält besser,Einseiter,Uncle Scrooge It All Adds Up,Disney Studio (foreign market stories),1
 2786,I TL 1561-AP,Der Schatz des Priamos,"Historisches Thema,Zeitreisen",Topolino e la guerra di Troia,Italien,61
-2787,I TL 1573-A,Phantomias und der vergessene Schrein,"Film Parodie,Superhelden",Parodie di grandi film,Italien,46
+2787,I TL 1573-A,Der vergessene Schrein,"Film Parodie,Superhelden",Parodie di grandi film,Italien,46
 2788,I TL 1604-AP,Krieg und Frieden,Literarische Parodie,Guerra e pace,Italien,64
 2789,I TL 1541-AP,Faule Tricks auf BMX,Sport,"Qui, Quo, Qua e le gioie del BMX",Italien,60
 2790,D AT255-B,Der Lachsaurier,"Gagstory,Dagobert in Not,Schatzsuche",Uncle Scrooge Legesaurussen,Dänemark,41
@@ -2947,22 +2947,22 @@
 2947,I TL 1107-AP,Der Solarspiegel,Dagobert in Not,Zio Paperone e lo specchio solare,Italien,66
 2948,I TL 1566-AP,Abenteuer im Orientexpreß,Kriminalgeschichte,Topolino sull'Orient Express,Italien,57
 2949,S 81145,Der Bürger Nummer eins,Wirtschaftskampf,Grandma Duck Number One Scrooge,Disney Studio (foreign market stories),16
-2950,I TL 1425-A,Messère Ducato Kapitel 1: Die Verbannung,Literarische Parodie,"","",29
-2951,I TL 1426-A,Messère Ducato Kapitel 2: Der Hungerturm,Literarische Parodie,"","",24
-2952,I TL 1427-A,Messère Ducato Kapitel 3: Die falschen Fiorini,Literarische Parodie,"","",24
-2953,I TL 1428-A,Messère Ducato Kapitel 4: Die Piraten von Montecristo,Literarische Parodie,"","",24
-2954,I TL 1429-A,Messère Ducato Kapitel 5: Die Grotte der Winde,Literarische Parodie,"","",21
-2955,I TL 1430-A,Ser Ducato Kapitel 6: Lorenzo der Prächtige,Literarische Parodie,"","",26
-2956,I TL 1431-A,Ser Ducato Kapitel 7: Aufbruch in die neue Welt,Literarische Parodie,"","",42
+2950,I TL 1425-A,Messère Ducato Kapitel 1: Die Verbannung,Literarische Parodie,,,29
+2951,I TL 1426-A,Messère Ducato Kapitel 2: Der Hungerturm,Literarische Parodie,,,24
+2952,I TL 1427-A,Messère Ducato Kapitel 3: Die falschen Fiorini,Literarische Parodie,,,24
+2953,I TL 1428-A,Messère Ducato Kapitel 4: Die Piraten von Montecristo,Literarische Parodie,,,24
+2954,I TL 1429-A,Messère Ducato Kapitel 5: Die Grotte der Winde,Literarische Parodie,,,21
+2955,I TL 1430-A,Ser Ducato Kapitel 6: Lorenzo der Prächtige,Literarische Parodie,,,26
+2956,I TL 1431-A,Ser Ducato Kapitel 7: Aufbruch in die neue Welt,Literarische Parodie,,,42
 2957,I TL 1281-AP,Die außergewöhnliche Stravigari,"Kriminalgeschichte,Historisches Thema",Topolino e lo straordinario Stravigarius,Italien,64
 2958,S 82097,Ein blitzgescheiter Vortrag,Gagstory,Goofy A Goofy Look At Lightning,Disney Studio (foreign market stories),4
-2959,I TL 1425-A,Messère Ducato Kapitel 1: Die Verbannung,Literarische Parodie,"","",29
-2960,I TL 1426-A,Messère Ducato Kapitel 2: Der Hungerturm,Literarische Parodie,"","",24
-2961,I TL 1427-A,Messère Ducato Kapitel 3: Die falschen Fiorini,Literarische Parodie,"","",24
-2962,I TL 1428-A,Messère Ducato Kapitel 4: Die Piraten von Montecristo,Literarische Parodie,"","",24
-2963,I TL 1429-A,Messère Ducato Kapitel 5: Die Grotte der Winde,Literarische Parodie,"","",21
-2964,I TL 1430-A,Ser Ducato Kapitel 6: Lorenzo der Prächtige,Literarische Parodie,"","",26
-2965,I TL 1431-A,Ser Ducato Kapitel 7: Aufbruch in die neue Welt,Literarische Parodie,"","",42
+2959,I TL 1425-A,Messère Ducato Kapitel 1: Die Verbannung,Literarische Parodie,,,29
+2960,I TL 1426-A,Messère Ducato Kapitel 2: Der Hungerturm,Literarische Parodie,,,24
+2961,I TL 1427-A,Messère Ducato Kapitel 3: Die falschen Fiorini,Literarische Parodie,,,24
+2962,I TL 1428-A,Messère Ducato Kapitel 4: Die Piraten von Montecristo,Literarische Parodie,,,24
+2963,I TL 1429-A,Messère Ducato Kapitel 5: Die Grotte der Winde,Literarische Parodie,,,21
+2964,I TL 1430-A,Ser Ducato Kapitel 6: Lorenzo der Prächtige,Literarische Parodie,,,26
+2965,I TL 1431-A,Ser Ducato Kapitel 7: Aufbruch in die neue Welt,Literarische Parodie,,,42
 2966,I TL 1281-AP,Die außergewöhnliche Stravigari,"Kriminalgeschichte,Historisches Thema",Topolino e lo straordinario Stravigarius,Italien,64
 2967,S 82097,Ein blitzgescheiter Vortrag,Gagstory,Goofy A Goofy Look At Lightning,Disney Studio (foreign market stories),4
 2968,I TL 1434-A,Ein Schluckauf mit Folgen,Gagstory,Zio Paperone e l'operazione singhiozzo,Italien,27
@@ -3068,28 +3068,28 @@
 3068,I TL 1225-AP,Das geheimnisvolle Geisterhaus,Kriminalgeschichte,Topolino e i segreti di casadiavolo,Italien,62
 3069,S 85197,Es lebe der technische Rückschritt!,"Gagstory,Düsentrieb´sche Erfindungen",Donald Duck Ro-Duck The Robot,Disney Studio (foreign market stories),16
 3070,I TL 1745-C,Ein romantisches Abenteuer,Zeitreisen,Minni e la romantica avventura,Italien,42
-3071,I TL 1758-A,Der magische Ring 1. Teil: Das Gold der Diebelungen,Literarische Parodie,"","",31
-3072,I TL 1759-C,Der magische Ring 2. Teil: Kriemundels Zaubertrank,Literarische Parodie,"","",34
-3073,I TL 1760-A,Der magische Ring 3. Teil: Der Kampf um den magischen Ring,Literarische Parodie,"","",39
+3071,I TL 1758-A,Der magische Ring 1. Teil: Das Gold der Diebelungen,Literarische Parodie,,,31
+3072,I TL 1759-C,Der magische Ring 2. Teil: Kriemundels Zaubertrank,Literarische Parodie,,,34
+3073,I TL 1760-A,Der magische Ring 3. Teil: Der Kampf um den magischen Ring,Literarische Parodie,,,39
 3074,I TL 1489-AP,Tips für Taucher,"Pädagogische Geschichte,Kriminalgeschichte",Topolino e le vacanze in immersione,Italien,61
 3075,I TL 1572-A,Der Weltraum-Wettkampf,Wirtschaftskampf,Zio Paperone l'incognita spaziale,Italien,35
 3076,I TL 1671-AP,Der verschwundene Regisseur,Kriminalgeschichte,Topolino profondo giallo,Italien,54
 3077,I TL 1766-C,Urlaub in Venedig,Gagstory,Topolino in vacanza,Italien,4
-3078,I TL 1758-A,Der magische Ring 1. Teil: Das Gold der Diebelungen,Literarische Parodie,"","",31
-3079,I TL 1759-C,Der magische Ring 2. Teil: Kriemundels Zaubertrank,Literarische Parodie,"","",34
-3080,I TL 1760-A,Der magische Ring 3. Teil: Der Kampf um den magischen Ring,Literarische Parodie,"","",39
+3078,I TL 1758-A,Der magische Ring 1. Teil: Das Gold der Diebelungen,Literarische Parodie,,,31
+3079,I TL 1759-C,Der magische Ring 2. Teil: Kriemundels Zaubertrank,Literarische Parodie,,,34
+3080,I TL 1760-A,Der magische Ring 3. Teil: Der Kampf um den magischen Ring,Literarische Parodie,,,39
 3081,I TL 1489-AP,Tips für Taucher,"Pädagogische Geschichte,Kriminalgeschichte",Topolino e le vacanze in immersione,Italien,61
 3082,I TL 1572-A,Der Weltraum-Wettkampf,Wirtschaftskampf,Zio Paperone l'incognita spaziale,Italien,35
 3083,I TL 1671-AP,Der verschwundene Regisseur,Kriminalgeschichte,Topolino profondo giallo,Italien,54
 3084,I TL 1766-C,Urlaub in Venedig,Gagstory,Topolino in vacanza,Italien,4
 3085,I TL 1739-D,Der goldene Krieger,Schatzsuche,Paperino e l'amuleto della valle perduta,Italien,34
 3086,I TL 1764-A,Das verrückte Mausoleum,"Historisches Thema,Zeitreisen",Topolino e la leggenda di re Porsenna,Italien,74
-3087,I TL991-A,Phantomias und das Indianerland,Superhelden,Paperinik e l'intrepido signore del fuoco,Italien,40
+3087,I TL991-A,Der eingebildete Kranke,Superhelden,Paperinik e l'intrepido signore del fuoco,Italien,40
 3088,I TL 1468-AP,"Die ""Froschkönigin""",Kriminalgeschichte,Topolino e le rane saltatrici,Italien,56
 3089,I TL 1714-AP,Unheimliche Begegnungen,Fantasy,Paperino e il mistero delle ombre vaganti,Italien,54
 3090,I TL 1739-D,Der goldene Krieger,Schatzsuche,Paperino e l'amuleto della valle perduta,Italien,34
 3091,I TL 1764-A,Das verrückte Mausoleum,"Historisches Thema,Zeitreisen",Topolino e la leggenda di re Porsenna,Italien,74
-3092,I TL991-A,Der eingebildete Kranke,Superhelden,Paperinik e l'intrepido signore del fuoco,Italien,40
+3092,I TL991-A,Phantomias und das Indianerland,Superhelden,Paperinik e l'intrepido signore del fuoco,Italien,40
 3093,I TL 1468-AP,"Die ""Froschkönigin""",Kriminalgeschichte,Topolino e le rane saltatrici,Italien,56
 3094,I TL 1714-AP,Unheimliche Begegnungen,Fantasy,Paperino e il mistero delle ombre vaganti,Italien,54
 3095,I TL 1718-A,"Das ""Projekt Zeiteis""",Wirtschaftskampf,Zio Paperone e il progetto ghiacciolo,Italien,58
@@ -3176,36 +3176,36 @@
 3176,I TL 1605-B,Antike Geschäfte,Abenteuer,Zio Paperone e la rinascita di Pompei,Italien,41
 3177,B 850096,Das Findelkind aus dem All,Science-Fiction,Prof. Pardal O Ã“rfão Espacial,Brasilien,10
 3178,I TL 1678-A,Das verschwundene Modellkleid,Kriminalgeschichte,Topolino e il vestito numero 1,Italien,33
-3179,I TL 1780-A,Die zwölf Namen - Der Tierkreisstein Episode 1,Zeitreisen,"","",29
-3180,I TL 1781-A,Im Tal der Skorpione - Der Tierkreisstein Episode 2,Abenteuer,"","",29
-3181,I TL 1782-C,Mit Zins und Zinseszins - Der Tierkreisstein Episode 3,Abenteuer,"","",30
-3182,I TL 1783-B,Der Tiger ist los - Der Tierkreisstein Episode 4,Abenteuer,"","",29
-3183,I TL 1784-A,Sternenmode - Der Tierkreisstein Episode 5,Science-Fiction,"","",29
-3184,I TL 1785-B,Abenteuer auf Hawaii - Der Tierkreisstein Episode 6,Abenteuer,"","",28
+3179,I TL 1780-A,Die zwölf Namen - Der Tierkreisstein Episode 1,Zeitreisen,,,29
+3180,I TL 1781-A,Im Tal der Skorpione - Der Tierkreisstein Episode 2,Abenteuer,,,29
+3181,I TL 1782-C,Mit Zins und Zinseszins - Der Tierkreisstein Episode 3,Abenteuer,,,30
+3182,I TL 1783-B,Der Tiger ist los - Der Tierkreisstein Episode 4,Abenteuer,,,29
+3183,I TL 1784-A,Sternenmode - Der Tierkreisstein Episode 5,Science-Fiction,,,29
+3184,I TL 1785-B,Abenteuer auf Hawaii - Der Tierkreisstein Episode 6,Abenteuer,,,28
 3185,I TL 1605-B,Antike Geschäfte,Abenteuer,Zio Paperone e la rinascita di Pompei,Italien,41
 3186,B 850096,Das Findelkind aus dem All,Science-Fiction,Prof. Pardal O Ã“rfão Espacial,Brasilien,10
 3187,I TL 1678-A,Das verschwundene Modellkleid,Kriminalgeschichte,Topolino e il vestito numero 1,Italien,33
-3188,I TL 1780-A,Die zwölf Namen - Der Tierkreisstein Episode 1,Zeitreisen,"","",29
-3189,I TL 1781-A,Im Tal der Skorpione - Der Tierkreisstein Episode 2,Abenteuer,"","",29
-3190,I TL 1782-C,Mit Zins und Zinseszins - Der Tierkreisstein Episode 3,Abenteuer,"","",30
-3191,I TL 1783-B,Der Tiger ist los - Der Tierkreisstein Episode 4,Abenteuer,"","",29
-3192,I TL 1784-A,Sternenmode - Der Tierkreisstein Episode 5,Science-Fiction,"","",29
-3193,I TL 1785-B,Abenteuer auf Hawaii - Der Tierkreisstein Episode 6,Abenteuer,"","",28
+3188,I TL 1780-A,Die zwölf Namen - Der Tierkreisstein Episode 1,Zeitreisen,,,29
+3189,I TL 1781-A,Im Tal der Skorpione - Der Tierkreisstein Episode 2,Abenteuer,,,29
+3190,I TL 1782-C,Mit Zins und Zinseszins - Der Tierkreisstein Episode 3,Abenteuer,,,30
+3191,I TL 1783-B,Der Tiger ist los - Der Tierkreisstein Episode 4,Abenteuer,,,29
+3192,I TL 1784-A,Sternenmode - Der Tierkreisstein Episode 5,Science-Fiction,,,29
+3193,I TL 1785-B,Abenteuer auf Hawaii - Der Tierkreisstein Episode 6,Abenteuer,,,28
 3194,I TL 1797-AP,Kampf auf der Spitze,Wirtschaftskampf,Zio Paperone e la disfida sulle punte,Italien,61
-3195,I TL 1786-C,Der doppelte Graf - Der Tierkreisstein Episode 7,Abenteuer,"","",28
-3196,I TL 1787-A,Lucius Spectaculus - Der Tierkreisstein Episode 8,Superhelden,"","",29
-3197,I TL 1788-A,Unter tropischer Sonne - Der Tierkreisstein Episode 9,Abenteuer,"","",31
-3198,I TL 1789-B,Schwarzbarts Schatz - Der Tierkreisstein Episode 10,Abenteuer,"","",28
-3199,I TL 1790-A,Der Wunder-Widder - Der Tierkreisstein Episode 11,Abenteuer,"","",26
-3200,I TL 1791-A,Das Vermächtnis des Zodiakus - Der Tierkreisstein Episode 12,Abenteuer,"","",31
+3195,I TL 1786-C,Der doppelte Graf - Der Tierkreisstein Episode 7,Abenteuer,,,28
+3196,I TL 1787-A,Lucius Spectaculus - Der Tierkreisstein Episode 8,Superhelden,,,29
+3197,I TL 1788-A,Unter tropischer Sonne - Der Tierkreisstein Episode 9,Abenteuer,,,31
+3198,I TL 1789-B,Schwarzbarts Schatz - Der Tierkreisstein Episode 10,Abenteuer,,,28
+3199,I TL 1790-A,Der Wunder-Widder - Der Tierkreisstein Episode 11,Abenteuer,,,26
+3200,I TL 1791-A,Das Vermächtnis des Zodiakus - Der Tierkreisstein Episode 12,Abenteuer,,,31
 3201,I TL 1384-B,Kosmischer Buchstabensalat,Science-Fiction,Topolino e le lettere misteriose,Italien,24
 3202,I TL 1797-AP,Kampf auf der Spitze,Wirtschaftskampf,Zio Paperone e la disfida sulle punte,Italien,61
-3203,I TL 1786-C,Der doppelte Graf - Der Tierkreisstein Episode 7,Abenteuer,"","",28
-3204,I TL 1787-A,Lucius Spectaculus - Der Tierkreisstein Episode 8,Superhelden,"","",29
-3205,I TL 1788-A,Unter tropischer Sonne - Der Tierkreisstein Episode 9,Abenteuer,"","",31
-3206,I TL 1789-B,Schwarzbarts Schatz - Der Tierkreisstein Episode 10,Abenteuer,"","",28
-3207,I TL 1790-A,Der Wunder-Widder - Der Tierkreisstein Episode 11,Abenteuer,"","",26
-3208,I TL 1791-A,Das Vermächtnis des Zodiakus - Der Tierkreisstein Episode 12,Abenteuer,"","",31
+3203,I TL 1786-C,Der doppelte Graf - Der Tierkreisstein Episode 7,Abenteuer,,,28
+3204,I TL 1787-A,Lucius Spectaculus - Der Tierkreisstein Episode 8,Superhelden,,,29
+3205,I TL 1788-A,Unter tropischer Sonne - Der Tierkreisstein Episode 9,Abenteuer,,,31
+3206,I TL 1789-B,Schwarzbarts Schatz - Der Tierkreisstein Episode 10,Abenteuer,,,28
+3207,I TL 1790-A,Der Wunder-Widder - Der Tierkreisstein Episode 11,Abenteuer,,,26
+3208,I TL 1791-A,Das Vermächtnis des Zodiakus - Der Tierkreisstein Episode 12,Abenteuer,,,31
 3209,I TL 1384-B,Kosmischer Buchstabensalat,Science-Fiction,Topolino e le lettere misteriose,Italien,24
 3210,I TL 1809-AP,Die Ballade von Cathy und Bill,Romanze,Ombretta e l'angolo dei Salici,Italien,53
 3211,I TL 1794-C,Ein ganzes exklusives Modell,Gagstory,Topolino alla ricerca del capello perduto,Italien,35
@@ -3277,7 +3277,7 @@
 3277,S 82098,Das pure Nichts...,Gagstory,Goofy A Goofy Look At Nothing,Disney Studio (foreign market stories),4
 3278,I TL 1829-B,Ein spärlicher Esser,Gagstory,Zio Paperone e la dieta bilanciata,Italien,8
 3279,I TL 1828-A,Ein Fall fürs blaue Telefon,"Pädagogische Geschichte,Kriminalgeschichte",Topolino e il segreto di un bambino,Italien,29
-3280,I TL 1825-B,Und wieder was weggeschafft!,Abenteuer,"","",8
+3280,I TL 1825-B,Und wieder was weggeschafft!,Abenteuer,,,8
 3281,I TL 1816-AP,Die vertrackte Hausknechtanlage,Kriminalgeschichte,Topolino e la casa (troppo) intelligente,Italien,59
 3282,D 88212,In die Enge getrieben,Einseiter,Mickey Mouse Cornered Again,Dänemark,1
 3283,I TL 1829-AP,Martin der Seefahrer und die Perlen der Südsee,Romanze,Martin il marinaio e le perle nere del pacifico,Italien,54
@@ -3286,7 +3286,7 @@
 3286,S 82098,Das pure Nichts...,Gagstory,Goofy A Goofy Look At Nothing,Disney Studio (foreign market stories),4
 3287,I TL 1829-B,Ein spärlicher Esser,Gagstory,Zio Paperone e la dieta bilanciata,Italien,8
 3288,I TL 1828-A,Ein Fall fürs blaue Telefon,"Pädagogische Geschichte,Kriminalgeschichte",Topolino e il segreto di un bambino,Italien,29
-3289,I TL 1825-B,Und wieder was weggeschafft!,Abenteuer,"","",8
+3289,I TL 1825-B,Und wieder was weggeschafft!,Abenteuer,,,8
 3290,I TL 1816-AP,Die vertrackte Hausknechtanlage,Kriminalgeschichte,Topolino e la casa (troppo) intelligente,Italien,59
 3291,D 88212,In die Enge getrieben,Einseiter,Mickey Mouse Cornered Again,Dänemark,1
 3292,I TL 1832-C,Der Schmutzgeier schlägt zu,Superhelden,Paperinik contro Inquinator,Italien,45
@@ -3295,7 +3295,7 @@
 3295,I TL 1431-B,Der verlorene Tempel,Abenteuer,Topolino alla ricerca del tempio perduto,Italien,22
 3296,I TL 1833-C,Ein ganz schwarzer Tag,Gagstory,L'infallibile oroscopo,Italien,13
 3297,I TL 1575-A,Den Grossfüsslern auf der Spur,Abenteuer,Topolino sulle orme di Piedone,Italien,36
-3298,I TL 1831-D,Der Lohn des Sauriers,Abenteuer,"","",41
+3298,I TL 1831-D,Der Lohn des Sauriers,Abenteuer,,,41
 3299,I TL 1793-B,Kosmische Albträume,Gagstory,Topolino e l'astro viaggio,Italien,5
 3300,I TL 1832-C,Der Schmutzgeier schlägt zu,Superhelden,Paperinik contro Inquinator,Italien,45
 3301,I TL 1833-AP,Die Intergalaktische Friedensflotte - Der Allmeister rettet die Welt,"Science-Fiction,Film Parodie",Contatto con la terra,Italien,60
@@ -3303,7 +3303,7 @@
 3303,I TL 1431-B,Der verlorene Tempel,Abenteuer,Topolino alla ricerca del tempio perduto,Italien,22
 3304,I TL 1833-C,Ein ganz schwarzer Tag,Gagstory,L'infallibile oroscopo,Italien,13
 3305,I TL 1575-A,Den Grossfüsslern auf der Spur,Abenteuer,Topolino sulle orme di Piedone,Italien,36
-3306,I TL 1831-D,Der Lohn des Sauriers,Abenteuer,"","",41
+3306,I TL 1831-D,Der Lohn des Sauriers,Abenteuer,,,41
 3307,I TL 1793-B,Kosmische Alpträume,Gagstory,Topolino e l'astro viaggio,Italien,5
 3308,I TL 1817-BP,"Spieler, Tore und Moneten",Sport,Zio Paperone il supercampionato,Italien,63
 3309,I TL 1834-AP,Das verzögerte Telefonat,Kriminalgeschichte,Topolino e il mistero della voce spezzata,Italien,51
@@ -3329,22 +3329,22 @@
 3329,I TL 1841-B,Zu Besuch im alten Rom,Zeitreisen,Pippo e l'introvabile Ambvrgvs,Italien,32
 3330,B 850040,Total normal...,Gagstory,Mickey e Minnie Os Grilus,Brasilien,8
 3331,I TL 1842-A,Das Pendel des Ekol,Literarische Parodie,Paperino e il pendolo di Ekòl,Italien,59
-3332,I TL 1800-A,Die Sieben Weltwunder 1. Episode: Der Zauberwürfel des Duckentmammon,Historisches Thema,"","",36
-3333,I TL 1801-A,Die Sieben Weltwunder 2. Episode: Die hängenden Gärten von Duckylon,Historisches Thema,"","",27
-3334,I TL 1802-C,Die Sieben Weltwunder 3. Episode: Die Statue des olympischen Zeus,Historisches Thema,"","",32
-3335,I TL 1803-A,Die Sieben Weltwunder 4. Episode: Der Tempel der Gaukelis,Historisches Thema,"","",34
-3336,I TL 1804-C,Die Sieben Weltwunder 5. Episode: Das Mausoleum zu Dagikarnass,Historisches Thema,"","",30
-3337,I TL 1805-A,Die Sieben Weltwunder 6. Episode: Der Koloss von Glykslos,Historisches Thema,"","",28
-3338,I TL 1806-A,Die Sieben Weltwunder 7. Episode: Der Leuchtturm von Duckandria,Historisches Thema,"","",40
+3332,I TL 1800-A,Die Sieben Weltwunder 1. Episode: Der Zauberwürfel des Duckentmammon,Historisches Thema,,,36
+3333,I TL 1801-A,Die Sieben Weltwunder 2. Episode: Die hängenden Gärten von Duckylon,Historisches Thema,,,27
+3334,I TL 1802-C,Die Sieben Weltwunder 3. Episode: Die Statue des olympischen Zeus,Historisches Thema,,,32
+3335,I TL 1803-A,Die Sieben Weltwunder 4. Episode: Der Tempel der Gaukelis,Historisches Thema,,,34
+3336,I TL 1804-C,Die Sieben Weltwunder 5. Episode: Das Mausoleum zu Dagikarnass,Historisches Thema,,,30
+3337,I TL 1805-A,Die Sieben Weltwunder 6. Episode: Der Koloss von Glykslos,Historisches Thema,,,28
+3338,I TL 1806-A,Die Sieben Weltwunder 7. Episode: Der Leuchtturm von Duckandria,Historisches Thema,,,40
 3339,S 84100,Der Tierfreund,Gagstory,Mickey Mouse Happy-go-lucky Goofy,Disney Studio (foreign market stories),15
 3340,B 790026,Ein seltsamer Besucher,Gagstory,Donald e Peninha Uma Visita Esquisita,Brasilien,8
-3341,I TL 1800-A,Die Sieben Weltwunder 1. Episode: Der Zauberwürfel des Duckentmammon,Historisches Thema,"","",36
-3342,I TL 1801-A,Die Sieben Weltwunder 2. Episode: Die hängenden Gärten von Duckylon,Historisches Thema,"","",27
-3343,I TL 1802-C,Die Sieben Weltwunder 3. Episode: Die Statue des olympischen Zeus,Historisches Thema,"","",32
-3344,I TL 1803-A,Die Sieben Weltwunder 4. Episode: Der Tempel der Gaukelis,Historisches Thema,"","",34
-3345,I TL 1804-C,Die Sieben Weltwunder 5. Episode: Das Mausoleum zu Dagikarnass,Historisches Thema,"","",30
-3346,I TL 1805-A,Die Sieben Weltwunder 6. Episode: Der Koloß von Glykslos,Historisches Thema,"","",28
-3347,I TL 1806-A,Die Sieben Weltwunder 7. Episode: Der Leuchtturm von Duckandria,Historisches Thema,"","",40
+3341,I TL 1800-A,Die Sieben Weltwunder 1. Episode: Der Zauberwürfel des Duckentmammon,Historisches Thema,,,36
+3342,I TL 1801-A,Die Sieben Weltwunder 2. Episode: Die hängenden Gärten von Duckylon,Historisches Thema,,,27
+3343,I TL 1802-C,Die Sieben Weltwunder 3. Episode: Die Statue des olympischen Zeus,Historisches Thema,,,32
+3344,I TL 1803-A,Die Sieben Weltwunder 4. Episode: Der Tempel der Gaukelis,Historisches Thema,,,34
+3345,I TL 1804-C,Die Sieben Weltwunder 5. Episode: Das Mausoleum zu Dagikarnass,Historisches Thema,,,30
+3346,I TL 1805-A,Die Sieben Weltwunder 6. Episode: Der Koloß von Glykslos,Historisches Thema,,,28
+3347,I TL 1806-A,Die Sieben Weltwunder 7. Episode: Der Leuchtturm von Duckandria,Historisches Thema,,,40
 3348,S 84100,Der Tierfreund,Gagstory,Mickey Mouse Happy-go-lucky Goofy,Disney Studio (foreign market stories),15
 3349,B 790026,Ein seltsamer Besucher,Gagstory,Donald e Peninha Uma Visita Esquisita,Brasilien,8
 3350,I TL 1846-DP,"""1-2-3 ist stets dabei!""",Düsentrieb´sche Erfindungen,"Zio Paperone e le magnifiche uno, due, tre",Italien,55
@@ -3738,12 +3738,12 @@
 3738,I TL 1828-B,Krise im Kristallbergtal,"Abenteuer,Dagobert in Not",Zio Paperone e l'affarissimo che fa benissimo,Italien,34
 3739,I TL 1990-A,Alpträume ohne Ende,Kriminalgeschichte,Topolino e i sogni ricorrenti,Italien,38
 3740,D 93368,Ein wahrer Held,Abenteuer,Donald Duck Hail the Conquering Duck,Dänemark,47
-3741,I TL 1996-A + I TL 1999-A,Es war einmal in Amerika - Teil 1: Der Schatz der Pilgerväter,Abenteuer,"","",68
+3741,I TL 1996-A + I TL 1999-A,Es war einmal in Amerika - Teil 1: Der Schatz der Pilgerväter,Abenteuer,,,68
 3742,I TL 1999-D,Ein kugelrunder Wächter,"Dagobert in Not,Abenteuer",Zio Paperone e lo sferoide da guardia,Italien,31
 3743,D 92217,Übelriechende Geschäfte,Kriminalgeschichte,Mickey Mouse Dirty Business,Dänemark,68
 3744,I TL 1978-D,Das Hyperauto,Besondere Fahrzeuge,Zio Paperone e le avveniristiche automa-automa,Italien,36
 3745,D 93368,Ein wahrer Held,Abenteuer,Donald Duck Hail the Conquering Duck,Dänemark,47
-3746,I TL 1996-A + I TL 1999-A,Es war einmal in Amerika - Teil 1: Der Schatz der Pilgerväter,Abenteuer,"","",68
+3746,I TL 1996-A + I TL 1999-A,Es war einmal in Amerika - Teil 1: Der Schatz der Pilgerväter,Abenteuer,,,68
 3747,I TL 1999-D,Ein kugelrunder Wächter,"Dagobert in Not,Abenteuer",Zio Paperone e lo sferoide da guardia,Italien,31
 3748,D 92217,Übelriechende Geschäfte,Kriminalgeschichte,Mickey Mouse Dirty Business,Dänemark,68
 3749,I TL 1978-D,Das Hyperauto,Besondere Fahrzeuge,Zio Paperone e le avveniristiche automa-automa,Italien,36
@@ -3755,15 +3755,15 @@
 3755,I TL 1967-E,Eine Bootsfahrt mit Hindernissen,Gagstory,Paperino e Paperoga guide marine,Italien,26
 3756,I TL 2003-1,Der Palast des Dagomesch,"Schatzsuche,Abenteuer,Historisches Thema",Zio Paperone i tesori di Papergamesh,Italien,37
 3757,I TL 1997-B,Die Pleite mit der Beute,Kriminalgeschichte,Topolino e la scatola dei 100 anni,Italien,55
-3758,I TL 2007-1,Die Anti-Streß-Kur,Dagobert in Not,Zio Paperone e la cura anti-stress,Italien,32
+3758,I TL 2007-1,Die Anti-Stress-Kur,Dagobert in Not,Zio Paperone e la cura anti-stress,Italien,32
 3759,I TL 2008-1,Ein pfiffiger Plan,Kriminalgeschichte,Topolino e il mistero del palazzo delle mostre,Italien,59
-3760,I TL 2009-2,Goldene Alpträume,Düsentrieb´sche Erfindungen,Zio Paperone e il sogno interrotto,Italien,28
+3760,I TL 2009-2,Goldene Albträume,Düsentrieb´sche Erfindungen,Zio Paperone e il sogno interrotto,Italien,28
 3761,I TL 1998-D,Die Rose aus dem All,Science-Fiction,Paperino e la rosa dall'altro mondo,Italien,39
 3762,I TL 2003-1,Der Palast des Dagomesch,"Schatzsuche,Abenteuer,Historisches Thema",Zio Paperone i tesori di Papergamesh,Italien,37
 3763,I TL 1997-B,Die Pleite mit der Beute,Kriminalgeschichte,Topolino e la scatola dei 100 anni,Italien,55
-3764,I TL 2007-1,Die Anti-Stress-Kur,Dagobert in Not,Zio Paperone e la cura anti-stress,Italien,32
+3764,I TL 2007-1,Die Anti-Streß-Kur,Dagobert in Not,Zio Paperone e la cura anti-stress,Italien,32
 3765,I TL 2008-1,Ein pfiffiger Plan,Kriminalgeschichte,Topolino e il mistero del palazzo delle mostre,Italien,59
-3766,I TL 2009-2,Goldene Albträume,Düsentrieb´sche Erfindungen,Zio Paperone e il sogno interrotto,Italien,28
+3766,I TL 2009-2,Goldene Alpträume,Düsentrieb´sche Erfindungen,Zio Paperone e il sogno interrotto,Italien,28
 3767,I TL 1998-D,Die Rose aus dem All,Science-Fiction,Paperino e la rosa dall'altro mondo,Italien,39
 3768,D 92567,Fantastische Zinsen gehn in die Binsen,Wirtschaftskampf,Uncle Scrooge The Swindling Mcswines,Dänemark,50
 3769,D 92000,Die Wollhorn-Diebe,"Abenteuer,Kriminalgeschichte",Mickey Mouse Rhi-Nose,Dänemark,48
@@ -3815,26 +3815,26 @@
 3815,I TL 2004-1,Roboduck gegen Klevercop,Wirtschaftskampf,Papercop contro Roborock,Italien,30
 3816,I TL 2012-1,Der gewaltige Zing Zong,"Abenteuer,Besondere Fahrzeuge",Zio Paperone e il terribile Kingo Kongo,Italien,50
 3817,D 91228,Die verschwundene Partitur,Kriminalgeschichte,Mickey Mouse Smashing Music,Dänemark,33
-3818,I TL 2018-1,"Es ist wichtig, Ernst zu sein",Literarische Parodie,"","",52
+3818,I TL 2018-1,"Es ist wichtig, Ernst zu sein",Literarische Parodie,,,52
 3819,I TL 1990-D,Das ferngesteuerte Gewissen,Gagstory,Paperino e la coscienza elettronica,Italien,22
 3820,D 93161,Süße Träume,Einseiter,Donald Duck Baah!,Dänemark,1
 3821,I TL 2025-1,Es war einmal in Amerika - Teil 3: Ein Interview mit George Washington,Historisches Thema,Intervista a George Washington,Italien,30
-3822,IS PM 163-1,Der güldene Stern,"Düsentrieb´sche Erfindungen,Science-Fiction","","",62
+3822,IS PM 163-1,Der güldene Stern,"Düsentrieb´sche Erfindungen,Science-Fiction",,,62
 3823,I TL 2012-1,Der gewaltige Zing Zong,"Abenteuer,Besondere Fahrzeuge",Zio Paperone e il terribile Kingo Kongo,Italien,50
 3824,D 91228,Die verschwundene Partitur,Kriminalgeschichte,Mickey Mouse Smashing Music,Dänemark,33
-3825,I TL 2018-1,"Es ist wichtig, ernst zu sein",Literarische Parodie,"","",52
+3825,I TL 2018-1,"Es ist wichtig, ernst zu sein",Literarische Parodie,,,52
 3826,I TL 1990-D,Das ferngesteuerte Gewissen,Gagstory,Paperino e la coscienza elettronica,Italien,22
 3827,D 93161,Süße Träume,Einseiter,Donald Duck Baah!,Dänemark,1
 3828,I TL 2025-1,Es war einmal in Amerika - Teil 3: Ein Interview mit George Washington,Historisches Thema,Intervista a George Washington,Italien,30
-3829,IS PM 163-1,Der güldene Stern,"Düsentrieb´sche Erfindungen,Science-Fiction","","",62
+3829,IS PM 163-1,Der güldene Stern,"Düsentrieb´sche Erfindungen,Science-Fiction",,,62
 3830,I TL 2035-4,Der Glücksstern,"Abenteuer,Gagstory",Paperino e la stella di Skalunia,Italien,48
 3831,I TL 1969-B,Der nachtaktive Onkel,Gagstory,Paperino nipote a sorpresa,Italien,26
-3832,I TL 2023-4,Kampf um den Smaragd-Eisberg,"Schatzsuche,Abenteuer","","",72
+3832,I TL 2023-4,Kampf um den Smaragd-Eisberg,"Schatzsuche,Abenteuer",,,72
 3833,I TL 2005-2,Der Ruf der Trommel,Schatzsuche,Paperino e il segreto del tamburino,Italien,23
 3834,D 90176,"Donaldoff, Kurier des Zaren",Literarische Parodie,"Donald Duck Donald Stroganoff, Courier Of The Czar",Dänemark,81
 3835,I TL 2035-4,Der Glücksstern,"Abenteuer,Gagstory",Paperino e la stella di Skalunia,Italien,48
 3836,I TL 1969-B,Der nachtaktive Onkel,Gagstory,Paperino nipote a sorpresa,Italien,26
-3837,I TL 2023-4,Kampf um den Smaragd-Eisberg,"Schatzsuche,Abenteuer","","",72
+3837,I TL 2023-4,Kampf um den Smaragd-Eisberg,"Schatzsuche,Abenteuer",,,72
 3838,I TL 2005-2,Der Ruf der Trommel,Schatzsuche,Paperino e il segreto del tamburino,Italien,23
 3839,D 90176,"Donaldoff, Kurier des Zaren",Literarische Parodie,"Donald Duck Donald Stroganoff, Courier Of The Czar",Dänemark,81
 3840,D 91106,Die Stampftanz-Insel,Zeitreisen,Donald Duck The Cranky Giant,Dänemark,46
@@ -3849,12 +3849,12 @@
 3849,D 92391,Ein Schlitzohr unter Galgenvögeln,Kriminalgeschichte,Mickey Mouse Undercover,Dänemark,54
 3850,I TL 2036-2,"Zu spät, Daniel, zu spät!",Düsentrieb´sche Erfindungen,Archimede e il fantastico DMTC,Italien,8
 3851,I TL 2036-3,Der Matschige Pfeil,Literarische Parodie,La freccia pera,Italien,53
-3852,I TL 2041-1,Die verlorene Welt,Literarische Parodie,"","",84
+3852,I TL 2041-1,Die verlorene Welt,Literarische Parodie,,,84
 3853,I TL 2030-1,Die städtischen Bühnen Entenhausen präsentieren: Scapins Streiche,Literarische Parodie,Il teatro Alambrah presenta,Italien,50
 3854,I TL 1988-B,Voll erwischt - und doch daneben,Gagstory,Paperino e Gastone ...scherzi a parte!,Italien,31
 3855,I TL 2040-3,Ein Blick in die Zukunft,"Science-Fiction,Kriminalgeschichte",Eta Beta e la Tv del giorno dopo,Italien,28
 3856,I TL 2043-1,Der Allmachts-Stein,Dagobert in Not,Amelia e la pietra pantarba,Italien,57
-3857,I TL 2041-1,Die verlorene Welt,Literarische Parodie,"","",84
+3857,I TL 2041-1,Die verlorene Welt,Literarische Parodie,,,84
 3858,I TL 2030-1,Die städtischen Bühnen Entenhausen präsentieren: Scapins Streiche,Literarische Parodie,Il teatro Alambrah presenta,Italien,50
 3859,I TL 1988-B,Voll erwischt - und doch daneben,Gagstory,Paperino e Gastone ...scherzi a parte!,Italien,31
 3860,I TL 2040-3,Ein Blick in die Zukunft,"Science-Fiction,Kriminalgeschichte",Eta Beta e la Tv del giorno dopo,Italien,28
@@ -3867,12 +3867,12 @@
 3867,I TL 1961-EP,Das Monster der Südsee,Abenteuer,Topolino e il mistero negli abissi,Italien,46
 3868,I TL 2048-2,Die Schnäppchen-Maschine,Abenteuer,Zio Paperone e l'occhio della montagna,Italien,49
 3869,I TL 2048-1,Die verschwundene Bibliothek,Kriminalgeschichte,Indiana Pipps e il sigillo Vallindo,Italien,40
-3870,I TL 2046-1,Donleon der Schreckliche,"Mittelalter,Abenteuer","","",89
+3870,I TL 2046-1,Donleon der Schreckliche,"Mittelalter,Abenteuer",,,89
 3871,D 92268,Abenteuer in Momba-Pomba,Abenteuer,Mickey Mouse Safari Soap,Dänemark,66
 3872,I TL 2011-2,Die Goldgräber-Agave,Abenteuer,Paperino e l'Agavis Maxmaxima,Italien,21
 3873,I TL 2035-1,Das Gauner-Doppel aus dem All,"Science-Fiction,Kriminalgeschichte",Topolino e l'alter ego spaziale,Italien,25
 3874,I TL 2051-4,Onkel Dagoberts fast wahre Geschichten: Die dreihöckrige Karawane,Abenteuer,I predoni del deserto e la carovana trigobbuta,Italien,49
-3875,I TL 2046-1,Donleon der Schreckliche,"Mittelalter,Abenteuer","","",89
+3875,I TL 2046-1,Donleon der Schreckliche,"Mittelalter,Abenteuer",,,89
 3876,D 92268,Abenteuer in Momba-Pomba,Abenteuer,Mickey Mouse Safari Soap,Dänemark,66
 3877,I TL 2011-2,Die Goldgräber-Agave,Abenteuer,Paperino e l'Agavis Maxmaxima,Italien,21
 3878,I TL 2035-1,Das Gauner-Doppel aus dem All,"Science-Fiction,Kriminalgeschichte",Topolino e l'alter ego spaziale,Italien,25
@@ -4015,13 +4015,13 @@
 4015,I TL 2082-1,Wer zuletzt klaut...,"Science-Fiction,Dagobert in Not,Gagstory",Zio Paperone e la minaccia spaziale,Italien,38
 4016,I PM170-1,Die Allerweltstür,Science-Fiction,Paperino e la porta sui mondi,Italien,33
 4017,I TL 2088-3,Das Monster-Schloss,Gagstory,Il maniero del brivido,Italien,31
-4018,I TL 2093-1,Der Geist aus der Kanne,Literarische Parodie,"","",106
+4018,I TL 2093-1,Der Geist aus der Kanne,Literarische Parodie,,,106
 4019,I TL 2086-1,Auf den Spuren der Bigfoots,Abenteuer,Indiana Pipps e il ritorno dei Big Foot,Italien,30
 4020,I PM163-3,Der Rathaus-Berater,Gagstory,Zio Paperone consulente speciale,Italien,22
 4021,I TL 2094-1,Schlafes Meister,Gagstory,Paperino maestro di sonno,Italien,28
 4022,I PM170-1,Die Allerweltstür,Science-Fiction,Paperino e la porta sui mondi,Italien,33
 4023,I TL 2088-3,Das Monster-Schloss,Gagstory,Il maniero del brivido,Italien,31
-4024,I TL 2093-1,Der Geist aus der Kanne,Literarische Parodie,"","",106
+4024,I TL 2093-1,Der Geist aus der Kanne,Literarische Parodie,,,106
 4025,I TL 2086-1,Auf den Spuren der Bigfoots,Abenteuer,Indiana Pipps e il ritorno dei Big Foot,Italien,30
 4026,I PM163-3,Der Rathaus-Berater,Gagstory,Zio Paperone consulente speciale,Italien,22
 4027,I TL 2094-1,Schlafes Meister,Gagstory,Paperino maestro di sonno,Italien,28
@@ -4042,14 +4042,14 @@
 4042,I TL 2071-4,Die Schniff-Schnuff-Pflanze,Gagstory,Paperino e le piante sniff-snuff,Italien,21
 4043,I TL 2067-1,Das Gold der Nebulaner,"Abenteuer,Science-Fiction",Zio Paperone e il lampo giallo della nebulosa bianca,Italien,28
 4044,I TL 2097-4,Aus der Chronik der Ducks Der ruhmreiche Donaldakis,"Historisches Thema,Antike",I paralipomeni della dinastia dei paperi,Italien,40
-4045,I TL 2097-1,Das Geheimnis der Sachertorte,Kriminalgeschichte,"","",49
+4045,I TL 2097-1,Das Geheimnis der Sachertorte,Kriminalgeschichte,,,49
 4046,I TL 2094-2,Das Talermeer,Dagobert in Not,Zio Paperone e il mare di dollari,Italien,33
 4047,D 95072,Im Königreich der Elfen,Abenteuer,Mickey Mouse Off The Beaten Trail,Dänemark,38
 4048,I TL 2098-1,Der goldene Preis,Wirtschaftskampf,Paperino e il grande gioco del papero,Italien,25
 4049,D 92189,Viel zuviel!,Einseiter,Gus Goose Hectic Schedule,Dänemark,1
 4050,I TL 2096-1,Die Kantengut-Pyramide,"Schatzsuche,Dagobert in Not",Paperino e la piramidina di Ment-Akut,Italien,64
 4051,I TL 2097-4,Aus der Chronik der Ducks Der ruhmreiche Donaldakis,"Historisches Thema,Antike",I paralipomeni della dinastia dei paperi,Italien,40
-4052,I TL 2097-1,Das Geheimnis der Sachertorte,Kriminalgeschichte,"","",49
+4052,I TL 2097-1,Das Geheimnis der Sachertorte,Kriminalgeschichte,,,49
 4053,I TL 2094-2,Das Talermeer,Dagobert in Not,Zio Paperone e il mare di dollari,Italien,33
 4054,D 95072,Im Königreich der Elfen,Abenteuer,Mickey Mouse Off The Beaten Trail,Dänemark,38
 4055,I TL 2098-1,Der goldene Preis,Wirtschaftskampf,Paperino e il grande gioco del papero,Italien,25
@@ -4098,7 +4098,7 @@
 4098,D 95071,Terror in Entenhausen,Kriminalgeschichte,Mickey Mouse A Tainted Image,Dänemark,52
 4099,I TL 2116-4,Das wahre Ich,"Pädagogische Geschichte,Abenteuer",Il ritratto di Zio Paperone,Italien,61
 4100,D 95069,Vom Knecht zum Ritter,Mittelalter,Donald Duck The Precious Porker,Dänemark,50
-4101,I TL 2119-6,Kampf der Galaxien: Die Invasion der Duplikate,"Science-Fiction,Film Parodie","","",69
+4101,I TL 2119-6,Kampf der Galaxien: Die Invasion der Duplikate,"Science-Fiction,Film Parodie",,,69
 4102,I TL 2076-01,"""Dussel""iger Ferienspaß 3",Einseiter,Le vacanze di Paperoga (9),Italien,1
 4103,I TL 2122-1,Die Traum-Schublade,Zeitreisen,Zio Paperone e i sogni nel cassetto,Italien,31
 4104,I TL 2123-2,Zeit ist Geld,Gagstory,Zio Paperone e il ritardo a ogni costo,Italien,21
@@ -4106,7 +4106,7 @@
 4106,I TL 2042-2,Das Endspiel,Gagstory,La partita,Italien,8
 4107,I PK 18-1,Räuber & Gendarm,Superhelden,Paperinik in... Guardie e ladri,Italien,35
 4108,D 95069,Vom Knecht zum Ritter,Mittelalter,Donald Duck The Precious Porker,Dänemark,50
-4109,I TL 2119-6,Kampf der Galaxien: Die Invasion der Duplikate,"Science-Fiction,Film Parodie","","",69
+4109,I TL 2119-6,Kampf der Galaxien: Die Invasion der Duplikate,"Science-Fiction,Film Parodie",,,69
 4110,I TL 2076-01,"""Dussel""iger Ferienspaß 3",Einseiter,Le vacanze di Paperoga (9),Italien,1
 4111,I TL 2122-1,Die Traum-Schublade,Zeitreisen,Zio Paperone e i sogni nel cassetto,Italien,31
 4112,I TL 2123-2,Zeit ist Geld,Gagstory,Zio Paperone e il ritardo a ogni costo,Italien,21
@@ -4117,7 +4117,7 @@
 4117,I TM50-1,Das goldene Kloster,"Abenteuer,Kriminalgeschichte",Topolino e il monastero d'oro,Italien,41
 4118,I PM195-2,Die Schreckens-Kur,"Literarische Parodie,Film Parodie",Paperino e il mago del brivido,Italien,30
 4119,I TL 2128-4,Die falsche Hexe,Dagobert in Not,Amelia e l'impresa disperata,Italien,33
-4120,I TL 2075-01,"""Dussel""iger Ferienspass 4",Einseiter,Le vacanze di Paperoga (7),Italien,1
+4120,I TL 2075-01,"""Dussel'iger Ferienspass 4",Einseiter,Le vacanze di Paperoga (7),Italien,1
 4121,D 95128,Besuch vom Planeten Dingdong,"Science-Fiction,Abenteuer",Mickey Mouse Raiders of The Living Mummy from Outer Space!,Dänemark,41
 4122,I TL 2122-5,Die Jagd auf das Sumpfmonster,Abenteuer,Paperino e il mostro della palude,Italien,30
 4123,I TL 1918-C,Realistische Malerei,Gagstory,Pippo e il quadro iperrealista,Italien,5
@@ -4126,12 +4126,12 @@
 4126,I TM50-1,Das goldene Kloster,"Abenteuer,Kriminalgeschichte",Topolino e il monastero d'oro,Italien,41
 4127,I PM195-2,Die Schreckens-Kur,"Literarische Parodie,Film Parodie",Paperino e il mago del brivido,Italien,30
 4128,I TL 2128-4,Die falsche Hexe,Dagobert in Not,Amelia e l'impresa disperata,Italien,33
-4129,I TL 2075-01,"""Dussel'iger Ferienspass 4",Einseiter,Le vacanze di Paperoga (7),Italien,1
+4129,I TL 2075-01,"""Dussel""iger Ferienspass 4",Einseiter,Le vacanze di Paperoga (7),Italien,1
 4130,D 95128,Besuch vom Planeten Dingdong,"Science-Fiction,Abenteuer",Mickey Mouse Raiders of The Living Mummy from Outer Space!,Dänemark,41
 4131,I TL 2122-5,Die Jagd auf das Sumpfmonster,Abenteuer,Paperino e il mostro della palude,Italien,30
 4132,I TL 1918-C,Realistische Malerei,Gagstory,Pippo e il quadro iperrealista,Italien,5
 4133,I TL 2129-3,Der Pirat aus dem Buddelschiff,"Gagstory,Mystery,Düsentrieb´sche Erfindungen",Paperino e il ritorno del pirata,Italien,26
-4134,I TL 2129-1,Kampf um die Villa Rosa,Superhelden,"","",52
+4134,I TL 2129-1,Kampf um die Villa Rosa,Superhelden,,,52
 4135,I TL 2128-1,Die unheimliche Insekten-Invasion,Kriminalgeschichte,Topolino e lo scarabeo nero,Italien,52
 4136,I TL 2131-1,Der Schulbus-Fahrer,Gagstory,Paperino autista di scuola bus,Italien,31
 4137,I TL 2129-5,Ein Mann sieht rot!,Gagstory,Uno studio troppo rosso,Italien,24
@@ -4139,7 +4139,7 @@
 4139,D 96026,Ausgetrickst!,Gagstory,Donald Duck Three Little Sicklings,Dänemark,2
 4140,I TL 2131-4,Das war knapp!,Dagobert in Not,Zio Paperone e il ratto delle monetine,Italien,26
 4141,I TL 2130-1,Die Wächter aus der Zukunft,"Science-Fiction,Wirtschaftskampf",Zio Paperone e i guardiani del tempo,Italien,40
-4142,I TL 2129-1,Kampf um die Villa Rosa,Superhelden,"","",52
+4142,I TL 2129-1,Kampf um die Villa Rosa,Superhelden,,,52
 4143,I TL 2128-1,Die unheimliche Insekten-Invasion,Kriminalgeschichte,Topolino e lo scarabeo nero,Italien,52
 4144,I TL 2131-1,Der Schulbus-Fahrer,Gagstory,Paperino autista di scuola bus,Italien,31
 4145,I TL 2129-5,Ein Mann sieht rot!,Gagstory,Uno studio troppo rosso,Italien,24
@@ -4161,18 +4161,18 @@
 4161,I PK33-2,"Phantomias und der ""Visiomat""",Superhelden,Paperinik e i dubbi a catena,Italien,40
 4162,D 94098,Die rätselhafte Handtasche,Kriminalgeschichte,Mickey Mouse Mystery of the Un-Snatched Purse,Dänemark,30
 4163,I TL 2123-1,Raub nach Noten,Gagstory,Zio Paperone e i concerti predatori,Italien,38
-4164,IS PM166-1,Im Land der Saurier,Abenteuer,"","",57
+4164,IS PM166-1,Im Land der Saurier,Abenteuer,,,57
 4165,I TL 2040-1,Der Lachermacher,Kriminalgeschichte,Topolino e l'imperatore della risata,Italien,43
 4166,I TL 2030-2,Das Orakel-Debakel,Abenteuer,Paperasia oracolo di Delfi,Italien,29
 4167,I TL 2034-2,Rätsel um Palenque,Zeitreisen,Topolino e la pietra di Palenque,Italien,40
 4168,I TL 2020-2,Eine technische Neuerung,Pädagogische Geschichte,Qui Quo Qua e il cellulare di salvataggio,Italien,21
-4169,IS MG456-A,Krieg der Sternenkönige,"Abenteuer,Science-Fiction","","",60
-4170,IS PM166-1,Im Land der Saurier,Abenteuer,"","",57
+4169,IS MG456-A,Krieg der Sternenkönige,"Abenteuer,Science-Fiction",,,60
+4170,IS PM166-1,Im Land der Saurier,Abenteuer,,,57
 4171,I TL 2040-1,Der Lachermacher,Kriminalgeschichte,Topolino e l'imperatore della risata,Italien,43
 4172,I TL 2030-2,Das Orakel-Debakel,Abenteuer,Paperasia oracolo di Delfi,Italien,29
 4173,I TL 2034-2,Rätsel um Palenque,Zeitreisen,Topolino e la pietra di Palenque,Italien,40
 4174,I TL 2020-2,Eine technische Neuerung,Pädagogische Geschichte,Qui Quo Qua e il cellulare di salvataggio,Italien,21
-4175,IS MG456-A,Krieg der Sternenkönige,"Abenteuer,Science-Fiction","","",60
+4175,IS MG456-A,Krieg der Sternenkönige,"Abenteuer,Science-Fiction",,,60
 4176,D 95088,Die Geldfälscher-Bande,Kriminalgeschichte,Donald Duck Who Pursues The Pursuers?,Dänemark,44
 4177,I PK30-1,Phantomias enttarnt?,Superhelden,Paperinik e l'identitÃ  svelata,Italien,33
 4178,I TL 2140-1,Der Zufall und die Reise ins All,Science-Fiction,Topolino e l'elemento casuale,Italien,35
@@ -4198,13 +4198,13 @@
 4198,I TL 1965-B,Ruf des Dschungels,"Abenteuer,Gagstory",Paperino - scout,Italien,27
 4199,I TL 2149-4,Der Pilz-Experte,Gagstory,Paperino e i funghi difficili,Italien,20
 4200,I TL 2147-1,Kommissar Issels lange Nacht,Kriminalgeschichte,La lunga notte del commissario Manetta,Italien,30
-4201,I TL 2147-2,Mutprobe im Hexenschloß,Mittelalter,"","",93
+4201,I TL 2147-2,Mutprobe im Hexenschloß,Mittelalter,,,93
 4202,D 95161,Die Schätze des Huan Li,"Abenteuer,Schatzsuche,Dagobert in Not",Uncle Scrooge The Treasures Of Huan Li,Dänemark,50
 4203,I TL 2139-1,Die Spuk-Mine,Abenteuer,Mickey's Movie Parade,Italien,30
 4204,I TL 1965-B,Ruf des Dschungels,"Abenteuer,Gagstory",Paperino - scout,Italien,27
 4205,I TL 2149-4,Der Pilz-Experte,Gagstory,Paperino e i funghi difficili,Italien,20
 4206,I TL 2147-1,Kommissar Issels lange Nacht,Kriminalgeschichte,La lunga notte del commissario Manetta,Italien,30
-4207,I TL 2147-2,Mutprobe im Hexenschloß,Mittelalter,"","",93
+4207,I TL 2147-2,Mutprobe im Hexenschloß,Mittelalter,,,93
 4208,I TL 2144-1,"Hilfe, die Touristen kommen!",Mittelalter,Paperino e le papere del Campidoglio,Italien,35
 4209,I TL 2142-1,Wer hat die ganzen Schäfchen?,Science-Fiction,Topolino e il mistero... sul filo di lana,Italien,34
 4210,I TL 2124-1,1-0 für Onkel Dagobert,"Sport,Wirtschaftskampf",Zio Paperone e l'amichevole... col nemico,Italien,41
@@ -4229,7 +4229,7 @@
 4229,I TL 2150-4,Donleon im Orient,Mittelalter,Paperleone in oriente,Italien,39
 4230,I TL 2154-3,Wettlauf der Erben,Gagstory,Paperino e la triplice contesa,Italien,28
 4231,I TL 2154-4,Das Tal des eisigen Schweigens,Abenteuer,Zio Paperone e il gelido silenzio della Valle Fredda,Italien,27
-4232,I TL 2152-4,Wahn oder Wirklichkeit?,Kriminalgeschichte,"","",56
+4232,I TL 2152-4,Wahn oder Wirklichkeit?,Kriminalgeschichte,,,56
 4233,I TL 2155-4,Auf der Suche nach neuen Welten,"Science-Fiction,Abenteuer",Zio Paperone e la nuova terra,Italien,50
 4234,D 96188,Das Schiff der Dämonen,Mystery,Mickey Mouse The Ship Of Ghouls,Dänemark,33
 4235,I TL 2117-4,Liebe auf den ersten Blick,"Gagstory,Romanze",Una fidanzata per Paperoga,Italien,24
@@ -4265,7 +4265,7 @@
 4265,I TL 2167-1,Der grosse Knall,Abenteuer,Indiana Pipps e l'avventura siberiana,Italien,31
 4266,I TL 2168-1,Ein unerbittlicher Bodyguard,Dagobert in Not,Zio Paperone e il gorilla,Italien,26
 4267,I TL 2013-6,Das Oberhaupt der Familie,Gagstory,Zio Paperone... oro & famiglia,Italien,21
-4268,I TL 2124-8,Das Monster vom Parksee,Gagstory,"","",37
+4268,I TL 2124-8,Das Monster vom Parksee,Gagstory,,,37
 4269,I TL 2123-4,Kleine Geschäfte mit großer Wirkung,Gagstory,Zio Paperone e l'affare da spiaggia,Italien,23
 4270,D 96131,Der Elfenstein,Fantasy,Uncle Scrooge A Spell In Ireland,Dänemark,39
 4271,D 96336,Gefangen im Fürchteforst,"Mystery,Dagobert in Not",Uncle Scrooge Somewhere In Time,Dänemark,46
@@ -4317,7 +4317,7 @@
 4317,I TL 2192-1,Der Babur von Jaipur,"Historisches Thema,Kriminalgeschichte",Topolino e il babur di Jaipur,Italien,44
 4318,D 97042,Das goldene Pflaster,"Historisches Thema,Abenteuer",Donald Duck The Rake's Progress,Dänemark,50
 4319,D 96359,Der Lebenskünstler,"Mittelalter,Romanze",Donald Duck Art And Love,Dänemark,48
-4320,IS PM177-1,Geschäfte in Transsylvanien,"Dagobert in Not,Wirtschaftskampf","","",47
+4320,IS PM177-1,Geschäfte in Transsylvanien,"Dagobert in Not,Wirtschaftskampf",,,47
 4321,I PM191-1,Der unsägliche Gernot Griesel,Gagstory,Paperino e l'insopportabile Matt Akkion,Italien,36
 4322,D 97108,Schrumpfstädte,Science-Fiction,Mickey Mouse My Little Town,Dänemark,30
 4323,I PK40-3,Bombensichere Alibis,Superhelden,Paperinik e l'inoffensivo Spectrus,Italien,34
@@ -4343,7 +4343,7 @@
 4343,I TL 2172-3,Ein gefährliches Hobby,Gagstory,Battista e l'hobby troppo casalingo,Italien,16
 4344,D 94164,Abenteuer im Cyberspace,Science-Fiction,Mickey Mouse Yours Virtually,Dänemark,35
 4345,I TL 2196-5,Ein schüchternes Paar,"Dagobert in Not,Romanze",Zio Paperone e gli alleati timidi,Italien,33
-4346,IS PM172-3,Der verschwundene Schatzsucher,Schatzsuche,"","",52
+4346,IS PM172-3,Der verschwundene Schatzsucher,Schatzsuche,,,52
 4347,D 97215,Die Rache des Zauberers,Dagobert in Not,Uncle Scrooge Papa's Revenge,Dänemark,40
 4348,D 97149,Der Waldgeist,"Abenteuer,Pädagogische Geschichte",Uncle Scrooge Law Of The Windigo,Dänemark,50
 4349,I PM206-1,Voll geplättet!,Gagstory,Paperino e lo spot a basso costo,Italien,30
@@ -4397,7 +4397,7 @@
 4397,D 97302,Das aufmüpfige Wunderkind,Mittelalter,Donald Duck The Liberation Of Wolfgang Mozhoven,Dänemark,40
 4398,I TL 2224-3,Schicksalsflug Nummer 17,Gagstory,Paperoga e le disdette del volo 17,Italien,5
 4399,I PK31-2,Phantomias in der Klemme,Superhelden,Super Paperinik,Italien,34
-4400,I TL 2239-1,Rückkehr nach Auralon,Fantasy,"","",63
+4400,I TL 2239-1,Rückkehr nach Auralon,Fantasy,,,63
 4401,D 97460,Rennfahrer wider Willen,Sport,Donald Duck The Crash Test Dummy,Dänemark,50
 4402,I TL 2237-1,Des Widerspenstigen Zähmung,Literarische Parodie,Paperon Bisbeticus domato,Italien,34
 4403,I TL 2157-5,Auf falscher Fährte,Kriminalgeschichte,I danzatroni rapiti,Italien,20
@@ -4499,7 +4499,7 @@
 4499,I TL 2075-1,Ein tolles Hobby,Dagobert in Not,Zio Paperone e l'hobby azzeccato,Italien,29
 4500,D 97629,Der Retter aus der Zukunft,"Dagobert in Not,Zeitreisen",Gyro Gearloose Weird Science,Dänemark,35
 4501,D 99161,Dabeisein ist alles!,Sport,Donald Duck Outback Olympics,Dänemark,35
-4502,I TL 2281-1,Der Goldene Nil,Schatzsuche,"","",66
+4502,I TL 2281-1,Der Goldene Nil,Schatzsuche,,,66
 4503,D 98171,Hypnotische Kleckse,Science-Fiction,Mickey Mouse Blot Clot,Dänemark,37
 4504,I TL 2086-3,Der Glückshut,Gagstory,Paperino e il cappello portafortuna,Italien,24
 4505,I TL 2204-3,Freundschaft online,"Wirtschaftskampf,Gagstory",Zio Paperone e l'amico navigatore,Italien,21
@@ -4762,7 +4762,7 @@
 4762,I TL 2415-5,Allumfassende Fähigkeiten...,Wirtschaftskampf,Paperino professionista dell'avventura,Italien,25
 4763,I TL 2313-04,Ein großzügiges Angebot,Einseiter,Tentazione,Italien,1
 4764,I TL 2404-1,Superheld im Anflug!,Superhelden,Paperinik e la minaccia al rifugio,Italien,34
-4765,I TL 2405-6,Der unvergleichliche Minerva III,Gagstory,"","",30
+4765,I TL 2405-6,Der unvergleichliche Minerva III,Gagstory,,,30
 4766,D 2000-132,"Durchhalten, Donald!",Gagstory,Donald Duck Temporary Situation,Dänemark,36
 4767,D 99047,Die Schnupfenschlacht,Wirtschaftskampf,Donald Duck Healthy Choice,Dänemark,38
 4768,I TL 2386-2,Dem Protopteryx auf der Spur,Gagstory,Paperoga & Pico alla ricerca del protopterix,Italien,15
@@ -4999,7 +4999,7 @@
 4999,I TL 2484-3,Die vergessene Warnung,"Abenteuer,Gagstory",Il tappeto volante,Italien,12
 5000,D 2002-212,Dschingis Dhon der Eroberer,Zeitreisen,Donald Duck Genghis Don,Dänemark,25
 5001,D 2004-038,Fair geht vor!,Sport,Donald Duck The Spirit of the Olympics,Dänemark,30
-5002,I TL 2414-5AP,Das letzte Geheimnis der Inkas,Zeitreisen,"","",47
+5002,I TL 2414-5AP,Das letzte Geheimnis der Inkas,Zeitreisen,,,47
 5003,I TL 2500-01,Überraschung unter Wasser,Einseiter,Caccia al tesoro,Italien,1
 5004,D 2003-082,Dynamit und Diamanten,"Dagobert in Not,Düsentrieb´sche Erfindungen",Uncle Scrooge Guilty As Charged,Dänemark,24
 5005,I TL 2489-6,Das Strand-Paradies,Wirtschaftskampf,"Paperino, Qui Quo Qua e la vacanza di lavoro",Italien,30
@@ -5105,7 +5105,7 @@
 5105,I TL 2523-2,Jagd nach dem Talerschein,Wirtschaftskampf,Zio Paperone e l'espediente della moneta corrente,Italien,18
 5106,I TL 2524-7,Im Schnäppchen-Fieber,Gagstory,Paperino e l'occasione imperdibile,Italien,20
 5107,I TL 2530-2,Der Chef der Herzen,Gagstory,Zio Paperone e la giornata della segretaria,Italien,20
-5108,D E 2002-001,Spurlos verschwunden!,Gagstory,"","",30
+5108,D E 2002-001,Spurlos verschwunden!,Gagstory,,,30
 5109,I PK120-1,Aufdringliche Helfer,Superhelden,Paperinik in,Italien,18
 5110,I TL 2522-7,Tumult um eine Taube,Gagstory,Paperino e la promessa mancata,Italien,26
 5111,I TL 2530-6,Eine zauberhafte Party,"Dagobert in Not,Mystery",Amelia e il party magico,Italien,25
@@ -5153,13 +5153,13 @@
 5153,D 2005-016,Ein Fall für Detektiv Duck: Die verschwundene Statue,"Interaktiv,Kriminalgeschichte",Donald Duck Private Eye,Dänemark,28
 5154,I TL 2532-5,Wiederbeschaffungen aller Art,Gagstory,Paperino Gastone e l'agenzia di recupero,Italien,12
 5155,D 2004-054,Eine Pyramide mit Tiefgang,Historisches Thema,Mickey Mouse The Mysterious Pyramid,Dänemark,35
-5156,"",Ein Fall für Detektiv Duck: 2. Teil,"","","",0
+5156,,Ein Fall für Detektiv Duck: 2. Teil,,,,0
 5157,I TL 2534-3,Guter Schlaf für alle,Gagstory,Paperino & il relax professionale,Italien,16
-5158,"",Ein Fall für Detektiv Duck: 3. Teil,"","","",0
-5159,IS PK39-1,Eine hartnäckige Verlobte,Superhelden,"","",49
+5158,,Ein Fall für Detektiv Duck: 3. Teil,,,,0
+5159,IS PK39-1,Eine hartnäckige Verlobte,Superhelden,,,49
 5160,I TL 2524-01,Kindertarif,Einseiter,MetÃ  prezzo,Italien,1
 5161,I TL 2521-6,Sonntagsausflug wider Willen,Gagstory,I Bassotti e la giornata ecologica,Italien,21
-5162,"",Ein Fall für Detektiv Duck: 4. Teil,"","","",0
+5162,,Ein Fall für Detektiv Duck: 4. Teil,,,,0
 5163,I TL 2518-4,Eher Schein als Sein,Gagstory,Paperino e la vittoria apparente,Italien,20
 5164,I TL 2540-7,Schummler unter sich,Wirtschaftskampf,Zio Paperone e il voto conteso,Italien,30
 5165,D 2004-094,Durchs wilde Auristan,Abenteuer,Donald Duck As Good As Old,Dänemark,35
@@ -5217,7 +5217,7 @@
 5217,I TL 2535-1,Der sagenhafte Superjux,Kriminalgeschichte,Topolino e il magnifico Doppioscherzo,Italien,36
 5218,I TL 2555-2,Gefräßige Energiespender,Gagstory,Zio Paperone e le bollette gastronomiche,Italien,21
 5219,I TL 2535-5,Um Lichtjahre voraus,"Gagstory,Science-Fiction",Archimede e l'invenzione del secolo,Italien,8
-5220,IS PK 59-1,Der durchgeknallte Doppelgänger,Superhelden,"","",57
+5220,IS PK 59-1,Der durchgeknallte Doppelgänger,Superhelden,,,57
 5221,I TL 2563-5,Merkwürdige Mieter,Gagstory,Paperino e l'inquilina sospetta,Italien,19
 5222,I TL 2544-7,Wettlauf um die Insel,"Schatzsuche,Dagobert in Not",Zio Paperone e l'isola che non c'era,Italien,21
 5223,D 99204,Mit dem Kopf durch die Wand,"Gagstory,Abenteuer",Donald Duck Only Ducks Can,Dänemark,50
@@ -5446,7 +5446,7 @@
 5446,D 2005-255,Flucht nach Duckland,Dagobert in Not,Uncle Scrooge Scroogeland,Dänemark,32
 5447,D 2003-207,Der Fluch von Goldtown,Abenteuer,Mickey Mouse Rocky Mountain Tommyknockers,Dänemark,32
 5448,I TL 2568-3,Verwirrung zu Valentin,Gagstory,Paperino e l'impiccio di S. Valentino,Italien,15
-5449,I PKC 12,Nicht ohne meinen Wagen,"Superhelden,Gagstory","","",22
+5449,I PKC 12,Nicht ohne meinen Wagen,"Superhelden,Gagstory",,,22
 5450,I TL 1091-A,Geschäft ist Geschäft,Wirtschaftskampf,Zio Paperone e il codice degli affari,Italien,33
 5451,I PM 314-1,Schätze scheibchenweise,Schatzsuche,Paperino e il disco di pietra,Italien,25
 5452,I TL 2579-5,Ein Hoch auf die Kunst,Gagstory,Paperina e l'arte da protagonisti,Italien,14
@@ -5508,7 +5508,7 @@
 5508,D 2007-341,Platsch!,"Gagstory,Pädagogische Geschichte",Huey Dewey and Louie Splash in the Plan,Dänemark,32
 5509,D 2004-191,"Tennis, Gauner und Juwelen",Kriminalgeschichte,Mickey Mouse A Girl's Best Friend,Dänemark,39
 5510,I TL 2681-2,Kampf um Stern vier,Wirtschaftskampf,Zio Paperone e la quarta stella,Italien,23
-5511,I PKC 14,Ein übler Werbetrick,"Superhelden,Gagstory","","",22
+5511,I PKC 14,Ein übler Werbetrick,"Superhelden,Gagstory",,,22
 5512,I TL 2686-2,Fischzug mit Flöte,Gagstory,I Bassotti & il piffero ballerino,Italien,16
 5513,I TL 2646-2,Die Äpfel des Vergessens,"Schatzsuche,Abenteuer",Zio Paperone e le mele dell'oblio,Italien,26
 5514,I TL 2678-1,Rückkehr der Heldin,Superhelden,Il ritorno di Paperinika,Italien,38
@@ -5557,13 +5557,13 @@
 5557,I TL 2717-1,Noch eine Mutprobe,"Abenteuer,Zeitreisen,Gagstory",Zio Paperone in.. un altro Natale sul Monte Orso,Italien,32
 5558,D 2005-002,Zu Besuch in Winzelhausen,"Fantasy,Abenteuer,Literarische Parodie",Mickey Mouse Uptop And Downbelow,Dänemark,33
 5559,I TL 2688-4,Eine gelungene Kopie...,"Düsentrieb´sche Erfindungen,Gagstory",Archimede inventore infallibile,Italien,10
-5560,I TL 2735-1,Agent DoppelDuck,"Kriminalgeschichte,Abenteuer,Film Parodie","","",38
+5560,I TL 2735-1,Agent DoppelDuck,"Kriminalgeschichte,Abenteuer,Film Parodie",,,38
 5561,I TL 2674-6,Verwirrte Vogelfreunde,Gagstory,Paperoga e l'inseguimento ornitologico,Italien,20
 5562,I TL 2663-2,Das neue Klubhaus,"Wirtschaftskampf,Gagstory",Zio Paperone e il progetto miliardario,Italien,27
 5563,D/D 2004-044,Zug um Zug,"Nachbarschaftsstreit,Gagstory",Donald Duck Train Insane,Dänemark,32
 5564,I PK 21-1,Klein aber oho!,"Superhelden,Gagstory",Paperinik e i rischi della miniaturizzazione,Italien,58
 5565,D 2006-332,Hexenzauber,Dagobert in Not,Magica De Spell Magica's Dime Spree,Dänemark,26
-5566,I TL 2736-2,Agent Doppelduck (2): Die Liste,Kriminalgeschichte,"","",32
+5566,I TL 2736-2,Agent Doppelduck (2): Die Liste,Kriminalgeschichte,,,32
 5567,D 2005-048,Zu früh gefreut,"Abenteuer,Gagstory",Mickey Mouse The Bully,Dänemark,37
 5568,I TL 2709-3,Ein Heim für Tiere,Gagstory,Paperino e l'ospite fuori misura,Italien,14
 5569,I TL 2711-1,"Der ""Mächtige Mampfer""","Gagstory,Wirtschaftskampf,Sport",Zio Paperone & Ciccio in l'imbattibile Forchettone,Italien,30
@@ -5575,16 +5575,16 @@
 5575,I TL 2673-2,Liebe und Hiebe,Dagobert in Not,Zio Paperone e l'incredibile San Valentino,Italien,20
 5576,I TL 2689-5,Einer zu viel,Gagstory,Qui Quo Qua e il terzo incomodo,Italien,24
 5577,I TL 2577-1,Der Herr der Tiefsee,"Fantasy,Abenteuer,Kriminalgeschichte",Topolino e l'eremita degli abissi,Italien,45
-5578,I TL 2737-3,Agent DoppelDuck (3): Falsches Spiel,Kriminalgeschichte,"","",36
+5578,I TL 2737-3,Agent DoppelDuck (3): Falsches Spiel,Kriminalgeschichte,,,36
 5579,I TL 2690-1,Ein erfrischendes Erlebnis,"Fantasy,Abenteuer",Zio Paperone e l'avarizia di Brangaboom,Italien,32
 5580,I TL 2750-3,Gegensätze ziehen sich an,Gagstory,Paperino nella zattera,Italien,8
 5581,I PK 68-1,Die gestohlene Erinnerung,"Superhelden,Kriminalgeschichte",Paperinik e l'inganno silenzioso,Italien,50
 5582,D 2005-135,Ein wölfischer Plan,"Dagobert in Not,Mystery,Abenteuer",Uncle Scrooge Hot Dogs And Old Sausages,Dänemark,46
-5583,I TL 2758-1,Der Schatz des Mauso Polo - Teil 1,"Abenteuer,Historisches Thema,Zeitreisen","","",32
+5583,I TL 2758-1,Der Schatz des Mauso Polo - Teil 1,"Abenteuer,Historisches Thema,Zeitreisen",,,32
 5584,I TL 2682-2,Perfekt versteckt!,Gagstory,"Paperino, Paperoga e il posto sicuro",Italien,20
-5585,I TL 2759-2,Der Schatz des Mauso Polo - Teil 2,"Abenteuer,Historisches Thema,Zeitreisen","","",32
-5586,I TL 2738-1,Agent DoppelDuck (4): Enttarnt!,Kriminalgeschichte,"","",36
-5587,I TL 2760-1,Der Schatz des Mauso Polo - Teil 3,"Abenteuer,Historisches Thema,Zeitreisen","","",32
+5585,I TL 2759-2,Der Schatz des Mauso Polo - Teil 2,"Abenteuer,Historisches Thema,Zeitreisen",,,32
+5586,I TL 2738-1,Agent DoppelDuck (4): Enttarnt!,Kriminalgeschichte,,,36
+5587,I TL 2760-1,Der Schatz des Mauso Polo - Teil 3,"Abenteuer,Historisches Thema,Zeitreisen",,,32
 5588,I PK 125-1,Das erste Mal mit Maske,"Superhelden,Gagstory",Paperinik e la primissima impresa,Italien,21
 5589,I TL 2757-02,Klassisch gescheitert...,Einseiter,Andare sul classico,Italien,1
 5590,I TL 337-B,Totale Glücksfinsternis,Gagstory,Gastone e l'eclissi di fortuna,Italien,30
@@ -5647,7 +5647,7 @@
 5647,I TL 2722-4,In den Minen des Midas Minor,"Abenteuer,Schatzsuche",Zio Paperone e le miniere curative,Italien,25
 5648,D 2005-083,Der fabelhafte Fabio,"Gagstory,Abenteuer",Mickey Mouse The Romantic Adventurer,Dänemark,34
 5649,I TL 2767-1,Agent DoubleDuck (5): Rasanter Einsatz,Kriminalgeschichte,Prima della Prima,Italien,37
-5650,I PK 105,Ganz großes Theater,Gagstory,"","",21
+5650,I PK 105,Ganz großes Theater,Gagstory,,,21
 5651,I TL 2689-2,Ein Ort des Friedens,Abenteuer,Zio Paperone e l'oasi dimenticata,Italien,27
 5652,I TL 2510-03,Transportprobleme,Einseiter,Mossa strategica,Italien,1
 5653,I TL 2719-5,Kostspieliges Picknick,Gagstory,Paperino e il prestito disastroso,Italien,16
@@ -5720,15 +5720,15 @@
 5720,I TL 2699-2,Onkel Dagoberts Millionen: Seine vierte Million,Abenteuer,Il mio quarto milione,Italien,24
 5721,I TL 2536-5,Filmreif!,Kriminalgeschichte,Gambadilegno e il colpo alla celluloide,Italien,16
 5722,I TL 2677-5,Eine fröhliche Fee,Dagobert in Not,Amelia e la cugina fata,Italien,23
-5723,I TL 2797-1,Agent DoppelDuck (8): Heißes Herz,Kriminalgeschichte,"","",30
+5723,I TL 2797-1,Agent DoppelDuck (8): Heißes Herz,Kriminalgeschichte,,,30
 5724,D 2005-132,Kriegerische Welten,"Science-Fiction,Kriminalgeschichte",Mickey Mouse Evolution Convolution,Dänemark,40
 5725,D 2008-211,Glücksjäger,"Gagstory,Fantasy",Donald Duck Unlucky Duck,Dänemark,36
-5726,I-D 2009-001,Ein fesselndes Spiel,"Abenteuer,Gagstory","","",64
+5726,I-D 2009-001,Ein fesselndes Spiel,"Abenteuer,Gagstory",,,64
 5727,I PK 122-1,Fitness über alles,"Superhelden,Gagstory",Paperinik e il dilemma della forma fisica,Italien,25
 5728,I TL 2701-1,ONKEL DAGOBERTS MILLIONEN: Seine fünfte Million,Abenteuer,Il mio quinto milione,Italien,24
 5729,D 2005-068,Das Golfball-Debakel,Gagstory,Donald Duck Golf Ball Goof-Up,Dänemark,20
 5730,I TL 2292-2,Gut in Szene gesetzt,Kriminalgeschichte,Manetta e il ciak promozionale,Italien,26
-5731,I TL 2798-1,Agent DoppelDuck (9): Deep Blue,Kriminalgeschichte,"","",27
+5731,I TL 2798-1,Agent DoppelDuck (9): Deep Blue,Kriminalgeschichte,,,27
 5732,I TL 2588-1,Der Blick des Basilisken,"Kriminalgeschichte,Abenteuer",Topolino e lo sguardo del Basilisco,Italien,34
 5733,D 2009-234,Cup am Kap,Sport,Huey Dewey and Louie Soccer City Showdown,Dänemark,30
 5734,I TL 403-B,Ferien um jeden Preis,Gagstory,Paperino e il ferragosto a ogni costo,Italien,30
@@ -5736,7 +5736,7 @@
 5736,I TL 2703-2,ONKEL DAGOBERTS MILLIONEN: Seine sechste Million,Abenteuer,Il mio sesto milione,Italien,25
 5737,I TL 2759-1,Die verschwundene Identität,"Superhelden,Gagstory",Paperinik e il fuggiasco del Gran VarietÃ ,Italien,27
 5738,I TL 2346-2,Zauberlehrling Oswald,Dagobert in Not,Amelia e l'aiutante obbligatorio,Italien,30
-5739,I TL 2799-3,Agent DoppelDuck (10): Doppelt getäuscht,Kriminalgeschichte,"","",30
+5739,I TL 2799-3,Agent DoppelDuck (10): Doppelt getäuscht,Kriminalgeschichte,,,30
 5740,I TL 2753-2,Der große Goofunga,Abenteuer,Topolino e il grande Pippunga,Italien,38
 5741,I TL 2335-3,Ein geborener Störenfried,Gagstory,Il vicino rumoroso,Italien,8
 5742,D 2007-378,Schmarotz zu Besuch,"Science-Fiction,Gagstory",Donald Duck Day of the Dafflegick,Dänemark,30
@@ -5745,7 +5745,7 @@
 5745,I TL 2705-3,ONKEL DAGOBERTS MILLIONEN: Seine siebte Million,"Abenteuer,Wirtschaftskampf",Il mio settimo milione,Italien,29
 5746,I TL 2787-2,Habakuks Rübchen,"Gagstory,Superhelden,Mystery,Literarische Parodie",Paperinik e l'effetto Dinamite,Italien,36
 5747,I TL 2622-6,Allerbeste Absichten,Dagobert in Not,"Paperoga, Amelia e i buoni propositi",Italien,28
-5748,I TL 2800-1,Agent DoppelDuck (11): Finten und falsche Fährten,Kriminalgeschichte,"","",33
+5748,I TL 2800-1,Agent DoppelDuck (11): Finten und falsche Fährten,Kriminalgeschichte,,,33
 5749,I TL 2743-1,In der Gewalt des Schwarzen Phantoms,Kriminalgeschichte,Topolino e l'occhio di Macchia,Italien,31
 5750,I TL 2696-4,Jede Menge Raum,Düsentrieb´sche Erfindungen,Archimede e il rimedio contro il disordine,Italien,8
 5751,D 2007-153,König für einen Tag,Gagstory,Donald Duck Lord Of The Fries,Dänemark,30
@@ -5815,7 +5815,7 @@
 5815,I TL 2756-2,Klub der Müßiggänger,Gagstory,Paperino e il certame del nipotame,Italien,32
 5816,I TL 2819-2,Gundel unter Druck,Gagstory,Amelia sotto assedio,Italien,20
 5817,I TL 1668-B,Die verzauberte Kamera,Abenteuer,La macchina giocografica,Italien,28
-5818,I TL 2815-1,Agent DoppelDuck (12): Auf der Jagd (Teil 1),Abenteuer,"","",25
+5818,I TL 2815-1,Agent DoppelDuck (12): Auf der Jagd (Teil 1),Abenteuer,,,25
 5819,D 2004-227,Zu Besuch bei König Karlo,"Science-Fiction,Abenteuer",Mickey Mouse King Pete,Dänemark,32
 5820,I/D 2009-010,Der Multiplikator des Simplicius,"Abenteuer,Schatzsuche",Zio Paperone e il moltiplicatore di Simplicius,Italien,30
 5821,I TL 2849-5,Ein überraschendes Ende,"Kriminalgeschichte,Gagstory",Basettoni e il vero effetto sorpresa,Italien,28
@@ -5824,7 +5824,7 @@
 5824,D 2007-201,Einfach unnachahmlich!,Abenteuer,Donald Duck Being Donald,Dänemark,36
 5825,D 2008-148,Die Hängematte des Hammurabi,Abenteuer,Donald Duck The Lost Hammock of Hammurabi,Dänemark,32
 5826,I PK 85-1,Gefangen im Zeitstrom,Superhelden,Paperinik e la minaccia del Time Slide,Italien,80
-5827,I TL 2856-2,Gefährlicher Schlankheitswahn,Gagstory,"","",30
+5827,I TL 2856-2,Gefährlicher Schlankheitswahn,Gagstory,,,30
 5828,I TL 2816-5,Der verschwundene Kapitän,Kriminalgeschichte,Topolino e il messaggio del capitano,Italien,28
 5829,I TL 2392-1,Spezialagent Franz Gans,Gagstory,Un caso sofisticato,Italien,31
 5830,I TL 2660-3,Das Hexenspray,Dagobert in Not,Amelia e il fantastico lucidante,Italien,18
@@ -5972,7 +5972,7 @@
 5972,I TL 2907-01,Alles reine Natur...,Einseiter,Inquinamento acustico,Italien,1
 5973,I/D 2009-009,Doppelt erfolgreich,Gagstory,The Double Surprise Reunion,Italien,30
 5974,I TL 2910-3,Jedes Jahr dasselbe Spiel!,Gagstory,Basettoni e le vacanze difficili,Italien,4
-5975,I TL 2919-3P,Agent DoppelDuck (25-27): Auftritt Agent Zero,Kriminalgeschichte,"","",85
+5975,I TL 2919-3P,Agent DoppelDuck (25-27): Auftritt Agent Zero,Kriminalgeschichte,,,85
 5976,I TL 2908-2,Haustausch mit fatalen Folgen,Gagstory,Paperino e il sereno scambio estivo,Italien,30
 5977,D 2012-036,Lust auf Ferien,Gagstory,Donald Duck Hopeful Holiday,Dänemark,1
 5978,D 2009-226,Traumhafte Ferien,Gagstory,Huey Dewey and Louie How We Spent Our Summer Vacation,Dänemark,30
@@ -5980,7 +5980,7 @@
 5980,I TL 2859-2,Der Wind der Freiheit,Abenteuer,Topolino e il vento di libertÃ ,Italien,34
 5981,I TL 2804-3,Dussel am Strand,Gagstory,Tutti al mare,Italien,13
 5982,I TL 2851-02,Ein guter Grund...,Einseiter,Tuffi da grandi altezze,Italien,1
-5983,I TL 2954-1,Agent DoppelDuck (28): Der olympische Code,Kriminalgeschichte,"","",30
+5983,I TL 2954-1,Agent DoppelDuck (28): Der olympische Code,Kriminalgeschichte,,,30
 5984,I TL 2847-2,Das Geheimnis der Geisterkralle,Gagstory,Zio Paperone e l'artiglio fantasma,Italien,32
 5985,D 2009-211,Abflug ins Abenteuer,Gagstory,Uncle Scrooge The Blue Mountain,Dänemark,40
 5986,I TL 2910-1,Geheimnisse der Tiefsee,Kriminalgeschichte,Topolino e il naufrago dell'abisso,Italien,32
@@ -6008,7 +6008,7 @@
 6008,I TL 2883-3,Der perfekte Butler,Dagobert in Not,Battista e il maggiordomo venuto dal passato,Italien,16
 6009,I TL 2827-1,Die Geister von Gold City,Gagstory,Paperino e gli spettri della cittÃ  fantasma,Italien,28
 6010,I TL 2657-3,Süßes oder Saures?,Gagstory,Pico de Paperis e il mostro di Halloween,Italien,18
-6011,I TL 2927-1,Das Orakel der Mayas,Abenteuer,"","",50
+6011,I TL 2927-1,Das Orakel der Mayas,Abenteuer,,,50
 6012,D 2009-138,Ein virtueller Gegenspieler,Gagstory,Donald Duck Duckworld,Dänemark,35
 6013,I TL 2939-2,Der Tartan aus dem Nebelwald,Abenteuer,Topolino e il mostruoso tartan delle nebbie,Italien,32
 6014,I TL 2924-4,Mission Nummer 13,Kriminalgeschichte,Paperino in,Italien,30
@@ -6054,7 +6054,7 @@
 6054,I/D 2011-003,Wahnsinn mit Methode,Abenteuer,The Return of the Mad Ducktor,Italien,36
 6055,I TL 2776-5,Das verschmähte Glück,Gagstory,Paperino e il giorno fortunato,Italien,24
 6056,I TL 2936-5,Der Schatz von Käpt’n Rebus,Abenteuer,Zio Paperone e il tempo dei pirati,Italien,32
-6057,I TL 2962-2P,Agent DoppelDuck (38-39): POLEPOSITION,Kriminalgeschichte,"","",60
+6057,I TL 2962-2P,Agent DoppelDuck (38-39): POLEPOSITION,Kriminalgeschichte,,,60
 6058,I TL 2850-4,Giga-Gähn räumt ab!,Kriminalgeschichte,Super Pippo e l'imprendibile Dr. Sbadiglior,Italien,22
 6059,I TL 2723-3,Nacht der tollen Träume,Gagstory,Paperino e la notte degli insonni,Italien,16
 6060,D 2009-152,Die Säulen von Stykolos,Gagstory,Uncle Scrooge The Columns Of Stykolos,Dänemark,30
@@ -6172,7 +6172,7 @@
 6172,I TL 2947-5,Trotzdem der Dumme...,Gagstory,Paperino e il tassello... numero uno,Italien,15
 6173,I TL 2663-01,Allzu wörtlich genommen,Einseiter,Pupazzi,Italien,1
 6174,I TL 2835-5,Auf der dunklen Seite des Mondes,Gagstory,Paperina agente P.E.A. - L'altra faccia della L. U. N. A.,Italien,28
-6175,I TL 2796-1,Eiszeit in Entenhausen - Teil 1,Abenteuer,"","",24
+6175,I TL 2796-1,Eiszeit in Entenhausen - Teil 1,Abenteuer,,,24
 6176,I TL 2899-2,Goofy und der Glücksstrahl,Kriminalgeschichte,Topolino e il Pippo fortunificato,Italien,28
 6177,I TL 3005-2,Ein ganz fieser Trick,Superhelden,Paperinik e la minaccia di Amelia,Italien,25
 6178,I TL 2255-3,"Die Liebe kommt, die Liebe geht...",Romanze,Paperino Cupido,Italien,15
@@ -6203,7 +6203,7 @@
 6203,I TL 2942-5,Enthenhausener Speicherlauf,Wirtschaftskampf,Zio Paperone e la corsa al deposito,Italien,30
 6204,I TL 2857-2,Eine eigenwillige Theorie,Gagstory,Paperino e la polenta universale,Italien,22
 6205,I TL 3009-5,Die Rückkehr der Musik,Gagstory,Tip & Tap e il caso clamoroso del mondo silenzioso,Italien,20
-6206,I T 2844-1,Zu allem entschlossen!,Dagobert in Not,"","",25
+6206,I T 2844-1,Zu allem entschlossen!,Dagobert in Not,,,25
 6207,I TL 2693-01,Magisches Happy End,Einseiter,Le cose... cambiano,Italien,1
 6208,I TL 2989-2,Galaktische Feinschmecker,Gagstory,Ciccio e la torta spaziale,Italien,30
 6209,I TL 3012-1,Agent Doppelduck (40): Wem die Stunde schlägt,"Kriminalgeschichte,Abenteuer",Mnemon,Italien,30
@@ -6436,7 +6436,7 @@
 6436,I TL 3101-2,Verdrehte Welt,Kriminalgeschichte,Gambadilegno e la dimensione eroica,Italien,28
 6437,I TL 2349-2,Im Bann des Mondes,Science-Fiction,Zio Paperone e la luna a specchio,Italien,33
 6438,I TL 2981-2,Die Reise des Helden,Gagstory,A lezione con Pico - Paperino e l'eroico viaggio educativo,Italien,28
-6439,I TL 3084-1,Agent DoppelDuck (44): Der letzte Tag (1),Kriminalgeschichte,"","",36
+6439,I TL 3084-1,Agent DoppelDuck (44): Der letzte Tag (1),Kriminalgeschichte,,,36
 6440,D 2015-136,Der unverfrorene Schneemann (Teil 1),Gagstory,Uncle Scrooge Riddle Snow Business,Dänemark,8
 6441,I TL 2978-5,Besuch aus dem All,Kriminalgeschichte,Topolino e il visitatore dallo spazio,Italien,25
 6442,I TL 3028-01,Winter mit Witz: Wie Hund und Katze,Einseiter,Ricordi,Italien,1
@@ -6452,7 +6452,7 @@
 6452,D 2014-102,Das Wikingerschiff aus dem Eis,Abenteuer,Donald Duck Valhalla,Dänemark,38
 6453,I TL 2955-2,Der Club der Gespenster,Abenteuer,Topolino e il club degli spettri,Italien,31
 6454,I TL 2670-3,Zwei Chaoten im Schnee,Gagstory,"Paperino, Paperoga e il set sulla neve",Italien,18
-6455,I M 61-5,Das Amulett des Bösen,Abenteuer,"","",26
+6455,I M 61-5,Das Amulett des Bösen,Abenteuer,,,26
 6456,I TL 2747-3,Goldene Ernte,Gagstory,Zio Paperone e i grappoli del tesoro,Italien,17
 6457,I TL 2464-3,Irren ist genial,Gagstory,Prove tecniche di invasione,Italien,9
 6458,I PKC 36-1,Identitätskrise,Superhelden,Paperino e la vera identitÃ  di Paperinik,Italien,24
@@ -6593,7 +6593,7 @@
 6593,I TL 3081-3,APPsolut sinnvoll,Gagstory,Pippo e l’App-mania dilagante,Italien,6
 6594,I TL 3100-2,Der fünfeinhalbte Geschmack,Gagstory,Zio Paperone e il quinto gusto e mezzo,Italien,40
 6595,I TL 2795-4,"Kino, Knusper und Krawall",Gagstory,"Ciccio, Nonna Papera e il film cortissimo",Italien,6
-6596,D 2015-183,Funkstille,Gagstory,"",Dänemark,30
+6596,D 2015-183,Funkstille,Gagstory,,Dänemark,30
 6597,I TL 3136-1,Das wird (m)ein Jahr,Gagstory,Paperino e il capodanno positivo,Italien,30
 6598,I TL 2817-5,Das Zeitbeben,Abenteuer,Topolino e il crocevia del caos,Italien,30
 6599,D 2015-001,Grüner Glibber in Spukstadt,Gagstory,Daisy and the Green Slime,Dänemark,30
@@ -6613,44 +6613,44 @@
 6613,I TL 3136-6,Der magische Gumburumbu,Gagstory,Paperino e la magica Gumburumbu,Italien,33
 6614,I TL 2629-5,Der Goldene Dietrich,Gagstory,"I Bassotti, Pico de Paperis e il furto con lezione",Italien,13
 6615,I TL 3133-2,Ein Hirte und keine Hochzeit,Gagstory,Via dalla papera folla,Italien,40
-6616,I TL 3094-1P,Die Schatzinsel,"Abenteuer,Schatzsuche",L isola del tesoro,"",93
-6617,I TL 3103-01,Zuckerbrot und Peitsche,Einseiter,Stile da vendere - Dinamismo,"",1
-6618,I PK 26-3,Das Ende der Legende?,Superhelden,La leggenda di Paperinik,"",34
-6619,I TL 2239-4,Unglück im Glück,Gagstory,Amelia & Gastone e la fortuna di troppo,"",27
-6620,I TL 3084-01,Einfach irre!,Einseiter,Tecnologia soft,"",1
-6621,I TL 2988-2,Runder wohnen,Gagstory,Zio Paperone e la bolla immobiliare,"",30
-6622,I TL 2610-3,Panzerknacker 2.0,Gagstory,La banda Bassotti e l aggiornamento ladresco,"",10
-6623,I TL 2332-2,Die Tante gibt den Takt vor,Düsentrieb´sche Erfindungen,Archimede e la zia a sorpresa,"",27
-6624,D 2015-106,Der Angstschür,Gagstory,Fear Itself,"",27
-6625,I TL 3149-1,Die Spur der Saphire,Kriminalgeschichte,Mistero su tela,"",40
-6626,I TL 3041-1,Der mysteriöse Puppenmeister,Kriminalgeschichte,Topolino e il teatrino di Bambolier,"",33
-6627,I TL 2574-03,König des Chaos – Kopflos,Einseiter,Lo stile innanzitutto,"",1
-6628,I TL 2526-7,Von den Panzerknackern empfohlen,Gagstory,Zio Paperone e il furto con l'antifurto,"",34
-6629,I TL 2774-2,Nummer eins auf der Liste,Gagstory,Paperino e il primo della lista,"",30
-6630,I TL 3041-4,"O Brüder, wo seid ihr?",Gagstory,Un Bassotto in,"",22
-6631,I M 59-2,Ein beharrlicher Verehrer,Gagstory,Paperina e il visconte gentiluomo,"",25
-6632,D 2016-001,"Detektive, Bohnen und Gespenster",Gagstory,The Lost Jelly Beans,"",7
-6633,I TL 2666-6,Betrügerei im Doppelpack,Kriminalgeschichte,"Gambadilegno, Macchia Nera e il doppio inganno","",27
-6634,D 2014-187,Der Neue,Gagstory,The Sidekick,"",31
-6635,I TL 3153-1P,Vereinte Kräfte,"Superhelden,Kriminalgeschichte",PK Timecrime DD,"",90
-6636,I TL 3110-5,Krimidinner,Kriminalgeschichte,Topolino e le cene con mistero,"",30
-6637,I TL 3173-4,Die Hexe und der Butler,Gagstory,Amelia e gli inutili spasimanti,"",26
-6638,I TL 3044-5,Mannzipation,Gagstory,Paperino e la rivolta festaiola,"",5
-6639,I TL 3112-01,Beute mit Biss,Einseiter,Genialità ladresca,"",1
-6640,I TL 2987-5,Mission: Ausgesetzt,Gagstory,Paperino & Paperoga in... Sfida alla natura selvaggia,"",26
-6641,I TL 3048-3,Verbrechen für Einsteiger,Gagstory,Gambadilegno e il corso di aggiornamento,"",12
-6642,I TL 3094-2,Das Volk der Sonne,Abenteuer,Paperino e il popolo del sole,"",30
-6643,D 2015-003,Das Geheimnis von Saputeh,Abenteuer,"","",31
-6644,D 2016-302,Es geht um die Wurst!,Gagstory,"","",20
-6645,I TL 3160-2,Hindernisse des Heldendaseins,Gagstory,Minni e l’insostenibile Super Top,"",30
-6646,I TL 2410-4,Und täglich grüßt ...,Gagstory,Amelia e l'incantesimo del domani,"",16
-6647,I TL 2483-6,Dem Bruder auf der Spur,Gagstory,Bum Bum e il fratello smarrito,"",30
-6648,I TL 3158-2,Der goldene Seestern,Schatzsuche,Zio Paperone e la stella d’oro,"",30
-6649,I TL 3183-3,Verrückte Vorstellung,Gagstory,Paperino e le meraviglie tecnologiche,"",14
-6650,I TL 3111-3,Liebenswert chaotisch,Gagstory,Pippo e l’immobile invendibile,"",20
-6651,I TL 3073-4,Völlig verstrickt,Abenteuer,Paperino e la lana autotessente,"",30
-6652,I TL 2483-3,Nach alter Tradition,Gagstory,I Bassotti e lo scambio culturale,"",10
-6653,I TL 2996-1,Zurück im Drei-Türme-Kastell,Superhelden,Paperinik e il castello dei segreti,"",50
+6616,I TL 3094-1P,Die Schatzinsel,"Abenteuer,Schatzsuche",L isola del tesoro,,93
+6617,I TL 3103-01,Zuckerbrot und Peitsche,Einseiter,Stile da vendere - Dinamismo,,1
+6618,I PK 26-3,Das Ende der Legende?,Superhelden,La leggenda di Paperinik,,34
+6619,I TL 2239-4,Unglück im Glück,Gagstory,Amelia & Gastone e la fortuna di troppo,,27
+6620,I TL 3084-01,Einfach irre!,Einseiter,Tecnologia soft,,1
+6621,I TL 2988-2,Runder wohnen,Gagstory,Zio Paperone e la bolla immobiliare,,30
+6622,I TL 2610-3,Panzerknacker 2.0,Gagstory,La banda Bassotti e l aggiornamento ladresco,,10
+6623,I TL 2332-2,Die Tante gibt den Takt vor,Düsentrieb´sche Erfindungen,Archimede e la zia a sorpresa,,27
+6624,D 2015-106,Der Angstschür,Gagstory,Fear Itself,,27
+6625,I TL 3149-1,Die Spur der Saphire,Kriminalgeschichte,Mistero su tela,,40
+6626,I TL 3041-1,Der mysteriöse Puppenmeister,Kriminalgeschichte,Topolino e il teatrino di Bambolier,,33
+6627,I TL 2574-03,König des Chaos – Kopflos,Einseiter,Lo stile innanzitutto,,1
+6628,I TL 2526-7,Von den Panzerknackern empfohlen,Gagstory,Zio Paperone e il furto con l'antifurto,,34
+6629,I TL 2774-2,Nummer eins auf der Liste,Gagstory,Paperino e il primo della lista,,30
+6630,I TL 3041-4,"O Brüder, wo seid ihr?",Gagstory,Un Bassotto in,,22
+6631,I M 59-2,Ein beharrlicher Verehrer,Gagstory,Paperina e il visconte gentiluomo,,25
+6632,D 2016-001,"Detektive, Bohnen und Gespenster",Gagstory,The Lost Jelly Beans,,7
+6633,I TL 2666-6,Betrügerei im Doppelpack,Kriminalgeschichte,"Gambadilegno, Macchia Nera e il doppio inganno",,27
+6634,D 2014-187,Der Neue,Gagstory,The Sidekick,,31
+6635,I TL 3153-1P,Vereinte Kräfte,"Superhelden,Kriminalgeschichte",PK Timecrime DD,,90
+6636,I TL 3110-5,Krimidinner,Kriminalgeschichte,Topolino e le cene con mistero,,30
+6637,I TL 3173-4,Die Hexe und der Butler,Gagstory,Amelia e gli inutili spasimanti,,26
+6638,I TL 3044-5,Mannzipation,Gagstory,Paperino e la rivolta festaiola,,5
+6639,I TL 3112-01,Beute mit Biss,Einseiter,Genialità ladresca,,1
+6640,I TL 2987-5,Mission: Ausgesetzt,Gagstory,Paperino & Paperoga in... Sfida alla natura selvaggia,,26
+6641,I TL 3048-3,Verbrechen für Einsteiger,Gagstory,Gambadilegno e il corso di aggiornamento,,12
+6642,I TL 3094-2,Das Volk der Sonne,Abenteuer,Paperino e il popolo del sole,,30
+6643,D 2015-003,Das Geheimnis von Saputeh,Abenteuer,,,31
+6644,D 2016-302,Es geht um die Wurst!,Gagstory,,,20
+6645,I TL 3160-2,Hindernisse des Heldendaseins,Gagstory,Minni e l’insostenibile Super Top,,30
+6646,I TL 2410-4,Und täglich grüßt ...,Gagstory,Amelia e l'incantesimo del domani,,16
+6647,I TL 2483-6,Dem Bruder auf der Spur,Gagstory,Bum Bum e il fratello smarrito,,30
+6648,I TL 3158-2,Der goldene Seestern,Schatzsuche,Zio Paperone e la stella d’oro,,30
+6649,I TL 3183-3,Verrückte Vorstellung,Gagstory,Paperino e le meraviglie tecnologiche,,14
+6650,I TL 3111-3,Liebenswert chaotisch,Gagstory,Pippo e l’immobile invendibile,,20
+6651,I TL 3073-4,Völlig verstrickt,Abenteuer,Paperino e la lana autotessente,,30
+6652,I TL 2483-3,Nach alter Tradition,Gagstory,I Bassotti e lo scambio culturale,,10
+6653,I TL 2996-1,Zurück im Drei-Türme-Kastell,Superhelden,Paperinik e il castello dei segreti,,50
 6654,I TL 2832-1P,Die Insel Niemalsnie,Abenteuer,Topolino e l'isola di Quandomai,Italien,70
 6655,I TL 3062-1,Ein Schild sagt mehr als tausend Worte,Gagstory,Paperino e il mistero del cartello,Italien,24
 6656,I TL 2860-2,Der Entspannungsexperte,Gagstory,Ciccio e il portento del vivere lento,Italien,24
@@ -6679,7 +6679,7 @@
 6679,D 2016-036,O.M.A.: Geistreich,Mystery,The Haunting of Scrooge McDuck,Dänemark,26
 6680,I TL 3154-3,Sieh mich nicht so an!,Gagstory,non guardarmi così!,Italien,4
 6681,I TL 2935-4,Duell um die Spitze,Wirtschaftskampf,la sfida dei giganti,Italien,48
-6682,D 2015-259,Der Drachenkämpfer,Abenteuer,"",Dänemark,35
+6682,D 2015-259,Der Drachenkämpfer,Abenteuer,,Dänemark,35
 6683,I TL 3107-01,Halunkenwelt – Das Kleinkind im Knacker,Einseiter,Effetto temporaneo,Italien,1
 6684,I TL 3177-2,Der Beutel der Unendlichkeit,Abenteuer,Topolino & Eta Beta,Italien,26
 6685,I TL 3097-2,Hallo Nachbarn!,Gagstory,Zio Paperone e la via del buon vicinato,Italien,28
@@ -6727,8 +6727,8 @@
 6727,I TL 3189-01,Astronomie im Alltag: Der Sterngucker,Einseiter,Osservare le stelle,Italien,1
 6728,I TL 2824-5,Fahrendes Fiasko,Gagstory,Zio Paperone e la locomozione affaristica,Italien,27
 6729,I TL 3140-5,Eiskalt serviert,Superhelden,Superpippo e i poteri invernali,Italien,12
-6730,D 2016-333,Winter ade…,Gagstory,"",Dänemark,35
-6731,D 2017-107,"Auf die Piste, fertig, los!",Gagstory,"",Dänemark,20
+6730,D 2016-333,Winter ade…,Gagstory,,Dänemark,35
+6731,D 2017-107,"Auf die Piste, fertig, los!",Gagstory,,Dänemark,20
 6732,I TL 3013-1P,Der unbezwingbare Berg,Abenteuer,Topolino e il passaggio al Tor Korgat,Italien,49
 6733,I TL 3035-1,DoppelDuck: Element 109,Kriminalgeschichte,Elemento 109,Italien,30
 6734,I TL 2399-5,Schlaflos am Vesuv,Gagstory,Gennarino e l'amore difficile,Italien,24
@@ -6743,7 +6743,7 @@
 6743,I TL 2990-2,Der Glückssammler,Gagstory,Gastone e il Progetto Blackmoon,Italien,30
 6744,I TL 3040-5P,Am Ende des Regenbogens,Science-Fiction,Zio Paperone e la pentola d'oro dell'arcobaleno,Italien,50
 6745,I PKC10-1,Furioses Finale,Superhelden,Paperinik e l'ultima partita,Italien,27
-6746,D 2017-047,Die Chroniken von Faarfoort,Gagstory,"",Dänemark,33
+6746,D 2017-047,Die Chroniken von Faarfoort,Gagstory,,Dänemark,33
 6747,I TL 3048-6,Zutritt verboten!,Gagstory,Zio Paperone e la protezione totale,Italien,22
 6748,I TL 3040-2,Ausbruchsgeschichten: Opa Knack geht in die Luft,Gagstory,Qualcuno volò dal nido del Bassotto,Italien,17
 6749,I TL 3021-3,Beste Feinde,Kriminalgeschichte,Topolino e Gambadilegno nemici per la pelle,Italien,25
@@ -6765,7 +6765,7 @@
 6765,I TL 3203-4,Gustav Gans‘ Grandhotel,Gagstory,Gastone in,Italien,25
 6766,I TL 3162-01,"König des Chaos: Spieglein, Spieglein …",Einseiter,Piccolo narciso,Italien,1
 6767,I TL 3102-5,Im Landknasthof,Gagstory,I Bassotti dalla rapina alla rapa,Italien,34
-6768,D 2017-131,Auf zum Titel!,Sport,"",Dänemark,24
+6768,D 2017-131,Auf zum Titel!,Sport,,Dänemark,24
 6769,I TL 2994-1,Katz und Maus,Gagstory,Topolino e la promessa del gatto,Italien,40
 6770,I TL 3156-4,Phantomias macht blau,Superhelden,Paperinik e l’effetto Gastone,Italien,24
 6771,I TL 3152-6,Eine Frage des Alters,Gagstory,Brigitta in… fuga dal domandone,Italien,24
@@ -6776,7 +6776,7 @@
 6776,I TL 2946-3,Komplette Kontrolle,Gagstory,Paperino telecomandato,Italien,10
 6777,I TL 3054-2,Ein verrückter Tag,Superhelden,Paperino 6 unico!,Italien,40
 6778,I TL 3055-5,Schatzsuche unter Palmen,Schatzsuche,Paperino e la perla della luna,Italien,32
-6779,D 2018-041,Einfach entspannen!,Einseiter,"",Dänemark,1
+6779,D 2018-041,Einfach entspannen!,Einseiter,,Dänemark,1
 6780,I TL 2584-6,Die Raubtouristen,Gagstory,Gambadilegno e le vacanze intelligenti,Italien,20
 6781,I TL 3222-1,Liebe geht durch den Motor,Superhelden,Paperinik... il cuore è un motore,Italien,32
 6782,I TL 3129-5,Schiffbruch zu zweit,Gagstory,Paperino & Paperoga naufraghi fuori rotta,Italien,12
@@ -6784,7 +6784,7 @@
 6784,I TL 3000-2,Der Schrecken der Meere,Abenteuer,Zio Paperone e il tiranno dei mari,Italien,30
 6785,I TL 3046-2,Ausbruchsgeschichten: Immer der Nase nach,Gagstory,Fuga dall'isola del cavolo,Italien,20
 6786,I TL 2601-1,Wie die Zeit verpufft,Kriminalgeschichte,Topolino e i colpi dell'Uomo Qualunque,Italien,33
-6787,D 2017-106,Der Klub der Entdecker,Gagstory,"",Dänemark,38
+6787,D 2017-106,Der Klub der Entdecker,Gagstory,,Dänemark,38
 6788,D 2018-042,Extrem erfrischen!,Einseiter,Freezing on the Beach,Dänemark,1
 6789,I TL 3221-6,"Sonne, Strand und Schnee",Gagstory,Paperino e la vacanza sottozero,Italien,22
 6790,I TL 3065-5,Das Wunder von Katapulto,Gagstory,Topolino e il misterioso caso Amberson,Italien,58
