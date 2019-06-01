@@ -5,16 +5,12 @@ require 'csv'
 require 'json'
 require 'uri'
 
-require 'pry'
-
 def fetch_utf8(url_in)
   open(url_in) { |f| f.read }.force_encoding("utf-8")
 end
 
 def fetch(url_in)
   html_result = fetch_utf8(url_in)
-
-  # binding.pry <-- Helpful for debugging
 
   tmp = JSON.parse(html_result)
   tmp_count = tmp['count']

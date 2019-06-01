@@ -107,8 +107,6 @@ def scrape_info(num)
 
       char_id = $characters[name]
 
-      if actor.length > 1 then puts "ACHTUNG: " + actor.length.to_s end
-
       actor.each do |a|
         question_index = a.rindex('?')
         if question_index then
@@ -128,9 +126,6 @@ def scrape_info(num)
         $occurence << [$stories[num],char_id,actor_id]
 
       end
-
-
-
     end
   end
 end

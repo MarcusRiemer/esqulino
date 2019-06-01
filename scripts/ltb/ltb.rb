@@ -75,19 +75,21 @@ def _info(doc,book_nmbr,edition_nmbr,title)
   # For each story
   for i in 1..story_cnt do
     # Each story has a numerating tbody
-      code = ""
-      genre = ""
-      orig_title = ""
-      orig_country = ""
-      story_page_cnt = 0
+      code = nil
+      genre = nil
+      orig_title = nil
+      orig_country = nil
+      story_page_cnt = nil
       chars = Array.new
       curr_story = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small')
-      if !curr_story.nil?
       story_title = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr("\t\r\n", '').gsub(/  +/, "")
-      p story_title
+      story_id = $tmp_story.length + 1
+      if curr_story.nil?
+
+      else
+      #story_title = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr("\t\r\n", '').gsub(/  +/, "")
       curr_story.each do |small|
         tmp_small = small.text.tr("\"\t\r\n", '').gsub(/  +/, "").split(':')
-        p tmp_small[0]
         case tmp_small[0]
           when "Code"
             code = tmp_small[1]
@@ -95,7 +97,6 @@ def _info(doc,book_nmbr,edition_nmbr,title)
             genre = tmp_small[1]
           when "Originaltitel"
             orig_title = tmp_small[1]
-            p orig_title
           when "Ursprung"
             orig_country = tmp_small[1]
           when "Seitenanzahl"
@@ -104,7 +105,7 @@ def _info(doc,book_nmbr,edition_nmbr,title)
             chars = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small[2]/span')
           end
       end
-      story_id = $tmp_story.length + 1
+      
       
       $book_to_story << [book_id,story_id]
 
@@ -120,17 +121,16 @@ def _info(doc,book_nmbr,edition_nmbr,title)
         char_id = $tmp_char[char_name]
         $story_to_char << [story_id, char_id]
       end
-
-      $tmp_story << [
-        story_id,
-        code,
-        story_title,
-        genre,
-        orig_title,
-        orig_country,
-        story_page_cnt
-      ]
     end
+    $tmp_story << [
+      story_id,
+      code,
+      story_title,
+      genre,
+      orig_title,
+      orig_country,
+      story_page_cnt
+    ]
   end
 
   #p tmp
@@ -142,6 +142,7 @@ def get_auflagen(url_str)
   doc = download_info(url_str)
   # Get the Ausgabe Nr
   book_nmbr = doc.xpath('//*[@id="page-top"]/div[1]/div[2]/h1/span[1]').text.tr(" \t\r\n", '').delete('Nr.').to_i
+  puts "Book Nr. : " + book_nmbr.to_s
   # Get the HTML-li-elements for the Auflagen
   edition_li = doc.xpath('//*[@id="page-top"]/div[2]/div/div[2]/div/ul/li')
   # Get the title
@@ -157,11 +158,9 @@ def get_auflagen(url_str)
       # Get the number of the edition 
       edition_nmbr = x.text.tr('\"\"', '\"').delete('Nr.').to_i
 
-      p $base_url + x.child.attribute('href').value
       tmp_node = tmp_node || $last_node == _info(tmp_doc,book_nmbr,edition_nmbr,title)
     end
   else
-    p url_str
     tmp_node = tmp_node || $last_node == _info(doc,book_nmbr,1,title)
   end
   tmp_node
@@ -170,8 +169,6 @@ end
 
 $last_node = download_info(last_url).xpath('/html/head/link[5]').attribute('href').value[/([^\/]+)$/].to_i
 next_url = first_url
-
-p $last_node
 
 while !exit_loop do
   exit_loop = get_auflagen(next_url)

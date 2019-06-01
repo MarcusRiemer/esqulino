@@ -23,7 +23,7 @@ puts '### -- Writing into CSV: ' + csv_file
 CSV.open(csv_file, "w") do |csv|
   result.each_with_index do |row , i|
 
-    tmp = JSON.parse(Nokogiri::HTML(open(row['url'])))
+    tmp = JSON.parse(fetch_utf8(row['url']))
     res = Array.new
 
     res << tmp['id']

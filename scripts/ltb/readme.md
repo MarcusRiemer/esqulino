@@ -1,6 +1,6 @@
 # LTB-Data
 
-One Paragraph of project description goes here
+Fetches the data for every LTB book, all the stories and characters inside.
 
 ## Getting Started
 

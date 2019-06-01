@@ -1,6 +1,6 @@
-# LTB-Data
+# Pokemon-Data
 
-One Paragraph of project description goes here
+Fetches serveral data for Pokemon.
 
 ## Getting Started
 
