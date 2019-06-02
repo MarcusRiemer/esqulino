@@ -3,6 +3,8 @@ require_dependency 'error'
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
+  include LocaleHelper
+
   # Handle all errors that are specifc to our parts of the code
   rescue_from EsqulinoError, :with => :handle_internal_exception
 
@@ -20,7 +22,7 @@ class ApplicationController < ActionController::API
     @identity = Identity.search(auth)
     if !@identity
       if (email) 
-        RegisterMailer.registered_user(auth[:data]).deliver
+        RegisterMailer.registered_user(auth, request_locale).deliver
       end
       @identity = Identity.create_with_auth(auth, current_user)
     end
@@ -29,7 +31,7 @@ class ApplicationController < ActionController::API
   def sign_in
     if !signed_in?
       @current_user = @identity.user
-      token = Auth.encode({user_id: @identity.user_id})
+      token = Auth.encode({user_id: @identity.user_id, data: @identity[:data]})
       response_jwt_cookie(token)
     end
   end
@@ -62,8 +64,12 @@ class ApplicationController < ActionController::API
     token = request.cookies['JWT-TOKEN']
     if token
       begin
-        user_id =  Auth.decode(token)[:user_id]
-        @current_user = User.find(user_id.to_s)
+        token_decoded =  Auth.decode(token)
+        if !token_decoded[:data] || token_decoded[:data][:confirmed]
+          @current_user = User.find(token_decoded[:user_id].to_s)
+        else
+          # TODO ERROR MSG: Please confirm your e-mail adress
+        end
       rescue ActiveRecord::RecordNotFound => e
         sign_out!
         render json: { errors: e.message }, status: :unauthorized

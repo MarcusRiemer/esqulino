@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     end
 
     scope 'auth' do
+      get 'identity/confirmation/:verify_token', controller: 'auth', action: :email_confirmation
       delete 'sign_out', controller: 'auth', action: :destroy
       match ":provider/callback", to: "auth#callback", via: [:get, :post]
       match 'failure', :to => 'auth#failure', via: [:get, :post]

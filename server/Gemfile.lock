@@ -122,6 +122,7 @@ GEM
       regexp_parser (~> 1.2.0)
       uri_template (~> 0.7.0)
     jwt (2.1.0)
+    kramdown (2.1.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -133,6 +134,9 @@ GEM
     lumberjack (1.0.13)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    maildown (3.0.2)
+      actionmailer (>= 4.0.0)
+      kramdown
     mapping (1.1.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
@@ -287,6 +291,7 @@ DEPENDENCIES
   json_schemer (~> 0.1)
   jwt
   listen (>= 3.0.5, < 3.2)
+  maildown
   mini_magick (~> 4.9)
   omniauth (~> 1.9.0)
   omniauth-github

@@ -4,7 +4,7 @@ class Identity < ApplicationRecord
   attr_accessor :email, :name, :password, :password_confirmation
 
   def self.search(auth)
-    find_by_provider_and_uid(auth["provider"], auth["uid"])
+    find_by_provider_and_uid(auth[:provider], auth[:uid])
   end
 
   def self.create_with_auth(auth, user)

@@ -1,10 +1,6 @@
 class UserController < ApplicationController
   before_action :authenticate_user!
 
-  def new
-    @user = request.env['omniauth.identity'] ||= User.new
-  end
-
   def index
     if signed_in?
       # TODO Data from JWT
