@@ -1,3 +1,4 @@
+import { AuthInputComponent } from './auth/auth-input.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,7 +10,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import {
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatFormFieldModule
+  MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatFormFieldModule, MatError
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
@@ -42,6 +43,7 @@ import { GrammarDataService, BlockLanguageDataService } from './serverdata'
 import { ResetPasswordComponent } from './auth/reset-password.component';
 import { ProviderAuthComponent } from './auth/provider-auth.component';
 import { SignInComponent } from './auth/sign-in.component';
+import { SignUpComponent } from './auth/sign-up.component';
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -90,6 +92,8 @@ const materialModules = [
     ProviderAuthComponent,
     SignInComponent,
     ResetPasswordComponent,
+    SignUpComponent,
+    AuthInputComponent,
     FocusDirective
   ],
   exports: [
@@ -116,6 +120,8 @@ const materialModules = [
     ResetPasswordComponent,
     ProviderAuthComponent,
     SignInComponent,
+    SignUpComponent,
+    AuthInputComponent,
     FocusDirective
   ],
   entryComponents: [AuthDialogComponent]

@@ -1,8 +1,9 @@
-<div class="d-flex align-items-center flex-column provider-list">
+<div class="d-flex align-items-center flex-column authentication">
   <div *ngFor="let provider of providers;">
     <button 
       mat-raised-button 
       color="primary"
+      [style.backgroundColor]="provider.color"
       (click)="onSignIn(provider.urlName)">
 
       <i class="fa {{provider.icon}}" aria-hidden="true"></i>

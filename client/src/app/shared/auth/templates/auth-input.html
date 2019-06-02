@@ -1,0 +1,15 @@
+<div class="row input-height">
+  <mat-form-field
+    [floatLabel]="'never'">
+    <input matInput
+      [type]="type"
+      [placeholder]="placeholder"
+      [formControl]="getControl()"
+      (change)="emitInput()"
+      required>
+
+    <mat-error *ngIf="getControl().invalid">
+      {{ getErrorMessage() }}
+    </mat-error>
+  </mat-form-field>
+</div>

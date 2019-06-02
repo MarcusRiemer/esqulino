@@ -1,4 +1,3 @@
-import { AuthContentDescription } from './auth-dialog-content.description';
 import { Component } from '@angular/core';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
@@ -6,6 +5,7 @@ import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { ServerApiService } from '../serverdata/serverapi.service';
 import { UserService } from './user.service';
 import { providers } from './providers';
+import { AuthContentDescription }  from './auth-description';
 
 @Component({
   templateUrl: './templates/auth-dialog.html'
@@ -18,25 +18,24 @@ export class AuthDialogComponent {
     private _userService: UserService
   ) {}
 
-  public displayingContent: AuthContentDescription = "SignIn";
   public readonly providers = providers
 
-  // private registerUserWithPassword(): void {
-  //   this._userService.signIn(this.general.value).subscribe(
-  //     data => console.log(JSON.stringify(data))
-  //   )
-  // }
+  public primaryContent:boolean = true;
 
   private loginUserWithPassword(): void {
     
   }
 
-  public changeContent(content: AuthContentDescription): void {
-    this.displayingContent = content;
+  public changeContent(): void {
+    this.primaryContent = false;
   }
 
   public onClose(): void {
     this._dialogRef.close();
+  }
+
+  public changeToPrimaryContent(): void {
+    this.primaryContent = true;
   }
 
 
@@ -51,23 +50,6 @@ export class AuthDialogComponent {
   //     // TODO ERROR MESSAGE
   //   }
   // }
-
-  public shouldDisplayResetPassword(): boolean {
-    return this.displayingContent === 'ResetPassword';
-  }
-
-  public shouldDisplaySignIn(): boolean {
-    return this.displayingContent === 'SignIn';
-  }
-
-  public shouldDisplaySignOut(): boolean {
-    return this.displayingContent === 'SignOut';
-  }
-
-  public shouldDisplayVerifyEmail(): boolean {
-    return this.displayingContent === 'VerifyEmail';
-  }
-
 
   public static showDialog(dialog: MatDialog) {
     dialog.open(AuthDialogComponent, {
