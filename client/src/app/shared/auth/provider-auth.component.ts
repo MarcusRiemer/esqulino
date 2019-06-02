@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { providers } from './providers';
 import { ServerApiService } from '../serverdata';
 
-
 @Component({
   selector: 'provider-auth',
   templateUrl: './templates/provider-auth.html'

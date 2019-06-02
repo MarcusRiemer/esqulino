@@ -1,6 +1,8 @@
 $height: 320px;
 $button-size: 12rem;
 
+$font-size-links: 0.8em;
+
 
 .authentication {
   .mat-tab-header {
@@ -16,29 +18,13 @@ $button-size: 12rem;
   }
 
   hr {
-    margin: 1em 0 1em 0;
+    margin: 2em 0 2em 0;
     background-color: rgba($color: #a1a1a1, $alpha: 0.5);
   }
-}
 
-.provider-list {
   .mat-raised-button {
     width: $button-size;
     margin-bottom: 0.5em;
-  }
-}
-
-.reset-password {
-  width: $height;
-
-  .mat-raised-button {
-    width: $button-size;
-  }
-}
-
-.sign-in {
-  .mat-raised-button {
-    width: $button-size
   }
 
   a {
@@ -47,10 +33,25 @@ $button-size: 12rem;
   }
 
   .reset-password-link-text {
-    font-size: 0.8em;
+    font-size: $font-size-links;
+    margin-top: 2em;
   }
 
-  .email-input {
-    height: 3.2em;
+  .resend-activation-link-text {
+    font-size: $font-size-links;
+    margin-top: 2em;
+  }
+
+  .input-height {
+    height: 3em;
+  }
+
+}
+
+.reset-password {
+  width: $height;
+
+  .mat-raised-button {
+    width: $button-size;
   }
 }

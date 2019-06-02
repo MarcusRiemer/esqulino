@@ -1,0 +1,47 @@
+<div class="d-flex align-items-center flex-column authentication">
+  <auth-input
+    [type]="'email'"
+    [placeholder]="'E-mail'"
+    [controlName]="'email'"
+    [(value)]="signUpData.email">
+  </auth-input>
+
+  <auth-input
+    [type]="'text'"
+    [placeholder]="'Username'"
+    [controlName]="'username'"
+    [(value)]="signUpData.username">
+  </auth-input>
+
+  <auth-input
+    [type]="'password'"
+    [placeholder]="'Password'"
+    [controlName]="'password'"
+    [(value)]="signUpData.password">
+  </auth-input>
+
+  <auth-input
+    [type]="'password'"
+    [placeholder]="'Retype password'"
+    [controlName]="'password'"
+    [error]="'Needs a length of min. 3'"
+    [(value)]="signUpData.retypedPassword">
+  </auth-input>
+
+  <div class="row resend-activation-link-text">
+    <div>
+      Send activation link again?
+      <a (click)="onSendVerifyLink()">
+        Click here
+      </a>
+    </div>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSignUp()">
+
+    Sign up
+  </button>
+</div>

@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { AuthContentDescription } from './auth-dialog-content.description';
+import { AuthContentDescription } from './auth-description';
 
 @Component({
   selector: 'sign-in',
@@ -13,15 +13,6 @@ export class SignInComponent {
   constructor() {}
 
   register: boolean = false;
-
-  public general = new FormGroup({
-    email: new FormControl('', [
-      Validators.email, Validators.required
-    ]),
-    password: new FormControl('', [
-      Validators.minLength(6), Validators.required
-    ])
-  })
 
   public onResetPassword(): void {
     this.content.emit('ResetPassword');
