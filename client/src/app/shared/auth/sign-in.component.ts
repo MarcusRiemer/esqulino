@@ -1,20 +1,33 @@
+import { UserService } from './user.service';
 import { Component, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
-import { AuthContentDescription } from './auth-description';
+import { SignInDescription } from './auth-description';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'sign-in',
   templateUrl: './templates/sign-in.html'
 })
 export class SignInComponent {
-  @Output() content = new EventEmitter<AuthContentDescription>()
+  @Output() content = new EventEmitter()
 
-  constructor() {}
+  public signInData: SignInDescription = {
+    email: undefined,
+    password: undefined
+  }
 
-  register: boolean = false;
+  constructor(
+    private _userService: UserService,
+    private _snackBar: MatSnackBar
+  ) {}
 
   public onResetPassword(): void {
-    this.content.emit('ResetPassword');
+    this.content.emit();
+  }
+
+  public onSignIn(): void {
+    this._userService.onSignIn(this.signInData).subscribe(
+      () => this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
+    )
   }
 }

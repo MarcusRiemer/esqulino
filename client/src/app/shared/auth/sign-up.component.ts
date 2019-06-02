@@ -24,7 +24,7 @@ export class SignUpComponent {
   }
 
   public onSignUp(): void {
-    this._userService.signIn(this.signUpData).subscribe(
+    this._userService.onSignUp(this.signUpData).subscribe(
       data => console.log(JSON.stringify(data))
     )
   }

@@ -31,6 +31,10 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/auth/identity/register`)
   }
 
+  getSignInWithPasswordUrl(): string {
+    return (`${this._apiBaseUrl}/auth/identity`)
+  }
+
   getSignOutUrl(): string {
     return (`${this._apiBaseUrl}/auth/sign_out`)
   }

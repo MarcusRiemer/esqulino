@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
-import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { ServerApiService } from '../serverdata/serverapi.service';
 import { UserService } from './user.service';
 import { providers } from './providers';
-import { AuthContentDescription }  from './auth-description';
 
 @Component({
   templateUrl: './templates/auth-dialog.html'

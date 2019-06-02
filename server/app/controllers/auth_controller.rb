@@ -9,6 +9,25 @@ class AuthController < ApplicationController
     redirect_to "/"
   end
 
+  def login_with_password
+    auth = {
+      provider: "identity",
+      uid: params[:email]
+    }
+    identity = Identity.search(auth)
+    if identity
+      if identity[:data]["password"].eql? params[:password]
+        @identity = identity
+        sign_in
+        render json: { loggged_in: true }
+      else
+        # TODO ERR MSG: password doesnt match 
+      end
+    else
+      # TODO ERR MSG e-mail not found
+    end
+  end
+
   def register
     auth = {
       provider: "identity",

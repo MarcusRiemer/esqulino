@@ -1,3 +1,4 @@
+import { SignUpDescription, SignInDescription } from './auth-description';
 import { Injectable } from '@angular/core';
 
 import { ServerDataService } from '../serverdata/server-data.service';
@@ -22,11 +23,27 @@ export class UserService {
     map(u => u.loggedIn? u.displayName : "Guest")
   )
 
-  public signIn(data: any): Observable<UserDescription> {
-    return this._serverData.signUp(data)
+  public onSignUp(data: SignUpDescription): Observable<UserDescription> {
+    return this._serverData.onSignUp(data).pipe(
+      first()
+    )
+  }
+
+  public onSignIn(data: SignInDescription): Observable<UserDescription> {
+    return this._serverData.onSignIn(data).pipe(
+      tap(_ => {
+        console.log("logged in");
+        this.userData.refresh();
+      })
+    )
   }
 
   public onLogout(): Observable<UserDescription> {
-    return this._serverData.onLogout()
+    return this._serverData.onLogout().pipe(
+      tap(_ => {
+        console.log("logged out");
+        this.userData.refresh();
+      })
+    )
   }
 }

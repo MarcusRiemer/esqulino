@@ -2,20 +2,15 @@
   <auth-input
     [type]="'email'"
     [placeholder]="'E-mail'"
-    [controlName]="'email'">
+    [controlName]="'email'"
+    [(value)]="signInData.email">
   </auth-input>
-  <!-- <div class="row input-height">
-    <mat-form-field>
-      <input matInput 
-        type="email"
-        placeholder="Email"
-        formControlName="email">
-    </mat-form-field>
-  </div> -->
+
   <auth-input
     [type]="'password'"
     [placeholder]="'Password'"
-    [controlName]="'password'">
+    [controlName]="'password'"
+    [(value)]="signInData.password">
   </auth-input>
 
   <div class="row reset-password-link-text">
@@ -29,7 +24,8 @@
 
   <button
     mat-raised-button
-    color="primary">
+    color="primary"
+    (click)="onSignIn()">
 
     Sign in
   </button>
