@@ -43,6 +43,9 @@ gem 'omniauth-google-oauth2'
 # Provider with login/password
 gem 'omniauth-identity', '~> 1.1.1'
 
+# Markdown for your ActionMailer generated emails 
+gem 'maildown'
+
 ############################
 # Rails dependencies
 ###########################
