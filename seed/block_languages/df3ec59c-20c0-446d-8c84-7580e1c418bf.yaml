@@ -64,13 +64,13 @@ concise_attributes:
     "block", "direction": "horizontal", "breakAfter": false, "dropTarget": {}, "wrapChildren":
     true}], "describedType": {"typeName": "concreteNode", "languageName": "MetaGrammar"}}],
     "editorComponents": [{"componentType": "block-root"}, {"componentType": "validator"},
-    {"componentType": "generated-code"}], "localGeneratorInstructions": {}}'
+    {"componentType": "generated-code"}], "localGeneratorInstructions": {"type": "tree"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-05-22 11:09:10.812796'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-22 11:09:38.785025'
+  value_before_type_cast: '2019-06-03 11:26:22.307966'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
