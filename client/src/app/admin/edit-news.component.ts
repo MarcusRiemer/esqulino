@@ -13,7 +13,8 @@ import { ServerDataService, ToolbarService } from '../shared';
   templateUrl: './templates/edit-news.html'
 })
 export class AdminNewsEditComponent implements OnInit {
-  @ViewChild('toolbarItems') toolbarItems: TemplateRef<any>;
+  @ViewChild('toolbarItems', { static: false })
+  toolbarItems: TemplateRef<any>;
 
   constructor(
     private _serverData: ServerDataService,
