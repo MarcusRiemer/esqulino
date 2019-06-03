@@ -17,17 +17,13 @@ class BlockLanguage < ApplicationRecord
   # The grammar that this block language may describe
   belongs_to :grammar
 
-  # The generator that may have been used to generate this block language
-  belongs_to :block_language_generator, optional: true
-
   # A block language with only the information that is relevant when listing it.
   # Adds the following calculated fields:
   #   generated: Indicates whether this language can be generated automatically
   scope :scope_list, -> {
     select(:id, :slug, :name, :default_programming_language_id,
-           :block_language_generator_id, :grammar_id,
-           :created_at, :updated_at,
-          "(model->'localGeneratorInstructions') IS NOT NULL AS generated")
+           :grammar_id, :created_at, :updated_at,
+           "(model->'localGeneratorInstructions') IS NOT NULL AS generated")
   }
 
   # Computes a hash that may be sent back to the client if it requires

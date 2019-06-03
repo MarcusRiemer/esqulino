@@ -351,7 +351,5 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: grammar_id
   value_before_type_cast: 7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: block_language_generator_id
 new_record: false
 active_record_yaml_version: 2
