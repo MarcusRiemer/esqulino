@@ -17,7 +17,7 @@ export class EditTraitScopesComponent {
   get availableScopes() {
     const instructions = this.blockLanguage && this.blockLanguage.localGeneratorInstructions;
 
-    if (instructions.type === "manual") {
+    if (instructions && instructions.type === "manual") {
       return (instructions.traitScopes);
     } else {
       return ([]);
