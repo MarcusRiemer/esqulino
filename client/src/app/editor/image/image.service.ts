@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 
 import { map } from 'rxjs/operators';
 
@@ -16,16 +16,15 @@ export class ImageService {
   constructor(
     private _serverApi: ServerApiService,
     private _projectService: ProjectService,
-    private _http: Http
+    private _http: HttpClient
   ) {
   };
 
   loadImageList() {
     let project = this._projectService.cachedProject
 
-    this._http.get(this._serverApi.getImageListUrl(project.slug))
+    this._http.get<AvailableImageDescription[]>(this._serverApi.getImageListUrl(project.slug))
       .pipe(
-        map(res => res.json() as AvailableImageDescription[]),
         map(res => res.map(img => new AvailableImage(this._serverApi, project, img)))
       )
       .subscribe(res => this._imageList = res);

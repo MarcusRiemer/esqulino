@@ -16,7 +16,7 @@ const AppRoutes: Routes = [
     // The admin module has a few heavyweight dependencies and is
     // therefore not bundled with the main application.
     path: 'admin',
-    loadChildren: './admin/admin.module#AdminModule'
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: '',
