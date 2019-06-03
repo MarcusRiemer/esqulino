@@ -11,5 +11,18 @@ FactoryBot.define do
     }
     association :default_programming_language, factory: :programming_language
     association :grammar, factory: :grammar
+
+    trait :auto_generated_blocks do
+      model {
+        ({
+           editorBlocks: [],
+           sidebars: [],
+           editorComponents: [],
+           localGeneratorInstructions: {
+             type: "tree"
+           }
+         })
+      }
+    end
   end
 end
