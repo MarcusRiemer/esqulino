@@ -273,13 +273,13 @@ concise_attributes:
     "languageName": "sql"}}], "editorComponents": [{"componentType": "block-root"},
     {"columnClasses": ["col-lg-6"], "componentType": "validator"}, {"columnClasses":
     ["col-lg-6"], "componentType": "generated-code"}, {"componentType": "query-preview"}],
-    "localGeneratorInstructions": {"traits": {"softHole": {"applyMode": "deepMerge",
-    "instructions": {"emptyDropTarget": true}}, "breakAfter": {"applyMode": "deepMerge",
-    "instructions": {"breakAfter": true}}, "blockBorder": {"applyMode": "deepMerge",
-    "instructions": {"style": {"border": "1px solid red", "margin": "2px", "padding":
-    "2px", "borderRadius": "5px"}}}, "keywordComponent": {"applyMode": "deepMerge",
-    "instructions": {"style": {"color": {"$ref": "keywordColor"}, "width": "9ch"}}},
-    "readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
+    "localGeneratorInstructions": {"type": "manual", "traits": {"softHole": {"applyMode":
+    "deepMerge", "instructions": {"emptyDropTarget": true}}, "breakAfter": {"applyMode":
+    "deepMerge", "instructions": {"breakAfter": true}}, "blockBorder": {"applyMode":
+    "deepMerge", "instructions": {"style": {"border": "1px solid red", "margin": "2px",
+    "padding": "2px", "borderRadius": "5px"}}}, "keywordComponent": {"applyMode":
+    "deepMerge", "instructions": {"style": {"color": {"$ref": "keywordColor"}, "width":
+    "9ch"}}}, "readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
     true}}}, "traitScopes": [{"blocks": {"sql": {"from": [0], "where": [0], "select":
     [], "groupBy": [], "orderBy": [], "innerJoinOn": [0], "innerJoinUsing": [0], "whereAdditional":
     [0]}}, "traits": ["breakAfter"], "attributes": {"sql": {"from": ["tables"], "querySelect":
@@ -344,7 +344,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-31 18:51:08.24129'
+  value_before_type_cast: '2019-06-03 10:58:06.826444'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
