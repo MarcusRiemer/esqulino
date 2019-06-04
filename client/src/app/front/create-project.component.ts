@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 
 import { ProjectCreationDescription, StringValidator, ProjectDescription } from '../shared/project.description'
 import { ServerApiService } from '../shared'
-import { CURRENT_API_VERSION } from '../shared/resource.description'
 
 @Component({
   templateUrl: 'templates/create-project.html'
@@ -21,15 +20,8 @@ export class CreateProjectComponent {
    * The definition that will be sent to the server.
    */
   public params: ProjectCreationDescription = {
-    apiVersion: CURRENT_API_VERSION,
     slug: undefined,
     name: undefined,
-    admin: {
-      name: "user",
-      password: "user",
-    },
-    dbType: "sqlite3",
-    basedOn: undefined
   };
 
   public constructor(
@@ -45,14 +37,6 @@ export class CreateProjectComponent {
 
   get regExpName() {
     return (StringValidator.ProjectName);
-  }
-
-  get regExpUserName() {
-    return (StringValidator.ProjectUserName);
-  }
-
-  get regExpUserPassword() {
-    return (StringValidator.ProjectUserPassword);
   }
 
   get currentError() {
@@ -71,8 +55,7 @@ export class CreateProjectComponent {
       this._currentError = undefined;
 
       this._currentRequest = this._http.post<ProjectDescription>(
-        this._serverApi.createProjectUrl(),
-        JSON.stringify(this.params)
+        this._serverApi.createProjectUrl(), this.params
       );
 
       this._currentRequest
