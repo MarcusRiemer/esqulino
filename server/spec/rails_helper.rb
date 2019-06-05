@@ -58,14 +58,6 @@ module ValidateAgainstMatcher
   end
 end
 
-# Some utility functions that are helpful during testing
-module Helpers
-  # Some tests need the illusion of a writeable projects directory
-  def fakefs_clone_projects_dir!
-    FakeFS::FileSystem.clone(Rails.application.config.sqlino[:projects_dir])
-  end
-end
-
 # Extensions to the core models that ease working with the specs
 module ApplicationRecordSpecExtensions
   def api_attributes_except(exclude = [], include_boilerplate = false)
@@ -117,9 +109,6 @@ RSpec.configure do |config|
 
   # Ensure we can actually validate stuff
   config.include ValidateAgainstMatcher
-
-  # Ensure we have our helper functions available
-  config.include Helpers
 end
 
 FactoryBot::SyntaxRunner.class_eval do

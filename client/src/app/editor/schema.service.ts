@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, map, catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared'
 
@@ -43,7 +43,7 @@ export class SchemaService {
    * @param _server Used to figure out paths for HTTP requests
    */
   constructor(
-    private _http: Http,
+    private _http: HttpClient,
     private _projectService: ProjectService,
     private _server: ServerApiService,
   ) {
@@ -113,11 +113,7 @@ export class SchemaService {
   getTableData(project: Project, table: Table, from: number, amount: number): Observable<RawTableDataDescription> {
     const url = this._server.getTableEntriesUrl(project.slug, project.currentDatabaseName, table.name, from, amount);
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    this._httpRequest = this._http.get(url, options)
-      .pipe(map((res) => res.json()))
+    this._httpRequest = this._http.get<RawTableDataDescription>(url, { headers: { 'Content-Type': 'application/json' } })
 
     return (this._httpRequest);
   }
@@ -127,15 +123,12 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table to get the entries from
    */
-  getTableRowAmount(project: Project, table: Table) {
+  getTableRowAmount(project: Project, table: Table): Observable<number> {
     const url = this._server.getTableEntriesCountUrl(project.slug, project.currentDatabaseName, table.name);
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
 
-    const toReturn = this._http.get(url, options)
+    const toReturn = this._http.get<number>(url, { headers: { 'Content-Type': 'application/json' } })
       .pipe(
-        map(res => res.json()),
         catchError(res => this.handleError(res))
       );
 
@@ -147,24 +140,19 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table to create inside the database
    */
-  saveNewTable(project: Project, table: Table): Observable<Table> {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
+  saveNewTable(project: Project, table: Table): Observable<void> {
     const url = this._server.getCreateTableUrl(project.slug, project.currentDatabaseName);
-
     const body = JSON.stringify(table.toModel());
 
-    const toReturn = this._http.post(url, body, options)
+    const toReturn = this._http.post<void>(url, body, { headers: { 'Content-Type': 'application/json' } })
       .pipe(
-        tap(_ => this.incrementChangeCount()),
-        map(_ => {
+        tap(_ => {
+          this.incrementChangeCount();
           this._projectService.setActiveProject(project.slug, true);
           this.clearCurrentlyEdited();
-          return table;
         }),
         catchError(this.handleError)
-      );;
+      );
     return (toReturn);
   }
 
@@ -174,18 +162,15 @@ export class SchemaService {
    * @param table - the table alter
    */
   sendAlterTableCommands(project: Project, tableName: string, commandHolder: TableCommandHolder): Observable<void> {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
     const url = this._server.getTableAlterUrl(project.slug, project.currentDatabaseName, tableName);
 
     const body = JSON.stringify(commandHolder.toModel());
 
-    const toReturn = this._http.post(url, body, options)
+    const toReturn = this._http.post<void>(url, body, { headers: { 'Content-Type': 'application/json' } })
       .pipe(
         catchError(this.handleError),
-        tap(_ => this.incrementChangeCount()),
-        map(_ => {
+        tap(_ => {
+          this.incrementChangeCount();
           this._projectService.setActiveProject(project.slug, true);
           this.clearCurrentlyEdited();
         })
@@ -198,18 +183,14 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table to delete
    */
-  deleteTable(project: Project, table: Table): Observable<Table> {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
+  deleteTable(project: Project, table: Table): Observable<void> {
     const url = this._server.getDropTableUrl(project.slug, project.currentDatabaseName, table.name);
 
-    const toReturn = this._http.delete(url, options)
+    const toReturn = this._http.delete<void>(url, { headers: { 'Content-Type': 'application/json' } })
       .pipe(
-        tap(_ => this.incrementChangeCount()),
-        map(_ => {
+        tap(_ => {
+          this.incrementChangeCount();
           this._projectService.setActiveProject(project.slug, true);
-          return table;
         }),
         catchError(this.handleError)
       )

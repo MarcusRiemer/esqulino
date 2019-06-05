@@ -410,7 +410,6 @@ export class Project implements ApiVersion, Saveable {
   toUpdateRequest(): ProjectUpdateDescription {
     const toReturn: ProjectUpdateDescription = {
       name: this.name,
-      apiVersion: this.apiVersion,
       description: this.description,
       activeDatabase: this._currentDatabase,
       projectUsesBlockLanguages: []
