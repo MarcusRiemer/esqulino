@@ -18,7 +18,7 @@ import { WorldSelectorComponent } from './world-selector.component';
   ]
 })
 export class WorldControllerComponent implements OnInit, OnDestroy {
-  @ViewChild('worldSelector') worldSelector: WorldSelectorComponent;
+  @ViewChild('worldSelector', { static: false }) worldSelector: WorldSelectorComponent;
 
   private _worldSubscription: Subscription;
   private _worldSelectorSubscription: Subscription;
