@@ -3,9 +3,9 @@ import { GrammarDocument } from '../../syntaxtree/grammar.description'
 import { VisualBlockDescriptions } from '../block.description';
 
 import { BlockLanguageGeneratorDocument } from './generator.description'
-import { convertGrammarManualInstructions } from './generator'
+import { convertGrammarManualInstructions } from './generator-manual'
 
-describe("BlockLanguage Generator", () => {
+describe("Manual BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
     it("Almost empty grammar with no generation instructions", () => {
       const grammar: GrammarDocument = {
