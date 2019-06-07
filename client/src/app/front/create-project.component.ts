@@ -1,20 +1,18 @@
 import { Component } from '@angular/core'
-import { Http, Response, RequestOptions, Headers } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { ProjectCreationDescription, StringValidator } from '../shared/project.description'
+import { ProjectCreationDescription, StringValidator, ProjectDescription } from '../shared/project.description'
 import { ServerApiService } from '../shared'
-import { CURRENT_API_VERSION } from '../shared/resource.description'
 
 @Component({
   templateUrl: 'templates/create-project.html'
 })
 export class CreateProjectComponent {
 
-  private _currentRequest: Observable<Response>
+  private _currentRequest: Observable<ProjectDescription>
 
   private _currentError: any;
 
@@ -22,19 +20,12 @@ export class CreateProjectComponent {
    * The definition that will be sent to the server.
    */
   public params: ProjectCreationDescription = {
-    apiVersion: CURRENT_API_VERSION,
     slug: undefined,
     name: undefined,
-    admin: {
-      name: "user",
-      password: "user",
-    },
-    dbType: "sqlite3",
-    basedOn: undefined
   };
 
   public constructor(
-    private _http: Http,
+    private _http: HttpClient,
     private _serverApi: ServerApiService,
     private _router: Router
   ) {
@@ -46,14 +37,6 @@ export class CreateProjectComponent {
 
   get regExpName() {
     return (StringValidator.ProjectName);
-  }
-
-  get regExpUserName() {
-    return (StringValidator.ProjectUserName);
-  }
-
-  get regExpUserPassword() {
-    return (StringValidator.ProjectUserPassword);
   }
 
   get currentError() {
@@ -71,17 +54,11 @@ export class CreateProjectComponent {
     if (!this._currentRequest) {
       this._currentError = undefined;
 
-      let headers = new Headers({ 'Content-Type': 'application/json' });
-      let options = new RequestOptions({ headers: headers });
-
-      this._currentRequest = this._http.post(
-        this._serverApi.createProjectUrl(),
-        JSON.stringify(this.params),
-        options
+      this._currentRequest = this._http.post<ProjectDescription>(
+        this._serverApi.createProjectUrl(), this.params
       );
 
       this._currentRequest
-        .pipe(map(res => res.json() as { id: string }))
         .subscribe(
           res => {
             this._router.navigateByUrl(`/editor/${res.id}`);

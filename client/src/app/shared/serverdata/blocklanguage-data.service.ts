@@ -18,7 +18,7 @@ export class BlockLanguageDataService extends DataService<BlockLanguageListDescr
     snackBar: MatSnackBar,
     http: HttpClient
   ) {
-    super(http, snackBar, _serverApi.getGrammarListUrl(), "BlockLanguage");
+    super(http, snackBar, _serverApi.getBlockLanguageListUrl(), "BlockLanguage");
   }
 
   protected resolveIndividualUrl(id: string): string {

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { catchError, delay, map, tap } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared'
 import { CodeResource } from '../shared/syntaxtree'
+import { CodeResourceDescription } from '../shared/syntaxtree/coderesource.description';
 import { Project } from '../shared/project'
 
 @Injectable()
@@ -15,7 +16,7 @@ export class CodeResourceService {
    * @param _server Used to figure out paths for HTTP requests
    */
   constructor(
-    private _http: Http,
+    private _http: HttpClient,
     private _server: ServerApiService
   ) {
   }
@@ -24,9 +25,6 @@ export class CodeResourceService {
    * Asks the server to create a new block resource.
    */
   createCodeResource(project: Project, name: string, blockLanguageId: string, programmingLanguageId: string) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
     const url = this._server.getCodeResourceBaseUrl(project.slug);
 
     const body = {
@@ -35,11 +33,11 @@ export class CodeResourceService {
       "blockLanguageId": blockLanguageId
     }
 
-    const toReturn = this._http.post(url, JSON.stringify(body), options)
+    const toReturn = this._http.post<CodeResourceDescription>(url, body)
       .pipe(
         catchError(this.handleError),
         delay(250),
-        map(res => new CodeResource(res.json(), project))
+        map(res => new CodeResource(res, project))
       );
 
 
@@ -50,9 +48,6 @@ export class CodeResourceService {
    * Sends a updated code resource to the server
    */
   updateCodeResource(resource: CodeResource) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
     const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
 
     // The actual document that should be sent
@@ -66,8 +61,7 @@ export class CodeResourceService {
       bodyJson.ast = null;
     }
 
-    const body = JSON.stringify(bodyJson);
-    const toReturn = this._http.put(url, body, options)
+    const toReturn = this._http.put(url, bodyJson)
       .pipe(
         catchError(this.handleError),
         delay(250),
@@ -81,12 +75,9 @@ export class CodeResourceService {
    * Deletes the resource with the given ID from the server.
    */
   deleteCodeResource(resource: CodeResource) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
     const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
 
-    const toReturn = this._http.delete(url, options)
+    const toReturn = this._http.delete<void>(url)
       .pipe(
         catchError(this.handleError),
         delay(250)

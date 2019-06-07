@@ -18,11 +18,15 @@ class ApplicationController < ActionController::API
     return !@current_user.nil?
   end
 
+  def set_identity(identity)
+    @identity = identity
+  end
+
   def create_identity(auth = request.env["omniauth.auth"], email = false)
     @identity = Identity.search(auth)
     if !@identity
       if (email) 
-        RegisterMailer.registered_user(auth, request_locale).deliver
+        IdentityMailer.confirm_email(auth, request_locale).deliver
       end
       @identity = Identity.create_with_auth(auth, current_user)
     end

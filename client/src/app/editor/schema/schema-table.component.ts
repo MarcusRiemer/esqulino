@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+import { first } from 'rxjs/operators';
+
 import { Table } from '../../shared/schema'
 
 import { SchemaService } from '../schema.service'
@@ -99,7 +101,9 @@ export class SchemaTableComponent {
    * Function to drop a Table;
    */
   deleteTable() {
-    this._schemaService.deleteTable(this._project, this.table).subscribe(res => res, error => this.showError(error));
+    this._schemaService.deleteTable(this._project, this.table)
+      .pipe(first())
+      .subscribe(res => res, error => this.showError(error));
   }
 
   /**

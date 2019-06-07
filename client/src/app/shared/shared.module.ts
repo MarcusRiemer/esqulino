@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
 
 import { PortalModule } from '@angular/cdk/portal';
 import {
@@ -68,7 +67,6 @@ const materialModules = [
     CommonModule,
     FormsModule,
     RouterModule,
-    HttpModule,
     HttpClientModule,
     PortalModule,
     ReactiveFormsModule,
@@ -100,8 +98,8 @@ const materialModules = [
     CommonModule,
     FormsModule,
     RouterModule,
-    HttpModule,
     PortalModule,
+    HttpClientModule,
     ...materialModules,
     ToolbarComponent,
     FlashMessageListComponent,

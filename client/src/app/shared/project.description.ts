@@ -42,8 +42,6 @@ export type ProjectUserPassword = string;
 export const StringValidator = {
   ProjectSlug: /^[a-z0-9\-]{4,}$/,
   ProjectName: /^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$/,
-  ProjectUserName: /^[a-zA-Z0-9\-_]{4,}$/,
-  ProjectUserPassword: /^.{4,}$/
 };
 
 /**
@@ -80,7 +78,7 @@ export interface ProjectSourceDescription {
 /**
  * The properties of a project that can be queried from the
  * server when asking for all available projecs.
- * 
+ *
  * This is a stripped down version of all possibly
  * existing project properties that is used to list available
  * projects.
@@ -133,7 +131,7 @@ export type ProjectUpdateUsedBlockLanguage = { blockLanguageId: string } | { id:
 /**
  * These things can be provided when updating the project itself.
  */
-export interface ProjectUpdateDescription extends ApiVersion {
+export interface ProjectUpdateDescription {
   name?: ProjectName
   description?: string
   activeDatabase?: string
@@ -145,21 +143,7 @@ export interface ProjectUpdateDescription extends ApiVersion {
 /**
  * These parameters are required to create a new project.
  */
-export interface ProjectCreationDescription extends ApiVersion {
+export interface ProjectCreationDescription {
   slug: ProjectSlug
   name: ProjectName
-
-  admin: {
-    /**
-     * @minlength 4
-     */
-    name: string
-
-    /**
-     * @minlength 4
-     */
-    password: string
-  }
-  dbType: "sqlite3"
-  basedOn?: string
 }

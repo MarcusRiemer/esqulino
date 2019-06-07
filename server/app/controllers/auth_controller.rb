@@ -16,15 +16,19 @@ class AuthController < ApplicationController
     }
     identity = Identity.search(auth)
     if identity
-      if identity[:data]["password"].eql? params[:password]
-        @identity = identity
-        sign_in
-        render json: { loggged_in: true }
+      if identity[:data]["confirmed"]
+        if identity[:data]["password"].eql? params[:password]
+          set_identity(identity)
+          sign_in
+          render json: { loggged_in: true }
+        else
+          render json: { error: "Wrong password" }, status: :unauthorized
+        end
       else
-        # TODO ERR MSG: password doesnt match 
+        render json:  { error: "Please confirm your e-mail" }, status: :unauthorized
       end
     else
-      # TODO ERR MSG e-mail not found
+      render json: { error: "E-Mail not found" }, status: :unauthorized
     end
   end
 
@@ -33,12 +37,13 @@ class AuthController < ApplicationController
       provider: "identity",
       uid: params[:email],
       info: {
-        name: params[:user_name]
+        name: params[:username]
       },
       data: {
         email: params[:email],
         password: params[:password],
         verify_token: SecureRandom.uuid,
+        password_reset_token: SecureRandom.uuid,
         confirmed: false
       }
     }
@@ -47,20 +52,6 @@ class AuthController < ApplicationController
     render json: { loggged_in: false }
   end
 
-  def email_confirmation
-    identity = Identity.where("data ->> 'verify_token' = ?", params[:verify_token]).first!
-    # identity found and not confirmed
-    if identity && !identity[:data][:confirmed]
-      identity[:data][:confirmed] = true;
-      identity.save
-
-      @identity = identity
-      sign_in
-      redirect_to "/"
-    else
-      # TODO ERROR MSG: Does not found an e-mail with this token
-    end
-  end
 
   def destroy
     sign_out!

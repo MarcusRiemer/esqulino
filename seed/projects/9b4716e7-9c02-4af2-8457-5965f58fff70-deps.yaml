@@ -3,8 +3,11 @@
   - f799623d-cb65-4720-a584-f6079dbe9992
   - !ruby/class 'Seed::ProjectUsesBlockLanguageSeed'
 - - "../seed/code_resources"
-  - 4975044e-80b6-441b-a43a-0d5a4af34747
+  - d84aaf05-03ee-4a4b-8640-a1d3ff295c67
   - &1 !ruby/class 'Seed::CodeResourceSeed'
+- - "../seed/code_resources"
+  - 4975044e-80b6-441b-a43a-0d5a4af34747
+  - *1
 - - "../seed/code_resources"
   - d98c7a33-db9a-4aff-88f4-f710ab0dde72
   - *1
@@ -16,9 +19,6 @@
   - *1
 - - "../seed/code_resources"
   - 4691271d-9f0c-418b-8ae2-dcd218e41858
-  - *1
-- - "../seed/code_resources"
-  - d84aaf05-03ee-4a4b-8640-a1d3ff295c67
   - *1
 - - "../seed/code_resources"
   - 9bcb9231-91af-443f-a5d9-9651b30b7dd1
