@@ -3,6 +3,10 @@ class Identity < ApplicationRecord
   belongs_to :user
   attr_accessor :email, :name, :password, :password_confirmation
 
+  scope :search_with_user_id, -> (user_id) {
+    where("user_id = ?", user_id)
+  }
+
   def self.search(auth)
     find_by_provider_and_uid(auth[:provider], auth[:uid])
   end

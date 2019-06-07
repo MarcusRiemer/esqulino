@@ -185,14 +185,18 @@ RSpec.describe BlockLanguagesController, type: :request do
         expect(orig_block_lang.model["editorBlocks"][0]).to eq upda_block_lang["editorBlocks"][0]
       end
 
-      it 'Update with empty model' do
+      it 'Update with invalid empty model' do
         original = FactoryBot.create(:block_language)
 
+        # Create params to change name and model
         params_update = FactoryBot
                           .attributes_for(:block_language,
                                           name: "Updated empty",
                                           model: Hash.new)
                           .transform_keys { |k| k.to_s.camelize(:lower) }
+
+        # Merge the model parameters into the actual update and remove it
+        # afterwards. This results in a theoretically valid request
         params_update_req = params_update.merge(params_update["model"])
         params_update_req.delete("model")
 
@@ -201,8 +205,33 @@ RSpec.describe BlockLanguagesController, type: :request do
             :params => params_update_req.to_json
 
         expect(response.status).to eq(400)
+
+        # Ensure that nothing has changed
         refreshed = BlockLanguage.find(original.id)
         expect(original.name).to eq refreshed.name
+        expect(refreshed.model).to_not be nil
+      end
+
+      it 'Update without localGeneratorInstructions' do
+        original = FactoryBot.create(:block_language, :auto_generated_blocks)
+        expect(original.model["localGeneratorInstructions"]).to_not be nil
+
+        # Parameters without localGeneratorInstructions
+        params_update = original.api_attributes
+        params_update_req = params_update.merge(params_update["model"])
+        params_update_req.delete("localGeneratorInstructions")
+
+        put "/api/block_languages/#{original.id}",
+            :headers => json_headers,
+            :params => params_update_req.to_json
+
+        expect(response.status).to eq(204)
+
+        # Ensure that nothing has changed
+        refreshed = BlockLanguage.find(original.id)
+        expect(original.name).to eq refreshed.name
+        expect(refreshed.model).to_not be nil
+        expect(refreshed.model["localGeneratorInstructions"]).to be nil
       end
     end
   end

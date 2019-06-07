@@ -3,12 +3,18 @@ Rails.application.routes.draw do
   # Second stop: The API for the editor
   scope '/api' do
 
+    scope 'identities' do
+      put 'change_password', controller: 'identities', action: :change_password
+      get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
+      post 'reset_password', controller: 'identities', action: :reset_password
+      get 'reset_password/:verify_token', controller: 'identities', action: :reset_password
+    end
+
     scope 'user' do
       root via: [:get], controller: 'user', action: :index
     end
 
     scope 'auth' do
-      get 'identity/confirmation/:verify_token', controller: 'auth', action: :email_confirmation
       delete 'sign_out', controller: 'auth', action: :destroy
       match ":provider/callback", to: "auth#callback", via: [:get, :post]
       match 'failure', :to => 'auth#failure', via: [:get, :post]
@@ -100,7 +106,6 @@ Rails.application.routes.draw do
     end
 
     resources :block_languages, only: [:create, :index, :show, :update, :destroy]
-    resources :block_language_generators, only: [:create, :index, :show, :update]
 
     resources :grammars, only: [:create, :index, :show, :update, :destroy]
     get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages

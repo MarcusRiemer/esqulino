@@ -1,5 +1,7 @@
 import { Component } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
+
+import { first } from 'rxjs/operators';
 
 import { ServerApiService } from '../../shared'
 import { ProjectService } from '../project.service'
@@ -31,7 +33,7 @@ export class ImageListComponent {
 
   constructor(
     private _serverApi: ServerApiService,
-    private _http: Http,
+    private _http: HttpClient,
     private _projectService: ProjectService,
     private _imageService: ImageService,
     private _sidebarService: SidebarService,
@@ -50,6 +52,7 @@ export class ImageListComponent {
   deleteImage(image_id: string, image_name: string) {
     if (confirm('"' + image_name + '"' + " löschen?")) {
       this._http.delete(this._serverApi.getImageDeleteUrl(this._projectService.cachedProject.slug, image_id))
+        .pipe(first())
         .subscribe(res => {
           console.log(res);
           //TODO handle failure
