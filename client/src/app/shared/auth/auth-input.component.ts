@@ -27,6 +27,10 @@ export class AuthInputComponent {
     Validators.minLength(3), Validators.required
   ])
 
+  public require = new FormControl('', [
+    Validators.required
+  ])
+
   public getErrorMessage(): string {
     return this.error || `Invalid ${this.placeholder}`
   }
@@ -35,9 +39,10 @@ export class AuthInputComponent {
     switch (this.controlName) {
       case 'email': return this.email
       case 'password': return this.password
-      case 'username': return this.password
+      case 'username': return this.username
+      case 'require': return this.require;
+      default: throw Error('wrong controlName');
     }
-    alert("Error: wrong controlName");
   }
 
   public emitInput(): void {

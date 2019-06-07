@@ -16,16 +16,22 @@ export class SignUpComponent {
     email: undefined,
     username: undefined,
     password: undefined,
-    retypedPassword: undefined,
+    confirmedPassword: undefined,
   };
+
+  public isPasswordEq(): boolean {
+    return this.signUpData.password === this.signUpData.confirmedPassword;
+  }
 
   public onSendVerifyLink(): void {
 
   }
 
   public onSignUp(): void {
-    this._userService.onSignUp(this.signUpData).subscribe(
-      data => console.log(JSON.stringify(data))
-    )
+    if (this.isPasswordEq()) {
+      this._userService.onSignUp$(this.signUpData).subscribe(
+        data => console.log(JSON.stringify(data))
+      )
+    }
   }
 }

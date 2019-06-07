@@ -39,6 +39,14 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/auth/sign_out`)
   }
 
+  getChangePasswordUrl(): string {
+    return (`${this._apiBaseUrl}/identities/change_password`)
+  }
+
+  getResetPasswordUrl(): string {
+    return (`${this._apiBaseUrl}/identities/reset_password`)
+  }
+
   /**
    * Retrieves a specific schema
    */

@@ -10,7 +10,7 @@ import { UserDescription } from '../auth/user.description';
 
 import { ServerApiService } from './serverapi.service';
 import { IndividualDescriptionCache, CachedRequest } from './request-cache';
-import { SignUpDescription, SignInDescription } from './../auth/auth-description';
+import { SignUpDescription, SignInDescription, ChangePasswordDescription, ResetPasswordDescription } from './../auth/auth-description';
 
 /**
  * Convenient and cached access to server side descriptions.
@@ -48,17 +48,26 @@ export class ServerDataService {
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
 
-  onSignUp(data: SignUpDescription): Observable<UserDescription> {
-    return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data)
+  onSignUp$(data: SignUpDescription): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data);
   }
 
-  onSignIn(data: SignInDescription): Observable<UserDescription> {
-    return this._http.post<UserDescription>(this._serverApi.getSignInWithPasswordUrl(), data)
+  onSignIn$(data: SignInDescription): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getSignInWithPasswordUrl(), data);
   }
 
 
-  onLogout(): Observable<UserDescription> {
-    return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl())
+  onLogout$(): Observable<UserDescription> {
+    return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl());
+  }
+
+  onChangePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
+    return this._http.put<UserDescription>(this._serverApi.getChangePasswordUrl(), data);
+  }
+
+  onResetPassword$(data: ResetPasswordDescription): Observable<UserDescription> {
+    console.log(data);
+    return this._http.post<UserDescription>(this._serverApi.getResetPasswordUrl(), data);
   }
 
   /**

@@ -4,7 +4,7 @@ export interface SignUpDescription {
   email: string;
   username: string;
   password: string;
-  retypedPassword: string;
+  confirmedPassword: string;
 }
 
 export interface SignInDescription {
@@ -15,4 +15,14 @@ export interface SignInDescription {
 export interface ProviderDescription {
   name: string;
   urlName: string;
+}
+
+export interface ChangePasswordDescription {
+  currentPassword: string;
+  newPassword: string;
+  confirmedPassword: string;
+}
+
+export interface ResetPasswordDescription {
+  email: string;
 }

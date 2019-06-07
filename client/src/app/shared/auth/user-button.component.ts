@@ -4,6 +4,8 @@ import { Component } from '@angular/core';
 
 import { AuthDialogComponent } from './auth-dialog.component';
 import { UserService } from './user.service';
+import { LinkIdentityComponent } from './link-identity.component';
+import { ChangePasswordComponent } from './change-password.component';
 
 
 @Component({
@@ -18,18 +20,26 @@ export class UserButtonComponent{
     private _snackBar: MatSnackBar
   ) {}
 
-  readonly userDisplayName = this._userService.userDisplayName
+  readonly userDisplayName = this._userService.userDisplayName$
 
   public openDialog(): void {
     AuthDialogComponent.showDialog(this._dialog)
   }
 
   public onLinkAccount(): void {
-    AuthDialogComponent.showDialog(this._dialog)
+    LinkIdentityComponent.showDialog(this._dialog)
+  }
+
+  public onChangeEmail(): void {
+
+  }
+
+  public onChangePassword(): void {
+    ChangePasswordComponent.showDialog(this._dialog)
   }
 
   public onLogout(): void {
-   this._userService.onLogout().subscribe(
+   this._userService.onLogout$().subscribe(
      _ => {
        this._router.navigate(['/']);
        this._snackBar.open('Succesfully logged out', '', { duration: 2000 });
