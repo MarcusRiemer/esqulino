@@ -12,7 +12,5 @@ export class LoginWrapperComponent {
     private _userData: UserService
   ) {}
 
-  readonly isLoggedIn = this._userData.isLoggedIn
-
-
+  readonly isLoggedIn = this._userData.isLoggedIn$
 }

@@ -29,7 +29,7 @@ export class AuthDialogComponent {
 
   public static showDialog(dialog: MatDialog) {
     dialog.open(AuthDialogComponent, {
-      height: '500px'
+      height: '600px'
     });
   }
 }

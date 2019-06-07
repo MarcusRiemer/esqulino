@@ -1,4 +1,4 @@
-import { SignUpDescription, SignInDescription } from './auth-description';
+import { SignUpDescription, SignInDescription, ChangePasswordDescription, ResetPasswordDescription } from './auth-description';
 import { Injectable } from '@angular/core';
 
 import { ServerDataService } from '../serverdata/server-data.service';
@@ -15,22 +15,22 @@ export class UserService {
 
   public userData = this._serverData.getUserData
 
-  public readonly isLoggedIn = this.userData.value.pipe(
+  public readonly isLoggedIn$ = this.userData.value.pipe(
     map(u => u.loggedIn)
   )
 
-  public readonly userDisplayName = this.userData.value.pipe(
+  public readonly userDisplayName$ = this.userData.value.pipe(
     map(u => u.loggedIn? u.displayName : "Guest")
   )
 
-  public onSignUp(data: SignUpDescription): Observable<UserDescription> {
-    return this._serverData.onSignUp(data).pipe(
+  public onSignUp$(data: SignUpDescription): Observable<UserDescription> {
+    return this._serverData.onSignUp$(data).pipe(
       first()
     )
   }
 
-  public onSignIn(data: SignInDescription): Observable<UserDescription> {
-    return this._serverData.onSignIn(data).pipe(
+  public onSignIn$(data: SignInDescription): Observable<UserDescription> {
+    return this._serverData.onSignIn$(data).pipe(
       tap(_ => {
         console.log("logged in");
         this.userData.refresh();
@@ -38,8 +38,24 @@ export class UserService {
     )
   }
 
-  public onLogout(): Observable<UserDescription> {
-    return this._serverData.onLogout().pipe(
+  public onChangePassword$(data: ChangePasswordDescription): Observable<UserDescription>{
+    return this._serverData.onChangePassword$(data).pipe(
+      tap(_ => {
+        this.userData.refresh();
+      })
+    )
+  }
+
+  public onResetPassword$(data: ResetPasswordDescription): Observable<UserDescription>{
+    return this._serverData.onResetPassword$(data).pipe(
+      tap(_ => {
+        this.userData.refresh();
+      })
+    )
+  }
+
+  public onLogout$(): Observable<UserDescription> {
+    return this._serverData.onLogout$().pipe(
       tap(_ => {
         console.log("logged out");
         this.userData.refresh();

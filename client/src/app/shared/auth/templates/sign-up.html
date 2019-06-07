@@ -22,19 +22,21 @@
 
   <auth-input
     [type]="'password'"
-    [placeholder]="'Retype password'"
+    [placeholder]="'Confirm password'"
     [controlName]="'password'"
-    [error]="'Needs a length of min. 3'"
-    [(value)]="signUpData.retypedPassword">
+    [error]="'Needs a length of min. 5'"
+    [(value)]="signUpData.confirmedPassword">
   </auth-input>
+
+  <mat-error *ngIf="!isPasswordEq()">Password must be equal</mat-error>
 
   <div class="row resend-activation-link-text">
     <div>
       Send activation link again?
-      <a (click)="onSendVerifyLink()">
-        Click here
-      </a>
     </div>
+    <a (click)="onSendVerifyLink()">
+      Click here
+    </a>
   </div>
 
   <button

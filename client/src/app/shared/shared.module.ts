@@ -1,4 +1,3 @@
-import { AuthInputComponent } from './auth/auth-input.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -43,6 +42,9 @@ import { ResetPasswordComponent } from './auth/reset-password.component';
 import { ProviderAuthComponent } from './auth/provider-auth.component';
 import { SignInComponent } from './auth/sign-in.component';
 import { SignUpComponent } from './auth/sign-up.component';
+import { LinkIdentityComponent } from './auth/link-identity.component';
+import { AuthInputComponent } from './auth/auth-input.component';
+import { ChangePasswordComponent } from './auth/change-password.component';
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -89,10 +91,12 @@ const materialModules = [
     LoginWrapperComponent,
     ProviderAuthComponent,
     SignInComponent,
-    ResetPasswordComponent,
     SignUpComponent,
     AuthInputComponent,
-    FocusDirective
+    FocusDirective,
+    ResetPasswordComponent,
+    ChangePasswordComponent,
+    LinkIdentityComponent
   ],
   exports: [
     CommonModule,
@@ -115,14 +119,16 @@ const materialModules = [
     AuthDialogComponent,
     UserButtonComponent,
     LoginWrapperComponent,
-    ResetPasswordComponent,
     ProviderAuthComponent,
     SignInComponent,
     SignUpComponent,
     AuthInputComponent,
-    FocusDirective
+    FocusDirective,
+    ResetPasswordComponent,
+    ChangePasswordComponent,
+    LinkIdentityComponent
   ],
-  entryComponents: [AuthDialogComponent]
+  entryComponents: [AuthDialogComponent, LinkIdentityComponent, ChangePasswordComponent]
 })
 export class SharedAppModule {
   static forRoot(): ModuleWithProviders {
