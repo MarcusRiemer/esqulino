@@ -107,7 +107,15 @@ export class EditBlockLanguageService {
         .getSingle(this.editedSubject.grammarId, true)
         .pipe(first())
         .subscribe(g => {
-          this.generatorErrors.push(...validateGenerator(instructions));
+          try {
+            this.generatorErrors.push(...validateGenerator(instructions));
+          } catch (e) {
+            this.generatorErrors.push({
+              type: "Unexpected",
+              message: "Could not validate block language",
+              exception: e
+            });
+          }
 
           if (this.generatorErrors.length === 0) {
             this.doUpdate(blockLanguage => {
@@ -116,11 +124,13 @@ export class EditBlockLanguageService {
               try {
                 return (generateBlockLanguage(blockLanguage, instructions, g));
               } catch (e) {
+                // Pass on the error
                 this.generatorErrors.push({
                   type: "Unexpected",
                   message: "Could not generate block language",
                   exception: e
                 });
+                // But don't change the language
                 return (blockLanguage);
               }
             });

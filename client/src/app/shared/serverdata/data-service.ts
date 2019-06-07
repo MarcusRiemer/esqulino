@@ -72,11 +72,12 @@ export abstract class DataService<
       this._http.put<TSingle>(this.resolveIndividualUrl(desc.id), desc)
         .pipe(first())
         .subscribe(updatedDesc => {
-          console.log(`Updated ${this._speakingName} with  "${desc.id}"`);
+          console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
           this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
           this.listCache.refresh();
           resolve(updatedDesc);
         }, err => {
+          console.warn(`Update failed: ${this._speakingName} with ID "${desc.id}"`);
           reject(err);
         });
     });
@@ -102,6 +103,7 @@ export abstract class DataService<
 
           resolve();
         }, err => {
+          console.warn(`Delete failed: ${this._speakingName} with ID "${id}"`);
           reject(err);
         });
     });
