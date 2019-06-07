@@ -7,6 +7,7 @@ import {
 import { GeneratorError } from './error.description'
 import { BlockLanguageGeneratorDocument } from "./generator.description";
 import { validateManualGenerator, convertGrammarManualInstructions } from './generator-manual';
+import { convertGrammarTreeInstructions } from './generator-tree';
 
 /**
  * Ensures that there should be no errors during generation.
@@ -16,7 +17,10 @@ export function validateGenerator(
 ): GeneratorError[] {
   switch (d.type) {
     case "manual": return (validateManualGenerator(d));
-    default: throw new Error(`validateGenerator(): Unknown BlockLanguageGenerator "${d.type}"`);
+    case "tree": return ([]);
+    default: {
+      throw new Error(`validateGenerator(): Unknown BlockLanguageGenerator "${d!.type}"`)
+    };
   }
 }
 
@@ -32,7 +36,8 @@ export function generateBlockLanguage(
   const runGenerator = () => {
     switch (d.type) {
       case "manual": return (convertGrammarManualInstructions(d, g));
-      default: throw new Error(`generateBlockLanguage(): Unknown BlockLanguageGenerator "${d.type}"`);
+      case "tree": return (convertGrammarTreeInstructions(d, g));
+      default: throw new Error(`generateBlockLanguage(): Unknown BlockLanguageGenerator "${d!.type}"`);
     }
   }
 
