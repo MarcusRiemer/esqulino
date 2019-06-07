@@ -33,9 +33,13 @@ export class ToolbarService {
    * Indicate that a new set of components should be shown.
    */
   addItem(templateRef: TemplateRef<any>) {
-    const newItem = new TemplatePortal(templateRef, undefined, {});
-    const currentItems = this._itemsPortal.value;
-    this._itemsPortal.next(currentItems.concat(newItem));
+    if (templateRef) {
+      const newItem = new TemplatePortal(templateRef, undefined, {});
+      const currentItems = this._itemsPortal.value;
+      this._itemsPortal.next(currentItems.concat(newItem));
+    } else {
+      console.warn("Attempted to add undefined template reference");
+    }
   }
 
   /**
