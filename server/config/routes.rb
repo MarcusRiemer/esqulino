@@ -6,8 +6,8 @@ Rails.application.routes.draw do
     scope 'identities' do
       put 'change_password', controller: 'identities', action: :change_password
       get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
-      post 'reset_password', controller: 'identities', action: :reset_password_mail
-      get 'reset_password/:verify_token', controller: 'identities', action: :reset_password_accepted
+      post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
+      put 'reset_password', controller: 'identities', action: :reset_password
     end
 
     scope 'user' do
