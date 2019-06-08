@@ -3,9 +3,9 @@ class IdentityMailer < ApplicationMailer
   @@base_url = Rails.configuration.sqlino["editor_domain"]
 
   def reset_password(identity_data, locale)
-    @identity = identity_data
-    @password_reset_url = "http://#{locale}.#{@@base_url}/api/identities/reset_password/#{@identity[:data]["password_reset_token"]}"
-    mail(to: @identity[:data]["email"], subject: "Blattwerkzeug.de password reset")
+    @identity = identity_data[:data]
+    @password_reset_url = "http://#{locale}.#{@@base_url}/user/reset_password?token=#{@identity["password_reset_token"]}&email=#{@identity["email"]}"
+    mail(to: @identity["email"], subject: "Blattwerkzeug.de password reset")
   end
 
   def changed_password(identity_data, display_name)

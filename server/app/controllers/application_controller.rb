@@ -28,7 +28,7 @@ class ApplicationController < ActionController::API
       if (email) 
         IdentityMailer.confirm_email(auth, request_locale).deliver
       end
-      @identity = Identity.create_with_auth(auth, current_user)
+      @identity = Identity.create_with_auth(auth, @current_user)
     end
   end
 

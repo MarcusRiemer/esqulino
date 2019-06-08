@@ -43,7 +43,6 @@ class AuthController < ApplicationController
         email: params[:email],
         password: params[:password],
         verify_token: SecureRandom.uuid,
-        password_reset_token: SecureRandom.uuid,
         confirmed: false
       }
     }
