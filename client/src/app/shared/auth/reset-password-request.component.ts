@@ -4,10 +4,10 @@ import { UserService } from './user.service';
 import { ResetPasswordDescription } from './auth-description';
 
 @Component({
-  selector: 'reset-password',
-  templateUrl: './templates/reset-password.html'
+  selector: 'reset-password-request',
+  templateUrl: './templates/reset-password-request.html'
 })
-export class ResetPasswordComponent {
+export class ResetPasswordRequestComponent {
   constructor(
     private _userService: UserService
   ) {}
@@ -19,7 +19,7 @@ export class ResetPasswordComponent {
   public onResetPassword(): void {
     this._userService.onResetPassword$(this.resetPasswordData).subscribe(
       () => console.log("email"),
-      (err) => console.log(JSON.stringify(err))
+      (err) => alert(`Error: ${err["error"]["error"]}`)
     )
   }
 }

@@ -7,6 +7,7 @@ import { providers } from './providers';
   templateUrl: './templates/auth-dialog.html'
 })
 export class AuthDialogComponent {
+
   constructor(
     private _dialogRef: MatDialogRef<AuthDialogComponent>,
   ) {}
@@ -18,6 +19,7 @@ export class AuthDialogComponent {
   public changeContent(): void {
     this.primaryContent = false;
   }
+
 
   public onClose(): void {
     this._dialogRef.close();
@@ -32,4 +34,5 @@ export class AuthDialogComponent {
       height: '600px'
     });
   }
+  
 }

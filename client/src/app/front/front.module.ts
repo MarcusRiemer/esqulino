@@ -38,7 +38,7 @@ import { DevelopmentComponent } from './development.component'
     VideoDisplayComponent,
     PrivacyComponent,
     VersionComponent,
-    DevelopmentComponent
+    DevelopmentComponent,
   ],
   exports: []
 })

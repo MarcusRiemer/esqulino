@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core'
-import { BrowserService } from '../shared/browser.service';
+
 import { NavItem } from '../shared/nav-interfaces';
 
 export const adminItems: NavItem[] = [
@@ -58,15 +58,6 @@ export const adminItems: NavItem[] = [
   templateUrl: 'templates/admin.html'
 })
 export class AdminComponent {
-
-  constructor(
-    private readonly _browser: BrowserService,
-  ) { }
-
-  readonly isMobile$ = this._browser.isMobile$;
-
-  readonly sidebarMode$ = this._browser.sidebarMode$;
-
   /**
    * All items that need to be shown in the general navigation
    */

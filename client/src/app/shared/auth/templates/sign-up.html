@@ -1,34 +1,33 @@
 <div class="d-flex align-items-center flex-column authentication">
-  <auth-input
+  <validate-input
     [type]="'email'"
     [placeholder]="'E-mail'"
     [controlName]="'email'"
     [(value)]="signUpData.email">
-  </auth-input>
+  </validate-input>
 
-  <auth-input
+  <validate-input
     [type]="'text'"
     [placeholder]="'Username'"
     [controlName]="'username'"
     [(value)]="signUpData.username">
-  </auth-input>
+  </validate-input>
 
-  <auth-input
+  <validate-input
     [type]="'password'"
     [placeholder]="'Password'"
     [controlName]="'password'"
     [(value)]="signUpData.password">
-  </auth-input>
+  </validate-input>
 
-  <auth-input
+  <validate-input
     [type]="'password'"
     [placeholder]="'Confirm password'"
     [controlName]="'password'"
     [error]="'Needs a length of min. 5'"
     [(value)]="signUpData.confirmedPassword">
-  </auth-input>
+  </validate-input>
 
-  <mat-error *ngIf="!isPasswordEq()">Password must be equal</mat-error>
 
   <div class="row resend-activation-link-text">
     <div>

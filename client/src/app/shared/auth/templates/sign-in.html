@@ -1,17 +1,17 @@
 <div class="d-flex align-items-center flex-column authentication">
-  <auth-input
+  <validate-input
     [type]="'email'"
     [placeholder]="'E-mail'"
     [controlName]="'email'"
     [(value)]="signInData.email">
-  </auth-input>
+  </validate-input>
 
-  <auth-input
+  <validate-input
     [type]="'password'"
     [placeholder]="'Password'"
     [controlName]="'password'"
     [(value)]="signInData.password">
-  </auth-input>
+  </validate-input>
 
   <div class="row reset-password-link-text">
     <div>

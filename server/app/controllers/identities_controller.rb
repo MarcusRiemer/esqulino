@@ -16,7 +16,7 @@ class IdentitiesController < ApplicationController
   end
 
   def reset_password_accepted
-    
+
   end
 
   def reset_password_mail
@@ -24,13 +24,12 @@ class IdentitiesController < ApplicationController
       provider: "identity",
       uid: params[:email]
     }
-    byebug
 
     identity = Identity.search(search_for)
     if (identity)
       IdentityMailer.reset_password(identity, request_locale).deliver
     else 
-      render json: { error: "e-mail not found"}
+      render json: { error: "e-mail not found"}, status: :unauthorized
     end
   end
 
