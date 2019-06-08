@@ -1,3 +1,4 @@
+import { adminRoutes } from './admin/admin.routes';
 import { Routes, RouterModule } from '@angular/router'
 
 import { editorRoutes } from './editor/editor.routes'
@@ -16,7 +17,10 @@ const AppRoutes: Routes = [
     // The admin module has a few heavyweight dependencies and is
     // therefore not bundled with the main application.
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    children: adminRoutes
+
+    // TODO-TOM THIS STOPS WORKING WITH ANGULAR 8
+    // loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: '',

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
 
-import { BrowserService } from '../shared/browser.service';
 import { NavItem } from '../shared/nav-interfaces';
 
 export const indexItems: NavItem[] = [
@@ -99,20 +98,6 @@ export const indexItems: NavItem[] = [
   templateUrl: 'templates/index.html',
 })
 export class FrontComponent {
-
-  /**
-   * Used for dependency injection
-   */
-  constructor(
-    private readonly _browser: BrowserService,
-  ) { }
-
-  // Pass through: Mobile device detection
-  readonly isMobile$ = this._browser.isMobile$;
-
-  // Pass through: Rendering mode for sidebar
-  readonly sidebarMode$ = this._browser.sidebarMode$;
-
   /**
    * All items that need to be shown in the general navigation
    */

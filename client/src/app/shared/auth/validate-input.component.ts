@@ -3,10 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 
 
 @Component({
-  selector: 'auth-input',
-  templateUrl: './templates/auth-input.html'
+  selector: 'validate-input',
+  templateUrl: './templates/validate-input.html'
 })
-export class AuthInputComponent {
+export class ValidateInputComponent {
   @Input() type: string;
   @Input() placeholder: string;
   @Input() controlName: string;

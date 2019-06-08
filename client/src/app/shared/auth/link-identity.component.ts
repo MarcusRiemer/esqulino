@@ -11,6 +11,7 @@ export class LinkIdentityComponent {
     private _dialogRef: MatDialogRef<LinkIdentityComponent>
   ) {}
 
+
   public static showDialog(dialog: MatDialog) {
     dialog.open(LinkIdentityComponent, {
       height: '550px'

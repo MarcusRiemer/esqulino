@@ -38,13 +38,14 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 
 
 import { GrammarDataService, BlockLanguageDataService } from './serverdata'
-import { ResetPasswordComponent } from './auth/reset-password.component';
+import { ResetPasswordRequestComponent } from './auth/reset-password-request.component';
 import { ProviderAuthComponent } from './auth/provider-auth.component';
 import { SignInComponent } from './auth/sign-in.component';
 import { SignUpComponent } from './auth/sign-up.component';
 import { LinkIdentityComponent } from './auth/link-identity.component';
-import { AuthInputComponent } from './auth/auth-input.component';
+import { ValidateInputComponent } from './auth/validate-input.component';
 import { ChangePasswordComponent } from './auth/change-password.component';
+
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -92,10 +93,11 @@ const materialModules = [
     ProviderAuthComponent,
     SignInComponent,
     SignUpComponent,
-    AuthInputComponent,
+    ValidateInputComponent,
     FocusDirective,
-    ResetPasswordComponent,
+    ResetPasswordRequestComponent,
     ChangePasswordComponent,
+    ValidateInputComponent,
     LinkIdentityComponent
   ],
   exports: [
@@ -122,9 +124,9 @@ const materialModules = [
     ProviderAuthComponent,
     SignInComponent,
     SignUpComponent,
-    AuthInputComponent,
+    ValidateInputComponent,
     FocusDirective,
-    ResetPasswordComponent,
+    ResetPasswordRequestComponent,
     ChangePasswordComponent,
     LinkIdentityComponent
   ],
