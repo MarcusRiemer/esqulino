@@ -43,7 +43,11 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/identities/change_password`)
   }
 
-  getResetPasswordUrl(): string {
+  getPasswordResetRequestUrl(): string {
+    return (`${this._apiBaseUrl}/identities/reset_password_mail`)
+  }
+
+  getPasswordResetUrl(): string {
     return (`${this._apiBaseUrl}/identities/reset_password`)
   }
 

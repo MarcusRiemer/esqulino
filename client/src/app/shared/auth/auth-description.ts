@@ -1,5 +1,3 @@
-
-
 export interface SignUpDescription {
   email: string;
   username: string;
@@ -21,8 +19,4 @@ export interface ChangePasswordDescription {
   currentPassword: string;
   newPassword: string;
   confirmedPassword: string;
-}
-
-export interface ResetPasswordDescription {
-  email: string;
 }
