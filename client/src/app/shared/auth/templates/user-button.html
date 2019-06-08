@@ -1,23 +1,50 @@
 
 
 <mat-menu #userMenu="matMenu">
-  <is-logged-in>
-    <ng-container logged_in>
-      <button mat-menu-item>Profil</button>
-      <button mat-menu-item (click)="onLinkAccount()">Konto verknüpfen</button>
-      <button mat-menu-item (click)="onChangePassword()">Passwort ändern</button>
-      <button mat-menu-item (click)="onChangeEmail()">E-Mail ändern</button>
-      <button mat-menu-item (click)="onLogout()">Logout</button>
-    </ng-container>
+  <button
+    mat-menu-item
+    [routerLink]="['/user']">
 
-    <ng-container logged_out>
-      <button mat-menu-item (click)="openDialog()">
-        Login
-      </button>
-    </ng-container>
-  </is-logged-in>
+    Profil
+  </button>
+  <button
+    mat-menu-item
+    (click)="onLinkAccount()">
+
+    Konto verknüpfen
+  </button>
+  <button
+    mat-menu-item
+    (click)="onChangePassword()">
+
+    Passwort ändern
+  </button>
+  <button
+    mat-menu-item
+    (click)="onChangeEmail()">
+
+    E-Mail ändern
+  </button>
+  <button
+    mat-menu-item
+    (click)="onLogout()">
+
+    Logout
+  </button>
 </mat-menu>
 
-<button mat-icon-button [matMenuTriggerFor]="userMenu">
-  <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-</button>
+<is-logged-in>
+  <!-- TODO-TOM BUG: IF YOURE CLICK ON THE BUTTON THE SHADOW EFFECT WILL STAY UNTIL YOU CLICK AGAIN -->
+  <ng-container logged_in>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+    </button>
+  </ng-container>
+
+  <ng-container logged_out>
+    <button mat-icon-button (click)="openDialog()">
+      <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+    </button>
+  </ng-container>
+</is-logged-in>
+

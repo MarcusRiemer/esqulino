@@ -18,6 +18,7 @@ import { routing } from './app.routes';
 import { NotifyErrorHandler } from './error-handler';
 
 import registerLanguages from './locale-registration';
+import { UserModule } from './user/user.module';
 
 
 // Ensure the Piwik client object is globally available
@@ -65,6 +66,7 @@ if (environment.sentry && environment.sentry.active) {
     SharedAppModule.forRoot(),
     FrontModule,
     EditorModule,
+    UserModule,
     routing,
   ],
   declarations: [

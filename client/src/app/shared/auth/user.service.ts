@@ -1,9 +1,9 @@
-import { SignUpDescription, SignInDescription, ChangePasswordDescription, ResetPasswordDescription } from './auth-description';
+import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { Injectable } from '@angular/core';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { map, tap, first } from 'rxjs/operators';
-import { UserDescription } from './user.description';
+import { UserDescription, UserEmailDescription, UserPasswordDescription } from './user.description';
 import { Observable } from 'rxjs';
 
 
@@ -38,6 +38,14 @@ export class UserService {
     )
   }
 
+  public resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
+    return this._serverData.resetPassword$(data).pipe(
+      tap(_ => {
+        this.userData.refresh();
+      })
+    )
+  }
+
   public onChangePassword$(data: ChangePasswordDescription): Observable<UserDescription>{
     return this._serverData.onChangePassword$(data).pipe(
       tap(_ => {
@@ -46,8 +54,8 @@ export class UserService {
     )
   }
 
-  public onResetPassword$(data: ResetPasswordDescription): Observable<UserDescription>{
-    return this._serverData.onResetPassword$(data).pipe(
+  public PasswordResetRequest$(data: UserEmailDescription): Observable<UserDescription>{
+    return this._serverData.PasswordResetRequest$(data).pipe(
       tap(_ => {
         this.userData.refresh();
       })

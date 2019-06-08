@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { editorRoutes } from './editor/editor.routes'
 import { frontRoutes } from './front/front.routes'
+import { userRoutes } from './user/user.routes';
 
 const AppRoutes: Routes = [
   {
@@ -12,6 +13,10 @@ const AppRoutes: Routes = [
   {
     path: 'about',
     children: frontRoutes
+  },
+  {
+    path: 'user',
+    children: userRoutes
   },
   {
     // The admin module has a few heavyweight dependencies and is

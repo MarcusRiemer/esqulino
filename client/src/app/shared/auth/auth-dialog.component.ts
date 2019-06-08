@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import {  MatDialog } from '@angular/material';
 
 import { providers } from './providers';
 
@@ -8,9 +8,7 @@ import { providers } from './providers';
 })
 export class AuthDialogComponent {
 
-  constructor(
-    private _dialogRef: MatDialogRef<AuthDialogComponent>,
-  ) {}
+  constructor() {}
 
   public readonly providers = providers
 
@@ -18,11 +16,6 @@ export class AuthDialogComponent {
 
   public changeContent(): void {
     this.primaryContent = false;
-  }
-
-
-  public onClose(): void {
-    this._dialogRef.close();
   }
 
   public changeToPrimaryContent(): void {

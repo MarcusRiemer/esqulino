@@ -1,3 +1,4 @@
+import { UserEmailDescription, UserPasswordDescription } from './../auth/user.description';
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
 
@@ -10,7 +11,9 @@ import { UserDescription } from '../auth/user.description';
 
 import { ServerApiService } from './serverapi.service';
 import { IndividualDescriptionCache, CachedRequest } from './request-cache';
-import { SignUpDescription, SignInDescription, ChangePasswordDescription, ResetPasswordDescription } from './../auth/auth-description';
+import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
+
+
 
 /**
  * Convenient and cached access to server side descriptions.
@@ -65,9 +68,12 @@ export class ServerDataService {
     return this._http.put<UserDescription>(this._serverApi.getChangePasswordUrl(), data);
   }
 
-  onResetPassword$(data: ResetPasswordDescription): Observable<UserDescription> {
-    console.log(data);
-    return this._http.post<UserDescription>(this._serverApi.getResetPasswordUrl(), data);
+  PasswordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getPasswordResetRequestUrl(), data);
+  }
+
+  resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
+    return this._http.put<UserDescription>(this._serverApi.getPasswordResetUrl(), data);
   }
 
   /**

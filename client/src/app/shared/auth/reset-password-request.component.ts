@@ -1,7 +1,7 @@
 import { Component, Input, Output } from '@angular/core';
 
+import { UserEmailDescription } from './user.description';
 import { UserService } from './user.service';
-import { ResetPasswordDescription } from './auth-description';
 
 @Component({
   selector: 'reset-password-request',
@@ -12,12 +12,12 @@ export class ResetPasswordRequestComponent {
     private _userService: UserService
   ) {}
 
-  public resetPasswordData: ResetPasswordDescription = {
+  public userEmail: UserEmailDescription = {
     email: undefined
   };
 
-  public onResetPassword(): void {
-    this._userService.onResetPassword$(this.resetPasswordData).subscribe(
+  public onPasswordResetRequest(): void {
+    this._userService.PasswordResetRequest$(this.userEmail).subscribe(
       () => console.log("email"),
       (err) => alert(`Error: ${err["error"]["error"]}`)
     )
