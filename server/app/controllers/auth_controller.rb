@@ -6,6 +6,7 @@ class AuthController < ApplicationController
   def callback
     create_identity
     sign_in
+
     redirect_to "/"
   end
 
@@ -50,7 +51,6 @@ class AuthController < ApplicationController
     create_identity(auth, true)
     render json: { loggged_in: false }
   end
-
 
   def destroy
     sign_out!

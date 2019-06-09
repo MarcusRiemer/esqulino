@@ -37,7 +37,7 @@ class IdentitiesController < ApplicationController
 
   def set_reset_token(identity)
     identity[:data]["password_reset_token"] = SecureRandom.uuid
-    identity[:data]["password_reset_token_exp"] = Time.now + 30.minutes
+    identity[:data]["password_reset_token_exp"] = 30.minutes.from_now
     identity.save
   end
 
@@ -85,7 +85,6 @@ class IdentitiesController < ApplicationController
       set_identity(identity)
       sign_in
       redirect_to "/"
-      render json: { loggged_in: true }
     else
       render json: { error: "Doesnt found an e-mail for your token" }, status: :unauthorized
     end
