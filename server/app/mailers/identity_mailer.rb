@@ -13,8 +13,8 @@ class IdentityMailer < ApplicationMailer
     mail(to: @user[:data]["email"], subject: "Blattwerkzeug.de password changed")
   end
 
-  def confirm_email(user_auth, locale)
-    @user = user_auth
+  def confirm_email(identity_data, locale)
+    @user = identity_data
     @user_verify_url = "http://#{locale}.#{@@base_url}/api/identities/confirmation/#{@user[:data][:verify_token]}"
     mail(to: @user[:data][:email], subject: "Blattwerkzeug.de confirmation")
   end
