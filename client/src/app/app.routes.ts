@@ -22,10 +22,8 @@ const AppRoutes: Routes = [
     // The admin module has a few heavyweight dependencies and is
     // therefore not bundled with the main application.
     path: 'admin',
-    children: adminRoutes
-
-    // TODO-TOM THIS STOPS WORKING WITH ANGULAR 8
-    // loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    loadChildren: './admin/admin.module#AdminModule',
+    // loadChildren : () => import('./admin/admin.module').then(m => m.AdminModule), // new dynamic import method
   },
   {
     path: '',
