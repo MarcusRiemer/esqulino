@@ -1,11 +1,13 @@
 
 require 'rails_helper'
 
-RSpec.describe "auth controller" do
+RSpec.fdescribe "auth controller" do
+
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   let(:identity_params){{ 
     :email => "blattwerkzeug@web.de",
+    # TODO-TOM ASK MARCUS 
     :password => "12345678",
     :username => "Blattwerkzeug"
   }}

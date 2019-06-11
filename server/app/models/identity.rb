@@ -1,5 +1,9 @@
 
+require 'bcrypt'
+
 class Identity < ApplicationRecord
+  include BCrypt
+
   belongs_to :user
   attr_accessor :email, :name, :password, :password_confirmation
 
@@ -15,5 +19,47 @@ class Identity < ApplicationRecord
     user ||= User.create_from_hash(auth)
     Identity.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
   end
+
+  def confirmed!()
+    self.data["confirmed"] = true;
+    self.save!
+  end
+
+  def delete_identity!()
+    self.delete(self.id)
+  end
+
+  def set_password(password)
+    self.data["password"] = Password.create(password)
+    self.save
+  end
+
+  def set_reset_token_expired()
+    self.data["password_reset_token_exp"] = Time.now - 1.hour
+    self.save
+  end
+
+  def set_reset_token()
+    self.data["password_reset_token"] = SecureRandom.uuid
+    self.data["password_reset_token_exp"] = 30.minutes.from_now
+    self.save
+  end
+
+  def reset_token_eql?(token)
+    return self.data["password_reset_token"].eql? token
+  end
+
+  def reset_token_expired?()
+    return self.data["password_reset_token_exp"] < Time.now
+  end
+
+  def password_eql?(password)
+    return Password.new(self.data["password"]) == password
+  end
+
+  def confirmed?()
+    return self.data["confirmed"]
+  end
+
 end
 
