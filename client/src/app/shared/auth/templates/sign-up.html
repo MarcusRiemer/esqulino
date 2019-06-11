@@ -1,30 +1,26 @@
 <div class="d-flex align-items-center flex-column authentication">
   <validate-input
-    [type]="'email'"
-    [placeholder]="'E-mail'"
-    [controlName]="'email'"
+    type="email"
+    placeholder="E-mail"
     [(value)]="signUpData.email">
   </validate-input>
 
   <validate-input
-    [type]="'text'"
-    [placeholder]="'Username'"
-    [controlName]="'username'"
+    type="text"
+    placeholder="Username"
     [(value)]="signUpData.username">
   </validate-input>
 
   <validate-input
-    [type]="'password'"
-    [placeholder]="'Password'"
-    [controlName]="'password'"
+    type="password"
+    placeholder="Password"
     [(value)]="signUpData.password">
   </validate-input>
 
   <validate-input
-    [type]="'password'"
-    [placeholder]="'Confirm password'"
-    [controlName]="'password'"
-    [error]="'Needs a length of min. 5'"
+    type="password"
+    placeholder="Confirm Password"
+    error="Needs a length of min. 5"
     [(value)]="signUpData.confirmedPassword">
   </validate-input>
 
