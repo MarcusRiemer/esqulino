@@ -36,6 +36,9 @@ export class ValidateInputComponent {
   }
 
   public getControl(): FormControl {
+    // If theres no existing controlName
+    this.controlName = this.controlName || this.type
+
     switch (this.controlName) {
       case 'email': return this.email
       case 'password': return this.password

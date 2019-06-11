@@ -30,7 +30,8 @@ export class SignUpComponent {
   public onSignUp(): void {
     if (this.isPasswordEq()) {
       this._userService.onSignUp$(this.signUpData).subscribe(
-        data => console.log(JSON.stringify(data))
+        _ => alert("Please confirm your e-mail"),
+        (err) => alert(`Error: ${err["error"]["error"]}`)
       )
     }
   }
