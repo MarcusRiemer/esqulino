@@ -9,37 +9,30 @@ class IdentitiesController < ApplicationController
         .transform_keys { |k| k.underscore }
   end
 
-  def delete_identity!(identity)
-    Identity.delete(identity[:id])
+
+  def reset_password_params
+    params
+        .permit([:email, :password, :confirmedPassword, :token])
+        .transform_keys { |k| k.underscore }
   end
 
-  def set_password(identity, password)
-    identity[:data]["password"] = password
-    identity.save
+  def reset_password_mail_params
+    params
+        .permit([:email])
   end
 
-  def set_token_expired(identity)
-    identity[:data]["password_reset_token_exp"] = Time.now - 1.hour
-    identity.save
+  def email_confirmation_params
+    params
+        .permit([:verify_token])
   end
 
-  def set_confirmed(identity)
-    identity[:data][:confirmed] = true;
-    identity.save
-  end
-
-  def search_for_identity(uid = params[:email])
+  def search_for_identity(permited_params)
     return Identity.search({
       provider: "identity",
-      uid: uid
+      uid: permited_params[:email]
     })
   end
 
-  def set_reset_token(identity)
-    identity[:data]["password_reset_token"] = SecureRandom.uuid
-    identity[:data]["password_reset_token_exp"] = 30.minutes.from_now
-    identity.save
-  end
 
   def show
     if signed_in?
@@ -48,13 +41,15 @@ class IdentitiesController < ApplicationController
   end
 
   def reset_password
-    identity = search_for_identity
+    permited_params = reset_password_params
+    identity = search_for_identity(permited_params)
+
     if identity
-      if params[:token].eql? identity[:data]["password_reset_token"]
-        if Time.now <= identity[:data]["password_reset_token_exp"]
-          set_token_expired(identity)
-          set_password(identity, params[:password])
-          render json: { logged_in: false }
+      if identity.reset_token_eql?(permited_params[:token])
+        if !identity.reset_token_expired?
+          identity.set_reset_token_expired
+          identity.set_password(permited_params[:password])
+          render_user_description({ loggged_in: false })
         else
           render json: { error: "token expired" }, status: :unauthorized
         end
@@ -67,21 +62,21 @@ class IdentitiesController < ApplicationController
   end
 
   def reset_password_mail
-    identity = search_for_identity
+    identity = search_for_identity(reset_password_mail_params)
     if identity
-      set_reset_token(identity)
+      identity.set_reset_token
       IdentityMailer.reset_password(identity, request_locale).deliver
     else 
       render json: { error: "e-mail not found"}, status: :unauthorized
-    end
+    end#
   end
 
 
   def email_confirmation
-    identity = Identity.where("data ->> 'verify_token' = ?", params[:verify_token]).first!
+    identity = Identity.where("data ->> 'verify_token' = ?", email_confirmation_params[:verify_token]).first
     # identity found and not confirmed
-    if identity && !identity[:data][:confirmed]
-      set_confirmed(identity)
+    if identity && !identity.confirmed?
+      identity.confirmed!
       set_identity(identity)
       sign_in
       redirect_to "/"
@@ -97,12 +92,12 @@ class IdentitiesController < ApplicationController
                           .first
 
       if (identity)
-        params = change_password_params
-        if !identity[:data]["password"].eql? params[:new_password]
-          if identity[:data]["password"].eql? params[:current_password]
-            set_password(identity, params[:new_password])
+        permited_params = change_password_params
+        if !identity.password_eql?(permited_params[:new_password])
+          if identity.password_eql?(permited_params[:current_password])
+            identity.set_password(permited_params[:new_password])
             IdentityMailer.changed_password(identity, User.display_name(@current_user[:id])).deliver
-            render json: { logged_in: true }
+            render_user_description({ loggged_in: true })
           end
         end
       else

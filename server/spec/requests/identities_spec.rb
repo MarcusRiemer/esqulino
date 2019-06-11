@@ -1,16 +1,10 @@
 
 require 'rails_helper'
 
-RSpec.describe "identities controller" do
+RSpec.fdescribe "identities controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   let(:user) { create(:user) }
-
-  let(:identity_params){{ 
-    :email => "blattwerkzeug@web.de",
-    :password => "12345678",
-    :username => "Blattwerkzeug"
-  }}
 
   it "e-mail confirmation" do
     identity = create(:identity, :identity_provider, user_id: user[:id])
@@ -46,7 +40,7 @@ RSpec.describe "identities controller" do
         newPassword: "newPassword"
       }.to_json
 
-    expect(Identity.all.first[:data]["password"]).to eq("newPassword")
+    expect(Identity.all.first.password_eql?("newPassword"))
   end
 
 
@@ -84,7 +78,7 @@ RSpec.describe "identities controller" do
         password: "reseted_password"
       }.to_json
 
-    expect(Identity.all.first[:data]["password"]).to eq("reseted_password")
+    expect(Identity.all.first.password_eql?("reseted_password")).to be_truthy
   end
 
   it "resetting password with wrong email" do

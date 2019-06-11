@@ -1,4 +1,6 @@
+
 FactoryBot.define do
+
   factory :identity do
     provider {}
     uid {}
@@ -10,7 +12,7 @@ FactoryBot.define do
       uid { "identity@web.de" }
       data ({
         email: "identity@web.de",
-        password: "1234567",
+        password: BCrypt::Password.create("1234567"),
         verify_token: SecureRandom.uuid,
         confirmed: false
       })
@@ -41,7 +43,7 @@ FactoryBot.define do
       uid { "blattwerkzeug@web.de" }
       data ({
         email: "blattwerkzeug@web.de",
-        password: "12345678",
+        password: BCrypt::Password.create("12345678"),
         verify_token: SecureRandom.uuid,
         confirmed: true,
         password_reset_token: SecureRandom.uuid,

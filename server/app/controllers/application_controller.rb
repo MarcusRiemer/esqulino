@@ -14,6 +14,11 @@ class ApplicationController < ActionController::API
 
   # AUTHENTICATION METHODS
 
+  def render_user_description(hash)
+    render json: hash
+      .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
+  end
+
   def signed_in?
     return !@current_user.nil?
   end
@@ -71,8 +76,6 @@ class ApplicationController < ActionController::API
         token_decoded =  Auth.decode(token)
         if !token_decoded[:data] || token_decoded[:data][:confirmed]
           @current_user = User.find(token_decoded[:user_id].to_s)
-        else
-          # TODO ERROR MSG: Please confirm your e-mail adress
         end
       rescue ActiveRecord::RecordNotFound => e
         sign_out!
