@@ -15,7 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 export class ResetPasswordComponent implements AfterViewInit {
 
-  @ViewChild("dialog") dialog: TemplateRef<MatDialog>;
+  @ViewChild("dialog", { static: true }) dialog: TemplateRef<MatDialog>;
 
   constructor(
     private _dialog: MatDialog,
@@ -23,7 +23,7 @@ export class ResetPasswordComponent implements AfterViewInit {
     private _activeRoute: ActivatedRoute,
     private _userService: UserService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   public resetPasswordData: UserPasswordDescription = {
     password: undefined,
@@ -37,9 +37,9 @@ export class ResetPasswordComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     setTimeout(() => {
       this._dialog.open(this.dialog).afterClosed()
-      .subscribe(_ => {
-        this._router.navigate(['/'])
-      });
+        .subscribe(_ => {
+          this._router.navigate(['/'])
+        });
     });
   }
 
@@ -47,7 +47,7 @@ export class ResetPasswordComponent implements AfterViewInit {
     this._userService.resetPassword$(this.resetPasswordData).subscribe(
       _ => {
         this._dialog.closeAll()
-        this._snackBar.open('Password succesfully updated', "", {duration: 3000})
+        this._snackBar.open('Password succesfully updated', "", { duration: 3000 })
       },
       (err) => {
         alert(`Error: ${err["error"]["error"]}`)
