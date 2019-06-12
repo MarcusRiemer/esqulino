@@ -15,7 +15,7 @@ import { SideNavService } from './side-nav.service';
 export class SideNavComponent {
   @Input('items') navItems: NavItem[];
 
-  @ViewChild('sideNav') sidenav: MatSidenav;
+  @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
 
   /**
    * Used for dependency injection

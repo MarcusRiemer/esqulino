@@ -9,7 +9,8 @@ import { map, startWith, shareReplay } from 'rxjs/operators';
   templateUrl: 'templates/world-render.html',
 })
 export class WorldRenderComponent implements OnInit, OnDestroy {
-  @ViewChild('canvas', { read: false }) _canvasRef: ElementRef;
+  @ViewChild('canvas', { static: false })
+  _canvasRef: ElementRef;
 
   private _renderer: Renderer;
   private _worldSubscription: Subscription;
