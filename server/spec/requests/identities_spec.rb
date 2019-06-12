@@ -28,6 +28,12 @@ RSpec.fdescribe "identities controller" do
     expect(Identity.all.first[:data]["confirmed"]).to eq(false)
   end
 
+  it "saving password as hash" do
+    identity = create(:identity, :identity_provider, password: "1234567", user_id: user[:id])
+    expect(identity[:data]["password"]).to_not eq("1234567")
+    expect(Identity.all.first.password_eql?("1234567")).to be_truthy
+  end
+
   it "password changing" do
     identity = create(:identity, :existing_identity, user_id: user[:id])
 

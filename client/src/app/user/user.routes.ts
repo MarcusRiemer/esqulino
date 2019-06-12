@@ -1,9 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserComponent } from './user.component';
 import { UserProfilComponent } from './user-profil.component';
 import { ResetPasswordComponent } from './reset-password.component';
-
+import { UserComponent } from './user.component';
 
 
 export const userRoutes: Routes = [
@@ -12,17 +11,21 @@ export const userRoutes: Routes = [
     component: UserComponent,
     children: [
       {
+        path: '',
+        component: UserProfilComponent,
+      },
+      {
         path: 'profil',
         component: UserProfilComponent,
+      },
+      {
+        path: 'settings',
+        loadChildren: './settings/settings.module#UserSettingsModule',
       },
       {
         path: 'reset_password',
         component: ResetPasswordComponent,
       },
-      {
-        path: '',
-        component: UserProfilComponent,
-      }
     ]
   }
 ]

@@ -15,13 +15,15 @@ export class ChangePasswordComponent {
 
   public newPasswordData: ChangePasswordDescription = { 
     currentPassword: undefined,
-    newPassword: undefined,
-    confirmedPassword: undefined,
+    newPassword: undefined
   };
+
+  public confirmedPassword: string;
 
   public onChangePassword(): void {
     this._userService.onChangePassword$(this.newPasswordData).subscribe(
-      _ => console.log("changed")
+      _ => console.log("changed"),
+      (err) => alert(err["error"]["error"])
     )
   }
 

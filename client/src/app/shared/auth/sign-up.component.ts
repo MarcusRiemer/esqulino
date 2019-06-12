@@ -16,11 +16,12 @@ export class SignUpComponent {
     email: undefined,
     username: undefined,
     password: undefined,
-    confirmedPassword: undefined,
   };
 
+  public confirmedPassword: string;
+
   public isPasswordEq(): boolean {
-    return this.signUpData.password === this.signUpData.confirmedPassword;
+    return this.signUpData.password === this.confirmedPassword;
   }
 
   public onSendVerifyLink(): void {

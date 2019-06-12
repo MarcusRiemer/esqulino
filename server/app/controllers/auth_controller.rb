@@ -10,6 +10,7 @@ class AuthController < ApplicationController
         .permit([:email, :username, :password])
   end
 
+
   def callback
     create_identity
     sign_in

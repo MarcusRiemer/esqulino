@@ -2,7 +2,6 @@ export interface SignUpDescription {
   email: string;
   username: string;
   password: string;
-  confirmedPassword: string;
 }
 
 export interface SignInDescription {
@@ -18,5 +17,4 @@ export interface ProviderDescription {
 export interface ChangePasswordDescription {
   currentPassword: string;
   newPassword: string;
-  confirmedPassword: string;
 }

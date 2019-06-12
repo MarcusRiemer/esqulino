@@ -1,18 +1,19 @@
-import { ToolbarService } from './toolbar.service';
-import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit } from "@angular/core";
+import { Component, Inject, LOCALE_ID, Input, ViewChild } from "@angular/core";
 import { BrowserService } from './browser.service';
+import { MatSidenav } from '@angular/material';
 
 import { NavItem } from './nav-interfaces';
-import { interval, Subject } from 'rxjs';
-import { MatSidenav } from '@angular/material';
-import { first } from 'rxjs/operators';
+import { SideNavService } from './side-nav.service';
+
+
+
 @Component({
   selector: 'side-nav-selector',
   templateUrl: './templates/side-nav.html'
 })
 
 export class SideNavComponent {
-  @Input('items') navItems: NavItem;
+  @Input('items') navItems: NavItem[];
 
   @ViewChild('sideNav') sidenav: MatSidenav;
 
@@ -22,12 +23,17 @@ export class SideNavComponent {
   constructor(
     @Inject(LOCALE_ID) private readonly _localeId: string,
     private readonly _browser: BrowserService,
-    private readonly _toolbarService: ToolbarService
-  ) { 
-    this._toolbarService.sideNav$
-      .subscribe(_ =>
+    private readonly _sideNav: SideNavService
+  ) {
+    this._sideNav.sideNavToggle$()
+      .subscribe(() =>
         this.sidenav.toggle()
       )
+
+    this._sideNav.sideNavItems$()
+      .subscribe(navItems => {
+        this.navItems = navItems
+      })
   }
 
   // Pass through: Mobile device detection
