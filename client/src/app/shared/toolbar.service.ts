@@ -22,8 +22,6 @@ export class ToolbarService {
     });
   }
 
-  public sideNav$ = new Subject<void>();
-
   /**
    * @return The portal that should be rendered
    */

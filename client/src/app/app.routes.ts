@@ -16,7 +16,7 @@ const AppRoutes: Routes = [
   },
   {
     path: 'user',
-    children: userRoutes
+    loadChildren: './user/user.module#UserModule',
   },
   {
     // The admin module has a few heavyweight dependencies and is

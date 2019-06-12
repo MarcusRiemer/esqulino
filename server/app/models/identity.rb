@@ -5,6 +5,7 @@ class Identity < ApplicationRecord
   include BCrypt
 
   belongs_to :user
+
   attr_accessor :email, :name, :password, :password_confirmation
 
   scope :search_with_user_id, -> (user_id) {
@@ -61,5 +62,13 @@ class Identity < ApplicationRecord
     return self.data["confirmed"]
   end
 
+  private 
+
+  def sign_up
+    password = Password.new(self.data["password"])
+    unless password.length < 3
+      puts "Error"      
+    end
+  end
 end
 

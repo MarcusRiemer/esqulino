@@ -2,7 +2,8 @@ class User < ApplicationRecord
   has_many :identities
 
   def self.create_from_hash(auth)
-    create(display_name: auth[:info][:name])
+    name = auth[:info][:name] || auth[:info][:nickname]
+    create(display_name: name)
   end
 
   def self.display_name(id)

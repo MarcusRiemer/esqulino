@@ -1,15 +1,15 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 import { NavItem } from '../shared/nav-interfaces';
 
-export const userItems: NavItem[] = [
+export const userSettings: NavItem[] = [
   {
     type: "link",
     text: {
-      de: "Profil",
-      en: "Profil",
+      de: "Test",
+      en: "Test",
     },
-    route: ["/user"],
+    route: ["/account"],
     icon: "puzzle-piece",
   },
   {
@@ -24,9 +24,8 @@ export const userItems: NavItem[] = [
 ];
 
 @Component({
-  templateUrl: "./templates/user-index.html"
+  templateUrl: './templates/user-index.html'
 })
 export class UserComponent {
-
-  public readonly userItems = userItems;
+  public userItems: NavItem[] = userSettings;
 }

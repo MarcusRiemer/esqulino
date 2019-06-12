@@ -2,13 +2,15 @@ import { NgModule } from "@angular/core";
 
 import { SharedAppModule } from '../shared/shared.module';
 import { UserProfilComponent } from './user-profil.component';
-import { UserComponent } from './user.component';
 import { ResetPasswordComponent } from './reset-password.component';
+import { userRouting } from './user.routes';
+import { UserComponent } from './user.component';
 
 
 @NgModule({
   imports: [
-    SharedAppModule
+    SharedAppModule,
+    userRouting
   ],
   declarations: [
     UserComponent,
@@ -18,7 +20,7 @@ import { ResetPasswordComponent } from './reset-password.component';
   exports: [
     UserComponent,
     UserProfilComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
   ],
   entryComponents: [ResetPasswordComponent]
 })

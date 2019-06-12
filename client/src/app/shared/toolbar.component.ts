@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 
+import { SideNavService } from './side-nav.service';
 import { ToolbarService } from './toolbar.service'
 
 @Component({
@@ -10,7 +11,8 @@ export class ToolbarComponent {
   @Output() toggle = new EventEmitter();
 
   constructor(
-    private _toolbarService: ToolbarService
+    private _toolbarService: ToolbarService,
+    private _sideNavService: SideNavService
   ) { }
 
   get toolbarItems$() {
@@ -18,6 +20,6 @@ export class ToolbarComponent {
   }
 
   public navToggle(): void {
-    this._toolbarService.sideNav$.next();
+    this._sideNavService.toggleSideNav()
   }
 }

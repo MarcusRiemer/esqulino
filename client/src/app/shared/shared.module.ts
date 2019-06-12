@@ -45,6 +45,7 @@ import { SignUpComponent } from './auth/sign-up.component';
 import { LinkIdentityComponent } from './auth/link-identity.component';
 import { ValidateInputComponent } from './auth/validate-input.component';
 import { ChangePasswordComponent } from './auth/change-password.component';
+import { SideNavService } from './side-nav.service';
 
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
@@ -146,6 +147,7 @@ export class SharedAppModule {
         VideoService,
         LanguageService,
         ToolbarService,
+        SideNavService,
         ...dataServices
       ]
     });
