@@ -6,6 +6,7 @@ import { NavItem } from './nav-interfaces';
 import { interval, Subject } from 'rxjs';
 import { MatSidenav } from '@angular/material';
 import { first } from 'rxjs/operators';
+
 @Component({
   selector: 'side-nav-selector',
   templateUrl: './templates/side-nav.html'
@@ -14,7 +15,7 @@ import { first } from 'rxjs/operators';
 export class SideNavComponent {
   @Input('items') navItems: NavItem;
 
-  @ViewChild('sideNav') sidenav: MatSidenav;
+  @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
 
   /**
    * Used for dependency injection
@@ -23,7 +24,7 @@ export class SideNavComponent {
     @Inject(LOCALE_ID) private readonly _localeId: string,
     private readonly _browser: BrowserService,
     private readonly _toolbarService: ToolbarService
-  ) { 
+  ) {
     this._toolbarService.sideNav$
       .subscribe(_ =>
         this.sidenav.toggle()
