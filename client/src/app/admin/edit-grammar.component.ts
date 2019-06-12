@@ -17,7 +17,8 @@ import { BlockLanguageListDescription } from '../shared/block/block-language.des
 })
 export class EditGrammarComponent implements OnInit {
 
-  @ViewChild("toolbarButtons", { read: false }) toolbarButtons: TemplateRef<any>;
+  @ViewChild("toolbarButtons", { static: false })
+  toolbarButtons: TemplateRef<any>;
 
   // The grammar that is beeing edited
   grammar: GrammarDescription;
