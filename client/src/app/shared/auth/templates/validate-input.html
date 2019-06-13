@@ -1,14 +1,10 @@
 <div class="row input-group input-group-heigth">
-    <div *ngIf="isIconActive()" class="input-group-prepend">
-      <span class="input-group-text" id="basic-addon1">
-          <i [class]="getIconClass()" aria-hidden="true"></i>
-      </span>
-    </div>
+  <div *ngIf="isIconActive()" class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">
+        <i [class]="getIconClass()" aria-hidden="true"></i>
+    </span>
+  </div>
 
-    <input #inputRef 
-      [type]="type"
-      class="form-control"
-      aria-describedby="emailHelp"
-      [placeholder]="placeholder">
+  <ng-content></ng-content>
 
 </div>
