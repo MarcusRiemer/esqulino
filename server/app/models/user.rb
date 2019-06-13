@@ -6,9 +6,4 @@ class User < ApplicationRecord
     create(display_name: name)
   end
 
-  def self.display_name(id)
-    where("id = ?", id)
-    .limit(1)
-    .select("display_name")
-  end
 end

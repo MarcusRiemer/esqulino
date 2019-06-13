@@ -51,24 +51,24 @@ export class ServerDataService {
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
 
-  onSignUp$(data: SignUpDescription): Observable<UserDescription> {
+  signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data);
   }
 
-  onSignIn$(data: SignInDescription): Observable<UserDescription> {
+  signIn$(data: SignInDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSignInWithPasswordUrl(), data);
   }
 
 
-  onLogout$(): Observable<UserDescription> {
+  logout$(): Observable<UserDescription> {
     return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl());
   }
 
-  onChangePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
+  changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
     return this._http.put<UserDescription>(this._serverApi.getChangePasswordUrl(), data);
   }
 
-  PasswordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
+  passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getPasswordResetRequestUrl(), data);
   }
 

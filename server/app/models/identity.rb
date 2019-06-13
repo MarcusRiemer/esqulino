@@ -30,6 +30,14 @@ class Identity < ApplicationRecord
     self.delete(self.id)
   end
 
+  def set_password_all_with_user_id(password)
+    identities = Identity.where('user_id = ?', self.user_id)
+
+    identities.each do |identity| 
+      identity.set_password(password)
+    end
+  end
+
   def set_password(password)
     self.data["password"] = Password.create(password)
     self.save

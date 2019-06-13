@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavItem } from '../shared/nav-interfaces';
 
-export const userSettings: NavItem[] = [
+export const userItems: NavItem[] = [
   {
     type: "link",
     text: {
@@ -27,5 +27,5 @@ export const userSettings: NavItem[] = [
   templateUrl: './templates/user-index.html'
 })
 export class UserComponent {
-  public userItems: NavItem[] = userSettings;
+  public userItems: NavItem[] = userItems;
 }
