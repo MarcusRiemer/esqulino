@@ -1,15 +1,14 @@
-<div class="row input-height">
-  <mat-form-field
-    [floatLabel]="'never'">
-    <input matInput
-      [type]="type"
-      [placeholder]="placeholder"
-      [formControl]="getControl()"
-      (change)="emitInput()"
-      required>
+<div class="row input-group input-group-heigth">
+    <div *ngIf="isIconActive()" class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">
+          <i [class]="getIconClass()" aria-hidden="true"></i>
+      </span>
+    </div>
 
-    <mat-error *ngIf="getControl().invalid">
-      {{ getErrorMessage() }}
-    </mat-error>
-  </mat-form-field>
+    <input #inputRef 
+      [type]="type"
+      class="form-control"
+      aria-describedby="emailHelp"
+      [placeholder]="placeholder">
+
 </div>

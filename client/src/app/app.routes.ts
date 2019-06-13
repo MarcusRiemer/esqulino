@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { editorRoutes } from './editor/editor.routes'
 import { frontRoutes } from './front/front.routes'
-import { userRoutes } from './user/user.routes';
 
 const AppRoutes: Routes = [
   {
@@ -16,14 +15,14 @@ const AppRoutes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: './user/user.module#UserModule',
+    loadChildren : () => import('./user/user.module').then(m => m.UserModule), // new dynamic import method
   },
   {
     // The admin module has a few heavyweight dependencies and is
     // therefore not bundled with the main application.
     path: 'admin',
-    loadChildren: './admin/admin.module#AdminModule',
-    // loadChildren : () => import('./admin/admin.module').then(m => m.AdminModule), // new dynamic import method
+    // loadChildren: './admin/admin.module#AdminModule',
+    loadChildren : () => import('./admin/admin.module').then(m => m.AdminModule), // new dynamic import method
   },
   {
     path: '',

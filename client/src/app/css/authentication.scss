@@ -1,5 +1,7 @@
-$height: 320px;
+$dialog_heigth: 320px;
 $button-size: 12rem;
+
+$margin_of_validate_inputs: 10px;
 
 $font-size-links: 0.8em;
 
@@ -13,7 +15,7 @@ $font-size-links: 0.8em;
     justify-content: center;
   }
 
-  .mat-form-field {
+  .form-group {
     width: 100%;
   }
 
@@ -42,16 +44,25 @@ $font-size-links: 0.8em;
     margin-top: 2em;
   }
 
-  .input-height {
-    height: 3em;
+  .input-group {
+    margin-top: $margin_of_validate_inputs;
   }
+
+
 
 }
 
 .reset-password {
-  width: $height;
+  width: $dialog_heigth;
 
   .mat-raised-button {
     width: $button-size;
+  }
+
+  validate-input {
+    display: flex;
+    justify-content: center;
+    width: 75%;
+    margin-bottom: $margin_of_validate_inputs;
   }
 }

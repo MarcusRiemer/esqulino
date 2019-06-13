@@ -108,7 +108,7 @@ const materialModules = [
     ResetPasswordRequestComponent,
     ChangePasswordComponent,
     ValidateInputComponent,
-    LinkIdentityComponent
+    LinkIdentityComponent,
   ],
   exports: [
     CommonModule,
@@ -138,7 +138,7 @@ const materialModules = [
     FocusDirective,
     ResetPasswordRequestComponent,
     ChangePasswordComponent,
-    LinkIdentityComponent
+    LinkIdentityComponent,
   ],
   entryComponents: [AuthDialogComponent, LinkIdentityComponent, ChangePasswordComponent]
 })
