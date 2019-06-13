@@ -1,5 +1,5 @@
 $dialog_heigth: 320px;
-$button-size: 12rem;
+$button-size: 14rem;
 
 $margin_of_validate_inputs: 10px;
 
@@ -7,6 +7,7 @@ $font-size-links: 0.8em;
 
 
 .authentication {
+
   .mat-tab-header {
     margin-bottom: 3vh;
   }
@@ -46,10 +47,8 @@ $font-size-links: 0.8em;
 
   .input-group {
     margin-top: $margin_of_validate_inputs;
+    width: $button-size;
   }
-
-
-
 }
 
 .reset-password {
@@ -62,6 +61,7 @@ $font-size-links: 0.8em;
   validate-input {
     display: flex;
     justify-content: center;
+
     width: 75%;
     margin-bottom: $margin_of_validate_inputs;
   }
