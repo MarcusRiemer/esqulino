@@ -1,7 +1,7 @@
 
 require 'rails_helper'
 
-RSpec.fdescribe "auth controller" do
+RSpec.describe "auth controller" do
 
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
