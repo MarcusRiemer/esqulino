@@ -1,5 +1,5 @@
-import { Component, Input, EventEmitter, Output } from "@angular/core";
-import { FormControl, Validators } from '@angular/forms';
+import { Component, Input, EventEmitter, Output, ViewChild, ElementRef } from "@angular/core";
+import { FormControl, Validators, NgForm, AbstractControl } from '@angular/forms';
 
 
 @Component({
@@ -9,48 +9,45 @@ import { FormControl, Validators } from '@angular/forms';
 export class ValidateInputComponent {
   @Input() type: string;
   @Input() placeholder: string;
-  @Input() controlName: string;
   @Input() error: string;
   @Input() value: string;
+  @Input() icon: string;
 
-  @Output() valueChange = new EventEmitter<string>();
+  @Output() valueChange = new EventEmitter<string | number>();
 
-  public email = new FormControl('', [
-    Validators.email, Validators.required
-  ])
-
-  public password = new FormControl('', [
-    Validators.minLength(5), Validators.required
-  ])
-
-  public username = new FormControl('', [
-    Validators.minLength(3), Validators.required
-  ])
-
-  public require = new FormControl('', [
-    Validators.required
-  ])
+  @ViewChild("inputRef", {static: false}) inputRef: ElementRef;
 
   public getErrorMessage(): string {
     return this.error || `Invalid ${this.placeholder}`
   }
 
-  public getControl(): FormControl {
-    // If theres no existing controlName
-    this.controlName = this.controlName || this.type
+  /**
+   * Creates a font awesome class with a passed string
+   * @retun font awesome class
+   */
+  public getIconClass(): string {
+    return `fa ${this.icon}`
+  }
 
-    switch (this.controlName) {
-      case 'email': return this.email
-      case 'password': return this.password
-      case 'username': return this.username
-      case 'require': return this.require;
-      default: throw Error('wrong controlName');
-    }
+  /** 
+   * Returns the value of the input field
+   * @return string or number depends on the type
+  */
+  public getValueOfInput(): string | number {
+    return this.inputRef.nativeElement.value;
+  }
+
+  public isIconActive(): boolean {
+    return this.icon !== undefined
+  }
+
+  public isInputValid(): boolean {
+    return this.inputRef.nativeElement.checkValidity();
   }
 
   public emitInput(): void {
-    if (this.getControl().valid) {
-      this.valueChange.emit(this.getControl().value)
+    if (this.isInputValid()) {
+      this.valueChange.emit(this.getValueOfInput())
     }
   }
 }
