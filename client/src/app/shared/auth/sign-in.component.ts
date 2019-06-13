@@ -26,7 +26,7 @@ export class SignInComponent {
   }
 
   public onSignIn(): void {
-    this._userService.onSignIn$(this.signInData).subscribe(
+    this._userService.signIn$(this.signInData).subscribe(
       (user) => {
         if (user.loggedIn) {
           this._snackBar.open('Succesfully logged in', '', { duration: 2000 })

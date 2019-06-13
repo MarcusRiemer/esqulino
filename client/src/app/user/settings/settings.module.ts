@@ -2,14 +2,18 @@ import { AccountSettingsComponent } from './components/account-settings.componen
 import { NgModule } from "@angular/core";
 
 import { UserSettingsComponent } from './settings.component';
-import { SharedAppModule } from 'src/app/shared/shared.module';
+import { SharedAppModule } from '../../shared/shared.module';
 
 import { userSettingsRouting } from './settings.routes';
+import { SecuritySettingsComponent } from './components/security-settings.component';
+import { EmailSettingsComponent } from './components/email-settings.component';
 
 @NgModule({
   declarations: [
     UserSettingsComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    SecuritySettingsComponent,
+    EmailSettingsComponent
   ],
   imports: [
     SharedAppModule,
@@ -17,7 +21,9 @@ import { userSettingsRouting } from './settings.routes';
   ],
   exports: [
     UserSettingsComponent,
-    AccountSettingsComponent
+    SecuritySettingsComponent,
+    AccountSettingsComponent,
+    EmailSettingsComponent
   ],
 })
 export class UserSettingsModule {}

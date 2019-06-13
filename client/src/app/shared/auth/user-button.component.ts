@@ -34,12 +34,10 @@ export class UserButtonComponent{
 
   }
 
-  public onChangePassword(): void {
-    ChangePasswordComponent.showDialog(this._dialog)
-  }
+
 
   public onLogout(): void {
-   this._userService.onLogout$().subscribe(
+   this._userService.logout$().subscribe(
      _ => {
        this._router.navigate(['/']);
        this._snackBar.open('Succesfully logged out', '', { duration: 2000 });

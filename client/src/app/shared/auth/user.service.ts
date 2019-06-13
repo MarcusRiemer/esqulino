@@ -23,14 +23,14 @@ export class UserService {
     map(u => u.loggedIn? u.displayName : "Guest")
   )
 
-  public onSignUp$(data: SignUpDescription): Observable<UserDescription> {
-    return this._serverData.onSignUp$(data).pipe(
+  public signUp$(data: SignUpDescription): Observable<UserDescription> {
+    return this._serverData.signUp$(data).pipe(
       first()
     )
   }
 
-  public onSignIn$(data: SignInDescription): Observable<UserDescription> {
-    return this._serverData.onSignIn$(data).pipe(
+  public signIn$(data: SignInDescription): Observable<UserDescription> {
+    return this._serverData.signIn$(data).pipe(
       tap(_ => {
         console.log("logged in");
         this.userData.refresh();
@@ -46,24 +46,24 @@ export class UserService {
     )
   }
 
-  public onChangePassword$(data: ChangePasswordDescription): Observable<UserDescription>{
-    return this._serverData.onChangePassword$(data).pipe(
+  public changePassword$(data: ChangePasswordDescription): Observable<UserDescription>{
+    return this._serverData.changePassword$(data).pipe(
       tap(_ => {
         this.userData.refresh();
       })
     )
   }
 
-  public PasswordResetRequest$(data: UserEmailDescription): Observable<UserDescription>{
-    return this._serverData.PasswordResetRequest$(data).pipe(
+  public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription>{
+    return this._serverData.passwordResetRequest$(data).pipe(
       tap(_ => {
         this.userData.refresh();
       })
     )
   }
 
-  public onLogout$(): Observable<UserDescription> {
-    return this._serverData.onLogout$().pipe(
+  public logout$(): Observable<UserDescription> {
+    return this._serverData.logout$().pipe(
       tap(_ => {
         console.log("logged out");
         this.userData.refresh();

@@ -1,5 +1,4 @@
-import { Component, Input, EventEmitter, Output, ViewChild, ElementRef } from "@angular/core";
-import { FormControl, Validators, NgForm, AbstractControl } from '@angular/forms';
+import { Component, Input, EventEmitter, Output, ElementRef, HostListener, ContentChild } from "@angular/core";
 
 
 @Component({
@@ -13,7 +12,11 @@ export class ValidateInputComponent {
 
   @Output() valueChange = new EventEmitter<string | number>();
 
-  @ViewChild("inputRef", {static: false}) inputRef: ElementRef;
+  @ContentChild("inputRef", {static: false}) inputRef: ElementRef;
+
+  @HostListener('change') onChange() {
+    this.emitInput()
+  }
 
   public getErrorMessage(): string {
     return this.error
@@ -24,7 +27,7 @@ export class ValidateInputComponent {
    * @retun font awesome class
    */
   public getIconClass(): string {
-    return `fa ${this.icon}`
+    return `fa fa-${this.icon}`
   }
 
   /** 

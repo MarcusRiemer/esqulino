@@ -1,7 +1,7 @@
 
 
 <!-- Sidebar -->
-<mat-sidenav-container>
+<mat-sidenav-container *ngIf="navItems">
   <mat-sidenav #sideNav
     [mode]="sidebarMode$ | async"
     [opened]="!(isMobile$ | async)">

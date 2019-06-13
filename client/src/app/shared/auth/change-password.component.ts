@@ -21,7 +21,7 @@ export class ChangePasswordComponent {
   public confirmedPassword: string;
 
   public onChangePassword(): void {
-    this._userService.onChangePassword$(this.newPasswordData).subscribe(
+    this._userService.changePassword$(this.newPasswordData).subscribe(
       _ => console.log("changed"),
       (err) => alert(err["error"]["error"])
     )

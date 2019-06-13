@@ -95,13 +95,13 @@ class IdentitiesController < ApplicationController
         permited_params = change_password_params
         if !identity.password_eql?(permited_params[:new_password])
           if identity.password_eql?(permited_params[:current_password])
-            identity.set_password(permited_params[:new_password])
-            IdentityMailer.changed_password(identity, User.display_name(@current_user[:id])).deliver
+            identity.set_password_all_with_user_id(permited_params[:new_password])
+            IdentityMailer.changed_password(identity, @current_user.display_name).deliver
             render_user_description({ loggged_in: true })
           end
         end
       else
-        render json: { error: "no vailable identity found"}
+        render json: { error: "no vailable identity found"}, status: :unauthorized
       end
     end
   end
