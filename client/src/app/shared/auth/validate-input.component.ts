@@ -7,8 +7,6 @@ import { FormControl, Validators, NgForm, AbstractControl } from '@angular/forms
   templateUrl: './templates/validate-input.html'
 })
 export class ValidateInputComponent {
-  @Input() type: string;
-  @Input() placeholder: string;
   @Input() error: string;
   @Input() value: string;
   @Input() icon: string;
@@ -18,7 +16,7 @@ export class ValidateInputComponent {
   @ViewChild("inputRef", {static: false}) inputRef: ElementRef;
 
   public getErrorMessage(): string {
-    return this.error || `Invalid ${this.placeholder}`
+    return this.error
   }
 
   /**
