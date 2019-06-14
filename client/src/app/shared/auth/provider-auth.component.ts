@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { providers } from './providers';
 import { ServerApiService } from '../serverdata';
@@ -8,11 +8,11 @@ import { ServerApiService } from '../serverdata';
   templateUrl: './templates/provider-auth.html'
 })
 export class ProviderAuthComponent {
+  @Input() providers = providers;
+
   constructor(
     private _serverApi: ServerApiService
   ) {}
-
-  public readonly providers = providers;
 
   public onSignIn(provider: string) {
     window.location.href = this._serverApi.getSignInUrl(provider);

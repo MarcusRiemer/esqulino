@@ -26,13 +26,8 @@ export class SignInComponent {
   }
 
   public onSignIn(): void {
-    this._userService.signIn$(this.signInData).subscribe(
-      (user) => {
-        if (user.loggedIn) {
-          this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
-        }
-      },
-      (err) => alert(`Error: ${JSON.stringify(err["error"]["error"])}`)
-    )
+    this._userService
+      .signIn$(this.signInData)
+      .subscribe()
   }
 }

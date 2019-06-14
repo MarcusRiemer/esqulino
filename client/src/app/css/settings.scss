@@ -1,0 +1,30 @@
+
+
+.settings {
+  .general {
+    h1 {
+      margin-top: 5%;
+    }
+
+    .input-group {
+      width: 20em;
+      margin-bottom: 1vh;
+    }
+  }
+
+  .account-settings {
+    provider-auth {
+      display: flex;
+      width: 10em;
+      flex-direction: column;
+
+      div {
+        margin-bottom: 1vh;
+      }
+
+      div, button {
+        width: 100%;
+      }
+    }
+  }
+}
