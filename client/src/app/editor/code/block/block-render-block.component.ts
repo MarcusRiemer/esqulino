@@ -106,7 +106,11 @@ export class BlockRenderBlockComponent {
   onMouseEnter(evt: MouseEvent) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
-        allowAnyParent: true, allowEmbrace: this.allowEmbrace, allowAppend: true, allowReplace: true
+        allowExact: true,
+        allowAnyParent: true,
+        allowEmbrace: this.allowEmbrace,
+        allowAppend: true,
+        allowReplace: true
       });
     }
   }
