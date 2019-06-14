@@ -2,7 +2,7 @@ import { NodeLocation, NodeDescription } from "./syntaxtree.description";
 import { Validator } from './validator';
 import { Tree } from './syntaxtree';
 import { embraceMatches } from './drop-embrace';
-import { SmartDropLocation, SmartDropOptions, InsertDropLocation, ReplaceDropLocation } from './drop.description';
+import { SmartDropLocation, SmartDropOptions, InsertDropLocation, ReplaceDropLocation, SmartDropAlgorithmNames } from './drop.description';
 import { insertAtAnyParent, appendAtParent } from './drop-parent';
 import { _cardinalityAllowsInsertion } from './drop-util';
 import { ErrorCodes } from './validation-result';
@@ -54,6 +54,7 @@ export function _exactMatches(
         .map((candidate): (InsertDropLocation | ReplaceDropLocation) => {
           return ({
             operation: "insert",
+            algorithm: "allowExact",
             location: loc,
             nodeDescription: candidate
           });
@@ -80,6 +81,7 @@ export function _exactMatches(
           // It fits? Then we allow the insertion
           return ({
             operation: "replace",
+            algorithm: "allowExact",
             location: [],
             nodeDescription: candidate
           });
@@ -130,6 +132,7 @@ export function _singleChildReplace(
             .map((candidate): ReplaceDropLocation => {
               return ({
                 operation: "replace",
+                algorithm: "allowReplace",
                 location: loc,
                 nodeDescription: candidate
               })
@@ -150,12 +153,13 @@ type SmartDropAlgorithm = (
 ) => SmartDropLocation[];
 
 // The algorithms that are actually available
-const algorithms: { [name in keyof (SmartDropOptions)]: SmartDropAlgorithm } = {
+const algorithms: { [name in SmartDropAlgorithmNames]: SmartDropAlgorithm } = {
   "allowExact": _exactMatches,
   "allowEmbrace": embraceMatches,
   "allowReplace": _singleChildReplace,
   "allowAppend": appendAtParent,
   "allowAnyParent": insertAtAnyParent,
+  "root": undefined
 };
 
 /**
@@ -189,9 +193,10 @@ export function smartDropLocation(
   candidates: NodeDescription[]
 ): SmartDropLocation[] {
   const toReturn: SmartDropLocation[] = [];
-  const matches = new Set<keyof (SmartDropOptions)>();
+  const matches = new Set<SmartDropAlgorithmNames>();
 
-  const runAlgorithm = (name: keyof (SmartDropOptions)) => {
+  // Runs the given algorith,
+  const runAlgorithm = (name: SmartDropAlgorithmNames) => {
     const dropAlternatives = algorithms[name](validator, tree, loc, candidates);
     if (dropAlternatives.length > 0) {
       toReturn.push(...dropAlternatives);
@@ -231,7 +236,7 @@ export function smartDropLocation(
   } else {
     // No tree? Then there is only a single possibility.
     return ([
-      { operation: "insert", location: [], nodeDescription: candidates[0] }
+      { operation: "insert", algorithm: "root", location: [], nodeDescription: candidates[0] }
     ]);
   }
 }

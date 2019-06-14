@@ -60,6 +60,7 @@ export function insertAtAnyParent(
             toReturn.push({
               location: [...pathBefore, [categoryName, i]],
               operation: "insert",
+              algorithm: "allowAnyParent",
               nodeDescription: candidate
             });
           }
@@ -112,6 +113,7 @@ export function appendAtParent(
         .map((c): InsertDropLocation => {
           return ({
             operation: "insert",
+            algorithm: "allowAnyParent",
             location: [...parentPath, [cat, index]],
             nodeDescription: c
           });

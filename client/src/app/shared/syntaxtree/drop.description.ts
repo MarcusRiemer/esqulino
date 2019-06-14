@@ -12,6 +12,11 @@ export interface SmartDropOptions {
 };
 
 /**
+ * These algorithms may be used to calculate a drop.
+ */
+export type SmartDropAlgorithmNames = keyof (SmartDropOptions) | "root";
+
+/**
  * A drop operation that would not "worsen" the tree by violating
  * basic type or cardinality laws.
  */
@@ -22,6 +27,7 @@ export type SmartDropLocation = InsertDropLocation | ReplaceDropLocation | Embra
  */
 export interface InsertDropLocation {
   operation: "insert";
+  algorithm: SmartDropAlgorithmNames;
   location: NodeLocation;
   nodeDescription: NodeDescription;
 }
@@ -31,6 +37,7 @@ export interface InsertDropLocation {
  */
 export interface ReplaceDropLocation {
   operation: "replace";
+  algorithm: SmartDropAlgorithmNames;
   location: NodeLocation;
   nodeDescription: NodeDescription;
 }
@@ -40,6 +47,7 @@ export interface ReplaceDropLocation {
  */
 export interface EmbraceDropLocation {
   operation: "embrace";
+  algorithm: SmartDropAlgorithmNames;
   location: NodeLocation;
   nodeDescription: NodeDescription;
   /**
