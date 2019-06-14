@@ -119,11 +119,18 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       switchMap(codeResource => codeResource.blockLanguage),
       map(
         (blockLanguage: BlockLanguage) => {
+          // Take all of the default block languages
+          const toReturn = [...blockLanguage.editorComponents];
+
           // Possibly inject the debug component
-          const dropDebug: DropDebugComponentDescription = {
-            componentType: "drop-debug"
-          };
-          return ([...blockLanguage.editorComponents, dropDebug]);
+          const blockEditorIndex = toReturn.findIndex(c => c.componentType === "block-root");
+          if (blockEditorIndex >= 0) {
+            toReturn.splice(blockEditorIndex + 1, 0, {
+              componentType: "drop-debug"
+            });
+          }
+
+          return (toReturn);
         }
       )
     );

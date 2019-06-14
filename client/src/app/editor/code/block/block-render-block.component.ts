@@ -106,7 +106,8 @@ export class BlockRenderBlockComponent {
   onMouseEnter(evt: MouseEvent) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
-        allowExact: true,
+        // Disabled because allowAnyParent inserts in front so defaulting to append seems smarter
+        allowExact: false,
         allowAnyParent: true,
         allowEmbrace: this.allowEmbrace,
         allowAppend: true,
