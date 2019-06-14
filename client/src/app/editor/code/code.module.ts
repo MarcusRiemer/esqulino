@@ -24,6 +24,7 @@ import { BlockRenderInputComponent } from './block/block-render-input.component'
 import { BlockRenderErrorComponent } from './block/block-render-error.component'
 import { BlockRootComponent } from './block/block-root.component'
 import { CodeResourceSettingsComponent } from './block/code-resource-settings.component'
+import { DropDebugComponent } from './block/drop-debug.component'
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 import { QueryPreviewComponent } from './query/query-preview.component'
@@ -54,6 +55,7 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     CodeGeneratorComponent,
     CodeResourceSettingsComponent,
     CreateCodeResourceComponent,
+    DropDebugComponent,
     DatabaseSchemaSidebarComponent,
     ValidationComponent,
     CodeSidebarComponent,
@@ -73,6 +75,7 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
     CodeResourceSettingsComponent,
+    DropDebugComponent,
     QueryPreviewComponent,
     ValidationComponent,
     CodeGeneratorComponent,
