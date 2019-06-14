@@ -6,8 +6,7 @@ import { CurrentCodeResourceService } from '../current-coderesource.service';
  * Informs the user about possible errors in his trees,
  */
 @Component({
-  templateUrl: 'templates/validation.html',
-  selector: 'ast-validation'
+  templateUrl: 'templates/validation.html'
 })
 export class ValidationComponent {
 

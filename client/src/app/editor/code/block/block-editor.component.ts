@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import { map, switchMap, first } from 'rxjs/operators';
 
-import { EditorComponentDescription } from '../../../shared/block/block-language.description';
+import { EditorComponentDescription, DropDebugComponentDescription } from '../../../shared/block/block-language.description';
 
 import { EditorComponentsService } from '../editor-components.service';
 
@@ -112,12 +112,27 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * The visual components that should be displayed.
+   * These editor components should be shown
    */
-  readonly editorComponents: Observable<PlacedEditorComponent[]> = this.currentResource
+  readonly editorComponentDescriptions = this.currentResource
     .pipe(
       switchMap(codeResource => codeResource.blockLanguage),
-      map((blockLanguage: BlockLanguage) => blockLanguage.editorComponents),
+      map(
+        (blockLanguage: BlockLanguage) => {
+          // Possibly inject the debug component
+          const dropDebug: DropDebugComponentDescription = {
+            componentType: "drop-debug"
+          };
+          return ([...blockLanguage.editorComponents, dropDebug]);
+        }
+      )
+    );
+
+  /**
+   * The visual components that should be displayed.
+   */
+  readonly editorComponents: Observable<PlacedEditorComponent[]> = this.editorComponentDescriptions
+    .pipe(
       map((components): PlacedEditorComponent[] => components.map(c => {
         // Resolved component and sane defaults for components that are displayed
         return ({

@@ -85,6 +85,13 @@ export interface BlockRootComponentDescription extends EditorComponentBaseDescri
 }
 
 /**
+ * Displays debug information about an ongoing drag process
+ */
+export interface DropDebugComponentDescription extends EditorComponentBaseDescription {
+  componentType: "drop-debug"
+}
+
+/**
  * Displays (limited) results of SQL-queries
  */
 export interface QueryPreviewComponentDescription extends EditorComponentBaseDescription {
@@ -137,7 +144,8 @@ export type EditorComponentDescription =
   | CodeGeneratorComponentDescription
   | TruckWorldComponentDescription
   | TruckControllerComponentDescription
-  | TruckSensorsComponentDescription;
+  | TruckSensorsComponentDescription
+  | DropDebugComponentDescription;
 
 /**
  * The data about a language model that is stored in the database
