@@ -143,6 +143,21 @@ export function _singleChildReplace(
   return ([]);
 }
 
+
+// The signature of an algorithm that may compute smart drops
+type SmartDropAlgorithm = (
+  validator: Validator, tree: Tree, loc: NodeLocation, candidates: NodeDescription[]
+) => SmartDropLocation[];
+
+// The algorithms that are actually available
+const algorithms: { [name in keyof (SmartDropOptions)]: SmartDropAlgorithm } = {
+  "allowExact": _exactMatches,
+  "allowEmbrace": embraceMatches,
+  "allowReplace": _singleChildReplace,
+  "allowAppend": appendAtParent,
+  "allowAnyParent": insertAtAnyParent,
+};
+
 /**
  * Possibly meaningful approach:
  *
@@ -173,33 +188,43 @@ export function smartDropLocation(
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): SmartDropLocation[] {
+  const toReturn: SmartDropLocation[] = [];
+  const matches = new Set<keyof (SmartDropOptions)>();
+
+  const runAlgorithm = (name: keyof (SmartDropOptions)) => {
+    const dropAlternatives = algorithms[name](validator, tree, loc, candidates);
+    if (dropAlternatives.length > 0) {
+      toReturn.push(...dropAlternatives);
+      matches.add(name);
+    }
+  }
+
   // All advanced heuristics only make sense if there is a tree
   if (tree) {
-    const toReturn: SmartDropLocation[] = [];
 
     // Possibly add the exact location that was requested.
     if (options.allowExact) {
-      toReturn.push(..._exactMatches(validator, tree, loc, candidates));
+      runAlgorithm("allowExact");
     }
 
     // Possibly all embracing options
     if (options.allowEmbrace) {
-      toReturn.push(...embraceMatches(validator, tree, loc, candidates));
+      runAlgorithm("allowEmbrace");
     }
 
     // Possibly all replacement options
     if (options.allowReplace) {
-      toReturn.push(..._singleChildReplace(validator, tree, loc, candidates));
+      runAlgorithm("allowReplace");
     }
 
     // Possibly appending
     if (options.allowAppend) {
-      toReturn.push(...appendAtParent(validator, tree, loc, candidates));
+      runAlgorithm("allowAppend");
     }
 
     // Possibly all insertion options
     if (options.allowAnyParent) {
-      toReturn.push(...insertAtAnyParent(validator, tree, loc, candidates));
+      runAlgorithm("allowAnyParent");
     }
 
     return (toReturn);
