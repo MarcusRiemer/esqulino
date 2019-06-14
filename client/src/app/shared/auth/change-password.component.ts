@@ -1,7 +1,8 @@
+import { Component } from '@angular/core';
+
 import { UserService } from './user.service';
 import { ChangePasswordDescription } from './auth-description';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: "change-password",
@@ -9,7 +10,6 @@ import { Component } from '@angular/core';
 })
 export class ChangePasswordComponent {
   constructor(
-    private _dialogRef: MatDialogRef<ChangePasswordComponent>,
     private _userService: UserService
   ) {}
 
@@ -21,15 +21,12 @@ export class ChangePasswordComponent {
   public confirmedPassword: string;
 
   public onChangePassword(): void {
-    this._userService.changePassword$(this.newPasswordData).subscribe(
-      _ => console.log("changed"),
-      (err) => alert(err["error"]["error"])
-    )
-  }
-
-  public static showDialog(dialog: MatDialog): void {
-    dialog.open(ChangePasswordComponent, {
-      height: "400px"
-    })
+    if (this.confirmedPassword === this.newPasswordData.newPassword) {
+      this._userService
+        .changePassword$(this.newPasswordData)
+        .subscribe()
+    } else {
+      alert("")
+    }
   }
 }

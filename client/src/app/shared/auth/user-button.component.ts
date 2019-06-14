@@ -40,9 +40,7 @@ export class UserButtonComponent{
    this._userService.logout$().subscribe(
      _ => {
        this._router.navigate(['/']);
-       this._snackBar.open('Succesfully logged out', '', { duration: 2000 });
-     },
-     err => alert(JSON.stringify(err))
+     }
    )
   }
 }

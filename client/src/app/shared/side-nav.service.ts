@@ -13,8 +13,6 @@ export class SideNavService {
   constructor() {}
 
   public newSideNav(list: NavItem[]): void {
-    console.log("Service")
-    console.log(list)
     this._sideNavItems.next(list);
   }
 

@@ -49,6 +49,12 @@ $font-size-links: 0.8em;
     margin-top: $margin_of_validate_inputs;
     width: $button-size;
   }
+
+  provider-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .reset-password {

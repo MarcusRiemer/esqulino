@@ -17,9 +17,8 @@ export class ResetPasswordRequestComponent {
   };
 
   public onPasswordResetRequest(): void {
-    this._userService.passwordResetRequest$(this.userEmail).subscribe(
-      () => console.log("email"),
-      (err) => alert(`Error: ${err["error"]["error"]}`)
-    )
+    this._userService
+      .passwordResetRequest$(this.userEmail)
+      .subscribe()
   }
 }
