@@ -1067,17 +1067,32 @@ describe("Complex Spec Grammar: SQL", () => {
     expect(smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates))
       .withContext(`Inserting at root`)
       .toEqual([
-        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+        {
+          operation: "insert",
+          algorithm: "allowAnyParent",
+          location: [["select", 0]],
+          nodeDescription: dropCandidates[1]
+        }
       ]);
     expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0]], dropCandidates))
       .withContext(`Inserting at SELECT`)
       .toEqual([
-        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+        {
+          operation: "insert",
+          algorithm: "allowAnyParent",
+          location: [["select", 0]],
+          nodeDescription: dropCandidates[1]
+        }
       ]);
     expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0], ["columns", 0]], dropCandidates))
       .withContext(`Inserting at first column of SELECT`)
       .toEqual([
-        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+        {
+          operation: "insert",
+          algorithm: "allowAnyParent",
+          location: [["select", 0]],
+          nodeDescription: dropCandidates[1]
+        }
       ]);
   });
 });
