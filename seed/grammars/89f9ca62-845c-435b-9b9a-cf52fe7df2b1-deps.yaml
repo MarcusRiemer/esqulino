@@ -1,0 +1,4 @@
+---
+- - "../seed/programming_language"
+  - generic
+  - !ruby/class 'Seed::ProgrammingLanguageSeed'

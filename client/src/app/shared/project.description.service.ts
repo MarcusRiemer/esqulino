@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class ProjectDescriptionService {
   /**
    * @param _http Dependently injected
    */
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _serverApi: ServerApiService,
     private _flashService: FlashService) {
     this._cache = new BehaviorSubject<ProjectFullDescription[]>([]);
@@ -46,9 +46,8 @@ export class ProjectDescriptionService {
   fetchProjects(): Observable<ProjectFullDescription[]> {
     // Ask the server for available projects
     const uri = this._serverApi.getProjectListUrl();
-    this._httpRequest = this._http.get(uri)
+    this._httpRequest = this._http.get<ProjectFullDescription[]>(uri)
       .pipe(
-        map(res => <ProjectFullDescription[]>res.json()),
         catchError(err => {
           this._flashService.addMessage({
             caption: "Fehler beim Laden der Projekte: ",

@@ -7,7 +7,7 @@ import {
 import { EditorBlockDescription } from "../block.description";
 
 import { GeneratorError } from './error.description'
-import { BlockLanguageGeneratorDocument } from "./generator.description";
+import { BlockLanguageGeneratorDocument, ManualBlockLanguageGeneratorDescription } from "./generator.description";
 import { TraitMap } from "./traits";
 import { ParameterMap } from "./parameters";
 import { GeneratorInstructions } from "./instructions";
@@ -35,6 +35,18 @@ const defaultEditorComponents: EditorComponentDescription[] = [
 export function validateGenerator(
   d: BlockLanguageGeneratorDocument
 ): GeneratorError[] {
+  switch (d.type) {
+    case "manual": return (validateManualGenerator(d));
+    default: throw new Error(`validateGenerator(): Unknown BlockLanguageGenerator "${d.type}"`);
+  }
+}
+
+/**
+ * Ensures that there should be no errors during generation.
+ */
+export function validateManualGenerator(
+  d: ManualBlockLanguageGeneratorDescription
+): GeneratorError[] {
   const toReturn: GeneratorError[] = [];
 
   // Apply traits
@@ -56,8 +68,8 @@ export function validateGenerator(
  * Takes a grammar description and a description how to transform it and
  * generates the corresponding block language.
  */
-export function convertGrammar(
-  d: BlockLanguageGeneratorDocument,
+export function convertGrammarManualInstructions(
+  d: ManualBlockLanguageGeneratorDescription,
   g: GrammarDocument
 ): BlockLanguageDocument {
   // Some information is provided 1:1 by the generation instructions,
@@ -115,7 +127,14 @@ export function generateBlockLanguage(
   d: BlockLanguageGeneratorDocument,
   g: GrammarDocument
 ): BlockLanguageDescription {
-  const generated = convertGrammar(d, g);
+  const runGenerator = () => {
+    switch (d.type) {
+      case "manual": return (convertGrammarManualInstructions(d, g));
+      default: throw new Error(`generateBlockLanguage(): Unknown BlockLanguageGenerator "${d.type}"`);
+    }
+  }
+
+  const generated = runGenerator();
 
   const toReturn = Object.assign({}, l, generated);
 

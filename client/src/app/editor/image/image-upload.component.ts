@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { ServerApiService } from '../../shared'
@@ -14,7 +14,7 @@ export class ImageUploadComponent {
 
   constructor(
     private _serverApi: ServerApiService,
-    private _http: Http,
+    private _http: HttpClient,
     private _projectService: ProjectService,
     private _router: Router,
     private _routeParams: ActivatedRoute
@@ -29,8 +29,7 @@ export class ImageUploadComponent {
     const projectId = this._projectService.cachedProject.slug;
 
     this._http.post(this._serverApi.getImageUploadUrl(projectId), formData)
-      .subscribe(res => {
-        console.log(res);
+      .subscribe(_ => {
         //TODO handle failure
         this._router.navigate(["../"], { relativeTo: this._routeParams });
       });

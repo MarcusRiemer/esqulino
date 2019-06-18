@@ -73,7 +73,6 @@ GEM
     factory_bot_rails (4.11.1)
       factory_bot (~> 4.11.1)
       railties (>= 3.0.0)
-    fakefs (0.19.2)
     falcon (0.26.0)
       async (~> 1.13)
       async-container (~> 0.10.0)
@@ -251,7 +250,6 @@ DEPENDENCIES
   byebug
   database_cleaner (~> 1.7)
   factory_bot_rails (~> 4.11)
-  fakefs
   falcon (~> 0.19)
   guard-rspec
   irb

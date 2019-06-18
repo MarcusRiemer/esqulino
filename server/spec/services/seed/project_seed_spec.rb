@@ -95,8 +95,6 @@ RSpec.describe Seed::ProjectSeed do
         # something via slug returns a different instance.
         #
         # We avoid this by using unique slugs in exactly these tests.
-        #
-        # TODO: Maybe using FakeFS would mitigate this better?
         pOrig = FactoryBot.create(:project, name: "Test", slug: "a" + SecureRandom.hex)
 
         Seed::ProjectSeed.new(pOrig).start_store
