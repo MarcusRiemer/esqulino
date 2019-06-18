@@ -1,6 +1,9 @@
 
 
 class IdentitiesController < ApplicationController
+  include AuthHelper
+  include IdentityHelper
+
   before_action :authenticate_user!
 
   def change_password_params
@@ -12,7 +15,7 @@ class IdentitiesController < ApplicationController
 
   def reset_password_params
     params
-        .permit([:email, :password, :confirmedPassword, :token])
+        .permit([:password, :confirmedPassword, :token])
         .transform_keys { |k| k.underscore }
   end
 
@@ -26,38 +29,31 @@ class IdentitiesController < ApplicationController
         .permit([:verify_token])
   end
 
-  def search_for_identity(permited_params)
-    return Identity.search({
-      provider: "identity",
-      uid: permited_params[:email]
-    })
+  def delete_identity_params
+    params
   end
-
-
+  
   def show
     if signed_in?
-      # TODO return every provider for a specific user
+      api_response(@current_user.all_providers)
     end
   end
 
   def reset_password
     permited_params = reset_password_params
-    identity = search_for_identity(permited_params)
+    identity = PasswordIdentity.where("data ->> 'password_reset_token' = ? ", permited_params[:token])
+                       .first
 
     if identity
-      if identity.reset_token_eql?(permited_params[:token])
-        if !identity.reset_token_expired?
-          identity.set_reset_token_expired
-          identity.set_password(permited_params[:password])
-          render_user_description({ loggged_in: false })
-        else
-          render json: { error: "token expired" }, status: :unauthorized
-        end
+      if !identity.reset_token_expired?
+        identity.set_reset_token_expired
+        identity.set_password_all_with_user_id(permited_params[:password])
+        api_response({ loggged_in: false })
       else
-        render json: { error: "token not valid" }, status: :unauthorized
+        render json: { error: "token expired" }, status: :unauthorized
       end
     else 
-      render json: { error: "e-mail not found"}, status: :unauthorized
+      render json: { error: "token not valid"}, status: :unauthorized
     end
   end
 
@@ -73,7 +69,7 @@ class IdentitiesController < ApplicationController
 
 
   def email_confirmation
-    identity = Identity.where("data ->> 'verify_token' = ?", email_confirmation_params[:verify_token]).first
+    identity = PasswordIdentity.where("data ->> 'verify_token' = ?", email_confirmation_params[:verify_token]).first
     # identity found and not confirmed
     if identity && !identity.confirmed?
       identity.confirmed!
@@ -87,21 +83,46 @@ class IdentitiesController < ApplicationController
 
   def change_password
     if signed_in?
-      identity = Identity.search_with_user_id(@current_user[:id])
-                          .where("provider = 'identity'")
-                          .first
+      identity = PasswordIdentity.find_by(user_id: @current_user[:id], provider: 'identity')
 
       if (identity)
         permited_params = change_password_params
         if !identity.password_eql?(permited_params[:new_password])
           if identity.password_eql?(permited_params[:current_password])
             identity.set_password_all_with_user_id(permited_params[:new_password])
-            IdentityMailer.changed_password(identity, @current_user.display_name).deliver
-            render_user_description({ loggged_in: true })
+            IdentityMailer.changed_password(identity).deliver
+            api_response({ loggged_in: true })
+          else
+            render json: { error: "current password is wrong"}, status: :unauthorized
           end
         end
       else
         render json: { error: "no vailable identity found"}, status: :unauthorized
+      end
+    end
+  end
+
+  def destroy
+    if signed_in?   
+      permited_params = delete_identity_params
+      identity = search_for_identity(permited_params)
+      if (identity)
+        if (Identity.where(user_id: @current_user[:id]).count > 1)
+          if (!@current_user.email.eql? identity.uid)
+            if identity.user_id.eql? @current_user.id
+              identity.delete
+              api_response(@current_user.all_providers)
+            else
+              render json: { error: "you can't delete this identity" }, status: :unauthorized
+            end
+          else 
+            render json: { error: "you can't delete the primary e-mail" }, status: :unauthorized
+          end
+        else
+          render json: { error: "you need more than one e-email" }, status: :unauthorized
+        end
+      else 
+        render json: { error: "there is none identity with this email"}, status: :unauthorized
       end
     end
   end

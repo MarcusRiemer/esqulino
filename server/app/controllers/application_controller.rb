@@ -1,4 +1,5 @@
 require_dependency 'error'
+require 'bcrypt'
 
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
@@ -14,7 +15,7 @@ class ApplicationController < ActionController::API
 
   # AUTHENTICATION METHODS
 
-  def render_user_description(hash)
+  def api_response(hash)
     render json: hash
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
@@ -23,53 +24,7 @@ class ApplicationController < ActionController::API
     return !@current_user.nil?
   end
 
-  def set_identity(identity)
-    @identity = identity
-  end
-
-  def create_identity(auth = request.env["omniauth.auth"], email = false)
-    @identity = Identity.search(auth)
-    if !@identity
-      if (email) 
-        IdentityMailer.confirm_email(auth, request_locale).deliver
-      end
-      @identity = Identity.create_with_auth(auth, @current_user)
-    end
-  end
-
-  def sign_in
-    if !signed_in?
-      @current_user = @identity.user
-      token = Auth.encode({user_id: @identity.user_id, data: @identity[:data]})
-      response_jwt_cookie(token)
-    end
-  end
-
-  def sign_out!
-    if signed_in?
-      @current_user = nil
-      delete_jwt_cookie!
-    end
-  end
-
-  def response_jwt_cookie(value, expires = 1.day.from_now)
-    response.set_cookie('JWT-TOKEN', {
-      value: value,
-      httponly: true,
-      expires: expires,
-      path: '/'
-    })
-  end
-
-  def delete_jwt_cookie!()
-    response_jwt_cookie("", 0.seconds.from_now)
-  end
-
   def authenticate_user!
-    current_user()
-  end
-
-  def current_user
     token = request.cookies['JWT-TOKEN']
     if token
       begin
@@ -78,14 +33,12 @@ class ApplicationController < ActionController::API
           @current_user = User.find(token_decoded[:user_id].to_s)
         end
       rescue ActiveRecord::RecordNotFound => e
-        sign_out!
         render json: { errors: e.message }, status: :unauthorized
       rescue JWT::DecodeError => e
-        sign_out!
         render json: { errors: e.message }, status: :unauthorized
       end
     else
-      sign_out!
+      @current_user = nil
     end
   end
 

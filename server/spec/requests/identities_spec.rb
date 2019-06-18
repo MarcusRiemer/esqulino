@@ -1,7 +1,7 @@
 
 require 'rails_helper'
 
-RSpec.describe "identities controller" do
+RSpec.fdescribe "identities controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   let(:user) { create(:user) }
@@ -31,7 +31,7 @@ RSpec.describe "identities controller" do
   it "saving password as hash" do
     identity = create(:identity, :identity_provider, password: "1234567", user_id: user[:id])
     expect(identity[:data]["password"]).to_not eq("1234567")
-    expect(Identity.all.first.password_eql?("1234567")).to be_truthy
+    expect(PasswordIdentity.all.first.password_eql?("1234567")).to be_truthy
   end
 
   it "password changing" do
@@ -46,7 +46,25 @@ RSpec.describe "identities controller" do
         newPassword: "newPassword"
       }.to_json
 
-    expect(Identity.all.first.password_eql?("newPassword"))
+    expect(PasswordIdentity.all.first.password_eql?("newPassword"))
+  end
+
+  it "password changing of all identities with password" do
+    create(:identity, :identity_provider, user_id: user[:id])
+    identity = create(:identity, :existing_identity, user_id: user[:id])
+
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    put '/api/identities/change_password',
+      :headers => json_headers,
+      :params => {
+        currentPassword: identity[:data]["password"],
+        newPassword: "newPassword"
+      }.to_json
+
+    expect(Identity.all.count).to eq(2)
+    expect(PasswordIdentity.all.first.password_eql?("newPassword"))
+    expect(PasswordIdentity.all.last.password_eql?("newPassword"))
   end
 
 
@@ -62,29 +80,27 @@ RSpec.describe "identities controller" do
         newPassword: "newPassword"
       }.to_json
 
-    expect(Identity.all.first[:data]["password"]).to eq(identity[:data]["password"])
+    expect(PasswordIdentity.all.first[:data]["password"]).to eq(identity[:data]["password"])
   end
 
   it "resetting password" do
     identity = create(:identity, :existing_identity, user_id: user[:id])
+    user.set_email(identity[:uid])
 
     post "/api/identities/reset_password_mail",
       :headers => json_headers,
       :params => {
-        email: identity[:uid]
+        email: user[:email]
       }.to_json
-
-    token_arrived_identity = Identity.all.first
 
     put "/api/identities/reset_password",
       :headers => json_headers,
       :params => {
-        email: token_arrived_identity[:uid],
-        token: token_arrived_identity[:data]["password_reset_token"],
+        token: PasswordIdentity.first[:data]["password_reset_token"],
         password: "reseted_password"
       }.to_json
 
-    expect(Identity.all.first.password_eql?("reseted_password")).to be_truthy
+    expect(PasswordIdentity.all.first.password_eql?("reseted_password")).to be_truthy
   end
 
   it "resetting password with wrong email" do
@@ -103,7 +119,7 @@ RSpec.describe "identities controller" do
 
   it "resetting password with invalid token" do
     identity = create(:identity, :existing_identity, user_id: user[:id])
-
+    user.set_email(identity[:uid])
 
     post "/api/identities/reset_password_mail",
       :headers => json_headers,
@@ -111,12 +127,9 @@ RSpec.describe "identities controller" do
         email: identity[:uid]
       }.to_json
 
-    token_arrived_identity = Identity.all.first
-
     put "/api/identities/reset_password",
       :headers => json_headers,
       :params => {
-        email: token_arrived_identity[:uid],
         token: "invalid-token",
         password: "reseted_password"
       }.to_json
@@ -141,6 +154,108 @@ RSpec.describe "identities controller" do
     json_data = JSON.parse(response.body)
     expect(json_data["error"]).to eq("token expired")
     expect(response.status).to eq(401)
+  end
 
+  it "getting all of the providers in an object" do
+    identity = create(:identity, :existing_identity, uid: "another@web.de", user_id: user[:id])
+    create(:identity, :existing_identity, user_id: user[:id])
+    create(:identity, :developer_provider, user_id: user[:id])
+
+    user.set_email(identity[:uid])
+
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    get '/api/identities'
+
+    json_data = JSON.parse(response.body)
+    expect(json_data["intern"].count).to eq(2)
+    expect(json_data["extern"].count).to eq(1)
+    expect(json_data["primary"]).to eq(identity[:uid])
+    # expect(json_data["confirmed"]).to eq(true)
+  end
+
+  it "deleting identity" do
+    identity = create(:identity, :existing_identity, uid: "another@web.de", user_id: user[:id])
+    create(:identity, :existing_identity, user_id: user[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    expect(Identity.all.count).to eq(2)
+
+    delete '/api/identities/delete_identity',
+      :headers => json_headers,
+      :params => {
+        uid: identity.uid
+      }.to_json
+
+    expect(response.status).to eq(200)
+    expect(Identity.all.count).to eq(1)
+  end
+
+  it "deleting identity with wrong uid" do
+    identity = create(:identity, :existing_identity, uid: "another@web.de", user_id: user[:id])
+    create(:identity, :existing_identity, user_id: user[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    expect(Identity.all.count).to eq(2)
+
+    delete '/api/identities/delete_identity',
+      :headers => json_headers,
+      :params => {
+        uid: "wrong_uid"
+      }.to_json
+
+    expect(response.status).to eq(401)
+    expect(Identity.all.count).to eq(2)
+  end
+
+  it "deleting identity from another user" do
+    user2 = create(:user)
+    identity = create(:identity, :existing_identity, uid: "another@web.de", user_id: user[:id])
+    create(:identity, :existing_identity, user_id: user2[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user2[:id]})
+
+    expect(Identity.all.count).to eq(2)
+
+    delete '/api/identities/delete_identity',
+      :headers => json_headers,
+      :params => {
+        uid: identity.uid
+      }.to_json
+
+    expect(response.status).to eq(401)
+    expect(Identity.all.count).to eq(2)
+  end
+
+  it "deleting identity while passed uid is primary mail" do
+    identity = create(:identity, :existing_identity, uid: "another@web.de", user_id: user[:id])
+    create(:identity, :existing_identity, user_id: user[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+    user.set_email(identity[:uid])
+
+    expect(Identity.all.count).to eq(2)
+
+    delete '/api/identities/delete_identity',
+      :headers => json_headers,
+      :params => {
+        uid: identity.uid
+      }.to_json
+
+    expect(response.status).to eq(401)
+    expect(Identity.all.count).to eq(2)
+  end
+
+
+  it "deleting identity while only one identity exists" do
+    identity = create(:identity, :existing_identity, uid: "another@web.de", user_id: user[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    delete '/api/identities/delete_identity',
+      :headers => json_headers,
+      :params => {
+        uid: identity.uid
+      }.to_json
+
+    expect(response.status).to eq(401)
+    expect(Identity.all.count).to eq(1)
   end
 end

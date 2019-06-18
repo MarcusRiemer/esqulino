@@ -1,8 +1,7 @@
-
-require 'bcrypt'
-
 class AuthController < ApplicationController
-  include BCrypt
+  include AuthHelper
+  include IdentityHelper
+
   before_action :authenticate_user!
 
   def register_params
@@ -10,6 +9,10 @@ class AuthController < ApplicationController
         .permit([:email, :username, :password])
   end
 
+  def login_params
+    params
+        .permit([:email, :password])
+  end
 
   def callback
     create_identity
@@ -19,17 +22,13 @@ class AuthController < ApplicationController
   end
 
   def login_with_password
-    auth = {
-      provider: "identity",
-      uid: params[:email]
-    }
-    identity = Identity.search(auth)
+    identity = search_for_identity(login_params)
     if identity
       if identity.confirmed?
         if identity.password_eql?(params[:password])
           set_identity(identity)
           sign_in
-          render_user_description({ loggged_in: true })
+          api_response({ logged_in: true })
         else
           render json: { error: "Wrong password" }, status: :unauthorized
         end
@@ -43,28 +42,16 @@ class AuthController < ApplicationController
 
   def register
     permited_params = register_params
-    auth = {
-      provider: "identity",
-      uid: permited_params[:email],
-      info: {
-        name: permited_params[:username]
-      },
-      data: {
-        email: permited_params[:email],
-        password: Password.create(permited_params[:password]),
-        verify_token: SecureRandom.uuid,
-        confirmed: false
-      }
-    }
+    auth = create_auth(permited_params)
 
     create_identity(auth, true)
-    render_user_description({ loggged_in: false })
+    api_response({ loggged_in: false })
   end
 
   def destroy
     sign_out!
     delete_jwt_cookie!
-    render_user_description({ loggged_in: false })
+    api_response({ loggged_in: false })
   end
 end
 
