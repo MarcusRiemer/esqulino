@@ -8,8 +8,9 @@ Rails.application.routes.draw do
       get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
       post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
       post 'create_identity', controller: 'identities', action: :create
-      put 'reset_password', controller: 'identities', action: :reset_password
-      put 'change_password', controller: 'identities', action: :change_password
+      post 'send_verify_email', controller: 'identities', action: :send_verify_email
+      patch 'reset_password', controller: 'identities', action: :reset_password
+      patch 'change_password', controller: 'identities', action: :change_password
       delete 'delete_identity', controller: 'identities', action: :destroy
     end
 

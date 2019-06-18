@@ -34,11 +34,29 @@ class PasswordIdentity < Identity
     return self.data["password_reset_token"].eql? token
   end
 
+  def can_send_verify_mail?
+    return waiting_time <= 0
+  end
+
+  def set_waiting_time
+    self.data["waiting_time_verify_mail"] = 2.minutes.from_now
+    self.save
+  end
+  
+  def waiting_time
+    need_to_wait = self.data["waiting_time_verify_mail"] || 1.minutes.ago
+    return ((need_to_wait.to_time - Time.current) / 1.minute).round
+  end
+
   def reset_token_expired?()
     return self.data["password_reset_token_exp"] < Time.now
   end
 
   def password_eql?(password)
+    # comparing nil with Password.new(self.data["password"]) will be true 
+    if password.nil?
+      return false
+    end
     return Password.new(self.data["password"]) == password
   end
 

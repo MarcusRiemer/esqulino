@@ -3,6 +3,7 @@
 class IdentitiesController < ApplicationController
   include AuthHelper
   include IdentityHelper
+  include LocaleHelper
 
   before_action :authenticate_user!
 
@@ -19,7 +20,7 @@ class IdentitiesController < ApplicationController
         .transform_keys { |k| k.underscore }
   end
 
-  def reset_password_mail_params
+  def mail_permit_param
     params
         .permit([:email])
   end
@@ -58,13 +59,32 @@ class IdentitiesController < ApplicationController
   end
 
   def reset_password_mail
-    identity = search_for_identity(reset_password_mail_params)
+    identity = search_for_password_identity(mail_permit_param)
     if identity
       identity.set_reset_token
       IdentityMailer.reset_password(identity, request_locale).deliver
     else 
       render json: { error: "e-mail not found"}, status: :unauthorized
-    end#
+    end
+  end
+
+  def send_verify_email
+    identity = search_for_password_identity(mail_permit_param)
+    if identity
+      if !identity.confirmed?       
+        if identity.can_send_verify_mail?
+          identity.set_waiting_time()
+          IdentityMailer.confirm_email(identity, request_locale).deliver
+          api_response({loggged_in: false})
+        else
+          render json: { error: `You need to wait for #{identity.waiting_time} minutes` }, status: :unauthorized
+        end
+      else
+        render json: { error: "e-mail already confirmed"}, status: :unauthorized
+      end
+    else 
+      render json: { error: "e-mail not found"}, status: :unauthorized
+    end
   end
 
 
@@ -84,7 +104,6 @@ class IdentitiesController < ApplicationController
   def change_password
     if signed_in?
       identity = PasswordIdentity.find_by(user_id: @current_user[:id], provider: 'identity')
-
       if (identity)
         permited_params = change_password_params
         if !identity.password_eql?(permited_params[:new_password])
@@ -103,9 +122,9 @@ class IdentitiesController < ApplicationController
   end
 
   def destroy
-    if signed_in?   
+    if signed_in?
       permited_params = delete_identity_params
-      identity = search_for_identity(permited_params)
+      identity = search_for_password_identity(permited_params)
       if (identity)
         if (Identity.where(user_id: @current_user[:id]).count > 1)
           if (!@current_user.email.eql? identity.uid)
