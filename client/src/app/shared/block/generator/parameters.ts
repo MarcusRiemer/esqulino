@@ -73,7 +73,7 @@ export class ParameterMap {
   }
 
   /**
-   * Check whether the given instructions could be meaningfully resoloved.
+   * Check whether the given instructions could be meaningfully resolved.
    */
   validate(instructions: AllReferenceableTypeInstructions): GeneratorError[] {
     const toReturn: GeneratorError[] = [];

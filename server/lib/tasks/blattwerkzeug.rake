@@ -69,7 +69,6 @@ namespace :blattwerkzeug do
     task :load_all => :environment do |t, args|
       m.load_all_programming_languages
       m.load_all_grammars
-      m.load_all_block_language_generators
       m.load_all_block_languages
     end
 
@@ -77,7 +76,6 @@ namespace :blattwerkzeug do
     task :store_all => :environment do |t, args|
       m.store_all_programming_languages
       m.store_all_grammars
-      m.store_all_block_language_generators
       m.store_all_block_languages
     end
   end

@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core'
 import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { first, map, tap } from 'rxjs/operators';
 
@@ -133,7 +133,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
    */
   get autocompleteTrait() {
     const instructions = this._editedBlockLanguageService.editedSubject.localGeneratorInstructions;
-    if (instructions) {
+    if (instructions && instructions.type === "manual") {
       return (
         Object.keys(instructions.traits)
           .filter(traitName => this.scope.traits.indexOf(traitName) < 0)

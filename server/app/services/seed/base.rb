@@ -225,6 +225,14 @@ module Seed
           end
         end
       end
+    rescue ActiveRecord::RecordInvalid => e
+      # Reading the stdout-dump is really tedious, so we drop to pry instead
+      if Rails.env.development?
+        binding.pry
+      end
+
+      # Re-raise the original exception
+      raise
     end
 
     # load yaml dump as seed instaces ready to be loaded

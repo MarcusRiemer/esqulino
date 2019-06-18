@@ -11,6 +11,7 @@ import { generateBlockLanguage, validateGenerator } from '../../shared/block/gen
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
 import { GeneratorError } from '../../shared/block/generator/error.description'
 import { prettyPrintGrammar } from '../../shared/syntaxtree';
+import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description';
 
 @Injectable()
 export class EditBlockLanguageService {
@@ -91,9 +92,9 @@ export class EditBlockLanguageService {
   /**
    * Reruns the block language generator.
    */
-  async regenerate() {
+  regenerate() {
     // Grab the instructions or assume default instructions
-    const instructions = this.editedSubject.localGeneratorInstructions || {};
+    const instructions = this.editedSubject.localGeneratorInstructions || DEFAULT_GENERATOR;
 
     // Ensure the instructions are valid
     // TODO: Do actual validation again

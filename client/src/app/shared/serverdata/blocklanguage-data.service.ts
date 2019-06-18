@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { BlockLanguageListDescription, BlockLanguageDescription } from '../block/block-language.description';
 
@@ -18,7 +18,7 @@ export class BlockLanguageDataService extends DataService<BlockLanguageListDescr
     snackBar: MatSnackBar,
     http: HttpClient
   ) {
-    super(http, snackBar, _serverApi.getGrammarListUrl(), "BlockLanguage");
+    super(http, snackBar, _serverApi.getBlockLanguageListUrl(), "BlockLanguage");
   }
 
   protected resolveIndividualUrl(id: string): string {

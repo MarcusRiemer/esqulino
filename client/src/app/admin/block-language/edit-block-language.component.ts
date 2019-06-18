@@ -12,7 +12,7 @@ import { EditBlockLanguageService } from './edit-block-language.service'
 })
 export class EditBlockLanguageComponent implements AfterViewInit {
 
-  @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
+  @ViewChild("toolbarButtons", { static: false }) toolbarButtons: TemplateRef<any>;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
