@@ -16,25 +16,25 @@ export class UserButtonComponent{
   constructor(
     private _dialog: MatDialog,
     private _userService: UserService,
-    private _router: Router,
-    private _snackBar: MatSnackBar
+    private _router: Router
   ) {}
 
   readonly userDisplayName = this._userService.userDisplayName$
 
   public openDialog(): void {
     AuthDialogComponent.showDialog(this._dialog)
+    this._userService.isLoggedIn$.subscribe(
+      loggedIn => {
+        if (loggedIn) {
+          this._dialog.closeAll()
+        }
+      }
+    )
   }
 
   public onLinkAccount(): void {
     LinkIdentityComponent.showDialog(this._dialog)
   }
-
-  public onChangeEmail(): void {
-
-  }
-
-
 
   public onLogout(): void {
    this._userService.logout$().subscribe(

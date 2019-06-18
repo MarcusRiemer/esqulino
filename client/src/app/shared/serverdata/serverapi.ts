@@ -35,6 +35,10 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/auth/identity`)
   }
 
+  getUserIdentitiesUrl(): string {
+    return (`${this._apiBaseUrl}/identities`)
+  }
+
   getSignOutUrl(): string {
     return (`${this._apiBaseUrl}/auth/sign_out`)
   }
@@ -49,6 +53,18 @@ export class ServerApi {
 
   getPasswordResetUrl(): string {
     return (`${this._apiBaseUrl}/identities/reset_password`)
+  }
+
+  getChangePrimaryEmailUrl(): string {
+    return (`${this._apiBaseUrl}/user/change_primary_email`)
+  }
+
+  getDeleteEmailUrl(): string {
+    return (`${this._apiBaseUrl}/identities/delete_identity`)
+  }
+
+  getSendVerifyEmailUrl(): string {
+    return (`${this._apiBaseUrl}/identities/send_verify_email`)
   }
 
   /**

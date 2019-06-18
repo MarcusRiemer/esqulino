@@ -1,12 +1,69 @@
-<div class="general">
-  <h1>E-Mails</h1> 
+<div class="general email-settings">
+  <h1>E-Mails</h1>
   <hr>
 
-  <ul class="list-group">
-    <li class="list-group-item active">Cras justo odio <i class="fa fa-trash-o" aria-hidden="true"></i>    </li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Morbi leo risus</li>
-    <li class="list-group-item">Porta ac consectetur ac</li>
-    <li class="list-group-item">Vestibulum at eros</li>
-  </ul>
+  <ng-container *ngIf="identities">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Hinzugefügte E-Mails</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isInternEmpty()">
+          <td></td>
+        </tr>
+        <tr *ngFor="let identity of identities.intern">
+          <td>
+            {{identity.uid}}
+            <button mat-icon-button
+              (click)="onDeleteEmail(identity.uid)">
+
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <validate-input
+      icon="envelope-o"
+      [(value)]="newEmailData.email">
+
+      <input #inputRef      
+        type="email"
+        class="form-control"
+        placeholder="Insert a new e-mail">
+    
+    </validate-input>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onAddEmail()">
+
+      Hinzufügen
+    </button>
+
+
+    <label>Wähle eine primäre E-Mail and die jegliche E-Mails geschickt werden sollen</label>
+    <select
+      class="custom-select"
+      [(ngModel)]="primaryEmailData.primaryEmail">
+
+      <option *ngFor="let identity of identities.intern"
+        [value]="identity.uid">
+
+        {{identity.uid}}
+      </option>
+    </select>
+  </ng-container>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onChangePrimaryEmail()">
+
+    Speichern
+  </button>
 </div>

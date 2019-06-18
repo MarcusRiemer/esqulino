@@ -26,7 +26,7 @@ export class ChangePasswordComponent {
         .changePassword$(this.newPasswordData)
         .subscribe()
     } else {
-      alert("")
+      alert("Die eigegebenen Passwörter sind nicht gleich.")
     }
   }
 }

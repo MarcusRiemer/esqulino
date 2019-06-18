@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { Component } from '@angular/core';
 import {  MatDialog } from '@angular/material';
 
@@ -8,7 +9,9 @@ import { providers } from './providers';
 })
 export class AuthDialogComponent {
 
-  constructor() {}
+  constructor(
+    private _userService: UserService
+  ) { }
 
   public readonly providers = providers
 

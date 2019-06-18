@@ -23,7 +23,7 @@ export const userRoutes: Routes = [
         loadChildren: './settings/settings.module#UserSettingsModule',
       },
       {
-        path: 'reset_password',
+        path: 'reset_password/:token',
         component: ResetPasswordComponent,
       },
     ]

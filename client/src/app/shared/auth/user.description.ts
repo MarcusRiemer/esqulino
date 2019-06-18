@@ -25,7 +25,6 @@ export interface PasswordConfirmedDescription {
 }
 
 export interface PasswordTokenDescription{
-  email: string;
   password: string;
   confirmedPassword: string;
   token: string;

@@ -9,11 +9,6 @@ export interface SignInDescription {
   password: string;
 }
 
-export interface ProviderDescription {
-  name: string;
-  urlName: string;
-}
-
 export interface ChangePasswordDescription {
   currentPassword: string;
   newPassword: string;
