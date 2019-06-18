@@ -28,11 +28,11 @@ $tmp_story = Array.new
 
 $tmp_char = Hash.new
 
-$story_to_char = Array.new
+$story_to_char = Set.new
 
 # Picture URL
 $pic_url = Array.new
- 
+
 
 def download_info(url_str)
   request_uri = URI.parse(url_str)
@@ -48,7 +48,7 @@ def download_info(url_str)
 end
 
 def _info(doc,book_nmbr,edition_nmbr,title)
-  
+
   story_cnt = doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[3]').text.to_i
   release_date = doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[2]/time').text.tr(" \"\t\r\n", '')
   page_cnt = doc.xpath('//*[@id="page-sidebar"]/div/dl/dd[4]').text.strip.to_i
@@ -70,43 +70,43 @@ def _info(doc,book_nmbr,edition_nmbr,title)
     book_id,
     $base_url + doc.xpath('//*[@id="page-sidebar"]/div/link[1]').attribute('href').value,
     doc.xpath('//*[@id="page-sidebar"]/div/link[1]').attribute('href').value[/([^\/]+)$/]
-]
+  ]
 
   # For each story
   for i in 1..story_cnt do
     # Each story has a numerating tbody
-      code = nil
-      genre = nil
-      orig_title = nil
-      orig_country = nil
-      story_page_cnt = nil
-      chars = Array.new
-      curr_story = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small')
-      story_title = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr("\t\r\n", '').gsub(/  +/, "")
-      story_id = $tmp_story.length + 1
-      if curr_story.nil?
+    code = nil
+    genre = nil
+    orig_title = nil
+    orig_country = nil
+    story_page_cnt = nil
+    chars = Array.new
+    curr_story = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small')
+    story_title = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr("\t\r\n", '').gsub(/  +/, "")
+    story_id = $tmp_story.length + 1
+    if curr_story.nil?
 
-      else
+    else
       #story_title = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[1]/i').text.tr("\t\r\n", '').gsub(/  +/, "")
       curr_story.each do |small|
         tmp_small = small.text.tr("\"\t\r\n", '').gsub(/  +/, "").split(':')
         case tmp_small[0]
-          when "Code"
-            code = tmp_small[1]
-          when "Genre"
-            genre = tmp_small[1]
-          when "Originaltitel"
-            orig_title = tmp_small[1]
-          when "Ursprung"
-            orig_country = tmp_small[1]
-          when "Seitenanzahl"
-            story_page_cnt = tmp_small[1]
-          when "Charaktere"
-            chars = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small[2]/span')
-          end
+        when "Code"
+          code = tmp_small[1]
+        when "Genre"
+          genre = tmp_small[1]
+        when "Originaltitel"
+          orig_title = tmp_small[1]
+        when "Ursprung"
+          orig_country = tmp_small[1]
+        when "Seitenanzahl"
+          story_page_cnt = tmp_small[1]
+        when "Charaktere"
+          chars = doc.xpath('//*[@id="page-content"]/div[2]/table/tbody['+(i+1).to_s+']/tr/td[1]/div/div[2]/small[2]/span')
+        end
       end
-      
-      
+
+
       $book_to_story << [book_id,story_id]
 
       # For each character in currenty story
@@ -114,12 +114,15 @@ def _info(doc,book_nmbr,edition_nmbr,title)
         char_name = span.text
         # Does the character name already occur?
         if not $tmp_char.key? char_name then
-        $tmp_char[char_name] = $tmp_char.length + 1
-        #p char_name
-      end
+          $tmp_char[char_name] = $tmp_char.length + 1
+          #p char_name
+        end
 
         char_id = $tmp_char[char_name]
-        $story_to_char << [story_id, char_id]
+        added = $story_to_char.add? [story_id, char_id]
+        if not added then
+          puts "Did not add story_to_char (duplicate): #{[story_id, char_id]}"
+        end
       end
     end
     $tmp_story << [
@@ -152,10 +155,10 @@ def get_auflagen(url_str)
 
   # If there are editions
   if (!edition_li.empty?) then
-    edition_li.each do |x|  
+    edition_li.each do |x|
       # Get the document of the current book
       tmp_doc = download_info($base_url + x.child.attribute('href').value)
-      # Get the number of the edition 
+      # Get the number of the edition
       edition_nmbr = x.text.tr('\"\"', '\"').delete('Nr.').to_i
 
       tmp_node = tmp_node || $last_node == _info(tmp_doc,book_nmbr,edition_nmbr,title)
