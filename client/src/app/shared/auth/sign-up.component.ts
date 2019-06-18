@@ -25,14 +25,13 @@ export class SignUpComponent {
   }
 
   public onSendVerifyLink(): void {
-
+    
   }
 
   public onSignUp(): void {
     if (this.isPasswordEq()) {
       this._userService.signUp$(this.signUpData).subscribe(
-        _ => alert("Please confirm your e-mail"),
-       
+        _ => alert("Please confirm your e-mail")
       )
     }
   }

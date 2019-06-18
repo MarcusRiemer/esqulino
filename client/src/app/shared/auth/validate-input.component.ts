@@ -1,4 +1,9 @@
-import { Component, Input, EventEmitter, Output, ElementRef, HostListener, ContentChild, Renderer2, AfterViewInit, OnInit, ViewChild } from "@angular/core";
+import {
+  Component, Input, EventEmitter, 
+  Output, ElementRef, HostListener, 
+  ContentChild, Renderer2, AfterViewInit, 
+  ViewChild
+} from "@angular/core";
 
 
 @Component({

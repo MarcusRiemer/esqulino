@@ -28,19 +28,15 @@ export class ResetPasswordComponent implements AfterViewInit {
   public resetPasswordData: UserPasswordDescription = {
     password: undefined,
     confirmedPassword: undefined,
-    email: this._activeRoute.snapshot.queryParams["email"],
-    token: this._activeRoute.snapshot.queryParams["token"]
+    token: this._activeRoute.snapshot.paramMap.get("token")
   }
 
 
-  // TODO-TOM ASK MARCUS FOR A BETTER METHOD THAN setTimeout
   public ngAfterViewInit(): void {
-    setTimeout(() => {
-      this._dialog.open(this.dialog).afterClosed()
-        .subscribe(_ => {
-          this._router.navigate(['/'])
-        });
-    });
+    this._dialog.open(this.dialog).afterClosed()
+      .subscribe(_ => {
+        this._router.navigate(['/'])
+      });
   }
 
   public onResetButton(): void {

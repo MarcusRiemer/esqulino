@@ -5,6 +5,9 @@
       (selectedTabChange)="changeToPrimaryContent()">
 
     <mat-tab label="Sign in">
+      <provider-auth></provider-auth>  
+
+      <hr>
       <sign-in
         *ngIf="primaryContent"
         (content)="changeContent()">
@@ -14,17 +17,16 @@
         *ngIf="!primaryContent">
       </reset-password-request>
 
-      <hr>
-      <provider-auth></provider-auth>  
     </mat-tab>
     <mat-tab label="Sign up">
+      <provider-auth></provider-auth> 
+
+      <hr>
       <sign-up 
         *ngIf="primaryContent"
         (content)="changeContent()">
       </sign-up>
 
-      <hr>
-      <provider-auth></provider-auth>  
     </mat-tab>
   </mat-tab-group>
 </div>

@@ -2,11 +2,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
-import { map, tap, first } from 'rxjs/operators';
+import { map, tap, first, filter } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
+import { ProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -15,14 +16,27 @@ export class UserService {
     private _snackBar: MatSnackBar
   ) {}
 
-  public userData = this._serverData.getUserData
+  public userData$ = this._serverData.getUserData;
+  public identities$ = this._serverData.getIdentities;
 
-  public readonly isLoggedIn$ = this.userData.value.pipe(
+  public readonly isLoggedIn$ = this.userData$.value.pipe(
     map(u => u.loggedIn)
   )
 
-  public readonly userDisplayName$ = this.userData.value.pipe(
+  public readonly userDisplayName$ = this.userData$.value.pipe(
     map(u => u.loggedIn? u.displayName : "Guest")
+  )
+
+  public readonly primaryEmail$ = this.identities$.value.pipe(
+    map(u => u.primary)
+  )
+
+  public readonly internIdentities$ = this.identities$.value.pipe(
+    map(u => u.intern.filter(entry => entry.uid != u.primary))
+  )
+
+  public readonly externIdentities$ = this.identities$.value.pipe(
+    map(u => u.extern)
   )
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
@@ -34,12 +48,7 @@ export class UserService {
   public signIn$(data: SignInDescription): Observable<UserDescription> {
     return this._serverData.signIn$(data).pipe(
       tap(
-        user => {
-          if (user.loggedIn) {
-            this.userData.refresh();
-            this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
-          }
-        },
+        () => this.userData$.refresh(),
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
     )
@@ -48,9 +57,7 @@ export class UserService {
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
     return this._serverData.resetPassword$(data).pipe(
       tap(
-        _ => {
-          this.userData.refresh();
-        },
+        _ => this.userData$.refresh(),
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
     )
@@ -61,7 +68,7 @@ export class UserService {
       tap(
         _ => {
           this._snackBar.open('Password changed', '', {duration: 3000})
-          this.userData.refresh();
+          this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
@@ -71,7 +78,46 @@ export class UserService {
   public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription>{
     return this._serverData.passwordResetRequest$(data).pipe(
       tap(
-        _ => this.userData.refresh(),
+        _ => {
+          this.userData$.refresh()
+          alert("Please check your mails")
+        },
+        (err) => alert(`Error: ${err["error"]["error"]}`)
+      )
+    )
+  }
+
+  public changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ProviderDescription> {
+    return this._serverData.changePrimaryEmail$(data).pipe(
+      tap(
+        _ => {
+          this._snackBar.open('Primary e-mail succesfully changed', '', {duration: 3000})
+          this.identities$.refresh();
+        },
+        (err) => alert(`Error: ${err["error"]["error"]}`)
+      )
+    )
+  }
+
+  public deleteEmail$(uid: string): Observable<ProviderDescription> {
+    return this._serverData.deleteEmail$(uid).pipe(
+      tap(
+        _ => {
+          this._snackBar.open('E-Mail succesfully deleted', '', {duration: 3000})
+          this.identities$.refresh();
+        },
+        (err) => alert(`Error: ${err["error"]["error"]}`)
+      )
+    )
+  }
+
+  public addEmail$(data: UserEmailDescription): Observable<ProviderDescription> {
+    return this._serverData.addEmail$(data).pipe(
+      tap(
+        _ => {
+          this._snackBar.open('Please confirm the E-Mail', '', {duration: 6000})
+          this.identities$.refresh();
+        },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
     )
@@ -82,7 +128,7 @@ export class UserService {
       tap(
         _ => {
           this._snackBar.open('Succesfully logged out', '', {duration: 3000})
-          this.userData.refresh();
+          this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )

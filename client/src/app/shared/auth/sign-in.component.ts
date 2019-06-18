@@ -28,6 +28,12 @@ export class SignInComponent {
   public onSignIn(): void {
     this._userService
       .signIn$(this.signInData)
-      .subscribe()
+      .subscribe(
+        user => {
+          if (user.loggedIn ) {
+            this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
+          }
+        },
+      )
   }
 }

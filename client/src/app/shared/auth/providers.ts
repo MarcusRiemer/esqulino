@@ -4,7 +4,7 @@ export const providers = [
     "name": "Github",
     "urlName": "github",
     "icon": "fa-github",
-    "color": "white"
+    "color": "black"
   },
   {
     "name": "Google",

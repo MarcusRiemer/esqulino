@@ -1,22 +1,44 @@
 
 
+$button_width: 10em;
+$email_width: 20em;
+
 .settings {
   .general {
+    display: flex;
+    flex-direction: column;
+
     h1 {
       margin-top: 5%;
+      margin-bottom: 0%;
+    }
+
+    .input-group, select {
+      margin-bottom: 1vh;
     }
 
     .input-group {
       width: 20em;
-      margin-bottom: 1vh;
+    }
+
+    select {
+      width: $email_width;
+    }
+
+    hr {
+      width: 100%;
+      margin-bottom: 3vh;
     }
   }
 
+  .mat-raised-button {
+    width: $button_width;
+  }
+
   .account-settings {
+
     provider-auth {
-      display: flex;
-      width: 10em;
-      flex-direction: column;
+      width: $button_width;
 
       div {
         margin-bottom: 1vh;
@@ -25,6 +47,38 @@
       div, button {
         width: 100%;
       }
+    }
+  }
+
+  .email-settings {
+    mat-list-item:first-child {
+      border-top: solid;
+      border-width: 1px;
+    }
+
+    label {
+      margin-top: 3vh;
+    }
+
+    mat-list-item {
+      background-color: white;
+      width: $email_width;
+      border: solid;
+      border-top: none;
+      border-width: 1px;
+    }
+
+    .table {
+      border: solid 1px;
+    }
+
+    th,td, .table {
+      width: $email_width;
+      background-color: white;
+    }
+
+    th {
+      border-top: none;
     }
   }
 }

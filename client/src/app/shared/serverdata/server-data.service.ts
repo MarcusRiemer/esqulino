@@ -1,6 +1,5 @@
-import { UserEmailDescription, UserPasswordDescription } from './../auth/user.description';
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
@@ -12,6 +11,8 @@ import { UserDescription } from '../auth/user.description';
 import { ServerApiService } from './serverapi.service';
 import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
+import { ProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
+import { UserEmailDescription, UserPasswordDescription } from './../auth/user.description';
 
 
 
@@ -51,6 +52,10 @@ export class ServerDataService {
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
 
+  readonly getIdentities = new CachedRequest<ProviderDescription>(
+    this._http.get<ProviderDescription>(this._serverApi.getUserIdentitiesUrl())
+  )
+
   signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data);
   }
@@ -73,7 +78,29 @@ export class ServerDataService {
   }
 
   resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
-    return this._http.put<UserDescription>(this._serverApi.getPasswordResetUrl(), data);
+    return this._http.patch<UserDescription>(this._serverApi.getPasswordResetUrl(), data);
+  }
+
+  changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ProviderDescription> {
+    return this._http.patch<ProviderDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
+  }
+
+  addEmail$(data: UserEmailDescription): Observable<ProviderDescription> {
+    return this._http.post<ProviderDescription>(this._serverApi.getSignUpUrl(), data)
+  }
+
+  sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getSendVerifyEmailUrl(), data)
+  }
+
+  deleteEmail$(uid: string): Observable<ProviderDescription> {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: { uid: uid },
+    };
+    return this._http.delete<ProviderDescription>(this._serverApi.getDeleteEmailUrl(), options)
   }
 
   /**
