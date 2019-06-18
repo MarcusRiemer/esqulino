@@ -22,7 +22,7 @@ class AuthController < ApplicationController
   end
 
   def login_with_password
-    identity = search_for_identity(login_params)
+    identity = search_for_password_identity(login_params)
     if identity
       if identity.confirmed?
         if identity.password_eql?(params[:password])

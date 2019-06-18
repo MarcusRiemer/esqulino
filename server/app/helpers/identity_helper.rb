@@ -2,6 +2,7 @@ require 'bcrypt'
 
 module IdentityHelper
   include BCrypt
+  include LocaleHelper
 
   def create_identity(auth = request.env["omniauth.auth"], email = false)
     @identity = Identity.search(auth)
@@ -13,7 +14,7 @@ module IdentityHelper
     end
   end
 
-  def search_for_identity(permited_params)
+  def search_for_password_identity(permited_params)
     uid = permited_params[:email] || permited_params[:uid]
     return PasswordIdentity.search({
       provider: "identity",

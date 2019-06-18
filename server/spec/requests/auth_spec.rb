@@ -1,7 +1,7 @@
 
 require 'rails_helper'
 
-RSpec.fdescribe "auth controller" do
+RSpec.describe "auth controller" do
 
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
@@ -305,7 +305,5 @@ RSpec.fdescribe "auth controller" do
 
     expect(Identity.where(user_id: user[:id]).count).to eq(count_identity_by_user_id + 1)
     expect(Identity.all.count).to eq(count_identities + 1)
-
   end
-
 end

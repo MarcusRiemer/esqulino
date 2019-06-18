@@ -16,6 +16,7 @@ module AuthHelper
         password = identity[:data]["password"]
       end
     end
+
     return auth = {
       provider: "identity",
       uid: permited_params[:email],

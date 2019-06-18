@@ -4,8 +4,6 @@ require 'bcrypt'
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
-  include LocaleHelper
-
   # Handle all errors that are specifc to our parts of the code
   rescue_from EsqulinoError, :with => :handle_internal_exception
 

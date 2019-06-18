@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.fdescribe IdentityMailer, :type => :mailer do
+RSpec.describe IdentityMailer, :type => :mailer do
   let(:user) { create(:user) }
 
   describe "Identity Mailer" do

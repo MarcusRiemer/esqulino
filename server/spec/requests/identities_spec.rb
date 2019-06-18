@@ -1,7 +1,7 @@
 
 require 'rails_helper'
 
-RSpec.fdescribe "identities controller" do
+RSpec.describe "identities controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   let(:user) { create(:user) }
@@ -39,7 +39,7 @@ RSpec.fdescribe "identities controller" do
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
 
-    put '/api/identities/change_password',
+    patch '/api/identities/change_password',
       :headers => json_headers,
       :params => {
         currentPassword: identity[:data]["password"],
@@ -55,7 +55,7 @@ RSpec.fdescribe "identities controller" do
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
 
-    put '/api/identities/change_password',
+    patch '/api/identities/change_password',
       :headers => json_headers,
       :params => {
         currentPassword: identity[:data]["password"],
@@ -73,7 +73,7 @@ RSpec.fdescribe "identities controller" do
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
 
-    put '/api/identities/change_password',
+    patch '/api/identities/change_password',
       :headers => json_headers,
       :params => {
         currentPassword: "12121212",
@@ -93,7 +93,7 @@ RSpec.fdescribe "identities controller" do
         email: user[:email]
       }.to_json
 
-    put "/api/identities/reset_password",
+    patch "/api/identities/reset_password",
       :headers => json_headers,
       :params => {
         token: PasswordIdentity.first[:data]["password_reset_token"],
@@ -127,7 +127,7 @@ RSpec.fdescribe "identities controller" do
         email: identity[:uid]
       }.to_json
 
-    put "/api/identities/reset_password",
+    patch "/api/identities/reset_password",
       :headers => json_headers,
       :params => {
         token: "invalid-token",
@@ -143,7 +143,7 @@ RSpec.fdescribe "identities controller" do
   it "resetting password with expired token" do
     identity = create(:identity, :existing_identity, user_id: user[:id])
 
-    put "/api/identities/reset_password",
+    patch "/api/identities/reset_password",
       :headers => json_headers,
       :params => {
         email: identity[:uid],
@@ -257,5 +257,61 @@ RSpec.fdescribe "identities controller" do
 
     expect(response.status).to eq(401)
     expect(Identity.all.count).to eq(1)
+  end
+
+  it "sending verify email again" do
+    identity = create(:identity, :identity_provider, user_id: user[:id])
+
+    post "/api/identities/send_verify_email",
+      :headers => json_headers,
+      :params => {
+        email: identity[:uid]
+      }.to_json
+
+    expect(response.status).to eq(200)
+  end
+
+  it "sending verify email in too short a time" do
+    identity = create(:identity, :identity_provider, user_id: user[:id])
+
+    post "/api/identities/send_verify_email",
+      :headers => json_headers,
+      :params => {
+        email: identity[:uid]
+      }.to_json
+
+    expect(response.status).to eq(200)
+
+    post "/api/identities/send_verify_email",
+      :headers => json_headers,
+      :params => {
+        email: identity[:uid]
+      }.to_json
+
+    expect(response.status).to eq(401)
+  end
+
+  it "sending verify email with invalid email" do
+    identity = create(:identity, :identity_provider, user_id: user[:id])
+
+    post "/api/identities/send_verify_email",
+      :headers => json_headers,
+      :params => {
+        email: "invalid"
+      }.to_json
+
+    expect(response.status).to eq(401)
+  end
+
+  it "sending verify email wih an already confirmed email" do
+    identity = create(:identity, :existing_identity, user_id: user[:id])
+
+    post "/api/identities/send_verify_email",
+      :headers => json_headers,
+      :params => {
+        email: identity[:uid]
+      }.to_json
+
+    expect(response.status).to eq(401)
   end
 end

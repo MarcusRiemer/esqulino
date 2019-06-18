@@ -1,7 +1,7 @@
 
 require 'rails_helper'
 
-RSpec.fdescribe "user controller" do
+RSpec.describe "user controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   let(:user) { create(:user) }
