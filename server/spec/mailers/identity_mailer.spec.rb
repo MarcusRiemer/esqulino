@@ -19,7 +19,7 @@ RSpec.fdescribe IdentityMailer, :type => :mailer do
     end
 
     it "changed password" do
-      mail = IdentityMailer.changed_password(identity, display_name)
+      mail = IdentityMailer.changed_password(identity)
 
       expect(mail.subject).to eq("Blattwerkzeug.de password changed")
       expect(mail.to).to eq(identity["email"])

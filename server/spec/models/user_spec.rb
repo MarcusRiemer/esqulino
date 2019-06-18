@@ -1,10 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  let(:user) { create(:user, display_name: "Tom") }
+
   it 'creating a user' do 
-    # user = build(display_name: 'Tom')
-    # expect(user).to be_truthy
-    # expect(user.display_name).to eq('Tom')
-    expect(nil).to be_nil
+    expect(user.display_name).to eq('Tom')
   end
+
+  # it 'creating new user and intern identity' do
+  #   identity = create(:identity, :identity_provider, user_id: user[:id])
+
+  #   expect(user[:email]).to eq(identity[:uid])
+  # end
+
+  # TODO-TOM ADD SOME TESTS
+  # 1. IS A NEW USER AND IDENTITY CREATING A NEW PRIMARY EMAIL
+
 end

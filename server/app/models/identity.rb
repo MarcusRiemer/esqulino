@@ -1,16 +1,20 @@
 
 require 'bcrypt'
 
-class Identity < ApplicationRecord
+class Identity < ActiveRecord::Base;
   include BCrypt
 
   belongs_to :user
-
   attr_accessor :email, :name, :password, :password_confirmation
 
-  scope :search_with_user_id, -> (user_id) {
-    where("user_id = ?", user_id)
+  scope :extern_provider, -> (user_id) {
+    where("user_id = ? and provider != 'identity'", user_id)
   }
+
+  scope :intern_provider, -> (user_id) {
+    where("user_id = ? and provider = 'identity'", user_id)
+  }
+
 
   def self.search(auth)
     find_by_provider_and_uid(auth[:provider], auth[:uid])
@@ -18,56 +22,14 @@ class Identity < ApplicationRecord
 
   def self.create_with_auth(auth, user)
     user ||= User.create_from_hash(auth)
-    Identity.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
-  end
 
-  def confirmed!()
-    self.data["confirmed"] = true;
-    self.save!
-  end
-
-  def delete_identity!()
-    self.delete(self.id)
-  end
-
-  def set_password_all_with_user_id(password)
-    identities = Identity.where('user_id = ?', self.user_id)
-
-    identities.each do |identity| 
-      identity.set_password(password)
+    # If there exists a user with an extern provider and an
+    # intern provider will be registered. Set primary e-mail
+    if !user.email? && (auth[:provider].eql? "identity")
+      user.set_email(auth[:uid])
     end
-  end
 
-  def set_password(password)
-    self.data["password"] = Password.create(password)
-    self.save
-  end
-
-  def set_reset_token_expired()
-    self.data["password_reset_token_exp"] = Time.now - 1.hour
-    self.save
-  end
-
-  def set_reset_token()
-    self.data["password_reset_token"] = SecureRandom.uuid
-    self.data["password_reset_token_exp"] = 30.minutes.from_now
-    self.save
-  end
-
-  def reset_token_eql?(token)
-    return self.data["password_reset_token"].eql? token
-  end
-
-  def reset_token_expired?()
-    return self.data["password_reset_token_exp"] < Time.now
-  end
-
-  def password_eql?(password)
-    return Password.new(self.data["password"]) == password
-  end
-
-  def confirmed?()
-    return self.data["confirmed"]
+    Identity.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
   end
 
   private 

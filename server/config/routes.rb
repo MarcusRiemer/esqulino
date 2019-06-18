@@ -4,14 +4,18 @@ Rails.application.routes.draw do
   scope '/api' do
 
     scope 'identities' do
-      put 'change_password', controller: 'identities', action: :change_password
+      root via: [:get], controller: 'identities', action: :show
       get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
       post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
+      post 'create_identity', controller: 'identities', action: :create
       put 'reset_password', controller: 'identities', action: :reset_password
+      put 'change_password', controller: 'identities', action: :change_password
+      delete 'delete_identity', controller: 'identities', action: :destroy
     end
 
     scope 'user' do
       root via: [:get], controller: 'user', action: :index
+      put 'change_primary_email', controller: 'user', action: :change_email
     end
 
     scope 'auth' do
