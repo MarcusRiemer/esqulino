@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
     scope 'user' do
       root via: [:get], controller: 'user', action: :index
-      put 'change_primary_email', controller: 'user', action: :change_email
+      patch 'change_primary_email', controller: 'user', action: :change_email
     end
 
     scope 'auth' do

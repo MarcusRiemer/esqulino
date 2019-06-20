@@ -1,6 +1,6 @@
 class PasswordIdentity < Identity
   attr_accessor :email, :name, :password, :password_confirmation
-
+  
   def confirmed!()
     self.data["confirmed"] = true;
     self.save!
@@ -43,6 +43,7 @@ class PasswordIdentity < Identity
     self.save
   end
   
+  # Waiting time before the server sends a new verify email
   def waiting_time
     need_to_wait = self.data["waiting_time_verify_mail"] || 1.minutes.ago
     return ((need_to_wait.to_time - Time.current) / 1.minute).round
