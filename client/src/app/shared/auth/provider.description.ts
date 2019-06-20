@@ -1,5 +1,5 @@
 
-export interface ProviderDescription {
+export interface ServerProviderDescription {
   extern: ExternProviderDescription[];
   intern: InternProviderDescription[];
   primary: string;
@@ -17,4 +17,11 @@ export interface InternProviderDescription {
 
 export interface ChangePrimaryEmailDescription {
   primaryEmail: string;
+}
+
+export interface ClientProviderDescription {
+  name: string;
+  urlName: string;
+  icon: string;
+  color: string;
 }

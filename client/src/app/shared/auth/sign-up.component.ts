@@ -1,6 +1,6 @@
 import { UserService } from './user.service';
 import { SignUpDescription } from './auth-description';
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
@@ -8,6 +8,8 @@ import { Component } from '@angular/core';
   templateUrl: './templates/sign-up.html'
 })
 export class SignUpComponent {
+  @Output() content = new EventEmitter()
+
   constructor(
     private _userService: UserService
   ) {}
@@ -25,7 +27,7 @@ export class SignUpComponent {
   }
 
   public onSendVerifyLink(): void {
-    
+    this.content.emit();
   }
 
   public onSignUp(): void {

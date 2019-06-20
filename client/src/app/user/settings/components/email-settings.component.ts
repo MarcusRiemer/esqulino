@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { UserService } from '../../../shared/auth/user.service';
-import { ChangePrimaryEmailDescription, ProviderDescription } from '../../../shared/auth/provider.description';
+import { ChangePrimaryEmailDescription, ServerProviderDescription } from '../../../shared/auth/provider.description';
 import { UserEmailDescription } from '../../../shared/auth/user.description';
 
 @Component({
@@ -25,7 +25,7 @@ export class EmailSettingsComponent {
     primaryEmail: "Please add an e-mail to your account"
   };
 
-  public identities: ProviderDescription;
+  public identities: ServerProviderDescription;
   public newEmailData: UserEmailDescription = {
     email: undefined
   }
@@ -59,6 +59,7 @@ export class EmailSettingsComponent {
   }
 
   public onChangePrimaryEmail(): void {
+    console.log(this.identities.intern)
     if (!this.isSelectedEmailCurrentPrimary()) {
       if (this.isInIntern(this.primaryEmailData.primaryEmail)) {
         this._userService.changePrimaryEmail$(this.primaryEmailData)
