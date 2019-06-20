@@ -37,5 +37,4 @@ class User < ApplicationRecord
     self.email = email
     self.save
   end
-
 end

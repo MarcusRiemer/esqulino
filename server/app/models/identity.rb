@@ -5,7 +5,7 @@ class Identity < ActiveRecord::Base;
   include BCrypt
 
   belongs_to :user
-  attr_accessor :email, :name, :password, :password_confirmation
+
 
   scope :extern_provider, -> (user_id) {
     where("user_id = ? and provider != 'identity'", user_id)
@@ -29,15 +29,6 @@ class Identity < ActiveRecord::Base;
     end
 
     Identity.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
-  end
-
-  private 
-
-  def sign_up
-    password = Password.new(self.data["password"])
-    unless password.length < 3
-      puts "Error"      
-    end
   end
 end
 

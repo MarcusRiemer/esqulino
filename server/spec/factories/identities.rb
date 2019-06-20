@@ -5,9 +5,9 @@ FactoryBot.define do
     provider {}
     uid {}
     data {}
-    user_id { }
+    association :user
 
-    trait :identity_provider do
+    trait :new_identity_provider do
       provider { "identity" }
       uid { "identity@web.de" }
       data ({
@@ -16,29 +16,9 @@ FactoryBot.define do
         verify_token: SecureRandom.uuid,
         confirmed: false
       })
-
-      trait :confirmed do
-        data ({
-          confirmed: true
-        })
-      end
-
-      trait :reset_password do
-        data ({
-          password_reset_token: SecureRandom.uuid,
-          password_reset_token_exp: 1.hour.from_now
-        })
-      end
-  
-      trait :reset_password_expired do
-        data ({
-          password_reset_token: SecureRandom.uuid,
-          password_reset_token_exp: Time.now - 1.hour
-        })
-      end
     end
 
-    trait :existing_identity do
+    trait :existing_identity_provider do
       provider { "identity" }
       uid { "blattwerkzeug@web.de" }
       data ({
@@ -49,39 +29,19 @@ FactoryBot.define do
         password_reset_token: SecureRandom.uuid,
         password_reset_token_exp: Time.now - 1.hour
       })
-
-      trait :unconfirmed do
-        data ({
-          confirmed: false
-        })
-      end
-
-      trait :reset_password do
-        data ({
-          password_reset_token: SecureRandom.uuid,
-          password_reset_token_exp: 1.hour.from_now
-        })
-      end
-  
-      trait :reset_password_expired do
-        data ({
-          password_reset_token: SecureRandom.uuid,
-          password_reset_token_exp: Time.now - 1.hour
-        })
-      end
     end
 
-    trait :developer_provider do
+    trait :new_developer_provider do
       provider { "developer" }
       uid { "developer@web.de" }
     end
 
-    trait :existing_developer do
+    trait :existing_developer_provider do
       provider { "developer" }
       uid { "developer@blattwerkzeug.de" }
     end
 
-    trait :google_provider do
+    trait :new_google_provider do
       provider { "google" }
       uid { "google@blattwerkzeug.de" }
     end

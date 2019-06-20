@@ -1,6 +1,6 @@
 class PasswordIdentity < Identity
   attr_accessor :email, :name, :password, :password_confirmation
-  
+
   def confirmed!()
     self.data["confirmed"] = true;
     self.save!
