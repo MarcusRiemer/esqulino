@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "user controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
-  let(:user) { create(:user) }
+  let(:user) { create(:user, display_name: "Blattwerkzeug") }
 
   it 'getting the user description logged in' do
     cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
@@ -86,7 +86,7 @@ RSpec.describe "user controller" do
     expect(User.find_by(id: identity[:user_id])[:email]).to eq(identity.uid)
   end
 
-  it 'changing primary email to an already linked email' do#
+  it 'changing primary email to an already linked email' do
     user2 = create(:user)
     identity = create(:identity, :existing_identity, user_id: user[:id])
     identity2 = create(:identity, :existing_identity, uid: "another@web.de", user_id: user2[:id])
@@ -103,5 +103,35 @@ RSpec.describe "user controller" do
 
     expect(response.status).to eq(401)
     expect(User.find_by(id: identity[:user_id])[:email]).to eq(identity.uid)
+  end
+
+  it "changing username with an valid" do
+    identity = create(:identity, :existing_identity, user_id: user[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    expect(User.find_by(id: identity[:user_id])[:display_name]).to eq("Blattwerkzeug")
+
+    patch '/api/user/change_username',
+      :headers => json_headers,
+      :params => {
+        displayName: "New name"
+      }.to_json
+
+    expect(User.find_by(id: identity[:user_id])[:display_name]).to eq("New name")
+  end
+
+  it "changing username with an invalid (empty string)" do
+    identity = create(:identity, :existing_identity, user_id: user[:id])
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+
+    expect(User.find_by(id: identity[:user_id])[:display_name]).to eq("Blattwerkzeug")
+
+    patch '/api/user/change_username',
+      :headers => json_headers,
+      :params => {
+        displayName: ""
+      }.to_json
+
+    expect(User.find_by(id: identity[:user_id])[:display_name]).to eq("Blattwerkzeug")
   end
 end
