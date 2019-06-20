@@ -1,7 +1,7 @@
 
 
 $button_width: 10em;
-$email_width: 21em;
+$base_width: 21em;
 
 .settings {
   .general {
@@ -18,11 +18,11 @@ $email_width: 21em;
     }
 
     .input-group {
-      width: 20em;
+      width: $base_width;
     }
 
     select {
-      width: $email_width;
+      width: $base_width;
     }
 
     hr {
@@ -40,9 +40,9 @@ $email_width: 21em;
     mat-card {
       display: flex;
       flex-direction: column;
-      width: 250px;
+      width: $base_width;
       align-items: center;
-      margin-left: 10px;
+      margin: 0 0 10px 10px;
 
       ul {
         list-style-type: none;
@@ -88,7 +88,7 @@ $email_width: 21em;
 
     mat-list-item {
       background-color: white;
-      width: $email_width;
+      width: $base_width;
       border: solid;
       border-top: none;
       border-width: 1px;
@@ -105,7 +105,7 @@ $email_width: 21em;
     }
 
     th,td, .table {
-      width: $email_width;
+      width: $base_width;
       background-color: white;
     }
 

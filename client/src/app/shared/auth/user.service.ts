@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { map, tap, first, filter } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
-import { UserDescription, UserEmailDescription, UserPasswordDescription } from './user.description';
+import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 
@@ -58,6 +58,18 @@ export class UserService {
     return this._serverData.resetPassword$(data).pipe(
       tap(
         _ => this.userData$.refresh(),
+        (err) => alert(`Error: ${err["error"]["error"]}`)
+      )
+    )
+  }
+
+  public changeUserName$(data: UserNameDescription) {
+    return this._serverData.changeUserName$(data).pipe(
+      tap(
+        _ => {
+          this._snackBar.open('Username changed', '', {duration: 3000})
+          this.userData$.refresh();
+        },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
     )

@@ -4,7 +4,7 @@
 
   <validate-input
     icon="pencil"
-    [(value)]="editedUsername">
+    [(value)]="userNameData.displayName">
 
     <input #inputRef 
       type="text"
@@ -14,7 +14,8 @@
 
   <button
     mat-raised-button
-    color="primary">
+    color="primary"
+    (click)="onChangeUserName()">
 
     Speichern
   </button>
@@ -30,7 +31,7 @@
         <ul>
           <ng-container *ngFor="let identity of identities$ | async">
             <li *ngIf="identity.provider === provider.urlName">
-              {{identity.provider}}
+              tom.hilge@gmail.com
             </li>
           </ng-container>
       </ul>
