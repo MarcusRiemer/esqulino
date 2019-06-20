@@ -77,7 +77,7 @@ class IdentitiesController < ApplicationController
           IdentityMailer.confirm_email(identity, request_locale).deliver
           api_response({loggged_in: false})
         else
-          render json: { error: `You need to wait for #{identity.waiting_time} minutes` }, status: :unauthorized
+          render json: { error: "You need to wait for #{identity.waiting_time} minutes"  }, status: :unauthorized
         end
       else
         render json: { error: "e-mail already confirmed"}, status: :unauthorized

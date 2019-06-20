@@ -24,6 +24,7 @@ class User < ApplicationRecord
 
   def all_intern_provider()
     return PasswordIdentity.all.intern_provider(self.id)
+                               .select("uid, provider, data ->> 'confirmed' as data")
   end
 
   def email?

@@ -15,7 +15,6 @@ class Identity < ActiveRecord::Base;
     where("user_id = ? and provider = 'identity'", user_id)
   }
 
-
   def self.search(auth)
     find_by_provider_and_uid(auth[:provider], auth[:uid])
   end

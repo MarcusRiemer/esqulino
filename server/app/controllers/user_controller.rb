@@ -8,15 +8,14 @@ class UserController < ApplicationController
   end
 
   def index
+    to_return = { logged_in: false }
+
     if signed_in?
       to_return = {
         display_name: @current_user.display_name,
         logged_in: true
       }
-    else
-      to_return = { logged_in: false }
     end
-
     api_response(to_return)
   end
 

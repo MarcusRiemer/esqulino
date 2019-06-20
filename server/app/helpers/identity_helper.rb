@@ -7,8 +7,8 @@ module IdentityHelper
   def create_identity(auth = request.env["omniauth.auth"], email = false)
     @identity = Identity.search(auth)
     if !@identity
-      @identity = Identity.create_with_auth(auth, @current_user) || PasswordIdentity.intern_provider(@current_user[:id]).first
-      if (email) 
+      @identity = Identity.create_with_auth(auth, @current_user)
+      if (@identity && email) 
         IdentityMailer.confirm_email(@identity, request_locale).deliver
       end
     end

@@ -20,8 +20,7 @@ class IdentityMailer < ApplicationMailer
   def confirm_email(identity, locale)
     @user = User.find(identity[:user_id])
 
-    @user[:email] ||= identity[:uid]
     @user_verify_url = "http://#{locale}.#{@@base_url}/api/identities/confirmation/#{identity[:data]["verify_token"]}"
-    mail(to: @user[:email].to_s, subject: "Blattwerkzeug.de confirmation")
+    mail(to: identity[:uid].to_s, subject: "Blattwerkzeug.de confirmation")
   end
 end
