@@ -1,5 +1,6 @@
 class AuthController < ApplicationController
   include AuthHelper
+  include UserHelper
   include IdentityHelper
 
   before_action :authenticate_user!
@@ -28,7 +29,7 @@ class AuthController < ApplicationController
         if identity.password_eql?(params[:password])
           set_identity(identity)
           sign_in
-          api_response({ logged_in: true })
+          api_response(user_informations)
         else
           render json: { error: "Wrong password" }, status: :unauthorized
         end

@@ -1,22 +1,35 @@
 class UserController < ApplicationController
+  include UserHelper
+
   before_action :authenticate_user!
 
   def change_email_params
     params
       .permit([:primaryEmail])
-      .transform_keys { |k| k.underscore }
+        .transform_keys { |k| k.underscore }
+  end
+
+  def change_username_params
+    params
+      .permit([:displayName])
+        .transform_keys { |k| k.underscore }
   end
 
   def index
-    to_return = { logged_in: false }
+    api_response(user_informations)
+  end
 
+  def change_username
     if signed_in?
-      to_return = {
-        display_name: @current_user.display_name,
-        logged_in: true
-      }
+      permited_params = change_username_params
+      @current_user.display_name = permited_params[:display_name]
+      if @current_user.valid?
+        @current_user.save!
+        api_response(user_informations)
+      else
+        render json: {error: "This username is not valid" }, status: :unauthorized
+      end 
     end
-    api_response(to_return)
   end
 
   def change_email

@@ -3,6 +3,7 @@
 class IdentitiesController < ApplicationController
   include AuthHelper
   include IdentityHelper
+  include UserHelper
   include LocaleHelper
 
   before_action :authenticate_user!
@@ -49,7 +50,7 @@ class IdentitiesController < ApplicationController
       if !identity.reset_token_expired?
         identity.set_reset_token_expired
         identity.set_password_all_with_user_id(permited_params[:password])
-        api_response({ loggged_in: false })
+        api_response(user_informations)
       else
         render json: { error: "token expired" }, status: :unauthorized
       end
@@ -75,7 +76,7 @@ class IdentitiesController < ApplicationController
         if identity.can_send_verify_mail?
           identity.set_waiting_time()
           IdentityMailer.confirm_email(identity, request_locale).deliver
-          api_response({loggged_in: false})
+          api_response(user_informations)
         else
           render json: { error: "You need to wait for #{identity.waiting_time} minutes"  }, status: :unauthorized
         end
@@ -110,7 +111,7 @@ class IdentitiesController < ApplicationController
           if identity.password_eql?(permited_params[:current_password])
             identity.set_password_all_with_user_id(permited_params[:new_password])
             IdentityMailer.changed_password(identity).deliver
-            api_response({ loggged_in: true })
+            api_response(user_informations)
           else
             render json: { error: "current password is wrong"}, status: :unauthorized
           end
