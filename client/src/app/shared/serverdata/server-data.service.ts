@@ -12,7 +12,7 @@ import { ServerApiService } from './serverapi.service';
 import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
-import { UserEmailDescription, UserPasswordDescription } from './../auth/user.description';
+import { UserEmailDescription, UserPasswordDescription, UserNameDescription } from './../auth/user.description';
 
 
 
@@ -91,6 +91,10 @@ export class ServerDataService {
 
   sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSendVerifyEmailUrl(), data)
+  }
+
+  changeUserName$(data: UserNameDescription): Observable<UserNameDescription> {
+    return this._http.patch<UserNameDescription>(this._serverApi.getChangeUserNameUrl(), data)
   }
 
   deleteEmail$(uid: string): Observable<ServerProviderDescription> {

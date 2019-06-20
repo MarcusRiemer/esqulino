@@ -1,4 +1,10 @@
-export type UserDescription = UserLoggedInDescription | UserLoggedOutDescription
+
+export type UserDescription = UserLoggedInDescription | UserLoggedOutDescription;
+
+export interface UserNameDescription {
+  displayName:string;
+}
+
 
 export interface UserLoggedInDescription {
   displayName: string;

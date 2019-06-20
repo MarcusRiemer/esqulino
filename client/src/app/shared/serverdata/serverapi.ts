@@ -59,6 +59,10 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/user/change_primary_email`)
   }
 
+  getChangeUserNameUrl(): string {
+    return (`${this._apiBaseUrl}/user/change_username`)
+  }
+
   getDeleteEmailUrl(): string {
     return (`${this._apiBaseUrl}/identities/delete_identity`)
   }
