@@ -21,4 +21,8 @@ module IdentityHelper
       uid: uid
     })
   end
+
+  def password_invalid(password)
+    return password.length >= 3 && password.length <= 20
+  end
 end

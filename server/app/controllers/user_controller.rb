@@ -16,7 +16,7 @@ class UserController < ApplicationController
   end
 
   def index
-    api_response(user_informations)
+    api_response(user_information)
   end
 
   def change_username
@@ -25,7 +25,7 @@ class UserController < ApplicationController
       @current_user.display_name = permited_params[:display_name]
       if @current_user.valid?
         @current_user.save!
-        api_response(user_informations)
+        api_response(user_information)
       else
         render json: {error: "This username is not valid" }, status: :unauthorized
       end 

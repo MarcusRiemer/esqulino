@@ -29,7 +29,7 @@ class AuthController < ApplicationController
         if identity.password_eql?(params[:password])
           set_identity(identity)
           sign_in
-          api_response(user_informations)
+          api_response(user_information)
         else
           render json: { error: "Wrong password" }, status: :unauthorized
         end
