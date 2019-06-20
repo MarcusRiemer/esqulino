@@ -1,13 +1,13 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { UserEmailDescription } from './user.description';
 import { UserService } from './user.service';
 
 @Component({
-  selector: 'reset-password-request',
-  templateUrl: './templates/reset-password-request.html'
+  selector: 'request-verify-email',
+  templateUrl: './templates/request-verify-email.html'
 })
-export class ResetPasswordRequestComponent {
+export class RequestVerifyEmailComponent {
   constructor(
     private _userService: UserService
   ) {}
@@ -16,9 +16,9 @@ export class ResetPasswordRequestComponent {
     email: undefined
   };
 
-  public onPasswordResetRequest(): void {
+  public onSendVerifyEmail(): void {
     this._userService
-      .passwordResetRequest$(this.userEmail)
+      .sendVerifyEmail$(this.userEmail)
       .subscribe()
   }
 }

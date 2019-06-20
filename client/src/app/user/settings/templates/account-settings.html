@@ -21,13 +21,25 @@
 
   <h1>Konto verknüpfen</h1>
   <hr>
-
-  <provider-auth></provider-auth>
-  <button
-    mat-raised-button
-    color="primary">
-
-    
-  </button>
-
+  <div class="row">
+    <mat-card *ngFor="let provider of providers;">
+      <mat-card-header>
+        <mat-card-title>{{provider.name}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <ng-container *ngFor="let identity of identities$ | async">
+            <li *ngIf="identity.provider === provider.urlName">
+              {{identity.provider}}
+            </li>
+          </ng-container>
+      </ul>
+      </mat-card-content>
+      <mat-card-actions>
+        <provider-button
+          [providerName]="provider.name">
+        </provider-button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>

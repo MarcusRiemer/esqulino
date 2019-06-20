@@ -1,3 +1,4 @@
+import { ProvidersExternComponent } from './auth/providers-extern.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,6 +19,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AnalyticsService } from './analytics.service';
@@ -47,14 +49,16 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 
 
 import { GrammarDataService, BlockLanguageDataService } from './serverdata'
-import { ResetPasswordRequestComponent } from './auth/reset-password-request.component';
-import { ProviderAuthComponent } from './auth/provider-auth.component';
+import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
+import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
 import { SignUpComponent } from './auth/sign-up.component';
 import { LinkIdentityComponent } from './auth/link-identity.component';
 import { ValidateInputComponent } from './auth/validate-input.component';
 import { ChangePasswordComponent } from './auth/change-password.component';
 import { SideNavService } from './side-nav.service';
+import { RequestVerifyEmailComponent } from './auth/request-verify-email.component';
+
 
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
@@ -63,7 +67,7 @@ const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
   MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
-  MatNativeDateModule, MatInputModule, MatFormFieldModule
+  MatNativeDateModule, MatInputModule, MatFormFieldModule, MatIconModule
 ]
 
 /**
@@ -100,15 +104,17 @@ const materialModules = [
     AuthDialogComponent,
     UserButtonComponent,
     LoginWrapperComponent,
-    ProviderAuthComponent,
+    ProviderButtonComponent,
     SignInComponent,
     SignUpComponent,
     ValidateInputComponent,
     FocusDirective,
-    ResetPasswordRequestComponent,
+    RequestResetPasswordComponent,
+    RequestVerifyEmailComponent,
     ChangePasswordComponent,
     ValidateInputComponent,
     LinkIdentityComponent,
+    ProvidersExternComponent
   ],
   exports: [
     CommonModule,
@@ -131,14 +137,16 @@ const materialModules = [
     AuthDialogComponent,
     UserButtonComponent,
     LoginWrapperComponent,
-    ProviderAuthComponent,
+    ProviderButtonComponent,
     SignInComponent,
     SignUpComponent,
     ValidateInputComponent,
     FocusDirective,
-    ResetPasswordRequestComponent,
+    RequestResetPasswordComponent,
+    RequestVerifyEmailComponent,
     ChangePasswordComponent,
     LinkIdentityComponent,
+    ProvidersExternComponent
   ],
   entryComponents: [AuthDialogComponent, LinkIdentityComponent, ChangePasswordComponent]
 })

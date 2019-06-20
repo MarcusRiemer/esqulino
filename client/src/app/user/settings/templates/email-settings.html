@@ -15,8 +15,26 @@
         </tr>
         <tr *ngFor="let identity of identities.intern">
           <td>
-            {{identity.uid}}
+            <div>
+              {{identity.uid}}
+
+              <mat-icon *ngIf="!identity.data"
+                aria-hidden="false"
+                matTooltip="You need to confirm this e-mail">
+  
+                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+              </mat-icon>
+  
+              <mat-icon *ngIf="identity.data"
+                aria-hidden="false"
+                matTooltip="This e-mail is confirmed">
+  
+                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+              </mat-icon>
+            </div>
+
             <button mat-icon-button
+              matTooltip="Remove this e-mail from your account"
               (click)="onDeleteEmail(identity.uid)">
 
               <i class="fa fa-trash" aria-hidden="true"></i>

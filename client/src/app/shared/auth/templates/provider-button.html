@@ -1,0 +1,12 @@
+
+
+<button 
+  mat-raised-button 
+  color="primary"
+  [style.backgroundColor]="provider.color"
+  (click)="onSignIn(provider.urlName)">
+
+  <i class="fa {{provider.icon}}" aria-hidden="true"></i>
+  {{provider.name}}
+</button>
+

@@ -1,7 +1,7 @@
 
 
 $button_width: 10em;
-$email_width: 20em;
+$email_width: 21em;
 
 .settings {
   .general {
@@ -37,11 +37,36 @@ $email_width: 20em;
 
   .account-settings {
 
-    provider-auth {
+    mat-card {
+      display: flex;
+      flex-direction: column;
+      width: 250px;
+      align-items: center;
+      margin-left: 10px;
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      mat-card-actions {
+        width: 65%;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    provider-button {
       width: $button_width;
 
       div {
         margin-bottom: 1vh;
+      }
+
+      button {
+        color: white !important;
       }
 
       div, button {
@@ -51,6 +76,7 @@ $email_width: 20em;
   }
 
   .email-settings {
+
     mat-list-item:first-child {
       border-top: solid;
       border-width: 1px;
@@ -70,6 +96,12 @@ $email_width: 20em;
 
     .table {
       border: solid 1px;
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     th,td, .table {

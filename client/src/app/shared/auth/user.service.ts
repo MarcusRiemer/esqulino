@@ -7,7 +7,7 @@ import { map, tap, first, filter } from 'rxjs/operators';
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
-import { ProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
+import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -80,14 +80,14 @@ export class UserService {
       tap(
         _ => {
           this.userData$.refresh()
-          alert("Please check your mails")
+          alert("Please check your e-mails")
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
     )
   }
 
-  public changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ProviderDescription> {
+  public changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ServerProviderDescription> {
     return this._serverData.changePrimaryEmail$(data).pipe(
       tap(
         _ => {
@@ -99,7 +99,7 @@ export class UserService {
     )
   }
 
-  public deleteEmail$(uid: string): Observable<ProviderDescription> {
+  public deleteEmail$(uid: string): Observable<ServerProviderDescription> {
     return this._serverData.deleteEmail$(uid).pipe(
       tap(
         _ => {
@@ -111,12 +111,23 @@ export class UserService {
     )
   }
 
-  public addEmail$(data: UserEmailDescription): Observable<ProviderDescription> {
+  public addEmail$(data: UserEmailDescription): Observable<ServerProviderDescription> {
     return this._serverData.addEmail$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Please confirm the E-Mail', '', {duration: 6000})
+          this._snackBar.open('Please confirm the e-mail', '', {duration: 6000})
           this.identities$.refresh();
+        },
+        (err) => alert(`Error: ${err["error"]["error"]}`)
+      )
+    )
+  }
+
+  public sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
+    return this._serverData.sendVerifyEmail$(data).pipe(
+      tap(
+        _ => {
+          this._snackBar.open('Please check your e-mails', '', {duration: 6000})
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )

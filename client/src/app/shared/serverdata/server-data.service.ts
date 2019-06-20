@@ -11,7 +11,7 @@ import { UserDescription } from '../auth/user.description';
 import { ServerApiService } from './serverapi.service';
 import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
-import { ProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
+import { ServerProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
 import { UserEmailDescription, UserPasswordDescription } from './../auth/user.description';
 
 
@@ -52,8 +52,8 @@ export class ServerDataService {
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
 
-  readonly getIdentities = new CachedRequest<ProviderDescription>(
-    this._http.get<ProviderDescription>(this._serverApi.getUserIdentitiesUrl())
+  readonly getIdentities = new CachedRequest<ServerProviderDescription>(
+    this._http.get<ServerProviderDescription>(this._serverApi.getUserIdentitiesUrl())
   )
 
   signUp$(data: SignUpDescription): Observable<UserDescription> {
@@ -70,7 +70,7 @@ export class ServerDataService {
   }
 
   changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
-    return this._http.put<UserDescription>(this._serverApi.getChangePasswordUrl(), data);
+    return this._http.patch<UserDescription>(this._serverApi.getChangePasswordUrl(), data);
   }
 
   passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
@@ -81,26 +81,26 @@ export class ServerDataService {
     return this._http.patch<UserDescription>(this._serverApi.getPasswordResetUrl(), data);
   }
 
-  changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ProviderDescription> {
-    return this._http.patch<ProviderDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
+  changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ServerProviderDescription> {
+    return this._http.patch<ServerProviderDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
   }
 
-  addEmail$(data: UserEmailDescription): Observable<ProviderDescription> {
-    return this._http.post<ProviderDescription>(this._serverApi.getSignUpUrl(), data)
+  addEmail$(data: UserEmailDescription): Observable<ServerProviderDescription> {
+    return this._http.post<ServerProviderDescription>(this._serverApi.getSignUpUrl(), data)
   }
 
   sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSendVerifyEmailUrl(), data)
   }
 
-  deleteEmail$(uid: string): Observable<ProviderDescription> {
+  deleteEmail$(uid: string): Observable<ServerProviderDescription> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
       body: { uid: uid },
     };
-    return this._http.delete<ProviderDescription>(this._serverApi.getDeleteEmailUrl(), options)
+    return this._http.delete<ServerProviderDescription>(this._serverApi.getDeleteEmailUrl(), options)
   }
 
   /**
