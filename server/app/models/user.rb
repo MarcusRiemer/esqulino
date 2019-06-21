@@ -14,19 +14,9 @@ class User < ApplicationRecord
 
   def all_providers()
     return {
-      extern: self.all_extern_provider.as_json(:only => [:provider]),
-      intern: self.all_intern_provider.as_json(:only => [:provider, :uid, :data]),
+      providers: Identity.all.select("uid, provider, data ->> 'confirmed' as data"),
       primary: self.email
     }
-  end
-
-  def all_extern_provider()
-    return PasswordIdentity.all.extern_provider(self.id)
-  end
-
-  def all_intern_provider()
-    return PasswordIdentity.all.intern_provider(self.id)
-                               .select("uid, provider, data ->> 'confirmed' as data")
   end
 
   def email?

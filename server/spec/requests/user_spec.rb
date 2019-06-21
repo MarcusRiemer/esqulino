@@ -1,12 +1,12 @@
 
 require 'rails_helper'
 
-RSpec.fdescribe "user controller" do
+RSpec.describe "user controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   it 'getting the user description logged in' do
     user = create(:user)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id], data: {"confirmed": true}})
 
     get '/api/user'
 
@@ -32,11 +32,11 @@ RSpec.fdescribe "user controller" do
   end
 
   it 'changing primary email logged in' do
-    identity = create(:identity, :existing_identity_provider)
-    identity2 = create(:identity, :existing_identity_provider, uid: "another@web.de", user_id: identity.user_id)
+    identity = create(:identity_provider, :existing)
+    identity2 = create(:identity_provider, :existing, uid: "another@web.de", user_id: identity.user_id)
     identity.user.set_email(identity.uid)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.first.email).to eq(identity.uid)
 
     patch '/api/user/change_primary_email',
@@ -50,11 +50,11 @@ RSpec.fdescribe "user controller" do
   end
 
   it 'changing primary email to an unconfirmed email' do
-    identity = create(:identity, :existing_identity_provider)
-    identity2 = create(:identity, :new_identity_provider, uid: "another@web.de", user_id: identity.user_id)
+    identity = create(:identity_provider, :existing)
+    identity2 = create(:identity_provider, :new, uid: "another@web.de", user_id: identity.user_id)
     identity.user.set_email(identity.uid)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.first.email).to eq(identity.uid)
 
     patch '/api/user/change_primary_email',
@@ -68,11 +68,11 @@ RSpec.fdescribe "user controller" do
   end
 
   it 'changing primary email to an not existing email' do
-    identity = create(:identity, :existing_identity_provider)
-    identity2 = create(:identity, :new_identity_provider, uid: "another@web.de", user_id: identity.user_id)
+    identity = create(:identity_provider, :existing)
+    identity2 = create(:identity_provider, :new, uid: "another@web.de", user_id: identity.user_id)
     identity.user.set_email(identity.uid)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     patch '/api/user/change_primary_email',
@@ -86,11 +86,11 @@ RSpec.fdescribe "user controller" do
   end
 
   it 'changing primary email to an already linked email' do
-    identity = create(:identity, :existing_identity_provider)
-    identity2 = create(:identity, :existing_identity_provider, uid: "another@web.de")
+    identity = create(:identity_provider, :existing)
+    identity2 = create(:identity_provider, :existing, uid: "another@web.de")
     identity.user.set_email(identity.uid)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     patch '/api/user/change_primary_email',
@@ -104,8 +104,8 @@ RSpec.fdescribe "user controller" do
   end
 
   it "changing username with an valid" do
-    identity = create(:identity, :existing_identity_provider)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    identity = create(:identity_provider, :existing)
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
@@ -119,8 +119,8 @@ RSpec.fdescribe "user controller" do
   end
 
   it "changing username with an invalid (empty string)" do
-    identity = create(:identity, :existing_identity_provider)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    identity = create(:identity_provider, :existing)
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
