@@ -37,8 +37,8 @@ RSpec.describe "auth controller" do
     end
 
     it "logging in with existing user and existing identity" do
-      identity = create(:identity, :existing_developer, user_id: user[:id])
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+      identity = create(:developer_provider, :existing)
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
 
       user_count = User.all.count
       identity_count = Identity.all.count
@@ -50,7 +50,7 @@ RSpec.describe "auth controller" do
     end
 
     it "logging in with existing user and a new identity" do
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id], data: {"confirmed": true}})
 
       user_count = User.all.count
       identity_count = Identity.where("user_id = ?", user[:id]).count
@@ -62,14 +62,14 @@ RSpec.describe "auth controller" do
     end
 
     it "logging in with new user and a new extern identity" do
-      identity = create(:identity, :google_provider, user_id: user[:id])
+      identity = create(:google_provider, :new)
 
       user_count = User.all.count
-      identity_count = Identity.all.count
-
+      identity_count = Identity.developer.count
+  
       get '/api/auth/developer/callback'
       expect(User.all.count).not_to eq(user_count)
-      expect(Identity.all.count).not_to eq(identity_count)
+      expect(Identity.developer.count).not_to eq(identity_count)
     end
 
     it "logging out user with developer strategy" do
@@ -83,8 +83,8 @@ RSpec.describe "auth controller" do
 
 
     it "logging in with an valid jwt token, but invalid user_id" do
-      identity = create(:identity, :google_provider, user_id: user[:id])
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: "12121212"})
+      identity = create(:google_provider, :new)
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: "12121212", data: {"confirmed": true}})
 
       get '/api/auth/developer/callback'
       expect(response.status).to eq(401)
@@ -121,19 +121,19 @@ RSpec.describe "auth controller" do
     end
 
     it "account linking with developer" do
-      create(:identity, :identity_provider, user_id: user[:id])
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]}, 1.hour.from_now)
+      identity = create(:identity_provider, :new)
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}}, 1.hour.from_now)
   
-      count_identity = Identity.where(user_id: user[:id]).count
+      count_identity = Identity.where(user_id: identity.user_id).count
   
       get '/api/auth/developer/callback'
   
-      expect(Identity.where(user_id: user[:id]).count).to eq(count_identity + 1)
+      expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
     end
 
     it "account linking with already linked identity ( developer )" do
       get '/api/auth/developer/callback'
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]}, 1.hour.from_now)
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id], data: {"confirmed": true}}, 1.hour.from_now)
       count_identity_by_user_id = Identity.where(user_id: user[:id]).count
       count_identities = Identity.all.count
   
@@ -167,7 +167,7 @@ RSpec.describe "auth controller" do
   end
 
   it "registering identity with existing uid" do
-    create(:identity, :identity_provider, uid: identity_params[:email], user_id: user[:id])
+    create(:identity_provider, :existing, uid: identity_params[:email])
 
     identity_count = Identity.all.count
 
@@ -179,7 +179,7 @@ RSpec.describe "auth controller" do
   end
 
   it "logging in with email and password" do
-    create(:identity, :existing_identity, user_id: user[:id])
+    create(:identity_provider, :existing)
 
     post '/api/auth/identity',
       :headers => json_headers,
@@ -204,7 +204,7 @@ RSpec.describe "auth controller" do
   # end
 
   # it "registering identity with an empty username" do
-  #   create(:identity, :identity_provider, user_id: user[:id])
+  #   create(:identity_provider, :new)
 
   #   identity_count = Identity.all.count
 
@@ -219,7 +219,7 @@ RSpec.describe "auth controller" do
 
 
   it "logging in with email and wrong password" do
-    create(:identity, :existing_identity, user_id: user[:id])
+    create(:identity_provider, :existing)
 
     identity_params[:password] = "wrong"
 
@@ -232,7 +232,7 @@ RSpec.describe "auth controller" do
   end
 
   it "logging in with wrong email and password" do
-    create(:identity, :existing_identity, user_id: user[:id])
+    create(:identity_provider, :existing)
 
     identity_params[:email] = "wrong"
 
@@ -246,41 +246,41 @@ RSpec.describe "auth controller" do
 
 
   it "account linking with identity" do
-    create(:identity, :identity_provider, user_id: user[:id])
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]}, 1.hour.from_now)
+    identity = create(:identity_provider, :new)
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}}, 1.hour.from_now)
 
-    count_identity = Identity.where(user_id: user[:id]).count
+    count_identity = Identity.where(user_id: identity.user_id).count
 
     post '/api/auth/identity/register',
       :headers => json_headers,
       :params => identity_params.to_json
 
-    expect(Identity.where(user_id: user[:id]).count).to eq(count_identity + 1)
+    expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
 
 
   it "account linking with identity and existing extern provider" do
-    create(:identity, :existing_developer, user_id: user[:id])
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]}, 1.hour.from_now)
+    identity = create(:developer_provider, :new)
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: { "confirmed": true }}, 1.hour.from_now)
 
-    count_identity = Identity.where(user_id: user[:id]).count
+    count_identity = Identity.where(user_id: identity.user_id).count
 
-    expect(user[:email]).to be_nil
+    expect(identity.user[:email]).to be_nil
 
     post '/api/auth/identity/register',
       :headers => json_headers,
       :params => identity_params.to_json
 
 
-    expect(user[:email]).to eq(identity_params[:uid])
-    expect(Identity.where(user_id: user[:id]).count).to eq(count_identity + 1)
+    expect(identity.user[:email]).to eq(identity_params[:uid])
+    expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
 
 
   it "account linking with already linked identity ( identity )" do
-    create(:identity, :existing_identity, user_id: user[:id])
+    identity = create(:identity_provider, :existing)
 
-    count_identity_by_user_id = Identity.where(user_id: user[:id]).count
+    count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
     count_identities = Identity.all.count
 
     post '/api/auth/identity/register',
@@ -288,22 +288,22 @@ RSpec.describe "auth controller" do
       :params => identity_params.to_json
 
 
-    expect(Identity.where(user_id: user[:id]).count).to eq(count_identity_by_user_id)
+    expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity_by_user_id)
     expect(Identity.all.count).to eq(count_identities)
   end
 
   it "add a new email to an logged in user" do
-    create(:identity, :identity_provider, user_id: user[:id])
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]}, 1.hour.from_now)
+    identity = create(:identity_provider, :new)
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}}, 1.hour.from_now)
 
-    count_identity_by_user_id = Identity.where(user_id: user[:id]).count
+    count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
     count_identities = Identity.all.count
 
     post '/api/auth/identity/register',
       :headers => json_headers,
       :params => identity_params.to_json
 
-    expect(Identity.where(user_id: user[:id]).count).to eq(count_identity_by_user_id + 1)
+    expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity_by_user_id + 1)
     expect(Identity.all.count).to eq(count_identities + 1)
   end
 end

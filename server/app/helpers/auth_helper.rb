@@ -3,14 +3,14 @@ require 'bcrypt'
 module AuthHelper
   include BCrypt
 
-  def create_auth(permited_params)
+  def create_identity_data(permited_params)
     # If the user is already logged in, 
     # choose the current username and password
 
     if signed_in?
       # Check if there exists an PasswordIdentity
       # because of a logged in user with an extern provider
-      identity = PasswordIdentity.intern_provider(@current_user[:id]).first
+      identity = PasswordIdentity.where(user_id: @current_user[:id]).first
       if identity
         name = @current_user[:display_name]
         password = identity[:data]["password"]

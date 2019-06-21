@@ -43,9 +43,9 @@ class AuthController < ApplicationController
 
   def register
     permited_params = register_params
-    auth = create_auth(permited_params)
+    identity_data = create_identity_data(permited_params)
 
-    create_identity(auth, true)
+    create_identity(identity_data, true)
     api_response({ loggged_in: false })
   end
 
