@@ -2,19 +2,19 @@
   class="d-flex justify-content-center authentication">
     <mat-tab-group
       mat-dialog-content
-      (selectedTabChange)="changeToPrimaryContent()">
+      (selectedTabChange)="changeToSignInOrSignUp()">
 
     <mat-tab label="Sign in">
       <providers-extern></providers-extern>
 
       <hr>
       <sign-in
-        *ngIf="primaryContent"
+        *ngIf="signInOrUp"
         (content)="changeContent()">
       </sign-in>
 
       <request-reset-password
-        *ngIf="!primaryContent">
+        *ngIf="!signInOrUp">
       </request-reset-password>
 
     </mat-tab>
@@ -23,12 +23,12 @@
 
       <hr>
       <sign-up 
-        *ngIf="primaryContent"
+        *ngIf="signInOrUp"
         (content)="changeContent()">
       </sign-up>
 
       <request-verify-email
-        *ngIf="!primaryContent">
+        *ngIf="!signInOrUp">
       </request-verify-email>
     </mat-tab>
   </mat-tab-group>

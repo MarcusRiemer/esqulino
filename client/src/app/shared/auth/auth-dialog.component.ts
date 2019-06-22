@@ -15,14 +15,14 @@ export class AuthDialogComponent {
 
   public readonly providers = providers
 
-  public primaryContent:boolean = true;
+  public signInOrUp:boolean = true;
 
   public changeContent(): void {
-    this.primaryContent = false;
+    this.signInOrUp = false;
   }
 
-  public changeToPrimaryContent(): void {
-    this.primaryContent = true;
+  public changeToSignInOrSignUp(): void {
+    this.signInOrUp = true;
   }
 
   public static showDialog(dialog: MatDialog) {

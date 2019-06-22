@@ -1,18 +1,16 @@
-
 export interface ServerProviderDescription {
-  extern: ExternProviderDescription[];
-  intern: InternProviderDescription[];
+  providers: Provider[];
   primary: string;
 }
-
-export interface ExternProviderDescription {
-  provider: string;
+export interface Provider {
+  uid: string;
+  type: string;
+  data: ProviderData;
 }
 
-export interface InternProviderDescription {
-  uid: string;
-  provider: string;
+export interface ProviderData {
   confirmed: boolean;
+  link: string;
 }
 
 export interface ChangePrimaryEmailDescription {

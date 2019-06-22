@@ -1,7 +1,7 @@
 
 
 $button_width: 10em;
-$base_width: 21em;
+$base_width: 20.5em;
 
 .settings {
   .general {
@@ -40,17 +40,12 @@ $base_width: 21em;
     mat-card {
       display: flex;
       flex-direction: column;
-      width: $base_width;
+      width: $button-width;
       align-items: center;
       margin: 0 0 10px 10px;
 
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
-
       mat-card-actions {
-        width: 65%;
+        width: 100%;
 
         button {
           width: 100%;
@@ -58,6 +53,20 @@ $base_width: 21em;
       }
     }
 
+
+    table {
+      width: 50vw;
+      background-color: white;
+      
+      th, td {
+        padding: 10px 10px 10px 10px
+      }
+
+      td:last-child {
+        width: 10px;
+      }
+    }
+  
     provider-button {
       width: $button_width;
 
