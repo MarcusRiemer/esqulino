@@ -1,3 +1,4 @@
+import { AddEmailDialogComponent } from './settings/components/add-email-dialog.component';
 import { NgModule } from "@angular/core";
 
 import { SharedAppModule } from '../shared/shared.module';
@@ -15,13 +16,15 @@ import { UserComponent } from './user.component';
   declarations: [
     UserComponent,
     UserProfilComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    AddEmailDialogComponent
   ],
   exports: [
     UserComponent,
     UserProfilComponent,
     ResetPasswordComponent,
+    AddEmailDialogComponent,
   ],
-  entryComponents: [ResetPasswordComponent]
+  entryComponents: [ResetPasswordComponent, AddEmailDialogComponent]
 })
 export class UserModule {}

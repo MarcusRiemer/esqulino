@@ -12,7 +12,7 @@ import { ServerApiService } from './serverapi.service';
 import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
-import { UserEmailDescription, UserPasswordDescription, UserNameDescription } from './../auth/user.description';
+import { UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './../auth/user.description';
 
 
 
@@ -85,7 +85,7 @@ export class ServerDataService {
     return this._http.patch<ServerProviderDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
   }
 
-  addEmail$(data: UserEmailDescription): Observable<ServerProviderDescription> {
+  addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
     return this._http.post<ServerProviderDescription>(this._serverApi.getSignUpUrl(), data)
   }
 
@@ -97,12 +97,12 @@ export class ServerDataService {
     return this._http.patch<UserNameDescription>(this._serverApi.getChangeUserNameUrl(), data)
   }
 
-  deleteEmail$(uid: string): Observable<ServerProviderDescription> {
+  deleteEmail$(id: string): Observable<ServerProviderDescription> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      body: { uid: uid },
+      body: { id: id },
     };
     return this._http.delete<ServerProviderDescription>(this._serverApi.getDeleteEmailUrl(), options)
   }

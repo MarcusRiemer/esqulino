@@ -40,7 +40,7 @@ $base_width: 20.5em;
     mat-card {
       display: flex;
       flex-direction: column;
-      width: $button-width;
+      width: 15em;
       align-items: center;
       margin: 0 0 10px 10px;
 
@@ -85,41 +85,13 @@ $base_width: 20.5em;
   }
 
   .email-settings {
-
-    mat-list-item:first-child {
-      border-top: solid;
-      border-width: 1px;
+    button {
+      margin-bottom: 5vh;
     }
 
-    label {
-      margin-top: 3vh;
-    }
-
-    mat-list-item {
-      background-color: white;
-      width: $base_width;
-      border: solid;
-      border-top: none;
-      border-width: 1px;
-    }
-
-    .table {
-      border: solid 1px;
-    }
-
-    td {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    th,td, .table {
-      width: $base_width;
-      background-color: white;
-    }
-
-    th {
-      border-top: none;
+    p {
+      width: 30vw;
+      min-width: $base_width;
     }
   }
 }
