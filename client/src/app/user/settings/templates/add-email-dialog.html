@@ -1,21 +1,25 @@
-<h1 mat-dialog-title>Hinzufügen einer E-Mail</h1>
-<div mat-dialog-content>
- <label>
-    Bitte gebe ein Passwort für die jeweilige Email ein.
-    <validate-input 
-      icon="key"
-      [(value)]="newEmailData.password">
+<h4 mat-dialog-title
+  class="new-email-dialog-title">
 
-      <input #inputRef
-        type="password"
-        class="form-control"
-        placeholder="Password">
-    </validate-input>
- </label>
+  Hinzufügen einer E-Mail
+</h4>
 
- <validate-input 
+<div mat-dialog-content
+  class="new-email-dialog-content">
+
+  <validate-input 
     icon="key"
-    [(value)]="passwordConfirmation">
+    [(value)]="newEmailData.password">
+
+    <input #inputRef
+      type="password"
+      class="form-control"
+      placeholder="Password">
+  </validate-input>
+
+  <validate-input 
+      icon="key"
+      [(value)]="passwordConfirmation">
 
     <input #inputRef
       type="password"
@@ -24,7 +28,9 @@
   </validate-input>
 </div>
 
-<div mat-dialog-actions>
+<div mat-dialog-actions
+  class="new-email-dialog-actions">
+
   <button
     mat-raised-button
     color="primary"
