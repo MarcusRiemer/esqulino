@@ -20,22 +20,43 @@
     Speichern
   </button>
 
+  <h1>Verknüpfte Konten</h1>
+  <hr>
+
+  <table class="table-bordered">
+    <thead>
+      <th scope="1">UID</th>
+      <th scope="2">Provider</th>
+      <th scope="3">Link</th>
+      <th scope="4"></th>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let provider of linkedProviders$ | async">
+        <td>{{provider.uid}}</td>
+        <td>{{provider.type}}</td>
+        <td>{{provider.data.link}}</td>
+        <td>
+          <button mat-icon-button
+            matTooltip="Remove this linked identity"
+            (click)="onDeleteIdentity()">
+
+            <i class="fa fa-trash" aria-hidden="true"></i>
+         </button>
+       </td>
+      </tr>
+    </tbody>
+  </table>
+
   <h1>Konto verknüpfen</h1>
   <hr>
   <div class="row">
     <mat-card *ngFor="let provider of providers;">
       <mat-card-header>
-        <mat-card-title>{{provider.name}}</mat-card-title>
+        <mat-card-title>
+          {{provider.name}}
+        </mat-card-title>
       </mat-card-header>
-      <mat-card-content>
-        <ul>
-          <ng-container *ngFor="let identity of identities$ | async">
-            <li *ngIf="identity.provider === provider.urlName">
-              tom.hilge@gmail.com
-            </li>
-          </ng-container>
-      </ul>
-      </mat-card-content>
       <mat-card-actions>
         <provider-button
           [providerName]="provider.name">

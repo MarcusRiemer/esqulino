@@ -18,9 +18,10 @@ export class AccountSettingsComponent {
 
   public username$ = this._userService.userDisplayName$;
   public providers = providers;
-  public identities$ = this._userService.externIdentities$;
+  public linkedProviders$ = this._userService.linkedProviders$;
 
   public onChangeUserName(): void {
+    this.linkedProviders$.subscribe(data => console.log(data))
     if (this.userNameData.displayName) {
       this._userService.changeUserName$(this.userNameData)
         .subscribe()

@@ -31,12 +31,8 @@ export class UserService {
     map(u => u.primary)
   )
 
-  public readonly internIdentities$ = this.identities$.value.pipe(
-    map(u => u.intern.filter(entry => entry.uid != u.primary))
-  )
-
-  public readonly externIdentities$ = this.identities$.value.pipe(
-    map(u => u.extern)
+  public readonly linkedProviders$ = this.identities$.value.pipe(
+    map(u => u.providers.filter(e => e.type != "PasswordIdentity"))
   )
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {

@@ -35,11 +35,11 @@ export class EmailSettingsComponent {
   }
 
   public isInIntern(searchFor: string): boolean {
-    return this.identities.intern.some(v => v.uid === searchFor)
+    return this.identities.providers.some(v => v.uid === searchFor)
   }
 
   public isInternEmpty(): boolean {
-    return this.identities.intern.length === 0
+    return this.identities.providers.length === 0
   }
 
   public onAddEmail() {
@@ -52,14 +52,14 @@ export class EmailSettingsComponent {
 
   public onDeleteEmail(uid: string): void {
     if (uid !== this.primaryEmailData.primaryEmail) {
-      if (this.identities.intern.length > 1) {
+      if (this.identities.providers.length > 1) {
         this._userService.deleteEmail$(uid).subscribe();
       } else alert("Es muss eine E-Mail vorhanden bleiben.")
     } else alert("Wähle zuvor eine andere primäre E-mail aus!")
   }
 
   public onChangePrimaryEmail(): void {
-    console.log(this.identities.intern)
+    console.log(this.identities.providers)
     if (!this.isSelectedEmailCurrentPrimary()) {
       if (this.isInIntern(this.primaryEmailData.primaryEmail)) {
         this._userService.changePrimaryEmail$(this.primaryEmailData)
