@@ -29,8 +29,6 @@ class ApplicationController < ActionController::API
         token_decoded = Auth.decode(token)
         if token_decoded[:data]["confirmed"]
           @current_user = User.find(token_decoded[:user_id].to_s)
-        else
-          render json: { errors: "Please confirm your e-email" }, status: :unauthorized
         end
       rescue ActiveRecord::RecordNotFound => e
         render json: { errors: e.message }, status: :unauthorized

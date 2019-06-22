@@ -125,10 +125,13 @@ class IdentitiesController < ApplicationController
   def destroy
     if signed_in?
       permited_params = delete_identity_params
-      identity = search_for_password_identity(permited_params)
+      identity = Identity.where(id: permited_params[:id]).first
       if (identity)
-        if (Identity.where(user_id: @current_user[:id]).count > 1)
-          if (!@current_user.email.eql? identity.uid)
+        all_identities = Identity.where(user_id: @current_user[:id])
+        if (all_identities.count > 1)
+          # Is the identity not the current primary mail or is it the current primary email
+          # and has more identities with the same email
+          if (!@current_user.email.eql? identity[:data]["email"]) || (@current_user.email.eql? identity[:data]["email"]) && (all_identities.where("data ->> 'email' = ?", identity[:data]["email"]).count > 1)
             if identity.user_id.eql? @current_user.id
               identity.delete
               api_response(@current_user.all_providers)
