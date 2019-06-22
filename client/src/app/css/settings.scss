@@ -3,6 +3,22 @@
 $button_width: 10em;
 $base_width: 20.5em;
 
+.add-email-dialog-title {
+  margin-bottom: 1em;
+}
+
+.add-email-dialog-actions {
+  button {
+    margin-top: 1vh;
+  }
+}
+
+.add-email-dialog-content {
+  .input-group {
+    margin-top: 0.5em;
+  }
+}
+
 .settings {
   .general {
     display: flex;
@@ -95,3 +111,4 @@ $base_width: 20.5em;
     }
   }
 }
+

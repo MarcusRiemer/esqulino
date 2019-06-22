@@ -65,7 +65,8 @@ export class EmailSettingsComponent {
         } else {
           // If there exists no identity with password, ask for password
           this._dialog.open(AddEmailDialogComponent, {
-            height: '300px',
+            height: '240px',
+            minWidth: '20em',
             data: this.newEmailData
           });
         }
