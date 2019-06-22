@@ -10,7 +10,7 @@ class IdentityMailer < ApplicationMailer
     mail(to: @user[:email], subject: "Blattwerkzeug.de password reset")
   end
 
-  def changed_password(identity_data)
+  def changed_password(identity)
     @user = User.find(identity[:user_id])
 
     @user[:email] ||= identity[:uid]
