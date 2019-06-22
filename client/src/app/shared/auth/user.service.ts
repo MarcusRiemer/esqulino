@@ -2,12 +2,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
-import { map, tap, first, filter } from 'rxjs/operators';
+import { map, tap, first, filter, distinct } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
-import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription } from './user.description';
+import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
-import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
+import { ServerProviderDescription, ChangePrimaryEmailDescription, ClientProviderDescription } from './provider.description';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -31,8 +31,9 @@ export class UserService {
     map(u => u.primary)
   )
 
-  public readonly linkedProviders$ = this.identities$.value.pipe(
-    map(u => u.providers.filter(e => e.type != "PasswordIdentity"))
+  public readonly providers$ = this.identities$.value.pipe(
+    map(u => u.providers)
+    // distinct(i => i.forEach(e => e.data.email) )
   )
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
@@ -119,7 +120,7 @@ export class UserService {
     )
   }
 
-  public addEmail$(data: UserEmailDescription): Observable<ServerProviderDescription> {
+  public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
     return this._serverData.addEmail$(data).pipe(
       tap(
         _ => {

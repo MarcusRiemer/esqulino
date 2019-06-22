@@ -15,6 +15,11 @@ export interface UserLoggedOutDescription {
   loggedIn: false;
 } 
 
+export interface UserAddEmailDescription {
+  email: string;
+  password: string;
+}
+
 export interface UserEmailDescription {
   email: string;
 }
