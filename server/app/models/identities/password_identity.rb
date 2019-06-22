@@ -1,12 +1,6 @@
 class PasswordIdentity < Identity
-  attr_accessor :email, :name, :password, :password_confirmation
 
   def self.create_with_auth(auth, user)
-    # If there exists a user with an extern provider and an
-    # intern provider will be registered. Set primary e-mail
-    if !user.email?
-      user.set_email(auth[:uid])
-    end
     self.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
   end
 

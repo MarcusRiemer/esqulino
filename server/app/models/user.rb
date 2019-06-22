@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include IdentityHelper
+
   has_many :identities
   validates_length_of :display_name, within: 3..20
   # validates_format_of :display_name, :with => /\A[A-Za-z0-9]*\z/i
@@ -7,14 +9,14 @@ class User < ApplicationRecord
   def self.create_from_hash(auth)
     name = auth[:info][:name] || auth[:info][:nickname]
     # If the provider is identity, set the primary email of user to the uid from identity 
-    email = (auth[:provider].eql? "identity") ? auth[:uid] : nil
+    email = auth[:info][:email]
 
     create(display_name: name, email: email)
   end
 
   def all_providers()
     return {
-      providers: Identity.all.select("uid, provider, data ->> 'confirmed' as data"),
+      providers: identities_slice_data(Identity.all.as_json(only: [:id, :type, :data])),
       primary: self.email
     }
   end

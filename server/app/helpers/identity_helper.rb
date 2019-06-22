@@ -21,7 +21,12 @@ module IdentityHelper
       when 'github'
         @identity = Github.create_with_auth(auth, user)
       else
-        raise Exception.new('Unknown Provider')
+        raise Exception.new('Unknown provider')
+      end
+
+      # set primary mail if email on user is nil
+      if !user.email?
+        user.set_email(auth[:info][:email])
       end
 
       if (@identity && email)
@@ -30,6 +35,21 @@ module IdentityHelper
     end
   end
 
+  # Return only information where is important for the client 
+  # TODO-TOM Search for a better way
+  def identities_slice_data(identities)
+    identities.each do |k|
+      if k["type"] == "PasswordIdentity"
+        k["type"] = "Blattwerkzeug"
+      end
+
+      if k["data"]
+        k["data"] = k["data"].slice("confirmed", "link", "email")
+      end
+    end
+  end
+
+  # Searching explicit for an PasswordIdentity with a passed uid
   def search_for_password_identity(permited_params)
     uid = permited_params[:email] || permited_params[:uid]
     return PasswordIdentity.search({

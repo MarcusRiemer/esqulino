@@ -181,7 +181,7 @@ RSpec.describe "identities controller" do
     delete '/api/identities/delete_identity',
       :headers => json_headers,
       :params => {
-        uid: identity.uid
+        id: identity.id
       }.to_json
 
     expect(response.status).to eq(200)
@@ -198,7 +198,7 @@ RSpec.describe "identities controller" do
     delete '/api/identities/delete_identity',
       :headers => json_headers,
       :params => {
-        uid: "wrong_uid"
+        id: "wrong_uid"
       }.to_json
 
     expect(response.status).to eq(401)
@@ -215,7 +215,7 @@ RSpec.describe "identities controller" do
     delete '/api/identities/delete_identity',
       :headers => json_headers,
       :params => {
-        uid: identity.uid
+        id: identity.id
       }.to_json
 
     expect(response.status).to eq(401)
@@ -234,7 +234,7 @@ RSpec.describe "identities controller" do
     delete '/api/identities/delete_identity',
       :headers => json_headers,
       :params => {
-        uid: identity.uid
+        id: identity.id
       }.to_json
 
     expect(response.status).to eq(401)
@@ -249,7 +249,7 @@ RSpec.describe "identities controller" do
     delete '/api/identities/delete_identity',
       :headers => json_headers,
       :params => {
-        uid: identity.uid
+        id: identity.id
       }.to_json
 
     expect(response.status).to eq(401)
