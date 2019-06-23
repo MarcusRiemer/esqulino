@@ -41,6 +41,10 @@ class PasswordIdentity < Identity
     return waiting_time <= 0
   end
 
+  def reset_token_expired?()
+    return self.data["password_reset_token_exp"] < Time.now
+  end
+
   def set_waiting_time
     self.data["waiting_time_verify_mail"] = 2.minutes.from_now
     self.save
@@ -52,9 +56,6 @@ class PasswordIdentity < Identity
     return ((need_to_wait.to_time - Time.current) / 1.minute).round
   end
 
-  def reset_token_expired?()
-    return self.data["password_reset_token_exp"] < Time.now
-  end
 
   def password_eql?(password)
     # comparing nil with Password.new(self.data["password"]) will be true 
