@@ -96,12 +96,12 @@ export class UserService {
     )
   }
 
-  public changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ServerProviderDescription> {
-    return this._serverData.changePrimaryEmail$(data).pipe(
+  public sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
+    return this._serverData.sendChangePrimaryEmail$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Primary e-mail succesfully changed', '', {duration: 3000})
-          this.identities$.refresh();
+          this._snackBar.open('Please confirm the e-mail', '', {duration: 5000})
+          this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )

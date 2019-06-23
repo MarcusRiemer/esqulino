@@ -56,7 +56,7 @@ export class ServerApi {
   }
 
   getChangePrimaryEmailUrl(): string {
-    return (`${this._apiBaseUrl}/user/change_primary_email`)
+    return (`${this._apiBaseUrl}/user/send_change_email`)
   }
 
   getChangeUserNameUrl(): string {
