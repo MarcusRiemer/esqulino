@@ -25,7 +25,7 @@ module IdentityHelper
       end
 
       # set primary mail if email on user is nil
-      if !user.email?
+      if !user.email? && @identity[:data]["confirmed"]
         user.set_email(auth[:info][:email])
       end
 

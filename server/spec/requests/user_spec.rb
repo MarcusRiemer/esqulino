@@ -22,7 +22,7 @@ RSpec.describe "user controller" do
   end
 
   it 'changing primary email logged out' do
-    patch '/api/user/change_primary_email',
+    post '/api/user/send_change_email',
       :headers => json_headers,
       :params => {
         primaryEmail: "test@web.de"
@@ -39,7 +39,7 @@ RSpec.describe "user controller" do
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.first.email).to eq(identity.uid)
 
-    patch '/api/user/change_primary_email',
+    post '/api/user/send_change_email',
       :headers => json_headers,
       :params => {
         primaryEmail: identity2.uid
@@ -57,7 +57,7 @@ RSpec.describe "user controller" do
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.first.email).to eq(identity.uid)
 
-    patch '/api/user/change_primary_email',
+    post '/api/user/send_change_email',
       :headers => json_headers,
       :params => {
         primaryEmail: identity2.uid
@@ -75,7 +75,7 @@ RSpec.describe "user controller" do
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
-    patch '/api/user/change_primary_email',
+    post '/api/user/send_change_email',
       :headers => json_headers,
       :params => {
         primaryEmail: "not_existing@web.de"
@@ -93,7 +93,7 @@ RSpec.describe "user controller" do
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
-    patch '/api/user/change_primary_email',
+    post '/api/user/send_change_email',
       :headers => json_headers,
       :params => {
         primaryEmail: identity2.uid

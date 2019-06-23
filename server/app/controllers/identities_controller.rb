@@ -93,6 +93,11 @@ class IdentitiesController < ApplicationController
     identity = PasswordIdentity.where("data ->> 'verify_token' = ?", email_confirmation_params[:verify_token]).first
     # identity found and not confirmed
     if identity && !identity.confirmed?
+      user = User.find_by(id: identity[:user_id])
+      if !user.email?
+        # Sets the primary email on confirmation
+        user.set_email(identity[:data]["email"])
+      end
       identity.confirmed!
       set_identity(identity)
       sign_in

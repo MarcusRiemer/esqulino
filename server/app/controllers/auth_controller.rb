@@ -21,7 +21,7 @@ class AuthController < ApplicationController
 
     redirect_to "/"
   end
-
+  
   def login_with_password
     identity = search_for_password_identity(login_params)
     if identity
@@ -53,6 +53,10 @@ class AuthController < ApplicationController
     sign_out!
     delete_jwt_cookie!
     api_response({ loggged_in: false })
+  end
+
+  def failure
+    redirect_to "/"
   end
 end
 
