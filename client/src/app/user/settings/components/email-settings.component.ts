@@ -77,7 +77,7 @@ export class EmailSettingsComponent {
   public onChangePrimaryEmail(): void {
     if (!this.isSelectedEmailCurrentPrimary()) {
       if (this.emails.has(this.primaryEmailData.primaryEmail)) {
-        this._userService.changePrimaryEmail$(this.primaryEmailData)
+        this._userService.sendChangePrimaryEmail$(this.primaryEmailData)
           .subscribe()
 
       } else alert("Diese E-Mail wurde noch nicht deinem Konto hinzugefügt")

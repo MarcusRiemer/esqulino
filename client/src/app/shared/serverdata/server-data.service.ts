@@ -81,8 +81,8 @@ export class ServerDataService {
     return this._http.patch<UserDescription>(this._serverApi.getPasswordResetUrl(), data);
   }
 
-  changePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ServerProviderDescription> {
-    return this._http.patch<ServerProviderDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
+  sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
   }
 
   addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
