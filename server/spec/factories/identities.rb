@@ -32,6 +32,19 @@ FactoryBot.define do
         password_reset_token_exp: Time.now - 1.hour
       }) }
     end
+
+    trait :another_existing do
+      provider { "identity" }
+      uid { "another@web.de" }
+      data { ({
+        email: "another@web.de",
+        password: BCrypt::Password.create("12345678"),
+        verify_token: SecureRandom.uuid,
+        confirmed: true,
+        password_reset_token: SecureRandom.uuid,
+        password_reset_token_exp: Time.now - 1.hour
+      }) }
+    end
   end
 
   factory :developer_provider, class: "Developer", parent: :identity do
