@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_21_080007) do
+ActiveRecord::Schema.define(version: 2019_06_24_121747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -65,6 +65,14 @@ ActiveRecord::Schema.define(version: 2019_06_21_080007) do
     t.datetime "updated_at", null: false
     t.string "type"
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "log_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "event_type"
+    t.datetime "created_at", null: false
+    t.uuid "user_id"
+    t.jsonb "data"
+    t.index ["user_id"], name: "index_log_entries_on_user_id"
   end
 
   create_table "news", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -136,6 +144,7 @@ ActiveRecord::Schema.define(version: 2019_06_21_080007) do
   add_foreign_key "code_resources", "projects"
   add_foreign_key "grammars", "programming_languages"
   add_foreign_key "identities", "users"
+  add_foreign_key "log_entries", "users"
   add_foreign_key "project_databases", "projects"
   add_foreign_key "project_sources", "projects"
   add_foreign_key "project_uses_block_languages", "block_languages"
