@@ -9,7 +9,7 @@ import { OverviewBlockLanguageComponent } from './block-language/overview-block-
 import { NavSiteComponent } from '../shared/nav-page.component';
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
-import { AuthGuard } from '../shared/guards/auth.guard';
+import { LoggedInGuard } from '../shared/guards/logged-in.guard';
 
 export const adminRoutes: Routes = [
   {
@@ -24,7 +24,7 @@ export const adminRoutes: Routes = [
       {
         path: 'nav',
         component: NavSiteComponent,
-        data: {items: adminItems}
+        data: { items: adminItems }
       },
       {
         path: 'grammar',
