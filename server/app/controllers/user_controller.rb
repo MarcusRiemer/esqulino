@@ -67,6 +67,8 @@ class UserController < ApplicationController
     end
   end
 
+  # Sends e-mail to primary mail 
+  # The change of primary needs to be confirmed 
   def send_change_email
     if signed_in?
       permited_params = change_email_params

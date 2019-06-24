@@ -107,7 +107,7 @@ RSpec.describe "user controller" do
 
     get "/api/user/change_primary_email/invalid"
 
-    expect(User.first.email).to eq(identity.uid)
+    expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     expect(response.status).to eq(401)
   end

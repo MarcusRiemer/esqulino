@@ -69,6 +69,7 @@ export const indexItems: NavItem[] = [
       de: "Administration",
       en: "Administration",
     },
+    requireLogin: true
   },
   {
     type: "link",
@@ -77,7 +78,8 @@ export const indexItems: NavItem[] = [
       en: "Languages",
     },
     route: ["/admin"],
-    icon: "puzzle-piece"
+    icon: "puzzle-piece",
+    requireLogin: true
   },
   {
     type: "external",
@@ -86,7 +88,7 @@ export const indexItems: NavItem[] = [
       en: "Manual 🇬🇧",
     },
     url: "http://manual.blattwerkzeug.de/",
-    icon: "book"
+    icon: "book",
   },
 ];
 

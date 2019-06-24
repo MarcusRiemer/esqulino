@@ -9,6 +9,7 @@ import { OverviewBlockLanguageComponent } from './block-language/overview-block-
 import { NavSiteComponent } from '../shared/nav-page.component';
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
+import { AuthGuard } from '../shared/guards/auth.guard';
 
 export const adminRoutes: Routes = [
   {
