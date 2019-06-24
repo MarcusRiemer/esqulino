@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'fakefs/safe'
 
 RSpec.describe ProjectsController, type: :request do
 
@@ -8,9 +7,7 @@ RSpec.describe ProjectsController, type: :request do
   describe 'POST /api/project' do
 
     describe 'valid request' do
-      it 'creates a project', fakefs: true do
-        fakefs_clone_projects_dir!
-
+      it 'creates a project' do
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)

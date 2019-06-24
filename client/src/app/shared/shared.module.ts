@@ -3,14 +3,21 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
 
 import { PortalModule } from '@angular/cdk/portal';
-import {
-  MatToolbarModule, MatButtonModule, MatMenuModule,
-  MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, MatFormFieldModule
-} from '@angular/material'
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AnalyticsService } from './analytics.service';
 import { BrowserService } from './browser.service'
@@ -34,6 +41,10 @@ import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
 import { FocusDirective } from './focus-element.directive';
 
+import { GrammarDataService, BlockLanguageDataService } from './serverdata'
+
+const dataServices = [GrammarDataService, BlockLanguageDataService];
+
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
@@ -55,7 +66,6 @@ const materialModules = [
     CommonModule,
     FormsModule,
     RouterModule,
-    HttpModule,
     HttpClientModule,
     PortalModule,
     ...materialModules
@@ -78,8 +88,8 @@ const materialModules = [
     CommonModule,
     FormsModule,
     RouterModule,
-    HttpModule,
     PortalModule,
+    HttpClientModule,
     ...materialModules,
     ToolbarComponent,
     FlashMessageListComponent,
@@ -109,6 +119,7 @@ export class SharedAppModule {
         VideoService,
         LanguageService,
         ToolbarService,
+        ...dataServices
       ]
     });
   }

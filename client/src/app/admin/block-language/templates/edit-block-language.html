@@ -5,6 +5,13 @@
     Speichern
   </button>
 
+  <button (click)="onDelete()"
+          mat-button
+          class="btn btn-outline-danger btn-sm">
+    <span class="fa fa-trash-o" aria-hidden="true"></span>
+    Löschen
+  </button>
+
   <button (click)="onRegenerate()"
           [disabled]="!editedSubject?.localGeneratorInstructions"
           mat-button>

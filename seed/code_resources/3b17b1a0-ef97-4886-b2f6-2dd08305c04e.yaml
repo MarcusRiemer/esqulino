@@ -88,6 +88,10 @@ concise_attributes:
         truck._progress([["procedures",2],["body",0],["body",0]]);
         yield* truck.turnLeft();
       }
+      else if ((truck.canTurnRight() && !truck.canGoStraight())) {
+        truck._progress([["procedures",2],["body",0],["elseIf",0],["body",0]]);
+        yield* truck.turnRight();
+      }
       truck._progress([["procedures",2],["body",1]]);
       yield* truck.goForward();
     }

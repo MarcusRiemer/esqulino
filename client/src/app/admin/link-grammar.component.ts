@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { map, filter } from 'rxjs/operators';
 
-import { ServerDataService } from '../shared';
+import { GrammarDataService } from '../shared/serverdata';
 
 /**
  * Creates a link to the grammar with the specified ID. Will attempt to
@@ -20,14 +20,14 @@ export class LinkGrammarComponent {
   @Input() grammarId: string;
 
   constructor(
-    private _serverData: ServerDataService,
+    private _grammarData: GrammarDataService,
   ) {
   }
 
   /**
    * (Possibly) the description of the grammar
    */
-  readonly description = this._serverData.listGrammars.value.pipe(
+  readonly description = this._grammarData.list.pipe(
     filter(grammars => !!grammars),
     map(grammars => grammars.find(g => g.id == this.grammarId))
   );

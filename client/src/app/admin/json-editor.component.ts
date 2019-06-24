@@ -49,7 +49,10 @@ export class JsonEditor implements OnInit, OnChanges {
    */
   onTextChanged(newText: string) {
     this._currentText = newText;
-    if (this.isSynchronised) {
+
+    // An empty string trumps everything else: No matter how identical
+    // the new state is, we want the empty state.
+    if (newText === "" || this.isSynchronised) {
       this.onEditorOverwriteUi();
     }
   }
@@ -68,10 +71,13 @@ export class JsonEditor implements OnInit, OnChanges {
    */
   onEditorOverwriteUi() {
     try {
-      this.jsonValue = JSON.parse(this._currentText);
+      // JSON.parse("") or JSON.parse(undefined) results in an exception
+      this.jsonValue = this._currentText !== "" ? JSON.parse(this._currentText) : undefined;
       this.jsonValueChange.emit(this.jsonValue);
       this.checkSynchronisation();
     } catch {
+      // This is (hopefully) something that happened during JSON.parse. We do
+      // not react to it because we only want to bother the user with valid documents.
     }
   }
 
@@ -79,13 +85,12 @@ export class JsonEditor implements OnInit, OnChanges {
    *
    */
   private checkSynchronisation() {
-    // Is there something that could be synchronized?
-    if (this._currentText || this.jsonValue) {
+    if (!this._currentText && this.jsonValue === undefined) {
+      this.isSynchronised = true;
+    } else {
       const ourValue = JSON.stringify(JSON.parse(this._currentText || null));
       const theirValue = JSON.stringify(this.jsonValue);
       this.isSynchronised = ourValue === theirValue;
-    } else {
-      this.isSynchronised = true;
     }
   }
 }

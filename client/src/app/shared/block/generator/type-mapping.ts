@@ -84,7 +84,7 @@ export function mapProperty(
  * Maps children of a specific child group to an iterable block.
  */
 export function mapChildren(
-  typeDesc: NodeConcreteTypeDescription,
+  _typeDesc: NodeConcreteTypeDescription,
   attr: NodeChildrenGroupDescription,
   instructions: IteratorInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
