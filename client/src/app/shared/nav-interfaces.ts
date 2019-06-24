@@ -13,7 +13,7 @@ export interface NavLink {
   type: "link",
   text: MultiLangString, // The text to display
   route: string[],
-  requireLogin?: boolean;
+  requireLogin?: boolean; // requireRole?: ["user"]
   icon?: string
 }
 

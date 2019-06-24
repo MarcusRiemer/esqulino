@@ -19,7 +19,7 @@ import { NotifyErrorHandler } from './error-handler';
 
 import registerLanguages from './locale-registration';
 import { UserModule } from './user/user.module';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { LoggedInGuard } from './shared/guards/logged-in.guard';
 
 
 // Ensure the Piwik client object is globally available
@@ -75,7 +75,7 @@ if (environment.sentry && environment.sentry.active) {
   ],
   providers: [
     Title,
-    AuthGuard,
+    LoggedInGuard,
     { provide: ErrorHandler, useClass: NotifyErrorHandler }
   ],
   bootstrap: [
