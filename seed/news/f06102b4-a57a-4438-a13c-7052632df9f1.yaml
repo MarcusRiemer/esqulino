@@ -1,0 +1,48 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f06102b4-a57a-4438-a13c-7052632df9f1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"Neue Datenbank: Die lustige Enzyklopädie", "en"=>"New
+    Database: German \"European Disney Paperbacks\""'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: |-
+    "de"=>"Das \"Lustige Taschenbuch\" erzählt Geschichten rund um die verschiedenen Figuren die Walt Disney geschaffen hat. Von Donald Duck über Mickey Maus bis hin zu sehr modernen Variationen wie \"Agent Doppelduck\" sind in 50 Jahren die unterschiedlichsten Charaktere aufgetreten. Und nun kann man diese Geschichten [mit dem SQL-Editor auch nach den unterschiedlichsten Gesichtspunkten untersuchen](/editor/ltb/schema/default).
+
+    <!-- SNIP -->
+
+    Die entsprechenden Daten sind in einem Content-Management-Projekt an der Fachhochschule Wedel zusammengetragen worden. Es lassen sich zum Beispiel die folgenden Fragestellungen beantworten:
+
+    * Wie oft tritt Daniel Düsentrieb in den Lustigen Taschenbüchern auf?
+    * Aus welchem Land stammen die meisten Geschichten?
+    * Was sind die längsten Geschichten?
+
+    Das  [entstandene Schema](/editor/ltb/schema/default) schaut aus wie folgt:
+
+    <img src=\"/api/project/ltb/db/default/visual_schema?format=png\" class=\"img-fluid mx-auto d-block\">", "en"=>"In europe there are various, country specifics \"Disney Paperbacks\". The germany variation is called \"Lustiges Taschenbuch\" which translates roughly to \"Funny Paperback\". This series has run for more then 50 years with loads of stories revolving around Donald Duck, Mickey Mouse or modern variations like \"Agent Doubleduck\". And now it is possible to [search through these stories using the SQL-editor](/editor/ltb/schema/default).
+
+    <!-- SNIP -->
+
+    The dataset in question has been gathered in a Content-Management-Projekt at the University of Applied Sciences Wedel and is able to answer e.g. the following questions:
+
+    * How often does Gyro Gearloose (*Daniel Düsentrieb* in german) appear in the german stories?
+    * Which country provides the most stories?
+    * Which stories are the longest?
+
+    The [current schema](/editor/ltb/schema/default) of the project is as follows:
+
+    <img src=\"/api/project/ltb/db/default/visual_schema?format=png\" class=\"img-fluid mx-auto d-block\">"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: '2019-06-23 00:00:00'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-06-24 19:49:11.846419'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-06-24 20:08:02.313356'
+new_record: false
+active_record_yaml_version: 2
