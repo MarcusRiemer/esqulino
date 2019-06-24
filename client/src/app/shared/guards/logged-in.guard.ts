@@ -10,11 +10,18 @@ export class LoggedInGuard implements CanActivate {
     private _router: Router
   ) { }
 
-  public async canActivate() {
-    return true;
+  // TODO: find out why this is not the same as
+  //       this._userService.isLoggedIn$.toPromise();
+  private _userStatus: Promise<boolean> = new Promise<boolean>((resolve, reject) => {
+    this._userService.isLoggedIn$.subscribe(
+      loggedIn => resolve(loggedIn),
+      _ => reject(false)
+    )
+  });
 
+  public async canActivate() {
     console.log(`LoggedIn Guard -> ?`);
-    const loggedIn = await this._userService.isLoggedIn$.toPromise();
+    const loggedIn = await this._userStatus;
     console.log(`LoggedIn Guard -> ${loggedIn}`);
 
     if (!loggedIn)
