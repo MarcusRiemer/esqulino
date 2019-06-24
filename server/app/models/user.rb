@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   def self.create_from_hash(auth)
     name = auth[:info][:name] || auth[:info][:nickname]
-    # If the provider is identity, set the primary email of user to the uid from identity 
+    # If the provider is identity, set the primary email of user to the uid from identity
     email = auth[:info][:email]
 
     create(display_name: name, email: email)
@@ -16,7 +16,7 @@ class User < ApplicationRecord
 
   def all_providers()
     return {
-      providers: identities_slice_data(Identity.all.as_json(only: [:id, :type, :data])),
+      providers: Identity.all.map {|i| i.to_list_api_response },
       primary: self.email
     }
   end

@@ -4,6 +4,10 @@ class PasswordIdentity < Identity
     self.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
   end
 
+  def email
+    self.uid
+  end
+
   def confirmed!()
     self.data["confirmed"] = true;
     self.save!
@@ -12,7 +16,7 @@ class PasswordIdentity < Identity
   def set_password_all_with_user_id(password)
     identities = PasswordIdentity.where('user_id = ?', self.user_id)
 
-    identities.each do |identity| 
+    identities.each do |identity|
       identity.set_password(password)
     end
   end
@@ -49,7 +53,7 @@ class PasswordIdentity < Identity
     self.data["waiting_time_verify_mail"] = 2.minutes.from_now
     self.save
   end
-  
+
   # Waiting time before the server sends a new verify email
   def waiting_time
     need_to_wait = self.data["waiting_time_verify_mail"] || 1.minutes.ago
@@ -58,7 +62,7 @@ class PasswordIdentity < Identity
 
 
   def password_eql?(password)
-    # comparing nil with Password.new(self.data["password"]) will be true 
+    # comparing nil with Password.new(self.data["password"]) will be true
     if password.nil?
       return false
     end

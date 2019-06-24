@@ -18,6 +18,15 @@ class Identity < ActiveRecord::Base
     find_by_provider_and_uid(auth[:provider], auth[:uid])
   end
 
+  def to_list_api_response
+    return ({
+              :id => self.id,
+              :type => self.type,
+              :email => self.email,
+              :confirmed => self.confirmed?,
+            })
+  end
+
   def set_primary_email_token
     self.data["change_primary_token"] = SecureRandom.uuid
     self.data["change_primary_token_exp"] = 30.minutes.from_now
@@ -39,4 +48,3 @@ class Identity < ActiveRecord::Base
     return self.data["change_primary_token_exp"] < Time.now
   end
 end
-
