@@ -4,22 +4,33 @@ require 'rails_helper'
 RSpec.describe "identities controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
+  it 'All identities of a logged in user' do
+    identity = create(:identity_provider, :existing)
+
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: { "confirmed": true }})
+
+    get '/api/identities'
+
+    json_data = JSON.parse(response.body)
+    expect(json_data).to validate_against "ServerProviderDescription"
+  end
+
   it "e-mail confirmation" do
     identity = create(:identity_provider, :new)
     confirmed = identity[:data]["confirmed"]
 
-    expect(confirmed).to eq(false)  
+    expect(confirmed).to eq(false)
 
     get "/api/identities/confirmation/#{identity[:data]["verify_token"]}"
 
-    expect(Identity.all.first[:data]["confirmed"]).to eq(true)  
+    expect(Identity.all.first[:data]["confirmed"]).to eq(true)
   end
 
   it "e-mail confirmation with wrong token" do
     identity = create(:identity_provider, :new)
     confirmed = identity[:data]["confirmed"]
 
-    expect(confirmed).to eq(false)  
+    expect(confirmed).to eq(false)
 
     get "/api/identities/confirmation/123121212"
 

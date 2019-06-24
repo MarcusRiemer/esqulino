@@ -11,14 +11,14 @@ RSpec.describe "user controller" do
     get '/api/user'
 
     json_data = JSON.parse(response.body)
-    expect(json_data["loggedIn"]).to eq(true)  
+    expect(json_data["loggedIn"]).to eq(true)
   end
 
   it 'getting the user description logged out' do
     get '/api/user'
 
     json_data = JSON.parse(response.body)
-    expect(json_data["loggedIn"]).to eq(false)  
+    expect(json_data["loggedIn"]).to eq(false)
   end
 
   it 'changing primary email logged out' do
@@ -49,7 +49,7 @@ RSpec.describe "user controller" do
     expect(response.status).to eq(200)
 
     updated_identity = Identity.find_by(id: identity2.id)
-    
+
     get "/api/user/change_primary_email/#{updated_identity[:data]["change_primary_token"]}"
 
     expect(User.first.email).to eq(identity2.uid)
