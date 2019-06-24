@@ -47,7 +47,7 @@ $stories = Hash.new
 # Associations of actors with characters
 # TODO: This is possibly obsolete, some characters habe been played
 #       by multiple actors
-$actor_char = Set.new
+#$actor_char = Set.new
 
 # List of pairs with occurences: (actor_id, char_id)
 #
@@ -107,9 +107,6 @@ def scrape_info(num)
 
       char_id = $characters[name]
 
-      # Remember the occurence of this char
-      $occurence << [$stories[num],char_id]
-
       actor.each do |a|
         question_index = a.rindex('?')
         if question_index then
@@ -123,7 +120,11 @@ def scrape_info(num)
 
         actor_id = $actors[a]
 
-        $actor_char.add([actor_id, char_id])
+        #$actor_char.add([actor_id, char_id])
+
+        # Remember the occurence of this char
+        $occurence << [$stories[num],char_id,actor_id]
+
       end
     end
   end
@@ -161,18 +162,18 @@ CSV.open("Sprecher.csv", "w") do |file|
   end
 end
 
-puts "Charakter_Sprecher: #{$actor_char.length} "
-CSV.open("Charakter_Sprecher.csv", "w") do |file|
-  $actor_char.each do |pair|
-    actor_id, char_id = pair[0], pair[1]
-    file << [char_id.to_i, actor_id.to_i]
-  end
-end
+#puts "Charakter_Sprecher: #{$actor_char.length} "
+#CSV.open("Charakter_Sprecher.csv", "w") do |file|
+#  $actor_char.each do |pair|
+#    actor_id, char_id = pair[0], pair[1]
+#    file << [char_id.to_i, actor_id.to_i]
+#  end
+#end
 
 puts "Auftritt: #{$occurence.length}"
 CSV.open("Auftritt.csv", "w") do |file|
-  $occurence.each do |pair|
-    story_id, char_id = pair[0], pair[1]
-    file << [story_id.to_i, char_id.to_i]
+  $occurence.each do |story_id,char_id,actor_id|
+    #story_id, char_id = pair[0], pair[1]
+    file << [story_id.to_i, char_id.to_i,actor_id.to_i]
   end
 end
