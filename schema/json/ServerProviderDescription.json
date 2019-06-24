@@ -1,0 +1,54 @@
+{
+  "$ref": "#/definitions/ServerProviderDescription",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "ProviderDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "confirmed"
+      ],
+      "type": "object"
+    },
+    "ServerProviderDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "providers": {
+          "items": {
+            "$ref": "#/definitions/ProviderDescription"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "providers",
+        "primary"
+      ],
+      "type": "object"
+    }
+  }
+}
