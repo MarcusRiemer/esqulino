@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, LOCALE_ID, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { first } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { NewsUpdateDescription } from '../shared/news.description';
 import { ServerDataService, ToolbarService } from '../shared';
@@ -13,7 +13,8 @@ import { ServerDataService, ToolbarService } from '../shared';
   templateUrl: './templates/edit-news.html'
 })
 export class AdminNewsEditComponent implements OnInit {
-  @ViewChild('toolbarItems') toolbarItems: TemplateRef<any>;
+  @ViewChild('toolbarItems', { static: false })
+  toolbarItems: TemplateRef<any>;
 
   constructor(
     private _serverData: ServerDataService,
@@ -112,7 +113,7 @@ export class AdminNewsEditComponent implements OnInit {
         if (option == "redirect")
           this._router.navigate(['admin/news'])
 
-        this._snackBar.open('Updated succesful', '', { duration: 3000 });
+        this._snackBar.open('Update succesful', '', { duration: 3000 });
       },
       err => alert(`Error: ${JSON.stringify(err)}`)
     );

@@ -5,14 +5,13 @@ import { Title } from '@angular/platform-browser'
 import { BehaviorSubject } from 'rxjs'
 import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
 
-import { JsonSchemaValidationService } from '../json-schema-validation.service'
-
-import { ServerDataService } from '../../shared'
+import { GrammarDataService, BlockLanguageDataService } from '../../shared/serverdata'
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
 import { GeneratorError } from '../../shared/block/generator/error.description'
 import { prettyPrintGrammar } from '../../shared/syntaxtree';
+import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description';
 
 @Injectable()
 export class EditBlockLanguageService {
@@ -26,16 +25,16 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _serverData: ServerDataService,
+    private _serverData: BlockLanguageDataService,
+    private _grammarData: GrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _title: Title,
-    private _schemaValidator: JsonSchemaValidationService,
   ) {
     // Ensures that a block language that matches the URL is loaded.
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get('blockLanguageId')),
-        switchMap((id: string) => this._serverData.getBlockLanguage(id).pipe(first())),
+        switchMap((id: string) => this._serverData.getSingle(id).pipe(first())),
       ).subscribe(blockLanguage => {
         this._editedSubject.next(blockLanguage);
       });
@@ -53,7 +52,7 @@ export class EditBlockLanguageService {
    * The grammar that is the basis for this block language.
    */
   readonly baseGrammar = this._editedSubject.pipe(
-    flatMap(blockLang => this._serverData.getGrammarDescription(blockLang.grammarId))
+    flatMap(blockLang => this._grammarData.getSingle(blockLang.grammarId))
   )
 
   /**
@@ -93,9 +92,9 @@ export class EditBlockLanguageService {
   /**
    * Reruns the block language generator.
    */
-  async regenerate() {
+  regenerate() {
     // Grab the instructions or assume default instructions
-    const instructions = this.editedSubject.localGeneratorInstructions || {};
+    const instructions = this.editedSubject.localGeneratorInstructions || DEFAULT_GENERATOR;
 
     // Ensure the instructions are valid
     // TODO: Do actual validation again
@@ -104,8 +103,8 @@ export class EditBlockLanguageService {
     // And do something meaningful if they are
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
-      this._serverData
-        .getGrammarDescription(this.editedSubject.grammarId, true)
+      this._grammarData
+        .getSingle(this.editedSubject.grammarId, true)
         .pipe(first())
         .subscribe(g => {
           this.generatorErrors.push(...validateGenerator(instructions));

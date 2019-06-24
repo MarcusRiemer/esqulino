@@ -90,37 +90,6 @@ class SeedManager
   end
 
   #############################################
-  # Block language generators
-  #############################################
-
-  # Stores all block language generators
-  def store_all_block_language_generators
-    Seed::BlockLanguageGeneratorSeed.store_all
-  end
-
-  # Loads all block language generators that are available as seeds
-  def load_all_block_language_generators
-    Seed::BlockLanguageGeneratorSeed.load_all
-  end
-
-  # Stores a specific block language generator
-  #
-  # @param slug_or_id [string, BlockLanguageGenerator]
-  #   The ID of the generator to store. May alternatively directly be
-  #   a BlockLanguageGenerator.
-  def store_block_language_generator(id)
-    Seed::BlockLanguageGeneratorSeed.new(id).start_store
-  end
-
-  # Loads a specific block language generator
-  #
-  # @param path_slug_or_id [string]
-  #   The path, slug or the ID of the block language to load.
-  def load_block_language_generator(path_slug_or_id)
-    Seed::BlockLanguageGeneratorSeed.new(path_slug_or_id).start_load
-  end
-
-  #############################################
   # Grammars
   #############################################
 

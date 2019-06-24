@@ -1,8 +1,6 @@
 import { Component } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Http } from '@angular/http'
-
-import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 import { ServerApiService } from '../../shared'
 import { ProjectService } from '../../editor/project.service'
@@ -23,7 +21,7 @@ export class ImageEditComponent {
 
   constructor(
     private _serverApi: ServerApiService,
-    private _http: Http,
+    private _http: HttpClient,
     private _projectService: ProjectService,
     private _routeParams: ActivatedRoute,
     private _toolbarService: ToolbarService,
@@ -37,7 +35,7 @@ export class ImageEditComponent {
     const formData = new FormData(event.target as HTMLFormElement);
     const projectId = this._projectService.cachedProject.slug;
 
-    this._http.post(this._serverApi.getImageMetadataUrl(projectId, this._imageMetadata['id']), formData)
+    this._http.post<void>(this._serverApi.getImageMetadataUrl(projectId, this._imageMetadata['id']), formData)
       .subscribe(res => {
         console.log(res);
       });
@@ -46,7 +44,7 @@ export class ImageEditComponent {
   onSubmitUpload(event: Event) {
     const formData = new FormData(event.target as HTMLFormElement);
     const projectId = this._projectService.cachedProject.slug;
-    this._http.post(this._serverApi.getImageUrl(projectId, this._imageMetadata['id']), formData)
+    this._http.post<void>(this._serverApi.getImageUrl(projectId, this._imageMetadata['id']), formData)
       .subscribe(res => {
         console.log(res)
         this.reloadImage();
@@ -75,8 +73,7 @@ export class ImageEditComponent {
     this._routeParams.params.subscribe(params => {
       const projectId = this._projectService.cachedProject.slug;
       console.log("imageId: " + params['imageId']);
-      this._http.get(this._serverApi.getImageMetadataUrl(projectId, params['imageId']))
-        .pipe(map(res => res.json() as AvailableImageDescription))
+      this._http.get<AvailableImageDescription>(this._serverApi.getImageMetadataUrl(projectId, params['imageId']))
         .subscribe(res => {
           console.log("res: " + JSON.stringify(res));
           this.reloadToolbar();

@@ -19,6 +19,7 @@ import * as Truck from './truck'
 
 /**
  * All languages that are statically known to the system.
+ * Must be kept in sync with the seed data.
  */
 export const AvailableLanguages = {
   Sql: new Language(Sql.LANGUAGE_DESCRIPTION),
@@ -28,5 +29,6 @@ export const AvailableLanguages = {
   Css: new Language(Css.LANGUAGE_DESCRIPTION),
   Json: new Language(Json.LANGUAGE_DESCRIPTION),
   TruckWorld: new Language(Truck.WORLD_LANGUAGE_DESCRIPTION),
-  TruckLanguage: new Language(Truck.PROG_LANGUAGE_DESCRIPTION)
+  TruckLanguage: new Language(Truck.PROG_LANGUAGE_DESCRIPTION),
+  Generic: new Language({ id: "generic", name: "Generic", validators: [], emitters: [] })
 };

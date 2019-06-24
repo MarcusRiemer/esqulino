@@ -1,0 +1,33 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5bd558a5-83ed-4cc9-9613-543bd6396a1e
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Test
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: Test
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: false
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-06-04 14:48:12.659782'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-06-04 14:50:33.822525'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: api_version
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+  value_before_type_cast: b8c133b2-eda7-4664-ae9a-dac928b20dd5
+new_record: false
+active_record_yaml_version: 2
