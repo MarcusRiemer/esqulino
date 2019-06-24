@@ -1,3 +1,4 @@
+import { UserService } from './auth/user.service';
 import { Component, Inject, LOCALE_ID, Input, ViewChild } from "@angular/core";
 import { BrowserService } from './browser.service';
 import { MatSidenav } from '@angular/material';
@@ -23,18 +24,19 @@ export class SideNavComponent {
   constructor(
     @Inject(LOCALE_ID) private readonly _localeId: string,
     private readonly _browser: BrowserService,
-    private readonly _sideNav: SideNavService
+    private readonly _sideNav: SideNavService,
+    private readonly _userService: UserService
   ) {
-    this._sideNav.sideNavToggle$()
-      .subscribe(() =>
-        this.sidenav.toggle()
-      )
-
     this._sideNav.sideNavItems$()
-      .subscribe(navItems => {
-        this.navItems = navItems
-      })
+      .subscribe(navItems => this.navItems = navItems)
+
+    this._sideNav.sideNavToggle$()
+      .subscribe(() => this.sidenav.toggle())
+
   }
+
+  // Checks if the user is logged in
+  readonly loggedIn$ = this._userService.isLoggedIn$;
 
   // Pass through: Mobile device detection
   readonly isMobile$ = this._browser.isMobile$;

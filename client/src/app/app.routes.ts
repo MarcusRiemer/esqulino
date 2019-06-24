@@ -1,8 +1,8 @@
-import { adminRoutes } from './admin/admin.routes';
 import { Routes, RouterModule } from '@angular/router'
 
 import { editorRoutes } from './editor/editor.routes'
 import { frontRoutes } from './front/front.routes'
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const AppRoutes: Routes = [
   {
@@ -23,6 +23,7 @@ const AppRoutes: Routes = [
     path: 'admin',
     // loadChildren: './admin/admin.module#AdminModule',
     loadChildren : () => import('./admin/admin.module').then(m => m.AdminModule), // new dynamic import method
+    canActivate: [AuthGuard]
   },
   {
     path: '',

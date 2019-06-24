@@ -65,7 +65,7 @@ const materialModules = [
     OverviewGrammarComponent,
     OverviewBlockLanguageComponent,
     AdminNewsListComponent,
-    AdminNewsEditComponent
+    AdminNewsEditComponent,
   ],
   providers: [
     JsonSchemaValidationService
