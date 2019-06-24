@@ -6,7 +6,7 @@
     icon="pencil"
     [(value)]="userNameData.displayName">
 
-    <input #inputRef 
+    <input #inputRef
       type="text"
       class="form-control"
       [placeholder]="(username$ | async)">
@@ -23,7 +23,7 @@
   <ng-container *ngIf="identities">
     <h1>Verknüpfte Konten</h1>
     <hr>
-  
+
     <table class="table-bordered">
       <thead>
         <th scope="1">E-Mail</th>
@@ -31,24 +31,24 @@
         <th scope="3">Link</th>
         <th scope="4"></th>
       </thead>
-  
+
       <tbody>
         <tr *ngFor="let identity of identities.providers">
-          <td>{{identity.data.email}}</td>
+          <td>{{identity.email}}</td>
           <td>{{identity.type}}</td>
-          <td>{{identity.data.link}}</td>
+          <td>{{identity.link}}</td>
           <td>
             <button mat-icon-button
               matTooltip="Remove this linked identity"
               (click)="onDeleteIdentity(identity)">
-  
+
               <i class="fa fa-trash" aria-hidden="true"></i>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-  
+
     <h1>Konto verknüpfen</h1>
     <hr>
     <div class="row">

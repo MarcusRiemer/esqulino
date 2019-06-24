@@ -28,7 +28,7 @@ export class AccountSettingsComponent {
 
   private anotherProviderWithSameEmail(identity: ProviderDescription): boolean {
     return this.identities.providers.some(v =>
-      v.data.email === identity.data.email && v.type !== identity.type
+      v.email === identity.email && v.type !== identity.type
     )
   }
 
@@ -37,11 +37,11 @@ export class AccountSettingsComponent {
     // or there existing an another provider with the same mail as the primary,
     // delete the clicked identity
     if (
-      identity.data.email !== primary
-      || this.anotherProviderWithSameEmail(identity) && identity.data.email === primary
+      identity.email !== primary
+      || this.anotherProviderWithSameEmail(identity) && identity.email === primary
     ) {
       console.log(identity)
-      console.log(this.anotherProviderWithSameEmail(identity) && identity.data.email === primary)
+      console.log(this.anotherProviderWithSameEmail(identity) && identity.email === primary)
       if (this.identities.providers.length > 1) {
         this._userService.deleteEmail$(identity.id).subscribe();
       } else alert("Es muss eine E-Mail vorhanden bleiben.")
