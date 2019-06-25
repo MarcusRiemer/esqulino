@@ -1,0 +1,16 @@
+<ng-container *ngIf="provider">
+  <ng-container [ngSwitch]="provider.type">
+    <ng-container *ngSwitchCase="'Google'">
+      Google
+    </ng-container>
+    <ng-container *ngSwitchCase="'Github'">
+      Github
+    </ng-container>
+    <ng-container *ngSwitchCase="'Developer'">
+      Developer
+    </ng-container>
+    <ng-container *ngSwitchCase="'PasswordIdentity'">
+      Blattwerkzeug
+    </ng-container>
+  </ng-container>
+</ng-container>

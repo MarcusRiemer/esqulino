@@ -21,8 +21,8 @@ export class EmailSettingsComponent {
         this.identities = identities;
         this.primaryEmailData.primaryEmail = identities.primary;
         this.identities.providers.forEach(v => {
-          if (v.data.email)
-            this.emails.add(v.data.email)
+          if (v.email)
+            this.emails.add(v.email)
         })
       }
     )
@@ -43,12 +43,12 @@ export class EmailSettingsComponent {
   }
 
   public existsOnePasswordIdentity(): boolean {
-    return this.identities.providers.some(v => v.type == "Blattwerkzeug")
+    return this.identities.providers.some(v => v.type == "PasswordIdentity")
   }
 
   public existingEmail(): boolean {
     return this.identities.providers.some(v =>
-      v.type == "Blattwerkzeug" && v.data.email == this.newEmailData.email
+      v.type == "PasswordIdentity" && v.email == this.newEmailData.email
     )
   }
 

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import { UserService } from './user.service';
 import { ChangePasswordDescription } from './auth-description';
-import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: "change-password",

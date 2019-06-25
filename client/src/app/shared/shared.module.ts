@@ -1,4 +1,4 @@
-import { ProvidersExternComponent } from './auth/providers-extern.component';
+import { ProviderShowComponent } from './provider-show.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -58,6 +58,7 @@ import { ValidateInputComponent } from './auth/validate-input.component';
 import { ChangePasswordComponent } from './auth/change-password.component';
 import { SideNavService } from './side-nav.service';
 import { RequestVerifyEmailComponent } from './auth/request-verify-email.component';
+import { ProvidersAllButtonsComponent } from './auth/providers-all-buttons.component';
 
 
 
@@ -114,7 +115,8 @@ const materialModules = [
     ChangePasswordComponent,
     ValidateInputComponent,
     LinkIdentityComponent,
-    ProvidersExternComponent
+    ProviderShowComponent,
+    ProvidersAllButtonsComponent
   ],
   exports: [
     CommonModule,
@@ -145,8 +147,9 @@ const materialModules = [
     RequestResetPasswordComponent,
     RequestVerifyEmailComponent,
     ChangePasswordComponent,
+    ProviderShowComponent,
     LinkIdentityComponent,
-    ProvidersExternComponent
+    ProvidersAllButtonsComponent
   ],
   entryComponents: [AuthDialogComponent, LinkIdentityComponent, ChangePasswordComponent]
 })

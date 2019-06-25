@@ -13,38 +13,23 @@ module IdentityHelper
 
       case auth[:provider]
       when 'developer'
-        @identity = Developer.create_with_auth(auth, user)
+        identity = Developer.create_with_auth(auth, user)
       when 'identity'
-        @identity = PasswordIdentity.create_with_auth(auth, user)
+        identity = PasswordIdentity.create_with_auth(auth, user)
       when 'google_oauth2'
-        @identity = Google.create_with_auth(auth, user)
+        identity = Google.create_with_auth(auth, user)
       when 'github'
-        @identity = Github.create_with_auth(auth, user)
+        identity = Github.create_with_auth(auth, user)
       else
         raise Exception.new('Unknown provider')
       end
 
-      # set primary mail if email on user is nil
-      if !user.email? && @identity[:data]["confirmed"]
-        user.set_email(auth[:info][:email])
-      end
-
-      if (@identity && email)
-        IdentityMailer.confirm_email(@identity, request_locale).deliver
-      end
-    end
-  end
-
-  # Return only information where is important for the client 
-  # TODO-TOM Search for a better way
-  def identities_slice_data(identities)
-    identities.each do |k|
-      if k["type"] == "PasswordIdentity"
-        k["type"] = "Blattwerkzeug"
-      end
-
-      if k["data"]
-        k["data"] = k["data"].slice("confirmed", "link", "email")
+      if identity.valid?
+        identity.save!
+        user.save!
+        @identity = identity
+      else
+        raise Exception.new("Error: UID cant be blank")
       end
     end
   end

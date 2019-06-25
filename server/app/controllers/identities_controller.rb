@@ -49,6 +49,8 @@ class IdentitiesController < ApplicationController
     if identity
       if !identity.reset_token_expired?
         identity.set_reset_token_expired
+        identity.save!
+
         identity.set_password_all_with_user_id(permited_params[:password])
         api_response(user_information)
       else
@@ -63,6 +65,7 @@ class IdentitiesController < ApplicationController
     identity = search_for_password_identity(mail_permit_param)
     if identity
       identity.set_reset_token
+      identity.save!
       IdentityMailer.reset_password(identity, request_locale).deliver
     else 
       render json: { error: "e-mail not found"}, status: :unauthorized
@@ -75,6 +78,7 @@ class IdentitiesController < ApplicationController
       if !identity.confirmed?       
         if identity.can_send_verify_mail?
           identity.set_waiting_time()
+          identity.save!
           IdentityMailer.confirm_email(identity, request_locale).deliver
           api_response(user_information)
         else
@@ -99,6 +103,10 @@ class IdentitiesController < ApplicationController
         user.set_email(identity[:data]["email"])
       end
       identity.confirmed!
+
+      identity.save!
+      user.save!
+
       set_identity(identity)
       sign_in
       redirect_to "/"
