@@ -32,6 +32,8 @@
 		\acro{SPA}{Single Page Application}
 		\acro{CLI}{Command Line Interface}
 		\acro{API}{Application Programming Interface}
+		\acro{RFC}{Request for Comments}
+		\acro{oAuth}{Open Authorization}
 	\end{acronym}
 	
 	\section{Einführung}
@@ -40,8 +42,7 @@
 	\begin{flushleft}
 		Derzeit ist auf den meisten modernen Webseiten mit Benutzerinteraktion eine Anmelde und Abmeldemöglichkeit implementiert. Zu dem wird in den meisten Fällen zwischen den Nutzern über bestimmte Benutzerrollen und Benutzergruppen unterschieden. Dabei geht es darum, Nutzern individuell nach Berechtigung der vorgegebenen Benutzerrolle und/oder Benutzergruppe ihren zugriffsmöglichen Inhalt zur Verfügung zu stellen.\par\bigskip
 		
-		Aktuell ist in Blattwerkzeug keine Benutzer Authentisierung, Authentifizierung und Autorisierung implementiert. Dies hat zur Folge, dass bisher keine individuelle Benutzerinteraktion stattfinden kann. 
-		Im Rahmen dieser Thesis soll genau dieses Problem gelöst werden. Nach Behandlung der Thesis soll es möglich sein, sich mit einer standardisierten Registrierung bei Blattwerkzeug anzumelden. Außerdem soll es ebenfalls möglich sein, sich über externe Anbieter anzumelden. Zusätzlich soll je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt werden.
+		Aktuell ist in Blattwerkzeug keine Benutzer Authentisierung, Authentifizierung und Autorisierung implementiert. Dies hat zur Folge, dass bisher keine individuelle Benutzerinteraktion stattfinden kann. Im Rahmen dieser Thesis soll genau dieses Problem gelöst werden. Nach Behandlung der Thesis soll es möglich sein, sich mit einer standardisierten Registrierung bei Blattwerkzeug anzumelden. Außerdem soll es ebenfalls möglich sein, sich über externe Anbieter anzumelden. Zusätzlich soll je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt werden.
 	\end{flushleft}
 
 
@@ -164,7 +165,7 @@
 			
 			\subsection{Ruby on Rails}
 			\label{sec: rails}
-			Ruby on Rails ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das MVC Muster und stellt bereits ein sehr umfangreiches CLI zur Verfügung. Mittels des generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Außerdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum versenden von Mails. Dabei kann der Inhalt der E-Mail im Textformat oder als HTML versendet werden.  \par\bigskip
+			Ruby on Rails ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das MVC Muster und stellt bereits ein sehr umfangreiches CLI zur Verfügung. Mittels des generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Außerdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum versenden von Mails. Dabei kann der Inhalt der E-Mail im Textformat oder als HTML versendet werden.
 			
 			\subsubsection{Controller}
 			\label{sec: rails_controller}
@@ -204,6 +205,14 @@
 			\begin{center}
 				\includegraphics[scale=0.1]{angular.png}
 			\end{center}
+		
+			\subsection{oAuth2}
+			\label{sec: oauth}
+			oAuth2 ist ein offenes nach RFC genormtes Protokoll welches verwendet wird um eine Authentifizierung einer Anwendung mittels dritt Anbieter zu ermöglichen. Hierbei wird der Nutzer zuerst auf die jeweilige Seite des dritt Anbieters weitergeleitet. Dort muss der Nutzer sich authentifizieren und den Zugriff auf die Daten seines Kontos bestätigen. Nachdem der Zugriff auf die Daten bestätigt wurde, erhält die jeweilige Anwendung von dem dritt Anbieter einen Autorisierungs-Token. Dieser Autorisierungs-Token wird darauf folgend von der Anwendung genutzt um einen Zugriffs-Token von dem dritt Anbieter zu erhalten. Dieser ermöglicht schlussendlich den Zugriff auf die spezifischen Nutzerdaten des dritt Anbieters.\par\bigskip
+			
+			IMAGE\par\bigskip
+			
+			In Blattwerkzeug wird genau dieser umfangreiche Vorgang von Omniauth übernommen. Aus diesem Grund wird oAuth2 in dieser Thesis nicht weiter erläutert.
 			
 			\subsection{Omniauth}
 			\label{sec: omniauth}
@@ -220,12 +229,7 @@
 			
 			\subsubsection{Omniauth Identity}
 			\label{sec: omniauth_identity}
-			Omniauth Identity ist eine Library zur Erweiterung von Omniauth. Mit Omniauth Identity ist intern ein Anbieter gegeben mit dem es möglich ist, sich zusätzlich mit einem Passwort zu registrieren und anzumelden. Eben so wie die Developer Strategy, bietet auch diese Library die Möglichkeit ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Library optional und eine auschließliche Kommunikation über ein API ist möglich.
-			
-			
-			
-			
-			
+			Omniauth Identity ist eine Library zur Erweiterung von Omniauth. Mit Omniauth Identity ist intern ein Anbieter gegeben mit dem es möglich ist, sich zusätzlich mit einem Passwort zu registrieren und anzumelden. Eben so wie die Developer Strategy, bietet auch diese Library die Möglichkeit ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Library optional und eine auschließliche Kommunikation über ein API ist möglich.\par\bigskip
 			
 			
 			
