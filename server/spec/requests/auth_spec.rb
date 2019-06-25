@@ -100,7 +100,9 @@ RSpec.describe "auth controller" do
       get '/api/auth/developer/callback'
   
       expect(response.cookies['JWT-TOKEN']).to be_truthy  
-  
+      
+      cookies["JWT-TOKEN"] = response.cookies['JWT-TOKEN']
+
       get '/api/user'
       json_data = JSON.parse(response.body)
       expect(json_data["loggedIn"]).to eq(true)

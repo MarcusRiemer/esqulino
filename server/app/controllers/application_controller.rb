@@ -27,9 +27,7 @@ class ApplicationController < ActionController::API
     if token
       begin
         token_decoded = Auth.decode(token)
-        if token_decoded[:data]["confirmed"]
-          @current_user = User.find(token_decoded[:user_id].to_s)
-        end
+        @current_user = User.find(token_decoded[:user_id].to_s)
       rescue ActiveRecord::RecordNotFound => e
         render json: { errors: e.message }, status: :unauthorized
       rescue JWT::DecodeError => e

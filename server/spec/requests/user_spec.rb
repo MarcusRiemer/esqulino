@@ -34,7 +34,9 @@ RSpec.describe "user controller" do
   it 'changing primary email logged in' do
     identity = create(:identity_provider, :existing)
     identity2 = create(:identity_provider, :another_existing, user_id: identity.user_id)
+
     identity.user.set_email(identity.uid)
+    identity.user.save!
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.first.email).to eq(identity.uid)
@@ -58,7 +60,9 @@ RSpec.describe "user controller" do
   it 'changing primary email to an unconfirmed email' do
     identity = create(:identity_provider, :existing)
     identity2 = create(:identity_provider, :new, uid: "another@web.de", user_id: identity.user_id)
+
     identity.user.set_email(identity.uid)
+    identity.user.save!
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.first.email).to eq(identity.uid)
@@ -76,7 +80,9 @@ RSpec.describe "user controller" do
   it 'changing primary email to an not existing email' do
     identity = create(:identity_provider, :existing)
     identity2 = create(:identity_provider, :new, uid: "another@web.de", user_id: identity.user_id)
+
     identity.user.set_email(identity.uid)
+    identity.user.save!
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
@@ -94,7 +100,9 @@ RSpec.describe "user controller" do
   it 'changing primary e-mail with invalid token' do
     identity = create(:identity_provider, :existing)
     identity2 = create(:identity_provider, :another_existing)
+  
     identity.user.set_email(identity.uid)
+    identity.user.save!
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
@@ -115,7 +123,9 @@ RSpec.describe "user controller" do
   it 'changing primary e-mail with expired token' do
     identity = create(:identity_provider, :existing)
     identity2 = create(:identity_provider, :another_existing)
+
     identity.user.set_email(identity.uid)
+    identity.user.save!
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
@@ -130,7 +140,7 @@ RSpec.describe "user controller" do
 
     get "/api/user/change_primary_email/invalid"
 
-    expect(User.first.email).to eq(identity.uid)
+    expect(User.find_by(id: identity.user_id).email).to eq(identity.uid)
 
     expect(response.status).to eq(401)
   end

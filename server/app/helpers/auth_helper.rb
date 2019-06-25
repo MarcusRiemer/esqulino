@@ -40,8 +40,7 @@ module AuthHelper
     if !signed_in?
       @current_user = @identity.user
       token = Auth.encode({
-        user_id: @identity.user_id,
-        data: @identity[:data],
+        user_id: @current_user.id,
         display_name: @current_user.display_name
       })
       response_jwt_cookie(token)

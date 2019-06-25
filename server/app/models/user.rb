@@ -11,7 +11,7 @@ class User < ApplicationRecord
     # If the provider is identity, set the primary email of user to the uid from identity
     email = auth[:info][:email]
 
-    create(display_name: name, email: email)
+    new(display_name: name, email: email)
   end
 
   def all_providers()
@@ -27,6 +27,5 @@ class User < ApplicationRecord
 
   def set_email(email)
     self.email = email
-    self.save
   end
 end

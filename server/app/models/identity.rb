@@ -5,7 +5,7 @@ class Identity < ActiveRecord::Base
   include BCrypt
   include LocaleHelper
 
-  attr_accessor :password, :password_confirmation
+  validates_presence_of :uid
 
   belongs_to :user
 

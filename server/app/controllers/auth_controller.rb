@@ -16,10 +16,14 @@ class AuthController < ApplicationController
   end
 
   def callback
-    create_identity
-    sign_in
-
-    redirect_to "/"
+    begin
+      create_identity
+      sign_in
+  
+      redirect_to "/"
+    rescue => e
+      render json: { "error": e.message }
+    end
   end
   
   def login_with_password
@@ -45,8 +49,12 @@ class AuthController < ApplicationController
     permited_params = register_params
     identity_data = create_identity_data(permited_params)
 
-    create_identity(identity_data, true)
-    api_response({ loggged_in: false })
+    begin
+      create_identity(identity_data, true)
+      api_response({ loggged_in: false })
+    rescue Exception => e
+      redirect_to "/"
+    end
   end
 
   def destroy

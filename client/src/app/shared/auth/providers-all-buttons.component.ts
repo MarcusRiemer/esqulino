@@ -3,9 +3,9 @@ import { Component } from "@angular/core";
 import { providers } from './providers';
 
 @Component({
-  selector: "providers-extern",
-  templateUrl: "./templates/providers-extern.html"
+  selector: "providers-all-buttons",
+  templateUrl: "./templates/providers-all-buttons.html"
 })
-export class ProvidersExternComponent {
+export class ProvidersAllButtonsComponent {
   public readonly providers = providers
 }

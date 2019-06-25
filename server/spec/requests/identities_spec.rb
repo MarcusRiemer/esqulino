@@ -95,6 +95,7 @@ RSpec.describe "identities controller" do
   it "resetting password" do
     identity = create(:identity_provider, :existing)
     identity.user.set_email(identity[:uid])
+    identity.user.save!
 
     post "/api/identities/reset_password_mail",
       :headers => json_headers,
@@ -129,6 +130,7 @@ RSpec.describe "identities controller" do
   it "resetting password with invalid token" do
     identity = create(:identity_provider, :existing)
     identity.user.set_email(identity[:uid])
+    identity.user.save!
 
     post "/api/identities/reset_password_mail",
       :headers => json_headers,
@@ -171,6 +173,7 @@ RSpec.describe "identities controller" do
     create(:developer_provider, :new, user_id: identity.user_id)
 
     identity.user.set_email(identity[:uid])
+    identity.user.save!
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: { "confirmed": true }})
 
@@ -239,6 +242,7 @@ RSpec.describe "identities controller" do
 
     cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: { "confirmed": true }})
     identity.user.set_email(identity[:uid])
+    identity.user.save!
 
     expect(Identity.all.count).to eq(2)
 
