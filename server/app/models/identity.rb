@@ -5,7 +5,8 @@ class Identity < ActiveRecord::Base
   include BCrypt
   include LocaleHelper
 
-  validates_presence_of :uid
+  validates :uid, presence: true
+  validates :provider, presence: true
 
   belongs_to :user
 

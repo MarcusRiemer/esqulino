@@ -1,8 +1,23 @@
 class PasswordIdentity < Identity
   attr_accessor :password, :password_confirmation
 
+  validates :password, presence: true
+
   def self.create_with_auth(auth, user)
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :data => auth[:data])
+  end
+
+  # Ensure that the data hash is never nil
+  after_initialize do |identity|
+    # Sadly this is not sufficient: The "password" attribute may
+    # be set **during** construction and therefore does this check again
+    identity.data ||= Hash.new
+
+    # Set the correct provider
+    identity.provider = "identity"
+
+    # Ensure that the password is hashed
+    identity.ensure_password_hashed!
   end
 
   def email
@@ -17,15 +32,42 @@ class PasswordIdentity < Identity
   def set_password_all_with_user_id(password)
     identities = PasswordIdentity.where('user_id = ?', self.user_id)
 
-    identities.each do |identity| 
+    identities.each do |identity|
       identity.set_password(password)
       identity.save!
     end
+  end
 
+  def ensure_password_hashed!
+    if (not password.nil?) and (not Password.valid_hash? password) then
+      self.data["password"] = Password.create(password)
+    end
+  end
+
+  def password
+    self.data["password"]
+  end
+
+  def password=(password)
+    # Ugly: All attributes that are actually defined in `self.data` may
+    # stumble over a hash that does not yet exist
+    self.data ||= Hash.new
+
+    # Is the given password already encrypted?
+    if Password.valid_hash? password then
+    # Yes, don't encrypt it again
+      self.data["password"] = password
+    else
+      # No, encrypt it
+      self.data["password"] = Password.create(password)
+    end
+
+
+    self.save
   end
 
   def set_password(password)
-    self.data["password"] = Password.create(password)
+    self.password = password
   end
 
   def set_reset_token_expired()
@@ -62,10 +104,11 @@ class PasswordIdentity < Identity
 
   def password_eql?(password)
     # comparing nil with Password.new(self.data["password"]) will be true
-    if password.nil?
+    if self.password.blank? || password.blank?
       return false
+    else
+      return Password.new(self.password) == password
     end
-    return Password.new(self.data["password"]) == password
   end
 
   def confirmed?()
