@@ -1,0 +1,13 @@
+GIT_REV
+auto
+Tom - Thesis.pdf
+*.aux
+*.log
+*.out
+*.tdo
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.synctex.gz
+*.run.xml
