@@ -4,7 +4,8 @@ FactoryBot.define do
   factory :identity, class: 'Identity' do
     provider {}
     uid {}
-    data {}
+    own_data {}
+    provider_data {}
     association :user
   end
 
@@ -12,8 +13,7 @@ FactoryBot.define do
     trait :new do
       provider { "identity" }
       uid { "identity@web.de" }
-      data { ({
-        email: "identity@web.de",
+      own_data { ({
         password: BCrypt::Password.create("1234567"),
         verify_token: SecureRandom.uuid,
         confirmed: false
@@ -23,8 +23,11 @@ FactoryBot.define do
     trait :existing do
       provider { "identity" }
       uid { "blattwerkzeug@web.de" }
-      data { ({
-        email: "blattwerkzeug@web.de",
+      provider_data { ({
+        name: "Tom",
+        email: "blattwerkzeug@web.de"
+      }) }
+      own_data { ({
         password: BCrypt::Password.create("12345678"),
         verify_token: SecureRandom.uuid,
         confirmed: true,
@@ -36,8 +39,11 @@ FactoryBot.define do
     trait :another_existing do
       provider { "identity" }
       uid { "another@web.de" }
-      data { ({
-        email: "another@web.de",
+      provider_data { ({
+        name: "Tom",
+        email: "another@web.de"
+      }) }
+      own_data { ({
         password: BCrypt::Password.create("12345678"),
         verify_token: SecureRandom.uuid,
         confirmed: true,

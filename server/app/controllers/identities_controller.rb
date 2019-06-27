@@ -43,8 +43,8 @@ class IdentitiesController < ApplicationController
 
   def reset_password
     permited_params = reset_password_params
-    identity = PasswordIdentity.where("data ->> 'password_reset_token' = ? ", permited_params[:token])
-                       .first
+    identity = PasswordIdentity.find_by_password_reset_token(permited_params[:token])
+                               .first
 
     if identity
       if !identity.reset_token_expired?
@@ -74,36 +74,43 @@ class IdentitiesController < ApplicationController
 
   def send_verify_email
     identity = search_for_password_identity(mail_permit_param)
-    if identity
-      if !identity.confirmed?       
-        if identity.can_send_verify_mail?
-          identity.set_waiting_time()
-          identity.save!
-          IdentityMailer.confirm_email(identity, request_locale).deliver
-          api_response(user_information)
-        else
-          render json: { error: "You need to wait for #{identity.waiting_time} minutes"  }, status: :unauthorized
-        end
-      else
-        render json: { error: "e-mail already confirmed"}, status: :unauthorized
-      end
-    else 
+    if (not identity) then
       render json: { error: "e-mail not found"}, status: :unauthorized
+      return
     end
+
+    if identity.confirmed?
+      render json: { error: "e-mail already confirmed"}, status: :unauthorized
+      return
+    end
+
+    if (not identity.can_send_verify_mail?)
+      render json: { error: "You need to wait for #{identity.waiting_time} minutes"  }, status: :unauthorized
+      return
+    end
+
+    identity.set_waiting_time()
+    identity.save!
+    IdentityMailer.confirm_email(identity, request_locale).deliver
+    api_response(user_information)
+
   end
 
 
   def email_confirmation
-    identity = PasswordIdentity.where("data ->> 'verify_token' = ?", email_confirmation_params[:verify_token]).first
-    # identity found and not confirmed
-    if identity && !identity.confirmed?
-      user = User.find_by(id: identity[:user_id])
-      if !user.email?
-        # Sets the primary email on confirmation
-        user.set_email(identity[:data]["email"])
-      end
-      identity.confirmed!
+    permited_params = email_confirmation_params
+    identity = PasswordIdentity.find_by_verify_token(permited_params[:verify_token])
+                               .first
 
+    # identity found and not confirmed
+    if identity && (not identity.confirmed?) then
+      user = User.find_by(id: identity[:user_id])
+      if (not user.email?)
+        # Sets the primary email on confirmation
+        user.set_email(identity.email)
+      end
+
+      identity.confirmed!
       identity.save!
       user.save!
 
@@ -118,10 +125,10 @@ class IdentitiesController < ApplicationController
   def change_password
     if signed_in?
       identity = PasswordIdentity.find_by(user_id: @current_user[:id], provider: 'identity')
-      if (identity)
+      if (not identity) then
         permited_params = change_password_params
-        if !identity.password_eql?(permited_params[:new_password])
-          if identity.password_eql?(permited_params[:current_password])
+        if (not identity.password_eql?(permited_params[:new_password])) then
+          if (identity.password_eql?(permited_params[:current_password])) then
             identity.set_password_all_with_user_id(permited_params[:new_password])
             IdentityMailer.changed_password(identity).deliver
             api_response(user_information)
@@ -139,27 +146,32 @@ class IdentitiesController < ApplicationController
     if signed_in?
       permited_params = delete_identity_params
       identity = Identity.where(id: permited_params[:id]).first
-      if (identity)
-        all_identities = Identity.where(user_id: @current_user[:id])
-        if (all_identities.count > 1)
-          # Is the identity not the current primary mail or is it the current primary email
-          # and has more identities with the same email
-          if (!@current_user.email.eql? identity[:data]["email"]) || (@current_user.email.eql? identity[:data]["email"]) && (all_identities.where("data ->> 'email' = ?", identity[:data]["email"]).count > 1)
-            if identity.user_id.eql? @current_user.id
-              identity.delete
-              api_response(@current_user.all_providers)
-            else
-              render json: { error: "you can't delete this identity" }, status: :unauthorized
-            end
-          else 
-            render json: { error: "you can't delete the primary e-mail" }, status: :unauthorized
-          end
-        else
-          render json: { error: "you need more than one e-email" }, status: :unauthorized
-        end
-      else 
-        render json: { error: "there is none identity with this email"}, status: :unauthorized
+
+      if (not identity) then
+        return error_response("There exist no identity with this email.")
       end
+      all_identities = @current_user.all_validated_emails
+
+      # You need more than one identity to be able
+      # to delete an identity
+      if (all_identities.count <= 1) then
+        return error_response("You need more than one confirmed e-mail.")
+      end
+  
+      # If the email to be deleted is the current primary email and 
+      # no more identities with the same email existing return.
+      if (@current_user.email.eql? identity.email) and (all_identities.count <= 1) then
+        return error_response("You can't delete the primary e-mail.")
+      end
+     
+      # Checks if the identity to be deleted has the same
+      # user_id as the logged in user
+      if (not identity.user_id.eql? @current_user.id) then
+        return error_response("You have not the permission to delete this identity.")
+      end
+
+      identity.delete
+      api_response(@current_user.all_providers)
     end
   end
 end

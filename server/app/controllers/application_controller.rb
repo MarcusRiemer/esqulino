@@ -18,6 +18,10 @@ class ApplicationController < ActionController::API
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 
+  def error_response(err = "something got wrong", code = :unauthorized)
+    render json: { "error": err }, status: code
+  end
+
   def signed_in?
     return !@current_user.nil?
   end
@@ -29,9 +33,9 @@ class ApplicationController < ActionController::API
         token_decoded = Auth.decode(token)
         @current_user = User.find(token_decoded[:user_id].to_s)
       rescue ActiveRecord::RecordNotFound => e
-        render json: { errors: e.message }, status: :unauthorized
+        render json: { error: e.message }, status: :unauthorized
       rescue JWT::DecodeError => e
-        render json: { errors: e.message }, status: :unauthorized
+        render json: { error: e.message }, status: :unauthorized
       end
     else
       @current_user = nil

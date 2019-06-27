@@ -85,7 +85,7 @@ RSpec.describe PasswordIdentity, type: :model do
 
   it "can be persisted with a user and a valid password via data" do
     u = create(:user)
-    a = PasswordIdentity.new(user: u, uid: "a@b.de", data: { password: "hahasicher" })
+    a = PasswordIdentity.new(user: u, uid: "a@b.de", own_data: { password: "hahasicher" })
 
     expect(a.validate).to eq true
     expect(a.password_eql? "hahasicher").to eq true
