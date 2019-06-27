@@ -18,6 +18,7 @@ import { PrivacyComponent } from './privacy.component'
 import { VideoDisplayComponent } from './video-display.component'
 import { VersionComponent } from './version.component'
 import { DevelopmentComponent } from './development.component'
+import { MatSidenavContainer } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { DevelopmentComponent } from './development.component'
     VersionComponent,
     DevelopmentComponent,
   ],
-  exports: []
+  exports: [],
+  providers: []
 })
 export class FrontModule { }

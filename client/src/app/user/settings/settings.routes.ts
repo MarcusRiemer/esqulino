@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AccountSettingsComponent } from './components/account-settings.component';
 import { UserSettingsComponent } from './settings.component';
-import { SecuritySettingsComponent } from './components/security-settings.component';
-import { EmailSettingsComponent } from './components/email-settings.component';
 
 export const userSettingsRoutes: Routes = [
   {
@@ -18,14 +16,6 @@ export const userSettingsRoutes: Routes = [
       {
         path: 'account',
         component: AccountSettingsComponent
-      },
-      {
-        path: 'security',
-        component: SecuritySettingsComponent
-      },
-      {
-        path: 'email',
-        component: EmailSettingsComponent
       }
     ]
   }

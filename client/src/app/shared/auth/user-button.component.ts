@@ -1,11 +1,9 @@
 import { Router } from '@angular/router';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Component } from '@angular/core';
 
 import { AuthDialogComponent } from './auth-dialog.component';
 import { UserService } from './user.service';
-import { LinkIdentityComponent } from './link-identity.component';
-import { ChangePasswordComponent } from './change-password.component';
 
 
 @Component({
@@ -21,8 +19,12 @@ export class UserButtonComponent{
 
   readonly userDisplayName = this._userService.userDisplayName$
 
+  /**
+   * Opens an dialog for sign in or sign up
+   */
   public openDialog(): void {
     AuthDialogComponent.showDialog(this._dialog)
+    // If youre on the base url and your loggin in, the dialog will be closed
     this._userService.isLoggedIn$.subscribe(
       loggedIn => {
         if (loggedIn) {
@@ -32,10 +34,9 @@ export class UserButtonComponent{
     )
   }
 
-  public onLinkAccount(): void {
-    LinkIdentityComponent.showDialog(this._dialog)
-  }
-
+  /**
+   * Sends an delete request and navigates back to the base url
+   */
   public onLogout(): void {
    this._userService.logout$().subscribe(
      _ => {

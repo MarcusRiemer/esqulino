@@ -1,0 +1,39 @@
+<ng-container *ngIf="identities">
+  <h1>Verknüpfte Konten</h1>
+  <hr>
+
+  <table class="table-bordered">
+    <thead>
+      <th scope="1">E-Mail</th>
+      <th scope="2">Provider</th>
+      <th scope="4"></th>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let identity of identities.providers">
+        <td>{{identity.email}}</td>
+        <td>
+          <a *ngIf="identity.link else noLink">
+            <provider-show 
+              [provider]="identity">
+            </provider-show>
+          </a>
+
+          <ng-template #noLink>
+            <provider-show 
+              [provider]="identity">
+            </provider-show>
+          </ng-template>
+        </td>
+        <td>
+          <button mat-icon-button
+            matTooltip="Remove this linked identity"
+            (click)="onDeleteIdentity(identity)">
+
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>

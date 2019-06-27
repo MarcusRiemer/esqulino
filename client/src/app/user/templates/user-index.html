@@ -3,5 +3,10 @@
 
   <side-nav-selector
     [items]="userItems">
+
+    <div class="container user mat-typography">
+      <flash-message-list></flash-message-list>
+      <router-outlet></router-outlet>
+    </div>
   </side-nav-selector>
 </div>

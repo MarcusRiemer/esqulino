@@ -105,6 +105,10 @@ $base_width: 20.5em;
       margin-bottom: 5vh;
     }
 
+    label {
+      margin-bottom: 0;
+    }
+
     p {
       width: 30vw;
       min-width: $base_width;

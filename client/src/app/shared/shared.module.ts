@@ -53,7 +53,6 @@ import { RequestResetPasswordComponent } from './auth/request-reset-password.com
 import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
 import { SignUpComponent } from './auth/sign-up.component';
-import { LinkIdentityComponent } from './auth/link-identity.component';
 import { ValidateInputComponent } from './auth/validate-input.component';
 import { ChangePasswordComponent } from './auth/change-password.component';
 import { SideNavService } from './side-nav.service';
@@ -114,7 +113,6 @@ const materialModules = [
     RequestVerifyEmailComponent,
     ChangePasswordComponent,
     ValidateInputComponent,
-    LinkIdentityComponent,
     ProviderShowComponent,
     ProvidersAllButtonsComponent
   ],
@@ -148,10 +146,9 @@ const materialModules = [
     RequestVerifyEmailComponent,
     ChangePasswordComponent,
     ProviderShowComponent,
-    LinkIdentityComponent,
     ProvidersAllButtonsComponent
   ],
-  entryComponents: [AuthDialogComponent, LinkIdentityComponent, ChangePasswordComponent]
+  entryComponents: [AuthDialogComponent, ChangePasswordComponent]
 })
 export class SharedAppModule {
   static forRoot(): ModuleWithProviders {

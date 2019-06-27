@@ -7,6 +7,7 @@ import { UserEmailDescription } from '../../../shared/auth/user.description';
 import { AddEmailDialogComponent } from './add-email-dialog.component';
 
 @Component({
+  selector: "email-settings",
   templateUrl: '../templates/email-settings.html'
 })
 export class EmailSettingsComponent {

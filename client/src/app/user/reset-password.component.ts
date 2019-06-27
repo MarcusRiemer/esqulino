@@ -1,13 +1,10 @@
-import { UserService } from './../shared/auth/user.service';
-import { UserPasswordDescription } from './../shared/auth/user.description';
-
-import { TemplateRef, AfterViewChecked, AfterContentInit, OnInit } from '@angular/core';
+import { TemplateRef } from '@angular/core';
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
-
+import { UserService } from '../shared/auth/user.service';
+import { UserPasswordDescription } from '../shared/auth/user.description';
 
 @Component({
   templateUrl: "./templates/reset-password.html"
