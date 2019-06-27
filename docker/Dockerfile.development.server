@@ -1,0 +1,6 @@
+FROM marcusriemer/sqlino:base
+LABEL name="esqulino development image: Server"
+
+RUN pacman --noconfirm -Sy $SERVER_PACKAGES
+
+EXPOSE 9292
