@@ -12,8 +12,4 @@ RSpec.describe User, type: :model do
 
   #   expect(user[:email]).to eq(identity[:uid])
   # end
-
-  # TODO-TOM ADD SOME TESTS
-  # 1. IS A NEW USER AND IDENTITY CREATING A NEW PRIMARY EMAIL
-
 end

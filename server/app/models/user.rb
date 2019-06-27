@@ -16,7 +16,7 @@ class User < ApplicationRecord
 
   def all_providers()
     return {
-      providers: Identity.all.map {|i| i.to_list_api_response },
+      providers: self.identities.map {|i| i.to_list_api_response },
       primary: self.email
     }
   end
