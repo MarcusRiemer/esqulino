@@ -8,7 +8,7 @@ module IdentityHelper
   # create_identity_data takes the posted values and put them into a hash
   def create_identity(auth = request.env["omniauth.auth"], email = false)
     @identity = Identity.search(auth)
-    if !@identity
+    if (not @identity) then
       user = @current_user || User.create_from_hash(auth)
 
       case auth[:provider]
@@ -24,12 +24,20 @@ module IdentityHelper
         raise Exception.new('Unknown provider')
       end
 
-      if identity.valid?
-        identity.save!
-        user.save!
-        @identity = identity
-      else
-        raise Exception.new("Error: UID cant be blank")
+      if (user.invalid?) then
+        raise Exception.new("Error: Something got wrong with the creation of a user")
+      end
+
+      if (identity.invalid?) then
+        raise Exception.new("Error: Something got wrong with the creation of an identity")
+      end
+
+      identity.save!
+      user.save!
+      @identity = identity
+
+      if (email) then
+        IdentityMailer.confirm_email(identity, request_locale).deliver
       end
     end
   end

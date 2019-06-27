@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe Identity, type: :model do
+RSpec.describe Identity, type: :model do
   it 'creating identitys without uid' do
     pw_ident = PasswordIdentity.new(uid: nil)
     google_ident = Google.new(uid: nil)
@@ -47,6 +47,7 @@ RSpec.fdescribe Identity, type: :model do
     end
 
     identities = Identity.all.map do |k| 
+
       k.set_primary_email_token_expired
       k.save!
     end
