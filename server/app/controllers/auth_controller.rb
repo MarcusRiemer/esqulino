@@ -15,6 +15,11 @@ class AuthController < ApplicationController
         .permit([:email, :password])
   end
 
+  # This function is essential for omniauth.
+  # If youre authenticated and got the callback data
+  # you will be navigated to this controller function. 
+  # In this function you create an identity with the callback data,
+  # sign in and redirect to base url.
   def callback
     begin
       create_identity
@@ -28,23 +33,29 @@ class AuthController < ApplicationController
   
   def login_with_password
     identity = search_for_password_identity(login_params)
-    if identity
-      if identity.confirmed?
-        if identity.password_eql?(params[:password])
-          set_identity(identity)
-          sign_in
-          api_response(user_information)
-        else
-          render json: { error: "Wrong password" }, status: :unauthorized
-        end
-      else
-        render json:  { error: "Please confirm your e-mail" }, status: :unauthorized
-      end
-    else
+    if (not identity)
       render json: { error: "E-Mail not found" }, status: :unauthorized
+      return
     end
+
+    if (not identity.confirmed?)
+      render json:  { error: "Please confirm your e-mail" }, status: :unauthorized
+      return
+    end
+
+    if (not identity.password_eql?(params[:password]))
+      render json: { error: "Wrong password" }, status: :unauthorized
+      return
+    end
+
+    set_identity(identity)
+    sign_in
+    api_response(user_information)
   end
 
+  # This register function is only for the identity provider.
+  # You use this for creating an identity with a password
+  # with simulated callback data
   def register
     permited_params = register_params
     identity_data = create_identity_data(permited_params)

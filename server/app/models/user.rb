@@ -21,6 +21,12 @@ class User < ApplicationRecord
     }
   end
 
+  def all_validated_emails()
+    self.identities
+      .filter { |i| i.confirmed? }
+      .map { |i| i.email }
+  end
+
   def email?
     return !self.email.nil?
   end

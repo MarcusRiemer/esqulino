@@ -6,7 +6,7 @@ RSpec.describe "user controller" do
 
   it 'getting the user description logged in' do
     user = create(:user)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id], data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
 
     get '/api/user'
 
@@ -38,7 +38,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
     expect(User.first.email).to eq(identity.uid)
 
 
@@ -51,9 +51,9 @@ RSpec.describe "user controller" do
     expect(response.status).to eq(200)
 
     updated_identity = Identity.find_by(id: identity2.id)
-
-    get "/api/user/change_primary_email/#{updated_identity[:data]["change_primary_token"]}"
-
+    
+    get "/api/user/change_primary_email/#{updated_identity.change_primary_email_token}"
+    
     expect(User.first.email).to eq(identity2.uid)
   end
 
@@ -64,7 +64,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
     expect(User.first.email).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -84,7 +84,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -104,7 +104,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -127,7 +127,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -136,7 +136,9 @@ RSpec.describe "user controller" do
         primaryEmail: identity2.uid
       }.to_json
 
-    Identity.find_by(uid: identity2.uid).set_primary_email_token_expired
+    expired = Identity.find_by(uid: identity2.uid)
+    expired.set_primary_email_token_expired
+    expired.save!
 
     get "/api/user/change_primary_email/invalid"
 
@@ -147,7 +149,7 @@ RSpec.describe "user controller" do
 
   it "changing username with an valid" do
     identity = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
@@ -162,7 +164,7 @@ RSpec.describe "user controller" do
 
   it "changing username with an invalid (empty string)" do
     identity = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: {"confirmed": true}})
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 

@@ -16,7 +16,7 @@ module AuthHelper
       identity = PasswordIdentity.where(user_id: @current_user[:id]).first
       if identity
         name = @current_user[:display_name]
-        password = identity[:data]["password"]
+        password = identity.password
       end
     end
 
@@ -31,7 +31,6 @@ module AuthHelper
         password: (password || BCrypt::Password.create(permited_params[:password])),
         verify_token: SecureRandom.uuid,
         confirmed: false,
-        email: permited_params[:email],
       }
     }
   end

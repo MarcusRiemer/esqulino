@@ -15,6 +15,14 @@ class Identity < ActiveRecord::Base
   scope :password, -> { where(type: 'PasswordIdentity') }
   scope :github, -> { where(type: 'Github') }
 
+  scope :find_by_email, -> (email) {
+    where("provider_data ->> 'email' = ?", email)
+  }
+
+  scope :find_by_change_primary_email_token, -> (token) { 
+    where("own_data ->> 'change_primary_email_token' = ?", token)
+  }
+
   def self.search(auth)
     find_by_provider_and_uid(auth[:provider], auth[:uid])
   end
@@ -28,24 +36,25 @@ class Identity < ActiveRecord::Base
             })
   end
 
+  def change_primary_email_token
+    return self.own_data["change_primary_email_token"]
+  end
+
   def set_primary_email_token
-    self.data["change_primary_token"] = SecureRandom.uuid
-    self.data["change_primary_token_exp"] = 30.minutes.from_now
-    self.save
+    self.own_data["change_primary_email_token"] = SecureRandom.uuid
+    self.own_data["change_primary_token_exp"] = 30.minutes.from_now
   end
 
   def set_primary_email_token_expired()
-    self.data["change_primary_token_exp"] = Time.now - 1.hour
-    self.save
+    self.own_data["change_primary_token_exp"] = Time.now - 1.hour
   end
 
-
   def primary_email_token_eql?(token)
-    return self.data["change_primary_token"].eql? token
+    return self.own_data["change_primary_email_token"].eql? token
   end
 
 
   def primary_email_token_expired?()
-    return self.data["change_primary_token_exp"] < Time.now
+    return self.own_data["change_primary_token_exp"] < Time.now
   end
 end
