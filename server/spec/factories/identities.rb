@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :identity, class: 'Identity' do
     provider {}
     uid {}
-    own_data {}
-    provider_data {}
+    own_data { ({}) }
+    provider_data { ({}) }
     association :user
   end
 
@@ -69,12 +69,43 @@ FactoryBot.define do
     trait :new do
       provider { "google" }
       uid { "google@gmail.de" }
+      provider_data { ({
+        name: "Tom",
+        email: "tom@gmail.com",
+        email_verified: false
+      }) }
+    end
+
+    trait :existing do
+      provider { "google" }
+      uid { "google@gmail.de" }
+      provider_data { ({
+        name: "Tom",
+        email: "tom@gmail.com",
+        email_verified: true
+      }) }
     end
   end
 
+  factory :github_provider, class: "Github", parent: :identity do
+    trait :new do
+      provider { "github" }
+      uid { "Stackoverflow is life" }
+      provider_data { ({
+        name: "Special-Name"
+      }) }
+    end
 
-  # trait :new_google_provider do
-  #   provider { "google" }
-  #   uid { "google@blattwerkzeug.de" }
-  # end
+    trait :existing do
+      provider { "github" }
+      uid { "Stackoverflow is life" }
+      provider_data { ({
+        name: "Special-Name",
+        email: "specialGitHubEmail@web.de",
+        urls: {
+          "Github" => "www.github.com/specialName"
+        }
+      }) }
+    end
+  end
 end

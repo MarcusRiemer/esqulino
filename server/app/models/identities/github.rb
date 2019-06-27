@@ -1,8 +1,17 @@
 class Github < Identity
   scope :find_by_email, -> (email) { 
     where("provider_data ->> 'email' = ?", email)
-   .limit(1)
   }
+
+  def to_list_api_response
+    return ({
+              :id => self.id,
+              :type => self.type,
+              :link => self.link,
+              :email => self.email,
+              :confirmed => self.confirmed?,
+            })
+  end
 
   def self.create_with_auth(auth, user)
     auth[:info]["confirmed"] = true
@@ -12,11 +21,15 @@ class Github < Identity
 
   # Github (hopefully) validates mails for us
   def confirmed?
-    true
+    return true
+  end
+
+  def link
+    return self.provider_data["urls"]["GitHub"]
   end
 
   # Github provides the mail in the JSON blob
   def email
-    self.provider_data["email"]
+    return self.provider_data["email"]
   end
 end
