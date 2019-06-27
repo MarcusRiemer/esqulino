@@ -1,33 +1,23 @@
-import { LoggedInGuard } from '../shared/guards/logged-in.guard';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserProfilComponent } from './user-profil.component';
-import { ResetPasswordComponent } from './reset-password.component';
 import { UserComponent } from './user.component';
-
+import { ResetPasswordComponent } from './reset-password.component';
+import { LoggedInGuard } from './../shared/guards/logged-in.guard';
 
 export const userRoutes: Routes = [
   {
     path: '',
-    canActivate: [LoggedInGuard],
     component: UserComponent,
     children: [
       {
-        path: '',
-        component: UserProfilComponent,
-      },
-      {
-        path: 'profil',
-        component: UserProfilComponent,
-      },
-      {
         path: 'settings',
+        canActivate: [LoggedInGuard],
         loadChildren: './settings/settings.module#UserSettingsModule',
       },
       {
         path: 'reset_password/:token',
-        component: ResetPasswordComponent,
-      },
+        component: ResetPasswordComponent
+      }
     ]
   }
 ]

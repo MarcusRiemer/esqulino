@@ -1,79 +1,11 @@
 <div class="account-settings general">
-  <h1>Benutzername</h1>
-  <hr>
+  <change-username></change-username>
 
-  <validate-input
-    icon="pencil"
-    [(value)]="userNameData.displayName">
+  <email-settings></email-settings>
 
-    <input #inputRef
-      type="text"
-      class="form-control"
-      [placeholder]="(username$ | async)">
-  </validate-input>
+  <change-password></change-password>
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onChangeUserName()">
+  <display-all-linked-providers></display-all-linked-providers>
 
-    Speichern
-  </button>
-
-  <ng-container *ngIf="identities">
-    <h1>Verknüpfte Konten</h1>
-    <hr>
-
-    <table class="table-bordered">
-      <thead>
-        <th scope="1">E-Mail</th>
-        <th scope="2">Provider</th>
-        <th scope="4"></th>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let identity of identities.providers">
-          <td>{{identity.email}}</td>
-          <td>
-            <a *ngIf="identity.link else noLink">
-              <provider-show 
-                [provider]="identity">
-              </provider-show>
-            </a>
-
-            <ng-template #noLink>
-              <provider-show 
-                [provider]="identity">
-              </provider-show>
-            </ng-template>
-          </td>
-          <td>
-            <button mat-icon-button
-              matTooltip="Remove this linked identity"
-              (click)="onDeleteIdentity(identity)">
-
-              <i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h1>Konto verknüpfen</h1>
-    <hr>
-    <div class="row">
-      <mat-card *ngFor="let provider of providers;">
-        <mat-card-header>
-          <mat-card-title>
-            {{provider.name}}
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-actions>
-          <provider-button
-            [providerName]="provider.name">
-          </provider-button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-  </ng-container>
+  <provider-linking></provider-linking>
 </div>

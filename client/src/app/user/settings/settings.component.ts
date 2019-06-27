@@ -14,22 +14,7 @@ export const userSettings: NavItem[] = [
     icon: "user",
   },
   {
-    type: "link",
-    text: {
-      de: "Sicherheit",
-      en: "Security",
-    },
-    route: ["/user/settings/security"],
-    icon: "shield",
-  },
-  {
-    type: "link",
-    text: {
-      de: "E-Mails",
-      en: "E-Mails",
-    },
-    route: ["/user/settings/email"],
-    icon: "envelope",
+    type: "fill"
   },
   {
     type: "external",

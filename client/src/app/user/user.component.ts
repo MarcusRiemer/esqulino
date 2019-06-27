@@ -4,15 +4,6 @@ import { NavItem } from '../shared/nav-interfaces';
 
 export const userItems: NavItem[] = [
   {
-    type: "link",
-    text: {
-      de: "Test",
-      en: "Test",
-    },
-    route: ["/account"],
-    icon: "puzzle-piece",
-  },
-  {
     type: "external",
     text: {
       de: "Anleitung 🇬🇧",

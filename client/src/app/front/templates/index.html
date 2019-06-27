@@ -3,5 +3,12 @@
 
   <side-nav-selector
     [items]="indexItems">
+    <!-- container comes from Bootstrap, it sets up the different "snapping" viewport widths#
+          front comes from the framework and is used in various CSS rules that should only apply at front
+          mat-typography comes from angular material and styles native elements-->
+    <div class="container front mat-typography">
+      <flash-message-list></flash-message-list>
+      <router-outlet></router-outlet>
+    </div>
   </side-nav-selector>
 </div>
