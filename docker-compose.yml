@@ -1,10 +1,16 @@
-version: "2"
+version: "3"
 
 services:
+  base:
+    image: marcusriemer/sqlino:base
+    build:
+      dockerfile: docker/Dockerfile.base
+      context: .
+
   test:
     image: marcusriemer/sqlino:test
     build:
-      dockerfile: Dockerfile.test
+      dockerfile: docker/Dockerfile.test
       context: .
     volumes:
       - .:/srv/esqulino
@@ -13,10 +19,14 @@ services:
       - USER_GID=1000
       - TPUT_BIN=true
       - DATABASE_HOST=db
+    entrypoint: ./docker/entrypoint-test.sh
     depends_on:
       - db
+    tty: false
+    stdin_open: false
+
   db:
-    image: postgres:10.0
+    image: postgres:latest
     environment:
       - POSTGRES_DB=esqulino_test
       - POSTGRES_USER=esqulino
