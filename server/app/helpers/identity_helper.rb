@@ -32,6 +32,11 @@ module IdentityHelper
         raise Exception.new("Error: Something got wrong with the creation of an identity")
       end
 
+      # If the user have no primary e-mail
+      if (not user.email) then
+        user.email = identity.email
+      end
+
       identity.save!
       user.save!
       @identity = identity

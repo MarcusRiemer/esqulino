@@ -16,7 +16,7 @@ class Github < Identity
   def self.create_with_auth(auth, user)
     auth[:info]["confirmed"] = true
 
-    Github.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info])
+    Github.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
   # Github (hopefully) validates mails for us

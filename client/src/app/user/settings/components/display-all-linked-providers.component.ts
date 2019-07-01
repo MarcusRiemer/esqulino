@@ -13,31 +13,32 @@ export class DisplayAllLinkedProvidersComponent {
   constructor(
     private _userService: UserService,
   ) {
-    this._userService.identities$.value.pipe(
-      first()
-    ).subscribe(
-      identities => this.identities = identities
+    this._userService.primaryEmail$.subscribe(
+      primary => this.primary = primary
+    )
+    this._userService.providers$.subscribe(
+      providers => this.providers = providers
     )
   }
 
-
-  public identities: ServerProviderDescription;
+  public primary: string;
+  public providers: ProviderDescription[];
 
   private anotherProviderWithSameEmail(identity: ProviderDescription): boolean {
-    return this.identities.providers.some(v =>
+    return this.providers.some(v =>
       v.email === identity.email && v.type !== identity.type
     )
   }
 
-  public onDeleteIdentity(identity: ProviderDescription, primary: string): void {
+  public onDeleteIdentity(identity: ProviderDescription): void {
     // If current providers mail is different to the current primary mail
     // or there existing an another provider with the same mail as the primary,
     // delete the clicked identity
     if (
-      identity.email !== primary
-      || this.anotherProviderWithSameEmail(identity) && identity.email === primary
+      identity.email !== this.primary
+      || this.anotherProviderWithSameEmail(identity) && identity.email === this.primary
     ) {
-      if (this.identities.providers.length > 1) {
+      if (this.providers.length > 1) {
         this._userService.deleteEmail$(identity.id).subscribe();
       } else alert("Es muss eine E-Mail vorhanden bleiben.")
     } else alert("Wähle zuvor eine andere primäre E-mail aus!")
