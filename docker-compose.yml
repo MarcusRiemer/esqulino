@@ -2,13 +2,13 @@ version: "3"
 
 services:
   base:
-    image: marcusriemer/sqlino:base
+    image: marcusriemer/blockwerkzeug:base
     build:
       dockerfile: docker/Dockerfile.base
       context: .
 
   test:
-    image: marcusriemer/sqlino:test
+    image: marcusriemer/blockwerkzeug:test
     build:
       dockerfile: docker/Dockerfile.test
       context: .
@@ -24,6 +24,39 @@ services:
       - db
     tty: false
     stdin_open: false
+
+  client:
+    image: marcusriemer/blockwerkzeug:client-dev
+    build:
+      dockerfile: docker/Dockerfile.development.client
+      context: .
+    volumes:
+      - .:/srv/esqulino
+    entrypoint: ./docker/entrypoint-development-client.sh
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - TPUT_BIN=true
+
+  server:
+    image: marcusriemer/blockwerkzeug:server-dev
+    build:
+      dockerfile: docker/Dockerfile.development.server
+      context: .
+    ports:
+      - 9292:9292
+    volumes:
+      - .:/srv/esqulino
+    entrypoint: ./docker/entrypoint-development-server.sh
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - TPUT_BIN=true
+      - DATABASE_HOST=db
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
 
   db:
     image: postgres:latest
