@@ -33,7 +33,6 @@ export class UserService {
 
   public readonly providers$ = this.identities$.value.pipe(
     map(u => u.providers)
-    // distinct(i => i.forEach(e => e.data.email) )
   )
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {

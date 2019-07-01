@@ -4,7 +4,7 @@ class Google < Identity
   }
 
   def self.create_with_auth(auth, user)
-    Google.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info])
+    Google.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
   # Google tells us whether the mail is valid

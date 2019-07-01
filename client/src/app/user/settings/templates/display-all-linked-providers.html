@@ -1,4 +1,4 @@
-<ng-container *ngIf="identities">
+<ng-container *ngIf="providers">
   <h1>Verknüpfte Konten</h1>
   <hr>
 
@@ -10,25 +10,27 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let identity of identities.providers">
-        <td>{{identity.email}}</td>
+      <tr *ngFor="let provider of providers">
+        <td>{{provider.email}}</td>
         <td>
-          <a *ngIf="identity.link else noLink">
+          <a *ngIf="provider.link else noLink"
+            [href]="provider.link">
+
             <provider-show 
-              [provider]="identity">
+              [provider]="provider">
             </provider-show>
           </a>
 
           <ng-template #noLink>
             <provider-show 
-              [provider]="identity">
+              [provider]="provider">
             </provider-show>
           </ng-template>
         </td>
         <td>
           <button mat-icon-button
-            matTooltip="Remove this linked identity"
-            (click)="onDeleteIdentity(identity)">
+            matTooltip="Remove this linked provider"
+            (click)="onDeleteIdentity(provider)">
 
             <i class="fa fa-trash" aria-hidden="true"></i>
           </button>
