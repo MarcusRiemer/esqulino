@@ -1,6 +1,4 @@
-FROM marcusriemer/sqlino:base
+FROM marcusriemer/blockwerkzeug:base
 LABEL name="esqulino development image: Server"
 
-RUN pacman --noconfirm -Sy $SERVER_PACKAGES
-
-EXPOSE 9292
+RUN pacman --noconfirm -Sy $BUILD_PACKAGES $SERVER_PACKAGES

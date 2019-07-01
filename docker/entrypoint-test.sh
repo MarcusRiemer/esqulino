@@ -1,6 +1,6 @@
 #!/bin/sh
 export TEST_SINGLE_RUN=true
-export NG_CLI_ANALYTICS=ci
+export NG_CLI_ANALYTICS=ci # Stop Angular CLI from asking for usage statistics
 
 # Run all operations using the uid and gid of the host user
 groupadd -g "$USER_GID" user

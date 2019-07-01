@@ -1,4 +1,4 @@
-FROM marcusriemer/sqlino:base
+FROM marcusriemer/blockwerkzeug:base
 LABEL name="esqulino test image"
 
 ENV CHROME_BIN="chromium"
