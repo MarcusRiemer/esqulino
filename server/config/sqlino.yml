@@ -1,6 +1,6 @@
 development:
   name: "Blattwerkzeug (Dev)"
-  data_dir: ../data/dev
+  data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["localhost.localdomain:9292"]
@@ -21,7 +21,7 @@ development:
 
 test:
   name: "Blattwerkzeug (Test)"
-  data_dir: ../data/test
+  data_dir: '../data/test'
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["localhost.localdomain:9292"]
@@ -46,7 +46,7 @@ test:
 
 production:
   name: "Blattwerkzeug"
-  data_dir: ../data/dev
+  data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["blattzeug.de"]
