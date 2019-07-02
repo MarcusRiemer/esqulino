@@ -12,6 +12,61 @@ function specContext(schemaDescription = SPEC_TABLES): DatabaseSchemaAdditionalC
   });
 }
 
+function createTreeWithCall(funcName: string, colNames: string[]): NodeDescription {
+  return ({
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "functionCall",
+                "language": "sql",
+                "properties": {
+                  "name": funcName,
+                },
+                "children": {
+                  "arguments": colNames.map((col): NodeDescription => {
+                    return ({
+                      "language": "sql",
+                      "name": "columnName",
+                      "properties": {
+                        "columnName": col,
+                        "refTableName": "ereignis"
+                      }
+                    })
+                  })
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "ereignis"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  });
+}
+
 describe(`Specialized SQL Validator`, () => {
   it(`Error: UNKNOWN_TABLE`, () => {
     const context = new ValidationContext(specContext());
@@ -134,7 +189,8 @@ describe(`Specialized SQL Validator`, () => {
     expect(context.errors[2].code).toEqual("DUPLICATE_TABLE_NAME", 2);
   });
 
-  it(`Error: AGGREGATION_WITHOUT_GROUP_BY`, () => {
+  // Deactivated for the moment, error doesn't seem to be very helpful
+  xit(`Error: AGGREGATION_WITHOUT_GROUP_BY`, () => {
     const context = new ValidationContext(specContext());
     const sqlValidator = new SqlValidator();
 
@@ -185,7 +241,35 @@ describe(`Specialized SQL Validator`, () => {
     const ast = new Node(astDesc, undefined);
     sqlValidator.validateFromRoot(ast, context);
 
-    expect(context.errors.length).toEqual(1);
-    expect(context.errors[0].code).toEqual("AGGREGATION_WITHOUT_GROUP_BY");
+    expect(context.errors.map(e => e.code)).toEqual(["AGGREGATION_WITHOUT_GROUP_BY"]);
+  });
+
+  describe("function argument count", () => {
+    const spec = (funcName: string, argColumns: string[], expectedCodes: string[]) => {
+      it(`${funcName}(${argColumns.join(", ")}) => [${expectedCodes.join(", ")}]`, () => {
+        const context = new ValidationContext(specContext());
+        const sqlValidator = new SqlValidator();
+
+        const astDesc: NodeDescription = createTreeWithCall(funcName, argColumns);
+
+        const ast = new Node(astDesc, undefined);
+        sqlValidator.validateFromRoot(ast, context);
+
+        expect(context.errors.map(e => e.code)).toEqual(expectedCodes);
+      });
+    }
+
+    spec("sum", [], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("sum", ["ereignis_id"], []);
+    spec("sum", ["ereignis_id", "bezeichnung"], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("min", [], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("min", ["ereignis_id"], []);
+    spec("min", ["ereignis_id", "bezeichnung"], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("max", [], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("max", ["ereignis_id"], []);
+    spec("max", ["ereignis_id", "bezeichnung"], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("count", [], []);
+    spec("count", ["ereignis_id"], []);
+    spec("count", ["ereignis_id", "bezeichnung"], []);
   });
 });
