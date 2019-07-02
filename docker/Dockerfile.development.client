@@ -1,0 +1,4 @@
+FROM marcusriemer/blockwerkzeug:base
+LABEL name="BlockWerkzeug development image: Client"
+
+RUN pacman --noconfirm -Sy $CLIENT_PACKAGES $BUILD_PACKAGES

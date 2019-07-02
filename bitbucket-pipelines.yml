@@ -1,6 +1,6 @@
-image: marcusriemer/sqlino:test
+image: marcusriemer/blockwerkzeug:test
 
-# Builds usually don't take longer then 10 minutes
+# Builds usually take around 10 minutes
 options:
   max-time: 20
 

@@ -7,49 +7,35 @@ default:
 # and rebuilds them on changes.. It may be shut down using ^C in the shell that started
 # this target or via the `stop-dev` target from another shell.
 run-dev:
-	docker-compose -f docker-compose.development.yml up
+	docker-compose up db server client
 
-# Starts the test environment to run all tests exactly once.
-run-test:
-	docker-compose -f docker-compose.test.yml up --force-recreate --abort-on-container-exit
-	docker-compose -f docker-compose.test.yml down
+# Resets the development environment by removing all conainers INCLUDING the storage
+# volumes.
+reset-dev:
+	docker-compose down -v
+
+run-reset-dev: reset-dev run-dev
+
+exec-dev-load-live-data:
+	docker-compose exec server su user -c 'make -C server load-live-data'
 
 # Interactively opens a shell on the dev server container. This is useful to run
 # maintenance tasks with `rails (located at `server/bin/rails`).
 shell-server-dev:
-	docker-compose -f docker-compose.development.yml exec --user user server /bin/bash
+	docker-compose exec --user user server /bin/bash
 
 # Interactively opens a shell on the dev client container. This is useful to run
 # maintenance tasks with `ng` (located at `client/node_modules/.bin/ng`)
 shell-client-dev:
-	docker-compose -f docker-compose.development.yml exec --user user client /bin/bash
+	docker-compose exec --user user client /bin/bash
 
 # Stops a running developent environment.
 stop-dev:
-	docker-compose -f docker-compose.development.yml down
+	docker-compose down
 
-# Pulls the latest images from the docker hub. If you want to run this project as
-# quick as possible this is the way to go.
-pull-all: pull-base pull-server-dev pull-client-dev pull-test
-
-# Pulls the base image
-pull-base:
-	docker pull marcusriemer/sqlino:base
-
-# Pulls all development images
-pull-dev: pull-client-dev pull-server-dev
-
-# Pulls the development image for the client
-pull-client-dev: pull-base
-	docker pull marcusriemer/sqlino:client-dev
-
-# Pulls the development image for the server
-pull-server-dev: pull-base
-	docker pull marcusriemer/sqlino:server-dev
-
-# Pulls the image that can run all tests
-pull-test: pull-base
-	docker pull marcusriemer/sqlino:test
+# Starts the test environment to run all tests exactly once.
+run-test:
+	docker-compose up --force-recreate --abort-on-container-exit test db
 
 # Locally builds all images that are required for development. You probably want to
 # simply pull them.
@@ -58,44 +44,41 @@ build-dev: build-server-dev build-client-dev
 
 # Builds the base image
 build-base:
-	docker pull archimg/base-devel
-	docker-compose -f docker-compose.base.yml build base
+	docker-compose build base
 
 # Builds the server image that runs Rails
 build-server-dev: build-base
-	docker-compose -f docker-compose.development.yml build server
+	docker-compose build server
 
 # Builds the client image that compiles Angular
 build-client-dev: build-base
-	docker-compose -f docker-compose.development.yml build client
+	docker-compose build client
 
 # Builds an image that can run all testcases
 build-test: build-base
-	docker-compose -f docker-compose.test.yml build
+	docker-compose build test
 
 # Builds all images
 build-all: build-base build-server-dev build-client-dev build-test
 
 # Pushes locally built base image back to the docker hub, requires privileges
 push-base:
-	docker push marcusriemer/sqlino:base
+	docker push marcusriemer/blockwerkzeug:base
 
 # Pushes locally built dev images back to the docker hub, requires privileges
 push-dev: push-server-dev push-client-dev
 
 # Pushes locally built server dev image back to the docker hub, requires privileges
 push-server-dev: push-base
-	docker push marcusriemer/sqlino:server-dev
+	docker push marcusriemer/blockwerkzeug:server-dev
 
 # Pushes locally built client dev image back to the docker hub, requires privileges
 push-client-dev: push-base
-	docker push marcusriemer/sqlino:client-dev
+	docker push marcusriemer/blockwerkzeug:client-dev
 
 # Pushes locally built test image back to the docker hub, requires privileges
 push-test : push-base
-	docker push marcusriemer/sqlino:test
+	docker push marcusriemer/blockwerkzeug:test
 
 # Pushes all local images to the docker hub, requires privileges
 push-all: push-base push-server-dev push-client-dev push-test
-
-
