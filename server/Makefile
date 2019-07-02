@@ -22,9 +22,9 @@ run : msg-pre-run-prod
 run-dev : msg-pre-run-dev
 	RACK_HANDLER=falcon ./bin/rails server -b 0.0.0.0 --port 9292
 
-# Sets up the database
+# Ensures that there is a correctly named and structured database available
 setup-database-schema:
-	./bin/rails db:setup RAILS_ENV=$(RAILS_ENV)
+	./bin/rails "db:setup"
 
 # Running tests
 test : msg-pre-run-test
