@@ -259,17 +259,21 @@ describe(`Specialized SQL Validator`, () => {
       });
     }
 
-    spec("sum", [], ["INVALID_NUMBER_OF_ARGUMENTS"]);
-    spec("sum", ["ereignis_id"], []);
-    spec("sum", ["ereignis_id", "bezeichnung"], ["INVALID_NUMBER_OF_ARGUMENTS"]);
-    spec("min", [], ["INVALID_NUMBER_OF_ARGUMENTS"]);
-    spec("min", ["ereignis_id"], []);
-    spec("min", ["ereignis_id", "bezeichnung"], ["INVALID_NUMBER_OF_ARGUMENTS"]);
-    spec("max", [], ["INVALID_NUMBER_OF_ARGUMENTS"]);
-    spec("max", ["ereignis_id"], []);
-    spec("max", ["ereignis_id", "bezeichnung"], ["INVALID_NUMBER_OF_ARGUMENTS"]);
+    spec("sum", [], ["MISSING_CHILD"]);
+    spec("SUM", ["ereignis_id"], []);
+    spec("sUm", ["ereignis_id", "bezeichnung"], ["MISSING_CHILD"]);
+    spec("min", [], ["MISSING_CHILD"]);
+    spec("MIN", ["ereignis_id"], []);
+    spec("miN", ["ereignis_id", "bezeichnung"], ["MISSING_CHILD"]);
+    spec("max", [], ["MISSING_CHILD"]);
+    spec("MAX", ["ereignis_id"], []);
+    spec("Max", ["ereignis_id", "bezeichnung"], ["MISSING_CHILD"]);
     spec("count", [], []);
-    spec("count", ["ereignis_id"], []);
-    spec("count", ["ereignis_id", "bezeichnung"], []);
+    spec("COUNT", ["ereignis_id"], []);
+    spec("CounT", ["ereignis_id", "bezeichnung"], []);
+
+    spec("invalid", [], []);
+    spec("INVALID", ["ereignis_id"], []);
+    spec("inVAliD", ["ereignis_id", "bezeichnung"], []);
   });
 });

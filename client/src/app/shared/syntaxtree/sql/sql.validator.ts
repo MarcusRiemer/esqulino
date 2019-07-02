@@ -1,5 +1,5 @@
 import { SpecializedValidator } from '../validator';
-import { ValidationContext } from '../validation-result';
+import { ValidationContext, ErrorCodes, ErrorMissingChild } from '../validation-result';
 import * as AST from '../syntaxtree';
 import { OccursDescription } from '../occurs.description';
 
@@ -104,6 +104,9 @@ export class SqlValidator extends SpecializedValidator {
     });
   }
 
+  /**
+   *
+   */
   private validateAggregationGroupBy(ast: AST.Node, _: Schema, context: ValidationContext) {
     // Are there any calls to aggregation functions without GROUP BY?
     const allFunctions = ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" });
@@ -123,12 +126,17 @@ export class SqlValidator extends SpecializedValidator {
 
   private validateNumberOfArguments(ast: AST.Node, _: Schema, context: ValidationContext) {
     ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" }).forEach(callNode => {
-      const funcName = callNode.properties["name"];
+      const funcName = callNode.properties["name"].toLocaleLowerCase();
       const numParameters = callNode.getChildrenInCategory("arguments").length;
 
       const validNumParameters = FUNCTION_ARGUMENT_COUNT[funcName];
       if (validNumParameters && !isInOccurs(numParameters, validNumParameters)) {
-        context.addError("INVALID_NUMBER_OF_ARGUMENTS", callNode);
+        let errData: ErrorMissingChild = {
+          category: "arguments",
+          expected: { languageName: "sql", typeName: "expression" },
+          index: numParameters
+        }
+        context.addError(ErrorCodes.MissingChild, callNode, errData);
       }
     });
   }
