@@ -4,7 +4,18 @@
 groupadd -g "$USER_GID" user
 useradd -m -u "$USER_UID" -g "$USER_GID" user
 
-make -C server install-deps
+# Ensure that the projects folder has the correct rights and exists
+chown user:user -R /srv/project-data
+su user -c "mkdir -p /srv/project-data/projects"
 
-su user -c "make --no-print-directory -C client cli-compile"
-su user -c "make --no-print-directory -C server setup-database-schema run-dev"
+# Run everything from here in the server folder
+cd server
+
+# Install server dependencies
+su user -c "make install-deps"
+
+# Possibly populate the database
+su user -c "./bin/rails db:exists || make setup-database-schema load-live-data"
+
+# And actually run the server
+su user -c "make run-dev"

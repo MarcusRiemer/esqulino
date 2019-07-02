@@ -22,11 +22,9 @@ run : msg-pre-run-prod
 run-dev : msg-pre-run-dev
 	RACK_HANDLER=falcon ./bin/rails server -b 0.0.0.0 --port 9292
 
-# Ensures that there is a corretly named database available
+# Ensures that there is a correctly named and structured database available
 setup-database-schema:
-# Environment variable must be valid for both subshells! Please
-# do not remove the semikolon, it has a purpose!
-	RAILS_ENV=$(RAILS_ENV); ./bin/rails "db:exists" || ./bin/rails "db:setup"
+	./bin/rails "db:setup"
 
 # Running tests
 test : msg-pre-run-test
