@@ -1,12 +1,10 @@
 import {
-  NodeChildrenGroupDescription,
-  NodeTypesChildReference, OccursSpecificDescription,
-  isQualifiedTypeName, isOccursSpecificDescription,
-  NodeAttributeDescription, isNodeConcreteTypeDescription,
+  NodeChildrenGroupDescription, NodeTypesChildReference,
+  isQualifiedTypeName, NodeAttributeDescription, isNodeConcreteTypeDescription,
   GrammarDocument,
-  OccursDescription
 } from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
+import { isOccursSpecificDescription, resolveOccurs, OccursSpecificDescription } from './occurs';
 
 /**
  * Takes any kind of reference and returns the number of occurences this reference
@@ -19,16 +17,6 @@ export function resolveChildOccurs(typeDesc: NodeTypesChildReference): OccursSpe
     return typeDesc.occurs;
   } else {
     return (resolveOccurs(typeDesc.occurs));
-  }
-}
-
-export function resolveOccurs(desc: OccursDescription): OccursSpecificDescription {
-  switch (desc) {
-    case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
-    case "?": return ({ minOccurs: 0, maxOccurs: 1 });
-    case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
-    case "1": return ({ minOccurs: 1, maxOccurs: 1 });
-    default: throw new Error(`Unknown occurences: "${JSON.stringify(desc)}"`);
   }
 }
 

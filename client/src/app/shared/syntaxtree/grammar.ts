@@ -8,8 +8,9 @@ import {
   ErrorIllegalChildType,
   ErrorSuperflousChild
 } from './validation-result'
-import { OccursSpecificDescription } from './grammar.description';
-import { resolveChildOccurs, resolveOccurs } from './grammar-util';
+
+import { resolveChildOccurs } from './grammar-util';
+import { OccursSpecificDescription, resolveOccurs } from './occurs';
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -557,9 +558,9 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   /**
    * @return The minimum and maximum number of children in this category as a whole
    */
-  validCardinality(): Desc.OccursSpecificDescription {
+  validCardinality(): OccursSpecificDescription {
     return (
-      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+      this._nodeTypes.reduce<OccursSpecificDescription>((akku, curr): OccursSpecificDescription => {
         return ({
           maxOccurs: akku.maxOccurs + curr.maxOccurs,
           minOccurs: akku.minOccurs + curr.minOccurs
@@ -667,9 +668,9 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   /**
    * @return The minimum and maximum number of children in this category as a whole
    */
-  validCardinality(): Desc.OccursSpecificDescription {
+  validCardinality(): OccursSpecificDescription {
     return (
-      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+      this._nodeTypes.reduce<OccursSpecificDescription>((akku, curr): OccursSpecificDescription => {
         return ({
           maxOccurs: akku.maxOccurs + curr.maxOccurs,
           minOccurs: akku.minOccurs + curr.minOccurs
@@ -750,7 +751,7 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
   /**
    * @return The minimum and maximum number of children in this category as a whole
    */
-  validCardinality(): Desc.OccursSpecificDescription {
+  validCardinality(): OccursSpecificDescription {
     return ({ maxOccurs: 0, minOccurs: 0 });
   }
 }
@@ -761,7 +762,7 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
 class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidator {
 
   private _group: NodeTypeChildren;
-  private _cardinality: Desc.OccursSpecificDescription;
+  private _cardinality: OccursSpecificDescription;
   private _nodeTypes: ChildCardinality[];
   private _subChildValidator: ChildrenValidationFunc;
 
@@ -836,9 +837,9 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
    *
    * @return The actual range of children that could occur.
    */
-  validCardinality(): Desc.OccursSpecificDescription {
-    const childCardinality: Desc.OccursSpecificDescription =
-      this._nodeTypes.reduce<Desc.OccursSpecificDescription>((akku, curr): Desc.OccursSpecificDescription => {
+  validCardinality(): OccursSpecificDescription {
+    const childCardinality: OccursSpecificDescription =
+      this._nodeTypes.reduce<OccursSpecificDescription>((akku, curr): OccursSpecificDescription => {
         return ({
           maxOccurs: akku.maxOccurs + curr.maxOccurs,
           minOccurs: akku.minOccurs + curr.minOccurs
