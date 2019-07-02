@@ -9,9 +9,15 @@ default:
 run-dev:
 	docker-compose up db server client
 
-# Starts the test environment to run all tests exactly once.
-run-test:
-	docker-compose up --force-recreate --abort-on-container-exit test db
+# Resets the development environment by removing all conainers INCLUDING the storage
+# volumes.
+reset-dev:
+	docker-compose down -v
+
+run-reset-dev: reset-dev run-dev
+
+exec-dev-load-live-data:
+	docker-compose exec server su user -c 'make -C server load-live-data'
 
 # Interactively opens a shell on the dev server container. This is useful to run
 # maintenance tasks with `rails (located at `server/bin/rails`).
@@ -27,28 +33,9 @@ shell-client-dev:
 stop-dev:
 	docker-compose down
 
-# Pulls the latest images from the docker hub. If you want to run this project as
-# quick as possible this is the way to go.
-pull-all: pull-base pull-server-dev pull-client-dev pull-test
-
-# Pulls the base image
-pull-base:
-	docker pull marcusriemer/sqlino:base
-
-# Pulls all development images
-pull-dev: pull-client-dev pull-server-dev
-
-# Pulls the development image for the client
-pull-client-dev: pull-base
-	docker pull marcusriemer/sqlino:client-dev
-
-# Pulls the development image for the server
-pull-server-dev: pull-base
-	docker pull marcusriemer/sqlino:server-dev
-
-# Pulls the image that can run all tests
-pull-test: pull-base
-	docker pull marcusriemer/sqlino:test
+# Starts the test environment to run all tests exactly once.
+run-test:
+	docker-compose up --force-recreate --abort-on-container-exit test db
 
 # Locally builds all images that are required for development. You probably want to
 # simply pull them.

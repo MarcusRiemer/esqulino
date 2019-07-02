@@ -22,8 +22,6 @@ services:
     entrypoint: ./docker/entrypoint-test.sh
     depends_on:
       - db
-    tty: false
-    stdin_open: false
 
   client:
     image: marcusriemer/blockwerkzeug:client-dev
@@ -47,14 +45,15 @@ services:
       - 9292:9292
     volumes:
       - .:/srv/esqulino
+      - data-files-volume:/srv/project-data
     entrypoint: ./docker/entrypoint-development-server.sh
     environment:
       - USER_UID=1000
       - USER_GID=1000
       - TPUT_BIN=true
       - DATABASE_HOST=db
-    stdin_open: true
-    tty: true
+      - DATA_DIR=/srv/project-data
+      - RAILS_ENV=development
     depends_on:
       - db
 
@@ -63,3 +62,9 @@ services:
     environment:
       - POSTGRES_DB=esqulino_test
       - POSTGRES_USER=esqulino
+    volumes:
+      - data-postgres-volume:/var/lib/postgresql/data
+
+volumes:
+  data-files-volume:
+  data-postgres-volume:
