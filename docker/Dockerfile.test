@@ -1,4 +1,4 @@
-FROM marcusriemer/sqlino:base
+FROM marcusriemer/blockwerkzeug:base
 LABEL name="esqulino test image"
 
 ENV CHROME_BIN="chromium"
@@ -6,6 +6,3 @@ ENV CHROME_BIN="chromium"
 RUN pacman --noconfirm -Sy $BUILD_PACKAGES $SERVER_PACKAGES $CLIENT_PACKAGES $TEST_PACKAGES
 
 RUN echo fs.inotify.max_user_watches=524288 > /etc/sysctl.d/40-max-user-watches.conf
-
-COPY entrypoint-test.sh /entrypoint.sh
-
