@@ -11,19 +11,16 @@ pipelines:
   default:
     - step:
         name: Client Build and Test
-        caches:
-          - node-client
-          - node-schema
         artifacts:
           - client/dist/**
         script:
           - make -C client install-deps
-          - make -C client client-compile
+          # Don't optimize for production, this takes very long
+          # and produces multiple builds due to differential loading
+          - NG_PROD='' make -C client client-compile-de
+          - NG_PROD='' make -C client universal-de
           - make -C client cli-compile
-          - make -C client universal-compile-langs
           - make -C client client-test
-        services:
-          - db
     - step:
         name: Server Test
         caches:
