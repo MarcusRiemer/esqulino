@@ -1,9 +1,16 @@
 require 'database_cleaner'
 require 'simplecov'
+require 'simplecov-cobertura'
 
 RSpec.configure do |config|
   # We want coverage reports
   SimpleCov.start 'rails'
+  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
+    [
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::CoberturaFormatter,
+    ]
+  )
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
