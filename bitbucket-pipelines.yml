@@ -17,8 +17,8 @@ pipelines:
           - make -C client install-deps
           # Don't optimize for production, this takes very long
           # and produces multiple builds due to differential loading
-          - NG_PROD='' make -C client client-compile-de
-          - NG_PROD='' make -C client universal-de
+          - make -C client client-compile-de
+          - make -C client universal-de
           - make -C client cli-compile
           - make -C client client-test
     - step:
