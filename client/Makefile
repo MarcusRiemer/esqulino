@@ -77,7 +77,10 @@ dist/cli/main.cli.js : $(CLIENT_NON_XLF_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) -p src/tsconfig.cli.json
 
-cli-compile: dist/cli/main.cli.js
+dist/cli/bundle.cli.js : dist/cli/main.cli.js
+	node_modules/.bin/webpack --config webpack.cli.config.js
+
+cli-compile: dist/cli/main.cli.js dist/cli/bundle.cli.js
 
 cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
