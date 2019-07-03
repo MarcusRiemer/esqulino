@@ -1,0 +1,728 @@
+1,Pfund,Pound,Écras’Face
+2,Karateschlag,Karate Chop,Poing-Karaté
+3,Duplexhieb,Double Slap,Torgnoles
+4,Kometenhieb,Comet Punch,Poing Comète
+5,Megahieb,Mega Punch,Ultimapoing
+6,Zahltag,Pay Day,Jackpot
+7,Feuerschlag,Fire Punch,Poing de Feu
+8,Eishieb,Ice Punch,Poing-Glace
+9,Donnerschlag,Thunder Punch,Poing-Éclair
+10,Kratzer,Scratch,Griffe
+11,Klammer,Vice Grip,Force Poigne
+12,Guillotine,Guillotine,Guillotine
+13,Klingensturm,Razor Wind,Coupe-Vent
+14,Schwerttanz,Swords Dance,Danse-Lames
+15,Zerschneider,Cut,Coupe
+16,Windstoß,Gust,Tornade
+17,Flügelschlag,Wing Attack,Cru-Aile
+18,Wirbelwind,Whirlwind,Cyclone
+19,Fliegen,Fly,Vol
+20,Klammergriff,Bind,Étreinte
+21,Slam,Slam,Souplesse
+22,Rankenhieb,Vine Whip,Fouet Lianes
+23,Stampfer,Stomp,Écrasement
+24,Doppelkick,Double Kick,Double Pied
+25,Megakick,Mega Kick,Ultimawashi
+26,Sprungkick,Jump Kick,Pied Sauté
+27,Fegekick,Rolling Kick,Mawashi Geri
+28,Sandwirbel,Sand Attack,Jet de Sable
+29,Kopfnuss,Headbutt,Coup d’Boule
+30,Hornattacke,Horn Attack,Koud’Korne
+31,Furienschlag,Fury Attack,Furie
+32,Hornbohrer,Horn Drill,Empal’Korne
+33,Tackle,Tackle,Charge
+34,Bodyslam,Body Slam,Plaquage
+35,Wickel,Wrap,Ligotage
+36,Bodycheck,Take Down,Bélier
+37,Fuchtler,Thrash,Mania
+38,Risikotackle,Double-Edge,Damoclès
+39,Rutenschlag,Tail Whip,Mimi-Queue
+40,Giftstachel,Poison Sting,Dard-Venin
+41,Duonadel,Twineedle,Double-Dard
+42,Nadelrakete,Pin Missile,Dard-Nuée
+43,Silberblick,Leer,Groz’Yeux
+44,Biss,Bite,Morsure
+45,Heuler,Growl,Rugissement
+46,Brüller,Roar,Hurlement
+47,Gesang,Sing,Berceuse
+48,Superschall,Supersonic,Ultrason
+49,Ultraschall,Sonic Boom,Sonicboom
+50,Aussetzer,Disable,Entrave
+51,Säure,Acid,Acide
+52,Glut,Ember,Flammèche
+53,Flammenwurf,Flamethrower,Lance-Flammes
+54,Weißnebel,Mist,Brume
+55,Aquaknarre,Water Gun,Pistolet à O
+56,Hydropumpe,Hydro Pump,Hydrocanon
+57,Surfer,Surf,Surf
+58,Eisstrahl,Ice Beam,Laser Glace
+59,Blizzard,Blizzard,Blizzard
+60,Psystrahl,Psybeam,Rafale Psy
+61,Blubbstrahl,Bubble Beam,Bulles d’O
+62,Aurorastrahl,Aurora Beam,Onde Boréale
+63,Hyperstrahl,Hyper Beam,Ultralaser
+64,Schnabel,Peck,Picpic
+65,Bohrschnabel,Drill Peck,Bec Vrille
+66,Überroller,Submission,Sacrifice
+67,Fußkick,Low Kick,Balayage
+68,Konter,Counter,Riposte
+69,Geowurf,Seismic Toss,Frappe Atlas
+70,Stärke,Strength,Force
+71,Absorber,Absorb,Vol-Vie
+72,Megasauger,Mega Drain,Méga-Sangsue
+73,Egelsamen,Leech Seed,Vampigraine
+74,Wachstum,Growth,Croissance
+75,Rasierblatt,Razor Leaf,Tranch’Herbe
+76,Solarstrahl,Solar Beam,Lance-Soleil
+77,Giftpuder,Poison Powder,Poudre Toxik
+78,Stachelspore,Stun Spore,Para-Spore
+79,Schlafpuder,Sleep Powder,Poudre Dodo
+80,Blättertanz,Petal Dance,Danse-Fleur
+81,Fadenschuss,String Shot,Sécrétion
+82,Drachenwut,Dragon Rage,Draco-Rage
+83,Feuerwirbel,Fire Spin,Danse Flamme
+84,Donnerschock,Thunder Shock,Éclair
+85,Donnerblitz,Thunderbolt,Tonnerre
+86,Donnerwelle,Thunder Wave,Cage-Éclair
+87,Donner,Thunder,Fatal-Foudre
+88,Steinwurf,Rock Throw,Jet-Pierres
+89,Erdbeben,Earthquake,Séisme
+90,Geofissur,Fissure,Abîme
+91,Schaufler,Dig,Tunnel
+92,Toxin,Toxic,Toxik
+93,Konfusion,Confusion,Choc Mental
+94,Psychokinese,Psychic,Psyko
+95,Hypnose,Hypnosis,Hypnose
+96,Meditation,Meditate,Yoga
+97,Agilität,Agility,Hâte
+98,Ruckzuckhieb,Quick Attack,Vive-Attaque
+99,Raserei,Rage,Frénésie
+100,Teleport,Teleport,Téléport
+101,Nachtnebel,Night Shade,Ombre Nocturne
+102,Mimikry,Mimic,Copie
+103,Kreideschrei,Screech,Grincement
+104,Doppelteam,Double Team,Reflet
+105,Genesung,Recover,Soin
+106,Härtner,Harden,Armure
+107,Komprimator,Minimize,Lilliput
+108,Rauchwolke,Smokescreen,Brouillard
+109,Konfustrahl,Confuse Ray,Onde Folie
+110,Panzerschutz,Withdraw,Repli
+111,Einigler,Defense Curl,Boul’Armure
+112,Barriere,Barrier,Bouclier
+113,Lichtschild,Light Screen,Mur Lumière
+114,Dunkelnebel,Haze,Buée Noire
+115,Reflektor,Reflect,Protection
+116,Energiefokus,Focus Energy,Puissance
+117,Geduld,Bide,Patience
+118,Metronom,Metronome,Métronome
+119,Spiegeltrick,Mirror Move,Mimique
+120,Finale,Self-Destruct,Destruction
+121,Eierbombe,Egg Bomb,Bomb’Œuf
+122,Schlecker,Lick,Léchouille
+123,Smog,Smog,Purédpois
+124,Schlammbad,Sludge,Détritus
+125,Knochenkeule,Bone Club,Massd’Os
+126,Feuersturm,Fire Blast,Déflagration
+127,Kaskade,Waterfall,Cascade
+128,Schnapper,Clamp,Claquoir
+129,Sternschauer,Swift,Météores
+130,Schädelwumme,Skull Bash,Coud’Krâne
+131,Dornkanone,Spike Cannon,Picanon
+132,Umklammerung,Constrict,Constriction
+133,Amnesie,Amnesia,Amnésie
+134,Psykraft,Kinesis,Télékinésie
+135,Weichei,Soft-Boiled,E-Coque
+136,Turmkick,High Jump Kick,Pied Voltige
+137,Giftblick,Glare,Regard Médusant
+138,Traumfresser,Dream Eater,Dévorêve
+139,Giftwolke,Poison Gas,Gaz Toxik
+140,Stakkato,Barrage,Pilonnage
+141,Blutsauger,Leech Life,Vampirisme
+142,Todeskuss,Lovely Kiss,Grobisou
+143,Himmelsfeger,Sky Attack,Piqué
+144,Wandler,Transform,Morphing
+145,Blubber,Bubble,Écume
+146,Irrschlag,Dizzy Punch,Uppercut
+147,Pilzspore,Spore,Spore
+148,Blitz,Flash,Flash
+149,Psywelle,Psywave,Vague Psy
+150,Platscher,Splash,Trempette
+151,Säurepanzer,Acid Armor,Acidarmure
+152,Krabbhammer,Crabhammer,Pince-Masse
+153,Explosion,Explosion,Explosion
+154,Kratzfurie,Fury Swipes,Combo-Griffe
+155,Knochmerang,Bonemerang,Osmerang
+156,Erholung,Rest,Repos
+157,Steinhagel,Rock Slide,Éboulement
+158,Hyperzahn,Hyper Fang,Croc de Mort
+159,Schärfer,Sharpen,Affûtage
+160,Umwandlung,Conversion,Conversion
+161,Triplette,Tri Attack,Triplattaque
+162,Superzahn,Super Fang,Croc Fatal
+163,Schlitzer,Slash,Tranche
+164,Delegator,Substitute,Clonage
+165,Verzweifler,Struggle,Lutte
+166,Nachahmer,Sketch,Gribouille
+167,Dreifachkick,Triple Kick,Triple Pied
+168,Raub,Thief,Larcin
+169,Spinnennetz,Spider Web,Toile
+170,Willensleser,Mind Reader,Lire-Esprit
+171,Nachtmahr,Nightmare,Cauchemar
+172,Flammenrad,Flame Wheel,Roue de Feu
+173,Schnarcher,Snore,Ronflement
+174,Fluch,Curse,Malédiction
+175,Dreschflegel,Flail,Fléau
+176,Umwandlung2,Conversion 2,Conversion 2
+177,Luftstoß,Aeroblast,Aéroblast
+178,Baumwollsaat,Cotton Spore,Spore Coton
+179,Gegenschlag,Reversal,Contre
+180,Groll,Spite,Dépit
+181,Pulverschnee,Powder Snow,Poudreuse
+182,Schutzschild,Protect,Abri
+183,Tempohieb,Mach Punch,Mach Punch
+184,Grimasse,Scary Face,Grimace
+185,Finte,Feint Attack,Feinte
+186,Bitterkuss,Sweet Kiss,Doux Baiser
+187,Bauchtrommel,Belly Drum,Cognobidon
+188,Matschbombe,Sludge Bomb,Bomb-Beurk
+189,Lehmschelle,Mud-Slap,Coud’Boue
+190,Octazooka,Octazooka,Octazooka
+191,Stachler,Spikes,Picots
+192,Blitzkanone,Zap Cannon,Élecanon
+193,Gesichte,Foresight,Clairvoyance
+194,Abgangsbund,Destiny Bond,Prélèvem. Destin
+195,Abgesang,Perish Song,Requiem
+196,Eissturm,Icy Wind,Vent Glace
+197,Scanner,Detect,Détection
+198,Knochenhatz,Bone Rush,Charge-Os
+199,Zielschuss,Lock-On,Verrouillage
+200,Wutanfall,Outrage,Colère
+201,Sandsturm,Sandstorm,Tempête de Sable
+202,Gigasauger,Giga Drain,Giga-Sangsue
+203,Ausdauer,Endure,Ténacité
+204,Charme,Charm,Charme
+205,Walzer,Rollout,Roulade
+206,Trugschlag,False Swipe,Faux-Chage
+207,Angeberei,Swagger,Vantardise
+208,Milchgetränk,Milk Drink,Lait à Boire
+209,Funkensprung,Spark,Étincelle
+210,Zornklinge,Fury Cutter,Taillade
+211,Stahlflügel,Steel Wing,Aile d’Acier
+212,Horrorblick,Mean Look,Regard Noir
+213,Anziehung,Attract,Attraction
+214,Schlafrede,Sleep Talk,Blabla Dodo
+215,Vitalglocke,Heal Bell,Glas de Soin
+216,Rückkehr,Return,Retour
+217,Geschenk,Present,Cadeau
+218,Frustration,Frustration,Frustration
+219,Bodyguard,Safeguard,Rune Protect
+220,Leidteiler,Pain Split,Balance
+221,Läuterfeuer,Sacred Fire,Feu Sacré
+222,Intensität,Magnitude,Ampleur
+223,Wuchtschlag,Dynamic Punch,Dynamopoing
+224,Vielender,Megahorn,Mégacorne
+225,Feuerodem,Dragon Breath,Dracosouffle
+226,Stafette,Baton Pass,Relais
+227,Zugabe,Encore,Encore
+228,Verfolgung,Pursuit,Poursuite
+229,Turbodreher,Rapid Spin,Tour Rapide
+230,Lockduft,Sweet Scent,Doux Parfum
+231,Eisenschweif,Iron Tail,Queue de Fer
+232,Metallklaue,Metal Claw,Griffe Acier
+233,Überwurf,Vital Throw,Corps Perdu
+234,Morgengrauen,Morning Sun,Aurore
+235,Synthese,Synthesis,Synthèse
+236,Mondschein,Moonlight,Rayon Lune
+237,Kraftreserve,Hidden Power,Puissance Cachée
+238,Kreuzhieb,Cross Chop,Coup-Croix
+239,Windhose,Twister,Ouragan
+240,Regentanz,Rain Dance,Danse Pluie
+241,Sonnentag,Sunny Day,Zénith
+242,Knirscher,Crunch,Mâchouille
+243,Spiegelcape,Mirror Coat,Voile Miroir
+244,Psycho-Plus,Psych Up,Boost
+245,Turbotempo,Extreme Speed,Vitesse Extrême
+246,Antik-Kraft,Ancient Power,Pouvoir Antique
+247,Spukball,Shadow Ball,Ball’Ombre
+248,Seher,Future Sight,Prescience
+249,Zertrümmerer,Rock Smash,Éclate-Roc
+250,Whirlpool,Whirlpool,Siphon
+251,Prügler,Beat Up,Baston
+252,Mogelhieb,Fake Out,Bluff
+253,Aufruhr,Uproar,Brouhaha
+254,Horter,Stockpile,Stockage
+255,Entfessler,Spit Up,Relâche
+256,Verzehrer,Swallow,Avale
+257,Hitzewelle,Heat Wave,Canicule
+258,Hagelsturm,Hail,Grêle
+259,Folterknecht,Torment,Tourmente
+260,Schmeichler,Flatter,Flatterie
+261,Irrlicht,Will-O-Wisp,Feu Follet
+262,Memento-Mori,Memento,Souvenir
+263,Fassade,Facade,Façade
+264,Power-Punch,Focus Punch,Mitra-Poing
+265,Riechsalz,Smelling Salts,Stimulant
+266,Spotlight,Follow Me,Par Ici
+267,Natur-Kraft,Nature Power,Force-Nature
+268,Ladevorgang,Charge,Chargeur
+269,Verhöhner,Taunt,Provoc
+270,Rechte Hand,Helping Hand,Coup d’Main
+271,Trickbetrug,Trick,Tourmagik
+272,Rollentausch,Role Play,Imitation
+273,Wunschtraum,Wish,Vœu
+274,Zuschuss,Assist,Assistance
+275,Verwurzler,Ingrain,Racines
+276,Kraftkoloss,Superpower,Surpuissance
+277,Magiemantel,Magic Coat,Reflet Magik
+278,Aufbereitung,Recycle,Recyclage
+279,Vergeltung,Revenge,Vendetta
+280,Durchbruch,Brick Break,Casse-Brique
+281,Gähner,Yawn,Bâillement
+282,Abschlag,Knock Off,Sabotage
+283,Notsituation,Endeavor,Effort
+284,Eruption,Eruption,Éruption
+285,Wertewechsel,Skill Swap,Échange
+286,Begrenzer,Imprison,Possessif
+287,Heilung,Refresh,Régénération
+288,Nachspiel,Grudge,Rancune
+289,Übernahme,Snatch,Saisie
+290,Geheimpower,Secret Power,Force Cachée
+291,Taucher,Dive,Plongée
+292,Armstoß,Arm Thrust,Cogne
+293,Tarnung,Camouflage,Camouflage
+294,Schweifglanz,Tail Glow,Lumiqueue
+295,Scheinwerfer,Luster Purge,Lumi-Éclat
+296,Nebelball,Mist Ball,Ball’Brume
+297,Daunenreigen,Feather Dance,Danse-Plume
+298,Taumeltanz,Teeter Dance,Danse-Folle
+299,Feuerfeger,Blaze Kick,Pied Brûleur
+300,Lehmsuhler,Mud Sport,Lance-Boue
+301,Frostbeule,Ice Ball,Ball’Glace
+302,Nietenranke,Needle Arm,Poing Dard
+303,Tagedieb,Slack Off,Paresse
+304,Schallwelle,Hyper Voice,Mégaphone
+305,Giftzahn,Poison Fang,Crochet Venin
+306,Zermalmklaue,Crush Claw,Éclate Griffe
+307,Lohekanonade,Blast Burn,Rafale Feu
+308,Aquahaubitze,Hydro Cannon,Hydroblast
+309,Sternenhieb,Meteor Mash,Poing Météore
+310,Erstauner,Astonish,Étonnement
+311,Meteorologe,Weather Ball,Ball’Météo
+312,Aromakur,Aromatherapy,Aromathérapie
+313,Trugträne,Fake Tears,Croco Larme
+314,Windschnitt,Air Cutter,Tranch’Air
+315,Hitzekoller,Overheat,Surchauffe
+316,Schnüffler,Odor Sleuth,Flair
+317,Felsgrab,Rock Tomb,Tomberoche
+318,Silberhauch,Silver Wind,Vent Argenté
+319,Metallsound,Metal Sound,Strido-Son
+320,Grasflöte,Grass Whistle,Siffl’Herbe
+321,Spaßkanone,Tickle,Chatouille
+322,Kosmik-Kraft,Cosmic Power,Force Cosmik
+323,Fontränen,Water Spout,Giclédo
+324,Ampelleuchte,Signal Beam,Rayon Signal
+325,Finsterfaust,Shadow Punch,Poing Ombre
+326,Sondersensor,Extrasensory,Extrasenseur
+327,Himmelhieb,Sky Uppercut,Stratopercut
+328,Sandgrab,Sand Tomb,Tourbi-Sable
+329,Eiseskälte,Sheer Cold,Glaciation
+330,Lehmbrühe,Muddy Water,Ocroupi
+331,Kugelsaat,Bullet Seed,Balle Graine
+332,Aero-Ass,Aerial Ace,Aéropique
+333,Eisspeer,Icicle Spear,Stalagtite
+334,Eisenabwehr,Iron Defense,Mur de Fer
+335,Rückentzug,Block,Barrage
+336,Jauler,Howl,Grondement
+337,Drachenklaue,Dragon Claw,Dracogriffe
+338,Flora-Statue,Frenzy Plant,Végé-Attak
+339,Protzer,Bulk Up,Gonflette
+340,Sprungfeder,Bounce,Rebond
+341,Lehmschuss,Mud Shot,Tir de Boue
+342,Giftschweif,Poison Tail,Queue-Poison
+343,Bezirzer,Covet,Implore
+344,Volttackle,Volt Tackle,Électacle
+345,Zauberblatt,Magical Leaf,Feuille Magik
+346,Nassmacher,Water Sport,Tourniquet
+347,Gedankengut,Calm Mind,Plénitude
+348,Laubklinge,Leaf Blade,Lame-Feuille
+349,Drachentanz,Dragon Dance,Danse Draco
+350,Felswurf,Rock Blast,Boule Roc
+351,Schockwelle,Shock Wave,Onde de Choc
+352,Aquawelle,Water Pulse,Vibraqua
+353,Kismetwunsch,Doom Desire,Carnareket
+354,Psyschub,Psycho Boost,Psycho Boost
+355,Ruheort,Roost,Atterrissage
+356,Erdanziehung,Gravity,Gravité
+357,Wunderauge,Miracle Eye,Œil Miracle
+358,Weckruf,Wake-Up Slap,Réveil Forcé
+359,Hammerarm,Hammer Arm,Marto-Poing
+360,Gyroball,Gyro Ball,Gyroballe
+361,Heilopfer,Healing Wish,Vœu Soin
+362,Lake,Brine,Saumure
+363,Beerenkräfte,Natural Gift,Don Naturel
+364,Offenlegung,Feint,Ruse
+365,Pflücker,Pluck,Picore
+366,Rückenwind,Tailwind,Vent Arrière
+367,Akupressur,Acupressure,Acupression
+368,Metallstoß,Metal Burst,Fulmifer
+369,Kehrtwende,U-turn,Demi-Tour
+370,Nahkampf,Close Combat,Close Combat
+371,Gegenstoß,Payback,Représailles
+372,Gewissheit,Assurance,Assurance
+373,Itemsperre,Embargo,Embargo
+374,Schleuder,Fling,Dégommage
+375,Psybann,Psycho Shift,Échange Psy
+376,Trumpfkarte,Trump Card,Atout
+377,Heilblockade,Heal Block,Anti-Soin
+378,Auswringen,Wring Out,Essorage
+379,Krafttrick,Power Trick,Astuce Force
+380,Magensäfte,Gastro Acid,Suc Digestif
+381,Beschwörung,Lucky Chant,Air Veinard
+382,Egotrip,Me First,Moi d’Abord
+383,Imitator,Copycat,Photocopie
+384,Krafttausch,Power Swap,Permuforce
+385,Schutztausch,Guard Swap,Permugarde
+386,Strafattacke,Punishment,Punition
+387,Zuflucht,Last Resort,Dernier Recours
+388,Sorgensamen,Worry Seed,Soucigraine
+389,Tiefschlag,Sucker Punch,Coup Bas
+390,Giftspitzen,Toxic Spikes,Pics Toxik
+391,Statustausch,Heart Swap,Permucœur
+392,Wasserring,Aqua Ring,Anneau Hydro
+393,Magnetflug,Magnet Rise,Vol Magnétik
+394,Flammenblitz,Flare Blitz,Boutefeu
+395,Kraftwelle,Force Palm,Forte-Paume
+396,Aurasphäre,Aura Sphere,Aurasphère
+397,Steinpolitur,Rock Polish,Poliroche
+398,Gifthieb,Poison Jab,Direct Toxik
+399,Finsteraura,Dark Pulse,Vibrobscur
+400,Nachthieb,Night Slash,Tranche-Nuit
+401,Nassschweif,Aqua Tail,Hydroqueue
+402,Samenbomben,Seed Bomb,Canon Graine
+403,Luftschnitt,Air Slash,Lame d’Air
+404,Kreuzschere,X-Scissor,Plaie-Croix
+405,Käfergebrumm,Bug Buzz,Bourdon
+406,Drachenpuls,Dragon Pulse,Dracochoc
+407,Drachenstoß,Dragon Rush,Dracocharge
+408,Juwelenkraft,Power Gem,Rayon Gemme
+409,Ableithieb,Drain Punch,Vampipoing
+410,Vakuumwelle,Vacuum Wave,Onde Vide
+411,Fokusstoß,Focus Blast,Exploforce
+412,Energieball,Energy Ball,Éco-Sphère
+413,Sturzflug,Brave Bird,Rapace
+414,Erdkräfte,Earth Power,Telluriforce
+415,Wechseldich,Switcheroo,Passe-Passe
+416,Gigastoß,Giga Impact,Giga Impact
+417,Ränkeschmied,Nasty Plot,Machination
+418,Patronenhieb,Bullet Punch,Pisto-Poing
+419,Lawine,Avalanche,Avalanche
+420,Eissplitter,Ice Shard,Éclats Glace
+421,Dunkelklaue,Shadow Claw,Griffe Ombre
+422,Donnerzahn,Thunder Fang,Crocs Éclair
+423,Eiszahn,Ice Fang,Crocs Givre
+424,Feuerzahn,Fire Fang,Crocs Feu
+425,Schattenstoß,Shadow Sneak,Ombre Portée
+426,Schlammbombe,Mud Bomb,Boue-Bombe
+427,Psychoklinge,Psycho Cut,Coupe Psycho
+428,Zen-Kopfstoß,Zen Headbutt,Psykoud’Boul
+429,Spiegelsalve,Mirror Shot,Miroi-Tir
+430,Lichtkanone,Flash Cannon,Luminocanon
+431,Kraxler,Rock Climb,Escalade
+432,Auflockern,Defog,Anti-Brume
+433,Bizarroraum,Trick Room,Distorsion
+434,Draco Meteor,Draco Meteor,Draco Météore
+435,Ladungsstoß,Discharge,Coup d’Jus
+436,Flammensturm,Lava Plume,Ébullilave
+437,Blättersturm,Leaf Storm,Tempête Verte
+438,Blattgeißel,Power Whip,Mégafouet
+439,Felswerfer,Rock Wrecker,Roc-Boulet
+440,Giftstreich,Cross Poison,Poison-Croix
+441,Mülltreffer,Gunk Shot,Détricanon
+442,Eisenschädel,Iron Head,Tête de Fer
+443,Magnetbombe,Magnet Bomb,Bombaimant
+444,Steinkante,Stone Edge,Lame de Roc
+445,Liebreiz,Captivate,Séduction
+446,Tarnsteine,Stealth Rock,Piège de Roc
+447,Strauchler,Grass Knot,Nœud Herbe
+448,Geschwätz,Chatter,Babil
+449,Urteilskraft,Judgment,Jugement
+450,Käferbiss,Bug Bite,Piqûre
+451,Ladestrahl,Charge Beam,Rayon Chargé
+452,Holzhammer,Wood Hammer,Martobois
+453,Wasserdüse,Aqua Jet,Aqua-Jet
+454,Schlagbefehl,Attack Order,Appel Attaque
+455,Blockbefehl,Defend Order,Appel Défense
+456,Heilbefehl,Heal Order,Appel Soins
+457,Kopfstoß,Head Smash,Fracass’Tête
+458,Doppelschlag,Double Hit,Coup Double
+459,Zeitenlärm,Roar of Time,Hurle-Temps
+460,Raumschlag,Spacial Rend,Spatio-Rift
+461,Lunartanz,Lunar Dance,Danse-Lune
+462,Quetschgriff,Crush Grip,Presse
+463,Lavasturm,Magma Storm,Vortex Magma
+464,Schlummerort,Dark Void,Trou Noir
+465,Schocksamen,Seed Flare,Fulmigraine
+466,Unheilböen,Ominous Wind,Vent Mauvais
+467,Schemenkraft,Shadow Force,Revenant
+468,Klauenwetzer,Hone Claws,Aiguisage
+469,Rundumschutz,Wide Guard,Garde Large
+470,Schutzteiler,Guard Split,Partage Garde
+471,Kraftteiler,Power Split,Partage Force
+472,Wunderraum,Wonder Room,Zone Étrange
+473,Psychoschock,Psyshock,Choc Psy
+474,Giftschock,Venoshock,Choc Venin
+475,Autotomie,Autotomize,Allègement
+476,Wutpulver,Rage Powder,Poudre Fureur
+477,Telekinese,Telekinesis,Lévikinésie
+478,Magieraum,Magic Room,Zone Magique
+479,Katapult,Smack Down,Anti-Air
+480,Bergsturm,Storm Throw,Yama Arashi
+481,Funkenflug,Flame Burst,Rebondifeu
+482,Schlammwoge,Sludge Wave,Cradovague
+483,Falterreigen,Quiver Dance,Papillodanse
+484,Rammboss,Heavy Slam,Tacle Lourd
+485,Synchrolärm,Synchronoise,Synchropeine
+486,Elektroball,Electro Ball,Boule Élek
+487,Überflutung,Soak,Détrempage
+488,Nitroladung,Flame Charge,Nitrocharge
+489,Einrollen,Coil,Enroulement
+490,Fußtritt,Low Sweep,Balayette
+491,Säurespeier,Acid Spray,Bombe Acide
+492,Schmarotzer,Foul Play,Tricherie
+493,Wankelstrahl,Simple Beam,Rayon Simple
+494,Zwango,Entrainment,Ten-danse
+495,Galanterie,After You,Après Vous
+496,Kanon,Round,Chant Canon
+497,Widerhall,Echoed Voice,Écho
+498,Zermürben,Chip Away,Attrition
+499,Klärsmog,Clear Smog,Bain de Smog
+500,Kraftvorrat,Stored Power,Force Ajoutée
+501,Rapidschutz,Quick Guard,Prévention
+502,Seitentausch,Ally Switch,Interversion
+503,Siedewasser,Scald,Ébullition
+504,Hausbruch,Shell Smash,Exuviation
+505,Heilwoge,Heal Pulse,Vibra Soin
+506,Bürde,Hex,Châtiment
+507,Freier Fall,Sky Drop,Chute Libre
+508,Gangwechsel,Shift Gear,Chgt Vitesse
+509,Überkopfwurf,Circle Throw,Projection
+510,Einäschern,Incinerate,Calcination
+511,Verzögerung,Quash,À la Queue
+512,Akrobatik,Acrobatics,Acrobatie
+513,Typenspiegel,Reflect Type,Copie Type
+514,Heimzahlung,Retaliate,Vengeance
+515,Wagemut,Final Gambit,Tout ou Rien
+516,Offerte,Bestow,Passe-Cadeau
+517,Inferno,Inferno,Feu d’Enfer
+518,Wassersäulen,Water Pledge,Aire d’Eau
+519,Feuersäulen,Fire Pledge,Aire de Feu
+520,Pflanzensäulen,Grass Pledge,Aire d’Herbe
+521,Voltwechsel,Volt Switch,Change Éclair
+522,Käfertrutz,Struggle Bug,Survinsecte
+523,Dampfwalze,Bulldoze,Piétisol
+524,Eisesodem,Frost Breath,Souffle Glacé
+525,Drachenrute,Dragon Tail,Draco-Queue
+526,Kraftschub,Work Up,Rengorgement
+527,Elektronetz,Electroweb,Toile Élek
+528,Stromstoß,Wild Charge,Éclair Fou
+529,Schlagbohrer,Drill Run,Tunnelier
+530,Doppelhieb,Dual Chop,Double Baffe
+531,Herzstempel,Heart Stamp,Crève-Cœur
+532,Holzgeweih,Horn Leech,Encornebois
+533,Sanctoklinge,Sacred Sword,Lame Sainte
+534,Kalkklinge,Razor Shell,Coquilame
+535,Brandstempel,Heat Crash,Tacle Feu
+536,Grasmixer,Leaf Tornado,Phytomixeur
+537,Quetschwalze,Steamroller,Bulldoboule
+538,Watteschild,Cotton Guard,Cotogarde
+539,Nachtflut,Night Daze,Explonuit
+540,Psychostoß,Psystrike,Frappe Psy
+541,Kehrschelle,Tail Slap,Plumo-Queue
+542,Orkan,Hurricane,Vent Violent
+543,Steinschädel,Head Charge,Peignée
+544,Klikkdiskus,Gear Grind,Lancécrou
+545,Flammenball,Searing Shot,Incendie
+546,Techblaster,Techno Blast,Techno-Buster
+547,Urgesang,Relic Song,Chant Antique
+548,Mystoschwert,Secret Sword,Lame Ointe
+549,Eiszeit,Glaciate,Ère Glaciaire
+550,Blitzschlag,Bolt Strike,Charge Foudre
+551,Blauflammen,Blue Flare,Flamme Bleue
+552,Feuerreigen,Fiery Dance,Danse du Feu
+553,Frostvolt,Freeze Shock,Éclair Gelé
+554,Frosthauch,Ice Burn,Feu Glacé
+555,Standpauke,Snarl,Aboiement
+556,Eiszapfhagel,Icicle Crash,Chute Glace
+557,V-Generator,V-create,Coup Victoire
+558,Kreuzflamme,Fusion Flare,Flamme Croix
+559,Kreuzdonner,Fusion Bolt,Éclair Croix
+560,Flying Press,Flying Press,Flying Press
+561,Tatami-Schild,Mat Block,Tatamigaeshi
+562,Rülpser,Belch,Éructation
+563,Pflüger,Rototiller,Fertilisation
+564,Klebenetz,Sticky Web,Toile Gluante
+565,Stachelfinale,Fell Stinger,Dard Mortel
+566,Phantomkraft,Phantom Force,Hantise
+567,Halloween,Trick-or-Treat,Halloween
+568,Kampfgebrüll,Noble Roar,Râle Mâle
+569,Plasmaschauer,Ion Deluge,DélugePlasmique
+570,Parabolladung,Parabolic Charge,Parabocharge
+571,Waldesfluch,Forest’s Curse,Maléfice Sylvain
+572,Blütenwirbel,Petal Blizzard,Tempête Florale
+573,Gefriertrockner,Freeze-Dry,Lyophilisation
+574,Säuselstimme,Disarming Voice,Voix Enjôleuse
+575,Abgangstirade,Parting Shot,Dernier Mot
+576,Invertigo,Topsy-Turvy,Renversement
+577,Diebeskuss,Draining Kiss,Vampibaiser
+578,Trickschutz,Crafty Shield,Vigilance
+579,Floraschutz,Flower Shield,Garde Florale
+580,Grasfeld,Grassy Terrain,Champ Herbu
+581,Nebelfeld,Misty Terrain,Champ Brumeux
+582,Elektrifizierung,Electrify,Électrisation
+583,Knuddler,Play Rough,Câlinerie
+584,Feenbrise,Fairy Wind,Vent Féérique
+585,Mondgewalt,Moonblast,Pouvoir Lunaire
+586,Überschallknall,Boomburst,Bang Sonique
+587,Feenschloss,Fairy Lock,Verrou Enchanté
+588,Königsschild,King’s Shield,Bouclier Royal
+589,Kameradschaft,Play Nice,Camaraderie
+590,Vertrauenssache,Confide,Confidence
+591,Diamantsturm,Diamond Storm,Orage Adamantin
+592,Dampfschwall,Steam Eruption,Jet de Vapeur
+593,Dimensionsloch,Hyperspace Hole,TrouDimensionnel
+594,Wasser-Shuriken,Water Shuriken,Sheauriken
+595,Magieflamme,Mystical Fire,Feu Ensorcelé
+596,Schutzstacheln,Spiky Shield,Pico-Défense
+597,Duftwolke,Aromatic Mist,Brume Capiteuse
+598,Mystowellen,Eerie Impulse,Ondes Étranges
+599,Giftfalle,Venom Drench,Piège de Venin
+600,Pulverschleuder,Powder,Nuée de Poudre
+601,Geokontrolle,Geomancy,Géo-Contrôle
+602,Magnetregler,Magnetic Flux,Magné-Contrôle
+603,Goldene Zeiten,Happy Hour,Étrennes
+604,Elektrofeld,Electric Terrain,Champ Électrifié
+605,Zauberschein,Dazzling Gleam,Éclat Magique
+606,Ehrentag,Celebrate,Célébration
+607,Händchenhalten,Hold Hands,Mains Jointes
+608,Kulleraugen,Baby-Doll Eyes,Regard Touchant
+609,Wangenrubbler,Nuzzle,Frotte-Frimousse
+610,Zurückhaltung,Hold Back,Retenue
+611,Plage,Infestation,Harcèlement
+612,Steigerungshieb,Power-Up Punch,Poing Boost
+613,Unheilsschwingen,Oblivion Wing,Mort-Ailes
+614,Tausend Pfeile,Thousand Arrows,Myria-Flèches
+615,Tausend Wellen,Thousand Waves,Myria-Vagues
+616,Bodengewalt,Land’s Wrath,Force Chtonienne
+617,Lux Calamitatis,Light of Ruin,Lumière du Néant
+618,Ursprungswoge,Origin Pulse,Onde Originelle
+619,Abgrundsklinge,Precipice Blades,Lame Pangéenne
+620,Zenitstürmer,Dragon Ascent,Draco Ascension
+621,Dimensionswahn,Hyperspace Fury,Furie Dimension
+622,Hyper-Sprintangriff,Breakneck Blitz,Turbo-Charge Bulldozer
+623,Hyper-Sprintangriff,Breakneck Blitz,Turbo-Charge Bulldozer
+624,Fulminante Faustschläge,All-Out Pummeling,Combo Hyper-Furie
+625,Fulminante Faustschläge,All-Out Pummeling,Combo Hyper-Furie
+626,Finaler Steilflug,Supersonic Skystrike,Piqué Supersonique
+627,Finaler Steilflug,Supersonic Skystrike,Piqué Supersonique
+628,Vernichtender Säureregen,Acid Downpour,Déluge Causti-Toxique
+629,Vernichtender Säureregen,Acid Downpour,Déluge Causti-Toxique
+630,Seismische Eruption,Tectonic Rage,Éruption Géo-Sismique
+631,Seismische Eruption,Tectonic Rage,Éruption Géo-Sismique
+632,Apokalyptische Steinpresse,Continental Crush,Apocalypse Gigalithique
+633,Apokalyptische Steinpresse,Continental Crush,Apocalypse Gigalithique
+634,Wirbelnder Insektenhieb,Savage Spin-Out,Cocon Fatal
+635,Wirbelnder Insektenhieb,Savage Spin-Out,Cocon Fatal
+636,Ewige Nacht,Never-Ending Nightmare,Appel des Ombres Éternelles
+637,Ewige Nacht,Never-Ending Nightmare,Appel des Ombres Éternelles
+638,Turbo-Spiralkombo,Corkscrew Crash,Vrille Maximum
+639,Turbo-Spiralkombo,Corkscrew Crash,Vrille Maximum
+640,Dynamische Maxiflamme,Inferno Overdrive,Pyro-Explosion Cataclysmique
+641,Dynamische Maxiflamme,Inferno Overdrive,Pyro-Explosion Cataclysmique
+642,Super-Wassertornado,Hydro Vortex,Super Tourbillon Abyssal
+643,Super-Wassertornado,Hydro Vortex,Super Tourbillon Abyssal
+644,Brillante Blütenpracht,Bloom Doom,Pétalexplosion Éblouissante
+645,Brillante Blütenpracht,Bloom Doom,Pétalexplosion Éblouissante
+646,Gigavolt-Funkensalve,Gigavolt Havoc,Fulguro-Lance Gigavolt
+647,Gigavolt-Funkensalve,Gigavolt Havoc,Fulguro-Lance Gigavolt
+648,Psycho-Schmetterschlag,Shattered Psyche,Psycho-Pulvérisation EX
+649,Psycho-Schmetterschlag,Shattered Psyche,Psycho-Pulvérisation EX
+650,Tobender Geofrost,Subzero Slammer,Laser Cryogénique
+651,Tobender Geofrost,Subzero Slammer,Laser Cryogénique
+652,Drastisches Drachendröhnen,Devastating Drake,Chaos Draconique
+653,Drastisches Drachendröhnen,Devastating Drake,Chaos Draconique
+654,Schwarzes Loch des Grauens,Black Hole Eclipse,Trou Noir des Ombres
+655,Schwarzes Loch des Grauens,Black Hole Eclipse,Trou Noir des Ombres
+656,Entzückender Sternenstoß,Twinkle Tackle,Impact Choupinova
+657,Entzückender Sternenstoß,Twinkle Tackle,Impact Choupinova
+658,Perfektes Pika-Projektil,Catastropika,Pikachute Foudroyante
+659,Sandsammler,Shore Up,Amass’Sable
+660,Überrumpler,First Impression,Escarmouche
+661,Bunker,Baneful Bunker,Blockhaus
+662,Schattenfessel,Spirit Shackle,Tisse Ombre
+663,Dark Lariat,Darkest Lariat,Dark Lariat
+664,Schaumserenade,Sparkling Aria,Aria de l’Écume
+665,Eishammer,Ice Hammer,Marteau de Glace
+666,Florakur,Floral Healing,Soin Floral
+667,Pferdestärke,High Horsepower,Cavalerie Lourde
+668,Kraftabsorber,Strength Sap,Vol-Force
+669,Solarklinge,Solar Blade,Lame Solaire
+670,Blattwerk,Leafage,Feuillage
+671,Rampenlicht,Spotlight,Projecteur
+672,Giftfaden,Toxic Thread,Fil Toxique
+673,Konzentration,Laser Focus,Affilage
+674,Hilfsmechanik,Gear Up,Engrenage
+675,Neck Strike,Throat Chop,Exécu-Son
+676,Pollenknödel,Pollen Puff,Boule Pollen
+677,Ankerschuss,Anchor Shot,Ancrage
+678,Psychofeld,Psychic Terrain,Champ Psychique
+679,Anfallen,Lunge,Furie-Bond
+680,Feuerpeitsche,Fire Lash,Fouet de Feu
+681,Überheblichkeit,Power Trip,Arrogance
+682,Ausbrennen,Burn Up,Flamme Ultime
+683,Initiativetausch,Speed Swap,Permuvitesse
+684,Schmalhorn,Smart Strike,Estocorne
+685,Läuterung,Purify,Purification
+686,Wecktanz,Revelation Dance,Danse Éveil
+687,Sanktionskern,Core Enforcer,Sanction Suprême
+688,Tropenkick,Trop Kick,Botte Sucrette
+689,Kommando,Instruct,Sommation
+690,Schnabelkanone,Beak Blast,Bec-Canon
+691,Schuppenrasseln,Clanging Scales,Vibrécaille
+692,Drachenhammer,Dragon Hammer,Draco-Marteau
+693,Wirbler,Brutal Swing,Centrifugifle
+694,Auroraschleier,Aurora Veil,Voile Aurore
+695,Schatten-Pfeilregen,Sinister Arrow Raid,Fureur des Plumes Spectrales
+696,Hyper Dark Crusher,Malicious Moonsault,Dark Body Press
+697,Grandiose Meeressymphonie,Oceanic Operetta,Symphonie des Ondines
+698,Alolas Wächter,Guardian of Alola,Colère du Gardien d’Alola
+699,Sternbild des Seelenraubes,Soul-Stealing 7-Star Strike,Fauche-Âme des Sept Étoiles
+700,Blitz-Wellenritt,Stoked Sparksurfer,Électro-Surf Survolté
+701,Schluss mit lustig,Pulverizing Pancake,Gare au Ronflex
+702,Macht der Neun,Extreme Evoboost,Neuf pour Un
+703,Supernova des Ursprungs,Genesis Supernova,Supernova Originelle
+704,Panzerfalle,Shell Trap,Carapiège
+705,Kanonenbouquet,Fleur Cannon,Canon Floral
+706,Psychobeißer,Psychic Fangs,Psycho-Croc
+707,Fruststampfer,Stomping Tantrum,Trépignement
+708,Schattenknochen,Shadow Bone,Os’Ombre
+709,Turbofelsen,Accelerock,Vif Roc
+710,Aquadurchstoß,Liquidation,Aqua-Brèche
+711,Prisma-Laser,Prismatic Laser,Laser Prisme
+712,Diebesschatten,Spectral Thief,Clepto-Mânes
+713,Stahlgestirn,Sunsteel Strike,Choc Météore
+714,Schattenstrahl,Moongeist Beam,Rayon Spectral
+715,Tränendrüse,Tearful Look,Larme à l’Œil
+716,Elektropikser,Zing Zap,Électrikipik
+717,Naturzorn,Nature’s Madness,Ire de la Nature
+718,Multi-Angriff,Multi-Attack,Coup Varia-Type
+719,Tausendfacher Donnerblitz,"10,000,000 Volt Thunderbolt",Giga-Tonnerre
+720,Knallkopf,Mind Blown,Caboche-Kaboum
+721,Plasmafäuste,Plasma Fists,Plasma Punch
+722,Photonen-Geysir,Photon Geyser,Photo-Geyser
+723,Licht des Erlöschens,Light That Burns the Sky,Apocalypsis Luminis
+724,Schmetternde Sonnenwalze,Searing Sunraze Smash,Hélio-Choc Dévastateur
+725,Geballter Mondlaser,Menacing Moonraze Maelstrom,Rayons Séléno-Explosifs
+726,Herzliche Knuddelkloppe,Let’s Snuggle Forever,Patati-Patattrape
+727,Fataler Steinregen,Splintered Stormshards,Hurlement des Roches-Lames
+728,Rasselnder Seelentanz,Clangorous Soulblaze,Dracacophonie Flamboyante

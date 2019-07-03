@@ -59,11 +59,47 @@ class BaseIdeService
     raise "execute_request not implemented"
   end
 
+  # The path to the cli program
+  def cli_program_path
+    raise "cli_program_path not implemented"
+  end
+
+  # Checks whether the given program actually exists
+  def cli_program_exists?
+    File.exist? cli_program_path
+  end
+
   # Ensures the node runtime has something meaningful to start
   def assert_cli_program_exists!
     if not cli_program_exists?
       raise IdeServiceError, "Could not find compiled CLI at \"#{@program}\""
     end
+  end
+
+  # Waits until the cli program is available
+  def wait_cli_program_exists!
+    wait_time = 2.seconds
+    sum_wait_time = 0
+    max_wait_time = 30 * wait_time
+
+    # Wait until the program magically appears
+    while not cli_program_exists?
+      # Are we patient enough to continue waiting
+      if sum_wait_time < max_wait_time
+        # Yes, possibly print a warning why startup is delayed and then wait
+        if sum_wait_time == 0
+          puts "Waiting for CLI-program at \"#{cli_program_path}\""
+        end
+
+        sleep wait_time
+        sum_wait_time += wait_time
+      else
+        raise IdeServiceError, "Could not find compiled CLI at \"#{cli_program_path}\""
+      end
+    end
+
+    # Now the program must exist
+    assert_cli_program_exists!
   end
 end
 
@@ -79,11 +115,6 @@ class ExecIdeService < BaseIdeService
   # The path to the cli program
   def cli_program_path
     @program
-  end
-
-  # Checks whether the given program actually exists
-  def cli_program_exists?
-    File.exist? cli_program_path
   end
 end
 
