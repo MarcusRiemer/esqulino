@@ -103,6 +103,12 @@ dist/server/de/server.js: $(CLIENT_NON_XLF_SOURCES)
 dist/server/en/server.js: $(CLIENT_NON_XLF_SOURCES)
 	$(NG_BIN) run blattwerkzeug-client:server --no-progress --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf" --i18nLocale="en" --outputPath="dist/server/en"
 
+# German version of the universal server
+universal-de: dist/server/de/server.js
+
+# English version of the universal server
+universal-en: dist/server/en/server.js
+
 # The Angular universal server that does the actual rendering and routing
 dist/server/universal-server.js: universal-server.ts universal-compile-langs
 	node_modules/.bin/webpack --config webpack.server.config.js --no-progress
