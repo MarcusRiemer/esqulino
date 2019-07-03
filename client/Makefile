@@ -77,7 +77,10 @@ dist/cli/main.cli.js : $(CLIENT_NON_XLF_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) -p src/tsconfig.cli.json
 
-cli-compile: dist/cli/main.cli.js
+dist/cli/bundle.cli.js : dist/cli/main.cli.js
+	node_modules/.bin/webpack --config webpack.cli.config.js
+
+cli-compile: dist/cli/main.cli.js dist/cli/bundle.cli.js
 
 cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
@@ -96,6 +99,12 @@ dist/server/de/server.js: $(CLIENT_NON_XLF_SOURCES)
 # The english Angular universal app
 dist/server/en/server.js: $(CLIENT_NON_XLF_SOURCES)
 	$(NG_BIN) run blattwerkzeug-client:server --no-progress --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf" --i18nLocale="en" --outputPath="dist/server/en"
+
+# German version of the universal server
+universal-de: dist/server/de/server.js
+
+# English version of the universal server
+universal-en: dist/server/en/server.js
 
 # The Angular universal server that does the actual rendering and routing
 dist/server/universal-server.js: universal-server.ts universal-compile-langs
