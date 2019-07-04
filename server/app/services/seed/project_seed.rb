@@ -30,13 +30,14 @@ module Seed
 
     # store image from proejct path into a tmp directory after loading
     def after_load_seed
-      if File.directory? (File.join seed_specific_directory, IMAGE_DIRECTORY)
+      seed_images_folder = File.join seed_specific_directory, IMAGE_DIRECTORY
+      if File.directory? (seed_images_folder)
         info "COPY Images"
 
+        # Ensure that the temporary target directory exists
         tmp_directory = path_to_data_directory + "_tmp"
         FileUtils.mkdir_p tmp_directory
-        image_target_folder = File.join tmp_directory, IMAGE_DIRECTORY
-        FileUtils.copy_entry seed_specific_directory, image_target_folder
+        FileUtils.cp_r seed_images_folder, tmp_directory
       end
     end
 
