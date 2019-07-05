@@ -23,6 +23,7 @@ export interface NewsDescription {
   publishedFrom: string | null;
   createdAt: string;
   updatedAt: string;
+  userId?: string;
 }
 
 /**
@@ -37,4 +38,5 @@ export interface NewsUpdateDescription {
   /** Internal Markdown version of the text */
   text: MultilingualString;
   publishedFrom: string | null;
+  userId?: string;
 }

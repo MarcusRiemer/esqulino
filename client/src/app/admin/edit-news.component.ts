@@ -1,3 +1,4 @@
+import { PerformDescription } from './../shared/may-perform.description';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, LOCALE_ID, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { first } from 'rxjs/operators';
@@ -36,6 +37,24 @@ export class AdminNewsEditComponent implements OnInit {
     { name: 'single', description: 'Einfacher Bearbeitungsmodus' },
     { name: 'translation', description: 'Übersetzungsmodus' },
   ]
+
+  readonly mayPerformUpdate: PerformDescription = {
+    resourceType: "News",
+    resourceId: this._newsId,
+    policyAction: "update"
+  }
+
+  readonly mayPerformCreate: PerformDescription = {
+    resourceType: "News",
+    policyAction: "create"
+  }
+
+  readonly mayPerformDelete: PerformDescription = {
+    resourceType: "News",
+    resourceId: this._newsId,
+    policyAction: "delete"
+  }
+
 
   public newsData: NewsUpdateDescription;
   public readonly queryParamsLanguage = this._queryParams.language || this.localeID;

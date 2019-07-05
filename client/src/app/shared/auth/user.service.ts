@@ -1,3 +1,4 @@
+import { MayPerformDescription, PerformDescription } from './../may-perform.description';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -7,7 +8,7 @@ import { map, tap, first, filter, distinct } from 'rxjs/operators';
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
-import { ServerProviderDescription, ChangePrimaryEmailDescription, ClientProviderDescription } from './provider.description';
+import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -27,6 +28,10 @@ export class UserService {
     map(u => u.loggedIn? u.displayName : "Guest")
   )
 
+  public readonly role$ = this.userData$.value.pipe(
+    map(u => u.role)
+  )
+
   public readonly primaryEmail$ = this.identities$.value.pipe(
     map(u => u.primary)
   )
@@ -37,6 +42,12 @@ export class UserService {
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._serverData.signUp$(data).pipe(
+      first()
+    )
+  }
+
+  public mayPerform$(data: PerformDescription[]): Observable<MayPerformDescription> {
+    return this._serverData.mayPerform$(data).pipe(
       first()
     )
   }

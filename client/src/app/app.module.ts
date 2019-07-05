@@ -1,3 +1,4 @@
+import { IsUserGuard } from './shared/guards/is-user.guard';
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
@@ -19,8 +20,6 @@ import { NotifyErrorHandler } from './error-handler';
 
 import registerLanguages from './locale-registration';
 import { UserModule } from './user/user.module';
-import { LoggedInGuard } from './shared/guards/logged-in.guard';
-
 
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
@@ -75,7 +74,6 @@ if (environment.sentry && environment.sentry.active) {
   ],
   providers: [
     Title,
-    LoggedInGuard,
     { provide: ErrorHandler, useClass: NotifyErrorHandler }
   ],
   bootstrap: [

@@ -1,4 +1,4 @@
-import { ProviderShowComponent } from './provider-show.component';
+import { PerformDataService } from './serverdata/perform-data.service';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -46,6 +46,8 @@ import { FocusDirective } from './focus-element.directive';
 import { UserButtonComponent } from './auth/user-button.component';
 import { AuthDialogComponent } from './auth/auth-dialog.component';
 import { LoginWrapperComponent } from './auth/login-wrapper.component';
+import { LoggedInGuard } from './guards/logged-in.guard';
+import { ProviderShowComponent } from './provider-show.component';
 
 
 import { GrammarDataService, BlockLanguageDataService } from './serverdata'
@@ -58,6 +60,9 @@ import { ChangePasswordComponent } from './auth/change-password.component';
 import { SideNavService } from './side-nav.service';
 import { RequestVerifyEmailComponent } from './auth/request-verify-email.component';
 import { ProvidersAllButtonsComponent } from './auth/providers-all-buttons.component';
+import { IsUserGuard } from './guards/is-user.guard';
+import { IsAdminGuard } from './guards/is-admin.guard';
+import { MayPerformComponent } from './may-perform.component';
 
 
 
@@ -114,6 +119,7 @@ const materialModules = [
     ChangePasswordComponent,
     ValidateInputComponent,
     ProviderShowComponent,
+    MayPerformComponent,
     ProvidersAllButtonsComponent
   ],
   exports: [
@@ -145,6 +151,7 @@ const materialModules = [
     RequestResetPasswordComponent,
     RequestVerifyEmailComponent,
     ChangePasswordComponent,
+    MayPerformComponent,
     ProviderShowComponent,
     ProvidersAllButtonsComponent
   ],
@@ -165,7 +172,11 @@ export class SharedAppModule {
         LanguageService,
         ToolbarService,
         SideNavService,
-        ...dataServices
+        PerformDataService,
+        ...dataServices,
+        LoggedInGuard,
+        IsUserGuard,
+        IsAdminGuard
       ]
     });
   }

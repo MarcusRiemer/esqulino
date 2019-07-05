@@ -5,14 +5,15 @@ export interface UserNameDescription {
   displayName:string;
 }
 
-
 export interface UserLoggedInDescription {
   displayName: string;
   loggedIn: true;
+  role: string;
 }
 
 export interface UserLoggedOutDescription {
   loggedIn: false;
+  role: "guest";
 } 
 
 export interface UserAddEmailDescription {

@@ -1,28 +1,45 @@
 <ng-template cdkPortal #toolbarItems>
-  <button *ngIf="!isCreatingNews"
-          (click)="onDelete()"
-          mat-button>
-    <span class="fa fa-trash"></span>&nbsp;
-    <span i18n="@@deleteNews">News Löschen</span>
-  </button>
-  <button *ngIf="!isCreatingNews"
-          (click)="onUpdate('redirect')"
-          mat-button>
+
+  <may-perform
+    [payload]="mayPerformDelete">
+
+    <button *ngIf="!isCreatingNews"
+            (click)="onDelete()"
+            mat-button>
+      <span class="fa fa-trash"></span>&nbsp;
+      <span i18n="@@deleteNews">News Löschen</span>
+    </button>
+  </may-perform>
+
+  <may-perform
+    [payload]="mayPerformUpdate">
+
+    <button *ngIf="!isCreatingNews"
+        (click)="onUpdate('redirect')"
+        mat-button>
     <span class="fa fa-pencil"></span>&nbsp;
     <span i18n="@@saveNewsAndBack">Aktualisieren</span>
-  </button>
-  <button *ngIf="!isCreatingNews"
-          (click)="onUpdate()"
-          mat-button>
+    </button>
+    <button *ngIf="!isCreatingNews"
+        (click)="onUpdate()"
+        mat-button>
     <span class="fa fa-pencil"></span>&nbsp;
     <span i18n="@@saveNewsAndStay">Aktualisieren (bleiben)</span>
-  </button>
-  <button *ngIf="isCreatingNews"
-          (click)="onCreate()"
-          mat-button>
-    <span class="fa fa-plus-circle"></span>&nbsp;
-    <span i18n="@@createNews">Neue News speichern</span>
-  </button>
+    </button>
+  </may-perform>
+ 
+  <may-perform
+    [payload]="mayPerformCreate">
+
+    <button *ngIf="isCreatingNews"
+      (click)="onCreate()"
+      mat-button>
+    
+      <span class="fa fa-plus-circle"></span>&nbsp;
+      <span i18n="@@createNews">Neue News speichern</span>
+    </button>
+  </may-perform>
+ 
   <select [(ngModel)]="queryParamsMode"
           name="editor"
           required>
