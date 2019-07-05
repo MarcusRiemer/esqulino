@@ -24,7 +24,7 @@ module Seed
     def after_store_seed
       if File.directory? seed.images_directory_path
         info "Storing images"
-        FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
+        FileUtils.cp_r(seed.images_directory_path, seed_specific_directory)
       end
     end
 
