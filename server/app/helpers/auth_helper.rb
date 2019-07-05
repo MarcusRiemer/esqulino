@@ -39,8 +39,9 @@ module AuthHelper
     if !signed_in?
       @current_user = @identity.user
       token = Auth.encode({
-        user_id: @current_user.id,
-        display_name: @current_user.display_name
+        user_id: current_user.id,
+        display_name: @current_user.display_name,
+        global_role: @current_user.global_role
       })
       response_jwt_cookie(token)
     end
@@ -52,6 +53,7 @@ module AuthHelper
       delete_jwt_cookie!
     end
   end
+
   def set_identity(identity)
     @identity = identity
   end

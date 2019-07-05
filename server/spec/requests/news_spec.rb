@@ -129,7 +129,6 @@ RSpec.describe NewsController, type: :request do
       expect(json_data[1]['title']['en']).to eq("Headline")
       expect(json_data[2]['title']['de']).to eq("Schlagzeile")
       expect(json_data[2]['title']['en']).to eq("Headline")
-
       expect(json_data[0]).to validate_against "NewsDescription"
       expect(json_data[1]).to validate_against "NewsDescription"
     end
@@ -161,6 +160,8 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "title" => { "de" => "Test" } })
 
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: news.user[:id]})
+
       put "/api/news/#{news.id}",
           :headers => json_headers,
           :params => news_params.to_json
@@ -182,6 +183,8 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }})
 
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: news.user[:id]})
+
       put "/api/news/#{news.id}",
           :headers => json_headers,
           :params => news_params.to_json
@@ -199,8 +202,9 @@ RSpec.describe NewsController, type: :request do
 
     it 'updating a news to remove a previously set publishing date' do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
-
       news_params = news.api_attributes.merge({ "publishedFrom" => nil })
+
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: news.user[:id]})      
 
       put "/api/news/#{news.id}",
           :headers => json_headers,
@@ -221,8 +225,9 @@ RSpec.describe NewsController, type: :request do
 
     it 'updating a news with a valid language and an invalid language' do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
-
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }})
+
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: news.user[:id]})
 
       put "/api/news/#{news.id}",
           :headers => json_headers,
@@ -277,7 +282,8 @@ RSpec.describe NewsController, type: :request do
 
   describe 'DELETE /api/news/:id' do
     it 'deleting a news' do
-      news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+      news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1), user: create(:user, :admin) )
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: news.user[:id]})
 
       delete "/api/news/#{news.id}"
 
@@ -297,7 +303,10 @@ RSpec.describe NewsController, type: :request do
   end
 
   describe "POST /api/news" do
+    let(:user) { create(:user, :admin) }
+
     it 'creating a news' do
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -318,6 +327,7 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'creating a news with an empty publishing date' do
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -338,6 +348,7 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'creating a news with an invalid date' do
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -355,6 +366,7 @@ RSpec.describe NewsController, type: :request do
     it 'creating a news without a date' do
       news = build(:news)
       news_params = news.api_attributes.except("publishedFrom")
+      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
 
       post "/api/news",
           :headers => json_headers,

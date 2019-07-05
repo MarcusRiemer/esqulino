@@ -5,6 +5,12 @@ require_dependency 'error'
 class News < ApplicationRecord
   include LocaleHelper
 
+  attr_reader :owner
+
+  resourcify
+
+  belongs_to :user
+
   # Title may only use allowed languages
   validates :title, valid_languages: []
 
@@ -68,6 +74,11 @@ class News < ApplicationRecord
   # actual markdown text.
   def to_full_api_response()
     to_json_api_response(compact: false)
+  end
+
+  # Checks if the logged in user is the owner of this news
+  def owner?(user)
+    return user.eql? self.user
   end
 
   # API response for data that is rendered on the frontpage. May restrict

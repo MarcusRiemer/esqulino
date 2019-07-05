@@ -9,7 +9,7 @@ module IdentityHelper
   def create_identity(auth = request.env["omniauth.auth"], email = false)
     @identity = Identity.search(auth)
     if (not @identity) then
-      user = @current_user || User.create_from_hash(auth)
+      user = signed_in?() ? @current_user : User.create_from_hash(auth)
 
       case auth[:provider]
       when 'developer'
@@ -41,6 +41,10 @@ module IdentityHelper
       user.save!
       @identity = identity
 
+      if (not user.has_role?(:user)) then
+        user.add_role :user
+      end
+      # sends an confirmation e-mail
       if (email) then
         IdentityMailer.confirm_email(identity, request_locale).deliver
       end

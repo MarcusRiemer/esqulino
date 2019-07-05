@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       root via: [:get], controller: 'user', action: :index
       get 'change_primary_email/:token', controller: 'user', action: :change_primary_email
       post 'send_change_email', controller: 'user', action: :send_change_email
+      post 'may_perform', controller: 'user', action: :may_perform
       patch 'change_username', controller: 'user', action: :change_username
     end
 

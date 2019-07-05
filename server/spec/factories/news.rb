@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :news do
-    title { 
+    title {
       {
         'de' => "Schlagzeile",
         'en' => "Headline"
@@ -13,5 +13,6 @@ FactoryBot.define do
       }
     }
     published_from { Date.new(2019, 4, 10) }
+    association :user
   end
 end

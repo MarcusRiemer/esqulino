@@ -16,10 +16,8 @@ class AuthController < ApplicationController
   end
 
   # This function is essential for omniauth.
-  # If youre authenticated and got the callback data
-  # you will be navigated to this controller function. 
-  # In this function you create an identity with the callback data,
-  # sign in and redirect to base url.
+  # If youre authenticated by the external provider, you will be 
+  # navigated to this function.
   def callback
     begin
       create_identity
@@ -27,25 +25,22 @@ class AuthController < ApplicationController
   
       redirect_to "/"
     rescue => e
-      render json: { "error": e.message }
+      error_response(e.message)
     end
   end
   
   def login_with_password
     identity = search_for_password_identity(login_params)
     if (not identity)
-      render json: { error: "E-Mail not found" }, status: :unauthorized
-      return
+      return error_response("E-Mail not found")
     end
 
     if (not identity.confirmed?)
-      render json:  { error: "Please confirm your e-mail" }, status: :unauthorized
-      return
+      return error_response("Please confirm your e-mail")
     end
 
     if (not identity.password_eql?(params[:password]))
-      render json: { error: "Wrong password" }, status: :unauthorized
-      return
+      return error_response("Wrong password")
     end
 
     set_identity(identity)

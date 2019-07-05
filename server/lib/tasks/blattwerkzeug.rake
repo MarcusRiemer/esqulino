@@ -91,4 +91,16 @@ namespace :blattwerkzeug do
       m.load_all_news
     end
   end
+
+  namespace :user do
+    desc 'Serialize all users to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_users
+    end
+
+    desc 'Serialize all users to their seed representation'
+    task :load_all => :environment do |t, args|
+      m.load_all_users
+    end
+  end
 end

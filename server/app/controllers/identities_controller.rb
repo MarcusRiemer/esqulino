@@ -54,10 +54,10 @@ class IdentitiesController < ApplicationController
         identity.set_password_all_with_user_id(permited_params[:password])
         api_response(user_information)
       else
-        render json: { error: "token expired" }, status: :unauthorized
+        error_response("token expired")
       end
     else 
-      render json: { error: "token not valid"}, status: :unauthorized
+      error_response("token not valid")
     end
   end
 
@@ -67,26 +67,23 @@ class IdentitiesController < ApplicationController
       identity.set_reset_token
       identity.save!
       IdentityMailer.reset_password(identity, request_locale).deliver
-    else 
-      render json: { error: "e-mail not found"}, status: :unauthorized
+    else
+      error_response("e-mail not found") 
     end
   end
 
   def send_verify_email
     identity = search_for_password_identity(mail_permit_param)
     if (not identity) then
-      render json: { error: "e-mail not found"}, status: :unauthorized
-      return
+      return error_response("e-mail not found")
     end
 
     if identity.confirmed?
-      render json: { error: "e-mail already confirmed"}, status: :unauthorized
-      return
+      return error_response("e-mail already confirmed")
     end
 
     if (not identity.can_send_verify_mail?)
-      render json: { error: "You need to wait for #{identity.waiting_time} minutes"  }, status: :unauthorized
-      return
+      return error_response("You need to wait for #{identity.waiting_time} minutes")
     end
 
     identity.set_waiting_time()
@@ -118,7 +115,7 @@ class IdentitiesController < ApplicationController
       sign_in
       redirect_to "/"
     else
-      render json: { error: "Doesnt found an e-mail for your token" }, status: :unauthorized
+      error_response("No valid e-email found.")
     end
   end
 
@@ -133,11 +130,11 @@ class IdentitiesController < ApplicationController
             IdentityMailer.changed_password(identity).deliver
             api_response(user_information)
           else
-            render json: { error: "current password is wrong"}, status: :unauthorized
+            error_response("current password is wrong")
           end
         end
       else
-        render json: { error: "no vailable identity found"}, status: :unauthorized
+        error_response("no vailable identity found")
       end
     end
   end

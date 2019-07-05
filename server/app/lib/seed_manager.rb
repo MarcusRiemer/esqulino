@@ -133,6 +133,20 @@ class SeedManager
   end
 
   #############################################
+  # User
+  #############################################
+
+  # Stores all users
+  def store_all_users
+    Seed::UserSeed.store_all
+  end
+
+  # Loads all users that are available as users
+  def load_all_users
+    Seed::UserSeed.load_all
+  end
+
+  #############################################
   # Programming Languages
   #############################################
 
