@@ -69,6 +69,7 @@ group :development, :test do
 
   # Generate code coverage reports
   gem 'simplecov', '~> 0.16'
+  gem 'simplecov-cobertura'
 
   # Factories seem to be so much nicer then fixtures
   gem 'factory_bot_rails', '~> 4.11'
