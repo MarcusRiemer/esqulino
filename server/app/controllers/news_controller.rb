@@ -2,6 +2,10 @@ class NewsController < ApplicationController
   include LocaleHelper
   include JsonSchemaHelper
 
+  before_action :authenticate_user!
+
+  skip_before_action :authenticate_user!, :only => [:index]
+
   # All news that are visible on the frontpage
   def index
     render :json => News.scope_single_language(request_locale)
@@ -33,6 +37,7 @@ class NewsController < ApplicationController
     news = News.find(params[:id])
     request_data = ensure_request("NewsUpdateDescription", request.body.read)
 
+    authorize news
     # TODO: This is a general pattern, it could be moved to the application controller
     news.assign_attributes(request_data)
     if news.save
@@ -46,6 +51,11 @@ class NewsController < ApplicationController
   # Creation of single news
   def create
     request_data = ensure_request("NewsUpdateDescription", request.body.read)
+
+    request_data[:user] = @current_user
+
+    authorize News, :create?
+
     news = News.create(request_data)
 
     render :json => news.to_full_api_response
@@ -54,6 +64,7 @@ class NewsController < ApplicationController
   # Deletion of a single news
   def delete
     news = News.all.find(params[:id])
+    authorize news
     news.destroy
   end
 

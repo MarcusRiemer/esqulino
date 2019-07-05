@@ -182,6 +182,8 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pundit (2.0.1)
+      activesupport (>= 3.0.0)
     rack (2.0.6)
     rack-cors (1.0.3)
     rack-test (1.1.0)
@@ -217,6 +219,7 @@ GEM
       ffi (~> 1.0)
     redcarpet (3.4.0)
     regexp_parser (1.2.0)
+    rolify (5.2.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -299,9 +302,11 @@ DEPENDENCIES
   omniauth-identity (~> 1.1.1)
   pg
   pry (~> 0.12.2)
+  pundit
   rack-cors
   rails (= 5.2.2)
   redcarpet (~> 3.4)
+  rolify
   rspec-rails (~> 3.8)
   rspec_junit_formatter
   ruby-filemagic (~> 0.7)

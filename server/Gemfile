@@ -36,7 +36,6 @@ gem 'omniauth', '~> 1.9.0'
 # Github as provider
 gem 'omniauth-github'
 
-
 # Google as provider
 gem 'omniauth-google-oauth2'
 
@@ -45,6 +44,13 @@ gem 'omniauth-identity', '~> 1.1.1'
 
 # Markdown for your ActionMailer generated emails 
 gem 'maildown'
+
+# Build a simple, robust and scaleable authorization system.
+gem "pundit"
+
+# Role library without any authorization 
+gem "rolify"
+
 
 ############################
 # Rails dependencies

@@ -3,6 +3,7 @@ require 'bcrypt'
 
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
+  include Pundit
 
   # Handle all errors that are specifc to our parts of the code
   rescue_from EsqulinoError, :with => :handle_internal_exception
@@ -23,22 +24,26 @@ class ApplicationController < ActionController::API
   end
 
   def signed_in?
-    return !@current_user.nil?
+    return (not @current_user.eql? User.guest)
+  end
+
+  def current_user
+    return @current_user
   end
 
   def authenticate_user!
     token = request.cookies['JWT-TOKEN']
     if token
       begin
-        token_decoded = Auth.decode(token)
-        @current_user = User.find(token_decoded[:user_id].to_s)
+        @token_decoded = Auth.decode(token)
+        @current_user = User.find(@token_decoded[:user_id].to_s)
       rescue ActiveRecord::RecordNotFound => e
         render json: { error: e.message }, status: :unauthorized
       rescue JWT::DecodeError => e
         render json: { error: e.message }, status: :unauthorized
       end
     else
-      @current_user = nil
+      @current_user = User.guest
     end
   end
 
