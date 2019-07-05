@@ -1,10 +1,5 @@
 /* Any editor that works with an AST */
 .ast {
-    /* Some space to the toolbar */
-    .content {
-        margin-top: 5px;
-    }
-
     /* The "hey, you should start programming by dragging something here"-notice */
     .empty-tree {
         border: 4px dashed blue;
