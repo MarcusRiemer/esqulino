@@ -13,7 +13,7 @@ end
 gem 'sqlite3'
 
 # Validating requests against a schema
-gem 'json_schemer', '~> 0.1'
+gem 'json_schemer', '~> 0.2'
 
 # Used to check the filetypes of uploaded files
 gem 'ruby-filemagic', '~> 0.7'
