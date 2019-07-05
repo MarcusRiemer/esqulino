@@ -78,10 +78,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
     it 'Creates a new block language with model properties' do
       g = FactoryBot.create(:grammar)
-
-      post "/api/block_languages",
-           :headers => json_headers,
-           :params => {
+      block_lang_model = {
              "name" => "Spec Lang",
              "sidebars" => [
                {
@@ -96,7 +93,7 @@ RSpec.describe BlockLanguagesController, type: :request do
                            "language" => "spec",
                            "name" => "block"
                          },
-                         displayName: "Block #1",
+                         "displayName" => "Block #1",
                        }
                      ]
                    }
@@ -113,9 +110,14 @@ RSpec.describe BlockLanguagesController, type: :request do
                  "visual" => []
                }
              ],
+             "rootCssClasses" => ["a", "b"],
              "grammarId" => g.id,
              "defaultProgrammingLanguageId" => g.programming_language_id
-           }.to_json
+           }
+
+      post "/api/block_languages",
+           :headers => json_headers,
+           :params => block_lang_model.to_json
 
       expect(response.content_type).to eq "application/json"
 
@@ -124,6 +126,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(200)
 
       expect(json_data).to validate_against "BlockLanguageDescription"
+      expect(json_data.except("id")).to eq block_lang_model
     end
 
     describe 'PUT /api/block_languages/:id' do

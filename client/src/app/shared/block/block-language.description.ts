@@ -170,7 +170,12 @@ export interface BlockLanguageDocument {
   /**
    * Information on how to (re)-generate this block language.
    */
-  localGeneratorInstructions?: BlockLanguageGeneratorDocument
+  localGeneratorInstructions?: BlockLanguageGeneratorDocument;
+
+  /**
+   * CSS classes that should be applied at the root
+   */
+  rootCssClasses?: string[];
 }
 
 /**
@@ -178,4 +183,9 @@ export interface BlockLanguageDocument {
  */
 export interface BlockLanguageListResponseDescription extends BlockLanguageListDescription {
   generated: boolean
+}
+
+
+export function isBlockLanguageDescription(obj: any): obj is BlockLanguageDescription {
+  return ("id" in obj && "name" in obj && "defaultProgrammingLanguageId" in obj);
 }

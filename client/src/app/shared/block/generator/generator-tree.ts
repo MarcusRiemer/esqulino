@@ -24,22 +24,16 @@ export function convertGrammarTreeInstructions(
     sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
   };
 
-  // Convert each node that is mentioned in the grammar to its own appropriate
-  // block description.
-  const mapTypeDescription = (name: string, typeDesc: NodeTypeDescription) => {
-    switch (typeDesc.type) {
-      case "concrete": return visualizeNode(d, name, typeDesc);
-      case "oneOf": return visualizeOneOf(d, name, typeDesc);
-    }
-  };
-
-  // Create a visual representation for each type
-  const mappedNodes = Object.entries(g.types).map(([name, typeDesc]): EditorBlockDescription => {
-    return ({
-      describedType: { languageName: g.technicalName, typeName: name },
-      visual: [mapTypeDescription(name, typeDesc)]
+  // Create a visual representation for each concrete type
+  const mappedNodes = Object.entries(g.types)
+    .filter(([_, typeDesc]) => typeDesc.type === "concrete")
+    .map(([name, typeDesc]): EditorBlockDescription => {
+      return ({
+        describedType: { languageName: g.technicalName, typeName: name },
+        // typeDesc must be a concrete description here
+        visual: [visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription)]
+      });
     });
-  });
 
   toReturn.editorBlocks = mappedNodes;
 
@@ -86,13 +80,12 @@ export function visualizeChildGroup(
 ): VisualBlockDescriptions.ConcreteBlock {
 
   return ({
-    blockType: "block",
-    direction: "vertical",
-    breakAfter: true,
+    blockType: "container",
+    direction: "horizontal",
     children: [
       {
         blockType: "constant",
-        text: `${t.name} : [`
+        text: `children "${t.name}" : [`
       },
       {
         blockType: "iterator",
@@ -112,32 +105,18 @@ export function visualizeProperty(
   t: NodePropertyTypeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
   return ({
-    blockType: "block",
+    blockType: "container",
     direction: "horizontal",
-    children: [
-      {
-        blockType: "constant",
-        text: `prop ${t.name}: `
-      },
-      {
-        blockType: "interpolated",
-        property: t.name
-      }
-    ]
-  });
-}
-
-export function visualizeOneOf(
-  d: TreeBlockLanguageGeneratorDescription,
-  name: string,
-  t: NodeOneOfTypeDescription
-): VisualBlockDescriptions.ConcreteBlock {
-  return ({
-    blockType: "block",
-    direction: "horizontal",
-    children: [
-      { blockType: "constant", text: name },
-      { blockType: "constant", text: "::=" }
-    ]
+    children:
+      [
+        {
+          blockType: "constant",
+          text: `prop "${t.name}": `
+        },
+        {
+          blockType: "interpolated",
+          property: t.name
+        }
+      ]
   });
 }

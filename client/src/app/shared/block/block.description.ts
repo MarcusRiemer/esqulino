@@ -61,6 +61,13 @@ export namespace VisualBlockDescriptions {
   }
 
   /**
+   * An element that exists merely for layout purposes, think "div" or "span"
+   */
+  export interface EditorContainer extends EditorLayout {
+    blockType: "container"
+  }
+
+  /**
    * Describes how a certain block should be represented. Blocks are
    * always draggable and also possible drop targets.
    */
@@ -132,7 +139,7 @@ export namespace VisualBlockDescriptions {
     excludedErrors?: string[];
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
+  export type ConcreteBlock = EditorContainer | EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
 
   export const DefaultDropTargetProperties: DropTargetProperties = {}
 

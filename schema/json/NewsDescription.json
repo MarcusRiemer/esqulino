@@ -36,9 +36,12 @@
         }
       },
       "required": [
+        "id",
         "title",
         "text",
-        "publishedFrom"
+        "publishedFrom",
+        "createdAt",
+        "updatedAt"
       ],
       "type": "object"
     }

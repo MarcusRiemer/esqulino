@@ -1,6 +1,6 @@
 import { Tree, LanguageDefinition, Language, NodeTypeDescription } from '../syntaxtree';
 
-import { BlockLanguageDescription } from './block-language.description'
+import { BlockLanguageDescription, isBlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'
 import { VisualBlockDescriptions } from './block.description'
 
@@ -102,6 +102,10 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
 }
 
 describe("Block Language", () => {
+  it("identifies objects correctly", () => {
+    expect(isBlockLanguageDescription(langModelEmptyBlocks)).toBe(true);
+  });
+
   it("Loads correctly and hands out data", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
     const l = new Language(langEmptyBlocks);

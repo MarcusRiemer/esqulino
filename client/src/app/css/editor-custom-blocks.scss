@@ -1,0 +1,8 @@
+.block-outline editor-block-render-block {
+    border: 1px solid black;
+}
+
+.block-indent editor-block-render-block editor-block-render-block {
+    margin-left: 10px;
+    margin-right: 10px;
+}
