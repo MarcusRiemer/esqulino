@@ -6,7 +6,6 @@ import { BlockLanguageDocument } from '../block-language.description';
 import { VisualBlockDescriptions, EditorBlockDescription } from '../block.description';
 
 import { GrammarDocument, NodeConcreteTypeDescription, NodeTypeDescription, NodeOneOfTypeDescription, NodeAttributeDescription, NodePropertyTypeDescription, NodeChildrenGroupDescription } from '../../syntaxtree';
-import { __assign } from 'tslib';
 
 
 /**
@@ -25,11 +24,12 @@ export function convertGrammarTreeInstructions(
     sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
   };
 
-  // Calls appropriate function dependending on the type
+  // Convert each node that is mentioned in the grammar to its own appropriate
+  // block description.
   const mapTypeDescription = (name: string, typeDesc: NodeTypeDescription) => {
     switch (typeDesc.type) {
-      case "concrete": return convertNode(d, name, typeDesc);
-      case "oneOf": return convertOneOf(d, name, typeDesc);
+      case "concrete": return visualizeNode(d, name, typeDesc);
+      case "oneOf": return visualizeOneOf(d, name, typeDesc);
     }
   };
 
@@ -49,101 +49,85 @@ export function convertGrammarTreeInstructions(
 /**
  * Converts this whole node (and its attributes) to a JSON-inspired representation.
  */
-export function convertNode(
+export function visualizeNode(
   d: TreeBlockLanguageGeneratorDescription,
   name: string,
   t: NodeConcreteTypeDescription,
 ): VisualBlockDescriptions.ConcreteBlock {
-  const attributes = t.attributes.map(a => convertNodeAttribute(d, a));
+  const attributes = t.attributes.map(a => visualizeNodeAttributes(d, a));
 
   return ({
     blockType: "block",
-    direction: "horizontal",
+    direction: "vertical",
     children: [
-      { blockType: "constant", text: name },
-      { blockType: "constant", text: "{" },
+      { blockType: "constant", text: `node "${name}" {` },
       ...attributes,
       { blockType: "constant", text: "}" }
     ]
   });
 }
 
-export function convertNodeAttribute(
+export function visualizeNodeAttributes(
   d: TreeBlockLanguageGeneratorDescription,
   t: NodeAttributeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
   switch (t.type) {
     case "property":
-      return convertProperty(d, t);
+      return visualizeProperty(d, t);
     case "sequence":
     case "allowed":
-      return convertChildGroup(d, t);
+      return visualizeChildGroup(d, t);
   }
 }
 
-export function convertChildGroup(
+export function visualizeChildGroup(
   d: TreeBlockLanguageGeneratorDescription,
   t: NodeChildrenGroupDescription
 ): VisualBlockDescriptions.ConcreteBlock {
 
   return ({
     blockType: "block",
-    direction: "horizontal",
+    direction: "vertical",
+    breakAfter: true,
     children: [
       {
         blockType: "constant",
-        text: t.type
+        text: `${t.name} : [`
+      },
+      {
+        blockType: "iterator",
+        childGroupName: t.name,
+        direction: "vertical"
       },
       {
         blockType: "constant",
-        text: " "
+        text: `]`
       },
-      {
-        blockType: "constant",
-        text: t.name
-      }
     ]
   });
 }
 
-export function convertProperty(
+export function visualizeProperty(
   d: TreeBlockLanguageGeneratorDescription,
   t: NodePropertyTypeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
-
-  const optional: VisualBlockDescriptions.EditorConstant[]
-    = t.isOptional ? [{ blockType: "constant", text: "?" }] : [];
-
   return ({
     blockType: "block",
     direction: "horizontal",
     children: [
       {
         blockType: "constant",
-        text: "prop "
+        text: `prop ${t.name}: `
       },
       {
-        blockType: "constant",
-        text: t.name
-      },
-      ...optional,
-      {
-        blockType: "constant",
-        text: " {"
-      },
-      {
-        blockType: "constant",
-        text: t.base
-      },
-      {
-        blockType: "constant",
-        text: "}"
+        blockType: "interpolated",
+        property: t.name
       }
     ]
   });
 }
 
-export function convertOneOf(
+export function visualizeOneOf(
   d: TreeBlockLanguageGeneratorDescription,
   name: string,
   t: NodeOneOfTypeDescription

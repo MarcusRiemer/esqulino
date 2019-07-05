@@ -20,7 +20,7 @@ describe("Tree BlockLanguage Generator", () => {
       const r = convertGrammarTreeInstructions({ "type": "tree" }, grammar);
 
       expect(r.editorBlocks).not.toEqual([]);
-      expect(readableConstants(r.editorBlocks[0].visual)).toEqual("<block>t1{}</block>");
+      expect(readableConstants(r.editorBlocks[0].visual)).toEqual(`<block>node "t1" {}</block>`);
       expect(r.editorBlocks[0]).toEqual(jasmine.objectContaining({
         describedType: { languageName: "g1", typeName: "t1" },
       }));
@@ -49,7 +49,7 @@ describe("Tree BlockLanguage Generator", () => {
       expect(r.editorBlocks)
         .not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual))
-        .toEqual("<block>t1{<block>prop p1 {string}</block>}</block>");
+        .toEqual(`<block>node "t1" {<block>prop p1: </block>}</block>`);
       expect(r.editorBlocks[0])
         .toEqual(jasmine.objectContaining({ describedType: { languageName: "g1", typeName: "t1" } }));
     });
