@@ -71,6 +71,10 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/identities/send_verify_email`)
   }
 
+  getMayPerformUrl(): string {
+    return (`${this._apiBaseUrl}/user/may_perform`)
+  }
+
   /**
    * Retrieves a specific schema
    */

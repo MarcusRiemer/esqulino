@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ServerDataService } from '../shared';
 import { MultilingualString } from './../shared/multilingual-string.description';
 import { locales } from '../shared/change-language.component';
+import { PerformDescription } from '../shared/may-perform.description';
 @Component({
   templateUrl: './templates/news.html'
 })
@@ -21,6 +22,11 @@ export class AdminNewsListComponent {
     { name: 'single', description: 'Einfacher Bearbeitungsmodus' },
     { name: 'translation', description: 'Übersetzungsmodus' },
   ]
+
+  readonly mayPerformCreate: PerformDescription = {
+    resourceType: "News",
+    policyAction: "create"
+  }
 
   public adminNewsList = this._serverData.getAdminNewsList.value;
   public searchList = this.adminNewsList;

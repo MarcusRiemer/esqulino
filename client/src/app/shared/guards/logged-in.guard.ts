@@ -1,7 +1,8 @@
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Injectable } from '@angular/core';
 
 import { UserService } from '../auth/user.service';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class LoggedInGuard implements CanActivate {
@@ -10,18 +11,12 @@ export class LoggedInGuard implements CanActivate {
     private _router: Router
   ) { }
 
-  // TODO: find out why this is not the same as
-  //       this._userService.isLoggedIn$.toPromise();
-  private _userStatus: Promise<boolean> = new Promise<boolean>((resolve, reject) => {
-    this._userService.isLoggedIn$.subscribe(
-      loggedIn => resolve(loggedIn),
-      _ => reject(false)
-    )
-  });
-
-  public async canActivate() {
+  public async canActivate(): Promise<true| UrlTree> {
     console.log(`LoggedIn Guard -> ?`);
-    const loggedIn = await this._userStatus;
+    const loggedIn = await this._userService.isLoggedIn$
+                                            .pipe(take(1))
+                                            .toPromise()
+
     console.log(`LoggedIn Guard -> ${loggedIn}`);
 
     if (!loggedIn)

@@ -35,8 +35,8 @@ export class DisplayAllLinkedProvidersComponent {
     // or there existing an another provider with the same mail as the primary,
     // delete the clicked identity
     if (
-      identity.email !== this.primary
-      || this.anotherProviderWithSameEmail(identity) && identity.email === this.primary
+        identity.email !== this.primary && this.primary !== undefined
+     || this.anotherProviderWithSameEmail(identity) && identity.email === this.primary
     ) {
       if (this.providers.length > 1) {
         this._userService.deleteEmail$(identity.id).subscribe();

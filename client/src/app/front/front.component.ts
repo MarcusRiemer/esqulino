@@ -1,4 +1,5 @@
-import { Component } from '@angular/core'
+import { SideNavService } from './../shared/side-nav.service';
+import { Component, OnInit } from '@angular/core'
 
 import { NavItem } from '../shared/nav-interfaces';
 
@@ -69,7 +70,8 @@ export const indexItems: NavItem[] = [
       de: "Administration",
       en: "Administration",
     },
-    requireLogin: true
+    requireLogin: true,
+    requireRoles: ["user"],
   },
   {
     type: "link",
@@ -79,7 +81,8 @@ export const indexItems: NavItem[] = [
     },
     route: ["/admin"],
     icon: "puzzle-piece",
-    requireLogin: true
+    // requireLogin: true,
+    // requireRoles: ["user"],
   },
   {
     type: "external",
@@ -99,9 +102,16 @@ export const indexItems: NavItem[] = [
 @Component({
   templateUrl: 'templates/index.html',
 })
-export class FrontComponent {
+export class FrontComponent implements OnInit {
+  constructor(
+    private _sideNavService: SideNavService
+  ) {}
   /**
    * All items that need to be shown in the general navigation
    */
   readonly indexItems = indexItems;
+
+  public ngOnInit(): void {
+    this._sideNavService.newSideNav(this.indexItems);
+  }
 }
