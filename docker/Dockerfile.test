@@ -1,6 +1,11 @@
 FROM marcusriemer/blockwerkzeug:base
 LABEL name="esqulino test image"
 
+ARG USER_UID
+ARG USER_GID
+ARG TPUT_BIN
+ARG DATABASE_HOST
+
 ENV CHROME_BIN="chromium"
 
 RUN pacman --noconfirm -Sy $BUILD_PACKAGES $SERVER_PACKAGES $CLIENT_PACKAGES $TEST_PACKAGES
