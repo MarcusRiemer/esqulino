@@ -1,0 +1,18 @@
+--- !ruby/object:User
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: display_name
+  value_before_type_cast: Guest
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-07-05 10:43:57.432336'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-07-05 10:43:57.432336'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: email
+new_record: false
+active_record_yaml_version: 2
