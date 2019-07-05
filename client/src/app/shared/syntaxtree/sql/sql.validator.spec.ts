@@ -189,8 +189,9 @@ describe(`Specialized SQL Validator`, () => {
     expect(context.errors[2].code).toEqual("DUPLICATE_TABLE_NAME", 2);
   });
 
-  // Deactivated for the moment, error doesn't seem to be very helpful
-  xit(`Error: AGGREGATION_WITHOUT_GROUP_BY`, () => {
+  it(`Error: AGGREGATION_WITHOUT_GROUP_BY`, () => {
+    pending("Deactivated for the moment, error doesn't seem to be very helpful");
+
     const context = new ValidationContext(specContext());
     const sqlValidator = new SqlValidator();
 

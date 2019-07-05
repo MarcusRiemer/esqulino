@@ -65,7 +65,7 @@ export class EditBlockLanguageService {
   /**
    * @return The currently edited block language
    */
-  get editedSubject(): Readonly<BlockLanguageDescription> {
+  get editedSubject(): BlockLanguageDescription {
     return (this._editedSubject.value);
   }
 

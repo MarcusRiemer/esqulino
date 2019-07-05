@@ -24,6 +24,8 @@ export class BlockRootComponent {
     return (this._currentCodeResource.currentResource);
   }
 
+
+
   /**
    * When something draggable enters the empty area a program may start with,
    * there is not actually a node that could be referenced.

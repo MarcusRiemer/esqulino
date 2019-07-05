@@ -95,6 +95,10 @@
                                (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
+  <div *ngSwitchCase="'container'">
+    Container
+  </div>
+
   <!-- Something is broken, display an error message -->
   <div *ngSwitchDefault>
     Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar

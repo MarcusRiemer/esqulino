@@ -78,7 +78,13 @@ class BlockLanguagesController < ApplicationController
     # Allowing an array of arbitrary objects seems to be unsupported
     # by the strong parameters API :(
     params
-      .to_unsafe_hash.slice(:sidebars, :editorBlocks, :editorComponents, :localGeneratorInstructions)
+      .to_unsafe_hash.slice(
+        :rootCssClasses,
+        :sidebars,
+        :editorBlocks,
+        :editorComponents,
+        :localGeneratorInstructions
+      )
   end
 
 end

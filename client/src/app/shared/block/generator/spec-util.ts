@@ -9,6 +9,7 @@ export function readableConstants(all: VisualBlockDescriptions.ConcreteBlock[]):
         break;
       case "block":
       case "iterator":
+      case "container":
         toReturn += `<${b.blockType}>` + readableConstants(b.children) + `</${b.blockType}>`;
         break;
     }
