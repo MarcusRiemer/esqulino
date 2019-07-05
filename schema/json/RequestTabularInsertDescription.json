@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/RequestTabularInsertDescription",
-  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "RawTableDataDescription": {
       "description": "At the lowest level all tabular data is simply represented by\na string array for each row.",
