@@ -31,5 +31,8 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000002
 new_record: false
 active_record_yaml_version: 2
