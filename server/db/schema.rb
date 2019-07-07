@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_05_091304) do
+ActiveRecord::Schema.define(version: 2019_07_07_133836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -129,8 +129,10 @@ ActiveRecord::Schema.define(version: 2019_07_05_091304) do
     t.string "slug"
     t.string "api_version"
     t.uuid "default_database_id"
+    t.uuid "user_id"
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

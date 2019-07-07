@@ -4,6 +4,7 @@ require_dependency "util" # Checking whether Strings are UUIDs
 # Currently every project is assumed to be somewhat web-centric
 # (using databases and HTML), but this is not set in stone.
 class Project < ApplicationRecord
+  belongs_to :user
   # Source citations for projects
   has_many :project_sources, :dependent => :destroy
   # The actual code that is part of this project
@@ -175,5 +176,10 @@ class Project < ApplicationRecord
   # Returns a nicely readable representation of id, slug and name
   def readable_identification
     "\"#{name}\" (#{slug}, #{id})"
+  end
+
+  # Checks if the passed user is the owner of this project
+  def owner?(user)
+    return user.eql? self.user
   end
 end

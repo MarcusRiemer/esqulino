@@ -5,6 +5,7 @@ FactoryBot.define do
     description { "Generated on the fly, used for tests" }
     index_page_id { nil }
     public { false }
+    association :user
 
     factory :project_with_default_database do
       after :create do |project|

@@ -2,7 +2,7 @@ class User < ApplicationRecord
   include IdentityHelper
 
   rolify strict: true
-
+  has_many :projects
   has_many :identities
   has_many :news
 
