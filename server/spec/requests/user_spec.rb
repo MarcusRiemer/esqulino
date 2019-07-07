@@ -176,4 +176,27 @@ RSpec.describe "user controller" do
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
   end
+
+  it "can perform with multiple objects" do
+    identity = create(:identity_provider, :existing)
+    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+
+    post '/api/user/may_perform',
+      :headers => json_headers,
+      :params => {
+        list: [
+          { 
+            resourceType: "News",
+            policyAction: "create"
+          },
+          { 
+            resourceType: "Project",
+            policyAction: "create"
+          }
+        ]
+      }.to_json
+
+    json_data = JSON.parse(response.body)
+    expect(json_data).to eq("list" => [false, true])
+  end
 end

@@ -1,4 +1,4 @@
-class NewsPolicy < ApplicationPolicy
+class NewsPolicy
   attr_reader :user, :news
 
   def initialize(user, news)
@@ -7,14 +7,14 @@ class NewsPolicy < ApplicationPolicy
   end
 
   def update?
-    user.owner_of?(news) || user.has_role?(:admin) || user.has_strict_role?(:news_editor, news)
+    user.owner_of?(news) || user.is_admin? || user.has_role?(:news_editor, news)
   end
 
   def create?
-    user.has_role? :admin
+    user.is_admin?
   end
-#
+
   def delete?
-    user.has_role? :admin || user.owner_of?(news)
+    user.is_admin? || user.owner_of?(news)
   end
 end

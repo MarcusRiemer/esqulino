@@ -18,11 +18,10 @@ class UserController < ApplicationController
   def may_perform_params
     params
       .permit([:list => [:resourceType, :resourceId, :policyAction]])
-      
   end
 
   def transform
-    may_perform_params[:list].transform_keys{ |k| k.underscore }
+    may_perform_params[:list]
   end
 
   def index
@@ -114,17 +113,21 @@ class UserController < ApplicationController
   end
 
   def may_perform
-    permited_params = transform
-    resource_type = permited_params[:resource_type].to_s
-    resource_id = permited_params[:resource_id].to_s
-    policy_action = permited_params[:policy_action].to_s + "?"
-
+    to_response = []
+    permited_params = may_perform_params
     begin
-      if (not resource_id.eql? "") then
-        resource = resource_type.constantize.find_by(id: resource_id)
+      permited_params[:list].each do |k|
+        resource_type = k[:resourceType].to_s
+        resource_id = k[:resourceId].to_s
+        policy_action = k[:policyAction].to_s + "?"
+  
+        if (not resource_id.eql? "") then
+          resource = resource_type.constantize.find_by(id: resource_id)
+        end
+        policy = "#{resource_type}Policy".constantize.new(current_user, resource)
+        to_response << policy.send(policy_action)
       end
-      policy = "#{resource_type}Policy".constantize.new(current_user, resource)
-      api_response({perform: policy.send(policy_action)})
+      api_response({list: to_response})
     rescue => exception
       error_response("Something got wrong")
     end
