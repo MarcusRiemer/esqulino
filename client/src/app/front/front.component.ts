@@ -71,7 +71,7 @@ export const indexItems: NavItem[] = [
       en: "Administration",
     },
     requireLogin: true,
-    requireRoles: ["user"],
+    requireRoles: ["admin"],
   },
   {
     type: "link",
@@ -81,8 +81,8 @@ export const indexItems: NavItem[] = [
     },
     route: ["/admin"],
     icon: "puzzle-piece",
-    // requireLogin: true,
-    // requireRoles: ["user"],
+    requireLogin: true,
+    requireRoles: ["admin"],
   },
   {
     type: "external",

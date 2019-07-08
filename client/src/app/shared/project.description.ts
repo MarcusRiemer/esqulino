@@ -93,6 +93,7 @@ export interface ProjectListDescription extends ApiVersion {
   indexPageId?: string
   createdAt?: string
   updatedAt?: string
+  userId?: string
 }
 
 /**

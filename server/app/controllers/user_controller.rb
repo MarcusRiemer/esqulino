@@ -16,12 +16,9 @@ class UserController < ApplicationController
   end
 
   def may_perform_params
-    params
-      .permit([:list => [:resourceType, :resourceId, :policyAction]])
-  end
-
-  def transform
-    may_perform_params[:list]
+    permited = params.permit([:list => [:resourceId, :resourceType, :policyAction]])
+    permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
+    return permited
   end
 
   def index
@@ -117,19 +114,26 @@ class UserController < ApplicationController
     permited_params = may_perform_params
     begin
       permited_params[:list].each do |k|
-        resource_type = k[:resourceType].to_s
-        resource_id = k[:resourceId].to_s
-        policy_action = k[:policyAction].to_s + "?"
+        resource_type = k[:resource_type].to_s
+        resource_id = k[:resource_id].to_s
+        policy_action = k[:policy_action].to_s + "?"
   
         if (not resource_id.eql? "") then
           resource = resource_type.constantize.find_by(id: resource_id)
         end
         policy = "#{resource_type}Policy".constantize.new(current_user, resource)
-        to_response << policy.send(policy_action)
+        to_response << {"perform" => policy.send(policy_action)}
       end
-      api_response({list: to_response})
+      api_array_response(to_response)
     rescue => exception
       error_response("Something got wrong")
     end
+  end
+
+
+  private 
+
+  def api_array_response(to_response)
+    render json: to_response.map { |k| k.transform_keys! { |v| v.underscore }}, status: :ok
   end
 end

@@ -15,6 +15,6 @@ class ProjectPolicy
   end
 
   def delete?
-    user.owner_of?(project) || (user.has_role?(:admin))
+    user.owner_of?(project) || user.has_role?(:admin)
   end
 end

@@ -1,4 +1,3 @@
-import { PerformDataService } from './serverdata/perform-data.service';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -172,7 +171,6 @@ export class SharedAppModule {
         LanguageService,
         ToolbarService,
         SideNavService,
-        PerformDataService,
         ...dataServices,
         LoggedInGuard,
         IsUserGuard,

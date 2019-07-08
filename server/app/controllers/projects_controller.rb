@@ -3,6 +3,8 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
+  before_action :authenticate_user!
+
   # Lists all projects
   def index
     render json: Project.only_public.map{|p| p.to_list_api_response}
@@ -21,31 +23,43 @@ class ProjectsController < ApplicationController
   # on the disk. Thankfully the Project-model takes care of the whole
   # filesystem stuff.
   def create
-    project = Project.new(project_creation_params)
-
-    if project.save
-      ProjectMailer.with(project: project).created_admin.deliver_later
-
-      render json: { 'id' => project.slug }, :status => 200
-    else
-      render :json => { 'errors' => project.errors }, :status => 400
+    begin
+      authorize Project, :create?
+      creation_params = append_current_user(project_creation_params)
+      project = Project.new(creation_params)
+  
+      if project.save
+        ProjectMailer.with(project: project).created_admin.deliver_later
+  
+        render json: { 'id' => project.slug }, :status => 200
+      else
+        render :json => { 'errors' => project.errors }, :status => 400
+      end
+    rescue Pundit::NotAuthorizedError => e
+      error_response("Please log in")
     end
   end
 
   # Update an existing project.
   def update
-    ensure_write_access do
+    begin
+      authorize current_project
       current_project.update project_update_params # Simple properties
       current_project.update project_used_block_languages_params # Used block languages
 
       render json: current_project.to_project_api_response
+    rescue Pundit::NotAuthorizedError => e
+      error_response("You need the permission")
     end
   end
 
   # Destroy an existing project and all of its associated data
   def destroy
-    ensure_write_access do
+    begin
+      authorize current_project
       current_project.destroy
+    rescue Pundit::NotAuthorizedError => e
+      error_response("You need the permission")
     end
   end
 
@@ -59,6 +73,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def append_current_user(hash)
+    hash["user"] = @current_user
+    return hash
+  end
 
   # These attributes are mandatory when a project is created
   def project_creation_params

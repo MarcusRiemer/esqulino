@@ -17,8 +17,14 @@ export class UserService {
     private _snackBar: MatSnackBar
   ) {}
 
+  public performIndex: number = 0;
+
   public userData$ = this._serverData.getUserData;
   public identities$ = this._serverData.getIdentities;
+
+  public resetPerformIndex(): void {
+    this.performIndex = 0;
+  }
 
   public readonly isLoggedIn$ = this.userData$.value.pipe(
     map(u => u.loggedIn)
@@ -46,9 +52,10 @@ export class UserService {
     )
   }
 
-  public mayPerform$(data: PerformDescription[]): Observable<MayPerformDescription> {
+  public mayPerform$(data: PerformDescription): Observable<MayPerformDescription[]> {
     return this._serverData.mayPerform$(data).pipe(
-      first()
+      first(),
+      tap(_ => this.performIndex++)
     )
   }
 

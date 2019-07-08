@@ -8,24 +8,24 @@ RSpec.describe "News-Policy" do
   context "as guest" do
     let(:user) { create(:user, :guest) }
 
-    it { should_not permit(:create)  }
-    it { should_not permit(:update)  }
+    it { should_not permit(:create) }
+    it { should_not permit(:update) }
     it { should_not permit(:delete) }
   end
 
   context "as user" do
     let(:user) { create(:user) }
 
-    it { should_not permit(:create)  }
-    it { should_not permit(:update)  }
+    it { should_not permit(:create) }
+    it { should_not permit(:update) }
     it { should_not permit(:delete) }
   end
 
   context "as admin" do
     let(:user) { create(:user, :admin) }
 
-    it { should permit(:create)  }
-    it { should permit(:update)  }
+    it { should permit(:create) }
+    it { should permit(:update) }
     it { should permit(:delete) }
   end
 

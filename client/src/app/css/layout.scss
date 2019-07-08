@@ -12,4 +12,10 @@
     .content, .admin {
         min-height: calc(100vh - (#{$toolbar-height} + #{$toolbar-margin-bottom}));
     }
+
+    side-nav-selector {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
 }

@@ -185,11 +185,11 @@ RSpec.describe "user controller" do
       :headers => json_headers,
       :params => {
         list: [
-          { 
+          {
             resourceType: "News",
             policyAction: "create"
           },
-          { 
+          {
             resourceType: "Project",
             policyAction: "create"
           }
@@ -197,6 +197,6 @@ RSpec.describe "user controller" do
       }.to_json
 
     json_data = JSON.parse(response.body)
-    expect(json_data).to eq("list" => [false, true])
+    expect(json_data).to eq([{"perform": false}, {"perform": true}])
   end
 end
