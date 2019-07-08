@@ -68,10 +68,25 @@ export class BlockRenderInputComponent {
   }
 
   /**
+   * @return True, if there is a non missing or blank value to display.
+   */
+  get hasValue() {
+    const val = this.currentValue;
+    return (!(val === undefined || val === null || val === ""));
+  }
+
+  /**
    * @return The value of the property in the tree.
    */
   get currentValue() {
     return (this.node.properties[this.visual.property]);
+  }
+
+  /**
+   * @return A representation of the value that is suited for "normal" display.
+   */
+  get currentDisplayValue() {
+    return this.currentValue.replace(/ /g, "␣");
   }
 
   /**
@@ -83,9 +98,6 @@ export class BlockRenderInputComponent {
 
   set currentlyEditing(value: boolean) {
     this._currentlyEditing = value;
-    if (this._currentlyEditing) {
-      //this._renderer.invokeElementMethod(this.input, "focus", []);
-    }
   }
 
   /**
@@ -94,7 +106,8 @@ export class BlockRenderInputComponent {
    * match the length of the edited value exactly.
    */
   get inputSize() {
-    return (Math.max(1, this.editedValue.length));
+    const value = this.editedValue || "";
+    return (Math.max(1, value.length));
   }
 
   /**
