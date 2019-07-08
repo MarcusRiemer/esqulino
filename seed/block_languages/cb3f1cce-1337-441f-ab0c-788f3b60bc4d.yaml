@@ -84,8 +84,7 @@ concise_attributes:
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
     "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text":
     "SELECT", "style": {"color": "#0000ff", "width": "9ch", "display": "inline-block"},
-    "blockType": "constant", "breakAfter": false}, {"style": {"display": "inline-block"},
-    "property": "distinct", "blockType": "input"}, {"blockType": "iterator", "direction":
+    "blockType": "constant", "breakAfter": false}, {"blockType": "iterator", "direction":
     "horizontal", "breakAfter": false, "wrapChildren": true, "childGroupName": "columns",
     "emptyDropTarget": true}], "blockType": "block", "direction": "horizontal", "breakAfter":
     false, "dropTarget": {}, "wrapChildren": false}], "describedType": {"typeName":
@@ -262,8 +261,7 @@ concise_attributes:
     "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
     ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-block"},
-    "property": "name", "blockType": "interpolated"}, {"style": {"display": "inline-block"},
-    "property": "alias", "blockType": "input"}], "blockType": "block", "direction":
+    "property": "name", "blockType": "interpolated"}], "blockType": "block", "direction":
     "horizontal", "breakAfter": false, "dropTarget": {}, "wrapChildren": true}], "describedType":
     {"typeName": "tableIntroduction", "languageName": "sql"}}, {"visual": [{"children":
     [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
@@ -348,7 +346,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-04 15:06:26.135792'
+  value_before_type_cast: '2019-07-08 14:04:09.385725'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
