@@ -19,65 +19,65 @@ concise_attributes:
     "displayName": "Knoten"}], "categoryCaption": "Grammatik"}]}], "editorBlocks":
     [{"visual": [{"children": [{"text": "node \"grammar\" {", "blockType": "constant"},
     {"children": [{"text": "prop \"name\": ", "blockType": "constant"}, {"property":
-    "name", "blockType": "interpolated"}], "blockType": "container", "direction":
-    "horizontal"}, {"children": [{"text": "children \"nodes\" : [", "blockType": "constant"},
-    {"blockType": "iterator", "direction": "vertical", "childGroupName": "nodes"},
-    {"text": "]", "blockType": "constant"}], "blockType": "container", "direction":
-    "horizontal"}, {"text": "}", "blockType": "constant"}], "blockType": "block",
-    "direction": "vertical"}], "describedType": {"typeName": "grammar", "languageName":
-    "MetaGrammar"}}, {"visual": [{"children": [{"text": "node \"nodeRef\" {", "blockType":
-    "constant"}, {"children": [{"text": "prop \"name\": ", "blockType": "constant"},
-    {"property": "name", "blockType": "interpolated"}], "blockType": "container",
-    "direction": "horizontal"}, {"text": "}", "blockType": "constant"}], "blockType":
-    "block", "direction": "vertical"}], "describedType": {"typeName": "nodeRef", "languageName":
-    "MetaGrammar"}}, {"visual": [{"children": [{"text": "node \"typedef\" {", "blockType":
-    "constant"}, {"children": [{"text": "prop \"name\": ", "blockType": "constant"},
-    {"property": "name", "blockType": "interpolated"}], "blockType": "container",
-    "direction": "horizontal"}, {"children": [{"text": "children \"attributes\" :
-    [", "blockType": "constant"}, {"blockType": "iterator", "direction": "vertical",
-    "childGroupName": "attributes"}, {"text": "]", "blockType": "constant"}], "blockType":
-    "container", "direction": "horizontal"}, {"text": "}", "blockType": "constant"}],
-    "blockType": "block", "direction": "vertical"}], "describedType": {"typeName":
-    "typedef", "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"text":
-    "node \"children\" {", "blockType": "constant"}, {"children": [{"text": "prop
-    \"name\": ", "blockType": "constant"}, {"property": "name", "blockType": "interpolated"}],
-    "blockType": "container", "direction": "horizontal"}, {"text": "}", "blockType":
-    "constant"}], "blockType": "block", "direction": "vertical"}], "describedType":
+    "name", "blockType": "input"}], "blockType": "container", "direction": "horizontal"},
+    {"children": [{"text": "children \"nodes\" : [", "blockType": "constant"}, {"blockType":
+    "iterator", "direction": "vertical", "childGroupName": "nodes"}, {"text": "]",
+    "blockType": "constant"}], "blockType": "container", "direction": "horizontal"},
+    {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
+    "describedType": {"typeName": "grammar", "languageName": "MetaGrammar"}}, {"visual":
+    [{"children": [{"text": "node \"nodeRef\" {", "blockType": "constant"}, {"children":
+    [{"text": "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
+    "input"}], "blockType": "container", "direction": "horizontal"}, {"text": "}",
+    "blockType": "constant"}], "blockType": "block", "direction": "vertical"}], "describedType":
+    {"typeName": "nodeRef", "languageName": "MetaGrammar"}}, {"visual": [{"children":
+    [{"text": "node \"typedef\" {", "blockType": "constant"}, {"children": [{"text":
+    "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
+    "input"}], "blockType": "container", "direction": "horizontal"}, {"children":
+    [{"text": "children \"attributes\" : [", "blockType": "constant"}, {"blockType":
+    "iterator", "direction": "vertical", "childGroupName": "attributes"}, {"text":
+    "]", "blockType": "constant"}], "blockType": "container", "direction": "horizontal"},
+    {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
+    "describedType": {"typeName": "typedef", "languageName": "MetaGrammar"}}, {"visual":
+    [{"children": [{"text": "node \"children\" {", "blockType": "constant"}, {"children":
+    [{"text": "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
+    "input"}], "blockType": "container", "direction": "horizontal"}, {"text": "}",
+    "blockType": "constant"}], "blockType": "block", "direction": "vertical"}], "describedType":
     {"typeName": "children", "languageName": "MetaGrammar"}}, {"visual": [{"children":
     [{"text": "node \"property\" {", "blockType": "constant"}, {"children": [{"text":
     "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
-    "interpolated"}], "blockType": "container", "direction": "horizontal"}, {"text":
-    "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
-    "describedType": {"typeName": "property", "languageName": "MetaGrammar"}}, {"visual":
-    [{"children": [{"text": "node \"terminal\" {", "blockType": "constant"}, {"children":
-    [{"text": "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
-    "interpolated"}], "blockType": "container", "direction": "horizontal"}, {"children":
+    "input"}], "blockType": "container", "direction": "horizontal"}, {"text": "}",
+    "blockType": "constant"}], "blockType": "block", "direction": "vertical"}], "describedType":
+    {"typeName": "property", "languageName": "MetaGrammar"}}, {"visual": [{"children":
+    [{"text": "node \"terminal\" {", "blockType": "constant"}, {"children": [{"text":
+    "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
+    "input"}], "blockType": "container", "direction": "horizontal"}, {"children":
     [{"text": "prop \"symbol\": ", "blockType": "constant"}, {"property": "symbol",
-    "blockType": "interpolated"}], "blockType": "container", "direction": "horizontal"},
+    "blockType": "input"}], "blockType": "container", "direction": "horizontal"},
     {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
     "describedType": {"typeName": "terminal", "languageName": "MetaGrammar"}}, {"visual":
     [{"children": [{"text": "node \"concreteNode\" {", "blockType": "constant"}, {"children":
     [{"text": "prop \"name\": ", "blockType": "constant"}, {"property": "name", "blockType":
-    "interpolated"}], "blockType": "container", "direction": "horizontal"}, {"children":
+    "input"}], "blockType": "container", "direction": "horizontal"}, {"children":
     [{"text": "children \"attributes\" : [", "blockType": "constant"}, {"blockType":
     "iterator", "direction": "vertical", "childGroupName": "attributes"}, {"text":
     "]", "blockType": "constant"}], "blockType": "container", "direction": "horizontal"},
     {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
     "describedType": {"typeName": "concreteNode", "languageName": "MetaGrammar"}}],
-    "rootCssClasses": ["block-outline", "block-indent"], "editorComponents": [{"componentType":
-    "block-root"}, {"componentType": "validator"}, {"componentType": "generated-code"}],
-    "localGeneratorInstructions": {"type": "tree", "staticSidebars": [{"type": "fixedBlocks",
-    "caption": "Meta", "categories": [{"blocks": [{"defaultNode": {"name": "grammar",
-    "children": {"nodes": [{"name": "concreteNode", "language": "MetaGrammar", "properties":
-    {"name": "root"}}]}, "language": "MetaGrammar"}, "displayName": "Leere Grammatik"},
-    {"defaultNode": {"name": "concreteNode", "language": "MetaGrammar", "properties":
-    {"name": "root"}}, "displayName": "Knoten"}], "categoryCaption": "Grammatik"}]}]}}'
+    "rootCssClasses": ["activate-indent", "activate-block-outline"], "editorComponents":
+    [{"componentType": "block-root"}, {"componentType": "validator"}, {"componentType":
+    "generated-code"}], "localGeneratorInstructions": {"type": "tree", "staticSidebars":
+    [{"type": "fixedBlocks", "caption": "Meta", "categories": [{"blocks": [{"defaultNode":
+    {"name": "grammar", "children": {"nodes": [{"name": "concreteNode", "language":
+    "MetaGrammar", "properties": {"name": "root"}}]}, "language": "MetaGrammar"},
+    "displayName": "Leere Grammatik"}, {"defaultNode": {"name": "concreteNode", "language":
+    "MetaGrammar", "properties": {"name": "root"}}, "displayName": "Knoten"}], "categoryCaption":
+    "Grammatik"}]}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-05-22 11:09:10.812796'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-05 13:43:31.66635'
+  value_before_type_cast: '2019-07-08 12:20:24.099477'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
