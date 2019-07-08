@@ -63,9 +63,10 @@ export namespace VisualBlockDescriptions {
   /**
    * An element that exists merely for layout purposes, think "div" or "span"
    */
-  export interface EditorContainer extends EditorLayout {
-    blockType: "container",
-    displayType?: "block" | "inline-block" | "inline"
+  export interface EditorContainer extends EditorBlockBase {
+    blockType: "container"
+    children?: ConcreteBlock[];
+    displayType?: "inline" | "block" | "inline-block" | "flex" | "inline-flex"
   }
 
   /**

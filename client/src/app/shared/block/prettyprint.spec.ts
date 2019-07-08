@@ -71,7 +71,7 @@ describe('BlockLanguage PrettyPrinter', () => {
     verifyFiles('013-block-iterator-empty-drop-target', prettyPrintBlockLanguage);
   });
 
-  it('013 Container: Two constants', () => {
+  it('014 Container: Two constants', () => {
     verifyFiles('014-container-constants', prettyPrintBlockLanguage);
   });
 });

@@ -12,7 +12,7 @@
       "visual": [
         {
           "blockType": "container",
-          "direction": "horizontal",
+          "displayType": "inline",
           "children": [
             {
               "blockType": "constant",
