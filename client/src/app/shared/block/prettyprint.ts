@@ -150,10 +150,9 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 function prettyPrintLayoutBlock(desc: VisualBlockDescriptions.EditorContainer | VisualBlockDescriptions.EditorBlock) {
   const head = `${desc.blockType} {`;
 
-  // For the moment the mandatory properties have to be stated verbosely
-  const props = [
-    `direction ${desc.direction}`
-  ]
+  const props = (VisualBlockDescriptions.isEditorContainer(desc))
+    ? [`display ${JSON.stringify(desc.displayType)}`]
+    : [`direction ${desc.direction}`]
 
   if (typeof (desc.breakAfter) !== "undefined") {
     props.push(`breakAfter ${desc.breakAfter}`);

@@ -2209,6 +2209,12 @@
           },
           "type": "array"
         },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "direction": {
           "$ref": "#/definitions/Orientation"
         },
@@ -2248,6 +2254,12 @@
         "breakAfter": {
           "type": "boolean"
         },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -2280,19 +2292,28 @@
           },
           "type": "array"
         },
-        "direction": {
-          "$ref": "#/definitions/Orientation"
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "displayType": {
+          "enum": [
+            "inline",
+            "block",
+            "inline-block",
+            "flex",
+            "inline-flex"
+          ],
+          "type": "string"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
-        },
-        "wrapChildren": {
-          "type": "boolean"
         }
       },
       "required": [
-        "blockType",
-        "direction"
+        "blockType"
       ],
       "type": "object"
     },
@@ -2312,6 +2333,12 @@
         "children": {
           "items": {
             "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },
@@ -2350,6 +2377,12 @@
         "breakAfter": {
           "type": "boolean"
         },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "excludedErrors": {
           "items": {
             "type": "string"
@@ -2377,6 +2410,12 @@
         },
         "breakAfter": {
           "type": "boolean"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "propReadOnly": {
           "type": "boolean"
@@ -2406,6 +2445,12 @@
         },
         "breakAfter": {
           "type": "boolean"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "property": {
           "type": "string"
@@ -2445,6 +2490,12 @@
         "children": {
           "items": {
             "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },

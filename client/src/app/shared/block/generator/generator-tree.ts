@@ -5,7 +5,10 @@ import { defaultEditorComponents } from './generator-default';
 import { BlockLanguageDocument } from '../block-language.description';
 import { VisualBlockDescriptions, EditorBlockDescription } from '../block.description';
 
-import { GrammarDocument, NodeConcreteTypeDescription, NodeTypeDescription, NodeOneOfTypeDescription, NodeAttributeDescription, NodePropertyTypeDescription, NodeChildrenGroupDescription } from '../../syntaxtree';
+import {
+  GrammarDocument, NodeConcreteTypeDescription, NodeAttributeDescription,
+  NodePropertyTypeDescription, NodeChildrenGroupDescription
+} from '../../syntaxtree';
 
 
 /**
@@ -53,6 +56,7 @@ export function visualizeNode(
   return ({
     blockType: "block",
     direction: "vertical",
+
     children: [
       { blockType: "constant", text: `node "${name}" {` },
       ...attributes,
@@ -81,7 +85,7 @@ export function visualizeChildGroup(
 
   return ({
     blockType: "container",
-    direction: "horizontal",
+    displayType: "inline-flex",
     children: [
       {
         blockType: "constant",
@@ -106,7 +110,7 @@ export function visualizeProperty(
 ): VisualBlockDescriptions.ConcreteBlock {
   return ({
     blockType: "container",
-    direction: "horizontal",
+    displayType: "inline-flex",
     children:
       [
         {
@@ -114,7 +118,7 @@ export function visualizeProperty(
           text: `prop "${t.name}": `
         },
         {
-          blockType: "interpolated",
+          blockType: "input",
           property: t.name
         }
       ]

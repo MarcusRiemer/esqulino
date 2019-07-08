@@ -1,7 +1,7 @@
 language "test" {
   type "test.root" {
     container {
-      direction horizontal
+      display "inline"
       visual {
         "blue" {
           style {
