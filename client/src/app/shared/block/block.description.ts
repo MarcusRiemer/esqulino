@@ -64,7 +64,8 @@ export namespace VisualBlockDescriptions {
    * An element that exists merely for layout purposes, think "div" or "span"
    */
   export interface EditorContainer extends EditorLayout {
-    blockType: "container"
+    blockType: "container",
+    displayType?: "block" | "inline-block" | "inline"
   }
 
   /**
@@ -151,6 +152,11 @@ export namespace VisualBlockDescriptions {
   // Type guard for EditorBlock
   export function isEditorBlock(obj?: EditorBlockBase): obj is EditorBlock {
     return (obj && obj.blockType === "block");
+  }
+
+  // Type guard for EditorContainer
+  export function isEditorContainer(obj?: EditorBlockBase): obj is EditorContainer {
+    return (obj && obj.blockType === "container");
   }
 }
 

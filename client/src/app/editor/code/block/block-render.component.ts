@@ -68,6 +68,13 @@ export class BlockRenderComponent {
   }
 
   /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockContainer(block: VisualBlockDescriptions.EditorBlockBase) {
+    return (block as VisualBlockDescriptions.EditorContainer);
+  }
+
+  /**
    * @return True, if there should be a break after this element
    */
   get breakAfter() {
@@ -88,9 +95,20 @@ export class BlockRenderComponent {
   /**
    * @return The actual nodes that should be displayed.
    */
-  get iteratorChildNodes() {
+  get childNodes() {
     if (VisualBlockDescriptions.isEditorIterator(this.visual)) {
       return (this.node.getChildrenInCategory(this.visual.childGroupName));
+    } else {
+      return ([]);
+    }
+  }
+
+  /**
+   * @return Some visuals that should render for the same node
+   */
+  get childVisuals() {
+    if (VisualBlockDescriptions.isEditorContainer(this.visual)) {
+      return (this.visual.children);
     } else {
       return ([]);
     }
@@ -108,7 +126,7 @@ export class BlockRenderComponent {
   }
 
   get lastNode() {
-    const childNodes = this.iteratorChildNodes;
+    const childNodes = this.childNodes;
     if (childNodes.length > 0) {
       return (childNodes[childNodes.length - 1]);
     } else {
