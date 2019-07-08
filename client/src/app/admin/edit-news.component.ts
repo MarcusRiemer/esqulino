@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { NewsUpdateDescription } from '../shared/news.description';
 import { ServerDataService, ToolbarService } from '../shared';
+import { PerformDataService } from '../shared/authorisation/perform-data.service';
 
 /**
  * Administrative UI to edit or create news.
@@ -24,6 +25,7 @@ export class AdminNewsEditComponent implements OnInit {
     private _serverService: ServerDataService,
     private _snackBar: MatSnackBar,
     private _toolbar: ToolbarService,
+    private _performData: PerformDataService,
     @Inject(LOCALE_ID) private readonly localeID: string,
   ) { }
 
@@ -38,23 +40,9 @@ export class AdminNewsEditComponent implements OnInit {
     { name: 'translation', description: 'Übersetzungsmodus' },
   ]
 
-  readonly mayPerformUpdate: PerformDescription = {
-    resourceType: "News",
-    resourceId: this._newsId,
-    policyAction: "update"
-  }
-
-  readonly mayPerformCreate: PerformDescription = {
-    resourceType: "News",
-    policyAction: "create"
-  }
-
-  readonly mayPerformDelete: PerformDescription = {
-    resourceType: "News",
-    resourceId: this._newsId,
-    policyAction: "delete"
-  }
-
+  readonly performUpdateData = this._performData.news.update(this._newsId)
+  readonly performCreateData = this._performData.news.create()
+  readonly performDeleteData = this._performData.news.delete(this._newsId)
 
   public newsData: NewsUpdateDescription;
   public readonly queryParamsLanguage = this._queryParams.language || this.localeID;

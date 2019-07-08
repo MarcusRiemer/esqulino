@@ -1,7 +1,9 @@
+
 import { PerformDescription } from './may-perform.description';
 import { Component, Inject, LOCALE_ID } from "@angular/core";
 
 import { ServerDataService } from './serverdata/server-data.service';
+import { PerformDataService } from './authorisation/perform-data.service';
 
 @Component({
   selector: 'news-list',
@@ -13,11 +15,6 @@ export class NewsComponent {
     private readonly _localeId: string,
     private _serverData: ServerDataService
   ) {}
-
-  readonly perform: PerformDescription = {
-    resourceType: "News",
-    policyAction: "create"
-  }
 
   readonly userNewsList = this._serverData.getUserNewsList;
   readonly locale = this._localeId;

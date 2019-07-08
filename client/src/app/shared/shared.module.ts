@@ -48,7 +48,6 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 
-
 import { GrammarDataService, BlockLanguageDataService } from './serverdata'
 import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
 import { ProviderButtonComponent } from './auth/provider-button.component';
@@ -62,7 +61,7 @@ import { ProvidersAllButtonsComponent } from './auth/providers-all-buttons.compo
 import { IsUserGuard } from './guards/is-user.guard';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { MayPerformComponent } from './may-perform.component';
-
+import { PerformDataService } from './authorisation/perform-data.service';
 
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
@@ -174,6 +173,7 @@ export class SharedAppModule {
         ...dataServices,
         LoggedInGuard,
         IsUserGuard,
+        PerformDataService,
         IsAdminGuard
       ]
     });

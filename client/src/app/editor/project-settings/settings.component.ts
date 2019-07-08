@@ -6,6 +6,7 @@ import { BlockLanguageDataService } from '../../shared/serverdata'
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
+import { PerformDataService } from 'src/app/shared/authorisation/perform-data.service';
 
 @Component({
   templateUrl: 'templates/settings.html'
@@ -30,6 +31,7 @@ export class SettingsComponent {
     private _sidebarService: SidebarService,
     private _router: Router,
     private _serverData: BlockLanguageDataService,
+    private _performData: PerformDataService
   ) {
   }
 
@@ -43,9 +45,13 @@ export class SettingsComponent {
     this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();
 
-    // Ensure we are always subsribed to the active project
+    // Ensure we are always subscribed to the active project
     let subRef = this._projectService.activeProject
-      .subscribe(res => this.project = res);
+      .subscribe(res => {
+        this.project = res
+        // Needs permission for saving
+        this._toolbarService.saveItem.performDesc = this._performData.project.update(res.id)
+      });
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the save button
@@ -59,7 +65,7 @@ export class SettingsComponent {
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the delete button
-    let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d");
+    let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d", this._performData.project.delete(this.project.id));
     subRef = btnDelete.onClick.subscribe(_ => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {

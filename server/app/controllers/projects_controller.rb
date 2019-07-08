@@ -27,7 +27,6 @@ class ProjectsController < ApplicationController
       authorize Project, :create?
       creation_params = append_current_user(project_creation_params)
       project = Project.new(creation_params)
-  
       if project.save
         ProjectMailer.with(project: project).created_admin.deliver_later
   
