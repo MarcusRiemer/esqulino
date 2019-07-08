@@ -410,6 +410,19 @@ class TileRenderer implements ObjectRenderer {
         tileHeight + this.overlap * 2
       );
     }
+
+    // Possibly draw a "truck is here"-marker
+    if (this.tile.position.x === this.parent.state.truck.position.x
+      && this.tile.position.y === this.parent.state.truck.position.y) {
+      // ctx.ctx.strokeStyle = `hsl(${this.parent.state.time}, 100, 50)`;
+      ctx.ctx.strokeStyle = "blue";
+      ctx.ctx.strokeRect(
+        tileWidth * this.tile.position.x - this.overlap,
+        tileWidth * this.tile.position.y - this.overlap,
+        tileWidth + this.overlap * 2,
+        tileHeight + this.overlap * 2
+      );
+    }
   }
 
   /**
