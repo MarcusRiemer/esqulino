@@ -35,7 +35,7 @@
   </ng-container>
   <!-- Iterate over children of a node -->
   <ng-container *ngSwitchCase="'iterator'">
-    <ng-container *ngFor="let childNode of iteratorChildNodes; let lastChild = last; let firstChild = first;">
+    <ng-container *ngFor="let childNode of childNodes; let lastChild = last; let firstChild = first;">
       <editor-block-render-drop-target [codeResource]="codeResource"
                                        [node]="childNode"
                                        [dropLocation]="childNode.location"
@@ -95,8 +95,15 @@
                                (mouseover)="currentBlock.onMouseEnter($event)">
     </editor-block-render-block>
   </ng-container>
-  <div *ngSwitchCase="'container'">
-    Container
+  <!-- Render multiple visuals for the same node -->
+  <div *ngSwitchCase="'container'"
+       class="indent"
+       [ngStyle]="{'display': visual.displayType}">
+    <editor-block-render *ngFor="let childVisual of childVisuals;"
+                         [visual]="childVisual"
+                         [codeResource]="codeResource"
+                         [node]="node"
+                         [readOnly]="readOnly"></editor-block-render>
   </div>
 
   <!-- Something is broken, display an error message -->
