@@ -60,7 +60,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
       "de": `Kompiliert das Projekt noch nach meinem letzten Commit? Laufen die Testfälle noch durch? Der CI-Dienst läuft nach jedem "push" und findet es heraus.`,
       "en": `Did my last commit break anything for the build? Do the tests still run? The CI-service runs after every push and finds out.`
     },
-    href: "https://trello.com/b/vQ5vkMpV/esqulino"
+    href: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build"
   }
 ]
 
