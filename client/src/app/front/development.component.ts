@@ -45,6 +45,22 @@ const DevelopmentLinks: DevelopmentLink[] = [
       "en": `Which feature is currently being worked on? Who is working on what? These organisational questions are organised with Trello.`
     },
     href: "https://trello.com/b/vQ5vkMpV/esqulino"
+  },
+  {
+    icon: "check-circle-o",
+    title: {
+      "de": "Continous Integration Pipeline",
+      "en": "Continous Integration Pipeline"
+    },
+    subtitle: {
+      "de": "Via Azure DevOps und Docker-Images",
+      "en": "Via Azure DevOps and Docker-imaeges"
+    },
+    content: {
+      "de": `Kompiliert das Projekt noch nach meinem letzten Commit? Laufen die Testfälle noch durch? Der CI-Dienst läuft nach jedem "push" und findet es heraus.`,
+      "en": `Did my last commit break anything for the build? Do the tests still run? The CI-service runs after every push and finds out.`
+    },
+    href: "https://trello.com/b/vQ5vkMpV/esqulino"
   }
 ]
 
