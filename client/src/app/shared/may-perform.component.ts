@@ -17,10 +17,13 @@ export class MayPerformComponent implements OnInit {
   public mayPerform: boolean;
 
   public ngOnInit(): void {
-    this._userService.mayPerform$(this.payload).subscribe(
-      w => this.mayPerform = w[this._userService.performIndex-1].perform,
-      err => console.log(err),
-      () => this._userService.resetPerformIndex()
-    );
+    // When a button needs no permission, payload will be undefined
+    if (this.payload) {
+      this._userService.mayPerform$(this.payload).subscribe(
+        w => this.mayPerform = w[this._userService.performIndex-1].perform,
+        _ => console.log("Unauthorized may-perform"),
+        () => this._userService.resetPerformIndex()
+      );
+    } else { this.mayPerform = true; }
   }
 }

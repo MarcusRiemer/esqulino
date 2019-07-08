@@ -6,16 +6,21 @@
   </ng-container>
 
   <ng-container position="start">
-    <button *ngFor="let item of toolbarService.items"
-            (click)="item.fire()"
-            mat-button
-            id="toolbar-btn-{{item.id}}">
-      <span class="fa fa-fw fa-spinner fa-pulse"
-            [hidden]="!item.isInProgress">
-      </span>
-      <span class="fa fa-fw fa-{{ item.icon }}"
-            [hidden]="item.isInProgress">
-      </span> {{ item.caption }}
-    </button>
+    <ng-container *ngFor="let item of toolbarService.items">
+      <may-perform 
+        [payload]="item.performDesc">
+      
+        <button (click)="item.fire()"
+                mat-button
+                id="toolbar-btn-{{item.id}}">
+          <span class="fa fa-fw fa-spinner fa-pulse"
+                [hidden]="!item.isInProgress">
+          </span>
+          <span class="fa fa-fw fa-{{ item.icon }}"
+                [hidden]="item.isInProgress">
+          </span> {{ item.caption }}
+        </button>
+      </may-perform>
+    </ng-container>
   </ng-container>
 </app-toolbar>

@@ -1,7 +1,7 @@
 <ng-template cdkPortal #toolbarItems>
 
   <may-perform
-    [payload]="mayPerformDelete">
+    [payload]="performDeleteData">
 
     <button *ngIf="!isCreatingNews"
             (click)="onDelete()"
@@ -12,7 +12,7 @@
   </may-perform>
 
   <may-perform
-    [payload]="mayPerformUpdate">
+    [payload]="performUpdateData">
 
     <button *ngIf="!isCreatingNews"
         (click)="onUpdate('redirect')"
@@ -29,7 +29,7 @@
   </may-perform>
  
   <may-perform
-    [payload]="mayPerformCreate">
+    [payload]="performCreateData">
 
     <button *ngIf="isCreatingNews"
       (click)="onCreate()"

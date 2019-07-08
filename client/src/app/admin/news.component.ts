@@ -2,10 +2,10 @@ import { map } from 'rxjs/operators';
 import { Component, Inject, LOCALE_ID } from "@angular/core";
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { PerformDataService } from './../shared/authorisation/perform-data.service';
 import { ServerDataService } from '../shared';
 import { MultilingualString } from './../shared/multilingual-string.description';
 import { locales } from '../shared/change-language.component';
-import { PerformDescription } from '../shared/may-perform.description';
 @Component({
   templateUrl: './templates/news.html'
 })
@@ -14,7 +14,8 @@ export class AdminNewsListComponent {
     @Inject(LOCALE_ID) readonly localeId: string,
     private readonly _serverData: ServerDataService,
     private _router: Router,
-    private _active: ActivatedRoute
+    private _active: ActivatedRoute,
+    private _performData: PerformDataService
   ) { }
 
   readonly languages = locales;
@@ -23,10 +24,7 @@ export class AdminNewsListComponent {
     { name: 'translation', description: 'Übersetzungsmodus' },
   ]
 
-  readonly mayPerformCreate: PerformDescription = {
-    resourceType: "News",
-    policyAction: "create"
-  }
+  readonly performCreateData = this._performData.news.create()
 
   public adminNewsList = this._serverData.getAdminNewsList.value;
   public searchList = this.adminNewsList;

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core'
-
 import { Observable, Subject } from 'rxjs'
+
+import { PerformDescription } from './../shared/may-perform.description';
+import { PerformDataService } from '../shared/authorisation/perform-data.service';
+
 
 /**
  * Used to subscribe to click events.
@@ -19,6 +22,7 @@ export class ToolbarItem {
   private _native: boolean;
   private _key: string;
   private _inProgress: boolean = false;
+  private _performDesc: PerformDescription;
 
   private _onClick: Subject<string>;
 
@@ -28,13 +32,14 @@ export class ToolbarItem {
    * @param key     The key this item should be bound to
    * @param native  True, if this is a native item of the toolbar
    */
-  constructor(id: string, caption: string, icon: string, key: string, native: boolean) {
+  constructor(id: string, caption: string, icon: string, key: string, native: boolean, performDesc: PerformDescription = undefined) {
     this._caption = caption;
     this._icon = icon;
     this._id = id;
     this._key = key.toLowerCase();
     this._native = native;
-
+    this._performDesc = performDesc;
+  
     this._onClick = new Subject<string>();
   }
 
@@ -81,11 +86,19 @@ export class ToolbarItem {
     this._inProgress = inProgress;
   }
 
+  set performDesc(desc: PerformDescription) {
+    this._performDesc = desc;
+  }
+
   /**
    * @return True, if a reaction to this is in progress
    */
   get isInProgress() {
     return (this._inProgress);
+  }
+
+  get performDesc() {
+    return (this._performDesc);
   }
 
   /**
@@ -140,9 +153,9 @@ export class ToolbarService {
    *
    * @return The click handler for the new button
    */
-  addButton(id: string, caption: string, icon: string, key: string): ToolbarItem {
+  addButton(id: string, caption: string, icon: string, key: string, performDesc: PerformDescription = undefined): ToolbarItem {
     // Create a new non-native icon
-    let item = new ToolbarItem(id, caption, icon, key, false);
+    let item = new ToolbarItem(id, caption, icon, key, false, performDesc);
 
     // Show the item on the toolbar
     this._items.push(item);
