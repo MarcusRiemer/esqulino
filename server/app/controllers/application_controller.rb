@@ -14,8 +14,8 @@ class ApplicationController < ActionController::API
 
   # AUTHENTICATION METHODS
 
-  def api_response(hash)
-    render json: hash
+  def api_response(response)
+    render json: response
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 

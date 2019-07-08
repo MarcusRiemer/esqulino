@@ -97,9 +97,9 @@ export class ServerDataService {
     return this._http.patch<UserNameDescription>(this._serverApi.getChangeUserNameUrl(), data)
   }
 
-  mayPerform$(data: PerformDescription[]): Observable<MayPerformDescription> {
-    const requestData = { "list": data }
-    return this._http.post<MayPerformDescription>(this._serverApi.getMayPerformUrl(), requestData)
+  mayPerform$(data: PerformDescription): Observable<MayPerformDescription[]> {
+    const requestData = { "list": [data] }
+    return this._http.post<MayPerformDescription[]>(this._serverApi.getMayPerformUrl(), requestData)
   }
 
   deleteEmail$(id: string): Observable<ServerProviderDescription> {

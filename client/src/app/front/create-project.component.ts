@@ -65,7 +65,7 @@ export class CreateProjectComponent {
             this._currentRequest = undefined;
           },
           err => {
-            this._currentError = err;
+            this._currentError = JSON.stringify(err);
             this._currentRequest = undefined;
           }
         );

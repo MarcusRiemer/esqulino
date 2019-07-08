@@ -34,12 +34,14 @@ class User < ApplicationRecord
     }
   end
 
+  # Returns all confirmed e-mails of a users
   def all_validated_emails()
     self.identities
       .filter { |i| i.confirmed? }
       .map { |i| i.email }
   end
 
+  # Is current user owner of something
   def owner_of?(instance)
     return instance.owner?(self)
   end
@@ -48,6 +50,7 @@ class User < ApplicationRecord
     return !self.email.nil?
   end
 
+  # Returns the current global role of a user
   def global_role
     to_return = "guest"
     if (self.has_role? :admin) then
@@ -59,6 +62,7 @@ class User < ApplicationRecord
     return to_return
   end
 
+  # Sets the primary e-mail of a user
   def set_email(email)
     self.email = email
   end

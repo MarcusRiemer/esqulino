@@ -36,36 +36,45 @@ class NewsController < ApplicationController
   def update
     news = News.find(params[:id])
     request_data = ensure_request("NewsUpdateDescription", request.body.read)
-
-    authorize news
-    # TODO: This is a general pattern, it could be moved to the application controller
-    news.assign_attributes(request_data)
-    if news.save
-      render :json => news.to_full_api_response
-    else
-      render json: { 'errors' => news.errors.as_json }, :status => 400
+    begin
+      authorize news
+      # TODO: This is a general pattern, it could be moved to the application controller
+      news.assign_attributes(request_data)
+      if news.save
+        render :json => news.to_full_api_response
+      else
+        render json: { 'errors' => news.errors.as_json }, :status => 400
+      end
+    rescue Pundit::NotAuthorizedError => e
+      error_response("You need the permission")
     end
-
   end
 
   # Creation of single news
   def create
     request_data = ensure_request("NewsUpdateDescription", request.body.read)
 
-    request_data[:user] = @current_user
+    creation_hash = append_current_user(request_data)
 
-    authorize News, :create?
+    begin
+      authorize News, :create?
+      news = News.create(creation_hash)
 
-    news = News.create(request_data)
-
-    render :json => news.to_full_api_response
+      render :json => news.to_full_api_response
+    rescue Pundit::NotAuthorizedError => e
+      error_response("You need the permission")
+    end
   end
 
   # Deletion of a single news
   def delete
     news = News.all.find(params[:id])
-    authorize news
-    news.destroy
+    begin
+      authorize news
+      news.destroy
+    rescue Pundit::NotAuthorizedError => e
+      error_response("You need the permission")
+    end
   end
 
   private
@@ -90,5 +99,11 @@ class NewsController < ApplicationController
     Date.parse(date_str)
   rescue ArgumentError => e
     raise EsqulinoError.new("Invalid date #{date_str}", 400)
+  end
+
+  # Appends current_user to a hash
+  def append_current_user(hash)
+    hash[:user] = @current_user
+    return hash
   end
 end
