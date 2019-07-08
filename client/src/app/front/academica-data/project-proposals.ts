@@ -8,6 +8,29 @@ export interface ProjectProposal {
 
 export const ProjectProposals: ProjectProposal[] = [
   {
+    id: "visual-database-editor",
+    language: "de",
+    title: "Visueller Drag & Drop Editor für Datenbanken",
+    text: `
+          <p>
+          Aufbauend auf der Bachelor-Thesis von Marco Pawloski soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+          </p>`,
+    tools: "TypeScript mit Angular",
+  },
+  {
+    id: "trucklino-world-editor",
+    language: "de",
+    title: "2D Welt-Editor für Trucklino",
+    text: `
+      <p>
+        Aufbauend auf der Bachelor-Thesis von Sebastian Popp soll ein Welt-Editor für Trucklino entwickelt werden. Bisher müssen Welten für Trucklino sehr umständlich als <code>JSON</code>-Dokument beschrieben werden. Der eingebaute block-basierte Editor wird für die textuelle Visualisierung von Syntaxbäumen entwickelt und eignet sich demenentsprechend nicht für die besser geeignete 2D-Kacheldarstellung.
+      </p>
+      <p>
+        Im Rahmen dieses Projektes soll daher ein browserbasierter 2D-Editor entwickelt werden, mit dem sich die Tiles und die verschiedenen Objekte in der Welt platzieren lassen. Die wesentliche Herausforderung wird dabei die sinnvolle Integration von Drag-and-Drop-Interaktionen aus Angular heraus in die normale Canvas-API sein.
+      </p>`,
+    tools: "Typescript mit Angular und <code>canvas</code>-Rendering",
+  },
+  /*{
     id: "usermanagement",
     language: "de",
     title: "Benutzermanagement",
@@ -26,7 +49,7 @@ export const ProjectProposals: ProjectProposal[] = [
       Currently, the website does not provide any registration of users, instead, each created project, so to speak, has its own user database. This circumstance should change as part of this project. The actual registration and administration of users is more a technical formality and not particularly challenging. Much more interesting are the special requirements that result from the use in schools. Registered users typically fall into one of three roles: student, teacher, or administrator.
       </p>`,
     tools: "Ruby on Rails for the server-side data model and Angular with Typescript for management in the frontend.",
-  },
+  },*/
   {
     id: "community-functions",
     language: "de",
@@ -63,16 +86,6 @@ export const ProjectProposals: ProjectProposal[] = [
     tools: "Typescript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
   },
   {
-    id: "visual-database-editor",
-    language: "de",
-    title: "Visueller Drag & Drop Editor für Datenbanken",
-    text: `
-          <p>
-          Aufbauend auf der Bachelor - Thesis von Marco Pawloski soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
-          </p>`,
-    tools: "TypeScript mit Angular",
-  },
-  {
     id: "code-sandbox",
     language: "de",
     title: "Umgebung zur Ausführung von nicht vertrauenswürdigen Programmen",
@@ -91,18 +104,5 @@ export const ProjectProposals: ProjectProposal[] = [
        Dazu sollen eigens geschriebene, bösartige Programme in einer Testsuite zusammengefasst und (möglichst) mit den gewählten Isolationsverfahren korrekt eingeschränkt werden. Die Bandbreite umfasst dabei schlicht schädliche Skripten (<code>rm -rf /</code>), triviale Versuche Passwörter auszulesen (<code>cat /etc/shadow</code>), über (BitCoin-)Miner (oder profane Endlosschleifen) bis hin zu Versuchen, einen <q>Command and Control</q>-Server aufzusetzen.
       </p>`,
     tools: "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), Docker",
-  },
-  {
-    id: "trucklino-world-editor",
-    language: "de",
-    title: "2D Welt-Editor für Trucklino",
-    text: `
-      <p>
-        Bisher müssen Welten für Trucklino sehr umständlich als <code>JSON</code>-Dokument beschrieben werden. Der eingebaute block-basierte Editor wird für die textuelle Visualisierung von Syntaxbäumen entwickelt und eignet sich demenentsprechend nicht für die besser geeignete 2D-Kacheldarstellung.
-      </p>
-      <p>
-        Im Rahmen dieses Projektes soll daher ein browserbasierter 2D-Editor entwickelt werden, mit dem sich die Tiles und die verschiedenen Objekte in der Welt platzieren lassen.
-      </p>`,
-    tools: "Typescript mit Angular und <code>canvas</code>-Rendering",
   }
 ];
