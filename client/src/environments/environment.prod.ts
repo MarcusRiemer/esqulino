@@ -5,6 +5,7 @@ export const environment: EnvironmentDescription = {
   production: true,
   canonicalHost: "blattwerkzeug.de",
   apiEndpoint: "https://blattwerkzeug.de/api",
+  loginEnabled: false,
   piwik: {
     host: "https://piwik.blattwerkzeug.de",
     id: 1
