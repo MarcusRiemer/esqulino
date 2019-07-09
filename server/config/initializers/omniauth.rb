@@ -1,8 +1,11 @@
 OmniAuth.config.logger = Rails.logger
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  OmniAuth.config.full_host = Rails.env.production? ? 'https://blattwerkzeug.de' : 'http://localhost:9292'
+  config = Rails.application.config_for :sqlino
+  domain = config["editor_domain"]
+
   configure do |config|
+    config.full_host = Rails.env.production? ? "https://#{domain}" : "http://#{domain}"
     config.path_prefix = '/api/auth'
   end
   provider :identity, :fields => [], :on_registration => AuthController.action(:register), :on_login => AuthController.action(:login_with_password), :model => PasswordIdentity
