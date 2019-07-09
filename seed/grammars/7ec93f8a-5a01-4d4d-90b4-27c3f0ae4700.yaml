@@ -74,7 +74,7 @@ concise_attributes:
     {"name": "keywordUsing", "type": "terminal", "symbol": "USING"}, {"name": "using",
     "type": "sequence", "nodeTypes": ["expression"]}]}, "whereAdditional": {"type":
     "concrete", "attributes": [{"base": "string", "name": "operator", "type": "property",
-    "restrictions": [{"type": "enum", "value": ["and", "or"]}]}, {"name": "expression",
+    "restrictions": [{"type": "enum", "value": ["AND", "OR"]}]}, {"name": "expression",
     "type": "sequence", "nodeTypes": ["expression"]}]}, "binaryExpression": {"type":
     "concrete", "attributes": [{"name": "lhs", "type": "sequence", "nodeTypes": ["expression"]},
     {"name": "operator", "type": "sequence", "nodeTypes": ["relationalOperator"]},
@@ -88,7 +88,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-08 14:01:49.846247'
+  value_before_type_cast: '2019-07-09 08:21:13.957829'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql
