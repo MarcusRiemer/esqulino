@@ -26,7 +26,7 @@
         },
         "text": {
           "$ref": "#/definitions/MultilingualString",
-          "description": "Internal Markdown version of the text "
+          "description": "Internal Markdown version of the text"
         },
         "title": {
           "$ref": "#/definitions/MultilingualString"

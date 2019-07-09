@@ -141,41 +141,14 @@
       "type": "object"
     },
     "BlockLanguageGeneratorDocument": {
-      "additionalProperties": false,
-      "description": "The nested parts of the generator description that must be stored\nas a JSON \"blob\".",
-      "properties": {
-        "editorComponents": {
-          "items": {
-            "$ref": "#/definitions/EditorComponentDescription"
-          },
-          "type": "array"
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ManualBlockLanguageGeneratorDescription"
         },
-        "parameterDeclarations": {
-          "$ref": "#/definitions/ParameterDeclarations"
-        },
-        "parameterValues": {
-          "$ref": "#/definitions/ParameterValues"
-        },
-        "staticSidebars": {
-          "items": {
-            "$ref": "#/definitions/AnySidebarDescription"
-          },
-          "type": "array"
-        },
-        "traitScopes": {
-          "items": {
-            "$ref": "#/definitions/ScopeTraitAdd"
-          },
-          "type": "array"
-        },
-        "traits": {
-          "$ref": "#/definitions/ReferenceableTraits"
-        },
-        "typeInstructions": {
-          "$ref": "#/definitions/AllReferenceableTypeInstructions"
+        {
+          "$ref": "#/definitions/TreeBlockLanguageGeneratorDescription"
         }
-      },
-      "type": "object"
+      ]
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,
@@ -660,6 +633,52 @@
       "required": [
         "type",
         "value"
+      ],
+      "type": "object"
+    },
+    "ManualBlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "description": "A very manual approach to block language generation. Uses specific type\ninstructions and traits to",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "traitScopes": {
+          "items": {
+            "$ref": "#/definitions/ScopeTraitAdd"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "$ref": "#/definitions/ReferenceableTraits"
+        },
+        "type": {
+          "enum": [
+            "manual"
+          ],
+          "type": "string"
+        },
+        "typeInstructions": {
+          "$ref": "#/definitions/AllReferenceableTypeInstructions"
+        }
+      },
+      "required": [
+        "type"
       ],
       "type": "object"
     },
@@ -1427,6 +1446,9 @@
         },
         "updatedAt": {
           "type": "string"
+        },
+        "userId": {
+          "type": "string"
         }
       },
       "required": [
@@ -1797,6 +1819,39 @@
         }
       ],
       "description": "All possible sidebar types"
+    },
+    "TreeBlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "tree"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
     },
     "TruckControllerComponentDescription": {
       "additionalProperties": false,
