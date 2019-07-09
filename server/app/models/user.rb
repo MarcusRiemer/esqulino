@@ -66,4 +66,9 @@ class User < ApplicationRecord
   def set_email(email)
     self.email = email
   end
+
+  # Returns a nicely readable representation of id and name
+  def readable_identification
+    "\"#{display_name}\" (#{id})"
+  end
 end

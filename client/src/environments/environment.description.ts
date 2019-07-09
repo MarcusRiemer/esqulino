@@ -11,6 +11,7 @@ export interface EnvironmentDescription {
     host: string;
     id: number;
   };
+  loginEnabled: boolean,
   // Tracking bugs in the live environment with Sentry
   sentry: {
     dsn: string;

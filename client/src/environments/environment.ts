@@ -10,6 +10,7 @@ export const environment: EnvironmentDescription = {
   production: false,
   canonicalHost: "localhost.localdomain:9292",
   apiEndpoint: "http://localhost.localdomain:9292/api",
+  loginEnabled: true,
   piwik: {
     host: "https://piwik.blattwerkzeug.de",
     id: 2
