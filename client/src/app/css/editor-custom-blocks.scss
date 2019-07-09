@@ -6,3 +6,13 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+
+editor-block-container {
+    display: flex;
+    &.horizontal {
+        flex-direction: row;
+    }
+    &.vertical {
+        flex-direction: column;
+    }
+}

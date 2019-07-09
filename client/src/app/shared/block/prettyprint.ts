@@ -151,7 +151,7 @@ function prettyPrintLayoutBlock(desc: VisualBlockDescriptions.EditorContainer | 
   const head = `${desc.blockType} {`;
 
   const props = (VisualBlockDescriptions.isEditorContainer(desc))
-    ? [`display ${JSON.stringify(desc.displayType)}`]
+    ? [``]
     : [`direction ${desc.direction}`]
 
   if (typeof (desc.breakAfter) !== "undefined") {
