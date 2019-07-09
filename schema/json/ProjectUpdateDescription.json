@@ -2,16 +2,6 @@
   "$ref": "#/definitions/ProjectUpdateDescription",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "ApiVersionToken": {
-      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "type": "string"
-    },
     "ProjectName": {
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
       "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$",
@@ -23,10 +13,6 @@
       "properties": {
         "activeDatabase": {
           "type": "string"
-        },
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "description": {
           "type": "string"
@@ -47,9 +33,6 @@
           "type": "array"
         }
       },
-      "required": [
-        "apiVersion"
-      ],
       "type": "object"
     },
     "ProjectUpdateUsedBlockLanguage": {
