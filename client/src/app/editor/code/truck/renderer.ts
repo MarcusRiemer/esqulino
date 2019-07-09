@@ -1,4 +1,7 @@
 import { World, TileOpening, WorldState, Tile, Truck, TurnDirection, Direction } from '../../../shared/syntaxtree/truck/world';
+import { BehaviorSubject } from 'rxjs';
+
+export type RenderingDimensions = { width: number, height: number };
 
 /**
  * Renderer.
@@ -20,9 +23,9 @@ export class Renderer {
    * @param width Width of the canvas.
    * @param height Height of the canvas.
    */
-  constructor(world: World, ctx: CanvasRenderingContext2D, width: number, height: number) {
+  constructor(world: World, ctx: CanvasRenderingContext2D, d: BehaviorSubject<RenderingDimensions>) {
     this.running = true;
-    this.ctx = new RenderingContext(ctx, width, height, world);
+    this.ctx = new RenderingContext(ctx, d, world);
 
     this.worldRenderer = new WorldRenderer(this.ctx.world, this);
   }
@@ -60,18 +63,6 @@ export class Renderer {
  * Rendering context.
  */
 class RenderingContext {
-  /** Canvas 2d context. */
-  readonly ctx: CanvasRenderingContext2D;
-
-  /** Width of the canvas. */
-  readonly width: number;
-
-  /** Height of the canvas. */
-  readonly height: number;
-
-  /** World. */
-  readonly world: World;
-
   /** Timestamp of the start of the animation. */
   start: DOMHighResTimeStamp;
 
@@ -88,15 +79,30 @@ class RenderingContext {
    * @param height Height of the canvas.
    * @param world World.
    */
-  constructor(ctx: CanvasRenderingContext2D, width: number, height: number, world: World) {
+  constructor(
+    readonly ctx: CanvasRenderingContext2D,
+    private readonly dimensions: BehaviorSubject<RenderingDimensions>,
+    readonly world: World) {
     this.ctx = ctx;
-    this.width = width;
-    this.height = height;
     this.world = world;
 
     this.start = 0;
     this.previousFrame = 0;
     this.currentFrame = 0;
+  }
+
+  /**
+   * Current target width to render.
+   */
+  get width() {
+    return (this.dimensions.value.width);
+  }
+
+  /**
+   * Current target width to render.
+   */
+  get height() {
+    return (this.dimensions.value.height);
   }
 
   /**
@@ -398,6 +404,19 @@ class TileRenderer implements ObjectRenderer {
     if (this.tile.freightTarget != null) {
       this.freightSprite.draw(
         ctx, this.freightTargetSpriteNumber,
+        tileWidth * this.tile.position.x - this.overlap,
+        tileWidth * this.tile.position.y - this.overlap,
+        tileWidth + this.overlap * 2,
+        tileHeight + this.overlap * 2
+      );
+    }
+
+    // Possibly draw a "truck is here"-marker
+    if (this.tile.position.x === this.parent.state.truck.position.x
+      && this.tile.position.y === this.parent.state.truck.position.y) {
+      // ctx.ctx.strokeStyle = `hsl(${this.parent.state.time}, 100, 50)`;
+      ctx.ctx.strokeStyle = "blue";
+      ctx.ctx.strokeRect(
         tileWidth * this.tile.position.x - this.overlap,
         tileWidth * this.tile.position.y - this.overlap,
         tileWidth + this.overlap * 2,
