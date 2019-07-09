@@ -33,9 +33,9 @@ test : msg-pre-run-test
 # Updates (or initially creates) the live data in the system in the system from
 # a dump that has been previously created.
 load-live-data:
-	bin/rails "blattwerkzeug:programming_language:load_all" \
+	bin/rails "blattwerkzeug:user:load_all" \
+                  "blattwerkzeug:programming_language:load_all" \
                   "blattwerkzeug:project:load_all" \
-									"blattwerkzeug:user:load_all" \
                   "blattwerkzeug:news:load_all"
 
 # This operation is used to extract all data out of this server instance.
@@ -43,7 +43,7 @@ store-live-data:
 	bin/rails "blattwerkzeug:programming_language:store_all" \
                   "blattwerkzeug:project:store_all" \
                   "blattwerkzeug:news:store_all" \
-									"blattwerkzeug:user:store_all"
+                  "blattwerkzeug:user:store_all"
 
 # Removes every trace of data from the live system
 delete-live-data: msg-pre-reset-live-data
