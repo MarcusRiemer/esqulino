@@ -1,4 +1,4 @@
-import { MayPerformDescription, PerformDescription } from './../may-perform.description';
+import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -15,7 +15,7 @@ export class UserService {
   constructor(
     private _serverData: ServerDataService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   public performIndex: number = 0;
 
@@ -31,7 +31,7 @@ export class UserService {
   )
 
   public readonly userDisplayName$ = this.userData$.value.pipe(
-    map(u => u.loggedIn? u.displayName : "Guest")
+    map(u => u.loggedIn ? u.displayName : "Guest")
   )
 
   public readonly role$ = this.userData$.value.pipe(
@@ -52,10 +52,11 @@ export class UserService {
     )
   }
 
-  public mayPerform$(data: PerformDescription): Observable<MayPerformDescription[]> {
+  public mayPerform$(data: MayPerformRequestDescription): Observable<MayPerformResponseDescription> {
     return this._serverData.mayPerform$(data).pipe(
       first(),
-      tap(_ => this.performIndex++)
+      tap(_ => this.performIndex++),
+      map(r => r[0])
     )
   }
 
@@ -81,7 +82,7 @@ export class UserService {
     return this._serverData.changeUserName$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Username changed', '', {duration: 3000})
+          this._snackBar.open('Username changed', '', { duration: 3000 })
           this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
@@ -89,11 +90,11 @@ export class UserService {
     )
   }
 
-  public changePassword$(data: ChangePasswordDescription): Observable<UserDescription>{
+  public changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
     return this._serverData.changePassword$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Password changed', '', {duration: 3000})
+          this._snackBar.open('Password changed', '', { duration: 3000 })
           this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
@@ -101,7 +102,7 @@ export class UserService {
     )
   }
 
-  public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription>{
+  public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
     return this._serverData.passwordResetRequest$(data).pipe(
       tap(
         _ => {
@@ -117,7 +118,7 @@ export class UserService {
     return this._serverData.sendChangePrimaryEmail$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Please confirm the e-mail', '', {duration: 5000})
+          this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
           this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
@@ -129,7 +130,7 @@ export class UserService {
     return this._serverData.deleteEmail$(uid).pipe(
       tap(
         _ => {
-          this._snackBar.open('E-Mail succesfully deleted', '', {duration: 3000})
+          this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
           this.identities$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
@@ -141,7 +142,7 @@ export class UserService {
     return this._serverData.addEmail$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Please confirm the e-mail', '', {duration: 6000})
+          this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
           this.identities$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
@@ -153,7 +154,7 @@ export class UserService {
     return this._serverData.sendVerifyEmail$(data).pipe(
       tap(
         _ => {
-          this._snackBar.open('Please check your e-mails', '', {duration: 6000})
+          this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)
       )
@@ -164,7 +165,7 @@ export class UserService {
     return this._serverData.logout$().pipe(
       tap(
         _ => {
-          this._snackBar.open('Succesfully logged out', '', {duration: 3000})
+          this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
           this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["error"]}`)

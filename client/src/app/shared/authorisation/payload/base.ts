@@ -1,4 +1,4 @@
-import { PerformDescription } from '../../may-perform.description';
+import { MayPerformRequestDescription } from '../../may-perform.description';
 
 export class BasePerformData {
   constructor(resourceType: string) {
@@ -7,20 +7,26 @@ export class BasePerformData {
 
   private _resourceType: string;
 
-  public update(resourceId: string): PerformDescription {
-    return  ({ resourceType: this._resourceType,
-               resourceId: resourceId,
-               policyAction: "update" })
+  public update(resourceId: string): MayPerformRequestDescription {
+    return ({
+      resourceType: this._resourceType,
+      resourceId: resourceId,
+      policyAction: "update"
+    })
   }
 
-  public create(): PerformDescription {
-    return ({ resourceType: this._resourceType,
-              policyAction: "create" })
+  public create(): MayPerformRequestDescription {
+    return ({
+      resourceType: this._resourceType,
+      policyAction: "create"
+    })
   }
 
-  public delete(resourceId: string): PerformDescription {
-    return ({ resourceType: "News",
-              resourceId: resourceId,
-              policyAction: "delete" })
+  public delete(resourceId: string): MayPerformRequestDescription {
+    return ({
+      resourceType: this._resourceType,
+      resourceId: resourceId,
+      policyAction: "delete"
+    })
   }
 }

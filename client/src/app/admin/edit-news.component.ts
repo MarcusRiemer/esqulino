@@ -1,4 +1,4 @@
-import { PerformDescription } from './../shared/may-perform.description';
+import { MayPerformRequestDescription } from './../shared/may-perform.description';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, LOCALE_ID, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { first } from 'rxjs/operators';
