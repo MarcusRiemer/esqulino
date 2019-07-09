@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Observable, Subject } from 'rxjs'
 
-import { PerformDescription } from './../shared/may-perform.description';
+import { MayPerformRequestDescription } from './../shared/may-perform.description';
 import { PerformDataService } from '../shared/authorisation/perform-data.service';
 
 
@@ -22,7 +22,7 @@ export class ToolbarItem {
   private _native: boolean;
   private _key: string;
   private _inProgress: boolean = false;
-  private _performDesc: PerformDescription;
+  private _performDesc: MayPerformRequestDescription;
 
   private _onClick: Subject<string>;
 
@@ -32,14 +32,14 @@ export class ToolbarItem {
    * @param key     The key this item should be bound to
    * @param native  True, if this is a native item of the toolbar
    */
-  constructor(id: string, caption: string, icon: string, key: string, native: boolean, performDesc: PerformDescription = undefined) {
+  constructor(id: string, caption: string, icon: string, key: string, native: boolean, performDesc: MayPerformRequestDescription = undefined) {
     this._caption = caption;
     this._icon = icon;
     this._id = id;
     this._key = key.toLowerCase();
     this._native = native;
     this._performDesc = performDesc;
-  
+
     this._onClick = new Subject<string>();
   }
 
@@ -86,7 +86,7 @@ export class ToolbarItem {
     this._inProgress = inProgress;
   }
 
-  set performDesc(desc: PerformDescription) {
+  set performDesc(desc: MayPerformRequestDescription) {
     this._performDesc = desc;
   }
 
@@ -153,7 +153,7 @@ export class ToolbarService {
    *
    * @return The click handler for the new button
    */
-  addButton(id: string, caption: string, icon: string, key: string, performDesc: PerformDescription = undefined): ToolbarItem {
+  addButton(id: string, caption: string, icon: string, key: string, performDesc: MayPerformRequestDescription = undefined): ToolbarItem {
     // Create a new non-native icon
     let item = new ToolbarItem(id, caption, icon, key, false, performDesc);
 
