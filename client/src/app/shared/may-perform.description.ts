@@ -1,10 +1,10 @@
 
-export interface PerformDescription {
+export interface MayPerformRequestDescription {
   resourceType: string;
   resourceId?: string;
   policyAction: string;
 }
 
-export interface MayPerformDescription {
+export interface MayPerformResponseDescription {
   perform: boolean;
 }

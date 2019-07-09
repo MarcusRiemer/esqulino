@@ -37,7 +37,7 @@
   <!-- Static contentent at the end of this toolbar -->
   <ng-content select="[position=end]"></ng-content>
 
-  <user-button></user-button>
+  <user-button *ngIf="loginEnabled"></user-button>
 
   <!-- Changing the natural language of the application should be possible everywhere -->
   <natural-language-selector></natural-language-selector>

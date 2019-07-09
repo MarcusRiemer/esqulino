@@ -1,4 +1,4 @@
-import { PerformDescription, MayPerformDescription } from './../may-perform.description';
+import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -97,9 +97,9 @@ export class ServerDataService {
     return this._http.patch<UserNameDescription>(this._serverApi.getChangeUserNameUrl(), data)
   }
 
-  mayPerform$(data: PerformDescription): Observable<MayPerformDescription[]> {
+  mayPerform$(data: MayPerformRequestDescription): Observable<MayPerformResponseDescription[]> {
     const requestData = { "list": [data] }
-    return this._http.post<MayPerformDescription[]>(this._serverApi.getMayPerformUrl(), requestData)
+    return this._http.post<MayPerformResponseDescription[]>(this._serverApi.getMayPerformUrl(), requestData)
   }
 
   deleteEmail$(id: string): Observable<ServerProviderDescription> {
