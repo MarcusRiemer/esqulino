@@ -1,18 +1,23 @@
 <ng-container [ngSwitch]="visual.blockType">
   <!-- Show a constant value directly specified in the block description -->
   <span *ngSwitchCase="'constant'"
+        [ngClass]="visual.cssClasses"
         [blockBase]="visual">
     {{ asBlockConstant(visual).text }}
   </span>
   <!-- Show a value that is derived from the property of a node -->
   <span *ngSwitchCase="'interpolated'"
-        [blockBase]="visual">{{ node.properties[asBlockInterpolated(visual).property] }}</span>
+        [ngClass]="visual.cssClasses"
+        [blockBase]="visual">
+    {{ node.properties[asBlockInterpolated(visual).property] }}
+  </span>
 
   <!-- Allowing the user to edit a value -->
   <ng-container *ngSwitchCase="'error'">
     <editor-block-render-error [codeResource]="codeResource"
                                [node]="node"
-                               [visual]="visual">
+                               [visual]="visual"
+                               [ngClass]="visual.cssClasses">
     </editor-block-render-error>
   </ng-container>
 
@@ -21,7 +26,8 @@
     <editor-block-render-input [codeResource]="codeResource"
                                [node]="node"
                                [visual]="visual"
-                               [readOnly]="readOnly">
+                               [readOnly]="readOnly"
+                               [ngClass]="visual.cssClasses">
     </editor-block-render-input>
   </ng-container>
   <!-- Iterate over children of a node -->
@@ -30,7 +36,8 @@
                                      [node]="node"
                                      [dropLocation]="node.location"
                                      [visual]="visual"
-                                     [readOnly]="readOnly">
+                                     [readOnly]="readOnly"
+                                     [ngClass]="visual.cssClasses">
     </editor-block-render-drop-target>
   </ng-container>
   <!-- Iterate over children of a node -->
@@ -40,7 +47,8 @@
                                        [node]="childNode"
                                        [dropLocation]="childNode.location"
                                        [visual]="iteratorDropTargetVisual"
-                                       [readOnly]="readOnly">
+                                       [readOnly]="readOnly"
+                                       [ngClass]="visual.cssClasses">
       </editor-block-render-drop-target>
 
       <!-- Rendering the actual editor-blocks. This element is an immediate child of the
@@ -67,7 +75,8 @@
     <editor-block-render-drop-target [codeResource]="codeResource"
                                      [dropLocation]="lastNodeLocation"
                                      [visual]="iteratorDropTargetVisual"
-                                     [readOnly]="readOnly">
+                                     [readOnly]="readOnly"
+                                     [ngClass]="visual.cssClasses">
     </editor-block-render-drop-target>
   </ng-container>
   <!-- Display a draggable block -->
@@ -88,6 +97,7 @@
                                [node]="node"
                                [visual]="visual"
                                [readOnly]="readOnly"
+                               [ngClass]="visual.cssClasses"
                                [class.read-only]="readOnly"
                                [class.being-replaced]="(currentBlock.isBeingReplaced | async) || true"
                                draggable="true"
@@ -96,15 +106,14 @@
     </editor-block-render-block>
   </ng-container>
   <!-- Render multiple visuals for the same node -->
-  <div *ngSwitchCase="'container'"
-       class="indent"
-       [ngStyle]="{'display': visual.displayType}">
+  <editor-block-container *ngSwitchCase="'container'"
+       [ngClass]="visual.cssClasses">
     <editor-block-render *ngFor="let childVisual of childVisuals;"
                          [visual]="childVisual"
                          [codeResource]="codeResource"
                          [node]="node"
                          [readOnly]="readOnly"></editor-block-render>
-  </div>
+  </editor-block-container>
 
   <!-- Something is broken, display an error message -->
   <div *ngSwitchDefault>

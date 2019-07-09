@@ -28,7 +28,7 @@ export function convertGrammarTreeInstructions(
   };
 
   // Create a visual representation for each concrete type
-  const mappedNodes = Object.entries(g.types)
+  const visualizedNodes = Object.entries(g.types)
     .filter(([_, typeDesc]) => typeDesc.type === "concrete")
     .map(([name, typeDesc]): EditorBlockDescription => {
       return ({
@@ -38,7 +38,7 @@ export function convertGrammarTreeInstructions(
       });
     });
 
-  toReturn.editorBlocks = mappedNodes;
+  toReturn.editorBlocks = visualizedNodes;
 
   return (toReturn);
 }
@@ -52,6 +52,9 @@ export function visualizeNode(
   t: NodeConcreteTypeDescription,
 ): VisualBlockDescriptions.ConcreteBlock {
   const attributes = t.attributes.map(a => visualizeNodeAttributes(d, a));
+  const wrappedAttributes: VisualBlockDescriptions.EditorContainer[] = (attributes.length > 0)
+    ? [{ blockType: "container", cssClasses: ["indent", "vertical"], children: attributes }]
+    : []
 
   return ({
     blockType: "block",
@@ -59,7 +62,7 @@ export function visualizeNode(
 
     children: [
       { blockType: "constant", text: `node "${name}" {` },
-      ...attributes,
+      ...wrappedAttributes,
       { blockType: "constant", text: "}" }
     ]
   });
@@ -85,7 +88,7 @@ export function visualizeChildGroup(
 
   return ({
     blockType: "container",
-    displayType: "inline-flex",
+    cssClasses: ["vertical"],
     children: [
       {
         blockType: "constant",
@@ -110,12 +113,13 @@ export function visualizeProperty(
 ): VisualBlockDescriptions.ConcreteBlock {
   return ({
     blockType: "container",
-    displayType: "inline-flex",
+    cssClasses: ["horizontal"],
     children:
       [
         {
           blockType: "constant",
-          text: `prop "${t.name}": `
+          text: `prop "${t.name}": `,
+          cssClasses: ["foobar-constant"],
         },
         {
           blockType: "input",

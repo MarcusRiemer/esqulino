@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core'
+import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
@@ -40,6 +40,9 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
 @NgModule({
   imports: [
     SharedEditorModule,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
   ],
   declarations: [
     BlockEditorComponent,

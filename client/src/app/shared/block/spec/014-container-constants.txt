@@ -1,7 +1,6 @@
 language "test" {
   type "test.root" {
     container {
-      display "inline"
       visual {
         "blue" {
           style {

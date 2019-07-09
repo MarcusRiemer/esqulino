@@ -40,6 +40,7 @@ export namespace VisualBlockDescriptions {
     blockType: string;
     style?: BlockStyle;
     breakAfter?: boolean;
+    cssClasses?: string[];
   }
 
   /**
@@ -66,7 +67,6 @@ export namespace VisualBlockDescriptions {
   export interface EditorContainer extends EditorBlockBase {
     blockType: "container"
     children?: ConcreteBlock[];
-    displayType?: "inline" | "block" | "inline-block" | "flex" | "inline-flex"
   }
 
   /**

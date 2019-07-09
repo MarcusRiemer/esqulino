@@ -130,6 +130,11 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
             });
           }
 
+          // Possibly inject the renaming component
+          if (true) {
+            toReturn.splice(0, 0, { componentType: "code-resource-settings" });
+          }
+
           return (toReturn);
         }
       )
