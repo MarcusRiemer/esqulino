@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   include IdentityHelper
 
+  GUEST_ID = "00000000-0000-0000-0000-000000000001"
+
   rolify strict: true
   has_many :projects
   has_many :identities
@@ -11,12 +13,27 @@ class User < ApplicationRecord
   validates_uniqueness_of :email, :allow_nil => true
 
   def self.guest
-    where(id: "00000000-0000-0000-0000-000000000001")
-   .first
+    self.find(GUEST_ID)
   end
 
-  def self.guest?
-    return self.user.eql? self.guest
+  def self.guest_id
+    return GUEST_ID
+  end
+
+  def guest?
+    return self.eql? self.guest
+  end
+
+  def role_names
+    return self.roles.map { |v| v.name }
+  end
+
+  def informations
+    return  {
+      user_id: self.id,
+      display_name: self.display_name,
+      roles: self.role_names
+    }
   end
 
   def self.create_from_hash(auth)

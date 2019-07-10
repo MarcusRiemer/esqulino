@@ -3,11 +3,12 @@ require 'rails_helper'
 
 RSpec.describe "auth controller" do
 
+  before(:each) { create(:user, :guest) }
+
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
-  let(:identity_params){{ 
+  let(:identity_params){{
     :email => "blattwerkzeug@web.de",
-    # TODO-TOM ASK MARCUS 
     :password => "12345678",
     :username => "Blattwerkzeug"
   }}
@@ -31,14 +32,14 @@ RSpec.describe "auth controller" do
 
     it "logging in with developer strategy" do
       get '/api/auth/developer/callback'
-      expect(response.cookies['JWT-TOKEN']).to be_truthy  
-      expect(Auth.decode(response.cookies['JWT-TOKEN'])[:user_id]).to be_truthy  
+      expect(response.cookies['JWT-TOKEN']).to be_truthy
+      expect(JwtHelper.decode(response.cookies['JWT-TOKEN'])[:user_id]).to be_truthy  
       expect(response.status).to eq(302)
     end
 
     it "logging in with existing user and existing identity" do
       identity = create(:developer_provider, :existing)
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+      set_jwt(identity.user)
 
       user_count = User.all.count
       identity_count = Identity.all.count
@@ -50,7 +51,7 @@ RSpec.describe "auth controller" do
     end
 
     it "logging in with existing user and a new identity" do
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+      set_jwt(user)
 
       user_count = User.all.count
       identity_count = Identity.where("user_id = ?", user[:id]).count
@@ -84,14 +85,14 @@ RSpec.describe "auth controller" do
 
     it "logging in with an valid jwt token, but invalid user_id" do
       identity = create(:google_provider, :new)
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: "12121212"})
+      set_jwt_with_invalid_user()
 
       get '/api/auth/developer/callback'
       expect(response.status).to eq(401)
     end
 
-    it "logging in with an invalid jwt token" do
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: "1337"}, 0.second.from_now)
+    it "logging in with an expired jwt token" do
+      set_expired_jwt()
       get '/api/auth/developer/callback'
       expect(response.status).to eq(401)
     end
@@ -105,26 +106,27 @@ RSpec.describe "auth controller" do
 
       get '/api/user'
       json_data = JSON.parse(response.body)
-      expect(json_data["loggedIn"]).to eq(true)
+      expect(json_data["roles"]).to eq(["user"])
     end
   
     it "logging out" do
       get '/api/auth/developer/callback'
+
   
       expect(response.cookies['JWT-TOKEN']).to be_truthy  
   
       delete '/api/auth/sign_out'
   
-      expect(cookies['JWT-TOKEN']).to eq("")  
+      expect(cookies['JWT-TOKEN']).to eq("")
   
       get '/api/user'
       json_data = JSON.parse(response.body)
-      expect(json_data["loggedIn"]).to eq(false)
+      expect(json_data["roles"]).to eq(["guest"])
     end
 
     it "account linking with developer" do
       identity = create(:identity_provider, :new)
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id}, 1.hour.from_now)
+      set_jwt(identity.user)
   
       count_identity = Identity.where(user_id: identity.user_id).count
   
@@ -134,8 +136,10 @@ RSpec.describe "auth controller" do
     end
 
     it "account linking with already linked identity ( developer )" do
+      identity = create(:developer_provider, :existing)
       get '/api/auth/developer/callback'
-      cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]}, 1.hour.from_now)
+
+      set_jwt(identity.user)
       count_identity_by_user_id = Identity.where(user_id: user[:id]).count
       count_identities = Identity.all.count
   
@@ -145,8 +149,6 @@ RSpec.describe "auth controller" do
       expect(Identity.all.count).to eq(count_identities)
     end
   end
-
-  # TODO-TOM ASK MARCUS WHY DESCRIBE IS NIL
 
   it "registering new identity with new user" do
     user_count = User.all.count
@@ -249,7 +251,7 @@ RSpec.describe "auth controller" do
 
   it "account linking with identity" do
     identity = create(:identity_provider, :new)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id}, 1.hour.from_now)
+    set_jwt(identity.user)
 
     count_identity = Identity.where(user_id: identity.user_id).count
 
@@ -263,7 +265,7 @@ RSpec.describe "auth controller" do
 
   it "account linking with identity and existing extern provider" do
     identity = create(:developer_provider, :new)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id, data: { "confirmed": true }}, 1.hour.from_now)
+    set_jwt(identity.user)
 
     count_identity = Identity.where(user_id: identity.user_id).count
 
@@ -296,7 +298,7 @@ RSpec.describe "auth controller" do
 
   it "add a new email to an logged in user" do
     identity = create(:identity_provider, :new)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id}, 1.hour.from_now)
+    set_jwt(identity.user)
 
     count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
     count_identities = Identity.all.count

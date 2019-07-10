@@ -1,20 +1,13 @@
 
-export type UserDescription = UserLoggedInDescription | UserLoggedOutDescription;
-
 export interface UserNameDescription {
   displayName:string;
 }
 
-export interface UserLoggedInDescription {
+export interface UserDescription {
   displayName: string;
-  loggedIn: true;
-  role: string;
+  roles: string[];
+  userId: string;
 }
-
-export interface UserLoggedOutDescription {
-  loggedIn: false;
-  role: "guest";
-} 
 
 export interface UserAddEmailDescription {
   email: string;

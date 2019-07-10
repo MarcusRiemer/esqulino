@@ -4,13 +4,14 @@ require 'rails_helper'
 RSpec.describe "identities controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
+  before(:each) { create(:user, :guest) }
+
   it 'All identities of a logged in user' do
     identity = create(:identity_provider, :existing)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     get '/api/identities'
-
     json_data = JSON.parse(response.body)
     expect(json_data).to validate_against "ServerProviderDescription"
   end
@@ -45,7 +46,7 @@ RSpec.describe "identities controller" do
   it "password changing" do
     identity = create(:identity_provider, :existing)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     patch '/api/identities/change_password',
       :headers => json_headers,
@@ -61,7 +62,7 @@ RSpec.describe "identities controller" do
     create(:identity_provider, :new)
     identity = create(:identity_provider, :existing)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     patch '/api/identities/change_password',
       :headers => json_headers,
@@ -79,7 +80,7 @@ RSpec.describe "identities controller" do
   it "password changing with invalid current password" do
     identity = create(:identity_provider, :existing)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     patch '/api/identities/change_password',
       :headers => json_headers,
@@ -174,7 +175,7 @@ RSpec.describe "identities controller" do
     identity.user.set_email(identity[:uid])
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     get '/api/identities'
 
@@ -187,7 +188,7 @@ RSpec.describe "identities controller" do
   it "deleting identity" do
     identity = create(:identity_provider, :existing, uid: "another@web.de")
     create(:identity_provider, :existing, user_id: identity.user_id)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     expect(Identity.all.count).to eq(2)
 
@@ -204,7 +205,7 @@ RSpec.describe "identities controller" do
   it "deleting identity with wrong uid" do
     identity = create(:identity_provider, :existing, uid: "another@web.de")
     create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     expect(Identity.all.count).to eq(2)
 
@@ -221,7 +222,7 @@ RSpec.describe "identities controller" do
   it "deleting identity from another user" do
     identity = create(:identity_provider, :existing, uid: "another@web.de")
     identity2 = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity2.user_id})
+    cookies['JWT-TOKEN'] = JwtHelper.encode({user_id: identity2.user_id})
 
     expect(Identity.all.count).to eq(2)
 
@@ -239,7 +240,7 @@ RSpec.describe "identities controller" do
     identity = create(:identity_provider, :existing, uid: "another@web.de")
     create(:identity_provider, :existing)
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
     identity.user.set_email(identity[:uid])
     identity.user.save!
 
@@ -258,7 +259,7 @@ RSpec.describe "identities controller" do
 
   it "deleting identity while only one identity exists" do
     identity = create(:identity_provider, :existing, uid: "another@web.de")
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     delete '/api/identities/delete_identity',
       :headers => json_headers,

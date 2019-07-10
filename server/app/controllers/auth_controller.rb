@@ -25,7 +25,7 @@ class AuthController < ApplicationController
   
       redirect_to "/"
     rescue => e
-      error_response(e.message)
+      return error_response(e.message)
     end
   end
   
@@ -57,7 +57,7 @@ class AuthController < ApplicationController
 
     begin
       create_identity(identity_data, true)
-      api_response({ loggged_in: false })
+      api_response(current_user.informations)
     rescue Exception => e
       redirect_to "/"
     end
@@ -66,7 +66,7 @@ class AuthController < ApplicationController
   def destroy
     sign_out!
     delete_jwt_cookie!
-    api_response({ loggged_in: false })
+    api_response(current_user.informations)
   end
 
   def failure

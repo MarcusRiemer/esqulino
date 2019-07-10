@@ -9,7 +9,7 @@ module IdentityHelper
   def create_identity(auth = request.env["omniauth.auth"], email = false)
     @identity = Identity.search(auth)
     if (not @identity) then
-      user = signed_in?() ? @current_user : User.create_from_hash(auth)
+      user = signed_in?() ? current_user : User.create_from_hash(auth)
 
       case auth[:provider]
       when 'developer'
@@ -25,11 +25,11 @@ module IdentityHelper
       end
 
       if (user.invalid?) then
-        raise Exception.new("Error: Something got wrong with the creation of a user")
+        raise Exception.new("Error: Something went wrong with the creation of a user")
       end
 
       if (identity.invalid?) then
-        raise Exception.new("Error: Something got wrong with the creation of an identity")
+        raise Exception.new("Error: Something went wrong with the creation of an identity")
       end
 
       # If the user have no primary e-mail

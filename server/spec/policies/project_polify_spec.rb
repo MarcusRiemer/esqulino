@@ -10,7 +10,7 @@ RSpec.describe "Project-Policy" do
 
     it { should_not permit(:create)  }
     it { should_not permit(:update)  }
-    it { should_not permit(:delete) }
+    it { should_not permit(:destroy) }
   end
 
   context "as user ( not owner )" do
@@ -18,7 +18,7 @@ RSpec.describe "Project-Policy" do
 
     it { should permit(:create)  }
     it { should_not permit(:update)  }
-    it { should_not permit(:delete) }
+    it { should_not permit(:destroy) }
   end
 
   context "as admin" do
@@ -26,7 +26,7 @@ RSpec.describe "Project-Policy" do
 
     it { should permit(:create)  }
     it { should permit(:update)  }
-    it { should permit(:delete) }
+    it { should permit(:destroy) }
   end
 
   context "as owner" do
@@ -34,6 +34,6 @@ RSpec.describe "Project-Policy" do
 
     it { should permit(:create)  }
     it { should permit(:update)  }
-    it { should permit(:delete) }
+    it { should permit(:destroy) }
   end
 end

@@ -9,6 +9,7 @@ import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
+import { Roles } from '../authorisation/roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -27,15 +28,18 @@ export class UserService {
   }
 
   public readonly isLoggedIn$ = this.userData$.value.pipe(
-    map(u => u.loggedIn)
+    map(u => u.roles.includes(Roles.Guest) &&
+              (u.roles.includes(Roles.User) || u.roles.includes(Roles.Admin))
+          || u.roles.includes(Roles.User)
+          || u.roles.includes(Roles.Admin))
   )
 
   public readonly userDisplayName$ = this.userData$.value.pipe(
-    map(u => u.loggedIn ? u.displayName : "Guest")
+    map(u => u.displayName)
   )
 
-  public readonly role$ = this.userData$.value.pipe(
-    map(u => u.role)
+  public readonly roles$ = this.userData$.value.pipe(
+    map(u => u.roles)
   )
 
   public readonly primaryEmail$ = this.identities$.value.pipe(

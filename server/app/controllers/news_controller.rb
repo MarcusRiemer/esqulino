@@ -103,7 +103,7 @@ class NewsController < ApplicationController
 
   # Appends current_user to a hash
   def append_current_user(hash)
-    hash[:user] = @current_user
+    hash[:user] = current_user
     return hash
   end
 end
