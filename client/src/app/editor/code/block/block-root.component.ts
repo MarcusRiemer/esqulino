@@ -20,9 +20,9 @@ export class BlockRootComponent {
   /**
    * @return The resource that is currently edited
    */
-  get currentResource() {
-    return (this._currentCodeResource.currentResource);
-  }
+  readonly currentResource$ = this._currentCodeResource.currentResource;
+
+  readonly currentBlockLanguage$ = this._currentCodeResource.currentBlockLanguage;
 
 
 
