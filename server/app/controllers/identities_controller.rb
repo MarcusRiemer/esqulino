@@ -37,7 +37,7 @@ class IdentitiesController < ApplicationController
   
   def show
     if signed_in?
-      api_response(@current_user.all_providers)
+      api_response(current_user.all_providers)
     end
   end
 
@@ -121,7 +121,7 @@ class IdentitiesController < ApplicationController
 
   def change_password
     if signed_in?
-      identity = PasswordIdentity.find_by(user_id: @current_user[:id], provider: 'identity')
+      identity = PasswordIdentity.find_by(user_id: current_user[:id], provider: 'identity')
       if (not identity) then
         permited_params = change_password_params
         if (not identity.password_eql?(permited_params[:new_password])) then
@@ -147,7 +147,7 @@ class IdentitiesController < ApplicationController
       if (not identity) then
         return error_response("There exist no identity with this email.")
       end
-      all_identities = @current_user.all_validated_emails
+      all_identities = current_user.all_validated_emails
 
       # You need more than one identity to be able
       # to delete an identity
@@ -157,18 +157,18 @@ class IdentitiesController < ApplicationController
   
       # If the email to be deleted is the current primary email and 
       # no more identities with the same email existing return.
-      if (@current_user.email.eql? identity.email) and (all_identities.count <= 1) then
+      if (current_user.email.eql? identity.email) and (all_identities.count <= 1) then
         return error_response("You can't delete the primary e-mail.")
       end
      
       # Checks if the identity to be deleted has the same
       # user_id as the logged in user
-      if (not identity.user_id.eql? @current_user.id) then
+      if (not identity.user_id.eql? current_user.id) then
         return error_response("You have not the permission to delete this identity.")
       end
 
       identity.delete
-      api_response(@current_user.all_providers)
+      api_response(current_user.all_providers)
     end
   end
 end

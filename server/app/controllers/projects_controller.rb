@@ -56,11 +56,13 @@ class ProjectsController < ApplicationController
   def destroy
     begin
       authorize current_project
+      
       current_project.destroy
     rescue Pundit::NotAuthorizedError => e
       error_response("You need the permission")
     end
   end
+
 
   # The preview image for a specific project
   def preview_image
@@ -74,7 +76,7 @@ class ProjectsController < ApplicationController
   private
 
   def append_current_user(hash)
-    hash["user"] = @current_user
+    hash["user"] = current_user
     return hash
   end
 

@@ -10,16 +10,17 @@ export class IsUserGuard implements CanActivate {
   constructor(
     private _router: Router,
     private _userService: UserService
-  ) {}
+  ) { }
 
   public async canActivate(): Promise<boolean | UrlTree> {
     console.log("UserRole -> ?")
-    const role = await this._userService.role$
-                                        .pipe(take(1))
-                                        .toPromise()
-    console.log(`UserRole -> ${role}`)
-    if (role !== Roles.Admin
-     && role !== Roles.User) {
+    const roles = await this._userService.roles$
+      .pipe(take(1))
+      .toPromise()
+
+    console.log(`UserRoles -> ${roles}`)
+    if (!roles.includes(Roles.Admin) &&
+        !roles.includes(Roles.User)) {
 
       return this._router.parseUrl("/");
     }

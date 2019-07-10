@@ -4,21 +4,23 @@ require 'rails_helper'
 RSpec.describe "user controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
+  before(:each) { create(:user, :guest) }
+
   it 'getting the user description logged in' do
     user = create(:user)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: user[:id]})
+    set_jwt(user)
 
     get '/api/user'
 
     json_data = JSON.parse(response.body)
-    expect(json_data["loggedIn"]).to eq(true)
+    expect(json_data["roles"]).to eq(["user"])
   end
 
   it 'getting the user description logged out' do
     get '/api/user'
 
     json_data = JSON.parse(response.body)
-    expect(json_data["loggedIn"]).to eq(false)
+    expect(json_data["roles"]).to eq(["guest"])
   end
 
   it 'changing primary email logged out' do
@@ -38,8 +40,8 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
-    expect(User.first.email).to eq(identity.uid)
+    set_jwt(identity.user)
+    expect(User.find(identity.user_id).email).to eq(identity.uid)
 
 
     post '/api/user/send_change_email',
@@ -54,7 +56,7 @@ RSpec.describe "user controller" do
     
     get "/api/user/change_primary_email/#{updated_identity.change_primary_email_token}"
     
-    expect(User.first.email).to eq(identity2.uid)
+    expect(User.find(identity.user_id).email).to eq(identity2.uid)
   end
 
   it 'changing primary email to an unconfirmed email' do
@@ -64,8 +66,8 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
-    expect(User.first.email).to eq(identity.uid)
+    set_jwt(identity.user)
+    expect(User.find(identity.user_id).email).to eq(identity.uid)
 
     post '/api/user/send_change_email',
       :headers => json_headers,
@@ -74,7 +76,7 @@ RSpec.describe "user controller" do
       }.to_json
 
     expect(response.status).to eq(401)
-    expect(User.first.email).to eq(identity.uid)
+    expect(User.find(identity.user_id).email).not_to eq(identity2.uid)
   end
 
   it 'changing primary email to an not existing email' do
@@ -84,7 +86,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -104,7 +106,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -127,7 +129,7 @@ RSpec.describe "user controller" do
     identity.user.set_email(identity.uid)
     identity.user.save!
 
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
     expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
     post '/api/user/send_change_email',
@@ -149,7 +151,7 @@ RSpec.describe "user controller" do
 
   it "changing username with an valid" do
     identity = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
@@ -164,7 +166,7 @@ RSpec.describe "user controller" do
 
   it "changing username with an invalid (empty string)" do
     identity = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
@@ -179,7 +181,7 @@ RSpec.describe "user controller" do
 
   it "can perform with multiple objects" do
     identity = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = Auth.encode({user_id: identity.user_id})
+    set_jwt(identity.user)
 
     post '/api/user/may_perform',
       :headers => json_headers,
@@ -197,6 +199,6 @@ RSpec.describe "user controller" do
       }.to_json
 
     json_data = JSON.parse(response.body)
-    expect(json_data).to eq([{"perform": false}, {"perform": true}])
+    expect(json_data).to eq([{"perform" => false}, {"perform" => true}])
   end
 end

@@ -19,32 +19,48 @@ class ApplicationController < ActionController::API
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 
-  def error_response(err = "something got wrong", code = :unauthorized)
+  def error_response(err = "something went wrong", code = :unauthorized)
     render json: { "error": err }, status: code
   end
 
   def signed_in?
-    return (not @current_user.eql? User.guest)
+    return (not current_user.eql? User.guest)
+  end
+
+  def current_jwt=(jwt)
+    @current_jwt = jwt
+  end
+
+
+  def current_jwt
+    return @current_jwt
+  end
+
+  def current_user=(user)
+    @current_user = user
   end
 
   def current_user
+    if (not @current_user) then
+      token = request.cookies['JWT-TOKEN']
+      if token
+        begin
+          self.current_jwt = JwtHelper.decode(token)
+          self.current_user = User.find(current_jwt[:user_id].to_s)
+        rescue ActiveRecord::RecordNotFound => e
+          raise EsqulinoError.new
+        rescue JWT::DecodeError => e
+          raise EsqulinoError.new
+        end
+      else
+        self.current_user = User.guest
+      end
+    end
     return @current_user
   end
 
   def authenticate_user!
-    token = request.cookies['JWT-TOKEN']
-    if token
-      begin
-        @token_decoded = Auth.decode(token)
-        @current_user = User.find(@token_decoded[:user_id].to_s)
-      rescue ActiveRecord::RecordNotFound => e
-        render json: { error: e.message }, status: :unauthorized
-      rescue JWT::DecodeError => e
-        render json: { error: e.message }, status: :unauthorized
-      end
-    else
-      @current_user = User.guest
-    end
+
   end
 
   # An instance of EsqulinoError was thrown

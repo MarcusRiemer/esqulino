@@ -3,6 +3,7 @@ import { Component, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SignInDescription } from './auth-description';
 import { MatSnackBar } from '@angular/material';
+import { Roles } from '../authorisation/roles.enum';
 
 @Component({
   selector: 'sign-in',
@@ -19,7 +20,7 @@ export class SignInComponent {
   constructor(
     private _userService: UserService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   public onResetPassword(): void {
     this.content.emit();
@@ -30,7 +31,7 @@ export class SignInComponent {
       .signIn$(this.signInData)
       .subscribe(
         user => {
-          if (user.loggedIn ) {
+          if (!user.roles.includes(Roles.Guest)) {
             this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
           }
         },

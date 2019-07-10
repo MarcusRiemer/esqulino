@@ -1,13 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ProjectsController, type: :request do
-
-  let(:auth_headers) { {"Authorization" => "Basic #{Base64.encode64('user:user')}"} }
+  before(:each) { create(:user, :guest) }
 
   describe 'POST /api/project' do
+    let(:user) { create(:user) }
 
     describe 'valid request' do
       it 'creates a project' do
+        set_jwt(user)
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)
@@ -22,6 +23,7 @@ RSpec.describe ProjectsController, type: :request do
       end
 
       it 'missing the slug' do
+        set_jwt(user)
         post '/api/project', params: { "name": "foof" }
         expect(response).to have_http_status(200)
 
@@ -31,6 +33,7 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'invalid request' do
       it 'missing a name' do
+        set_jwt(user)
         post '/api/project', params: { "slug": "foof" }
         expect(response).to have_http_status(400)
       end
@@ -53,8 +56,10 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     describe 'valid request' do
+      before(:each) { set_jwt(project.user) }
+
       it 'updates all attributes at once' do
-        put "/api/project/#{project.slug}", params: update_params, headers: auth_headers
+        put "/api/project/#{project.slug}", params: update_params
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -69,8 +74,7 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'updates only the name' do
         put "/api/project/#{project.slug}",
-            params: { "apiVersion" => 4, "name" => "Only" },
-            headers: auth_headers
+            params: { "apiVersion" => 4, "name" => "Only" }
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -85,9 +89,8 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'updates only the description' do
         put "/api/project/#{project.slug}",
-            params: { "apiVersion" => 4, "description" => "Only" },
-            headers: auth_headers
-
+            params: { "apiVersion" => 4, "description" => "Only" }
+  
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
         json_data = JSON.parse(response.body)
@@ -101,8 +104,7 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'ignores unknown attributes' do
         put "/api/project/#{project.slug}",
-            params: { "apiVersion" => 4, "will_never_exist" => "Only" },
-            headers: auth_headers
+            params: { "apiVersion" => 4, "will_never_exist" => "Only" }
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -126,8 +128,7 @@ RSpec.describe ProjectsController, type: :request do
               "projectUsesBlockLanguages" => [
                 { "blockLanguageId" => new_block_language.id }
               ]
-            },
-            headers: auth_headers
+            }
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -150,8 +151,7 @@ RSpec.describe ProjectsController, type: :request do
               "projectUsesBlockLanguages" => [
                 { "id" => use_added_block_language.id, "_destroy": true }
               ]
-            },
-            headers: auth_headers
+            }
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -174,9 +174,8 @@ RSpec.describe ProjectsController, type: :request do
               "projectUsesBlockLanguages" => [
                 { "id" => use_added_block_language.id, "blockLanguageId": new_block_language.id }
               ]
-            },
-            headers: auth_headers
-
+            }
+  
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
         json_data = JSON.parse(response.body)
@@ -265,15 +264,16 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'nonexistant' do
-      delete "/api/project/not_even_a_uuid", headers: auth_headers
+      delete "/api/project/not_even_a_uuid"
 
       expect(response).to have_http_status(404)
     end
 
     it 'an empty project' do
       to_delete = FactoryBot.create(:project)
+      set_jwt(to_delete.user)
 
-      delete "/api/project/#{to_delete.slug}", headers: auth_headers
+      delete "/api/project/#{to_delete.slug}"
 
       expect(response.body).to be_empty
       expect(response).to have_http_status(204)

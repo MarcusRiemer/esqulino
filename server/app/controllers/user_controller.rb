@@ -28,9 +28,9 @@ class UserController < ApplicationController
   def change_username
     if signed_in? then
       permited_params = change_username_params
-      @current_user.display_name = permited_params[:display_name]
-      if @current_user.valid?
-        @current_user.save!
+      current_user.display_name = permited_params[:display_name]
+      if current_user.valid?
+        current_user.save!
         api_response(user_information)
       else
         error_response("This username is not valid")
@@ -84,13 +84,13 @@ class UserController < ApplicationController
     end
 
     permited_params = change_email_params
-    if @current_user.email.eql? permited_params[:primary_email] then
+    if current_user.email.eql? permited_params[:primary_email] then
       return render status: :ok
     end
 
-    validated_identities = @current_user.all_validated_emails
+    validated_identities = current_user.all_validated_emails
 
-    identity = Identity.where(user_id: @current_user.id)
+    identity = Identity.where(user_id: current_user.id)
                         .find_by_email(permited_params[:primary_email])
                         .first
 
@@ -126,7 +126,7 @@ class UserController < ApplicationController
       end
       api_array_response(to_response)
     rescue => exception
-      error_response("Something got wrong")
+      error_response("Something went wrong")
     end
   end
 

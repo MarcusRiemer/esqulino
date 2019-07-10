@@ -13,12 +13,12 @@ export class IsAdminGuard implements CanActivate {
   ) {}
   
   public async canActivate(): Promise<boolean | UrlTree> {
-    const role = await this._userService.role$
+    const roles = await this._userService.roles$
                                         .pipe(take(1))
                                         .toPromise()
 
-    console.log(role);
-    if (role !== Roles.Admin) {
+    console.log(`Current roles: ${roles}`);
+    if (roles.includes(Roles.Admin)) {
       return this._router.parseUrl("/");
     }
     return true;

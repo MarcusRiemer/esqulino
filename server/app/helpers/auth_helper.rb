@@ -13,9 +13,9 @@ module AuthHelper
     if signed_in?
       # Check if there exists an PasswordIdentity
       # because of a logged in user with other provider
-      identity = PasswordIdentity.where(user_id: @current_user[:id]).first
+      identity = PasswordIdentity.where(user_id: current_user[:id]).first
       if identity
-        name = @current_user[:display_name]
+        name = current_user[:display_name]
         password = identity.password
       end
     end
@@ -37,19 +37,15 @@ module AuthHelper
 
   def sign_in
     if !signed_in?
-      @current_user = @identity.user
-      token = Auth.encode({
-        user_id: current_user.id,
-        display_name: @current_user.display_name,
-        global_role: @current_user.global_role
-      })
+      current_user = @identity.user
+      token = JwtHelper.encode(current_user.informations)
       response_jwt_cookie(token)
     end
   end
 
   def sign_out!
     if signed_in?
-      @current_user = nil
+      current_user = User.guest
       delete_jwt_cookie!
     end
   end
@@ -68,6 +64,7 @@ module AuthHelper
   end
 
   def delete_jwt_cookie!()
+    @current_jwt = nil
     response_jwt_cookie("", 0.seconds.from_now)
   end
 end

@@ -92,7 +92,7 @@
 	Mittlerweile gibt es verschiedene Hash-Funktionen, von denen manche als nicht mehr sicher gelten. \hlnote{Bestimmte}{Weasel} Menschen haben es sich zur Aufgabe gemacht sogenannte Rainbowtables~\ref{fig:rainbowtable} zu erstellen, in denen Hashes mit dazugehörigem Klartext Passwort stehen. Dies hat zur Folge, dass falls ein Angreifer die Nutzerdaten erlangt und die Passwörter mit einer solchen Hash-Funktion gehasht wurden. Die Möglichkeit besteht das gehashte Passwort mit einer Rainbowtable abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Weshalb MD5~\ref{fig:md5} und SHA zwei der bekanntesten Hash-Funktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden.
 	
 	\begin{figure}[h]
-		\includegraphics[width=\textwidth]{images/hash-md5.png}
+sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 		\caption{Resultat einer MD5 Hashfunktion auf ein Klartext.}
 		\label{fig:md5}
 	\end{figure}
@@ -124,7 +124,7 @@
 	
 	\subsection{JSON Web Token}
 	\label{sec: jwt}
-	\enquote{\gls{JWT} sind auf \gls{JSON} basierende \gls{RFC} 7519 genormte Access-Token.}
+	\enquote{\gls{JWT} sind auf \gls{JSON} basierende \gls{RFC} 7519 genormte Access-Token.} \gls{RFC} ist eine Sammlung aus Dokumenten in denen das Verhalten der Technologien des Internets beschrieben ist. Einige davon gehören zum Standart und werden somit in den meisten Fällen vorrausgesetzt. In speziellen Fällen möchte beispielsweise ein Unternehmen eigene Protokolle verwenden die nicht zum Standart gehören. 
 	
 	Diese Tokens werden zur eindeutigen Identifizierung von Nutzern verwendet und können die Session ersetzen. Dabei ist es bei einem \gls{JWT} nicht von nöten die Daten auf dem Server zu speichern. Dies hat zur Folge, dass die Pflege des Speichers an diesem Punkt entfällt. Jedoch haben \gls{JWT} einen großen Nachteil, sobald der Server einen \gls{JWT} ausgestellt hat, ist dieser bis zum Ablauf des Tokens gültig. Das heißt, sollte ein Server die Berechtigung eines Nutzers nach Austellung eines \gls{JWT} ändern, ist diese Änderung erst bei erneutem erstellen eines \gls{JWT} gültig.
 	
@@ -229,7 +229,7 @@
 	
 	\subsubsection{Model}
 	\label{sec: rails_model}
-	Das Model spielt während dieser Thesis \hlnote{eine große Rolle}{weasel}. Es stellt jeweils eine Datenbanktabelle dar. Die Attribute des Models sind jeweilige Spalten der Datenbanktabelle. Jeweilige Datenbankeinträge die über das Model erstellt werden, können mittels Validatoren auf ihre Gültigkeit geprüft werden. Diese Validatoren werden innerhalb des Models festgelegt und auf ein Attribut des Models zugewiesen. Rails bietet dabei bereits verfügbare Validatoren, beispielsweise \enquote{presence: true} \hlnote{IMAGE-REF}{Bild Referenz}. Dieser Validator sorgt für das Vorhanden sein eines Wertes ungleich \textit{nil}. Jedes Model kann zusätzliche Funktionen beinhalten, die direkt auf den jeweiligen Datenbankeintrag angewandt werden kann. Außerdem bietet Rails die Möglichkeit die Beziehungen zwischen Datenbanktabellen direkt in den Modellen festzulegen.
+	Das Model in Rails stellt jeweils eine Datenbanktabelle dar. Die Attribute des Models sind jeweilige Spalten der Datenbanktabelle. Jeweilige Datenbankeinträge die über das Model erstellt werden, können mittels Validatoren auf ihre Gültigkeit geprüft werden. Diese Validatoren werden innerhalb des Models festgelegt und auf ein Attribut des Models zugewiesen. Rails bietet dabei bereits verfügbare Validatoren, beispielsweise \enquote{presence: true} \hlnote{IMAGE-REF}{Bild Referenz}. Dieser Validator sorgt für das Vorhanden sein eines Wertes ungleich \textit{nil}. Jedes Model kann zusätzliche Funktionen beinhalten, die direkt auf den jeweiligen Datenbankeintrag angewandt werden kann. Außerdem bietet Rails die Möglichkeit die Beziehungen zwischen Datenbanktabellen direkt in den Modellen festzulegen.
 	
 	\subsubsection{View}
 	\label{sec: rails_view}
@@ -281,11 +281,22 @@
 		\caption{Beispiele einiger zu installierender Provider}
 		\label{fig:provider-list}
 	\end{figure}
+
+	\subsection{Pundit}
+	\label{sec: pundit}
+	Pundit ist eine Ruby on Rails Library die ein Designpattern zur Autorisierung bietet. Bei diesem Pattern wird zu einem jeweiligen Controller eine Policy angelegt. Eine Policy ist hierbei nur eine Klasse. Dabei setzt sich der Name der Policy, aus dem Namen des Models und dem Schlüsselwort Policy als Suffix zusammen. Dem Konstruktor der Policy wird ein Nutzer und das jeweilige Objekt übergeben, welches auf den Zugriff geprüft werden soll. Innerhalb der Policy werden die jeweiligen Controllerfunktionsköpfe in denen eine Autorisierung stattfinden soll mit einem \enquote{?} als Suffix ergänzt und definiert. Diese Funktionen müssen zwingend einen Boolean als Rückgabewert haben um eine gültige Auswirkung als Policy zu haben. Sobald die aufgerufene Funktion der Policy fehlschlägt wird eine Exception geworfen. Diese Exception kann an jeweiliger Position beispielsweise im Controller abgefangen und verarbeitet werden. 
 	
-	\subsection{Problemanalyse}
+	Da es sich bei Policies um Klassen handelt, können diese auch instanziert und jeweilige Funktionen dynamisch abgerufen werden. Dies hat zur Folge, dass explizit nach einer bestimmten Policy-Funktion gefragt werden kann, selbst wenn der Funktionsname nicht dem der aufgerufenen Policy-Funktion entspricht.
+	
+	\subsection{Rolify}
+	\label{sec: rolify}
+	Rolify ist eine Ruby on Rails Library zur Verwaltung von Rollen. Hierbei liefert Rolify bereits zwei Datenbanktabellen im Design der polymorphen Assoziation. 
+	
+	
+	\section{Problemanalyse}
 	\label{sec: analyze}
 	
-	\subsection{Implementierung}
+	\section{Implementierung}
 	\label{sec: implementation}
 	
 	\subsubsection{Omniauth Identity\todo{$\rightarrow$Implementierung}}
