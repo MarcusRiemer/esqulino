@@ -54,7 +54,7 @@ export function visualizeNode(
 ): VisualBlockDescriptions.ConcreteBlock {
   const attributes = t.attributes
     // Ignore everything that is not expected
-    .filter(t => ["property", "sequence", "allowed"].includes(t.type))
+    .filter(t => ["property", "sequence", "allowed", "parentheses", "choice"].includes(t.type))
     .map(a => visualizeNodeAttributes(d, a));
   const wrappedAttributes: VisualBlockDescriptions.EditorContainer[] = (attributes.length > 0)
     ? [{ blockType: "container", cssClasses: ["indent", "vertical"], children: attributes }]
@@ -63,7 +63,6 @@ export function visualizeNode(
   return ({
     blockType: "block",
     direction: "vertical",
-
     children: [
       { blockType: "constant", text: `node "${name}" {` },
       ...wrappedAttributes,
@@ -81,6 +80,8 @@ export function visualizeNodeAttributes(
       return visualizeProperty(d, t);
     case "sequence":
     case "allowed":
+    case "parentheses":
+    case "choice":
       return visualizeChildGroup(d, t);
   }
 }
