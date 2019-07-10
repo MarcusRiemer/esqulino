@@ -19,6 +19,7 @@
       <ng-template #renderTree>
         <div class="block-editor-root">
           <editor-block-host  *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
+                              [blockLanguage]="currentBlockLanguage"
                               [ngClass]="currentBlockLanguage.rootCssClasses"
                               [codeResource]="currentResource"
                               [node]="currentTree.rootNode"

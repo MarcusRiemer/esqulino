@@ -3,7 +3,7 @@ import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { map, withLatestFrom, distinctUntilChanged, tap, combineLatest } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions } from '../../../shared/block';
+import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
 import { arrayEqual } from '../../../shared/util';
 import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
@@ -39,6 +39,11 @@ export class BlockRenderBlockComponent {
    * Disables any interaction with this block if true.
    */
   @Input() public readOnly = false;
+
+  /**
+   * Optionally override the block language that comes with the code resource.
+   */
+  @Input() public blockLanguage?: BlockLanguage;
 
   constructor(
     private _dragService: DragService,

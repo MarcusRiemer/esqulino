@@ -122,7 +122,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         this._debugOptions.showDropDebug.value$,
         this._debugOptions.showLanguageSelector.value$,
       ),
-      tap(v => console.log(v)),
       map(
         ([blockLanguage, showDropDebug, showLanguageSelector]) => {
           // Take all of the default block languages

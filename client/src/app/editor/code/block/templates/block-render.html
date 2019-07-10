@@ -54,17 +54,17 @@
       <!-- Rendering the actual editor-blocks. This element is an immediate child of the
            flex-element above. It is therefore the only place where flex-children specific
            properties can be applied.-->
-      <ng-container *ngFor="let childVisualBlock of iteratorGetEditorBlock(childNode).visual">
-        <editor-block-render class="from-iterator"
-                             [codeResource]="codeResource"
-                             [node]="childNode"
-                             [visual]="childVisualBlock"
-                             [readOnly]="readOnly"></editor-block-render>
-      </ng-container>
+      <editor-block-render *ngFor="let childVisualBlock of iteratorGetEditorBlock(childNode).visual"
+                           [blockLanguage]="blockLanguage"
+                           [codeResource]="codeResource"
+                           [node]="childNode"
+                           [visual]="childVisualBlock"
+                           [readOnly]="readOnly"></editor-block-render>
 
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild; else lastDrop;">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
+                             [blockLanguage]="blockLanguage"
                              [codeResource]="codeResource"
                              [visual]="sepBlock"
                              [node]="childNode"></editor-block-render>
@@ -91,6 +91,7 @@
     <editor-block-render-block #currentBlock
                                [@background]="currentBlock.backgroundState | async"
                                [@isEmbraced]="currentBlock.isEmbraceDrop | async"
+                               [blockLanguage]="blockLanguage"
                                [blockLayout]="visual"
                                [blockBase]="visual"
                                [codeResource]="codeResource"
@@ -107,8 +108,9 @@
   </ng-container>
   <!-- Render multiple visuals for the same node -->
   <editor-block-container *ngSwitchCase="'container'"
-       [ngClass]="visual.cssClasses">
+                          [ngClass]="visual.cssClasses">
     <editor-block-render *ngFor="let childVisual of childVisuals;"
+                         [blockLanguage]="blockLanguage"
                          [visual]="childVisual"
                          [codeResource]="codeResource"
                          [node]="node"
