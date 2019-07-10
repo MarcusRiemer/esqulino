@@ -21,9 +21,11 @@ export function readableConstants(all: VisualBlockDescriptions.ConcreteBlock[]):
         toReturn += b.text;
         break;
       case "block":
-      case "iterator":
       case "container":
-        toReturn += `<${b.blockType}${readableClass(b)}>` + readableConstants(b.children) + `</${b.blockType}>`;
+        toReturn += `<${b.blockType}${readableClass(b)}>` + readableConstants(b.children || []) + `</${b.blockType}>`;
+        break;
+      case "iterator":
+        toReturn += `<iterator childGroup="${b.childGroupName}">`;
         break;
     }
   });

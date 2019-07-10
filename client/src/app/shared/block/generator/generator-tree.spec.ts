@@ -86,5 +86,45 @@ describe("Tree BlockLanguage Generator", () => {
       expect(r.editorBlocks[0])
         .toEqual(jasmine.objectContaining({ describedType: { languageName: "g1", typeName: "t1" } }));
     });
+
+    it("Goes into parentheses", () => {
+      const grammar: GrammarDocument = {
+        technicalName: "g1",
+        root: "t1",
+        types: {
+          "t1": {
+            type: "concrete",
+            attributes: [
+              {
+                type: "parentheses",
+                name: "p1",
+                cardinality: "+",
+                group: {
+                  nodeTypes: ["t2", "t3"],
+                  type: "allowed"
+                }
+              }
+            ]
+          },
+          "t2": {
+            type: "concrete",
+            attributes: []
+          },
+          "t3": {
+            type: "concrete",
+            attributes: []
+          }
+        },
+      };
+
+      const r = convertGrammarTreeInstructions({ "type": "tree" }, grammar);
+
+      expect(r.editorBlocks)
+        .not.toEqual([]);
+      expect(readableConstants(r.editorBlocks[0].visual))
+        .toEqual(`<block>node "t1" {<container class="indent vertical"><container class="vertical">children parentheses "p1" : [<iterator childGroup="p1">]</container></container>}</block>`);
+      expect(r.editorBlocks[0])
+        .toEqual(jasmine.objectContaining({ describedType: { languageName: "g1", typeName: "t1" } }));
+    });
   });
 });
