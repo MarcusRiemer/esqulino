@@ -1,19 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
+import { ComponentPortal } from '@angular/cdk/portal';
 
-import { map, switchMap, first } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap, first, combineLatest, tap } from 'rxjs/operators';
 
-import { EditorComponentDescription, DropDebugComponentDescription } from '../../../shared/block/block-language.description';
-
-import { EditorComponentsService } from '../editor-components.service';
+import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
 import { ToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
-import { BlockLanguage } from '../../../shared/block';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { Observable } from 'rxjs';
+import { EditorComponentsService } from '../editor-components.service';
+
+import { BlockDebugOptionsService } from '../../block-debug-options.service';
 
 interface PlacedEditorComponent {
   portal: ComponentPortal<{}>;
@@ -44,6 +44,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
+    private _debugOptions: BlockDebugOptionsService,
   ) {
   }
 
@@ -117,21 +118,28 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   readonly editorComponentDescriptions = this.currentResource
     .pipe(
       switchMap(codeResource => codeResource.blockLanguage),
+      combineLatest(
+        this._debugOptions.showDropDebug.value$,
+        this._debugOptions.showLanguageSelector.value$,
+      ),
+      tap(v => console.log(v)),
       map(
-        (blockLanguage: BlockLanguage) => {
+        ([blockLanguage, showDropDebug, showLanguageSelector]) => {
           // Take all of the default block languages
           const toReturn = [...blockLanguage.editorComponents];
 
           // Possibly inject the debug component
-          const blockEditorIndex = toReturn.findIndex(c => c.componentType === "block-root");
-          if (blockEditorIndex >= 0) {
-            toReturn.splice(blockEditorIndex + 1, 0, {
-              componentType: "drop-debug"
-            });
+          if (showDropDebug) {
+            const blockEditorIndex = toReturn.findIndex(c => c.componentType === "block-root");
+            if (blockEditorIndex >= 0) {
+              toReturn.splice(blockEditorIndex + 1, 0, {
+                componentType: "drop-debug"
+              });
+            }
           }
 
           // Possibly inject the renaming component
-          if (true) {
+          if (showLanguageSelector) {
             toReturn.splice(0, 0, { componentType: "code-resource-settings" });
           }
 

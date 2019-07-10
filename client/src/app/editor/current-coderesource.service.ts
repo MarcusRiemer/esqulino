@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs'
-import { tap, flatMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
+import { tap, flatMap, map } from 'rxjs/operators';
 
 import { CodeResource, NodeLocation, Tree } from '../shared/syntaxtree';
 
@@ -10,6 +10,7 @@ import { SidebarService } from './sidebar.service';
 
 // TODO: Promote the new sidebar system
 import { CodeSidebarComponent } from './code/code.sidebar'
+import { BlockLanguage } from '../shared/block';
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -75,6 +76,16 @@ export class CurrentCodeResourceService {
    */
   readonly currentTree: Observable<Tree> = this._codeResource.pipe(
     flatMap(c => c.syntaxTree)
+  );
+
+  readonly resourceBlockLanguage: Observable<BlockLanguage> = this.currentResource.pipe(
+    flatMap(c => c.blockLanguage)
+  );
+
+  readonly currentBlockLanguage: Observable<BlockLanguage> = combineLatest(
+    this.resourceBlockLanguage
+  ).pipe(
+    map(([res]) => res)
   );
 
   /**

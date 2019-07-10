@@ -16,6 +16,7 @@ import { ValidationComponent } from './validation.component'
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockBaseDirective } from './block/block-base.directive'
+import { BlockDebugOptionsService } from '../block-debug-options.service'
 import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
@@ -98,7 +99,12 @@ export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders {
     return ({
       ngModule: CodeEditorModule,
-      providers: [EditorComponentsService, QueryService, TruckWorldService]
+      providers: [
+        EditorComponentsService,
+        BlockDebugOptionsService,
+        QueryService,
+        TruckWorldService
+      ]
     });
   }
 

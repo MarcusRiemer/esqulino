@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -49,7 +50,8 @@ const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
   MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
-  MatNativeDateModule, MatInputModule, MatFormFieldModule
+  MatNativeDateModule, MatInputModule, MatFormFieldModule,
+  MatCheckboxModule
 ]
 
 /**
