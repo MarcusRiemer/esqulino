@@ -2,9 +2,10 @@
       class="fa fa-cog fa-spin fa-fw"></span>
 
 <!-- Render all components of this block -->
-<ng-container *ngFor="let childVisualBlock of visual.children">
-  <editor-block-render [visual]="childVisualBlock"
-                       [codeResource]="codeResource"
-                       [node]="node"
-                       [readOnly]="readOnly"></editor-block-render>
-</ng-container>
+<editor-block-render *ngFor="let childVisualBlock of visual.children"
+                     [blockLanguage]="blockLanguage"
+                     [visual]="childVisualBlock"
+                     [codeResource]="codeResource"
+                     [node]="node"
+                     [readOnly]="readOnly">
+</editor-block-render>

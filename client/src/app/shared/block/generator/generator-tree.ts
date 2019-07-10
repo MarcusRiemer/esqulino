@@ -24,7 +24,8 @@ export function convertGrammarTreeInstructions(
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || defaultEditorComponents,
-    sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
+    sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar)),
+    rootCssClasses: ["activate-indent", "activate-block-outline"]
   };
 
   // Create a visual representation for each concrete type
@@ -51,7 +52,10 @@ export function visualizeNode(
   name: string,
   t: NodeConcreteTypeDescription,
 ): VisualBlockDescriptions.ConcreteBlock {
-  const attributes = t.attributes.map(a => visualizeNodeAttributes(d, a));
+  const attributes = t.attributes
+    // Ignore everything that is not expected
+    .filter(t => ["property", "sequence", "allowed"].includes(t.type))
+    .map(a => visualizeNodeAttributes(d, a));
   const wrappedAttributes: VisualBlockDescriptions.EditorContainer[] = (attributes.length > 0)
     ? [{ blockType: "container", cssClasses: ["indent", "vertical"], children: attributes }]
     : []
@@ -92,7 +96,7 @@ export function visualizeChildGroup(
     children: [
       {
         blockType: "constant",
-        text: `children "${t.name}" : [`
+        text: `children ${t.type} "${t.name}" : [`
       },
       {
         blockType: "iterator",
