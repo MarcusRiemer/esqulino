@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_07_133836) do
+ActiveRecord::Schema.define(version: 2019_07_11_124705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -166,9 +166,13 @@ ActiveRecord::Schema.define(version: 2019_07_07_133836) do
   add_foreign_key "grammars", "programming_languages"
   add_foreign_key "identities", "users"
   add_foreign_key "log_entries", "users"
+  add_foreign_key "news", "users"
   add_foreign_key "project_databases", "projects"
   add_foreign_key "project_sources", "projects"
   add_foreign_key "project_uses_block_languages", "block_languages"
   add_foreign_key "project_uses_block_languages", "projects"
   add_foreign_key "projects", "project_databases", column: "default_database_id"
+  add_foreign_key "projects", "users"
+  add_foreign_key "users_roles", "roles"
+  add_foreign_key "users_roles", "users"
 end
