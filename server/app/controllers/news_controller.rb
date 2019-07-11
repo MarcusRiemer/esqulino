@@ -67,7 +67,7 @@ class NewsController < ApplicationController
   end
 
   # Deletion of a single news
-  def delete
+  def destroy
     news = News.all.find(params[:id])
     begin
       authorize news

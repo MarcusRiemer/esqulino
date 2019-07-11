@@ -110,7 +110,7 @@ Rails.application.routes.draw do
       root via: [:post], controller: 'news', action: :create
       get ':id', controller: 'news', action: :show
       put ':id', controller: 'news', action: :update
-      delete ':id', controller: 'news', action: :delete
+      delete ':id', controller: 'news', action: :destroy
     end
 
     resources :block_languages, only: [:create, :index, :show, :update, :destroy]

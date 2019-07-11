@@ -103,4 +103,28 @@ namespace :blattwerkzeug do
       m.load_all_users
     end
   end
+
+  namespace :role do
+    desc 'Serialize all roles to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_roles
+    end
+
+    desc 'Serialize all roles to their seed representation'
+    task :load_all => :environment do |t, args|
+      m.load_all_roles
+    end
+  end
+
+  namespace :user_role do
+    desc 'Serialize all roles to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_user_roles
+    end
+
+    desc 'Serialize all roles to their seed representation'
+    task :load_all => :environment do |t, args|
+      m.load_all_user_roles
+    end
+  end
 end

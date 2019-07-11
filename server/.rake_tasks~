@@ -17,6 +17,10 @@ blattwerkzeug:project:validate[project_id]
 blattwerkzeug:project:validate_all
 blattwerkzeug:user:load_all
 blattwerkzeug:user:store_all
+blattwerkzeug:role:load_all
+blattwerkzeug:role:store_all
+blattwerkzeug:user_role:load_all
+blattwerkzeug:user_role:store_all
 clean
 clobber
 db:create
