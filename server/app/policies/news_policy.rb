@@ -14,7 +14,7 @@ class NewsPolicy
     user.is_admin?
   end
 
-  def delete?
+  def destroy?
     user.is_admin? || user.owner_of?(news)
   end
 end

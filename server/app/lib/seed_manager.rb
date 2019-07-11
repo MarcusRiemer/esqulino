@@ -147,6 +147,36 @@ class SeedManager
   end
 
   #############################################
+  # Roles
+  #############################################
+
+  # Stores all users
+  def store_all_roles
+    Seed::RoleSeed.store_all
+  end
+
+  # Loads all roles that are available 
+  def load_all_roles
+    Seed::RoleSeed.load_all
+  end
+
+  #############################################
+  # User roles
+  #############################################
+
+  # Stores all users
+  def store_all_user_roles
+    Seed::UserRoleSeed.store_all
+  end
+
+  # Loads all roles that are available 
+  def load_all_user_roles
+    Seed::UserRoleSeed.load_all
+  end
+  
+  
+
+  #############################################
   # Programming Languages
   #############################################
 
