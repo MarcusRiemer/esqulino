@@ -1,0 +1,20 @@
+--- !ruby/object:Role
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: bc59e8c1-e563-408f-869f-95392829c076
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: guest
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: resource_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: resource_type
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-07-11 08:48:48.571651'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-07-11 08:48:48.571651'
+new_record: false
+active_record_yaml_version: 2
