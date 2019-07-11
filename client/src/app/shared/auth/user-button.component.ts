@@ -10,14 +10,14 @@ import { UserService } from './user.service';
   selector: 'user-button',
   templateUrl: './templates/user-button.html'
 })
-export class UserButtonComponent{
+export class UserButtonComponent {
   constructor(
     private _dialog: MatDialog,
     private _userService: UserService,
     private _router: Router
-  ) {}
+  ) { }
 
-  readonly userDisplayName = this._userService.userDisplayName$
+  readonly userDisplayName$ = this._userService.userDisplayName$
 
   /**
    * Opens an dialog for sign in or sign up
@@ -38,10 +38,10 @@ export class UserButtonComponent{
    * Sends an delete request and navigates back to the base url
    */
   public onLogout(): void {
-   this._userService.logout$().subscribe(
-     _ => {
-       this._router.navigate(['/']);
-     }
-   )
+    this._userService.logout$().subscribe(
+      _ => {
+        this._router.navigate(['/']);
+      }
+    )
   }
 }

@@ -24,7 +24,7 @@ export class BasePerformData {
 
   public delete(resourceId: string): MayPerformRequestDescription {
     return ({
-      resourceType: "News",
+      resourceType: this._resourceType,
       resourceId: resourceId,
       policyAction: "delete"
     })

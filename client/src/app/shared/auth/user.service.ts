@@ -23,10 +23,6 @@ export class UserService {
   public userData$ = this._serverData.getUserData;
   public identities$ = this._serverData.getIdentities;
 
-  public resetPerformIndex(): void {
-    this.performIndex = 0;
-  }
-
   public readonly isLoggedIn$ = this.userData$.value.pipe(
     map(u => u.roles.includes(Roles.Guest) &&
               (u.roles.includes(Roles.User) || u.roles.includes(Roles.Admin))

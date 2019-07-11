@@ -1,10 +1,11 @@
 import { UserService } from './auth/user.service';
-import { Component, Inject, LOCALE_ID, Input, ViewChild } from "@angular/core";
+import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit } from "@angular/core";
 import { BrowserService } from './browser.service';
 import { MatSidenav } from '@angular/material';
 
 import { NavItem } from './nav-interfaces';
 import { SideNavService } from './side-nav.service';
+import { take, first } from 'rxjs/operators';
 
 
 
@@ -13,7 +14,7 @@ import { SideNavService } from './side-nav.service';
   templateUrl: './templates/side-nav.html'
 })
 
-export class SideNavComponent {
+export class SideNavComponent implements OnInit {
   @Input('items') navItems: NavItem[];
 
   @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
@@ -46,4 +47,26 @@ export class SideNavComponent {
 
   // The actual locale that is currently in use
   readonly locale = this._localeId;
+
+  private _userRoles: string[];
+
+  public get userRoles(): string[] {
+    return this._userRoles;
+  }
+
+  public set userRoles(roles: string[]) {
+    this._userRoles = roles;
+  }
+
+  public ngOnInit(): void {
+    this._userService.roles$.pipe(first())
+      .subscribe(v => this.userRoles = v)
+  }
+
+  public userHasRoles(roles: string[]): boolean {
+    return roles
+      ? roles.every(v => this.userRoles.includes(v))
+      : true
+      ;
+  }
 }
