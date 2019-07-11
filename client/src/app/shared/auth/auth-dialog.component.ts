@@ -15,7 +15,7 @@ export class AuthDialogComponent {
 
   public readonly providers = providers
 
-  public signInOrUp:boolean = true;
+  public signInOrUp: boolean = true;
 
   public changeContent(): void {
     this.signInOrUp = false;
