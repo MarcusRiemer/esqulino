@@ -24,7 +24,7 @@ const AppRoutes: Routes = [
     path: 'admin',
     // loadChildren: './admin/admin.module#AdminModule',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), // new dynamic import method
-    // canActivate: [LoggedInGuard, IsAdminGuard]
+    canActivate: [LoggedInGuard, IsAdminGuard]
   },
   {
     path: '',

@@ -1,21 +1,27 @@
-
 /* Allows independent scrolling of sidenav and main content items */
 .body-nav-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .content,
+  .admin {
+    min-height: calc(100vh - (#{$toolbar-height} + #{$toolbar-margin-bottom}));
+  }
+
+  side-nav-selector {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    overflow: hidden;
+  }
+}
 
-    .content, .admin {
-        min-height: calc(100vh - (#{$toolbar-height} + #{$toolbar-margin-bottom}));
-    }
-
-    side-nav-selector {
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
+.user-button {
+  .display-name {
+    font-size: 12px;
+  }
 }

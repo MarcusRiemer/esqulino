@@ -1,41 +1,31 @@
-
-
 <mat-menu #userMenu="matMenu">
-
-  <button
-    mat-menu-item
-    [routerLink]="['/user']">
-
+  <button mat-menu-item [routerLink]="['/user']">
     Profil
   </button>
 
-  <button
-    mat-menu-item
-    [routerLink]="['/user/settings']">
-
+  <button mat-menu-item [routerLink]="['/user/settings']">
     Einstellungen
   </button>
 
-  <button
-    mat-menu-item
-    (click)="onLogout()">
-
+  <button mat-menu-item (click)="onLogout()">
+    <i class="fa fa-sign-out"></i>
     Logout
   </button>
 </mat-menu>
 
-<is-logged-in>
-  <!-- TODO-TOM BUG: IF YOURE CLICK ON THE BUTTON THE SHADOW EFFECT WILL STAY UNTIL YOU CLICK AGAIN -->
+<is-logged-in class="user-button">
   <ng-container logged_in>
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <span class="display-name">
+        {{ userDisplayName$ | async }}
+      </span>
       <i class="fa fa-user-circle-o" aria-hidden="true"></i>
     </button>
   </ng-container>
 
   <ng-container logged_out>
     <button mat-icon-button (click)="openDialog()">
-      <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+      <i class="fa fa-sign-in" aria-hidden="true"></i>
     </button>
   </ng-container>
 </is-logged-in>
-

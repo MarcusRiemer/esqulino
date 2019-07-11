@@ -1,6 +1,6 @@
 
 export interface UserNameDescription {
-  displayName:string;
+  displayName: string;
 }
 
 export interface UserDescription {
@@ -29,7 +29,7 @@ export interface PasswordConfirmedDescription {
   confirmedPassword: string;
 }
 
-export interface PasswordTokenDescription{
+export interface PasswordTokenDescription {
   password: string;
   confirmedPassword: string;
   token: string;
