@@ -1,19 +1,21 @@
 {
   "technicalName": "g8",
-  "root": "n1",
+  "root": { "languageName": "g8", "typeName": "n1" },
   "types": {
-    "n1": {
-      "attributes": [
-        {
-          "name": "c",
-          "type": "choice",
-          "choices": ["n2", "n3"]
-        }
-      ]
-    },
-    "n2": {
-    },
-    "n3": {
+    "g8": {
+      "n1": {
+        "attributes": [
+          {
+            "name": "c",
+            "type": "choice",
+            "choices": ["n2", "n3"]
+          }
+        ]
+      },
+      "n2": {
+      },
+      "n3": {
+      }
     }
   }
 }

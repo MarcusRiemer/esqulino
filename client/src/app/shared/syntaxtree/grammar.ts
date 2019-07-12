@@ -1162,7 +1162,7 @@ class TypeReference {
 export class GrammarValidator {
   private _validator: Validator;
   private _technicalName: string;
-  private _registeredTypes: { [name: string]: NodeType } = {};
+  private _registeredTypes: { [languageName: string]: { [typeName: string]: NodeType } } = {};
   private _rootType: TypeReference;
 
   /**
@@ -1176,8 +1176,10 @@ export class GrammarValidator {
     this._validator = validator;
     this._technicalName = desc.technicalName;
 
-    Object.entries(desc.types).forEach(([typeName, typeDesc]) => {
-      this.registerTypeValidator(typeName, typeDesc)
+    Object.entries(desc.types).forEach(([langName, types]) => {
+      Object.entries(types).forEach(([typeName, typeDesc]) => {
+        this.registerTypeValidator(langName, typeName, typeDesc)
+      });
     });
 
     this._rootType = new TypeReference(validator, desc.root, this._technicalName);
@@ -1200,8 +1202,10 @@ export class GrammarValidator {
   /**
    * @return All types that are part of this language.
    */
-  get availableTypes() {
-    return (Object.values(this._registeredTypes));
+  get availableTypes(): NodeType[] {
+    const nested = Object.values(this._registeredTypes)
+      .map(lang => Object.values(lang));
+    return ([].concat.apply([], nested));
   }
 
   /**
@@ -1219,33 +1223,47 @@ export class GrammarValidator {
   /**
    * @return True if the given typename is known in this language.
    */
-  isKnownType(typename: string) {
-    return (!!this._registeredTypes[typename]);
+  isKnownType(languageName: string, typename: string): boolean {
+    const lang = this._registeredTypes[languageName];
+    return (lang && !!lang[typename]);
   }
 
   /**
    * @return The type with the matching name.
    */
-  getType(typename: string) {
-    if (!this.isKnownType(typename)) {
+  getType(languageName: string, typename: string): NodeType {
+    if (!this.isKnownType(this.technicalName, typename)) {
       throw new Error(`Language "${this._technicalName}" does not have type "${typename}"`);
     } else {
-      return (this._registeredTypes[typename]);
+      return (this._registeredTypes[languageName][typename]);
     }
   }
 
   /**
    * Registers a new type validator with this language.
    */
-  private registerTypeValidator(nodeName: string, desc: Desc.NodeTypeDescription) {
-    if (this.isKnownType(nodeName)) {
+  private registerTypeValidator(
+    languageName: string,
+    nodeName: string,
+    desc: Desc.NodeTypeDescription
+  ) {
+    // Ensure that we don't override any types
+    if (this.isKnownType(languageName, nodeName)) {
       throw new Error(`Attempted to register node "${nodeName}" twice for "${this._technicalName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
+    // Ensure the object for the language in question exists
+    if (!this._registeredTypes[languageName]) {
+      this._registeredTypes[languageName] = {};
+    }
+
+    const langTypes = this._registeredTypes[languageName];
+
+    // Actually instantiate the correct validator
     if (Desc.isNodeConcreteTypeDescription(desc)) {
-      this._registeredTypes[nodeName] = new NodeConcreteType(this._validator, desc, this._technicalName, nodeName);
+      langTypes[nodeName] = new NodeConcreteType(this._validator, desc, languageName, nodeName);
     } else if (Desc.isNodeOneOfTypeDescription(desc)) {
-      this._registeredTypes[nodeName] = new NodeOneOfType(this._validator, desc, this._technicalName, nodeName);
+      langTypes[nodeName] = new NodeOneOfType(this._validator, desc, languageName, nodeName);
     }
   }
 }

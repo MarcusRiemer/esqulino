@@ -279,15 +279,20 @@ export interface GrammarListDescription {
   slug?: string
 }
 
+export type NamedTypes = { [nodeName: string]: NodeTypeDescription };
+
 /**
  * This part of the grammar is stored as a JSON blob in the database.
  */
 export interface GrammarDatabaseBlob {
-  // All types that exist in this language
-  types: { [nodeName: string]: NodeTypeDescription }
+  // All types that are defined on this language
+  types: { [languageName: string]: NamedTypes }
+
+  // All types that come from different languages
+  foreignTypes?: { [languageName: string]: NamedTypes }
 
   // The type that needs to be at the root of the language.
-  root: TypeReference
+  root: QualifiedTypeName
 }
 
 /**
@@ -297,6 +302,9 @@ export interface GrammarDatabaseBlob {
 export interface GrammarDocument extends GrammarDatabaseBlob {
   // This name is used when a grammer is referred to by another grammar
   technicalName: string
+
+  // These grammars are included in this grammar
+  includedGrammars?: string[]
 }
 
 /**

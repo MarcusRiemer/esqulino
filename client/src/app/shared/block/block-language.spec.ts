@@ -12,24 +12,26 @@ const langEmptyBlocks: LanguageDefinition = {
     {
       technicalName: "emptyBlocks",
       types: {
-        "root": {
-          attributes: [
-            {
-              name: "cat_a",
-              type: "allowed",
-              nodeTypes: [
-                {
-                  nodeType: "a",
-                  occurs: "+"
-                }
-              ]
-            }
-          ]
-        } as NodeTypeDescription,
-        "a": {} as NodeTypeDescription,
-        "z": {} as NodeTypeDescription
+        "emptyBlocks": {
+          "root": {
+            attributes: [
+              {
+                name: "cat_a",
+                type: "allowed",
+                nodeTypes: [
+                  {
+                    nodeType: "a",
+                    occurs: "+"
+                  }
+                ]
+              }
+            ]
+          } as NodeTypeDescription,
+          "a": {} as NodeTypeDescription,
+          "z": {} as NodeTypeDescription
+        },
       },
-      root: "root"
+      root: { languageName: "emptyBlocks", typeName: "root" }
     }
   ]
 }

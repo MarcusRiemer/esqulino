@@ -1,44 +1,46 @@
 {
   "technicalName": "g12",
-  "root": "n1",
+  "root": { "languageName": "g12", "typeName": "n1" },
   "types": {
-    "n1": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "c",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "nodeType": {
-                "languageName": "g12",
-                "typeName": "n2"
+    "g12": {
+      "n1": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "c",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "nodeType": {
+                  "languageName": "g12",
+                  "typeName": "n2"
+                },
+                "occurs": "*"
               },
-              "occurs": "*"
-            },
-            {
-              "nodeType": {
-                "languageName": "g12",
-                "typeName": "n3"
-              },
-              "occurs": "*"
+              {
+                "nodeType": {
+                  "languageName": "g12",
+                  "typeName": "n3"
+                },
+                "occurs": "*"
+              }
+            ],
+            "between": {
+              "type": "terminal",
+              "name": "cSep",
+              "symbol": ","
             }
-          ],
-          "between": {
-            "type": "terminal",
-            "name": "cSep",
-            "symbol": ","
           }
-        }
-      ]
-    },
-    "n2": {
-      "type": "concrete",
-      "attributes": []
-    },
-    "n3": {
-      "type": "concrete",
-      "attributes": []
+        ]
+      },
+      "n2": {
+        "type": "concrete",
+        "attributes": []
+      },
+      "n3": {
+        "type": "concrete",
+        "attributes": []
+      }
     }
   }
 }
