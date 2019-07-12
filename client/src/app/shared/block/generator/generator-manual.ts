@@ -11,6 +11,8 @@ import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
 import { generateSidebar } from './sidebar'
 import { defaultEditorComponents } from './generator-default';
+import { QualifiedTypeName } from '../../syntaxtree';
+import { getQualifiedTypes } from '../../syntaxtree/grammar-util';
 
 /**
  * Ensures that there should be no errors during generation.
@@ -53,8 +55,8 @@ export function convertGrammarManualInstructions(
 
   // The blocks of the editor are based on the concrete types of the grammar,
   // "oneOf" types are not of interest here because they can never be nodes.
-  const concreteTypes = Object.entries(g.types)
-    .filter(([_, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
+  const concreteTypes = getQualifiedTypes(g)
+    .filter(t => t.type !== "oneOf");
 
   // Apply traits
   const traitMap = new TraitMap();
@@ -76,13 +78,13 @@ export function convertGrammarManualInstructions(
   const instructions = new GeneratorInstructions(resolvedTypeInstructions);
 
   // Look over every type that exists and see how it should be created
-  toReturn.editorBlocks = concreteTypes.map(([tName, tDesc]): EditorBlockDescription => {
+  toReturn.editorBlocks = concreteTypes.map((t): EditorBlockDescription => {
     return ({
-      describedType: {
-        languageName: g.technicalName,
-        typeName: tName
-      },
-      visual: mapType(tDesc, instructions.typeInstructions(g.technicalName, tName))
+      describedType: { languageName: t.languageName, typeName: t.typeName },
+      visual: mapType(
+        t as NodeConcreteTypeDescription,
+        instructions.typeInstructions(t.languageName, t.typeName)
+      )
     });
   });
 

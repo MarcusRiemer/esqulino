@@ -6,7 +6,7 @@ import { first, map, tap } from 'rxjs/operators';
 
 import { GrammarDataService } from '../../shared/serverdata';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
-import { FullNodeAttributeDescription, getFullAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
+import { FullNodeAttributeDescription, getFullQualifiedAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
 
 import { EditBlockLanguageService } from './edit-block-language.service';
 
@@ -74,7 +74,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
     this._grammarData.getSingle(this._editedBlockLanguageService.editedSubject.grammarId)
       .pipe(first())
       .subscribe(g => {
-        this.allPossibleAttributes = getFullAttributes(g);
+        this.allPossibleAttributes = getFullQualifiedAttributes(g);
         this.allPossibleBlocks = getFullBlocks(g).map(b => {
           return ({
             grammar: b.languageName,
@@ -168,7 +168,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
       map(
         value => this.allPossibleAttributes.filter(
           option =>
-            option.grammarName.includes(value)
+            option.languageName.includes(value)
             || option.typeName.includes(value)
             || option.name.includes(value)
         )
@@ -184,14 +184,14 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
       if (!this.scope.attributes) {
         this.scope.attributes = {};
       }
-      if (!this.scope.attributes[attr.grammarName]) {
-        this.scope.attributes[attr.grammarName] = {};
+      if (!this.scope.attributes[attr.languageName]) {
+        this.scope.attributes[attr.languageName] = {};
       }
-      if (!this.scope.attributes[attr.grammarName][attr.typeName]) {
-        this.scope.attributes[attr.grammarName][attr.typeName] = [];
+      if (!this.scope.attributes[attr.languageName][attr.typeName]) {
+        this.scope.attributes[attr.languageName][attr.typeName] = [];
       }
-      if (this.scope.attributes[attr.grammarName][attr.typeName].indexOf(attr.name) < 0) {
-        this.scope.attributes[attr.grammarName][attr.typeName].push(attr.name);
+      if (this.scope.attributes[attr.languageName][attr.typeName].indexOf(attr.name) < 0) {
+        this.scope.attributes[attr.languageName][attr.typeName].push(attr.name);
       }
     });
   }

@@ -552,8 +552,20 @@
       "additionalProperties": false,
       "description": "A whole grammar with all user-facing documentation.",
       "properties": {
+        "foreignTypes": {
+          "additionalProperties": {
+            "$ref": "#/definitions/NamedTypes"
+          },
+          "type": "object"
+        },
         "id": {
           "type": "string"
+        },
+        "includedGrammars": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "name": {
           "type": "string"
@@ -562,7 +574,7 @@
           "type": "string"
         },
         "root": {
-          "$ref": "#/definitions/TypeReference"
+          "$ref": "#/definitions/QualifiedTypeName"
         },
         "slug": {
           "type": "string"
@@ -572,7 +584,7 @@
         },
         "types": {
           "additionalProperties": {
-            "$ref": "#/definitions/NodeTypeDescription"
+            "$ref": "#/definitions/NamedTypes"
           },
           "type": "object"
         }
@@ -819,6 +831,12 @@
         "categoryCaption",
         "blocks"
       ],
+      "type": "object"
+    },
+    "NamedTypes": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NodeTypeDescription"
+      },
       "type": "object"
     },
     "NodeAttributeDescription": {
@@ -2149,16 +2167,6 @@
             "type": "string"
           },
           "type": "array"
-        },
-        "displayType": {
-          "enum": [
-            "inline",
-            "block",
-            "inline-block",
-            "flex",
-            "inline-flex"
-          ],
-          "type": "string"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"

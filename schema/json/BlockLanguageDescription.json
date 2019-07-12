@@ -1308,16 +1308,6 @@
           },
           "type": "array"
         },
-        "displayType": {
-          "enum": [
-            "inline",
-            "block",
-            "inline-block",
-            "flex",
-            "inline-flex"
-          ],
-          "type": "string"
-        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         }

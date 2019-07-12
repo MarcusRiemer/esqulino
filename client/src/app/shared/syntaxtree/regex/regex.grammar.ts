@@ -5,51 +5,53 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "regex",
   technicalName: "regex",
   programmingLanguageId: "regex",
+  root: { languageName: "regex", typeName: "root" },
   types: {
-    "constant": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "value",
-          type: "property",
-          base: "string"
-        }
-      ]
-    },
-    "alternative": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "expressions",
-          type: "allowed",
-          nodeTypes: [
-            { nodeType: "expr", occurs: "+" }
-          ]
-        }
-      ]
-    },
-    "expr": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "singleExpression",
-          type: "choice",
-          choices: ["constant", "alternative"]
-        }
-      ]
-    },
-    "root": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "expressions",
-          type: "allowed",
-          nodeTypes: [
-            { nodeType: "expr", occurs: "+" }
-          ]
-        }
-      ]
-    },
-  },
-  root: "root"
+    "regex": {
+      "constant": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "value",
+            type: "property",
+            base: "string"
+          }
+        ]
+      },
+      "alternative": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "expressions",
+            type: "allowed",
+            nodeTypes: [
+              { nodeType: "expr", occurs: "+" }
+            ]
+          }
+        ]
+      },
+      "expr": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "singleExpression",
+            type: "choice",
+            choices: ["constant", "alternative"]
+          }
+        ]
+      },
+      "root": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "expressions",
+            type: "allowed",
+            nodeTypes: [
+              { nodeType: "expr", occurs: "+" }
+            ]
+          }
+        ]
+      },
+    }
+  }
 }

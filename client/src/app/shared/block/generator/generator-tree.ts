@@ -29,15 +29,23 @@ export function convertGrammarTreeInstructions(
   };
 
   // Create a visual representation for each concrete type
-  const visualizedNodes = Object.entries(g.types)
-    .filter(([_, typeDesc]) => typeDesc.type === "concrete")
-    .map(([name, typeDesc]): EditorBlockDescription => {
-      return ({
-        describedType: { languageName: g.technicalName, typeName: name },
-        // typeDesc must be a concrete description here
-        visual: [visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription)]
-      });
-    });
+  const visualizedNodes: EditorBlockDescription[] = [];
+
+  Object.entries(g.types)
+    .forEach(([langName, types]) => {
+      const vis = Object.entries(types)
+        .filter(([_, typeDesc]) => typeDesc.type === "concrete")
+        .map(([name, typeDesc]): EditorBlockDescription => {
+          return ({
+            describedType: { languageName: langName, typeName: name },
+            // typeDesc must be a concrete description here
+            visual: [visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription)]
+          });
+        });
+
+      visualizedNodes.push(...vis);
+    })
+
 
   toReturn.editorBlocks = visualizedNodes;
 
@@ -87,7 +95,7 @@ export function visualizeNodeAttributes(
 }
 
 export function visualizeChildGroup(
-  d: TreeBlockLanguageGeneratorDescription,
+  _d: TreeBlockLanguageGeneratorDescription,
   t: NodeChildrenGroupDescription
 ): VisualBlockDescriptions.ConcreteBlock {
 
@@ -113,7 +121,7 @@ export function visualizeChildGroup(
 }
 
 export function visualizeProperty(
-  d: TreeBlockLanguageGeneratorDescription,
+  _d: TreeBlockLanguageGeneratorDescription,
   t: NodePropertyTypeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
   return ({

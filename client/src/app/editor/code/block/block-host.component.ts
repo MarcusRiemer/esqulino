@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
-import { BlockLanguage } from 'src/app/shared/block';
+import { BlockLanguage } from '../../../shared/block';
 
 /**
  * Renders all editor blocks that are mandated by the given node.

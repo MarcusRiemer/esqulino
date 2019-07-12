@@ -14,10 +14,9 @@ export function prettyPrintGrammar(g: Desc.GrammarDocument): string {
   const tail = `}`;
 
   const orderedTypes = orderTypes(g);
-  const existingTypes = orderedTypes.filter(t => t.typeName in g.types);
 
-  const nodes = existingTypes
-    .map((name): [string, Desc.NodeTypeDescription] => [name.typeName, g.types[name.typeName]])
+  const nodes = orderedTypes
+    .map((name): [string, Desc.NodeTypeDescription] => [name.typeName, g.types[name.languageName][name.typeName]])
     .map(([name, t]) => prettyPrintType(name, t))
 
   const toReturn = [head, ...nodes, tail] as NestedString

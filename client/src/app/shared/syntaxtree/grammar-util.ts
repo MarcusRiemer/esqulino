@@ -2,6 +2,7 @@ import {
   NodeChildrenGroupDescription, NodeTypesChildReference,
   isQualifiedTypeName, NodeAttributeDescription, isNodeConcreteTypeDescription,
   GrammarDocument,
+  NodeTypeDescription,
 } from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { isOccursSpecificDescription, resolveOccurs, OccursSpecificDescription } from './occurs';
@@ -41,23 +42,50 @@ export function isHoleIfEmpty(attrDescription: NodeChildrenGroupDescription) {
  * A NodeAttributeDescription that knows the name of its hosting grammar and
  * the type it is placed on.
  */
-export type FullNodeAttributeDescription = NodeAttributeDescription & {
-  grammarName: string
+export type QualifiedNodeTypeDescription = NodeTypeDescription & {
+  languageName: string
   typeName: string
 }
 
 /**
  * @return All attributes of the given grammar in the form of a handy list.
  */
-export function getFullAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
+export function getQualifiedTypes(g: GrammarDocument): QualifiedNodeTypeDescription[] {
+  const toReturn: QualifiedNodeTypeDescription[] = [];
+
+  Object.entries(g.types || {}).forEach(([langName, types]) => {
+    Object.entries(types).forEach(([typeName, t]) => {
+      toReturn.push(Object.assign({}, t, {
+        languageName: langName,
+        typeName: typeName
+      }));
+    });
+  });
+
+  return (toReturn);
+}
+
+/**
+ * A NodeAttributeDescription that knows the name of its hosting grammar and
+ * the type it is placed on.
+ */
+export type FullNodeAttributeDescription = NodeAttributeDescription & {
+  languageName: string
+  typeName: string
+}
+
+/**
+ * @return All attributes of the given grammar in the form of a handy list.
+ */
+export function getFullQualifiedAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
 
-  Object.entries(g.types || {}).forEach(([typeName, type]) => {
-    if (isNodeConcreteTypeDescription(type)) {
-      (type.attributes || []).forEach(attribute => {
+  getQualifiedTypes(g).forEach(t => {
+    if (isNodeConcreteTypeDescription(t)) {
+      (t.attributes || []).forEach(attribute => {
         toReturn.push(Object.assign({}, attribute, {
-          grammarName: g.technicalName,
-          typeName: typeName
+          languageName: t.languageName,
+          typeName: t.typeName
         }));
       });
     }
