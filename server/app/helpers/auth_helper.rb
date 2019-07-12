@@ -9,7 +9,6 @@ module AuthHelper
   def create_identity_data(permited_params)
     # If the user is already logged in, 
     # choose the current username and password
-
     if signed_in?
       # Check if there exists an PasswordIdentity
       # because of a logged in user with other provider

@@ -91,8 +91,8 @@ class UserController < ApplicationController
     validated_identities = current_user.all_validated_emails
 
     identity = Identity.where(user_id: current_user.id)
-                        .find_by_email(permited_params[:primary_email])
-                        .first
+                       .find_by_email(permited_params[:primary_email])
+                       .first
 
     if (not identity) then
       return error_response("Your account has no linked email with this name")

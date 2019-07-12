@@ -15,13 +15,13 @@ class Identity < ActiveRecord::Base
   scope :password, -> { where(type: 'PasswordIdentity') }
   scope :github, -> { where(type: 'Github') }
 
-  scope :find_by_email, -> (email) {
+  def self.find_by_email(email)
     where("provider_data ->> 'email' = ?", email)
-  }
+  end
 
-  scope :find_by_change_primary_email_token, -> (token) { 
+  def self.find_by_change_primary_email_token(token)
     where("own_data ->> 'change_primary_email_token' = ?", token)
-  }
+  end
 
   def self.search(auth)
     find_by_provider_and_uid(auth[:provider], auth[:uid])
