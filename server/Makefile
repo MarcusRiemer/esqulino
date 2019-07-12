@@ -34,7 +34,7 @@ test : msg-pre-run-test
 # a dump that has been previously created.
 load-live-data:
 	bin/rails "blattwerkzeug:role:load_all" \
-									"blattwerkzeug:user:load_all" \
+                  "blattwerkzeug:user:load_all" \
                   "blattwerkzeug:programming_language:load_all" \
                   "blattwerkzeug:project:load_all" \
                   "blattwerkzeug:news:load_all"
@@ -44,7 +44,7 @@ store-live-data:
 	bin/rails "blattwerkzeug:programming_language:store_all" \
                   "blattwerkzeug:project:store_all" \
                   "blattwerkzeug:news:store_all" \
-									"blattwerkzeug:role:store_all" \
+                  "blattwerkzeug:role:store_all" \
                   "blattwerkzeug:user:store_all"
 
 # Removes every trace of data from the live system
