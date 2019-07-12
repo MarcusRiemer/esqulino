@@ -4,20 +4,20 @@
     <body>
       <trans-unit id="news" datatype="html">
         <source>Neuigkeiten</source><target state="translated">News</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit><trans-unit id="newsPublicationDate" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">3</context></context-group></trans-unit><trans-unit id="newsPublicationDate" datatype="html">
         <source>
       Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:'dd.MM.yyyy'}}"/>
     </source><target state="translated">News from <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:'dd.MM.yyyy'}}"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news-details.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="continueReading" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">13</context></context-group><context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news-details.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="continueReading" datatype="html">
         <source>Weiterlesen ...</source><target state="translated">Continue reading ...</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="guest" datatype="html">
+        <source>Gast</source><target state="translated">Guest</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="sourcefile">app/shared/auth/templates/user-button.html</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit><trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei </source>
@@ -189,49 +189,25 @@
         <note priority="1" from="description">dev environment used</note>
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">63</context></context-group></trans-unit><trans-unit id="deleteNews" datatype="html">
         <source>News Löschen</source><target state="translated">Delete News</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit><trans-unit id="saveNewsAndBack" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="saveNewsAndBack" datatype="html">
         <source>Aktualisieren</source><target state="translated">Save</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit><trans-unit id="saveNewsAndStay" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">21</context></context-group></trans-unit><trans-unit id="saveNewsAndStay" datatype="html">
         <source>Aktualisieren (bleiben)</source><target state="translated">Save and Stay</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit><trans-unit id="createNews" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">27</context></context-group></trans-unit><trans-unit id="createNews" datatype="html">
         <source>Neue News speichern</source><target state="translated">Save new News</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit><trans-unit id="newsTitle" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">39</context></context-group></trans-unit><trans-unit id="newsTitle" datatype="html">
         <source>Titel</source><target state="translated">Title</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit><trans-unit id="newsText" datatype="html">
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">56</context></context-group><context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">74</context></context-group></trans-unit><trans-unit id="newsText" datatype="html">
         <source>Text</source><target state="new">Text</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/admin/templates/edit-news.html</context>
-          <context context-type="linenumber">65</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">63</context></context-group><context-group purpose="location"><context context-type="sourcefile">app/admin/templates/edit-news.html</context><context context-type="linenumber">82</context></context-group></trans-unit>
       <trans-unit id="scientificWorkHeadline" datatype="html">
         <source>Wissenschaftliche Arbeiten</source>
         <target state="translated">Scientific work</target>
