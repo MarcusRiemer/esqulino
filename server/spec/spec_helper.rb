@@ -4,7 +4,10 @@ require 'simplecov-cobertura'
 
 RSpec.configure do |config|
   # We want coverage reports
-  SimpleCov.start 'rails'
+  SimpleCov.start 'rails' do
+    add_group "Policies", "app/policies"
+    add_group "Seed Manager", "app/services/seed"
+  end
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
     [
       SimpleCov::Formatter::HTMLFormatter,
