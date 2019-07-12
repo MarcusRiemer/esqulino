@@ -3,17 +3,17 @@ class PasswordIdentity < Identity
 
   validates :password, presence: true
 
-  scope :find_by_email, -> (email) { 
+  def self.find_by_email(email)
     where(uid: email)
-  }
+  end
 
-  scope :find_by_password_reset_token, -> (token) {
-    where("own_data ->> 'password_reset_token' = ?", token)
-  }
-
-  scope :find_by_verify_token, -> (token) {
+  def self.find_by_verify_token(token)
     where("own_data ->> 'verify_token' = ?", token)
-  }
+  end
+
+  def self.find_by_password_reset_token(token)
+    where("own_data ->> 'password_reset_token' = ?", token)
+  end
 
   def self.create_with_auth(auth, user)
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => auth[:data])

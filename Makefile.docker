@@ -35,7 +35,8 @@ stop-dev:
 
 # Starts the test environment to run all tests exactly once.
 run-test:
-	docker-compose up --force-recreate --abort-on-container-exit test db
+	docker-compose down -v
+	docker-compose up --abort-on-container-exit test db
 
 # Locally builds all images that are required for development. You probably want to
 # simply pull them.
