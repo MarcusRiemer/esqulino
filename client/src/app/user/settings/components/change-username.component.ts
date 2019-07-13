@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { UserService } from './../../../shared/auth/user.service';
-import { UserNameDescription } from 'src/app/shared/auth/user.description';
-
+import { UserNameDescription } from './../../../shared/auth/user.description';
 
 @Component({
   selector: "change-username",
@@ -11,7 +10,7 @@ import { UserNameDescription } from 'src/app/shared/auth/user.description';
 export class ChangeUsernameComponent {
   constructor(
     private _userService: UserService
-  ){}
+  ) { }
 
   public username$ = this._userService.userDisplayName$;
   public userNameData: UserNameDescription = {

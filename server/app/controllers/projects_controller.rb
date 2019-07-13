@@ -2,8 +2,7 @@
 class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
-
-  before_action :authenticate_user!
+  include UserHelper
 
   # Lists all projects
   def index

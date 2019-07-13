@@ -6,7 +6,7 @@ import { BlockLanguageDataService } from '../../shared/serverdata'
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
-import { PerformDataService } from 'src/app/shared/authorisation/perform-data.service';
+import { PerformDataService } from '../../shared/authorisation/perform-data.service';
 
 @Component({
   templateUrl: 'templates/settings.html'

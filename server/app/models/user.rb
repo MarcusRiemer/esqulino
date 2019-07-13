@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  include IdentityHelper
 
   GUEST_ID = "00000000-0000-0000-0000-000000000001"
 

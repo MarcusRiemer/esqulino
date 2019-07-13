@@ -18,10 +18,11 @@ development:
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
+  auth_provider: [Google, Github, PasswordIdentity, Developer]
 
 test:
   name: "Blattwerkzeug (Test)"
-  data_dir: '../data/test'
+  data_dir: "../data/test"
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["localhost.localdomain:9292"]

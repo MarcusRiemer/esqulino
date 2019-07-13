@@ -1,9 +1,6 @@
 class AuthController < ApplicationController
   include AuthHelper
   include UserHelper
-  include IdentityHelper
-
-  before_action :authenticate_user!
 
   def register_params
     params
@@ -20,9 +17,8 @@ class AuthController < ApplicationController
   # navigated to this function.
   def callback
     begin
-      create_identity
-      sign_in
-  
+      identity = get_or_create_identity()
+      sign_in(identity)
       redirect_to "/"
     rescue => e
       return error_response(e.message)
@@ -30,7 +26,7 @@ class AuthController < ApplicationController
   end
   
   def login_with_password
-    identity = search_for_password_identity(login_params)
+    identity = PasswordIdentity.find_by(uid: login_params[:email])
     if (not identity)
       return error_response("E-Mail not found")
     end
@@ -43,8 +39,7 @@ class AuthController < ApplicationController
       return error_response("Wrong password")
     end
 
-    set_identity(identity)
-    sign_in
+    sign_in(identity)
     api_response(user_information)
   end
 
@@ -52,11 +47,10 @@ class AuthController < ApplicationController
   # You use this for creating an identity with a password
   # with simulated callback data
   def register
-    permited_params = register_params
-    identity_data = create_identity_data(permited_params)
+    identity_data = create_identity_data(register_params)
 
     begin
-      create_identity(identity_data, true)
+      identity = get_or_create_identity(email = true)
       api_response(current_user.informations)
     rescue Exception => e
       redirect_to "/"
@@ -71,6 +65,17 @@ class AuthController < ApplicationController
 
   def failure
     redirect_to "/"
+  end
+
+  private 
+
+  def get_or_create_identity(email = false)
+    auth_hash = request.env["omniauth.auth"] || create_identity_data(register_params)
+    identity = Identity.search(auth_hash)
+    if (not identity)
+      user = signed_in?() ? current_user : User.create_from_hash(auth_hash)
+      identity = Identity.create_with_auth(auth_hash, user, email)
+    end
   end
 end
 

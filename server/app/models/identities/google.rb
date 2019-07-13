@@ -4,7 +4,7 @@ class Google < Identity
   }
 
   def self.create_with_auth(auth, user)
-    Google.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
+    new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
   # Google tells us whether the mail is valid
@@ -15,5 +15,14 @@ class Google < Identity
   # Github provides the mail in the JSON blob
   def email
     return self.provider_data["email"]
+  end
+
+  def self.client_informations
+    return ({
+      name: "Google",
+      url_name: "google_oauth2",
+      icon: "fa-google",
+      color: "FireBrick"
+    })
   end
 end
