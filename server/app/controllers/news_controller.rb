@@ -1,10 +1,7 @@
 class NewsController < ApplicationController
   include LocaleHelper
   include JsonSchemaHelper
-
-  before_action :authenticate_user!
-
-  skip_before_action :authenticate_user!, :only => [:index]
+  include UserHelper
 
   # All news that are visible on the frontpage
   def index

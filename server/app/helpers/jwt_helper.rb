@@ -1,6 +1,14 @@
 module JwtHelper
   SECRET_KEY = Rails.application.secrets.secret_key_base. to_s
 
+  def current_jwt=(jwt)
+    @current_jwt = jwt
+  end
+
+  def current_jwt
+    return @current_jwt
+  end
+
   def self.encode(payload, exp = 24.hours.from_now)
     payload[:exp] = exp.to_i
     JWT.encode(payload, SECRET_KEY)

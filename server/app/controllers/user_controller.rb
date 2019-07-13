@@ -1,25 +1,6 @@
 class UserController < ApplicationController
   include UserHelper
-
-  before_action :authenticate_user!
-
-  def change_email_params
-    params
-      .permit([:primaryEmail])
-      .transform_keys { |k| k.underscore }
-  end
-
-  def change_username_params
-    params
-      .permit([:displayName])
-      .transform_keys { |k| k.underscore }
-  end
-
-  def may_perform_params
-    permited = params.permit([:list => [:resourceId, :resourceType, :policyAction]])
-    permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
-    return permited
-  end
+  include LocaleHelper
 
   def index
     api_response(user_information)
@@ -131,7 +112,25 @@ class UserController < ApplicationController
   end
 
 
-  private 
+  private
+
+  def change_email_params
+    params
+      .permit([:primaryEmail])
+      .transform_keys { |k| k.underscore }
+  end
+
+  def change_username_params
+    params
+      .permit([:displayName])
+      .transform_keys { |k| k.underscore }
+  end
+
+  def may_perform_params
+    permited = params.permit([:list => [:resourceId, :resourceType, :policyAction]])
+    permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
+    return permited
+  end
 
   def api_array_response(to_response)
     render json: to_response.map { |k| k.transform_keys! { |v| v.underscore }}, status: :ok
