@@ -1,4 +1,3 @@
-import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -14,6 +13,8 @@ import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
 import { UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './../auth/user.description';
+import { ClientProviderDescription } from './../auth/provider.description';
+import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 
 
 
@@ -55,6 +56,10 @@ export class ServerDataService {
 
   readonly getIdentities = new CachedRequest<ServerProviderDescription>(
     this._http.get<ServerProviderDescription>(this._serverApi.getUserIdentitiesUrl())
+  )
+
+  readonly getProviders = new CachedRequest<ClientProviderDescription[]>(
+    this._http.get<ClientProviderDescription[]>(this._serverApi.getProvidersUrl())
   )
 
   signUp$(data: SignUpDescription): Observable<UserDescription> {

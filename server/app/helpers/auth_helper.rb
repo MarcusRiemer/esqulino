@@ -34,5 +34,4 @@ module AuthHelper
       }
     }
   end
-
 end

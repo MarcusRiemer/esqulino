@@ -1,11 +1,14 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
-import { providers } from './providers';
-
+import { UserService } from './user.service';
 @Component({
   selector: "providers-all-buttons",
   templateUrl: "./templates/providers-all-buttons.html"
 })
 export class ProvidersAllButtonsComponent {
-  public readonly providers = providers
+  constructor(
+    private _userService: UserService
+  ) { }
+
+  readonly providers$ = this._userService.providerList$
 }

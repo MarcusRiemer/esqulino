@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
     scope 'identities' do
       root via: [:get], controller: 'identities', action: :show
+      get 'list', controller: 'identities', action: :list
       get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
       post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
       post 'create_identity', controller: 'identities', action: :create

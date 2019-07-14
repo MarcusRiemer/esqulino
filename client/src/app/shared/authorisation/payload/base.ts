@@ -26,7 +26,7 @@ export class BasePerformData {
     return ({
       resourceType: this._resourceType,
       resourceId: resourceId,
-      policyAction: "delete"
+      policyAction: "destroy"
     })
   }
 }

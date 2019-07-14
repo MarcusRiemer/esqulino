@@ -10,6 +10,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   end
   provider :identity, :fields => [], :on_registration => AuthController.action(:register), :on_login => AuthController.action(:login_with_password), :model => PasswordIdentity
   provider :developer, :fields => [:name, :email], :uid_field => :email unless Rails.env.production?
-  provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET']
-  provider :github, ENV['GITHUB_CLIENT_ID'], ENV['GITHUB_CLIENT_SECRET']
+  provider :google_oauth2, config["auth_provider_keys"]["google_id"], config["auth_provider_keys"]["google_secret"]
+  provider :github, config["auth_provider_keys"]["github_id"], config["auth_provider_keys"]["github_secret"]
 end

@@ -65,7 +65,7 @@ class Identity < ActiveRecord::Base
 
   # Creates an identity with omniauth callback or create_identity_data,
   # create_identity_data takes the posted values and put them into a hash
-  def self.create_with_auth(auth, user, email = false)
+  def self.create_with_auth(auth, user)
     case auth[:provider]
     when 'developer'
       identity = Developer.create_with_auth(auth, user)
@@ -76,20 +76,20 @@ class Identity < ActiveRecord::Base
     when 'github'
       identity = Github.create_with_auth(auth, user)
     else
-      raise Exception.new('Unknown provider')
-    end
-
-    if (user.invalid?) then
-      raise Exception.new("Error: Something went wrong with the creation of a user")
-    end
-
-    if (identity.invalid?) then
-      raise Exception.new("Error: Something went wrong with the creation of an identity")
+      raise RuntimeError.new('Unknown provider')
     end
 
     # If the user has no primary e-mail
-    if (not user.email) then
+    if ((not user.email) and identity.confirmed?) then
       user.email = identity.email
+    end
+
+    if (user.invalid?) then
+      raise StandardError.new(user.errors.full_messages[0])
+    end
+
+    if (identity.invalid?) then
+      raise StandardError.new(identity.errors.full_messages[0])
     end
 
     identity.save!
@@ -99,11 +99,6 @@ class Identity < ActiveRecord::Base
       user.add_role :user
     end
   
-    # sends an confirmation e-mail
-    if (email) then
-      IdentityMailer.confirm_email(identity, request_locale).deliver
-    end
-
     return identity
   end
 end

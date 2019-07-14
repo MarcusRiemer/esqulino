@@ -2,20 +2,24 @@ module UserHelper
   include JwtHelper
   
   def user_information
-    return (private_claim_response || current_user.informations)
+    begin
+      return (private_claim_response || current_user.informations)
+    rescue EsqulinoError => e
+      raise EsqulinoError.new(e.message)
+    end
   end
 
   def current_user
     if (not @current_user) then
-      token = request.cookies['JWT-TOKEN']
+      token = request.cookies['JWT']
       if token
         begin
-          self.current_jwt = JwtHelper.decode(token)
+          current_jwt = JwtHelper.decode(token)
           self.current_user = User.find(current_jwt[:user_id].to_s)
         rescue ActiveRecord::RecordNotFound => e
-          raise EsqulinoError.new
+          raise EsqulinoError.new(e.message)
         rescue JWT::DecodeError => e
-          raise EsqulinoError.new
+          raise EsqulinoError.new(e.message)
         end
       else
         self.current_user = User.guest
@@ -42,21 +46,21 @@ module UserHelper
 
   def sign_out!
     if (signed_in?) then
-      current_user = User.guest
+      self.current_user = User.guest
       delete_jwt_cookie!
     end
   end
 
   def delete_jwt_cookie!()
     current_jwt = nil
-    current_user = nil
+    self.current_user = nil
 
     response_jwt_cookie("", 0.seconds.from_now)
   end
 
   private
   def response_jwt_cookie(value, expires = 1.day.from_now)
-    response.set_cookie('JWT-TOKEN', {
+    response.set_cookie('JWT', {
       value: value,
       httponly: true,
       expires: expires,

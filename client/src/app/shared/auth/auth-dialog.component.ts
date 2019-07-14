@@ -1,19 +1,12 @@
-import { UserService } from './user.service';
 import { Component } from '@angular/core';
-import {  MatDialog } from '@angular/material';
-
-import { providers } from './providers';
+import { MatDialog } from '@angular/material';
 
 @Component({
   templateUrl: './templates/auth-dialog.html'
 })
 export class AuthDialogComponent {
 
-  constructor(
-    private _userService: UserService
-  ) { }
-
-  public readonly providers = providers
+  constructor( ) { }
 
   public signInOrUp: boolean = true;
 
@@ -30,5 +23,4 @@ export class AuthDialogComponent {
       height: '600px'
     });
   }
-  
 }

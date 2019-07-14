@@ -1,27 +1,22 @@
 class AuthController < ApplicationController
   include AuthHelper
   include UserHelper
-
-  def register_params
-    params
-        .permit([:email, :username, :password])
-  end
-
-  def login_params
-    params
-        .permit([:email, :password])
-  end
+  include LocaleHelper
 
   # This function is essential for omniauth.
   # If youre authenticated by the external provider, you will be 
   # navigated to this function.
   def callback
     begin
-      identity = get_or_create_identity()
+      auth_hash = request.env["omniauth.auth"]
+      identity = Identity.search(auth_hash)
+      if (not identity) then
+        identity = create_identity(auth_hash)
+      end
       sign_in(identity)
       redirect_to "/"
     rescue => e
-      return error_response(e.message)
+      raise RuntimeError.new(e.message)
     end
   end
   
@@ -47,13 +42,19 @@ class AuthController < ApplicationController
   # You use this for creating an identity with a password
   # with simulated callback data
   def register
-    identity_data = create_identity_data(register_params)
-
     begin
-      identity = get_or_create_identity(email = true)
-      api_response(current_user.informations)
-    rescue Exception => e
-      redirect_to "/"
+      auth_hash = create_identity_data(register_params)
+      identity = Identity.search(auth_hash)
+      if (not identity) then
+        identity = create_identity(auth_hash)
+        # sends an confirmation e-mail
+        IdentityMailer.confirm_email(identity, request_locale).deliver
+        api_response(current_user.informations)
+      else
+        error_response("E-mail already registered")
+      end
+    rescue => e
+      error_response(e.message)
     end
   end
 
@@ -67,15 +68,26 @@ class AuthController < ApplicationController
     redirect_to "/"
   end
 
-  private 
+  private
 
-  def get_or_create_identity(email = false)
-    auth_hash = request.env["omniauth.auth"] || create_identity_data(register_params)
-    identity = Identity.search(auth_hash)
-    if (not identity)
-      user = signed_in?() ? current_user : User.create_from_hash(auth_hash)
-      identity = Identity.create_with_auth(auth_hash, user, email)
+  def create_identity(auth_hash)
+    user = current_user
+    if (not signed_in?) then
+      user = User.create_from_hash(auth_hash)
     end
+    identity = Identity.create_with_auth(auth_hash, user)
+
+    return identity
+  end
+
+  def register_params
+    params
+        .permit([:email, :username, :password])
+  end
+
+  def login_params
+    params
+        .permit([:email, :password])
   end
 end
 

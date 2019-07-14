@@ -2,6 +2,7 @@ class PasswordIdentity < Identity
   attr_accessor :password, :password_confirmation
 
   validates :password, presence: true
+  validates_uniqueness_of :uid
 
   def self.find_by_email(email)
     where(uid: email)
@@ -73,7 +74,6 @@ class PasswordIdentity < Identity
       self.own_data["password"] = Password.create(password)
     end
 
-
     self.save
   end
 
@@ -132,16 +132,16 @@ class PasswordIdentity < Identity
     user = self.user
     if (not user.email?)
       # Sets the primary email on confirmation
-      user.set_email(self.email)
+      user.email = self.email
     end
 
     self.confirmed!
     self.save!
-  
+
     if (user.valid?) then
       user.save!
     end
-  
+
     return self
   end
 

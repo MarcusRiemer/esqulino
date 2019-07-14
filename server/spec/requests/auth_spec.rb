@@ -2,22 +2,16 @@
 require 'rails_helper'
 
 RSpec.describe "auth controller" do
-
-  before(:each) { create(:user, :guest) }
-
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
+  before(:each) { create(:user, :guest) }
   let(:identity_params){{
     :email => "blattwerkzeug@web.de",
     :password => "12345678",
     :username => "Blattwerkzeug"
   }}
 
-  let(:user) { create(:user) }
-
-  # TODO developer simulate get and post 
-  describe "developer strategy with default values" do
-
+  describe "developer provider with default values" do
     before(:each) do
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:developer] = OmniAuth::AuthHash.new({
@@ -30,142 +24,151 @@ RSpec.describe "auth controller" do
       })
     end
 
-    it "logging in with developer strategy" do
-      get '/api/auth/developer/callback'
-      expect(response.cookies['JWT-TOKEN']).to be_truthy
-      expect(JwtHelper.decode(response.cookies['JWT-TOKEN'])[:user_id]).to be_truthy  
-      expect(response.status).to eq(302)
+    context "logging in" do
+      it "valid response" do
+        get '/api/auth/developer/callback'
+        expect(response.cookies['JWT']).to be_truthy
+        expect(JwtHelper.decode(response.cookies['JWT'])[:user_id]).to be_truthy
+        expect(response.status).to eq(302)
+      end
+
+      it "existing user and existing identity" do
+        identity = create(:developer_provider, :existing)
+        set_jwt(identity.user)
+
+        user_count = User.all.count
+        identity_count = Identity.all.count
+
+        get '/api/auth/developer/callback'
+
+        expect(User.all.count).to eq(user_count)
+        expect(Identity.all.count).to eq(identity_count)
+      end
+
+      it "existing user and a new identity" do
+        user = create(:user)
+        set_jwt(user)
+
+        user_count = User.all.count
+        identity_count = Identity.where("user_id = ?", user[:id]).count
+        new_identity_count = identity_count + 1
+
+        get '/api/auth/developer/callback'
+        expect(User.all.count).to eq(user_count)
+        expect(Identity.where("user_id = ?", user[:id]).count).to eq(new_identity_count)
+      end
+
+      it "new user and a new extern identity" do
+        identity = create(:google_provider, :new)
+
+        user_count = User.all.count
+        identity_count = Identity.developer.count
+
+        get '/api/auth/developer/callback'
+        expect(User.all.count).not_to eq(user_count)
+        expect(Identity.developer.count).not_to eq(identity_count)
+      end
+
+      it "valid jwt token, but invalid user_id" do
+        identity = create(:google_provider, :new)
+        set_jwt_with_invalid_user()
+
+        get '/api/auth/developer/callback'
+        expect(response.status).to eq(500)
+      end
+
+      it "expired jwt token" do
+        set_expired_jwt()
+        get '/api/auth/developer/callback'
+        expect(response.status).to eq(500)
+      end
     end
 
-    it "logging in with existing user and existing identity" do
-      identity = create(:developer_provider, :existing)
-      set_jwt(identity.user)
+    context "logged in" do
+      it "testing the json response of a sign_in" do
+        get '/api/auth/developer/callback'
 
-      user_count = User.all.count
-      identity_count = Identity.all.count
+        expect(response.cookies['JWT']).to be_truthy
 
-      get '/api/auth/developer/callback'
+        cookies["JWT"] = response.cookies['JWT']
 
-      expect(User.all.count).to eq(user_count)
-      expect(Identity.all.count).to eq(identity_count)
+        get '/api/user'
+        json_data = JSON.parse(response.body)
+        expect(json_data["roles"]).to eq(["user"])
+      end
     end
 
-    it "logging in with existing user and a new identity" do
-      set_jwt(user)
+    context "logging out" do
+      it "first logging in then logging out" do
+        get '/api/auth/developer/callback'
+        expect(response.cookies['JWT']).to be_truthy
 
-      user_count = User.all.count
-      identity_count = Identity.where("user_id = ?", user[:id]).count
-      new_identity_count = identity_count + 1
+        delete '/api/auth/sign_out'
+        expect(cookies['JWT']).to eq("")
+        expect(response.status).to eq(200)
+      end
 
-      get '/api/auth/developer/callback'
-      expect(User.all.count).to eq(user_count)
-      expect(Identity.where("user_id = ?", user[:id]).count).to eq(new_identity_count)
+      it "already logged in" do
+        get '/api/auth/developer/callback'
+        expect(response.cookies['JWT']).to be_truthy
+
+        delete '/api/auth/sign_out'
+        expect(cookies['JWT']).to eq("")
+
+        get '/api/user'
+        json_data = JSON.parse(response.body)
+        expect(json_data["roles"]).to eq(["guest"])
+      end
     end
 
-    it "logging in with new user and a new extern identity" do
-      identity = create(:google_provider, :new)
+    context "account linking" do
+      it "succesfully" do
+        identity = create(:identity_provider, :new)
+        set_jwt(identity.user)
 
-      user_count = User.all.count
-      identity_count = Identity.developer.count
-  
-      get '/api/auth/developer/callback'
-      expect(User.all.count).not_to eq(user_count)
-      expect(Identity.developer.count).not_to eq(identity_count)
-    end
+        count_identity = Identity.where(user_id: identity.user_id).count
 
-    it "logging out user with developer strategy" do
-      get '/api/auth/developer/callback'
-      expect(response.cookies['JWT-TOKEN']).to be_truthy  
+        get '/api/auth/developer/callback'
+        expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
+      end
 
-      delete '/api/auth/sign_out'
-      expect(cookies['JWT-TOKEN']).to eq("")
-      expect(response.status).to eq(200)
-    end
+      it "already linked identity ( developer )" do
+        identity = create(:developer_provider, :existing)
+        get '/api/auth/developer/callback'
 
+        set_jwt(identity.user)
+        count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
+        count_identities = Identity.all.count
 
-    it "logging in with an valid jwt token, but invalid user_id" do
-      identity = create(:google_provider, :new)
-      set_jwt_with_invalid_user()
-
-      get '/api/auth/developer/callback'
-      expect(response.status).to eq(401)
-    end
-
-    it "logging in with an expired jwt token" do
-      set_expired_jwt()
-      get '/api/auth/developer/callback'
-      expect(response.status).to eq(401)
-    end
-
-    it "testing the json response of a sign_in" do
-      get '/api/auth/developer/callback'
-  
-      expect(response.cookies['JWT-TOKEN']).to be_truthy  
-      
-      cookies["JWT-TOKEN"] = response.cookies['JWT-TOKEN']
-
-      get '/api/user'
-      json_data = JSON.parse(response.body)
-      expect(json_data["roles"]).to eq(["user"])
-    end
-  
-    it "logging out" do
-      get '/api/auth/developer/callback'
-
-  
-      expect(response.cookies['JWT-TOKEN']).to be_truthy  
-  
-      delete '/api/auth/sign_out'
-  
-      expect(cookies['JWT-TOKEN']).to eq("")
-  
-      get '/api/user'
-      json_data = JSON.parse(response.body)
-      expect(json_data["roles"]).to eq(["guest"])
-    end
-
-    it "account linking with developer" do
-      identity = create(:identity_provider, :new)
-      set_jwt(identity.user)
-  
-      count_identity = Identity.where(user_id: identity.user_id).count
-  
-      get '/api/auth/developer/callback'
-  
-      expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
-    end
-
-    it "account linking with already linked identity ( developer )" do
-      identity = create(:developer_provider, :existing)
-      get '/api/auth/developer/callback'
-
-      set_jwt(identity.user)
-      count_identity_by_user_id = Identity.where(user_id: user[:id]).count
-      count_identities = Identity.all.count
-  
-      get '/api/auth/developer/callback'
-  
-      expect(Identity.where(user_id: user[:id]).count).to eq(count_identity_by_user_id)
-      expect(Identity.all.count).to eq(count_identities)
+        get '/api/auth/developer/callback'
+        expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity_by_user_id)
+        expect(Identity.all.count).to eq(count_identities)
+      end
     end
   end
 
+  describe "password identity" do
+
+  end
+
+
   it "registering new identity with new user" do
     user_count = User.all.count
+    identity_count = Identity.all.count
+
     post '/api/auth/identity/register',
       :headers => json_headers,
       :params => identity_params.to_json
 
-    identity = Identity.all.first
     expect(User.all.count).to_not eq(user_count)
-    expect(User.all.last[:email]).to eq(identity[:uid])
+    expect(Identity.all.count).to_not eq(identity_count)
   end
 
   it "registering identity with password" do
     post '/api/auth/identity/register',
         :headers => json_headers,
         :params => identity_params.to_json
-    
+
     expect(Identity.all.first[:uid]).to eq(identity_params[:email])
     expect(Identity.all.first.confirmed?).to eq(false)
   end
@@ -189,10 +192,10 @@ RSpec.describe "auth controller" do
       :headers => json_headers,
       :params => identity_params.to_json
 
-    expect(response.cookies['JWT-TOKEN']).to be_truthy 
+    expect(response.cookies['JWT']).to be_truthy
   end
 
-  # TODO-TOM NEEDS SERVER VALIDATION 
+  # TODO-TOM NEEDS SERVER VALIDATION
   # it "registering identity with an empty password" do
   #   create(:identity, :identity_provider, user_id: user[:id])
 
@@ -232,7 +235,7 @@ RSpec.describe "auth controller" do
       :params => identity_params.to_json
 
     expect(response.status).to eq(401)
-    expect(response.cookies['JWT-TOKEN']).to be_nil 
+    expect(response.cookies['JWT']).to be_nil
   end
 
   it "logging in with wrong email and password" do
@@ -245,7 +248,7 @@ RSpec.describe "auth controller" do
       :params => identity_params.to_json
 
     expect(response.status).to eq(401)
-    expect(response.cookies['JWT-TOKEN']).to be_nil 
+    expect(response.cookies['JWT']).to be_nil
   end
 
 
@@ -275,8 +278,6 @@ RSpec.describe "auth controller" do
       :headers => json_headers,
       :params => identity_params.to_json
 
-
-    expect(identity.user[:email]).to eq(identity_params[:uid])
     expect(Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
 

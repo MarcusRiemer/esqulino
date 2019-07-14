@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  GUEST_ID = "00000000-0000-0000-0000-000000000001"
+  GUEST_ID = Rails.configuration.sqlino["seed_users"]["guest"]
 
   rolify strict: true
   has_many :projects
