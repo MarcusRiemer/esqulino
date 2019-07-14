@@ -1,8 +1,8 @@
-import { UserService } from './user.service';
-import { Component, Output, EventEmitter } from "@angular/core";
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SignInDescription } from './auth-description';
 import { MatSnackBar } from '@angular/material';
+import { Component, Output, EventEmitter } from "@angular/core";
+
+import { SignInDescription } from './auth-description';
+import { UserService } from './user.service';
 import { Roles } from '../authorisation/roles.enum';
 
 @Component({

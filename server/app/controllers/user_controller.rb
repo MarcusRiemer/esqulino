@@ -133,6 +133,6 @@ class UserController < ApplicationController
   end
 
   def api_array_response(to_response)
-    render json: to_response.map { |k| k.transform_keys! { |v| v.underscore }}, status: :ok
+    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) }}, status: :ok
   end
 end

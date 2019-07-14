@@ -10,8 +10,8 @@ class IdentitiesController < ApplicationController
     end
   end
 
-  def show_all
-    api_response(Identity.all_client_informations)
+  def list
+    api_array_response(Identity.all_client_informations)
   end
 
   def reset_password
@@ -41,7 +41,7 @@ class IdentitiesController < ApplicationController
       identity.save!
       IdentityMailer.reset_password(identity, request_locale).deliver
     else
-      error_response("e-mail not found") 
+      error_response("e-mail not found")
     end
   end
 
@@ -105,7 +105,7 @@ class IdentitiesController < ApplicationController
 
       # You need more than one identity to be able
       # to delete an identity
-      if (all_identities.count <= 1) then
+      if (all_identities.count <= 1 && identity.confirmed?) then
         return error_response("You need more than one confirmed e-mail.")
       end
   
@@ -126,6 +126,7 @@ class IdentitiesController < ApplicationController
     end
   end
 
+  private
 
   def change_password_params
     params
@@ -153,5 +154,8 @@ class IdentitiesController < ApplicationController
   def delete_identity_params
     params
   end
-end
 
+  def api_array_response(to_response)
+    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) }}, status: :ok
+  end
+end

@@ -34,7 +34,7 @@ test : msg-pre-run-test
 # a dump that has been previously created.
 load-live-data:
 	bin/rails "blattwerkzeug:role:load_all" \
-									"blattwerkzeug:user:load_all" \
+                  "blattwerkzeug:user:load_all" \
                   "blattwerkzeug:programming_language:load_all" \
                   "blattwerkzeug:project:load_all" \
                   "blattwerkzeug:news:load_all"

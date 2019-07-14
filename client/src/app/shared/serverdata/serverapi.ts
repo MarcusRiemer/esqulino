@@ -39,6 +39,10 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/identities`)
   }
 
+  getProvidersUrl(): string {
+    return (`${this._apiBaseUrl}/identities/list`)
+  }
+
   getSignOutUrl(): string {
     return (`${this._apiBaseUrl}/auth/sign_out`)
   }

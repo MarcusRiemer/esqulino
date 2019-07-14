@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
   end
 
   def error_response(err = "something went wrong", code = :unauthorized)
-    render json: { "error": err }, status: code
+    render json: err.to_json, status: code
   end
 
   # An instance of EsqulinoError was thrown

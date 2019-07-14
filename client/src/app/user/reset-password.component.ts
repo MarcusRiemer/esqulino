@@ -41,9 +41,6 @@ export class ResetPasswordComponent implements AfterViewInit {
       _ => {
         this._dialog.closeAll()
         this._snackBar.open('Password succesfully updated', "", { duration: 3000 })
-      },
-      (err) => {
-        alert(`Error: ${err["error"]["error"]}`)
       }
     )
   }
