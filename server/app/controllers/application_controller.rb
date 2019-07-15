@@ -18,8 +18,8 @@ class ApplicationController < ActionController::API
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 
-  def error_response(err = "something went wrong", code = :unauthorized)
-    render json: err.to_json, status: code
+  def error_response(err = "something went wrong")
+    raise EsqulinoError.new(err)
   end
 
   # An instance of EsqulinoError was thrown

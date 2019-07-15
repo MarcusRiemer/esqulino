@@ -50,7 +50,7 @@ export class UserService {
       first(),
       tap(
         _ => alert("Please confirm your e-mail"),
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -66,7 +66,7 @@ export class UserService {
     return this._serverData.signIn$(data).pipe(
       tap(
         () => this.userData$.refresh(),
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -75,7 +75,7 @@ export class UserService {
     return this._serverData.resetPassword$(data).pipe(
       tap(
         _ => this.userData$.refresh(),
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -87,7 +87,7 @@ export class UserService {
           this._snackBar.open('Username changed', '', { duration: 3000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -99,7 +99,7 @@ export class UserService {
           this._snackBar.open('Password changed', '', { duration: 3000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -111,7 +111,7 @@ export class UserService {
           this.userData$.refresh()
           alert("Please check your e-mails")
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -123,7 +123,7 @@ export class UserService {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -135,7 +135,7 @@ export class UserService {
           this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
           this.identities$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -147,7 +147,7 @@ export class UserService {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
           this.identities$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -158,7 +158,7 @@ export class UserService {
         _ => {
           this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -170,7 +170,7 @@ export class UserService {
           this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
