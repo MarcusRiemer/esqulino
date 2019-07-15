@@ -1,0 +1,4 @@
+---
+- - "../seed/programming_language"
+  - html
+  - !ruby/class 'Seed::ProgrammingLanguageSeed'

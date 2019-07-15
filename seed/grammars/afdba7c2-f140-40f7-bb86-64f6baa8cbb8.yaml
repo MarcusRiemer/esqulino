@@ -1,0 +1,28 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: afdba7c2-f140-40f7-bb86-64f6baa8cbb8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: HTML
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"root": {"typeName": "", "languageName": ""}, "types":
+    {}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-07-15 12:31:32.188104'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-07-15 12:31:32.188104'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: html
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: technical_name
+  value_before_type_cast: html
+new_record: false
+active_record_yaml_version: 2
