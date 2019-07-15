@@ -64,8 +64,18 @@ RSpec.describe BlockLanguagesController, type: :request do
              "name" => "Spec Grammar",
              "technicalName" => "spec",
              "programmingLanguageId" => prog_lang.id,
-             "types" => { "spec" => { "type" => "concrete" } },
-             "root" => "spec"
+             "types" => {
+               "spec" => {
+                 "root" => {
+                   "type" => "concrete",
+                   "attributes" => []
+                 }
+               }
+             },
+             "root" => {
+               "languageName" => "spec",
+               "typeName" => "root"
+             }
            }.to_json
 
       expect(response.content_type).to eq "application/json"
@@ -77,8 +87,8 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(g.name).to eq "Spec Grammar"
       expect(g.technical_name).to eq "spec"
       expect(g.slug).to eq "spec"
-      expect(g.model["root"]).to eq "spec"
-      expect(g.model["types"]["spec"]).to eq({ "type" => "concrete" })
+      expect(g.model["root"]).to eq({ "languageName" => "spec", "typeName" => "root"})
+      expect(g.model["types"]["spec"]["root"]).to eq({ "type" => "concrete", "attributes" => [] })
 
       expect(response.status).to eq(200)
     end
@@ -108,7 +118,10 @@ RSpec.describe BlockLanguagesController, type: :request do
       upda_grammar = {
         "name" => "Upda",
         "types" => {},
-        "root" => "empty"
+        "root" => {
+          "languageName" => "spec",
+          "typeName" => "root"
+        }
       }
 
       put "/api/grammars/#{orig_grammar.id}",
@@ -123,7 +136,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       orig_grammar.reload
       expect(orig_grammar.name).to eq upda_grammar['name']
       expect(orig_grammar.model["types"]).to eq Hash.new
-      expect(orig_grammar.model["root"]).to eq "empty"
+      expect(orig_grammar.model["root"]).to eq ({ "languageName" => "spec", "typeName" => "root" })
     end
 
     it 'Update with empty model' do
