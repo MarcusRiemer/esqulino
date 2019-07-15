@@ -11,30 +11,30 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"root": "query", "types": {"from": {"type": "concrete",
-    "attributes": [{"name": "keyword", "type": "terminal", "symbol": "FROM"}, {"name":
-    "tables", "type": "sequence", "between": {"name": "columnSeparator", "type": "terminal",
-    "symbol": ","}, "nodeTypes": [{"occurs": "+", "nodeType": "tableIntroduction"}]},
-    {"name": "joins", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "join"}]}]}, "join": {"type": "oneOf", "oneOf": ["crossJoin", "innerJoinUsing",
-    "innerJoinOn"]}, "query": {"type": "oneOf", "oneOf": ["querySelect", "queryDelete"]},
-    "where": {"type": "concrete", "attributes": [{"name": "keyword", "type": "terminal",
-    "symbol": "WHERE"}, {"name": "expressions", "type": "sequence", "nodeTypes": [{"occurs":
-    "1", "nodeType": {"typeName": "expression", "languageName": "sql"}}, {"occurs":
-    "*", "nodeType": {"typeName": "whereAdditional", "languageName": "sql"}}]}]},
-    "delete": {"type": "concrete", "attributes": [{"name": "keyword", "type": "terminal",
-    "symbol": "DELETE"}]}, "select": {"type": "concrete", "attributes": [{"name":
-    "keyword", "type": "terminal", "symbol": "SELECT"}, {"base": "boolean", "name":
-    "distinct", "type": "property", "isOptional": true}, {"name": "columns", "type":
-    "parentheses", "group": {"type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType":
-    "expression"}, {"occurs": "?", "nodeType": "starOperator"}]}, "between": {"name":
-    "columnSeparator", "type": "terminal", "symbol": ","}, "cardinality": "1"}]},
-    "groupBy": {"type": "concrete", "attributes": [{"name": "keyword", "type": "terminal",
-    "symbol": "GROUP BY"}, {"name": "expressions", "type": "allowed", "between": {"name":
-    "columnSeparator", "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs":
-    "+", "nodeType": {"typeName": "expression", "languageName": "sql"}}]}]}, "orderBy":
-    {"type": "concrete", "attributes": [{"name": "keyword", "type": "terminal", "symbol":
-    "ORDER BY"}, {"name": "expressions", "type": "allowed", "between": {"name": "columnSeparator",
+  value_before_type_cast: '{"root": {"typeName": "query", "languageName": "sql"},
+    "types": {"sql": {"from": {"type": "concrete", "attributes": [{"name": "keyword",
+    "type": "terminal", "symbol": "FROM"}, {"name": "tables", "type": "sequence",
+    "between": {"name": "columnSeparator", "type": "terminal", "symbol": ","}, "nodeTypes":
+    [{"occurs": "+", "nodeType": "tableIntroduction"}]}, {"name": "joins", "type":
+    "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "join"}]}]}, "join": {"type":
+    "oneOf", "oneOf": ["crossJoin", "innerJoinUsing", "innerJoinOn"]}, "query": {"type":
+    "oneOf", "oneOf": ["querySelect", "queryDelete"]}, "where": {"type": "concrete",
+    "attributes": [{"name": "keyword", "type": "terminal", "symbol": "WHERE"}, {"name":
+    "expressions", "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": {"typeName":
+    "expression", "languageName": "sql"}}, {"occurs": "*", "nodeType": {"typeName":
+    "whereAdditional", "languageName": "sql"}}]}]}, "delete": {"type": "concrete",
+    "attributes": [{"name": "keyword", "type": "terminal", "symbol": "DELETE"}]},
+    "select": {"type": "concrete", "attributes": [{"name": "keyword", "type": "terminal",
+    "symbol": "SELECT"}, {"name": "columns", "type": "parentheses", "group": {"type":
+    "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "expression"}, {"occurs":
+    "?", "nodeType": "starOperator"}]}, "between": {"name": "columnSeparator", "type":
+    "terminal", "symbol": ","}, "cardinality": "1"}]}, "groupBy": {"type": "concrete",
+    "attributes": [{"name": "keyword", "type": "terminal", "symbol": "GROUP BY"},
+    {"name": "expressions", "type": "allowed", "between": {"name": "columnSeparator",
+    "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs": "+", "nodeType":
+    {"typeName": "expression", "languageName": "sql"}}]}]}, "orderBy": {"type": "concrete",
+    "attributes": [{"name": "keyword", "type": "terminal", "symbol": "ORDER BY"},
+    {"name": "expressions", "type": "allowed", "between": {"name": "columnSeparator",
     "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs": "+", "nodeType":
     {"typeName": "expression", "languageName": "sql"}}]}]}, "constant": {"type": "concrete",
     "attributes": [{"base": "string", "name": "value", "type": "property"}]}, "crossJoin":
@@ -75,22 +75,21 @@ concise_attributes:
     {"name": "keywordUsing", "type": "terminal", "symbol": "USING"}, {"name": "using",
     "type": "sequence", "nodeTypes": ["expression"]}]}, "whereAdditional": {"type":
     "concrete", "attributes": [{"base": "string", "name": "operator", "type": "property",
-    "restrictions": [{"type": "enum", "value": ["and", "or"]}]}, {"name": "expression",
+    "restrictions": [{"type": "enum", "value": ["AND", "OR"]}]}, {"name": "expression",
     "type": "sequence", "nodeTypes": ["expression"]}]}, "binaryExpression": {"type":
     "concrete", "attributes": [{"name": "lhs", "type": "sequence", "nodeTypes": ["expression"]},
     {"name": "operator", "type": "sequence", "nodeTypes": ["relationalOperator"]},
     {"name": "rhs", "type": "sequence", "nodeTypes": ["expression"]}]}, "tableIntroduction":
     {"type": "concrete", "attributes": [{"base": "string", "name": "name", "type":
-    "property"}, {"base": "string", "name": "alias", "type": "property", "isOptional":
-    true}]}, "relationalOperator": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "operator", "type": "property", "restrictions": [{"type": "enum", "value":
-    ["<", "<=", "=", "<>", ">=", ">", "LIKE", "NOT LIKE"]}]}]}}}'
+    "property"}]}, "relationalOperator": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "operator", "type": "property", "restrictions": [{"type": "enum",
+    "value": ["<", "<=", "=", "<>", ">=", ">", "LIKE", "NOT LIKE"]}]}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-07 21:04:36.061614'
+  value_before_type_cast: '2019-07-12 11:20:24.254532'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql

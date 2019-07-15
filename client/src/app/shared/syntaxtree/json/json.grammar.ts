@@ -5,141 +5,143 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "json",
   technicalName: "json",
   programmingLanguageId: "json",
-  root: "value",
+  root: { languageName: "json", typeName: "value" },
   types: {
-    "object": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "terminal",
-          symbol: "{",
-          name: "object-open"
-        },
-        {
-          type: "allowed",
-          name: "values",
-          nodeTypes: [
-            { nodeType: "key-value", occurs: "*" }
-          ],
-          between: {
+    "json": {
+      "object": {
+        type: "concrete",
+        attributes: [
+          {
             type: "terminal",
-            symbol: ",",
-            name: "object-sep"
-          }
-        },
-        {
-          type: "terminal",
-          symbol: "}",
-          name: "object-close"
-        },
-      ]
-    },
-    "key-value": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "allowed",
-          name: "key",
-          nodeTypes: [
-            { nodeType: "string", occurs: "1" }
-          ]
-        },
-        {
-          type: "terminal",
-          symbol: ":",
-          name: "colon"
-        },
-        {
-          type: "allowed",
-          name: "value",
-          nodeTypes: [
-            { nodeType: "value", occurs: "1" }
-          ]
-        }
-      ]
-    },
-    "array": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "terminal",
-          symbol: "[",
-          name: "array-open"
-        },
-        {
-          type: "allowed",
-          name: "values",
-          nodeTypes: [
-            { nodeType: "value", occurs: "*" }
-          ],
-          between: {
+            symbol: "{",
+            name: "object-open"
+          },
+          {
+            type: "allowed",
+            name: "values",
+            nodeTypes: [
+              { nodeType: "key-value", occurs: "*" }
+            ],
+            between: {
+              type: "terminal",
+              symbol: ",",
+              name: "object-sep"
+            }
+          },
+          {
             type: "terminal",
-            symbol: ",",
-            name: "array-sep"
+            symbol: "}",
+            name: "object-close"
+          },
+        ]
+      },
+      "key-value": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "allowed",
+            name: "key",
+            nodeTypes: [
+              { nodeType: "string", occurs: "1" }
+            ]
+          },
+          {
+            type: "terminal",
+            symbol: ":",
+            name: "colon"
+          },
+          {
+            type: "allowed",
+            name: "value",
+            nodeTypes: [
+              { nodeType: "value", occurs: "1" }
+            ]
           }
-        },
-        {
-          type: "terminal",
-          symbol: "]",
-          name: "array-close"
-        },
-      ]
-    },
-    "value": {
-      type: "oneOf",
-      oneOf: [
-        "string", "number", "boolean", "object", "array", "null"
-      ]
-    },
-    "string": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "terminal",
-          symbol: "\"",
-          name: "quot-begin"
-        },
-        {
-          type: "property",
-          name: "value",
-          base: "string"
-        },
-        {
-          type: "terminal",
-          symbol: "\"",
-          name: "quot-end"
-        },
-      ]
-    },
-    "number": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "property",
-          name: "value",
-          base: "integer"
-        }
-      ]
-    },
-    "boolean": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "property",
-          name: "value",
-          base: "boolean"
-        }
-      ]
-    },
-    "null": {
-      type: "concrete",
-      attributes: [
-        {
-          type: "terminal",
-          name: "value",
-          symbol: "null"
-        }
-      ]
+        ]
+      },
+      "array": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "terminal",
+            symbol: "[",
+            name: "array-open"
+          },
+          {
+            type: "allowed",
+            name: "values",
+            nodeTypes: [
+              { nodeType: "value", occurs: "*" }
+            ],
+            between: {
+              type: "terminal",
+              symbol: ",",
+              name: "array-sep"
+            }
+          },
+          {
+            type: "terminal",
+            symbol: "]",
+            name: "array-close"
+          },
+        ]
+      },
+      "value": {
+        type: "oneOf",
+        oneOf: [
+          "string", "number", "boolean", "object", "array", "null"
+        ]
+      },
+      "string": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "terminal",
+            symbol: "\"",
+            name: "quot-begin"
+          },
+          {
+            type: "property",
+            name: "value",
+            base: "string"
+          },
+          {
+            type: "terminal",
+            symbol: "\"",
+            name: "quot-end"
+          },
+        ]
+      },
+      "number": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "property",
+            name: "value",
+            base: "integer"
+          }
+        ]
+      },
+      "boolean": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "property",
+            name: "value",
+            base: "boolean"
+          }
+        ]
+      },
+      "null": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "terminal",
+            name: "value",
+            symbol: "null"
+          }
+        ]
+      }
     }
   }
 }

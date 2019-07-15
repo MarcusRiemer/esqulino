@@ -1,23 +1,20 @@
 import { GrammarDocument } from '../../syntaxtree/grammar.description'
+import { grammarWith } from '../../syntaxtree/grammar.spec-util';
 
 import { VisualBlockDescriptions } from '../block.description';
 
 import { BlockLanguageGeneratorDocument } from './generator.description'
-import { convertGrammarManualInstructions } from './generator'
+import { convertGrammarManualInstructions } from './generator-manual'
 
-describe("BlockLanguage Generator", () => {
+describe("Manual BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
     it("Almost empty grammar with no generation instructions", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "concrete",
-            attributes: []
-          }
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: []
         }
-      };
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -30,19 +27,15 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and missing values", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "concrete",
-            attributes: [
-              { type: "property", name: "p1", base: "string" },
-              { type: "terminal", name: "t1", symbol: "t1" }
-            ]
-          }
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            { type: "property", name: "p1", base: "string" },
+            { type: "terminal", name: "t1", symbol: "t1" }
+          ]
         }
-      };
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -67,19 +60,15 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with two blocks for a single type", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "concrete",
-            attributes: [
-              { type: "property", name: "p1", base: "string" },
-              { type: "terminal", name: "t1", symbol: "t1" }
-            ]
-          }
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            { type: "property", name: "p1", base: "string" },
+            { type: "terminal", name: "t1", symbol: "t1" }
+          ]
         }
-      };
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -111,19 +100,15 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with one partial block for a single type", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "concrete",
-            attributes: [
-              { type: "property", name: "p1", base: "string" },
-              { type: "terminal", name: "t1", symbol: "t1" }
-            ]
-          }
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            { type: "property", name: "p1", base: "string" },
+            { type: "terminal", name: "t1", symbol: "t1" }
+          ]
         }
-      };
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -153,19 +138,15 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and supplied values", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "concrete",
-            attributes: [
-              { type: "property", name: "p1", base: "string" },
-              { type: "terminal", name: "t1", symbol: "t1" }
-            ]
-          }
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            { type: "property", name: "p1", base: "string" },
+            { type: "terminal", name: "t1", symbol: "t1" }
+          ]
         }
-      };
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -209,24 +190,20 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("No blocks for 'oneOf'-types", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "oneOf",
-            oneOf: ["t2", "t3"]
-          },
-          "t2": {
-            type: "concrete",
-            attributes: []
-          },
-          "t3": {
-            type: "concrete",
-            attributes: []
-          }
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "oneOf",
+          oneOf: ["t2", "t3"]
+        },
+        "t2": {
+          type: "concrete",
+          attributes: []
+        },
+        "t3": {
+          type: "concrete",
+          attributes: []
         }
-      };
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -239,52 +216,48 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("All iterators, a constant and a property", () => {
-      const grammar: GrammarDocument = {
-        technicalName: "g1",
-        root: "t1",
-        types: {
-          "t1": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "terminal",
-                name: "t",
-                symbol: "t"
-              },
-              {
-                type: "allowed",
-                name: "c1",
-                nodeTypes: [
-                  {
-                    nodeType: "t1",
-                    occurs: "1"
-                  }
-                ]
-              },
-              {
-                type: "sequence",
-                name: "c2",
-                nodeTypes: [
-                  {
-                    nodeType: "t1",
-                    occurs: "1"
-                  }
-                ]
-              },
-              {
-                type: "choice",
-                name: "c3",
-                choices: ["t1"]
-              },
-              {
-                type: "property",
-                name: "p1",
-                base: "string"
-              }
-            ]
-          },
-        }
-      };
+      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              name: "t",
+              symbol: "t"
+            },
+            {
+              type: "allowed",
+              name: "c1",
+              nodeTypes: [
+                {
+                  nodeType: "t1",
+                  occurs: "1"
+                }
+              ]
+            },
+            {
+              type: "sequence",
+              name: "c2",
+              nodeTypes: [
+                {
+                  nodeType: "t1",
+                  occurs: "1"
+                }
+              ]
+            },
+            {
+              type: "choice",
+              name: "c3",
+              choices: ["t1"]
+            },
+            {
+              type: "property",
+              name: "p1",
+              base: "string"
+            }
+          ]
+        },
+      });
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",

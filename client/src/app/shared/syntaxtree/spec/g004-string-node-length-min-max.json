@@ -1,25 +1,27 @@
 {
   "technicalName": "g4",
-  "root": "s1",
+  "root": { "languageName": "g4", "typeName": "s1" },
   "types": {
-    "s1": {
-      "attributes": [
-        {
-          "name": "value",
-          "type": "property",
-          "base": "string",
-          "restrictions": [
-            {
-              "type": "minLength",
-              "value": 2
-            },
-            {
-              "type": "maxLength",
-              "value": 4
-            }
-          ]
-        }
-      ]
+    "g4": {
+      "s1": {
+        "attributes": [
+          {
+            "name": "value",
+            "type": "property",
+            "base": "string",
+            "restrictions": [
+              {
+                "type": "minLength",
+                "value": 2
+              },
+              {
+                "type": "maxLength",
+                "value": 4
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

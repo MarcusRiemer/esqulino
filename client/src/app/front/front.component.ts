@@ -76,11 +76,11 @@ export const indexItems: NavItem[] = [
   {
     type: "link",
     text: {
-      de: "Sprachen",
-      en: "Languages",
+      de: "Administration",
+      en: "Administration",
     },
     route: ["/admin"],
-    icon: "puzzle-piece",
+    icon: "user-secret",
     requireLogin: true,
     requireRoles: ["admin"],
   },
@@ -105,7 +105,7 @@ export const indexItems: NavItem[] = [
 export class FrontComponent implements OnInit {
   constructor(
     private _sideNavService: SideNavService
-  ) {}
+  ) { }
   /**
    * All items that need to be shown in the general navigation
    */

@@ -20,8 +20,9 @@
   </ng-container>
 
   <ng-container logged_out>
-    <button mat-icon-button (click)="openDialog()">
-      <i class="fa fa-sign-in" aria-hidden="true"></i>
+    <button mat-button (click)="openDialog()">
+      <span class="display-name" i18n="@@guest">Gast </span>
+      <i class="fa fa-user-o" aria-hidden="true"></i>
     </button>
   </ng-container>
 </is-logged-in>

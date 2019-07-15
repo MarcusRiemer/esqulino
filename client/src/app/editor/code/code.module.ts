@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core'
+import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
@@ -16,6 +16,7 @@ import { ValidationComponent } from './validation.component'
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockBaseDirective } from './block/block-base.directive'
+import { BlockDebugOptionsService } from '../block-debug-options.service'
 import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
@@ -24,6 +25,7 @@ import { BlockRenderInputComponent } from './block/block-render-input.component'
 import { BlockRenderErrorComponent } from './block/block-render-error.component'
 import { BlockRootComponent } from './block/block-root.component'
 import { CodeResourceSettingsComponent } from './block/code-resource-settings.component'
+import { DropDebugComponent } from './block/drop-debug.component'
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 import { QueryPreviewComponent } from './query/query-preview.component'
@@ -40,6 +42,9 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
   imports: [
     SharedEditorModule,
   ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+  ],
   declarations: [
     BlockEditorComponent,
     BlockRenderComponent,
@@ -54,6 +59,7 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     CodeGeneratorComponent,
     CodeResourceSettingsComponent,
     CreateCodeResourceComponent,
+    DropDebugComponent,
     DatabaseSchemaSidebarComponent,
     ValidationComponent,
     CodeSidebarComponent,
@@ -73,6 +79,7 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
     CodeResourceSettingsComponent,
+    DropDebugComponent,
     QueryPreviewComponent,
     ValidationComponent,
     CodeGeneratorComponent,
@@ -92,7 +99,12 @@ export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders {
     return ({
       ngModule: CodeEditorModule,
-      providers: [EditorComponentsService, QueryService, TruckWorldService]
+      providers: [
+        EditorComponentsService,
+        BlockDebugOptionsService,
+        QueryService,
+        TruckWorldService
+      ]
     });
   }
 

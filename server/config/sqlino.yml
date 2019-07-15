@@ -11,7 +11,7 @@ development:
   ide_service:
     exec:
       node_binary: /usr/bin/node
-      program: ../client/dist/cli/main.cli.js
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/main.cli.js' %>
       mode: one-shot
   seed:
     data_dir: ../seed
@@ -47,7 +47,7 @@ test:
     mock: true
     exec:
       node_binary: /usr/bin/node
-      program: ../client/dist/cli/bundle.cli.js
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one-shot
   seed:
     data_dir: ../seed-test
@@ -64,7 +64,7 @@ test:
 
 production:
   name: "Blattwerkzeug"
-  data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
+  data_dir: <%= ENV['DATA_DIR'] || '../data/prod' %>
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["blattzeug.de"]
@@ -75,7 +75,7 @@ production:
   ide_service:
     exec:
       node_binary: /usr/bin/node
-      program: ../client/dist/cli/bundle.cli.js
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one-shot
   seed:
     data_dir: ../seed

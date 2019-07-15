@@ -10,27 +10,29 @@ concise_attributes:
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"root": "grammar", "types": {"node": {"type": "oneOf",
-    "oneOf": ["concreteNode", "typedef"]}, "grammar": {"type": "concrete", "attributes":
-    [{"name": "nodes", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType":
-    "node"}]}]}, "nodeRef": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "name", "type": "property"}]}, "typedef": {"type": "concrete", "attributes":
-    [{"base": "string", "name": "name", "type": "property"}, {"name": "attributes",
-    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}]},
-    "children": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
-    "type": "property"}]}, "property": {"type": "concrete", "attributes": [{"base":
-    "string", "name": "name", "type": "property"}]}, "terminal": {"type": "concrete",
-    "attributes": [{"base": "string", "name": "name", "type": "property"}, {"base":
-    "string", "name": "symbol", "type": "property"}]}, "attribute": {"type": "oneOf",
-    "oneOf": ["terminal", "property", "children"]}, "concreteNode": {"type": "concrete",
-    "attributes": [{"base": "string", "name": "name", "type": "property"}, {"name":
-    "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}]}]}}}'
+  value_before_type_cast: '{"root": {"typeName": "grammar", "languageName": "MetaGrammar"},
+    "types": {"MetaGrammar": {"node": {"type": "oneOf", "oneOf": ["concreteNode",
+    "typedef"]}, "grammar": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}, {"name": "nodes", "type": "sequence", "nodeTypes":
+    [{"occurs": "+", "nodeType": "node"}]}]}, "nodeRef": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "name", "type": "property"}]}, "typedef": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
+    {"name": "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "nodeRef"}]}]}, "children": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}]}, "property": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "name", "type": "property"}]}, "terminal": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
+    {"base": "string", "name": "symbol", "type": "property"}]}, "attribute": {"type":
+    "oneOf", "oneOf": ["terminal", "property", "children"]}, "concreteNode": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
+    {"name": "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "attribute"}]}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2019-05-22 09:31:33.682761'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-22 10:50:55.301343'
+  value_before_type_cast: '2019-07-12 11:20:24.258546'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic

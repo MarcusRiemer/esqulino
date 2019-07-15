@@ -1,6 +1,7 @@
 {
   "id": "test",
   "name": "test",
+  "defaultProgrammingLanguageId": "generic",
   "editorBlocks": [
     {
       "describedType": {
@@ -8,7 +9,7 @@
         "typeName": "root"
       },
       "visual": [
-        {          
+        {
           "blockType": "block",
           "direction": "horizontal",
           "children": [
@@ -19,4 +20,3 @@
   ],
   "sidebarBlocks": []
 }
-

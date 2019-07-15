@@ -1,12 +1,11 @@
 import {
-  NodeChildrenGroupDescription,
-  NodeTypesChildReference, OccursSpecificDescription,
-  isQualifiedTypeName, isOccursSpecificDescription,
-  NodeAttributeDescription, isNodeConcreteTypeDescription,
+  NodeChildrenGroupDescription, NodeTypesChildReference,
+  isQualifiedTypeName, NodeAttributeDescription, isNodeConcreteTypeDescription,
   GrammarDocument,
-  OccursDescription
+  NodeTypeDescription,
 } from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
+import { isOccursSpecificDescription, resolveOccurs, OccursSpecificDescription } from './occurs';
 
 /**
  * Takes any kind of reference and returns the number of occurences this reference
@@ -19,16 +18,6 @@ export function resolveChildOccurs(typeDesc: NodeTypesChildReference): OccursSpe
     return typeDesc.occurs;
   } else {
     return (resolveOccurs(typeDesc.occurs));
-  }
-}
-
-export function resolveOccurs(desc: OccursDescription): OccursSpecificDescription {
-  switch (desc) {
-    case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
-    case "?": return ({ minOccurs: 0, maxOccurs: 1 });
-    case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
-    case "1": return ({ minOccurs: 1, maxOccurs: 1 });
-    default: throw new Error(`Unknown occurences: "${JSON.stringify(desc)}"`);
   }
 }
 
@@ -53,23 +42,50 @@ export function isHoleIfEmpty(attrDescription: NodeChildrenGroupDescription) {
  * A NodeAttributeDescription that knows the name of its hosting grammar and
  * the type it is placed on.
  */
-export type FullNodeAttributeDescription = NodeAttributeDescription & {
-  grammarName: string
+export type QualifiedNodeTypeDescription = NodeTypeDescription & {
+  languageName: string
   typeName: string
 }
 
 /**
  * @return All attributes of the given grammar in the form of a handy list.
  */
-export function getFullAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
+export function getQualifiedTypes(g: GrammarDocument): QualifiedNodeTypeDescription[] {
+  const toReturn: QualifiedNodeTypeDescription[] = [];
+
+  Object.entries(g.types || {}).forEach(([langName, types]) => {
+    Object.entries(types).forEach(([typeName, t]) => {
+      toReturn.push(Object.assign({}, t, {
+        languageName: langName,
+        typeName: typeName
+      }));
+    });
+  });
+
+  return (toReturn);
+}
+
+/**
+ * A NodeAttributeDescription that knows the name of its hosting grammar and
+ * the type it is placed on.
+ */
+export type FullNodeAttributeDescription = NodeAttributeDescription & {
+  languageName: string
+  typeName: string
+}
+
+/**
+ * @return All attributes of the given grammar in the form of a handy list.
+ */
+export function getFullQualifiedAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
 
-  Object.entries(g.types || {}).forEach(([typeName, type]) => {
-    if (isNodeConcreteTypeDescription(type)) {
-      (type.attributes || []).forEach(attribute => {
+  getQualifiedTypes(g).forEach(t => {
+    if (isNodeConcreteTypeDescription(t)) {
+      (t.attributes || []).forEach(attribute => {
         toReturn.push(Object.assign({}, attribute, {
-          grammarName: g.technicalName,
-          typeName: typeName
+          languageName: t.languageName,
+          typeName: t.typeName
         }));
       });
     }

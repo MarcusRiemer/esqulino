@@ -5,55 +5,56 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "ruby",
   name: "imp",
   technicalName: "imp",
+  root: { languageName: "imp", typeName: "program" },
   types: {
-    "program": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "statements",
-          type: "sequence",
-          nodeTypes: ["statement"]
-        }
-      ],
+    "imp": {
+      "program": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "statements",
+            type: "sequence",
+            nodeTypes: ["statement"]
+          }
+        ],
+      },
+
+      "statement": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "children",
+            type: "allowed",
+            nodeTypes: ["statementAssign"]
+          }
+        ]
+      },
+
+      "statementAssign": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "children",
+            type: "sequence",
+            nodeTypes: ["variable"]
+          }
+        ]
+      },
+
+      "variable": {
+        type: "concrete",
+        attributes: [
+          {
+            name: "name",
+            type: "property",
+            base: "string"
+          }
+        ],
+      },
+
+      "expression": {
+        type: "concrete",
+      }
     },
-
-    "statement": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "children",
-          type: "allowed",
-          nodeTypes: ["statementAssign"]
-        }
-      ]
-    },
-
-    "statementAssign": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "children",
-          type: "sequence",
-          nodeTypes: ["variable"]
-        }
-      ]
-    },
-
-    "variable": {
-      type: "concrete",
-      attributes: [
-        {
-          name: "name",
-          type: "property",
-          base: "string"
-        }
-      ],
-    },
-
-    "expression": {
-      type: "concrete",
-    }
-  },
-
-  root: "program"
+  }
 }

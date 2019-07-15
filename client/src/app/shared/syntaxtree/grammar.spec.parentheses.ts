@@ -2,6 +2,7 @@ import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes } from './validation-result'
+import { grammarWith } from './grammar.spec-util';
 
 describe('Grammar :: Parentheses', () => {
 
@@ -17,29 +18,25 @@ describe('Grammar :: Parentheses', () => {
 
   describe(`Sequence`, () => {
     describe(`g1 ::= ()`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "sequence",
-                  nodeTypes: []
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "sequence",
+                nodeTypes: []
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
         }
-      }
+      });
 
       const v = new Validator([g]);
 
@@ -55,32 +52,28 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1)`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "sequence",
-                  nodeTypes: ["t1"]
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "sequence",
+                nodeTypes: ["t1"]
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          },
-          "invalid": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
+        },
+        "invalid": {
+          type: "concrete"
         }
-      };
+      });
 
       const v = new Validator([g]);
 
@@ -106,35 +99,31 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 t2)`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "sequence",
-                  nodeTypes: ["t1", "t2"]
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "sequence",
+                nodeTypes: ["t1", "t2"]
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          },
-          "t2": {
-            type: "concrete"
-          },
-          "invalid": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
+        },
+        "t2": {
+          type: "concrete"
+        },
+        "invalid": {
+          type: "concrete"
         }
-      }
+      });
 
       const v = new Validator([g]);
 
@@ -189,38 +178,34 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 t2?)`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "sequence",
-                  nodeTypes: [
-                    "t1",
-                    { nodeType: "t2", occurs: "?" }
-                  ]
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "sequence",
+                nodeTypes: [
+                  "t1",
+                  { nodeType: "t2", occurs: "?" }
+                ]
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          },
-          "t2": {
-            type: "concrete"
-          },
-          "invalid": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
+        },
+        "t2": {
+          type: "concrete"
+        },
+        "invalid": {
+          type: "concrete"
         }
-      }
+      });
 
       const v = new Validator([g]);
 
@@ -268,32 +253,28 @@ describe('Grammar :: Parentheses', () => {
 
   describe("Allowed", () => {
     describe(`g ::= (t1)`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "allowed",
-                  nodeTypes: ["t1"]
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "allowed",
+                nodeTypes: ["t1"]
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          },
-          "invalid": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
+        },
+        "invalid": {
+          type: "concrete"
         }
-      };
+      });
 
       const v = new Validator([g]);
 
@@ -331,35 +312,31 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 & t2)`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "allowed",
-                  nodeTypes: ["t1", "t2"]
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "allowed",
+                nodeTypes: ["t1", "t2"]
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          },
-          "t2": {
-            type: "concrete"
-          },
-          "invalid": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
+        },
+        "t2": {
+          type: "concrete"
+        },
+        "invalid": {
+          type: "concrete"
         }
-      };
+      });
 
       const v = new Validator([g]);
 
@@ -410,38 +387,34 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 & t2?)`, () => {
-      const g: Schema.GrammarDocument = {
-        root: "root",
-        technicalName: "spec",
-        types: {
-          "root": {
-            type: "concrete",
-            attributes: [
-              {
-                type: "parentheses",
-                name: "g1",
-                cardinality: "1",
-                group: {
-                  type: "allowed",
-                  nodeTypes: [
-                    "t1",
-                    { nodeType: "t2", occurs: "?" }
-                  ]
-                }
+      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "1",
+              group: {
+                type: "allowed",
+                nodeTypes: [
+                  "t1",
+                  { nodeType: "t2", occurs: "?" }
+                ]
               }
-            ]
-          },
-          "t1": {
-            type: "concrete"
-          },
-          "t2": {
-            type: "concrete"
-          },
-          "invalid": {
-            type: "concrete"
-          }
+            }
+          ]
+        },
+        "t1": {
+          type: "concrete"
+        },
+        "t2": {
+          type: "concrete"
+        },
+        "invalid": {
+          type: "concrete"
         }
-      };
+      });
 
       const v = new Validator([g]);
 

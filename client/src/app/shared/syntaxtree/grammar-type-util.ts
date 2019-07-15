@@ -1,6 +1,8 @@
 import * as Desc from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-type-util.description";
+import { debug } from 'util';
+import { getFullQualifiedAttributes, getQualifiedTypes } from './grammar-util';
 
 /**
  * Calculates the self contained, full description for a certain node type.
@@ -19,7 +21,12 @@ export function fullNodeDescription(
     typeName = typeName.typeName;
   }
 
-  const actualType = grammar.types[typeName];
+  const actualLang = grammar.types[languageName];
+  if (!actualLang) {
+    throw new Error(`Language "${languageName}" does not exist on grammar`);
+  }
+
+  const actualType = actualLang[typeName];
   if (!actualType) {
     throw new Error(`Type "${typeName}" does not exist on grammar`);
   }
@@ -56,15 +63,18 @@ export type OrderedTypes = QualifiedTypeName[];
  * @return A meaningful order of the types in the given grammar
  */
 export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
-  const rootType: QualifiedTypeName = ensureTypename(g.root, g.technicalName);
+  // Is there a root to work with
+  const rootLang = g.root && g.types[g.root.languageName];
+  if (!rootLang || !rootLang[g.root.typeName]) {
+    // No root available? We just return the order that we got
+    const toReturn: OrderedTypes = [];
+    Object.entries(g.types).forEach(([langName, types]) => {
+      Object.keys(types).forEach(typeName => {
+        toReturn.push({ languageName: langName, typeName: typeName });
+      });
+    });
 
-  // No root available? We just return the order that we got
-  if (rootType.languageName != g.technicalName || !(rootType.typeName in g.types)) {
-    return (
-      Object
-        .keys(g.types)
-        .map(k => ensureTypename(k, g.technicalName))
-    );
+    return (toReturn);
   } else {
     const usedTypes = new Set<string>();
     const order: OrderedTypes = [];
@@ -77,8 +87,9 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
         order.push(curr);
 
         // Different types need to be treated differently
-        const def = g.types[curr.typeName];
-        if (def) {
+        const types = g.types[curr.languageName];
+        if (types && types[curr.typeName]) {
+          const def = types[curr.typeName];
           switch (def.type) {
             // For concrete types: Add all types mentioned in childgroups
             case "concrete":
@@ -106,12 +117,14 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
       }
     }
 
-    impl(rootType);
+    impl(g.root);
 
     // Add all unreferenced types
-    const unreferenced = Object.keys(g.types)
-      .map(k => ensureTypename(k, g.technicalName))
-      .filter(k => !usedTypes.has(JSON.stringify(k)));
+    const unreferenced = getQualifiedTypes(g)
+      // OUCH! Order of keys is important here, if "typeName" is mentioned first
+      // the resulting string also has that key and value mentioned first
+      .map((t): QualifiedTypeName => { return ({ languageName: t.languageName, typeName: t.typeName }) })
+      .filter(t => !usedTypes.has(JSON.stringify(t)));
     order.push(...unreferenced);
 
     return (order);

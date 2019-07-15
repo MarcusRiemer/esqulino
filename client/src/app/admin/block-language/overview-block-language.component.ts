@@ -11,7 +11,7 @@ import { BlockLanguageDataService } from '../../shared/serverdata';
 })
 
 export class OverviewBlockLanguageComponent implements OnInit {
-  @ViewChild('toolbarItems', { static: false })
+  @ViewChild('toolbarItems', { static: true })
   toolbarItems: TemplateRef<any>;
 
   constructor(

@@ -289,6 +289,8 @@ export class DragService {
     this._bufferedDragOver = undefined;
 
     const currentCodeResource = this._currentCodeResource.peekResource;
+
+    // Find out which locations are currently candidates for drags
     const smartDropLocations = smartDropLocation(
       smartDropOptions,
       currentCodeResource.validationLanguagePeek.validator,

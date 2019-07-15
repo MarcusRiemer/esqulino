@@ -24,26 +24,33 @@ module Seed
     def after_store_seed
       if File.directory? seed.images_directory_path
         info "Storing images"
-        FileUtils.copy_entry(seed.images_directory_path, seed_specific_directory)
+        FileUtils.cp_r(seed.images_directory_path, seed_specific_directory)
       end
     end
 
     # store image from proejct path into a tmp directory after loading
     def after_load_seed
-      if File.directory? seed_specific_directory
+      seed_images_folder = File.join seed_specific_directory, IMAGE_DIRECTORY
+      if File.directory? (seed_images_folder)
         info "COPY Images"
 
+        # Ensure that the temporary target directory exists
         tmp_directory = path_to_data_directory + "_tmp"
         FileUtils.mkdir_p tmp_directory
-        image_target_folder = File.join tmp_directory, IMAGE_DIRECTORY
-        FileUtils.copy_entry seed_specific_directory, image_target_folder
+        FileUtils.cp_r seed_images_folder, tmp_directory
       end
     end
 
     # move the tmp directory to the main data directory after loading process is finished
     def move_data_from_tmp_to_data_directory
-      FileUtils.remove_dir(path_to_data_directory) # Remove existing folder
-      FileUtils.mv path_to_data_directory + "_tmp", path_to_data_directory # Move tmp folder in place
+      # Remove existing folder, it will be (more or less) atomically overwritten
+      # if a new folder was created.
+      FileUtils.remove_dir(path_to_data_directory)
+
+      # Move temporary folder with updated content into position
+      if File.directory? path_to_data_directory + "_tmp"
+        FileUtils.mv path_to_data_directory + "_tmp", path_to_data_directory # Move tmp folder in place
+      end
     end
 
     # make static method availbale as instance method for this class

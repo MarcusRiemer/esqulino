@@ -1,6 +1,7 @@
-<ng-container *ngFor="let visualBlock of editorBlock.visual">
-  <editor-block-render [codeResource]="codeResource"
-                       [node]="node"
-                       [visual]="visualBlock"
-                       [readOnly]="readOnly"></editor-block-render>
-</ng-container>
+<editor-block-render *ngFor="let visualBlock of editorBlock.visual"
+                     [blockLanguage]="blockLanguage"
+                     [codeResource]="codeResource"
+                     [node]="node"
+                     [visual]="visualBlock"
+                     [readOnly]="readOnly">
+</editor-block-render>

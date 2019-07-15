@@ -1,0 +1,44 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 98787a86-c084-43a4-988d-366a2f65b579
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Alle Beiträge
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"tables": [{"name": "tableIntroduction", "language": "sql",
+    "properties": {"name": "article"}}]}, "language": "sql"}], "where": [], "select":
+    [{"name": "select", "children": {"columns": [{"name": "starOperator", "language":
+    "sql"}]}, "language": "sql"}], "groupBy": []}, "language": "sql"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-07-09 08:09:21.514995'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-07-09 08:09:49.218275'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    SELECT *
+    FROM article
+new_record: false
+active_record_yaml_version: 2

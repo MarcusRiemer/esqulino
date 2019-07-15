@@ -1,6 +1,7 @@
 {
   "id": "test",
   "name": "test",
+  "defaultProgrammingLanguageId": "generic",
   "editorBlocks": [],
   "sidebars": [
     {
@@ -26,4 +27,3 @@
     }
   ]
 }
-

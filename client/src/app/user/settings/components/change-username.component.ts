@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { UserService } from './../../../shared/auth/user.service';
-import { UserNameDescription } from './../../../shared/auth/user.description';
+import { UserService } from '../../../shared/auth/user.service';
+import { UserNameDescription } from '../../../shared/auth/user.description';
+
 
 @Component({
   selector: "change-username",

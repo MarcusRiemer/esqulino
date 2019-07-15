@@ -2,11 +2,11 @@ import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 
 import { BlockLanguageDataService } from '../../shared/serverdata'
+import { PerformDataService } from '../../shared/authorisation/perform-data.service';
 
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
-import { PerformDataService } from '../../shared/authorisation/perform-data.service';
 
 @Component({
   templateUrl: 'templates/settings.html'

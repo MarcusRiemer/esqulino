@@ -84,3 +84,33 @@ describe('Utility: arrayEqual', () => {
     expect(Util.arrayEqual([[lhs], lhs], [[rhs], rhs])).toBeFalsy();
   });
 });
+
+describe("locationIsOnPath", () => {
+  it("[] is on []", () => {
+    expect(Util.locationIsOnPath([], [])).toBe(true);
+  });
+
+  it(`[] is on [["a", 0]]`, () => {
+    expect(Util.locationIsOnPath([], [["a", 0]])).toBe(true);
+  });
+
+  it(`[["a", 0]] is on [["a", 0]]`, () => {
+    expect(Util.locationIsOnPath([["a", 0]], [["a", 0]])).toBe(true);
+  });
+
+  it(`[["a", 0]] is on [["a", 0], ["a", 0]]`, () => {
+    expect(Util.locationIsOnPath([["a", 0]], [["a", 0], ["a", 0]])).toBe(true);
+  });
+
+  it(`[["a", 0], ["a", 0]] is on [["a", 0], ["a", 0]]`, () => {
+    expect(Util.locationIsOnPath([["a", 0], ["a", 0]], [["a", 0], ["a", 0]])).toBe(true);
+  });
+
+  it(`[["b", 0]] is not on [["a", 0]]`, () => {
+    expect(Util.locationIsOnPath([["b", 0]], [["a", 0]])).toBe(false);
+  });
+
+  it(`[["a", 0], ["b", 0]] is not on [["a", 0], ["a", 0]]`, () => {
+    expect(Util.locationIsOnPath([["a", 0], ["b", 0]], [["a", 0], ["a", 0]])).toBe(false);
+  });
+});

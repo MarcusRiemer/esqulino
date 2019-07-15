@@ -1,23 +1,25 @@
 {
   "technicalName": "g6",
-  "root": "n1",
+  "root": { "languageName": "g6", "typeName": "n1" },
   "types": {
-    "n1": {
-      "attributes": [
-        {
-          "name": "c",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "nodeType": {
-                "languageName": "g6",
-                "typeName": "n1"
-              },
-              "occurs": "?"
-            }
-          ]
-        }
-      ]
+    "g6": {
+      "n1": {
+        "attributes": [
+          {
+            "name": "c",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "nodeType": {
+                  "languageName": "g6",
+                  "typeName": "n1"
+                },
+                "occurs": "?"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

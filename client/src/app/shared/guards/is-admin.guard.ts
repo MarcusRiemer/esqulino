@@ -2,7 +2,7 @@ import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Injectable } from '@angular/core';
 
 import { UserService } from './../auth/user.service';
-import { take } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { Roles } from '../authorisation/roles.enum';
 
 @Injectable()
@@ -14,10 +14,12 @@ export class IsAdminGuard implements CanActivate {
 
   public async canActivate(): Promise<boolean | UrlTree> {
     const roles = await this._userService.roles$
-      .pipe(take(1))
+      .pipe(first())
       .toPromise()
 
     console.log(`Current roles: ${roles}`);
+
+    // If the user is not an administrator, redirect him to the frontpage
     if (!roles.includes(Roles.Admin)) {
       return this._router.parseUrl("/");
     }

@@ -17,7 +17,7 @@
     "@angular/router": "8.0.0",
     "@nguniversal/express-engine": "7.1.1",
     "@nguniversal/module-map-ngfactory-loader": "7.1.1",
-    "@ngx-i18nsupport/tooling": "8.0.0",
+    "@ngx-i18nsupport/tooling": "8.0.3",
     "@sentry/browser": "4.6.5",
     "ajv": "6.10.0",
     "angulartics2": "7.4.1",

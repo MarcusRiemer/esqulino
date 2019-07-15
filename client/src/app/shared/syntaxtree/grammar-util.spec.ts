@@ -1,5 +1,5 @@
-import { resolveChildOccurs, isHoleIfEmpty, getFullAttributes } from "./grammar-util";
-import { NodeTypeDescription } from "./grammar.description";
+import { resolveChildOccurs, isHoleIfEmpty, getFullQualifiedAttributes } from "./grammar-util";
+import { NodeTypeDescription, GrammarDocument } from "./grammar.description";
 
 describe(`Grammar Utilities`, () => {
   describe(`resolveOccurs`, () => {
@@ -61,17 +61,19 @@ describe(`Grammar Utilities`, () => {
   describe(`getAttributes`, () => {
     // Shorthand to generate a grammar with the relevant properties
     const testGrammar = (name: string, types: { [nodeName: string]: NodeTypeDescription }) => {
-      return ({
+      const g: GrammarDocument = {
         technicalName: name,
-        programmingLanguageId: "lang",
         root: undefined,
-        types: types
-      });
+        types: {}
+      };
+
+      g.types[name] = types;
+      return (g);
     }
 
     it(`Empty Grammar`, () => {
       const g = testGrammar("g1", {});
-      expect(getFullAttributes(g)).toEqual([]);
+      expect(getFullQualifiedAttributes(g)).toEqual([]);
     });
 
     it(`Single type, single attribute`, () => {
@@ -81,8 +83,8 @@ describe(`Grammar Utilities`, () => {
           attributes: [{ type: "terminal", name: "a1", symbol: "t_a1" }]
         }
       });
-      expect(getFullAttributes(g)).toEqual([{
-        grammarName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1"
+      expect(getFullQualifiedAttributes(g)).toEqual([{
+        languageName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1"
       }]);
     });
 
@@ -96,9 +98,9 @@ describe(`Grammar Utilities`, () => {
           ]
         }
       });
-      expect(getFullAttributes(g)).toEqual([
-        { grammarName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
-        { grammarName: "g1", typeName: "t1", type: "property", name: "a2", base: "string" }
+      expect(getFullQualifiedAttributes(g)).toEqual([
+        { languageName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
+        { languageName: "g1", typeName: "t1", type: "property", name: "a2", base: "string" }
       ]);
     });
 
@@ -117,9 +119,9 @@ describe(`Grammar Utilities`, () => {
           ]
         }
       });
-      expect(getFullAttributes(g)).toEqual([
-        { grammarName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
-        { grammarName: "g1", typeName: "t2", type: "property", name: "a1", base: "string" }
+      expect(getFullQualifiedAttributes(g)).toEqual([
+        { languageName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
+        { languageName: "g1", typeName: "t2", type: "property", name: "a1", base: "string" }
       ]);
     });
 
@@ -136,8 +138,8 @@ describe(`Grammar Utilities`, () => {
           oneOf: []
         }
       });
-      expect(getFullAttributes(g)).toEqual([
-        { grammarName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
+      expect(getFullQualifiedAttributes(g)).toEqual([
+        { languageName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
       ]);
     });
   });

@@ -9,7 +9,7 @@ import {
 } from './project.description'
 import { Schema } from './schema/schema'
 import { Saveable, SaveStateEvent } from './interfaces'
-import { CodeResource, Language } from './syntaxtree'
+import { CodeResource, Language, GrammarDescription } from './syntaxtree'
 import { BlockLanguage } from '../shared/block';
 import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
 
@@ -61,6 +61,8 @@ export class Project implements ApiVersion, Saveable {
 
   private _validationLanguages: Language[];
 
+  readonly grammarDescriptions: GrammarDescription[];
+
   // Tracking added and removed block languages
   private _removedBlockLanguages: string[] = [];
 
@@ -82,6 +84,7 @@ export class Project implements ApiVersion, Saveable {
     this._projectImageId = json.preview;
     this._sources = json.sources || [] // Sources may be undefined
     this._usesBlockLanguages = json.projectUsesBlockLanguages;
+    this.grammarDescriptions = json.grammars;
     this.schema = new Schema(json.schema);
 
     if (json.apiVersion as string != this.apiVersion) {

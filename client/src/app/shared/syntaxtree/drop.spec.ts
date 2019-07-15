@@ -41,8 +41,18 @@ describe('Drop', () => {
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
       expect(_exactMatches(v, treeIn, [["expr", 0]], candidates))
         .toEqual([
-          { operation: "insert", location: [["expr", 0]], nodeDescription: candidates[0] },
-          { operation: "insert", location: [["expr", 0]], nodeDescription: candidates[1] }
+          {
+            operation: "insert",
+            algorithm: "allowExact",
+            location: [["expr", 0]],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "insert",
+            algorithm: "allowExact",
+            location: [["expr", 0]],
+            nodeDescription: candidates[1]
+          }
         ]);
     });
 
@@ -91,8 +101,18 @@ describe('Drop', () => {
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
       expect(_exactMatches(v, treeIn, [["lhs", 0]], candidates))
         .toEqual([
-          { operation: "insert", location: [["lhs", 0]], nodeDescription: candidates[0] },
-          { operation: "insert", location: [["lhs", 0]], nodeDescription: candidates[1] }
+          {
+            operation: "insert",
+            algorithm: "allowExact",
+            location: [["lhs", 0]],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "insert",
+            algorithm: "allowExact",
+            location: [["lhs", 0]],
+            nodeDescription: candidates[1]
+          }
         ]);
       expect(_exactMatches(v, treeIn, [["rhs", 0]], candidates))
         .toEqual([]);
@@ -112,8 +132,18 @@ describe('Drop', () => {
       expect(_exactMatches(v, treeIn, [], candidates))
         .withContext("Two constants and a noMatch at root")
         .toEqual([
-          { operation: "replace", location: [], nodeDescription: candidates[0] },
-          { operation: "replace", location: [], nodeDescription: candidates[1] },
+          {
+            operation: "replace",
+            algorithm: "allowExact",
+            location: [],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "replace",
+            algorithm: "allowExact",
+            location: [],
+            nodeDescription: candidates[1]
+          },
         ]);
 
       expect(_exactMatches(v, treeIn, [["a", 12]], candidates))
@@ -183,8 +213,18 @@ describe('Drop', () => {
       expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates))
         .toEqual([
-          { operation: "replace", location: [["expr", 0]], nodeDescription: candidates[0] },
-          { operation: "replace", location: [["expr", 0]], nodeDescription: candidates[1] }
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["expr", 0]],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["expr", 0]],
+            nodeDescription: candidates[1]
+          }
         ]);
     });
 
@@ -213,8 +253,18 @@ describe('Drop', () => {
         .toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["rhs", 0]], candidates))
         .toEqual([
-          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[0] },
-          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[1] }
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["rhs", 0]],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["rhs", 0]],
+            nodeDescription: candidates[1]
+          }
         ]);
     });
 
@@ -254,13 +304,33 @@ describe('Drop', () => {
 
       expect(_singleChildReplace(v, treeIn, [["rhs", 0]], candidates))
         .toEqual([
-          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[0] },
-          { operation: "replace", location: [["rhs", 0]], nodeDescription: candidates[1] }
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["rhs", 0]],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["rhs", 0]],
+            nodeDescription: candidates[1]
+          }
         ]);
       expect(_singleChildReplace(v, treeIn, [["rhs", 0], ["expr", 0]], candidates))
         .toEqual([
-          { operation: "replace", location: [["rhs", 0], ["expr", 0]], nodeDescription: candidates[0] },
-          { operation: "replace", location: [["rhs", 0], ["expr", 0]], nodeDescription: candidates[1] }
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["rhs", 0], ["expr", 0]],
+            nodeDescription: candidates[0]
+          },
+          {
+            operation: "replace",
+            algorithm: "allowReplace",
+            location: [["rhs", 0], ["expr", 0]],
+            nodeDescription: candidates[1]
+          }
         ]);
     });
 
