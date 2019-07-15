@@ -1,8 +1,7 @@
 import * as Desc from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-type-util.description";
-import { debug } from 'util';
-import { getFullQualifiedAttributes, getQualifiedTypes } from './grammar-util';
+import { getQualifiedTypes } from './grammar-util';
 
 /**
  * Calculates the self contained, full description for a certain node type.
