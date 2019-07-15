@@ -1,6 +1,7 @@
 import { Injectable, ErrorHandler, Inject, Optional, PLATFORM_ID } from '@angular/core'
 
 import * as Sentry from '@sentry/browser';
+
 import { isPlatformBrowser } from '@angular/common';
 
 /**

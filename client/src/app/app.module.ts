@@ -5,7 +5,9 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Angulartics2Module } from 'angulartics2';
+
 import * as Sentry from '@sentry/browser';
+import * as Integrations from '@sentry/integrations';
 
 import { environment } from '../environments/environment';
 
@@ -35,7 +37,10 @@ if (environment.sentry && environment.sentry.active) {
   const options: Sentry.BrowserOptions = {
     dsn: environment.sentry.dsn,
     environment: environment.production ? "production" : "development",
-    release: environment.version.hash
+    release: environment.version.hash,
+    integrations: [
+      new Integrations.Angular()
+    ]
   };
 
   // Possibly also show a helpful dialogue
