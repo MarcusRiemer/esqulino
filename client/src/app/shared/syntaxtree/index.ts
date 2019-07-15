@@ -16,6 +16,7 @@ import * as RegEx from './regex'
 import * as Css from './css'
 import * as Json from './json'
 import * as Truck from './truck'
+import * as Web from './web'
 
 /**
  * All languages that are statically known to the system.
@@ -30,5 +31,6 @@ export const AvailableLanguages = {
   Json: new Language(Json.LANGUAGE_DESCRIPTION),
   TruckWorld: new Language(Truck.WORLD_LANGUAGE_DESCRIPTION),
   TruckLanguage: new Language(Truck.PROG_LANGUAGE_DESCRIPTION),
+  Html: new Language(Web.HTML_LANGUAGE_DESCRIPTION),
   Generic: new Language({ id: "generic", name: "Generic", validators: [], emitters: [] })
 };
