@@ -6,10 +6,18 @@ FactoryBot.define do
     association :programming_language, factory: :programming_language
     model {
       ({
-         "types": {
-                    "spec": { "type": "concrete", "attributes": [] }
-                  },
-        "root": "spec"
+         "types" => {
+           "spec" => {
+             "root" => {
+               "type" => "concrete",
+               "attributes" => []
+             }
+           }
+         },
+         "root" => {
+           "languageName" => "spec",
+           "typeName" => "root"
+         }
        })
     }
   end
