@@ -27,7 +27,7 @@
 
 
 /** Evergreen browsers require these. **/
-import 'core-js/es6/reflect';
+import 'core-js/es/reflect';
 
 
 
@@ -47,7 +47,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 
-import 'core-js/es7/object';
+import 'core-js/es/object';
 
 // Add global to window, assigning the value of window itself.
 // This hack is currently required for ACE, see https://github.com/fxmontigny/ng2-ace-editor/issues/87

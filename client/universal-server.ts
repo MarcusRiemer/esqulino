@@ -9,9 +9,6 @@ import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import { join } from 'path';
 
-//
-declare var global: any;
-
 /**
  * Some library we load doesn't understand its in a node-environment
  * and attempts to register callbacks. What a dumb idea ...
@@ -48,7 +45,7 @@ const angularApps = {
   })
 }
 
-app.engine('html', (filePath: any, options: any, callback: any) => {
+app.engine('html', (filePath, options, callback) => {
   options.engine(
     filePath,
     { req: options.req, res: options.res },

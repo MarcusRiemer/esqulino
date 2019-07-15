@@ -42,13 +42,13 @@ gem 'omniauth-google-oauth2'
 # Provider with login/password
 gem 'omniauth-identity', '~> 1.1.1'
 
-# Markdown for your ActionMailer generated emails 
+# Markdown for your ActionMailer generated emails
 gem 'maildown'
 
 # Build a simple, robust and scaleable authorization system.
 gem "pundit"
 
-# Role library without any authorization 
+# Role library without any authorization
 gem "rolify"
 
 
@@ -57,7 +57,7 @@ gem "rolify"
 ###########################
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.2.2'
+gem 'rails', '~> 5.2'
 
 # Connecting to postgres databases
 gem 'pg'
