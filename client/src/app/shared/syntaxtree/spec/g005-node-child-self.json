@@ -1,15 +1,17 @@
 {
   "technicalName": "g5",
-  "root": "n1",
+  "root": { "languageName": "g5", "typeName": "n1" },
   "types": {
-    "n1": {
-      "attributes": [
-        {
-          "name": "c",
-          "type": "sequence",
-          "nodeTypes": ["n1"]
-        }
-      ]
+    "g5": {
+      "n1": {
+        "attributes": [
+          {
+            "name": "c",
+            "type": "sequence",
+            "nodeTypes": ["n1"]
+          }
+        ]
+      }
     }
   }
 }

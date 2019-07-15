@@ -2,12 +2,16 @@ import { ComponentPortal } from '@angular/cdk/portal';
 
 import { EditorComponentDescription } from '../../shared/block/block-language.description';
 
-import { BlockRootComponent } from './block/block-root.component';
-import { CodeResourceSettingsComponent } from './block/code-resource-settings.component'
-import { QueryPreviewComponent } from './query/query-preview.component';
-import { WorldRenderComponent } from './truck/world-render.component';
 import { ValidationComponent } from './validation.component';
 import { CodeGeneratorComponent } from './code-generator.component';
+
+import { BlockRootComponent } from './block/block-root.component';
+import { CodeResourceSettingsComponent } from './block/code-resource-settings.component'
+import { DropDebugComponent } from './block/drop-debug.component'
+
+import { QueryPreviewComponent } from './query/query-preview.component';
+
+import { WorldRenderComponent } from './truck/world-render.component';
 import { WorldControllerComponent } from './truck/world-controller.component';
 import { WorldSensorsComponent } from './truck/world-sensors.component';
 
@@ -20,6 +24,7 @@ export class EditorComponentsService {
     switch (description.componentType) {
       case "block-root": return (new ComponentPortal(BlockRootComponent));
       case "code-resource-settings": return (new ComponentPortal(CodeResourceSettingsComponent));
+      case "drop-debug": return (new ComponentPortal(DropDebugComponent));
       case "query-preview": return (new ComponentPortal(QueryPreviewComponent));
       case "validator": return (new ComponentPortal(ValidationComponent));
       case "generated-code": return (new ComponentPortal(CodeGeneratorComponent));

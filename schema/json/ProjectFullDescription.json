@@ -114,6 +114,13 @@
           "description": "The name that should be displayed to the user.",
           "type": "string"
         },
+        "rootCssClasses": {
+          "description": "CSS classes that should be applied at the root",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "sidebars": {
           "description": "How the available blocks should be represented in the sidebar.",
           "items": {
@@ -382,6 +389,28 @@
       ],
       "type": "object"
     },
+    "DropDebugComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays debug information about an ongoing drag process",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "drop-debug"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
     "EditorBlockDescription": {
       "additionalProperties": false,
       "description": "Describes how certain nodes in the syntaxtree should be presented\nto an end user inside the drag & drop interface.",
@@ -429,6 +458,9 @@
         },
         {
           "$ref": "#/definitions/TruckSensorsComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/DropDebugComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -623,8 +655,20 @@
       "additionalProperties": false,
       "description": "A whole grammar with all user-facing documentation.",
       "properties": {
+        "foreignTypes": {
+          "additionalProperties": {
+            "$ref": "#/definitions/NamedTypes"
+          },
+          "type": "object"
+        },
         "id": {
           "type": "string"
+        },
+        "includedGrammars": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "name": {
           "type": "string"
@@ -633,7 +677,7 @@
           "type": "string"
         },
         "root": {
-          "$ref": "#/definitions/TypeReference"
+          "$ref": "#/definitions/QualifiedTypeName"
         },
         "slug": {
           "type": "string"
@@ -643,7 +687,7 @@
         },
         "types": {
           "additionalProperties": {
-            "$ref": "#/definitions/NodeTypeDescription"
+            "$ref": "#/definitions/NamedTypes"
           },
           "type": "object"
         }
@@ -890,6 +934,12 @@
         "categoryCaption",
         "blocks"
       ],
+      "type": "object"
+    },
+    "NamedTypes": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NodeTypeDescription"
+      },
       "type": "object"
     },
     "NodeAttributeDescription": {
@@ -2126,6 +2176,9 @@
     "VisualBlockDescriptions.ConcreteBlock": {
       "anyOf": [
         {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorContainer"
+        },
+        {
           "$ref": "#/definitions/VisualBlockDescriptions.EditorBlock"
         },
         {
@@ -2177,6 +2230,12 @@
           },
           "type": "array"
         },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "direction": {
           "$ref": "#/definitions/Orientation"
         },
@@ -2216,6 +2275,12 @@
         "breakAfter": {
           "type": "boolean"
         },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -2226,6 +2291,40 @@
       "required": [
         "blockType",
         "text"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorContainer": {
+      "additionalProperties": false,
+      "description": "An element that exists merely for layout purposes, think \"div\" or \"span\"",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "container"
+          ],
+          "type": "string"
+        },
+        "breakAfter": {
+          "type": "boolean"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType"
       ],
       "type": "object"
     },
@@ -2245,6 +2344,12 @@
         "children": {
           "items": {
             "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },
@@ -2283,6 +2388,12 @@
         "breakAfter": {
           "type": "boolean"
         },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "excludedErrors": {
           "items": {
             "type": "string"
@@ -2310,6 +2421,12 @@
         },
         "breakAfter": {
           "type": "boolean"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "propReadOnly": {
           "type": "boolean"
@@ -2339,6 +2456,12 @@
         },
         "breakAfter": {
           "type": "boolean"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "property": {
           "type": "string"
@@ -2378,6 +2501,12 @@
         "children": {
           "items": {
             "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },

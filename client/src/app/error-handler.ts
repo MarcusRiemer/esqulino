@@ -24,7 +24,7 @@ export class NotifyErrorHandler extends ErrorHandler {
 
     if (isPlatformBrowser(this._platformId)) {
       // "IN YOUR FACE"-feedback
-      document.querySelector('body').style.backgroundColor = 'red';
+      document.querySelector<HTMLElement>('mat-toolbar').style.backgroundColor = 'red';
     }
 
     // And send the error on its way to be archived

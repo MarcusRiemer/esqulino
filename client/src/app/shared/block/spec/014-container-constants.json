@@ -1,0 +1,38 @@
+{
+  "id": "test",
+  "name": "test",
+  "programmingLanguageId": "generic",
+  "defaultProgrammingLanguageId": "generic",
+  "editorBlocks": [
+    {
+      "describedType": {
+        "languageName": "test",
+        "typeName": "root"
+      },
+      "visual": [
+        {
+          "blockType": "container",
+          "children": [
+            {
+              "blockType": "constant",
+              "text": "blue",
+              "style": {
+                "backgroundColor": "blue",
+                "width": 10
+              }
+            },
+            {
+              "blockType": "constant",
+              "text": "red",
+              "style": {
+                "backgroundColor": "red",
+                "width": 10
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sidebarBlocks": []
+}

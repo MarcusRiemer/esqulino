@@ -4,7 +4,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import {
   Node, CodeResource, NodeLocation, locationIncLastIndex
 } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions } from '../../../shared/block';
+import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -33,6 +33,17 @@ export class BlockRenderComponent {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
+
+  ngOnInit() {
+    if (!this.visual) {
+      debugger;
+    }
+  }
+
+  /**
+   * Optionally override the block language that comes with the code resource.
+   */
+  @Input() public blockLanguage?: BlockLanguage;
 
   /**
    * Disables any interaction with this block if true.
@@ -68,6 +79,13 @@ export class BlockRenderComponent {
   }
 
   /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockContainer(block: VisualBlockDescriptions.EditorBlockBase) {
+    return (block as VisualBlockDescriptions.EditorContainer);
+  }
+
+  /**
    * @return True, if there should be a break after this element
    */
   get breakAfter() {
@@ -88,9 +106,23 @@ export class BlockRenderComponent {
   /**
    * @return The actual nodes that should be displayed.
    */
-  get iteratorChildNodes() {
+  get childNodes() {
     if (VisualBlockDescriptions.isEditorIterator(this.visual)) {
       return (this.node.getChildrenInCategory(this.visual.childGroupName));
+    } else {
+      return ([]);
+    }
+  }
+
+  /**
+   * @return Some visuals that should render for the same node
+   */
+  get childVisuals() {
+    if (VisualBlockDescriptions.isEditorContainer(this.visual)) {
+      if (this.visual.children.some(v => !v)) {
+        debugger;
+      }
+      return (this.visual.children);
     } else {
       return ([]);
     }
@@ -100,7 +132,8 @@ export class BlockRenderComponent {
    * @return The visual editor block that should be used to represent the given node.
    */
   iteratorGetEditorBlock(node: Node) {
-    return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
+    const bl = this.blockLanguage || this.codeResource.blockLanguagePeek;
+    return (bl.getEditorBlock(node.qualifiedName));
   }
 
   locationAppend(loc: NodeLocation): NodeLocation {
@@ -108,7 +141,7 @@ export class BlockRenderComponent {
   }
 
   get lastNode() {
-    const childNodes = this.iteratorChildNodes;
+    const childNodes = this.childNodes;
     if (childNodes.length > 0) {
       return (childNodes[childNodes.length - 1]);
     } else {
