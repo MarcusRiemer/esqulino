@@ -21,7 +21,7 @@
     "@sentry/browser": "5.5.0",
     "@sentry/integrations": "5.5.0",
     "ajv": "6.10.0",
-    "angulartics2": "7.4.1",
+    "angulartics2": "7.5.2",
     "bootstrap": "4.3.1",
     "brace": "0.11.1",
     "core-js": "2.6.5",
