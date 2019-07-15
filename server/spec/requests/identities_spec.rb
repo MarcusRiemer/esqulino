@@ -147,7 +147,7 @@ RSpec.describe "identities controller" do
           }.to_json
 
         json_data = JSON.parse(response.body)
-        expect(json_data).to eq("e-mail not found")
+        expect(json_data["message"]).to eq("e-mail not found")
         expect(response.status).to eq(401)
       end
 
@@ -169,7 +169,7 @@ RSpec.describe "identities controller" do
           }.to_json
 
         json_data = JSON.parse(response.body)
-        expect(json_data).to eq("token not valid")
+        expect(json_data["message"]).to eq("token not valid")
         expect(response.status).to eq(401)
       end
 
@@ -183,7 +183,7 @@ RSpec.describe "identities controller" do
           }.to_json
 
         json_data = JSON.parse(response.body)
-        expect(json_data).to eq("token expired")
+        expect(json_data["message"]).to eq("token expired")
         expect(response.status).to eq(401)
       end
     end
