@@ -65,6 +65,35 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   }
 
   /**
+   * The user wants to add a new root CSS class
+   */
+  onAddCssRootClass(className: string) {
+    if (!className) {
+      return;
+    }
+
+    this._current.doUpdate(bl => {
+      if (!bl.rootCssClasses) {
+        bl.rootCssClasses = [];
+      }
+
+      // Ensure no class is added twice
+      if (!new Set(bl.rootCssClasses).has(className)) {
+        bl.rootCssClasses.push(className);
+      }
+    });
+  }
+
+  /**
+   * The user wants to remove a certain root css clas
+   */
+  onRemoveCssRootClass(className: string) {
+    this._current.doUpdate(bl => {
+      bl.rootCssClasses = bl.rootCssClasses.filter(c => c !== className);
+    });
+  }
+
+  /**
    * Reruns the block language generator.
    */
   onRegenerate() {

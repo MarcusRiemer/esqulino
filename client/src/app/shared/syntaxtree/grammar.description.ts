@@ -1,4 +1,5 @@
 import { QualifiedTypeName } from './syntaxtree.description'
+import { OccursDescription } from './occurs.description';
 
 /**
  * Types may either be concrete new type or an alias
@@ -195,19 +196,6 @@ export interface ChildCardinalityDescription {
 }
 
 /**
- * A verbos definition of minimum and maximum occurences.
- */
-export interface OccursSpecificDescription {
-  minOccurs: number,
-  maxOccurs: number
-}
-
-/**
- * Describes limits for occurences.
- */
-export type OccursDescription = "1" | "?" | "+" | "*" | OccursSpecificDescription;
-
-/**
  * A simple type reference is a shortcut for an element with
  * minOccurs = 1 and maxOccurs = 1;
  */
@@ -291,15 +279,20 @@ export interface GrammarListDescription {
   slug?: string
 }
 
+export type NamedTypes = { [nodeName: string]: NodeTypeDescription };
+
 /**
  * This part of the grammar is stored as a JSON blob in the database.
  */
 export interface GrammarDatabaseBlob {
-  // All types that exist in this language
-  types: { [nodeName: string]: NodeTypeDescription }
+  // All types that are defined on this language
+  types: { [languageName: string]: NamedTypes }
+
+  // All types that come from different languages
+  foreignTypes?: { [languageName: string]: NamedTypes }
 
   // The type that needs to be at the root of the language.
-  root: TypeReference
+  root: QualifiedTypeName
 }
 
 /**
@@ -309,6 +302,9 @@ export interface GrammarDatabaseBlob {
 export interface GrammarDocument extends GrammarDatabaseBlob {
   // This name is used when a grammer is referred to by another grammar
   technicalName: string
+
+  // These grammars are included in this grammar
+  includedGrammars?: string[]
 }
 
 /**
@@ -358,13 +354,6 @@ export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequen
  */
 export function isChildCardinalityDescription(obj: any): obj is ChildCardinalityDescription {
   return (obj instanceof Object && "occurs" in obj && "nodeType" in obj);
-}
-
-/**
- * @return True, if the given instance probably satisfies "ChildCardinalityDescription"
- */
-export function isOccursSpecificDescription(obj: any): obj is OccursSpecificDescription {
-  return (obj instanceof Object && "minOccurs" in obj && "maxOccurs" in obj);
 }
 
 /**

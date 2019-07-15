@@ -1,8 +1,10 @@
-import { SpecializedValidator } from '../validator'
-import { ValidationContext } from '../validation-result'
-import * as AST from '../syntaxtree'
+import { SpecializedValidator } from '../validator';
+import { ValidationContext, ErrorCodes, ErrorMissingChild } from '../validation-result';
+import * as AST from '../syntaxtree';
+import { OccursDescription } from '../occurs.description';
 
-import { Schema } from '../../schema/schema'
+import { Schema } from '../../schema/schema';
+import { isInOccurs } from '../occurs';
 
 /**
  * SQL validation requires a schema as additional context.
@@ -15,7 +17,21 @@ export function isDatabaseSchemaAdditionalContext(obj: any): obj is DatabaseSche
   return (typeof obj === "object" && obj.databaseSchema instanceof Schema);
 }
 
-const AGGREGATION_FUNCTIONS = new Set(["min", "max", "count", "avg", "sum", "group_concat"]);
+// These functions are aggregation functions
+// Based on: https://sqlite.org/lang_aggfunc.html
+const FUNCTION_AGGREGATION = new Set(["min", "max", "count", "avg", "sum", "group_concat"]);
+
+// These are the required argument counts for various accounts
+// Based on: https://sqlite.org/lang_aggfunc.html
+const FUNCTION_ARGUMENT_COUNT: { [key: string]: OccursDescription } = {
+  "avg": "1",
+  "count": "*",
+  "group_concat": { minOccurs: 1, maxOccurs: 2 },
+  "min": "1",
+  "max": "1",
+  "total": "1",
+  "sum": "1"
+}
 
 /**
  * Extended validation for SQL. Mainly checks the tables and columns
@@ -31,7 +47,8 @@ export class SqlValidator extends SpecializedValidator {
       const schema = context.additional.databaseSchema;
 
       this.validateColumnAndTableNames(ast, schema, context);
-      this.validateAggregationGroupBy(ast, schema, context);
+      //this.validateAggregationGroupBy(ast, schema, context);
+      this.validateNumberOfArguments(ast, schema, context);
     }
   }
 
@@ -87,13 +104,16 @@ export class SqlValidator extends SpecializedValidator {
     });
   }
 
+  /**
+   *
+   */
   private validateAggregationGroupBy(ast: AST.Node, _: Schema, context: ValidationContext) {
     // Are there any calls to aggregation functions without GROUP BY?
     const allFunctions = ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" });
 
     const aggregationFuncs = allFunctions.filter(f => {
       const functionName = (f.properties || {})["name"] || ""
-      return (AGGREGATION_FUNCTIONS.has(functionName.toLowerCase()))
+      return (FUNCTION_AGGREGATION.has(functionName.toLowerCase()))
     });
     const hasGroupBy = ast.getNodesOfType({ languageName: "sql", typeName: "groupBy" }).length > 0;
 
@@ -102,5 +122,22 @@ export class SqlValidator extends SpecializedValidator {
         context.addError("AGGREGATION_WITHOUT_GROUP_BY", a);
       });
     }
+  }
+
+  private validateNumberOfArguments(ast: AST.Node, _: Schema, context: ValidationContext) {
+    ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" }).forEach(callNode => {
+      const funcName = callNode.properties["name"].toLocaleLowerCase();
+      const numParameters = callNode.getChildrenInCategory("arguments").length;
+
+      const validNumParameters = FUNCTION_ARGUMENT_COUNT[funcName];
+      if (validNumParameters && !isInOccurs(numParameters, validNumParameters)) {
+        let errData: ErrorMissingChild = {
+          category: "arguments",
+          expected: { languageName: "sql", typeName: "expression" },
+          index: numParameters
+        }
+        context.addError(ErrorCodes.MissingChild, callNode, errData);
+      }
+    });
   }
 }

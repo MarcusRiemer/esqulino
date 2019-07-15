@@ -2,7 +2,7 @@ import { recursiveJoin, NestedString } from '../nested-string'
 
 import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
-import { BlockLanguageDescription } from './block-language.description'
+import { BlockLanguageDescription, BlockLanguageDocument, isBlockLanguageDescription } from './block-language.description'
 import {
   VisualBlockDescriptions, EditorBlockDescription,
   SidebarDescription, SidebarBlockDescription, FixedBlocksSidebarCategoryDescription
@@ -12,8 +12,13 @@ import {
  * Converts the internal structure of a language model into a more readable
  * version.
  */
-export function prettyPrintBlockLanguage(desc: BlockLanguageDescription): string {
-  const head = `language "${desc.name}" {`;
+export function prettyPrintBlockLanguage(desc: BlockLanguageDescription): string
+export function prettyPrintBlockLanguage(desc: BlockLanguageDocument, name: string): string
+export function prettyPrintBlockLanguage(
+  desc: BlockLanguageDocument | BlockLanguageDescription,
+  name?: string): string {
+  const actualName = isBlockLanguageDescription(desc) ? desc.name : name;
+  const head = `language "${actualName}" {`;
   const tail = `}`;
 
   const blocks = (desc.editorBlocks || []).map(prettyPrintBlockTypeHeader);
@@ -65,7 +70,8 @@ export function prettyPrintVisual(desc: VisualBlockDescriptions.ConcreteBlock): 
     case "dropTarget":
       return prettyPrintVisualDropTarget(desc);
     case "block":
-      return prettyPrintVisualBlock(desc);
+    case "container":
+      return prettyPrintLayoutBlock(desc);
     case "input":
       return [`TODO: input blocks`];
     case "error":
@@ -141,19 +147,18 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 /**
  * Prettyprints actual blocks.
  */
-function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
-  const head = `block {`;
+function prettyPrintLayoutBlock(desc: VisualBlockDescriptions.EditorContainer | VisualBlockDescriptions.EditorBlock) {
+  const head = `${desc.blockType} {`;
 
-  // For the moment the mandatory properties have to be stated verbosely
-  const props = [
-    `direction ${desc.direction}`
-  ]
+  const props = (VisualBlockDescriptions.isEditorContainer(desc))
+    ? [``]
+    : [`direction ${desc.direction}`]
 
   if (typeof (desc.breakAfter) !== "undefined") {
     props.push(`breakAfter ${desc.breakAfter}`);
   }
 
-  const dropTarget = (desc.dropTarget)
+  const dropTarget = (desc.blockType === "block" && desc.dropTarget)
     ? prettyPrintDropTargetProperties(desc.dropTarget)
     : [];
 

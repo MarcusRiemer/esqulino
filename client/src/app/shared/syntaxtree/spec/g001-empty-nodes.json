@@ -1,8 +1,10 @@
 {
   "technicalName": "g1",
-  "root": "n1",
+  "root": { "languageName": "g1", "typeName": "n1" },
   "types": {
-    "n1": {},
-    "n2": {}
+    "g1": {
+      "n1": {},
+      "n2": {}
+    }
   }
 }

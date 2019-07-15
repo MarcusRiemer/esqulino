@@ -1,14 +1,18 @@
 {
   "technicalName": "g11",
-  "root": "n1",
+  "root": { "languageName": "g11", "typeName": "n1" },
   "types": {
-    "n1": {
-      "type": "oneOf",
-      "oneOf": ["n2", "n3"]
-    },
-    "n2": {
-    },
-    "n3": {
+    "g11": {
+      "n1": {
+        "type": "oneOf",
+        "oneOf": ["n2", "n3"]
+      },
+      "n2": {
+        "type": "concrete"
+      },
+      "n3": {
+        "type": "concrete"
+      }
     }
   }
 }

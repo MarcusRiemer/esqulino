@@ -40,6 +40,7 @@ export namespace VisualBlockDescriptions {
     blockType: string;
     style?: BlockStyle;
     breakAfter?: boolean;
+    cssClasses?: string[];
   }
 
   /**
@@ -58,6 +59,14 @@ export namespace VisualBlockDescriptions {
     direction: Orientation;
     children?: ConcreteBlock[];
     wrapChildren?: boolean;
+  }
+
+  /**
+   * An element that exists merely for layout purposes, think "div" or "span"
+   */
+  export interface EditorContainer extends EditorBlockBase {
+    blockType: "container"
+    children?: ConcreteBlock[];
   }
 
   /**
@@ -132,7 +141,7 @@ export namespace VisualBlockDescriptions {
     excludedErrors?: string[];
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
+  export type ConcreteBlock = EditorContainer | EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
 
   export const DefaultDropTargetProperties: DropTargetProperties = {}
 
@@ -144,6 +153,11 @@ export namespace VisualBlockDescriptions {
   // Type guard for EditorBlock
   export function isEditorBlock(obj?: EditorBlockBase): obj is EditorBlock {
     return (obj && obj.blockType === "block");
+  }
+
+  // Type guard for EditorContainer
+  export function isEditorContainer(obj?: EditorBlockBase): obj is EditorContainer {
+    return (obj && obj.blockType === "container");
   }
 }
 

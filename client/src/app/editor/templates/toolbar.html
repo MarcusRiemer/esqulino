@@ -23,4 +23,30 @@
       </may-perform>
     </ng-container>
   </ng-container>
+
+  <ng-container position="end">
+    <button mat-button
+            [matMenuTriggerFor]="naturalLang"
+            aria-label="Debug Optionen Menü">
+      <span class="fa fa-bug" aria-hidden="true"></span>
+      Debug Options
+    </button>
+    <mat-menu #naturalLang="matMenu">
+      <mat-checkbox [(ngModel)]="debugOptions.showInternalAst.value"
+                    class="mat-menu-item"
+                    color="warn">
+        Show Internal AST
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="debugOptions.showLanguageSelector.value"
+                    class="mat-menu-item"
+                    color="warn">
+        Show Language Selector
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="debugOptions.showDropDebug.value"
+                    class="mat-menu-item"
+                    color="warn">
+        Show Drop Debug
+      </mat-checkbox>
+    </mat-menu>
+  </ng-container>
 </app-toolbar>

@@ -22,6 +22,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
   private _slug: string;
   private _defaultProgrammingLanguageId: string;
   private _grammarId: string;
+  private _rootCssClasses: string[];
 
   constructor(desc: BlockLanguageDescription) {
     this._id = desc.id;
@@ -31,6 +32,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
     this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguageId;
     this._editorBlocks = desc.editorBlocks;
     this._editorComponents = desc.editorComponents;
+    this._rootCssClasses = desc.rootCssClasses || [];
 
     this._sidebars = desc.sidebars.map(sidebarDesc => {
       switch (sidebarDesc.type) {
@@ -96,6 +98,13 @@ export class BlockLanguage implements Forward.BlockLanguage {
    */
   get hasMultipleSidebars() {
     return (this.sidebars.length > 1);
+  }
+
+  /**
+   * @return The css classes that should be applied at the root
+   */
+  get rootCssClasses() {
+    return (this._rootCssClasses);
   }
 
   /**

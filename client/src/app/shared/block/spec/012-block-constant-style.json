@@ -1,6 +1,8 @@
 {
   "id": "test",
   "name": "test",
+  "programmingLanguageId": "generic",
+  "defaultProgrammingLanguageId": "generic",
   "editorBlocks": [
     {
       "describedType": {
@@ -21,4 +23,3 @@
   ],
   "sidebarBlocks": []
 }
-

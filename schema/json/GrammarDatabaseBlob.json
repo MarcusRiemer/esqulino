@@ -46,12 +46,18 @@
       "additionalProperties": false,
       "description": "This part of the grammar is stored as a JSON blob in the database.",
       "properties": {
+        "foreignTypes": {
+          "additionalProperties": {
+            "$ref": "#/definitions/NamedTypes"
+          },
+          "type": "object"
+        },
         "root": {
-          "$ref": "#/definitions/TypeReference"
+          "$ref": "#/definitions/QualifiedTypeName"
         },
         "types": {
           "additionalProperties": {
-            "$ref": "#/definitions/NodeTypeDescription"
+            "$ref": "#/definitions/NamedTypes"
           },
           "type": "object"
         }
@@ -160,6 +166,12 @@
         "type",
         "value"
       ],
+      "type": "object"
+    },
+    "NamedTypes": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NodeTypeDescription"
+      },
       "type": "object"
     },
     "NodeAttributeDescription": {

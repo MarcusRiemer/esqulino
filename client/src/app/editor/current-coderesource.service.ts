@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs'
-import { tap, flatMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
+import { tap, flatMap, map } from 'rxjs/operators';
 
+import { BlockLanguage } from '../shared/block';
 import { CodeResource, NodeLocation, Tree } from '../shared/syntaxtree';
 
 import { ProjectService } from './project.service';
 import { SidebarService } from './sidebar.service';
+import { BlockDebugOptionsService } from './block-debug-options.service';
 
 // TODO: Promote the new sidebar system
 import { CodeSidebarComponent } from './code/code.sidebar'
+import { convertGrammarTreeInstructions } from '../shared/block/generator/generator-tree';
+import { BlockLanguageDescription } from '../shared/block/block-language.description';
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -26,9 +30,12 @@ export class CurrentCodeResourceService {
 
   private _executionLocation = new BehaviorSubject<NodeLocation>(undefined);
 
+  private _blockLanguageCache: { [id: string]: BlockLanguage } = {};
+
   constructor(
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
+    private _debugOptions: BlockDebugOptionsService,
   ) {
     // Things that need to happen every time the resource changes
     this._codeResource
@@ -78,12 +85,57 @@ export class CurrentCodeResourceService {
   );
 
   /**
+   * The block language that is configured on the resource.
+   */
+  readonly resourceBlockLanguage: Observable<BlockLanguage> = this.currentResource.pipe(
+    flatMap(c => c.blockLanguage)
+  );
+
+  /**
+   * The block language that should be used to display the code resource.
+   */
+  readonly currentBlockLanguage: Observable<BlockLanguage> = combineLatest(
+    this.resourceBlockLanguage, this._debugOptions.showInternalAst.value$
+  ).pipe(
+    map(([res, internalAst]) => {
+      if (internalAst) {
+        return (this.getInternalBlockLanguage(res.grammarId));
+      } else {
+        return (res);
+      }
+    })
+  );
+
+  /**
+   * Generates a block language on the fly to represent an AST for the grammar
+   * with the given ID.
+   *
+   * @param grammarId The grammar to base the block language on.
+   */
+  private getInternalBlockLanguage(grammarId: string): BlockLanguage {
+    // Was the block language for that grammar created already?
+    if (!this._blockLanguageCache[grammarId]) {
+      // Nope, we build it on the fly
+      console.log(`Generating AST block language for grammar with ID "${grammarId}"`);
+
+      const grammar = this._projectService.cachedProject.grammarDescriptions.find(g => g.id === grammarId);
+      const blockLangModel = convertGrammarTreeInstructions({ type: "tree" }, grammar);
+      const blockLangDesc: BlockLanguageDescription = Object.assign(blockLangModel, {
+        id: grammarId,
+        name: `Automatically generated from "${grammar.name}"`,
+        defaultProgrammingLanguageId: grammar.programmingLanguageId
+      });
+
+      this._blockLanguageCache[grammarId] = new BlockLanguage(blockLangDesc);
+    }
+
+    return (this._blockLanguageCache[grammarId]);
+  }
+
+  /**
    *
    */
-  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation
-    .pipe(
-      // tap(_ => this._applicationRef.tick()) // TODO: This must not be necessary
-    );
+  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation;
 
   /**
    * The currently loaded resource

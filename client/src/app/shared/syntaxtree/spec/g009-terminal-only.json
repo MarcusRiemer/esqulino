@@ -1,15 +1,17 @@
 {
   "technicalName": "g9",
-  "root": "n1",
+  "root": { "languageName": "g9", "typeName": "n1" },
   "types": {
-    "n1": {
-      "attributes": [
-        {
-          "type": "terminal",
-          "name": "req",
-          "symbol": "i am required"
-        }
-      ]
+    "g9": {
+      "n1": {
+        "attributes": [
+          {
+            "type": "terminal",
+            "name": "req",
+            "symbol": "i am required"
+          }
+        ]
+      }
     }
   }
 }

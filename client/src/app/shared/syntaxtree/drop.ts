@@ -2,7 +2,7 @@ import { NodeLocation, NodeDescription } from "./syntaxtree.description";
 import { Validator } from './validator';
 import { Tree } from './syntaxtree';
 import { embraceMatches } from './drop-embrace';
-import { SmartDropLocation, SmartDropOptions, InsertDropLocation, ReplaceDropLocation } from './drop.description';
+import { SmartDropLocation, SmartDropOptions, InsertDropLocation, ReplaceDropLocation, SmartDropAlgorithmNames } from './drop.description';
 import { insertAtAnyParent, appendAtParent } from './drop-parent';
 import { _cardinalityAllowsInsertion } from './drop-util';
 import { ErrorCodes } from './validation-result';
@@ -54,6 +54,7 @@ export function _exactMatches(
         .map((candidate): (InsertDropLocation | ReplaceDropLocation) => {
           return ({
             operation: "insert",
+            algorithm: "allowExact",
             location: loc,
             nodeDescription: candidate
           });
@@ -80,6 +81,7 @@ export function _exactMatches(
           // It fits? Then we allow the insertion
           return ({
             operation: "replace",
+            algorithm: "allowExact",
             location: [],
             nodeDescription: candidate
           });
@@ -130,6 +132,7 @@ export function _singleChildReplace(
             .map((candidate): ReplaceDropLocation => {
               return ({
                 operation: "replace",
+                algorithm: "allowReplace",
                 location: loc,
                 nodeDescription: candidate
               })
@@ -142,6 +145,22 @@ export function _singleChildReplace(
   // We are either at the root or did not have a hole
   return ([]);
 }
+
+
+// The signature of an algorithm that may compute smart drops
+type SmartDropAlgorithm = (
+  validator: Validator, tree: Tree, loc: NodeLocation, candidates: NodeDescription[]
+) => SmartDropLocation[];
+
+// The algorithms that are actually available
+const algorithms: { [name in SmartDropAlgorithmNames]: SmartDropAlgorithm } = {
+  "allowExact": _exactMatches,
+  "allowEmbrace": embraceMatches,
+  "allowReplace": _singleChildReplace,
+  "allowAppend": appendAtParent,
+  "allowAnyParent": insertAtAnyParent,
+  "root": undefined
+};
 
 /**
  * Possibly meaningful approach:
@@ -173,40 +192,51 @@ export function smartDropLocation(
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): SmartDropLocation[] {
+  const toReturn: SmartDropLocation[] = [];
+  const matches = new Set<SmartDropAlgorithmNames>();
+
+  // Runs the given algorith,
+  const runAlgorithm = (name: SmartDropAlgorithmNames) => {
+    const dropAlternatives = algorithms[name](validator, tree, loc, candidates);
+    if (dropAlternatives.length > 0) {
+      toReturn.push(...dropAlternatives);
+      matches.add(name);
+    }
+  }
+
   // All advanced heuristics only make sense if there is a tree
   if (tree) {
-    const toReturn: SmartDropLocation[] = [];
 
     // Possibly add the exact location that was requested.
     if (options.allowExact) {
-      toReturn.push(..._exactMatches(validator, tree, loc, candidates));
+      runAlgorithm("allowExact");
     }
 
     // Possibly all embracing options
     if (options.allowEmbrace) {
-      toReturn.push(...embraceMatches(validator, tree, loc, candidates));
+      runAlgorithm("allowEmbrace");
     }
 
     // Possibly all replacement options
     if (options.allowReplace) {
-      toReturn.push(..._singleChildReplace(validator, tree, loc, candidates));
+      runAlgorithm("allowReplace");
     }
 
     // Possibly appending
     if (options.allowAppend) {
-      toReturn.push(...appendAtParent(validator, tree, loc, candidates));
+      runAlgorithm("allowAppend");
     }
 
     // Possibly all insertion options
     if (options.allowAnyParent) {
-      toReturn.push(...insertAtAnyParent(validator, tree, loc, candidates));
+      runAlgorithm("allowAnyParent");
     }
 
     return (toReturn);
   } else {
     // No tree? Then there is only a single possibility.
     return ([
-      { operation: "insert", location: [], nodeDescription: candidates[0] }
+      { operation: "insert", algorithm: "root", location: [], nodeDescription: candidates[0] }
     ]);
   }
 }

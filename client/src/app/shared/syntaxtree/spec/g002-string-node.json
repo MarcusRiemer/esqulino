@@ -1,15 +1,17 @@
 {
   "technicalName": "g2",
-  "root": "s1",
+  "root": { "languageName": "g2", "typeName": "s1" },
   "types": {
-    "s1": {
-      "attributes": [
-        {
-          "name": "value",
-          "type": "property",
-          "base": "string"
-        }
-      ]
+    "g2" : {
+      "s1": {
+        "attributes": [
+          {
+            "name": "value",
+            "type": "property",
+            "base": "string"
+          }
+        ]
+      }
     }
   }
 }

@@ -94,6 +94,7 @@ export function embraceMatches(
       holes.forEach(hole => {
         toReturn.push({
           location: loc,
+          algorithm: "allowEmbrace",
           nodeDescription: candidate,
           operation: "embrace",
           candidateHole: hole

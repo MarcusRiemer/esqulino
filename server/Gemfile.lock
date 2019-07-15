@@ -115,7 +115,7 @@ GEM
       concurrent-ruby (~> 1.0)
     irb (1.0.0)
     json (2.2.0)
-    json_schemer (0.1.10)
+    json_schemer (0.2.0)
       ecma-re-validator (~> 0.2.0)
       hana (~> 1.3.3)
       regexp_parser (~> 1.2.0)
@@ -291,7 +291,7 @@ DEPENDENCIES
   falcon (~> 0.19)
   guard-rspec
   irb
-  json_schemer (~> 0.1)
+  json_schemer (~> 0.2)
   jwt
   listen (>= 3.0.5, < 3.2)
   maildown

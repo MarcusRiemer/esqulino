@@ -14,557 +14,559 @@ export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
   name: "sql",
   technicalName: "sql",
   programmingLanguageId: "sql",
+  root: { languageName: "sql", typeName: "query" },
   types: {
-    "from": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "FROM"
-        },
-        {
-          "name": "tables",
-          "type": "sequence",
-          "between": {
-            "name": "columnSeparator",
+    "sql": {
+      "from": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
             "type": "terminal",
-            "symbol": ","
+            "symbol": "FROM"
           },
-          "nodeTypes": [
-            {
-              "occurs": "+",
-              "nodeType": "tableIntroduction"
-            }
-          ]
-        },
-        {
-          "name": "joins",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "*",
-              "nodeType": "join"
-            }
-          ]
-        }
-      ]
-    },
-    "join": {
-      "type": "oneOf",
-      "oneOf": [
-        "crossJoin",
-        "innerJoinUsing",
-        "innerJoinOn"
-      ]
-    },
-    "query": {
-      "type": "oneOf",
-      "oneOf": [
-        "querySelect",
-        "queryDelete"
-      ]
-    },
-    "where": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "WHERE"
-        },
-        {
-          "name": "expressions",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "1",
-              "nodeType": {
-                "typeName": "expression",
-                "languageName": "sql"
-              }
+          {
+            "name": "tables",
+            "type": "sequence",
+            "between": {
+              "name": "columnSeparator",
+              "type": "terminal",
+              "symbol": ","
             },
-            {
-              "occurs": "*",
-              "nodeType": {
-                "typeName": "whereAdditional",
-                "languageName": "sql"
+            "nodeTypes": [
+              {
+                "occurs": "+",
+                "nodeType": "tableIntroduction"
               }
-            }
-          ]
-        }
-      ]
-    },
-    "delete": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "DELETE"
-        }
-      ]
-    },
-    "select": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "SELECT"
-        },
-        {
-          "base": "boolean",
-          "name": "distinct",
-          "type": "property",
-          "isOptional": true
-        },
-        {
-          "name": "columns",
-          "type": "allowed",
-          "between": {
-            "name": "columnSeparator",
-            "type": "terminal",
-            "symbol": ","
+            ]
           },
-          "nodeTypes": [
-            {
-              "occurs": "*",
-              "nodeType": "expression"
+          {
+            "name": "joins",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "*",
+                "nodeType": "join"
+              }
+            ]
+          }
+        ]
+      },
+      "join": {
+        "type": "oneOf",
+        "oneOf": [
+          "crossJoin",
+          "innerJoinUsing",
+          "innerJoinOn"
+        ]
+      },
+      "query": {
+        "type": "oneOf",
+        "oneOf": [
+          "querySelect",
+          "queryDelete"
+        ]
+      },
+      "where": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
+            "type": "terminal",
+            "symbol": "WHERE"
+          },
+          {
+            "name": "expressions",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "1",
+                "nodeType": {
+                  "typeName": "expression",
+                  "languageName": "sql"
+                }
+              },
+              {
+                "occurs": "*",
+                "nodeType": {
+                  "typeName": "whereAdditional",
+                  "languageName": "sql"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
+            "type": "terminal",
+            "symbol": "DELETE"
+          }
+        ]
+      },
+      "select": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
+            "type": "terminal",
+            "symbol": "SELECT"
+          },
+          {
+            "base": "boolean",
+            "name": "distinct",
+            "type": "property",
+            "isOptional": true
+          },
+          {
+            "name": "columns",
+            "type": "allowed",
+            "between": {
+              "name": "columnSeparator",
+              "type": "terminal",
+              "symbol": ","
             },
-            {
-              "occurs": "?",
-              "nodeType": "starOperator"
-            }
-          ]
-        }
-      ]
-    },
-    "groupBy": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "GROUP BY"
-        },
-        {
-          "name": "expressions",
-          "type": "allowed",
-          "between": {
-            "name": "columnSeparator",
-            "type": "terminal",
-            "symbol": ","
-          },
-          "nodeTypes": [
-            {
-              "occurs": "+",
-              "nodeType": {
-                "typeName": "expression",
-                "languageName": "sql"
+            "nodeTypes": [
+              {
+                "occurs": "*",
+                "nodeType": "expression"
+              },
+              {
+                "occurs": "?",
+                "nodeType": "starOperator"
               }
-            }
-          ]
-        }
-      ]
-    },
-    "orderBy": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "ORDER BY"
-        },
-        {
-          "name": "expressions",
-          "type": "allowed",
-          "between": {
-            "name": "columnSeparator",
+            ]
+          }
+        ]
+      },
+      "groupBy": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
             "type": "terminal",
-            "symbol": ","
+            "symbol": "GROUP BY"
           },
-          "nodeTypes": [
-            {
-              "occurs": "+",
-              "nodeType": {
-                "typeName": "expression",
-                "languageName": "sql"
+          {
+            "name": "expressions",
+            "type": "allowed",
+            "between": {
+              "name": "columnSeparator",
+              "type": "terminal",
+              "symbol": ","
+            },
+            "nodeTypes": [
+              {
+                "occurs": "+",
+                "nodeType": {
+                  "typeName": "expression",
+                  "languageName": "sql"
+                }
               }
-            }
-          ]
-        }
-      ]
-    },
-    "constant": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "base": "string",
-          "name": "value",
-          "type": "property"
-        }
-      ]
-    },
-    "crossJoin": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "table",
-          "type": "sequence",
-          "nodeTypes": [
-            "tableIntroduction"
-          ]
-        }
-      ]
-    },
-    "parameter": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "colon",
-          "type": "terminal",
-          "symbol": ":"
-        },
-        {
-          "base": "string",
-          "name": "name",
-          "type": "property"
-        }
-      ]
-    },
-    "columnName": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "base": "string",
-          "name": "refTableName",
-          "type": "property"
-        },
-        {
-          "name": "dot",
-          "type": "terminal",
-          "symbol": "."
-        },
-        {
-          "base": "string",
-          "name": "columnName",
-          "type": "property"
-        }
-      ]
-    },
-    "expression": {
-      "type": "oneOf",
-      "oneOf": [
-        "columnName",
-        "binaryExpression",
-        "constant",
-        "parameter",
-        "functionCall",
-        "parentheses"
-      ]
-    },
-    "innerJoinOn": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "INNER JOIN"
-        },
-        {
-          "name": "table",
-          "type": "sequence",
-          "nodeTypes": [
-            "tableIntroduction"
-          ]
-        },
-        {
-          "name": "keywordOn",
-          "type": "terminal",
-          "symbol": "ON"
-        },
-        {
-          "name": "on",
-          "type": "sequence",
-          "nodeTypes": [
-            "expression"
-          ]
-        }
-      ]
-    },
-    "parentheses": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "parenOpen",
-          "type": "terminal",
-          "symbol": "("
-        },
-        {
-          "name": "expression",
-          "type": "sequence",
-          "nodeTypes": [
-            "expression"
-          ]
-        },
-        {
-          "name": "parenClose",
-          "type": "terminal",
-          "symbol": ")"
-        }
-      ]
-    },
-    "queryDelete": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "delete",
-          "type": "sequence",
-          "nodeTypes": [
-            "delete"
-          ]
-        },
-        {
-          "name": "from",
-          "type": "sequence",
-          "nodeTypes": [
-            "from"
-          ]
-        },
-        {
-          "name": "where",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "?",
-              "nodeType": "where"
-            }
-          ]
-        }
-      ]
-    },
-    "querySelect": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "select",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "1",
-              "nodeType": "select"
-            }
-          ]
-        },
-        {
-          "name": "from",
-          "type": "sequence",
-          "nodeTypes": [
-            "from"
-          ]
-        },
-        {
-          "name": "where",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "?",
-              "nodeType": "where"
-            }
-          ]
-        },
-        {
-          "name": "groupBy",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "?",
-              "nodeType": "groupBy"
-            }
-          ]
-        },
-        {
-          "name": "orderBy",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "occurs": "?",
-              "nodeType": "orderBy"
-            }
-          ]
-        }
-      ]
-    },
-    "functionCall": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "base": "string",
-          "name": "name",
-          "type": "property"
-        },
-        {
-          "name": "paren-open",
-          "type": "terminal",
-          "symbol": "("
-        },
-        {
-          "name": "arguments",
-          "type": "sequence",
-          "between": {
-            "name": "param-separator",
+            ]
+          }
+        ]
+      },
+      "orderBy": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
             "type": "terminal",
-            "symbol": ","
+            "symbol": "ORDER BY"
           },
-          "nodeTypes": [
-            {
-              "occurs": "*",
-              "nodeType": "expression"
-            }
-          ]
-        },
-        {
-          "name": "paren-close",
-          "type": "terminal",
-          "symbol": ")"
-        }
-      ]
+          {
+            "name": "expressions",
+            "type": "allowed",
+            "between": {
+              "name": "columnSeparator",
+              "type": "terminal",
+              "symbol": ","
+            },
+            "nodeTypes": [
+              {
+                "occurs": "+",
+                "nodeType": {
+                  "typeName": "expression",
+                  "languageName": "sql"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "constant": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "base": "string",
+            "name": "value",
+            "type": "property"
+          }
+        ]
+      },
+      "crossJoin": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "table",
+            "type": "sequence",
+            "nodeTypes": [
+              "tableIntroduction"
+            ]
+          }
+        ]
+      },
+      "parameter": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "colon",
+            "type": "terminal",
+            "symbol": ":"
+          },
+          {
+            "base": "string",
+            "name": "name",
+            "type": "property"
+          }
+        ]
+      },
+      "columnName": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "base": "string",
+            "name": "refTableName",
+            "type": "property"
+          },
+          {
+            "name": "dot",
+            "type": "terminal",
+            "symbol": "."
+          },
+          {
+            "base": "string",
+            "name": "columnName",
+            "type": "property"
+          }
+        ]
+      },
+      "expression": {
+        "type": "oneOf",
+        "oneOf": [
+          "columnName",
+          "binaryExpression",
+          "constant",
+          "parameter",
+          "functionCall",
+          "parentheses"
+        ]
+      },
+      "innerJoinOn": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
+            "type": "terminal",
+            "symbol": "INNER JOIN"
+          },
+          {
+            "name": "table",
+            "type": "sequence",
+            "nodeTypes": [
+              "tableIntroduction"
+            ]
+          },
+          {
+            "name": "keywordOn",
+            "type": "terminal",
+            "symbol": "ON"
+          },
+          {
+            "name": "on",
+            "type": "sequence",
+            "nodeTypes": [
+              "expression"
+            ]
+          }
+        ]
+      },
+      "parentheses": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "parenOpen",
+            "type": "terminal",
+            "symbol": "("
+          },
+          {
+            "name": "expression",
+            "type": "sequence",
+            "nodeTypes": [
+              "expression"
+            ]
+          },
+          {
+            "name": "parenClose",
+            "type": "terminal",
+            "symbol": ")"
+          }
+        ]
+      },
+      "queryDelete": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "delete",
+            "type": "sequence",
+            "nodeTypes": [
+              "delete"
+            ]
+          },
+          {
+            "name": "from",
+            "type": "sequence",
+            "nodeTypes": [
+              "from"
+            ]
+          },
+          {
+            "name": "where",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "?",
+                "nodeType": "where"
+              }
+            ]
+          }
+        ]
+      },
+      "querySelect": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "select",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "1",
+                "nodeType": "select"
+              }
+            ]
+          },
+          {
+            "name": "from",
+            "type": "sequence",
+            "nodeTypes": [
+              "from"
+            ]
+          },
+          {
+            "name": "where",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "?",
+                "nodeType": "where"
+              }
+            ]
+          },
+          {
+            "name": "groupBy",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "?",
+                "nodeType": "groupBy"
+              }
+            ]
+          },
+          {
+            "name": "orderBy",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "occurs": "?",
+                "nodeType": "orderBy"
+              }
+            ]
+          }
+        ]
+      },
+      "functionCall": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "base": "string",
+            "name": "name",
+            "type": "property"
+          },
+          {
+            "name": "paren-open",
+            "type": "terminal",
+            "symbol": "("
+          },
+          {
+            "name": "arguments",
+            "type": "sequence",
+            "between": {
+              "name": "param-separator",
+              "type": "terminal",
+              "symbol": ","
+            },
+            "nodeTypes": [
+              {
+                "occurs": "*",
+                "nodeType": "expression"
+              }
+            ]
+          },
+          {
+            "name": "paren-close",
+            "type": "terminal",
+            "symbol": ")"
+          }
+        ]
+      },
+      "starOperator": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "star",
+            "type": "terminal",
+            "symbol": "*"
+          }
+        ]
+      },
+      "innerJoinUsing": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "keyword",
+            "type": "terminal",
+            "symbol": "INNER JOIN"
+          },
+          {
+            "name": "table",
+            "type": "sequence",
+            "nodeTypes": [
+              "tableIntroduction"
+            ]
+          },
+          {
+            "name": "keywordUsing",
+            "type": "terminal",
+            "symbol": "USING"
+          },
+          {
+            "name": "using",
+            "type": "sequence",
+            "nodeTypes": [
+              "expression"
+            ]
+          }
+        ]
+      },
+      "whereAdditional": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "base": "string",
+            "name": "operator",
+            "type": "property",
+            "restrictions": [
+              {
+                "type": "enum",
+                "value": [
+                  "and",
+                  "or"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "expression",
+            "type": "sequence",
+            "nodeTypes": [
+              "expression"
+            ]
+          }
+        ]
+      },
+      "binaryExpression": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "name": "lhs",
+            "type": "sequence",
+            "nodeTypes": [
+              "expression"
+            ]
+          },
+          {
+            "name": "operator",
+            "type": "sequence",
+            "nodeTypes": [
+              "relationalOperator"
+            ]
+          },
+          {
+            "name": "rhs",
+            "type": "sequence",
+            "nodeTypes": [
+              "expression"
+            ]
+          }
+        ]
+      },
+      "tableIntroduction": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "base": "string",
+            "name": "name",
+            "type": "property"
+          },
+          {
+            "base": "string",
+            "name": "alias",
+            "type": "property",
+            "isOptional": true
+          }
+        ]
+      },
+      "relationalOperator": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "base": "string",
+            "name": "operator",
+            "type": "property",
+            "restrictions": [
+              {
+                "type": "enum",
+                "value": [
+                  "<",
+                  "<=",
+                  "=",
+                  "<>",
+                  ">=",
+                  ">",
+                  "LIKE",
+                  "NOT LIKE"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
-    "starOperator": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "star",
-          "type": "terminal",
-          "symbol": "*"
-        }
-      ]
-    },
-    "innerJoinUsing": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "keyword",
-          "type": "terminal",
-          "symbol": "INNER JOIN"
-        },
-        {
-          "name": "table",
-          "type": "sequence",
-          "nodeTypes": [
-            "tableIntroduction"
-          ]
-        },
-        {
-          "name": "keywordUsing",
-          "type": "terminal",
-          "symbol": "USING"
-        },
-        {
-          "name": "using",
-          "type": "sequence",
-          "nodeTypes": [
-            "expression"
-          ]
-        }
-      ]
-    },
-    "whereAdditional": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "base": "string",
-          "name": "operator",
-          "type": "property",
-          "restrictions": [
-            {
-              "type": "enum",
-              "value": [
-                "and",
-                "or"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "expression",
-          "type": "sequence",
-          "nodeTypes": [
-            "expression"
-          ]
-        }
-      ]
-    },
-    "binaryExpression": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "name": "lhs",
-          "type": "sequence",
-          "nodeTypes": [
-            "expression"
-          ]
-        },
-        {
-          "name": "operator",
-          "type": "sequence",
-          "nodeTypes": [
-            "relationalOperator"
-          ]
-        },
-        {
-          "name": "rhs",
-          "type": "sequence",
-          "nodeTypes": [
-            "expression"
-          ]
-        }
-      ]
-    },
-    "tableIntroduction": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "base": "string",
-          "name": "name",
-          "type": "property"
-        },
-        {
-          "base": "string",
-          "name": "alias",
-          "type": "property",
-          "isOptional": true
-        }
-      ]
-    },
-    "relationalOperator": {
-      "type": "concrete",
-      "attributes": [
-        {
-          "base": "string",
-          "name": "operator",
-          "type": "property",
-          "restrictions": [
-            {
-              "type": "enum",
-              "value": [
-                "<",
-                "<=",
-                "=",
-                "<>",
-                ">=",
-                ">",
-                "LIKE",
-                "NOT LIKE"
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  },
-  root: "query"
+  }
 }
 
 
@@ -1067,17 +1069,32 @@ describe("Complex Spec Grammar: SQL", () => {
     expect(smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates))
       .withContext(`Inserting at root`)
       .toEqual([
-        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+        {
+          operation: "insert",
+          algorithm: "allowAnyParent",
+          location: [["select", 0]],
+          nodeDescription: dropCandidates[1]
+        }
       ]);
     expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0]], dropCandidates))
       .withContext(`Inserting at SELECT`)
       .toEqual([
-        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+        {
+          operation: "insert",
+          algorithm: "allowAnyParent",
+          location: [["select", 0]],
+          nodeDescription: dropCandidates[1]
+        }
       ]);
     expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0], ["columns", 0]], dropCandidates))
       .withContext(`Inserting at first column of SELECT`)
       .toEqual([
-        { operation: "insert", location: [["select", 0]], nodeDescription: dropCandidates[1] }
+        {
+          operation: "insert",
+          algorithm: "allowAnyParent",
+          location: [["select", 0]],
+          nodeDescription: dropCandidates[1]
+        }
       ]);
   });
 });
