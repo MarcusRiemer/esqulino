@@ -13,6 +13,7 @@
     </ng-container>
   </app-requires-javascript>
 
+  <!-- "Back" button to main page -->
   <a mat-button
      [routerLink]="'/about'">
     <img src="/vendor/logos/blattwerkzeug-logo.svg"
@@ -31,12 +32,13 @@
                 [cdkPortalOutlet]="toolbarItem">
   </ng-container>
 
-    <!-- Filling out the space in the middle -->
+  <!-- Filling out the space in the middle -->
   <span class="fill-space"></span>
 
   <!-- Static contentent at the end of this toolbar -->
   <ng-content select="[position=end]"></ng-content>
 
+  <!-- Possibly allowing the user to login -->
   <user-button *ngIf="loginEnabled"></user-button>
 
   <!-- Changing the natural language of the application should be possible everywhere -->

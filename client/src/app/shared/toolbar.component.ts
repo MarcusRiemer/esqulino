@@ -5,6 +5,11 @@ import { ToolbarService } from './toolbar.service'
 
 import { environment } from '../../environments/environment';
 
+function urlAllowsLogin() {
+  const url = new URL(window.location.href);
+  return (url.searchParams.has("allowLogin"));
+}
+
 @Component({
   selector: "app-toolbar",
   templateUrl: "templates/toolbar.html"
@@ -25,5 +30,6 @@ export class ToolbarComponent {
     this._sideNavService.toggleSideNav()
   }
 
-  readonly loginEnabled = environment.loginEnabled;
+  // Login is not necessarily allowed at all times
+  readonly loginEnabled = environment.loginEnabled || urlAllowsLogin();
 }

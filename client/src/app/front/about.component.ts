@@ -20,6 +20,5 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     this._title.setTitle("BlattWerkzeug");
     this._serverData.getUserNewsList.refresh();
-
   }
 }
