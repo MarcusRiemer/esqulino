@@ -14,7 +14,7 @@ class AuthController < ApplicationController
         identity = create_identity(auth_hash)
       end
       sign_in(identity)
-      redirect_to "/"
+      redirect_to URI(request.referer || "/").path
     rescue => e
       raise RuntimeError.new(e.message)
     end

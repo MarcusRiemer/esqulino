@@ -1,3 +1,13 @@
+  <!-- If a message is passed to the dialog -->
+  <div *ngIf="this.data && this.data.message"
+    mat-dialog-header
+    class="alert"
+    [ngClass]="{'alert-danger': type=='error', 'alert-warning': type=='warning'}"
+    role="alert">
+
+    {{message}}
+  </div>
+
 <div mat-dialog-content
   class="d-flex justify-content-center authentication">
     <mat-tab-group
