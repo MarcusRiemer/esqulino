@@ -13,3 +13,8 @@ export interface ChangePasswordDescription {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface AuthDialogDataDescription {
+  message: string;
+  type: "error" | "warning"
+}
