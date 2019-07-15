@@ -9,8 +9,8 @@ export const HTML_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment("---", node);
-        process.addConvertedFragment("<html>", node);
+        process.addConvertedFragment("---", node, OutputSeparator.NEW_LINE_AFTER);
+        process.addConvertedFragment("<html>", node, OutputSeparator.NEW_LINE_AFTER);
         process.addConvertedFragment("</html>", node);
       }
     }

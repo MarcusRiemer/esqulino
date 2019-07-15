@@ -18,6 +18,8 @@ import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
 import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
+import { RenderRequestDescription } from './app/shared/syntaxtree/web/render.description';
+import { renderTree } from './app/shared/syntaxtree/web/render';
 
 /**
  * Can be used to test whether the IDE-service is actually available.
@@ -59,6 +61,11 @@ interface EmitSyntaxTreeCommand {
   languageId: string
 }
 
+interface RenderHtmlCommand {
+  type: "renderHtml"
+  request: RenderRequestDescription
+}
+
 /**
  * Prints a list of all available programming languages.
  */
@@ -66,7 +73,7 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | RenderHtmlCommand;
 
 // Knows all URLs that are avaiable to the API
 const serverApi: ServerApi = new ServerApi("http://localhost:9292/api")
@@ -123,6 +130,10 @@ async function executeCommand(command: Command): Promise<string | any[]> {
       } else {
         return ("Generic Language without code generator");
       }
+    }
+    case "renderHtml": {
+      // TODO: Parse request
+      return (renderTree({ frontMatter: {} }));
     }
   }
 }
