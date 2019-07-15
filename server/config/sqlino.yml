@@ -46,7 +46,7 @@ test:
 
 production:
   name: "Blattwerkzeug"
-  data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
+  data_dir: <%= ENV['DATA_DIR'] || '../data/prod' %>
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["blattzeug.de"]
