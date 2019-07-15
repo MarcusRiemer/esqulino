@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
   end
 
   def error_response(err = "something went wrong")
-    raise EsqulinoError.new(err)
+    raise EsqulinoError.new(err, 401)
   end
 
   # An instance of EsqulinoError was thrown
