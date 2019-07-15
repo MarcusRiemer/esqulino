@@ -68,13 +68,17 @@ trash {
     }
 
     editor-block-render-input {
-        > span {
+        .not-editing {
+            display: inline-block;
             border-bottom: 1px dashed black;
+            min-height: 1ch;
+            min-width: 1ch;
         }
 
         // Input fields for users need to somehow "blend in" with the rest of the
         // blocks but also be recognizable.
         input {
+            display: inline-block;
             border: 0px;
             border-bottom: 1px dashed black;
             background-color: transparent;

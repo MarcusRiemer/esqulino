@@ -1,3 +1,5 @@
+import { NodeLocation } from './syntaxtree';
+
 /**
  * String -> String
  */
@@ -99,4 +101,15 @@ export function arrayEqual(lhs: any[], rhs: any[]) {
 
   // No counter proof found, these arrays must be equal
   return (true);
+}
+
+/**
+ * Checks whether the prefix in question is actually a prefix of the full path.
+ */
+export function locationIsOnPath(prefix: NodeLocation, full: NodeLocation): boolean {
+  if (full.length >= prefix.length) {
+    return (prefix.every((step, i) => arrayEqual(step, full[i])));
+  } else {
+    return (false);
+  }
 }

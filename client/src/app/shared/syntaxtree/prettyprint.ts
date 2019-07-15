@@ -3,6 +3,7 @@ import { recursiveJoin, NestedString } from '../nested-string'
 import { NodeDescription } from './syntaxtree.description'
 import * as Desc from './grammar.description'
 import { orderTypes } from './grammar-type-util';
+import { OccursDescription } from './occurs';
 
 /**
  * Converts the internal structure of a grammar into a more readable
@@ -13,10 +14,9 @@ export function prettyPrintGrammar(g: Desc.GrammarDocument): string {
   const tail = `}`;
 
   const orderedTypes = orderTypes(g);
-  const existingTypes = orderedTypes.filter(t => t.typeName in g.types);
 
-  const nodes = existingTypes
-    .map((name): [string, Desc.NodeTypeDescription] => [name.typeName, g.types[name.typeName]])
+  const nodes = orderedTypes
+    .map((name): [string, Desc.NodeTypeDescription] => [name.typeName, g.types[name.languageName][name.typeName]])
     .map(([name, t]) => prettyPrintType(name, t))
 
   const toReturn = [head, ...nodes, tail] as NestedString
@@ -114,7 +114,7 @@ export function prettyPrintProperty(p: Desc.NodePropertyTypeDescription): Nested
  * Cardinalities are  mapped to the standard regex operators ?,+ and * or expressed using
  * the {min,max}-bracket notation.
  */
-export function prettyPrintCardinality(t: Desc.OccursDescription) {
+export function prettyPrintCardinality(t: OccursDescription) {
   if (typeof t === "string") {
     if (t !== "1") {
       return (t);

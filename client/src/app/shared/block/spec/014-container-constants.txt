@@ -1,0 +1,20 @@
+language "test" {
+  type "test.root" {
+    container {
+      visual {
+        "blue" {
+          style {
+            backgroundColor: blue
+            width: 10
+          }
+        }
+        "red" {
+          style {
+            backgroundColor: red
+            width: 10
+          }
+        }
+      }
+    }
+  }
+}

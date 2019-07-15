@@ -20,9 +20,11 @@ export class BlockRootComponent {
   /**
    * @return The resource that is currently edited
    */
-  get currentResource() {
-    return (this._currentCodeResource.currentResource);
-  }
+  readonly currentResource$ = this._currentCodeResource.currentResource;
+
+  readonly currentBlockLanguage$ = this._currentCodeResource.currentBlockLanguage;
+
+
 
   /**
    * When something draggable enters the empty area a program may start with,

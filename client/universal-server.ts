@@ -9,6 +9,9 @@ import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import { join } from 'path';
 
+//
+declare var global: any;
+
 /**
  * Some library we load doesn't understand its in a node-environment
  * and attempts to register callbacks. What a dumb idea ...
@@ -45,7 +48,7 @@ const angularApps = {
   })
 }
 
-app.engine('html', (filePath, options, callback) => {
+app.engine('html', (filePath: any, options: any, callback: any) => {
   options.engine(
     filePath,
     { req: options.req, res: options.res },
@@ -59,7 +62,7 @@ app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, 'browser'));
 
 // API targets should never reach the universal sever
-app.get('/api/**', (req, res) => {
+app.get('/api/**', (_req, res) => {
   res.status(500);
   res.send('Universal Server has no /api endpoint')
 });
@@ -69,7 +72,7 @@ app.get('*.*', express.static(join(DIST_FOLDER, 'browser/de')));
 app.get('*.*', express.static(join(DIST_FOLDER, 'browser/en')));
 
 // workaround for server crash caused by favicon.ico
-app.get('/favicon.ico', (req, res) => res.sendStatus(204));
+app.get('/favicon.ico', (_req, res) => res.sendStatus(204));
 
 // All paths that remain now are part of Angular
 app.get('*', (req, res) => {

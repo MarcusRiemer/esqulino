@@ -1,33 +1,35 @@
 {
   "technicalName": "g10",
-  "root": "n1",
+  "root": { "languageName": "g10", "typeName": "n1" },
   "types": {
-    "n1": {
-      "attributes": [
-        {
-          "type": "terminal",
-          "name": "fst",
-          "symbol": "first"
-        },
-        {
-          "name": "c",
-          "type": "sequence",
-          "nodeTypes": [
-            {
-              "nodeType": {
-                "languageName": "g10",
-                "typeName": "n1"
-              },
-              "occurs": "?"
-            }
-          ]
-        },
-        {
-          "type": "terminal",
-          "name": "lst",
-          "symbol": "last"
-        }
-      ]
+    "g10": {
+      "n1": {
+        "attributes": [
+          {
+            "type": "terminal",
+            "name": "fst",
+            "symbol": "first"
+          },
+          {
+            "name": "c",
+            "type": "sequence",
+            "nodeTypes": [
+              {
+                "nodeType": {
+                  "languageName": "g10",
+                  "typeName": "n1"
+                },
+                "occurs": "?"
+              }
+            ]
+          },
+          {
+            "type": "terminal",
+            "name": "lst",
+            "symbol": "last"
+          }
+        ]
+      }
     }
   }
 }

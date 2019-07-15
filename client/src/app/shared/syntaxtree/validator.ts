@@ -154,23 +154,23 @@ export class Validator {
    * @return The type that has been asked for. Throws if the type does not exist.
    */
   getType(qualifiedTypename: AST.QualifiedTypeName): NodeType;
-  getType(language: string, typename: string): NodeType;
+  getType(languageName: string, typename: string): NodeType;
   getType(languageOrTypeName: string | AST.QualifiedTypeName, optTypename?: string): NodeType {
-    let language: string = undefined;
+    let languageName: string = undefined;
     let typename: string = undefined;
 
     if (typeof (languageOrTypeName) === "object") {
-      language = languageOrTypeName.languageName;
+      languageName = languageOrTypeName.languageName;
       typename = languageOrTypeName.typeName;
     } else {
-      language = languageOrTypeName;
+      languageName = languageOrTypeName;
       typename = optTypename;
     }
 
-    if (!this.isKnownType(language, typename)) {
-      throw new Error(`Validator does not know type "${language}.${typename}"`);
+    if (!this.isKnownType(languageName, typename)) {
+      throw new Error(`Validator does not know type "${languageName}.${typename}"`);
     } else {
-      return (this._registeredGrammars[language].getType(typename));
+      return (this._registeredGrammars[languageName].getType(languageName, typename));
     }
   }
 
@@ -187,7 +187,7 @@ export class Validator {
   isKnownType(language: string, typename: string) {
     return (
       this.isKnownLanguage(language) &&
-      this._registeredGrammars[language].isKnownType(typename)
+      this._registeredGrammars[language].isKnownType(language, typename)
     );
   }
 }

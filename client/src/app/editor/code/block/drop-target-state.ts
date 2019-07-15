@@ -75,7 +75,7 @@ const isLegalImmediateChild = (
 /**
  * @return True, if the given location generally requires children.
  */
-export const _isChildRequired = (
+export const _isChildRequiredSchema = (
   validator: Validator,
   tree: Tree,
   dropLocation: NodeLocation
@@ -124,7 +124,7 @@ function _buildExpression(
     ifEmpty: () => !dropLocationHasChildren(tree, dropLocation),
     ifLegalChild: isLegalSubtree.bind(this),
     ifLegalDrag: isLegalImmediateChild.bind(this, drag, validator, tree, dropLocation),
-    ifChildrenRequired: _isChildRequired.bind(this, validator, tree, dropLocation)
+    ifChildrenRequired: _isChildRequiredSchema.bind(this, validator, tree, dropLocation)
   };
 
   // Evaluation of the expression function may be costly. So we postpone it until

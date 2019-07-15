@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { ToolbarService } from './toolbar.service';
 import { PreferencesService } from './preferences.service';
+import { BlockDebugOptionsService } from './block-debug-options.service';
 
 @Component({
   templateUrl: 'templates/toolbar.html',
@@ -11,6 +12,7 @@ export class ToolbarComponent {
   constructor(
     private _toolbarService: ToolbarService,
     private _preferences: PreferencesService,
+    readonly debugOptions: BlockDebugOptionsService,
   ) { }
 
   get toolbarService() {

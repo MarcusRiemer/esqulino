@@ -11,19 +11,20 @@ concise_attributes:
   value_before_type_cast: regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"root": "root", "types": {"expr": {"type": "concrete",
-    "attributes": [{"name": "singleExpression", "type": "choice", "choices": ["constant",
-    "alternative"]}]}, "root": {"type": "concrete", "attributes": [{"name": "expressions",
-    "type": "allowed", "nodeTypes": [{"occurs": "+", "nodeType": "expr"}]}]}, "constant":
-    {"type": "concrete", "attributes": [{"base": "string", "name": "value", "type":
-    "property"}]}, "alternative": {"type": "concrete", "attributes": [{"name": "expressions",
-    "type": "allowed", "nodeTypes": [{"occurs": "+", "nodeType": "expr"}]}]}}}'
+  value_before_type_cast: '{"root": {"typeName": "root", "languageName": "regex"},
+    "types": {"regex": {"expr": {"type": "concrete", "attributes": [{"name": "singleExpression",
+    "type": "choice", "choices": ["constant", "alternative"]}]}, "root": {"type":
+    "concrete", "attributes": [{"name": "expressions", "type": "allowed", "nodeTypes":
+    [{"occurs": "+", "nodeType": "expr"}]}]}, "constant": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "value", "type": "property"}]}, "alternative": {"type":
+    "concrete", "attributes": [{"name": "expressions", "type": "allowed", "nodeTypes":
+    [{"occurs": "+", "nodeType": "expr"}]}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:53:19.032293'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-12-20 15:39:00.353847'
+  value_before_type_cast: '2019-07-12 11:20:24.242611'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: regex

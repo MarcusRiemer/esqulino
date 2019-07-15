@@ -67,17 +67,23 @@ export abstract class DataService<
    * Updates an individual resource on the server. Uses the same
    * URL as the individual data access, but with HTTP PUT.
    */
-  updateSingle(desc: TSingle): Promise<TSingle> {
+  updateSingle(desc: TSingle, showErrorFeedback = true): Promise<TSingle> {
     const toReturn = new Promise<TSingle>((resolve, reject) => {
       this._http.put<TSingle>(this.resolveIndividualUrl(desc.id), desc)
         .pipe(first())
         .subscribe(updatedDesc => {
-          console.log(`Updated ${this._speakingName} with  "${desc.id}"`);
+          console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
           this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
           this.listCache.refresh();
           resolve(updatedDesc);
         }, err => {
-          reject(err);
+          console.warn(`Update failed: ${this._speakingName} with ID "${desc.id}"`);
+
+          if (showErrorFeedback) {
+            this._snackBar.open(`Could not update ${this._speakingName} with ID "${desc.id}"`, "OK 😞");
+          } else {
+            reject(err);
+          }
         });
     });
 
@@ -90,7 +96,7 @@ export abstract class DataService<
    *
    * @param id The ID of the resouce.
    */
-  deleteSingle(id: string): Promise<void> {
+  deleteSingle(id: string, showErrorFeedback = true): Promise<void> {
     const toReturn = new Promise<void>((resolve, reject) => {
 
       this._http.delete(this.resolveIndividualUrl(id))
@@ -102,7 +108,12 @@ export abstract class DataService<
 
           resolve();
         }, err => {
-          reject(err);
+          console.warn(`Delete failed: ${this._speakingName} with ID "${id}"`);
+          if (showErrorFeedback) {
+            this._snackBar.open(`Could not delete ${this._speakingName} with ID "${id}"`, "OK 😞");
+          } else {
+            reject(err);
+          }
         });
     });
 

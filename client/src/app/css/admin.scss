@@ -43,6 +43,15 @@
         width: 100%;
     }
 
+    /* Clickable root classes that have been added in the block language editor */
+    .block-lang-css-root-class {
+        cursor: pointer;
+    }
+
+    .block-lang-css-root-class:hover {
+        background-color: red;
+    }
+
     #news {
         tbody tr { cursor: pointer; }
         table {

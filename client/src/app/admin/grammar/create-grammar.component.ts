@@ -21,7 +21,7 @@ export class CreateGrammarComponent {
     technicalName: "",
     slug: undefined,
     programmingLanguageId: "",
-    root: "",
+    root: { languageName: "", typeName: "" },
     types: {}
   };
 

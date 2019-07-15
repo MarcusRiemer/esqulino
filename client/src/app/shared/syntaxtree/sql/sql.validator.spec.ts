@@ -12,6 +12,61 @@ function specContext(schemaDescription = SPEC_TABLES): DatabaseSchemaAdditionalC
   });
 }
 
+function createTreeWithCall(funcName: string, colNames: string[]): NodeDescription {
+  return ({
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "functionCall",
+                "language": "sql",
+                "properties": {
+                  "name": funcName,
+                },
+                "children": {
+                  "arguments": colNames.map((col): NodeDescription => {
+                    return ({
+                      "language": "sql",
+                      "name": "columnName",
+                      "properties": {
+                        "columnName": col,
+                        "refTableName": "ereignis"
+                      }
+                    })
+                  })
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "ereignis"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  });
+}
+
 describe(`Specialized SQL Validator`, () => {
   it(`Error: UNKNOWN_TABLE`, () => {
     const context = new ValidationContext(specContext());
@@ -135,6 +190,8 @@ describe(`Specialized SQL Validator`, () => {
   });
 
   it(`Error: AGGREGATION_WITHOUT_GROUP_BY`, () => {
+    pending("Deactivated for the moment, error doesn't seem to be very helpful");
+
     const context = new ValidationContext(specContext());
     const sqlValidator = new SqlValidator();
 
@@ -185,7 +242,39 @@ describe(`Specialized SQL Validator`, () => {
     const ast = new Node(astDesc, undefined);
     sqlValidator.validateFromRoot(ast, context);
 
-    expect(context.errors.length).toEqual(1);
-    expect(context.errors[0].code).toEqual("AGGREGATION_WITHOUT_GROUP_BY");
+    expect(context.errors.map(e => e.code)).toEqual(["AGGREGATION_WITHOUT_GROUP_BY"]);
+  });
+
+  describe("function argument count", () => {
+    const spec = (funcName: string, argColumns: string[], expectedCodes: string[]) => {
+      it(`${funcName}(${argColumns.join(", ")}) => [${expectedCodes.join(", ")}]`, () => {
+        const context = new ValidationContext(specContext());
+        const sqlValidator = new SqlValidator();
+
+        const astDesc: NodeDescription = createTreeWithCall(funcName, argColumns);
+
+        const ast = new Node(astDesc, undefined);
+        sqlValidator.validateFromRoot(ast, context);
+
+        expect(context.errors.map(e => e.code)).toEqual(expectedCodes);
+      });
+    }
+
+    spec("sum", [], ["MISSING_CHILD"]);
+    spec("SUM", ["ereignis_id"], []);
+    spec("sUm", ["ereignis_id", "bezeichnung"], ["MISSING_CHILD"]);
+    spec("min", [], ["MISSING_CHILD"]);
+    spec("MIN", ["ereignis_id"], []);
+    spec("miN", ["ereignis_id", "bezeichnung"], ["MISSING_CHILD"]);
+    spec("max", [], ["MISSING_CHILD"]);
+    spec("MAX", ["ereignis_id"], []);
+    spec("Max", ["ereignis_id", "bezeichnung"], ["MISSING_CHILD"]);
+    spec("count", [], []);
+    spec("COUNT", ["ereignis_id"], []);
+    spec("CounT", ["ereignis_id", "bezeichnung"], []);
+
+    spec("invalid", [], []);
+    spec("INVALID", ["ereignis_id"], []);
+    spec("inVAliD", ["ereignis_id", "bezeichnung"], []);
   });
 });

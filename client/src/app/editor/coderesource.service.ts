@@ -17,7 +17,7 @@ export class CodeResourceService {
    */
   constructor(
     private _http: HttpClient,
-    private _server: ServerApiService
+    private _server: ServerApiService,
   ) {
   }
 

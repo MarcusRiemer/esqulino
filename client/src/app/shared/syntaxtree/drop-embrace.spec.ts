@@ -310,7 +310,13 @@ describe('Drop Embrace', () => {
       expect(curr.toModel()).toEqual(expTreeDesc);
       expect(canEmbraceNode(validator, prev, [], embraceCandidates)).toBe(true);
       expect(embraceMatches(validator, prev, [], embraceCandidates)).toEqual([
-        { location: [], nodeDescription: embraceCandidates[0], operation: "embrace", candidateHole: [["expr", 0]] }
+        {
+          location: [],
+          algorithm: "allowEmbrace",
+          nodeDescription: embraceCandidates[0],
+          operation: "embrace",
+          candidateHole: [["expr", 0]]
+        }
       ]);
     });
 

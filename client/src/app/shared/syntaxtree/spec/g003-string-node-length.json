@@ -1,21 +1,23 @@
 {
   "technicalName": "g3",
-  "root": "s1",
+  "root": { "languageName": "g3", "typeName": "s1" },
   "types": {
-    "s1": {
-      "attributes": [
-        {
-          "name": "value",
-          "type": "property",
-          "base": "string",
-          "restrictions": [
-            {
-              "type": "length",
-              "value": 4
-            }
-          ]
-        }
-      ]
+    "g3": {
+      "s1": {
+        "attributes": [
+          {
+            "name": "value",
+            "type": "property",
+            "base": "string",
+            "restrictions": [
+              {
+                "type": "length",
+                "value": 4
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

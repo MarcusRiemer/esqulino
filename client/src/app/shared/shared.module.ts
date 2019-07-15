@@ -8,6 +8,7 @@ import { PortalModule } from '@angular/cdk/portal';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +19,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AnalyticsService } from './analytics.service';
@@ -70,7 +70,8 @@ const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
   MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
-  MatNativeDateModule, MatInputModule, MatFormFieldModule, MatIconModule
+  MatNativeDateModule, MatInputModule, MatFormFieldModule,
+  MatCheckboxModule
 ]
 
 /**

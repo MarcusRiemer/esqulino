@@ -11,21 +11,13 @@ import { ServerApi } from './app/shared/serverdata/serverapi';
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
 
-import { LanguageDefinition } from './app/shared/syntaxtree/language'
-import { Language } from './app/shared/syntaxtree/language'
+import { AvailableLanguages } from './app/shared/syntaxtree/'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
 import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
 import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
-
-import * as dxml from './app/shared/syntaxtree/dxml/'
-import * as regex from './app/shared/syntaxtree/regex/'
-import * as sql from './app/shared/syntaxtree/sql/'
-import * as css from './app/shared/syntaxtree/css/'
-import * as json from './app/shared/syntaxtree/json/'
-import * as truck from './app/shared/syntaxtree/truck'
 
 /**
  * Can be used to test whether the IDE-service is actually available.
@@ -79,29 +71,6 @@ type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | A
 // Knows all URLs that are avaiable to the API
 const serverApi: ServerApi = new ServerApi("http://localhost:9292/api")
 
-function availableLanguages(): LanguageDefinition[] {
-  return ([
-    dxml.LANGUAGE_DESCRIPTION_ERUBY,
-    dxml.LANGUAGE_DESCRIPTION_LIQUID,
-    regex.LANGUAGE_DESCRIPTION,
-    sql.LANGUAGE_DESCRIPTION,
-    css.LANGUAGE_DESCRIPTION,
-    json.LANGUAGE_DESCRIPTION,
-    truck.WORLD_LANGUAGE_DESCRIPTION,
-    truck.PROG_LANGUAGE_DESCRIPTION
-  ]);
-}
-
-/**
- * Retrieves all grammars that are known to this instance.
- */
-function availableGrammars(): GrammarDescription[] {
-  const allGrammars = availableLanguages().map(
-    l => l.validators.filter(v => !(v instanceof Function)) as GrammarDescription[]
-  )
-  return ([].concat(...allGrammars));
-}
-
 /**
  * Retrieves a single grammar by name
  */
@@ -114,9 +83,9 @@ async function findGrammar(slug: string) {
  * Retrieves a single Language by its name
  */
 function findLanguage(id: string) {
-  const desc = availableLanguages().find(l => l.id == id);
+  const desc = Object.values(AvailableLanguages).find(l => l.id == id);
   if (desc)
-    return (new Language(desc));
+    return (desc);
   else {
     throw new Error(`Unknown language ${id}`);
   }
@@ -144,14 +113,16 @@ async function executeCommand(command: Command): Promise<string | any[]> {
       const l = await findBlockLanguage(command.blockLanguageId);
       return (prettyPrintBlockLanguage(l));
     }
-    case "available":
-      return (availableGrammars().map(g => g.name));
     case "graphvizTree":
       return (graphvizSyntaxTree(command.model));
     case "emitTree": {
-      const l = findLanguage(command.languageId);
-      const t = new Tree(command.model);
-      return (l.emitTree(t));
+      if (command.languageId !== "generic") {
+        const l = findLanguage(command.languageId);
+        const t = new Tree(command.model);
+        return (l.emitTree(t));
+      } else {
+        return ("Generic Language without code generator");
+      }
     }
   }
 }

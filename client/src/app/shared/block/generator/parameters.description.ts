@@ -37,6 +37,8 @@ export function isParameterReference(obj: any): obj is ParameterReference {
 
 // All types that are considered primitive in Javascript.
 // It seems that there is no builtin for this kind of distinction.
+//
+// symbol is missing on this list because the schema generator chokes on it
 type PrimitiveType = string | number | boolean | undefined | null;
 
 // Allows properties of an object to be a reference that can be resolved to

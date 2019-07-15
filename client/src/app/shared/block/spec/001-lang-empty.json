@@ -1,6 +1,7 @@
 {
   "id": "l1",
   "name": "empty",
+  "defaultProgrammingLanguageId": "generic",
   "editorBlocks": [],
   "sidebarBlocks": []
 }
