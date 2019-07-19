@@ -60,7 +60,7 @@
 	
 	\section{Einführung}
 	\label{sec:introduction}
-	Aktuell ist in Blattwerkzeug keine Benutzer-Authentisierung, -Authentifizierung und -Autorisierung implementiert. Dies hat zur Folge, dass  zum jetzigen Zeitpunkt jeder Blattwerkzeug-Nutzer dazu autorisiert ist, jegliche, vom Client erlaubten, Änderungen vorzunehmen. Dies resultiert aus dem bisher einzigen Nutzer in der Datenbank. Das Adminpanel ist beispielsweise für jeden Blattwerkzeug-Nutzer, über die Seiten-Navigation, frei zugänglich. Im Rahmen dieser Thesis soll genau dieses Problem gelöst werden. Nach Behandlung der Thesis soll es möglich sein, sich mit einer standardisierten Registrierung bei Blattwerkzeug anzumelden. Außerdem soll es ebenfalls möglich sein, sich über externe Anbieter anzumelden. Zusätzlich soll je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt werden.
+	Aktuell ist in Blattwerkzeug keine Benutzer-Authentisierung, -Authentifizierung und -Autorisierung implementiert. Dies hat zur Folge, dass  zum jetzigen Zeitpunkt jeder Blattwerkzeug-Nutzer dazu autorisiert ist, jegliche, vom Client erlaubten, Änderungen vorzunehmen. Dies resultiert aus dem bisher einzigen Nutzer in der Datenbank. Das Adminpanel ist beispielsweise für jeden Blattwerkzeug-Nutzer, über die Seiten-Navigation, frei zugänglich. Im Rahmen dieser Thesis soll genau dieses Problem gelöst werden. Nach Behandlung der Thesis soll es möglich sein, sich mit einer standardisierten Registrierung bei Blattwerkzeug anzumelden. Außerdem soll es ebenfalls möglich sein, sich über externe Anbieter anzumelden. Zusätzlich soll je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt werden. Darüber hinaus soll ein angemeldeter Benutzer die Möglichkeit haben sein bereits erstelltes Konto mit weiteren E-Mails oder externen Konten zu verknüpfen. In den Einstellungen soll es dem Nutzer außerdem ermöglicht werden seine verknüpften Konten zu verwalten.
 	
 	\section{Technologien}
 	\label{sec:technology}
@@ -75,24 +75,22 @@
 	\end{figure}
 	
 	
-	Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und SQL Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug den Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit ein zu sehen. Dennoch ist es dem Nutzer einfach gemacht, mit visuellen Elementen teile der Informatik kennen zu lernen.
+	Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und SQL Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug die Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit ein zu sehen. Dennoch ist es dem Nutzer einfach gemacht, mit visuellen Elementen teile der Informatik kennen zu lernen.
 	
 	Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutreten. Mit Blattwerkzeug wird Lehrern ein Werkzeug in die Hand gelegt, mit dem einfacher und informativer Informatik Unterricht gestaltet werden kann. Somit kann der veraltete und doch sehr Office-lastige Informatik Unterricht komplett erneuert und interessanter gestaltet werden\todo{Zuviel: BlattWerkzeug ist ein Zusatz, keine Ersetzung}.
-	
-	Zu dem aktuellen Zeitpunkt ist in Blattwerkzeug keine Benutzer Authentisierung, Authentifizierung und Autorisierung implementiert. Dies hat zur Folge.
 	
 	\subsection{Passwort Hashing}
 	\label{sec:password_hashing}
 	
-	Sobald eine Software mit Nutzerdaten geführt wird, ergibt sich das Problem des speicherns der Passwörter jeweiliger Nutzer.
+	Sobald eine Software mit Nutzerdaten geführt wird, ergibt sich das Problem des Speicherns der Passwörter jeweiliger Nutzer.
 	Denn sollten die Daten der Nutzer im Klartext in der Datenbank gespeichert werden und ein Angreifer erlangt Zugriff auf die Datenbank, so ist es für ihn ein leichtes weitere Konten der Nutzer zu infiltrieren. Der Grund dafür sind die anwendungsübergreifenden, vom Nutzer größtenteils identischen, Passwörter.
 	
-	An diesem Punkt kommt das Hashen von Passwörtern zum einsatz. Passwort Hashing soll dem Nutzer Sicherheit gewährleisten und es einem Angreifer nicht möglich machen mit erlangten Daten weitere Konten der Nutzer zu infiltrieren. Dabei wird aus einem Passwort ein Hash generiert, dieser Hash macht es einem unmöglich, das Passwort wiederherzustellen. Jedoch ergibt sich bei gleicher Eingabe, der gleiche Hash. Um ein gehashtes Passwort zu erhalten, muss ein Hashing Algorithmus auf das jeweilige Klartext Passwort angewendet werden.
+	An diesem Punkt kommt das Hashen von Passwörtern zum Einsatz. Passwort Hashing soll dem Nutzer Sicherheit gewährleisten und es einem Angreifer nicht möglich machen mit erlangten Daten weitere Konten der Nutzer zu infiltrieren. Dabei wird aus einem Passwort ein Hash generiert, dieser Hash macht es einem unmöglich, das Passwort wiederherzustellen. Jedoch ergibt sich bei gleicher Eingabe, der gleiche Hash. Um ein gehashtes Passwort zu erhalten, muss ein Hashing Algorithmus auf das jeweilige Klartext Passwort angewendet werden.
 	
 	Mittlerweile gibt es verschiedene Hash-Funktionen, von denen manche als nicht mehr sicher gelten. \hlnote{Bestimmte}{Weasel} Menschen haben es sich zur Aufgabe gemacht sogenannte Rainbowtables~\ref{fig:rainbowtable} zu erstellen, in denen Hashes mit dazugehörigem Klartext Passwort stehen. Dies hat zur Folge, dass falls ein Angreifer die Nutzerdaten erlangt und die Passwörter mit einer solchen Hash-Funktion gehasht wurden. Die Möglichkeit besteht das gehashte Passwort mit einer Rainbowtable abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Weshalb MD5~\ref{fig:md5} und SHA zwei der bekanntesten Hash-Funktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden.
 	
 	\begin{figure}[h]
-sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
+		\includegraphics[width=\textwidth]{images/hash-md5.png}
 		\caption{Resultat einer MD5 Hashfunktion auf ein Klartext.}
 		\label{fig:md5}
 	\end{figure}
@@ -103,7 +101,7 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 		\label{fig:rainbowtable}
 	\end{figure}
 	
-	Aus diesem Grund werden sogenannte Salts~\ref{fig:salted-hash}, zufällig generierte Zeichenketten, an das Passwort angehängt und darauf folgend die Hashfunktion angewandt.
+	Aus diesem Grund werden sogenannte Salts~\ref{fig:salted-hash}, zufällig generierte Zeichenketten, an das Passwort angehängt und darauffolgend die Hashfunktion angewandt.
 
 	\begin{figure}[h]
 		\includegraphics[width=\textwidth]{images/salted_hash.png}
@@ -120,13 +118,11 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	IMAGE
 	
-	\newpage
-	
 	\subsection{JSON Web Token}
 	\label{sec: jwt}
-	\enquote{\gls{JWT} sind auf \gls{JSON} basierende \gls{RFC} 7519 genormte Access-Token.} \gls{RFC} ist eine Sammlung aus Dokumenten in denen das Verhalten der Technologien des Internets beschrieben ist. Einige davon gehören zum Standart und werden somit in den meisten Fällen vorrausgesetzt. In speziellen Fällen möchte beispielsweise ein Unternehmen eigene Protokolle verwenden die nicht zum Standart gehören. 
+	\enquote{\gls{JWT} sind auf \gls{JSON} basierende \gls{RFC} 7519 genormte Access-Token.} \gls{RFC} ist eine Sammlung aus Dokumenten in denen das Verhalten der Technologien des Internets beschrieben ist. Einige davon gehören zum Standard und werden somit in den meisten Fällen vorausgesetzt. In speziellen Fällen möchte beispielsweise ein Unternehmen eigene Protokolle verwenden die nicht zum Standard gehören. 
 	
-	Diese Tokens werden zur eindeutigen Identifizierung von Nutzern verwendet und können die Session ersetzen. Dabei ist es bei einem \gls{JWT} nicht von nöten die Daten auf dem Server zu speichern. Dies hat zur Folge, dass die Pflege des Speichers an diesem Punkt entfällt. Jedoch haben \gls{JWT} einen großen Nachteil, sobald der Server einen \gls{JWT} ausgestellt hat, ist dieser bis zum Ablauf des Tokens gültig. Das heißt, sollte ein Server die Berechtigung eines Nutzers nach Austellung eines \gls{JWT} ändern, ist diese Änderung erst bei erneutem erstellen eines \gls{JWT} gültig.
+	Diese Tokens werden zur eindeutigen Identifizierung von Nutzern verwendet und können die Session ersetzen. Dabei ist es bei einem \gls{JWT} nicht vonnöten die Daten auf dem Server zu speichern. Dies hat zur Folge, dass die Pflege des Speichers an diesem Punkt entfällt. Jedoch haben \gls{JWT} einen großen Nachteil, sobald der Server einen \gls{JWT} ausgestellt hat, ist dieser bis zum Ablauf des Tokens gültig. Das heißt, sollte ein Server die Berechtigung eines Nutzers nach Ausstellung eines \gls{JWT} ändern, ist diese Änderung erst bei erneutem Erstellen eines \gls{JWT} gültig.
 	
 	Ein \gls{JWT} besteht aus Header, Payload und Signatur. Dabei ist der Header und die Payload jeweils ein \gls{JSON} Objekt.
 	
@@ -135,7 +131,7 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	\begin{description}
 		\leftskip=1em
-		\item[typ] Der typ Claim beschreibt den \gls{MIME} des \gls{JWT}, dieser wiederum teilt dem Client oder Server mit um welche Art von Medium an Daten es sich handelt. Der Stanart-Wert dieses Claims beläuft sich auf \enquote{JWT}, übersetzt \enquote{application/jwt}.
+		\item[typ] Der typ Claim beschreibt den \gls{MIME} des \gls{JWT}, dieser wiederum teilt dem Client oder Server mit um welche Art von Medium an Daten es sich handelt. Der Standardwert dieses Claims beläuft sich auf \enquote{JWT}, übersetzt \enquote{application/jwt}.
 		\item[alg] Der alg Claim beschreibt die Verschlüsselungsmethode. Ein Beispiel ist \gls{HMAC} mit \gls{SHA256}, HS256 abgekürzt.
 	\end{description}
 	
@@ -151,7 +147,7 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	Die Payload beinhalteten Schlüssel-Wert Paare werden Claims genannt. Dabei handelt es sich um ein JSON Objekt, bei dem bestimmte Schlüssel des Objektes bereits reserviert sind. Diese nennen sich registrierte Claims. Außerdem gibt es öffentliche und private Claims. Hierbei wird zwischen öffentlichen und privaten differenziert.
 		
 	\noindent
-	\textbf{Beispiel registierter Claims}
+	\textbf{Beispiel registrierter Claims}
 	
 	\begin{description}
 		\leftskip=1em
@@ -165,12 +161,12 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	\noindent
 	\textbf{Öffentliche Claims}
 
-	Öffentliche Claims sind zusätzlich zum Standart nutzbar und ihre Namen sollten Semantisch dem dazugehörigen Wert entsprechen. Außerdem sollten die Namen der Claims Netzwerkübergreifend verständlich sein.~\ref{fig:public-claim}
+	Öffentliche Claims sind zusätzlich zum Standard nutzbar und ihre Namen sollten Semantisch dem dazugehörigen Wert entsprechen. Außerdem sollten die Namen der Claims Netzwerkübergreifend verständlich sein.~\ref{fig:public-claim}
 
 	\noindent
 	\textbf{Private Claims}
 
-	Private Claims werden nur innerhalb eines Netzwerkes verwendet. Aus diesem Grund gibt es keine implizite Beschrenkung in der Namensgebung.~\ref{fig:private-claim}  
+	Private Claims werden nur innerhalb eines Netzwerkes verwendet. Aus diesem Grund gibt es keine implizite Beschränkung in der Namensgebung.~\ref{fig:private-claim}  
 	
 	\begin{figure}[h]
 		\centering
@@ -189,11 +185,11 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	\subsubsection{Signatur}
 	\label{sec: jwt_signature}
 	
-	Um die Signatur zu erhalten muss die Payload und der Header Base64 kodiert werden. Außerdem müssen diese beiden kodierten Zeichenfolgen mit einem Punkt als Trennzeichen verknüpft werden. Darauf folgend wird eine Hashfunktion auf das jeweilige Ergebnis mit zusätzlich sicherer Zeichenfolge als Parameter angewandt. Da diese sichere Zeichenfolge, auch Private Key genannt, nur auf dem Server hinterlegt ist, ist es dem Client zwar möglich den \gls{JWT} zu verändern, ihn jedoch mit korrekter Signatur zu versehen nicht.
+	Um die Signatur zu erhalten muss die Payload und der Header Base64 kodiert werden. Außerdem müssen diese beiden kodierten Zeichenfolgen mit einem Punkt als Trennzeichen verknüpft werden. Darauffolgend wird eine Hashfunktion auf das jeweilige Ergebnis mit zusätzlich sicherer Zeichenfolge als Parameter angewandt. Da diese sichere Zeichenfolge, auch Private Key genannt, nur auf dem Server hinterlegt ist, ist es dem Client zwar möglich den \gls{JWT} zu verändern, ihn jedoch mit korrekter Signatur zu versehen nicht.
 	
 	\subsubsection{Zusammengesetzes Token}
 	\label{sec: jwt_result}
-	Schlussendlich ergibt sich der \gls{JWT} aus kodierten Header, kodierten Payload und der Signatur. Dabei steht der Header am Anfang Abbildung \ref{fig:jwt-encoded} Rot gekennzeichnet. Darauf folgend mit einem Punkt getrennt die Payload und zum Schluss die Signatur, ebenfalls mit einem Punkt getrennt.
+	Schlussendlich ergibt sich der \gls{JWT} aus kodiertem Header, kodierten Payload und der Signatur. Dabei steht der Header am Anfang Abbildung \ref{fig:jwt-encoded} Rot gekennzeichnet. Darauffolgend mit einem Punkt getrennt die Payload und zum Schluss die Signatur, ebenfalls mit einem Punkt getrennt.
 	
 	\begin{figure}[h]
 		\includegraphics[width=\textwidth]{images/jwt-encoded.png}
@@ -203,13 +199,13 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	\subsection{Ruby on Rails}
 	\label{sec: rails}
-	Ruby on Rails ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das \gls{MVC} Muster und stellt bereits ein sehr umfangreiches \gls{CLI} zur Verfügung. Mittels des generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Außerdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum versenden von Mails. Dabei kann der Inhalt der E-Mail im Textformat oder als \gls{HTML} versendet werden. Einer der wesentlichen Vorteile von Ruby on Rails ist jedoch die Datenbankanbindung. Hierbei bietet Rails einen Nachhaltigen und Rücksichtsvollen Umgang mit der Datenbank, beispielsweise Migrationen. Migrationen erlauben die Datenbank, ohne explizite SQL-Statements, zu verändern. Außerdem erleichtern Migrationen die Implementierung einer Datenbankstruktur auf einem anderen System.
+	Ruby on Rails ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das \gls{MVC} Muster und stellt bereits ein sehr umfangreiches \gls{CLI} zur Verfügung. Mittels des generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Außerdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum Versenden von Mails. Dabei kann der Inhalt der E-Mail im Textformat oder als \gls{HTML} versendet werden. Einer der wesentlichen Vorteile von Ruby on Rails ist jedoch die Datenbankanbindung. Hierbei bietet Rails einen Nachhaltigen und Rücksichtsvollen Umgang mit der Datenbank, beispielsweise Migrationen. Migrationen erlauben die Datenbank, ohne explizite SQL-Statements, zu verändern. Außerdem erleichtern Migrationen die Implementierung einer Datenbankstruktur auf einem anderen System.
 	
 	\todo[inline]{Nochmal in den eigenen Quelltext schauen: Welche Aspekte sind wirklich relevant?}
 	
 	\subsubsection{Routen}
 	\label{sec: routen}
-	Die Routen in Rails verweisen auf einen Controller und auf eine Funktion innerhalb des Controllers. Dabei wird die Route meistens mit der Anfragemethode eingeleitet, beispielsweise \enquote{get}. Routen können in sogennante \enquote{scopes}~\ref{fig:routes-scope} unterteilt werden. Somit ist es nicht von nöten bei einer Verschachtelten \gls{URI} redundant zu werden.~\ref{fig:routes-redundant}
+	Die Routen in Rails verweisen auf einen Controller und auf eine Funktion innerhalb des Controllers. Dabei wird die Route meistens mit der Anfragemethode eingeleitet, beispielsweise \enquote{get}. Routen können in sogenannte \enquote{scopes}~\ref{fig:routes-scope} unterteilt werden. Somit ist es nicht vonnöten bei einer Verschachtelten \gls{URI} redundant zu werden.~\ref{fig:routes-redundant}
 	
 	\begin{figure}
 		\includegraphics[width=\textwidth]{images/routes-redundant.png}
@@ -229,7 +225,7 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	\subsubsection{Model}
 	\label{sec: rails_model}
-	Das Model in Rails stellt jeweils eine Datenbanktabelle dar. Die Attribute des Models sind jeweilige Spalten der Datenbanktabelle. Jeweilige Datenbankeinträge die über das Model erstellt werden, können mittels Validatoren auf ihre Gültigkeit geprüft werden. Diese Validatoren werden innerhalb des Models festgelegt und auf ein Attribut des Models zugewiesen. Rails bietet dabei bereits verfügbare Validatoren, beispielsweise \enquote{presence: true} \hlnote{IMAGE-REF}{Bild Referenz}. Dieser Validator sorgt für das Vorhanden sein eines Wertes ungleich \textit{nil}. Jedes Model kann zusätzliche Funktionen beinhalten, die direkt auf den jeweiligen Datenbankeintrag angewandt werden kann. Außerdem bietet Rails die Möglichkeit die Beziehungen zwischen Datenbanktabellen direkt in den Modellen festzulegen.
+	Das Model in Rails stellt jeweils eine Datenbanktabelle dar. Die Attribute des Models sind jeweilige Spalten der Datenbanktabelle. Jeweilige Datenbankeinträge die über das Model erstellt werden, können mittels Validatoren auf ihre Gültigkeit geprüft werden. Diese Validatoren werden innerhalb des Models festgelegt und auf ein Attribut des Models zugewiesen. Rails bietet dabei bereits verfügbare Validatoren, beispielsweise \enquote{presence: true} \hlnote{IMAGE-REF}{Bild Referenz}. Dieser Validator sorgt für das Vorhandensein eines Wertes ungleich \textit{nil}. Jedes Model kann zusätzliche Funktionen beinhalten, die direkt auf den jeweiligen Datenbankeintrag angewandt werden kann. Außerdem bietet Rails die Möglichkeit die Beziehungen zwischen Datenbanktabellen direkt in den Modellen festzulegen.
 	
 	\subsubsection{View}
 	\label{sec: rails_view}
@@ -237,11 +233,11 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	\subsection{Zusammenfassung}
 	\label{sec: rails_resuemee}
-	Schlussendlich wird über die Route auf den jeweiligen Controller zugegriffen. Dieser fragt in den meisten Fällen nach einem bestimmten Eintrag eines Models. Darauf folgend wird mit dem Ergebnis der Anfrage interagiert. Es werden Veränderungen oder abfragen bestimmter Daten getätigt. Danach wird ein Ergebnis dem Client ausgeliefert.
+	Schlussendlich wird über die Route auf den jeweiligen Controller zugegriffen. Dieser fragt in den meisten Fällen nach einem bestimmten Eintrag eines Models. Darauffolgend wird mit dem Ergebnis der Anfrage interagiert. Es werden Veränderungen oder abfragen bestimmter Daten getätigt. Danach wird ein Ergebnis dem Client ausgeliefert.
 	
 	\subsection{Angular}
 	\label{sec: angular}
-	Angular ist ein TypeScript basiertes Front-End Webframework, dass in vielen fällen für \gls{SPA} verwendet wird. \gls{SPA}s laden ihren Inhalt lediglich in ein einziges \gls{HTML} Dokument. Der Inhalt dieses \gls{HTML} Dokumentes wird dynamisch, von beispielsweise einem Framework wie Angular, verändert. Der wesentliche Vorteil von Angular sind die klaren Entwurfsmuster. Jede Komponente in Angular hat im wesentlichen die gleiche Struktur. Dies hat zur Folge, dass Angular eine sehr gute Codekonsistenz bietet.
+	Angular ist ein TypeScript basiertes Front-End Webframework, dass in vielen Fällen für \gls{SPA} verwendet wird. \gls{SPA}s laden ihren Inhalt lediglich in ein einziges \gls{HTML} Dokument. Der Inhalt dieses \gls{HTML} Dokumentes wird dynamisch, von beispielsweise einem Framework wie Angular, verändert. Der wesentliche Vorteil von Angular sind die klaren Entwurfsmuster. Jede Komponente in Angular hat im wesentlichen die gleiche Struktur. Dies hat zur Folge, dass Angular eine sehr gute Codekonsistenz bietet.
 	
 	
 	\subsubsection{Component}
@@ -250,7 +246,7 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	\subsubsection{Services}
 	\label{sec: ang-service}
-	Zur kommunikation mit einem Server und/oder zum Datenaustausch zwischen unterschiedlichen Komponenten wird meistens ein Service verwendet. Jedoch bei einem Datenaustausch zwichen Eltern- und Kindkomponente ist es einfacher dies mittels der Kindkomponente durchzuführem. Services werden beim laden der Module instaziert und dem Konstruktor der Komponente als instanziertes Objekt übergeben.
+	Zur Kommunikation mit einem Server und/oder zum Datenaustausch zwischen unterschiedlichen Komponenten wird meistens ein Service verwendet. Jedoch bei einem Datenaustausch zwischen Eltern- und Kind-Komponente ist es einfacher dies mittels der Kind-Komponente durchzuführen. Services werden beim laden der Module instanziiert und dem Konstruktor der Komponente als instanziiertes Objekt übergeben.
 	
 	\subsubsection{Module}
 	\label{sec: ang-modul}
@@ -258,7 +254,7 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 	
 	\subsection{oAuth2}
 	\label{sec: oauth2}
-	\gls{oAuth2} ist ein offenes \gls{RFC} 6749 Protokoll welches verwendet wird um eine Authentifizierung einer Anwendung mittels Drittanbieter zu ermöglichen. Hierbei wird der Nutzer zuerst auf die jeweilige Seite des Drittanbieters weitergeleitet. Dort muss der Nutzer sich authentifizieren und den Zugriff auf die Daten seines Kontos bestätigen. Nachdem der Zugriff auf die Daten bestätigt wurde, erhält die jeweilige Anwendung von dem Drittanbieter einen Autorisierungs-Token. Dieser Autorisierungs-Token wird darauf folgend von der Anwendung genutzt um einen Zugriffs-Token von dem Drittanbieter zu erhalten. Dieser ermöglicht schlussendlich den Zugriff auf die spezifischen Nutzerdaten des Drittanbieters.~\ref{fig:oauth2}
+	\gls{oAuth2} ist ein offenes \gls{RFC} 6749 Protokoll welches verwendet wird um eine Authentifizierung einer Anwendung mittels Drittanbieter zu ermöglichen. Hierbei wird der Nutzer zuerst auf die jeweilige Seite des Drittanbieters weitergeleitet. Dort muss der Nutzer sich authentifizieren und den Zugriff auf die Daten seines Kontos bestätigen. Nachdem der Zugriff auf die Daten bestätigt wurde, erhält die jeweilige Anwendung von dem Drittanbieter einen Autorisierungs-Token. Dieser Autorisierungs-Token wird darauffolgend von der Anwendung genutzt um einen Zugriffs-Token von dem Drittanbieter zu erhalten. Dieser ermöglicht schlussendlich den Zugriff auf die spezifischen Nutzerdaten des Drittanbieters.~\ref{fig:oauth2}
 	
 	In Blattwerkzeug wird genau dieser umfangreiche Vorgang von Omniauth übernommen. Aus diesem Grund wird oAuth2 in dieser Thesis nicht weiter erläutert.
 	
@@ -284,24 +280,69 @@ sec:introduction		\includegraphics[width=\textwidth]{images/hash-md5.png}
 
 	\subsection{Pundit}
 	\label{sec: pundit}
-	Pundit ist eine Ruby on Rails Library die ein Designpattern zur Autorisierung bietet. Bei diesem Pattern wird zu einem jeweiligen Controller eine Policy angelegt. Eine Policy ist hierbei nur eine Klasse. Dabei setzt sich der Name der Policy, aus dem Namen des Models und dem Schlüsselwort Policy als Suffix zusammen. Dem Konstruktor der Policy wird ein Nutzer und das jeweilige Objekt übergeben, welches auf den Zugriff geprüft werden soll. Innerhalb der Policy werden die jeweiligen Controllerfunktionsköpfe in denen eine Autorisierung stattfinden soll mit einem \enquote{?} als Suffix ergänzt und definiert. Diese Funktionen müssen zwingend einen Boolean als Rückgabewert haben um eine gültige Auswirkung als Policy zu haben. Sobald die aufgerufene Funktion der Policy fehlschlägt wird eine Exception geworfen. Diese Exception kann an jeweiliger Position beispielsweise im Controller abgefangen und verarbeitet werden. 
+	Pundit ist eine Ruby on Rails Library die ein Designpattern zur Autorisierung bietet. Bei diesem Pattern wird zu einem jeweiligen Controller eine Policy angelegt. Eine Policy ist hierbei nur eine Klasse. Dabei setzt sich der Name der Policy, aus dem Namen des Models und dem Schlüsselwort Policy als Suffix zusammen. Dem Konstruktor der Policy wird beispielsweise ein Nutzer und das jeweilige Objekt übergeben, welches auf den Zugriff geprüft werden soll. Innerhalb der Policy werden die jeweiligen Controllerfunktionsköpfe in denen eine Autorisierung stattfinden soll mit einem \enquote{?} als Suffix ergänzt und definiert. Diese Funktionen müssen zwingend einen Boolean als Rückgabewert haben um eine gültige Auswirkung als Policy zu haben. Sobald die aufgerufene Funktion der Policy fehlschlägt wird eine Exception geworfen. Diese Exception kann an jeweiliger Position beispielsweise im Controller abgefangen und verarbeitet werden. 
 	
-	Da es sich bei Policies um Klassen handelt, können diese auch instanziert und jeweilige Funktionen dynamisch abgerufen werden. Dies hat zur Folge, dass explizit nach einer bestimmten Policy-Funktion gefragt werden kann, selbst wenn der Funktionsname nicht dem der aufgerufenen Policy-Funktion entspricht.
+	Da es sich bei Policies um Klassen handelt, können diese auch instanziiert und jeweilige Funktionen dynamisch abgerufen werden. Dies hat zur Folge, dass explizit nach einer bestimmten Policy-Funktion gefragt werden kann, selbst wenn der Funktionsname nicht dem der aufgerufenen Policy-Funktion entspricht.
 	
 	\subsection{Rolify}
 	\label{sec: rolify}
-	Rolify ist eine Ruby on Rails Library zur Verwaltung von Rollen. Hierbei liefert Rolify bereits zwei Datenbanktabellen im Design der polymorphen Assoziation. 
+	Rolify ist eine Ruby on Rails Library zur Verwaltung von Rollen. Hierbei liefert Rolify bereits zwei Datenbanktabellen im Design der polymorphen Assoziation. Bei einer Eins-zu-viele-Assoziation hat beispielsweise ein Nutzer verschiedene Rollen, diese Rollen beinhalten verschiedene Fremdschlüssel aus verschiedenen Tabellen. Dabei ergibt sich das Problem, dass nicht mehr sicher gestellt werden kann aus welcher Tabelle der Fremdschlüssel stammt. Um dieses Problem zu lösen gibt es drei bewährte Methoden. In dieser Thesis gehen wir jedoch nur auf die von Rolify mitgelieferte Methode ein.
 	
+	Bei dieser Methode handelt es sich um eine Kindtabelle \enquote{roles} und einer Elterntabelle \enquote{users\_roles}. Dabei stehen in der Roles-Tabelle die jeweiligen Informationen der Rolle und auf welche Ressource diese Rolle sich bezieht. Rolify unterscheidet hierbei zwischen globalen und Ressourcen spezifische Rollen. Eine globale Rolle beinhaltet keine Informationen einer Ressource und kann somit als beispielsweise allgemeine \enquote{user} Rolle dienen.
 	
-	\section{Problemanalyse}
+	Die \enquote{users\_roles} beinhaltet wiederum die jeweilige \enquote{user\_id} und die zu dem Nutzer dazugehörigen Primärschlüssel einer Rolle. Dabei können verschiedene Nutzer dieselbe Rolle und ein Nutzer verschiedene Rollen haben.
+	
+	Außerdem liefert Rolify bereits vordefinierte Funktionen mit denen es möglich ist, jeweilige Rollen eines Nutzers abzufragen, hinzuzufügen oder zu entfernen.
+	
+	\section{Anforderungsanalyse}
 	\label{sec: analyze}
+	Das Ziel dieser Thesis ist ein standardisiertes Registrierungsverfahren. Außerdem eine Authentifikation über \gls{oAuth2} oder ein Passwort. Hinzu kommt eine Möglichkeit den Nutzer über den Server zu Autorisieren und ihm nach spezifischen Benutzerrollen unterschiedlichen Inhalt zu präsentieren. Dabei soll es dem Nutzer nicht gestattet sein durch Manipulation seines Clients mit verfälschten Daten Zugriff auf für ihn nicht zugreiffbare Daten zu erhalten. Um das Ziel dieser Thesis zu erreichen muss sich vorerst mit Ruby und dem Webframework Rails auseinandergesetzt werden. Außerdem ist es vonnöten sich intensiver mit Angular zu beschäftigen, da dieses bisher nur Oberflächlich behandelt wurde. 
+	
+	\subsection{Derzeitiges Projekt}
+	\label{sec: current_project}
+	Zum derzeitigen Zeitpunkt ist Blattwerkzeug eine Lernplattform in der jeder Nutzer jedes Projekt bearbeiten kann. Dafür wurde Serverseitig ein Benutzername und Passwort, in beiden Fällen \enquote{user}, hinterlegt. Zusätzlich ist es möglich das Adminpanel ohne weitere Autorisierungsabfrage zu betätigen. 
+	
+	\subsubsection{Client}
+	Der Clientseitige-Teil von Blattwerkzeug basiert auf Angular, Angular-Material und Bootstrap, hierbei sind Angular-Material und Bootstrap Gestaltungsframeworks. Bootstrap welches hauptsächlich auf \gls{CSS} und \gls{HTML} basiert und Angular-Material welches explizit Module für Angular bereitstellt. 
+	
+	\subsubsection{Server}
+	Der Serverseitige-Teil baut auf Ruby on Rails und bietet ein \gls{API} zur Kommunikation mit dem Server. Im Wesentlichen werden die Daten vom Client mittels unterschiedlicher Anfragemethoden abgefragt/übermittelt und vom Server verarbeitet. 
+	
+	\subsection{Anforderungen}
+	Im Verlauf dieser Sektion werden die Anforderungen, die diese Thesis erfüllen soll, detailliert erläutert.
+		
+	\subsubsection{Anmeldung mittels \gls{oAuth2}}
+	Eine Authentifizierung mittels oAuth2 soll über Google und GitHub möglich sein. Die von Google oder GitHub zurückgelieferten Daten sollen in der Datenbank abgespeichert werden. Darüber hinaus soll beim vorhanden sein spezifischer Daten, wie beispielsweise der E-Mail, eine automatische Zuweisung spezieller Datenbankfelder des Nutzers geben.
+	
+	\subsubsection{Anmeldung mittels Passwortes}
+	Für eine Anmeldung mittels Passwortes muss zuerst eine Möglichkeit gegeben sein ein Konto zu erstellen. Bei der Erstellung eines Kontos sollten vier Felder geben sein. Das erste für den Benutzernamen, das zweite für die E-Mail, das dritte und vierte für das Passwort und die Passwort Bestätigung. Sobald der Benutzer seine Daten erfolgreich abgeschickt hat, sollte das vom Client als Klartext verschickte Passwort auf dem Server verschlüsselt werden. Nachdem der Benutzer sein Konto erstellt hat soll eine Bestätigungsmail an die angegebene E-Mail gesendet werden. Diese Bestätigungsmail sollte einen Link beinhalten mit dem das vom Nutzer erstellte Konto bestätigt werden kann. Sollte diese E-Mail der Nutzer nicht empfangen, muss die Möglichkeit geben sein eine erneute Bestätigungsmail zu versenden. Erst nachdem das Konto bestätigt wurde, soll es dem Nutzer gestattet sein dieses Konto zu verwenden. Falls ein Nutzer sein Passwort vergessen haben sollte, muss es zusätzlich eine Funktion zum Passwort wiederherstellen geben.
+	
+	\subsubsection{Benutzereinstellungen}
+	Die Benutzereinstellungen sollten einem Benutzer erlauben sein bereits erstelltes Konto mit weiteren Konten zu verknüpfen. Hierbei sollte der Benutzer eingeloggt sein und einen bestimmten Provider auf seiner Einstellungs-Seite auswählen können. Nachdem sich der Benutzer bei dem ausgewählten Provider authentifiziert hat, sollte dieses Konto dem Nutzer hinzugefügt werden.  Außerdem sollten die Benutzereinstellungen eine Verwaltung der verknüpften Konten beinhalten. Das heißt der Benutzer sollte zu jeder Zeit entscheiden können welche dieser verknüpften Konten beständig bleiben oder welche gelöscht werden.
+	
+	Sollte sich ein Benutzer mittels Passwortes auf Blattwerkzeug registriert haben, muss es für diesen Nutzer eine Möglichkeit geben sein Passwort zu ändern, selbst wenn dieser bereits sein Konto zusätzlich mit Google oder GitHub verknüpft hat. Sollte ein Benutzer bereits ein vorhandenes Konto mit einem Passwort haben, sollte das neu zu verknüpfende Konto automatisch das Passwort des bereits vorhandenen annehmen. Falls das zu verknüpfende Konto, das erste mit einem Passwort sein sollte, muss dafür in den Benutzereinstellungen eine extra Passworteingabe erscheinen, in dem das zu verwendende Passwort angegeben wird.
+	
+	Da es in Blattwerkzeug bei der Benutzernamensgebung zum jetzigen Stand keine einmaligen Benutzernamen geben muss, soll es dem Benutzer in den Benutzereinstellungen außerdem möglich sein, seinen Benutzernamen zu ändern. 
+	
+	\subsubsection{Authentifizierung}
+	Um vom Server als angemeldeter Benutzer authentifiziert zu werden, sollten die Benutzerdaten in einem \gls{JWT} gespeichert werden. Dieser \gls{JWT} wird bei der Anmeldung eines Benutzers an den Client übermittelt. Ab dem Zeitpunkt wird dieser \gls{JWT} bei jeder Anfrage an den Server mit übermittelt. Sobald eine Anfrage den Server erreicht, muss zwangsläufig der \gls{JWT} auf seine Gültigkeit geprüft werden. Sollte dieser \gls{JWT} eine nicht gültige Signatur haben oder bereits abgelaufen sein, darf keine weitere Aktion auf dem Server erfolgen.
+	
+	\subsubsection{Rollen und Autorisierung}
+	Die Rollen sollten sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in ~\ref{sec: rolify} beschrieben keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich auf beispielsweise ein Projekt. Sollte ein Projekt von einem angemeldeten Benutzer erstellt werden, sollte dieser eine jeweilige Rolle für dieses Projekt erhalten. Mit dieser Rolle sollte es dem Benutzer möglich sein, sein Projekt zu bearbeiten oder zu löschen. Außerdem sollte die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf 
+
+	Für eine Autorisierung mittels Rollen sollten bestimmte Regeln für die jeweiligen Controller Funktionen festgelegt werden. Diese Regeln sollten mittels Pundit erstellt werden. Innerhalb der Regeln sollte die Überprüfung der Rollen des angemeldeten Nutzers stattfinden. 
+	
+	\subsubsection{Bedienelemente}
+	
+	
+
 	
 	\section{Implementierung}
 	\label{sec: implementation}
 	
 	\subsubsection{Omniauth Identity\todo{$\rightarrow$Implementierung}}
 	\label{sec: omniauth_identity}
-	Omniauth Identity ist eine Library zur Erweiterung von Omniauth. Mit Omniauth Identity ist intern ein Anbieter gegeben mit dem es möglich ist, sich zusätzlich mit einem Passwort zu registrieren und anzumelden. Eben so wie die Developer Strategy, bietet auch diese Library die Möglichkeit ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Library optional und eine auschließliche Kommunikation über ein API ist möglich. 
+	Omniauth Identity ist eine Library zur Erweiterung von Omniauth. Mit Omniauth Identity ist intern ein Anbieter gegeben mit dem es möglich ist, sich zusätzlich mit einem Passwort zu registrieren und anzumelden. Ebenso wie die Developer Strategie, bietet auch diese Library die Möglichkeit ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Library optional und eine ausschließliche Kommunikation über ein API ist möglich. 
 	
 \end{document}
 %%% Local Variables:
