@@ -68,4 +68,18 @@
         textarea { margin-top: 1vh }
         select { margin-bottom: 2vh; }
     }
+
+    change-roles {
+        display: flex;
+        flex-direction: column;
+        
+        label {
+            width: 20vw;
+            min-width: 230px;
+        }
+
+        button {
+            width: 230px;
+        }
+    }
 }

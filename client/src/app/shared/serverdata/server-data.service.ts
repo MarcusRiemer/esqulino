@@ -50,6 +50,7 @@ export class ServerDataService {
 
 
   // TODO COMMENTS
+
   readonly getUserData = new CachedRequest<UserDescription>(
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
@@ -61,6 +62,10 @@ export class ServerDataService {
   readonly getProviders = new CachedRequest<ClientProviderDescription[]>(
     this._http.get<ClientProviderDescription[]>(this._serverApi.getProvidersUrl())
   )
+
+  changeRoles$(userId: string): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getChangeRolesUrl(), { "userId": userId })
+  }
 
   signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data);
