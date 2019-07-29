@@ -6,6 +6,12 @@ module JwtHelper
   end
 
   def current_jwt
+    if (not @current_jwt) then
+      jwt = request.cookies['JWT']
+      if (jwt) then
+        self.current_jwt = JwtHelper.decode(jwt)
+      end
+    end
     return @current_jwt
   end
 
@@ -19,7 +25,7 @@ module JwtHelper
     HashWithIndifferentAccess.new decoded
   end
 
-  # Only the data the client receives
+  # Only data the client receives
   def private_claim_response
     if (current_jwt) then
       to_return = {
@@ -29,5 +35,14 @@ module JwtHelper
       }
     end
     return to_return
+  end
+
+  def response_jwt_cookie(value, expires = 1.day.from_now)
+    response.set_cookie('JWT', {
+      value: value,
+      httponly: true,
+      expires: expires,
+      path: '/'
+    })
   end
 end

@@ -85,11 +85,11 @@ class Identity < ActiveRecord::Base
     end
 
     if (user.invalid?) then
-      raise StandardError.new(user.errors.full_messages[0])
+      raise EsqulinoError.new(user.errors.full_messages[0])
     end
 
     if (identity.invalid?) then
-      raise StandardError.new(identity.errors.full_messages[0])
+      raise EsqulinoError.new(identity.errors.full_messages[0])
     end
 
     identity.save!
