@@ -1,19 +1,20 @@
-\documentclass[11pt]{article}
+\documentclass[paper=a4,fontsize=12pt,parskip=half]{scrartcl}
 
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{titlesec}
-
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{pgf}
+\usepackage{enumitem}
 \usepackage[ngerman]{babel}
 \usepackage[autostyle=true,german=quotes]{csquotes}
-
 \usepackage[acronym,hyperfirst=false]{glossaries}
 \usepackage[colorlinks]{hyperref}
-
 \usepackage{acronym}
-
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 \usepackage{soul}
 
@@ -27,17 +28,28 @@
 \fi
 \makeatother
 
-
-\setlength{\parskip}{1.5em}
-
 \titlespacing*{\section} {0pt}{0ex}{0ex}
 \titlespacing*{\subsection} {0pt}{0ex}{0ex}
 \titlespacing*{\subsubsection} {0pt}{0ex}{0ex}
+
+\lstdefinestyle{CodeView} {
+	columns=flexible,
+	numbers=left,
+	basicstyle=\scriptsize,
+	tabsize=3,
+	frame=single,
+	backgroundcolor=\color{white},
+	keywordstyle=\color{blue},
+}
+
+\linespread{1.5}
 
 \title{Abschlussarbeit}
 \author{Tom Hilge}
 
 \makeglossaries
+
+\newcommand{\JS}{JavaScript}
 
 \newacronym{JWT}{JWT}{JSON Web Token}
 \newacronym{URI}{URI}{Uniform Resource Identifier}
@@ -55,6 +67,12 @@
 \newacronym{HMAC}{HMAC}{Keyed-Hash Message Authentication Code}
 \newacronym{SHA256}{SHA256}{Secure Hash Algorithm 256 Bit}
 \newacronym{oAuth2}{oAuth2}{Open Authorization 2.0}
+\newacronym{UUID}{UUID}{Universally Unique Identifier}
+\newacronym{STI}{STI}{Single Table Inheritance}
+\newacronym{XSS}{XSS}{Cross-Site-Scripting}
+\newacronym{CSRF}{CSRF}{Cross-Site-Request-Forgery}
+\newacronym{HTTPS}{HTTPS}{Hypertext Transfer Protocol Secure}
+\newacronym{JS}{JS}{JavaScript}
 
 \begin{document}
 	
@@ -87,7 +105,7 @@
 	
 	An diesem Punkt kommt das Hashen von Passwörtern zum Einsatz. Passwort Hashing soll dem Nutzer Sicherheit gewährleisten und es einem Angreifer nicht möglich machen mit erlangten Daten weitere Konten der Nutzer zu infiltrieren. Dabei wird aus einem Passwort ein Hash generiert, dieser Hash macht es einem unmöglich, das Passwort wiederherzustellen. Jedoch ergibt sich bei gleicher Eingabe, der gleiche Hash. Um ein gehashtes Passwort zu erhalten, muss ein Hashing Algorithmus auf das jeweilige Klartext Passwort angewendet werden.
 	
-	Mittlerweile gibt es verschiedene Hash-Funktionen, von denen manche als nicht mehr sicher gelten. \hlnote{Bestimmte}{Weasel} Menschen haben es sich zur Aufgabe gemacht sogenannte Rainbowtables~\ref{fig:rainbowtable} zu erstellen, in denen Hashes mit dazugehörigem Klartext Passwort stehen. Dies hat zur Folge, dass falls ein Angreifer die Nutzerdaten erlangt und die Passwörter mit einer solchen Hash-Funktion gehasht wurden. Die Möglichkeit besteht das gehashte Passwort mit einer Rainbowtable abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Weshalb MD5~\ref{fig:md5} und SHA zwei der bekanntesten Hash-Funktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden.
+	Mittlerweile gibt es verschiedene Hash-Funktionen. Rainbowtables in denen Hashes mit dazugehörigem Klartext Passwort stehen sorgen jedoch dafür, dass manche dieser Hash-Funktionen als nicht mehr riches gelten. Dies hat zur Folge, dass eine Sicherheitslücke ensteht falls ein Angreifer die Nutzerdaten erlangt und die Passwörter mit einer solchen Hash-Funktion gehasht wurden. Die Möglichkeit besteht das gehashte Passwort mit einer Rainbowtable abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Weshalb MD5~\ref{fig:md5} und SHA zwei der bekanntesten Hash-Funktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden.
 	
 	\begin{figure}[h]
 		\includegraphics[width=\textwidth]{images/hash-md5.png}
@@ -265,8 +283,8 @@
 	\end{figure}
 
 	\subsection{Omniauth}
-	\label{sec: omniauth}
-	Omniauth ist eine quelloffene Library für Ruby on Rails und ermöglicht einem, eine Anmeldung mittels unterschiedlicher Anbieter über \gls{oAuth2}. Bei der Anmeldung mittels oAuth2 werden bereits viele Funktionen von Omniauth selber übernommen. Sobald der Nutzer sich bei dem jeweiligen Anbieter angemeldet hat, wird die Antwort des jeweiligen Anbieters automatisch über die von Omniauth festgelegte Route verarbeitet. Jedoch muss vorher das spezifische Gem des Anbieters für Omniauth installiert werden.
+	\label{sec:omniauth}
+	Omniauth ist eine quelloffene Library für Ruby on Rails und ermöglicht einem, eine Anmeldung mittels unterschiedlicher Anbieter über \gls{oAuth2}. Bei der Anmeldung mittels oAuth2 werden bereits viele Funktionen von Omniauth selber übernommen. Sobald der Nutzer sich bei dem jeweiligen Anbieter angemeldet hat, wird die Antwort des jeweiligen Anbieters automatisch über die von Omniauth festgelegte Route verarbeitet. Jedoch muss vorher das spezifische Gem des Anbieters für Omniauth installiert werden. Hierbei stellt jedes Gem eine eigene Strategie für Omniauth bereit. Eine Strategie stellt die Möglichkeit bereit sich mit einem speziellen Provider zu authentifizieren.
 	
 	Omniauth selber verfügt nur über die Developer Strategie, diese ermöglicht eine Anmeldung ohne spezifische Überprüfung der angegebenen Daten. Das hat zur Folge, dass diese Art von Anmeldung auf keinen Fall im Produktiv System vorhanden sein darf.
 	
@@ -306,16 +324,23 @@
 	Der Clientseitige-Teil von Blattwerkzeug basiert auf Angular, Angular-Material und Bootstrap, hierbei sind Angular-Material und Bootstrap Gestaltungsframeworks. Bootstrap welches hauptsächlich auf \gls{CSS} und \gls{HTML} basiert und Angular-Material welches explizit Module für Angular bereitstellt. 
 	
 	\subsubsection{Server}
-	Der Serverseitige-Teil baut auf Ruby on Rails und bietet ein \gls{API} zur Kommunikation mit dem Server. Im Wesentlichen werden die Daten vom Client mittels unterschiedlicher Anfragemethoden abgefragt/übermittelt und vom Server verarbeitet. 
+	Der Serverseitige-Teil baut auf Ruby on Rails und bietet ein \gls{API} zur Kommunikation mit dem Server. Die Daten werden mittels unterschiedlicher Anfragemethoden abgefragt/übermittelt und vom Server verarbeitet. 
 	
 	\subsection{Anforderungen}
+	\label{sec: requirement}
 	Im Verlauf dieser Sektion werden die Anforderungen, die diese Thesis erfüllen soll, detailliert erläutert.
+	
+	\subsubsection{Unterschiedliche Anmeldemöglichkeiten}
+	Ein Benutzer sollte die Möglichkeit haben sich mit mehreren Konten zu verknüpfen. Das bedeutet, er sollte sich mit Google authentifizieren können, jedoch auch mit einem Passwort.
 		
 	\subsubsection{Anmeldung mittels \gls{oAuth2}}
 	Eine Authentifizierung mittels oAuth2 soll über Google und GitHub möglich sein. Die von Google oder GitHub zurückgelieferten Daten sollen in der Datenbank abgespeichert werden. Darüber hinaus soll beim vorhanden sein spezifischer Daten, wie beispielsweise der E-Mail, eine automatische Zuweisung spezieller Datenbankfelder des Nutzers geben.
 	
 	\subsubsection{Anmeldung mittels Passwortes}
 	Für eine Anmeldung mittels Passwortes muss zuerst eine Möglichkeit gegeben sein ein Konto zu erstellen. Bei der Erstellung eines Kontos sollten vier Felder geben sein. Das erste für den Benutzernamen, das zweite für die E-Mail, das dritte und vierte für das Passwort und die Passwort Bestätigung. Sobald der Benutzer seine Daten erfolgreich abgeschickt hat, sollte das vom Client als Klartext verschickte Passwort auf dem Server verschlüsselt werden. Nachdem der Benutzer sein Konto erstellt hat soll eine Bestätigungsmail an die angegebene E-Mail gesendet werden. Diese Bestätigungsmail sollte einen Link beinhalten mit dem das vom Nutzer erstellte Konto bestätigt werden kann. Sollte diese E-Mail der Nutzer nicht empfangen, muss die Möglichkeit geben sein eine erneute Bestätigungsmail zu versenden. Erst nachdem das Konto bestätigt wurde, soll es dem Nutzer gestattet sein dieses Konto zu verwenden. Falls ein Nutzer sein Passwort vergessen haben sollte, muss es zusätzlich eine Funktion zum Passwort wiederherstellen geben.
+	
+	\subsubsection{Authentifizierung nach Anmeldung}
+	Um vom Server als angemeldeter Benutzer authentifiziert zu werden, sollten die Benutzerdaten in einem \gls{JWT} gespeichert werden. Dieser \gls{JWT} wird bei der Anmeldung eines Benutzers an den Client übermittelt. Ab dem Zeitpunkt wird dieser \gls{JWT} bei jeder Anfrage an den Server mit übermittelt. Sobald eine Anfrage den Server erreicht, muss zwangsläufig der \gls{JWT} auf seine Gültigkeit geprüft werden. Sollte dieser \gls{JWT} eine nicht gültige Signatur haben oder bereits abgelaufen sein, darf keine weitere Aktion auf dem Server erfolgen.
 	
 	\subsubsection{Benutzereinstellungen}
 	Die Benutzereinstellungen sollten einem Benutzer erlauben sein bereits erstelltes Konto mit weiteren Konten zu verknüpfen. Hierbei sollte der Benutzer eingeloggt sein und einen bestimmten Provider auf seiner Einstellungs-Seite auswählen können. Nachdem sich der Benutzer bei dem ausgewählten Provider authentifiziert hat, sollte dieses Konto dem Nutzer hinzugefügt werden.  Außerdem sollten die Benutzereinstellungen eine Verwaltung der verknüpften Konten beinhalten. Das heißt der Benutzer sollte zu jeder Zeit entscheiden können welche dieser verknüpften Konten beständig bleiben oder welche gelöscht werden.
@@ -324,25 +349,132 @@
 	
 	Da es in Blattwerkzeug bei der Benutzernamensgebung zum jetzigen Stand keine einmaligen Benutzernamen geben muss, soll es dem Benutzer in den Benutzereinstellungen außerdem möglich sein, seinen Benutzernamen zu ändern. 
 	
-	\subsubsection{Authentifizierung}
-	Um vom Server als angemeldeter Benutzer authentifiziert zu werden, sollten die Benutzerdaten in einem \gls{JWT} gespeichert werden. Dieser \gls{JWT} wird bei der Anmeldung eines Benutzers an den Client übermittelt. Ab dem Zeitpunkt wird dieser \gls{JWT} bei jeder Anfrage an den Server mit übermittelt. Sobald eine Anfrage den Server erreicht, muss zwangsläufig der \gls{JWT} auf seine Gültigkeit geprüft werden. Sollte dieser \gls{JWT} eine nicht gültige Signatur haben oder bereits abgelaufen sein, darf keine weitere Aktion auf dem Server erfolgen.
-	
 	\subsubsection{Rollen und Autorisierung}
-	Die Rollen sollten sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in ~\ref{sec: rolify} beschrieben keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich auf beispielsweise ein Projekt. Sollte ein Projekt von einem angemeldeten Benutzer erstellt werden, sollte dieser eine jeweilige Rolle für dieses Projekt erhalten. Mit dieser Rolle sollte es dem Benutzer möglich sein, sein Projekt zu bearbeiten oder zu löschen. Außerdem sollte die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf 
+	Die Rollen sollten sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in ~\ref{sec: rolify} beschrieben keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich auf beispielsweise ein Projekt. Sollte ein Projekt von einem angemeldeten Benutzer erstellt werden, sollte dieser eine jeweilige Rolle oder eine Datenbank-Beziehung für dieses Projekt erhalten. Mit dieser Rolle sollte es dem Benutzer möglich sein, sein Projekt zu bearbeiten oder zu löschen. Außerdem sollte die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf jedes Projekt haben.
 
 	Für eine Autorisierung mittels Rollen sollten bestimmte Regeln für die jeweiligen Controller Funktionen festgelegt werden. Diese Regeln sollten mittels Pundit erstellt werden. Innerhalb der Regeln sollte die Überprüfung der Rollen des angemeldeten Nutzers stattfinden. 
 	
-	\subsubsection{Bedienelemente}
-	
-	
-
+	\subsubsection{Bedienelemente und Routen}
+	Die Bedienelemente die ein Benutzer zu sehen hat, müssen jeweils von den Rollen abhängen. Dazu ist es möglich bei jedem Bedienelement den Server nach der Berechtigung zu fragen oder jedoch Clientseitig Pundit nach zu bauen. Außerdem sollte es einem Benutzer, bei nicht ausreichender Berechtigung, nicht gestattet sein bestimmte Routen des Clients zu besuchen. Zusätzlich sollten die Bedienelemente benuzterfreundlich sein, da es sich bei Blattwerkzeug, wie in \ref{sec:blattwerkzeug} beschrieben, um ein Werkzeug zum lernen bestimmter Bereiche der Informatik handelt.
 	
 	\section{Implementierung}
 	\label{sec: implementation}
+	In dieser Sektion wird sich ausgiebig mit der Implementierung der zuvor festgelegten Anforderungen auseinandergesetzt.
 	
-	\subsubsection{Omniauth Identity\todo{$\rightarrow$Implementierung}}
-	\label{sec: omniauth_identity}
-	Omniauth Identity ist eine Library zur Erweiterung von Omniauth. Mit Omniauth Identity ist intern ein Anbieter gegeben mit dem es möglich ist, sich zusätzlich mit einem Passwort zu registrieren und anzumelden. Ebenso wie die Developer Strategie, bietet auch diese Library die Möglichkeit ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Library optional und eine ausschließliche Kommunikation über ein API ist möglich. 
+	\subsection{Server}
+	\label{sec: server}
+	Da zu diesem Zeitpunkt bereits Librarys zur Authentifizierung existieren, wurde sich zuerst mit der Library Devise auseinander gesetzt.
+	
+	\subsubsection{Devise}
+	\label{sec: devise}
+	Devise ist eine Ruby on Rails Library mit der sich eine flexible Authentifizierung ermöglichen lässt. Es bietet ein vorgefertigtes Datenbankschema für registrierte Benuzer, ein leichten Umgang mit OmniAuth und Funktionen wie beispielsweise das Senden einer E-Mail bei Registrierung. Im Datenbankschema enthalten ist ein Log-System mit dem beispielweise der Zeitpunkt der letzten Anmeldung eines Benutzers festgehalten werden kann. \todo{Warum nicht genommen? Was für Probleme traten auf?}
+	
+	\subsubsection{Anmeldung eines Benutzers}
+	\label{sec: sign-in-imp}
+	Die Anmeldung mittels oAuth2 oder Passwort wurde mit Omniauth ermöglicht. Hierbei wurde zuerst Omniauth selber dem derzeitigen Projekt hinzugefügt und darauf folgend die Gems zur Authentifizierung mittels Google, Github und Passwort. Um die einzelnen Provider nutzen zu können müssen diese in einem initializer (Listing \ref{lst:added_providers}) deklariert werden. Ein initializer wird nach dem Rails Framework und den dazugehörigen Gems geladen. Bei der Deklarierung der Provider ist zu beachten, dass Provider wie Google oder Github eine jeweilige ID und einen Secret-Key als Parameter benötigen. Diese werden jeweils auf den offiziellen Seiten der Provider erstellt. Dabei musste darauf geachtet werden, dass diese ID und dieser Secret-key über eine Umgebungsvariable mit in das Projekt eingebunden wird. Umgebungsvariablen werden in dem Fall in der Kommandozeile vor das Kommando zum starten des Projektes gesetzt. Nach dem das Kommando zum starten des Servers ausgeführt wurde, kann auf die Werte der zurvor festgelegten Umgebungsvariablen zugegriffen werden. Die Verwendung von Umgebungsvariablen ist besondes bei Blattwerkzeug von nöten, da es sich um ein quelloffenes Projekt handelt und jeder den bereits produzierten Code einsehen kann. 
+	
+	\begin{lstlisting}[language=Ruby, style=CodeView, caption=Zu Omniauth hinzugefügte Provider, captionpos=b, label={lst:added_providers}]
+Rails.application.config.middleware.use OmniAuth::Builder do
+	provider :identity, :on_registration => AuthController.action(:register),
+						:on_login => AuthController.action(:login_with_password), :model => PasswordIdentity
+	provider :developer, :fields => [:name, :email], :uid_field => :email unless Rails.env.production?
+	provider :google_oauth2, GOOGLE_ID, GOOGLE_SECRET
+	provider :github, GITHUB_ID, GITHUB_SECRET
+end
+	\end{lstlisting}
+	
+	Bei der Erstellung des User und des Identity Models wurde sich zuerst damit beschäftigt welche Attribute die jeweiligen Models haben sollen. Hierbei steht das Identity Model für alle hinzugefügten authentifikations Möglichkeiten eines Benutzers. Dabei wurde darauf geachtet, welche Attribute später dem Client zur Verfügung gestellt werden sollten und welche für spätere Controller Funktionen benötigt werden. 
+	
+	\begin{figure}[h]
+		\includegraphics[width=\textwidth]{images/identities_table.png}
+		\caption{identities Tabelle}
+		\label{fig:identities_table}
+	\end{figure}
+	
+	\begin{description}
+		\item[uid (Abbildung \ref{fig:identities_table})]\hfill\\
+		Die uid ist ein String der zur eindeutigen Identifikation des Kontos eines Providers dient. Dabei kann die uid beispeilsweise eine Zahl oder eine E-Mail sein. Mit der uid wird festgestellt ob ein bestimmtes Konto bereits mit einem Benutzer verknüpft ist.
+		\item[provider (Abbildung \ref{fig:identities_table})]\hfill\\
+		Das provider Attribut wird mit dem jeweiligen Provider-Namen beschrieben. Dabei sind die Namen wie in Listing \ref{lst: added_providers} definiert. Da die Namen jedoch von den installierten Gems stammen ist eine Änderung dieser Namen nicht ohne weiteres Möglich.
+		\item[provider\_data (Abbildung \ref{fig:users_table})]\hfill\\
+		Das provider\_data Attribut wird mit jeglichen Daten beschrieben, die ein Provider über den authentifizierten Benutzer zurückliefert. 
+		\item[own\_data (Abbildung \ref{fig:identities_table})]\hfill\\
+		Das own\_data Attribut wird mit den Daten beschrieben die Blattwerkzeug für den Benutzer vorgesehen hat. Dies kann beispielsweise der Token zur Aktivierung einer E-Mail sein.
+		\item[type (Abbildung \ref{fig:identities_table})]\hfill\\
+		Das type Attribut wird, sobald es der Tabelle hinzugefügt wurde, von Rails automatisch interpretiert. Hierbei handelt es sich um \gls{STI}. \gls{STI} ist eine Möglichkeit Objekt-Orientierung in einer Relationellen Datenbank zu emulieren. Dabei ist die Tabelle identities und dessen Model (Identity) die Basisklasse und die in type festgelegten Klassen, die Abegeleiteten. Das type Attribut ermöglicht einen sofortigen Zugriff auf die Klasse des Providers einer ausgewählten Identity.
+	\end{description}
+	
+	\begin{figure}[h]
+		\includegraphics[width=\textwidth]{images/users_table.png}
+		\caption{users Tabelle}
+		\label{fig:users_table}
+	\end{figure}
+
+	\begin{description}
+		\item[display\_name (Abbildung \ref{fig:users_table})]\hfill\\
+		Das display\_name Attribut steht für den Anzeigenamen des Benutzers. Dieser ist jedoch nicht einzigartig und lässt sich beliebig oft verändern. Das hat zur Folge, dass mehrere Benutzer den selben Anzeigenamen haben können.
+		\item[email (Abbildung \ref{fig:users_table})]\hfill\\
+		Das email Attribut steht für die primäre E-Mail eines Benutzers. Die primäre E-Mail wird verwendet sobald eine E-Mail von Blattwerkzeug an den Benutzer gesendet werden soll. Dies ist wichtig, da jedes verknüpfte Konto eine unterschiedliche E-Mail besitzen darf. Die primäre E-Mail wird bei Erstellung eines Benutzers gesetzt, außer ein Benutzer authentifiziert sich über einen Provider dessen Rückgabe keine E-Mail enthält.
+	\end{description}
+
+	\begin{description}
+		\item[Anmeldung mittels \gls{oAuth2}]\hfill\\
+		Bei einer Anmeldung mittels \gls{oAuth2} wurde bei dem Provider über den sich authentifiziert wird, eine Redirect Url hinterlegt. Auf diese wird der jeweilige Benutzer nach authentifikation zurück geleitet. Die Route zu der Redirect Url zeigt auf die Funktion mit dem Namen \enquote{Callback} im \enquote{AuthController}. Die Callback Funktion prüft auf das vorhanden sein der vom Provider zurückgelieferten Daten. Sollte bisher keine Identität mit den Daten des Providers erstellt worden sein wird eine neue Identität angelegt. Sollte ein angemeldeter Benutzer dieser Operation ausführen wird ihm eine neue Identität zu seinem Benutzer hinzugefügt. Sollte es sich um keinen angemeldeten Benutzer handeln, wird zusätzlich ein neuer Benutzer erstellt. Da jeder Provider unterschiedliche Daten zurückliefert wird beim anlegen einer neuen Identität zwischen den einzelnen Providern unterschieden. Jeder Provider besitzt eine Abgeleiteteklasse der Basisklasse Identity und greift innerhalb seiner Klasse auf die für ihn relevanten Daten zu. Sollte eine Identität mit den zuürckgelieferten Daten bereits existieren, wird ohne Erstellung einer Identität fortgefahren. Mit der erstellten oder existierenden Identität werden die Benutzerinformationen in die Payload eines \gls{JWT} geschrieben. Die Funktionen zu Erstellung eines \gls{JWT} wurden hierbei in einen Helper ausgelagert. Die Gültigkeitsdauer des erstellten \gls{JWT} beläuft sich auf eine Stunde.
+
+		\item[Anmeldung mittels Passwort]\hfill\\
+		Die Anmeldung mittels Passwort wurde mittels Omniauth Identity ermöglicht. Omniauth Identity ist ebenfalls eine Strategie mit der die Möglichkeit gegeben ist, sich über ein Passwort bei Blattwerkzeug anzumelden. Ebenso wie die Developer Strategie, bietet auch diese Strategie die Möglichkeit ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Strategie optional und eine ausschließliche Kommunikation über ein API ist möglich. 
+		
+		Bei dem Nutzen dieser Strategie fiel auf, dass die Daten übermittelt wurden sie jedoch nicht richtig verarbeitet werden konnten (Listing \ref{lst:register_omniauth_identity}). Das hatte zur Folge, dass mit der Erstellung eines Models, welches mit als Parameter im iniziliazer angegeben werden kann, nicht ordnugsgemäß fortgefahren werden konnte. Um fortzufahren wäre es Möglich eine eigene Strategie für Omniauth zu entwickeln oder auf die von Omniauth Identity mitgelieferten Optionen zurück zugreiffen.
+		
+		\begin{lstlisting}[language=Ruby, style=CodeView, caption=Aufgerufene Funktion bei POST Request (Omniauth Identity), captionpos=b, label={lst:register_omniauth_identity}]
+	def registration_phase
+		attributes = (options[:fields] + [:password, :password_confirmation])
+			.inject({}){|h,k| h[k] = request[k.to_s]; h}
+		@identity = model.create(attributes)
+		if @identity.persisted?
+			env['PATH_INFO'] = callback_path
+			callback_phase
+		else
+			if options[:on_failed_registration]
+				self.env['omniauth.identity'] = @identity
+				options[:on_failed_registration].call(self.env)
+			else
+				registration_form
+			end
+		end
+	end
+		\end{lstlisting}
+		Omniauth Identity bietet die Möglichkeit bei Registrierung auf eine Funktion zu verweisen. Diese Funktion muss ebenfalls im iniziliazer angegeben werden. (Listing \ref{lst:added_providers}). Sollte bei der Erstellung des Models ein Fehler auftretten (Listing \ref{lst:register_omniauth_identity}), wird die Funktion im zuvor festgelegten iniziliazer aufgerufen. Hierbei wurde sich in der Thesis zuerst für diese Methode entschieden. Diese Methode entspricht jedoch nicht dem Schema von Omniauth.(Sektion \ref{sec:omniauth}). Hierbei wurden jegliche Funktionen außerhalb der Strategie genutzt. Die Funktionen wurden in den AuthController mit integriert. Dieser besaß jedoch nur drei Funktionen, die callback, destroy und failure Funktion. Jeder dieser drei Funktionen hat einen globalen Nutzen für jegliche Provider. Dieses Schema wurde durch das Hinzufügen der Funktionen zur Anmeldung und Registrierung mittels Passwortes nicht weiter eingehalten. 
+
+		\item[Speichern eines \gls{JWT}]\hfill\\
+		Bei dem erstellen eines \gls{JWT} muss abegewägt werden wo dieser Clientseitig gespeichert werden soll. Hierbei gibt es die Möglichkeit den \gls{JWT} im LocalStorage, sessionStorage oder als Cookie zu speichern.
+		
+		Der LocalStorage und der sessionStorage sind ähnlich und bieten dieselben schwachstellen, weßhalb sich im weiteren Verlauf nur auf den LocalStorage bezogen wird. Bei der Speicherung eines \gls{JWT} im LocalStorage wird \gls{XSS} zur Schwachstelle. Bei \gls{XSS} handelt es sich um mit einer der bekanntesten Angriffsmethoden in der Webentwicklung. Hierbei wird beispielsweise ein Link manipuliert und mit javaScript auf den localStorage zugegriffen. Sobald sich ein Angreifer den \gls{JWT} zukommen lassen hat, ist es für diesen Möglich sich mit dem \gls{JWT} zu authentifizieren. Angular schützt seine Applikationen bereits vor \gls{XSS} in dem beispielsweise Eigenschaften und Attribute auf nicht vertrauenswürdige Werte überprüft werden.
+		
+		Die Speicherung im Cookie bietet die Möglichkeit, mit dem httpOnly-Flag, den Zugriff mittels \JS zu verbieten. Zusätzlich kann der secure-Flag gesetzt werden, der die Übertragung des Cookies nur über eine sichere \gls{HTTPS} Verbindung zulässt. Jedoch hat die Speicherung eines Cookies ebenfalls eine große Schwachstelle. \gls{CSRF} ist ebenso berühmt in der Webentwicklung wie \gls{XSS}. Bei \gls{CSRF} handelt es sich um das fälschen von Anfragen einer Webseite auf die kein Einfluss genommen werden kann. Dabei wird die Anfrage so gefälscht, dass der Server von einem legitimen eingeloggten Benutzer ausgeht.
+		
+		Bei der Entscheidung zwischen \gls{XSS} oder \gls{CSRF} muss abgewägt werden, was einem sicherer erscheint. Da sich bei der Verhinderung von \gls{XSS} sehr stark auf Angular verlassen wird, wurde sich für \gls{CSRF} entschieden. Das bedeutet, der \gls{JWT} wird in einem Cookie mit dem httpOnly- und dem secure-Flag versendet.
+	\end{description}
+
+	\subsection{Client}
+	\label{sec: client}
+	Zuest wurde sich mit der Darstellung von Komponenten für die Anmeldung und die Registrierung auseinandergesetzt. Diese sollten einem neumodischen Stil entsprechen und leicht zu bedienen sein. Hierbei bietet Angular Material eine Möglichkeit, sogenannte Dialog-Fenster zu erstellen. Um das Dialog-Fenster zu implementieren muss ein Modul namens \enquote{MatDialogModule} eingebunden werden. Angular Material bietet außerdem die Möglichkeit sogennante \enquote{tabs} zu verwenden. Diese Tabs ermöglichen den wechsel zwischen unterschiedlichem Inhalt mit zusätzlicher Animation und gleichbleibender Komponente. Aus diesen beiden Elementen von Angular Material wurde schluessendlich ein Popup-Fenster erstellt in dem der Wechsel zwischen Anmeldung (Abbildung~\ref{fig:dialog_sign_in}) und Registrierung (Abbildung~\ref{fig:dialog_sign_up}) ermöglicht wird. 
+	
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/dialog-sign-in.png}
+		\caption{Zustand nach öffnen des Dialogs}
+		\label{fig:dialog_sign_in}
+	\end{figure}
+
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/dialog-sign-up.png}
+		\caption{Zustand nach öffnen des Dialogs}
+		\label{fig:dialog_sign_up}
+	\end{figure}
+	
+	\subsection{Nebular}
+	\label{sec: nebular}
+	Nebular eine Angular Library die bereits viele Bedienelemente im benutzerfreundlichen Design enhält. Zusätzlich stellt Nebular bereits Services und Helper Koponenten mit denen der Umgang mit \gls{oAuth2} oder \gls{JWT} erleichtert wird. Da Nebular jedoch eine so umfangreiche Libraby ist und wir im Fall dieser Thesis nur auf die Struktur und das Design der Bedienelemente zurückgegriffen hätten, wäre eine vielzahl an zusätzlichen Eigenschaften Nebulas ungenutzt. Zusätzlich konzentriert sich Nebular bei Autorisierung stark auf den Clientseitigen Teil. Dies hat zur Folge, dass serverseitig und clientseitig Fehler abgefangen werden müssten. Aus diesen Gründen wurde sich gegen Nebular und für ein eigenes Design entschieden.
 	
 \end{document}
 %%% Local Variables:

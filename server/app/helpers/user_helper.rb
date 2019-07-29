@@ -14,7 +14,6 @@ module UserHelper
       token = request.cookies['JWT']
       if token
         begin
-          current_jwt = JwtHelper.decode(token)
           self.current_user = User.find(current_jwt[:user_id].to_s)
         rescue ActiveRecord::RecordNotFound => e
           raise EsqulinoError.new(e.message)
@@ -56,15 +55,5 @@ module UserHelper
     self.current_user = nil
 
     response_jwt_cookie("", 0.seconds.from_now)
-  end
-
-  private
-  def response_jwt_cookie(value, expires = 1.day.from_now)
-    response.set_cookie('JWT', {
-      value: value,
-      httponly: true,
-      expires: expires,
-      path: '/'
-    })
   end
 end
