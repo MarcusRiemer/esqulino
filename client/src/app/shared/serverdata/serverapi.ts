@@ -43,6 +43,10 @@ export class ServerApi {
     return (`${this._apiBaseUrl}/identities/list`)
   }
 
+  getChangeRolesUrl(): string {
+    return (`${this._apiBaseUrl}/user/change_roles`)
+  }
+
   getSignOutUrl(): string {
     return (`${this._apiBaseUrl}/auth/sign_out`)
   }
