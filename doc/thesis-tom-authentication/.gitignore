@@ -1,6 +1,8 @@
 GIT_REV
 auto
 Tom - Thesis.pdf
+*.acn
+*.ist
 *.aux
 *.log
 *.out
