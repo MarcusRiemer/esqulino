@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { UserService } from './user.service';
-import { ClientProviderDescription } from './provider.description';
+import { AvailableProvidersDescription } from './provider.description';
 import { ServerApiService } from '../serverdata';
 
 @Component({
@@ -14,9 +14,9 @@ export class ProviderButtonComponent implements OnInit {
   constructor(
     private _serverApi: ServerApiService,
     private _userService: UserService
-  ) {}
+  ) { }
 
-  public provider: ClientProviderDescription;
+  public provider: AvailableProvidersDescription;
 
   public ngOnInit(): void {
     this._userService.providerList$.value.subscribe(a => {

@@ -14,7 +14,7 @@ export interface ChangePrimaryEmailDescription {
   primaryEmail: string;
 }
 
-export interface ClientProviderDescription {
+export interface AvailableProvidersDescription {
   name: string;
   urlName: string;
   icon: string;

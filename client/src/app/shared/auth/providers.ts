@@ -1,6 +1,6 @@
-import { ClientProviderDescription } from './provider.description';
+import { AvailableProvidersDescription } from './provider.description';
 
-export const providers: ClientProviderDescription[] = [
+export const providers: AvailableProvidersDescription[] = [
   {
     name: "Github",
     urlName: "github",
