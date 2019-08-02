@@ -13,7 +13,7 @@ import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
 import { UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './../auth/user.description';
-import { ClientProviderDescription } from './../auth/provider.description';
+import { AvailableProvidersDescription } from './../auth/provider.description';
 import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 
 
@@ -59,8 +59,8 @@ export class ServerDataService {
     this._http.get<ServerProviderDescription>(this._serverApi.getUserIdentitiesUrl())
   )
 
-  readonly getProviders = new CachedRequest<ClientProviderDescription[]>(
-    this._http.get<ClientProviderDescription[]>(this._serverApi.getProvidersUrl())
+  readonly getProviders = new CachedRequest<AvailableProvidersDescription[]>(
+    this._http.get<AvailableProvidersDescription[]>(this._serverApi.getProvidersUrl())
   )
 
   changeRoles$(userId: string): Observable<UserDescription> {
