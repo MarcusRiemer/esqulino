@@ -159,6 +159,10 @@ class PasswordIdentity < Identity
   end
 
   def self.client_informations
-    return nil
+    return ({
+      name: "E-Mail",
+      icon: "fa-envelope-o",
+      color: "Maroon"
+    })
   end
 end

@@ -1,47 +1,46 @@
-  <!-- If a message is passed to the dialog -->
-  <div *ngIf="this.data && this.data.message"
-    mat-dialog-header
-    class="alert"
-    [ngClass]="{'alert-danger': type=='error', 'alert-warning': type=='warning'}"
-    role="alert">
+<!-- If a message is passed to the dialog -->
+<div
+  *ngIf="this.data && this.data.message"
+  mat-dialog-header
+  class="alert"
+  [ngClass]="{
+    'alert-danger': type == 'error',
+    'alert-warning': type == 'warning'
+  }"
+  role="alert"
+>
+  {{ message }}
+</div>
 
-    {{message}}
+<div mat-dialog-content class="flex-column authentication">
+  <div>
+    <h1>{{ isSignIn() ? "Anmelden" : "Registrieren" }}</h1>
   </div>
+  <providers-all-buttons
+    (trigger)="showEmailContent()">
+  
+  </providers-all-buttons>
 
-<div mat-dialog-content
-  class="d-flex justify-content-center authentication">
-    <mat-tab-group
-      mat-dialog-content
-      dynamicHeight
-      (selectedTabChange)="changeToSignInOrSignUp()">
+  <ng-container *ngIf="emailContent">
+    <hr/>
 
-    <mat-tab label="Sign in">
-      <providers-all-buttons></providers-all-buttons>
-
-      <hr>
-      <sign-in
-        *ngIf="signInOrUp"
+    <ng-container *ngIf="isSignIn()">
+      <sign-in *ngIf="!secondContent"
         (content)="changeContent()">
       </sign-in>
-
-      <request-reset-password
-        *ngIf="!signInOrUp">
+      <request-reset-password 
+        *ngIf="secondContent">
       </request-reset-password>
+    </ng-container>
 
-    </mat-tab>
-    <mat-tab label="Sign up">
-      <providers-all-buttons></providers-all-buttons>
-
-      <hr>
-      <sign-up 
-        *ngIf="signInOrUp"
+    <ng-container *ngIf="!isSignIn()">
+      <sign-up *ngIf="!secondContent"
         (content)="changeContent()">
       </sign-up>
 
       <request-verify-email
-        *ngIf="!signInOrUp">
+        *ngIf="secondContent">
       </request-verify-email>
-    </mat-tab>
-  </mat-tab-group>
+    </ng-container>
+  </ng-container>
 </div>
-

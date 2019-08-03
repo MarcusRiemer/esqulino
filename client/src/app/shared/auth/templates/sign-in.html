@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center flex-column authentication">
+<div class="flex-column authentication align-items-center">
   <validate-input
     icon="envelope-o"
     [(value)]="signInData.email">
@@ -23,9 +23,9 @@
 
   <div class="row reset-password-link-text">
     <div>
-      Forgot your password?
+      Passwort vergessen?
       <a (click)="onResetPassword()">
-        Click here
+        Klicke hier
       </a>
     </div>
   </div>
@@ -35,6 +35,6 @@
     color="primary"
     (click)="onSignIn()">
 
-    Sign in
+    Anmelden
   </button>
 </div>

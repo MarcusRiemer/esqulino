@@ -1,10 +1,10 @@
-import { AuthDialogComponent } from "./../auth/auth-dialog.component";
 import { MatDialog } from "@angular/material";
 import { CanActivate, Router, UrlTree } from "@angular/router";
 import { Injectable } from "@angular/core";
-
-import { UserService } from "../auth/user.service";
 import { first } from "rxjs/operators";
+
+import { AuthDialogComponent } from "./../auth/auth-dialog.component";
+import { UserService } from "../auth/user.service";
 
 @Injectable()
 export class LoggedInGuard implements CanActivate {
@@ -23,12 +23,19 @@ export class LoggedInGuard implements CanActivate {
     console.log(`LoggedIn Guard -> ${loggedIn}`);
 
     if (!loggedIn) {
+      // Waiting for a login
       await this._matDialog
-        .open(AuthDialogComponent, { data: { message: "You need to login to view this content!", type: "error" } })
+        .open(AuthDialogComponent, {
+          data: {
+            type: "signIn",
+            message: "You need to login to view this content!",
+            message_type: "error"
+          }
+        })
         .afterClosed()
         .pipe(first())
         .toPromise();
-
+      // After closing without sign in redirecting to base url
       console.log("Dialog closed");
       return this._router.parseUrl("/");
     }

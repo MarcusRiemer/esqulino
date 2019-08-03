@@ -11,10 +11,10 @@ export class AuthDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) readonly data: AuthDialogDataDescription
   ) { }
 
-  public signInOrUp: boolean = true;
-
   private _message: string;
   private _type: string;
+  private _secondContent: boolean = false;
+  private _emailContent: boolean = false;
 
   public get message(): string {
     return this._message;
@@ -32,23 +32,44 @@ export class AuthDialogComponent implements OnInit {
     this._type = type;
   }
 
+  public get secondContent(): boolean {
+    return this._secondContent;
+  }
+
+  public get emailContent(): boolean {
+    return this._emailContent;
+  }
+
+  public set emailContent(status: boolean) {
+    this._emailContent = status;
+  }
+
   ngOnInit(): void {
     if (this.data) {
       console.log(`AuthDialog-Data: ${JSON.stringify(this.data)}`)
       this.message = this.data.message;
-      this.type = this.data.type || 'error';
+      this.type = this.data.message_type || 'error';
     }
   }
 
+  public showEmailContent(): void {
+    this.emailContent = true;
+  }
+
+  public static showDialog(dialog: MatDialog, data: AuthDialogDataDescription) {
+    dialog.open(AuthDialogComponent, { data: data });
+  }
+
+  public isSignIn(): boolean {
+    return this.data.type === "signIn";
+  }
+
+  /**
+   * This function switches between the second
+   * content and the sign in / up.
+   * For example, the second content is password reset
+   */
   public changeContent(): void {
-    this.signInOrUp = false;
-  }
-
-  public changeToSignInOrSignUp(): void {
-    this.signInOrUp = true;
-  }
-
-  public static showDialog(dialog: MatDialog) {
-    dialog.open(AuthDialogComponent);
+    this._secondContent = !this.secondContent;
   }
 }
