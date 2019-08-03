@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center flex-column authentication">
+<div class="flex-column authentication align-items-center">
   <validate-input
     icon="envelope-o"
     [(value)]="signUpData.email">
@@ -45,7 +45,7 @@
 
   <div class="row resend-activation-link-text">
     <div>
-      Send activation link again? <a (click)="onSendVerifyLink()">Click here</a>
+      Aktivierungsmail nicht erhalten? <a (click)="onSendVerifyLink()">Klicke hier</a>
     </div>
 
   </div>
@@ -55,6 +55,6 @@
     color="primary"
     (click)="onSignUp()">
 
-    Sign up
+    Registrieren
   </button>
 </div>

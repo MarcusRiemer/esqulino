@@ -31,7 +31,7 @@ class UserController < ApplicationController
     if (not identity) then
       return error_response("No user was found")
     end
-    user = User.find_by(id: identity[:user_id])
+    user = identity.user
 
     if (not user) then
       return error_response("No user was found")

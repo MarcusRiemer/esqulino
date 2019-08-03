@@ -7,8 +7,7 @@ class User < ApplicationRecord
   has_many :identities
   has_many :news
 
-  validates_length_of :display_name, within: 3..20
-  # validates_format_of :display_name, :with => /\A[A-Za-z0-9]*\z/i
+  validates_format_of :display_name, :with => /\A^[a-zA-Z0-9]{3}.{0,17}$\z/i
   validates_uniqueness_of :email, :allow_nil => true
 
   def self.guest

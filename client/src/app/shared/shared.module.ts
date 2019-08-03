@@ -42,7 +42,7 @@ import { NewsDetailsComponent } from './news-details.component';
 import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
 import { FocusDirective } from './focus-element.directive';
-import { UserButtonComponent } from './auth/user-button.component';
+import { UserButtonsComponent } from './auth/user-buttons.component';
 import { AuthDialogComponent } from './auth/auth-dialog.component';
 import { LoginWrapperComponent } from './auth/login-wrapper.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
@@ -106,7 +106,7 @@ const materialModules = [
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
     AuthDialogComponent,
-    UserButtonComponent,
+    UserButtonsComponent,
     LoginWrapperComponent,
     ProviderButtonComponent,
     SignInComponent,
@@ -140,7 +140,7 @@ const materialModules = [
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
     AuthDialogComponent,
-    UserButtonComponent,
+    UserButtonsComponent,
     LoginWrapperComponent,
     ProviderButtonComponent,
     SignInComponent,

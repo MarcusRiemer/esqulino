@@ -7,10 +7,10 @@ import { UserService } from './user.service';
 
 
 @Component({
-  selector: 'user-button',
-  templateUrl: './templates/user-button.html'
+  selector: 'user-buttons',
+  templateUrl: './templates/user-buttons.html'
 })
-export class UserButtonComponent {
+export class UserButtonsComponent {
   constructor(
     private _dialog: MatDialog,
     private _userService: UserService,
@@ -22,8 +22,8 @@ export class UserButtonComponent {
   /**
    * Opens an dialog for sign in or sign up
    */
-  public openDialog(): void {
-    AuthDialogComponent.showDialog(this._dialog)
+  public openDialog(type: "signIn" | "signUp"): void {
+    AuthDialogComponent.showDialog(this._dialog, { type: type })
     // If youre on the base url and your loggin in, the dialog will be closed
     this._userService.isLoggedIn$.subscribe(
       loggedIn => {

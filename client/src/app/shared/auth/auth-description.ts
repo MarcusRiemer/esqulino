@@ -15,6 +15,7 @@ export interface ChangePasswordDescription {
 }
 
 export interface AuthDialogDataDescription {
-  message: string;
-  type: "error" | "warning"
+  type: "signIn" | "signUp";
+  message?: string;
+  message_type?: "error" | "warning"
 }

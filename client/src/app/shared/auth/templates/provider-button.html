@@ -1,11 +1,10 @@
-<ng-container *ngIf="provider">
-  <button
-    mat-raised-button
-    color="primary"
-    [style.backgroundColor]="provider.color"
-    (click)="onSignIn(provider.urlName)"
-  >
-    <i class="fa {{ provider.icon }}" aria-hidden="true"></i>
-    {{ provider.name }}
-  </button>
-</ng-container>
+<button
+  mat-raised-button
+  color="primary"
+  [style.backgroundColor]="provider.color"
+  (click)="onClick()"
+>
+  <i class="fa {{ provider.icon }}" aria-hidden="true"></i>
+  {{ provider.name }}
+</button>
+
