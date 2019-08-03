@@ -41,8 +41,7 @@ RSpec.describe "identities controller" do
       get "/api/identities/list"
       json_response = JSON.parse(response.body)
 
-      expect(json_response.length).to eq(3)
-      expect(json_response.filter { |k| k[:name].eql? "PasswordIdentity" }).to eq([])
+      expect(json_response.length).to eq(4)
     end
   end
 
