@@ -1,9 +1,9 @@
 module UserHelper
   include JwtHelper
   
-  def user_information
+  def user_information(current = nil)
     begin
-      return (private_claim_response || current_user.informations)
+      return current ? current_user.informations : (private_claim_response || current_user.informations)
     rescue EsqulinoError => e
       raise EsqulinoError.new(e.message)
     end
@@ -42,6 +42,7 @@ module UserHelper
       response_jwt_cookie(token)
     end
   end
+
 
   def sign_out!
     if (signed_in?) then
