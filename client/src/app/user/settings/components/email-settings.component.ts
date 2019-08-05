@@ -1,22 +1,28 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
 
 import { UserService } from '../../../shared/auth/user.service';
 import { ChangePrimaryEmailDescription, ServerProviderDescription } from '../../../shared/auth/provider.description';
-import { UserEmailDescription } from '../../../shared/auth/user.description';
-import { AddEmailDialogComponent } from './add-email-dialog.component';
 
 @Component({
   selector: "email-settings",
   templateUrl: '../templates/email-settings.html'
 })
-export class EmailSettingsComponent {
-  private identities$ = this._userService.identities$;
+export class EmailSettingsComponent implements OnInit {
+  public identities$ = this._userService.identities$;
 
   constructor(
     private _userService: UserService,
-    private _dialog: MatDialog
-  ) {
+  ) { }
+
+  public primaryEmailData: ChangePrimaryEmailDescription = {
+    primaryEmail: "Please add an e-mail to your account"
+  };
+  //All distinct e-mails from all providers  
+  public emails: Set<string> = new Set();
+  public identities: ServerProviderDescription;
+
+  // TODO-TOM move code into template / Promise
+  public ngOnInit(): void {
     this.identities$.value.subscribe(
       identities => {
         this.identities = identities;
@@ -29,59 +35,15 @@ export class EmailSettingsComponent {
     )
   }
 
-  public primaryEmailData: ChangePrimaryEmailDescription = {
-    primaryEmail: "Please add an e-mail to your account"
-  };
-  //All distinct e-mails from all providers  
-  public emails: Set<string> = new Set();
-  public identities: ServerProviderDescription;
-  public newEmailData: UserEmailDescription = {
-    email: undefined,
-  }
-
-  public isSelectedEmailCurrentPrimary(): boolean {
-    return this.identities.primary === this.primaryEmailData.primaryEmail;
-  }
-
-  public existsOnePasswordIdentity(): boolean {
-    return this.identities.providers.some(v => v.type == "PasswordIdentity")
-  }
-
-  public existingEmail(): boolean {
-    return this.identities.providers.some(v =>
-      v.type == "PasswordIdentity" && v.email == this.newEmailData.email
-    )
-  }
-
-  /**
-   * Adds a new e-mail to the signed in user.
-   * Checks if the new mail is not already linked with this account and
-   * the value is different to undefined. 
-   */
-  public onAddEmail() {
-    if (!this.existingEmail()) {
-      if (this.newEmailData.email) {
-        if (this.existsOnePasswordIdentity()) {
-          this._userService.addEmail$(this.newEmailData).subscribe()
-        } else {
-          // If there exists no identity with password, ask for password
-          this._dialog.open(AddEmailDialogComponent, {
-            height: '240px',
-            minWidth: '20em',
-            data: this.newEmailData
-          });
-        }
-      } else alert("Diese E-Mail kann nicht hinzugefügt werden")
-    } else alert("Diese E-Mail ist bereits an deinen Account gebunden!")
+  public isPrimaryEmailChange(): boolean {
+    return this.identities.providers.some(v => v.changes.primary !== undefined && v.changes.primary !== null)
   }
 
   public onChangePrimaryEmail(): void {
-    if (!this.isSelectedEmailCurrentPrimary()) {
-      if (this.emails.has(this.primaryEmailData.primaryEmail)) {
-        this._userService.sendChangePrimaryEmail$(this.primaryEmailData)
-          .subscribe()
+    if (this.emails.has(this.primaryEmailData.primaryEmail)) {
+      this._userService.sendChangePrimaryEmail$(this.primaryEmailData)
+        .subscribe()
 
-      } else alert("Diese E-Mail wurde noch nicht deinem Konto hinzugefügt")
     }
   }
 }

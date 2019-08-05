@@ -134,6 +134,7 @@ export class UserService {
         _ => {
           this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
           this.identities$.refresh();
+          this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["message"]}`)
       )
@@ -146,6 +147,7 @@ export class UserService {
         _ => {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
           this.identities$.refresh();
+          this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["message"]}`)
       )

@@ -7,25 +7,40 @@
 <div mat-dialog-content
   class="add-email-dialog-content">
 
-  <validate-input 
-    icon="key"
-    [(value)]="newEmailData.password">
+  <label>
+    Füge eine neue E-Mail deinem Konto hinzu.
+    <validate-input
+      icon="envelope-o"
+      [(value)]="newEmailData.email">
 
-    <input #inputRef
-      type="password"
-      class="form-control"
-      placeholder="Password">
-  </validate-input>
+      <input #inputRef      
+        type="email"
+        class="form-control"
+        placeholder="Insert a new e-mail">
+    </validate-input>
+  </label>
 
-  <validate-input 
+  <ng-container *ngIf="!existsPasswordIdentity()">
+    <validate-input 
       icon="key"
-      [(value)]="passwordConfirmation">
+      [(value)]="newEmailData.password">
 
-    <input #inputRef
-      type="password"
-      class="form-control"
-      placeholder="Confirm password">
-  </validate-input>
+      <input #inputRef
+        type="password"
+        class="form-control"
+        placeholder="Password">
+    </validate-input>
+
+    <validate-input 
+        icon="key"
+        [(value)]="passwordConfirmation">
+
+      <input #inputRef
+        type="password"
+        class="form-control"
+        placeholder="Confirm password">
+    </validate-input>
+  </ng-container>
 </div>
 
 <div mat-dialog-actions

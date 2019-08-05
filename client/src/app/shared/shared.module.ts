@@ -62,6 +62,9 @@ import { IsUserGuard } from './guards/is-user.guard';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { MayPerformComponent } from './may-perform.component';
 import { PerformDataService } from './authorisation/perform-data.service';
+import { MessageDialogComponent } from './message-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material';
+import { MasterGuard } from './guards/master-guard';
 
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
@@ -71,7 +74,7 @@ const materialModules = [
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
   MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
   MatNativeDateModule, MatInputModule, MatFormFieldModule,
-  MatCheckboxModule
+  MatCheckboxModule, MatProgressSpinnerModule
 ]
 
 /**
@@ -119,7 +122,8 @@ const materialModules = [
     ValidateInputComponent,
     ProviderShowComponent,
     MayPerformComponent,
-    ProvidersAllButtonsComponent
+    ProvidersAllButtonsComponent,
+    MessageDialogComponent
   ],
   exports: [
     CommonModule,
@@ -152,9 +156,10 @@ const materialModules = [
     ChangePasswordComponent,
     MayPerformComponent,
     ProviderShowComponent,
+    MessageDialogComponent,
     ProvidersAllButtonsComponent
   ],
-  entryComponents: [AuthDialogComponent, ChangePasswordComponent]
+  entryComponents: [AuthDialogComponent, ChangePasswordComponent, MessageDialogComponent]
 })
 export class SharedAppModule {
   static forRoot(): ModuleWithProviders {
@@ -173,6 +178,7 @@ export class SharedAppModule {
         SideNavService,
         ...dataServices,
         LoggedInGuard,
+        MasterGuard,
         IsUserGuard,
         PerformDataService,
         IsAdminGuard
