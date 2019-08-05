@@ -69,6 +69,10 @@ class UserController < ApplicationController
       return render status: :ok
     end
 
+    if current_user.primary_email_change? then
+      return error_response("You are already changing the primary email")
+    end
+
     validated_identities = current_user.all_validated_emails
 
     identity = Identity.where(user_id: current_user.id)

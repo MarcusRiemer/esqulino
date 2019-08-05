@@ -10,6 +10,9 @@ class Github < Identity
               :link => self.link,
               :email => self.email,
               :confirmed => self.confirmed?,
+              :changes => {
+                primary: self.change_primary_token_exp
+              }
             })
   end
 

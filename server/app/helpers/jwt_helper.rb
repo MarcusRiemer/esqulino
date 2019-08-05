@@ -31,7 +31,8 @@ module JwtHelper
       to_return = {
         user_id: current_jwt[:user_id],
         display_name: current_jwt[:display_name],
-        roles: current_jwt[:roles]
+        roles: current_jwt[:roles],
+        email: current_jwt[:email]
       }
     end
     return to_return

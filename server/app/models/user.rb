@@ -30,7 +30,8 @@ class User < ApplicationRecord
     return  {
       user_id: self.id,
       display_name: self.display_name,
-      roles: self.role_names
+      roles: self.role_names,
+      email: self.email
     }
   end
 
@@ -40,6 +41,10 @@ class User < ApplicationRecord
     email = auth[:info][:email]
 
     new(display_name: name, email: email)
+  end
+
+  def self.has_email?(email)
+    find_by(email: email)
   end
 
   def all_providers()
@@ -80,6 +85,16 @@ class User < ApplicationRecord
   # Sets the primary e-mail of a user
   def set_email(email)
     self.email = email
+  end
+
+  def primary_email_change?
+    identity = self.identities.find { |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) }
+    return identity ? (not identity.email.eql?(self.email)) : false
+  end
+
+  def primary_email_change_time
+    identity = self.identities.find { |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) }
+    return identity.change_primary_token_exp
   end
 
   # Returns a nicely readable representation of id and name

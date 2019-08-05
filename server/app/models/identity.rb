@@ -39,11 +39,18 @@ class Identity < ActiveRecord::Base
               :type => self.type,
               :email => self.email,
               :confirmed => self.confirmed?,
+              :changes => {
+                primary: self.change_primary_token_exp
+              }
             })
   end
 
   def change_primary_email_token
     return self.own_data["change_primary_email_token"]
+  end
+
+  def change_primary_token_exp
+    return self.own_data["change_primary_token_exp"]
   end
 
   def set_primary_email_token
@@ -77,6 +84,11 @@ class Identity < ActiveRecord::Base
       identity = Github.create_with_auth(auth, user)
     else
       raise RuntimeError.new('Unknown provider')
+    end
+
+    # checks if someone has already registered this email
+    if ((identity.email && User.has_email?(identity.email) && (not user.email.eql?(identity.email)))) then
+      raise EsqulinoError.new("E-mail already taken")
     end
 
     # If the user has no primary e-mail
