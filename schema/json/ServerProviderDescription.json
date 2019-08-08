@@ -5,6 +5,21 @@
     "ProviderDescription": {
       "additionalProperties": false,
       "properties": {
+        "changes": {
+          "additionalProperties": false,
+          "properties": {
+            "primary": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "primary"
+          ],
+          "type": "object"
+        },
         "confirmed": {
           "type": "boolean"
         },
@@ -24,7 +39,8 @@
       "required": [
         "id",
         "type",
-        "confirmed"
+        "confirmed",
+        "changes"
       ],
       "type": "object"
     },
