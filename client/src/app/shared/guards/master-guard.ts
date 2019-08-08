@@ -1,10 +1,10 @@
-import {Injectable, Injector} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from "@angular/router";
+import { Injectable, Injector } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from "@angular/router";
 
 @Injectable()
 export class MasterGuard implements CanActivate {
 
-    constructor(private injector: Injector) {}
+    constructor(private injector: Injector) { }
 
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {
         let guards = route.data.guards || [];

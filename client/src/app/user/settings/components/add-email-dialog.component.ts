@@ -15,8 +15,8 @@ export class AddEmailDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: ServerProviderDescription,
     private dialogRef: MatDialogRef<AddEmailDialogComponent>,
     private _userService: UserService
-  ) {}
-  
+  ) { }
+
   private identities = this.data;
 
   public passwordConfirmation: string;
@@ -24,14 +24,14 @@ export class AddEmailDialogComponent {
   public newEmailData: UserAddEmailDescription = {
     email: undefined,
     password: undefined,
-  } 
+  }
 
 
   public onAddEmail(): void {
     if (this.newEmailData.password) {
-      if (this.passwordConfirmation === this.newEmailData.password){
+      if (this.passwordConfirmation === this.newEmailData.password) {
         this._userService.addEmail$(this.newEmailData)
-          .subscribe( _ => this.dialogRef.close())
+          .subscribe(_ => this.dialogRef.close())
 
       } else alert("Deine Passwörter stimmen nicht über ein!")
     } else alert("Bitte wähle ein Passwort.")
