@@ -7,7 +7,7 @@ def m
   SeedManager.instance
 end
 
-# Actual definitions of rake tasks
+# Actual definitions of rake tasks for seeding
 namespace :blattwerkzeug do
   namespace :file_storage do
     task :delete_all => :environment do |t, args|
