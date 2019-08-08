@@ -9,7 +9,7 @@ export interface ProviderDescription {
   link?: string;
   email?: string;
   changes: {
-    primary: string;
+    primary: string | null;
   }
 }
 
