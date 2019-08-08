@@ -14,8 +14,7 @@ export class ProviderButtonComponent {
   @Output() trigger = new EventEmitter<void>()
 
   constructor(
-    private _serverApi: ServerApiService,
-    private _userService: UserService
+    private _serverApi: ServerApiService
   ) { }
 
   public onClick() {

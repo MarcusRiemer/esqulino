@@ -1,7 +1,7 @@
 import {
-  Component, Input, EventEmitter, 
-  Output, ElementRef, HostListener, 
-  ContentChild, Renderer2, AfterViewInit, 
+  Component, Input, EventEmitter,
+  Output, ElementRef, HostListener,
+  ContentChild, Renderer2, AfterViewInit,
   ViewChild
 } from "@angular/core";
 
@@ -21,20 +21,20 @@ export class ValidateInputComponent implements AfterViewInit {
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() clicked = new EventEmitter<void>();
 
-  @ViewChild('spanRef', {static: false}) spanRef: ElementRef; 
-  @ContentChild("inputRef", {static: false}) inputRef: ElementRef;
+  @ViewChild('spanRef', { static: false }) spanRef: ElementRef;
+  @ContentChild("inputRef", { static: false }) inputRef: ElementRef;
 
   @HostListener('change') onChange() {
     this.emitInput()
   }
 
-  constructor(private _renderer: Renderer2) {}
+  constructor(private _renderer: Renderer2) { }
 
   public getErrorMessage(): string {
     return this.error
   }
 
-  public ngAfterViewInit(): void  {
+  public ngAfterViewInit(): void {
     if (this.clickAble) {
       this._renderer.setStyle(
         this.spanRef.nativeElement,
@@ -81,8 +81,11 @@ export class ValidateInputComponent implements AfterViewInit {
   }
 
   public emitInput(): void {
-    if (this.isInputValid()) {
-      this.valueChange.emit(this.getValueOfInput())
-    }
+    const value = this.isInputValid()
+      ? this.getValueOfInput()
+      : undefined
+      ;
+
+    this.valueChange.emit(value)
   }
 }
