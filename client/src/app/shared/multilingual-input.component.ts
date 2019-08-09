@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { Component, Input, LOCALE_ID, Inject, Output, EventEmitter} from '@angular/core';
+import { Component, Input, LOCALE_ID, Inject, Output, EventEmitter } from '@angular/core';
 
 import { locales } from './change-language.component'
 import { MultilingualString } from './multilingual-string.description';
@@ -11,7 +11,7 @@ import { MultilingualString } from './multilingual-string.description';
 export class MultiLingualInputComponent {
   @Input() editingString: MultilingualString;
   @Input() control: string = 'input';
-  @Input() language: string = this.localeId; 
+  @Input() language: string = this.localeId;
   @Input() placeholder: string = '';
 
   @Output() editingStringChange = new EventEmitter<MultilingualString>();
@@ -19,11 +19,12 @@ export class MultiLingualInputComponent {
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
     private _activeRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   public readonly languages = locales;
 
-  public readonly mode = this._activeRoute.queryParams || 'single'
+  // TODO: Read mode from URL? Or from somewhere else?
+  public readonly mode: "single" | "translation" = 'single'
 
   public get currentString() {
     return (this.editingString)
@@ -53,7 +54,7 @@ export class MultiLingualInputComponent {
   }
 
   /**
-   * Add a new Object to the current String if there´s no one  
+   * Add a new Object to the current String if there´s no one
    * and add an empty string to the current language
    */
   public addObject(): void {
