@@ -1,0 +1,64 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 803ffd84-cea4-4339-907a-c8264fdf7be9
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Anzahl Pokémon je Typ
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"joins": [{"name": "innerJoinOn", "children": {"on": [{"name":
+    "binaryExpression", "children": {"lhs": [{"name": "columnName", "language": "sql",
+    "properties": {"columnName": "id", "refTableName": "type"}}], "rhs": [{"name":
+    "columnName", "language": "sql", "properties": {"columnName": "type_id", "refTableName":
+    "pokemon_to_type"}}], "operator": [{"name": "relationalOperator", "language":
+    "sql", "properties": {"operator": "="}}]}, "language": "sql"}], "table": [{"name":
+    "tableIntroduction", "language": "sql", "properties": {"name": "pokemon_to_type"}}]},
+    "language": "sql"}, {"name": "innerJoinOn", "children": {"on": [{"name": "binaryExpression",
+    "children": {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
+    "id", "refTableName": "pokemon"}}], "rhs": [{"name": "columnName", "language":
+    "sql", "properties": {"columnName": "pokemon_id", "refTableName": "pokemon_to_type"}}],
+    "operator": [{"name": "relationalOperator", "language": "sql", "properties": {"operator":
+    "="}}]}, "language": "sql"}], "table": [{"name": "tableIntroduction", "language":
+    "sql", "properties": {"name": "pokemon"}}]}, "language": "sql"}], "tables": [{"name":
+    "tableIntroduction", "language": "sql", "properties": {"name": "type"}}]}, "language":
+    "sql"}], "where": [], "select": [{"name": "select", "children": {"columns": [{"name":
+    "columnName", "language": "sql", "properties": {"columnName": "name_de", "refTableName":
+    "type"}}, {"name": "functionCall", "children": {"arguments": []}, "language":
+    "sql", "properties": {"name": "COUNT"}}]}, "language": "sql"}], "groupBy": [{"name":
+    "groupBy", "children": {"expressions": [{"name": "columnName", "language": "sql",
+    "properties": {"columnName": "id", "refTableName": "type"}}]}, "language": "sql"}],
+    "orderBy": [{"name": "orderBy", "children": {"expressions": [{"name": "functionCall",
+    "children": {"arguments": []}, "language": "sql", "properties": {"name": "COUNT"}}]},
+    "language": "sql"}]}, "language": "sql"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-08-10 11:12:03.147351'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-08-10 11:15:10.826412'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: "SELECT type.name_de, COUNT()\nFROM type\n\tINNER JOIN pokemon_to_type
+    ON type.id = pokemon_to_type.type_id\n\tINNER JOIN pokemon ON pokemon.id = pokemon_to_type.pokemon_id\nGROUP
+    BY type.id\nORDER BY COUNT() DESC"
+new_record: false
+active_record_yaml_version: 2
