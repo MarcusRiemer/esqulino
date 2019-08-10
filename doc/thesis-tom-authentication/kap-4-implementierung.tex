@@ -106,7 +106,7 @@ Da Blattwerkzeug bereits eine Passwortabfrage eingebaut hatte (Listing \ref{lst:
 	\item[may\_perform]\hfill\\
 	Sobald sich mit den Rollen beschäftigt wurde, stellte sich die Frage wie die Bedienelemente in Abhängigkeit von den Rollen Clientseitig angezeigt werden sollten. Hierbei gab es die Möglichkeit ein eigenes Pundit (Sektion \ref{sec: pundit}) ähnliches Mustur zu implementieren oder den Server bei jedem Bedienelement zu fragen, ob der aktuelle Benutzer Zugriff auf das Bedienelement hat. In der Thesis wurde sich für den zweiten Weg entschieden, da bei einer zusätzlichen Clientseitigen Überprüfung, Client und Server gepflegt werden müssten. Sollte es vorkommen, dass die Pflege des Serverseitigen-Teils vergessen wurde, stellt dieses ein Sicherheitsrisiko dar. Clientseitige Anwendungen werden auf dem Entgerät eines Benutzers ausgeführt. Folgedessen besteht die Möglichkeit die Anwendung zu manipulieren.
 
-	Die Serverseitige Überprüfung der Bedienelemente wurde mittels der may\_perform Funktion realisiert. Diese erhält vom Client eine Liste an Daten in der jedes Element ein Bedienelement darstellt. In der may\_perform Funktion wird jedes Element der Liste durchlaufen und auf das Zugriffsrecht des aktuellen Benutzers geprüft. Dies geschieht in dem eine Instanz einer Policy erstellt wird die zu der jeweiligen Resource, beispielsweise der Projekte (Listing \ref{lst:project_policy}) gehört. Hierbei wird die Funktion die auf ihren Zugriff geprüft werden soll, ebenfalls vom Client mit an den Server gesendet. Diese wird schlussendlich auf der erstellten Instanz ausgeführt. Das Ergebnis der Aufgerufenen Policy Funktion wird in einem Array gespeichert und sobald die Liste durchlaufen wurde an den Client übermittelt. Die Nutzung des Arrays und der übermittelten Liste wird in der Client Sektion \ref{sec: client} erläutert.
+	Die Serverseitige Überprüfung der Bedienelemente wurde mittels der may\_perform Funktion realisiert. Diese erhält vom Client eine Liste an Daten in der jedes Element ein Bedienelement darstellt. In der may\_perform Funktion wird jedes Element der Liste durchlaufen und auf das Zugriffsrecht des aktuellen Benutzers geprüft. Dies geschieht in dem aus den übermittelten Daten eine Instanz einer Policy erstellt wird die zu der jeweiligen Ressource, beispielsweise der Projekte (Listing \ref{lst:project_policy}) gehört. Hierbei wird die Funktion die auf ihren Zugriff geprüft werden soll, ebenfalls vom Client mit an den Server gesendet. Diese wird schlussendlich auf der erstellten Instanz ausgeführt. Das Ergebnis der Aufgerufenen Policy Funktion wird in einem Array gespeichert und sobald die Liste durchlaufen wurde an den Client übermittelt. Die Nutzung des Arrays und der übermittelten Liste wird in der Client Sektion \ref{sec: client} erläutert.
 \end{description}
 
 \subsubsection{Benutzereinstellungen}
@@ -237,11 +237,28 @@ Die Unterteilung der einzelnen Codeabschnitte in eigene Komponenten hat den Nach
 Eine Wrapper-Komponente die dynamisch ihren Inhalt lädt und gleichzeitig bedingt auf den Inhalt achtet, verhindert erhöhte Coderedundanz und ermöglicht eine einfache Erweiterbarkeit oder Veränderung der Komponente. Aus diesen Gründen wurde sich für diese Methode entschieden.
 \begin{description}
 	\item[may\_perform]\hfill\\
-	Bedienelemente die von der jeweiligen Benuterrolle abhängen, wie beispielsweise der Speichern-Knopf eines Projektes, werden mittels may\_perform Wrapper-Komponente überprüft und dargestellt. Damit eine Überprüfung serverseitig stattfinden kann, wurde sich vorerst mit den zu übermittelnden Daten beschäftigt.
-	eine Anfrage an den Server gestellt (Sektion \ref{sec:server-authorisation}).  
+	Bedienelemente, die von der jeweiligen Benutzerrolle abhängen, wie beispielsweise das Bedienelement zum Speichern eines Projektes, werden mittels may\_perform Wrapper-Komponente überprüft und dargestellt. Da es sich bei Projekten um Resourcen handelt, die nur bei spezifischer Berechtigung bearbeitet werden dürfen, müssen die Bedienelemente der jeweiligen Resource ausgeblendet werden. Sollten die Bedienelemente weiterhin dargestellt werden, kann dies zu einer schlechten User Experience führen\todo{Warum ?}. Damit eine Überprüfung serverseitig stattfinden kann, wurde sich vorerst mit den zu übermittelnden Daten beschäftigt. Für die Überprüfung der jeweiligen Funktion eines Bedienelementes, muss der Client die auf dem Server auszuführende Funktion angeben. Hierbei musste darauf geachtet werden, dass serverseitig nur Funktionen einer Policy ausgeführt werden können (Sektion \ref{sec:server-authorisation}). Desweiteren benötigt der Server die Informationen auf welcher Ressource diese Funktion ausgeführt werden soll. Sollte es sich bei der Überprüfung um eine spezifische Ressource handeln, muss ebenfalls die ID der Ressource übermittelt werden.
 	
+	\lstinputlisting[language=JavaScript, style=CodeView, caption=Interface der zu übermittelnden Daten, captionpos=b]{snippets/may-perform.ts}
+	
+	Die may-perform Daten wurden in eine Basisklasse und verschiedene abgeleitete Klassen unterteilt. Dabei beinhaltet die Basisklasse jegliche Daten, die Resourcen-übergreifend sind. Die abgeleiteten Klassen beinhalten spezialisierte Daten für eine Resource (Abbildung \ref{fig:client-data-pattern}). Der Service, der zum Aufruf dieser Daten injiziert wird, erstellt beim Aufruf einer Funktion, eine Instanz dieser Klasse. Ein Vorteil dieses Musters ist, dass die Struktur der Daten eindeutig ist, da die abgeleiteten Klassen jeweils einer Ressource entsprechen. Die Funktionen innerhalb des Services werden nach den jeweiligen Resourcen benannt. Daraus resultiert ein eindeutiges Aufruf-Muster, welches den Ressourcen-Namen gefolgt von der Aktion enhält (Listing \ref{lst:client-example_data_pattern}). 
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{graphics/data-pattern.pdf}
+		\caption{Struktur des Daten-Musters}
+		\label{fig:client-data-pattern}
+	\end{figure}
+
+	\begin{minipage}{\linewidth}
+		\lstinputlisting[language=JavaScript, style=CodeView, caption=Beispiel Aufruf zum erhalten der News-Daten, captionpos=b, label={lst:client-example_data_pattern}]{snippets/example_data_pattern.ts}
+	\end{minipage}
+
+	Schlussendlich wird ein Boolscher-Wert an den Client ausgeliefert. Sollte der Boolsche-Wert true zurückliefern, wird das Bedienelement dargestellt.
 	
 	\item[is-logged-in]\hfill\\
+	Bedienelemente werden nicht ausschließlich durch Rollen unterschieden. Die Überprüfung eines angemeldeten Benutzers findet serverseitig über die Benutzer-Id statt (Sektion \ref{sec:server-authorisation}). Aus diesem Grund wird ein angemeldeter Benutzer clientseitig ebenfalls über die Benutzer-Id identifiziert.  
+	
 \end{description}
 
 \subsubsection{Routing-Guards}
