@@ -23,7 +23,7 @@ export class MultiLingualInputComponent {
 
   public readonly languages = locales;
 
-  public readonly mode = this._activeRoute.queryParams || 'single'
+  public readonly mode = this._activeRoute.snapshot.queryParamMap.get('mode') || 'single'
 
   public get currentString() {
     return (this.editingString)
