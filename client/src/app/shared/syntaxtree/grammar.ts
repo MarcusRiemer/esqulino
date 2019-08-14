@@ -1200,12 +1200,23 @@ export class GrammarValidator {
   }
 
   /**
-   * @return All types that are part of this language.
+   * @return All types that are part of this grammar.
    */
   get availableTypes(): NodeType[] {
     const nested = Object.values(this._registeredTypes)
       .map(lang => Object.values(lang));
     return ([].concat.apply([], nested));
+  }
+
+  /**
+   * @return All languages that are part of this grammar.
+   */
+  get availableLanguages() {
+    const toReturn = new Set<string>();
+
+    this.availableTypes.forEach(t => toReturn.add(t.languageName));
+
+    return Array.from(toReturn);
   }
 
   /**
