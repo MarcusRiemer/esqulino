@@ -1160,10 +1160,11 @@ class TypeReference {
  * A language consists of type definitions and a set of types that may occur at the root.
  */
 export class GrammarValidator {
-  private _validator: Validator;
-  private _technicalName: string;
   private _registeredTypes: { [languageName: string]: { [typeName: string]: NodeType } } = {};
-  private _rootType: TypeReference;
+
+  public readonly validator: Validator;
+  public readonly technicalName: string;
+  public readonly rootType: TypeReference;
 
   /**
    * Construct a new validator for a specific grammar.
@@ -1173,8 +1174,8 @@ export class GrammarValidator {
    * @param desc The description of the grammar to validate.
    */
   constructor(validator: Validator, desc: Desc.GrammarDocument) {
-    this._validator = validator;
-    this._technicalName = desc.technicalName;
+    this.validator = validator;
+    this.technicalName = desc.technicalName;
 
     Object.entries(desc.types).forEach(([langName, types]) => {
       Object.entries(types).forEach(([typeName, typeDesc]) => {
@@ -1182,21 +1183,7 @@ export class GrammarValidator {
       });
     });
 
-    this._rootType = new TypeReference(validator, desc.root, this._technicalName);
-  }
-
-  /**
-   * @return The technical name of this grammar
-   */
-  get technicalName() {
-    return (this._technicalName);
-  }
-
-  /**
-   * @return The validator this language has been registered to.
-   */
-  get validator() {
-    return (this._validator);
+    this.rootType = new TypeReference(validator, desc.root, this.technicalName);
   }
 
   /**
@@ -1224,10 +1211,10 @@ export class GrammarValidator {
    * type is used as the root.
    */
   validateFromRoot(ast: AST.Node, context: ValidationContext) {
-    if (!this._rootType.isResolveable) {
+    if (!this.rootType.isResolveable) {
       context.addError(ErrorCodes.UnknownRoot, ast);
     } else {
-      this._rootType.validate(ast, context);
+      this.rootType.validate(ast, context);
     }
   }
 
@@ -1244,7 +1231,7 @@ export class GrammarValidator {
    */
   getType(languageName: string, typename: string): NodeType {
     if (!this.isKnownType(this.technicalName, typename)) {
-      throw new Error(`Language "${this._technicalName}" does not have type "${typename}"`);
+      throw new Error(`Language "${this.technicalName}" does not have type "${typename}"`);
     } else {
       return (this._registeredTypes[languageName][typename]);
     }
@@ -1260,7 +1247,7 @@ export class GrammarValidator {
   ) {
     // Ensure that we don't override any types
     if (this.isKnownType(languageName, nodeName)) {
-      throw new Error(`Attempted to register node "${nodeName}" twice for "${this._technicalName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
+      throw new Error(`Attempted to register node "${nodeName}" twice for "${this.technicalName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
     // Ensure the object for the language in question exists
@@ -1272,9 +1259,9 @@ export class GrammarValidator {
 
     // Actually instantiate the correct validator
     if (Desc.isNodeConcreteTypeDescription(desc)) {
-      langTypes[nodeName] = new NodeConcreteType(this._validator, desc, languageName, nodeName);
+      langTypes[nodeName] = new NodeConcreteType(this.validator, desc, languageName, nodeName);
     } else if (Desc.isNodeOneOfTypeDescription(desc)) {
-      langTypes[nodeName] = new NodeOneOfType(this._validator, desc, languageName, nodeName);
+      langTypes[nodeName] = new NodeOneOfType(this.validator, desc, languageName, nodeName);
     }
   }
 }

@@ -2,8 +2,9 @@ import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes } from './validation-result'
 import { NodePropertyIntegerValidator } from './grammar';
-import { singleLanguageGrammar, multiLanguageGrammar } from './grammar.spec-util';
+import { singleLanguageGrammar, multiLanguageGrammar, comparableErrors } from './grammar.spec-util';
 import { getQualifiedTypes } from './grammar-util';
+import { NodeDescription } from './syntaxtree.description';
 
 /**
  * Describes a language where each document would be the equivalent
@@ -1775,6 +1776,12 @@ describe('Grammar Validation', () => {
       );
 
       const v = new Validator([g]);
+
+      expect(v.getGrammarValidator("g").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+      expect(v.getGrammarValidator("h").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+
       expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
       expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
       expect(v.isKnownLanguage("n")).withContext("n known").toBe(false);
@@ -1784,6 +1791,15 @@ describe('Grammar Validation', () => {
 
       expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
       expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
+
+      const astDesc: AST.NodeDescription = {
+        language: "g",
+        name: "t1",
+        children: {}
+      }
+
+      const ast = new AST.Tree(astDesc);
+      expect(comparableErrors(v.validateFromRoot(ast))).toEqual([]);
     });
 
     it(`Two languages, same typename, g.t1 has h.t1 as child`, () => {
@@ -1818,6 +1834,12 @@ describe('Grammar Validation', () => {
       );
 
       const v = new Validator([g]);
+
+      expect(v.getGrammarValidator("g").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+      expect(v.getGrammarValidator("h").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+
       expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
       expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
       expect(v.isKnownLanguage("n")).withContext("n known").toBe(false);
@@ -1827,6 +1849,88 @@ describe('Grammar Validation', () => {
 
       expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
       expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
+
+      const astDesc: AST.NodeDescription = {
+        language: "g",
+        name: "t1",
+        children: {
+          "t1_c1": [
+            {
+              language: "h",
+              name: "t1"
+            }
+          ]
+        }
+      }
+
+      const ast = new AST.Tree(astDesc);
+      const res = v.validateFromRoot(ast);
+      expect(comparableErrors(res)).toEqual([]);
+    });
+
+    it(`Two types in two languages, root is typedef for either of them`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "root" },
+        {
+          "g": {
+            "root": {
+              type: "oneOf",
+              oneOf: [
+                { languageName: "g", typeName: "t1" },
+                { languageName: "h", typeName: "t1" }
+              ]
+            },
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          },
+          "h": {
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          }
+        }
+      );
+
+      const v = new Validator([g]);
+
+      expect(v.getGrammarValidator("g").rootType.description)
+        .toEqual({ languageName: "g", typeName: "root" });
+      expect(v.getGrammarValidator("h").rootType.description)
+        .toEqual({ languageName: "g", typeName: "root" });
+
+      expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
+      expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
+      expect(v.isKnownLanguage("n")).withContext("n known").toBe(false);
+
+      expect(v.isKnownType("g", "t1")).withContext("g.t1 known").toBe(true);
+      expect(v.isKnownType("g", "t2")).withContext("g.t2 known").toBe(false);
+
+      expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
+      expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
+
+
+      const validDescs: NodeDescription[] = [
+        {
+          language: "g",
+          name: "t1",
+        },
+        {
+          language: "h",
+          name: "t1",
+        },
+      ];
+
+      validDescs.forEach(astDesc => {
+        const ast = new AST.Tree(astDesc);
+        const res = v.validateFromRoot(ast);
+        expect(comparableErrors(res))
+          .withContext(JSON.stringify(astDesc))
+          .toEqual([]);
+      });
     });
   });
 });
