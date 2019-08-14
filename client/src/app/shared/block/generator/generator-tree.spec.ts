@@ -1,5 +1,5 @@
 import { GrammarDocument } from '../../syntaxtree/grammar.description'
-import { grammarWith } from '../../syntaxtree/grammar.spec-util';
+import { singleLanguageGrammar } from '../../syntaxtree/grammar.spec-util';
 
 import { convertGrammarTreeInstructions } from './generator-tree';
 import { readableConstants } from './spec-util';
@@ -7,7 +7,7 @@ import { readableConstants } from './spec-util';
 describe("Tree BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
     it("Root node without attributes", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: []
@@ -24,7 +24,7 @@ describe("Tree BlockLanguage Generator", () => {
     });
 
     it("Root node with single property", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [
@@ -48,7 +48,7 @@ describe("Tree BlockLanguage Generator", () => {
     });
 
     it("Reads over terminals", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [
@@ -77,7 +77,7 @@ describe("Tree BlockLanguage Generator", () => {
     });
 
     it("Goes into parentheses", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [

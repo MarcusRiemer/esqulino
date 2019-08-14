@@ -1,6 +1,7 @@
-import { GrammarDocument, NamedTypes } from './grammar.description';
+import { GrammarDocument, NamedTypes, NamedLanguages } from './grammar.description';
+import { QualifiedTypeName } from './syntaxtree.description';
 
-export function grammarWith(
+export function singleLanguageGrammar(
   langName: string,
   rootType: string,
   types: NamedTypes
@@ -16,4 +17,16 @@ export function grammarWith(
   toReturn.types[langName] = types;
 
   return (toReturn);
+}
+
+export function multiLanguageGrammar(
+  langName: string,
+  rootType: QualifiedTypeName,
+  languages: NamedLanguages
+): GrammarDocument {
+  return ({
+    technicalName: langName,
+    types: languages,
+    root: rootType,
+  });
 }

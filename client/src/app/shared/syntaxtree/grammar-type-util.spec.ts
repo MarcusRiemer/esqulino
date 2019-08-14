@@ -1,6 +1,6 @@
 import { GrammarDocument } from "./grammar.description";
 import { orderTypes, ensureTypename } from "./grammar-type-util";
-import { grammarWith } from './grammar.spec-util';
+import { singleLanguageGrammar } from './grammar.spec-util';
 
 describe(`Grammar Type Utilities`, () => {
   describe(`ensureTypename`, () => {
@@ -21,7 +21,7 @@ describe(`Grammar Type Utilities`, () => {
 
   describe(`orderTypes`, () => {
     it(`Unknown Root`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "t1": {
           type: "concrete",
           attributes: []
@@ -34,7 +34,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Only Root`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "r": {
           type: "concrete",
           attributes: []
@@ -48,7 +48,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one unreferenced type`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "r": {
           type: "concrete",
           attributes: []
@@ -67,7 +67,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one unreferenced type (order flipped)`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "t1": {
           type: "concrete",
           attributes: []
@@ -87,7 +87,7 @@ describe(`Grammar Type Utilities`, () => {
 
 
     it(`Root and one illegal reference`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "r": {
           type: "concrete",
           attributes: [
@@ -109,7 +109,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and multiple references to the same thing`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "r": {
           type: "concrete",
           attributes: [
@@ -131,7 +131,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and recursive reference to self`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "r": {
           type: "concrete",
           attributes: [
@@ -154,7 +154,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and typedef`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "t1": {
           type: "oneOf",
           oneOf: ["t2", "t3"]
@@ -185,7 +185,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and recursive typedef`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "t1": {
           type: "oneOf",
           oneOf: ["t2", "t3", "t1", "r"]
@@ -216,7 +216,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root typedef with bizarre order`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "r": {
           type: "oneOf",
           oneOf: ["t3", "t1", "t2"]
@@ -246,7 +246,7 @@ describe(`Grammar Type Utilities`, () => {
 
 
     it(`Root, one chain and unreferenced item`, () => {
-      const g: GrammarDocument = grammarWith("foo", "r", {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         "b4": {
           type: "concrete",
           attributes: []
