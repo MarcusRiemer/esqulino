@@ -1,5 +1,5 @@
 import { GrammarDocument } from '../../syntaxtree';
-import { grammarWith } from '../../syntaxtree/grammar.spec-util';
+import { singleLanguageGrammar } from '../../syntaxtree/grammar.spec-util';
 
 import { generateDefaultNode, generateSidebar } from './sidebar'
 import { AnySidebarDescription } from './sidebar.description';
@@ -88,7 +88,7 @@ describe("Sidebar Default Node Generator", () => {
   });
 
   it(`Sidebar generation passes fixed sidebars through`, () => {
-    const grammar: GrammarDocument = grammarWith("g1", "foo", {});
+    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {});
 
     const sidebar: AnySidebarDescription = {
       type: "fixedBlocks",
@@ -101,7 +101,7 @@ describe("Sidebar Default Node Generator", () => {
   });
 
   it(`Sidebar generation passes fixed sidebar categories through`, () => {
-    const grammar: GrammarDocument = grammarWith("g1", "foo", {});
+    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {});
 
     const sidebar: AnySidebarDescription = {
       type: "generatedBlocks",
@@ -131,7 +131,7 @@ describe("Sidebar Default Node Generator", () => {
   });
 
   it(`Sidebar generation passes fixed blocks through`, () => {
-    const grammar: GrammarDocument = grammarWith("g1", "foo", {});
+    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {});
 
     const sidebar: AnySidebarDescription = {
       type: "generatedBlocks",
@@ -178,7 +178,7 @@ describe("Sidebar Default Node Generator", () => {
   });
 
   it(`Sidebar generation creates a mixture of fixed and generated blocks`, () => {
-    const grammar: GrammarDocument = grammarWith("g1", "foo", {
+    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {
       "t1": { type: "concrete" }
     });
 
@@ -216,7 +216,7 @@ describe("Sidebar Default Node Generator", () => {
   });
 
   it(`Sidebar generation for purely generated categories`, () => {
-    const grammar: GrammarDocument = grammarWith("g1", "foo", {
+    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {
       "t1": { type: "concrete" }
     });
 
