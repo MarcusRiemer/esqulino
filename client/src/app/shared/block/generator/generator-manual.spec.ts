@@ -1,5 +1,5 @@
 import { GrammarDocument } from '../../syntaxtree/grammar.description'
-import { grammarWith } from '../../syntaxtree/grammar.spec-util';
+import { singleLanguageGrammar } from '../../syntaxtree/grammar.spec-util';
 
 import { VisualBlockDescriptions } from '../block.description';
 
@@ -9,7 +9,7 @@ import { convertGrammarManualInstructions } from './generator-manual'
 describe("Manual BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
     it("Almost empty grammar with no generation instructions", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: []
@@ -27,7 +27,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and missing values", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [
@@ -60,7 +60,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with two blocks for a single type", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [
@@ -100,7 +100,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with one partial block for a single type", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [
@@ -138,7 +138,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and supplied values", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [
@@ -190,7 +190,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("No blocks for 'oneOf'-types", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "oneOf",
           oneOf: ["t2", "t3"]
@@ -216,7 +216,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("All iterators, a constant and a property", () => {
-      const grammar: GrammarDocument = grammarWith("g1", "t1", {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {
           type: "concrete",
           attributes: [

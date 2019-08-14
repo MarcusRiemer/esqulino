@@ -75,7 +75,8 @@ export class Validator {
       throw new Error(`Attempted to register language "${desc.technicalName}" twice`);
     }
 
-    this._registeredGrammars[desc.technicalName] = new GrammarValidator(this, desc);
+    const gv = new GrammarValidator(this, desc);
+    gv.availableLanguages.forEach(langName => this._registeredGrammars[langName] = gv);
   }
 
   /**

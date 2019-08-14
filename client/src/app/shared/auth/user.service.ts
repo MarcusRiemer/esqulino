@@ -3,7 +3,7 @@ import { MayPerformResponseDescription, MayPerformRequestDescription } from './.
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
-import { map, tap, first, filter, distinct } from 'rxjs/operators';
+import { map, tap, first } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
@@ -22,6 +22,13 @@ export class UserService {
   public identities$ = this._serverData.getIdentities;
   public providerList$ = this._serverData.getProviders;
 
+  /**
+   * Deducing the login-state is not a 100% straightforward because users that
+   * are not logged in get the "guest" role assigned. That role *should* only
+   * be applicable to users that are not logged in, but for various reasons (e.g.
+   * testing page display with different roles) it is entirely possible that a
+   * logged-in user also has the "guest" role.
+   */
   public readonly isLoggedIn$ = this.userData$.value.pipe(
     map(u => u.roles.includes(Roles.Guest) &&
       (u.roles.includes(Roles.User) || u.roles.includes(Roles.Admin))

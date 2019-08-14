@@ -1,0 +1,64 @@
+--- !ruby/object:ProjectDatabase
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3fdf9b83-08a3-4792-96a8-d18cce420985
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: schema
+  value_before_type_cast: '[{"name": "move", "columns": [{"name": "id", "type": "INTEGER",
+    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
+    "name_de", "type": "STRING", "index": 1, "primary": false, "not_null": false,
+    "dflt_value": null}, {"name": "name_en", "type": "STRING", "index": 2, "primary":
+    false, "not_null": false, "dflt_value": null}, {"name": "name_fr", "type": "STRING",
+    "index": 3, "primary": false, "not_null": false, "dflt_value": null}], "foreign_keys":
+    []}, {"name": "move_to_type", "columns": [{"name": "move_id", "type": "INTEGER",
+    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
+    "type_id", "type": "INTEGER", "index": 1, "primary": true, "not_null": false,
+    "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "type", "to_column":
+    null, "from_column": "type_id"}]}, {"references": [{"to_table": "move", "to_column":
+    "id", "from_column": "move_id"}]}]}, {"name": "pokemon", "columns": [{"name":
+    "id", "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
+    null}, {"name": "name_de", "type": "STRING", "index": 1, "primary": false, "not_null":
+    false, "dflt_value": null}, {"name": "name_en", "type": "STRING", "index": 2,
+    "primary": false, "not_null": false, "dflt_value": null}, {"name": "name_fr",
+    "type": "STRING", "index": 3, "primary": false, "not_null": false, "dflt_value":
+    null}, {"name": "evolve_id", "type": "INTEGER", "index": 4, "primary": false,
+    "not_null": false, "dflt_value": null}], "foreign_keys": []}, {"name": "pokemon_to_move",
+    "columns": [{"name": "pokemon_id", "type": "INTEGER", "index": 0, "primary": true,
+    "not_null": false, "dflt_value": null}, {"name": "move_id", "type": "INTEGER",
+    "index": 1, "primary": true, "not_null": false, "dflt_value": null}], "foreign_keys":
+    [{"references": [{"to_table": "move", "to_column": "id", "from_column": "move_id"}]},
+    {"references": [{"to_table": "pokemon", "to_column": "id", "from_column": "pokemon_id"}]}]},
+    {"name": "pokemon_to_type", "columns": [{"name": "pokemon_id", "type": "INTEGER",
+    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
+    "type_id", "type": "INTEGER", "index": 1, "primary": true, "not_null": false,
+    "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "type", "to_column":
+    "id", "from_column": "type_id"}]}, {"references": [{"to_table": "pokemon", "to_column":
+    "id", "from_column": "pokemon_id"}]}]}, {"name": "type", "columns": [{"name":
+    "id", "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
+    null}, {"name": "name_de", "type": "STRING", "index": 1, "primary": false, "not_null":
+    false, "dflt_value": null}, {"name": "name_en", "type": "STRING", "index": 2,
+    "primary": false, "not_null": false, "dflt_value": null}, {"name": "name_fr",
+    "type": "STRING", "index": 3, "primary": false, "not_null": false, "dflt_value":
+    null}], "foreign_keys": []}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-08-10 11:06:37.700147'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-08-10 11:07:08.339664'
+new_record: false
+active_record_yaml_version: 2

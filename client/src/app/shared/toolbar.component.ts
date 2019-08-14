@@ -4,6 +4,7 @@ import { SideNavService } from './side-nav.service';
 import { ToolbarService } from './toolbar.service'
 
 import { environment } from '../../environments/environment';
+import { UserService } from './auth/user.service';
 
 function urlAllowsLogin() {
   const url = new URL(window.location.href);
@@ -19,7 +20,8 @@ export class ToolbarComponent {
 
   constructor(
     private _toolbarService: ToolbarService,
-    private _sideNavService: SideNavService
+    private _sideNavService: SideNavService,
+    private _userService: UserService,
   ) { }
 
   get toolbarItems$() {
@@ -32,4 +34,6 @@ export class ToolbarComponent {
 
   // Login is not necessarily allowed at all times
   readonly loginEnabled = environment.loginEnabled || urlAllowsLogin();
+
+  readonly isLoggedIn$ = this._userService.isLoggedIn$;
 }
