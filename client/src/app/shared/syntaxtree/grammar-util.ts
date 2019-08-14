@@ -97,16 +97,19 @@ export function getFullQualifiedAttributes(g: GrammarDocument): FullNodeAttribut
 /**
  * @return Names of all blocks of the given grammar in the form of a handy list
  */
-export function getFullBlocks(g: GrammarDocument): QualifiedTypeName[] {
+export function getConcreteTypes(g: GrammarDocument): QualifiedTypeName[] {
   const toReturn: QualifiedTypeName[] = [];
 
-  Object.entries(g.types || {}).forEach(([typeName, type]) => {
-    if (isNodeConcreteTypeDescription(type)) {
-      toReturn.push({
-        languageName: g.technicalName,
-        typeName: typeName
-      });
-    }
+  Object.entries(g.types || {}).forEach(([languageName, types]) => {
+    Object.entries(types).forEach(([typeName, type]) => {
+      if (isNodeConcreteTypeDescription(type)) {
+        toReturn.push({
+          languageName: languageName,
+          typeName: typeName
+        });
+      }
+
+    });
   });
 
   return (toReturn);
