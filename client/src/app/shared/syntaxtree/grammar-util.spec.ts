@@ -1,4 +1,4 @@
-import { resolveChildOccurs, isHoleIfEmpty, getFullQualifiedAttributes } from "./grammar-util";
+import { resolveChildOccurs, isHoleIfEmpty, getFullQualifiedAttributes, getConcreteTypes } from "./grammar-util";
 import { NodeTypeDescription, GrammarDocument } from "./grammar.description";
 
 describe(`Grammar Utilities`, () => {
@@ -55,6 +55,32 @@ describe(`Grammar Utilities`, () => {
           { nodeType: "t2", occurs: "?" }
         ]
       })).toBe(false);
+    });
+
+    it(`Allowed: t1`, () => {
+      expect(isHoleIfEmpty({
+        type: "allowed", name: "a1", nodeTypes: ["t1"]
+      })).toBe(true);
+    });
+
+    it(`Allowed: t1? t2?`, () => {
+      expect(isHoleIfEmpty({
+        type: "allowed", name: "a1",
+        nodeTypes: [
+          { nodeType: "t1", occurs: "?" },
+          { nodeType: "t2", occurs: "?" }
+        ]
+      })).toBe(false);
+    });
+
+    it(`choice`, () => {
+      expect(isHoleIfEmpty({
+        type: "choice", name: "a1",
+        choices: [
+          { languageName: "g", typeName: "t1" },
+          { languageName: "g", typeName: "t2" }
+        ]
+      })).toBe(true);
     });
   });
 
@@ -141,6 +167,114 @@ describe(`Grammar Utilities`, () => {
       expect(getFullQualifiedAttributes(g)).toEqual([
         { languageName: "g1", typeName: "t1", type: "terminal", name: "a1", symbol: "t_a1" },
       ]);
+    });
+  });
+
+  describe(`getAllTypes`, () => {
+    it(`g.t1`, () => {
+      const g: GrammarDocument = {
+        technicalName: "g",
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "concrete",
+            }
+          }
+        }
+      };
+
+      expect(getConcreteTypes(g)).toEqual([
+        { languageName: "g", typeName: "t1" }
+      ]);
+    });
+
+    it(`g.t1, g.t2`, () => {
+      const g: GrammarDocument = {
+        technicalName: "g",
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "concrete",
+            },
+            "t2": {
+              type: "concrete",
+            }
+          }
+        }
+      };
+
+      expect(getConcreteTypes(g)).toEqual([
+        { languageName: "g", typeName: "t1" },
+        { languageName: "g", typeName: "t2" }
+      ]);
+    });
+
+    it(`g.t1, h.t1`, () => {
+      const g: GrammarDocument = {
+        technicalName: "g",
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "concrete",
+            },
+          },
+          "h": {
+            "t1": {
+              type: "concrete",
+            }
+          }
+        }
+      };
+
+      expect(getConcreteTypes(g)).toEqual([
+        { languageName: "g", typeName: "t1" },
+        { languageName: "h", typeName: "t1" }
+      ]);
+    });
+
+    it(`Omit typedef`, () => {
+      const g: GrammarDocument = {
+        technicalName: "g",
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "oneOf",
+              oneOf: []
+            },
+            "t2": {
+              type: "concrete",
+            }
+          }
+        }
+      };
+
+      expect(getConcreteTypes(g)).toEqual([
+        { languageName: "g", typeName: "t2" }
+      ]);
+    });
+
+    it(`Missing Types`, () => {
+      const g: GrammarDocument = {
+        technicalName: "g",
+        root: { languageName: "g", typeName: "t1" },
+        types: undefined
+      };
+
+      expect(getConcreteTypes(g)).toEqual([]);
+    });
+
+    it(`Empty Types`, () => {
+      const g: GrammarDocument = {
+        technicalName: "g",
+        root: { languageName: "g", typeName: "t1" },
+        types: {}
+      };
+
+      expect(getConcreteTypes(g)).toEqual([]);
     });
   });
 });

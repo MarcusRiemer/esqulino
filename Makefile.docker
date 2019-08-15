@@ -16,6 +16,7 @@ reset-dev:
 
 run-reset-dev: reset-dev run-dev
 
+# Loads the live data on a running server
 exec-dev-load-live-data:
 	docker-compose exec server su user -c 'make -C server load-live-data'
 
@@ -61,6 +62,10 @@ build-test: build-base
 
 # Builds all images
 build-all: build-base build-server-dev build-client-dev build-test
+
+# Pulls all images from the registry
+pull-all:
+        docker-compose pull
 
 # Pushes locally built base image back to the docker hub, requires privileges
 push-base:
