@@ -1,14 +1,13 @@
-import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
-
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
-import { map, tap, first, filter, distinct } from 'rxjs/operators';
+import { map, tap, first, } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
+import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
 import { Roles } from '../authorisation/roles.enum';
 
 @Injectable({ providedIn: 'root' })
@@ -23,10 +22,7 @@ export class UserService {
   public providerList$ = this._serverData.getProviders;
 
   public readonly isLoggedIn$ = this.userData$.value.pipe(
-    map(u => u.roles.includes(Roles.Guest) &&
-      (u.roles.includes(Roles.User) || u.roles.includes(Roles.Admin))
-      || u.roles.includes(Roles.User)
-      || u.roles.includes(Roles.Admin))
+    map(u => u.roles.some(v => v !== Roles.Guest))
   )
 
   public readonly userDisplayName$ = this.userData$.value.pipe(

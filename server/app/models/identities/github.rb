@@ -17,8 +17,6 @@ class Github < Identity
   end
 
   def self.create_with_auth(auth, user)
-    auth[:info]["confirmed"] = true
-
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
