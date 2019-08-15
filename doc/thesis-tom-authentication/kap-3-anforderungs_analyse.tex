@@ -16,7 +16,7 @@ Der Serverseitige-Teil baut auf Ruby on Rails und bietet ein \gls{API} zur Kommu
 \label{sec: requirement}
 Im Verlauf dieser Sektion werden die Anforderungen, die diese Thesis erfüllen soll, detailliert erläutert.
 
-\subsubsection{Unterschiedliche Anmeldemöglichkeiten\todo{Stichwort: User / Identität}}
+\subsubsection{Unterschiedliche Anmeldemöglichkeiten}
 Ein Benutzer sollte die Möglichkeit haben sich mit mehreren Konten zu verknüpfen. Das bedeutet, er sollte sich mit Google authentifizieren können, jedoch auch mit einem Passwort.
 
 \subsubsection{Anmeldung mittels \gls{oAuth2}}
@@ -28,23 +28,22 @@ Für eine Anmeldung mittels Passwortes muss zuerst eine Möglichkeit gegeben sei
 \subsubsection{Authentifizierung nach Anmeldung}
 Um vom Server als angemeldeter Benutzer authentifiziert zu werden, sollten die Benutzerdaten in einem \gls{JWT} gespeichert werden. Dieser \gls{JWT} wird bei der Anmeldung eines Benutzers an den Client übermittelt. Ab dem Zeitpunkt wird dieser \gls{JWT} bei jeder Anfrage an den Server mit übermittelt. Sobald eine Anfrage den Server erreicht, muss zwangsläufig der \gls{JWT} auf seine Gültigkeit geprüft werden. Sollte dieser \gls{JWT} eine nicht gültige Signatur haben oder bereits abgelaufen sein, darf keine weitere Aktion auf dem Server erfolgen.
 
-\subsubsection{Benutzereinstellungen\todo{\enquote{Einstellungen} ist zu allgemein, Verwaltung von Zugangsdaten}}
-Die Benutzereinstellungen sollten einem Benutzer erlauben sein bereits erstelltes Konto mit weiteren Konten zu verknüpfen. Hierbei sollte der Benutzer eingeloggt sein und einen bestimmten Provider auf seiner Einstellungs-Seite auswählen können. Nachdem sich der Benutzer bei dem ausgewählten Provider authentifiziert hat, sollte dieses Konto dem Nutzer hinzugefügt werden.  Außerdem sollten die Benutzereinstellungen eine Verwaltung der verknüpften Konten beinhalten. Das heißt der Benutzer sollte zu jeder Zeit entscheiden können welche dieser verknüpften Konten beständig bleiben oder welche gelöscht werden.
+\subsubsection{Sicherheit und Login}
+Die Einstellungen im Bereich Sicherheit und Login sollten einem Benutzer erlauben sein bereits erstelltes Konto mit weiteren Konten zu verknüpfen. Hierbei sollte der Benutzer eingeloggt sein und einen bestimmten Provider auf seiner Einstellungsseite auswählen können. Nachdem sich der Benutzer bei dem ausgewählten Provider authentifiziert hat, sollte dieses Konto dem Nutzer hinzugefügt werden.  Außerdem sollten die Benutzereinstellungen eine Verwaltung der verknüpften Konten beinhalten. Das heißt der Benutzer sollte zu jeder Zeit entscheiden können welche dieser verknüpften Konten beständig bleiben oder welche gelöscht werden.
 
 Sollte sich ein Benutzer mittels Passwortes auf Blattwerkzeug registriert haben, muss es für diesen Nutzer eine Möglichkeit geben sein Passwort zu ändern, selbst wenn dieser bereits sein Konto zusätzlich mit Google oder GitHub verknüpft hat. Sollte ein Benutzer bereits ein vorhandenes Konto mit einem Passwort haben, sollte das neu zu verknüpfende Konto automatisch das Passwort des bereits vorhandenen annehmen. Falls das zu verknüpfende Konto, das erste mit einem Passwort sein sollte, muss dafür in den Benutzereinstellungen eine extra Passworteingabe erscheinen, in dem das zu verwendende Passwort angegeben wird.
 
 Da es in Blattwerkzeug bei der Benutzernamensgebung zum jetzigen Stand keine einmaligen Benutzernamen geben muss, soll es dem Benutzer in den Benutzereinstellungen außerdem möglich sein, seinen Benutzernamen zu ändern.
 
 \subsubsection{Rollen und Autorisierung}
-Die Rollen sollten sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in ~\ref{sec: rolify} beschrieben keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich auf beispielsweise ein Projekt. Sollte ein Projekt von einem angemeldeten Benutzer erstellt werden, sollte dieser eine jeweilige Rolle oder eine Datenbank-Beziehung für dieses Projekt erhalten. Mit dieser Rolle sollte es dem Benutzer möglich sein, sein Projekt zu bearbeiten oder zu löschen. Außerdem sollte die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf jedes Projekt haben.
+Die Rollen sollten sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in Sektion ~\ref{sec: rolify} beschrieben keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich auf beispielsweise ein Projekt. Sollte ein Projekt von einem angemeldeten Benutzer erstellt werden, sollte dieser eine jeweilige Rolle oder eine Datenbank-Beziehung für dieses Projekt erhalten. Mit dieser Rolle sollte es dem Benutzer möglich sein, sein Projekt zu bearbeiten oder zu löschen. Außerdem sollte die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf jedes Projekt haben.
 
 \todo[inline]{Auflistung von nötigen Rollen und Rechten}
 
 Für eine Autorisierung mittels Rollen sollten bestimmte Regeln für die jeweiligen Controller Funktionen festgelegt werden. Diese Regeln sollten mittels Pundit erstellt werden. Innerhalb der Regeln sollte die Überprüfung der Rollen des angemeldeten Nutzers stattfinden.
 
 
-
 \subsubsection{Bedienelemente und Routen}
-Die Bedienelemente die ein Benutzer zu sehen hat, müssen jeweils von den Rollen abhängen. Dazu ist es möglich bei jedem Bedienelement den Server nach der Berechtigung zu fragen oder jedoch Clientseitig Pundit nach zu bauen. Außerdem sollte es einem Benutzer, bei nicht ausreichender Berechtigung, nicht gestattet sein bestimmte Routen des Clients zu besuchen. Zusätzlich sollten die Bedienelemente benuzterfreundlich sein, da es sich bei Blattwerkzeug, wie in \ref{sec:blattwerkzeug} beschrieben, um ein Werkzeug zum lernen bestimmter Bereiche der Informatik handelt.
+Die Bedienelemente die ein Benutzer zu sehen hat, müssen jeweils von den Rollen abhängen. Dazu ist es möglich bei jedem Bedienelement den Server nach der Berechtigung zu fragen oder jedoch Clientseitig Pundit nach zu bauen. Sollte ein Benutzer eine Route mit nicht ausreichender Berechtigung besuchen, muss ihm der Zugriff verwehrt werden. Die Bedienelemente sollten benuzterfreundlich sein, da es sich bei Blattwerkzeug, wie in Sektion \ref{sec:blattwerkzeug} beschrieben, um ein Werkzeug zum lernen bestimmter Bereiche der Informatik handelt.
 
 \todo[inline]{Code-Beispiel für Verwendung als Angular-Komponente (Template)}

@@ -18,6 +18,7 @@
 \usepackage{acronym}
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 \usepackage{soul}
+\usepackage{subcaption}
 \usepackage{hyperref}
 \hypersetup{
 	colorlinks=true,% make the links colored
@@ -40,7 +41,7 @@
 \lstdefinestyle{CodeView} {
 	columns=flexible,
 	numbers=left,
-	basicstyle=\scriptsize,
+	basicstyle=\footnotesize,
 	tabsize=4,
 	frame=single,
 	backgroundcolor=\color{white},
@@ -106,6 +107,7 @@
 \makeglossaries
 
 \newcommand{\JS}{JavaScript}
+\newcommand{\TS}{TypeScript}
 
 \newacronym{JWT}{JWT}{JSON Web Token}
 \newacronym{URI}{URI}{Uniform Resource Identifier}
@@ -130,9 +132,8 @@
 \newacronym{HTTPS}{HTTPS}{Hypertext Transfer Protocol Secure}
 \newacronym{URL}{URL}{Uniform Resource Locator}
 
-
 \begin{document}
-	\hypersetup{linkcolor=black}
+	\hypersetup{linkcolor=black, urlcolor=black}
 
    	\tableofcontents
 	\clearpage
@@ -141,6 +142,7 @@
 	\input{kap-2-technologien}
 	\input{kap-3-anforderungs_analyse}
 	\input{kap-4-implementierung}
+	\input{kap-5-fazit}
 
 \end{document}
 %%% Local Variables:

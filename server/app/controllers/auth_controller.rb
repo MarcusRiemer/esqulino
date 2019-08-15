@@ -65,7 +65,7 @@ class AuthController < ApplicationController
   end
 
   def failure
-    redirect_to "/"
+    error_response(params[:message])
   end
 
   private
