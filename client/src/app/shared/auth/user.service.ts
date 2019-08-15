@@ -21,6 +21,13 @@ export class UserService {
   public identities$ = this._serverData.getIdentities;
   public providerList$ = this._serverData.getProviders;
 
+  /**
+   * Deducing the login-state is not a 100% straightforward because users that
+   * are not logged in get the "guest" role assigned. That role *should* only
+   * be applicable to users that are not logged in, but for various reasons (e.g.
+   * testing page display with different roles) it is entirely possible that a
+   * logged-in user also has the "guest" role.
+   */
   public readonly isLoggedIn$ = this.userData$.value.pipe(
     map(u => u.roles.some(v => v !== Roles.Guest))
   )

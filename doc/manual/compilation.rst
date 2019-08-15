@@ -103,8 +103,9 @@ Ensure you have the "main" dependencies installed (``ruby`` and ``bundle`` for t
 
    1. ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
    2. Start a PostgreSQL-server that has a user who is allowed to create databases.
-   3. Setup the database and fill the database (``make reset-live-databases``). This will create all required tables and load some sample data.
+   3. Setup the database and fill the database (``make reset-live-data``). This will create all required tables and load some sample data.
    4. You may now run the server, to do this locally simply use ``make run-dev`` and it will spin up a local server instance listening on port ``9292``. You can alternatively run a production server using ``make run``.
+   5. If you require administrative rights, :ref:`you can give the permissions via the Rails shell <shell-create-admin-account>`.
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
@@ -149,11 +150,11 @@ The ``Makefile`` therefore exposes the ``store-live-data`` target which stores t
 Running via Docker
 ------------------
 
-There are pre-built docker images for development use on docker hub: `marcusriemer/sqlino <https://hub.docker.com/r/marcusriemer/sqlino/>`_. These are built using the various ``Dockerfile``\ s in this repository and can also be used with the ``docker-compose.yml`` file which is also part of this repository. Under the hood these containers use the same ``Makefile``\s and commands that have been mentioned above.
+There are pre-built docker images for development use on docker hub: `marcusriemer/blockwerkzeug <https://hub.docker.com/r/marcusriemer/blockwerkzeug/>`_. These are built using the various ``Dockerfile``\ s in this repository and can also be used with the ``docker-compose.yml`` file which is also part of this repository. Under the hood these containers use the same ``Makefile``\s and commands that have been mentioned above.
 
 Depending on your local configuration you might need to run the mentioned ``Makefile`` with ``sudo``.
 
-* ``make -f Makefile.docker pull-all`` retrieves the most recent version of all images from the `docker hub <https://hub.docker.com/r/marcusriemer/sqlino/>`_.
+* ``make -f Makefile.docker pull-all`` ensures that the most recent version of all images are available locally. If you don't pull the images first, the ``run-dev`` target might decide to build the required images locally instead.
 
 * ``make -f Makefile.docker run-dev`` starts docker containers that continously watch for changes to the ``server`` and ``client`` folders. It mounts the projects root folder as volumes into the containers, which allows you to edit the files in ``server`` and ``client`` in your usual environment. A third container is started for PostgreSQL.
 
@@ -167,5 +168,13 @@ These issues happen on a semi-regular scale.
 I don't have any programming languages or projects available
     You probably forgot to load the initial data. Run ``make load-live-data`` in the ``server`` folder.
 
-``Startup Error: No cli program at "../client/dist/cli/main.cli.js"``
-    The server requires the ``cli`` version of the IDE to run. Create it using ``make compile-cli`` in the ``client`` folder.
+.. _shell-create-admin-account:
+
+I need an admin account
+    1) If you don't have a regular account yet: Register one. During development you may use the "developer" identity which does not even require a password.
+    2) Assuming your display name is unique: Open a Rails console and run the following command::
+
+         User.find_by(display_name: "<Your Display Name>").add_role(:admin)
+
+The server wont start and shows ``Startup Error: No cli program at "../client/dist/cli/bundle.cli.js"``
+    The server requires the ``cli`` version of the IDE to run. Create it using ``make compile-cli`` in the ``client`` folder. The server will make more then one attempt to find the file, so if the program is currently beeing compiled startup should work once the compilation is finished.

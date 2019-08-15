@@ -2,7 +2,7 @@ import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes } from './validation-result'
-import { grammarWith } from './grammar.spec-util';
+import { singleLanguageGrammar } from './grammar.spec-util';
 
 describe('Grammar :: Parentheses', () => {
 
@@ -18,7 +18,7 @@ describe('Grammar :: Parentheses', () => {
 
   describe(`Sequence`, () => {
     describe(`g1 ::= ()`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [
@@ -52,7 +52,7 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1)`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [
@@ -99,7 +99,7 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 t2)`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [
@@ -178,7 +178,7 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 t2?)`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [
@@ -253,7 +253,7 @@ describe('Grammar :: Parentheses', () => {
 
   describe("Allowed", () => {
     describe(`g ::= (t1)`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [
@@ -312,7 +312,7 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 & t2)`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [
@@ -387,7 +387,7 @@ describe('Grammar :: Parentheses', () => {
     });
 
     describe(`g ::= (t1 & t2?)`, () => {
-      const g: Schema.GrammarDocument = grammarWith("spec", "root", {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
         "root": {
           type: "concrete",
           attributes: [

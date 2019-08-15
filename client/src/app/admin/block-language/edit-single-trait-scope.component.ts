@@ -6,7 +6,7 @@ import { first, map, tap } from 'rxjs/operators';
 
 import { GrammarDataService } from '../../shared/serverdata';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
-import { FullNodeAttributeDescription, getFullQualifiedAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
+import { FullNodeAttributeDescription, getFullQualifiedAttributes, getConcreteTypes } from '../../shared/syntaxtree/grammar-util';
 
 import { EditBlockLanguageService } from './edit-block-language.service';
 
@@ -75,7 +75,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
       .pipe(first())
       .subscribe(g => {
         this.allPossibleAttributes = getFullQualifiedAttributes(g);
-        this.allPossibleBlocks = getFullBlocks(g).map(b => {
+        this.allPossibleBlocks = getConcreteTypes(g).map(b => {
           return ({
             grammar: b.languageName,
             type: b.typeName,
