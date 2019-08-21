@@ -11,16 +11,6 @@ export interface ProjectProposal {
 }
 
 export const ProjectProposals: ProjectProposal[] = [
-  {
-    id: "visual-database-editor",
-    language: "de",
-    title: "Visueller Drag & Drop Editor für Datenbanken",
-    text: `
-          <p>
-          Aufbauend auf der <a href="http://files.blattwerkzeug.de/theses/marco-pawlowski-thesis-schema-editor.pdf"> Bachelor-Thesis von Marco Pawloski</a> soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
-          </p>`,
-    tools: "TypeScript mit Angular",
-  },
   /*
   {
     id: "trucklino-world-editor",
@@ -55,7 +45,28 @@ export const ProjectProposals: ProjectProposal[] = [
       Currently, the website does not provide any registration of users, instead, each created project, so to speak, has its own user database. This circumstance should change as part of this project. The actual registration and administration of users is more a technical formality and not particularly challenging. Much more interesting are the special requirements that result from the use in schools. Registered users typically fall into one of three roles: student, teacher, or administrator.
       </p>`,
     tools: "Ruby on Rails for the server-side data model and Angular with Typescript for management in the frontend.",
-  },*/
+    },*/
+  {
+    id: "sql-query-visualisation",
+    language: "de",
+    title: "Visualisierung von SQL-Abfragen",
+    text: `
+      <p>
+        SQL-Abfragen lassen sich recht anschaulich erläutern, weil das Ergebnis von jeder SQL-Komponente immer
+        wieder eine eigene Zwischentabelle ist. Allerdings sind diese Zwischenschritte für den Benutzer nicht
+        besonders transparent: Gängige Datenbanksoftware zeigt immer nur das Endergebnis, ein Anwender muss die
+        entsprechenden Schritte manuell ein- oder aus-kommentieren.
+      </p>
+      <p>
+        Im Rahmen dieses Projektes sollen bestehende BlattWerkzeug-SQL-Abfragen schrittweise ausgeführt und
+        sinnvoll visualisiert werden. Dazu muss der Syntaxbaum einer Abfrage in eine Abfolge von aufeinander
+        aufbauenden Abfragen transformiert werden. Dabei sollen mindestens (<code>OUTER</code>)
+        <code>JOIN</code>-Operationen in mehreren Schritten gezeigt werden (Kreuzprodukt bilden, innere
+        Verknüpfung, <code>NULL</code>-Werte) und die Inhalte von Gruppierungen sichtbar gemacht werden.
+      </p>`,
+
+    tools: "BlattWerkzeug-Syntaxbäume, TypeScript mit Angular",
+  },
   {
     id: "regex-course",
     language: "de",
@@ -76,6 +87,20 @@ export const ProjectProposals: ProjectProposal[] = [
         des generierten Block-Editors soll er dazu einen Ausdruck bauen, der alle Testfälle erfüllt.
       </p>`,
     tools: "BlattWerkzeug-Sprachdefinitionen, TypeScript mit Angular"
+  },
+  {
+    id: "community-functions",
+    language: "de",
+    title: "Community-Funktionen für Schüler",
+    text: `
+      <p>
+        BlattWerkzeug soll in einem überschaubarem Rahmen mit Community-Funktionen ausgestattet werden. Dazu gehören Kommentare zu Projekten, eine Foren-artige Kommunikationsmöglichkeit und persönliche Direktnachrichten. Diese Funktionalität soll allerdings nicht von Grund auf neu entwickelt werden: Der Nutzen steht dabei in keinem Verhältnis zum Aufwand, vor allem weil entsprechende Software schon existiert.
+      </p>
+      <p>
+        Stattdessen sollen bestehende Community-Platformen in Bezug auf ihre Eignung für die Integration evaluiert werden. Ein erster Ausgangspunkt für die Recherche sollten bestehende OpenSource Foren-Programme wie <a href="http://www.discourse.org">Discourse</a> sein, eine Liste mit möglichen Kandidaten findet sich bei <a href="https://github.com/Kickball/awesome-selfhosted#social-networks-and-forums">Awesome Selfhosted</a>. Die schlussendlich gewählte Software soll dann in BlattWerkzeug integriert werden. Dazu gehört mindestens ein gemeinsamer Login und die Integration von Kommentaren zu Projekten oder Nachrichten. Weitere Aspekte sind abhängig von der ausgewählten Software.
+      </p>`,
+
+    tools: "Eigene Konzeption und Recherche, Anbindung der gewählten Software",
   },
   {
     id: "teacher-backend",
@@ -100,18 +125,14 @@ export const ProjectProposals: ProjectProposal[] = [
     tools: "Eigene Konzeption und Recherche, TypeScript mit Angular, Ruby mit Rails",
   },
   {
-    id: "community-functions",
+    id: "visual-database-editor",
     language: "de",
-    title: "Community-Funktionen für Schüler",
+    title: "Visueller Drag & Drop Editor für Datenbanken",
     text: `
-      <p>
-        BlattWerkzeug soll in einem überschaubarem Rahmen mit Community-Funktionen ausgestattet werden. Dazu gehören Kommentare zu Projekten, eine Foren-artige Kommunikationsmöglichkeit und persönliche Direktnachrichten. Diese Funktionalität soll allerdings nicht von Grund auf neu entwickelt werden: Der Nutzen steht dabei in keinem Verhältnis zum Aufwand, vor allem weil entsprechende Software schon existiert.
-      </p>
-      <p>
-        Stattdessen sollen bestehende Community-Platformen in Bezug auf ihre Eignung für die Integration evaluiert werden. Ein erster Ausgangspunkt für die Recherche sollten bestehende OpenSource Foren-Programme wie <a href="http://www.discourse.org">Discourse</a> sein, eine Liste mit möglichen Kandidaten findet sich bei <a href="https://github.com/Kickball/awesome-selfhosted#social-networks-and-forums">Awesome Selfhosted</a>. Die schlussendlich gewählte Software soll dann in BlattWerkzeug integriert werden. Dazu gehört mindestens ein gemeinsamer Login und die Integration von Kommentaren zu Projekten. Weitere Aspekte sind abhängig von der ausgewählten Software.
-      </p>`,
-
-    tools: "Eigene Konzeption und Recherche, Anbindung der gewählten Software",
+          <p>
+          Aufbauend auf der <a href="http://files.blattwerkzeug.de/theses/marco-pawlowski-thesis-schema-editor.pdf"> Bachelor-Thesis von Marco Pawloski</a> soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+          </p>`,
+    tools: "TypeScript mit Angular",
   },
   /*
   {
