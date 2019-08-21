@@ -279,17 +279,25 @@ export interface GrammarListDescription {
   slug?: string
 }
 
+/**
+ * Types for a single language
+ */
 export type NamedTypes = { [nodeName: string]: NodeTypeDescription };
+
+/**
+ * Multiple languages with types
+ */
+export type NamedLanguages = { [languageName: string]: NamedTypes };
 
 /**
  * This part of the grammar is stored as a JSON blob in the database.
  */
 export interface GrammarDatabaseBlob {
   // All types that are defined on this language
-  types: { [languageName: string]: NamedTypes }
+  types: NamedLanguages
 
   // All types that come from different languages
-  foreignTypes?: { [languageName: string]: NamedTypes }
+  foreignTypes?: NamedLanguages
 
   // The type that needs to be at the root of the language.
   root: QualifiedTypeName

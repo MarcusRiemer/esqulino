@@ -2,8 +2,9 @@ import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes } from './validation-result'
 import { NodePropertyIntegerValidator } from './grammar';
-import { grammarWith } from './grammar.spec-util';
+import { singleLanguageGrammar, multiLanguageGrammar, comparableErrors } from './grammar.spec-util';
 import { getQualifiedTypes } from './grammar-util';
+import { NodeDescription } from './syntaxtree.description';
 
 /**
  * Describes a language where each document would be the equivalent
@@ -17,7 +18,7 @@ import { getQualifiedTypes } from './grammar-util';
  *   </body>
  * </html>
  */
-const langMiniHtml = grammarWith("mini-html", "html", {
+const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
   "text": {
     type: "concrete",
     attributes: [
@@ -165,7 +166,7 @@ const langMiniHtml = grammarWith("mini-html", "html", {
  * FROM
  * WHERE
  */
-const langMiniSql = grammarWith("mini-sql", "root", {
+const langMiniSql = singleLanguageGrammar("mini-sql", "root", {
   "root": {
     type: "oneOf",
     oneOf: ["query-select", "query-delete"]
@@ -199,7 +200,7 @@ const langMiniSql = grammarWith("mini-sql", "root", {
 /**
  * A single node that uses every possible string constraint.
  */
-const langStringConstraint = grammarWith("string-constraint", "root", {
+const langStringConstraint = singleLanguageGrammar("string-constraint", "root", {
   root: {
     type: "concrete",
     attributes: [
@@ -256,7 +257,7 @@ const langStringConstraint = grammarWith("string-constraint", "root", {
 /**
  * A single node that uses every possible integer constraint.
  */
-const langIntegerConstraint = grammarWith("integer-constraint", "root", {
+const langIntegerConstraint = singleLanguageGrammar("integer-constraint", "root", {
   root: {
     type: "concrete",
     attributes: [
@@ -283,7 +284,7 @@ const langIntegerConstraint = grammarWith("integer-constraint", "root", {
 /**
  * A single root node that uses some children with the "allowed" constraint
  */
-const langAllowedConstraint = grammarWith("allowed-constraint", "root", {
+const langAllowedConstraint = singleLanguageGrammar("allowed-constraint", "root", {
   "root": {
     type: "concrete",
     attributes: [
@@ -318,7 +319,7 @@ const langAllowedConstraint = grammarWith("allowed-constraint", "root", {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSingleSequenceConstraint = grammarWith("single-sequence-constraint", "root", {
+const langSingleSequenceConstraint = singleLanguageGrammar("single-sequence-constraint", "root", {
   "root": {
     type: "concrete",
     attributes: [
@@ -335,7 +336,7 @@ const langSingleSequenceConstraint = grammarWith("single-sequence-constraint", "
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSequenceConstraint = grammarWith("sequence-constraint", "root", {
+const langSequenceConstraint = singleLanguageGrammar("sequence-constraint", "root", {
   "root": {
     type: "concrete",
     attributes: [
@@ -371,7 +372,7 @@ const langSequenceConstraint = grammarWith("sequence-constraint", "root", {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langOneOfNodes = grammarWith("oneof-nodes", "root", {
+const langOneOfNodes = singleLanguageGrammar("oneof-nodes", "root", {
   "root": {
     type: "oneOf",
     oneOf: ["a", "b"]
@@ -384,7 +385,7 @@ const langOneOfNodes = grammarWith("oneof-nodes", "root", {
 /**
  * A single node with only boolean properties.
  */
-const langBooleanConstraint = grammarWith("boolean-constraint", "root", {
+const langBooleanConstraint = singleLanguageGrammar("boolean-constraint", "root", {
 
   "root": {
     type: "concrete",
@@ -401,7 +402,7 @@ const langBooleanConstraint = grammarWith("boolean-constraint", "root", {
 /**
  * A single node that may have optional properties.
  */
-const langOptionalProperty = grammarWith("optionalProperty", "root", {
+const langOptionalProperty = singleLanguageGrammar("optionalProperty", "root", {
   "root": {
     type: "concrete",
     attributes: [
@@ -420,7 +421,7 @@ const langOptionalProperty = grammarWith("optionalProperty", "root", {
   }
 });
 
-const langSimpleChoice = grammarWith("simpleChoice", "root", {
+const langSimpleChoice = singleLanguageGrammar("simpleChoice", "root", {
   "root": {
     type: "concrete",
     attributes: [
@@ -435,7 +436,7 @@ const langSimpleChoice = grammarWith("simpleChoice", "root", {
   "b": { type: "concrete" }
 });
 
-const langComplexChoice = grammarWith("complexChoice", "root", {
+const langComplexChoice = singleLanguageGrammar("complexChoice", "root", {
   "root": {
     type: "concrete",
     attributes: [
@@ -506,7 +507,7 @@ describe('Grammar Validation', () => {
    * clash between oneOf and complex types.
    */
   it('Grammar Empty Nodes', () => {
-    const g = grammarWith("emptyNodes", "r", {
+    const g = singleLanguageGrammar("emptyNodes", "r", {
       "r": { type: "concrete" }
     });
 
@@ -1751,5 +1752,185 @@ describe('Grammar Validation', () => {
     expect(JSON.stringify(res.errors[0].data)).toBeTruthy("Should be pure data");
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(JSON.stringify(res.errors[1].data)).toBeTruthy("Should be pure data");
+  });
+
+  describe(`Multiple Languages in Single Grammar`, () => {
+    it(`Two languages, same typename, no relation`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "t1" },
+        {
+          "g": {
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          },
+          "h": {
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          }
+        }
+      );
+
+      const v = new Validator([g]);
+
+      expect(v.getGrammarValidator("g").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+      expect(v.getGrammarValidator("h").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+
+      expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
+      expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
+      expect(v.isKnownLanguage("n")).withContext("n known").toBe(false);
+
+      expect(v.isKnownType("g", "t1")).withContext("g.t1 known").toBe(true);
+      expect(v.isKnownType("g", "t2")).withContext("g.t2 known").toBe(false);
+
+      expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
+      expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
+
+      const astDesc: AST.NodeDescription = {
+        language: "g",
+        name: "t1",
+        children: {}
+      }
+
+      const ast = new AST.Tree(astDesc);
+      expect(comparableErrors(v.validateFromRoot(ast))).toEqual([]);
+    });
+
+    it(`Two languages, same typename, g.t1 has h.t1 as child`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "t1" },
+        {
+          "g": {
+            "t1": {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "allowed",
+                  name: "t1_c1",
+                  nodeTypes: [
+                    {
+                      nodeType: { languageName: "h", typeName: "t1" },
+                      occurs: "1"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "h": {
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          }
+        }
+      );
+
+      const v = new Validator([g]);
+
+      expect(v.getGrammarValidator("g").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+      expect(v.getGrammarValidator("h").rootType.description)
+        .toEqual({ languageName: "g", typeName: "t1" });
+
+      expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
+      expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
+      expect(v.isKnownLanguage("n")).withContext("n known").toBe(false);
+
+      expect(v.isKnownType("g", "t1")).withContext("g.t1 known").toBe(true);
+      expect(v.isKnownType("g", "t2")).withContext("g.t2 known").toBe(false);
+
+      expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
+      expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
+
+      const astDesc: AST.NodeDescription = {
+        language: "g",
+        name: "t1",
+        children: {
+          "t1_c1": [
+            {
+              language: "h",
+              name: "t1"
+            }
+          ]
+        }
+      }
+
+      const ast = new AST.Tree(astDesc);
+      const res = v.validateFromRoot(ast);
+      expect(comparableErrors(res)).toEqual([]);
+    });
+
+    it(`Two types in two languages, root is typedef for either of them`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "root" },
+        {
+          "g": {
+            "root": {
+              type: "oneOf",
+              oneOf: [
+                { languageName: "g", typeName: "t1" },
+                { languageName: "h", typeName: "t1" }
+              ]
+            },
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          },
+          "h": {
+            "t1": {
+              type: "concrete",
+              attributes: []
+            }
+          }
+        }
+      );
+
+      const v = new Validator([g]);
+
+      expect(v.getGrammarValidator("g").rootType.description)
+        .toEqual({ languageName: "g", typeName: "root" });
+      expect(v.getGrammarValidator("h").rootType.description)
+        .toEqual({ languageName: "g", typeName: "root" });
+
+      expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
+      expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
+      expect(v.isKnownLanguage("n")).withContext("n known").toBe(false);
+
+      expect(v.isKnownType("g", "t1")).withContext("g.t1 known").toBe(true);
+      expect(v.isKnownType("g", "t2")).withContext("g.t2 known").toBe(false);
+
+      expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
+      expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
+
+
+      const validDescs: NodeDescription[] = [
+        {
+          language: "g",
+          name: "t1",
+        },
+        {
+          language: "h",
+          name: "t1",
+        },
+      ];
+
+      validDescs.forEach(astDesc => {
+        const ast = new AST.Tree(astDesc);
+        const res = v.validateFromRoot(ast);
+        expect(comparableErrors(res))
+          .withContext(JSON.stringify(astDesc))
+          .toEqual([]);
+      });
+    });
   });
 });

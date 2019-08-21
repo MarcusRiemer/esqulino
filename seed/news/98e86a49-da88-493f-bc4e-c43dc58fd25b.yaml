@@ -1,0 +1,38 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 98e86a49-da88-493f-bc4e-c43dc58fd25b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"Neue Datenbank: Pokédex", "en"=>"New Database: Pokédex"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: |-
+    "de"=>"Welche Attacke kann von den meisten Pokémon gelernt werden? Gibt es mehr \"Wasser\" oder mehr \"normale\" Pokémon? Und wie heißt eigentlich \"Taubsi\" auf Französisch? Diese und weiter Fragen können mit [den Daten aus dem Pokédex beantwortet werden](/editor/pokedex).
+
+    <!-- SNIP -->
+
+    Die Daten stammen aus dem [PokéAPI-Projekt](https://pokeapi.co/). Dort lassen sich anhand einer Web-Schnittstelle umfangreiche JSON-Daten zu allen möglichen Pokémon abrufen. Die entsprechenden Daten sind in einem Content-Management-Projekt an der Fachhochschule Wedel zusammengetragen und in eine relationale Datenbank überführt worden. Das  [entstandene Schema](/editor/pokedex/schema/default) schaut aus wie folgt:
+
+    <img src=\"/api/project/pokedex/db/default/visual_schema?format=png\" class=\"img-fluid mx-auto d-block\">", "en"=>"Which attack can be learned by the most Pokémon? Are there more \"water\" or \"normal\" Pokémon? And what is the name of \"Pidgeot\" in french? These and other questions can be answered [with data from the Pokédex](/editor/pokedex).
+
+    <!-- SNIP -->
+
+    The data comes from the [PokéAPI-Project](https://pokeapi.co/), a JSON web interface that provides data about Pokémon. The data in question was gathered and transformed into a relational database as part of a content management project at the University of Applied Sciences Wedel. The [resulting schema](/editor/pokedex/schema/default) looks like this:
+
+    <img src=\"/api/project/pokedex/db/default/visual_schema?format=png\" class=\"img-fluid mx-auto d-block\">"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: '2019-08-10 00:00:00'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-08-10 11:36:38.174687'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-08-10 11:48:58.835282'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000002
+new_record: false
+active_record_yaml_version: 2
