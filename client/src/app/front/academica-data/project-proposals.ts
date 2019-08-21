@@ -1,3 +1,7 @@
+/**
+ * Inspiration for a task that could be fulfilled by a student in an
+ * academic project (thesis, seminar, ...)
+ */
 export interface ProjectProposal {
   id: string;
   language: string;
@@ -13,10 +17,11 @@ export const ProjectProposals: ProjectProposal[] = [
     title: "Visueller Drag & Drop Editor für Datenbanken",
     text: `
           <p>
-          Aufbauend auf der Bachelor-Thesis von Marco Pawloski soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+          Aufbauend auf der <a href="http://files.blattwerkzeug.de/theses/marco-pawlowski-thesis-schema-editor.pdf"> Bachelor-Thesis von Marco Pawloski</a> soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
           </p>`,
     tools: "TypeScript mit Angular",
   },
+  /*
   {
     id: "trucklino-world-editor",
     language: "de",
@@ -30,6 +35,7 @@ export const ProjectProposals: ProjectProposal[] = [
       </p>`,
     tools: "Typescript mit Angular und <code>canvas</code>-Rendering",
   },
+  */
   /*{
     id: "usermanagement",
     language: "de",
@@ -51,6 +57,27 @@ export const ProjectProposals: ProjectProposal[] = [
     tools: "Ruby on Rails for the server-side data model and Angular with Typescript for management in the frontend.",
   },*/
   {
+    id: "regex-course",
+    language: "de",
+    title: "Kurs für Reguläre Ausdrücke",
+    text: `
+      <p>
+        Reguläre Ausdrücke lassen sich vergleichsweise gut anhand von Beispielen erläutern. Man präsentiert
+        dem Nutzer bestimmte Ausdrücke und Eingaben und führt ihn so schrittweise ein. Das kommerzielle Angebot
+        <a href="https://www.executeprogram.com/">"Execute Program"</a> zeigt sehr schön, wie ein solcher
+        Kurs aussehen könnte.
+      </p>
+      <p>
+        Um ähnliche Ansätze in BlattWerkzeug zu ermöglichen, bedarf es zunächst der Definition und Implementierung
+        von Regulären Ausdrücken an sich. Dabei soll natürlich nicht der gesamte mögliche Sprachumfang abgebildet
+        werden, sondern ein sorgsam gewählter Satz an didaktisch sinnvollen Funktionalitäten.
+        Die implementierte Sprache soll dann im Rahmen einer interaktiven Test-Umgebung zum Einsatz kommen.
+        Dem Anwender werden eine Reihe von beispielhaften Eingaben samt erwartetem Ergebnis vorgegeben. Mittels
+        des generierten Block-Editors soll er dazu einen Ausdruck bauen, der alle Testfälle erfüllt.
+      </p>`,
+    tools: "BlattWerkzeug-Sprachdefinitionen, Angular mit Typescript"
+  },
+  {
     id: "community-functions",
     language: "de",
     title: "Community-Funktionen für Schüler",
@@ -64,6 +91,7 @@ export const ProjectProposals: ProjectProposal[] = [
 
     tools: "Eigene Konzeption und Recherche, Anbindung der gewählten Software",
   },
+  /*
   {
     id: "web-environment",
     language: "de",
@@ -85,6 +113,8 @@ export const ProjectProposals: ProjectProposal[] = [
      </ul>`,
     tools: "Typescript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
   },
+  */
+  /*
   {
     id: "code-sandbox",
     language: "de",
@@ -104,5 +134,5 @@ export const ProjectProposals: ProjectProposal[] = [
        Dazu sollen eigens geschriebene, bösartige Programme in einer Testsuite zusammengefasst und (möglichst) mit den gewählten Isolationsverfahren korrekt eingeschränkt werden. Die Bandbreite umfasst dabei schlicht schädliche Skripten (<code>rm -rf /</code>), triviale Versuche Passwörter auszulesen (<code>cat /etc/shadow</code>), über (BitCoin-)Miner (oder profane Endlosschleifen) bis hin zu Versuchen, einen <q>Command and Control</q>-Server aufzusetzen.
       </p>`,
     tools: "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), Docker",
-  }
+  }, */
 ];
