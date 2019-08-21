@@ -75,7 +75,29 @@ export const ProjectProposals: ProjectProposal[] = [
         Dem Anwender werden eine Reihe von beispielhaften Eingaben samt erwartetem Ergebnis vorgegeben. Mittels
         des generierten Block-Editors soll er dazu einen Ausdruck bauen, der alle Testfälle erfüllt.
       </p>`,
-    tools: "BlattWerkzeug-Sprachdefinitionen, Angular mit Typescript"
+    tools: "BlattWerkzeug-Sprachdefinitionen, TypeScript mit Angular"
+  },
+  {
+    id: "teacher-backend",
+    language: "de",
+    title: "Konzeption & initiale Implementierung eines Backends für Lehrer",
+    text: `
+      <p>
+        Aktuell ist die Benutzerverwaltung von BlattWerkzeug noch sehr rudimentär und keinesfalls auf die
+        Bedürfnisse von Lehrern ausgerichtet. Es fehlen vor allem Werkzeuge zur Verwaltung von ganzen
+        Gruppen an Benutzern. Dabei ist jedoch aktuell noch fast völlig undefiniert, wie der Umgang von
+        Schülern und Lehrern genau zu gestalten ist. Mindestens sollten Lehrer in der Lage sein, mehrere
+        Schüler auf einmal einzuschreiben und diesen auch Projekte vorzugeben.
+      </p>
+      <p>
+        Darüber hinaus stellt sich vor allem die Frage, wie Lehrer ihre Projekte sinnvoll an Gruppen von
+        Schüler-Nutzern weitergeben können. Problematisch ist vornehmlich, dass die Projekte häufig einen
+        Kern an recht statischen Inhalten wie Datenbanken haben. Es ist prinzipiell zwar möglich, wenn auch
+        ineffizient, diese Daten schlicht zu kopieren. Dann ergeben sich allerdings Probleme, wenn solche
+        statischen Daten vom Lehrer aktualisiert werden müssen.
+      </p>`,
+
+    tools: "Eigene Konzeption und Recherche, TypeScript mit Angular, Ruby mit Rails",
   },
   {
     id: "community-functions",
@@ -111,7 +133,7 @@ export const ProjectProposals: ProjectProposal[] = [
        <li>Wie kann eine Seite die Datenquellen angeben, die zur Darstellung benötigt werden?</li>
        <li>Wie können Formulardaten verarbeitet werden?</li>
      </ul>`,
-    tools: "Typescript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
+    tools: "TypeScript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
   },
   */
   /*
