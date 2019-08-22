@@ -1,4 +1,4 @@
-<ng-container *ngIf="providers">
+<ng-container *ngIf="(providers$ | async) as providers">
   <h1>Verknüpfte Konten</h1>
   <hr>
 

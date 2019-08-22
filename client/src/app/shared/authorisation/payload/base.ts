@@ -1,5 +1,4 @@
 import { MayPerformRequestDescription } from '../../may-perform.description';
-
 export class BasePerformData {
   constructor(resourceType: string) {
     this._resourceType = resourceType;

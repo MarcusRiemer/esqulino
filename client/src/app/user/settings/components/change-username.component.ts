@@ -2,11 +2,9 @@ import { Component } from '@angular/core';
 
 import { UserService } from '../../../shared/auth/user.service';
 import { UserNameDescription } from '../../../shared/auth/user.description';
-
-
 @Component({
   selector: "change-username",
-  templateUrl: "../templates/change-username.html"
+  templateUrl: "./templates/change-username.html"
 })
 export class ChangeUsernameComponent {
   constructor(

@@ -1,10 +1,8 @@
 import { EventEmitter } from '@angular/core';
 import { Component, Input, Output } from '@angular/core';
 
-import { UserService } from './user.service';
 import { AvailableProvidersDescription } from './provider.description';
 import { ServerApiService } from '../serverdata';
-
 @Component({
   selector: 'provider-button',
   templateUrl: './templates/provider-button.html'
@@ -18,10 +16,9 @@ export class ProviderButtonComponent {
   ) { }
 
   public onClick() {
-    if (this.provider.urlName) {
-      window.location.href = this._serverApi.getSignInUrl(this.provider.urlName);
-    } else {
-      this.trigger.emit();
-    }
+    this.provider.urlName
+      ? window.location.href = this._serverApi.getSignInUrl(this.provider.urlName)
+      : this.trigger.emit()
+      ;
   }
 }

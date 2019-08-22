@@ -13,6 +13,11 @@ class AuthController < ApplicationController
       if (not identity) then
         identity = create_identity(auth_hash)
       end
+
+      if (signed_in?) and (not current_user.eql? identity.user) then
+        raise RuntimeError.new("Error: already linked with a user")
+      end
+
       sign_in(identity)
       redirect_to URI(request.referer || "/").path
     rescue => e
@@ -48,8 +53,8 @@ class AuthController < ApplicationController
       if (not identity) then
         identity = create_identity(auth_hash)
         # sends an confirmation e-mail
-        IdentityMailer.confirm_email(identity, request_locale).deliver
-        api_response(current_user.informations)
+        IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
+        api_response(current_user.information)
       else
         error_response("E-mail already registered")
       end
@@ -61,7 +66,7 @@ class AuthController < ApplicationController
   def destroy
     sign_out!
     delete_jwt_cookie!
-    api_response(current_user.informations)
+    api_response(current_user.information)
   end
 
   def failure
@@ -75,8 +80,8 @@ class AuthController < ApplicationController
     if (not signed_in?) then
       user = User.create_from_hash(auth_hash)
     end
-    identity = Identity.create_with_auth(auth_hash, user)
 
+    identity = Identity.create_with_auth(auth_hash, user)
     return identity
   end
 

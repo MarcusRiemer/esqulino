@@ -10,8 +10,7 @@ Da zu diesem Zeitpunkt bereits Librarys zur Authentifizierung existieren, wurde 
 \label{sec: devise}
 Devise ist eine Ruby on Rails Library mit der sich eine flexible Authentifizierung ermöglichen lässt. Es bietet ein vorgefertigtes Datenbankschema für registrierte Benutzer, einen leichten Umgang mit OmniAuth und Funktionen wie beispielsweise das Senden einer E-Mail bei Registrierung. Im Datenbankschema enthalten ist ein Log-System mit dem zum Beispiel der Zeitpunkt der letzten Anmeldung eines Benutzers festgehalten werden kann. 
 
-In der Einarbeitungsphase von Devise wurde \todo{schreiben}
-
+Die Funktionalitäten die Omniauth bietet sind jedoch für die Zielverwirklichung ausreichend, we{\ss}halb sich gegen Devise entschieden wurde. Aus diesem Grund mussten Funktionen wie zum Beispiel das Senden einer Bestätigungsmail selbst implementiert werden. 
 
 \subsubsection{Omniauth}
 \label{sec:omniauth}
@@ -58,8 +57,9 @@ Dem zuzüglich liefert Rolify bereits vordefinierte Funktionen, mit denen es mö
 \label{sec: sign-in-imp}
 Die Anmeldung mittels oAuth2 oder Passwort wurde mit Omniauth ermöglicht. Hierbei wurde zuerst Omniauth selber dem derzeitigen Projekt hinzugefügt und darauffolgend die Gems zur Authentifizierung mittels Google, GitHub und Passwort. Um die einzelnen Provider nutzen zu können, müssen diese in einem \enquote{initializer} (Listing \ref{lst:added_providers}) deklariert werden. Ein \enquote{initializer} wird nach dem Rails Framework und den dazugehörigen Gems geladen. Bei der Deklarierung der Provider ist zu beachten, dass Provider wie Google oder GitHub eine jeweilige ID und einen Secret-Key als Parameter benötigen. Diese werden jeweils auf den offiziellen Seiten der Provider erstellt. Dabei musste darauf geachtet werden, dass diese ID und dieser Secret-key über eine Umgebungsvariable mit in das Projekt eingebunden wird. Umgebungsvariablen werden in dem Fall in der Kommandozeile vor das Kommando zum Starten des Projektes gesetzt. Nachdem das Kommando zum starten des Servers ausgeführt wurde, kann auf die Werte der zuvor festgelegten Umgebungsvariablen zugegriffen werden. Die Verwendung von Umgebungsvariablen ist besonders bei Blattwerkzeug vonnöten, da es sich um ein quelloffenes Projekt handelt und jeder den bereits produzierten Code einsehen kann. Da es sich bei Secret-Keys um Passwörter handelt, sind diese nicht im Repository angegeben.  
 
-\lstinputlisting[language=Ruby, style=CodeView, basicstyle=\scriptsize, caption=Zu Omniauth hinzugefügte Provider, captionpos=b, label={lst:added_providers}]{snippets/omniauth-initializer.rb}
-
+\begin{minipage}{\textwidth}
+	\lstinputlisting[language=Ruby, style=CodeView, basicstyle=\scriptsize, caption=Zu Omniauth hinzugefügte Provider, captionpos=b, label={lst:added_providers}]{snippets/omniauth-initializer.rb}
+\end{minipage}
 
 Bei der Erstellung des User und des Identity Models wurde zuerst diskutiert, welche Attribute die jeweiligen Models haben sollten. Hierbei steht das Identity Model für alle hinzugefügten Authentifikations-Möglichkeiten eines Benutzers. Dabei wurde darauf geachtet, welche Attribute später dem Client zur Verfügung gestellt und welche für spätere Controller Funktionen benötigt werden.
 
@@ -88,7 +88,7 @@ Die nachfolgenden Beschreibungen der Attribute beziehen sich auf die identities 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{graphics/users-identities.pdf}
+	\includegraphics[width=0.65\textwidth]{graphics/users-identities.pdf}
 	\caption{Darstellung der users und identities Tabelle inklusive Beziehung.}
 	\label{fig:server-users-identities}
 \end{figure}
@@ -102,39 +102,44 @@ Die nachfolgenden Beschreibungen der Attribute beziehen sich auf die users Tabel
 	Das email Attribut steht für die primäre E-Mail eines Benutzers. Die primäre E-Mail wird verwendet, sobald eine E-Mail von Blattwerkzeug an den Benutzer gesendet wird. Dies ist wichtig, da jedes verknüpfte Konto eine unterschiedliche E-Mail besitzen darf. Die primäre E-Mail wird bei Erstellung eines Benutzers gesetzt, au{\ss}er ein Benutzer authentifiziert sich über einen Provider, dessen Rückgabe keine E-Mail enthält.
 \end{description}
 
-\subsubsection*{Anmeldemöglichkeiten}
-Die geforderten Anmeldemöglichkeiten und deren Implementierung werden in diesem Abschnitt erläutert. 
+
+\subsubsection{Anmeldung mittels \gls{oAuth2}}
+\label{sec:sever-sign-in-oauth2}
+Bei einer Anmeldung mittels \gls{oAuth2} wurde bei dem Provider, über den sich authentifiziert wird, eine Redirect Url hinterlegt. Auf diese wird der jeweilige Benutzer nach Authentifikation zurückgeleitet. Die Route zu der Redirect Url zeigt auf die Funktion mit dem Namen \enquote{callback} im \enquote{AuthController}. Die callback Funktion prüft auf das Vorhandensein der vom Provider zurückgelieferten Daten. Sollte bisher keine Identität mit den Daten des Providers erstellt worden sein wird eine neue Identität angelegt. Führt ein angemeldeter Benutzer diese Funktion aus, wird ihm eine neue Identität zu seinem Konto hinzugefügt. Handelt es sich nicht um einen angemeldeten Benutzer, wird zusätzlich ein neuer Benutzer erstellt. Da jeder Provider unterschiedliche Daten zurückliefert, wird bei dem Anlegen einer neuen Identität zwischen den einzelnen Providern unterschieden. Jeder Provider besitzt eine Abgeleiteteklasse der Basisklasse Identity und greift innerhalb seiner Klasse auf die für ihn relevanten Daten zu. Sollte eine Identität mit den zuürckgelieferten Daten bereits existieren, wird ohne Erstellung einer Identität fortgefahren. Mit der erstellten oder existierenden Identität werden die Benutzerinformationen in die Payload eines \gls{JWT} geschrieben. Bei den Benutzerinformationen handelt es sich um die id, den display\_name und die Rollen eines Benutzers. Die Funktionen zu Erstellung eines \gls{JWT} wurden hierbei in einen Helper ausgelagert und die Gültigkeitsdauer des erstellten \gls{JWT} beläuft sich auf eine Stunde.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{graphics/sign-in-oauth2.pdf}
+	\caption{Ablauf einer Anmeldung mittels \gls{oAuth2}}
+	\label{fig:server-sign-in-oauth}
+\end{figure}
+
+\subsubsection{Anmeldung mittels Passwort}
+\label{sec:sever-sign-in-password}
+Die Anmeldung mittels Passwort wurde mittels Omniauth Identity\footnote{\url{https://github.com/omniauth/omniauth-identity}} ermöglicht. Omniauth Identity ist ebenfalls eine Strategie mit der die Möglichkeit gegeben ist, sich über ein Passwort bei Blattwerkzeug anzumelden. Ebenso wie die Developer Strategie bietet auch diese Strategie die Möglichkeit, ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Strategie optional, und eine ausschlie{\ss}liche Kommunikation über ein API ist möglich.
+
+Bei dem Nutzen dieser Strategie fiel auf, dass die Daten übermittelt wurden sie jedoch nicht richtig verarbeitet werden konnten (Listing \ref{lst:register_omniauth_identity}). Das hatte zur Folge, dass mit der Erstellung eines Models, welches mit als Parameter im iniziliazer angegeben werden kann, nicht ordnungsgemä{\ss} fortgefahren werden konnte. Um fortzufahren, wäre es möglich eine eigene Strategie für Omniauth zu entwickeln oder auf die von Omniauth Identity mitgelieferten Optionen zurück zugreiffen.
+
+Omniauth Identity bietet die Möglichkeit bei der Registrierung auf eine Funktion zu verweisen. Diese Funktion muss ebenfalls im \enquote{initializer} angegeben werden. (Listing \ref{lst:added_providers}). Tritt bei der Erstellung des Models ein Fehler auf (Listing \ref{lst:register_omniauth_identity}), wird die Funktion, im zuvor festgelegten iniziliazer, aufgerufen. Letztendlich hat man sich in der Thesis für diese Methode entschieden. Hierbei werden jegliche Funktionen innerhalb des AuthControllers und au{\ss}erhalb der Strategie genutzt.
+
+
+\begin{minipage}{\textwidth}
+	\lstinputlisting[language=Ruby, style=CodeView, caption=Aufgerufene Funktion bei POST Request (Omniauth Identity), captionpos=b, label={lst:register_omniauth_identity}]{snippets/omniauth-identity-registration.rb}
+\end{minipage}
+
+
 \begin{description}
-	\item[Anmeldung mittels \gls{oAuth2}]\hfill\\
-	Bei einer Anmeldung mittels \gls{oAuth2} wurde bei dem Provider, über den sich authentifiziert wird, eine Redirect Url hinterlegt. Auf diese wird der jeweilige Benutzer nach Authentifikation zurückgeleitet. Die Route zu der Redirect Url zeigt auf die Funktion mit dem Namen \enquote{Callback} im \enquote{AuthController}. Die Callback Funktion prüft auf das Vorhandensein der vom Provider zurückgelieferten Daten. Sollte bisher keine Identität mit den Daten des Providers erstellt worden sein wird eine neue Identität angelegt. Führt ein angemeldeter Benutzer diese Funktion aus, wird ihm eine neue Identität zu seinem Konto hinzugefügt. Handelt es sich nicht um einen angemeldeten Benutzer, wird zusätzlich ein neuer Benutzer erstellt. Da jeder Provider unterschiedliche Daten zurückliefert, wird bei dem Anlegen einer neuen Identität zwischen den einzelnen Providern unterschieden. Jeder Provider besitzt eine Abgeleiteteklasse der Basisklasse Identity und greift innerhalb seiner Klasse auf die für ihn relevanten Daten zu. Sollte eine Identität mit den zuürckgelieferten Daten bereits existieren, wird ohne Erstellung einer Identität fortgefahren. Mit der erstellten oder existierenden Identität werden die Benutzerinformationen in die Payload eines \gls{JWT} geschrieben. Bei den Benutzerinformationen handelt es sich um die id, den display\_name und die Rollen eines Benutzers. Die Funktionen zu Erstellung eines \gls{JWT} wurden hierbei in einen Helper ausgelagert und die Gültigkeitsdauer des erstellten \gls{JWT} beläuft sich auf eine Stunde.
-
-	\begin{figure}[h]
-		\centering
-		\includegraphics[width=0.6\textwidth]{graphics/sign-in-oauth2.pdf}
-		\caption{Ablauf einer Anmeldung mittels \gls{oAuth2}}
-		\label{fig:server-sign-in-oauth}
-	\end{figure}
-
-	\item[Anmeldung mittels Passwort]\hfill\\
-	\todo[inline]{Visualisierung als Automat (Zustände / Übergänge) zur Veranschaulichung des Prozesses vermutlich hilfreich}
-	\todo[inline]{Allgemein: Mehr Struktur, in diesem Punkt verstecken sich zuviele eigenständige Funktionen}
-	Die Anmeldung mittels Passwort wurde mittels Omniauth Identity\footnote{\url{https://github.com/omniauth/omniauth-identity}} ermöglicht. Omniauth Identity ist ebenfalls eine Strategie mit der die Möglichkeit gegeben ist, sich über ein Passwort bei Blattwerkzeug anzumelden. Ebenso wie die Developer Strategie bietet auch diese Strategie die Möglichkeit, ein vorgefertigtes Formular für Anmeldung und Registrierung zu erstellen. Jedoch ist es bei dieser Strategie optional, und eine ausschließliche Kommunikation über ein API ist möglich.
-
-	Bei dem Nutzen dieser Strategie fiel auf, dass die Daten übermittelt wurden sie jedoch nicht richtig verarbeitet werden konnten (Listing \ref{lst:register_omniauth_identity}). Das hatte zur Folge, dass mit der Erstellung eines Models, welches mit als Parameter im iniziliazer angegeben werden kann, nicht ordnungsgemäß fortgefahren werden konnte. Um fortzufahren, wäre es möglich eine eigene Strategie für Omniauth zu entwickeln oder auf die von Omniauth Identity mitgelieferten Optionen zurück zugreiffen.
+	\item[Registrierung]\hfill\\
+	Bevor eine Anmeldung mittels Passwort stattfinden kann, wurde eine Registrierungs-Möglichkeit hinzugefügt. Die \enquote{register} Funktion arbeitet ähnlich, wie die callback (Sektion \ref{sec:sever-sign-in-oauth2}) Funktion. Der Unterschied besteht darin, dass die register Funktion einen simulierten Hash in der Struktur Omniauths erhält und mit diesem versucht, eine neue Identität zu erstellen. Bei dem Erstellen einer neuen Password-Identität wird ein Verifizierungs-Token generiert. Dieser Verifizierungs-Token ist eine \gls{UUID} und wird zur Verzifizierung der Identität genutzt. Nachdem eine Identität erstellt wurde, sendet der Server mithilfe der Basisklasse ActionMailer eine Bestätigungsmail. Diese Bestätigungsmail verhindert das Registrieren von willkürlichen E-Mail Adressen. Zudem wird  mit der Bestätigungsmail eine E-Mail Adresse auf ihre Existens geprüft. Die Bestätigungsmail besteht aus einem Hyperlink zu einer \gls{URL} Blattwerkzeugs in der der Verifizierungs-Token enthalten ist. Sobald dieser \gls{URL} besucht wird, wird die Indentität als bestätigt gekennzeichnet. Dies erfolgt durch das Setzen des confirmed Feldes im JSON Blob Attribut own\_data.
 	
-	\begin{minipage}{\textwidth}
-		\lstinputlisting[language=Ruby, style=CodeView, caption=Aufgerufene Funktion bei POST Request (Omniauth Identity), captionpos=b, label={lst:register_omniauth_identity}]{snippets/omniauth-identity-registration.rb}
-	\end{minipage}
-
-	Omniauth Identity bietet die Möglichkeit bei der Registrierung auf eine Funktion zu verweisen. Diese Funktion muss ebenfalls im iniziliazer\todo{typo} angegeben werden. (Listing \ref{lst:added_providers}). Tritt bei der Erstellung des Models ein Fehler auf (Listing \ref{lst:register_omniauth_identity}), wird die Funktion, im zuvor festgelegten iniziliazer, aufgerufen. Letztendlich hat man sich in der Thesis für diese Methode entschieden. Hierbei werden jegliche Funktionen innerhalb des AuthControllers und außerhalb der Strategie genutzt.
-
-	Bevor eine Anmeldung mittels Passwort stattfinden kann, wurde eine Registrierungs-Möglichkeit hinzugefügt. Die \enquote{register} Funktion arbeitet ähnlich, wie die callback Funktion\todo{welche}. Der Unterschied besteht darin, dass die register Funktion einen simulierten Hash in der Struktur Omniauths erhält und mit diesem versucht, eine neue Identität zu erstellen. Bei dem Erstellen einer neuen Password-Identität wird ein Verifizierungs-Token generiert. Dieser Verifizierungs-Token ist eine \gls{UUID} und wird zur Verzifizierung der Identität genutzt. Nachdem eine Identität erstellt wurde, sendet der Server mithilfe der Basisklasse ActionMailer eine Bestätigungsmail. Diese Bestätigungsmail verhindert das Registrieren von willkürlichen E-Mail Adressen. Zudem wird  mit der Bestätigungsmail eine E-Mail Adresse auf ihre Existens geprüft. Die Bestätigungsmail besteht aus einem Hyperlink zu einer \gls{URL} Blattwerkzeugs in der der Verifizierungs-Token enthalten ist. Sobald dieser \gls{URL} besucht wird, wird die Indentität als bestätigt gekennzeichnet. Dies erfolgt durch das Setzen des confirmed Feldes im JSON Blob Attribut own\_data.
-
+	\item[Verifizierungsmail nicht erhalten]\hfill\\
 	Da es vorkommen kann, dass eine Verifizierungsmail nicht an der angegebene E-Mail ankommt, wurde hierfür eine Funktion im IdentitiesController geschrieben. Diese Funktion prüft die übermittelte E-Mail auf ihre Existens in der Blattwerkzeug-Datenbank und ob diese bereits verifiziert wurde. Sollte diese E-Mail nicht verifiziert sein, wird eine neue Verifizierungsmail versendet. Gleichzeitig wird jedoch auch eine Wartezeit von zwei Minuten im own\_data Attribut festgelegt. Die Wartezeit zum Versenden einer neuen Verifizierungsmail soll verhindern, dass eine E-Mail Adresse mit Verifizierungsmails überhäuft werden kann.
-
+	
+	\item[Anmeldung mit verifizierter E-Mail]\hfill\\
 	Ist eine Identität mit einem Passwort bereits vorhanden, kann sich mit E-Mail und Passwort angemeldet werden. Bei der Anmeldung wird das Passwort zur angegebenen E-Mail überprüft. Zusätzlich wird geprüft, ob die E-Mail verifiziert wurde. Sollten diese Sicherheitsabfragen erfolgreich durchlaufen sein, wird wie bei der Anmeldung mittels \gls{oAuth2} ein \gls{JWT} ausgestellt, in dem die Benutzerinformationen gespeichert werden.
-
-	Da im Laufe der Zeit die Möglichkeit besteht, dass Benutzer ihr Passwort vergessen haben, wurde hierfür eine Funktion im IdentitiesController erstellt. Damit ein Passwort zurück gesetzt werden kann, muss die übermittelte E-Mail Adresse als Passwort Identität vorhanden sein. Sollte die Identität vorliegen, wird ein password\_reset\_token erstellt. Dieser password\_reset\_token ist eine \gls{UUID} und wird im own\_data JSON Blob Attribut gespeichert. Ebenfalls zum own\_data Attribut wird ein Feld password\_reset\_token\_exp hinzugefügt. Dessen Wert beläuft sich auf die aktuelle Uhrzeit plus dreißig Minuten. Nachdem die festgelegte Uhrzeit des password\_reset\_token\_exp Feldes überschritten wurde, kann der Zurücksetzungs-Token nicht mehr verwendet werden. Damit das Passwort trotzdessen zurückgesetzt werden kann, muss ein neuer Zurücksetzungs-Token angefordert werden. Die Ablaufzeit eines Zurücksetzungs-Tokens hat den Vorteil, dass, sollte beispielsweise ein Angreiffer Zugriff auf den Browserverlauf haben, dieser nicht die Möglichkeit erhält, das Passwort dieses Benutzers zu verändern. Die E-Mail, die beim Kennwort zurücksetzen versendet wird, wird an die primäre E-Mail verschickt und enthält einen Hyperlink zum Wiederherstellen des Passwortes. Der Hyperlink beinhaltet den password\_reset\_token. Nachdem ein neues Passwort ausgewählt wurde, wird von jeder Passwort-Identität des Benutzers das Passwort geändert.
+	
+	\item[Passwort vergessen]\hfill\\
+		Da im Laufe der Zeit die Möglichkeit besteht, dass Benutzer ihr Passwort vergessen haben, wurde hierfür eine Funktion im IdentitiesController erstellt. Damit ein Passwort zurück gesetzt werden kann, muss die übermittelte E-Mail Adresse als Passwort Identität vorhanden sein. Sollte die Identität vorliegen, wird ein password\_reset\_token erstellt. Dieser password\_reset\_token ist eine \gls{UUID} und wird im own\_data JSON Blob Attribut gespeichert. Ebenfalls zum own\_data Attribut wird ein Feld password\_reset\_token\_exp hinzugefügt. Dessen Wert beläuft sich auf die aktuelle Uhrzeit plus drei{\ss}ig Minuten. Nachdem die festgelegte Uhrzeit des password\_reset\_token\_exp Feldes überschritten wurde, kann der Zurücksetzungs-Token nicht mehr verwendet werden. Damit das Passwort trotzdessen zurückgesetzt werden kann, muss ein neuer Zurücksetzungs-Token angefordert werden. Die Ablaufzeit eines Zurücksetzungs-Tokens hat den Vorteil, dass, sollte beispielsweise ein Angreiffer Zugriff auf den Browserverlauf haben, dieser nicht die Möglichkeit erhält, das Passwort dieses Benutzers zu verändern. Die E-Mail, die beim Kennwort zurücksetzen versendet wird, wird an die primäre E-Mail verschickt und enthält einen Hyperlink zum Wiederherstellen des Passwortes. Der Hyperlink beinhaltet den password\_reset\_token. Nachdem ein neues Passwort ausgewählt wurde, wird von jeder Passwort-Identität des Benutzers das Passwort geändert.
 \end{description}
 
 Blattwerkzeug nutzt Subdomains zur Unterteilung verschiedener Sprachen. Dabei ergab sich das Problem, dass das Umleiten auf eine Basisurl, die \gls{CSRF} Protection von Rails ausgelöst hat. Somit ist es derzeit möglich, sich über die Subdomains anzumelden, jedoch wird zwischenzeitlich ein Fehler zurückgegeben.
@@ -145,7 +150,7 @@ Sobald ein Benutzer angemeldet ist, wird bei jedem Request ein \gls{JWT} mit an 
 
 Damit zwischen den Benutzern unterschieden werden kann, wurden drei Globale-Rollen eingebaut.
 
-\todo[inline]{Unklar: Was genau wurde extra \enquote{eingebaut}? Ich halte das eher für eine Konvention. Und zwischen Benitzern unterscheidet man anhand ihrer ID ;-) Ich weiß was gemeint ist, aber geh hier nochmal in dich und formulier sauber aus inwiefern diese (sinnvolle!) Konvention dir hilft.}
+\todo[inline]{Unklar: Was genau wurde extra \enquote{eingebaut}? Ich halte das eher für eine Konvention. Und zwischen Benitzern unterscheidet man anhand ihrer ID ;-) Ich wei{\ss} was gemeint ist, aber geh hier nochmal in dich und formulier sauber aus inwiefern diese (sinnvolle!) Konvention dir hilft.}
 
 \begin{description}
 	\item[guest]\hfill\\
@@ -173,9 +178,10 @@ Da Blattwerkzeug bereits eine Passwortabfrage eingebaut hatte (Listing \ref{lst:
 \end{minipage}
 
 \subsubsection{may\_perform}
+\label{sec:server-may-perform}
 Sobald man sich mit den Rollen beschäftigt, stellte sich die Frage, wie die Bedienelemente in Abhängigkeit von den Rollen Clientseitig angezeigt werden sollten. Hierbei ergab sich, ein eigenes Pundit (Sektion \ref{sec: pundit}) ähnliches Mustur zu implementieren oder den Server bei jedem Bedienelement zu fragen, ob der aktuelle Benutzer Zugriff auf das Bedienelement hat. In der Thesis wurde sich für den zweiten Weg entschieden, da bei einer zusätzlichen clientseitigen Überprüfung, Client und Server gepflegt werden müssten. Sollte es vorkommen, dass die Pflege des serverseitigen Teils vergessen wurde, stellt dieses ein Sicherheitsrisiko dar. Clientseitige Anwendungen werden auf dem Endgerät eines Benutzers ausgeführt. Infolgedessen, besteht die Möglichkeit, die Anwendung zu manipulieren.
 
-Die serverseitige Überprüfung der Bedienelemente wurde mittels der may\_perform Funktion realisiert. Diese erhält vom Client eine Liste an Daten, in der jedes Element ein Bedienelement darstellt. In der may\_perform Funktion wird jedes Element der Liste durchlaufen und auf das Zugriffsrecht des aktuellen Benutzers geprüft. Dies geschieht in dem aus den übermittelten Daten eine Instanz einer Policy erstellt wird, die zu der jeweiligen Ressource, beispielsweise der Projekte (Listing \ref{lst:project_policy}), gehört. Hierbei wird die Funktion, die auf ihren Zugriff geprüft werden soll, ebenfalls vom Client mit an den Server gesendet. Diese wird letztendlich auf der erstellten Instanz ausgeführt. Das Ergebnis der aufgerufenen Policy Funktion wird in einem Array gespeichert und sobald die Liste durchlaufen wurde, an den Client weiter übermittelt. Die Nutzung des Arrays und der übermittelten Liste wird in der Client Sektion \ref{sec:fazit} erläutert.
+Die serverseitige Überprüfung der Bedienelemente wurde mittels der may\_perform Funktion realisiert. Diese erhält vom Client eine Liste an Daten, in der jedes Element ein Bedienelement darstellt. In der may\_perform Funktion wird jedes Element der Liste durchlaufen und auf das Zugriffsrecht des aktuellen Benutzers geprüft. Dies geschieht in dem aus den übermittelten Daten eine Instanz einer Policy erstellt wird, die zu der jeweiligen Ressource, beispielsweise der Projekte (Listing \ref{lst:project_policy}), gehört. Hierbei wird die Funktion, die auf ihren Zugriff geprüft werden soll, ebenfalls vom Client mit an den Server gesendet. Diese wird letztendlich auf der erstellten Instanz ausgeführt. Das Ergebnis der aufgerufenen Policy Funktion wird in einem Array gespeichert und sobald die Liste durchlaufen wurde, an den Client weiter übermittelt.
 
 \subsubsection{Sicherheit und Login}
 \label{sec:server-account-settings}
@@ -197,8 +203,6 @@ Da ein Benutzer die Möglichkeit haben soll seinen Account zu verwalten und Änd
 
 \lstinputlisting[language=Ruby, style=CodeView, caption=Validierung des Benutzernamens, captionpos=b, label={lst:validation_display_name},float,floatplacement=h]{snippets/email_validator.rb}
 
-\todo[inline]{Die Regex-Regel ist so nicht sinnvoll. Webseiten beschränken Benutzernamen vor allem um Probleme mit leicht zu verwechselnden Zeichen zu vermeiden (Stichwort \enquote{Greek Question Mark Prank}) oder weil Namen wie \enquote{<script>alert(haha)</script>} gar nicht erst möglich sein sollen. Beschreibe beide Sachverhalte / Probleme (nicht unbedingt hier, das kann sogar bis zu den Anforderungen nach vorne) und präsentiere hier dann einen passenderen RegEx.}
-
 \subsection{Client}
 \label{sec: client}
 Die Client Sektion beschreibt die Umsetzung der Anforderungen (clientseitig). 
@@ -207,11 +211,35 @@ Die Client Sektion beschreibt die Umsetzung der Anforderungen (clientseitig).
 \label{sec: nebular}
 Nebular ist eine Angular Library, die bereits viele Bedienelemente im benutzerfreundlichen Design enthält. Zusätzlich stellt Nebular bereits Services und Helper Koponenten, mit denen der Umgang mit \gls{oAuth2} oder \gls{JWT} erleichtert wird. Da Nebular jedoch eine so umfangreiche Libraby ist und wir im Fall dieser Thesis nur auf die Struktur und das Design der Bedienelemente zurückgegriffen hätten, wäre eine Vielzahl an zusätzlichen Eigenschaften Nebulas ungenutzt. Zusätzlich konzentriert sich Nebular bei Autorisierung stark auf den clientseitigen Teil. Dies hat zur Folge, dass serverseitig und clientseitig Fehler abgefangen werden müssten. Aus diesen Gründen wurde sich gegen Nebular und für ein eigenes Design entschieden.
 
-\subsubsection{Dialog zur Anmeldung/Registrierung}
-\label{sec:client-dialog-authentication}
-Zuerst wurde sich mit der Darstellung von Komponenten für die Anmeldung und die Registrierung auseinandergesetzt\todo{ugs}. Diese sollten einem neuartigen Stil entsprechen und leicht zu bedienen sein\todo{Dieser Satz beschreibt Anforderungen}. Hierbei bietet Angular Material eine Möglichkeit, sogenannte Dialog-Fenster zu erstellen. Um das Dialog-Fenster zu implementieren muss ein Modul namens \enquote{MatDialogModule} eingebunden werden. Angular Material bietet zusätzlich die Möglichkeit sogennante \enquote{tabs} zu verwenden. Diese Tabs ermöglichen den wechsel zwischen unterschiedlichem Inhalt mit zusätzlicher Animation und gleichbleibender Komponente. Aus diesen beiden Elementen von Angular Material wurde dann ein Popup-Fenster erstellt, in dem der Wechsel zwischen Anmeldung (Abbildung~\ref{fig:dialog_sign_in}) und Registrierung (Abbildung~\ref{fig:dialog_sign_up}) ermöglicht wird.
+\subsubsection{Dialog Gestaltung}
+Bei der Darstellung einer Anmeldung und Registrierung wurde sich an bereits vorhandenen Webseiten orientiert. 
 
-\begin{figure}
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=.95\linewidth]{graphics/discourse-sign-in.png}
+		\caption{Anmeldung bei Discourse}
+		\label{fig:discourse-sign-in}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.59\linewidth]{graphics/discourse-sign-up.png}
+		\caption{Registrierung bei Discourse}
+		\label{fig:discourse-sign-up}
+	\end{subfigure}
+	\caption{Dialoge zur Anmeldung/Registrierung auf der Webseite Discourse}
+	\label{fig:discourse}
+\end{figure}
+
+\subsubsection{Dialog Implementierung}
+\label{sec:client-dialog-authentication}
+Die Anmeldung und Registrierung clientseitig wurden mit einem Dialog-Fenster realisiert. Das Dialog-Fenster\footnote{\url{https://material.angular.io/components/dialog/overview}} wird bereitgestellt von Angular Material. Für die Implementierung eines Dialog-Fensters muss das \enquote{MatDialogModule} eingebunden werden. 
+
+Die von Angular Material bereitgestellten \enquote{tabs}\footnote{\url{https://material.angular.io/components/tabs/overview}} wurden zum dynamischen wechsel der Ansichtsseiten Anmeldung und Registrierung verwendet. Tabs ermöglichen den wechsel zwischen unterschiedlichem Inhalt mit zusätzlicher Animation und gleichbleibender Komponente. Damit \enquote{tabs} verwendet werden können muss das \enquote{MatTabsModule} integriert werden.
+
+Aus diesen beiden Elementen von Angular Material wurde ein Popup-Fenster erstellt, in dem der Wechsel zwischen Anmeldung (Abbildung~\ref{fig:dialog_sign_in}) und Registrierung (Abbildung~\ref{fig:dialog_sign_up}) ermöglicht wird. Bei der Implementierung ist aufgefallen, dass ein Dialog-Fenster im Querformat speziell angepasst werden müsste, da in der hochkant Handyansicht die Darstellung nicht übereinstimmen würde. Ursächlich hierfür ist die im Hochkantformat reduzierte Breite eines Handys.
+
+\begin{figure}[h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=.95\linewidth]{graphics/dialog-sign-in.png}
@@ -248,7 +276,7 @@ Zuerst wurde sich mit der Darstellung von Komponenten für die Anmeldung und die
 
 	Für die Entscheidung zwischen \gls{HTML}5 und Angular Validierung, musste abgewogen werden in welchem Umfang die Validierung benötigt wird. Die zu nutzenden Input-Felder können jeweils mit den vordefinierten Validatoren, beider Validierungs-Möglichkeiten, validiert werden. Aus diesem Grund wurde sich für die \gls{HTML}5 Validierung entschieden, da diese über das Hinzufügen als Attribut eine deutlich komfortablere Lösung bietet.
 
-	Bei der Implementierung der jeweiligen Validatoren innerhalb der Input-Felder wurde erhöhte Code-Redundanz festgestellt. Aus diesem Grund wurde für das Validieren der einzelnen Input-Felder eine validate-input Komponente erstellt. Die validate-input Komponente lädt dynamisch ein Input-Feld mittels ng-content in das Template. Der zu validierende Wert wird mittels input-binding an die validate-input Komponente übermittelt (Listing \ref{lst:validate_input}). Zusätzlich kann mit input-binding das Design des Input-Feldes (Abbildung \ref{fig:validate_input}) erweitert werden. Sollte die Validierung des übermittelten Wertes fehlschlagen, wird undefined an die Eltern-Komponente zurückgeliefert. Dies hat den Vorteil, dass der Client von einem invaliden Wert ausgehen kann und der Server keine invaliden Werte, außer undefined, erhält. Allerdings verhindert diese Komponente nur bei falscher Eingabe das Übermitteln von falschen Daten. Aus diesem Grund ist diese Komponente kein Ersatz für die serverseitge Validierung.
+		Bei der Implementierung der jeweiligen Validatoren innerhalb der Input-Felder wurde erhöhte Code-Redundanz festgestellt. Aus diesem Grund wurde für das Validieren der einzelnen Input-Felder eine validate-input Komponente erstellt. Die validate-input Komponente lädt dynamisch ein Input-Feld mittels ng-content in das Template. Der zu validierende Wert wird mittels input-binding an die validate-input Komponente übermittelt (Listing \ref{lst:validate_input}). Zusätzlich kann mit input-binding das Design des Input-Feldes (Abbildung \ref{fig:validate_input}) erweitert werden. Sollte die Validierung des übermittelten Wertes fehlschlagen, wird undefined an die Eltern-Komponente zurückgeliefert. Dies hat den Vorteil, dass der Client von einem invaliden Wert ausgehen kann und der Server keine invaliden Werte, au{\ss}er undefined, erhält. Allerdings verhindert diese Komponente nur bei falscher Eingabe das Übermitteln von falschen Daten. Aus diesem Grund ist diese Komponente kein Ersatz für die serverseitge Validierung.
 
 	\begin{figure}
 		\centering
@@ -256,37 +284,24 @@ Zuerst wurde sich mit der Darstellung von Komponenten für die Anmeldung und die
 		\caption{Standard und erweiterte Ausführung eines validate-input}
 		\label{fig:validate_input}
 	\end{figure}
-	\todo[inline]{Standard! Und verpass den Icons mal die CSS-Klasse fa-fw, dann werden die identisch breit dargestellt.}
-
 
 	\begin{minipage}{\linewidth}
 			\lstinputlisting[language=JavaScript, style=CodeView, caption=Verwendung einer validate-input Komponente, captionpos=b, label={lst:validate_input}]{snippets/validate_input.ts}
 	\end{minipage}
-
-	\item[Inspiration]\hfill\\
 \end{description}
 
 \subsubsection{Speichern eines \gls{JWT}}
 Bei dem Erstellen eines \gls{JWT} muss abgewogen werden, wo dieser clientseitig gespeichert werden soll. Hierbei gibt es die Möglichkeit den \gls{JWT} im LocalStorage, sessionStorage oder als Cookie zu speichern.
 
-Der LocalStorage und der sessionStorage sind ähnlich und bieten dieselben Schwachstellen, weßhalb sich im weiteren Verlauf nur auf den LocalStorage bezogen wird. Bei der Speicherung eines \gls{JWT} im LocalStorage wird \gls{XSS} zur Schwachstelle. Bei \gls{XSS} handelt es sich um eine der bekanntesten Angriffsmethoden in der Webentwicklung. Hierbei wird beispielsweise ein Hyperlink manipuliert und mit \JS auf den localStorage zugegriffen. Sobald sich ein Angreifer den \gls{JWT} hat zukommen lassen, ist es für diesen möglich sich mit dem \gls{JWT} zu authentifizieren. Angular schützt seine Applikationen bereits vor \gls{XSS} in dem beispielsweise Eigenschaften und Attribute auf nicht vertrauenswürdige Werte überprüft werden.
+Der LocalStorage und der sessionStorage sind ähnlich und bieten dieselben Schwachstellen, we{\ss}halb sich im weiteren Verlauf nur auf den LocalStorage bezogen wird. Bei der Speicherung eines \gls{JWT} im LocalStorage wird \gls{XSS} zur Schwachstelle. Bei \gls{XSS} handelt es sich um eine der bekanntesten Angriffsmethoden in der Webentwicklung. Hierbei wird beispielsweise ein Hyperlink manipuliert und mit \JS auf den localStorage zugegriffen. Sobald sich ein Angreifer den \gls{JWT} hat zukommen lassen, ist es für diesen möglich sich mit dem \gls{JWT} zu authentifizieren. Angular schützt seine Applikationen bereits vor \gls{XSS} in dem beispielsweise Eigenschaften und Attribute auf nicht vertrauenswürdige Werte überprüft werden.
 
-Die Speicherung im Cookie bietet die Möglichkeit, mit dem httpOnly-Flag den Zugriff mittels \JS zu verbieten. Zusätzlich kann der secure-Flag gesetzt werden, der die Übertragung des Cookies nur über eine sichere \gls{HTTPS} Verbindung zulässt. Jedoch hat die Speicherung eines Cookies ebenfalls eine große Schwachstelle. \gls{CSRF} ist ebenso berühmt in der Webentwicklung wie \gls{XSS}. Bei \gls{CSRF} handelt es sich um das Fälschen von Anfragen einer Webseite auf die kein Einfluss genommen werden kann. Dabei wird die Anfrage so gefälscht, dass der Server von einem legitimen eingeloggten Benutzer ausgeht.
+Die Speicherung im Cookie bietet die Möglichkeit, mit dem httpOnly-Flag den Zugriff mittels \JS zu verbieten. Zusätzlich kann der secure-Flag gesetzt werden, der die Übertragung des Cookies nur über eine sichere \gls{HTTPS} Verbindung zulässt. Jedoch hat die Speicherung eines Cookies ebenfalls eine gro{\ss}e Schwachstelle. \gls{CSRF} ist ebenso berühmt in der Webentwicklung wie \gls{XSS}. Bei \gls{CSRF} handelt es sich um das Fälschen von Anfragen einer Webseite auf die kein Einfluss genommen werden kann. Dabei wird die Anfrage so gefälscht, dass der Server von einem legitimen eingeloggten Benutzer ausgeht.
 
 Bei der Entscheidung zwischen \gls{XSS} oder \gls{CSRF} muss abgewogen werden, was einem sicherer erscheint. Da sich bei der Verhinderung von \gls{XSS} sehr stark auf Angular verlassen wird, wurde sich für \gls{CSRF} entschieden. Das bedeutet, der \gls{JWT} wird in einem Cookie mit dem httpOnly- und dem secure-Flag versendet.
 
 \subsubsection{Sicherheit und Login}
 \label{sec:client-security-login}
 Die clientseitige Einstellungsmöglichkeit für Sicherheit und Login kann erst aufgerufen werden, sobald ein Benutzer sich angemeldet hat. Für die Input-Felder wurde die bereits erstellte validate-input Komponente verwendet. Damit zwischen den Einstellungsmöglichkeiten unterschieden werden kann, wurde jeweils eine Komponente erstellt. Da die Einstellungsmöglichkeiten sich auf ein paar wenige einschränken, wurden die erstellten Komponenten in einer Komponente zusammen getragen.
-
-\begin{description}
-	\item[Passwort ändern]\hfill\\
-	Sollte ein Benutzer sein Passwort ändern wollen, muss dafür vorerst eine Passwort Identität vorhanden sein. Falls keine Passwort Identität vorhanden ist, wird dem angemeldeten Benutzer keine Passwort Änderung angezeigt. Damit ein Benutzer nicht versehentlich ein falsches Passwort angibt, muss das eingegebene Passwort bestätigt werden.(Abbildung \ref{fig:account_settings_1}) Hierfür muss das neue Passwort erneut eingegeben werden. Damit ein Passwortwechsel erfolgreich durchgeführt werden kann, muss der Server die Eingaben auf ihre Gültigkeit prüfen (Sektion \ref{sec:server-account-settings}).
-	\item[Verknüpfte Konten]\hfill\\
-	Ein Benutzer soll die Möglichkeit besitzen seine bereits verknüpften Konten zu verwalten. Hierzu wurde eine Übersicht der bereits verknüpften Konten erstellt (Abbildung \ref{fig:account_settings_2}). Diese Übersicht der Konten bietet die Möglichkeit, die bereits verknüpften Konten zu entfernen oder Profilseiten, falls vom Provider ausgeliefert, zu besuchen. Die Entscheidung ob ein verknüpftes Konto entfernt werden darf, obliegt jedoch dem Server (Sektion \ref{sec:server-account-settings}).
-	\item[Konto Verknüpfung]\hfill\\
-	Damit ein angemeldeter Benutzer sein bereits bestehendes Konto mit weiteren Konto verknüpfen kann, wurden die bereits erstellten provider-button Komponenten zur Darstellung verwendet. Hierbei ist die Funktionsweise in den Einstellungen identisch zu der Funktionsweise des Dialogs (Sektion \ref{sec:client-dialog-authentication}).
-\end{description}
 
 \begin{figure}
 	\centering
@@ -302,6 +317,16 @@ Die clientseitige Einstellungsmöglichkeit für Sicherheit und Login kann erst a
 	\label{fig:account_settings_2}
 \end{figure}
 
+
+\begin{description}
+	\item[Passwort ändern]\hfill\\
+	Sollte ein Benutzer sein Passwort ändern wollen, muss dafür vorerst eine Passwort Identität vorhanden sein. Falls keine Passwort Identität vorhanden ist, wird dem angemeldeten Benutzer keine Passwort Änderung angezeigt. Damit ein Benutzer nicht versehentlich ein falsches Passwort angibt, muss das eingegebene Passwort bestätigt werden.(Abbildung \ref{fig:account_settings_1}) Hierfür muss das neue Passwort erneut eingegeben werden. Damit ein Passwortwechsel erfolgreich durchgeführt werden kann, muss der Server die Eingaben auf ihre Gültigkeit prüfen (Sektion \ref{sec:server-account-settings}).
+	\item[Verknüpfte Konten]\hfill\\
+	Ein Benutzer soll die Möglichkeit besitzen seine bereits verknüpften Konten zu verwalten. Hierzu wurde eine Übersicht der bereits verknüpften Konten erstellt (Abbildung \ref{fig:account_settings_2}). Diese Übersicht der Konten bietet die Möglichkeit, die bereits verknüpften Konten zu entfernen oder Profilseiten, falls vom Provider ausgeliefert, zu besuchen. Die Entscheidung ob ein verknüpftes Konto entfernt werden darf, obliegt jedoch dem Server (Sektion \ref{sec:server-account-settings}).
+	\item[Konto Verknüpfung]\hfill\\
+	Damit ein angemeldeter Benutzer sein bereits bestehendes Konto mit weiteren Konto verknüpfen kann, wurden die bereits erstellten provider-button Komponenten zur Darstellung verwendet. Hierbei ist die Funktionsweise in den Einstellungen identisch zu der Funktionsweise des Dialogs (Sektion \ref{sec:client-dialog-authentication}).
+\end{description}
+
 \subsubsection{Wrapper-Komponenten}
 \label{sec:client-wrapper-components}
 Die Darstellung der Blattwerkzeug-Seite muss abhängig von den Rollen eines Benutzers sein. Hierfür ist es möglich, die Unterteilung der einzelnen Codeabschnitte jeweils mit der Angular internen *If Direktive zu lösen. Eine weitere Möglichkeit wäre, die zu den Rollen angepassten Codeabschnitte jeweils in eigene Komponenten auszulagern. Ebenso ist es möglich eine Wrapper-Komponente zu entwickeln, die dynamisch den Inhalt ihres Templates lädt und hierbei bedingt zwischen dem übermittelten Inhalt unterscheiden kann.
@@ -315,25 +340,27 @@ Eine Wrapper-Komponente, die dynamisch ihren Inhalt lädt und gleichzeitig bedin
 	\item[may\_perform]\hfill\\
 	Bedienelemente, die von der jeweiligen Benutzerrolle abhängen, wie beispielsweise das Bedienelement zum Speichern eines Projektes, werden mittels der may\_perform Wrapper-Komponente überprüft und dargestellt. Da es sich bei Projekten um Resourcen handelt, die nur bei spezifischer Berechtigung bearbeitet werden dürfen, müssen die Bedienelemente der jeweiligen Resource ausgeblendet werden. Sollten die Bedienelemente weiterhin dargestellt werden, führt dies zu einer schlechten User Experience, da ein Benutzer erst nach der Benutzung des Bedienelementes über eine unzureichende Berechtigung informiert wird. Damit eine Überprüfung serverseitig stattfinden kann, wurde sich vorerst mit den zu übermittelnden Daten beschäftigt. Für die Überprüfung der jeweiligen Funktion eines Bedienelementes, muss der Client die auf dem Server auszuführende Funktion angeben. Hierbei wurde darauf geachtet, dass serverseitig nur Funktionen einer Policy ausgeführt werden können (Sektion \ref{sec:server-authorisation}). Desweiteren benötigt der Server die Informationen auf welcher Ressource diese Funktion ausgeführt werden soll. Sollte es sich bei der Überprüfung um eine spezifische Ressource handeln, muss ebenfalls die ID der Ressource übermittelt werden.
 	
-	\lstinputlisting[language=JavaScript, style=CodeView, caption=Interface der zu übermittelnden Daten, captionpos=b]{snippets/may-perform.ts}
+	\begin{minipage}{\linewidth}
+		\lstinputlisting[language=JavaScript, style=CodeView, caption=Interface der zu übermittelnden Daten, captionpos=b]{snippets/may-perform.ts}
+	\end{minipage}
 	
 	Die may-perform Daten wurden in eine Basisklasse und verschiedene abgeleitete Klassen unterteilt. Dabei beinhaltet die Basisklasse jegliche Daten, die ressourcenübergreifend sind. Die abgeleiteten Klassen beinhalten spezialisierte Daten für eine Resource (Abbildung \ref{fig:client-data-pattern}). Der Service, der zum Aufruf dieser Daten injiziert wird, erstellt beim Aufruf einer Funktion, eine Instanz dieser Klasse. Ein Vorteil dieses Musters ist, dass die Struktur der Daten eindeutig ist, da die abgeleiteten Klassen jeweils einer Ressource entsprechen. Die Funktionen innerhalb des Services werden nach den jeweiligen Resourcen benannt. Daraus resultiert ein eindeutiges Aufruf-Muster, welches den Ressourcen-Namen gefolgt von der Aktion enhält (Listing \ref{lst:client-example_data_pattern}). 
 	
 	\begin{figure}
 		\centering
-		\includegraphics[width=\textwidth]{graphics/data-pattern.pdf}
+		\includegraphics[width=.8\textwidth]{graphics/data-pattern.pdf}
 		\caption{Struktur des Daten-Musters}
 		\label{fig:client-data-pattern}
 	\end{figure}
 
 	\begin{minipage}{\linewidth}
-		\lstinputlisting[language=JavaScript, style=CodeView, caption=Beispiel Aufruf zum Erhalten der News-Daten, captionpos=b, label={lst:client-example_data_pattern}]{snippets/example_data_pattern.ts}
+		\lstinputlisting[language=JavaScript, style=CodeView, caption=Beispiel Aufruf zum Erhalten der News-Daten, captionpos=b, label={lst:client-example_data_pattern}]{snippets/example-data-pattern.ts}
 	\end{minipage}
 
 	Schlussendlich wird ein Boolscher-Wert an den Client ausgeliefert. Sollte der Boolsche-Wert true zurückliefern, wird das Bedienelement dargestellt.
 	
 	\item[is-logged-in]\hfill\\
-	Ein Besucher erhält  bei einem Aufruf der Blattwerkzeug-Seite Informationen über seinen derzeitigen Benutzer. Die übermittelten Informationen enthalten die Benuzter-Id, die Rollen, die primäre E-Mail und den Benutzernamen. Aus diesem Grund benötigen einige Bedienelemente keine serverseitige Berechtigungs-Abfrage. Das Nutzen  der may-perform Komponente wäre in diesem Fall eine überflüssige Maßname, da diese Bedienelemente ausschließlich auf eine statische Rolle geprüft werden.
+	Ein Besucher erhält  bei einem Aufruf der Blattwerkzeug-Seite Informationen über seinen derzeitigen Benutzer. Die übermittelten Informationen enthalten die Benuzter-Id, die Rollen, die primäre E-Mail und den Benutzernamen. Aus diesem Grund benötigen einige Bedienelemente keine serverseitige Berechtigungs-Abfrage. Das Nutzen  der may-perform Komponente wäre in diesem Fall eine überflüssige Ma{\ss}name, da diese Bedienelemente ausschlie{\ss}lich auf eine globale Rolle geprüft werden.
 	
 	Die is-logged-in Wrapper-Komponente nutzt die vom Server übermittelten Rollen zur Überprüfung eines angemeldeten Benutzers. Ein angemeldeter Benutzer, wird clientseitig an seiner Rolle identifiziert. Hierfür werden die übermittelten Rollen auf eine guest Rolle geprüft. Das Vorhandensein einer guest Rolle, stellt einen unangemeldeten Benutzer dar. Die Darstellung eines umschlossenen HTML Codeabschnittes mittels is-logged-in hängt von dem derzeitigen Anmeldestatus eines Benutzers ab.  
 \end{description}
@@ -353,22 +380,22 @@ Für die Einschränkung der Navigation auf Blattwerkzeug wurden verschiedene Rou
 
 \begin{description}
 	\item[AdminGuard]\hfill\\
-	Damit Bereiche wie beispielsweise, der Adminbereich, ausschließlich von Administratoren besucht werden können, wurde ein AdminGuard implementiert. Für die Überprüfung des AdminGuards werden die statischen Rollen eines Benutzers auf eine admin Rolle geprüft. Sollte dem derzeitigen Benutzer keine admin Rolle zugewiesen sein, wird dem Benutzer eine Fehlermeldung angezeigt. Die Fehlermeldung wurde mittels Asynchroner-Funktion und einem Dialog-Fenster implementiert. Das Dialog-Fenster bietet die Möglichkeit, mittels afterClosed Funktion, ein Observable als Rückgabewert festzulegen.
+	Damit Bereiche wie beispielsweise, der Adminbereich, ausschlie{\ss}lich von Administratoren besucht werden können, wurde ein AdminGuard implementiert. Für die Überprüfung des AdminGuards werden die globalen Rollen eines Benutzers auf eine admin Rolle geprüft. Sollte dem derzeitigen Benutzer keine admin Rolle zugewiesen sein, wird dem Benutzer eine Fehlermeldung angezeigt. Die Fehlermeldung wurde mittels Asynchroner-Funktion und einem Dialog-Fenster implementiert. Das Dialog-Fenster bietet die Möglichkeit, mittels afterClosed Funktion, ein Observable als Rückgabewert festzulegen.
 	
 	Zitat:
 	 \begin{quote}
 		``Ein Observable ist die Repräsentation einer beliebigen Menge von Werten, die über eine beliebige Zeitdauer verteilt sein könnnen.``\footnote{\url{https://www.buschmais.de/wp-content/uploads/2019/01/01-2019-Java-aktuell_AUTOR_Michael-Ruttka_Einfuehrung-in-RxJS.pdf}}
 	\end{quote}
 
-	Das Schließen des Dialog-Fensters löst das zurückgegebene Observable aus. Sobald das Observable ausgelöst wurde, wird auf die Startseite zurück navigiert.
+	Das Schlie{\ss}en des Dialog-Fensters löst das zurückgegebene Observable aus. Sobald das Observable ausgelöst wurde, wird auf die Startseite zurück navigiert.
 	
 	\item[LoggedInGuard]\hfill\\
-	Der LoggedInGuard ähnelt in seiner Funktionsweise dem AdminGuard. Allerdings wird dieser Routing Guard zur Überprüfung eines eingeloggten Benutzers verwendet. Die Einstellungen für Sicherheit und Login dürfen beispielsweise ausschließlich als angemeldeter Benutzer eingesehen werden. Sollte ein unangemeldeter Benutzer eine von einem LoggedInGuard geschützte Route besuchen, erhält dieser die Möglichkeit sich vorerst anzumelden. Da der LoggedInGuard sich ausschließlich im Dialog-Fenster und der zu überprüfenden Rolle von dem AdminGuard unterscheidet, wird die Implementierung nicht weiter erläutert.
+	Der LoggedInGuard ähnelt in seiner Funktionsweise dem AdminGuard. Allerdings wird dieser Routing Guard zur Überprüfung eines eingeloggten Benutzers verwendet. Die Einstellungen für Sicherheit und Login dürfen beispielsweise ausschlie{\ss}lich als angemeldeter Benutzer eingesehen werden. Sollte ein unangemeldeter Benutzer eine von einem LoggedInGuard geschützte Route besuchen, erhält dieser die Möglichkeit sich vorerst anzumelden. Da der LoggedInGuard sich ausschlie{\ss}lich im Dialog-Fenster und der zu überprüfenden Rolle von dem AdminGuard unterscheidet, wird die Implementierung nicht weiter erläutert.
 	
 	\item[MasterGuard]\hfill\\
 	Bevor der AdminGuard oder der LoggedInGuard fehlschlägt, werden jeweils Dialog-Fenster geöffnet. Sollten mehrere Routing Guards für eine Route festgelegt werden, werden bei dem Fehlschlagen der Routing Guards die Dialog-Fenster übereinander gelegt. Die Ursache dafür ist das von Angular festgelegte, gleichzeitige Ausführen von Routing Guards. Aus diesem Grund muss ein Algorithmus zum Ausführen nacheinander gefolgter Routing Guards implementiert werden. 
 	
-	Der MasterGuard implementiert einen Algorithmus zum Ausführen nacheinander gefolgter Routing Guards. Hierfür werden die auszuführenden Routing Guards im data Objekt des Routes Typen hinterlegt. Sobald der MasterGuard aufgerufen wird, erfolgt über die von Angular übergebene Route ein Zugriff auf das data Objekt. Anschließend wird von jedem, im data Objekt enhaltenen Routing Guard, eine Instanz erstellt und die canActivate Methode aufgerufen. Sollte ein Routing Guard fehlschlagen, schlägt der Master Guard ebenfalls fehl.
+	er MasterGuard implementiert einen Algorithmus zum Ausführen nacheinander gefolgter Routing Guards. Hierfür werden die auszuführenden Routing Guards im data Objekt des Routes Typen hinterlegt. Sobald der MasterGuard aufgerufen wird, erfolgt über die von Angular übergebene Route ein Zugriff auf das data Objekt. Anschlie{\ss}end wird von jedem, im data Objekt enhaltenen Routing Guard, eine Instanz erstellt und die canActivate Methode aufgerufen. Sollte ein Routing Guard fehlschlagen, schlägt der Master Guard ebenfalls fehl.
 
 \end{description}
 

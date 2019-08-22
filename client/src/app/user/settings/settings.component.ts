@@ -1,6 +1,6 @@
-import { SideNavService } from './../../shared/side-nav.service';
 import { Component, AfterViewChecked } from "@angular/core";
 
+import { SideNavService } from '../../shared/side-nav.service';
 import { NavItem } from '../../shared/nav-interfaces';
 
 export const userSettings: NavItem[] = [
@@ -28,7 +28,7 @@ export const userSettings: NavItem[] = [
 ];
 
 @Component({
-  templateUrl: './templates/settings-index.html'
+  templateUrl: './components/templates/settings-index.html'
 })
 export class UserSettingsComponent implements AfterViewChecked {
   constructor(

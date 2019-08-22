@@ -8,7 +8,6 @@ RSpec.describe "identities controller" do
 
   it "saving password as hash" do
     identity = create(:identity_provider, :new, password: "1234567")
-    expect(identity.password).to_not eq("1234567")
     expect(PasswordIdentity.all.first.password_eql?("1234567")).to be_truthy
   end
 
@@ -50,9 +49,7 @@ RSpec.describe "identities controller" do
 
     it "valid" do
       expect(identity.confirmed?).to eq(false)
-
       get "/api/identities/confirmation/#{identity.verify_token}"
-
       expect(Identity.find(identity.id).confirmed?).to eq(true)
     end
 
@@ -60,9 +57,7 @@ RSpec.describe "identities controller" do
       confirmed = identity.confirmed?
 
       expect(confirmed).to eq(false)
-
       get "/api/identities/confirmation/123121212"
-
       expect(Identity.find(identity.id).confirmed?).to eq(false)
     end
   end
@@ -101,17 +96,35 @@ RSpec.describe "identities controller" do
       end
     end
 
-    it "invalid current password" do
-      set_jwt(identity.user)
+    context "invalid" do
+      it "current password" do
+        set_jwt(identity.user)
 
-      patch '/api/identities/change_password',
-        :headers => json_headers,
-        :params => {
-          currentPassword: "12121212",
-          newPassword: "newPassword"
-        }.to_json
+        patch '/api/identities/change_password',
+          :headers => json_headers,
+          :params => {
+            currentPassword: "12121212",
+            newPassword: "newPassword"
+          }.to_json
 
-      expect(PasswordIdentity.all.first.password).to eq(identity.password)
+        expect(PasswordIdentity.all.first.password).to eq(identity.password)
+      end
+
+      it "new password" do
+        set_jwt(identity.user)
+
+        patch '/api/identities/change_password',
+          :headers => json_headers,
+          :params => {
+            currentPassword: "12345678",
+            newPassword: "12345"
+          }.to_json
+
+        json_data = JSON.parse(response.body)
+
+        expect(PasswordIdentity.all.first.password_eql?("12345")).to be_falsey
+        expect(json_data["message"]).to eq("Password is too short (minimum is 6 characters)")
+      end
     end
   end
 

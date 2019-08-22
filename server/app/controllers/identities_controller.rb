@@ -11,7 +11,7 @@ class IdentitiesController < ApplicationController
   end
 
   def list
-    api_array_response(Identity.all_client_informations)
+    api_array_response(Identity.all_client_information)
   end
 
   def reset_password
@@ -24,7 +24,7 @@ class IdentitiesController < ApplicationController
         identity.set_reset_token_expired
         identity.save!
 
-        identity.set_password_all_with_user_id(permited_params[:password])
+        identity.set_all_passwords(permited_params[:password])
         api_response(user_information)
       else
         error_response("token expired")
@@ -39,7 +39,7 @@ class IdentitiesController < ApplicationController
     if (identity) then
       identity.set_reset_token
       identity.save!
-      IdentityMailer.reset_password(identity, request_locale).deliver
+      IdentityMailer.reset_password(identity, request_locale).deliver unless Rails.env.test?
     else
       error_response("e-mail not found")
     end
@@ -61,7 +61,7 @@ class IdentitiesController < ApplicationController
 
     identity.set_waiting_time()
     identity.save!
-    IdentityMailer.confirm_email(identity, request_locale).deliver
+    IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
     api_response(user_information)
   end
 
@@ -83,12 +83,17 @@ class IdentitiesController < ApplicationController
 
   def change_password
     if signed_in?
-      identity = PasswordIdentity.find_by(user_id: current_user[:id], provider: 'identity')
-      if (not identity) then
-        permited_params = change_password_params
-        identity.change_password(permited_params)
-      else
-        error_response("no vailable identity found")
+      identity = PasswordIdentity.find_by(user_id: current_user.id, provider: 'identity')
+      begin
+        if identity then
+          permited_params = change_password_params
+          identity.change_password(permited_params)
+          api_response(user_information)
+        else
+          raise EsqulinoError.new("no vailable identity found")
+        end
+      rescue => e
+        error_response(e.message)
       end
     end
   end
@@ -111,7 +116,7 @@ class IdentitiesController < ApplicationController
   
       # If the email to be deleted is the current primary email and 
       # no more identities with the same email existing return.
-      if (current_user.email.eql? identity.email) and (all_identities.count <= 1) then
+      if (current_user.email.eql? identity.email) and (all_identities.filter { |m| current_user.email.eql? m }.length <= 1) then
         return error_response("You can't delete the primary e-mail.")
       end
      

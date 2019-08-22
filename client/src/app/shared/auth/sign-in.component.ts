@@ -4,7 +4,6 @@ import { Component, Output, EventEmitter } from "@angular/core";
 import { SignInDescription } from './auth-description';
 import { UserService } from './user.service';
 import { Roles } from '../authorisation/roles.enum';
-
 @Component({
   selector: 'sign-in',
   templateUrl: './templates/sign-in.html'

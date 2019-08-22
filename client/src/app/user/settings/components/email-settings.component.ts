@@ -1,47 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { UserService } from '../../../shared/auth/user.service';
 import { ChangePrimaryEmailDescription, ServerProviderDescription } from '../../../shared/auth/provider.description';
-
 @Component({
   selector: "email-settings",
-  templateUrl: '../templates/email-settings.html'
+  templateUrl: './templates/email-settings.html'
 })
-export class EmailSettingsComponent implements OnInit {
-  public identities$ = this._userService.identities$;
+export class EmailSettingsComponent {
 
   constructor(
     private _userService: UserService,
   ) { }
 
-  public primaryEmailData: ChangePrimaryEmailDescription = {
-    primaryEmail: "Please add an e-mail to your account"
+  private _primaryEmailData: ChangePrimaryEmailDescription = {
+    primaryEmail: ""
   };
-  //All distinct e-mails from all providers  
-  public emails: Set<string> = new Set();
-  public identities: ServerProviderDescription;
 
-  // TODO-TOM move code into template / Promise
-  public ngOnInit(): void {
-    this.identities$.value.subscribe(
-      identities => {
-        this.identities = identities;
-        this.primaryEmailData.primaryEmail = identities.primary;
-        this.identities.providers.forEach(v => {
-          if (v.email)
-            this.emails.add(v.email)
-        })
-      }
-    )
+  public identities$ = this._userService.identities$;
+
+  public get primaryEmail(): string {
+    return this._primaryEmailData.primaryEmail;
   }
 
-  public isPrimaryEmailChange(): boolean {
-    return this.identities.providers.some(v => v.changes.primary !== undefined && v.changes.primary !== null)
+  public set primaryEmail(email: string) {
+    this._primaryEmailData.primaryEmail = email;
   }
 
-  public onChangePrimaryEmail(): void {
-    if (this.emails.has(this.primaryEmailData.primaryEmail)) {
-      this._userService.sendChangePrimaryEmail$(this.primaryEmailData)
+  public isTokenExpired(date: string): boolean {
+    return new Date() <= new Date(date);
+  }
+
+  public validEmails(identities: ServerProviderDescription): Set<string> {
+    //All distinct e-mails from all providers  
+    const emails: Set<string> = new Set();
+    identities.providers.forEach(v => {
+      if (v.email)
+        emails.add(v.email);
+    })
+    return emails;
+  }
+
+  // Must be used, because 2 way data binding does not work in this case
+  public onChange(email: string) {
+    this.primaryEmail = email;
+  }
+
+  public onSave(emails: Set<string>): void {
+    if (emails.has(this.primaryEmail)) {
+      this._userService.sendChangePrimaryEmail$(this._primaryEmailData)
         .subscribe()
 
     }

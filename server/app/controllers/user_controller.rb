@@ -1,6 +1,7 @@
 class UserController < ApplicationController
   include UserHelper
   include LocaleHelper
+  include JwtHelper
 
   def index
     api_response(user_information)
@@ -12,6 +13,7 @@ class UserController < ApplicationController
       current_user.display_name = permited_params[:display_name]
       if current_user.valid?
         current_user.save!
+        update_private_claim()
         api_response(user_information)
       else
         error_response("This username is not valid")
@@ -31,6 +33,7 @@ class UserController < ApplicationController
     if (not identity) then
       return error_response("No user was found")
     end
+
     user = identity.user
 
     if (not user) then
@@ -65,8 +68,9 @@ class UserController < ApplicationController
     end
 
     permited_params = change_email_params
+
     if current_user.email.eql? permited_params[:primary_email] then
-      return render status: :ok
+      return api_response(current_user.information)
     end
 
     if current_user.primary_email_change? then
@@ -90,7 +94,7 @@ class UserController < ApplicationController
     identity.set_primary_email_token
     identity.save!
 
-    UserMailer.change_primary_email(identity, request_locale).deliver
+    UserMailer.change_primary_email(identity, request_locale).deliver unless Rails.env.test?
     api_response(user_information)
   end
 

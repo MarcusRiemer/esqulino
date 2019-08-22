@@ -5,15 +5,13 @@ kurz erläutert.
 
 \subsection{Blattwerkzeug}
 \label{sec:blattwerkzeug}
-
-\begin{figure}
-	\includegraphics[scale=0.4]{graphics/blattwerkzeug.png}
-\end{figure}
-
-
 Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und SQL Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug die Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit einzusehen. Dennoch ist es dem Nutzer einfach gemacht, mit visuellen Elementen teile der Informatik kennen zu lernen.
 
 Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutreten. Mit Blattwerkzeug wird Lehrern ein Werkzeug in die Hand gelegt, mit dem der Informatik Unterricht einfacher und informativer gestaltet werden kann. Somit wird der veraltete und doch sehr Office-lastige Informatik Unterricht komplett erneuert und interessanter gestaltet werden\todo{Zuviel: BlattWerkzeug ist ein Zusatz, keine Ersetzung}.
+
+\begin{figure}[h]
+	\includegraphics[scale=0.6]{graphics/blattwerkzeug.png}
+\end{figure}
 
 \subsection{Passwort Hashing}
 \label{sec:password_hashing}
@@ -21,12 +19,13 @@ Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutr
 Sobald eine Software mit Nutzerdaten geführt wird, ergibt sich das Problem des Speicherns der Passwörter der jeweiligen Nutzer.
 Denn sollten die Daten der Nutzer im Klartext in der Datenbank gespeichert werden und ein Angreifer erlangt Zugriff auf die Datenbank, so ist es für ihn ein leichtes weitere Konten der Nutzer zu infiltrieren. Der Grund dafür sind die anwendungsübergreifenden, vom Nutzer grö{\ss}tenteils identischen, Passwörter.
 
-\todo[inline]{Nicht nur Super-GAU für eigene Seite, sondern auch für Nutzer auf anderen Seiten. Konkretes Beispiel ergänzen (Liesschen Müller ist mit ihrer EMail
-  \enquote{lieeschen@müller.de} und dem Passwort \enquote{Milch} bei \enquote{Milchkanne.de} registriert, ...}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{graphics/example-plaintext-password.pdf}
+	\caption{Beispiel einer Infiltrierung bei Klartext Passwort.}
+\end{figure}
 
 An diesem Punkt kommt das Hashen von Passwörtern zum Einsatz. Passwort Hashing soll dem Nutzer Sicherheit gewährleisten und es einem Angreifer nicht möglich machen mit erlangten Daten weitere Konten der Nutzer zu infiltrieren. Dabei wird aus einem Passwort ein Hash generiert. Dieser Hash macht es einem unmöglich, das Passwort wiederherzustellen. Jedoch ergibt sich bei gleicher Eingabe, der gleiche Hash. Um ein gehashtes Passwort zu erhalten, muss ein Hashing Algorithmus auf das jeweilige Klartext Passwort angewendet werden.
-
-Mittlerweile gibt es eine vielzahl an Hashfunktionen, von denen manche als nicht mehr sicher gelten. Der Grund dafür sind Rainbowtables in denen Hashes mit dazugehörigem Klartext Passwort (Abbildung \ref{fig:unhashed_table}) stehen. Das Nutzen einer nicht sicheren Hashfunktion stellt ein Sicherheitsrisiko dar, da die Möglichkeit besteht, das gehashte Passwort mit einer Rainbowtable (Abbildung \ref{fig:rainbowtable}) abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Aus diesem Grund werden MD5 (Abbildung \ref{fig:md5_hashed_table}) und SHA zwei der bekanntesten Hashfunktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden. Ein Beispiel für eine derzeitig nutzbare Hashfunktion ist bcrypt. Bcrypt bietet den Vorteil des Integrierten Saltings. (Abbildung \ref{fig:salted_table})
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{graphics/unhashed_table.pdf}
@@ -52,23 +51,24 @@ Mittlerweile gibt es eine vielzahl an Hashfunktionen, von denen manche als nicht
 	\label{fig:rainbowtable}
 \end{figure}
 
- Salts (Abbildung ~\ref{fig:salted-hash}) sind zufällig generierte Zeichenketten, die dem Klartext-Passwort hinzugefügt werden. Der zusammengesetzte String wird mittels Hashfunktion verschlüsselt.
+Mittlerweile gibt es eine vielzahl an Hashfunktionen, von denen manche als nicht mehr sicher gelten. Der Grund dafür sind Rainbowtables in denen Hashes mit dazugehörigem Klartext Passwort (Abbildung \ref{fig:unhashed_table}) stehen. Das Nutzen einer nicht sicheren Hashfunktion stellt ein Sicherheitsrisiko dar, da die Möglichkeit besteht, das gehashte Passwort mit einer Rainbowtable (Abbildung \ref{fig:rainbowtable}) abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Aus diesem Grund werden MD5 (Abbildung \ref{fig:md5_hashed_table}) und SHA zwei der bekanntesten Hashfunktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden. Ein Beispiel für eine derzeitig nutzbare Hashfunktion ist bcrypt. Bcrypt bietet den Vorteil des Integrierten Saltings. (Abbildung \ref{fig:salted_table})
+
+Salts (Abbildung ~\ref{fig:salted-hash}) sind zufällig generierte Zeichenketten, die dem Klartext-Passwort hinzugefügt werden. Der zusammengesetzte String wird mittels Hashfunktion verschlüsselt.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=.89\textwidth]{graphics/salting.pdf}
+	\includegraphics[width=.7\textwidth]{graphics/salting.pdf}
 	\caption{Hashfunktion auf Klartext und Salt angewandt.}
 	\label{fig:salted-hash}
 \end{figure}
 
 \subsection{Sessions}
 \label{sec: sessions}
-
-Das \gls{HTTP} ist ein zustandsloses Protokoll, dass sich keine Informationen der jeweiligen Aufrufe zwischenspeichert. Dies ist aber unpraktisch, wenn Daten eines Benutzer kurzeitig gespeichert werden sollen. \todo{Zustandslos praktisch} Ein Verwendungszweck wäre beispielsweise der Warenkorb, da dieser nur temporär vorhanden sein soll. Genau dieses Problem kann mit der Session gelöst werden\todo{Warum lösen Cookies das Problem nicht?}.
+Das \gls{HTTP} ist ein zustandsloses Protokoll, dass sich keine Informationen der jeweiligen Aufrufe zwischenspeichert. Das hat den Vorteil, dass ohne jegliche Vorbedingung eine vielzahl an Verbrauchern auf eine Anwendung zugreifen kann. Die Zustandslosigkeit ist allerdings dann unpraktisch, wenn Daten eines Benutzer kurzeitig gespeichert werden sollen. Ein Verwendungszweck wäre beispielsweise der Warenkorb, da dieser nur temporär vorhanden sein soll. 
 
 Die Session ist eine serverseitige Daten-Speichermöglichkeit. Dabei wird bei der Anfrage von einem Client an den Server ohne Session-ID eine Session und Session-ID erstellt. Diese Session-ID wird bei der Antwort des Servers mit an den Client ausgeliefert. Ab diesem Punkt wird bei jeder Anfrage vom Client an den Server die Session-ID mit gesendet. Dies kann über einen Cookie oder über die \gls{URI} erfolgen. Aufgrund dessen kann der Server dem Client Daten aus der jeweiligen Session zur Verfügung stellen.
 
-IMAGE
+Eine weitere Möglichkeit Daten zwischenzeitig zu speichern sind Cookies. Cookies werden clientseitig gespeichert und häufig für das Aufbewahren der Session-ID verwendet. Desweiteren werden Cookies ebenfalls verwendet um Warenkörbe zu realisieren. Ein Problem hierbei ist die Vertrauenswürdigkeit eines Cookies, da dieser beliebig modifiziert werden kann.
 
 \subsection{JSON Web Token}
 \label{sec: jwt}

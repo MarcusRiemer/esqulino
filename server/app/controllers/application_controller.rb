@@ -12,14 +12,13 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
   protected
 
-  # AUTHENTICATION METHODS
   def api_response(response)
     render json: response
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 
-  def error_response(err = "something went wrong")
-    raise EsqulinoError.new(err, 401)
+  def error_response(err = "something went wrong", code = 401)
+    raise EsqulinoError.new(err, code)
   end
 
   # An instance of EsqulinoError was thrown
