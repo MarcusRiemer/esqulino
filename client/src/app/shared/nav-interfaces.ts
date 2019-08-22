@@ -13,7 +13,6 @@ export interface NavLink {
   type: "link",
   text: MultiLangString, // The text to display
   route: string[],
-  requireLogin?: boolean;
   requireRoles?: string[];
   icon?: string
 }
@@ -49,7 +48,6 @@ export interface NavFill {
 export interface NavHeader {
   type: "header",
   text: MultiLangString,
-  requireLogin?: boolean;
   requireRoles?: string[];
 }
 

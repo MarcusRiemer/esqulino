@@ -70,7 +70,6 @@ export const indexItems: NavItem[] = [
       de: "Administration",
       en: "Administration",
     },
-    requireLogin: true,
     requireRoles: ["admin"],
   },
   {
@@ -81,7 +80,6 @@ export const indexItems: NavItem[] = [
     },
     route: ["/admin"],
     icon: "user-secret",
-    requireLogin: true,
     requireRoles: ["admin"],
   },
   {
