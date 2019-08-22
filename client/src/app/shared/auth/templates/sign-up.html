@@ -1,12 +1,13 @@
-<div class="d-flex align-items-center flex-column authentication">
+<div class="flex-column authentication align-items-center">
   <validate-input
     icon="envelope-o"
     [(value)]="signUpData.email">
 
-    <input #inputRef 
+    <input #inputRef
       type="email"
       class="form-control"
-      placeholder="E-Mail">
+      placeholder="E-Mail"
+      required>
   </validate-input>
 
   <validate-input
@@ -16,7 +17,8 @@
     <input #inputRef 
       type="text"
       class="form-control"
-      placeholder="Username">
+      placeholder="Username"
+      required>
   </validate-input>
 
   <validate-input
@@ -25,7 +27,8 @@
     <input #inputRef 
       type="password"
       class="form-control"
-      placeholder="Password">
+      placeholder="Password"
+      required>
   </validate-input>
 
   <validate-input
@@ -35,17 +38,16 @@
     <input #inputRef 
       type="password"
       class="form-control"
-      placeholder="Confirm password">
+      placeholder="Confirm password"
+      required>
   </validate-input>
 
 
   <div class="row resend-activation-link-text">
     <div>
-      Send activation link again?
+      Aktivierungsmail nicht erhalten? <a (click)="onSendVerifyLink()">Klicke hier</a>
     </div>
-    <a (click)="onSendVerifyLink()">
-      Click here
-    </a>
+
   </div>
 
   <button
@@ -53,6 +55,6 @@
     color="primary"
     (click)="onSignUp()">
 
-    Sign up
+    Registrieren
   </button>
 </div>

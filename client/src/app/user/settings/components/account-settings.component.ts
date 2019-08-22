@@ -1,34 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 
 import { UserService } from '../../../shared/auth/user.service';
 import { providers } from '../../../shared/auth/providers';
-import { UserNameDescription } from './../../../shared/auth/user.description';
-import { ProviderDescription, ServerProviderDescription } from '../../../shared/auth/provider.description';
-import { first } from 'rxjs/operators';
-
+import { ServerProviderDescription } from '../../../shared/auth/provider.description';
+import { AddEmailDialogComponent } from './add-email-dialog.component';
 @Component({
   templateUrl: '../templates/account-settings.html'
 })
-export class AccountSettingsComponent {
+export class AccountSettingsComponent implements OnInit {
   constructor(
     private _userService: UserService,
-  ) {
-    this._userService.identities$.value.pipe(
-      first()
-    ).subscribe(
-      identities => this.identities = identities
-    )
-  }
+    private _dialog: MatDialog
+  ) { }
 
   public providers = providers;
   public identities: ServerProviderDescription;
 
-  private anotherProviderWithSameEmail(identity: ProviderDescription): boolean {
-    return this.identities.providers.some(v =>
-      v.email === identity.email && v.type !== identity.type
-    )
+  public ngOnInit(): void {
+    this._userService.identities$.value
+      .subscribe(
+        identities => this.identities = identities
+      )
   }
 
-  
-
+  public onTrigger(): void {
+    // If there exists no identity with password, ask for password
+    this._dialog.open(AddEmailDialogComponent, {
+      minWidth: '20em',
+      data: this.identities
+    });
+  }
 }

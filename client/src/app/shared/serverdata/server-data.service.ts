@@ -1,4 +1,3 @@
-import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -14,6 +13,8 @@ import { IndividualDescriptionCache, CachedRequest } from './request-cache';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './../auth/auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from '../auth/provider.description';
 import { UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './../auth/user.description';
+import { AvailableProvidersDescription } from './../auth/provider.description';
+import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 
 
 
@@ -49,6 +50,7 @@ export class ServerDataService {
 
 
   // TODO COMMENTS
+
   readonly getUserData = new CachedRequest<UserDescription>(
     this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
   );
@@ -56,6 +58,14 @@ export class ServerDataService {
   readonly getIdentities = new CachedRequest<ServerProviderDescription>(
     this._http.get<ServerProviderDescription>(this._serverApi.getUserIdentitiesUrl())
   )
+
+  readonly getProviders = new CachedRequest<AvailableProvidersDescription[]>(
+    this._http.get<AvailableProvidersDescription[]>(this._serverApi.getProvidersUrl())
+  )
+
+  changeRoles$(userId: string): Observable<UserDescription> {
+    return this._http.post<UserDescription>(this._serverApi.getChangeRolesUrl(), { "userId": userId })
+  }
 
   signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._http.post<UserDescription>(this._serverApi.getSignUpUrl(), data);

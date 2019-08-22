@@ -8,7 +8,6 @@ import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
 
-
 @Component({
   templateUrl: 'templates/settings.html'
 })

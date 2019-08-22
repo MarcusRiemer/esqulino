@@ -35,4 +35,4 @@ import { AddEmailDialogComponent } from './components/add-email-dialog.component
   ],
   entryComponents: [AddEmailDialogComponent],
 })
-export class UserSettingsModule {}
+export class UserSettingsModule { }

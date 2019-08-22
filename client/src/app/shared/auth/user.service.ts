@@ -1,14 +1,13 @@
-import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
-
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
-import { map, tap, first } from 'rxjs/operators';
+import { map, tap, first, } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
+import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
 import { Roles } from '../authorisation/roles.enum';
 
 @Injectable({ providedIn: 'root' })
@@ -18,10 +17,9 @@ export class UserService {
     private _snackBar: MatSnackBar
   ) { }
 
-  public performIndex: number = 0;
-
   public userData$ = this._serverData.getUserData;
   public identities$ = this._serverData.getIdentities;
+  public providerList$ = this._serverData.getProviders;
 
   /**
    * Deducing the login-state is not a 100% straightforward because users that
@@ -31,9 +29,7 @@ export class UserService {
    * logged-in user also has the "guest" role.
    */
   public readonly isLoggedIn$ = this.userData$.value.pipe(
-    map(u => (u.roles.includes(Roles.Guest) && (u.roles.includes(Roles.User) || u.roles.includes(Roles.Admin)))
-      || u.roles.includes(Roles.User)
-      || u.roles.includes(Roles.Admin))
+    map(u => u.roles.some(v => v !== Roles.Guest))
   )
 
   public readonly userDisplayName$ = this.userData$.value.pipe(
@@ -54,14 +50,17 @@ export class UserService {
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._serverData.signUp$(data).pipe(
-      first()
+      first(),
+      tap(
+        _ => alert("Please confirm your e-mail"),
+        (err) => alert(`Error: ${err["error"]["message"]}`)
+      )
     )
   }
 
   public mayPerform$(data: MayPerformRequestDescription): Observable<MayPerformResponseDescription> {
     return this._serverData.mayPerform$(data).pipe(
       first(),
-      tap(_ => this.performIndex++),
       map(r => r[0])
     )
   }
@@ -70,7 +69,7 @@ export class UserService {
     return this._serverData.signIn$(data).pipe(
       tap(
         () => this.userData$.refresh(),
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -79,7 +78,7 @@ export class UserService {
     return this._serverData.resetPassword$(data).pipe(
       tap(
         _ => this.userData$.refresh(),
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -91,7 +90,7 @@ export class UserService {
           this._snackBar.open('Username changed', '', { duration: 3000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -103,7 +102,7 @@ export class UserService {
           this._snackBar.open('Password changed', '', { duration: 3000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -115,7 +114,7 @@ export class UserService {
           this.userData$.refresh()
           alert("Please check your e-mails")
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -127,7 +126,7 @@ export class UserService {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -138,8 +137,9 @@ export class UserService {
         _ => {
           this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
           this.identities$.refresh();
+          this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -150,8 +150,9 @@ export class UserService {
         _ => {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
           this.identities$.refresh();
+          this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -162,7 +163,7 @@ export class UserService {
         _ => {
           this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }
@@ -174,7 +175,7 @@ export class UserService {
           this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
           this.userData$.refresh();
         },
-        (err) => alert(`Error: ${err["error"]["error"]}`)
+        (err) => alert(`Error: ${err["error"]["message"]}`)
       )
     )
   }

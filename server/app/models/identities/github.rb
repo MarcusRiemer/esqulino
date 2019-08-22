@@ -10,13 +10,14 @@ class Github < Identity
               :link => self.link,
               :email => self.email,
               :confirmed => self.confirmed?,
+              :changes => {
+                primary: self.change_primary_token_exp
+              }
             })
   end
 
   def self.create_with_auth(auth, user)
-    auth[:info]["confirmed"] = true
-
-    Github.create(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
+    new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
   # Github (hopefully) validates mails for us
@@ -31,5 +32,14 @@ class Github < Identity
   # Github provides the mail in the JSON blob
   def email
     return self.provider_data["email"]
+  end
+
+  def self.client_informations
+    return ({
+        name: "Github",
+        url_name: "github",
+        icon: "fa-github",
+        color: "black"
+    })
   end
 end
