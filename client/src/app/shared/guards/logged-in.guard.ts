@@ -1,27 +1,44 @@
-import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { MatDialog } from "@angular/material";
+import { CanActivate, Router, UrlTree } from "@angular/router";
+import { Injectable } from "@angular/core";
+import { first } from "rxjs/operators";
 
-import { UserService } from '../auth/user.service';
-import { take } from 'rxjs/operators';
+import { AuthDialogComponent } from "./../auth/auth-dialog.component";
+import { UserService } from "../auth/user.service";
 
 @Injectable()
 export class LoggedInGuard implements CanActivate {
   constructor(
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private _matDialog: MatDialog
   ) { }
 
-  public async canActivate(): Promise<true| UrlTree> {
+  public async canActivate(): Promise<true | UrlTree> {
     console.log(`LoggedIn Guard -> ?`);
     const loggedIn = await this._userService.isLoggedIn$
-                                            .pipe(take(1))
-                                            .toPromise()
+      .pipe(first())
+      .toPromise();
 
     console.log(`LoggedIn Guard -> ${loggedIn}`);
 
-    if (!loggedIn)
+    if (!loggedIn) {
+      // Waiting for a login
+      await this._matDialog
+        .open(AuthDialogComponent, {
+          data: {
+            type: "signIn",
+            message: "You need to login to view this content!",
+            message_type: "error"
+          }
+        })
+        .afterClosed()
+        .pipe(first())
+        .toPromise();
+      // After closing without sign in redirecting to base url
+      console.log("Dialog closed");
       return this._router.parseUrl("/");
-
+    }
     return true;
   }
 }

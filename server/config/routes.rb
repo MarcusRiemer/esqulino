@@ -5,9 +5,9 @@ Rails.application.routes.draw do
 
     scope 'identities' do
       root via: [:get], controller: 'identities', action: :show
+      get 'list', controller: 'identities', action: :list
       get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
       post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
-      post 'create_identity', controller: 'identities', action: :create
       post 'send_verify_email', controller: 'identities', action: :send_verify_email
       patch 'reset_password', controller: 'identities', action: :reset_password
       patch 'change_password', controller: 'identities', action: :change_password
@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get 'change_primary_email/:token', controller: 'user', action: :change_primary_email
       post 'send_change_email', controller: 'user', action: :send_change_email
       post 'may_perform', controller: 'user', action: :may_perform
+      post 'change_roles', controller: 'user', action: :change_roles
       patch 'change_username', controller: 'user', action: :change_username
     end
 
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
       delete 'sign_out', controller: 'auth', action: :destroy
       match ":provider/callback", to: "auth#callback", via: [:get, :post]
       match 'failure', :to => 'auth#failure', via: [:get, :post]
+      match 'failure_msg', :to => 'auth#failure_msg', via: [:get, :post]
     end
   
     # Everything in the context of projects

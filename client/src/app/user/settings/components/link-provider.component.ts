@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import { providers } from '../../../shared/auth/providers';
-
+import { UserService } from './../../../shared/auth/user.service';
 @Component({
   selector: "provider-linking",
   templateUrl: "../templates/link-provider.html"
 })
 export class ProviderLinkingComponent {
-  constructor() {}
-  public readonly providers = providers;
+  @Output() trigger = new EventEmitter<void>();
+
+  constructor(
+    private _userService: UserService
+  ) { }
+  public readonly providers = this._userService.providerList$;
+
+  public onTrigger(): void {
+    this.trigger.emit()
+  }
 }

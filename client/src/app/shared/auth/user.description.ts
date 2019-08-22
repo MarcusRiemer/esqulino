@@ -7,6 +7,7 @@ export interface UserDescription {
   displayName: string;
   roles: string[];
   userId: string;
+  email: string;
 }
 
 export interface UserAddEmailDescription {

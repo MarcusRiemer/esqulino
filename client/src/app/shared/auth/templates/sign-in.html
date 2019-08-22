@@ -1,14 +1,15 @@
-<div class="d-flex align-items-center flex-column authentication">
+<div class="flex-column authentication align-items-center">
   <validate-input
     icon="envelope-o"
     [(value)]="signInData.email">
 
-    <input #inputRef 
+    <input #inputRef
       type="email"
       class="form-control"
-      placeholder="E-Mail">
+      placeholder="E-Mail"
+      required>
   </validate-input>
-
+  
   <validate-input
     icon="key"
     [(value)]="signInData.password">
@@ -16,14 +17,15 @@
     <input #inputRef 
       type="password"
       class="form-control"
-      placeholder="Password">
+      placeholder="Password"
+      required>
   </validate-input>
 
   <div class="row reset-password-link-text">
     <div>
-      Forgot your password?
+      Passwort vergessen?
       <a (click)="onResetPassword()">
-        Click here
+        Klicke hier
       </a>
     </div>
   </div>
@@ -33,6 +35,6 @@
     color="primary"
     (click)="onSignIn()">
 
-    Sign in
+    Anmelden
   </button>
 </div>

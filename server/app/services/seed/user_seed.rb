@@ -6,8 +6,8 @@ module Seed
     SEED_IDENTIFIER = User
     SEED_DIRECTORY = "user"
 
-    GUEST_ID = "00000000-0000-0000-0000-000000000001"
-    SYSTEM_ID = "00000000-0000-0000-0000-000000000002"
+    GUEST_ID = Rails.configuration.sqlino["seed_users"]["guest"]
+    SYSTEM_ID = Rails.configuration.sqlino["seed_users"]["system"]
 
     def after_load_seed
       user = User.find(load_seed_id)

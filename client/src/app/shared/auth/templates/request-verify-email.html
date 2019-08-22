@@ -1,25 +1,24 @@
 
 
-<div class="d-flex align-items-center flex-column reset-password">
-  <p>
-    Keine Bestätigungs Email erhalten? Kein Problem!
-  </p>
 
-  <validate-input
-    icon="envelope-o"
-    [(value)]="userEmail.email">
+<p>
+  Keine Bestätigungs Email erhalten? Kein Problem!
+</p>
 
-    <input #inputRef 
-      type="email"
-      class="form-control"
-      placeholder="E-Mail">
-  </validate-input>
+<validate-input
+  icon="envelope-o"
+  [(value)]="userEmail.email">
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onSendVerifyEmail()">
+  <input #inputRef 
+    type="email"
+    class="form-control"
+    placeholder="E-Mail">
+</validate-input>
 
-    Sende verifizierungs E-Mail
-  </button>
-</div>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="onSendVerifyEmail()">
+
+  Sende Verifizierungsmail
+</button>

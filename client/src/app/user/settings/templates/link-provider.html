@@ -3,7 +3,7 @@
 <hr>
 
 <div class="row">
-  <mat-card *ngFor="let provider of providers;">
+  <mat-card *ngFor="let provider of providers.value | async;">
     <mat-card-header>
       <mat-card-title>
         {{provider.name}}
@@ -11,7 +11,8 @@
     </mat-card-header>
     <mat-card-actions>
       <provider-button
-        [providerName]="provider.name">
+        [provider]="provider"
+        (trigger)="onTrigger()">
       </provider-button>
     </mat-card-actions>
   </mat-card>
