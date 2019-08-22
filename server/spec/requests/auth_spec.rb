@@ -196,34 +196,67 @@ RSpec.describe "auth controller" do
   end
 
   # TODO-TOM NEEDS SERVER VALIDATION
-  # it "registering identity with an empty password" do
-  #   create(:identity, :identity_provider, user_id: user[:id])
+  it "registering identity with an empty password" do
+    create(:identity_provider, :new)
 
-  #   identity_count = Identity.all.count
+    identity_count = Identity.all.count
 
-  #   identity_params[:password] = ""
+    identity_params[:password] = ""
 
-  #   post '/api/auth/identity/register',
-  #       :headers => json_headers,
-  #       :params => identity_params.to_json
+    post '/api/auth/identity/register',
+        :headers => json_headers,
+        :params => identity_params.to_json
 
-  #   expect(Identity.all.count).to eq(identity_count)
-  # end
+    json_data = JSON.parse(response.body)
 
-  # it "registering identity with an empty username" do
-  #   create(:identity_provider, :new)
+    expect(json_data["message"]).to eq("Password can't be blank")
+    expect(Identity.all.count).to eq(identity_count)
+  end
 
-  #   identity_count = Identity.all.count
+  it "registering identity with length < 6" do
+    create(:identity_provider, :new)
 
-  #   identity_params[:username] = ""
+    identity_count = Identity.all.count
 
-  #   post '/api/auth/identity/register',
-  #       :headers => json_headers,
-  #       :params => identity_params.to_json
+    identity_params[:password] = "12345"
 
-  #   expect(Identity.all.count).to eq(identity_count)
-  # end
+    post '/api/auth/identity/register',
+        :headers => json_headers,
+        :params => identity_params.to_json
 
+    json_data = JSON.parse(response.body)
+
+    expect(json_data["message"]).to eq("Password is too short (minimum is 6 characters)")
+    expect(Identity.all.count).to eq(identity_count)
+  end
+
+  it "registering identity with an empty username" do
+    create(:identity_provider, :new)
+
+    identity_count = Identity.all.count
+
+    identity_params[:username] = ""
+
+    post '/api/auth/identity/register',
+        :headers => json_headers,
+        :params => identity_params.to_json
+
+    expect(Identity.all.count).to eq(identity_count)
+  end
+
+  it "registering identity with an invalid username" do
+    create(:identity_provider, :new)
+
+    identity_count = Identity.all.count
+
+    identity_params[:username] = "   "
+
+    post '/api/auth/identity/register',
+        :headers => json_headers,
+        :params => identity_params.to_json
+
+    expect(Identity.all.count).to eq(identity_count)
+  end
 
   it "logging in with email and wrong password" do
     create(:identity_provider, :existing)

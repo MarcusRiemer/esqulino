@@ -25,12 +25,56 @@ class Identity < ActiveRecord::Base
     find_by_provider_and_uid(auth[:provider], auth[:uid])
   end
 
-  def self.all_client_informations
+  def self.all_client_information
     to_return = Rails.configuration.sqlino["auth_provider"].map do |k|
-      infos = k.constantize.client_informations
+      infos = k.constantize.client_information
       infos = infos ? infos.slice(:name, :url_name, :icon, :color) : infos
     end
     return to_return.filter { |v| v }
+  end
+
+  # Creates an identity with omniauth callback or create_identity_data,
+  # create_identity_data takes the posted values and put them into a hash
+  def self.create_with_auth(auth, user)
+    case auth[:provider]
+    when 'developer'
+      identity = Developer.create_with_auth(auth, user)
+    when 'identity'
+      identity = PasswordIdentity.create_with_auth(auth, user)
+    when 'google_oauth2'
+      identity = Google.create_with_auth(auth, user)
+    when 'github'
+      identity = Github.create_with_auth(auth, user)
+    else
+      raise RuntimeError.new('Unknown provider')
+    end
+
+    # checks if someone has already registered this email
+    if ((identity.email && User.has_someone_email?(identity.email) && (not user.email.eql?(identity.email)))) then
+      raise EsqulinoError.new("E-mail already taken")
+    end
+
+    # If the user has no primary e-mail
+    if ((not user.email) and identity.confirmed?) then
+      user.email = identity.email
+    end
+
+    if (user.invalid?) then
+      raise EsqulinoError.new(user.errors.full_messages[0])
+    end
+
+    if (identity.invalid?) then
+      raise EsqulinoError.new(identity.errors.full_messages[0])
+    end
+
+    identity.save!
+    user.save!
+
+    if (not user.has_role?(:user)) then
+      user.add_role :user
+    end
+  
+    return identity
   end
 
   def to_list_api_response
@@ -68,49 +112,5 @@ class Identity < ActiveRecord::Base
 
   def primary_email_token_expired?()
     return self.own_data["change_primary_token_exp"] < Time.now
-  end
-
-  # Creates an identity with omniauth callback or create_identity_data,
-  # create_identity_data takes the posted values and put them into a hash
-  def self.create_with_auth(auth, user)
-    case auth[:provider]
-    when 'developer'
-      identity = Developer.create_with_auth(auth, user)
-    when 'identity'
-      identity = PasswordIdentity.create_with_auth(auth, user)
-    when 'google_oauth2'
-      identity = Google.create_with_auth(auth, user)
-    when 'github'
-      identity = Github.create_with_auth(auth, user)
-    else
-      raise RuntimeError.new('Unknown provider')
-    end
-
-    # checks if someone has already registered this email
-    if ((identity.email && User.has_email?(identity.email) && (not user.email.eql?(identity.email)))) then
-      raise EsqulinoError.new("E-mail already taken")
-    end
-
-    # If the user has no primary e-mail
-    if ((not user.email) and identity.confirmed?) then
-      user.email = identity.email
-    end
-
-    if (user.invalid?) then
-      raise EsqulinoError.new(user.errors.full_messages[0])
-    end
-
-    if (identity.invalid?) then
-      raise EsqulinoError.new(identity.errors.full_messages[0])
-    end
-
-    identity.save!
-    user.save!
-
-    if (not user.has_role?(:user)) then
-      user.add_role :user
-    end
-  
-    return identity
   end
 end

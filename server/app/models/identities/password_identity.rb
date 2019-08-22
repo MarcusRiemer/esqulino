@@ -1,7 +1,7 @@
 class PasswordIdentity < Identity
   attr_accessor :password, :password_confirmation
 
-  validates :password, presence: true
+  validates :password, presence: true, :length => { :minimum => 6 }
   validates_uniqueness_of :uid
 
   def self.find_by_email(email)
@@ -20,6 +20,14 @@ class PasswordIdentity < Identity
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => auth[:data])
   end
 
+  def self.client_information
+    return ({
+      name: "E-Mail",
+      icon: "fa-envelope-o",
+      color: "Maroon"
+    })
+  end
+
   # Ensure that the data hash is never nil
   after_initialize do |identity|
     # Sadly this is not sufficient: The "password" attribute may
@@ -28,70 +36,14 @@ class PasswordIdentity < Identity
 
     # Set the correct provider
     identity.provider = "identity"
-
-    # Ensure that the password is hashed
-    identity.ensure_password_hashed!
+    if (identity.valid?) then
+      # Ensure that the password is hashed
+      identity.ensure_password_hashed!
+    end
   end
 
   def email
-    self.uid
-  end
-
-  def confirmed!()
-    self.own_data["confirmed"] = true;
-  end
-
-  def set_password_all_with_user_id(password)
-    identities = PasswordIdentity.where('user_id = ?', self.user_id)
-
-    identities.each do |identity|
-      identity.password = password
-      identity.save!
-    end
-  end
-
-  def ensure_password_hashed!
-    if (not password.nil?) and (not Password.valid_hash? password) then
-      self.own_data["password"] = Password.create(password)
-    end
-  end
-
-  def password
-    self.own_data["password"]
-  end
-
-  def password=(password)
-    # Ugly: All attributes that are actually defined in `self.data` may
-    # stumble over a hash that does not yet exist
-    self.own_data ||= Hash.new
-
-    # Is the given password already encrypted?
-    if Password.valid_hash? password then
-    # Yes, don't encrypt it again
-      self.own_data["password"] = password
-    else
-      # No, encrypt it
-      self.own_data["password"] = Password.create(password)
-    end
-
-    self.save
-  end
-
-  def verify_token()
-    return self.own_data["verify_token"]
-  end
-
-  def password_reset_token()
-    return self.own_data["password_reset_token"]
-  end
-
-  def set_reset_token_expired()
-    self.own_data["password_reset_token_exp"] = Time.now - 1.hour
-  end
-
-  def set_reset_token()
-    self.own_data["password_reset_token"] = SecureRandom.uuid
-    self.own_data["password_reset_token_exp"] = 30.minutes.from_now
+    return self.uid
   end
 
   def reset_token_eql?(token)
@@ -106,8 +58,16 @@ class PasswordIdentity < Identity
     return self.own_data["password_reset_token_exp"] < Time.now
   end
 
-  def set_waiting_time
-    self.own_data["waiting_time_verify_mail"] = 2.minutes.from_now
+  def password
+    self.own_data["password"]
+  end
+
+  def verify_token()
+    return self.own_data["verify_token"]
+  end
+
+  def password_reset_token()
+    return self.own_data["password_reset_token"]
   end
 
   # Waiting time before the server sends a new verify email
@@ -116,15 +76,63 @@ class PasswordIdentity < Identity
     return ((need_to_wait.to_time - Time.current) / 1.minute).round
   end
 
-  def change_password(permited_params)
-    if (not self.password_eql?(permited_params[:new_password])) then
-      if (self.password_eql?(permited_params[:current_password])) then
-        self.set_password_all_with_user_id(permited_params[:new_password])
-        IdentityMailer.changed_password(self).deliver
-        api_response(user_information)
-      else
-        error_response("current password is wrong")
+  def confirmed?()
+    return self.own_data["confirmed"]
+  end
+
+  def confirmed!()
+    self.own_data["confirmed"] = true;
+  end
+
+  def password=(password)
+    # Ugly: All attributes that are actually defined in `self.data` may
+    # stumble over a hash that does not yet exist
+    self.own_data ||= Hash.new
+    self.own_data["password"] = password
+  end
+
+  def set_all_passwords(password)
+    identities = PasswordIdentity.where('user_id = ?', self.user_id)
+    identities.each do |identity|
+      identity.password = password
+      if (identity.invalid?) then
+        raise EsqulinoError.new(identity.errors.full_messages[0])
       end
+      identity.save!
+    end
+  end
+
+  def ensure_password_hashed!
+    if (not password.nil?) and (not Password.valid_hash? password) then
+      self.own_data["password"] = Password.create(password)
+    end
+  end
+
+  def set_reset_token_expired()
+    self.own_data["password_reset_token_exp"] = Time.now - 1.hour
+  end
+
+  def set_reset_token()
+    self.own_data["password_reset_token"] = SecureRandom.uuid
+    self.own_data["password_reset_token_exp"] = 30.minutes.from_now
+  end
+
+  def set_waiting_time
+    self.own_data["waiting_time_verify_mail"] = 2.minutes.from_now
+  end
+
+  def change_password(permited_params)
+    begin
+      if (not self.password_eql?(permited_params[:new_password])) then
+        if (not self.password_eql?(permited_params[:current_password])) then
+          raise EsqulinoError.new("current password is wrong.")
+        end
+
+        self.set_all_passwords(permited_params[:new_password])
+        IdentityMailer.changed_password(self).deliver unless Rails.env.test?
+      end
+    rescue EsqulinoError => e
+      raise EsqulinoError.new(e.message)
     end
   end
 
@@ -146,23 +154,12 @@ class PasswordIdentity < Identity
   end
 
   def password_eql?(password)
+    ensure_password_hashed!
     # comparing nil with Password.new(self.data["password"]) will be true
     if self.password.blank? || password.blank?
       return false
     else
-      return Password.new(self.password) == password
+      Password.new(self.password) == password
     end
-  end
-
-  def confirmed?()
-    return self.own_data["confirmed"]
-  end
-
-  def self.client_informations
-    return ({
-      name: "E-Mail",
-      icon: "fa-envelope-o",
-      color: "Maroon"
-    })
   end
 end

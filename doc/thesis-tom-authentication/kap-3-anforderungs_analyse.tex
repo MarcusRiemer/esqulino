@@ -1,5 +1,5 @@
 \section{Anforderungsanalyse}
-\label{sec: analyze}
+\label{sec:analyze}
 Das Ziel dieser Thesis ist, ein standardisiertes Registrierungsverfahren zu erstellen, zuzüglich einer Authentifikation über \gls{oAuth2} oder ein Passwort. Hinzu kommt eine Möglichkeit, den Nutzer über den Server zu autorisieren und ihm nach spezifischen Benutzerrollen unterschiedlichen Inhalt zu präsentieren. Dabei soll es dem Nutzer nicht gestattet sein, durch Manipulation seines Clients mit verfälschten Daten, Zugriff auf für ihn nicht zugreiffbare Daten zu erhalten. Um das Ziel dieser Thesis zu erreichen, muss man sich vorerst mit Ruby und dem Webframework Rails auseinandersetzen. Zudem ist es vonnöten, sich intensiver mit Angular zu beschäftigen, da dieses bisher nur oberflächlich behandelt wurde.
 
 \subsection{Derzeitiges Projekt}
@@ -16,8 +16,9 @@ Der serverseitige Teil baut auf Ruby on Rails und bietet ein \gls{API} zur Kommu
 \label{sec: requirement}
 Im Verlauf dieser Sektion werden die Anforderungen, die diese Thesis erfüllen soll, detailliert erläutert.
 
-\subsubsection{Unterschiedliche Anmeldemöglichkeiten}
-Ein Benutzer sollte die Möglichkeit haben sich mit mehreren Konten zu verknüpfen. Das bedeutet, einem Benutzer würde die Möglichkeit gegeben sein, sich mit Passwort und zum Beispiel Google anzumelden. 
+\subsubsection{Identitäten und Benutzer}
+\label{sec:identities_users}
+Blattwerkzeug soll die Möglichkeit bieten, einen Benutzer mit unterschiedlichen Providern zu authentifizieren. Hierbei wird Blattwerkzeug ebenfalls als Provider bezeichnet und dient zur Anmeldung/Registrierung mittels Passwort. Damit ein Benutzer von unterschiedlichen Providern authentifiziert werden darf, müssen unterschiedliche Modelle erstellt werden. Das user Model soll explizit für den Benutzer stehen und das identity Model für jegliche Provider über die eine Authentifizierung stattfinden kann. Zwischen user und identity Model muss eine Beziehung von 1:n bestehen, da ein Benutzer verschiedene Identitäten besitzen und eine Identität nur einem Benutzer zugeordnet werden darf.
 
 \subsubsection{Anmeldung mittels \gls{oAuth2}}
 Eine Authentifizierung mittels oAuth2 soll über Google und GitHub möglich sein. Die von Google oder GitHub zurückgelieferten Daten sollen in der Datenbank abgespeichert werden. Darüber hinaus müsste bei dem Vorhandensein spezifischer Daten, wie beispielsweise die einer E-Mail, eine automatische Zuweisung spezieller Datenbankfelder des Nutzers erfolgen.
@@ -36,14 +37,28 @@ Hat sich ein Benutzer mittels Passwortes auf Blattwerkzeug registriert, muss es 
 Da es in Blattwerkzeug bei der Benutzernamensgebung zum jetzigen Stand keine einmaligen Benutzernamen gibt, muss es dem Benutzer in den Benutzereinstellungen zusätzlich möglich sein, seinen Benutzernamen zu ändern.
 
 \subsubsection{Rollen und Autorisierung}
-Die Rollen müssen sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in Sektion ~\ref{sec: rolify} beschrieben, keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich zum Beispiel auf ein Projekt. Bei der Erstellung eines Projektes muss ein Benutzer eine Rolle oder eine Datenbank-Beziehung zu dem jeweiligen Projekt erhalten. Mit dieser Rolle ist es dann dem Benutzer möglich, sein Projekt zu bearbeiten oder zu löschen. Zusätzlich muss die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf jedes Projekt haben.
-
-\todo[inline]{Auflistung von nötigen Rollen und Rechten}
+Die Rollen müssen sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in Sektion ~\ref{sec: rolify} beschrieben, keiner spezifischen Ressource zugewiesen. Ressourcen spezifische Rollen beziehen sich zum Beispiel auf ein Projekt. Bei der Erstellung eines Projektes muss ein Benutzer eine Rolle oder eine Datenbank-Beziehung zu dem jeweiligen Projekt erhalten. Mit dieser Rolle ist es dann dem Benutzer möglich, sein Projekt zu bearbeiten oder zu löschen. Zusätzlich muss die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird.
 
 Für eine Autorisierung mittels Rollen müssen bestimmte Regeln für die jeweiligen Controller Funktionen festgelegt werden. Diese Regeln werden mittels Pundit erstellt werden. Innerhalb dieser Regeln sollte die Überprüfung der Rollen des angemeldeten Nutzers stattfinden.
 
 
-\subsubsection{Bedienelemente und Routen}
-Die Bedienelemente, die ein Benutzer zu sehen hat, müssen jeweils von den Rollen abhängen. Dazu ist es vonnöten, bei jedem Bedienelement den Server nach der Berechtigung zu fragen oder jedoch Clientseitig Pundit nachzubauen. Besucht ein Benutzer eine Route mit nicht ausreichender Berechtigung, wird ihm der Zugriff verwehrt. Die Bedienelemente sollten benuzterfreundlich sein, da es sich bei Blattwerkzeug, wie in Sektion \ref{sec:blattwerkzeug} beschrieben, um ein Werkzeug zum Lernen bestimmter Bereiche der Informatik handelt.
+\begin{description}
+	\item[user]\hfill\\
+	Die user Rolle muss einem standard Benutzer zugewiesen werden und soll das Erstellen von Projekten autorisieren. Desweiteren soll die user Rolle genutzt werden um die für den standard Benutzer zugänglichen Inhalte darzustellen.
+	\item[admin]\hfill\\
+	Die admin Rolle sollte nur einem Administrator zugewiesen werden. Im Gegensatz zu der gerade beschriebenen user Rolle, soll die admin Rolle die Berechtigung zu der Bearbeitung jeglicher Projekte und News bereitstellen. Darüber hinaus soll das Adminpanel clientseitig bei bestehender admin Rolle gerendert und benutzt werden können.
+	\item[owner]\hfill\\
+	Für die Identifizierung eines Projektinhabers soll ein Attribut owner der projects und news Tabelle hinzugefügt werden. Dieses Attribut muss ein Fremdschlüssel sein und auf den jeweiligen Projektinhaber verweisen.
+\end{description}
 
-\todo[inline]{Code-Beispiel für Verwendung als Angular-Komponente (Template)}
+\subsubsection{Bedienelemente und Routen}
+Die Bedienelemente, die ein Benutzer zu sehen hat, müssen jeweils von den Rollen abhängen. Dazu ist es vonnöten, die Berechtigung eines Bedienelementes serverseitig abzufragen (Listing \ref{lst:client-example-ui-authorisation-component}) oder jedoch Clientseitig Pundit nachzubauen (Listing \ref{lst:client-example-ui-authorisation-interface}). Besucht ein Benutzer eine Route mit nicht ausreichender Berechtigung, wird ihm der Zugriff verwehrt. Die Bedienelemente sollten benuzterfreundlich sein, da es sich bei Blattwerkzeug, wie in Sektion \ref{sec:blattwerkzeug} beschrieben, um ein Werkzeug zum Lernen bestimmter Bereiche der Informatik handelt.
+
+\begin{minipage}{\textwidth}
+	\lstinputlisting[language=JavaScript, style=CodeView, basicstyle=\scriptsize, caption=Beispiel einer Wrapper-Komponente zur serverseitigen Überprüfung, captionpos=b, label={lst:client-example-ui-authorisation-component}]{snippets/example-ui-authorisation-1.ts}
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+	\lstinputlisting[language=JavaScript, style=CodeView, basicstyle=\scriptsize, caption=Beispiel eines Interfaces zur Nutzung eines Pundit ähnlichen Musters, captionpos=b, label={lst:client-example-ui-authorisation-interface}]{snippets/example-ui-authorisation-2.ts}
+\end{minipage}
+

@@ -1,6 +1,34 @@
 module JwtHelper
   SECRET_KEY = Rails.application.secrets.secret_key_base. to_s
 
+  def self.encode(payload, exp = 24.hours.from_now)
+    payload[:exp] = exp.to_i
+    JWT.encode(payload, SECRET_KEY)
+  end
+
+  def self.decode(token)
+    decoded = JWT.decode(token, SECRET_KEY)[0]
+    HashWithIndifferentAccess.new decoded
+  end
+
+  # Only data the client receives
+  def get_private_claim
+    if (current_jwt) then
+      to_return = {
+        user_id: current_jwt[:user_id],
+        display_name: current_jwt[:display_name],
+        roles: current_jwt[:roles],
+        email: current_jwt[:email]
+      }
+    end
+  end
+
+  def update_private_claim
+    if (current_jwt) then
+      response_jwt_cookie(JwtHelper.encode(current_user.information))
+    end
+  end
+
   def current_jwt=(jwt)
     @current_jwt = jwt
   end
@@ -13,29 +41,6 @@ module JwtHelper
       end
     end
     return @current_jwt
-  end
-
-  def self.encode(payload, exp = 24.hours.from_now)
-    payload[:exp] = exp.to_i
-    JWT.encode(payload, SECRET_KEY)
-  end
-
-  def self.decode(token)
-    decoded = JWT.decode(token, SECRET_KEY)[0]
-    HashWithIndifferentAccess.new decoded
-  end
-
-  # Only data the client receives
-  def private_claim_response
-    if (current_jwt) then
-      to_return = {
-        user_id: current_jwt[:user_id],
-        display_name: current_jwt[:display_name],
-        roles: current_jwt[:roles],
-        email: current_jwt[:email]
-      }
-    end
-    return to_return
   end
 
   def response_jwt_cookie(value, expires = 1.day.from_now)

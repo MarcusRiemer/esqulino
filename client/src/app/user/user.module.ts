@@ -4,8 +4,6 @@ import { SharedAppModule } from '../shared/shared.module';
 import { ResetPasswordComponent } from './reset-password.component';
 import { userRouting } from './user.routes';
 import { UserComponent } from './user.component';
-
-
 @NgModule({
   imports: [
     SharedAppModule,

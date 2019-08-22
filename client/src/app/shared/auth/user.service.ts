@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
+
+import { Observable } from 'rxjs';
 import { map, tap, first, } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
@@ -9,7 +10,6 @@ import { SignUpDescription, SignInDescription, ChangePasswordDescription } from 
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
 import { Roles } from '../authorisation/roles.enum';
-
 @Injectable({ providedIn: 'root' })
 export class UserService {
   constructor(
@@ -67,6 +67,7 @@ export class UserService {
 
   public signIn$(data: SignInDescription): Observable<UserDescription> {
     return this._serverData.signIn$(data).pipe(
+      first(),
       tap(
         () => this.userData$.refresh(),
         (err) => alert(`Error: ${err["error"]["message"]}`)
@@ -76,6 +77,7 @@ export class UserService {
 
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
     return this._serverData.resetPassword$(data).pipe(
+      first(),
       tap(
         _ => this.userData$.refresh(),
         (err) => alert(`Error: ${err["error"]["message"]}`)
@@ -85,6 +87,7 @@ export class UserService {
 
   public changeUserName$(data: UserNameDescription) {
     return this._serverData.changeUserName$(data).pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('Username changed', '', { duration: 3000 })
@@ -97,6 +100,7 @@ export class UserService {
 
   public changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
     return this._serverData.changePassword$(data).pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('Password changed', '', { duration: 3000 })
@@ -109,6 +113,7 @@ export class UserService {
 
   public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
     return this._serverData.passwordResetRequest$(data).pipe(
+      first(),
       tap(
         _ => {
           this.userData$.refresh()
@@ -121,10 +126,12 @@ export class UserService {
 
   public sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
     return this._serverData.sendChangePrimaryEmail$(data).pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
           this.userData$.refresh();
+          this.identities$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["message"]}`)
       )
@@ -133,6 +140,7 @@ export class UserService {
 
   public deleteEmail$(uid: string): Observable<ServerProviderDescription> {
     return this._serverData.deleteEmail$(uid).pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
@@ -140,12 +148,13 @@ export class UserService {
           this.userData$.refresh();
         },
         (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+      ),
     )
   }
 
   public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
     return this._serverData.addEmail$(data).pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
@@ -159,6 +168,7 @@ export class UserService {
 
   public sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
     return this._serverData.sendVerifyEmail$(data).pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
@@ -170,6 +180,7 @@ export class UserService {
 
   public logout$(): Observable<UserDescription> {
     return this._serverData.logout$().pipe(
+      first(),
       tap(
         _ => {
           this._snackBar.open('Succesfully logged out', '', { duration: 3000 })

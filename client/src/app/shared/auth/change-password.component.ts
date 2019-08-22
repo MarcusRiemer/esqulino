@@ -3,7 +3,6 @@ import { map } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 import { ChangePasswordDescription } from './auth-description';
-
 @Component({
   selector: "change-password",
   templateUrl: "./templates/change-password.html"
@@ -13,12 +12,11 @@ export class ChangePasswordComponent {
     private _userService: UserService
   ) { }
 
+  public confirmedPassword: string;
   public newPasswordData: ChangePasswordDescription = {
     currentPassword: undefined,
     newPassword: undefined
   };
-
-  public confirmedPassword: string;
 
   public hasPasswordIdentity = this._userService.providers$.pipe(
     map(a => a.some(v => v.type === "PasswordIdentity" && v.confirmed))

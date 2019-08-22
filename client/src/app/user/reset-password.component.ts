@@ -1,17 +1,16 @@
-import { TemplateRef } from '@angular/core';
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
+import { TemplateRef } from "@angular/core";
+import { Component, AfterViewInit, ViewChild } from "@angular/core";
+import { MatDialog, MatSnackBar } from "@angular/material";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { UserService } from '../shared/auth/user.service';
-import { UserPasswordDescription } from '../shared/auth/user.description';
+import { UserService } from "../shared/auth/user.service";
+import { UserPasswordDescription } from "../shared/auth/user.description";
+import { first } from "rxjs/operators";
 
 @Component({
   templateUrl: "./templates/reset-password.html"
 })
-
 export class ResetPasswordComponent implements AfterViewInit {
-
   @ViewChild("dialog", { static: true }) dialog: TemplateRef<MatDialog>;
 
   constructor(
@@ -26,22 +25,26 @@ export class ResetPasswordComponent implements AfterViewInit {
     password: undefined,
     confirmedPassword: undefined,
     token: this._activeRoute.snapshot.paramMap.get("token")
-  }
-
+  };
 
   public ngAfterViewInit(): void {
-    this._dialog.open(this.dialog).afterClosed()
+    this._dialog
+      .open(this.dialog)
+      .afterClosed()
+      .pipe(first())
       .subscribe(_ => {
-        this._router.navigate(['/'])
+        this._router.navigate(["/"]);
       });
   }
 
   public onResetButton(): void {
-    this._userService.resetPassword$(this.resetPasswordData).subscribe(
-      _ => {
-        this._dialog.closeAll()
-        this._snackBar.open('Password succesfully updated', "", { duration: 3000 })
-      }
-    )
+    this._userService
+      .resetPassword$(this.resetPasswordData)
+      .subscribe(_ => {
+        this._dialog.closeAll();
+        this._snackBar.open("Password succesfully updated", "", {
+          duration: 3000
+        });
+      });
   }
 }

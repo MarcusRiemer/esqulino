@@ -3,7 +3,7 @@ module UserHelper
   
   def user_information(current = nil)
     begin
-      return current ? current_user.informations : (private_claim_response || current_user.informations)
+      return current ? current_user.information : (get_private_claim() || current_user.information)
     rescue EsqulinoError => e
       raise EsqulinoError.new(e.message)
     end
@@ -38,7 +38,7 @@ module UserHelper
   def sign_in(identity)
     if (not signed_in?) then
       current_user = identity.user
-      token = JwtHelper.encode(current_user.informations)
+      token = JwtHelper.encode(current_user.information)
       response_jwt_cookie(token)
     end
   end

@@ -24,7 +24,7 @@ class User < ApplicationRecord
   validates_format_of :display_name, :with => /\A^[a-zA-Z0-9]{3}.{0,17}$\z/i
   # Primary emails may only be used once. But because some identities do not
   # provide an email, they may also be empty
-  validates_uniqueness_of :email, :allow_nil => true
+  validates_uniqueness_of :email, :allow_nil => true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   # The guest user is always present and used to represent users that are
   # currently not logged in. Every role and permission of this user applies
@@ -36,6 +36,21 @@ class User < ApplicationRecord
   def self.guest_id
     return GUEST_ID
   end
+
+  # Creates a new user from a hash
+  def self.create_from_hash(auth)
+    name = auth[:info][:name] || auth[:info][:nickname]
+    # If the provider is identity, set the primary email of user to the uid from identity
+    email = auth[:info][:email]
+
+    new(display_name: name, email: email)
+  end
+
+  # Searchs for an existing user with the given e-mail
+  def self.has_someone_email?(email)
+    find_by(email: email) ? true : false
+  end
+
 
   # During development repeatedly logging in can be tedious. To ease this pain
   # it is possible to simply promote the guest user to be an administator.
@@ -62,27 +77,13 @@ class User < ApplicationRecord
   end
 
   # TODO: What is this required for?
-  def informations
+  def information
     return  {
       user_id: self.id,
       display_name: self.display_name,
       roles: self.role_names,
       email: self.email
     }
-  end
-
-  # TODO: What is this required for?
-  def self.create_from_hash(auth)
-    name = auth[:info][:name] || auth[:info][:nickname]
-    # If the provider is identity, set the primary email of user to the uid from identity
-    email = auth[:info][:email]
-
-    new(display_name: name, email: email)
-  end
-
-  # TODO: Does not return a boolean value
-  def self.has_email?(email)
-    find_by(email: email)
   end
 
   # TODO: What is this required for?
@@ -120,12 +121,6 @@ class User < ApplicationRecord
     end
 
     return to_return
-  end
-
-  # Sets the primary e-mail of a user
-  # TODO: Seems useless, the asignment could be made from the outside
-  def set_email(email)
-    self.email = email
   end
 
   # TODO: What is this required for?

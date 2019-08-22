@@ -3,21 +3,17 @@ class Github < Identity
     where("provider_data ->> 'email' = ?", email)
   }
 
-  def to_list_api_response
-    return ({
-              :id => self.id,
-              :type => self.type,
-              :link => self.link,
-              :email => self.email,
-              :confirmed => self.confirmed?,
-              :changes => {
-                primary: self.change_primary_token_exp
-              }
-            })
-  end
-
   def self.create_with_auth(auth, user)
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
+  end
+
+  def self.client_information
+    return ({
+        name: "Github",
+        url_name: "github",
+        icon: "fa-github",
+        color: "black"
+    })
   end
 
   # Github (hopefully) validates mails for us
@@ -34,12 +30,16 @@ class Github < Identity
     return self.provider_data["email"]
   end
 
-  def self.client_informations
+  def to_list_api_response
     return ({
-        name: "Github",
-        url_name: "github",
-        icon: "fa-github",
-        color: "black"
-    })
+              :id => self.id,
+              :type => self.type,
+              :link => self.link,
+              :email => self.email,
+              :confirmed => self.confirmed?,
+              :changes => {
+                primary: self.change_primary_token_exp
+              }
+            })
   end
 end

@@ -53,7 +53,7 @@ import { RequestResetPasswordComponent } from './auth/request-reset-password.com
 import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
 import { SignUpComponent } from './auth/sign-up.component';
-import { ValidateInputComponent } from './auth/validate-input.component';
+import { ValidateInputComponent } from './validate-input.component';
 import { ChangePasswordComponent } from './auth/change-password.component';
 import { SideNavService } from './side-nav.service';
 import { RequestVerifyEmailComponent } from './auth/request-verify-email.component';

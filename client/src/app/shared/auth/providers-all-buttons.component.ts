@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter } from "@angular/core";
 
 import { UserService } from './user.service';
-
 @Component({
   selector: "providers-all-buttons",
   templateUrl: "./templates/providers-all-buttons.html"

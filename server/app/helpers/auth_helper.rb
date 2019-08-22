@@ -28,7 +28,7 @@ module AuthHelper
         email: permited_params[:email],
       },
       data: {
-        password: (password || BCrypt::Password.create(permited_params[:password])),
+        password: (password || permited_params[:password]),
         verify_token: SecureRandom.uuid,
         confirmed: false,
       }
