@@ -8,10 +8,15 @@ import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNam
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
-import { Roles } from '../authorisation/roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+
+  /**
+   * The ID of the guest account, no "normal" user will ever have this id.
+   */
+  static readonly GUEST_ID = "00000000-0000-0000-0000-000000000001";
+
   constructor(
     private _serverData: ServerDataService,
     private _snackBar: MatSnackBar
@@ -22,14 +27,11 @@ export class UserService {
   public providerList$ = this._serverData.getProviders;
 
   /**
-   * Deducing the login-state is not a 100% straightforward because users that
-   * are not logged in get the "guest" role assigned. That role *should* only
-   * be applicable to users that are not logged in, but for various reasons (e.g.
-   * testing page display with different roles) it is entirely possible that a
-   * logged-in user also has the "guest" role.
+   * Instead of relying on roles, the (seldomly used) check for the login state
+   * relies on the guest user ID.
    */
   public readonly isLoggedIn$ = this.userData$.value.pipe(
-    map(u => u.roles.some(v => v !== Roles.Guest))
+    map(u => u.userId !== UserService.GUEST_ID)
   )
 
   public readonly userDisplayName$ = this.userData$.value.pipe(
