@@ -1,3 +1,7 @@
+/**
+ * Inspiration for a task that could be fulfilled by a student in an
+ * academic project (thesis, seminar, ...)
+ */
 export interface ProjectProposal {
   id: string;
   language: string;
@@ -7,16 +11,7 @@ export interface ProjectProposal {
 }
 
 export const ProjectProposals: ProjectProposal[] = [
-  {
-    id: "visual-database-editor",
-    language: "de",
-    title: "Visueller Drag & Drop Editor für Datenbanken",
-    text: `
-          <p>
-          Aufbauend auf der Bachelor-Thesis von Marco Pawloski soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
-          </p>`,
-    tools: "TypeScript mit Angular",
-  },
+  /*
   {
     id: "trucklino-world-editor",
     language: "de",
@@ -30,6 +25,7 @@ export const ProjectProposals: ProjectProposal[] = [
       </p>`,
     tools: "Typescript mit Angular und <code>canvas</code>-Rendering",
   },
+  */
   /*{
     id: "usermanagement",
     language: "de",
@@ -49,7 +45,49 @@ export const ProjectProposals: ProjectProposal[] = [
       Currently, the website does not provide any registration of users, instead, each created project, so to speak, has its own user database. This circumstance should change as part of this project. The actual registration and administration of users is more a technical formality and not particularly challenging. Much more interesting are the special requirements that result from the use in schools. Registered users typically fall into one of three roles: student, teacher, or administrator.
       </p>`,
     tools: "Ruby on Rails for the server-side data model and Angular with Typescript for management in the frontend.",
-  },*/
+    },*/
+  {
+    id: "sql-query-visualisation",
+    language: "de",
+    title: "Visualisierung von SQL-Abfragen",
+    text: `
+      <p>
+        SQL-Abfragen lassen sich recht anschaulich erläutern, weil das Ergebnis von jeder SQL-Komponente immer
+        wieder eine eigene Zwischentabelle ist. Allerdings sind diese Zwischenschritte für den Benutzer nicht
+        besonders transparent: Gängige Datenbanksoftware zeigt immer nur das Endergebnis, ein Anwender muss die
+        entsprechenden Schritte manuell ein- oder aus-kommentieren.
+      </p>
+      <p>
+        Im Rahmen dieses Projektes sollen bestehende BlattWerkzeug-SQL-Abfragen schrittweise ausgeführt und
+        sinnvoll visualisiert werden. Dazu muss der Syntaxbaum einer Abfrage in eine Abfolge von aufeinander
+        aufbauenden Abfragen transformiert werden. Dabei sollen mindestens (<code>OUTER</code>)
+        <code>JOIN</code>-Operationen in mehreren Schritten gezeigt werden (Kreuzprodukt bilden, innere
+        Verknüpfung, <code>NULL</code>-Werte) und die Inhalte von Gruppierungen sichtbar gemacht werden.
+      </p>`,
+
+    tools: "BlattWerkzeug-Syntaxbäume, TypeScript mit Angular",
+  },
+  {
+    id: "regex-course",
+    language: "de",
+    title: "Kurs für Reguläre Ausdrücke",
+    text: `
+      <p>
+        Reguläre Ausdrücke lassen sich vergleichsweise gut anhand von Beispielen erläutern. Man präsentiert
+        dem Nutzer bestimmte Ausdrücke und Eingaben und führt ihn so schrittweise ein. Das kommerzielle Angebot
+        <a href="https://www.executeprogram.com/">"Execute Program"</a> zeigt sehr schön, wie ein solcher
+        Kurs aussehen könnte.
+      </p>
+      <p>
+        Um ähnliche Ansätze in BlattWerkzeug zu ermöglichen, bedarf es zunächst der Definition und Implementierung
+        von Regulären Ausdrücken an sich. Dabei soll natürlich nicht der gesamte mögliche Sprachumfang abgebildet
+        werden, sondern ein sorgsam gewählter Satz an didaktisch sinnvollen Funktionalitäten.
+        Die implementierte Sprache soll dann im Rahmen einer interaktiven Test-Umgebung zum Einsatz kommen.
+        Dem Anwender werden eine Reihe von beispielhaften Eingaben samt erwartetem Ergebnis vorgegeben. Mittels
+        des generierten Block-Editors soll er dazu einen Ausdruck bauen, der alle Testfälle erfüllt.
+      </p>`,
+    tools: "BlattWerkzeug-Sprachdefinitionen, TypeScript mit Angular"
+  },
   {
     id: "community-functions",
     language: "de",
@@ -59,11 +97,44 @@ export const ProjectProposals: ProjectProposal[] = [
         BlattWerkzeug soll in einem überschaubarem Rahmen mit Community-Funktionen ausgestattet werden. Dazu gehören Kommentare zu Projekten, eine Foren-artige Kommunikationsmöglichkeit und persönliche Direktnachrichten. Diese Funktionalität soll allerdings nicht von Grund auf neu entwickelt werden: Der Nutzen steht dabei in keinem Verhältnis zum Aufwand, vor allem weil entsprechende Software schon existiert.
       </p>
       <p>
-        Stattdessen sollen bestehende Community-Platformen in Bezug auf ihre Eignung für die Integration evaluiert werden. Ein erster Ausgangspunkt für die Recherche sollten bestehende OpenSource Foren-Programme wie <a href="http://www.discourse.org">Discourse</a> sein, eine Liste mit möglichen Kandidaten findet sich bei <a href="https://github.com/Kickball/awesome-selfhosted#social-networks-and-forums">Awesome Selfhosted</a>. Die schlussendlich gewählte Software soll dann in BlattWerkzeug integriert werden. Dazu gehört mindestens ein gemeinsamer Login und die Integration von Kommentaren zu Projekten. Weitere Aspekte sind abhängig von der ausgewählten Software.
+        Stattdessen sollen bestehende Community-Platformen in Bezug auf ihre Eignung für die Integration evaluiert werden. Ein erster Ausgangspunkt für die Recherche sollten bestehende OpenSource Foren-Programme wie <a href="http://www.discourse.org">Discourse</a> sein, eine Liste mit möglichen Kandidaten findet sich bei <a href="https://github.com/Kickball/awesome-selfhosted#social-networks-and-forums">Awesome Selfhosted</a>. Die schlussendlich gewählte Software soll dann in BlattWerkzeug integriert werden. Dazu gehört mindestens ein gemeinsamer Login und die Integration von Kommentaren zu Projekten oder Nachrichten. Weitere Aspekte sind abhängig von der ausgewählten Software.
       </p>`,
 
     tools: "Eigene Konzeption und Recherche, Anbindung der gewählten Software",
   },
+  {
+    id: "teacher-backend",
+    language: "de",
+    title: "Konzeption & initiale Implementierung eines Backends für Lehrer",
+    text: `
+      <p>
+        Aktuell ist die Benutzerverwaltung von BlattWerkzeug noch sehr rudimentär und keinesfalls auf die
+        Bedürfnisse von Lehrern ausgerichtet. Es fehlen vor allem Werkzeuge zur Verwaltung von ganzen
+        Gruppen an Benutzern. Dabei ist jedoch aktuell noch fast völlig undefiniert, wie der Umgang von
+        Schülern und Lehrern genau zu gestalten ist. Mindestens sollten Lehrer in der Lage sein, mehrere
+        Schüler auf einmal einzuschreiben und diesen auch Projekte vorzugeben.
+      </p>
+      <p>
+        Darüber hinaus stellt sich vor allem die Frage, wie Lehrer ihre Projekte sinnvoll an Gruppen von
+        Schüler-Nutzern weitergeben können. Problematisch ist vornehmlich, dass die Projekte häufig einen
+        Kern an recht statischen Inhalten wie Datenbanken haben. Es ist prinzipiell zwar möglich, wenn auch
+        ineffizient, diese Daten schlicht zu kopieren. Dann ergeben sich allerdings Probleme, wenn solche
+        statischen Daten vom Lehrer aktualisiert werden müssen.
+      </p>`,
+
+    tools: "Eigene Konzeption und Recherche, TypeScript mit Angular, Ruby mit Rails",
+  },
+  {
+    id: "visual-database-editor",
+    language: "de",
+    title: "Visueller Drag & Drop Editor für Datenbanken",
+    text: `
+          <p>
+          Aufbauend auf der <a href="http://files.blattwerkzeug.de/theses/marco-pawlowski-thesis-schema-editor.pdf"> Bachelor-Thesis von Marco Pawloski</a> soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+          </p>`,
+    tools: "TypeScript mit Angular",
+  },
+  /*
   {
     id: "web-environment",
     language: "de",
@@ -83,8 +154,10 @@ export const ProjectProposals: ProjectProposal[] = [
        <li>Wie kann eine Seite die Datenquellen angeben, die zur Darstellung benötigt werden?</li>
        <li>Wie können Formulardaten verarbeitet werden?</li>
      </ul>`,
-    tools: "Typescript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
+    tools: "TypeScript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
   },
+  */
+  /*
   {
     id: "code-sandbox",
     language: "de",
@@ -104,5 +177,5 @@ export const ProjectProposals: ProjectProposal[] = [
        Dazu sollen eigens geschriebene, bösartige Programme in einer Testsuite zusammengefasst und (möglichst) mit den gewählten Isolationsverfahren korrekt eingeschränkt werden. Die Bandbreite umfasst dabei schlicht schädliche Skripten (<code>rm -rf /</code>), triviale Versuche Passwörter auszulesen (<code>cat /etc/shadow</code>), über (BitCoin-)Miner (oder profane Endlosschleifen) bis hin zu Versuchen, einen <q>Command and Control</q>-Server aufzusetzen.
       </p>`,
     tools: "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), Docker",
-  }
+  }, */
 ];

@@ -13,3 +13,7 @@ Tom - Thesis.pdf
 *.blg
 *.synctex.gz
 *.run.xml
+*.acr
+*.alg
+*.glg
+*.gls
