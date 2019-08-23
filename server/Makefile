@@ -47,6 +47,10 @@ store-live-data:
                   "blattwerkzeug:role:store_all" \
                   "blattwerkzeug:user:store_all"
 
+# Promote the guest oder to an administrator, only works on development instances
+dev-make-guest-admin:
+	bin/rails blattwerkzeug:dev:make_guest_admin
+
 # Removes every trace of data from the live system
 delete-live-data: msg-pre-reset-live-data
 	bin/rails blattwerkzeug:file_storage:delete_all db:reset
