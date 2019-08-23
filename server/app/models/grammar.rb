@@ -6,11 +6,6 @@ class Grammar < ApplicationRecord
   # A user defined name
   validates :name, presence: true
 
-  # The name used in "inter grammar" communication must be given
-  validates :technical_name, presence: true
-  validates :technical_name, format: { with: /\A[a-zA-Z]\w*\z/,
-                                       message: "Starts with a letter, allows letters, digits and _" }
-
   # Some special grammars may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true
   validates :slug, format: { with: /\A[a-zA-Z][a-zA-Z0-9\-]+\z/,

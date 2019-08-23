@@ -269,9 +269,6 @@ export interface GrammarListDescription {
   // The name of the language
   name: string
 
-  // This name is used when a grammer is referred to by another grammar
-  technicalName: string
-
   // The name of the programming language this grammar implements
   programmingLanguageId: string
 

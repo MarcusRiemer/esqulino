@@ -98,6 +98,6 @@ export class EditGrammarComponent implements OnInit {
   }
 
   get availableTypes() {
-    return (Object.keys(this.grammar.types))
+    return ([]) // TODO: Properly return types
   }
 }
