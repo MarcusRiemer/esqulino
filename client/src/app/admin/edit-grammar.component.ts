@@ -98,6 +98,7 @@ export class EditGrammarComponent implements OnInit {
   set grammarTypes(types) {
     this.grammar.types = types;
     this.availableTypes = getAllTypes(this.grammar);
+    this.grammarRoot = this.grammar.root;
   }
 
   /**
@@ -112,10 +113,10 @@ export class EditGrammarComponent implements OnInit {
    * The compiled version of the grammar
    */
   get prettyPrintedGrammar() {
-    if (this.grammar && this.grammar.types) {
+    try {
       return (prettyPrintGrammar(this.grammar.name, this.grammar));
-    } else {
-      return ("");
+    } catch (e) {
+      return (e.message);
     }
   }
 }
