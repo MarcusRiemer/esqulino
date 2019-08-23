@@ -1,5 +1,3 @@
-
-
 $button_width: 10em;
 $base_width: 20.5em;
 
@@ -29,7 +27,8 @@ $base_width: 20.5em;
       margin-bottom: 0%;
     }
 
-    .input-group, select {
+    .input-group,
+    select {
       margin-bottom: 1vh;
     }
 
@@ -73,8 +72,9 @@ $base_width: 20.5em;
     table {
       width: 50vw;
       background-color: white;
-      
-      th, td {
+
+      th,
+      td {
         padding: 10px 10px 10px 10px
       }
 
@@ -82,7 +82,7 @@ $base_width: 20.5em;
         width: 10px;
       }
     }
-  
+
     provider-button {
       width: $button_width;
 
@@ -94,7 +94,8 @@ $base_width: 20.5em;
         color: white !important;
       }
 
-      div, button {
+      div,
+      button {
         width: 100%;
       }
     }
@@ -113,6 +114,16 @@ $base_width: 20.5em;
       width: 30vw;
       min-width: $base_width;
     }
+
+    mat-progress-spinner {
+      width: 30px !important;
+      height: 30px !important;
+      margin-left: 10px;
+    }
+
+    svg {
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
 }
-

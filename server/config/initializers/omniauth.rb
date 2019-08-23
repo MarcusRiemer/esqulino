@@ -4,12 +4,27 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   config = Rails.application.config_for :sqlino
   domain = config["editor_domain"]
 
+  # See which providers are configure, fall back to password
+  auth_providers = Set.new(config.fetch("auth_provider", ["PasswordIdentity"]))
+
   configure do |config|
     config.full_host = Rails.env.production? ? "https://#{domain}" : "http://#{domain}"
     config.path_prefix = '/api/auth'
   end
-  provider :identity, :fields => [], :on_registration => AuthController.action(:register), :on_login => AuthController.action(:login_with_password), :model => PasswordIdentity
-  provider :developer, :fields => [:name, :email], :uid_field => :email unless Rails.env.production?
-  provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET']
-  provider :github, ENV['GITHUB_CLIENT_ID'], ENV['GITHUB_CLIENT_SECRET']
+
+  if auth_providers.include? "PasswordIdentity"
+    provider :identity, :fields => [], :on_registration => AuthController.action(:register), :on_login => AuthController.action(:login_with_password), :model => PasswordIdentity
+  end
+
+  if auth_providers.include? "Developer"
+    provider :developer, :fields => [:name, :email], :uid_field => :email
+  end
+
+  if auth_providers.include? "Google"
+    provider :google_oauth2, config["auth_provider_keys"]["google_id"], config["auth_provider_keys"]["google_secret"]
+  end
+
+  if auth_providers.include? "Github"
+    provider :github, config["auth_provider_keys"]["github_id"], config["auth_provider_keys"]["github_secret"]
+  end
 end

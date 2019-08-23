@@ -28,18 +28,6 @@
     </div>
   </div>
 
-  <!-- Technical name of the grammar -->
-  <div class="form-group row">
-    <label for="grammar-technical-name"
-           class="col-sm-2 col-form-label">Technischer Name</label>
-    <div class="col-sm-10">
-      <input id="grammar-technical-name"
-             class="form-control"
-             name="technical-name"
-             [(ngModel)]="grammar.technicalName">
-    </div>
-  </div>
-
   <!-- The type that should be trated as the root -->
   <div class="form-group row">
     <label for="grammar-root"
@@ -50,10 +38,10 @@
               required
               name="grammar-root"
               [(ngModel)]="grammar.root">
-        <option value="">-- Wurzeltyp wählen --</option>
-        <option *ngFor="let typename of availableTypes"
-                [value]="typename">
-          {{ typename }}
+        <option [ngValue]="undefined">-- Wurzeltyp wählen --</option>
+        <option *ngFor="let type of availableTypes;"
+                [ngValue]="type">
+          {{ type.languageName }}.{{ type.typeName }}
         </option>
       </select>
     </div>
@@ -85,12 +73,7 @@
                  class="col-form-label">Types</label>
         </div>
         <div class="col-sm-10">
-          <div *ngIf="!typesSynced"
-               class="alert alert-danger"
-               role="alert">
-            <code>JSON</code>-Struktur ist ungültig und kann daher nicht gespeichert werden.
-          </div>
-          <json-editor [(jsonValue)]="grammar.types"
+          <json-editor [(jsonValue)]="grammarTypes"
                        class="full-height">
           </json-editor>
         </div>

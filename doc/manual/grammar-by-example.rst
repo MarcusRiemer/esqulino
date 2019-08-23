@@ -1,6 +1,8 @@
-=======================
- Programming Languages
-=======================
+.. _grammars-by-example:
+
+=====================
+ Grammars by Example
+=====================
 
 As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages. The validation concept is losely based on ``XML Schema`` and ``RelaxNG``, the syntax of the latter is also used as the inspiration to describe the grammars in a user friendly textual representation.
 
@@ -127,7 +129,7 @@ Valid children of a node are defined via the ``children`` directive, a name and 
   }
 
 Example Grammar: Dynamic ``XML``
-------------------------
+--------------------------------
 
 .. literalinclude:: ./generated/dxml.grammar
    :language: javascript

@@ -1,0 +1,49 @@
+\section{Anforderungsanalyse}
+\label{sec: analyze}
+Das Ziel dieser Thesis ist, ein standardisiertes Registrierungsverfahren zu erstellen, zuzüglich einer Authentifikation über \gls{oAuth2} oder ein Passwort. Hinzu kommt eine Möglichkeit, den Nutzer über den Server zu autorisieren und ihm nach spezifischen Benutzerrollen unterschiedlichen Inhalt zu präsentieren. Dabei soll es dem Nutzer nicht gestattet sein, durch Manipulation seines Clients mit verfälschten Daten, Zugriff auf für ihn nicht zugreiffbare Daten zu erhalten. Um das Ziel dieser Thesis zu erreichen, muss man sich vorerst mit Ruby und dem Webframework Rails auseinandersetzen. Zudem ist es vonnöten, sich intensiver mit Angular zu beschäftigen, da dieses bisher nur oberflächlich behandelt wurde.
+
+\subsection{Derzeitiges Projekt}
+\label{sec: current_project}
+Zum derzeitigen Zeitpunkt ist Blattwerkzeug eine Lernplattform, in der jeder Nutzer jedes Projekt bearbeiten kann. Dafür wurde serverseitig ein Benutzername und Passwort, in beiden Fällen \enquote{user}, hinterlegt. Zusätzlich ist es möglich, das Adminpanel ohne weitere Autorisierungsabfrage zu betätigen.
+
+\subsubsection{Client}
+Der clientseitige Teil von Blattwerkzeug basiert auf Angular, Angular-Material und Bootstrap, hierbei sind Angular-Material und Bootstrap Gestaltungsframeworks. Bootstrap, welches hauptsächlich auf \gls{CSS} und \gls{HTML} basiert und Angular-Material, dass explizit Module für Angular bereitstellt.
+
+\subsubsection{Server}
+Der serverseitige Teil baut auf Ruby on Rails und bietet ein \gls{API} zur Kommunikation mit dem Server. Die Daten werden mittels unterschiedlicher Anfragemethoden abgefragt, übermittelt und vom Server verarbeitet.
+
+\subsection{Anforderungen}
+\label{sec: requirement}
+Im Verlauf dieser Sektion werden die Anforderungen, die diese Thesis erfüllen soll, detailliert erläutert.
+
+\subsubsection{Unterschiedliche Anmeldemöglichkeiten}
+Ein Benutzer sollte die Möglichkeit haben sich mit mehreren Konten zu verknüpfen. Das bedeutet, einem Benutzer würde die Möglichkeit gegeben sein, sich mit Passwort und zum Beispiel Google anzumelden. 
+
+\subsubsection{Anmeldung mittels \gls{oAuth2}}
+Eine Authentifizierung mittels oAuth2 soll über Google und GitHub möglich sein. Die von Google oder GitHub zurückgelieferten Daten sollen in der Datenbank abgespeichert werden. Darüber hinaus müsste bei dem Vorhandensein spezifischer Daten, wie beispielsweise die einer E-Mail, eine automatische Zuweisung spezieller Datenbankfelder des Nutzers erfolgen.
+
+\subsubsection{Anmeldung mittels Passwortes}
+Für eine Anmeldung mittels Passwortes muss zuerst eine Möglichkeit verfügbar sein ein Konto zu erstellen. Bei der Erstellung eines Kontos sollten vier Felder geben sein. Das Erste für den Benutzernamen, das Zweite für die E-Mail, das Dritte und Vierte für das Passwort und die Passwort Bestätigung. Sobald der Benutzer seine Daten erfolgreich abgeschickt hat, würde das vom Client als Klartext verschickte Passwort auf dem Server verschlüsselt werden. Nachdem der Benutzer sein Konto erstellt hat, muss eine Bestätigungsmail an die angegebene E-Mail gesendet werden. Diese Bestätigungsmail sollte einen Hyperlink beinhalten mit dem das vom Nutzer erstellte Konto bestätigt werden kann. Empfängt diese E-Mail den Nutzer nicht, muss die Möglichkeit bestehen, eine erneute Bestätigungsmail zu versenden. Erst nachdem das Konto bestätigt wurde, soll es dem Nutzer gestattet sein, dieses Konto zu verwenden. Falls ein Nutzer sein Passwort vergessen hat, muss es zusätzlich eine Funktion zum Passwort wiederherstellen geben.
+
+\subsubsection{Authentifizierung nach Anmeldung}
+Um vom Server als angemeldeter Benutzer authentifiziert zu werden, müssen die Benutzerdaten in einem \gls{JWT} gespeichert werden. Dieser \gls{JWT} wird bei der Anmeldung eines Benutzers an den Client übermittelt. Ab dem Zeitpunkt wird dieser \gls{JWT} bei jeder Anfrage an den Server mit gesendet. Sobald eine Anfrage den Server erreicht, muss zwangsläufig der \gls{JWT} auf seine Gültigkeit geprüft werden. Hat dieser \gls{JWT} eine nicht gültige Signatur oder ist bereits abgelaufen, darf keine weitere Aktion auf dem Server erfolgen.
+
+\subsubsection{Sicherheit und Login}
+Die Einstellungen im Bereich Sicherheit und Login sollen einem Benutzer erlauben sein bereits erstelltes Konto mit weiteren Konten zu verknüpfen. Hierbei muss der Benutzer eingeloggt sein und einen bestimmten Provider auf seiner Einstellungsseite auswählen können. Nachdem sich der Benutzer bei dem ausgewählten Provider authentifiziert hat, sollte dieses Konto dem Nutzer hinzugefügt werden. Ebenso müssen die Benutzereinstellungen eine Verwaltung der verknüpften Konten beinhalten. Das bedeutet der Benutzer kann zu jeder Zeit entscheiden, welche dieser verknüpften Konten beständig bleiben oder welche gelöscht werden.
+
+Hat sich ein Benutzer mittels Passwortes auf Blattwerkzeug registriert, muss es für diesen Nutzer eine Möglichkeit geben sein Passwort zu ändern, selbst wenn dieser bereits sein Konto zusätzlich mit Google oder GitHub verknüpft hat. Besteht für den Benutzer bereits ein vorhandenes Konto mit einem Passwort, sollte das neu zu verknüpfende Konto automatisch das Passwort des bereits Vorhandenen annehmen. Falls das zu verknüpfende Konto das erste mit einem Passwort sein sollte, muss dafür in den Benutzereinstellungen eine extra Passworteingabe dargestellt werden, in die das zu verwendende Passwort eingegeben wird.
+
+Da es in Blattwerkzeug bei der Benutzernamensgebung zum jetzigen Stand keine einmaligen Benutzernamen gibt, muss es dem Benutzer in den Benutzereinstellungen zusätzlich möglich sein, seinen Benutzernamen zu ändern.
+
+\subsubsection{Rollen und Autorisierung}
+Die Rollen müssen sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in Sektion ~\ref{sec: rolify} beschrieben, keiner spezifischen Ressource zugewiesen. Zwei Beispiele globaler Rollen wären \enquote{user} und \enquote{admin} oder \enquote{guest}, \enquote{user} und \enquote{admin}. Ressourcen spezifische Rollen beziehen sich zum Beispiel auf ein Projekt. Bei der Erstellung eines Projektes muss ein Benutzer eine Rolle oder eine Datenbank-Beziehung zu dem jeweiligen Projekt erhalten. Mit dieser Rolle ist es dann dem Benutzer möglich, sein Projekt zu bearbeiten oder zu löschen. Zusätzlich muss die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird. Administratoren mit der \enquote{admin} Rolle sollten jedoch Zugriff auf jedes Projekt haben.
+
+\todo[inline]{Auflistung von nötigen Rollen und Rechten}
+
+Für eine Autorisierung mittels Rollen müssen bestimmte Regeln für die jeweiligen Controller Funktionen festgelegt werden. Diese Regeln werden mittels Pundit erstellt werden. Innerhalb dieser Regeln sollte die Überprüfung der Rollen des angemeldeten Nutzers stattfinden.
+
+
+\subsubsection{Bedienelemente und Routen}
+Die Bedienelemente, die ein Benutzer zu sehen hat, müssen jeweils von den Rollen abhängen. Dazu ist es vonnöten, bei jedem Bedienelement den Server nach der Berechtigung zu fragen oder jedoch Clientseitig Pundit nachzubauen. Besucht ein Benutzer eine Route mit nicht ausreichender Berechtigung, wird ihm der Zugriff verwehrt. Die Bedienelemente sollten benuzterfreundlich sein, da es sich bei Blattwerkzeug, wie in Sektion \ref{sec:blattwerkzeug} beschrieben, um ein Werkzeug zum Lernen bestimmter Bereiche der Informatik handelt.
+
+\todo[inline]{Code-Beispiel für Verwendung als Angular-Komponente (Template)}

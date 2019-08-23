@@ -1,44 +1,17 @@
 
 
 class IdentitiesController < ApplicationController
-  include AuthHelper
-  include IdentityHelper
   include UserHelper
   include LocaleHelper
-
-  before_action :authenticate_user!
-
-  def change_password_params
-    params
-        .permit([:currentPassword, :newPassword])
-        .transform_keys { |k| k.underscore }
-  end
-
-
-  def reset_password_params
-    params
-        .permit([:password, :confirmedPassword, :token])
-        .transform_keys { |k| k.underscore }
-  end
-
-  def mail_permit_param
-    params
-        .permit([:email])
-  end
-
-  def email_confirmation_params
-    params
-        .permit([:verify_token])
-  end
-
-  def delete_identity_params
-    params
-  end
   
   def show
     if signed_in?
       api_response(current_user.all_providers)
     end
+  end
+
+  def list
+    api_array_response(Identity.all_client_informations)
   end
 
   def reset_password
@@ -62,18 +35,18 @@ class IdentitiesController < ApplicationController
   end
 
   def reset_password_mail
-    identity = search_for_password_identity(mail_permit_param)
-    if identity
+    identity = PasswordIdentity.find_by(uid: email_permit_param[:email])
+    if (identity) then
       identity.set_reset_token
       identity.save!
       IdentityMailer.reset_password(identity, request_locale).deliver
     else
-      error_response("e-mail not found") 
+      error_response("e-mail not found")
     end
   end
 
   def send_verify_email
-    identity = search_for_password_identity(mail_permit_param)
+    identity = PasswordIdentity.find_by(uid: email_permit_param[:email])
     if (not identity) then
       return error_response("e-mail not found")
     end
@@ -90,7 +63,6 @@ class IdentitiesController < ApplicationController
     identity.save!
     IdentityMailer.confirm_email(identity, request_locale).deliver
     api_response(user_information)
-
   end
 
 
@@ -101,18 +73,8 @@ class IdentitiesController < ApplicationController
 
     # identity found and not confirmed
     if identity && (not identity.confirmed?) then
-      user = User.find_by(id: identity[:user_id])
-      if (not user.email?)
-        # Sets the primary email on confirmation
-        user.set_email(identity.email)
-      end
-
-      identity.confirmed!
-      identity.save!
-      user.save!
-
-      set_identity(identity)
-      sign_in
+      identity = identity.email_confirmation
+      sign_in(identity)
       redirect_to "/"
     else
       error_response("No valid e-email found.")
@@ -124,15 +86,7 @@ class IdentitiesController < ApplicationController
       identity = PasswordIdentity.find_by(user_id: current_user[:id], provider: 'identity')
       if (not identity) then
         permited_params = change_password_params
-        if (not identity.password_eql?(permited_params[:new_password])) then
-          if (identity.password_eql?(permited_params[:current_password])) then
-            identity.set_password_all_with_user_id(permited_params[:new_password])
-            IdentityMailer.changed_password(identity).deliver
-            api_response(user_information)
-          else
-            error_response("current password is wrong")
-          end
-        end
+        identity.change_password(permited_params)
       else
         error_response("no vailable identity found")
       end
@@ -151,7 +105,7 @@ class IdentitiesController < ApplicationController
 
       # You need more than one identity to be able
       # to delete an identity
-      if (all_identities.count <= 1) then
+      if (all_identities.count <= 1 && identity.confirmed?) then
         return error_response("You need more than one confirmed e-mail.")
       end
   
@@ -171,5 +125,37 @@ class IdentitiesController < ApplicationController
       api_response(current_user.all_providers)
     end
   end
-end
 
+  private
+
+  def change_password_params
+    params
+        .permit([:currentPassword, :newPassword])
+        .transform_keys { |k| k.underscore }
+  end
+
+
+  def reset_password_params
+    params
+        .permit([:password, :confirmedPassword, :token])
+        .transform_keys { |k| k.underscore }
+  end
+
+  def email_permit_param
+    params
+        .permit([:email])
+  end
+
+  def email_confirmation_params
+    params
+        .permit([:verify_token])
+  end
+
+  def delete_identity_params
+    params
+  end
+
+  def api_array_response(to_response)
+    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) }}, status: :ok
+  end
+end

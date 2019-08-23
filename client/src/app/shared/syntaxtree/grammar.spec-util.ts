@@ -1,6 +1,6 @@
 import { GrammarDocument, NamedTypes, NamedLanguages } from './grammar.description';
 import { QualifiedTypeName, NodeLocation } from './syntaxtree.description';
-import { ValidationError, ValidationResult } from './validation-result';
+import { ValidationResult } from './validation-result';
 
 export function singleLanguageGrammar(
   langName: string,
@@ -9,7 +9,6 @@ export function singleLanguageGrammar(
 ): GrammarDocument {
   const toReturn: GrammarDocument = {
     root: { languageName: langName, typeName: rootType },
-    technicalName: langName,
     types: {},
   };
 
@@ -21,12 +20,11 @@ export function singleLanguageGrammar(
 }
 
 export function multiLanguageGrammar(
-  langName: string,
+  _langName: string,
   rootType: QualifiedTypeName,
   languages: NamedLanguages
 ): GrammarDocument {
   return ({
-    technicalName: langName,
     types: languages,
     root: rootType,
   });

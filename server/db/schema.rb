@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_124705) do
+ActiveRecord::Schema.define(version: 2019_08_23_183207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 2019_07_11_124705) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "programming_language_id"
-    t.string "technical_name"
     t.index ["programming_language_id"], name: "index_grammars_on_programming_language_id"
     t.index ["slug"], name: "index_grammars_on_slug", unique: true
   end

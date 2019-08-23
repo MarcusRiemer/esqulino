@@ -1,19 +1,21 @@
-$dialog_heigth: 320px;
 $button-size: 14rem;
+
+$provider-button-heigth: 45px;
+$provider-button-width: 250px;
 
 $margin_of_validate_inputs: 10px;
 
 $font-size-links: 0.8em;
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 .authentication {
-
-  .mat-tab-header {
-    margin-bottom: 3vh;
-  }
-
-  .mat-tab-labels {
-    justify-content: center;
+  h1 {
+    font-size: 1.5rem;
   }
 
   .form-group {
@@ -55,14 +57,19 @@ $font-size-links: 0.8em;
     flex-direction: column;
     align-items: center;
 
-   .mat-raised-button {
+    .mat-raised-button {
       color: white !important;
+      width: $provider-button-width;
+      height: $provider-button-heigth;
     }
   }
 }
 
-.reset-password {
-  width: $dialog_heigth;
+request-reset-password, request-verify-email {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: $provider-button-width;
 
   .mat-raised-button {
     width: $button-size;
@@ -72,7 +79,7 @@ $font-size-links: 0.8em;
     display: flex;
     justify-content: center;
 
-    width: 75%;
+    width: 100%;
     margin-bottom: $margin_of_validate_inputs;
   }
 }

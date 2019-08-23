@@ -35,6 +35,7 @@ import { OverviewBlockLanguageComponent } from './block-language/overview-block-
 
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
+import { ChangeRoles } from './change-roles.component';
 
 const materialModules = [
   MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule
@@ -66,6 +67,7 @@ const materialModules = [
     OverviewBlockLanguageComponent,
     AdminNewsListComponent,
     AdminNewsEditComponent,
+    ChangeRoles
   ],
   providers: [
     JsonSchemaValidationService

@@ -1,25 +1,6 @@
 class UserController < ApplicationController
   include UserHelper
-
-  before_action :authenticate_user!
-
-  def change_email_params
-    params
-      .permit([:primaryEmail])
-      .transform_keys { |k| k.underscore }
-  end
-
-  def change_username_params
-    params
-      .permit([:displayName])
-      .transform_keys { |k| k.underscore }
-  end
-
-  def may_perform_params
-    permited = params.permit([:list => [:resourceId, :resourceType, :policyAction]])
-    permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
-    return permited
-  end
+  include LocaleHelper
 
   def index
     api_response(user_information)
@@ -50,7 +31,7 @@ class UserController < ApplicationController
     if (not identity) then
       return error_response("No user was found")
     end
-    user = User.find_by(id: identity[:user_id])
+    user = identity.user
 
     if (not user) then
       return error_response("No user was found")
@@ -86,6 +67,10 @@ class UserController < ApplicationController
     permited_params = change_email_params
     if current_user.email.eql? permited_params[:primary_email] then
       return render status: :ok
+    end
+
+    if current_user.primary_email_change? then
+      return error_response("You are already changing the primary email")
     end
 
     validated_identities = current_user.all_validated_emails
@@ -131,9 +116,27 @@ class UserController < ApplicationController
   end
 
 
-  private 
+  private
+
+  def change_email_params
+    params
+      .permit([:primaryEmail])
+      .transform_keys { |k| k.underscore }
+  end
+
+  def change_username_params
+    params
+      .permit([:displayName])
+      .transform_keys { |k| k.underscore }
+  end
+
+  def may_perform_params
+    permited = params.permit([:list => [:resourceId, :resourceType, :policyAction]])
+    permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
+    return permited
+  end
 
   def api_array_response(to_response)
-    render json: to_response.map { |k| k.transform_keys! { |v| v.underscore }}, status: :ok
+    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) }}, status: :ok
   end
 end

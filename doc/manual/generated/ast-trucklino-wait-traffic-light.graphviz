@@ -1,0 +1,16 @@
+digraph SyntaxTree {
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{ trucklino_program.loopWhile}"];
+  subgraph cluster_r_pred {
+    label="pred";
+    r_pred_0 [label="{{trucklino_program.sensor}|{type|lightIsRed}}"];
+  }
+  r -> r_pred_0;
+  subgraph cluster_r_body {
+    label="body";
+    r_body_0 [label="{{trucklino_program.procedureCall}|{name|Wait}}"];
+  }
+  r -> r_body_0;
+}

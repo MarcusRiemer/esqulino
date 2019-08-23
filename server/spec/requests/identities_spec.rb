@@ -6,324 +6,328 @@ RSpec.describe "identities controller" do
 
   before(:each) { create(:user, :guest) }
 
-  it 'All identities of a logged in user' do
-    identity = create(:identity_provider, :existing)
-
-    set_jwt(identity.user)
-
-    get '/api/identities'
-    json_data = JSON.parse(response.body)
-    expect(json_data).to validate_against "ServerProviderDescription"
-  end
-
-  it "e-mail confirmation" do
-    identity = create(:identity_provider, :new)
-    confirmed = identity.confirmed?
-    expect(confirmed).to eq(false)
-
-    get "/api/identities/confirmation/#{identity.verify_token}"
-
-    expect(Identity.all.first.confirmed?).to eq(true)
-  end
-
-  it "e-mail confirmation with wrong token" do
-    identity = create(:identity_provider, :new)
-    confirmed = identity.confirmed?
-
-    expect(confirmed).to eq(false)
-
-    get "/api/identities/confirmation/123121212"
-
-    expect(Identity.all.first.confirmed?).to eq(false)
-  end
-
   it "saving password as hash" do
     identity = create(:identity_provider, :new, password: "1234567")
     expect(identity.password).to_not eq("1234567")
     expect(PasswordIdentity.all.first.password_eql?("1234567")).to be_truthy
   end
 
-  it "password changing" do
-    identity = create(:identity_provider, :existing)
+  describe "listing response" do
+    it "own identities" do
+      identity = create(:identity_provider, :existing)
 
-    set_jwt(identity.user)
+      create(:developer_provider, :new, user: identity.user)
+      create(:google_provider, :existing, user: identity.user)
 
-    patch '/api/identities/change_password',
-      :headers => json_headers,
-      :params => {
-        currentPassword: identity.password,
-        newPassword: "newPassword"
-      }.to_json
+      identity.user.email = identity.uid
+      identity.user.save!
 
-    expect(PasswordIdentity.all.first.password_eql?("newPassword"))
+      set_jwt(identity.user)
+
+      get "/api/identities"
+      json_response = JSON.parse(response.body)
+      provider_list = json_response["providers"].map { |k| k["type"] }
+
+      aggregate_failures "response validation" do
+        expect(json_response).to validate_against "ServerProviderDescription"
+        expect(json_response["primary"]).to eq(identity.user.email)
+        expect(provider_list.include? "PasswordIdentity").to be_truthy
+        expect(provider_list.include? "Google").to be_truthy
+        expect(provider_list.include? "Developer").to be_truthy
+      end
+    end
+
+    it "all providers" do
+      get "/api/identities/list"
+      json_response = JSON.parse(response.body)
+
+      expect(json_response.length).to eq(4)
+    end
   end
 
-  it "password changing of all identities with password" do
-    create(:identity_provider, :new)
-    identity = create(:identity_provider, :existing)
+  describe "e-mail confirmation" do
+    let!(:identity) { create(:identity_provider, :new) }
 
-    set_jwt(identity.user)
+    it "valid" do
+      expect(identity.confirmed?).to eq(false)
 
-    patch '/api/identities/change_password',
-      :headers => json_headers,
-      :params => {
-        currentPassword: identity.password,
-        newPassword: "newPassword"
-      }.to_json
+      get "/api/identities/confirmation/#{identity.verify_token}"
 
-    expect(Identity.all.count).to eq(2)
-    expect(PasswordIdentity.all.first.password_eql?("newPassword"))
-    expect(PasswordIdentity.all.last.password_eql?("newPassword"))
+      expect(Identity.find(identity.id).confirmed?).to eq(true)
+    end
+
+    it "e-mail confirmation with wrong token" do
+      confirmed = identity.confirmed?
+
+      expect(confirmed).to eq(false)
+
+      get "/api/identities/confirmation/123121212"
+
+      expect(Identity.find(identity.id).confirmed?).to eq(false)
+    end
   end
 
+  describe "password changing" do
+    let!(:identity) { create(:identity_provider, :existing) }
 
-  it "password changing with invalid current password" do
-    identity = create(:identity_provider, :existing)
+    context "valid" do
+      it "single identity" do
+        set_jwt(identity.user)
 
-    set_jwt(identity.user)
+        patch '/api/identities/change_password',
+          :headers => json_headers,
+          :params => {
+            currentPassword: identity.password,
+            newPassword: "newPassword"
+          }.to_json
 
-    patch '/api/identities/change_password',
-      :headers => json_headers,
-      :params => {
-        currentPassword: "12121212",
-        newPassword: "newPassword"
-      }.to_json
+        expect(PasswordIdentity.all.first.password_eql?("newPassword"))
+      end
 
-    expect(PasswordIdentity.all.first.password).to eq(identity.password)
+      it "all identities with password" do
+        create(:identity_provider, :new)
+        set_jwt(identity.user)
+
+        patch '/api/identities/change_password',
+          :headers => json_headers,
+          :params => {
+            currentPassword: identity.password,
+            newPassword: "newPassword"
+          }.to_json
+
+        expect(Identity.all.count).to eq(2)
+        expect(PasswordIdentity.all.first.password_eql?("newPassword"))
+        expect(PasswordIdentity.all.last.password_eql?("newPassword"))
+      end
+    end
+
+    it "invalid current password" do
+      set_jwt(identity.user)
+
+      patch '/api/identities/change_password',
+        :headers => json_headers,
+        :params => {
+          currentPassword: "12121212",
+          newPassword: "newPassword"
+        }.to_json
+
+      expect(PasswordIdentity.all.first.password).to eq(identity.password)
+    end
   end
 
-  it "resetting password" do
-    identity = create(:identity_provider, :existing)
-    identity.user.set_email(identity[:uid])
-    identity.user.save!
+  describe "resetting password" do
+    let!(:identity) { create(:identity_provider, :existing) }
+    it "valid" do
+      identity.user.email = identity[:uid]
+      identity.user.save!
 
-    post "/api/identities/reset_password_mail",
-      :headers => json_headers,
-      :params => {
-        email: identity.user[:email]
-      }.to_json
+      post "/api/identities/reset_password_mail",
+        :headers => json_headers,
+        :params => {
+          email: identity.user[:email]
+        }.to_json
 
-    patch "/api/identities/reset_password",
-      :headers => json_headers,
-      :params => {
-        token: PasswordIdentity.first.password_reset_token,
-        password: "reseted_password"
-      }.to_json
+      patch "/api/identities/reset_password",
+        :headers => json_headers,
+        :params => {
+          token: PasswordIdentity.first.password_reset_token,
+          password: "reseted_password"
+        }.to_json
 
-    expect(PasswordIdentity.all.first.password_eql?("reseted_password")).to be_truthy
+      expect(PasswordIdentity.all.first.password_eql?("reseted_password")).to be_truthy
+    end
+
+    context "invalid" do
+      it "wrong email" do
+        post "/api/identities/reset_password_mail",
+          :headers => json_headers,
+          :params => {
+            email: "wrong@email.de"
+          }.to_json
+
+        json_data = JSON.parse(response.body)
+        expect(json_data["message"]).to eq("e-mail not found")
+        expect(response.status).to eq(401)
+      end
+
+      it "invalid token" do
+        identity.user.email = identity[:uid]
+        identity.user.save!
+
+        post "/api/identities/reset_password_mail",
+          :headers => json_headers,
+          :params => {
+            email: identity[:uid]
+          }.to_json
+
+        patch "/api/identities/reset_password",
+          :headers => json_headers,
+          :params => {
+            token: "invalid-token",
+            password: "reseted_password"
+          }.to_json
+
+        json_data = JSON.parse(response.body)
+        expect(json_data["message"]).to eq("token not valid")
+        expect(response.status).to eq(401)
+      end
+
+      it "expired token" do
+        patch "/api/identities/reset_password",
+          :headers => json_headers,
+          :params => {
+            email: identity[:uid],
+            token: identity.password_reset_token,
+            password: "reseted_password"
+          }.to_json
+
+        json_data = JSON.parse(response.body)
+        expect(json_data["message"]).to eq("token expired")
+        expect(response.status).to eq(401)
+      end
+    end
   end
 
-  it "resetting password with wrong email" do
-    identity = create(:identity_provider, :existing)
+  describe "deleting identity" do
+    let!(:identity) { create(:identity_provider, :existing, uid: "another@web.de") }
 
-    post "/api/identities/reset_password_mail",
-      :headers => json_headers,
-      :params => {
-        email: "wrong@email.de"
-      }.to_json
+    it "valid" do
+      create(:identity_provider, :existing, user_id: identity.user_id)
+      set_jwt(identity.user)
 
-    json_data = JSON.parse(response.body)
-    expect(json_data["error"]).to eq("e-mail not found")
-    expect(response.status).to eq(401)
+      expect(Identity.all.count).to eq(2)
+
+      delete '/api/identities/delete_identity',
+        :headers => json_headers,
+        :params => {
+          id: identity.id
+        }.to_json
+
+      expect(response.status).to eq(200)
+      expect(Identity.all.count).to eq(1)
+    end
+
+    context "invalid" do
+      it "wrong uid" do
+        create(:identity_provider, :existing)
+        set_jwt(identity.user)
+
+        expect(Identity.all.count).to eq(2)
+
+        delete '/api/identities/delete_identity',
+          :headers => json_headers,
+          :params => {
+            id: "wrong_uid"
+          }.to_json
+
+        expect(response.status).to eq(401)
+        expect(Identity.all.count).to eq(2)
+      end
+
+      it "from another user" do
+        identity2 = create(:identity_provider, :existing)
+        set_jwt(identity2.user)
+
+        expect(Identity.all.count).to eq(2)
+
+        delete '/api/identities/delete_identity',
+          :headers => json_headers,
+          :params => {
+            id: identity.id
+          }.to_json
+
+        expect(response.status).to eq(401)
+        expect(Identity.all.count).to eq(2)
+      end
+
+      it "passed uid is primary mail" do
+        create(:identity_provider, :existing)
+
+        set_jwt(identity.user)
+        identity.user.email = identity[:uid]
+        identity.user.save!
+
+        expect(Identity.all.count).to eq(2)
+
+        delete '/api/identities/delete_identity',
+          :headers => json_headers,
+          :params => {
+            id: identity.id
+          }.to_json
+
+        expect(response.status).to eq(401)
+        expect(Identity.all.count).to eq(2)
+      end
+
+      it "only one existing identity" do
+        set_jwt(identity.user)
+
+        delete '/api/identities/delete_identity',
+          :headers => json_headers,
+          :params => {
+            id: identity.id
+          }.to_json
+
+        expect(response.status).to eq(401)
+        expect(Identity.all.count).to eq(1)
+      end
+    end
   end
 
-  it "resetting password with invalid token" do
-    identity = create(:identity_provider, :existing)
-    identity.user.set_email(identity[:uid])
-    identity.user.save!
+  describe "sending verify mail again" do
+    let(:identity) { create(:identity_provider, :new) }
 
-    post "/api/identities/reset_password_mail",
-      :headers => json_headers,
-      :params => {
-        email: identity[:uid]
-      }.to_json
+    it "valid" do
+      post "/api/identities/send_verify_email",
+        :headers => json_headers,
+        :params => {
+          email: identity[:uid]
+        }.to_json
 
-    patch "/api/identities/reset_password",
-      :headers => json_headers,
-      :params => {
-        token: "invalid-token",
-        password: "reseted_password"
-      }.to_json
+      expect(response.status).to eq(200)
+    end
 
-    json_data = JSON.parse(response.body)
-    expect(json_data["error"]).to eq("token not valid")
-    expect(response.status).to eq(401)
-  end
+    context "invalid" do
+      it "in too short a time" do
+        post "/api/identities/send_verify_email",
+          :headers => json_headers,
+          :params => {
+            email: identity[:uid]
+          }.to_json
 
+        expect(response.status).to eq(200)
 
-  it "resetting password with expired token" do
-    identity = create(:identity_provider, :existing)
+        post "/api/identities/send_verify_email",
+          :headers => json_headers,
+          :params => {
+            email: identity[:uid]
+          }.to_json
 
-    patch "/api/identities/reset_password",
-      :headers => json_headers,
-      :params => {
-        email: identity[:uid],
-        token: identity.password_reset_token,
-        password: "reseted_password"
-      }.to_json
+        expect(response.status).to eq(401)
+      end
 
-    json_data = JSON.parse(response.body)
-    expect(json_data["error"]).to eq("token expired")
-    expect(response.status).to eq(401)
-  end
+      it "invalid email" do
+        post "/api/identities/send_verify_email",
+          :headers => json_headers,
+          :params => {
+            email: "invalid"
+          }.to_json
 
-  it "getting all of the providers in an object" do
-    identity = create(:identity_provider, :existing, uid: "another@web.de")
-    create(:identity_provider, :existing, user_id: identity.user_id)
-    create(:developer_provider, :new, user_id: identity.user_id)
+        expect(response.status).to eq(401)
+      end
 
-    identity.user.set_email(identity[:uid])
-    identity.user.save!
+      it "already confirmed email" do
+        identity.confirmed!
+        identity.save!
 
-    set_jwt(identity.user)
+        post "/api/identities/send_verify_email",
+          :headers => json_headers,
+          :params => {
+            email: identity[:uid]
+          }.to_json
 
-    get '/api/identities'
-
-    json_data = JSON.parse(response.body)
-    expect(json_data["providers"].count).to eq(3)
-    expect(json_data["primary"]).to eq(identity[:uid])
-    # expect(json_data["confirmed"]).to eq(true)
-  end
-
-  it "deleting identity" do
-    identity = create(:identity_provider, :existing, uid: "another@web.de")
-    create(:identity_provider, :existing, user_id: identity.user_id)
-    set_jwt(identity.user)
-
-    expect(Identity.all.count).to eq(2)
-
-    delete '/api/identities/delete_identity',
-      :headers => json_headers,
-      :params => {
-        id: identity.id
-      }.to_json
-
-    expect(response.status).to eq(200)
-    expect(Identity.all.count).to eq(1)
-  end
-
-  it "deleting identity with wrong uid" do
-    identity = create(:identity_provider, :existing, uid: "another@web.de")
-    create(:identity_provider, :existing)
-    set_jwt(identity.user)
-
-    expect(Identity.all.count).to eq(2)
-
-    delete '/api/identities/delete_identity',
-      :headers => json_headers,
-      :params => {
-        id: "wrong_uid"
-      }.to_json
-
-    expect(response.status).to eq(401)
-    expect(Identity.all.count).to eq(2)
-  end
-
-  it "deleting identity from another user" do
-    identity = create(:identity_provider, :existing, uid: "another@web.de")
-    identity2 = create(:identity_provider, :existing)
-    cookies['JWT-TOKEN'] = JwtHelper.encode({user_id: identity2.user_id})
-
-    expect(Identity.all.count).to eq(2)
-
-    delete '/api/identities/delete_identity',
-      :headers => json_headers,
-      :params => {
-        id: identity.id
-      }.to_json
-
-    expect(response.status).to eq(401)
-    expect(Identity.all.count).to eq(2)
-  end
-
-  it "deleting identity while passed uid is primary mail" do
-    identity = create(:identity_provider, :existing, uid: "another@web.de")
-    create(:identity_provider, :existing)
-
-    set_jwt(identity.user)
-    identity.user.set_email(identity[:uid])
-    identity.user.save!
-
-    expect(Identity.all.count).to eq(2)
-
-    delete '/api/identities/delete_identity',
-      :headers => json_headers,
-      :params => {
-        id: identity.id
-      }.to_json
-
-    expect(response.status).to eq(401)
-    expect(Identity.all.count).to eq(2)
-  end
-
-
-  it "deleting identity while only one identity exists" do
-    identity = create(:identity_provider, :existing, uid: "another@web.de")
-    set_jwt(identity.user)
-
-    delete '/api/identities/delete_identity',
-      :headers => json_headers,
-      :params => {
-        id: identity.id
-      }.to_json
-
-    expect(response.status).to eq(401)
-    expect(Identity.all.count).to eq(1)
-  end
-
-  it "sending verify email again" do
-    identity = create(:identity_provider, :new)
-
-    post "/api/identities/send_verify_email",
-      :headers => json_headers,
-      :params => {
-        email: identity[:uid]
-      }.to_json
-
-    expect(response.status).to eq(200)
-  end
-
-  it "sending verify email in too short a time" do
-    identity = create(:identity_provider, :new)
-
-    post "/api/identities/send_verify_email",
-      :headers => json_headers,
-      :params => {
-        email: identity[:uid]
-      }.to_json
-
-    expect(response.status).to eq(200)
-
-    post "/api/identities/send_verify_email",
-      :headers => json_headers,
-      :params => {
-        email: identity[:uid]
-      }.to_json
-
-    expect(response.status).to eq(401)
-  end
-
-  it "sending verify email with invalid email" do
-    identity = create(:identity_provider, :new)
-
-    post "/api/identities/send_verify_email",
-      :headers => json_headers,
-      :params => {
-        email: "invalid"
-      }.to_json
-
-    expect(response.status).to eq(401)
-  end
-
-  it "sending verify email wih an already confirmed email" do
-    identity = create(:identity_provider, :existing)
-
-    post "/api/identities/send_verify_email",
-      :headers => json_headers,
-      :params => {
-        email: identity[:uid]
-      }.to_json
-
-    expect(response.status).to eq(401)
+        expect(response.status).to eq(401)
+      end
+    end
   end
 end

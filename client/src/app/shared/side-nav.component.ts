@@ -1,20 +1,19 @@
 import { UserService } from './auth/user.service';
-import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit } from "@angular/core";
+import { Component, Inject, LOCALE_ID, Input, ViewChild } from "@angular/core";
 import { BrowserService } from './browser.service';
 import { MatSidenav } from '@angular/material';
 
 import { NavItem } from './nav-interfaces';
 import { SideNavService } from './side-nav.service';
-import { take, first } from 'rxjs/operators';
-
-
+import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'side-nav-selector',
   templateUrl: './templates/side-nav.html'
 })
 
-export class SideNavComponent implements OnInit {
+export class SideNavComponent {
   @Input('items') navItems: NavItem[];
 
   @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
@@ -33,7 +32,6 @@ export class SideNavComponent implements OnInit {
 
     this._sideNav.sideNavToggle$()
       .subscribe(() => this.sidenav.toggle())
-
   }
 
   // Checks if the user is logged in
@@ -48,25 +46,21 @@ export class SideNavComponent implements OnInit {
   // The actual locale that is currently in use
   readonly locale = this._localeId;
 
-  private _userRoles: string[];
-
-  public get userRoles(): string[] {
-    return this._userRoles;
-  }
-
-  public set userRoles(roles: string[]) {
-    this._userRoles = roles;
-  }
-
-  public ngOnInit(): void {
-    this._userService.roles$.pipe(first())
-      .subscribe(v => this.userRoles = v)
-  }
-
-  public userHasRoles(roles: string[]): boolean {
-    return roles
-      ? roles.every(v => this.userRoles.includes(v))
-      : true
-      ;
+  /**
+   * Checks whether the currently logged in user has all the requested roles.
+   *
+   * TODO: It would be better to filter the list of relevant nav items to
+   *       factor out the *ngIf in the template. This could be perfectly
+   *       described in terms of the `combineLatest` rxjs-operation.
+   */
+  public userHasRoles$(roles: string[]) {
+    if (roles && roles.length > 0) {
+      return this._userService.roles$.pipe(
+        map(userRoles => roles.every(r => userRoles.includes(r)))
+      );
+    } else {
+      // "of" is a constructor function that wraps a static value as an observable
+      return (of(true));
+    }
   }
 }

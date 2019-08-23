@@ -4,7 +4,6 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "3889526b-3b6a-4e54-8b29-95b3526f8c5a",
   programmingLanguageId: "ruby",
   name: "imp",
-  technicalName: "imp",
   root: { languageName: "imp", typeName: "program" },
   types: {
     "imp": {
