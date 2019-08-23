@@ -69,20 +69,19 @@ grammar "sql" {
   }
   node "sql"."where" {
     terminal "keyword" "WHERE"
-    children sequence "expressions" ::= sql.expression sql.whereAdditional*
+    children sequence "expressions" ::= expression whereAdditional*
   }
-  typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
   node "sql"."whereAdditional" {
     prop "operator" { string enum "AND" "OR" }
     children sequence "expression" ::= expression
   }
   node "sql"."groupBy" {
     terminal "keyword" "GROUP BY"
-    children allowed "expressions", between: "," ::= sql.expression+
+    children allowed "expressions", between: "," ::= expression+
   }
   node "sql"."orderBy" {
     terminal "keyword" "ORDER BY"
-    children allowed "expressions", between: "," ::= sql.expression+
+    children allowed "expressions", between: "," ::= expression+
   }
   node "sql"."queryDelete" {
     children sequence "delete" ::= delete
@@ -92,15 +91,10 @@ grammar "sql" {
   node "sql"."delete" {
     terminal "keyword" "DELETE"
   }
-  typedef "sql"."query" ::= querySelect | queryDelete
   node "sql"."sortOrder" {
     prop "order" { string enum "ASC" "DESC" }
   }
   node "sql"."starOperator" {
     terminal "star" "*"
-  }
-  node "sql"."whereAdditional" {
-    prop "operator" { string enum "AND" "OR" }
-    children sequence "expression" ::= expression
   }
 }

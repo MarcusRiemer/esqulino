@@ -1,6 +1,6 @@
 grammar "g012-sequence-separator" {
   node "g12"."n1" {
-    children sequence "c", between: "," ::= g12.n2* g12.n3*
+    children sequence "c", between: "," ::= n2* n3*
   }
   node "g12"."n2" {
   }

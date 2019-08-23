@@ -34,7 +34,4 @@ grammar "css" {
   node "css"."exprAny" {
     prop "value" { string }
   }
-  node "css"."document" {
-    children allowed "rules" ::= rule+
-  }
 }

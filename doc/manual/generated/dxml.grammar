@@ -35,14 +35,6 @@ grammar "dxml" {
   node "dxml"."binaryOperator" {
     prop "operator" { string }
   }
-  node "dxml"."element" {
-    terminal "tag-open-begin" "<"
-    prop "name" { string }
-    children allowed "attributes" ::= attribute*
-    terminal "tag-open-end" ">"
-    children allowed "elements" ::= element* & text* & interpolate* & if*
-    terminal "tag-close" "<ende/>"
-  }
   node "dxml"."if" {
     children allowed "condition" ::= expr
     children allowed "body" ::= element* & text* & interpolate* & if*
