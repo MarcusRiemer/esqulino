@@ -1248,10 +1248,10 @@ describe('Grammar Validation', () => {
 
   it('"allowed": allowsChildType', () => {
     const v = new Validator([langAllowedConstraint]);
-    const vRoot = v.availableTypes[0];
-    const vNodeA = v.availableTypes[1];
-    const vNodeB = v.availableTypes[2];
-    const vNodeC = v.availableTypes[3];
+    const vRoot = v.getType({ languageName: "allowed-constraint", typeName: "root" });
+    const vNodeA = v.getType({ languageName: "allowed-constraint", typeName: "a" });
+    const vNodeB = v.getType({ languageName: "allowed-constraint", typeName: "b" });
+    const vNodeC = v.getType({ languageName: "allowed-constraint", typeName: "c" });
 
     const tNodeA = { languageName: "allowed-constraint", typeName: "a" };
     const tNodeB = { languageName: "allowed-constraint", typeName: "b" };

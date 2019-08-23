@@ -12,7 +12,6 @@ import { smartDropLocation } from './drop';
 export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
   id: "7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700",
   name: "sql",
-  technicalName: "sql",
   programmingLanguageId: "sql",
   root: { languageName: "sql", typeName: "query" },
   types: {
