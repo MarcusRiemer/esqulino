@@ -19,7 +19,7 @@ class Grammar < ApplicationRecord
 
   # Grammar with properties that are relevant when listing
   scope :scope_list, -> {
-    select(:id, :slug, :name, :technical_name, :created_at, :updated_at, :programming_language_id)
+    select(:id, :slug, :name, :created_at, :updated_at, :programming_language_id)
   }
 
   # Computes a hash that may be sent back to the client if it requires

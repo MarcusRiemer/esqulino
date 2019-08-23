@@ -62,8 +62,5 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-world
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: technical_name
-  value_before_type_cast: truck_world
 new_record: false
 active_record_yaml_version: 2

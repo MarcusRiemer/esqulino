@@ -19,12 +19,9 @@ concise_attributes:
   value_before_type_cast: '2019-08-23 09:29:51.024269'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-08-23 09:39:15.359899'
+  value_before_type_cast: '2019-08-23 18:29:02.584094'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: technical_name
-  value_before_type_cast: doc
 new_record: false
 active_record_yaml_version: 2
