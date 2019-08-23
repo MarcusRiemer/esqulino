@@ -1,99 +1,106 @@
 grammar "sql" {
-  typedef "query" ::= querySelect | queryDelete
-  node "querySelect" {
+  typedef "sql"."query" ::= querySelect | queryDelete
+  node "sql"."querySelect" {
     children sequence "select" ::= select
     children sequence "from" ::= from
     children sequence "where" ::= where?
     children sequence "groupBy" ::= groupBy?
     children sequence "orderBy" ::= orderBy?
   }
-  node "select" {
+  node "sql"."select" {
     terminal "keyword" "SELECT"
-    prop? "distinct" { boolean }
-    children allowed "columns", between: "," ::= expression* & starOperator?
+    children allowed "columns" ::= (expression* & starOperator?)
   }
-  typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
-  node "columnName" {
-    prop "refTableName" { string }
-    terminal "dot" "."
-    prop "columnName" { string }
-  }
-  node "binaryExpression" {
-    children sequence "lhs" ::= expression
-    children sequence "operator" ::= relationalOperator
-    children sequence "rhs" ::= expression
-  }
-  node "relationalOperator" {
-    prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
-  }
-  node "constant" {
-    prop "value" { string }
-  }
-  node "parameter" {
-    terminal "colon" ":"
-    prop "name" { string }
-  }
-  node "functionCall" {
-    prop "name" { string }
-    terminal "paren-open" "("
-    children sequence "arguments", between: "," ::= expression*
-    terminal "paren-close" ")"
-  }
-  node "starOperator" {
-    terminal "star" "*"
-  }
-  node "from" {
+  node "sql"."from" {
     terminal "keyword" "FROM"
     children sequence "tables", between: "," ::= tableIntroduction+
     children sequence "joins" ::= join*
   }
-  node "tableIntroduction" {
+  node "sql"."tableIntroduction" {
     prop "name" { string }
-    prop? "alias" { string }
   }
-  typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
-  node "crossJoin" {
+  typedef "sql"."join" ::= crossJoin | innerJoinUsing | innerJoinOn
+  node "sql"."crossJoin" {
     children sequence "table" ::= tableIntroduction
   }
-  node "innerJoinUsing" {
+  node "sql"."innerJoinUsing" {
     terminal "keyword" "INNER JOIN"
     children sequence "table" ::= tableIntroduction
     terminal "keywordUsing" "USING"
     children sequence "using" ::= expression
   }
-  node "innerJoinOn" {
+  typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
+  node "sql"."columnName" {
+    prop "refTableName" { string }
+    terminal "dot" "."
+    prop "columnName" { string }
+  }
+  node "sql"."binaryExpression" {
+    children sequence "lhs" ::= expression
+    children sequence "operator" ::= relationalOperator
+    children sequence "rhs" ::= expression
+  }
+  node "sql"."relationalOperator" {
+    prop "operator" { string enum "<" "<=" "=" "<>" ">=" ">" "LIKE" "NOT LIKE" }
+  }
+  node "sql"."constant" {
+    prop "value" { string }
+  }
+  node "sql"."parameter" {
+    terminal "colon" ":"
+    prop "name" { string }
+  }
+  node "sql"."functionCall" {
+    prop "name" { string }
+    terminal "paren-open" "("
+    children sequence "arguments", between: "," ::= expression*
+    terminal "paren-close" ")"
+  }
+  node "sql"."parentheses" {
+    terminal "parenOpen" "("
+    children sequence "expression" ::= expression
+    terminal "parenClose" ")"
+  }
+  node "sql"."innerJoinOn" {
     terminal "keyword" "INNER JOIN"
     children sequence "table" ::= tableIntroduction
     terminal "keywordOn" "ON"
     children sequence "on" ::= expression
   }
-  node "where" {
+  node "sql"."where" {
     terminal "keyword" "WHERE"
     children sequence "expressions" ::= sql.expression sql.whereAdditional*
   }
-  typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
-  node "whereAdditional" {
-    prop "operator" { string { enum "and" "or" } }
+  typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
+  node "sql"."whereAdditional" {
+    prop "operator" { string enum "AND" "OR" }
     children sequence "expression" ::= expression
   }
-  node "groupBy" {
+  node "sql"."groupBy" {
     terminal "keyword" "GROUP BY"
     children allowed "expressions", between: "," ::= sql.expression+
   }
-  node "orderBy" {
+  node "sql"."orderBy" {
     terminal "keyword" "ORDER BY"
     children allowed "expressions", between: "," ::= sql.expression+
   }
-  node "queryDelete" {
+  node "sql"."queryDelete" {
     children sequence "delete" ::= delete
     children sequence "from" ::= from
     children sequence "where" ::= where?
   }
-  node "delete" {
+  node "sql"."delete" {
     terminal "keyword" "DELETE"
   }
-  node "whereAdditional" {
-    prop "operator" { string { enum "and" "or" } }
+  typedef "sql"."query" ::= querySelect | queryDelete
+  node "sql"."sortOrder" {
+    prop "order" { string enum "ASC" "DESC" }
+  }
+  node "sql"."starOperator" {
+    terminal "star" "*"
+  }
+  node "sql"."whereAdditional" {
+    prop "operator" { string enum "AND" "OR" }
     children sequence "expression" ::= expression
   }
 }
