@@ -1,4 +1,4 @@
-grammar "g2" {
+grammar "g002-string-node" {
   node "g2"."s1" {
     prop "value" { string }
   }

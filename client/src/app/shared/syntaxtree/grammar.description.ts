@@ -308,9 +308,6 @@ export interface GrammarDatabaseBlob {
  * or generation.
  */
 export interface GrammarDocument extends GrammarDatabaseBlob {
-  // This name is used when a grammer is referred to by another grammar
-  technicalName: string
-
   // These grammars are included in this grammar
   includedGrammars?: string[]
 }

@@ -1,4 +1,4 @@
-grammar "g4" {
+grammar "g004-string-node-length-min-max" {
   node "g4"."s1" {
     prop "value" {
       string {

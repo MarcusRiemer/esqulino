@@ -1,4 +1,4 @@
-grammar "g9" {
+grammar "g009-terminal-only" {
   node "g9"."n1" {
     terminal "req" "i am required"
   }
