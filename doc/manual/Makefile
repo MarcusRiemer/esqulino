@@ -39,7 +39,7 @@ generated/%.graphviz: examples/syntaxtree/%.json $(CLI_PROG_CLIENT)
 pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.grammar generated/css.grammar
 
 # Default set of pretty printed blocks
-pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
+pretty-blocks: generated/sql.blocks
 
 # Default set of graphviz trees
 graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-sql-column-name.graphviz generated/ast-example-xml-node-two-attributes.graphviz generated/ast-trucklino-wait-traffic-light.graphviz

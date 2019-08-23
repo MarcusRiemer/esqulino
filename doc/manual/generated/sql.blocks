@@ -1,403 +1,220 @@
-language "SQL" {
-  type "sql.querySelect" {
-    iterate {
-      childGroup "select"
-      direction horizontal
-    }
-    iterate {
-      childGroup "from"
-      direction horizontal
-    }
-    dropTarget {
-      direction horizontal
-      dropOptions {
-        visible {"$var":"ifLegalChild"}
-        parent "where", insertFirst
-      }
-      visual {
-        "+WHERE"
-      }
-    }
-    iterate {
-      childGroup "where"
-      direction horizontal
-    }
-    dropTarget {
-      direction horizontal
-      dropOptions {
-        visible {"$var":"ifLegalChild"}
-        parent "groupBy", insertFirst
-      }
-      visual {
-        "+GROUP BY"
-      }
-    }
-    iterate {
-      childGroup "groupBy"
-      direction horizontal
-    }
-    dropTarget {
-      direction horizontal
-      dropOptions {
-        visible {"$var":"ifLegalChild"}
-        parent "orderBy", insertFirst
-      }
-      visual {
-        "+ORDER BY"
-      }
-    }
-    iterate {
-      childGroup "orderBy"
-      direction horizontal
-    }
-  }
-  type "sql.select" {
-    block {
-      direction horizontal
-      dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "columns", insertFirst
-      }
-      visual {
-        "SELECT" {
-          style {
-            color: blue
-            width: 9ch
-            cursor: grab
-            display: inline-block
-            padding-left: 2px
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "columns", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "columns"
-          direction horizontal
-          between {
-            ", "
-          }
-        }
-      }
-    }
-  }
-  type "sql.columnName" {
-    block {
-      direction horizontal
-      visual {
-        {{ refTableName }}
-        "."
-        {{ columnName }}
-      }
-      style {
-        border: 2px solid rgba(0, 255, 0, 0.6)
-        cursor: grab
-        margin-top: 2px
-        paddingLeft: 10px
-        borderRadius: 500px
-        paddingRight: 10px
-        margin-bottom: 2px
-        background-color: rgba(0, 255, 0, 0.15)
-      }
-    }
-  }
-  type "sql.starOperator" {
-    block {
-      direction horizontal
-      visual {
-        "★"
-      }
-      style {
-        border: 2px solid rgba(0, 255, 0, 0.6)
-        cursor: grab
-        margin-top: 2px
-        paddingLeft: 10px
-        paddingRight: 10px
-        border-radius: 500px
-        margin-bottom: 2px
-        background-color: rgba(0, 255, 0, 0.15)
-      }
-    }
-  }
-  type "sql.parameter" {
-    block {
-      direction horizontal
-      visual {
-        ":"
-        TODO: input blocks
-      }
-      style {
-        border: 2px solid rgba(129, 129, 247, 1)
-        cursor: grab
-        margin-top: 2px
-        paddingLeft: 10px
-        borderRadius: 500px
-        paddingRight: 10px
-        margin-bottom: 2px
-        background-color: rgba(129, 129, 247, 0.4)
-      }
-    }
-  }
-  type "sql.constant" {
-    block {
-      direction horizontal
-      visual {
-        TODO: input blocks
-      }
-      style {
-        border: 2px solid rgba(0, 255, 0, 0.6)
-        margin-top: 2px
-        paddingLeft: 10px
-        borderRadius: 500px
-        paddingRight: 10px
-        margin-bottom: 2px
-        text-decoration: underline black dotted
-        background-color: rgba(0, 255, 0, 0.15)
-      }
-    }
-  }
-  type "sql.functionCall" {
-    block {
-      direction horizontal
-      visual {
-        TODO: input blocks
-        "("
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "arguments", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "arguments"
-          direction horizontal
-        }
-        ")"
-      }
-      style {
-        border: 2px solid rgba(255, 165, 0, 0.6)
-        margin-top: 2px
-        paddingLeft: 10px
-        borderRadius: 500px
-        paddingRight: 10px
-        margin-bottom: 2px
-        backgroundColor: rgba(255, 165, 0, 0.3)
-      }
-    }
-  }
-  type "sql.binaryExpression" {
-    block {
-      direction horizontal
-      visual {
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "lhs", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "lhs"
-          direction horizontal
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "operator", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "operator"
-          direction horizontal
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "rhs", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "rhs"
-          direction horizontal
-        }
-      }
-      style {
-        border: 2px solid rgba(255, 165, 0, 0.6)
-        cursor: grab
-        margin-top: 2px
-        paddingLeft: 5px
-        borderRadius: 500px
-        paddingRight: 5px
-        margin-bottom: 2px
-        backgroundColor: rgba(255, 165, 0, 0.3)
-      }
-    }
-  }
-  type "sql.relationalOperator" {
-    block {
-      direction horizontal
-      visual {
-        TODO: input blocks
-      }
-    }
-  }
+language "Generated SQL" {
   type "sql.from" {
     block {
-      direction vertical
+      direction horizontal
+      breakAfter true
+      dropOptions {
+
+      }
       visual {
-        block {
-          direction horizontal
-          dropOptions {
-            visible {"$var":"ifLegalChild"}
-            children "tables", insertFirst
+        TODO: error blocks
+        "FROM" {
+          style {
+            color: #0000ff
+            width: 9ch
+            display: inline-block
           }
-          visual {
-            "FROM" {
+        }
+        iterate {
+          childGroup "tables"
+          direction horizontal
+          between {
+            "," {
               style {
-                color: blue
-                width: 9ch
                 display: inline-block
-              }
-            }
-            dropTarget {
-              direction horizontal
-              dropOptions {
-                visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-                children "tables", insertFirst
-              }
-              visual {
-                "❓" {
-                  style {
-                    color: darkred
-                    border: 2px solid red
-                    cursor: default
-                    paddingLeft: 10px
-                    borderRadius: 500px
-                    paddingRight: 10px
-                    backgroundColor: orange
-                  }
-                }
-              }
-            }
-            iterate {
-              childGroup "tables"
-              direction horizontal
-              between {
-                ","
               }
             }
           }
         }
         iterate {
           childGroup "joins"
-          direction vertical
-          between {
+          direction horizontal
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.where" {
+    block {
+      direction horizontal
+      breakAfter true
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "WHERE" {
+          style {
+            color: #0000ff
+            width: 9ch
+            display: inline-block
           }
         }
-        dropTarget {
+        iterate {
+          childGroup "expressions"
           direction horizontal
-          dropOptions {
-            visible {"$var":"ifLegalChild"}
-            children "joins", insertLast
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.delete" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "DELETE" {
+          style {
+            display: inline-block
           }
-          visual {
-            "+JOIN"
+        }
+      }
+    }
+  }
+  type "sql.select" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "SELECT" {
+          style {
+            color: #0000ff
+            width: 9ch
+            display: inline-block
+          }
+        }
+        iterate {
+          childGroup "columns"
+          direction horizontal
+          emptyDropTarget true
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.groupBy" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "GROUP BY" {
+          style {
+            color: #0000ff
+            width: 9ch
+            display: inline-block
+          }
+        }
+        iterate {
+          childGroup "expressions"
+          direction horizontal
+          between {
+            "," {
+              style {
+                display: inline-block
+              }
+            }
           }
         }
       }
       style {
-        cursor: grab
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.orderBy" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "ORDER BY" {
+          style {
+            color: #0000ff
+            width: 9ch
+            display: inline-block
+          }
+        }
+        iterate {
+          childGroup "expressions"
+          direction horizontal
+          between {
+            "," {
+              style {
+                display: inline-block
+              }
+            }
+          }
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.constant" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        TODO: input blocks
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
       }
     }
   }
   type "sql.crossJoin" {
     block {
       direction horizontal
+      breakAfter false
       dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "table", insertFirst
+
       }
       visual {
-        "JOIN" {
-          style {
-            color: blue
-            width: 10ch
-            display: inline-block
-            marginLeft: 10px
-          }
-        }
+        TODO: error blocks
         iterate {
           childGroup "table"
           direction horizontal
@@ -405,42 +222,285 @@ language "SQL" {
       }
     }
   }
+  type "sql.parameter" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        ":" {
+          style {
+            display: inline-block
+          }
+        }
+        TODO: input blocks
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.sortOrder" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        TODO: input blocks
+      }
+    }
+  }
+  type "sql.columnName" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        {{ refTableName }} {
+          style {
+            display: inline-block
+          }
+        }
+        "." {
+          style {
+            display: inline-block
+          }
+        }
+        {{ columnName }} {
+          style {
+            display: inline-block
+          }
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.innerJoinOn" {
+    block {
+      direction horizontal
+      breakAfter true
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "INNER JOIN" {
+          style {
+            color: #0000ff
+            display: inline-block
+            margin-right: 1ch
+          }
+        }
+        iterate {
+          childGroup "table"
+          direction horizontal
+        }
+        "ON" {
+          style {
+            color: #0000ff
+            display: inline-block
+            margin-left: 1ch
+            margin-right: 1ch
+          }
+        }
+        iterate {
+          childGroup "on"
+          direction horizontal
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        margin-left: 2ch
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.parentheses" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "(" {
+          style {
+            display: inline-block
+          }
+        }
+        iterate {
+          childGroup "expression"
+          direction horizontal
+        }
+        ")" {
+          style {
+            display: inline-block
+          }
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.queryDelete" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        iterate {
+          childGroup "delete"
+          direction horizontal
+        }
+        iterate {
+          childGroup "from"
+          direction horizontal
+        }
+        iterate {
+          childGroup "where"
+          direction horizontal
+        }
+      }
+    }
+  }
+  type "sql.querySelect" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        iterate {
+          childGroup "select"
+          direction horizontal
+        }
+        iterate {
+          childGroup "from"
+          direction horizontal
+        }
+        iterate {
+          childGroup "where"
+          direction horizontal
+        }
+        iterate {
+          childGroup "groupBy"
+          direction horizontal
+        }
+        iterate {
+          childGroup "orderBy"
+          direction horizontal
+        }
+      }
+    }
+  }
+  type "sql.functionCall" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        {{ name }} {
+          style {
+            display: inline-block
+          }
+        }
+        "(" {
+          style {
+            display: inline-block
+          }
+        }
+        iterate {
+          childGroup "arguments"
+          direction horizontal
+          between {
+            "," {
+              style {
+                display: inline-block
+              }
+            }
+          }
+        }
+        ")" {
+          style {
+            display: inline-block
+          }
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
+  type "sql.starOperator" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "*" {
+          style {
+            display: inline-block
+          }
+        }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
+      }
+    }
+  }
   type "sql.innerJoinUsing" {
     block {
       direction horizontal
+      breakAfter true
       dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "table", insertFirst
+
       }
       visual {
+        TODO: error blocks
         "INNER JOIN" {
           style {
-            color: blue
-            width: 10ch
-            cursor: grab
             display: inline-block
-            marginLeft: 2ch
-            marginRight: 1ch
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "table", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
           }
         }
         iterate {
@@ -449,31 +509,7 @@ language "SQL" {
         }
         "USING" {
           style {
-            color: blue
-            cursor: grab
             display: inline-block
-            marginLeft: 1ch
-            marginRight: 1ch
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "using", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
           }
         }
         iterate {
@@ -483,240 +519,96 @@ language "SQL" {
       }
     }
   }
-  type "sql.innerJoinOn" {
+  type "sql.whereAdditional" {
     block {
       direction horizontal
+      breakAfter true
       dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "table", insertFirst
+
       }
       visual {
-        "INNER JOIN" {
+        TODO: error blocks
+        {{ operator }} {
           style {
-            color: blue
-            width: 10ch
-            cursor: grab
+            color: #0000ff
+            width: 9ch
             display: inline-block
-            marginLeft: 2ch
-            marginRight: 1ch
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "table", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
           }
         }
         iterate {
-          childGroup "table"
+          childGroup "expression"
           direction horizontal
         }
-        "ON" {
+      }
+    }
+  }
+  type "sql.binaryExpression" {
+    block {
+      direction horizontal
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        iterate {
+          childGroup "lhs"
+          direction horizontal
+        }
+        iterate {
+          childGroup "operator"
+          direction horizontal
           style {
-            color: blue
-            cursor: grab
-            display: inline-block
-            marginLeft: 1ch
-            marginRight: 1ch
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "on", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
+            margin-left: 1ch
+            margin-right: 1ch
           }
         }
         iterate {
-          childGroup "on"
+          childGroup "rhs"
           direction horizontal
         }
+      }
+      style {
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
       }
     }
   }
   type "sql.tableIntroduction" {
     block {
       direction horizontal
-      visual {
-        {{ name }}
-      }
-      style {
-        border: 2px solid rgba(255, 255, 0, 0.9)
-        cursor: grab
-        margin-top: 2px
-        paddingLeft: 10px
-        borderRadius: 500px
-        paddingRight: 10px
-        margin-bottom: 2px
-        background-color: rgba(255, 255, 0, 0.2)
-      }
-    }
-  }
-  type "sql.where" {
-    block {
-      direction horizontal
+      breakAfter false
       dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "expressions", insertFirst
+
       }
       visual {
-        "WHERE" {
+        TODO: error blocks
+        {{ name }} {
           style {
-            color: blue
-            width: 9ch
             display: inline-block
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "expressions", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "expressions"
-          direction horizontal
-          between {
-            ", "
-          }
-        }
-      }
-    }
-  }
-  type "sql.groupBy" {
-    block {
-      direction horizontal
-      dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "expressions", insertFirst
-      }
-      visual {
-        "GROUP BY" {
-          style {
-            color: blue
-            width: 9ch
-            display: inline-block
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "expressions", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "expressions"
-          direction horizontal
-          between {
-            ", "
           }
         }
       }
       style {
-        cursor: grab
+        border: 1px solid red
+        margin: 2px
+        padding: 2px
+        borderRadius: 5px
       }
     }
   }
-  type "sql.orderBy" {
+  type "sql.relationalOperator" {
     block {
       direction horizontal
+      breakAfter false
       dropOptions {
-        visible {"$var":"ifLegalChild"}
-        children "expressions", insertFirst
+
       }
       visual {
-        "ORDER BY" {
-          style {
-            color: blue
-            width: 9ch
-            display: inline-block
-          }
-        }
-        dropTarget {
-          direction horizontal
-          dropOptions {
-            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
-            children "expressions", insertFirst
-          }
-          visual {
-            "❓" {
-              style {
-                color: darkred
-                border: 2px solid red
-                cursor: default
-                paddingLeft: 10px
-                borderRadius: 500px
-                paddingRight: 10px
-                backgroundColor: orange
-              }
-            }
-          }
-        }
-        iterate {
-          childGroup "expressions"
-          direction horizontal
-          between {
-            ", "
-          }
-        }
-      }
-      style {
-        cursor: grab
+        TODO: error blocks
+        TODO: input blocks
       }
     }
   }
@@ -749,9 +641,52 @@ language "SQL" {
           }
         }
       }
-      sidebarBlock "Funktionsaufruf" {
+      sidebarBlock "Klammern" {
+        node "sql.parentheses" {
+          childGroup "expression" {
+          }
+        }
+      }
+    }
+    category "Funktionen" {
+      sidebarBlock "COUNT()" {
         node "sql.functionCall" {
           prop "name" COUNT
+          childGroup "arguments" {
+          }
+        }
+      }
+      sidebarBlock "SUM()" {
+        node "sql.functionCall" {
+          prop "name" SUM
+          childGroup "arguments" {
+          }
+        }
+      }
+      sidebarBlock "AVG()" {
+        node "sql.functionCall" {
+          prop "name" AVG
+          childGroup "arguments" {
+          }
+        }
+      }
+      sidebarBlock "MIN()" {
+        node "sql.functionCall" {
+          prop "name" MIN
+          childGroup "arguments" {
+          }
+        }
+      }
+      sidebarBlock "MAX()" {
+        node "sql.functionCall" {
+          prop "name" MAX
+          childGroup "arguments" {
+          }
+        }
+      }
+      sidebarBlock "GROUP_CONCAT()" {
+        node "sql.functionCall" {
+          prop "name" GROUP_CONCAT
           childGroup "arguments" {
           }
         }
@@ -814,6 +749,20 @@ language "SQL" {
       sidebarBlock "WHERE" {
         node "sql.where" {
           childGroup "expressions" {
+          }
+        }
+      }
+      sidebarBlock "... AND" {
+        node "sql.whereAdditional" {
+          prop "operator" AND
+          childGroup "expression" {
+          }
+        }
+      }
+      sidebarBlock "... OR" {
+        node "sql.whereAdditional" {
+          prop "operator" OR
+          childGroup "expression" {
           }
         }
       }
