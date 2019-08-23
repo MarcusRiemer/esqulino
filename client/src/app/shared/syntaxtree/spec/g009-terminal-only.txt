@@ -1,5 +1,5 @@
 grammar "g9" {
-  node "n1" {
+  node "g9"."n1" {
     terminal "req" "i am required"
   }
 }

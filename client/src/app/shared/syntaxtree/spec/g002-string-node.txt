@@ -1,5 +1,5 @@
 grammar "g2" {
-  node "s1" {
+  node "g2"."s1" {
     prop "value" { string }
   }
 }

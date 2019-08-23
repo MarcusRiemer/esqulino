@@ -1,9 +1,9 @@
 grammar "g8" {
-  node "n1" {
+  node "g8"."n1" {
     children choice "c" ::= n2 | n3
   }
-  node "n2" {
+  node "g8"."n2" {
   }
-  node "n3" {
+  node "g8"."n3" {
   }
 }

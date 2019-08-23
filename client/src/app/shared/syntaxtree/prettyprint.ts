@@ -1,6 +1,6 @@
 import { recursiveJoin, NestedString } from '../nested-string'
 
-import { NodeDescription } from './syntaxtree.description'
+import { NodeDescription, QualifiedTypeName } from './syntaxtree.description'
 import * as Desc from './grammar.description'
 import { orderTypes } from './grammar-type-util';
 import { OccursDescription } from './occurs';
@@ -16,7 +16,7 @@ export function prettyPrintGrammar(g: Desc.GrammarDocument): string {
   const orderedTypes = orderTypes(g);
 
   const nodes = orderedTypes
-    .map((name): [string, Desc.NodeTypeDescription] => [name.typeName, g.types[name.languageName][name.typeName]])
+    .map((name): [QualifiedTypeName, Desc.NodeTypeDescription] => [name, g.types[name.languageName][name.typeName]])
     .map(([name, t]) => prettyPrintType(name, t))
 
   const toReturn = [head, ...nodes, tail] as NestedString
@@ -27,7 +27,7 @@ export function prettyPrintGrammar(g: Desc.GrammarDocument): string {
 /**
  * Picks the correct pretty printer for a certain type.
  */
-export function prettyPrintType(name: string, t: Desc.NodeTypeDescription): NestedString {
+export function prettyPrintType(name: QualifiedTypeName, t: Desc.NodeTypeDescription): NestedString {
   if (Desc.isNodeConcreteTypeDescription(t)) {
     return prettyPrintConcreteNodeType(name, t);
   } else if (Desc.isNodeOneOfTypeDescription(t)) {
@@ -38,10 +38,17 @@ export function prettyPrintType(name: string, t: Desc.NodeTypeDescription): Nest
 }
 
 /**
+ * Properly prints a fully qualified typename
+ */
+export function prettyPrintQualifiedTypeName(name: QualifiedTypeName): string {
+  return (`"${name.languageName}"."${name.typeName}"`);
+}
+
+/**
  * Prints the grammar for a concrete node.
  */
-export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTypeDescription): NestedString {
-  const head = `node "${name}" {`;
+export function prettyPrintConcreteNodeType(name: QualifiedTypeName, t: Desc.NodeConcreteTypeDescription): NestedString {
+  const head = `node ${prettyPrintQualifiedTypeName(name)} {`;
 
   const attributes = (t.attributes ? t.attributes : []).map(a => {
     switch (a.type) {
@@ -64,12 +71,11 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
   }
 }
 
-
 /**
  * Prints the grammar for a placeholder node.
  */
-export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescription): NestedString {
-  return ([`typedef "${name}" ::= ${t.oneOf.join(" | ")}`]);
+export function prettyPrintOneOfType(name: QualifiedTypeName, t: Desc.NodeOneOfTypeDescription): NestedString {
+  return ([`typedef ${prettyPrintQualifiedTypeName(name)} ::= ${t.oneOf.join(" | ")}`]);
 }
 
 /**
@@ -87,6 +93,23 @@ export function prettyPrintProperty(p: Desc.NodePropertyTypeDescription): Nested
   const optional = p.isOptional ? '?' : '';
   const head = `prop${optional} "${p.name}"`;
 
+  const restrictionSign = (baseType: string) => {
+    switch (baseType) {
+      case "length":
+        return ("==");
+      case "minLength":
+        return (">");
+      case "maxLength":
+        return ("<");
+      case "minInclusive":
+        return ("≥");
+      case "maxInclusive":
+        return ("≤");
+      default:
+        return (baseType);
+    }
+  };
+
   let restrictions: string[] = [];
   if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
     restrictions = p.restrictions.map(r => {
@@ -94,17 +117,19 @@ export function prettyPrintProperty(p: Desc.NodePropertyTypeDescription): Nested
         case "length":
         case "maxLength":
         case "minLength":
-          return (`${r.type} ${r.value}`);
+          return (`length ${restrictionSign(r.type)} ${r.value}`);
         case "enum":
           return (`${r.type} ${r.value.map(v => JSON.stringify(v)).join(' ')}`);
       }
     });
+  } else if (p.base === "integer" && p.restrictions) {
+    restrictions = p.restrictions.map(r => `${restrictionSign(r.type)} ${r.value}`);
   }
 
   if (restrictions.length === 0) {
     return ([`${head} { ${p.base} }`]);
   } else if (restrictions.length === 1) {
-    return ([`${head} { ${p.base} { ${restrictions[0]} } }`]);
+    return ([`${head} { ${p.base} ${restrictions[0]} }`]);
   } else {
     return ([head + " {", [p.base + " {", restrictions, "}"], "}"]);
   }

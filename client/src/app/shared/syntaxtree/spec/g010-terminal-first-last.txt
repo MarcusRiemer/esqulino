@@ -1,5 +1,5 @@
 grammar "g10" {
-  node "n1" {
+  node "g10"."n1" {
     terminal "fst" "first"
     children sequence "c" ::= g10.n1?
     terminal "lst" "last"

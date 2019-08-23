@@ -1,5 +1,6 @@
 import * as d from './grammar.description'
 import * as p from './prettyprint'
+import { QualifiedTypeName } from './syntaxtree.description';
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -37,6 +38,13 @@ export function verifyFilesGraphviz<T>(fileName: string, transform: (obj: T) => 
   expect(transform(input)).toEqual(expected);
 }
 
+/**
+ * Stands for "qualified Typename", saves some verbose repetition
+ */
+function qt(name: string): QualifiedTypeName {
+  return ({ languageName: "spec", typeName: name });
+}
+
 
 describe('Grammar PrettyPrinter', () => {
   it('prop "s1" { string }', () => {
@@ -51,7 +59,7 @@ describe('Grammar PrettyPrinter', () => {
     expect(r).toEqual([`prop? "s2" { string }`]);
   });
 
-  it('prop "s3" { string { length=4 } }', () => {
+  it('prop "s3" { string length == 4 }', () => {
     const r = p.prettyPrintProperty({
       name: "s3",
       base: "string",
@@ -63,10 +71,10 @@ describe('Grammar PrettyPrinter', () => {
       ]
     } as d.NodePropertyStringDescription);
 
-    expect(r).toEqual([`prop "s3" { string { length 4 } }`]);
+    expect(r).toEqual([`prop "s3" { string length == 4 }`]);
   });
 
-  it('prop "s4" { string { minLength 2 maxLength 4 } }', () => {
+  it('prop "s4" { string { length > 2 length < 4 } }', () => {
     const r = p.prettyPrintProperty({
       name: "s4",
       base: "string",
@@ -87,7 +95,7 @@ describe('Grammar PrettyPrinter', () => {
         `prop "s4" {`,
         [
           `string {`,
-          [`minLength 2`, `maxLength 4`],
+          [`length > 2`, `length < 4`],
           `}`
         ],
         `}`
@@ -165,7 +173,7 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('node "s1" { prop "value" { string } }', () => {
-    const r = p.prettyPrintConcreteNodeType("s1", {
+    const r = p.prettyPrintConcreteNodeType(qt("s1"), {
       type: "concrete",
       attributes: [
         {
@@ -177,7 +185,7 @@ describe('Grammar PrettyPrinter', () => {
     });
 
     expect(r).toEqual([
-      'node "s1" {', [
+      'node "spec"."s1" {', [
         'prop "value" { string }'
       ],
       '}'

@@ -1,5 +1,5 @@
 grammar "g5" {
-  node "n1" {
+  node "g5"."n1" {
     children sequence "c" ::= n1
   }
 }
