@@ -9,8 +9,8 @@ import { OccursDescription } from './occurs';
  * Converts the internal structure of a grammar into a more readable
  * version that reads similar to RelaxNG.
  */
-export function prettyPrintGrammar(g: Desc.GrammarDocument): string {
-  const head = `grammar "${g.technicalName}" {`;
+export function prettyPrintGrammar(name: string, g: Desc.GrammarDocument): string {
+  const head = `grammar "${name}" {`;
   const tail = `}`;
 
   const orderedTypes = orderTypes(g);

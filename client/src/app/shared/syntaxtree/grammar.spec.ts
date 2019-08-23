@@ -519,7 +519,7 @@ describe('Grammar Validation', () => {
     });
 
     expect(v.validateFromRoot(ast).isValid).toBe(true);
-    expect(v.getGrammarValidator(g.technicalName).technicalName).toEqual(g.technicalName);
+    expect(v.getGrammarValidator("emptyNodes")).toBeTruthy();
   });
 
 
@@ -686,7 +686,7 @@ describe('Grammar Validation', () => {
     const v = new Validator([langOptionalProperty]);
 
     const astDesc: AST.NodeDescription = {
-      language: langOptionalProperty.technicalName,
+      language: "optionalProperty",
       name: "root",
       properties: {
         "required": ""
@@ -703,7 +703,7 @@ describe('Grammar Validation', () => {
     const v = new Validator([langOptionalProperty]);
 
     const astDesc: AST.NodeDescription = {
-      language: langOptionalProperty.technicalName,
+      language: "optionalProperty",
       name: "root",
     }
 
@@ -752,10 +752,10 @@ describe('Grammar Validation', () => {
     const vNodeB = v.availableTypes[2];
     const vNodeC = v.availableTypes[3];
 
-    const tNodeA = { languageName: langOneOfNodes.technicalName, typeName: "a" };
-    const tNodeB = { languageName: langOneOfNodes.technicalName, typeName: "b" };
-    const tNodeC = { languageName: langOneOfNodes.technicalName, typeName: "c" };
-    const tNodeD = { languageName: langOneOfNodes.technicalName, typeName: "d" };
+    const tNodeA = { languageName: "oneof-nodes", typeName: "a" };
+    const tNodeB = { languageName: "oneof-nodes", typeName: "b" };
+    const tNodeC = { languageName: "oneof-nodes", typeName: "c" };
+    const tNodeD = { languageName: "oneof-nodes", typeName: "d" };
 
     expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy("a in root");
     expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
@@ -804,10 +804,10 @@ describe('Grammar Validation', () => {
     const vNodeB = v.availableTypes[2];
     const vNodeC = v.availableTypes[3];
 
-    const tNodeA = { languageName: langSequenceConstraint.technicalName, typeName: "a" };
-    const tNodeB = { languageName: langSequenceConstraint.technicalName, typeName: "b" };
-    const tNodeC = { languageName: langSequenceConstraint.technicalName, typeName: "c" };
-    const tNodeD = { languageName: langSequenceConstraint.technicalName, typeName: "d" };
+    const tNodeA = { languageName: "sequence-constraint", typeName: "a" };
+    const tNodeB = { languageName: "sequence-constraint", typeName: "b" };
+    const tNodeC = { languageName: "sequence-constraint", typeName: "c" };
+    const tNodeD = { languageName: "sequence-constraint", typeName: "d" };
 
     expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy();
     expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy();
@@ -1253,10 +1253,10 @@ describe('Grammar Validation', () => {
     const vNodeB = v.availableTypes[2];
     const vNodeC = v.availableTypes[3];
 
-    const tNodeA = { languageName: langAllowedConstraint.technicalName, typeName: "a" };
-    const tNodeB = { languageName: langAllowedConstraint.technicalName, typeName: "b" };
-    const tNodeC = { languageName: langAllowedConstraint.technicalName, typeName: "c" };
-    const tNodeD = { languageName: langAllowedConstraint.technicalName, typeName: "d" };
+    const tNodeA = { languageName: "allowed-constraint", typeName: "a" };
+    const tNodeB = { languageName: "allowed-constraint", typeName: "b" };
+    const tNodeC = { languageName: "allowed-constraint", typeName: "c" };
+    const tNodeD = { languageName: "allowed-constraint", typeName: "d" };
 
     expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy("a in root");
     expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
@@ -1560,7 +1560,7 @@ describe('Grammar Validation', () => {
   it('Mini-SQL: registers types', () => {
     const v = new Validator([langMiniSql]);
 
-    expect(v.isKnownLanguage(langMiniSql.technicalName)).toBeTruthy();
+    expect(v.isKnownLanguage("mini-sql")).toBeTruthy();
 
     const allTypes = getQualifiedTypes(langMiniSql);
     allTypes.forEach(t => {

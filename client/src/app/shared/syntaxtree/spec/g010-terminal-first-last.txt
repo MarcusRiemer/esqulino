@@ -1,4 +1,4 @@
-grammar "g10" {
+grammar "g010-terminal-first-last" {
   node "g10"."n1" {
     terminal "fst" "first"
     children sequence "c" ::= g10.n1?

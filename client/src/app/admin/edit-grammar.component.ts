@@ -94,7 +94,7 @@ export class EditGrammarComponent implements OnInit {
    * The compiled version of the grammar
    */
   get prettyPrintedGrammar() {
-    return (prettyPrintGrammar(this.grammar));
+    return (prettyPrintGrammar(this.grammar.name, this.grammar));
   }
 
   get availableTypes() {

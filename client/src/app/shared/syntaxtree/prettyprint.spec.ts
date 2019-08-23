@@ -9,7 +9,7 @@ import { QualifiedTypeName } from './syntaxtree.description';
  * to `require` are relative to the file the function is defined in.
  * So for the moment this function is copy and pasted into spec files :(
  */
-export function verifyFilesTxt<T>(fileName: string, transform: (obj: T) => string) {
+export function verifyFilesTxt<T>(fileName: string, transform: (name: string, obj: T) => string) {
   const input = require(`./spec/${fileName}.json`);
   let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
 
@@ -17,7 +17,7 @@ export function verifyFilesTxt<T>(fileName: string, transform: (obj: T) => strin
     expected = expected.substr(0, expected.length - 1);
   }
 
-  expect(transform(input)).toEqual(expected);
+  expect(transform(fileName, input)).toEqual(expected);
 }
 
 /**
@@ -245,39 +245,41 @@ describe('Grammar PrettyPrinter', () => {
   });
 });
 
+const printWrapper = (_: string, obj: any) => p.prettyPrintSyntaxTree(obj);
+
 describe('SyntaxTree PrettyPrinter', () => {
   it('Tree t0: Empty root', () => {
-    verifyFilesTxt('t000-empty-root', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t000-empty-root', printWrapper);
     verifyFilesGraphviz('t000-empty-root', p.graphvizSyntaxTree);
   });
 
   it('Tree t1: Root with single prop', () => {
-    verifyFilesTxt('t001-root-single-prop', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t001-root-single-prop', printWrapper);
     verifyFilesGraphviz('t001-root-single-prop', p.graphvizSyntaxTree);
   });
 
   it('Tree t2: Root with single child', () => {
-    verifyFilesTxt('t002-root-single-child', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t002-root-single-child', printWrapper);
     verifyFilesGraphviz('t002-root-single-child', p.graphvizSyntaxTree);
   });
 
   it('Tree t3: Root with two childgroups', () => {
-    verifyFilesTxt('t003-root-two-childgroups', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t003-root-two-childgroups', printWrapper);
     verifyFilesGraphviz('t003-root-two-childgroups', p.graphvizSyntaxTree);
   });
 
   it('Tree t4: Root with three children', () => {
-    verifyFilesTxt('t004-root-three-children', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t004-root-three-children', printWrapper);
     verifyFilesGraphviz('t004-root-three-children', p.graphvizSyntaxTree);
   });
 
   it('Tree t5: Root with three complex children', () => {
-    verifyFilesTxt('t005-root-complex-children', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t005-root-complex-children', printWrapper);
     verifyFilesGraphviz('t005-root-complex-children', p.graphvizSyntaxTree);
   });
 
   it('Tree t6: Manual example (if)', () => {
-    verifyFilesTxt('t006-manual-if-example', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t006-manual-if-example', printWrapper);
     verifyFilesGraphviz('t006-manual-if-example', p.graphvizSyntaxTree);
   });
 });

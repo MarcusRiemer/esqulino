@@ -1,4 +1,4 @@
-grammar "g7" {
+grammar "g007-node-child-allowed-mix" {
   node "g7"."n1" {
     children allowed "c" ::= n1? & n2+ & n3*
   }

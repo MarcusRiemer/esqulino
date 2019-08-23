@@ -97,19 +97,19 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
                   case "allowed":
                   case "sequence":
                     a.nodeTypes.forEach(t => {
-                      impl(ensureTypename(t, g.technicalName));
+                      impl(ensureTypename(t, curr.languageName));
                     });
                     break;
                   case "choice":
                     a.choices.forEach(t => {
-                      impl(ensureTypename(t, g.technicalName));
+                      impl(ensureTypename(t, curr.languageName));
                     });
                     break;
                 }
               });
               break;
             case "oneOf":
-              (def.oneOf || []).forEach(t => impl(ensureTypename(t, g.technicalName)));
+              (def.oneOf || []).forEach(t => impl(ensureTypename(t, curr.languageName)));
               break;
           }
         }

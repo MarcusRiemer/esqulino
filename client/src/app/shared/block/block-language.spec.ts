@@ -10,7 +10,6 @@ const langEmptyBlocks: LanguageDefinition = {
   emitters: [],
   validators: [
     {
-      technicalName: "emptyBlocks",
       types: {
         "emptyBlocks": {
           "root": {

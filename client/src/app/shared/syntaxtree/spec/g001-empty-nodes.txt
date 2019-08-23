@@ -1,4 +1,4 @@
-grammar "g1" {
+grammar "g001-empty-nodes" {
   node "g1"."n1" {
   }
   node "g1"."n2" {

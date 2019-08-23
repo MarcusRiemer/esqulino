@@ -5,7 +5,6 @@
 <table class="table table-sm">
   <tr>
     <th>Name</th>
-    <th>Technischer Name</th>
     <th>Slug</th>
     <th>ID</th>
     <th>Aktionen</th>
@@ -14,7 +13,6 @@
     <td>
       <a [routerLink]="[grammar.id]">{{ grammar.name }}</a>
     </td>
-    <td><code>{{ grammar.technicalName }}</code></td>
     <td><code>{{ grammar.slug | defaultValue }}</code></td>
     <td><code>{{ grammar.id }}</code></td>
     <td>

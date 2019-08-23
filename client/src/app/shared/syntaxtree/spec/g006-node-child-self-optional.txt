@@ -1,4 +1,4 @@
-grammar "g6" {
+grammar "g006-node-child-self-optional" {
   node "g6"."n1" {
     children sequence "c" ::= g6.n1?
   }

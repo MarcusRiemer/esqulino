@@ -2,7 +2,6 @@ import { GrammarDocument } from "./grammar.description";
 
 export const GRAMMAR_ARITHMETIC_DESCRIPTION: GrammarDocument = {
   root: { languageName: "expr", typeName: "expression" },
-  technicalName: "expr",
   types: {
     "expr": {
       "expression": {
