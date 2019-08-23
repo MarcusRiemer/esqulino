@@ -109,7 +109,7 @@ Bei einer Anmeldung mittels \gls{oAuth2} wurde bei dem Provider, über den sich 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{graphics/sign-in-oauth2.pdf}
+	\includegraphics[width=0.8\textwidth]{graphics/sign-in-oauth2.pdf}
 	\caption{Ablauf einer Anmeldung mittels \gls{oAuth2}}
 	\label{fig:server-sign-in-oauth}
 \end{figure}
@@ -148,9 +148,7 @@ Blattwerkzeug nutzt Subdomains zur Unterteilung verschiedener Sprachen. Dabei er
 \label{sec:server-authorisation}
 Sobald ein Benutzer angemeldet ist, wird bei jedem Request ein \gls{JWT} mit an den Server gesendet. Dieser wird serverseitig auf seine Gültigkeit geprüft. Hierbei prüft der Server, ob dieser \gls{JWT} seine Ablaufzeit nicht überschritten hat und ob der \gls{JWT} die Signatur des Servers beinhaltet. Diese Überprüfung authentifiziert einen Besucher als angemeldeten Benutzer und wird von der Library jwt\footnote{\url{https://github.com/jwt/ruby-jwt}} übernommen.
 
-Damit zwischen den Benutzern unterschieden werden kann, wurden drei Globale-Rollen eingebaut.
-
-\todo[inline]{Unklar: Was genau wurde extra \enquote{eingebaut}? Ich halte das eher für eine Konvention. Und zwischen Benitzern unterscheidet man anhand ihrer ID ;-) Ich wei{\ss} was gemeint ist, aber geh hier nochmal in dich und formulier sauber aus inwiefern diese (sinnvolle!) Konvention dir hilft.}
+Das Muster der globalen Rollen welches bereits von Rolify (Sektion \ref{sec: rolify}) implementiert wurde, konnte genutzt werden um die Benutzer in ihrem Status zu unterteilen. 
 
 \begin{description}
 	\item[guest]\hfill\\
@@ -270,7 +268,7 @@ Aus diesen beiden Elementen von Angular Material wurde ein Popup-Fenster erstell
 	\item[Validate-Input]\hfill\\
 	Der Auth-Dialog beinhaltet verschiedene Input-Felder. Um eine Rückmeldung bei Fehleingabe in einem der Input-Felder zu erhalten, muss ein Input-Feld validiert werden. Hierbei sind verschiedene Möglichkeiten gegeben.
 
-	Die Validierung eines Input-Feldes ist ein fester bestandteil\todo{typo} von \gls{HTML}5. Für eine Validierung mittels \gls{HTML}5 Validator, muss der Validator als Attribut dem Input-Feld hinzugefügt werden. 
+	Die Validierung eines Input-Feldes ist ein fester Bestandteil von \gls{HTML}5. Für eine Validierung mittels \gls{HTML}5 Validator, muss der Validator als Attribut dem Input-Feld hinzugefügt werden. 
 	
 	Die Angular Validierung bietet bereits vordefinierte Klassenmethoden zur Validierung von Input-Feldern. Die vordefinierten Klassenmethoden gleichen, von der Funktionsweise, den HTML Validatoren. Ein Vorteil den Angular hierbei bietet, ist das Erstellen eigener komplexer Validatoren. Ein weiterer Vorteil, ist das Auslagern der Validatoren aus dem Template. Folglich kann beispielsweise ein Service zur Validierung von Input-Feldern dienen und somit anwendungsübergreifend die Validierung geändert werden.
 
