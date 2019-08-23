@@ -19,8 +19,8 @@ Every top level definition introduces a new type that can be referenced. Grammar
 
 This lookup may yield one of two different type definitions: A definition of type ``node`` matches an actual node in an abstract syntax tree, it may define properties and children. A ``typedef`` on the other hand denotes a type that will never exist in a tree, it's a mere placeholder for a set of other types that could appear in the referenced position.
 
-Type ``node``
-=============
+Top level: ``node``
+=================
 
 This type defines which attributes (properties or children) a certain node may have. Both types of attributes share a common namespace, it is therefore not possible to have a property **and** a child group named ``foo`` on the same ``node`` definition.
 
@@ -82,12 +82,42 @@ Children Restrictions
 
 As every node in the syntaxtree may have any number of named subtrees, the grammar must be able to validate any number of subtrees for a certain type. Technically every childgroup may contain a list of subtrees in which every tree can be validated individually. Grammars may enforce rules about the order or cardinality for the types of the roots of those trees.
 
-``sequence``
-~~~~~~~~~~~~
+Childgroup Type ``sequence``
+----------------------------
 
+Sequences expect an exact series of types in a certain child group. The following example shows a sequence where a valid syntax tree must have exactly four nodes overall::
 
-Type ``typedef``
-================
+  node "sequence"."root" {
+    children sequence "Children" ::= B A B
+  }
+  node "sequence"."B" { }
+  node "sequence"."A" { }
+
+Childgroup Type ``allowed``
+---------------------------
+
+For some kinds of subtrees the order of the following root nodes is irrelevant, but the cardinality may be very relevant. This is very common in markup languages, where many different types of children may be allowed in no particular order.
+
+The following example defines the structure of some kind of document: It must have ``Text``, it may have exactly a single ``Figure`` and it may contain any number of ``Reference``::
+
+  node "allowed"."Document" {
+    children allowed "Children" ::= Text+ & Figure? & Reference*
+  }
+
+Limitation: No mixed groups
+---------------------------
+
+Note that it is currently **not** possible to mix e.g. ``sequence`` and ``allowed`` child groups as it would be possible with RelaxNG. This is mainly because no proper use case has surfaced that would warrant this rather complicated behavior. Under most circumstances using multiple child groups is a perfectly fine workaround. In order to add a single "Heading" for the ``Document`` type  mentioned above, one could make the following workaround::
+
+  node "allowed"."Document" {
+    children sequence "Heading" ::= Text
+    children allowed "Body" ::= Text+ & Figure? & Reference*
+  }
+
+Now every ``Document`` requires a single ``Text`` node in the ``Heading`` childgroup.
+
+Top level: ``typedef``
+====================
 
 A ``typedef`` denotes a type that will never exist in a tree, it's a mere placeholder for a set of other types that could appear in the referenced position. This is useful when in certain places different but related types could be expected. Instead of repeating sets like ``{unaryExpression, binaryExpression, constant}`` again and again, a single typedef may group these common usage together.
 
