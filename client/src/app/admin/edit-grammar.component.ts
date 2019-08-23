@@ -9,8 +9,10 @@ import { ToolbarService } from '../shared/toolbar.service'
 import { CachedRequest, GrammarDataService } from '../shared/serverdata'
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
-import { GrammarDescription } from '../shared/syntaxtree'
+import { GrammarDescription, QualifiedTypeName, NodeTypeDescription, NamedLanguages } from '../shared/syntaxtree'
 import { BlockLanguageListDescription } from '../shared/block/block-language.description'
+import { getAllTypes } from '../shared/syntaxtree/grammar-util';
+import { stableQualifiedTypename } from '../shared/syntaxtree/grammar-type-util';
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
@@ -26,9 +28,9 @@ export class EditGrammarComponent implements OnInit {
   // Block languages that are related to this grammar
   relatedBlockLanguages: CachedRequest<BlockLanguageListDescription[]>;
 
-  // Indicates whether the state of the editor is synchronized
-  // with the rendered grammar.
-  typesSynced = true;
+  // All types that are available as root. These may not be regenerated
+  // on the fly because [ngValue] uses the identity of the objects to compare them.
+  availableTypes: QualifiedTypeName[] = [];
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -49,6 +51,8 @@ export class EditGrammarComponent implements OnInit {
       switchMap((id: string) => this._grammarData.getSingle(id).pipe(first())),
     ).subscribe(g => {
       this.grammar = g;
+      this.availableTypes = getAllTypes(this.grammar)
+      this.grammarRoot = g.root;
       this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`)
     });
 
@@ -65,21 +69,35 @@ export class EditGrammarComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarButtons);
   }
 
-  onTypeDataUpdate(text: string) {
-    try {
-      const newTypes = JSON.parse(text);
-      this.grammar.types = newTypes;
-      this.typesSynced = true;
-    } catch (e) {
-      this.typesSynced = false;
-    }
-  }
-
   /**
    * User has decided to save.
    */
   onSave() {
     this._grammarData.updateSingle(this.grammar);
+  }
+
+  get grammarRoot() {
+    return (this.grammar.root);
+  }
+
+  /**
+   * Ensures that the instance of the qualified typename matches an instance in availableTypes.
+   * This allows ngModel to pre-select the correct value.
+   */
+  set grammarRoot(t: QualifiedTypeName) {
+    this.grammar.root = this.availableTypes.find(a => a.languageName === t.languageName && a.typeName === t.typeName);
+  }
+
+  get grammarTypes() {
+    return (this.grammar.types);
+  }
+
+  /**
+   * Updates the types that are available when set.
+   */
+  set grammarTypes(types) {
+    this.grammar.types = types;
+    this.availableTypes = getAllTypes(this.grammar);
   }
 
   /**
@@ -94,10 +112,10 @@ export class EditGrammarComponent implements OnInit {
    * The compiled version of the grammar
    */
   get prettyPrintedGrammar() {
-    return (prettyPrintGrammar(this.grammar.name, this.grammar));
-  }
-
-  get availableTypes() {
-    return ([]) // TODO: Properly return types
+    if (this.grammar && this.grammar.types) {
+      return (prettyPrintGrammar(this.grammar.name, this.grammar));
+    } else {
+      return ("");
+    }
   }
 }

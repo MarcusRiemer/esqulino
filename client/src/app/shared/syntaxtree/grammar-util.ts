@@ -95,14 +95,23 @@ export function getFullQualifiedAttributes(g: GrammarDocument): FullNodeAttribut
 }
 
 /**
- * @return Names of all blocks of the given grammar in the form of a handy list
+ * A predicate with a NodeTypeDescription as argument
  */
-export function getConcreteTypes(g: GrammarDocument): QualifiedTypeName[] {
+type NodeTypeDescriptionPredicate = (t: NodeTypeDescription) => boolean;
+
+/**
+ * @return Names of all types in the given grammar in the form of a handy list
+ */
+function collectTypes(g: GrammarDocument, pred: NodeTypeDescriptionPredicate): QualifiedTypeName[] {
   const toReturn: QualifiedTypeName[] = [];
+
+  if (!g) {
+    return ([]);
+  }
 
   Object.entries(g.types || {}).forEach(([languageName, types]) => {
     Object.entries(types).forEach(([typeName, type]) => {
-      if (isNodeConcreteTypeDescription(type)) {
+      if (pred(type)) {
         toReturn.push({
           languageName: languageName,
           typeName: typeName
@@ -113,4 +122,18 @@ export function getConcreteTypes(g: GrammarDocument): QualifiedTypeName[] {
   });
 
   return (toReturn);
+}
+
+/**
+ * @return Names of all types in the given grammar in the form of a handy list
+ */
+export function getAllTypes(g: GrammarDocument): QualifiedTypeName[] {
+  return (collectTypes(g, _ => true));
+}
+
+/**
+ * @return Names of all concrete types in the given grammar in the form of a handy list
+ */
+export function getConcreteTypes(g: GrammarDocument): QualifiedTypeName[] {
+  return (collectTypes(g, isNodeConcreteTypeDescription));
 }

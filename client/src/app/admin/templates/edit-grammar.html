@@ -38,10 +38,10 @@
               required
               name="grammar-root"
               [(ngModel)]="grammar.root">
-        <option value="">-- Wurzeltyp wählen --</option>
-        <option *ngFor="let typename of availableTypes"
-                [value]="typename">
-          {{ typename }}
+        <option [ngValue]="undefined">-- Wurzeltyp wählen --</option>
+        <option *ngFor="let type of availableTypes;"
+                [ngValue]="type">
+          {{ type.languageName }}.{{ type.typeName }}
         </option>
       </select>
     </div>
@@ -73,12 +73,7 @@
                  class="col-form-label">Types</label>
         </div>
         <div class="col-sm-10">
-          <div *ngIf="!typesSynced"
-               class="alert alert-danger"
-               role="alert">
-            <code>JSON</code>-Struktur ist ungültig und kann daher nicht gespeichert werden.
-          </div>
-          <json-editor [(jsonValue)]="grammar.types"
+          <json-editor [(jsonValue)]="grammarTypes"
                        class="full-height">
           </json-editor>
         </div>
