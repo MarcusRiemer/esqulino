@@ -22,6 +22,16 @@ export class UserService {
     private _snackBar: MatSnackBar
   ) { }
 
+  private $pipeObserv($observ: Observable<any>, action: (() => any)): Observable<any> {
+    return $observ.pipe(
+      first(),
+      tap(
+        _ => action(),
+        (err) => alert(`Error: ${err["error"]["message"]}`)
+      )
+    )
+  }
+
   public userData$ = this._serverData.getUserData;
   public identities$ = this._serverData.getIdentities;
   public providerList$ = this._serverData.getProviders;
@@ -51,12 +61,8 @@ export class UserService {
   )
 
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
-    return this._serverData.signUp$(data).pipe(
-      first(),
-      tap(
-        _ => alert("Please confirm your e-mail"),
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.signUp$(data),
+      () => alert("Please confirm your e-mail")
     )
   }
 
@@ -68,128 +74,87 @@ export class UserService {
   }
 
   public signIn$(data: SignInDescription): Observable<UserDescription> {
-    return this._serverData.signIn$(data).pipe(
-      first(),
-      tap(
-        () => this.userData$.refresh(),
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.signIn$(data),
+      () => this.userData$.refresh()
     )
   }
 
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
-    return this._serverData.resetPassword$(data).pipe(
-      first(),
-      tap(
-        _ => this.userData$.refresh(),
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.resetPassword$(data),
+     () => this.userData$.refresh()
     )
   }
 
   public changeUserName$(data: UserNameDescription) {
-    return this._serverData.changeUserName$(data).pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('Username changed', '', { duration: 3000 })
-          this.userData$.refresh();
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.changeUserName$(data),
+      () => {
+        this._snackBar.open('Username changed', '', { duration: 3000 })
+        this.userData$.refresh();
+      },
     )
   }
 
   public changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
-    return this._serverData.changePassword$(data).pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('Password changed', '', { duration: 3000 })
-          this.userData$.refresh();
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(
+      this._serverData.changePassword$(data),
+      () => {
+        this._snackBar.open('Password changed', '', { duration: 3000 });
+        this.userData$.refresh();
+      }
     )
   }
 
   public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
-    return this._serverData.passwordResetRequest$(data).pipe(
-      first(),
-      tap(
-        _ => {
-          this.userData$.refresh()
-          alert("Please check your e-mails")
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.passwordResetRequest$(data),
+      () => {
+        this.userData$.refresh()
+        alert("Please check your e-mails")
+      },
     )
   }
 
   public sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
-    return this._serverData.sendChangePrimaryEmail$(data).pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
-          this.userData$.refresh();
-          this.identities$.refresh();
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.sendChangePrimaryEmail$(data),
+      () => {
+        this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
+        this.userData$.refresh();
+        this.identities$.refresh();
+      },
     )
   }
 
   public deleteEmail$(uid: string): Observable<ServerProviderDescription> {
-    return this._serverData.deleteEmail$(uid).pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
-          this.identities$.refresh();
-          this.userData$.refresh();
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      ),
+    return this.$pipeObserv(this._serverData.deleteEmail$(uid),
+      () => {
+        this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
+        this.identities$.refresh();
+        this.userData$.refresh();
+      }
     )
   }
 
   public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
-    return this._serverData.addEmail$(data).pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
-          this.identities$.refresh();
-          this.userData$.refresh();
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.addEmail$(data), 
+      () => {
+        this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
+        this.identities$.refresh();
+        this.userData$.refresh();
+      }
     )
   }
 
   public sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
-    return this._serverData.sendVerifyEmail$(data).pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.sendVerifyEmail$(data),
+      () => this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
     )
   }
 
   public logout$(): Observable<UserDescription> {
-    return this._serverData.logout$().pipe(
-      first(),
-      tap(
-        _ => {
-          this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
-          this.userData$.refresh();
-        },
-        (err) => alert(`Error: ${err["error"]["message"]}`)
-      )
+    return this.$pipeObserv(this._serverData.logout$(),
+      () => {
+        this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
+        this.userData$.refresh();
+      }
     )
   }
 }

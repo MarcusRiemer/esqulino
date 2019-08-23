@@ -32,12 +32,10 @@ export class SignUpComponent {
   }
 
   public onSignUp(): void {
-    if (!this.isPasswordEq())
-      return alert("Error: Your passwords do not match")
-
-    if (this.isPasswordEmpty())
-      return alert("Error: Password can not be empty")
-
-    this._userService.signUp$(this.signUpData).subscribe();
+    if (this.isPasswordEq()) {
+      if (!this.isPasswordEmpty()) {
+        this._userService.signUp$(this.signUpData).subscribe()
+      } else alert("Error: Password can not be empty")
+    } else alert("Error: Your passwords do not match")
   }
 }
