@@ -18,10 +18,19 @@ development:
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
+  auth_provider: [Google, Github, PasswordIdentity, Developer]
+  auth_provider_keys:
+    google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
+    google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
+    github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
+    github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+  seed_users:
+    guest: "00000000-0000-0000-0000-000000000001"
+    system: "00000000-0000-0000-0000-000000000002"
 
 test:
   name: "Blattwerkzeug (Test)"
-  data_dir: '../data/test'
+  data_dir: "../data/test"
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["localhost.localdomain:9292"]
@@ -43,6 +52,15 @@ test:
   seed:
     data_dir: ../seed-test
     output: false
+  auth_provider: [Google, Github, PasswordIdentity, Developer]
+  auth_provider_keys:
+    google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
+    google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
+    github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
+    github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+  seed_users:
+    guest: "00000000-0000-0000-0000-000000000001"
+    system: "00000000-0000-0000-0000-000000000002"
 
 production:
   name: "Blattwerkzeug"
@@ -64,3 +82,12 @@ production:
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
+  auth_provider: [Google, Github, PasswordIdentity]
+  auth_provider_keys:
+    google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
+    google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
+    github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
+    github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+  seed_users:
+    guest: "00000000-0000-0000-0000-000000000001"
+    system: "00000000-0000-0000-0000-000000000002"

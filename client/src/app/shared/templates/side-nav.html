@@ -1,52 +1,48 @@
 <!-- Sidebar -->
 <mat-sidenav-container *ngIf="navItems">
   <mat-sidenav
-    #sideNav
-    [mode]="sidebarMode$ | async"
-    [opened]="!(isMobile$ | async)"
+      #sideNav
+      [mode]="sidebarMode$ | async"
+      [opened]="!(isMobile$ | async)"
   >
     <!-- Sidebar item output -->
 
     <mat-nav-list id="main-nav">
       <ng-container *ngFor="let nav of navItems">
-        <ng-container
-          *ngIf="!nav.requireLogin || (nav.requireLogin && (loggedIn$ | async))"
-        >
-          <ng-container *ngIf="userHasRoles(nav.requireRoles)">
-            <ng-container [ngSwitch]="nav.type">
-              <!-- Rendering internal links -->
-              <a
+        <ng-container *ngIf="userHasRoles$(nav.requireRoles) | async">
+          <ng-container [ngSwitch]="nav.type">
+            <!-- Rendering internal links -->
+            <a
                 *ngSwitchCase="'link'"
                 mat-list-item
                 [routerLink]="nav.route"
                 routerLinkActive="router-link-active"
                 [routerLinkActiveOptions]="{ exact: true }"
-              >
-                <span
+            >
+              <span
                   *ngIf="nav.icon"
                   class="fa fa-fw fa-{{ nav.icon }}"
                   aria-hidden="true"
-                ></span>
-                {{ nav.text[locale] }}
-              </a>
-              <!-- Rendering external links -->
-              <a *ngSwitchCase="'external'" mat-list-item [href]="nav.url">
-                <span
+              ></span>
+              {{ nav.text[locale] }}
+            </a>
+            <!-- Rendering external links -->
+            <a *ngSwitchCase="'external'" mat-list-item [href]="nav.url">
+              <span
                   *ngIf="nav.icon"
                   class="fa fa-fw fa-{{ nav.icon }}"
                   aria-hidden="true"
-                ></span>
-                {{ nav.text[locale] }}
-              </a>
-              <!-- Rendering Dividers -->
-              <mat-divider *ngSwitchCase="'divider'"></mat-divider>
-              <!-- Rendering Headers -->
-              <h3 *ngSwitchCase="'header'" mat-subheader>
-                {{ nav.text[locale] }}
-              </h3>
-              <!-- Rendering fillers -->
-              <div *ngSwitchCase="'fill'" class="fill"></div>
-            </ng-container>
+              ></span>
+              {{ nav.text[locale] }}
+            </a>
+            <!-- Rendering Dividers -->
+            <mat-divider *ngSwitchCase="'divider'"></mat-divider>
+            <!-- Rendering Headers -->
+            <h3 *ngSwitchCase="'header'" mat-subheader>
+              {{ nav.text[locale] }}
+            </h3>
+            <!-- Rendering fillers -->
+            <div *ngSwitchCase="'fill'" class="fill"></div>
           </ng-container>
         </ng-container>
       </ng-container>

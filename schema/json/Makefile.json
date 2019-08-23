@@ -19,7 +19,7 @@ JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDesc
 
 define CONVERT_COMMAND
 	@echo "Creating $(notdir $(basename $@)).json"
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) --path $^ -c --type $(notdir $(basename $@)) > "$@.tmp"
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) --no-type-check --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
 	sed -i -- 's/</_/g' "$@.tmp"
 	sed -i -- 's/>/_/g' "$@.tmp"
 	mv "$@.tmp" "$@"

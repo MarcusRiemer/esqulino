@@ -1,4 +1,3 @@
-import { IsUserGuard } from './shared/guards/is-user.guard';
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';

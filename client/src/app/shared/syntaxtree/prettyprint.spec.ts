@@ -1,5 +1,6 @@
 import * as d from './grammar.description'
 import * as p from './prettyprint'
+import { QualifiedTypeName } from './syntaxtree.description';
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -8,7 +9,7 @@ import * as p from './prettyprint'
  * to `require` are relative to the file the function is defined in.
  * So for the moment this function is copy and pasted into spec files :(
  */
-export function verifyFilesTxt<T>(fileName: string, transform: (obj: T) => string) {
+export function verifyFilesTxt<T>(fileName: string, transform: (name: string, obj: T) => string) {
   const input = require(`./spec/${fileName}.json`);
   let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
 
@@ -16,7 +17,7 @@ export function verifyFilesTxt<T>(fileName: string, transform: (obj: T) => strin
     expected = expected.substr(0, expected.length - 1);
   }
 
-  expect(transform(input)).toEqual(expected);
+  expect(transform(fileName, input)).toEqual(expected);
 }
 
 /**
@@ -37,6 +38,13 @@ export function verifyFilesGraphviz<T>(fileName: string, transform: (obj: T) => 
   expect(transform(input)).toEqual(expected);
 }
 
+/**
+ * Stands for "qualified Typename", saves some verbose repetition
+ */
+function qt(name: string): QualifiedTypeName {
+  return ({ languageName: "spec", typeName: name });
+}
+
 
 describe('Grammar PrettyPrinter', () => {
   it('prop "s1" { string }', () => {
@@ -51,9 +59,10 @@ describe('Grammar PrettyPrinter', () => {
     expect(r).toEqual([`prop? "s2" { string }`]);
   });
 
-  it('prop "s3" { string { length=4 } }', () => {
+  it('prop "s3" { string length == 4 }', () => {
     const r = p.prettyPrintProperty({
       name: "s3",
+      type: "property",
       base: "string",
       restrictions: [
         {
@@ -61,14 +70,15 @@ describe('Grammar PrettyPrinter', () => {
           value: 4
         }
       ]
-    } as d.NodePropertyStringDescription);
+    });
 
-    expect(r).toEqual([`prop "s3" { string { length 4 } }`]);
+    expect(r).toEqual([`prop "s3" { string length == 4 }`]);
   });
 
-  it('prop "s4" { string { minLength 2 maxLength 4 } }', () => {
+  it('prop "s4" { string { length > 2 length < 4 } }', () => {
     const r = p.prettyPrintProperty({
       name: "s4",
+      type: "property",
       base: "string",
       restrictions: [
         {
@@ -80,92 +90,199 @@ describe('Grammar PrettyPrinter', () => {
           value: 4
         }
       ]
-    } as d.NodePropertyStringDescription);
+    });
 
     expect(r).toEqual(
       [
         `prop "s4" {`,
         [
           `string {`,
-          [`minLength 2`, `maxLength 4`],
+          [`length > 2`, `length < 4`],
           `}`
         ],
         `}`
       ]);
   });
 
+  it('prop "s5" { string enum }', () => {
+    const r = p.prettyPrintProperty({
+      name: "s5",
+      type: "property",
+      base: "string",
+      restrictions: [
+        {
+          type: "enum",
+          value: ["a", "b", "c"]
+        }
+      ]
+    });
+
+    expect(r).toEqual([`prop "s5" { string enum "a" "b" "c" }`]);
+  });
+
   it('prop "i1" { integer }', () => {
     const r = p.prettyPrintProperty({
       name: "i1",
+      type: "property",
       base: "integer",
-    } as d.NodePropertyIntegerDescription);
+    });
 
     expect(r).toEqual([`prop "i1" { integer }`]);
   });
 
+  it('prop "i2" { integer ≥ 2 }', () => {
+    const r = p.prettyPrintProperty({
+      name: "i2",
+      type: "property",
+      base: "integer",
+      restrictions: [
+        {
+          type: "minInclusive",
+          value: 2
+        }
+      ]
+    });
+
+    expect(r).toEqual([`prop "i2" { integer ≥ 2 }`]);
+  });
+
+  it('prop "i2" { integer ≤ 2 }', () => {
+    const r = p.prettyPrintProperty({
+      name: "i2",
+      type: "property",
+      base: "integer",
+      restrictions: [
+        {
+          type: "maxInclusive",
+          value: 2
+        }
+      ]
+    });
+
+    expect(r).toEqual([`prop "i2" { integer ≤ 2 }`]);
+  });
+
   it('Type References & Cardinalities', () => {
-    expect(p.prettyPrintTypeReference("foo")).toEqual("foo");
-    expect(p.prettyPrintTypeReference({ languageName: "bar", typeName: "foo" })).toEqual("bar.foo");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: "1"
-    })).toEqual("bar.foo");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: {
-        minOccurs: 0,
-        maxOccurs: 1,
+    const parentType: QualifiedTypeName = { languageName: "spec", typeName: "root" };
+
+    expect(p.prettyPrintTypeReference(parentType, "foo")).toEqual("foo");
+    expect(p.prettyPrintTypeReference(parentType, { languageName: "bar", typeName: "foo" })).toEqual("bar.foo");
+    expect(p.prettyPrintTypeReference(parentType, { languageName: "spec", typeName: "foo" })).toEqual("foo");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: "1"
       }
-    })).toEqual("bar.foo?");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: {
-        minOccurs: 1,
-        maxOccurs: undefined
+    )).toEqual("bar.foo");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: {
+          minOccurs: 0,
+          maxOccurs: 1,
+        }
       }
-    })).toEqual("bar.foo+");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: {
-        minOccurs: 0,
-        maxOccurs: undefined
+    )).toEqual("bar.foo?");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: {
+          minOccurs: 1,
+          maxOccurs: undefined
+        }
       }
-    })).toEqual("bar.foo*");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: {
-        minOccurs: 0,
-        maxOccurs: 2,
+    )).toEqual("bar.foo+");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: {
+          minOccurs: 0,
+          maxOccurs: undefined
+        }
       }
-    })).toEqual("bar.foo{0,2}");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: {
-        minOccurs: undefined,
-        maxOccurs: 2,
+    )).toEqual("bar.foo*");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: {
+          minOccurs: 0,
+          maxOccurs: 2,
+        }
       }
-    })).toEqual("bar.foo{,2}");
-    expect(p.prettyPrintTypeReference({
-      nodeType: { languageName: "bar", typeName: "foo" },
-      occurs: {
-        minOccurs: 3,
-        maxOccurs: undefined
+    )).toEqual("bar.foo{0,2}");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: {
+          minOccurs: undefined,
+          maxOccurs: 2,
+        }
       }
-    })).toEqual("bar.foo{3,}");
+    )).toEqual("bar.foo{,2}");
+    expect(p.prettyPrintTypeReference(
+      parentType,
+      {
+        nodeType: { languageName: "bar", typeName: "foo" },
+        occurs: {
+          minOccurs: 3,
+          maxOccurs: undefined
+        }
+      }
+    )).toEqual("bar.foo{3,}");
   });
 
   it('foo ::= bar baz', () => {
-    const r = p.prettyPrintChildGroup({
-      name: "foo",
-      nodeTypes: ["bar", "baz"],
-      type: "sequence"
-    });
+    const r = p.prettyPrintChildGroup(
+      { languageName: "spec", typeName: "root" },
+      {
+        name: "foo",
+        nodeTypes: ["bar", "baz"],
+        type: "sequence"
+      });
 
     expect(r).toEqual(['children sequence "foo" ::= bar baz']);
   });
 
+  it('foo ::= (a b)+', () => {
+    const r = p.prettyPrintChildGroup(
+      { languageName: "spec", typeName: "root" },
+      {
+        name: "foo",
+        type: "parentheses",
+        group: {
+          nodeTypes: ["bar", "baz"],
+          type: "sequence"
+        },
+        cardinality: "+"
+      });
+
+    expect(r).toEqual(['children sequence "foo" ::= (bar baz)+']);
+  });
+
+  it('foo ::= (a & b)?', () => {
+    const r = p.prettyPrintChildGroup(
+      { languageName: "spec", typeName: "root" },
+      {
+        name: "foo",
+        type: "parentheses",
+        group: {
+          nodeTypes: ["bar", "baz"],
+          type: "allowed"
+        },
+        cardinality: "?"
+      });
+
+    expect(r).toEqual(['children allowed "foo" ::= (bar & baz)?']);
+  });
+
   it('node "s1" { prop "value" { string } }', () => {
-    const r = p.prettyPrintConcreteNodeType("s1", {
+    const r = p.prettyPrintConcreteNodeType(qt("s1"), {
       type: "concrete",
       attributes: [
         {
@@ -177,7 +294,7 @@ describe('Grammar PrettyPrinter', () => {
     });
 
     expect(r).toEqual([
-      'node "s1" {', [
+      'node "spec"."s1" {', [
         'prop "value" { string }'
       ],
       '}'
@@ -235,41 +352,51 @@ describe('Grammar PrettyPrinter', () => {
   it('Grammar g12: sequence separator', () => {
     verifyFilesTxt('g012-sequence-separator', p.prettyPrintGrammar);
   });
+
+  it('Grammar g13: foreign reference', () => {
+    verifyFilesTxt('g013-foreign-reference', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g14: RegEx Language', () => {
+    verifyFilesTxt('g014-regex-language', p.prettyPrintGrammar);
+  });
 });
+
+const printWrapper = (_: string, obj: any) => p.prettyPrintSyntaxTree(obj);
 
 describe('SyntaxTree PrettyPrinter', () => {
   it('Tree t0: Empty root', () => {
-    verifyFilesTxt('t000-empty-root', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t000-empty-root', printWrapper);
     verifyFilesGraphviz('t000-empty-root', p.graphvizSyntaxTree);
   });
 
   it('Tree t1: Root with single prop', () => {
-    verifyFilesTxt('t001-root-single-prop', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t001-root-single-prop', printWrapper);
     verifyFilesGraphviz('t001-root-single-prop', p.graphvizSyntaxTree);
   });
 
   it('Tree t2: Root with single child', () => {
-    verifyFilesTxt('t002-root-single-child', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t002-root-single-child', printWrapper);
     verifyFilesGraphviz('t002-root-single-child', p.graphvizSyntaxTree);
   });
 
   it('Tree t3: Root with two childgroups', () => {
-    verifyFilesTxt('t003-root-two-childgroups', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t003-root-two-childgroups', printWrapper);
     verifyFilesGraphviz('t003-root-two-childgroups', p.graphvizSyntaxTree);
   });
 
   it('Tree t4: Root with three children', () => {
-    verifyFilesTxt('t004-root-three-children', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t004-root-three-children', printWrapper);
     verifyFilesGraphviz('t004-root-three-children', p.graphvizSyntaxTree);
   });
 
   it('Tree t5: Root with three complex children', () => {
-    verifyFilesTxt('t005-root-complex-children', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t005-root-complex-children', printWrapper);
     verifyFilesGraphviz('t005-root-complex-children', p.graphvizSyntaxTree);
   });
 
   it('Tree t6: Manual example (if)', () => {
-    verifyFilesTxt('t006-manual-if-example', p.prettyPrintSyntaxTree);
+    verifyFilesTxt('t006-manual-if-example', printWrapper);
     verifyFilesGraphviz('t006-manual-if-example', p.graphvizSyntaxTree);
   });
 });

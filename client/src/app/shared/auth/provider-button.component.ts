@@ -1,32 +1,27 @@
-import { ClientProviderDescription } from './provider.description';
-import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 
-import { providers } from './providers';
+import { UserService } from './user.service';
+import { AvailableProvidersDescription } from './provider.description';
 import { ServerApiService } from '../serverdata';
 
 @Component({
   selector: 'provider-button',
   templateUrl: './templates/provider-button.html'
 })
-export class ProviderButtonComponent implements OnInit {
-  @Input() providers = providers;
-  @Input() providerName: string;
+export class ProviderButtonComponent {
+  @Input() provider: AvailableProvidersDescription;
+  @Output() trigger = new EventEmitter<void>()
 
   constructor(
     private _serverApi: ServerApiService
-  ) {}
+  ) { }
 
-  public provider: ClientProviderDescription;
-
-  public ngOnInit(): void {
-    this.providers.forEach(e => {
-      if (e.name.toLowerCase() === this.providerName.toLowerCase()) {
-        this.provider = e;
-      }
-    })
-  }
-
-  public onSignIn(provider: string) {
-    window.location.href = this._serverApi.getSignInUrl(provider);
+  public onClick() {
+    if (this.provider.urlName) {
+      window.location.href = this._serverApi.getSignInUrl(this.provider.urlName);
+    } else {
+      this.trigger.emit();
+    }
   }
 }

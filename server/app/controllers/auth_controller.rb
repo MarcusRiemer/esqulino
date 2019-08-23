@@ -1,36 +1,27 @@
 class AuthController < ApplicationController
   include AuthHelper
   include UserHelper
-  include IdentityHelper
-
-  before_action :authenticate_user!
-
-  def register_params
-    params
-        .permit([:email, :username, :password])
-  end
-
-  def login_params
-    params
-        .permit([:email, :password])
-  end
+  include LocaleHelper
 
   # This function is essential for omniauth.
   # If youre authenticated by the external provider, you will be 
   # navigated to this function.
   def callback
     begin
-      create_identity
-      sign_in
-  
-      redirect_to "/"
+      auth_hash = request.env["omniauth.auth"]
+      identity = Identity.search(auth_hash)
+      if (not identity) then
+        identity = create_identity(auth_hash)
+      end
+      sign_in(identity)
+      redirect_to URI(request.referer || "/").path
     rescue => e
-      return error_response(e.message)
+      raise RuntimeError.new(e.message)
     end
   end
   
   def login_with_password
-    identity = search_for_password_identity(login_params)
+    identity = PasswordIdentity.find_by(uid: login_params[:email])
     if (not identity)
       return error_response("E-Mail not found")
     end
@@ -43,8 +34,7 @@ class AuthController < ApplicationController
       return error_response("Wrong password")
     end
 
-    set_identity(identity)
-    sign_in
+    sign_in(identity)
     api_response(user_information)
   end
 
@@ -52,14 +42,19 @@ class AuthController < ApplicationController
   # You use this for creating an identity with a password
   # with simulated callback data
   def register
-    permited_params = register_params
-    identity_data = create_identity_data(permited_params)
-
     begin
-      create_identity(identity_data, true)
-      api_response(current_user.informations)
-    rescue Exception => e
-      redirect_to "/"
+      auth_hash = create_identity_data(register_params)
+      identity = Identity.search(auth_hash)
+      if (not identity) then
+        identity = create_identity(auth_hash)
+        # sends an confirmation e-mail
+        IdentityMailer.confirm_email(identity, request_locale).deliver
+        api_response(current_user.informations)
+      else
+        error_response("E-mail already registered")
+      end
+    rescue => e
+      error_response(e.message)
     end
   end
 
@@ -70,7 +65,29 @@ class AuthController < ApplicationController
   end
 
   def failure
-    redirect_to "/"
+    error_response(params[:message])
+  end
+
+  private
+
+  def create_identity(auth_hash)
+    user = current_user
+    if (not signed_in?) then
+      user = User.create_from_hash(auth_hash)
+    end
+    identity = Identity.create_with_auth(auth_hash, user)
+
+    return identity
+  end
+
+  def register_params
+    params
+        .permit([:email, :username, :password])
+  end
+
+  def login_params
+    params
+        .permit([:email, :password])
   end
 end
 

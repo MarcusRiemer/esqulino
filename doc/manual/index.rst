@@ -15,7 +15,7 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    :caption: For Language Creators
 
    ast
-   programming-language
+   grammar-by-example
    grammar
    block-language
 

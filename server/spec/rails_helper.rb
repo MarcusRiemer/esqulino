@@ -45,8 +45,9 @@ module ValidateAgainstMatcher
       if @error
         @error
       else
+        # Omit the whole schema from the shown output
         @result
-          .map {|r| JSON.pretty_generate(r) }
+          .map {|r| JSON.pretty_generate(r.except("root_schema")) }
           .join "\n"
       end
     end

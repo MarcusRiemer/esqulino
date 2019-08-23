@@ -9,10 +9,10 @@
   </button>
 </mat-menu>
 
-<is-logged-in class="user-button">
+<is-logged-in class="user-buttons">
   <ng-container logged_in>
     <button mat-button [matMenuTriggerFor]="userMenu">
-      <span class="display-name">
+      <span class="font-size">
         {{ userDisplayName$ | async }}
       </span>
       <i class="fa fa-user-circle-o" aria-hidden="true"></i>
@@ -20,9 +20,18 @@
   </ng-container>
 
   <ng-container logged_out>
-    <button mat-button (click)="openDialog()">
-      <span class="display-name" i18n="@@guest">Gast </span>
-      <i class="fa fa-user-o" aria-hidden="true"></i>
+    <button mat-button (click)="openDialog('signIn')">
+      <span class="font-size">
+        Anmelden
+        <i class="fa fa-sign-in" aria-hidden="true"></i>
+      </span>
+    </button>
+
+    <button mat-button (click)="openDialog('signUp')">
+      <span class="font-size">
+        Registrieren
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
+      </span>
     </button>
   </ng-container>
 </is-logged-in>

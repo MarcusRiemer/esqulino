@@ -2,6 +2,7 @@ class PasswordIdentity < Identity
   attr_accessor :password, :password_confirmation
 
   validates :password, presence: true
+  validates_uniqueness_of :uid
 
   def self.find_by_email(email)
     where(uid: email)
@@ -73,7 +74,6 @@ class PasswordIdentity < Identity
       self.own_data["password"] = Password.create(password)
     end
 
-
     self.save
   end
 
@@ -116,6 +116,34 @@ class PasswordIdentity < Identity
     return ((need_to_wait.to_time - Time.current) / 1.minute).round
   end
 
+  def change_password(permited_params)
+    if (not self.password_eql?(permited_params[:new_password])) then
+      if (self.password_eql?(permited_params[:current_password])) then
+        self.set_password_all_with_user_id(permited_params[:new_password])
+        IdentityMailer.changed_password(self).deliver
+        api_response(user_information)
+      else
+        error_response("current password is wrong")
+      end
+    end
+  end
+
+  def email_confirmation
+    user = self.user
+    if (not user.email?)
+      # Sets the primary email on confirmation
+      user.email = self.email
+    end
+
+    self.confirmed!
+    self.save!
+
+    if (user.valid?) then
+      user.save!
+    end
+
+    return self
+  end
 
   def password_eql?(password)
     # comparing nil with Password.new(self.data["password"]) will be true
@@ -128,5 +156,13 @@ class PasswordIdentity < Identity
 
   def confirmed?()
     return self.own_data["confirmed"]
+  end
+
+  def self.client_informations
+    return ({
+      name: "E-Mail",
+      icon: "fa-envelope-o",
+      color: "Maroon"
+    })
   end
 end

@@ -8,13 +8,16 @@ export interface ProviderDescription {
   confirmed: boolean;
   link?: string;
   email?: string;
+  changes: {
+    primary: string | null;
+  }
 }
 
 export interface ChangePrimaryEmailDescription {
   primaryEmail: string;
 }
 
-export interface ClientProviderDescription {
+export interface AvailableProvidersDescription {
   name: string;
   urlName: string;
   icon: string;

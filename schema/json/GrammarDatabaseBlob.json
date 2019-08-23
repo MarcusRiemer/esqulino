@@ -47,19 +47,13 @@
       "description": "This part of the grammar is stored as a JSON blob in the database.",
       "properties": {
         "foreignTypes": {
-          "additionalProperties": {
-            "$ref": "#/definitions/NamedTypes"
-          },
-          "type": "object"
+          "$ref": "#/definitions/NamedLanguages"
         },
         "root": {
           "$ref": "#/definitions/QualifiedTypeName"
         },
         "types": {
-          "additionalProperties": {
-            "$ref": "#/definitions/NamedTypes"
-          },
-          "type": "object"
+          "$ref": "#/definitions/NamedLanguages"
         }
       },
       "required": [
@@ -168,10 +162,18 @@
       ],
       "type": "object"
     },
+    "NamedLanguages": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NamedTypes"
+      },
+      "description": "Multiple languages with types",
+      "type": "object"
+    },
     "NamedTypes": {
       "additionalProperties": {
         "$ref": "#/definitions/NodeTypeDescription"
       },
+      "description": "Types for a single language",
       "type": "object"
     },
     "NodeAttributeDescription": {

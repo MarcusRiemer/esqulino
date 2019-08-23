@@ -23,8 +23,10 @@ export class MultiLingualInputComponent {
 
   public readonly languages = locales;
 
-  // TODO: Read mode from URL? Or from somewhere else?
-  public readonly mode: "single" | "translation" = 'single'
+  /**
+   * Users may specify a mode via the URL
+   */
+  public readonly mode = this._activeRoute.snapshot.queryParamMap.get('mode') || 'single'
 
   public get currentString() {
     return (this.editingString)

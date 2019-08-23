@@ -1,5 +1,5 @@
-grammar "g3" {
-  node "s1" {
-    prop "value" { string { length 4 } }
+grammar "g003-string-node-length" {
+  node "g3"."s1" {
+    prop "value" { string length == 4 }
   }
 }

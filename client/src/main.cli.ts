@@ -108,7 +108,7 @@ async function executeCommand(command: Command): Promise<string | any[]> {
       return ("pong");
     case "printGrammar":
       const g = await findGrammar(command.programmingLanguageId);
-      return (prettyPrintGrammar(g));
+      return (prettyPrintGrammar(command.programmingLanguageId, g));
     case "printBlockLanguage": {
       const l = await findBlockLanguage(command.blockLanguageId);
       return (prettyPrintBlockLanguage(l));
