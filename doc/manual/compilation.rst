@@ -109,13 +109,14 @@ Ensure you have the "main" dependencies installed (``ruby`` and ``bundle`` for t
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
-* Relevant targets in the ``client`` folder:
+* Typical targets in the ``client`` folder:
 
   * Run ``NG_OPTS="--watch" make client-compile-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
   * Run ``make client-test-watch`` to continously run the client testcases in the background.
 
-* Relevant targets in the ``server`` folder:
+* Typical targets in the ``server`` folder:
 
+  * Run ``make reset-live-data dev-make-guest-admin run-dev`` if you have pulled any seed data changes that need to be reflected. The ``dev-make-guest-admin`` target is optional, but very convenient during development.
   * Run ``make test-watch`` to continously run the server testcases in the background. This requires a running PostgreSQL database server.
 
 
@@ -170,7 +171,7 @@ I don't have any programming languages or projects available
 
 .. _shell-create-admin-account:
 
-I need an admin account
+I need a dedicated admin account, the ``guest`` user is not enough.
     1) If you don't have a regular account yet: Register one. During development you may use the "developer" identity which does not even require a password.
     2) Assuming your display name is unique: Open a Rails console and run the following command::
 
