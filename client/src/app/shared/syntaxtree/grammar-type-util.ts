@@ -59,6 +59,13 @@ export const ensureTypename = (ref: Desc.TypeReference | Desc.ChildCardinalityDe
 export type OrderedTypes = QualifiedTypeName[];
 
 /**
+ *
+ */
+export function stableQualifiedTypename(n: QualifiedTypeName): string {
+  return (n.languageName + "." + n.typeName);
+}
+
+/**
  * @return A meaningful order of the types in the given grammar
  */
 export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
@@ -81,8 +88,8 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
     // Recursively walk through all types that are mentioned
     const impl = (curr: QualifiedTypeName) => {
       // Don't do anything if the type has been mentioned already
-      if (!usedTypes.has(JSON.stringify(curr))) {
-        usedTypes.add(JSON.stringify(curr));
+      if (!usedTypes.has(stableQualifiedTypename(curr))) {
+        usedTypes.add(stableQualifiedTypename(curr));
         order.push(curr);
 
         // Different types need to be treated differently
@@ -123,7 +130,7 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
       // OUCH! Order of keys is important here, if "typeName" is mentioned first
       // the resulting string also has that key and value mentioned first
       .map((t): QualifiedTypeName => { return ({ languageName: t.languageName, typeName: t.typeName }) })
-      .filter(t => !usedTypes.has(JSON.stringify(t)));
+      .filter(t => !usedTypes.has(stableQualifiedTypename(t)));
     order.push(...unreferenced);
 
     return (order);
