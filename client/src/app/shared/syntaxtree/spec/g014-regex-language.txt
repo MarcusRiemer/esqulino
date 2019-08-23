@@ -1,4 +1,4 @@
-grammar "regex" {
+grammar "g014-regex-language" {
   node "regex"."root" {
     children allowed "expressions" ::= expr+
   }

@@ -33,7 +33,7 @@ export function prettyPrintType(name: QualifiedTypeName, t: Desc.NodeTypeDescrip
   } else if (Desc.isNodeOneOfTypeDescription(t)) {
     return prettyPrintOneOfType(name, t);
   } else {
-    throw Error(`Unknown type "${name}" to pretty print: ${JSON.stringify(t)}`);
+    throw Error(`Unknown type ${prettyPrintQualifiedTypeName(name)} to pretty print: ${JSON.stringify(t)}`);
   }
 }
 
@@ -60,7 +60,7 @@ export function prettyPrintConcreteNodeType(name: QualifiedTypeName, t: Desc.Nod
       case "sequence":
       case "choice":
       case "parentheses":
-        return (prettyPrintChildGroup(a));
+        return (prettyPrintChildGroup(name, a));
     }
   });
 
@@ -168,12 +168,24 @@ export function prettyPrintCardinality(t: OccursDescription) {
 /**
  * Takes a node reference, possibly with its cardinality description,
  * and returns a pretty string version of it.
+ *
+ * @param nodeName The typename of the node this reference is mentioned on
+ * @param t The type reference to to print
  */
-export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
+export function prettyPrintTypeReference(
+  nodeName: QualifiedTypeName,
+  t: Desc.NodeTypesChildReference
+) {
   if (Desc.isQualifiedTypeName(t)) {
-    return (`${t.languageName}.${t.typeName}`);
+    // If the referenced language name is the same as the language it was
+    // defined in: Omit the reference
+    if (nodeName.languageName === t.languageName) {
+      return (t.typeName);
+    } else {
+      return (`${t.languageName}.${t.typeName}`);
+    }
   } else if (Desc.isChildCardinalityDescription(t)) {
-    const printedName = prettyPrintTypeReference(t.nodeType);
+    const printedName = prettyPrintTypeReference(nodeName, t.nodeType);
     return (`${printedName}${prettyPrintCardinality(t.occurs)}`);
   } else {
     return (t);
@@ -183,20 +195,24 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
 /**
  * Prints the grammar of a single child group.
  */
-export function prettyPrintChildGroup(p: Desc.NodeChildrenGroupDescription): NestedString {
+export function prettyPrintChildGroup(
+  nodeName: QualifiedTypeName,
+  p: Desc.NodeChildrenGroupDescription
+): NestedString {
   let sep = "";
   if ((p.type === "allowed" || p.type === "sequence") && p.between) {
     sep = `, between: "${p.between.symbol}"`
   }
   const prettyType = p.type === "parentheses" ? p.group.type : p.type;
-  return ([`children ${prettyType} "${p.name}"${sep} ::= ` + prettyPrintChildGroupElements(p)]);
+  return ([`children ${prettyType} "${p.name}"${sep} ::= ` + prettyPrintChildGroupElements(nodeName, p)]);
 }
 
 /**
  * Prints the elements of a single child group. This may be a simple list of elements
  * (for "sequence" and "allowed" groups) or recursive definitions of child groups ("choice").
  */
-function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): string {
+function prettyPrintChildGroupElements(nodeName: QualifiedTypeName, p: Desc.NodeChildrenGroupDescription): string {
+
   // Sequences and allowed groups can be printed by simply joining the elements
   switch (p.type) {
     case "sequence":
@@ -212,7 +228,7 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
 
       return (
         p.nodeTypes
-          .map(prettyPrintTypeReference)
+          .map(ref => prettyPrintTypeReference(nodeName, ref))
           .join(connector(p))
       );
     case "parentheses":
@@ -224,21 +240,14 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
         nodeTypes: p.group.nodeTypes,
         name: "dirtyHack"
       }
-      const prettyChildren = prettyPrintChildGroupElements(hackedChildGroup);
+      const prettyChildren = prettyPrintChildGroupElements(nodeName, hackedChildGroup);
       const prettyCardinality = prettyPrintCardinality(p.cardinality);
       return (`(${prettyChildren})${prettyCardinality}`);
 
     case "choice":
       return (
         p.choices
-          // Recursive call
-          .map(c => {
-            if (typeof c === "string") {
-              return (c);
-            } else {
-              return (c.languageName + "." + c.typeName);
-            }
-          })
+          .map(ref => prettyPrintTypeReference(nodeName, ref))
           .join(` | `)
       )
     default:
