@@ -16,9 +16,8 @@ export class ProviderButtonComponent {
   ) { }
 
   public onClick() {
-    this.provider.urlName
-      ? window.location.href = this._serverApi.getSignInUrl(this.provider.urlName)
-      : this.trigger.emit()
-      ;
+    if (this.provider.urlName) {
+      window.location.href = this._serverApi.getSignInUrl(this.provider.urlName)
+    } else this.trigger.emit()
   }
 }
