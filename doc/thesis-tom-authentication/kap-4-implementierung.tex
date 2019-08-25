@@ -8,13 +8,13 @@ Da zu diesem Zeitpunkt bereits Librarys zur Authentifizierung existieren, wurde 
 
 \subsubsection{Devise}
 \label{sec: devise}
-Devise ist eine Ruby on Rails Library mit der sich eine flexible Authentifizierung ermöglichen lässt. Es bietet ein vorgefertigtes Datenbankschema für registrierte Benutzer, einen leichten Umgang mit OmniAuth und Funktionen wie beispielsweise das Senden einer E-Mail bei Registrierung. Im Datenbankschema enthalten ist ein Log-System mit dem zum Beispiel der Zeitpunkt der letzten Anmeldung eines Benutzers festgehalten werden kann. 
+Devise\footnote{\url{https://github.com/plataformatec/devise}} ist eine Ruby on Rails Library mit der sich eine flexible Authentifizierung ermöglichen lässt. Es bietet ein vorgefertigtes Datenbankschema für registrierte Benutzer, einen leichten Umgang mit OmniAuth und Funktionen wie beispielsweise das Senden einer E-Mail bei Registrierung. Im Datenbankschema enthalten ist ein Log-System mit dem zum Beispiel der Zeitpunkt der letzten Anmeldung eines Benutzers festgehalten werden kann. 
 
 Die Funktionalitäten die Omniauth bietet sind jedoch für die Zielverwirklichung ausreichend, we{\ss}halb sich gegen Devise entschieden wurde. Aus diesem Grund mussten Funktionen wie zum Beispiel das Senden einer Bestätigungsmail selbst implementiert werden. 
 
 \subsubsection{Omniauth}
 \label{sec:omniauth}
-Omniauth ist eine quelloffene Library für Ruby on Rails und ermöglicht dem Benutzer, eine Anmeldung mittels unterschiedlicher Anbieter über \gls{oAuth2}. Bei der Anmeldung mittels oAuth2 werden bereits viele Funktionen von Omniauth selber übernommen. Sobald der Nutzer sich bei dem jeweiligen Anbieter angemeldet hat, wird die Antwort des jeweiligen Anbieters automatisch über die von Omniauth festgelegte Route verarbeitet. Jedoch muss vorher das spezifische Gem des Anbieters für Omniauth installiert werden. Hierbei stellt jedes Gem eine eigene Strategie für Omniauth bereit. Eine Strategie stellt die Möglichkeit bereit, sich mit einem speziellen Provider zu authentifizieren.
+Omniauth\footnote{\url{https://github.com/omniauth/omniauth}} ist eine quelloffene Library für Ruby on Rails und ermöglicht dem Benutzer, eine Anmeldung mittels unterschiedlicher Anbieter über \gls{oAuth2}. Bei der Anmeldung mittels oAuth2 werden bereits viele Funktionen von Omniauth selber übernommen. Sobald der Nutzer sich bei dem jeweiligen Anbieter angemeldet hat, wird die Antwort des jeweiligen Anbieters automatisch über die von Omniauth festgelegte Route verarbeitet. Jedoch muss vorher das spezifische Gem des Anbieters für Omniauth installiert werden. Hierbei stellt jedes Gem eine eigene Strategie für Omniauth bereit. Eine Strategie stellt die Möglichkeit bereit, sich mit einem speziellen Provider zu authentifizieren.
 
 Omniauth selber verfügt nur über die Developer Strategie, diese ermöglicht eine Anmeldung ohne spezifische Überprüfung der angegebenen Daten. Das hat zur Folge, dass diese Art von Anmeldung auf keinen Fall im Produktiv System vorhanden sein darf.
 
@@ -53,7 +53,7 @@ Dem zuzüglich liefert Rolify bereits vordefinierte Funktionen, mit denen es mö
 
 
 
-\subsubsection{Anmeldung eines Benutzers}
+\subsubsection{Vorbereitung für die Anmeldung eines Benutzers}
 \label{sec: sign-in-imp}
 Die Anmeldung mittels oAuth2 oder Passwort wurde mit Omniauth ermöglicht. Hierbei wurde zuerst Omniauth selber dem derzeitigen Projekt hinzugefügt und darauffolgend die Gems zur Authentifizierung mittels Google, GitHub und Passwort. Um die einzelnen Provider nutzen zu können, müssen diese in einem \enquote{initializer} (Listing \ref{lst:added_providers}) deklariert werden. Ein \enquote{initializer} wird nach dem Rails Framework und den dazugehörigen Gems geladen. Bei der Deklarierung der Provider ist zu beachten, dass Provider wie Google oder GitHub eine jeweilige ID und einen Secret-Key als Parameter benötigen. Diese werden jeweils auf den offiziellen Seiten der Provider erstellt. Dabei musste darauf geachtet werden, dass diese ID und dieser Secret-key über eine Umgebungsvariable mit in das Projekt eingebunden wird. Umgebungsvariablen werden in dem Fall in der Kommandozeile vor das Kommando zum Starten des Projektes gesetzt. Nachdem das Kommando zum starten des Servers ausgeführt wurde, kann auf die Werte der zuvor festgelegten Umgebungsvariablen zugegriffen werden. Die Verwendung von Umgebungsvariablen ist besonders bei Blattwerkzeug vonnöten, da es sich um ein quelloffenes Projekt handelt und jeder den bereits produzierten Code einsehen kann. Da es sich bei Secret-Keys um Passwörter handelt, sind diese nicht im Repository angegeben.  
 

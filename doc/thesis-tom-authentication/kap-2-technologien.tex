@@ -7,7 +7,7 @@ kurz erläutert.
 \label{sec:blattwerkzeug}
 Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und SQL Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug die Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit einzusehen. Dennoch ist es dem Nutzer einfach gemacht, mit visuellen Elementen teile der Informatik kennen zu lernen.
 
-Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutreten. Mit Blattwerkzeug wird Lehrern ein Werkzeug in die Hand gelegt, mit dem der Informatik Unterricht einfacher und informativer gestaltet werden kann. Somit wird der veraltete und doch sehr Office-lastige Informatik Unterricht komplett erneuert und interessanter gestaltet werden\todo{Zuviel: BlattWerkzeug ist ein Zusatz, keine Ersetzung}.
+Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutreten. Mit Blattwerkzeug wird Lehrern ein Werkzeug in die Hand gelegt, mit dem der doch sehr Office-lastige Informatik Unterricht erweitert werden kann. Die spielerischen Aspekte von Blattwerkzeug sollen vorallem dazu führen, dass jüngere Menschen ein Interesse an der Informatik entwickeln.
 
 \begin{figure}[h]
 	\includegraphics[scale=0.6]{graphics/blattwerkzeug.png}
@@ -72,7 +72,12 @@ Eine weitere Möglichkeit Daten zwischenzeitig zu speichern sind Cookies. Cookie
 
 \subsection{JSON Web Token}
 \label{sec: jwt}
-\enquote{\gls{JWT} sind auf \gls{JSON} basierende \gls{RFC} 7519 genormte Access-Token.} \gls{RFC} ist eine Sammlung aus Dokumenten, in denen das Verhalten der Technologien des Internets beschrieben ist. Einige davon gehören zum Standard und werden somit in den meisten Fällen vorausgesetzt. In speziellen Fällen möchte beispielsweise ein Unternehmen eigene Protokolle verwenden, die nicht zum Standard gehören.
+
+\begin{quote}
+	``\gls{JWT} sind auf \gls{JSON} basierende \gls{RFC} 7519 genormte Access-Token.``\footnote{\url{https://de.wikipedia.org/wiki/JSON_Web_Token}}
+\end{quote}
+
+\gls{RFC} ist eine Sammlung aus Dokumenten, in denen das Verhalten der Technologien des Internets beschrieben ist. Einige davon gehören zum Standard und werden somit in den meisten Fällen vorausgesetzt. In speziellen Fällen möchte beispielsweise ein Unternehmen eigene Protokolle verwenden, die nicht zum Standard gehören.
 
 Diese Tokens werden zur eindeutigen Identifizierung von Nutzern verwendet und können die Session ersetzen. Dabei ist es bei einem \gls{JWT} nicht vonnöten die Daten auf dem Server zu speichern. Dies hat zur Folge, dass die Pflege des Speichers an diesem Punkt entfällt. Jedoch haben \gls{JWT}s einen gro{\ss}en Nachteil, denn sobald der Server einen \gls{JWT} ausgestellt hat, ist dieser bis zum Ablauf des Tokens gültig. Das hei{\ss}t, sollte ein Server die Berechtigung eines Nutzers nach Ausstellung eines \gls{JWT} ändern, ist diese Änderung erst bei erneutem Erstellen eines \gls{JWT} gültig.
 
@@ -202,7 +207,7 @@ Zusätzlich bietet Angular auch die Möglichkeit eigene Module zu erstellen in d
 
 In Blattwerkzeug wird genau dieser umfangreiche Vorgang von Omniauth übernommen. Aus diesem Grund wird oAuth2 in dieser Thesis nicht weiter erläutert.
 
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\includegraphics[width=.55\textwidth]{graphics/oauth2.pdf}
 	\caption{oAuth2 verfahren}
