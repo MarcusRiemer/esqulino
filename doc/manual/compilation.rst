@@ -169,13 +169,30 @@ These issues happen on a semi-regular scale.
 I don't have any programming languages or projects available
     You probably forgot to load the initial data. Run ``make load-live-data`` in the ``server`` folder.
 
+I changed things in the database, but they don't show up in the browser
+    Rails does some fairly aggressive query caching which can **really** get in the way. Sadly the easiest
+    option to fix this seems to be a restart of the server.
+
+I don't want to log in for every operation
+    You can give ``admin`` rights to the ``guest`` user which enables you to do almost anything without
+    logging in. To do so you may run the following command from the ``server`` directory::
+
+      make dev-make-guest-admin
+
 .. _shell-create-admin-account:
 
 I need a dedicated admin account, the ``guest`` user is not enough.
     1) If you don't have a regular account yet: Register one. During development you may use the "developer" identity which does not even require a password.
-    2) Assuming your display name is unique: Open a Rails console and run the following command::
+    2) Find out your User ID, this can normally be accessed via `the user settings page <http://localhost:9292/user/settings>`_.
+    3) Run the following command from the ``server`` directory::
 
-         User.find_by(display_name: "<Your Display Name>").add_role(:admin)
+         bin/rails "blattwerkzeug:make_admin[<Your User ID here>]"
+
+    Alternatively (if your display name is unique): Open a Rails console and run the following command::
+
+       User.find_by(display_name: "<Your Display Name>").add_role(:admin)
+
+    In both cases you need to log out and log in again to refresh your current token.
 
 The server wont start and shows ``Startup Error: No cli program at "../client/dist/cli/bundle.cli.js"``
     The server requires the ``cli`` version of the IDE to run. Create it using ``make compile-cli`` in the ``client`` folder. The server will make more then one attempt to find the file, so if the program is currently beeing compiled startup should work once the compilation is finished.
