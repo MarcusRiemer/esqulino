@@ -9,7 +9,7 @@ Structural and Visual Aspects
 
 Currently the validation grammar and the visual grammar are stored in the same model. This is bad and must change, but whats a better approach?
 
-Apart from beeing visually pleasing in its formal grammar representation it must also be meaningfully convertible in HTML. This sadly excludes the simplest possibility of simply inserting virtual linebreaks, `because this doesn't work nicely with CSS flexboxes <https://stackoverflow.com/questions/54239033/>`_, see `minimal_indent.html </_static/playground/minimal-indent.html>`_. for an example how this fails. A more or less straightforward HTML layout is proposed at `row-col.html </_static/playground/row-col.html>`_.
+Apart from beeing visually pleasing in its formal grammar representation it must also be meaningfully convertible in HTML. This sadly excludes the simplest possibility of simply inserting virtual linebreaks, `because this doesn't work nicely with CSS flexboxes <https://stackoverflow.com/questions/54239033/>`_, see :download:`minimal_indent.html <examples/code-fragments/minimal-indent.html>`. for an example how this fails. A more or less straightforward HTML layout is proposed at :download:`row-col.html <examples/code-fragments/row-col.html>`.
 
 Example grammars (whithout visual aspects)
 ---------------------------------------------
