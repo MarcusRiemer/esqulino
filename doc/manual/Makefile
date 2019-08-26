@@ -36,7 +36,7 @@ generated/%.graphviz: examples/syntaxtree/%.json $(CLI_PROG_CLIENT)
 	@echo '{ "type": "graphvizTree", "model": $(shell cat "$<" | jq -c .)}' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.graphviz"
 
 # Default set of pretty printed grammar files
-pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.grammar generated/css.grammar
+pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.grammar generated/css.grammar generated/json.grammar generated/trucklino-program.grammar
 
 # Default set of pretty printed blocks
 pretty-blocks: generated/sql.blocks

@@ -17,6 +17,7 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    ast
    grammar-by-example
    grammar
+   grammar-builtin
    block-language
 
 .. toctree::
