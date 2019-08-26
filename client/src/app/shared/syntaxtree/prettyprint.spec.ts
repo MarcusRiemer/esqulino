@@ -11,7 +11,7 @@ import { QualifiedTypeName } from './syntaxtree.description';
  */
 export function verifyFilesTxt<T>(fileName: string, transform: (name: string, obj: T) => string) {
   const input = require(`./spec/${fileName}.json`);
-  let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
+  let expected = require(`raw-loader!./spec/${fileName}.txt`).default as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);
@@ -29,7 +29,7 @@ export function verifyFilesTxt<T>(fileName: string, transform: (name: string, ob
  */
 export function verifyFilesGraphviz<T>(fileName: string, transform: (obj: T) => string) {
   const input = require(`./spec/${fileName}.json`);
-  let expected = require(`raw-loader!./spec/${fileName}.graphviz`) as string;
+  let expected = require(`raw-loader!./spec/${fileName}.graphviz`).default as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);
