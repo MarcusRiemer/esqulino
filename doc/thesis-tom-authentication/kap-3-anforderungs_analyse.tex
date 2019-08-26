@@ -1,6 +1,6 @@
 \section{Anforderungsanalyse}
 \label{sec:analyze}
-Das Ziel dieser Thesis ist, ein standardisiertes Registrierungsverfahren zu erstellen, zuzüglich einer Authentifikation über \gls{oAuth2} oder ein Passwort. Hinzu kommt eine Möglichkeit, den Nutzer über den Server zu autorisieren und ihm nach spezifischen Benutzerrollen unterschiedlichen Inhalt zu präsentieren. Dabei soll es dem Nutzer nicht gestattet sein, durch Manipulation seines Clients mit verfälschten Daten, Zugriff auf für ihn nicht zugreiffbare Daten zu erhalten. Um das Ziel dieser Thesis zu erreichen, muss man sich vorerst mit Ruby und dem Webframework Rails auseinandersetzen. Zudem ist es vonnöten, sich intensiver mit Angular zu beschäftigen, da dieses bisher nur oberflächlich behandelt wurde.
+Das Ziel dieser Thesis ist, ein standardisiertes Registrierungsverfahren zu erstellen, zuzüglich einer Authentifikation über \gls{oAuth2} oder ein Passwort. Hinzu kommt eine Möglichkeit, den Nutzer über den Server zu autorisieren und ihm nach spezifischen Benutzerrollen unterschiedlichen Inhalt zu präsentieren. Dabei soll es dem Nutzer nicht gestattet sein, durch Manipulation seines Clients mit verfälschten Daten, Zugriff auf für ihn nicht zugreiffbare Daten zu erhalten.
 
 \subsection{Derzeitiges Projekt}
 \label{sec: current_project}
@@ -18,7 +18,7 @@ Im Verlauf dieser Sektion werden die Anforderungen, die diese Thesis erfüllen s
 
 \subsubsection{Identitäten und Benutzer}
 \label{sec:identities_users}
-Blattwerkzeug soll die Möglichkeit bieten, einen Benutzer mit unterschiedlichen Providern zu authentifizieren. Hierbei wird Blattwerkzeug ebenfalls als Provider bezeichnet und dient zur Anmeldung/Registrierung mittels Passwort. Damit ein Benutzer von unterschiedlichen Providern authentifiziert werden darf, müssen unterschiedliche Modelle erstellt werden. Das user Model soll explizit für den Benutzer stehen und das identity Model für jegliche Provider über die eine Authentifizierung stattfinden kann. Zwischen user und identity Model muss eine Beziehung von 1:n bestehen, da ein Benutzer verschiedene Identitäten besitzen und eine Identität nur einem Benutzer zugeordnet werden darf.
+Blattwerkzeug soll die Möglichkeit bieten, einen Benutzer mit unterschiedlichen Providern zu authentifizieren. Hierbei wird Blattwerkzeug ebenfalls als Provider bezeichnet und dient zur Anmeldung/Registrierung mittels Passwort. Damit ein Benutzer von unterschiedlichen Providern authentifiziert werden darf, müssen unterschiedliche Modelle erstellt werden. Das user\todo{Bezeichner aus dem Code lieber in Proportionalschrift (und groß, wenn ein Typ)} Model soll explizit für den Benutzer stehen und das identity Model für jegliche Provider über die eine Authentifizierung stattfinden kann. Zwischen user und identity\todo{Codebezeichner} Model muss eine Beziehung von 1:n bestehen, da ein Benutzer verschiedene Identitäten besitzen und eine Identität nur einem Benutzer zugeordnet werden darf.
 
 \subsubsection{Anmeldung mittels \gls{oAuth2}}
 Eine Authentifizierung mittels oAuth2 soll über Google und GitHub möglich sein. Die von Google oder GitHub zurückgelieferten Daten sollen in der Datenbank abgespeichert werden. Darüber hinaus müsste bei dem Vorhandensein spezifischer Daten, wie beispielsweise die einer E-Mail, eine automatische Zuweisung spezieller Datenbankfelder des Nutzers erfolgen.
@@ -37,7 +37,7 @@ Hat sich ein Benutzer mittels Passwortes auf Blattwerkzeug registriert, muss es 
 Da es in Blattwerkzeug bei der Benutzernamensgebung zum jetzigen Stand keine einmaligen Benutzernamen gibt, muss es dem Benutzer in den Benutzereinstellungen zusätzlich möglich sein, seinen Benutzernamen zu ändern.
 
 \subsubsection{Rollen und Autorisierung}
-Die Rollen müssen sich in globale und Ressourcen spezifische Rollen unterteilen. Dabei sind Globale-Rollen wie in Sektion ~\ref{sec: rolify} beschrieben, keiner spezifischen Ressource zugewiesen. Ressourcen spezifische Rollen beziehen sich zum Beispiel auf ein Projekt. Bei der Erstellung eines Projektes muss ein Benutzer eine Rolle oder eine Datenbank-Beziehung zu dem jeweiligen Projekt erhalten. Mit dieser Rolle ist es dann dem Benutzer möglich, sein Projekt zu bearbeiten oder zu löschen. Zusätzlich muss die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird.
+Die Rollen müssen sich in globale und Ressourcen spezifische\todo{Wirklich 2 Worte?} Rollen unterteilen. Dabei sind Globale-Rollen wie in Sektion ~\ref{sec: rolify} beschrieben, keiner spezifischen Ressource zugewiesen. Ressourcen spezifische Rollen beziehen sich zum Beispiel auf ein Projekt. Bei der Erstellung eines Projektes muss ein Benutzer eine Rolle oder eine Datenbank-Beziehung zu dem jeweiligen Projekt erhalten. Mit dieser Rolle ist es dann dem Benutzer möglich, sein Projekt zu bearbeiten oder zu löschen. Zusätzlich muss die Möglichkeit gegeben sein, einem anderen Benutzer eine Rolle zuzuweisen mit der das Bearbeiten eines von ihm nicht erstellten Projektes ermöglicht wird.
 
 Für eine Autorisierung mittels Rollen müssen bestimmte Regeln für die jeweiligen Controller Funktionen festgelegt werden. Diese Regeln werden mittels Pundit erstellt werden. Innerhalb dieser Regeln sollte die Überprüfung der Rollen des angemeldeten Nutzers stattfinden.
 
@@ -61,4 +61,9 @@ Die Bedienelemente, die ein Benutzer zu sehen hat, müssen jeweils von den Rolle
 \begin{minipage}{\textwidth}
 	\lstinputlisting[language=JavaScript, style=CodeView, basicstyle=\scriptsize, caption=Beispiel eines Interfaces zur Nutzung eines Pundit ähnlichen Musters, captionpos=b, label={lst:client-example-ui-authorisation-interface}]{snippets/example-ui-authorisation-2.ts}
 \end{minipage}
+\todo[inline]{Müsste es dann nicht eine \texttt{ProjectPolicy} sein?}
 
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Tom - Thesis"
+%%% End:
