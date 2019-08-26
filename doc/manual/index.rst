@@ -32,6 +32,7 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    :caption: Design Documents
 
    online-platform
+   ast-grammar-design
 
 .. toctree::
    :caption: Appendix

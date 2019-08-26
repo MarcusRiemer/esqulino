@@ -29,10 +29,26 @@
     </style>
   </head>
   <body>
+    <h1>Problem: Width of parent matches summed width of children</h1>
+    <p>
+      <a href="https://stackoverflow.com/questions/54239033">This is by design</a>
+      and therefore not a good way to implement linebreaks. You may click on the
+      <code>goForward()</code> blocks to delete them and see how the parent container
+      shrinks.
+    </p>
+
     <div class="block">
       <div class="terminal">while(</div>
       <div class="block">true</div>
       <div class="terminal">)</div>
+      <div class="line-break"></div>
+      <div class="block forward">
+        <div class="terminal">goForward()</div>
+      </div>
+      <div class="line-break"></div>
+      <div class="block forward">
+        <div class="terminal">goForward()</div>
+      </div>
       <div class="line-break"></div>
       <div class="block forward">
         <div class="terminal">goForward()</div>
