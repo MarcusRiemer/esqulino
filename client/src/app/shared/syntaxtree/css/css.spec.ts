@@ -15,7 +15,7 @@ import { NODE_CONVERTER } from './css.codegenerator'
  */
 function verifyEmitted<T>(fileName: string, transform: (obj: T) => string) {
   const input = require(`./spec/${fileName}.json`);
-  let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
+  let expected = require(`raw-loader!./spec/${fileName}.txt`).default as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);
