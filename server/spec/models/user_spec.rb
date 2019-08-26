@@ -27,4 +27,44 @@ RSpec.describe User, type: :model do
       expect(User.guest.has_role?(:admin)).to eq false
     end
   end
+
+  describe 'promoting any user to admin' do
+    before { create(:user, id: User.guest_id) }
+
+    it 'normal user in development' do
+      expect(user.has_role?(:admin)).to eq false
+
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
+      User.make_user_admin! user.id
+
+      expect(user.has_role?(:admin)).to eq true
+    end
+
+    it 'normal user in production' do
+      expect(user.has_role?(:admin)).to eq false
+
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+      User.make_user_admin! user.id
+
+      expect(user.has_role?(:admin)).to eq true
+    end
+
+    it 'guest user in development' do
+      expect(User.guest.has_role?(:admin)).to eq false
+
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
+      User.make_user_admin! User.guest.id
+
+      expect(User.guest.has_role?(:admin)).to eq true
+    end
+
+    it 'guest user in production' do
+      expect(User.guest.has_role?(:admin)).to eq false
+
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+      expect{ User.make_user_admin! User.guest.id }.to raise_exception(EsqulinoError)
+
+      expect(User.guest.has_role?(:admin)).to eq false
+    end
+  end
 end
