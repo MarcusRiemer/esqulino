@@ -27,15 +27,25 @@ export class UserService {
   public providerList$ = this._serverData.getProviders;
 
   /**
+   * @return The Name of the currently authenticated user
+   */
+  public readonly userDisplayName$ = this.userData$.value.pipe(
+    map(u => u.displayName)
+  )
+
+  /**
+   * @return The ID of the currently authenticated user
+   */
+  public readonly userId$ = this.userData$.value.pipe(
+    map(u => u.userId)
+  );
+
+  /**
    * Instead of relying on roles, the (seldomly used) check for the login state
    * relies on the guest user ID.
    */
-  public readonly isLoggedIn$ = this.userData$.value.pipe(
-    map(u => u.userId !== UserService.GUEST_ID)
-  )
-
-  public readonly userDisplayName$ = this.userData$.value.pipe(
-    map(u => u.displayName)
+  public readonly isLoggedIn$ = this.userId$.pipe(
+    map(id => id !== UserService.GUEST_ID)
   )
 
   public readonly roles$ = this.userData$.value.pipe(
