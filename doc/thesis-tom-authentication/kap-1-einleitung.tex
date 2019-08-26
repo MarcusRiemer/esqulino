@@ -1,7 +1,14 @@
 \section{Einführung}
 \label{sec:introduction}
-Aktuell ist in Blattwerkzeug keine Benutzer-Authentisierung, -Authentifizierung und -Autorisierung implementiert. Dies hat zur Folge, dass  zum jetzigen Zeitpunkt jeder Internet-Nutzer dazu autorisiert ist, jegliche, vom Client angebotenen, Änderungen vorzunehmen. Das Adminpanel ist beispielsweise für jeden Internet-Nutzer, über die Seiten-Navigation, frei zugänglich.
+Aktuell ist in Blattwerkzeug keine Benutzer-Authentisierung, -Authentifizierung und -Autorisierung implementiert. Dies hat zur Folge, dass zum jetzigen Zeitpunkt jeder Internet-Nutzer dazu autorisiert ist, beliebige Anfragen an den Server zu stellen und ohne spezifische Berechtigungs-Überprüfung Serverfunktionen auszuführen. Das Adminpanel ist beispielsweise für jeden Internet-Nutzer, über die Seiten-Navigation, frei zugänglich.
 
-Im Rahmen dieser Thesis soll das Problem der Autorisierung und Authentifizierung gelöst werden. Nach Behandlung der Thesis soll es möglich sein, sich mit einer standardisierten Registrierung oder einem externen Anbieter bei Blattwerkzeug anzumelden. Au{\ss}erdem soll je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt werden. Hierbei sollen die Aktionen serverseitig zum erstellen, bearbeiten und löschen von Projekten und News ebenfalls rollenabhängig sein. Der angemeldete Benutzer mit standard Berechtigung darf beispielsweise ein Projekt erstellen, bearbeiten und löschen. Die Möglichkeit ohne zusätzliche Rolle Projekte anderer Benutzer zu bearbeiten, soll in dem Fall nicht gegeben sein. Desweiteren realisiert werden soll, eine Möglichkeit sein bereits erstelltes Konto mit weiteren E-Mails oder externen Konten zu verknüpfen.
+Im Rahmen dieser Thesis soll das Problem der Autorisierung und Authentifizierung gelöst werden. Nach Fertigstellung der Thesis soll es möglich sein, sich mit einer standardisierten Registrierung oder einem externen Anbieter bei Blattwerkzeug anzumelden. Au{\ss}erdem soll je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt werden. Hierbei sollen die Aktionen serverseitig zum erstellen, bearbeiten und löschen von Projekten und News ebenfalls rollenabhängig sein. Der angemeldete Benutzer mit Standardberechtigung darf beispielsweise ein Projekt erstellen, bearbeiten und löschen. Die Möglichkeit ohne zusätzliche Rolle Projekte anderer Benutzer zu bearbeiten, soll in dem Fall nicht gegeben sein. Desweiteren realisiert werden soll, eine Möglichkeit sein bereits erstelltes Konto mit weiteren E-Mails oder externen Konten zu verknüpfen.
+
+\todo[inline]{Kurze Erläuterung ``externe Anbieter'', Beispiel reicht.}
 
 Die bereits genutzten Technologien von Blattwerkzeug werden in der Sektion \ref{sec:technology} beschrieben. Ebenfalls beschrieben werden in diesem Abschnitt Technologien, die zur Umsetzung der gesetzten Ziele verwendet werden sollten. Die Anforderungen an diese Thesis wurden abstrakt in der Sektion \ref{sec:analyze} vorgestellt und die Implementierung der zuvor festgelegten Anforderungen in Sektion \ref{sec: implementation}. Für das Fazit (Sektion \ref{sec:conclusion}) wurden die erreichten Ziele und die noch zu entwickelnden Erweiterungen jeweils gerafft zusammengefasst.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Tom - Thesis"
+%%% End:

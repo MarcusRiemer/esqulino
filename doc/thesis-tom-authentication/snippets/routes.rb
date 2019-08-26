@@ -10,4 +10,3 @@ scope 'news' do
 	put ':id', controller: 'news', action: :update
 	delete ':id', controller: 'news', action: :destroy
 end
-

@@ -49,6 +49,8 @@ export class AuthDialogComponent implements OnInit {
       console.log(`AuthDialog-Data: ${JSON.stringify(this.data)}`)
       this.message = this.data.message;
       this.type = this.data.message_type || 'error';
+    } else {
+      console.error("Please pass a data object");
     }
   }
 
@@ -56,10 +58,20 @@ export class AuthDialogComponent implements OnInit {
     this.emailContent = true;
   }
 
+  /**
+   * Static method for opening this component as dialog.
+   * AuthDialogComponent.
+   * @param dialog Service to open Material Design modal dialogs.
+   * @param data Passing data to dialog
+   */
   public static showDialog(dialog: MatDialog, data: AuthDialogDataDescription) {
     dialog.open(AuthDialogComponent, { data: data });
   }
 
+  /**
+   * Is signIn dialog opend?
+   * type: signIn | signUp
+   */
   public isSignIn(): boolean {
     return this.data.type === "signIn";
   }

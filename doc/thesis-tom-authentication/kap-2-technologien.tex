@@ -1,11 +1,11 @@
 \section{Technologien}
 \label{sec:technology}
-Im Verlauf dieser Sektion werden die Technologien und deren Verwendungszweck
+Im Verlauf dieser Sektion werden die verwendeten und existierenden Technologien und deren Verwendungszweck
 kurz erläutert.
 
 \subsection{Blattwerkzeug}
 \label{sec:blattwerkzeug}
-Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und SQL Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug die Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit einzusehen. Dennoch ist es dem Nutzer einfach gemacht, mit visuellen Elementen teile der Informatik kennen zu lernen.
+Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und \gls{SQL} Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug die Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit einzusehen. Dadurch wird es möglich, in einer ``richtigen'' Programmiersprache zu entwickeln, ohne sich von Beginn an mit syntaktischen Details beschäftigen zu müssen.
 
 Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutreten. Mit Blattwerkzeug wird Lehrern ein Werkzeug in die Hand gelegt, mit dem der doch sehr Office-lastige Informatik Unterricht erweitert werden kann. Die spielerischen Aspekte von Blattwerkzeug sollen vorallem dazu führen, dass jüngere Menschen ein Interesse an der Informatik entwickeln.
 
@@ -24,6 +24,8 @@ Denn sollten die Daten der Nutzer im Klartext in der Datenbank gespeichert werde
 	\includegraphics[width=\textwidth]{graphics/example-plaintext-password.pdf}
 	\caption{Beispiel einer Infiltrierung bei Klartext Passwort.}
 \end{figure}
+
+\todo[inline]{Vorsicht, der Angriff erlaubt nicht das entschlüsseln des Passworts bei Gmail, es erlaubt nur den Login (sofern das gleiche Passwort verwendet wurde. Vielleicht stattdessen lieber exemplarisch mehrere Anbieter zeigen?}
 
 An diesem Punkt kommt das Hashen von Passwörtern zum Einsatz. Passwort Hashing soll dem Nutzer Sicherheit gewährleisten und es einem Angreifer nicht möglich machen mit erlangten Daten weitere Konten der Nutzer zu infiltrieren. Dabei wird aus einem Passwort ein Hash generiert. Dieser Hash macht es einem unmöglich, das Passwort wiederherzustellen. Jedoch ergibt sich bei gleicher Eingabe, der gleiche Hash. Um ein gehashtes Passwort zu erhalten, muss ein Hashing Algorithmus auf das jeweilige Klartext Passwort angewendet werden.
 
@@ -64,7 +66,7 @@ Salts (Abbildung ~\ref{fig:salted-hash}) sind zufällig generierte Zeichenketten
 
 \subsection{Sessions}
 \label{sec: sessions}
-Das \gls{HTTP} ist ein zustandsloses Protokoll, dass sich keine Informationen der jeweiligen Aufrufe zwischenspeichert. Das hat den Vorteil, dass ohne jegliche Vorbedingung eine vielzahl an Verbrauchern auf eine Anwendung zugreifen kann. Die Zustandslosigkeit ist allerdings dann unpraktisch, wenn Daten eines Benutzer kurzeitig gespeichert werden sollen. Ein Verwendungszweck wäre beispielsweise der Warenkorb, da dieser nur temporär vorhanden sein soll. 
+Das \gls{HTTP} ist ein zustandsloses Protokoll, dass keine Informationen der jeweiligen Aufrufe zwischenspeichert. Das hat den Vorteil, dass ohne jegliche Vorbedingung eine vielzahl an Verbrauchern auf eine Anwendung zugreifen kann. Die Zustandslosigkeit ist allerdings dann unpraktisch, wenn Daten eines Benutzer kurzeitig gespeichert werden sollen. Ein Verwendungszweck wäre beispielsweise der Warenkorb, da dieser nur temporär vorhanden sein soll.
 
 Die Session ist eine serverseitige Daten-Speichermöglichkeit. Dabei wird bei der Anfrage von einem Client an den Server ohne Session-ID eine Session und Session-ID erstellt. Diese Session-ID wird bei der Antwort des Servers mit an den Client ausgeliefert. Ab diesem Punkt wird bei jeder Anfrage vom Client an den Server die Session-ID mit gesendet. Dies kann über einen Cookie oder über die \gls{URI} erfolgen. Aufgrund dessen kann der Server dem Client Daten aus der jeweiligen Session zur Verfügung stellen.
 
@@ -79,12 +81,13 @@ Eine weitere Möglichkeit Daten zwischenzeitig zu speichern sind Cookies. Cookie
 
 \gls{RFC} ist eine Sammlung aus Dokumenten, in denen das Verhalten der Technologien des Internets beschrieben ist. Einige davon gehören zum Standard und werden somit in den meisten Fällen vorausgesetzt. In speziellen Fällen möchte beispielsweise ein Unternehmen eigene Protokolle verwenden, die nicht zum Standard gehören.
 
-Diese Tokens werden zur eindeutigen Identifizierung von Nutzern verwendet und können die Session ersetzen. Dabei ist es bei einem \gls{JWT} nicht vonnöten die Daten auf dem Server zu speichern. Dies hat zur Folge, dass die Pflege des Speichers an diesem Punkt entfällt. Jedoch haben \gls{JWT}s einen gro{\ss}en Nachteil, denn sobald der Server einen \gls{JWT} ausgestellt hat, ist dieser bis zum Ablauf des Tokens gültig. Das hei{\ss}t, sollte ein Server die Berechtigung eines Nutzers nach Ausstellung eines \gls{JWT} ändern, ist diese Änderung erst bei erneutem Erstellen eines \gls{JWT} gültig.
+Diese Tokens werden zur eindeutigen Identifizierung von Nutzern verwendet und können die Session ersetzen. Dabei ist es bei einem \gls{JWT} nicht vorgesehen die Daten auf dem Server zu speichern. Dies hat zur Folge, dass die Pflege des Speichers an diesem Punkt entfällt. Jedoch haben \gls{JWT}s einen gro{\ss}en Nachteil, denn sobald der Server einen \gls{JWT} ausgestellt hat, ist dieser bis zum Ablauf des Tokens gültig. Das hei{\ss}t, sollte ein Server die Berechtigung eines Nutzers nach Ausstellung eines \gls{JWT} ändern, ist diese Änderung erst bei erneutem Erstellen eines \gls{JWT} gültig.
 
 Ein \gls{JWT} besteht aus Header, Payload und Signatur. Dabei ist der Header und die Payload jeweils ein \gls{JSON} Objekt.
 
 \subsubsection{Header}
 \label{sec: jwt_header}
+Der Header beschreibt die 
 
 \begin{description}
 	\leftskip=1em
@@ -133,7 +136,7 @@ Private Claims werden nur innerhalb eines Netzwerkes verwendet. Aus diesem Grund
 \subsubsection{Signatur}
 \label{sec: jwt_signature}
 
-Um die Signatur zu erhalten muss, die Payload und der Header Base64 kodiert werden. Au{\ss}erdem müssen diese beiden kodierten Zeichenfolgen mit einem Punkt als Trennzeichen verknüpft werden. Darauffolgend wird eine Hashfunktion auf das jeweilige Ergebnis mit zusätzlich sicherer Zeichenfolge als Parameter angewandt. Da diese sichere Zeichenfolge, auch Private Key genannt, nur auf dem Server hinterlegt ist, ist es dem Client zwar möglich den \gls{JWT} zu verändern, ihn jedoch mit korrekter Signatur zu versehen nicht.
+Um die Signatur zu erhalten muss, die Payload und der Header Base64 kodiert werden. Au{\ss}erdem müssen diese beiden kodierten Zeichenfolgen mit einem Punkt als Trennzeichen verknüpft werden. Darauffolgend wird eine Hashfunktion auf das jeweilige Ergebnis mit zusätzlich sicherer Zeichenfolge als Parameter angewandt. Da diese sichere Zeichenfolge, auch Private Key genannt, nur auf dem Server hinterlegt ist, ist es dem Client zwar möglich den \gls{JWT} zu verändern, ihn jedoch mit korrekter Signatur zu versehen nicht. Infolgedessen erkennt der Server eine Manipulation des übermittelten \gls{JWT}.
 
 \subsubsection{Zusammengesetzes Token}
 \label{sec: jwt_result}
@@ -148,7 +151,7 @@ Schlussendlich ergibt sich der \gls{JWT} aus kodiertem Header, kodierten Payload
 
 \subsection{Ruby on Rails}
 \label{sec: rails}
-Ruby on Rails ist ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das \gls{MVC} Muster und stellt bereits ein sehr umfangreiches \gls{CLI} zur Verfügung. Mittels des generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Au{/ss}erdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum Versenden von Mails zur Verfügung. Dabei kann der Inhalt der E-Mail im Textformat oder als \gls{HTML} versendet werden. Einer der wesentlichen Vorteile von Ruby on Rails ist jedoch die Datenbankanbindung. Hierbei bietet Rails einen nachhaltigen und rücksichtsvollen Umgang mit der Datenbank, zum Beispiel die Migrationen. Migrationen erlauben, die Datenbank, ohne explizite SQL-Statements, zu verändern. Zusätzlich erleichtern Migrationen die Implementierung einer Datenbankstruktur auf einem anderen System.
+Ruby on Rails ist ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das \gls{MVC} Muster und stellt bereits ein sehr umfangreiches \gls{CLI} zur Verfügung. Das generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Au{\ss}erdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum Versenden von Mails zur Verfügung. Dabei kann der Inhalt der E-Mail im Textformat oder als \gls{HTML} versendet werden. Einer der wesentlichen Vorteile von Ruby on Rails ist jedoch\todo{``Jedoch'' in Abgrenzung zu was?} die Datenbankanbindung. Hierbei bietet Rails einen nachhaltigen und rücksichtsvollen Umgang mit der Datenbank, zum Beispiel die Migrationen. Migrationen erlauben, die Datenbank, ohne explizite SQL-Statements, zu verändern. Zusätzlich erleichtern Migrationen die Implementierung einer Datenbankstruktur auf einem anderen System.
 
 \subsubsection{Routen}
 \label{sec: routen}
@@ -162,13 +165,14 @@ Die Routen in Rails verweisen auf einen Controller und auf eine Funktion innerha
 	\lstinputlisting[language=Ruby, style=CodeView, caption=Beispiel einiger Routen mit scope, captionpos=b, label={lst:routes_scopes}]{snippets/routes.rb}
 \end{minipage}
 
+
 \subsubsection{Controller}
 \label{sec: rails_controller}
-Der Controller dient hierbei zur Kapselung von bestimmten Prozessen. Jede Route verweist in irgendeiner Weise auf eine Controller Funktion. In der jeweiligen Controller Funktion wird dann meistens mit einem Model interagiert. Es wird beispielsweise eine Benutzerberechtigung abgefragt und individuell auf die Berechtigung reagiert. Um auf die jeweilige Berechtigung zu reagieren, gibt es mehrere Möglichkeiten. Eine der Möglichkeiten wäre, direkt ein View Template auf dem Server zu rendern und an den Client auszuliefern. Eine andere Möglichkeit wäre ein \gls{JSON} Objekt zurück zu geben und darauf mit dem Client zu agieren.
+Der Controller dient hierbei zur Kapselung von bestimmten Prozessen. Jede Route verweist in irgendeiner Weise auf eine Controllerfunktion. In der jeweiligen Controllerfunktion wird dann meistens mit einem Model interagiert. Es wird beispielsweise eine Benutzerberechtigung abgefragt und individuell auf die Berechtigung reagiert. Um auf die jeweilige Berechtigung zu reagieren, gibt es mehrere Möglichkeiten. Eine der Möglichkeiten wäre, direkt ein View Template auf dem Server zu rendern und an den Client auszuliefern. Eine andere Möglichkeit wäre ein \gls{JSON} Objekt zurück zu geben und darauf mit dem Client zu agieren.
 
 \subsubsection{Model}
 \label{sec: rails_model}
-Das Model in Rails stellt jeweils eine Datenbanktabelle dar. Die Attribute des Models sind die entsprechenden Spalten der Datenbanktabelle. Jeweilige Datenbankeinträge, die über das Model erstellt werden, können mittels Validatoren auf ihre Gültigkeit geprüft werden. Diese Validatoren werden innerhalb des Models festgelegt und auf ein Attribut des Models zugewiesen. Rails bietet dabei bereits verfügbare Validatoren, zum Beispiel \enquote{presence: true}. Dieser Validator sorgt für das Vorhandensein eines Wertes ungleich \textit{nil}. Jedes Model kann zusätzliche Funktionen beinhalten, die direkt auf den jeweiligen Datenbankeintrag angewandt werden können. Ebenso bietet Rails die Möglichkeit die Beziehungen zwischen Datenbanktabellen direkt in den Modellen festzulegen.
+Das Model in Rails bildet jeweils eine Datenbanktabelle ab. Die Attribute des Models sind die entsprechenden Spalten der Datenbanktabelle. Jeweilige Datenbankeinträge, die über das Model erstellt werden, können mittels Validatoren auf ihre Gültigkeit geprüft werden. Diese Validatoren werden innerhalb des Models festgelegt und auf ein Attribut des Models zugewiesen. Rails bietet dabei bereits verfügbare Validatoren, zum Beispiel \enquote{presence: true}. Dieser Validator sorgt für das Vorhandensein eines Wertes ungleich \textit{nil}. Jedes Model kann zusätzliche Funktionen beinhalten, die direkt auf den jeweiligen Datenbankeintrag angewandt werden können. Ebenso bietet Rails die Möglichkeit die Beziehungen zwischen Datenbanktabellen direkt in den Modellen festzulegen.
 
 \subsubsection{View}
 \label{sec: rails_view}
@@ -184,14 +188,17 @@ Letzendlich wird über die Route auf den jeweiligen Controller zugegriffen. Dies
 	\label{fig:rails-mvc}
 \end{figure}
 
+\todo[inline]{Besser: ``BlattWerkzeug'' durch ``Routing'' ersetzen und dann den ``Rückweg'' nicht mehr dadurch führen.}
+
 \subsection{Angular}
 \label{sec: angular}
-Angular ist ein TypeScript basiertes Front-End Webframework, dass in vielen Fällen für \gls{SPA} verwendet wird. \gls{SPA}s laden ihren Inhalt lediglich in ein einziges \gls{HTML} Dokument. Der Inhalt dieses \gls{HTML} Dokumentes wird dynamisch, von beispielsweise einem Framework wie Angular, verändert. Der wesentliche Vorteil von Angular sind die klaren Entwurfsmuster. Jede Komponente in Angular hat im wesentlichen die gleiche Struktur. Dies hat zur Folge, dass Angular eine sehr gute Codekonsistenz bietet.
-
+Angular ist ein TypeScript basierendes Front-End Webframework, dass für \gls{SPA} verwendet wird. \gls{SPA}s laden ihren Inhalt lediglich in ein einziges \gls{HTML} Dokument\todo{Abgrenzen zu klassischen Webseiten mit Links}. Der Inhalt dieses \gls{HTML} Dokumentes wird dynamisch, von beispielsweise einem Framework wie Angular, verändert. Der wesentliche Vorteil von Angular sind die klaren Entwurfsmuster. Jede Komponente in Angular hat im wesentlichen die gleiche Struktur. Dies hat zur Folge, dass Angular eine sehr gute Codekonsistenz bietet.
 
 \subsubsection{Component}
 \label{sec: ang-component}
 Komponenten in Angular bieten die Möglichkeit \gls{HTML}, \gls{CSS} und TypeScript zu kapseln. Das bedeutet, dass jede Komponente unabhängig von einer anderen Komponente arbeiten kann.
+
+\todo[inline]{Fehlt: Ein- und Ausgaben, wird im nächsten Absatz etwas merkürdig vorweggenommen. Ruhig mit sehr kleinem Codebeispiel wenn dir das bei der Erklärung hilft.}
 
 \subsubsection{Services}
 \label{sec: ang-service}
@@ -213,3 +220,8 @@ In Blattwerkzeug wird genau dieser umfangreiche Vorgang von Omniauth übernommen
 	\caption{oAuth2 verfahren}
 	\label{fig:oauth2}
 \end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Tom - Thesis"
+%%% End:
