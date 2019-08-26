@@ -1,5 +1,5 @@
 import { SideNavService } from './../../shared/side-nav.service';
-import { Component, AfterViewChecked } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import { NavItem } from '../../shared/nav-interfaces';
 
@@ -30,12 +30,12 @@ export const userSettings: NavItem[] = [
 @Component({
   templateUrl: './templates/settings-index.html'
 })
-export class UserSettingsComponent implements AfterViewChecked {
+export class UserSettingsComponent implements OnInit {
   constructor(
     private _sideNav: SideNavService
-  ) {}
+  ) { }
 
-  ngAfterViewChecked(): void {
+  ngOnInit(): void {
     this._sideNav.newSideNav(userSettings)
   }
 }
