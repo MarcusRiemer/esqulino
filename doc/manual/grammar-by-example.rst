@@ -127,15 +127,3 @@ Valid children of a node are defined via the ``children`` directive, a name and 
       prop "value" { string }
     }
   }
-
-Example Grammar: Dynamic ``XML``
---------------------------------
-
-.. literalinclude:: ./generated/dxml.grammar
-   :language: javascript
-
-Example Grammar: ``SQL``
-------------------------
-
-.. literalinclude:: ./generated/sql.grammar
-   :language: javascript

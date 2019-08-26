@@ -8,6 +8,7 @@ concise_attributes:
   value_before_type_cast: Trucklino Program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
+  value_before_type_cast: trucklino-program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": {"typeName": "program", "languageName": "trucklino_program"},
