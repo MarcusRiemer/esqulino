@@ -1,46 +1,3 @@
-\begin{filecontents}{\jobname.bib}
-	@BOOK{Hoelscher1971,
-		AUTHOR = {Hölscher, Klaus},
-		YEAR = {1971},
-		TITLE = {Eigenfertigung oder Fremdbezug, Entscheidungsmodelle für den Wirtschaftlichkeitsvergleich - },
-		EDITION = {},
-		ISBN = {978-3-409-32692-6},
-		PUBLISHER = {Betriebswirtschaftlicher Verlag},
-		ADDRESS = {Wiesbaden},
-	}
-	
-	@BOOK{Friedl2010,
-		AUTHOR = {Friedl, Gunther AND Hofmann, Christian AND Pedell, Burkhard},
-		YEAR = {2010},
-		TITLE = {Kostenrechnung - },
-		EDITION = {1. Aufl.},
-		ISBN = {978-3-800-63595-5},
-		PUBLISHER = {Vahlen},
-		ADDRESS = {München},
-	}
-	
-	@Article{KoRePrax1997,
-		author = {Männel, Wolfgang},
-		title = {Make or Buy Entscheidungen},
-		journal = {Kostenrechnungspraxis - },
-		year = {1997},
-		volume = {41. Jg.},
-		number = {Nr. 6.},
-		pages = {S. 307- 311},
-	}
-	
-	@Article{KoRePrax1996,
-		author = {Männel, Wolfgang},
-		title = {Make or Buy Entscheidungen},
-		journal = {Kostenrechnungspraxis - },
-		year = {1996},
-		volume = {40. Jg.},
-		number = {Nr. 3},
-		pages = {148- 150},
-	}
-\end{filecontents}
-
-
 \documentclass[paper=a4,fontsize=11pt,parskip=half]{scrartcl}
 
 
@@ -64,7 +21,7 @@
 \usepackage{subcaption}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
-\usepackage{biblatex}
+\usepackage[backend=biber]{biblatex}
 
 \hypersetup{
 	colorlinks=true,% make the links colored
@@ -202,9 +159,10 @@
 	\input{kap-4-implementierung}
 	\clearpage
 	\input{kap-5-fazit}
-	\clearpage
+	\clearpage 
 
 	\section{Literaturverzeichnis}
+	\nocite{*}
 	\printbibliography
 	
 	\clearpage

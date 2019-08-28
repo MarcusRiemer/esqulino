@@ -7,7 +7,7 @@ kurz erläutert.
 \label{sec:blattwerkzeug}
 Blattwerkzeug ist ein quelloffenes Projekt, dass Informatik-Interessierten das Programmieren von \gls{HTML} Grundgerüsten und \gls{SQL} Statements per \enquote{drag and drop} näher bringen kann. Dabei versteckt Blattwerkzeug die Syntax nicht vor dem Nutzer, sondern gibt ihm die Möglichkeit diesen gleich mit einzusehen. Dadurch wird es möglich, in einer ``richtigen'' Programmiersprache zu entwickeln, ohne sich von Beginn an mit syntaktischen Details beschäftigen zu müssen.
 
-Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutreten. Mit Blattwerkzeug wird Lehrern ein Werkzeug in die Hand gelegt, mit dem der doch sehr Office-lastige Informatik Unterricht erweitert werden kann. Die spielerischen Aspekte von Blattwerkzeug sollen vorallem dazu führen, dass jüngere Menschen ein Interesse an der Informatik entwickeln.
+Mit Blattwerkzeug wird Lehrern ein Werkzeug an die Hand gegeben, mit dem der Informatik Unterricht etwas einfach um Programmiersprachen erweitert werden kann. Die spielerischen Aspekte von Blattwerkzeug sollen vorallem dazu führen, dass jüngere Menschen ein Interesse an der Informatik entwickeln.
 
 \begin{figure}[h]
 	\includegraphics[scale=0.6]{graphics/blattwerkzeug.png}
@@ -19,35 +19,39 @@ Dabei hat es sich Blattwerkzeug vor allem als Aufgabe gemacht an Schulen aufzutr
 Sobald eine Software mit Nutzerdaten geführt wird, ergibt sich das Problem des Speicherns der Passwörter der jeweiligen Nutzer.
 Denn sollten die Daten der Nutzer im Klartext in der Datenbank gespeichert werden und ein Angreifer erlangt Zugriff auf die Datenbank, so ist es für ihn ein leichtes weitere Konten der Nutzer zu infiltrieren. Der Grund dafür sind die anwendungsübergreifenden, vom Nutzer grö{\ss}tenteils identischen, Passwörter.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{graphics/example-plaintext-password.pdf}
-	\caption{Beispiel einer Infiltrierung bei Klartext Passwort.}
-\end{figure}
 
-\todo[inline]{Vorsicht, der Angriff erlaubt nicht das entschlüsseln des Passworts bei Gmail, es erlaubt nur den Login (sofern das gleiche Passwort verwendet wurde. Vielleicht stattdessen lieber exemplarisch mehrere Anbieter zeigen?}
+Beispiel:
+\begin{enumerate}
+	\item Lisa registriert sich mit der E-Mail \enquote{lisa@gmail.com} und dem Passwort \enquote{12345678} bei Amazon.
+	\item Amazon verschlüsselt das von Lisa angegebene Passwort.
+	\item Lisa registriert sich ebenfalls mit der E-Mail \enquote{lisa@gmail.com} und dem Passwort \enquote{12345678} bei Blattwerkzeug.
+	\item Blattwerkzeug speichert das von Lisa angegebene Passwort, im Klartext.
+	\item Ein Angreifer erlangt Zugriff auf die Datenbank von Blattwerkzeug.
+	\item Die vom Angreifer erlangten Daten werden auf weiteren Anwendungen getestet.
+	\item Der Angreifer erlangt durch das in Blattwerkzeug im Klartext gespeicherte Passwort ebenfalls Zugriff auf das Amazon Konto von Lisa.
+\end{enumerate}
 
 An diesem Punkt kommt das Hashen von Passwörtern zum Einsatz. Passwort Hashing soll dem Nutzer Sicherheit gewährleisten und es einem Angreifer nicht möglich machen mit erlangten Daten weitere Konten der Nutzer zu infiltrieren. Dabei wird aus einem Passwort ein Hash generiert. Dieser Hash macht es einem unmöglich, das Passwort wiederherzustellen. Jedoch ergibt sich bei gleicher Eingabe, der gleiche Hash. Um ein gehashtes Passwort zu erhalten, muss ein Hashing Algorithmus auf das jeweilige Klartext Passwort angewendet werden.
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\textwidth]{graphics/unhashed_table.pdf}
 	\caption{Tabelle mit ungehashten Passwörtern}
 	\label{fig:unhashed_table}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\textwidth]{graphics/md5_table.pdf}
 	\caption{Tabelle mit MD5 gehashten Passwörtern}
 	\label{fig:md5_hashed_table}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\textwidth]{graphics/salted_table.pdf}
 	\caption{Tabelle mit Salting Hashes}
 	\label{fig:salted_table}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\textwidth]{graphics/rainbowtable.pdf}
 	\caption{Beispiel einer Rainbowtable.}
 	\label{fig:rainbowtable}
@@ -55,14 +59,15 @@ An diesem Punkt kommt das Hashen von Passwörtern zum Einsatz. Passwort Hashing 
 
 Mittlerweile gibt es eine vielzahl an Hashfunktionen, von denen manche als nicht mehr sicher gelten. Der Grund dafür sind Rainbowtables in denen Hashes mit dazugehörigem Klartext Passwort (Abbildung \ref{fig:unhashed_table}) stehen. Das Nutzen einer nicht sicheren Hashfunktion stellt ein Sicherheitsrisiko dar, da die Möglichkeit besteht, das gehashte Passwort mit einer Rainbowtable (Abbildung \ref{fig:rainbowtable}) abzugleichen und dabei das jeweilige Klartext Passwort zu erhalten. Aus diesem Grund werden MD5 (Abbildung \ref{fig:md5_hashed_table}) und SHA zwei der bekanntesten Hashfunktionen, seit geraumer Zeit nicht mehr zum Passwort hashen verwendet werden. Ein Beispiel für eine derzeitig nutzbare Hashfunktion ist bcrypt. Bcrypt bietet den Vorteil des Integrierten Saltings. (Abbildung \ref{fig:salted_table})
 
-Salts (Abbildung ~\ref{fig:salted-hash}) sind zufällig generierte Zeichenketten, die dem Klartext-Passwort hinzugefügt werden. Der zusammengesetzte String wird mittels Hashfunktion verschlüsselt.
-
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=.7\textwidth]{graphics/salting.pdf}
 	\caption{Hashfunktion auf Klartext und Salt angewandt.}
 	\label{fig:salted-hash}
 \end{figure}
+
+Salts (Abbildung ~\ref{fig:salted-hash}) sind zufällig generierte Zeichenketten, die dem Klartext-Passwort hinzugefügt werden. Der zusammengesetzte String wird mittels Hashfunktion verschlüsselt.
+
 
 \subsection{Sessions}
 \label{sec: sessions}
@@ -87,7 +92,7 @@ Ein \gls{JWT} besteht aus Header, Payload und Signatur. Dabei ist der Header und
 
 \subsubsection{Header}
 \label{sec: jwt_header}
-Der Header beschreibt die 
+Der Header beschreibt die Verschlüsselungsmethode und den Token-Typ.
 
 \begin{description}
 	\leftskip=1em
@@ -151,7 +156,7 @@ Schlussendlich ergibt sich der \gls{JWT} aus kodiertem Header, kodierten Payload
 
 \subsection{Ruby on Rails}
 \label{sec: rails}
-Ruby on Rails ist ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das \gls{MVC} Muster und stellt bereits ein sehr umfangreiches \gls{CLI} zur Verfügung. Das generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Au{\ss}erdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum Versenden von Mails zur Verfügung. Dabei kann der Inhalt der E-Mail im Textformat oder als \gls{HTML} versendet werden. Einer der wesentlichen Vorteile von Ruby on Rails ist jedoch\todo{``Jedoch'' in Abgrenzung zu was?} die Datenbankanbindung. Hierbei bietet Rails einen nachhaltigen und rücksichtsvollen Umgang mit der Datenbank, zum Beispiel die Migrationen. Migrationen erlauben, die Datenbank, ohne explizite SQL-Statements, zu verändern. Zusätzlich erleichtern Migrationen die Implementierung einer Datenbankstruktur auf einem anderen System.
+Ruby on Rails ist ein quelloffenes Webframework für die Programmiersprache Ruby. Das Webframework nutzt das \gls{MVC} Muster und stellt bereits ein sehr umfangreiches \gls{CLI} zur Verfügung. Das generate Werkzeugs kann beispielsweise Model, View und Controller erstellt werden. Jeder dieser Komponenten wird automatisch in die erstellte Rails Anwendung eingebunden. Au{\ss}erdem stellt Rails eine umfangreiche Test-Architektur und einen Service zum Versenden von Mails zur Verfügung. Dabei kann der Inhalt der E-Mail im Textformat oder als \gls{HTML} versendet werden. Einer der wesentlichen Vorteile von Ruby on Rails ist die Datenbankanbindung. Hierbei bietet Rails einen nachhaltigen und rücksichtsvollen Umgang mit der Datenbank, zum Beispiel die Migrationen. Migrationen erlauben, die Datenbank, ohne explizite SQL-Statements, zu verändern. Zusätzlich erleichtern Migrationen die Implementierung einer Datenbankstruktur auf einem anderen System.
 
 \subsubsection{Routen}
 \label{sec: routen}
@@ -188,21 +193,23 @@ Letzendlich wird über die Route auf den jeweiligen Controller zugegriffen. Dies
 	\label{fig:rails-mvc}
 \end{figure}
 
-\todo[inline]{Besser: ``BlattWerkzeug'' durch ``Routing'' ersetzen und dann den ``Rückweg'' nicht mehr dadurch führen.}
-
 \subsection{Angular}
 \label{sec: angular}
-Angular ist ein TypeScript basierendes Front-End Webframework, dass für \gls{SPA} verwendet wird. \gls{SPA}s laden ihren Inhalt lediglich in ein einziges \gls{HTML} Dokument\todo{Abgrenzen zu klassischen Webseiten mit Links}. Der Inhalt dieses \gls{HTML} Dokumentes wird dynamisch, von beispielsweise einem Framework wie Angular, verändert. Der wesentliche Vorteil von Angular sind die klaren Entwurfsmuster. Jede Komponente in Angular hat im wesentlichen die gleiche Struktur. Dies hat zur Folge, dass Angular eine sehr gute Codekonsistenz bietet.
+Angular ist ein TypeScript basierendes Front-End Webframework, das für \gls{SPA} verwendet wird. \gls{SPA}s bestehen aus einem einzigen \gls{HTML} Dokument und der Inhalt wird dynamisch nachgeladen. Der Unterschied zwischen klassischen Webseiten und \gls{SPA} besteht darin, dass klassiche Webseiten im Gegensatz zu \gls{SPA} für jede aufgerufene \gls{URL} ein \gls{HTML} Dokument rendern. 
+
+Der wesentliche Vorteil von Angular sind die klaren Entwurfsmuster. Jede Komponente in Angular hat im wesentlichen die gleiche Struktur. Dies hat zur Folge, dass Angular eine sehr gute Codekonsistenz bietet.
 
 \subsubsection{Component}
 \label{sec: ang-component}
-Komponenten in Angular bieten die Möglichkeit \gls{HTML}, \gls{CSS} und TypeScript zu kapseln. Das bedeutet, dass jede Komponente unabhängig von einer anderen Komponente arbeiten kann.
+Komponenten in Angular bieten die Möglichkeit \gls{HTML}, \gls{CSS} und TypeScript zu kapseln. Das bedeutet, dass jede Komponente unabhängig von einer anderen Komponente arbeiten kann. Für eine Interaktion zwischen den Komponenten, stellt Angular die Option der Eingabe- und Ausgabebindung bereit (Listing \ref{lst:component_interaction}). 
 
-\todo[inline]{Fehlt: Ein- und Ausgaben, wird im nächsten Absatz etwas merkürdig vorweggenommen. Ruhig mit sehr kleinem Codebeispiel wenn dir das bei der Erklärung hilft.}
+\begin{minipage}{\linewidth}
+	\lstinputlisting[language=HTML, style=CodeView, caption=Komponente mit Eingabe- und Ausgabebindung, captionpos=b, label={lst:component_interaction}]{snippets/component-interaction.html}
+\end{minipage}
 
 \subsubsection{Services}
 \label{sec: ang-service}
-Zur Kommunikation mit einem Server und/oder zum Datenaustausch zwischen unterschiedlichen Komponenten wird meistens ein Service verwendet. Bei einem Datenaustausch zwischen Eltern- und Kind-Komponente ist es jedoch einfacher dies mittels der Kind-Komponente durchzuführen. Services werden bei dem Laden der Module instanziiert und dem Konstruktor der Komponente als instanziiertes Objekt übergeben.
+Zur Kommunikation mit einem Server und/oder zum Datenaustausch zwischen unterschiedlichen Komponenten wird meistens ein Service verwendet. Bei einem Datenaustausch zwischen Eltern- und Kind-Komponente ist es jedoch einfacher dies mittels der Ein- und Ausgabebindung (Listing \ref{lst:component_interaction}) durchzuführen. Services werden bei dem Laden der Module instanziiert und dem Konstruktor der Komponente als instanziiertes Objekt übergeben.
 
 \subsubsection{Module}
 \label{sec: ang-modul}
