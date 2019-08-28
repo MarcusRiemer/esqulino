@@ -63,12 +63,11 @@ Die Anmeldung mittels oAuth2 oder Passwort wurde mit Omniauth ermöglicht. Hierb
 	\lstinputlisting[language=Ruby, style=CodeView, basicstyle=\scriptsize, caption=Zu Omniauth hinzugefügte Provider, captionpos=b, label={lst:added_providers}]{snippets/omniauth-initializer.rb}
 \end{minipage}
 
-\todo[inline]{Listing läuft rechts raus}
 
 Bei der Erstellung des User und des Identity Models wurde zuerst diskutiert, welche Attribute die jeweiligen Models haben sollten. Hierbei steht das Identity Model für alle hinzugefügten Authentifikations-Möglichkeiten eines Benutzers. Dabei wurde darauf geachtet, welche Attribute später dem Client zur Verfügung gestellt und welche für spätere Controller Funktionen benötigt werden.
 
 \subsubsection*{Attribute der identities Tabelle}
-Die nachfolgenden Beschreibungen der Attribute beziehen sich auf die identities\todo{Codebezeichner} Tabelle, welche in Abbildung \ref{fig:server-users-identities} dargestellt wird.
+Die nachfolgenden Beschreibungen der Attribute beziehen sich auf die \texttt{identities} Tabelle, welche in Abbildung \ref{fig:server-users-identities} dargestellt wird.
 \begin{description}
 	\item[uid]\hfill\\
 	Die uid ist ein String, der zur eindeutigen Identifikation des Kontos eines Providers dient. Dabei kann die uid zum Beispiel eine Zahl oder eine E-Mail sein. Mit der uid wird festgestellt, ob ein bestimmtes Konto bereits mit einem Benutzer verknüpft ist.
@@ -113,13 +112,10 @@ Bei einer Anmeldung mittels \gls{oAuth2} wurde bei dem Provider, über den sich 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{graphics/sign-in-oauth2.pdf}
+	\includegraphics[width=\textwidth]{graphics/sign-in-oauth2.pdf}
 	\caption{Ablauf einer Anmeldung mittels \gls{oAuth2}}
 	\label{fig:server-sign-in-oauth}
 \end{figure}
-
-\todo[inline]{Warum 2x ``Client'' und 2x ``BlattWerkzeug''?}
-
 
 \subsubsection{Anmeldung mittels Passwort}
 \label{sec:sever-sign-in-password}
@@ -140,7 +136,7 @@ Omniauth Identity bietet die Möglichkeit bei der Registrierung auf eine Funktio
 	Bevor eine Anmeldung mittels Passwort stattfinden kann, wurde eine Registrierungs-Möglichkeit hinzugefügt. Die \enquote{register} Funktion arbeitet ähnlich, wie die callback (Sektion \ref{sec:sever-sign-in-oauth2}) Funktion. Der Unterschied besteht darin, dass die register Funktion einen simulierten Hash in der Struktur Omniauths erhält und mit diesem versucht, eine neue Identität zu erstellen. Bei dem Erstellen einer neuen Password-Identität wird ein Verifizierungs-Token generiert. Dieser Verifizierungs-Token ist eine \gls{UUID} und wird zur Verzifizierung der Identität genutzt. Nachdem eine Identität erstellt wurde, sendet der Server mithilfe der Basisklasse ActionMailer eine Bestätigungsmail. Diese Bestätigungsmail verhindert das Registrieren von willkürlichen E-Mail Adressen. Zudem wird  mit der Bestätigungsmail eine E-Mail Adresse auf ihre Existens geprüft. Die Bestätigungsmail besteht aus einem Hyperlink zu einer \gls{URL} Blattwerkzeugs in der der Verifizierungs-Token enthalten ist. Sobald dieser \gls{URL} besucht wird, wird die Indentität als bestätigt gekennzeichnet. Dies erfolgt durch das Setzen des confirmed Feldes im JSON Blob Attribut own\_data.
 
 	\item[Verifizierungsmail nicht erhalten]\hfill\\
-	Da es vorkommen kann, dass eine Verifizierungsmail nicht an der angegebene E-Mail ankommt, wurde hierfür eine Funktion im IdentitiesController\todo{Codebezeichner} geschrieben. Diese Funktion prüft die übermittelte E-Mail auf ihre Existens in der Blattwerkzeug-Datenbank und ob diese bereits verifiziert wurde. Sollte diese E-Mail nicht verifiziert sein, wird eine neue Verifizierungsmail versendet. Gleichzeitig wird jedoch auch eine Wartezeit von zwei Minuten im own\_data\todo{Codebezeichner} Attribut festgelegt. Die Wartezeit zum Versenden einer neuen Verifizierungsmail soll verhindern, dass eine E-Mail Adresse mit Verifizierungsmails überhäuft werden kann.
+	Da es vorkommen kann, dass eine Verifizierungsmail nicht an der angegebene E-Mail ankommt, wurde hierfür eine Funktion im \texttt{IdentitiesController} geschrieben. Diese Funktion prüft die übermittelte E-Mail auf ihre Existens in der Blattwerkzeug-Datenbank und ob diese bereits verifiziert wurde. Sollte diese E-Mail nicht verifiziert sein, wird eine neue Verifizierungsmail versendet. Gleichzeitig wird jedoch auch eine Wartezeit von zwei Minuten im \texttt{own\_data} Attribut festgelegt. Die Wartezeit zum Versenden einer neuen Verifizierungsmail soll verhindern, dass eine E-Mail Adresse mit Verifizierungsmails überhäuft werden kann.
 
 	\item[Anmeldung mit verifizierter E-Mail]\hfill\\
 	Ist eine Identität mit einem Passwort bereits vorhanden, kann sich mit E-Mail und Passwort angemeldet werden. Bei der Anmeldung wird das Passwort zur angegebenen E-Mail überprüft. Zusätzlich wird geprüft, ob die E-Mail verifiziert wurde. Sollten diese Sicherheitsabfragen erfolgreich durchlaufen sein, wird wie bei der Anmeldung mittels \gls{oAuth2} ein \gls{JWT} ausgestellt, in dem die Benutzerinformationen gespeichert werden.
@@ -182,11 +178,11 @@ Da Blattwerkzeug bereits eine Passwortabfrage eingebaut hatte (Listing \ref{lst:
 	\lstinputlisting[language=Ruby, caption=Controller-Funktion mit Integrierung Pundits, style=CodeView, captionpos=b, label={lst:controller_function_after}]{snippets/controller_authorisation_after.rb}
 \end{minipage}
 
-\subsubsection{may\_perform\todo{Lieber abstrakte Bezeichnung als Funktionsnamen}}
+\subsubsection{Überprüfung von clientseitigen Bedienelementen}
 \label{sec:server-may-perform}
 Sobald man sich mit den Rollen beschäftigt, stellte sich die Frage, wie die Bedienelemente in Abhängigkeit von den Rollen Clientseitig angezeigt werden sollten. Hierbei ergab sich, ein eigenes Pundit (Sektion \ref{sec: pundit}) ähnliches Mustur zu implementieren oder den Server bei jedem Bedienelement zu fragen, ob der aktuelle Benutzer Zugriff auf das Bedienelement hat. In der Thesis wurde sich für den zweiten Weg entschieden, da bei einer zusätzlichen clientseitigen Überprüfung, Client und Server gepflegt werden müssten. Sollte es vorkommen, dass die Pflege des serverseitigen Teils vergessen wurde, stellt dieses ein Sicherheitsrisiko dar. Clientseitige Anwendungen werden auf dem Endgerät eines Benutzers ausgeführt. Infolgedessen, besteht die Möglichkeit, die Anwendung zu manipulieren.
 
-Die serverseitige Überprüfung der Bedienelemente wurde mittels der may\_perform Funktion realisiert. Diese erhält vom Client eine Liste an Daten, in der jedes Element ein Bedienelement darstellt. In der may\_perform\todo{Codebezeichner} Funktion wird jedes Element der Liste durchlaufen und auf das Zugriffsrecht des aktuellen Benutzers geprüft. Dies geschieht in dem aus den übermittelten Daten eine Instanz einer Policy erstellt wird, die zu der jeweiligen Ressource, beispielsweise der Projekte (Listing \ref{lst:project_policy}), gehört. Hierbei wird die Funktion, die auf ihren Zugriff geprüft werden soll, ebenfalls vom Client mit an den Server gesendet. Diese wird letztendlich auf der erstellten Instanz ausgeführt. Das Ergebnis der aufgerufenen Policy Funktion wird in einem Array gespeichert und sobald die Liste durchlaufen wurde, an den Client weiter übermittelt.
+Die serverseitige Überprüfung der Bedienelemente wurde mittels der may\_perform Funktion realisiert. Diese erhält vom Client eine Liste an Daten, in der jedes Element ein Bedienelement darstellt. In der \texttt{may\_perform} Funktion wird jedes Element der Liste durchlaufen und auf das Zugriffsrecht des aktuellen Benutzers geprüft. Dies geschieht in dem aus den übermittelten Daten eine Instanz einer Policy erstellt wird, die zu der jeweiligen Ressource, beispielsweise der Projekte (Listing \ref{lst:project_policy}), gehört. Hierbei wird die Funktion, die auf ihren Zugriff geprüft werden soll, ebenfalls vom Client mit an den Server gesendet. Diese wird letztendlich auf der erstellten Instanz ausgeführt. Das Ergebnis der aufgerufenen Policy Funktion wird in einem Array gespeichert und sobald die Liste durchlaufen wurde, an den Client weiter übermittelt.
 
 \subsubsection{Sicherheit und Login}
 \label{sec:server-account-settings}
@@ -196,17 +192,16 @@ Da ein Benutzer die Möglichkeit haben soll seinen Account zu verwalten und Änd
 	\item[Konto verknüpfen]\hfill\\
 	Die callback Funktion im Authcontroller enthält eine Abfrage zur Überprüfung eines angemeldeten Benutzers. Bei einem angemeldeten Benutzer wird die zuerstellende Identität dem angemeldeten Account hinzugefügt. Dies wird mittels eines Fremdschlüssels, der auf die id eines Benutzers referenziert, realisiert.
 	\item[Identität löschen]\hfill\\
-	Damit eine Identität\todo{Konto oder Identität?} gelöscht werden kann, müssen zuerst einige Sicherheitsabfragen durchlaufen werden. Die E-Mail der zu löschenden Identität, darf nicht als derzeitige primäre E-Mail fungieren. Infolge dessen kann bei einem Fremdzugriff auf den Account, keine Übernahme des Benutzers erfolgen. Ebenfalls muss eine weitere bestätigte Identität vorhanden sein. Demnach ist es nicht möglich, jegliche Authentifizierungs Möglichkeiten eines Benutzers zu entfernen. Um zu verhindern, dass mit verfälschten Daten fremde Identitäten gelöscht werden, muss die zu löschende Identität zwangsläufig dem angemeldeten Benutzer angehören.
+	Damit eine Identität gelöscht werden kann, müssen zuerst einige Sicherheitsabfragen durchlaufen werden. Die E-Mail der zu löschenden Identität, darf nicht als derzeitige primäre E-Mail fungieren. Infolge dessen kann bei einem Fremdzugriff auf den Account, keine Übernahme des Benutzers erfolgen. Ebenfalls muss eine weitere bestätigte Identität vorhanden sein. Demnach ist es nicht möglich, jegliche Authentifizierungs Möglichkeiten eines Benutzers zu entfernen. Um zu verhindern, dass mit verfälschten Daten fremde Identitäten gelöscht werden, muss die zu löschende Identität zwangsläufig dem angemeldeten Benutzer angehören.
 	\item[Primäre E-Mail wechseln]\hfill\\
 	Ein Benutzer hat die Möglichkeit die primäre E-Mail zu ändern. Hierbei wurde darauf geachtet, dass die Änderung einer primären E-Mail ebenfalls bestätigt werden muss. Das Bestätigen einer Änderung der primären E-Mail schützt vor Benutzer übernahmen innerhalb Blattwerkzeugs. Bei einer Änderung der primären E-Mail wird eine Bestätigungsmail vom Server gesendet, allerdings wird vorher überprüft, ob die neue E-Mail in einem der verknüpften Identitäten vorhanden ist. Folglich ist es nicht möglich mit manipulierten Daten, auf eine nicht verknüpfte und nicht bestätigte E-Mail zu wechseln. Die Bestätigungsmail enthält einen Hyperlink mit einem zuvor erstellten change\_primary\_email\_token. Damit die neue primäre E-Mail nicht als beispielsweise URL-Parameter mit an die \gls{URL} gehängt werden muss, wurde der change\_primary\_email\_token in der Identität der neuen primären E-Mail gespeichert. Demnach kann mittels Token direkt auf die wechselnde Identität zugegriffen werden. Für eine erfolgreiche Änderung der primären E-Mail, muss der an die \gls{URL} angehängte Token dem change\_primary\_email\_token entsprechen. Zusätzlich darf der angegebene Token seine Ablaufzeit nicht überschreiten. Sollte die vom Benutzer ausgewählte E-Mail bereits als primäre E-Mail eines anderen Benutzers dienen, kann der Vorgang zur Änderung ebenfalls nicht erfolgreich abgeschlossen werden.
 	\item[Passwort wechseln]\hfill\\
 	Damit ein Passwortwechsel durchgeführt werden kann, muss eine Passwort Identität vorhanden sein. Um das Passwort der Passwort Identität zu verändern, muss das derzeitige Passwort und eine neues Passwort an den Server übermittelt werden. Der Server gleicht das übermittelte Passwort mit dem Passwort der verknüpften Identität ab. Existieren bereits mehrere Passwort Identitäten, werden von jeder das Passwort geändert. Da bei einer Verknüpfung einer Passwort Identität das Passwort einer bereits existierenden Passwort Identität übernommen wird, führt das Ändern jeglicher Passwort Identitäten zu keinem ungewollten Verhalten.
 	\item[Benutzernamen wechseln]\hfill\\
-	Da es in Blattwerkzeug keine eindeutigen Benutzernamen gibt, wurde eine Funktion zum Wechseln des Benutzernamens hinzugefügt. Diese Funktion prüft lediglich auf \enquote{das Valide sein} eines Benutzers nach Änderung des Benutzernamens. Zur Überprüfung des Benutzernamens wurde ein Validator hinzugefügt, der den Benutzernamen mittels regulären Ausdrucks auf seine Gültigkeit prüft. (Listing \ref{lst:validation_display_name}) Der Benutzername muss mit drei Buchstaben oder Zahlen beginnen und kann gefolgt werden von siebzehn Zeichen.
-
+	Da es in Blattwerkzeug keine eindeutigen Benutzernamen gibt, wurde eine Funktion zum Wechseln des Benutzernamens hinzugefügt. Diese Funktion prüft lediglich auf \enquote{das Valide sein} eines Benutzers nach Änderung des Benutzernamens. Zur Überprüfung des Benutzernamens wurde ein Validator hinzugefügt, der den Benutzernamen mittels regulären Ausdrucks auf seine Gültigkeit prüft. (Listing \ref{lst:validation_display_name}) Der Benutzername muss mit mindestens drei Buchstaben oder Zahlen beginnen und kann mit siebzehn Buchstaben oder Zahlen erweitert werden.
+	
+	\lstinputlisting[language=Ruby, style=CodeView, caption=Validierung des Benutzernamens, captionpos=b, label={lst:validation_display_name}]{snippets/email_validator.rb}
 \end{description}
-
-\lstinputlisting[language=Ruby, style=CodeView, caption=Validierung des Benutzernamens, captionpos=b, label={lst:validation_display_name},float,floatplacement=h]{snippets/email_validator.rb}
 
 \subsection{Client}
 \label{sec: client}
@@ -308,28 +303,25 @@ Bei der Entscheidung zwischen \gls{XSS} oder \gls{CSRF} muss abgewogen werden, w
 \label{sec:client-security-login}
 Die clientseitige Einstellungsmöglichkeit für Sicherheit und Login kann erst aufgerufen werden, sobald ein Benutzer sich angemeldet hat. Für die Input-Felder wurde die bereits erstellte validate-input Komponente verwendet. Damit zwischen den Einstellungsmöglichkeiten unterschieden werden kann, wurde jeweils eine Komponente erstellt. Da die Einstellungsmöglichkeiten sich auf ein paar wenige einschränken, wurden die erstellten Komponenten in einer Komponente zusammen getragen.
 
-\todo[inline]{Screenshots zeigen zuviel irrelevanten Hintergrund, passen die Beschreibungen?}
-
-\begin{figure}
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{graphics/account-settings-1.png}
-	\caption{Standart und erweiterte Ausführung eines validate-input}
-	\label{fig:account_settings_1}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=.9\textwidth]{graphics/account-settings-1.png}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=.9\textwidth]{graphics/account-settings-2.png}
+	\end{subfigure}
+	\caption{Sicherheit und Login}
+	\label{fig:account_settings}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{graphics/account-settings-2.png}
-	\caption{Standart und erweiterte Ausführung eines validate-input}
-	\label{fig:account_settings_2}
-\end{figure}
 
 \begin{description}
 	\item[Passwort ändern]\hfill\\
-	Sollte ein Benutzer sein Passwort ändern wollen, muss dafür vorerst eine Passwort Identität vorhanden sein. Falls keine Passwort Identität vorhanden ist, wird dem angemeldeten Benutzer keine Passwort Änderung angezeigt. Damit ein Benutzer nicht versehentlich ein falsches Passwort angibt, muss das eingegebene Passwort bestätigt werden.(Abbildung \ref{fig:account_settings_1}) Hierfür muss das neue Passwort erneut eingegeben werden. Damit ein Passwortwechsel erfolgreich durchgeführt werden kann, muss der Server die Eingaben auf ihre Gültigkeit prüfen (Sektion \ref{sec:server-account-settings}).
+	Sollte ein Benutzer sein Passwort ändern wollen, muss dafür vorerst eine Passwort Identität vorhanden sein. Falls keine Passwort Identität vorhanden ist, wird dem angemeldeten Benutzer keine Passwort Änderung angezeigt. Damit ein Benutzer nicht versehentlich ein falsches Passwort angibt, muss das eingegebene Passwort bestätigt werden.(Abbildung \ref{fig:account_settings}) Hierfür muss das neue Passwort erneut eingegeben werden. Damit ein Passwortwechsel erfolgreich durchgeführt werden kann, muss der Server die Eingaben auf ihre Gültigkeit prüfen (Sektion \ref{sec:server-account-settings}).
 	\item[Verknüpfte Konten]\hfill\\
-	Ein Benutzer soll die Möglichkeit besitzen seine bereits verknüpften Konten zu verwalten. Hierzu wurde eine Übersicht der bereits verknüpften Konten erstellt (Abbildung \ref{fig:account_settings_2}). Diese Übersicht der Konten bietet die Möglichkeit, die bereits verknüpften Konten zu entfernen oder Profilseiten, falls vom Provider ausgeliefert, zu besuchen. Die Entscheidung ob ein verknüpftes Konto entfernt werden darf, obliegt jedoch dem Server (Sektion \ref{sec:server-account-settings}).
-	\item[Konto Verknüpfung]\hfill\\
+	Ein Benutzer soll die Möglichkeit besitzen seine bereits verknüpften Konten zu verwalten. Hierzu wurde eine Übersicht der bereits verknüpften Konten erstellt (Abbildung \ref{fig:account_settings}). Diese Übersicht der Konten bietet die Möglichkeit, die bereits verknüpften Konten zu entfernen oder Profilseiten, falls vom Provider ausgeliefert, zu besuchen. Die Entscheidung ob ein verknüpftes Konto entfernt werden darf, obliegt jedoch dem Server (Sektion \ref{sec:server-account-settings}).
+	\item[Konto verknüpfen]\hfill\\
 	Damit ein angemeldeter Benutzer sein bereits bestehendes Konto mit weiteren Konto verknüpfen kann, wurden die bereits erstellten provider-button Komponenten zur Darstellung verwendet. Hierbei ist die Funktionsweise in den Einstellungen identisch zu der Funktionsweise des Dialogs (Sektion \ref{sec:client-dialog-authentication}).
 \end{description}
 
@@ -357,10 +349,8 @@ Eine Wrapper-Komponente, die dynamisch ihren Inhalt lädt und gleichzeitig bedin
 		\includegraphics[width=.8\textwidth]{graphics/data-pattern.pdf}
 		\caption{Struktur des Daten-Musters}
 		\label{fig:client-data-pattern}
-        \end{figure}
-
-        \todo[inline]{Was sind die Kästen mit ``update\_all'' bzw. ``create'', ``update'', ``delete''?}
-
+    \end{figure}
+   
 	\begin{minipage}{\linewidth}
 		\lstinputlisting[language=JavaScript, style=CodeView, caption=Beispiel Aufruf zum Erhalten der News-Daten, captionpos=b, label={lst:client-example_data_pattern}]{snippets/example-data-pattern.ts}
 	\end{minipage}
