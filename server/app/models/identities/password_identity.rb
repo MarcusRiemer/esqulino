@@ -1,21 +1,33 @@
+# Bcrypt is used to encrypt passwords
+require 'bcrypt'
+
 class PasswordIdentity < Identity
   attr_accessor :password, :password_confirmation
 
   validates :password, presence: true, :length => { :minimum => 6 }
+  # The uid is always the e-mail
   validates_uniqueness_of :uid
 
+  # Search for all password identities with the given email
   def self.find_by_email(email)
     where(uid: email)
   end
 
+  # Search for all password identities with the given token.
+  # Verification token is set only in the password identity.
   def self.find_by_verify_token(token)
     where("own_data ->> 'verify_token' = ?", token)
   end
 
+  # Search for all password identities with the given token.
+  # Password reset token is set only in the password identity.
   def self.find_by_password_reset_token(token)
     where("own_data ->> 'password_reset_token' = ?", token)
   end
 
+  # Creates a password identity with the given hash and user
+  # The auth hash is split into two different jsonb attributes
+  # provider_data 
   def self.create_with_auth(auth, user)
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => auth[:data])
   end

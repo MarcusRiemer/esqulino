@@ -1,12 +1,16 @@
+# The GitHub provider comes from https://github.com/omniauth/omniauth-github
 class Github < Identity
+  # Search for all GitHub identities with the given email
   scope :find_by_email, -> (email) { 
     where("provider_data ->> 'email' = ?", email)
   }
 
+  # Creates a github identity with the given hash and user
   def self.create_with_auth(auth, user)
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
+  # Client side information for the GitHub provider
   def self.client_information
     return ({
         name: "Github",
@@ -21,6 +25,7 @@ class Github < Identity
     return true
   end
 
+  # GitHub returns a link to a user's Github profile
   def link
     return self.provider_data["urls"]["GitHub"]
   end
@@ -30,6 +35,8 @@ class Github < Identity
     return self.provider_data["email"]
   end
 
+  # Creates a hash that is passed to the client
+  # contains all information about a current selected identity 
   def to_list_api_response
     return ({
               :id => self.id,

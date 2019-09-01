@@ -11,6 +11,8 @@ export class ChangeUsernameComponent {
     private _userService: UserService
   ) { }
 
+  
+  // Username of logged in user
   public username$ = this._userService.userDisplayName$;
   public userNameData: UserNameDescription = {
     displayName: undefined,

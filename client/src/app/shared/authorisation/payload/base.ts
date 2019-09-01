@@ -1,9 +1,14 @@
 import { MayPerformRequestDescription } from '../../may-perform.description';
+
+/**
+ * Is used to check an ui element with the may perform component
+ */
 export class BasePerformData {
   constructor(resourceType: string) {
     this._resourceType = resourceType;
   }
 
+  // Which resource-typ (Example: News, Projekt)
   private _resourceType: string;
 
   public update(resourceId: string): MayPerformRequestDescription {

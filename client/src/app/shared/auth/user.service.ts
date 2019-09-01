@@ -22,6 +22,9 @@ export class UserService {
     private _snackBar: MatSnackBar
   ) { }
 
+  /**
+   * Commonly used pipe operators are used in this function
+   */
   private $pipeObserv($observ: Observable<any>, action: (() => any)): Observable<any> {
     return $observ.pipe(
       first(),
@@ -60,12 +63,20 @@ export class UserService {
     map(u => u.providers)
   )
 
+  /**
+   * Sends a http-request for the sign up of a password identity
+   * @param data email, username, password
+   */
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.signUp$(data),
       () => alert("Please confirm your e-mail")
     )
   }
 
+  /**
+   * Sends a http-request to check for the authorization of ui element.
+   * Server will respond with a list of authorizations
+   */
   public mayPerform$(data: MayPerformRequestDescription): Observable<MayPerformResponseDescription> {
     return this._serverData.mayPerform$(data).pipe(
       first(),
@@ -73,18 +84,31 @@ export class UserService {
     )
   }
 
+  /**
+   * Sends a http-request to sign in with a password identity
+   * @param data email, password
+   */
   public signIn$(data: SignInDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.signIn$(data),
       () => this.userData$.refresh()
     )
   }
 
+  /**
+   * Sends a http-request to reset the passwords
+   * of all password identities linked to the logged in user.
+   * @param data new password, token to reset a password
+   */
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.resetPassword$(data),
      () => this.userData$.refresh()
     )
   }
 
+  /**
+   * Sends a http-request to change the username
+   * @param data new username
+   */
   public changeUserName$(data: UserNameDescription) {
     return this.$pipeObserv(this._serverData.changeUserName$(data),
       () => {
@@ -94,6 +118,10 @@ export class UserService {
     )
   }
 
+  /**
+   * Sends a http-request to exchange the passwords of all linked password identities 
+   * @param data current password, new password
+   */
   public changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
     return this.$pipeObserv(
       this._serverData.changePassword$(data),
@@ -104,6 +132,10 @@ export class UserService {
     )
   }
 
+  /**
+   * To reset a password, a password reset email needs to be sent via E-Mail
+   * @param data email
+   */
   public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.passwordResetRequest$(data),
       () => {
@@ -113,6 +145,12 @@ export class UserService {
     )
   }
 
+  /**
+   * If the User wants to change his primary E-Mail,
+   * a confirmation email will be sent. 
+   * The user has to verify the email in order to change the primary email
+   * @param data new primary e-mail
+   */
   public sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.sendChangePrimaryEmail$(data),
       () => {
@@ -123,8 +161,11 @@ export class UserService {
     )
   }
 
-  public deleteEmail$(uid: string): Observable<ServerProviderDescription> {
-    return this.$pipeObserv(this._serverData.deleteEmail$(uid),
+  /**
+   * Sends a http-request to delete a linked identitiy
+   */
+  public deleteIdentity$(uid: string): Observable<ServerProviderDescription> {
+    return this.$pipeObserv(this._serverData.deleteIdentity$(uid),
       () => {
         this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
         this.identities$.refresh();
@@ -133,6 +174,10 @@ export class UserService {
     )
   }
 
+  /**
+   * Sends a http-request to add a password identity
+   * @param data If a password identity exists ( email ) | email, password
+   */
   public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
     return this.$pipeObserv(this._serverData.addEmail$(data), 
       () => {
@@ -143,12 +188,19 @@ export class UserService {
     )
   }
 
+  /**
+   * Sends a http-request to sent a new confirmation Email
+   * @param data email
+   */
   public sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.sendVerifyEmail$(data),
       () => this._snackBar.open('Please check your e-mails', '', { duration: 6000 })
     )
   }
 
+  /**
+   * Log out a logged in user
+   */
   public logout$(): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.logout$(),
       () => {

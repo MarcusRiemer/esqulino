@@ -13,6 +13,7 @@ export class AccountSettingsComponent {
     private _dialog: MatDialog
   ) { }
 
+  // Linked identities
   public identities$ = this._userService.identities$;
 
   public onTrigger(identities: ServerProviderDescription): void {

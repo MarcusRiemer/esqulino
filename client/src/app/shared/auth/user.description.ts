@@ -1,8 +1,15 @@
 
+/**
+ * is used to change the username
+ */
 export interface UserNameDescription {
   displayName: string;
 }
 
+/**
+ * The description contains the most
+ * important information about a USER.
+ */
 export interface UserDescription {
   displayName: string;
   roles: string[];
@@ -10,25 +17,31 @@ export interface UserDescription {
   email: string;
 }
 
+/**
+ * Adding a password identity.
+ * If there's already an existing password identity,
+ * the password will be empty
+ */
 export interface UserAddEmailDescription {
   email: string;
   password: string;
 }
 
+/**
+ * The UserEmailDescription will be used,
+ * if primarily the email is transfered.
+ * Example: password reset, sending verification link again
+ */
 export interface UserEmailDescription {
   email: string;
 }
 
-export type UserPasswordDescription = PasswordTokenDescription | PasswordConfirmedDescription | PasswordDescription;
-
-export interface PasswordDescription {
-  password: string;
-}
-
-export interface PasswordConfirmedDescription {
-  password: string;
-  confirmedPassword: string;
-}
+/**
+ * If the password is being reset, a token will be created.
+ * This token is used to to reset the password. 
+ * The new password will be sent to the server, together with the newly created token. 
+ * */
+export type UserPasswordDescription = PasswordTokenDescription;
 
 export interface PasswordTokenDescription {
   password: string;

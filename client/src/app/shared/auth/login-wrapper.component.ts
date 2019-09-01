@@ -10,5 +10,9 @@ export class LoginWrapperComponent {
     private _userData: UserService
   ) {}
 
+  /**
+   * Whether a user is logged in it decides
+   * on the content that is displayed
+   */
   readonly isLoggedIn = this._userData.isLoggedIn$
 }

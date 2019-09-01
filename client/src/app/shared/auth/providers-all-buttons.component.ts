@@ -12,9 +12,15 @@ export class ProvidersAllButtonsComponent {
     private _userService: UserService
   ) { }
 
+  /**
+   * All available providers
+   */
   readonly providers$ = this._userService.providerList$
 
-  public triggerd(): void {
+  /**
+   * Will be used for forwarding a click of the blattwerkzeug provider
+   */
+  public onTrigger(): void {
     this.trigger.emit()
   }
 }

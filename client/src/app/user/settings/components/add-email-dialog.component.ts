@@ -14,6 +14,7 @@ export class AddEmailDialogComponent {
     private _userService: UserService
   ) {}
 
+  // Passed linked indentities
   private identities = this.data;
 
   public passwordConfirmation: string;
@@ -22,6 +23,9 @@ export class AddEmailDialogComponent {
     password: undefined
   };
 
+  /**
+   * Triggers the addition of a new password identity
+   */
   public onAddEmail(): void {
     if (this.newEmailData.password) {
       if (this.passwordConfirmation === this.newEmailData.password) {
@@ -32,6 +36,9 @@ export class AddEmailDialogComponent {
     } else alert("Bitte wähle ein Passwort.");
   }
 
+  /**
+   * Is a password identity linked to the current user
+   */
   public existsPasswordIdentity(): boolean {
     return this.identities.providers.some(v => v.type == "PasswordIdentity");
   }
