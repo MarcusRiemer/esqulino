@@ -11,9 +11,24 @@ export class AuthDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) readonly data: AuthDialogDataDescription
   ) { }
 
+  /**
+   *  Message to display
+   */
   private _message: string;
+
+  /**
+   * Type of message 
+   */
   private _type: string;
+
+  /**
+   * Is the second content displayed? 
+   */
   private _secondContent: boolean = false;
+
+  /**
+   * Does the user want to see the sign in/up with a password?
+   */ 
   private _emailContent: boolean = false;
 
   public get message(): string {
@@ -47,13 +62,20 @@ export class AuthDialogComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       console.log(`AuthDialog-Data: ${JSON.stringify(this.data)}`)
+      // Message to display
       this.message = this.data.message;
+      // Which css class should be used
       this.type = this.data.message_type || 'error';
     } else {
       console.error("Please pass a data object");
     }
   }
 
+  /**
+   * Either the sign in or sign up are hidden 
+   * and will be displayed on clicking the e-mail button.
+   * The clicked e-mail button triggers the showEmailContent function.
+   */
   public showEmailContent(): void {
     this.emailContent = true;
   }

@@ -3,10 +3,12 @@ class UserController < ApplicationController
   include LocaleHelper
   include JwtHelper
 
+  # Response with current user information
   def index
     api_response(user_information)
   end
 
+  # Changes the username
   def change_username
     if signed_in? then
       permited_params = change_username_params
@@ -21,6 +23,9 @@ class UserController < ApplicationController
     end
   end
 
+  # Changes the primary email.
+  # For a primary e-mail change, a token
+  # is created that is contained in an e-mail
   def change_primary_email
     token = params[:token]
     if (not token) then
@@ -61,7 +66,7 @@ class UserController < ApplicationController
   end
 
   # Sends e-mail to primary mail 
-  # Change of primary needs to be confirmed 
+  # Change of primary e-mail needs to be confirmed 
   def send_change_email
     if (not signed_in?) then
       return error_response("You need to be logged in")
@@ -98,6 +103,7 @@ class UserController < ApplicationController
     api_response(user_information)
   end
 
+  # The function is used to determine the authorization of a ui element
   def may_perform
     to_response = []
     permited_params = may_perform_params

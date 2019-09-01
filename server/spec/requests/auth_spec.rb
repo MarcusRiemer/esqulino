@@ -147,6 +147,8 @@ RSpec.describe "auth controller" do
     end
   end
 
+  # TODO: move tests into describe block
+  #  Moving test cases leads to errors
   describe "password identity" do
 
   end
@@ -195,7 +197,6 @@ RSpec.describe "auth controller" do
     expect(response.cookies['JWT']).to be_truthy
   end
 
-  # TODO-TOM NEEDS SERVER VALIDATION
   it "registering identity with an empty password" do
     create(:identity_provider, :new)
 

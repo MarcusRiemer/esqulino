@@ -4,16 +4,19 @@ class IdentitiesController < ApplicationController
   include UserHelper
   include LocaleHelper
   
+  # Responds with all linked identities
   def show
     if signed_in?
       api_response(current_user.all_providers)
     end
   end
 
+  # Responds with all available providers
   def list
     api_array_response(Identity.all_client_information)
   end
 
+  # Resets the passwords of a specific user.
   def reset_password
     permited_params = reset_password_params
     identity = PasswordIdentity.find_by_password_reset_token(permited_params[:token])
@@ -23,7 +26,8 @@ class IdentitiesController < ApplicationController
       if !identity.reset_token_expired?
         identity.set_reset_token_expired
         identity.save!
-
+        
+        # Sets passwords of all linked password identities
         identity.set_all_passwords(permited_params[:password])
         api_response(user_information)
       else
@@ -34,6 +38,7 @@ class IdentitiesController < ApplicationController
     end
   end
 
+  # Sends a password reset mail
   def reset_password_mail
     identity = PasswordIdentity.find_by(uid: email_permit_param[:email])
     if (identity) then
@@ -45,6 +50,7 @@ class IdentitiesController < ApplicationController
     end
   end
 
+  # Used to send a new verification email
   def send_verify_email
     identity = PasswordIdentity.find_by(uid: email_permit_param[:email])
     if (not identity) then
@@ -55,6 +61,7 @@ class IdentitiesController < ApplicationController
       return error_response("e-mail already confirmed")
     end
 
+    # Waiting time is 2 minutes
     if (not identity.can_send_verify_mail?)
       return error_response("You need to wait for #{identity.waiting_time} minutes")
     end
@@ -65,7 +72,7 @@ class IdentitiesController < ApplicationController
     api_response(user_information)
   end
 
-
+  # Confirms a password identity 
   def email_confirmation
     permited_params = email_confirmation_params
     identity = PasswordIdentity.find_by_verify_token(permited_params[:verify_token])
@@ -81,6 +88,7 @@ class IdentitiesController < ApplicationController
     end
   end
 
+  # Changes passwords of all password identities
   def change_password
     if signed_in?
       identity = PasswordIdentity.find_by(user_id: current_user.id, provider: 'identity')
@@ -90,7 +98,7 @@ class IdentitiesController < ApplicationController
           identity.change_password(permited_params)
           api_response(user_information)
         else
-          raise EsqulinoError.new("no vailable identity found")
+          raise EsqulinoError.new("no available identity found")
         end
       rescue => e
         error_response(e.message)
@@ -98,6 +106,7 @@ class IdentitiesController < ApplicationController
     end
   end
 
+  # Deletes a linked identity
   def destroy
     if signed_in?
       permited_params = delete_identity_params
@@ -108,8 +117,7 @@ class IdentitiesController < ApplicationController
       end
       all_identities = current_user.all_validated_emails
 
-      # You need more than one identity to be able
-      # to delete an identity
+      # You need at least more than 1 confirmed identity
       if (all_identities.count <= 1 && identity.confirmed?) then
         return error_response("You need more than one confirmed e-mail.")
       end

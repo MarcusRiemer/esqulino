@@ -1,6 +1,6 @@
 <ng-container *ngFor="let provider of providers$.value | async">
   <provider-button
-    (trigger)="triggerd()"
+    (trigger)="onTrigger()"
     [provider]="provider">
   </provider-button>
 </ng-container>

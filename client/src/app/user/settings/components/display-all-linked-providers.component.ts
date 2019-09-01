@@ -11,11 +11,17 @@ export class DisplayAllLinkedProvidersComponent {
     private _userService: UserService,
   ) {}
 
+  // Current primary e-mail
   public primary: string;
+  
+  // All linked identities 
   public providers$ = this._userService.providers$;
 
+  /**
+   * Deleting a linked identity
+   */
   public onDeleteIdentity(identity: ProviderDescription): void {
-    this._userService.deleteEmail$(identity.id)
+    this._userService.deleteIdentity$(identity.id)
       .subscribe();
   }
 }

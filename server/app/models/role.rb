@@ -1,4 +1,6 @@
 class Role < ApplicationRecord
+  # Role model comes from Rolify
+  # https://github.com/RolifyCommunity/rolify
   has_and_belongs_to_many :users, :join_table => :users_roles
 
 

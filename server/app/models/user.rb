@@ -4,7 +4,6 @@
 # Generally the user model groups together the following information:
 # * Social context: How someone would like to be adressed,
 #
-# TODO: Sort methods, static methods should come first
 class User < ApplicationRecord
   # The ID of the user that acts as a guest
   GUEST_ID = Rails.configuration.sqlino["seed_users"]["guest"]
@@ -21,7 +20,7 @@ class User < ApplicationRecord
   has_many :news
 
   # Only allow safe characters in usernames
-  validates_format_of :display_name, :with => /\A^[a-zA-Z0-9]{3}.{0,17}$\z/i
+  validates_format_of :display_name, :with => /\A[a-zA-Z0-9]{3}[a-zA-Z0-9\ ]{0,17}\z/i
   # Primary emails may only be used once. But because some identities do not
   # provide an email, they may also be empty
   validates_uniqueness_of :email, :allow_nil => true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -71,12 +70,14 @@ class User < ApplicationRecord
     return self.eql? self.guest
   end
 
-  # TODO: What is this required for?
+  # Names of the roles of a logged in user
+  # Is written in the private claim of the JWT
   def role_names
     return self.roles.map { |v| v.name }
   end
 
-  # TODO: What is this required for?
+  # The information is used for the clientside representation 
+  # of a either signed in or signed out user
   def information
     return  {
       user_id: self.id,
@@ -86,7 +87,8 @@ class User < ApplicationRecord
     }
   end
 
-  # TODO: What is this required for?
+  # The resulting hash will be rendered as json and is used
+  # for displaying all linked identities and selected primary email
   def all_providers()
     return {
       providers: self.identities.map {|i| i.to_list_api_response },
@@ -111,7 +113,7 @@ class User < ApplicationRecord
   end
 
   # Returns the current global role of a user
-  # TODO: Describe what a "global role" is
+  # Global roles are roles
   def global_role
     to_return = "guest"
     if (self.has_role? :admin) then
@@ -123,13 +125,13 @@ class User < ApplicationRecord
     return to_return
   end
 
-  # TODO: What is this required for?
+  # Checks if the current user is changing his primary email
   def primary_email_change?
     identity = self.identities.find { |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) }
     return identity ? (not identity.email.eql?(self.email)) : false
   end
 
-  # TODO: What is this required for?
+  # If a user is changing his primary email, the expiration time of the current token returns
   def primary_email_change_time
     identity = self.identities.find { |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) }
     return identity.change_primary_token_exp

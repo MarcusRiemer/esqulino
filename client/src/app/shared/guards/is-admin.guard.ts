@@ -6,6 +6,10 @@ import { first } from 'rxjs/operators';
 import { UserService } from './../auth/user.service';
 import { Roles } from '../authorisation/roles.enum';
 import { MessageDialogComponent } from '../message-dialog.component';
+
+/**
+ * Checks for the global admin role
+ */
 @Injectable()
 export class IsAdminGuard implements CanActivate {
   constructor(

@@ -1,6 +1,9 @@
 module UserHelper
   include JwtHelper
   
+  # Had to be written into a helper, since
+  # access to the request object is not 
+  # possible within the model.
   def user_information(current = nil)
     begin
       return current ? current_user.information : (get_private_claim() || current_user.information)
@@ -9,6 +12,8 @@ module UserHelper
     end
   end
 
+  # A user is logged in if a HTTP-request contains a cookie with a value that is a valid jwt
+  # if there was no jwt, the current user will be set to the guest user
   def current_user
     if (not @current_user) then
       token = request.cookies['JWT']
@@ -31,10 +36,12 @@ module UserHelper
     @current_user = user
   end
 
+  # A user is logged in if he is not the guest user
   def signed_in?
     return (not current_user.eql? User.guest)
   end
 
+  # sign in sets the current user and response with a jwt
   def sign_in(identity)
     if (not signed_in?) then
       current_user = identity.user
@@ -43,14 +50,15 @@ module UserHelper
     end
   end
 
-
+  # Sets the current user to the guest user and deletes the jwt
   def sign_out!
     if (signed_in?) then
       self.current_user = User.guest
-      delete_jwt_cookie!
+      self.delete_jwt_cookie!
     end
   end
 
+  # Deleting a jwt is done by setting the expiration time of the cookie
   def delete_jwt_cookie!()
     current_jwt = nil
     self.current_user = nil

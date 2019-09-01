@@ -35,6 +35,9 @@ export class UserSettingsComponent implements AfterViewChecked {
     private _sideNav: SideNavService
   ) {}
 
+  /**
+   * Reloads the side-nav
+   */
   ngAfterViewChecked(): void {
     this._sideNav.newSideNav(userSettings)
   }

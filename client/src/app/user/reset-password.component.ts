@@ -27,6 +27,9 @@ export class ResetPasswordComponent implements AfterViewInit {
     token: this._activeRoute.snapshot.paramMap.get("token")
   };
 
+  /**
+   * Opening a dialog for reset password
+   */
   public ngAfterViewInit(): void {
     this._dialog
       .open(this.dialog)
@@ -37,6 +40,9 @@ export class ResetPasswordComponent implements AfterViewInit {
       });
   }
 
+  /**
+   * Resetting password
+   */
   public onResetButton(): void {
     this._userService
       .resetPassword$(this.resetPasswordData)
