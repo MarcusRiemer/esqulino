@@ -1,4 +1,4 @@
-import { NodeLocation, NodeDescription } from "./syntaxtree.description";
+import { NodeLocation, NodeDescription, NodeLocationStep } from "./syntaxtree.description";
 import { Validator } from './validator';
 import { Node } from './syntaxtree';
 import { ErrorCodes } from './validation-result';
@@ -45,5 +45,59 @@ export function _cardinalityAllowsInsertion(
     );
   } else {
     return (false);
+  }
+}
+
+/**
+ * @return True, if the node is in a hole with no place for other nodes.
+ */
+export function nodeIsInSingularHole(
+  validator: Validator,
+  node: Node
+) {
+  if (node.nodeParent) {
+    const parent = node.nodeParent;
+    const parentType = validator.getType(parent.languageName, parent.typeName);
+    const parentCardinality = parentType.validCardinality(node.nodeParentCategory);
+    return (parentCardinality.maxOccurs === 1 && parentCardinality.minOccurs === 1);
+  } else {
+    // There may only be a single root
+    return (true);
+  }
+}
+
+/**
+ * Possibilities the user may specify to further indicate where the drop should take place.
+ */
+export type RelativeDropLocation = "block" | "begin" | "end";
+
+/**
+ * Calculates a possibly shifted drop location relative to the given location.
+ */
+export function relativeDropLocation(loc: NodeLocation, relative: RelativeDropLocation) {
+  const relativeToShift = (relative: RelativeDropLocation) => {
+    switch (relative) {
+      case "begin":
+        return (-1);
+      default:
+        return (0);
+    }
+  };
+
+  if (loc.length > 0) {
+    const shift = relativeToShift(relative);
+    const prevLast = loc[loc.length - 1];
+
+    // Shallow copy
+    const copy = [...loc];
+
+    // New last element, index may not be < 0
+    const shiftedLast: NodeLocationStep = [prevLast[0], Math.max(-1, prevLast[1] + shift)];
+    copy[copy.length - 1] = shiftedLast;
+
+    // Shallow copy with changed last element, other elements are still shared
+    return (copy);
+  } else {
+    return (loc);
   }
 }

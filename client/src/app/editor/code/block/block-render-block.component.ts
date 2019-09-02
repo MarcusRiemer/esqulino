@@ -10,10 +10,9 @@ import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { nodeIsInSingularHole, relativeDropLocation, RelativeDropLocation } from 'src/app/shared/syntaxtree/drop-util';
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
-
-type RelativeDropLocation = "block" | "top" | "left" | "bottom" | "right"
 
 /**
  * Renders a single and well known visual element of a node.
@@ -115,13 +114,16 @@ export class BlockRenderBlockComponent {
    */
   onMouseEnter(evt: MouseEvent, dropLocationHint: RelativeDropLocation) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, this.node.location, this.node, {
+      const shiftedLocation = relativeDropLocation(this.node.location, dropLocationHint);
+      const explicitLocation = dropLocationHint !== "block";
+
+      this._dragService.informDraggedOver(evt, shiftedLocation, this.node, {
         // Disabled because allowAnyParent inserts in front so defaulting to append seems smarter
         allowExact: false,
         allowAnyParent: true,
-        allowEmbrace: this.allowEmbrace,
+        allowEmbrace: this.allowEmbrace && !explicitLocation,
         allowAppend: true,
-        allowReplace: true
+        allowReplace: explicitLocation
       });
     }
   }
@@ -173,7 +175,10 @@ export class BlockRenderBlockComponent {
   ).pipe(
     map(([inProgress, currentDrag]) => {
       if (inProgress && !this.readOnly && currentDrag) {
-        return (currentDrag.hoverNode === this.node);
+        return (currentDrag.hoverNode === this.node && !nodeIsInSingularHole(
+          this.codeResource.validationLanguagePeek.validator,
+          this.node
+        ));
       } else {
         return (false);
       }
