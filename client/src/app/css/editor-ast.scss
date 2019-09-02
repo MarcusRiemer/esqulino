@@ -67,41 +67,85 @@ trash {
             background-color: red;
         }
 
-        /* Indicators where to drop stuff relative to the current block */
-        .begin-drop, .end-drop {
-            position: absolute;
-            left: 0px;
-            right: 0px;
+        /* Indicators where to drop stuff relative to the current block, this
+           is for a vertical layout where the indicators are displayed at top or bottom */
+        editor-block-render-block.vertical > {
+
+            .begin-drop, .end-drop {
+                position: absolute;
+                left: 0px;
+                right: 0px;
+            }
+
+            /* Drop before this block */
+            .begin-drop {
+                top: 0px;
+                height: $relative-drop-hint-size;
+            }
+
+            .begin-drop:hover {
+                background: linear-gradient(
+                    to top,
+                    rgba(255,255,255,0) 10%,
+                    rgba(130,130,130,0) 50%,
+                    rgba(0,0,0,0.65) 100%
+                );
+            }
+
+            /* Drop after this block */
+            .end-drop {
+                bottom: 0px;
+                height: $relative-drop-hint-size;
+            }
+
+            .end-drop:hover {
+                background: linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0) 10%,
+                    rgba(130,130,130,0) 50%,
+                    rgba(0,0,0,0.65) 100%
+                );
+            }
         }
 
-        /* Drop before this block */
-        .begin-drop {
-            top: 0px;
-            height: 15px;
-        }
+        /* Horizontal (left to right) indicators */
+        editor-block-render-block.horizontal > {
 
-        .begin-drop:hover {
-            background: linear-gradient(
-                to top,
-                rgba(255,255,255,0) 10%,
-                rgba(130,130,130,0) 50%,
-                rgba(0,0,0,0.65) 100%
-            );
-        }
+            .begin-drop, .end-drop {
+                position: absolute;
+                top: 0px;
+                bottom: 0px;
+            }
 
-        /* Drop after this block */
-        .end-drop {
-            bottom: 0px;
-            height: 15px;
-        }
+            /* Drop before this block */
+            .begin-drop {
+                left: 0px;
+                width: $relative-drop-hint-size;
+            }
 
-        .end-drop:hover {
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0) 10%,
-                rgba(130,130,130,0) 50%,
-                rgba(0,0,0,0.65) 100%
-            );
+            .begin-drop:hover {
+                background: linear-gradient(
+                    to left,
+                    rgba(255,255,255,0) 10%,
+                    rgba(130,130,130,0) 50%,
+                    rgba(0,0,0,0.65) 100%
+                );
+            }
+
+            /* Drop after this block */
+            .end-drop {
+                right: 0px;
+                width: $relative-drop-hint-size;
+            }
+
+            .end-drop:hover {
+                background: linear-gradient(
+                    to right,
+                    rgba(255,255,255,0) 10%,
+                    rgba(130,130,130,0) 50%,
+                    rgba(0,0,0,0.65) 100%
+                );
+            }
         }
     }
 

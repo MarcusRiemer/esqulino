@@ -99,6 +99,7 @@
                                [visual]="visual"
                                [readOnly]="readOnly"
                                [ngClass]="visual.cssClasses"
+                               class="{{ visual.direction }}"
                                [class.read-only]="readOnly"
                                [class.being-replaced]="(currentBlock.isBeingReplaced | async)"
                                draggable="true"
