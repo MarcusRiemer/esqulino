@@ -151,7 +151,7 @@ Blattwerkzeug nutzt Subdomains zur Unterteilung verschiedener Sprachen. Dabei er
 \label{sec:server-authorisation}
 Sobald ein Benutzer angemeldet ist, wird bei jedem Request ein \gls{JWT} mit an den Server gesendet. Dieser wird serverseitig auf seine Gültigkeit geprüft. Hierbei prüft der Server, ob dieser \gls{JWT} seine Ablaufzeit nicht überschritten hat und ob der \gls{JWT} die Signatur des Servers beinhaltet. Diese Überprüfung authentifiziert einen Besucher als angemeldeten Benutzer und wird von der Library jwt\footnote{\url{https://github.com/jwt/ruby-jwt}} übernommen.
 
-Das Muster der globalen Rollen, welches in Rolify (Sektion \ref{sec: rolify}) implementiert wurde konnte genutzt werden, um zwischen den allgemeinen Zugriffsrechten der Benutzer zu unterscheiden.
+Das Muster der globalen Rolle, welches in Rolify (Sektion \ref{sec: rolify}) implementiert wurde konnte genutzt werden, um zwischen den allgemeinen Zugriffsrechten der Benutzer zu unterscheiden.
 
 \begin{description}
 	\item[guest]\hfill\\
@@ -286,7 +286,7 @@ Aus diesen beiden Elementen von Angular Material wurde ein Popup-Fenster erstell
 	\end{figure}
 
 	\begin{minipage}{\linewidth}
-tat			\lstinputlisting[language=JavaScript, style=CodeView, caption=Verwendung einer validate-input Komponente, captionpos=b, label={lst:validate_input}]{snippets/validate_input.ts}
+		\lstinputlisting[language=JavaScript, style=CodeView, caption=Verwendung einer validate-input Komponente, captionpos=b, label={lst:validate_input}]{snippets/validate_input.ts}
 	\end{minipage}
 \end{description}
 
