@@ -5,7 +5,7 @@ class IdentityMailer < ApplicationMailer
   def reset_password(identity, locale)
     @user = User.find(identity[:user_id])
   
-    @password_reset_url = "https://#{@@base_url}/user/reset_password/#{identity.password_reset_token}"
+    @password_reset_url = "https://#{locale}.#{@@base_url}/user/reset_password/#{identity.password_reset_token}"
     mail(to: identity.email, subject: "Blattwerkzeug.de password reset")
   end
 
