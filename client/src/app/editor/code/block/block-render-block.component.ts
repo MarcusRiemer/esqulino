@@ -169,6 +169,11 @@ export class BlockRenderBlockComponent {
     })
   );
 
+  /**
+   * True if it is sensible to show more detailed drop location hints.
+   * This is the case if the location that would be dropped in to is at
+   * least not empty and if it would take the type.
+   */
   readonly showRelativeDropLocations: Observable<Boolean> = combineLatest(
     this._dragService.isDragInProgress,
     this._dragService.currentDrag
