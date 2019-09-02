@@ -100,10 +100,10 @@
                                [readOnly]="readOnly"
                                [ngClass]="visual.cssClasses"
                                [class.read-only]="readOnly"
-                               [class.being-replaced]="(currentBlock.isBeingReplaced | async) || true"
+                               [class.being-replaced]="(currentBlock.isBeingReplaced | async)"
                                draggable="true"
                                (dragstart)="currentBlock.onStartDrag($event, block)"
-                               (mouseover)="currentBlock.onMouseEnter($event)">
+                               (mouseover)="currentBlock.onMouseEnter($event, 'block')">
     </editor-block-render-block>
   </ng-container>
   <!-- Render multiple visuals for the same node -->
