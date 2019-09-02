@@ -67,18 +67,20 @@ trash {
             background-color: red;
         }
 
-        .upper-drop, .lower-drop {
+        /* Indicators where to drop stuff relative to the current block */
+        .begin-drop, .end-drop {
             position: absolute;
             left: 0px;
             right: 0px;
         }
 
-        .upper-drop {
+        /* Drop before this block */
+        .begin-drop {
             top: 0px;
             height: 15px;
         }
 
-        .upper-drop:hover {
+        .begin-drop:hover {
             background: linear-gradient(
                 to top,
                 rgba(255,255,255,0) 10%,
@@ -87,12 +89,13 @@ trash {
             );
         }
 
-        .lower-drop {
+        /* Drop after this block */
+        .end-drop {
             bottom: 0px;
             height: 15px;
         }
 
-        .lower-drop:hover {
+        .end-drop:hover {
             background: linear-gradient(
                 to bottom,
                 rgba(255,255,255,0) 10%,
