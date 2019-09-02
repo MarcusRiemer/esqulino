@@ -53,6 +53,7 @@ trash {
 
     /* An actual block being rendered */
     editor-block-render-block {
+        position: relative; // To serve as an anchor for the more exact drop locations
         background-color: white;
         cursor: grab;
 
@@ -64,6 +65,40 @@ trash {
 
         .being-replaced {
             background-color: red;
+        }
+
+        .upper-drop, .lower-drop {
+            position: absolute;
+            left: 0px;
+            right: 0px;
+        }
+
+        .upper-drop {
+            top: 0px;
+            height: 15px;
+        }
+
+        .upper-drop:hover {
+            background: linear-gradient(
+                to top,
+                rgba(255,255,255,0) 10%,
+                rgba(130,130,130,0) 50%,
+                rgba(0,0,0,0.65) 100%
+            );
+        }
+
+        .lower-drop {
+            bottom: 0px;
+            height: 15px;
+        }
+
+        .lower-drop:hover {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0) 10%,
+                rgba(130,130,130,0) 50%,
+                rgba(0,0,0,0.65) 100%
+            );
         }
     }
 

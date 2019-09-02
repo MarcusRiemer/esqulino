@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { map, withLatestFrom, distinctUntilChanged, tap, combineLatest } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, withLatestFrom, distinctUntilChanged, tap } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
@@ -11,6 +12,8 @@ import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
+
+type RelativeDropLocation = "block" | "top" | "left" | "bottom" | "right"
 
 /**
  * Renders a single and well known visual element of a node.
@@ -44,6 +47,8 @@ export class BlockRenderBlockComponent {
    * Optionally override the block language that comes with the code resource.
    */
   @Input() public blockLanguage?: BlockLanguage;
+
+  private _currentDropLocationHint = new BehaviorSubject<RelativeDropLocation>(undefined);
 
   constructor(
     private _dragService: DragService,
@@ -108,7 +113,7 @@ export class BlockRenderBlockComponent {
   /**
    * A mouse has entered the block and might want to drop something.
    */
-  onMouseEnter(evt: MouseEvent) {
+  onMouseEnter(evt: MouseEvent, dropLocationHint: RelativeDropLocation) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.node.location, this.node, {
         // Disabled because allowAnyParent inserts in front so defaulting to append seems smarter
@@ -162,11 +167,26 @@ export class BlockRenderBlockComponent {
     })
   );
 
+  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest(
+    this._dragService.isDragInProgress,
+    this._dragService.currentDrag
+  ).pipe(
+    map(([inProgress, currentDrag]) => {
+      if (inProgress && !this.readOnly && currentDrag) {
+        return (currentDrag.hoverNode === this.node);
+      } else {
+        return (false);
+      }
+    })
+  );
+
   /**
    * All different background states.
    */
-  readonly backgroundState = this.isBeingReplaced.pipe(
-    combineLatest(this.isCurrentlyExecuted),
+  readonly backgroundState: Observable<BackgroundState> = combineLatest(
+    this.isBeingReplaced,
+    this.isCurrentlyExecuted
+  ).pipe(
     map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
       if (isBeingReplaced && !this.readOnly) {
         return ("replaced");

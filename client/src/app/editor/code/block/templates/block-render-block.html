@@ -9,3 +9,13 @@
                      [node]="node"
                      [readOnly]="readOnly">
 </editor-block-render>
+
+<ng-container *ngIf="showRelativeDropLocations | async">
+  <div (mouseover)="onMouseEnter($event, 'top')"
+       class="upper-drop">
+  </div>
+
+  <div (mouseover)="onMouseEnter($event, 'bottom')"
+       class="lower-drop">
+  </div>
+</ng-container>
