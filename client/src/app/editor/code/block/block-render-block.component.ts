@@ -7,10 +7,10 @@ import { Node, CodeResource, locationEquals, locationMatchingLength } from '../.
 import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
 import { arrayEqual } from '../../../shared/util';
 import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
+import { nodeIsInSingularHole, relativeDropLocation, RelativeDropLocation } from '../../../shared/syntaxtree/drop-util';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { nodeIsInSingularHole, relativeDropLocation, RelativeDropLocation } from 'src/app/shared/syntaxtree/drop-util';
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
 
