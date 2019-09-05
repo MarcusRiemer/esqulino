@@ -1,0 +1,32 @@
+grammar "json" {
+  typedef "json"."value" ::= string | number | boolean | object | array | null
+  node "json"."string" {
+    terminal "quot-begin" "\""
+    prop "value" { string }
+    terminal "quot-end" "\""
+  }
+  node "json"."number" {
+    prop "value" { integer }
+  }
+  node "json"."boolean" {
+    prop "value" { boolean }
+  }
+  node "json"."object" {
+    terminal "object-open" "{"
+    children allowed "values", between: "," ::= key-value*
+    terminal "object-close" "}"
+  }
+  node "json"."key-value" {
+    children allowed "key" ::= string
+    terminal "colon" ":"
+    children allowed "value" ::= value
+  }
+  node "json"."array" {
+    terminal "array-open" "["
+    children allowed "values", between: "," ::= value*
+    terminal "array-close" "]"
+  }
+  node "json"."null" {
+    terminal "value" "null"
+  }
+}

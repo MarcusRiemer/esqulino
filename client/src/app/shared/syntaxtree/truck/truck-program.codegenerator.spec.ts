@@ -12,7 +12,7 @@ import { PROGRAM_NODE_CONVERTER, DEFAULT_STATE } from './truck-program.codegener
  */
 export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) {
   const input = require(`./truck-program.spec/${fileName}.json`);
-  let expected = require(`raw-loader!./truck-program.spec/${fileName}.txt`) as string;
+  let expected = require(`raw-loader!./truck-program.spec/${fileName}.txt`).default as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);
@@ -30,7 +30,7 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
  */
 export function verifySuffixFiles<T>(fileName: string, outSuffix: string, transform: (obj: T) => string) {
   const input = require(`./truck-program.spec/${fileName}.json`);
-  let expected = require(`raw-loader!./truck-program.spec/${fileName}-${outSuffix}.txt`) as string;
+  let expected = require(`raw-loader!./truck-program.spec/${fileName}-${outSuffix}.txt`).default as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);

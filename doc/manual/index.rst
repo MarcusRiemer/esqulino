@@ -15,8 +15,9 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    :caption: For Language Creators
 
    ast
-   programming-language
+   grammar-by-example
    grammar
+   grammar-builtin
    block-language
 
 .. toctree::
@@ -31,6 +32,7 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    :caption: Design Documents
 
    online-platform
+   ast-grammar-design
 
 .. toctree::
    :caption: Appendix

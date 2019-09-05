@@ -7,4 +7,9 @@ namespace :blattwerkzeug do
       User.make_guest_admin!
     end
   end
+
+  # Promote the given user to be an administrator
+  task :make_admin, [:user_id] => :environment do |t, args|
+    User.make_user_admin! args[:user_id]
+  end
 end

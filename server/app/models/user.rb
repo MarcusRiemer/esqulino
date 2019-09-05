@@ -58,9 +58,19 @@ class User < ApplicationRecord
   # THIS IS ONLY ALLOWED DURING DEVELOPMENT!
   def self.make_guest_admin!
     if Rails.env.development? or Rails.env.test?
-      User.guest.add_role(:admin)#
+      User.guest.add_role(:admin)
     else
       raise EsqulinoError.new("Guests can't be admins outside of development environments", 401)
+    end
+  end
+
+  # Promotes the user with the given ID to be an admin.
+  def self.make_user_admin!(user_id)
+    if (user_id === GUEST_ID)
+      User.make_guest_admin!
+    else
+      user = User.find(user_id)
+      user.add_role(:admin)
     end
   end
 

@@ -47,10 +47,7 @@
       "description": "The technical aspects of a grammar that are used for actual validation\nor generation.",
       "properties": {
         "foreignTypes": {
-          "additionalProperties": {
-            "$ref": "#/definitions/NamedTypes"
-          },
-          "type": "object"
+          "$ref": "#/definitions/NamedLanguages"
         },
         "includedGrammars": {
           "items": {
@@ -61,19 +58,12 @@
         "root": {
           "$ref": "#/definitions/QualifiedTypeName"
         },
-        "technicalName": {
-          "type": "string"
-        },
         "types": {
-          "additionalProperties": {
-            "$ref": "#/definitions/NamedTypes"
-          },
-          "type": "object"
+          "$ref": "#/definitions/NamedLanguages"
         }
       },
       "required": [
         "root",
-        "technicalName",
         "types"
       ],
       "type": "object"
@@ -178,10 +168,18 @@
       ],
       "type": "object"
     },
+    "NamedLanguages": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NamedTypes"
+      },
+      "description": "Multiple languages with types",
+      "type": "object"
+    },
     "NamedTypes": {
       "additionalProperties": {
         "$ref": "#/definitions/NodeTypeDescription"
       },
+      "description": "Types for a single language",
       "type": "object"
     },
     "NodeAttributeDescription": {
