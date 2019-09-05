@@ -11,8 +11,9 @@ export class ProviderLinkingComponent {
   constructor(
     private _userService: UserService
   ) { }
-  public readonly providers = this._userService.providerList$;
 
+  readonly providers = this._userService.providerList$;
+  
   public onTrigger(): void {
     this.trigger.emit()
   }

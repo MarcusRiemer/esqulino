@@ -18,67 +18,116 @@ export class ServerApi {
   ) {
   }
 
-  // TODO NEEDS COMMENTS
+  /**
+   * Retrieves the URL that is used to sign in 
+   */
   getSignInUrl(provider: string): string {
     return (`${this._apiBaseUrl}/auth/${provider}`)
   }
 
+  /**
+   * Retrieves the URL that is used to sign in with password
+   */
   getUserDataUrl(): string {
     return (`${this._apiBaseUrl}/user`)
   }
 
+  /**
+   * Retrieves the URL that is used to sign up with password
+   */
   getSignUpUrl(): string {
     return (`${this._apiBaseUrl}/auth/identity/register`)
   }
 
+  /**
+   * Retrieves the URL that is used to sign in with password
+   */
   getSignInWithPasswordUrl(): string {
     return (`${this._apiBaseUrl}/auth/identity`)
   }
 
+  /**
+   * Retrieves the URL that is used to list all linked identities
+   */
   getUserIdentitiesUrl(): string {
     return (`${this._apiBaseUrl}/identities`)
   }
 
+  /**
+   * Retrieves the URL that is used to list all available providers
+   */
   getProvidersUrl(): string {
     return (`${this._apiBaseUrl}/identities/list`)
   }
 
+  /**
+   * Retrieves the URL that is used to change user roles
+   */
   getChangeRolesUrl(): string {
     return (`${this._apiBaseUrl}/user/change_roles`)
   }
 
+  /**
+   * Retrieves the URL that is used to sign out
+   */
   getSignOutUrl(): string {
     return (`${this._apiBaseUrl}/auth/sign_out`)
   }
 
+  /**
+   * Retrieves the URL that is used to change the password of the password identities
+   */
   getChangePasswordUrl(): string {
     return (`${this._apiBaseUrl}/identities/change_password`)
   }
 
+  /**
+   * Retrieves the URL that is used to send a password reset mail
+   */
   getPasswordResetRequestUrl(): string {
     return (`${this._apiBaseUrl}/identities/reset_password_mail`)
   }
 
+
+  /**
+   * Retrieves the URL that is used to reset the password of all linked password identities
+   */
   getPasswordResetUrl(): string {
     return (`${this._apiBaseUrl}/identities/reset_password`)
   }
 
+
+  /**
+   * Retrieves the URL that is used to change the primary email
+   */
   getChangePrimaryEmailUrl(): string {
     return (`${this._apiBaseUrl}/user/send_change_email`)
   }
 
+  /**
+   * Retrieves the URL that is used to change the username
+   */
   getChangeUserNameUrl(): string {
     return (`${this._apiBaseUrl}/user/change_username`)
   }
-
-  getDeleteEmailUrl(): string {
+  
+  /**
+   * Retrieves the URL that is used to delete a linked identity
+   */
+  getDeleteIdentityUrl(): string {
     return (`${this._apiBaseUrl}/identities/delete_identity`)
   }
 
+  /**
+   * Retrieves the URL that is used to send an verify email
+   */
   getSendVerifyEmailUrl(): string {
     return (`${this._apiBaseUrl}/identities/send_verify_email`)
   }
 
+  /**
+   * Retrieves the URL that is used to check ui elements
+   */
   getMayPerformUrl(): string {
     return (`${this._apiBaseUrl}/user/may_perform`)
   }

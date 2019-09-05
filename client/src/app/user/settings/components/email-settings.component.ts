@@ -16,6 +16,7 @@ export class EmailSettingsComponent {
     primaryEmail: ""
   };
 
+  // All linked identities
   public identities$ = this._userService.identities$;
 
   public get primaryEmail(): string {
@@ -26,6 +27,9 @@ export class EmailSettingsComponent {
     this._primaryEmailData.primaryEmail = email;
   }
 
+  /**
+   * Is the given date earlier than the current
+   */
   public isTokenExpired(date: string): boolean {
     return new Date() <= new Date(date);
   }
@@ -45,6 +49,10 @@ export class EmailSettingsComponent {
     this.primaryEmail = email;
   }
 
+  /**
+   * Changing primary e-mail
+   * @param emails distinct, confirmed emails
+   */
   public onSave(emails: Set<string>): void {
     if (emails.has(this.primaryEmail)) {
       this._userService.sendChangePrimaryEmail$(this._primaryEmailData)

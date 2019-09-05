@@ -21,6 +21,7 @@
         </select>
 
         <ng-container *ngFor="let provider of identities.providers">
+          <!-- Animation if primary email is in progress -->
           <mat-progress-spinner
             *ngIf="isTokenExpired(provider.changes.primary)"
             color="primary"

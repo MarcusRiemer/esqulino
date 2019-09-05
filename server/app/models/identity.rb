@@ -1,30 +1,37 @@
 
-require 'bcrypt'
+# Represents a sign in option 
 class Identity < ActiveRecord::Base
   include BCrypt
 
+  # The uid is a unique identifier of an identity that has to be set
   validates :uid, presence: true
   validates :provider, presence: true
 
   belongs_to :user
 
+  # Scopes to search identities of specific providers
   scope :developer, -> { where(type: 'Developer') }
   scope :google, -> { where(type: 'Google') }
   scope :password, -> { where(type: 'PasswordIdentity') }
   scope :github, -> { where(type: 'Github') }
 
+  # Search for all identities with the given email
   def self.find_by_email(email)
     where("provider_data ->> 'email' = ?", email)
   end
 
+   # Search for all identities with the given primary email token
   def self.find_by_change_primary_email_token(token)
     where("own_data ->> 'change_primary_email_token' = ?", token)
   end
 
+  # Search for an identity with the given auth hash.
   def self.search(auth)
     find_by_provider_and_uid(auth[:provider], auth[:uid])
   end
 
+  # Returns a hash containing information about all available providers
+  # The available providers are loaded from the sqlino file
   def self.all_client_information
     to_return = Rails.configuration.sqlino["auth_provider"].map do |k|
       infos = k.constantize.client_information
@@ -36,6 +43,10 @@ class Identity < ActiveRecord::Base
   # Creates an identity with omniauth callback or create_identity_data,
   # create_identity_data takes the posted values and put them into a hash
   def self.create_with_auth(auth, user)
+    if (user.eql? User.guest) then
+      user = User.create_from_hash(auth)
+    end
+
     case auth[:provider]
     when 'developer'
       identity = Developer.create_with_auth(auth, user)
@@ -77,6 +88,8 @@ class Identity < ActiveRecord::Base
     return identity
   end
 
+  # Creates a hash that is passed to the client
+  # contains all information about a current selected identity 
   def to_list_api_response
     return ({
               :id => self.id,
@@ -89,6 +102,7 @@ class Identity < ActiveRecord::Base
             })
   end
 
+  # Will be created on a primary e-mail change
   def change_primary_email_token
     return self.own_data["change_primary_email_token"]
   end

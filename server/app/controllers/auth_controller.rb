@@ -11,7 +11,7 @@ class AuthController < ApplicationController
       auth_hash = request.env["omniauth.auth"]
       identity = Identity.search(auth_hash)
       if (not identity) then
-        identity = create_identity(auth_hash)
+        identity = Identity.create_with_auth(auth_hash, current_user)
       end
 
       if (signed_in?) and (not current_user.eql? identity.user) then
@@ -19,12 +19,16 @@ class AuthController < ApplicationController
       end
 
       sign_in(identity)
+      # The HTTP referer identifies the address of the webpage
+      # which is linked to the resource being requested
       redirect_to URI(request.referer || "/").path
     rescue => e
       raise RuntimeError.new(e.message)
     end
   end
   
+  # Function is called by omniauth identity and
+  # is used to login a user with password
   def login_with_password
     identity = PasswordIdentity.find_by(uid: login_params[:email])
     if (not identity)
@@ -51,7 +55,7 @@ class AuthController < ApplicationController
       auth_hash = create_identity_data(register_params)
       identity = Identity.search(auth_hash)
       if (not identity) then
-        identity = create_identity(auth_hash)
+        identity = Identity.create_with_auth(auth_hash, current_user)
         # sends an confirmation e-mail
         IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
         api_response(current_user.information)
@@ -63,27 +67,19 @@ class AuthController < ApplicationController
     end
   end
 
+  # Sign out a user
   def destroy
     sign_out!
-    delete_jwt_cookie!
     api_response(current_user.information)
   end
 
+  # Failure will be called by omniauth.
+  # For example if someone tries csrf
   def failure
     error_response(params[:message])
   end
 
   private
-
-  def create_identity(auth_hash)
-    user = current_user
-    if (not signed_in?) then
-      user = User.create_from_hash(auth_hash)
-    end
-
-    identity = Identity.create_with_auth(auth_hash, user)
-    return identity
-  end
 
   def register_params
     params

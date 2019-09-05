@@ -1,12 +1,15 @@
+# The Google provider comes from https://github.com/zquestz/omniauth-google-oauth2
 class Google < Identity
   scope :find_by_email, -> (email) { 
     where("provider_data ->> 'email' = ?", email)
   }
 
+  # Creates a google identity with the given hash and user
   def self.create_with_auth(auth, user)
     new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
   end
 
+  # Client side information for the GitHub provider
   def self.client_information
     return ({
       name: "Google",
