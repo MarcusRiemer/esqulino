@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-import { Observable, combineLatest } from 'rxjs';
-import { map, withLatestFrom, flatMap } from 'rxjs/operators';
+import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { map, flatMap } from 'rxjs/operators';
 
 import { locationIsOnPath } from '../../../shared/util';
 import { Node, CodeResource, NodeLocation, ErrorCodes, ErrorMissingChild } from '../../../shared/syntaxtree';
@@ -138,7 +138,10 @@ export class BlockRenderDropTargetComponent {
    */
   @Input() public readOnly = false;
 
-  private _currentTarget = false;
+  /**
+   * Indicates whether the mouse is currently over exactly this target.
+   */
+  private _currentMouseTarget = new BehaviorSubject(false);
 
   constructor(
     private _dragService: DragService,
@@ -168,8 +171,9 @@ export class BlockRenderDropTargetComponent {
    * It is important to have both things at hand because the UI should react
    * to ended drag events, so filtering out all "empty" drags is no option.
    */
-  private readonly _latestDragData = this._dragService.currentDrag.pipe(
-    withLatestFrom(this._dragService.isDragInProgress)
+  private readonly _latestDragData = combineLatest(
+    this._dragService.currentDrag,
+    this._dragService.isDragInProgress
   );
 
   /** @return True, if this drop target is acting as a hole */
@@ -200,7 +204,7 @@ export class BlockRenderDropTargetComponent {
   /** @return True, if this drop target is currently a possible drag location */
   private readonly _isCurrentDropCandidate = this._latestDragData.pipe(
     map(([currentDrag, inProgress]) => {
-      if (inProgress && currentDrag.smartDrops.length > 0) {
+      if (inProgress && currentDrag && currentDrag.smartDrops.length > 0) {
         currentDrag.smartDrops.some(op =>
           op.operation === "insert" && locationIsOnPath(currentDrag.dropLocation, this.dropLocation)
         );
@@ -220,63 +224,70 @@ export class BlockRenderDropTargetComponent {
     return (targetState(drag, this.dropLocation, this._peekValidator, this._peekTree));
   }
 
+  /**
+   * @return The current targeting state of this drop target
+   */
+  readonly targetState: Observable<DragTargetState | "hole" | "optional"> = combineLatest(
+    this._dragService.currentDrag,
+    this._isHole,
+    this._parentRequiresChildren,
+    this._hasChildren
+  ).pipe(
+    map(([drag, isHole, requiresChildren, hasChildren]) => {
+      if (this.readOnly) {
+        return ("unknown");
+      } else {
+        const targetState = this._targetState(drag);
+        if (targetState === "unknown") {
+          if (isHole || requiresChildren)
+            return ("hole");
+          else if (!hasChildren && this.visual.emptyDropTarget)
+            return ("optional");
+          else
+            return ("unknown");
+        } else {
+          return (targetState);
+        }
+      }
+    })
+  );
+
+  /**
+   * True if the mouse is currently over this drop target
+   */
+  readonly currentMouseTarget = this._currentMouseTarget.asObservable();
 
   /**
    * True if either the drop target or the drop location should be shown.
    */
   readonly showAnything: Observable<boolean> = combineLatest(
-    this._isCurrentDropCandidate, this._isHole, this._parentRequiresChildren, this._hasChildren
+    this._isCurrentDropCandidate, this._isHole, this._parentRequiresChildren,
+    this._hasChildren, this.currentMouseTarget
   ).pipe(
-    map(([isCurrentDropLocation, isHole, requiresChildren, hasChildren]) => {
+    map(([isCurrentDropLocation, isHole, requiresChildren, hasChildren, currentMouseTarget]) => {
       return (
         (this.visual.emptyDropTarget && !hasChildren)
         || isHole
         || requiresChildren
         || isCurrentDropLocation
-        || this._currentTarget
+        || currentMouseTarget
       );
     })
   )
-
-  /**
-   * @return The current targeting state of this drop target
-   */
-  readonly targetState: Observable<DragTargetState | "hole" | "optional"> = this._dragService.currentDrag
-    .pipe(
-      withLatestFrom(this._isHole, this._parentRequiresChildren, this._hasChildren),
-      map(([drag, isHole, requiresChildren, hasChildren]) => {
-        if (this.readOnly) {
-          return ("unknown");
-        } else {
-          const targetState = this._targetState(drag);
-          if (targetState === "unknown") {
-            if (isHole || requiresChildren)
-              return ("hole");
-            else if (!hasChildren && this.visual.emptyDropTarget)
-              return ("optional");
-            else
-              return (targetState);
-
-          } else {
-            return (targetState);
-          }
-        }
-      })
-    );
 
   /**
    * A mouse has entered, we possibly need to ensure that the drop target
    * does not vanish.
    */
   onMouseEnter(evt: MouseEvent) {
-    this._currentTarget = true;
+    this._currentMouseTarget.next(true);
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.dropLocation, undefined, { allowExact: true });
     }
   }
 
   onMouseOut(evt: MouseEvent) {
-    this._currentTarget = false;
+    this._currentMouseTarget.next(false);
     evt.stopPropagation();
   }
 

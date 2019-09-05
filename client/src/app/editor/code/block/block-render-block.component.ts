@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { map, withLatestFrom, distinctUntilChanged, tap, combineLatest } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, withLatestFrom, distinctUntilChanged, tap } from 'rxjs/operators';
 
 import { Node, CodeResource, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
@@ -9,6 +10,7 @@ import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { nodeIsInSingularHole, relativeDropLocation, RelativeDropLocation } from 'src/app/shared/syntaxtree/drop-util';
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
 
@@ -44,6 +46,8 @@ export class BlockRenderBlockComponent {
    * Optionally override the block language that comes with the code resource.
    */
   @Input() public blockLanguage?: BlockLanguage;
+
+  private _currentDropLocationHint = new BehaviorSubject<RelativeDropLocation>(undefined);
 
   constructor(
     private _dragService: DragService,
@@ -108,15 +112,18 @@ export class BlockRenderBlockComponent {
   /**
    * A mouse has entered the block and might want to drop something.
    */
-  onMouseEnter(evt: MouseEvent) {
+  onMouseEnter(evt: MouseEvent, dropLocationHint: RelativeDropLocation) {
     if (!this.readOnly && this._dragService.peekIsDragInProgress) {
-      this._dragService.informDraggedOver(evt, this.node.location, this.node, {
+      const shiftedLocation = relativeDropLocation(this.node.location, dropLocationHint);
+      const explicitLocation = dropLocationHint !== "block";
+
+      this._dragService.informDraggedOver(evt, shiftedLocation, this.node, {
         // Disabled because allowAnyParent inserts in front so defaulting to append seems smarter
         allowExact: false,
         allowAnyParent: true,
-        allowEmbrace: this.allowEmbrace,
+        allowEmbrace: this.allowEmbrace && !explicitLocation,
         allowAppend: true,
-        allowReplace: true
+        allowReplace: explicitLocation
       });
     }
   }
@@ -163,10 +170,33 @@ export class BlockRenderBlockComponent {
   );
 
   /**
+   * True if it is sensible to show more detailed drop location hints.
+   * This is the case if the location that would be dropped in to is at
+   * least not empty and if it would take the type.
+   */
+  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest(
+    this._dragService.isDragInProgress,
+    this._dragService.currentDrag
+  ).pipe(
+    map(([inProgress, currentDrag]) => {
+      if (inProgress && !this.readOnly && currentDrag) {
+        return (currentDrag.hoverNode === this.node && !nodeIsInSingularHole(
+          this.codeResource.validationLanguagePeek.validator,
+          this.node
+        ));
+      } else {
+        return (false);
+      }
+    })
+  );
+
+  /**
    * All different background states.
    */
-  readonly backgroundState = this.isBeingReplaced.pipe(
-    combineLatest(this.isCurrentlyExecuted),
+  readonly backgroundState: Observable<BackgroundState> = combineLatest(
+    this.isBeingReplaced,
+    this.isCurrentlyExecuted
+  ).pipe(
     map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
       if (isBeingReplaced && !this.readOnly) {
         return ("replaced");

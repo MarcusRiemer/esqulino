@@ -71,12 +71,14 @@ export class Validator {
    * Registers a new language with this validator
    */
   private registerGrammar(desc: Desc.GrammarDocument) {
-    if (this.isKnownLanguage(desc.technicalName)) {
-      throw new Error(`Attempted to register language "${desc.technicalName}" twice`);
-    }
-
     const gv = new GrammarValidator(this, desc);
-    gv.availableLanguages.forEach(langName => this._registeredGrammars[langName] = gv);
+    gv.availableLanguages.forEach(langName => {
+      if (this._registeredGrammars[langName]) {
+        throw new Error(`Attempted to register second validator ${langName}`);
+      }
+
+      this._registeredGrammars[langName] = gv;
+    });
   }
 
   /**

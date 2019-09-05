@@ -59,7 +59,7 @@ export class EditBlockLanguageService {
    * A human readable version of that grammar.
    */
   readonly baseGrammarPrettyPrinted = this.baseGrammar.pipe(
-    map(grammar => prettyPrintGrammar(grammar))
+    map(grammar => prettyPrintGrammar(grammar.name, grammar))
   );
 
   /**

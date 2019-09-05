@@ -1,7 +1,7 @@
-import { NodeDescription } from './syntaxtree.description';
+import { NodeDescription, NodeLocation } from './syntaxtree.description';
 import { Tree } from './syntaxtree';
 import { Validator } from './validator';
-import { _cardinalityAllowsInsertion } from './drop-util';
+import { _cardinalityAllowsInsertion, nodeIsInSingularHole, relativeDropLocation } from './drop-util';
 import { ErrorCodes } from './validation-result';
 
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from './grammar.spec.boolean';
@@ -227,5 +227,80 @@ describe('Drop Utils', () => {
       expect(_cardinalityAllowsInsertion(validator, inNode, candidateDesc, "where", 0)).toBe(false);
     });
 
+  });
+
+  describe(`nodeIsInSingularHole`, () => {
+    it(`SQL: Components are singular, columns not`, () => {
+      const inTreeDesc: NodeDescription = {
+        language: "sql",
+        name: "querySelect",
+        children: {
+          "select": [{
+            language: "sql",
+            name: "select",
+            children: {
+              "columns": [{ language: "sql", name: "starOperator" }]
+            }
+          }],
+          "from": [{
+            language: "sql",
+            name: "from",
+            children: {
+              "tables": []
+            }
+          }]
+        }
+      };
+
+      const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
+      const tree = new Tree(inTreeDesc);
+
+      expect(nodeIsInSingularHole(validator, tree.locate([["select", 0]]))).toBe(true);
+      expect(nodeIsInSingularHole(validator, tree.locate([["select", 0], ["columns", 0]]))).toBe(false);
+      expect(nodeIsInSingularHole(validator, tree.locate([["from", 0]]))).toBe(true);
+      expect(nodeIsInSingularHole(validator, tree.locate([]))).toBe(true);
+    });
+  });
+
+  describe(`relativeDropLocation`, () => {
+    it(`empty`, () => {
+      expect(relativeDropLocation([], "block")).toEqual([]);
+      expect(relativeDropLocation([], "begin")).toEqual([]);
+      expect(relativeDropLocation([], "end")).toEqual([]);
+    });
+
+    it(`single level`, () => {
+      expect(relativeDropLocation([["foo", 0]], "block")).toEqual([["foo", 0]]);
+      expect(relativeDropLocation([["foo", 0]], "begin")).toEqual([["foo", -1]]);
+      expect(relativeDropLocation([["foo", 0]], "end")).toEqual([["foo", 0]]);
+
+      expect(relativeDropLocation([["foo", 1]], "block")).toEqual([["foo", 1]]);
+      expect(relativeDropLocation([["foo", 1]], "begin")).toEqual([["foo", 0]]);
+      expect(relativeDropLocation([["foo", 1]], "end")).toEqual([["foo", 1]]);
+
+      expect(relativeDropLocation([["foo", 2]], "block")).toEqual([["foo", 2]]);
+      expect(relativeDropLocation([["foo", 2]], "begin")).toEqual([["foo", 1]]);
+      expect(relativeDropLocation([["foo", 2]], "end")).toEqual([["foo", 2]]);
+    });
+
+    it(`two levels`, () => {
+      expect(relativeDropLocation([["bar", 0], ["foo", 0]], "block")).toEqual([["bar", 0], ["foo", 0]]);
+      expect(relativeDropLocation([["bar", 0], ["foo", 0]], "begin")).toEqual([["bar", 0], ["foo", -1]]);
+      expect(relativeDropLocation([["bar", 0], ["foo", 0]], "end")).toEqual([["bar", 0], ["foo", 0]]);
+
+      expect(relativeDropLocation([["bar", 0], ["foo", 1]], "block")).toEqual([["bar", 0], ["foo", 1]]);
+      expect(relativeDropLocation([["bar", 0], ["foo", 1]], "begin")).toEqual([["bar", 0], ["foo", 0]]);
+      expect(relativeDropLocation([["bar", 0], ["foo", 1]], "end")).toEqual([["bar", 0], ["foo", 1]]);
+
+      expect(relativeDropLocation([["bar", 0], ["foo", 2]], "block")).toEqual([["bar", 0], ["foo", 2]]);
+      expect(relativeDropLocation([["bar", 0], ["foo", 2]], "begin")).toEqual([["bar", 0], ["foo", 1]]);
+      expect(relativeDropLocation([["bar", 0], ["foo", 2]], "end")).toEqual([["bar", 0], ["foo", 2]]);
+    });
+
+    it(`copy`, () => {
+      const given: NodeLocation = [["bar", 0], ["foo", 0]];
+      expect(relativeDropLocation(given, "block")).toEqual(given);
+      expect(relativeDropLocation(given, "block")).not.toBe(given);
+    });
   });
 });

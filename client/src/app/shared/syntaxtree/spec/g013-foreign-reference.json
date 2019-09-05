@@ -1,0 +1,22 @@
+{
+  "root": { "languageName": "g013", "typeName": "n1" },
+  "types": {
+    "g013": {
+      "n1": {
+        "attributes": [
+          {
+            "name": "c",
+            "type": "sequence",
+            "nodeTypes": [
+              "n1",
+              { "languageName": "g013-foreign", "typeName": "n1" }
+            ]
+          }
+        ]
+      }
+    },
+    "g013-foreign": {
+      "n1": {}
+    }
+  }
+}
