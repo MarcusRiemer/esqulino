@@ -1,6 +1,10 @@
 import { Injectable, Injector } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from "@angular/router";
 
+/**
+ * The guards passed in the data object are instantiated one after the other and
+ * checked for validity.
+ */
 @Injectable()
 export class MasterGuard implements CanActivate {
 

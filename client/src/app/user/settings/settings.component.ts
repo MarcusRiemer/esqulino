@@ -35,6 +35,9 @@ export class UserSettingsComponent implements OnInit {
     private _sideNav: SideNavService
   ) { }
 
+  /**
+   * Reloads the side-nav
+   */
   ngOnInit(): void {
     this._sideNav.newSideNav(userSettings)
   }

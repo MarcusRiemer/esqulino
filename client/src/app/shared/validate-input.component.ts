@@ -72,10 +72,16 @@ export class ValidateInputComponent implements AfterViewInit {
     this.clicked.emit();
   }
 
+  /**
+   * Should the icon displayed?
+   */
   public isIconActive(): boolean {
     return this.icon !== undefined
   }
 
+  /**
+   * Is input valid? Checks with native HTML validator
+   */
   public isInputValid(): boolean {
     return this.inputRef.nativeElement.checkValidity();
   }

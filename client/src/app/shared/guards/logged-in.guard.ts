@@ -6,6 +6,9 @@ import { first } from "rxjs/operators";
 import { AuthDialogComponent } from "./../auth/auth-dialog.component";
 import { UserService } from "../auth/user.service";
 
+/**
+ *Guard to protect routes, that are only to be seen as a logged in user
+ */
 @Injectable()
 export class LoggedInGuard implements CanActivate {
   constructor(

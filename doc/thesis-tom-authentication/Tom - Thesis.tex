@@ -1,7 +1,7 @@
 \documentclass[paper=a4,fontsize=11pt,parskip=half]{scrartcl}
 
-\usepackage{ucs}
-\usepackage[utf8x]{inputenc}
+
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{titlesec}
@@ -19,7 +19,10 @@
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 \usepackage{soul}
 \usepackage{subcaption}
+\usepackage{fancyhdr}
 \usepackage{hyperref}
+\usepackage[backend=biber]{biblatex}
+
 \hypersetup{
 	colorlinks=true,% make the links colored
 }
@@ -99,6 +102,10 @@
 	{]}{{{\color{delim}{]}}}}{1},
 }
 
+\fancyhf{}
+\chead{\fancyplain{}{\nouppercase{\rightmark}}} 
+\cfoot{\pagemark}
+
 \onehalfspacing
 
 \title{Abschlussarbeit}
@@ -131,18 +138,37 @@
 \newacronym{CSRF}{CSRF}{Cross-Site-Request-Forgery}
 \newacronym{HTTPS}{HTTPS}{Hypertext Transfer Protocol Secure}
 \newacronym{URL}{URL}{Uniform Resource Locator}
+\newacronym{SQL}{Structured Query Language}{Structured Query Language}
+
+\addbibresource{quellen.bib} 
 
 \begin{document}
 	\hypersetup{linkcolor=black, urlcolor=black}
-
-   	\tableofcontents
 	\clearpage
-	
+	\input{titelseite}
+	\clearpage
+   	\tableofcontents
+  	\clearpage
+ 	\pagestyle{fancy}
 	\input{kap-1-einleitung}
+	\clearpage
 	\input{kap-2-technologien}
+	\clearpage
 	\input{kap-3-anforderungs_analyse}
+	\clearpage
 	\input{kap-4-implementierung}
+	\clearpage
 	\input{kap-5-fazit}
+	\clearpage 
+
+	\section{Literaturverzeichnis}
+	\nocite{*}
+	\printbibliography
+	
+	\clearpage
+	\input{eidesstattliche-erklärung}
+	\clearpage
+	\input{cd-rom}
 
 \end{document}
 %%% Local Variables:

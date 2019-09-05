@@ -5,7 +5,7 @@ class IdentityMailer < ApplicationMailer
   def reset_password(identity, locale)
     @user = User.find(identity[:user_id])
   
-    @password_reset_url = "http://#{locale}.#{@@base_url}/user/reset_password/#{identity.password_reset_token}"
+    @password_reset_url = "https://#{locale}.#{@@base_url}/user/reset_password/#{identity.password_reset_token}"
     mail(to: identity.email, subject: "Blattwerkzeug.de password reset")
   end
 
@@ -19,7 +19,7 @@ class IdentityMailer < ApplicationMailer
   def confirm_email(identity, locale)
     @user = User.find(identity[:user_id])
 
-    @user_verify_url = "http://#{locale}.#{@@base_url}/api/identities/confirmation/#{identity.verify_token}"
+    @user_verify_url = "https://#{locale}.#{@@base_url}/api/identities/confirmation/#{identity.verify_token}"
     mail(to: identity[:uid].to_s, subject: "Blattwerkzeug.de confirmation")
   end
 end

@@ -25,19 +25,22 @@
     <hr/>
 
     <ng-container *ngIf="isSignIn()">
+      <!-- Main content -->
       <sign-in *ngIf="!secondContent"
         (content)="changeContent()">
       </sign-in>
+      <!-- Second content -->
       <request-reset-password 
         *ngIf="secondContent">
       </request-reset-password>
     </ng-container>
 
     <ng-container *ngIf="!isSignIn()">
+      <!-- Main content -->
       <sign-up *ngIf="!secondContent"
         (content)="changeContent()">
       </sign-up>
-
+      <!-- Second content -->
       <request-verify-email
         *ngIf="secondContent">
       </request-verify-email>

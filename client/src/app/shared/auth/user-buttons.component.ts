@@ -16,10 +16,14 @@ export class UserButtonsComponent {
     private _router: Router
   ) { }
 
+  /**
+   * Der aktuelle display-name eines Benutzers
+   */
   readonly userDisplayName$ = this._userService.userDisplayName$;
 
   /**
-   * Opens an dialog for sign in or sign up
+   * Opens a dialog for sign in or sign up
+   * Dialog: https://material.angular.io/components/dialog/overview
    */
   public openDialog(type: "signIn" | "signUp"): void {
     AuthDialogComponent.showDialog(this._dialog, { type: type });
@@ -34,7 +38,7 @@ export class UserButtonsComponent {
   }
 
   /**
-   * Sends an delete request and navigates back to the base url
+   * Sends a delete request and navigates back to the base url
    */
   public onLogout(): void {
     this._userService
