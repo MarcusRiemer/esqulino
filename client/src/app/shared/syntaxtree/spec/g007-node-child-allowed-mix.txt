@@ -1,9 +1,9 @@
-grammar "g7" {
-  node "n1" {
+grammar "g007-node-child-allowed-mix" {
+  node "g7"."n1" {
     children allowed "c" ::= n1? & n2+ & n3*
   }
-  node "n2" {
+  node "g7"."n2" {
   }
-  node "n3" {
+  node "g7"."n3" {
   }
 }

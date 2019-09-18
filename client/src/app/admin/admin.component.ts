@@ -7,8 +7,8 @@ export const adminItems: NavItem[] = [
   {
     type: "link",
     text: {
-      de: "Administration",
-      en: "Administration",
+      de: "Benutzer",
+      en: "User",
     },
     route: ["/admin"],
     icon: "puzzle-piece",
@@ -39,6 +39,9 @@ export const adminItems: NavItem[] = [
     },
     route: ["/admin/news"],
     icon: "newspaper-o",
+  },
+  {
+    type: "fill"
   },
   {
     type: "external",

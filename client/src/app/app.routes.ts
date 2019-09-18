@@ -2,7 +2,6 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { editorRoutes } from './editor/editor.routes'
 import { frontRoutes } from './front/front.routes'
-import { LoggedInGuard } from './shared/guards/logged-in.guard';
 import { IsAdminGuard } from './shared/guards/is-admin.guard';
 import { MasterGuard } from './shared/guards/master-guard';
 
@@ -17,16 +16,15 @@ const AppRoutes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule), // new dynamic import method
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {
     // The admin module has a few heavyweight dependencies and is
     // therefore not bundled with the main application.
     path: 'admin',
-    // loadChildren: './admin/admin.module#AdminModule',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), // new dynamic import method
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
     data: {
-      guards: [LoggedInGuard, IsAdminGuard]
+      guards: [IsAdminGuard]
     },
     canActivate: [MasterGuard]
   },

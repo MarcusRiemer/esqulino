@@ -65,7 +65,7 @@ test:
 production:
   name: "Blattwerkzeug"
   data_dir: <%= ENV['DATA_DIR'] || '../data/prod' %>
-  client_dir: ../client/dist/browser
+  client_dir: ../client/dist-live/browser # Beware, this is *not* the normal output folder
   schema_dir: ../schema/json
   project_domains: ["blattzeug.de"]
   editor_domain: "blattwerkzeug.de"
@@ -75,7 +75,7 @@ production:
   ide_service:
     exec:
       node_binary: /usr/bin/node
-      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist-live/cli/bundle.cli.js' %>
       mode: one-shot
   seed:
     data_dir: ../seed

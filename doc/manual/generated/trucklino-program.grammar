@@ -1,0 +1,94 @@
+grammar "trucklino-program" {
+  node "trucklino_program"."program" {
+    children sequence "procedures" ::= procedureDeclaration*
+    children sequence "main" ::= statement*
+  }
+  node "trucklino_program"."procedureDeclaration" {
+    terminal "function" "function "
+    prop "name" { string }
+    terminal "parenOpen" "("
+    children sequence "arguments" ::= procedureParameter*
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+  node "trucklino_program"."procedureParameter" {
+    prop "name" { string }
+  }
+  typedef "trucklino_program"."statement" ::= procedureCall | if | loopFor | loopWhile
+  node "trucklino_program"."procedureCall" {
+    prop "name" { string }
+    terminal "parenOpen" "("
+    children sequence "arguments" ::= booleanExpression*
+    terminal "parenClose" ")"
+  }
+  typedef "trucklino_program"."booleanExpression" ::= sensor | negateExpression | booleanBinaryExpression | booleanConstant
+  node "trucklino_program"."sensor" {
+    prop "type" { string enum "lightIsRed" "lightIsGreen" "canGoStraight" "canTurnLeft" "canTurnRight" "canLoad" "canUnload" "isOnTarget" "isSolved" }
+  }
+  node "trucklino_program"."negateExpression" {
+    terminal "not" "(NOT "
+    children sequence "expr" ::= booleanExpression
+    terminal "close" ")"
+  }
+  node "trucklino_program"."booleanBinaryExpression" {
+    terminal "open" "("
+    children sequence "lhs" ::= booleanExpression
+    terminal "spaceBefore" " "
+    children sequence "operator" ::= relationalOperator
+    terminal "spaceAfter" " "
+    children sequence "rhs" ::= booleanExpression
+    terminal "close" ")"
+  }
+  node "trucklino_program"."relationalOperator" {
+    prop "operator" { string enum "AND" "OR" }
+  }
+  node "trucklino_program"."booleanConstant" {
+    prop "value" { string enum "true" "false" }
+  }
+  node "trucklino_program"."if" {
+    terminal "if" "if"
+    terminal "parenOpen" " ("
+    children sequence "pred" ::= booleanExpression
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+    children sequence "elseIf" ::= ifElseIf*
+    children sequence "else" ::= ifElse?
+  }
+  node "trucklino_program"."ifElseIf" {
+    terminal "elseIf" "else if"
+    terminal "parenOpen" " ("
+    children sequence "pred" ::= booleanExpression
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+  node "trucklino_program"."ifElse" {
+    terminal "else" "else"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+  node "trucklino_program"."loopFor" {
+    terminal "for" "for"
+    terminal "parenOpen" " ("
+    prop "times" { integer ≥ 0 }
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+  node "trucklino_program"."loopWhile" {
+    terminal "while" "while"
+    terminal "parenOpen" " ("
+    children sequence "pred" ::= booleanExpression
+    terminal "parenClose" ")"
+    terminal "bodyOpen" " {"
+    children sequence "body" ::= statement*
+    terminal "bodyClose" "}"
+  }
+}

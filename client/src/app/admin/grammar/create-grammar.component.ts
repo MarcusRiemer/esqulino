@@ -18,7 +18,6 @@ export class CreateGrammarComponent {
   grammar: GrammarDescription = {
     id: undefined,
     name: "",
-    technicalName: "",
     slug: undefined,
     programmingLanguageId: "",
     root: { languageName: "", typeName: "" },

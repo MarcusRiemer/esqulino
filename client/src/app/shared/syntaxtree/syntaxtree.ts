@@ -244,6 +244,19 @@ export class Node {
   }
 
   /**
+   * @return The category this node inhabits in its parent
+   */
+  get nodeParentCategory(): string {
+    const parent = this.nodeParent;
+    if (parent) {
+      const loc = this.location;
+      return (loc[loc.length - 1][0]);
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
    * @return The tree this node is a part of.
    */
   get tree(): Tree {
