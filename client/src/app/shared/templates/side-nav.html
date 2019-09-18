@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<mat-sidenav-container *ngIf="navItems">
+<mat-sidenav-container *ngIf="(sideNavItems$ | async) as navItems">
   <mat-sidenav
       #sideNav
       [mode]="sidebarMode$ | async"
