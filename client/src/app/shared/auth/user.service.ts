@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
-import { Observable } from 'rxjs';
-import { map, tap, first, } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, tap, first, catchError, } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
@@ -43,14 +43,18 @@ export class UserService {
    * @return The Name of the currently authenticated user
    */
   public readonly userDisplayName$ = this.userData$.value.pipe(
-    map(u => u.displayName)
+    map(u => u.displayName),
+    // Error value if something breaks down horribly (server error, network outage, ...).
+    catchError(_ => of("userDisplayName: Unknown Error")),
   )
 
   /**
    * @return The ID of the currently authenticated user
    */
   public readonly userId$ = this.userData$.value.pipe(
-    map(u => u.userId)
+    map(u => u.userId),
+    // Assume guest role if something breaks down horribly (server error, network outage, ...).
+    catchError(_ => of(["guest"])),
   );
 
   /**
@@ -62,7 +66,9 @@ export class UserService {
   )
 
   public readonly roles$ = this.userData$.value.pipe(
-    map(u => u.roles)
+    map(u => u.roles),
+    // Assume guest ID if something breaks down horribly (server error, network outage, ...).
+    catchError(_ => of(UserService.GUEST_ID)),
   )
 
   public readonly primaryEmail$ = this.identities$.value.pipe(
@@ -111,7 +117,7 @@ export class UserService {
    */
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription> {
     return this.$pipeObserv(this._serverData.resetPassword$(data),
-     () => this.userData$.refresh()
+      () => this.userData$.refresh()
     )
   }
 
@@ -129,7 +135,7 @@ export class UserService {
   }
 
   /**
-   * Sends a http-request to exchange the passwords of all linked password identities 
+   * Sends a http-request to exchange the passwords of all linked password identities
    * @param data current password, new password
    */
   public changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
@@ -157,7 +163,7 @@ export class UserService {
 
   /**
    * If the User wants to change his primary E-Mail,
-   * a confirmation email will be sent. 
+   * a confirmation email will be sent.
    * The user has to verify the email in order to change the primary email
    * @param data new primary e-mail
    */
@@ -189,7 +195,7 @@ export class UserService {
    * @param data If a password identity exists ( email ) | email, password
    */
   public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
-    return this.$pipeObserv(this._serverData.addEmail$(data), 
+    return this.$pipeObserv(this._serverData.addEmail$(data),
       () => {
         this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
         this.identities$.refresh();
