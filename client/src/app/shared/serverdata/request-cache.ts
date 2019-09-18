@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { switchMap, tap, shareReplay, scan, map, filter, catchError } from 'rxjs/operators';
 
 /**
@@ -54,7 +54,7 @@ export class CachedRequest<T> {
 
   // True if an error occured. This effectively stops all further requests from
   // this this cache unless explicitly cleared.
-  private _error = new BehaviorSubject<boolean>(false);
+  private _error = new BehaviorSubject<any>(undefined);
 
   constructor(
     private _httpRequest: Observable<T>
@@ -65,17 +65,17 @@ export class CachedRequest<T> {
    * exists and there is no other request in progress.
    */
   readonly value: Observable<T> = this._trigger.pipe(
-    // Ensure that all errors are properly noted
-    catchError(e => {
-      this._error.next(true);
-      return (Observable.throw(e));
-    }),
     // Ensure that no new request is started if a previous request caused an error
     filter(_ => !this._error.value),
     // Hand over to the Angular request
     switchMap(_ => this._httpRequest),
     // Log that the request has been fulfilled
     tap(_ => this.changeRequestCount(-1)),
+    // Treat errors as non existant values (for the moment)
+    catchError(_ => {
+      this._error.next(true);
+      return (of(undefined));
+    }),
     // Ensure that the request is properly cached
     shareReplay(1)
   );
@@ -86,6 +86,13 @@ export class CachedRequest<T> {
   readonly inProgress = this._inProgress.pipe(
     scan((count, current) => count + current, 0),
     map(count => count > 0)
+  );
+
+  /**
+   * Indicates whether there is an error
+   */
+  readonly hasError = this._error.pipe(
+    map(err => !!err)
   );
 
   /**
