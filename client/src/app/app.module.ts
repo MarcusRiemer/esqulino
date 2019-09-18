@@ -17,7 +17,7 @@ import { EditorModule } from './editor/editor.module';
 import { SqlScratchComponent } from './app.component';
 import { routing } from './app.routes';
 
-import { NotifyErrorHandler } from './error-handler';
+import { NotifyErrorHandler, isApplicationCrashed } from './error-handler';
 
 import registerLanguages from './locale-registration';
 import { UserModule } from './user/user.module';
@@ -45,9 +45,12 @@ if (environment.sentry && environment.sentry.active) {
   // Possibly also show a helpful dialogue
   if (environment.sentry.showDialogue) {
     options.beforeSend = event => {
-      Sentry.showReportDialog({
-        dsn: options.dsn
-      });
+      // Ensure that only the first dialog is ever shown.
+      if (!isApplicationCrashed()) {
+        Sentry.showReportDialog({
+          dsn: options.dsn
+        });
+      }
       return event;
     };
   }

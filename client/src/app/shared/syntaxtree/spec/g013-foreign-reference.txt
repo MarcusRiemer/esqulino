@@ -1,0 +1,7 @@
+grammar "g013-foreign-reference" {
+  node "g013"."n1" {
+    children sequence "c" ::= n1 g013-foreign.n1
+  }
+  node "g013-foreign"."n1" {
+  }
+}

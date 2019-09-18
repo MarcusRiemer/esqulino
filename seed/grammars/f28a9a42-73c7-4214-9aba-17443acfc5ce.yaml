@@ -28,8 +28,5 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: regex
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: technical_name
-  value_before_type_cast: regex
 new_record: false
 active_record_yaml_version: 2

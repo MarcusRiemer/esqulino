@@ -65,6 +65,10 @@
     .academia-item {
         margin-bottom: 1rem;
 
+        .mat-card-title {
+            line-height: 1em;
+        }
+
         &:target {
             background-color: mat-color($ide-app-accent, 200);
         }

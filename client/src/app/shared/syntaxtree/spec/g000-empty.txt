@@ -1,2 +1,2 @@
-grammar "g0" {
+grammar "g000-empty" {
 }

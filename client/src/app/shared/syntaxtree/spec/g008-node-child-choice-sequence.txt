@@ -1,9 +1,9 @@
-grammar "g8" {
-  node "n1" {
+grammar "g008-node-child-choice-sequence" {
+  node "g8"."n1" {
     children choice "c" ::= n2 | n3
   }
-  node "n2" {
+  node "g8"."n2" {
   }
-  node "n3" {
+  node "g8"."n3" {
   }
 }

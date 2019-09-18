@@ -1,7 +1,7 @@
-grammar "g11" {
-  typedef "n1" ::= n2 | n3
-  node "n2" {
+grammar "g011-one-of-root" {
+  typedef "g11"."n1" ::= n2 | n3
+  node "g11"."n2" {
   }
-  node "n3" {
+  node "g11"."n3" {
   }
 }

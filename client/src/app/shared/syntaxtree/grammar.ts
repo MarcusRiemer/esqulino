@@ -11,6 +11,7 @@ import {
 
 import { resolveChildOccurs } from './grammar-util';
 import { OccursSpecificDescription, resolveOccurs } from './occurs';
+import { QualifiedTypeName } from './syntaxtree.description';
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -372,7 +373,12 @@ class ChildCardinality {
       this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may refer to a different language
-      this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
+      if (typeof (typeDesc.nodeType) === "string") {
+        this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
+      } else {
+        this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType);
+      }
+
     } else {
       throw new Error(`Unknown child cardinality: "${JSON.stringify(typeDesc)}"`);
     }
@@ -1020,7 +1026,10 @@ class NodeOneOfType extends NodeType {
   constructor(validator: Validator, typeDesc: Desc.NodeOneOfTypeDescription, language: string, name: string) {
     super(validator, language, name);
 
-    this._possibilities = typeDesc.oneOf.map(t => new TypeReference(validator, t, language));
+    this._possibilities = typeDesc.oneOf.map(t => typeof (t) === "string"
+      ? new TypeReference(validator, t, language)
+      : new TypeReference(validator, t)
+    );
   }
 
   /**
@@ -1098,7 +1107,9 @@ class TypeReference {
    * @param desc The reference in qualified or unqualified form
    * @param currentLang The language to use in case of an unqualified reference
    */
-  constructor(_validator: Validator, desc: Desc.TypeReference, currentLang: string) {
+  constructor(_validator: Validator, desc: QualifiedTypeName)
+  constructor(_validator: Validator, desc: string, currentLang: string)
+  constructor(_validator: Validator, desc: Desc.TypeReference, currentLang?: string) {
     this._validator = _validator;
 
     if (Desc.isQualifiedTypeName(desc)) {
@@ -1163,7 +1174,6 @@ export class GrammarValidator {
   private _registeredTypes: { [languageName: string]: { [typeName: string]: NodeType } } = {};
 
   public readonly validator: Validator;
-  public readonly technicalName: string;
   public readonly rootType: TypeReference;
 
   /**
@@ -1175,7 +1185,6 @@ export class GrammarValidator {
    */
   constructor(validator: Validator, desc: Desc.GrammarDocument) {
     this.validator = validator;
-    this.technicalName = desc.technicalName;
 
     Object.entries(desc.types).forEach(([langName, types]) => {
       Object.entries(types).forEach(([typeName, typeDesc]) => {
@@ -1183,7 +1192,7 @@ export class GrammarValidator {
       });
     });
 
-    this.rootType = new TypeReference(validator, desc.root, this.technicalName);
+    this.rootType = new TypeReference(validator, desc.root);
   }
 
   /**
@@ -1230,8 +1239,8 @@ export class GrammarValidator {
    * @return The type with the matching name.
    */
   getType(languageName: string, typename: string): NodeType {
-    if (!this.isKnownType(this.technicalName, typename)) {
-      throw new Error(`Language "${this.technicalName}" does not have type "${typename}"`);
+    if (!this.isKnownType(languageName, typename)) {
+      throw new Error(`Language does not have type "${typename}"`);
     } else {
       return (this._registeredTypes[languageName][typename]);
     }
@@ -1247,7 +1256,7 @@ export class GrammarValidator {
   ) {
     // Ensure that we don't override any types
     if (this.isKnownType(languageName, nodeName)) {
-      throw new Error(`Attempted to register node "${nodeName}" twice for "${this.technicalName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
+      throw new Error(`Attempted to register node "${nodeName}" twice for "${languageName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
     // Ensure the object for the language in question exists

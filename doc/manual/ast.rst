@@ -1,3 +1,5 @@
+.. _abstract-syntax-tree:
+
 The Abstract Syntax Tree
 ========================
 
@@ -14,7 +16,7 @@ The ``language`` is essentially a namespace that allows the use of identical ``n
 
 Nodes may define so called **properties** which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
 
-The children of nodes have to be organized in so called **child categories**. Each of these categories has a name and may contain any number of children. This is a rather unusual implementation of syntaxtrees, but is beneficial to ease the implementation of the user interface.
+The children of nodes have to be organized in so called **child groups**. Each of these groups has a name and contains any number of subtrees. This is a rather unusual implementation of syntaxtrees, but is beneficial to ease the implementation of the user interface.
 
 The resulting structure has a strong resemblance to an ``XML``-tree, but instead of grouping all children in a single, implicit scope, they are organised into their own-subtrees.
 
@@ -60,7 +62,7 @@ Properties of nodes are listed inside the node itself. The following tree corres
    :align: center
    :caption: Expression ``numRattles``
 
-Children of trees are simply denoted by arrows that are connecting them. They are grouped into named boxes that define the name of the child group in which they appear in. So the following tree represents a binary expression that has two child groups (``lhs`` for "left hand side" and ``rhs`` for "right hand side") and defines the used operation with the property ``op``.
+Children of trees are simply denoted by arrows that are connecting them. They are grouped into named boxes that define the name of the child group in which they appear in. So the following tree represents a binary expression that has two child groups (``lhs`` for "left hand side" and ``rhs`` for "right hand side") and defines the used operation with the property ``op``. Each child group contains a sub-tree of its own and technically any node may have any number of disjoint subtrees.
 
 .. literalinclude:: examples/syntaxtree/ast-example-expr-binary.json
 

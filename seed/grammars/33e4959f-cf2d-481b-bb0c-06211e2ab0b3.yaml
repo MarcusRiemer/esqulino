@@ -41,8 +41,5 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: json
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: technical_name
-  value_before_type_cast: json
 new_record: false
 active_record_yaml_version: 2

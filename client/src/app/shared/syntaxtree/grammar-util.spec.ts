@@ -88,7 +88,6 @@ describe(`Grammar Utilities`, () => {
     // Shorthand to generate a grammar with the relevant properties
     const testGrammar = (name: string, types: { [nodeName: string]: NodeTypeDescription }) => {
       const g: GrammarDocument = {
-        technicalName: name,
         root: undefined,
         types: {}
       };
@@ -173,7 +172,6 @@ describe(`Grammar Utilities`, () => {
   describe(`getAllTypes`, () => {
     it(`g.t1`, () => {
       const g: GrammarDocument = {
-        technicalName: "g",
         root: { languageName: "g", typeName: "t1" },
         types: {
           "g": {
@@ -191,7 +189,6 @@ describe(`Grammar Utilities`, () => {
 
     it(`g.t1, g.t2`, () => {
       const g: GrammarDocument = {
-        technicalName: "g",
         root: { languageName: "g", typeName: "t1" },
         types: {
           "g": {
@@ -213,7 +210,6 @@ describe(`Grammar Utilities`, () => {
 
     it(`g.t1, h.t1`, () => {
       const g: GrammarDocument = {
-        technicalName: "g",
         root: { languageName: "g", typeName: "t1" },
         types: {
           "g": {
@@ -237,7 +233,6 @@ describe(`Grammar Utilities`, () => {
 
     it(`Omit typedef`, () => {
       const g: GrammarDocument = {
-        technicalName: "g",
         root: { languageName: "g", typeName: "t1" },
         types: {
           "g": {
@@ -259,7 +254,6 @@ describe(`Grammar Utilities`, () => {
 
     it(`Missing Types`, () => {
       const g: GrammarDocument = {
-        technicalName: "g",
         root: { languageName: "g", typeName: "t1" },
         types: undefined
       };
@@ -269,7 +263,6 @@ describe(`Grammar Utilities`, () => {
 
     it(`Empty Types`, () => {
       const g: GrammarDocument = {
-        technicalName: "g",
         root: { languageName: "g", typeName: "t1" },
         types: {}
       };
