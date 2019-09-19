@@ -157,7 +157,7 @@ RSpec.describe "CodeResource request", :type => :request do
       delete "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
              :headers => json_headers
 
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(204)
     end
   end
 
