@@ -21,9 +21,7 @@ export class PreferencesService {
   // The side is normally not visible on mobile devices
   private _showSideNav = new BehaviorSubject(true);
 
-  readonly showSideNav$ = this._showSideNav.pipe(
-
-  );
+  readonly showSideNav$ = this._showSideNav.asObservable();
 
   /**
    * Toggles the display of the side navigation.

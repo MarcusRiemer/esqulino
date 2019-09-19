@@ -2,6 +2,7 @@
 import { Component } from '@angular/core'
 
 import { NavItem } from '../shared/nav-interfaces';
+import { SideNavService } from '../shared/side-nav.service';
 
 export const adminItems: NavItem[] = [
   {
@@ -61,9 +62,15 @@ export const adminItems: NavItem[] = [
   templateUrl: 'templates/admin.html'
 })
 export class AdminComponent {
+  constructor(private _sideNavService: SideNavService) {}
+
   /**
    * All items that need to be shown in the general navigation
    */
   readonly adminItems = adminItems;
 
+  // Toggles the shared side-nav
+  public navToggle(): void {
+    this._sideNavService.toggleSideNav();
+  }
 }

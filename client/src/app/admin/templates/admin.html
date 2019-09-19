@@ -1,5 +1,11 @@
 <div class="body-nav-container">
-  <app-toolbar></app-toolbar>
+  <app-toolbar>
+    <ng-container position="toggle">
+      <button mat-icon-button (click)="navToggle()">
+        <span class="fa fa-bars" aria-hidden="true"></span>
+      </button>
+    </ng-container>
+  </app-toolbar>
 
   <side-nav-selector
     [items]="adminItems">

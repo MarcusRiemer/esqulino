@@ -112,4 +112,9 @@ export class FrontComponent implements OnInit {
   public ngOnInit(): void {
     this._sideNavService.newSideNav(this.indexItems);
   }
+  
+  // Toggles the shared side-nav
+  public navToggle(): void {
+    this._sideNavService.toggleSideNav();
+  }
 }
