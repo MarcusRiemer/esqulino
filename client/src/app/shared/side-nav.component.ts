@@ -1,19 +1,20 @@
-import { UserService } from './auth/user.service';
-import { Component, Inject, LOCALE_ID, Input, ViewChild } from "@angular/core";
+import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit, AfterViewChecked, AfterViewInit, OnDestroy } from "@angular/core";
 import { BrowserService } from './browser.service';
 import { MatSidenav } from '@angular/material';
 
-import { NavItem } from './nav-interfaces';
-import { SideNavService } from './side-nav.service';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
+
+import { NavItem } from './nav-interfaces';
+import { SideNavService } from './side-nav.service';
+import { UserService } from './auth/user.service';
 
 @Component({
   selector: 'side-nav-selector',
   templateUrl: './templates/side-nav.html'
 })
 
-export class SideNavComponent {
+export class SideNavComponent implements OnDestroy {
   @Input('items') navItems: NavItem[];
 
   @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
@@ -26,13 +27,9 @@ export class SideNavComponent {
     private readonly _browser: BrowserService,
     private readonly _sideNav: SideNavService,
     private readonly _userService: UserService
-  ) {
-    this._sideNav.sideNavItems$()
-      .subscribe(navItems => this.navItems = navItems)
+  ) { }
 
-    this._sideNav.sideNavToggle$()
-      .subscribe(() => this.sidenav.toggle())
-  }
+  readonly navItems$ = this._sideNav.sideNavItems$();
 
   // Checks if the user is logged in
   readonly loggedIn$ = this._userService.isLoggedIn$;
@@ -45,6 +42,13 @@ export class SideNavComponent {
 
   // The actual locale that is currently in use
   readonly locale = this._localeId;
+
+  readonly sideNavToggleSub = this._sideNav.sideNavToggle$()
+    .subscribe(() => this.sidenav.toggle())
+
+  ngOnDestroy(): void {
+    this.sideNavToggleSub.unsubscribe();
+  }
 
   /**
    * Checks whether the currently logged in user has all the requested roles.

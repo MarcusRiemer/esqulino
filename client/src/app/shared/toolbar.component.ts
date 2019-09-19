@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component, EventEmitter, Output, ContentChild, ElementRef } from '@angular/core'
 
 import { SideNavService } from './side-nav.service';
 import { ToolbarService } from './toolbar.service'
@@ -26,10 +26,6 @@ export class ToolbarComponent {
 
   get toolbarItems$() {
     return (this._toolbarService.itemsPortal);
-  }
-
-  public navToggle(): void {
-    this._sideNavService.toggleSideNav()
   }
 
   // Login is not necessarily allowed at all times
