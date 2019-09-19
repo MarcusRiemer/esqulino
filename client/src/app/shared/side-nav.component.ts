@@ -1,22 +1,23 @@
-import { UserService } from './auth/user.service';
-import { Component, Inject, LOCALE_ID, Input, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit, AfterViewChecked, AfterViewInit, OnDestroy } from "@angular/core";
 import { BrowserService } from './browser.service';
 import { MatSidenav } from '@angular/material';
 
+import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 import { NavItem } from './nav-interfaces';
 import { SideNavService } from './side-nav.service';
-import { map, first } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { UserService } from './auth/user.service';
 
 @Component({
   selector: 'side-nav-selector',
   templateUrl: './templates/side-nav.html'
 })
 
-export class SideNavComponent implements AfterViewInit {
+export class SideNavComponent implements OnDestroy {
   @Input('items') navItems: NavItem[];
 
-  @ViewChild('sideNav', { static: true }) sidenav: MatSidenav;
+  @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
 
   /**
    * Used for dependency injection
@@ -26,10 +27,9 @@ export class SideNavComponent implements AfterViewInit {
     private readonly _browser: BrowserService,
     private readonly _sideNav: SideNavService,
     private readonly _userService: UserService
-  ) {}
+  ) { }
 
-  // List of side nav items
-  readonly sideNavItems$ = this._sideNav.sideNavItems$();
+  readonly navItems$ = this._sideNav.sideNavItems$();
 
   // Checks if the user is logged in
   readonly loggedIn$ = this._userService.isLoggedIn$;
@@ -42,10 +42,12 @@ export class SideNavComponent implements AfterViewInit {
 
   // The actual locale that is currently in use
   readonly locale = this._localeId;
-  
-  ngAfterViewInit(): void {
-    this._sideNav.sideNavToggle$()
-      .subscribe(() => this.sidenav.toggle())
+
+  readonly sideNavToggleSub = this._sideNav.sideNavToggle$()
+    .subscribe(() => this.sidenav.toggle())
+
+  ngOnDestroy(): void {
+    this.sideNavToggleSub.unsubscribe();
   }
 
   /**
