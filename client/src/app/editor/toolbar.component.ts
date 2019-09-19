@@ -20,6 +20,7 @@ export class ToolbarComponent {
   }
 
   toggleNavbar() {
+    console.log("Editor-Toolbar: Sidenav toggled");
     this._preferences.toggleSideNav();
   }
 }

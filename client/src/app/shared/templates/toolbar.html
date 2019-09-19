@@ -2,9 +2,7 @@
   <!-- The menu toggle (if applicable) -->
   <app-requires-javascript>
     <ng-container active>
-      <button mat-icon-button (click)="navToggle()">
-        <span class="fa fa-bars" aria-hidden="true"></span>
-      </button>
+      <ng-content select="[position=toggle]"></ng-content>
     </ng-container>
     <ng-container inactive>
       <a [routerLink]="['nav']" mat-icon-button>
@@ -12,7 +10,7 @@
       </a>
     </ng-container>
   </app-requires-javascript>
-
+  
   <!-- "Back" button to main page -->
   <a mat-button
      [routerLink]="'/about'">

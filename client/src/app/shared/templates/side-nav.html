@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<mat-sidenav-container *ngIf="(sideNavItems$ | async) as navItems">
+<mat-sidenav-container>
   <mat-sidenav
       #sideNav
       [mode]="sidebarMode$ | async"
@@ -7,7 +7,9 @@
   >
     <!-- Sidebar item output -->
 
-    <mat-nav-list id="main-nav">
+    <mat-nav-list 
+      id="main-nav"
+    >
       <ng-container *ngFor="let nav of navItems">
         <ng-container *ngIf="userHasRoles$(nav.requireRoles) | async">
           <ng-container [ngSwitch]="nav.type">

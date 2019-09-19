@@ -18,6 +18,7 @@ export class SideNavService {
   }
 
   public toggleSideNav(): void {
+    console.log("Shared-Sidenav: toggled");
     this._sideNavToggle.next();
   }
 
