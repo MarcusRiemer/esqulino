@@ -31,6 +31,10 @@ module AuthHelper
         password: (password || permited_params[:password]),
         verify_token: SecureRandom.uuid,
         confirmed: false,
+      },
+      credentials: {
+        expires: true,
+        expires_at: JwtHelper.acces_token_duration
       }
     }
   end

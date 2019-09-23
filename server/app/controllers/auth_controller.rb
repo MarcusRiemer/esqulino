@@ -17,8 +17,17 @@ class AuthController < ApplicationController
       if (signed_in?) and (not current_user.eql? identity.user) then
         raise RuntimeError.new("Error: already linked with a user")
       end
+      byebug
 
-      sign_in(identity)
+      # TODO-Tom Comment
+      if (identity.acces_token_expires?) then
+        if (identity.acces_token_expired?) then
+          identity.credentials = auth_hash[:credentials]
+          identity.save!
+        end
+      end
+
+      sign_in(identity, identity.acces_token_duration)
       # The HTTP referer identifies the address of the webpage
       # which is linked to the resource being requested
       redirect_to URI(request.referer || "/").path
@@ -43,7 +52,7 @@ class AuthController < ApplicationController
       return error_response("Wrong password")
     end
 
-    sign_in(identity)
+    sign_in(identity, identity.acces_token_duration)
     api_response(user_information)
   end
 
