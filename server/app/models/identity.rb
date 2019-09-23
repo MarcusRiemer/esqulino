@@ -3,6 +3,8 @@
 class Identity < ActiveRecord::Base
   include BCrypt
 
+  attr_accessor :credentials
+
   # The uid is a unique identifier of an identity that has to be set
   validates :uid, presence: true
   validates :provider, presence: true
@@ -100,6 +102,19 @@ class Identity < ActiveRecord::Base
                 primary: self.change_primary_token_exp
               }
             })
+  end
+
+  # Comes from Omniauth and contains an acces/refresh token from oauth2
+  def credentials
+    return self.provider_data["credentials"]
+  end
+
+  def credentials=(credentials)
+    self.provider_data["credentials"] = credentials
+  end
+
+  def acces_token_expires?
+    return self.credentials["expires"]
   end
 
   # Will be created on a primary e-mail change

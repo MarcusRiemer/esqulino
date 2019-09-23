@@ -12,7 +12,7 @@ RSpec.describe "auth controller" do
   }}
 
   describe "developer provider with default values" do
-    before(:each) do
+    before(:all) do
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:developer] = OmniAuth::AuthHash.new({
         :provider => 'developer',
@@ -25,10 +25,10 @@ RSpec.describe "auth controller" do
     end
 
     context "logging in" do
-      it "valid response" do
+      fit "valid response" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['JWT']).to be_truthy
-        expect(JwtHelper.decode(response.cookies['JWT'])[:user_id]).to be_truthy
+        expect(response.cookies['ACCES_TOKEN']).to be_truthy
+        expect(JwtHelper.decode(response.cookies['ACCES_TOKEN'])[:user_id]).to be_truthy
         expect(response.status).to eq(302)
       end
 
@@ -88,9 +88,9 @@ RSpec.describe "auth controller" do
       it "testing the json response of a sign_in" do
         get '/api/auth/developer/callback'
 
-        expect(response.cookies['JWT']).to be_truthy
+        expect(response.cookies['ACCES_TOKEN']).to be_truthy
 
-        cookies["JWT"] = response.cookies['JWT']
+        cookies['ACCES_TOKEN'] = response.cookies['ACCES_TOKEN']
 
         get '/api/user'
         json_data = JSON.parse(response.body)
@@ -101,19 +101,19 @@ RSpec.describe "auth controller" do
     context "logging out" do
       it "first logging in then logging out" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['JWT']).to be_truthy
+        expect(response.cookies['ACCES_TOKEN']).to be_truthy
 
         delete '/api/auth/sign_out'
-        expect(cookies['JWT']).to eq("")
+        expect(cookies['ACCES_TOKEN']).to eq("")
         expect(response.status).to eq(200)
       end
 
       it "already logged in" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['JWT']).to be_truthy
+        expect(response.cookies['ACCES_TOKEN']).to be_truthy
 
         delete '/api/auth/sign_out'
-        expect(cookies['JWT']).to eq("")
+        expect(cookies['ACCES_TOKEN']).to eq("")
 
         get '/api/user'
         json_data = JSON.parse(response.body)
@@ -145,16 +145,18 @@ RSpec.describe "auth controller" do
         expect(Identity.all.count).to eq(count_identities)
       end
     end
+
+    context "jwt" do
+      it "expired" do
+        set_expired_jwt()
+        get '/api/user'
+        body = JSON.parse(response.body)
+        expect(response.cookies['ACCES_TOKEN']).to be_nil
+      end
+    end
   end
 
-  # TODO: move tests into describe block
-  #  Moving test cases leads to errors
-  describe "password identity" do
-
-  end
-
-
-  it "registering new identity with new user" do
+  it "new identity with new user" do
     user_count = User.all.count
     identity_count = Identity.all.count
 
@@ -166,7 +168,7 @@ RSpec.describe "auth controller" do
     expect(Identity.all.count).to_not eq(identity_count)
   end
 
-  it "registering identity with password" do
+  it "identity with password" do
     post '/api/auth/identity/register',
         :headers => json_headers,
         :params => identity_params.to_json
@@ -175,7 +177,8 @@ RSpec.describe "auth controller" do
     expect(Identity.all.first.confirmed?).to eq(false)
   end
 
-  it "registering identity with existing uid" do
+
+  it "identity with existing uid" do
     create(:identity_provider, :existing, uid: identity_params[:email])
 
     identity_count = Identity.all.count
@@ -187,15 +190,7 @@ RSpec.describe "auth controller" do
     expect(Identity.all.count).to eq(identity_count)
   end
 
-  it "logging in with email and password" do
-    create(:identity_provider, :existing)
 
-    post '/api/auth/identity',
-      :headers => json_headers,
-      :params => identity_params.to_json
-
-    expect(response.cookies['JWT']).to be_truthy
-  end
 
   it "registering identity with an empty password" do
     create(:identity_provider, :new)
@@ -259,34 +254,8 @@ RSpec.describe "auth controller" do
     expect(Identity.all.count).to eq(identity_count)
   end
 
-  it "logging in with email and wrong password" do
-    create(:identity_provider, :existing)
 
-    identity_params[:password] = "wrong"
-
-    post '/api/auth/identity',
-      :headers => json_headers,
-      :params => identity_params.to_json
-
-    expect(response.status).to eq(401)
-    expect(response.cookies['JWT']).to be_nil
-  end
-
-  it "logging in with wrong email and password" do
-    create(:identity_provider, :existing)
-
-    identity_params[:email] = "wrong"
-
-    post '/api/auth/identity',
-      :headers => json_headers,
-      :params => identity_params.to_json
-
-    expect(response.status).to eq(401)
-    expect(response.cookies['JWT']).to be_nil
-  end
-
-
-  it "account linking with identity" do
+  it "with identity" do
     identity = create(:identity_provider, :new)
     set_jwt(identity.user)
 
@@ -300,7 +269,7 @@ RSpec.describe "auth controller" do
   end
 
 
-  it "account linking with identity and existing extern provider" do
+  it "with identity and existing extern provider" do
     identity = create(:developer_provider, :new)
     set_jwt(identity.user)
 
@@ -316,7 +285,7 @@ RSpec.describe "auth controller" do
   end
 
 
-  it "account linking with already linked identity ( identity )" do
+  it "with already linked identity ( identity )" do
     identity = create(:identity_provider, :existing)
 
     count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
@@ -331,7 +300,45 @@ RSpec.describe "auth controller" do
     expect(Identity.all.count).to eq(count_identities)
   end
 
-  it "add a new email to an logged in user" do
+
+  it "with email and password" do
+    create(:identity_provider, :existing)
+
+    post '/api/auth/identity',
+      :headers => json_headers,
+      :params => identity_params.to_json
+
+    expect(response.cookies['ACCES_TOKEN']).to be_truthy
+  end
+
+  it "with email and wrong password" do
+    create(:identity_provider, :existing)
+
+    identity_params[:password] = "wrong"
+
+    post '/api/auth/identity',
+      :headers => json_headers,
+      :params => identity_params.to_json
+
+    expect(response.status).to eq(401)
+    expect(response.cookies['ACCES_TOKEN']).to be_nil
+  end
+
+  it "with wrong email and password" do
+    create(:identity_provider, :existing)
+
+    identity_params[:email] = "wrong"
+
+    post '/api/auth/identity',
+      :headers => json_headers,
+      :params => identity_params.to_json
+
+    expect(response.status).to eq(401)
+    expect(response.cookies['ACCES_TOKEN']).to be_nil
+  end
+
+
+  it "new email to an logged in user" do
     identity = create(:identity_provider, :new)
     set_jwt(identity.user)
 

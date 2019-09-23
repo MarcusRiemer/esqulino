@@ -23,6 +23,14 @@ RSpec.describe "user controller" do
       json_data = JSON.parse(response.body)
       expect(json_data["roles"]).to eq(["guest"])
     end
+
+    it "jwt expired" do
+      user = create(:user)
+      set_expired_jwt()
+
+      get '/api/user'
+      expect(response.status).to eq(500)
+    end
   end
 
   describe "changing primary e-mail" do

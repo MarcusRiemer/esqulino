@@ -18,6 +18,9 @@ development:
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
+  auth_tokens: 
+    acces_token: 3 # 3 minutes
+    refresh_token: 5 # 5 days
   auth_provider: [Google, Github, PasswordIdentity, Developer]
   auth_provider_keys:
     google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>

@@ -29,7 +29,15 @@ class PasswordIdentity < Identity
   # The auth hash is split into two different jsonb attributes
   # provider_data 
   def self.create_with_auth(auth, user)
-    new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => auth[:data])
+    new(
+      :user => user,
+      :uid => auth[:uid],
+      :provider => auth[:provider],
+      :provider_data => auth[:info].merge({
+        credentials: auth[:credentials]}
+      ),
+      :own_data => auth[:data]
+    )
   end
 
   def self.client_information
