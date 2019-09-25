@@ -16,6 +16,7 @@ module UserHelper
         acces_token = current_acces_token
         if (acces_token) then
           self.current_user = User.find(current_acces_token[:user_id].to_s)
+          @current_user.refresh_token_if_expired
         else
           sign_out!
         end
@@ -47,11 +48,11 @@ module UserHelper
 
       if (acces_token_duration) then
         response_secure_cookie("REFRESH_TOKEN",
-          JwtHelper.encode({user_id: identity.user.id}, 5.days.from_now)
+          JwtHelper.encode({user_id: identity.user.id}, JwtHelper.refresh_token_duration.from_now)
         )
       end
 
-      response_secure_cookie("ACCES_TOKEN", JwtHelper.encode(payload, 10.seconds.from_now))
+      response_secure_cookie("ACCES_TOKEN", JwtHelper.encode(payload))
     end
   end
 

@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/ProjectUpdateDescription",
-  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "ProjectName": {
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",

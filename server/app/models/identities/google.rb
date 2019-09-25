@@ -1,6 +1,6 @@
 # The Google provider comes from https://github.com/zquestz/omniauth-google-oauth2
 class Google < Identity
-  scope :find_by_email, -> (email) { 
+  scope :find_by_email, -> (email) {
     where("provider_data ->> 'email' = ?", email)
   }
 
@@ -36,11 +36,31 @@ class Google < Identity
     return self.provider_data["email"]
   end
 
+  # TODO-Tom comments
   def acces_token_duration
     return self.credentials["expires_at"]
   end
 
   def acces_token_expired?
-    return self.acces_token_duration < Date.today.to_time.to_i
+    return self.acces_token_duration.to_i < Time.now.to_i
+  end
+
+  def acces_token=(acces_token)
+    self.credentials["acces_token"] = acces_token
+  end
+
+  def refresh_acces_token
+    # TODO-Tom comments
+    response = RestClient.post(
+      Rails.configuration.sqlino["auth_refresh_token_urls"]["google"],
+      :grant_type => 'refresh_token',
+      :refresh_token => self.credentials["refresh_token"],
+      :client_id => Rails.configuration.sqlino["auth_provider_keys"]["google_id"],
+      :client_secret => Rails.configuration.sqlino["auth_provider_keys"]["google_secret"]
+    )
+    parsed_response = JSON.parse(response.body).slice("access_token","expires_in")
+
+    self.credentials["acces_token"] = parsed_response["acces_token"]
+    self.credentials["expires_at"] = Time.now + parsed_response["expires_in"]
   end
 end
