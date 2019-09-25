@@ -57,4 +57,16 @@ class Github < Identity
               }
             })
   end
+
+  def acces_token_duration
+    return nil
+  end
+
+  def acces_token_expired?
+    return false
+  end
+
+  def refresh_acces_token
+    # TODO-Tom needs to be added
+  end
 end

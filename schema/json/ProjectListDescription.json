@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/ProjectListDescription",
-  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "ApiVersionToken": {
       "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",

@@ -9,18 +9,18 @@ module JwtHelper
   end
   # Returns the default duration of an acces token 
   def self.acces_token_duration
-    return Rails.configuration.sqlino['auth_tokens']['acces_token'].minutes
+    return Rails.configuration.sqlino['auth_tokens']['acces_token'].seconds
   end
   # Returns the default duration of an refresh token 
   def self.refresh_token_duration
-    return Rails.configuration.sqlino['auth_tokens']['refresh_token'].days
+    return Rails.configuration.sqlino['auth_tokens']['refresh_token'].seconds
   end
 
-  def self.append_registered_claims(payload = {}, duration = acces_token_duration)
+  def self.append_registered_claims(payload = {}, duration = acces_token_duration.from_now)
     return payload.merge({exp: duration.to_i, iss: JwtHelper.issuer})
   end
 
-  def self.encode(payload = {}, duration)
+  def self.encode(payload, duration = acces_token_duration.from_now)
     payload = JwtHelper.append_registered_claims(payload, duration)
     JWT.encode(payload, JwtHelper.secret_key)
   end
@@ -63,7 +63,7 @@ module JwtHelper
     end
   end
 
-  # Sets the current_jwt
+  # Clears the current_acces_token
   def clear_current_acces_token
     @current_acces_token = nil
   end
@@ -82,8 +82,8 @@ module JwtHelper
         begin
           user_id = JwtHelper.decode(refresh_token)[:user_id]
           @current_acces_token = renew_acces_token(user_id)
-
         # If an decode error occurs the user will be classified as guest
+        # Empty acces_token means no one is logged in
         rescue JWT::DecodeError => e
           @current_acces_token = nil
         end

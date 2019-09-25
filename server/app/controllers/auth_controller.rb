@@ -12,19 +12,13 @@ class AuthController < ApplicationController
       identity = Identity.search(auth_hash)
       if (not identity) then
         identity = Identity.create_with_auth(auth_hash, current_user)
-      end
-
-      if (signed_in?) and (not current_user.eql? identity.user) then
-        raise RuntimeError.new("Error: already linked with a user")
-      end
-      byebug
-
-      # TODO-Tom Comment
-      if (identity.acces_token_expires?) then
-        if (identity.acces_token_expired?) then
-          identity.credentials = auth_hash[:credentials]
-          identity.save!
+      else
+        if (signed_in?) and (not current_user.eql? identity.user) then
+          raise RuntimeError.new("Error: already linked with a user")
         end
+
+        identity.update_provider_data(auth_hash)
+        identity.save!
       end
 
       sign_in(identity, identity.acces_token_duration)

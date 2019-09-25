@@ -137,18 +137,31 @@ class User < ApplicationRecord
 
   # Checks if the current user is changing his primary email
   def primary_email_change?
-    identity = self.identities.find { |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) }
-    return identity ? (not identity.email.eql?(self.email)) : false
+    return self.identities.find {
+      |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?)
+    } ? (not identity.email.eql?(self.email)) : false
   end
 
   # If a user is changing his primary email, the expiration time of the current token returns
   def primary_email_change_time
-    identity = self.identities.find { |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) }
-    return identity.change_primary_token_exp
+    return self.identities.find {
+      |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) 
+    }.change_primary_token_exp
   end
 
   # Returns a nicely readable representation of id and name
   def readable_identification
     "\"#{display_name}\" (#{id})"
+  end
+
+  def refresh_token_if_expired
+    self.identities.each do |identity|
+      if identity.acces_token_expired? then
+        if (not Rails.env.test?) then
+          identity.refresh_acces_token
+          identity.save!
+        end
+      end
+    end
   end
 end

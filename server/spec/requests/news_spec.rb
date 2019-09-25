@@ -98,7 +98,7 @@ RSpec.describe NewsController, type: :request do
   describe 'GET /api/news/:id' do
     it 'Frontpage: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
-      set_jwt(n.user)
+      set_acces_token(n.user)
       get "/api/news/#{n.id}"
       json_data = JSON.parse(response.body)
 
@@ -123,7 +123,7 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 12, 1) )
       create(:news, published_from: nil )
 
-      set_jwt(admin)
+      set_acces_token(admin)
       get '/api/news/admin'
       json_data = JSON.parse(response.body)
       expect(json_data[0]['title']['de']).to eq("Schlagzeile 1")
@@ -140,7 +140,7 @@ RSpec.describe NewsController, type: :request do
   describe 'GET /api/news/admin/:id' do
     it 'Admin: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
-      set_jwt(n.user)
+      set_acces_token(n.user)
       get "/api/news/admin/#{n.id}"
       json_data = JSON.parse(response.body)
 
@@ -163,7 +163,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "title" => { "de" => "Test" } })
 
-      set_jwt(news.user)
+      set_acces_token(news.user)
 
       put "/api/news/#{news.id}",
           :headers => json_headers,
@@ -186,7 +186,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }})
 
-      set_jwt(news.user)
+      set_acces_token(news.user)
 
       put "/api/news/#{news.id}",
           :headers => json_headers,
@@ -207,7 +207,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "publishedFrom" => nil })
 
-      set_jwt(news.user)  
+      set_acces_token(news.user)  
 
       put "/api/news/#{news.id}",
           :headers => json_headers,
@@ -230,7 +230,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }})
 
-      set_jwt(news.user)
+      set_acces_token(news.user)
 
       put "/api/news/#{news.id}",
           :headers => json_headers,
@@ -250,7 +250,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "publishedFrom" => "test" })
 
-      set_jwt(news.user)
+      set_acces_token(news.user)
       put "/api/news/#{news.id}",
           :headers => json_headers,
           :params => news_params.to_json
@@ -266,7 +266,7 @@ RSpec.describe NewsController, type: :request do
 
     it 'updating a news without a date' do
       news = create(:news)
-      set_jwt(news.user)
+      set_acces_token(news.user)
       news_params = news.api_attributes.except("publishedFrom")
 
       put "/api/news/#{news.id}",
@@ -288,7 +288,7 @@ RSpec.describe NewsController, type: :request do
   describe 'DELETE /api/news/:id' do
     it 'deleting a news' do
       news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1), user: create(:user, :admin) )
-      set_jwt(news.user)
+      set_acces_token(news.user)
 
       delete "/api/news/#{news.id}"
 
@@ -311,7 +311,7 @@ RSpec.describe NewsController, type: :request do
     let(:user) { create(:user, :admin) }
 
     it 'creating a news' do
-      set_jwt(user)
+      set_acces_token(user)
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -332,7 +332,7 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'creating a news with an empty publishing date' do
-      set_jwt(user)
+      set_acces_token(user)
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -353,7 +353,7 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'creating a news with an invalid date' do
-      set_jwt(user)
+      set_acces_token(user)
       count_news = News.all.count
       post "/api/news",
            headers: json_headers,
@@ -371,7 +371,7 @@ RSpec.describe NewsController, type: :request do
     it 'creating a news without a date' do
       news = build(:news)
       news_params = news.api_attributes.except("publishedFrom")
-      set_jwt(user)
+      set_acces_token(user)
 
       post "/api/news",
           :headers => json_headers,
