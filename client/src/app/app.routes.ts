@@ -39,4 +39,6 @@ const AppRoutes: Routes = [
 // is passed down to the editor modules.
 export const routing = RouterModule.forRoot(AppRoutes, {
   paramsInheritanceStrategy: "always",
+  // TODO-Tom ask marcus
+  // onSameUrlNavigation: 'reload',
 });

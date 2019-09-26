@@ -21,7 +21,7 @@ development:
   auth_tokens: 
     acces_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
-  auth_refresh_token_url:
+  auth_refresh_token_urls:
     google: "https://accounts.google.com/o/oauth2/token"
   auth_provider: [Google, Github, PasswordIdentity, Developer]
   auth_provider_keys:

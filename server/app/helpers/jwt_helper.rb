@@ -9,6 +9,7 @@ module JwtHelper
   end
   # Returns the default duration of an acces token 
   def self.acces_token_duration
+    # return 10.seconds
     return Rails.configuration.sqlino['auth_tokens']['acces_token'].seconds
   end
   # Returns the default duration of an refresh token 

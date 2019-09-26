@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/BlockLanguageDocument",
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "AllReferenceableTypeInstructions": {
       "additionalProperties": {
@@ -42,22 +42,6 @@
         },
         {
           "$ref": "#/definitions/GeneratedBlocksSidebarDescription"
-        }
-      ]
-    },
-    "AttributeMappingOrder": {
-      "anyOf": [
-        {
-          "enum": [
-            "grammar"
-          ],
-          "type": "string"
-        },
-        {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
         }
       ]
     },
@@ -473,109 +457,27 @@
         "attributes": {
           "additionalProperties": {
             "additionalProperties": false,
+            "description": "Make all properties in T optional",
             "properties": {
               "allowWrap": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "attributeMapping": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/AttributeMappingOrder"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
-                  }
-                ]
               },
               "between": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "breakAfter": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "emptyDropTarget": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "generateErrorIndicator": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Position"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "onDrop": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
-                  }
-                ]
               },
               "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "propReadOnly": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "style": {
-                "anyOf": [
-                  {
-                    "additionalProperties": {
-                      "type": "string"
-                    },
-                    "type": "object"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_"
-                  }
-                ]
               }
             },
             "type": "object"
@@ -585,79 +487,21 @@
         "blocks": {
           "items": {
             "additionalProperties": false,
+            "description": "Make all properties in T optional",
             "properties": {
               "allowWrap": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "attributeMapping": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/AttributeMappingOrder"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
-                  }
-                ]
               },
               "breakAfter": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "generateErrorIndicator": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Position"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "onDrop": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
-                  }
-                ]
               },
               "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "style": {
-                "anyOf": [
-                  {
-                    "additionalProperties": {
-                      "type": "string"
-                    },
-                    "type": "object"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_"
-                  }
-                ]
               }
             },
             "type": "object"
@@ -786,7 +630,7 @@
     "ParameterBoolean": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "boolean"
           ],
@@ -794,7 +638,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -819,202 +663,6 @@
       },
       "type": "object"
     },
-    "ParameterReference": {
-      "additionalProperties": false,
-      "properties": {
-        "$ref": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "$ref"
-      ],
-      "type": "object"
-    },
-    "ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression|undefined)_": {
-      "additionalProperties": false,
-      "properties": {
-        "$every": {
-          "anyOf": [
-            {
-              "items": {
-                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-              },
-              "type": "array"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
-            }
-          ]
-        },
-        "$not": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__"
-            }
-          ]
-        },
-        "$some": {
-          "anyOf": [
-            {
-              "items": {
-                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-              },
-              "type": "array"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
-            }
-          ]
-        },
-        "$value": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "$ref": "#/definitions/ParameterReference"
-            }
-          ]
-        },
-        "$var": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
-            },
-            {
-              "$ref": "#/definitions/ParameterReference"
-            }
-          ]
-        }
-      },
-      "required": [
-        "$value",
-        "$var",
-        "$every",
-        "$some",
-        "$not"
-      ],
-      "type": "object"
-    },
-    "ParameterReferenceable_AttributeMappingOrder_": {
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__": {
-      "additionalProperties": false,
-      "properties": {
-        "$every": {
-          "anyOf": [
-            {
-              "items": {
-                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-              },
-              "type": "array"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
-            }
-          ]
-        },
-        "$not": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__"
-            }
-          ]
-        },
-        "$some": {
-          "anyOf": [
-            {
-              "items": {
-                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-              },
-              "type": "array"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
-            }
-          ]
-        },
-        "$value": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "$ref": "#/definitions/ParameterReference"
-            }
-          ]
-        },
-        "$var": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
-            },
-            {
-              "$ref": "#/definitions/ParameterReference"
-            }
-          ]
-        }
-      },
-      "required": [
-        "$value",
-        "$var",
-        "$every",
-        "$some",
-        "$not"
-      ],
-      "type": "object"
-    },
-    "ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_": {
-      "additionalProperties": false,
-      "properties": {
-        "visibility": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
-            },
-            {
-              "$ref": "#/definitions/ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression|undefined)_"
-            }
-          ]
-        }
-      },
-      "type": "object"
-    },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
-          },
-          {
-            "$ref": "#/definitions/ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__"
-          }
-        ]
-      },
-      "type": "array"
-    },
-    "ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_": {
-      "additionalProperties": {
-        "anyOf": [
-          {
-            "type": "string"
-          },
-          {
-            "$ref": "#/definitions/ParameterReference"
-          }
-        ]
-      },
-      "type": "object"
-    },
     "ParameterType": {
       "anyOf": [
         {
@@ -1031,7 +679,7 @@
     "ParameterTypeColor": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "color"
           ],
@@ -1039,14 +687,14 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
     "ParameterTypeString": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "string"
           ],
@@ -1054,7 +702,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -1069,14 +717,6 @@
         "$ref": "#/definitions/ParameterValue"
       },
       "type": "object"
-    },
-    "Position": {
-      "enum": [
-        "start",
-        "end",
-        "none"
-      ],
-      "type": "string"
     },
     "QualifiedTypeName": {
       "additionalProperties": false,
@@ -1131,109 +771,27 @@
           },
           "instructions": {
             "additionalProperties": false,
+            "description": "Make all properties in T optional",
             "properties": {
               "allowWrap": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "attributeMapping": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/AttributeMappingOrder"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
-                  }
-                ]
               },
               "between": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "breakAfter": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "emptyDropTarget": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "generateErrorIndicator": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Position"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "onDrop": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
-                  }
-                ]
               },
               "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "propReadOnly": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "style": {
-                "anyOf": [
-                  {
-                    "additionalProperties": {
-                      "type": "string"
-                    },
-                    "type": "object"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_"
-                  }
-                ]
               }
             },
             "type": "object"
