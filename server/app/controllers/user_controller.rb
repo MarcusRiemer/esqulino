@@ -19,7 +19,9 @@ class UserController < ApplicationController
         api_response(user_information)
       else
         error_response("This username is not valid")
-      end 
+      end
+    else
+      error_response("You need to be logged in")
     end
   end
 

@@ -59,8 +59,8 @@ class Google < Identity
       :client_secret => Rails.configuration.sqlino["auth_provider_keys"]["google_secret"]
     )
     parsed_response = JSON.parse(response.body).slice("access_token","expires_in")
-
-    self.credentials["acces_token"] = parsed_response["acces_token"]
-    self.credentials["expires_at"] = Time.now + parsed_response["expires_in"]
+    
+    self.credentials["acces_token"] = parsed_response["access_token"]
+    self.credentials["expires_at"] = (Time.now + parsed_response["expires_in"]).to_i
   end
 end
