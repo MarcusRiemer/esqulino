@@ -1,4 +1,4 @@
-<mat-card class="jumbotron">
+<mat-card class="jumbotron mb-3">
   <div class="container">
     <h1><ng-container i18n="welcome message@@welcomeMessage">Willkommen bei </ng-container>
       <img src="/vendor/logos/blattwerkzeug-logo.svg"
@@ -6,9 +6,15 @@
                                       title="BlattWerkzeug">
     </h1>
     <p i18n="short project introduction@@shortProjectIntroduction">
-      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.
+      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL- und Webprogrammierung.
     </p>
   </div>
+</mat-card>
+
+<mat-card class="alert-warning mb-3">
+  <p i18n="prototypeWarning@@frontPrototypeWarning">
+    Der hier verfügbare Stand ist ein <strong>Prototyp</strong> um die SQL- und Trucklino-Editoren zu zeigen. Insbesondere die Funktionen rund um die <strong>Benutzerverwaltung</strong> sind noch <strong>kaum getestet</strong>!
+  </p>
 </mat-card>
 
 <div class="row mb-3 target-groups">
