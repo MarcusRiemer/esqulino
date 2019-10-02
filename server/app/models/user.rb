@@ -32,6 +32,7 @@ class User < ApplicationRecord
     self.find(GUEST_ID)
   end
 
+  # The guest user has a static ID
   def self.guest_id
     return GUEST_ID
   end
@@ -86,10 +87,10 @@ class User < ApplicationRecord
     return self.roles.map { |v| v.name }
   end
 
-  # The information is used for the clientside representation 
+  # The information is used for the clientside representation
   # of a either signed in or signed out user
   def information
-    return  {
+    return {
       user_id: self.id,
       display_name: self.display_name,
       roles: self.role_names,
@@ -145,7 +146,7 @@ class User < ApplicationRecord
   # If a user is changing his primary email, the expiration time of the current token returns
   def primary_email_change_time
     return self.identities.find {
-      |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?) 
+      |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?)
     }.change_primary_token_exp
   end
 
