@@ -1,4 +1,3 @@
-import { NODE_CONVERTER } from './../syntaxtree/css/css.codegenerator';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
