@@ -26,7 +26,7 @@
                 class="form-control custom-select"
                 id="block-language"
                 required>
-          <option *ngFor="let lang of availableBlockLanguages"
+          <option *ngFor="let lang of availableBlockLanguages$ | async"
                   [value]="lang.id">
             {{ lang.name }} ({{ lang.id }})
           </option>

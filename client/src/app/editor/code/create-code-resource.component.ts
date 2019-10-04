@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { first } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 import { ToolbarService } from '../toolbar.service';
 import { SidebarService } from '../sidebar.service';
@@ -33,14 +34,23 @@ export class CreateCodeResourceComponent {
     this._toolbarService.savingEnabled = false;
 
     this._sidebarService.hideSidebar();
+
+    // Possibly pre-select the first block language
+    this.availableBlockLanguages$.pipe(
+      first()
+    ).subscribe(b => {
+      if (b.length > 0) {
+        this.blockLanguageId = b[0].id;
+      };
+    });
   }
 
   /**
    * @return The BlockLanguages that are available for creation.
    */
-  get availableBlockLanguages() {
-    return (this._projectService.cachedProject.projectBlockLanguages);
-  }
+  readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
+    switchMap(p => of(p.projectBlockLanguages))
+  );
 
   /**
    * Actually creates the CodeResource
