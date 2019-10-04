@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, delay, first, filter, tap, map } from 'rxjs/operators';
+import { catchError, delay, first, filter, tap, map, publish, share } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
@@ -74,13 +74,14 @@ export class ProjectService {
     // Build the HTTP-request
     const url = this._server.getProjectUrl(id);
     this._httpRequest = this._http.get<ProjectFullDescription>(url)
-      .pipe(map(res => {
-        return (new Project(res, this._languageService));
-      }));
+      .pipe(
+        first(),
+        map(res => new Project(res, this._languageService)),
+        share() // Ensure that the request is not executed multiple times
+      );
 
     // And execute it by subscribing to it.
     this._httpRequest
-      .pipe(first())
       .subscribe(res => {
         // There is a new project, Inform subscribers
         console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
@@ -102,6 +103,9 @@ export class ProjectService {
           this._subject = new BehaviorSubject<Project>(undefined);
           this._httpRequest = undefined;
         })
+
+    // Others may also be interested in the result
+    return (this._httpRequest);
   }
 
   /**
