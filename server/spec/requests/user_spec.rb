@@ -9,7 +9,7 @@ RSpec.describe "user controller" do
   describe "getting user description" do
     it "logged in" do
       user = create(:user)
-      set_jwt(user)
+      set_acces_token(user)
 
       get '/api/user'
 
@@ -23,6 +23,19 @@ RSpec.describe "user controller" do
       json_data = JSON.parse(response.body)
       expect(json_data["roles"]).to eq(["guest"])
     end
+
+    it "acces token expired" do
+      user = create(:user)
+      set_expired_acces_token()
+
+      get '/api/user'
+      json_data = JSON.parse(response.body)
+      aggregate_failures "testing changes and response" do
+        expect(json_data["userId"]).to eq(User.guest_id)
+        expect(json_data["displayName"]).to eq("Guest")
+        expect(response.status).to eq(200)
+      end
+    end
   end
 
   describe "changing primary e-mail" do
@@ -33,7 +46,7 @@ RSpec.describe "user controller" do
       identity.user.email = identity.uid
       identity.user.save!
 
-      set_jwt(identity.user)
+      set_acces_token(identity.user)
       expect(User.find(identity.user_id).email).to eq(identity.uid)
 
       post '/api/user/send_change_email',
@@ -69,7 +82,7 @@ RSpec.describe "user controller" do
         identity.user.email = identity.uid
         identity.user.save!
 
-        set_jwt(identity.user)
+        set_acces_token(identity.user)
         expect(User.find(identity.user_id).email).to eq(identity.uid)
 
         post '/api/user/send_change_email',
@@ -88,7 +101,7 @@ RSpec.describe "user controller" do
         identity.user.email = identity.uid
         identity.user.save!
 
-        set_jwt(identity.user)
+        set_acces_token(identity.user)
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
         post '/api/user/send_change_email',
@@ -107,7 +120,7 @@ RSpec.describe "user controller" do
         identity.user.email = identity.uid
         identity.user.save!
 
-        set_jwt(identity.user)
+        set_acces_token(identity.user)
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
         post '/api/user/send_change_email',
@@ -127,7 +140,7 @@ RSpec.describe "user controller" do
         identity.user.email = identity.uid
         identity.user.save!
 
-        set_jwt(identity.user)
+        set_acces_token(identity.user)
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
         post '/api/user/send_change_email',
@@ -151,7 +164,7 @@ RSpec.describe "user controller" do
     let!(:identity) { create(:identity_provider, :existing) }
 
     it "valid" do
-      set_jwt(identity.user)
+      set_acces_token(identity.user)
       expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
       patch '/api/user/change_username',
@@ -159,12 +172,15 @@ RSpec.describe "user controller" do
         :params => {
           displayName: "New name"
         }.to_json
-
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("New name")
+      
+      aggregate_failures "testing changes and response" do
+        expect(User.find_by(id: identity.user_id)[:display_name]).to eq("New name")
+        expect(response.status).to eq(200)
+      end
     end
 
     it "invalid (empty string)" do
-      set_jwt(identity.user)
+      set_acces_token(identity.user)
       expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
       patch '/api/user/change_username',
@@ -181,7 +197,7 @@ RSpec.describe "user controller" do
     let!(:identity) { create(:identity_provider, :existing) }
 
     it "multiple objects" do
-      set_jwt(identity.user)
+      set_acces_token(identity.user)
 
       post '/api/user/may_perform',
         :headers => json_headers,

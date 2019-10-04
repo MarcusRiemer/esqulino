@@ -13,6 +13,12 @@ FactoryBot.define do
     trait :new do
       provider { "identity" }
       uid { "identity@web.de" }
+      provider_data { ({
+        credentials: {
+          expires: true,
+          expires_at: 3.hours.from_now
+        }
+      }) }
       own_data { ({
         password: BCrypt::Password.create("1234567"),
         verify_token: SecureRandom.uuid,
@@ -25,7 +31,11 @@ FactoryBot.define do
       uid { "blattwerkzeug@web.de" }
       provider_data { ({
         name: "Tom",
-        email: "blattwerkzeug@web.de"
+        email: "blattwerkzeug@web.de",
+        credentials: {
+          expires: true,
+          expires_at: 3.hours.from_now
+        }
       }) }
       own_data { ({
         password: BCrypt::Password.create("12345678"),
@@ -41,7 +51,11 @@ FactoryBot.define do
       uid { "another@web.de" }
       provider_data { ({
         name: "Tom",
-        email: "another@web.de"
+        email: "another@web.de",
+        credentials: {
+          expires: true,
+          expires_at: 3.hours.from_now
+        }
       }) }
       own_data { ({
         password: BCrypt::Password.create("12345678"),
@@ -57,11 +71,21 @@ FactoryBot.define do
     trait :new do
       provider { "developer" }
       uid { "developer@web.de" }
+      provider_data { ({
+        credentials: {
+          expires: false
+        }
+      }) }
     end
 
     trait :existing do
       provider { "developer" }
       uid { "developer@blattwerkzeug.de" }
+      provider_data { ({
+        credentials: {
+          expires: false
+        }
+      }) }
     end
   end
 
@@ -72,7 +96,11 @@ FactoryBot.define do
       provider_data { ({
         name: "Tom",
         email: "tom@gmail.com",
-        email_verified: false
+        email_verified: false,
+        credentials: {
+          expires: true,
+          expires_at: (Time.now + 3.hours).to_i
+        }
       }) }
     end
 
@@ -82,7 +110,12 @@ FactoryBot.define do
       provider_data { ({
         name: "Tom",
         email: "tom@gmail.com",
-        email_verified: true
+        email_verified: true,
+        credentials: {
+          expires: true,
+          # TODO-Tom ask marcus
+          expires_at: (Time.now + 3.hours).to_i
+        }
       }) }
     end
   end
@@ -92,7 +125,10 @@ FactoryBot.define do
       provider { "github" }
       uid { "Stackoverflow is life" }
       provider_data { ({
-        name: "Special-Name"
+        name: "Special-Name",
+        credentials: {
+          expires: false
+        }
       }) }
     end
 
@@ -104,6 +140,9 @@ FactoryBot.define do
         email: "specialGitHubEmail@web.de",
         urls: {
           "Github" => "www.github.com/specialName"
+        },
+        credentials: {
+          expires: false
         }
       }) }
     end

@@ -1,10 +1,14 @@
 {
   "$ref": "#/definitions/ServerProviderDescription",
-  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "ProviderDescription": {
       "additionalProperties": false,
+      "description": "Information about a User linked identity",
       "properties": {
+        "acces_token_duration": {
+          "type": "string"
+        },
         "changes": {
           "additionalProperties": false,
           "properties": {
@@ -46,6 +50,7 @@
     },
     "ServerProviderDescription": {
       "additionalProperties": false,
+      "description": "Identities and the primary e-mail of a user",
       "properties": {
         "primary": {
           "type": [

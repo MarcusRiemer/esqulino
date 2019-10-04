@@ -12,13 +12,16 @@ class AuthController < ApplicationController
       identity = Identity.search(auth_hash)
       if (not identity) then
         identity = Identity.create_with_auth(auth_hash, current_user)
+      else
+        if (signed_in?) and (not current_user.eql? identity.user) then
+          raise RuntimeError.new("Error: already linked with a user")
+        end
+
+        identity.update_provider_data(auth_hash)
+        identity.save!
       end
 
-      if (signed_in?) and (not current_user.eql? identity.user) then
-        raise RuntimeError.new("Error: already linked with a user")
-      end
-
-      sign_in(identity)
+      sign_in(identity, identity.acces_token_duration)
       # The HTTP referer identifies the address of the webpage
       # which is linked to the resource being requested
       redirect_to URI(request.referer || "/").path
@@ -43,7 +46,7 @@ class AuthController < ApplicationController
       return error_response("Wrong password")
     end
 
-    sign_in(identity)
+    sign_in(identity, identity.acces_token_duration)
     api_response(user_information)
   end
 
