@@ -29,13 +29,6 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="guest" datatype="html">
-        <source>Gast</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/auth/templates/user-button.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei </source>
         <context-group purpose="location">
@@ -46,7 +39,7 @@
       </trans-unit>
       <trans-unit id="shortProjectIntroduction" datatype="html">
         <source>
-      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.
+      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL- und Webprogrammierung.
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
@@ -54,13 +47,23 @@
         </context-group>
         <note priority="1" from="description">short project introduction</note>
       </trans-unit>
+      <trans-unit id="frontPrototypeWarning" datatype="html">
+        <source>
+    Der hier verfügbare Stand ist ein <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Prototyp<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> um die SQL- und Trucklino-Editoren zu zeigen. Insbesondere die Funktionen rund um die <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Benutzerverwaltung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sind noch <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kaum getestet<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>!
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/about.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <note priority="1" from="description">prototypeWarning</note>
+      </trans-unit>
       <trans-unit id="forPupilsHeadline" datatype="html">
         <source>
         Für Schüler
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <note priority="1" from="description">for pupils headline</note>
       </trans-unit>
@@ -70,7 +73,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <note priority="1" from="description">for pupils description</note>
       </trans-unit>
@@ -78,7 +81,7 @@
         <source>So legst du los</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">36</context>
         </context-group>
         <note priority="1" from="description">get started button text</note>
       </trans-unit>
@@ -88,7 +91,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <note priority="1" from="description">for teachers headline</note>
       </trans-unit>
@@ -98,7 +101,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <note priority="1" from="description">for teachers description</note>
       </trans-unit>
@@ -106,7 +109,7 @@
         <source>Konzept</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <note priority="1" from="description">concept</note>
       </trans-unit>
@@ -114,7 +117,7 @@
         <source>Demo-Videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <note priority="1" from="description">demo videos</note>
       </trans-unit>
@@ -124,7 +127,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="forDevelopersDescription" datatype="html">
@@ -133,14 +136,14 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="projectGitRepoLinkTitle" datatype="html">
         <source>BlattWerkzeug Entwicklung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">81</context>
         </context-group>
         <note priority="1" from="description">project git repo link title</note>
       </trans-unit>

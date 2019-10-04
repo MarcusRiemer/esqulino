@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core'
 import { Observable, Subject } from 'rxjs'
 
 import { MayPerformRequestDescription } from './../shared/may-perform.description';
-import { PerformDataService } from '../shared/authorisation/perform-data.service';
-
 
 /**
  * Used to subscribe to click events.

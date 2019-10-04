@@ -8,7 +8,7 @@
 # Once more: Hacking along with a custom version of the schema generator.
 # This time due to conditional types, see the github repo for details
 # https://github.com/vega/ts-json-schema-generator/pull/39
-TYPESCRIPT_JSON_SCHEMA_BIN = /home/marcus/projects/ts-json-schema-generator/bin/ts-json-schema-generator
+TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/ts-json-schema-generator/bin/ts-json-schema-generator
 
 # Names of the schema files to generate
 JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json NewsDescription.json NewsUpdateDescription.json NewsFrontpageDescription.json ServerProviderDescription.json

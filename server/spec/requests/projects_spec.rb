@@ -8,7 +8,7 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'valid request' do
       it 'creates a project' do
-        set_jwt(user)
+        set_acces_token(user)
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)
@@ -23,7 +23,7 @@ RSpec.describe ProjectsController, type: :request do
       end
 
       it 'missing the slug' do
-        set_jwt(user)
+        set_acces_token(user)
         post '/api/project', params: { "name": "foof" }
         expect(response).to have_http_status(200)
 
@@ -33,7 +33,7 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'invalid request' do
       it 'missing a name' do
-        set_jwt(user)
+        set_acces_token(user)
         post '/api/project', params: { "slug": "foof" }
         expect(response).to have_http_status(400)
       end
@@ -56,7 +56,7 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     describe 'valid request' do
-      before(:each) { set_jwt(project.user) }
+      before(:each) { set_acces_token(project.user) }
 
       it 'updates all attributes at once' do
         put "/api/project/#{project.slug}", params: update_params
@@ -271,7 +271,7 @@ RSpec.describe ProjectsController, type: :request do
 
     it 'an empty project' do
       to_delete = FactoryBot.create(:project)
-      set_jwt(to_delete.user)
+      set_acces_token(to_delete.user)
 
       delete "/api/project/#{to_delete.slug}"
 

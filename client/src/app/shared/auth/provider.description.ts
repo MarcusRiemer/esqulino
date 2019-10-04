@@ -14,6 +14,7 @@ export interface ProviderDescription {
   confirmed: boolean;
   link?: string;
   email?: string;
+  acces_token_duration?: string;
   changes: {
     // TODO-TOM: should be renamed
     primary: string | null;

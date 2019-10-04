@@ -90,7 +90,7 @@ class IdentitiesController < ApplicationController
 
   # Changes passwords of all password identities
   def change_password
-    if signed_in?
+    if (signed_in?) then
       identity = PasswordIdentity.find_by(user_id: current_user.id, provider: 'identity')
       begin
         if identity then
@@ -103,6 +103,8 @@ class IdentitiesController < ApplicationController
       rescue => e
         error_response(e.message)
       end
+    else
+      error_response("You need to be logged in")
     end
   end
 
@@ -136,6 +138,8 @@ class IdentitiesController < ApplicationController
 
       identity.delete
       api_response(current_user.all_providers)
+    else
+      error_response("You need to be logged in")
     end
   end
 

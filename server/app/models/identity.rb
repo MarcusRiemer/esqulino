@@ -3,6 +3,8 @@
 class Identity < ActiveRecord::Base
   include BCrypt
 
+  attr_accessor :credentials
+
   # The uid is a unique identifier of an identity that has to be set
   validates :uid, presence: true
   validates :provider, presence: true
@@ -96,10 +98,30 @@ class Identity < ActiveRecord::Base
               :type => self.type,
               :email => self.email,
               :confirmed => self.confirmed?,
+              :acces_token_duration => self.acces_token_duration ? Time.at(self.acces_token_duration) : nil,
               :changes => {
                 primary: self.change_primary_token_exp
               }
-            })
+            }).compact
+  end
+
+  # Updates the current provider data. 
+  # Will be triggerd when a user is logging in.
+  def update_provider_data(hash)
+    self.provider_data = self.provider_data.deep_merge(
+      hash[:info].merge({
+        credentials: hash[:credentials]
+      })
+    )
+  end
+
+  # Comes from Omniauth and contains an acces/refresh token from oauth2
+  def credentials
+    return self.provider_data["credentials"]
+  end
+
+  def acces_token_expires?
+    return self.credentials["expires"]
   end
 
   # Will be created on a primary e-mail change

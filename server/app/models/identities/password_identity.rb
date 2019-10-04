@@ -29,7 +29,15 @@ class PasswordIdentity < Identity
   # The auth hash is split into two different jsonb attributes
   # provider_data 
   def self.create_with_auth(auth, user)
-    new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => auth[:data])
+    new(
+      :user => user,
+      :uid => auth[:uid],
+      :provider => auth[:provider],
+      :provider_data => auth[:info].merge({
+        credentials: auth[:credentials]}
+      ),
+      :own_data => auth[:data]
+    )
   end
 
   def self.client_information
@@ -173,5 +181,17 @@ class PasswordIdentity < Identity
     else
       Password.new(self.password) == password
     end
+  end
+
+  def acces_token_duration
+    return nil
+  end
+
+  def acces_token_expired?
+    return false
+  end
+
+  def refresh_acces_token
+    # TODO-Tom needs to be added
   end
 end

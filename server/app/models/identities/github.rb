@@ -7,7 +7,15 @@ class Github < Identity
 
   # Creates a github identity with the given hash and user
   def self.create_with_auth(auth, user)
-    new(:user => user, :uid => auth[:uid], :provider => auth[:provider], :provider_data => auth[:info], :own_data => {})
+    new(
+      :user => user,
+      :uid => auth[:uid], 
+      :provider => auth[:provider], 
+      :provider_data => auth[:info].merge({
+        credentials: auth[:credentials]}
+      ),
+      :own_data => {}
+    )
   end
 
   # Client side information for the GitHub provider
@@ -19,7 +27,7 @@ class Github < Identity
         color: "black"
     })
   end
-
+  
   # Github (hopefully) validates mails for us
   def confirmed?
     return true
@@ -48,5 +56,17 @@ class Github < Identity
                 primary: self.change_primary_token_exp
               }
             })
+  end
+
+  def acces_token_duration
+    return nil
+  end
+
+  def acces_token_expired?
+    return false
+  end
+
+  def refresh_acces_token
+    # TODO-Tom needs to be added
   end
 end

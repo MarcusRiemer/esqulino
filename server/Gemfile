@@ -51,6 +51,8 @@ gem "pundit"
 # Role library without any authorization
 gem "rolify"
 
+# Used for HTTP-Requests
+gem "rest-client"
 
 ############################
 # Rails dependencies

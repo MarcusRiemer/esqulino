@@ -9,6 +9,7 @@ export const userRoutes: Routes = [
     path: '',
     component: UserComponent,
     canActivate: [LoggedInGuard],
+    runGuardsAndResolvers: 'always',
     children: [
       {
         path: 'settings',
