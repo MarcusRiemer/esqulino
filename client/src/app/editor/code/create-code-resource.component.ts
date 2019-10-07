@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { first, switchMap } from 'rxjs/operators';
+import { first, switchMap, shareReplay } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { ToolbarService } from '../toolbar.service';
@@ -24,6 +25,8 @@ export class CreateCodeResourceComponent {
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
+    private _router: Router,
+    private _route: ActivatedRoute,
   ) { }
 
   /**
@@ -59,10 +62,18 @@ export class CreateCodeResourceComponent {
     const p = this._projectService.cachedProject;
     const b = p.getBlockLanguage(this.blockLanguageId);
 
-    this._codeResourceService.createCodeResource(p, this.resourceName, this.blockLanguageId, b.defaultProgrammingLanguageId)
-      .pipe(first())
-      .subscribe(res => {
-        p.addCodeResource(res);
-      });
+    const toReturn = this._codeResourceService.createCodeResource(
+      p, this.resourceName, this.blockLanguageId, b.defaultProgrammingLanguageId
+    ).pipe(
+      first()
+    );
+
+    toReturn.subscribe(res => {
+      p.addCodeResource(res);
+
+      this._router.navigate([res.id], { relativeTo: this._route.parent });
+    });
+
+    return toReturn.toPromise();
   }
 }

@@ -1,40 +1,40 @@
 <div class="card mb-3">
   <div class="card-body">
     <h4 class="card-title">Neue Code-Ressource anlegen</h4>
-
-    <div class="form-group row">
-      <label for="resource-name"
-             class="col-sm-2 form-control-label">
-        Name
-      </label>
-      <div class="col-sm-10">
-        <input [(ngModel)]="resourceName"
-               class="form-control"
-               id="resource-name"
-               required>
-        <small class="text-muted">Der Name der neuen Resource</small>
+    <form (submit)="createCodeResource()">
+      <div class="form-group row">
+        <label for="resource-name"
+               class="col-sm-2 form-control-label">
+          Name
+        </label>
+        <div class="col-sm-10">
+          <input [(ngModel)]="resourceName"
+                 class="form-control"
+                 name="resource-name"
+                 required>
+          <small class="text-muted">Der Name der neuen Resource</small>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group row">
-      <label for="block-language"
-             class="col-sm-2 form-control-label">
-        Codetyp
-      </label>
-      <div class="col-sm-10">
-        <select [(ngModel)]="blockLanguageId"
-                class="form-control custom-select"
-                id="block-language"
-                required>
-          <option *ngFor="let lang of availableBlockLanguages$ | async"
-                  [value]="lang.id">
-            {{ lang.name }} ({{ lang.id }})
-          </option>
-        </select>
-        <small class="text-muted">Welche Programmiersprache soll genutzt werden?</small>
+      <div class="form-group row">
+        <label for="block-language"
+               class="col-sm-2 form-control-label">
+          Codetyp
+        </label>
+        <div class="col-sm-10">
+          <select [(ngModel)]="blockLanguageId"
+                  class="form-control custom-select"
+                  name="block-language"
+                  required>
+            <option *ngFor="let lang of availableBlockLanguages$ | async"
+                    [value]="lang.id">
+              {{ lang.name }} ({{ lang.id }})
+            </option>
+          </select>
+          <small class="text-muted">Welche Programmiersprache soll genutzt werden?</small>
+        </div>
       </div>
-    </div>
-    <button (click)="createCodeResource()"
-            class="btn btn-primary">Erstellen!</button>
+      <button class="btn btn-primary">Erstellen!</button>
+    </form>
   </div>
 </div>

@@ -3,8 +3,9 @@ import { HttpTestingController } from '@angular/common/http/testing';
 
 import { ProjectService } from '../../project.service';
 
-import { ProjectFullDescription } from '../../../shared/project';
+import { ProjectFullDescription, Project } from '../../../shared/project';
 import { ServerApiService } from '../../../shared';
+import { generateUUIDv4 } from 'src/app/shared/util';
 
 
 const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
@@ -25,11 +26,11 @@ const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
 export const specLoadEmptyProject = (
   projectService: ProjectService,
   override?: Partial<ProjectFullDescription>
-) => {
+): Promise<Project> => {
   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
   const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
-  const p = Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {});
+  const p = Object.assign({ id: generateUUIDv4() }, DEFAULT_EMPTY_PROJECT, override || {});
 
   const toReturn = projectService.setActiveProject(DEFAULT_EMPTY_PROJECT.id, true).toPromise();
 
