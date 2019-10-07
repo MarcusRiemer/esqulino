@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { catchError, delay, map, tap } from 'rxjs/operators';
+import { catchError, delay, map, tap, shareReplay } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared'
 import { CodeResource } from '../shared/syntaxtree'
@@ -37,7 +37,8 @@ export class CodeResourceService {
       .pipe(
         catchError(this.handleError),
         delay(250),
-        map(res => new CodeResource(res, project))
+        map(res => new CodeResource(res, project)),
+        shareReplay(1)
       );
 
 

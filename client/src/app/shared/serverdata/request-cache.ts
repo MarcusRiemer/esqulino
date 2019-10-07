@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { switchMap, tap, shareReplay, scan, map, filter, catchError } from 'rxjs/operators';
 
 /**
