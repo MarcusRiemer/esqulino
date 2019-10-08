@@ -7,12 +7,12 @@ module JwtHelper
   def self.issuer
     return Rails.configuration.sqlino['editor_domain']
   end
-  # Returns the default duration of an acces token 
+  # Returns the default duration of an acces token
   def self.acces_token_duration
     # return 10.seconds
     return Rails.configuration.sqlino['auth_tokens']['acces_token'].seconds
   end
-  # Returns the default duration of an refresh token 
+  # Returns the default duration of an refresh token
   def self.refresh_token_duration
     return Rails.configuration.sqlino['auth_tokens']['refresh_token'].seconds
   end
@@ -113,7 +113,8 @@ module JwtHelper
       value: value,
       httponly: true,
       expires: expires,
-      path: '/api'
+      path: '/api',
+      domain: "." + Rails.application.config.cookie_domain
     })
   end
 end
