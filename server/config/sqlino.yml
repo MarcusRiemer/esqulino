@@ -3,8 +3,8 @@ development:
   data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
-  project_domains: ["localhost.localdomain:9292"]
-  editor_domain: "localhost:9292"
+  project_domains: ["projects.localdomain:9292"]
+  editor_domain: "localhost.localdomain:9292"
   mail:
     default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
     admin: "Marcus@GurXite.de"
@@ -18,7 +18,7 @@ development:
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
-  auth_tokens: 
+  auth_tokens:
     acces_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
   auth_refresh_token_urls:
@@ -38,7 +38,7 @@ test:
   data_dir: "../data/test"
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
-  project_domains: ["localhost.localdomain:9292"]
+  project_domains: ["projects.localdomain:9292"]
   editor_domain: "localhost.localdomain:9292"
   mail:
     default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
@@ -57,7 +57,7 @@ test:
   seed:
     data_dir: ../seed-test
     output: false
-  auth_tokens: 
+  auth_tokens:
     acces_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
   auth_provider: [Google, Github, PasswordIdentity, Developer]
@@ -90,7 +90,7 @@ production:
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
-  auth_tokens: 
+  auth_tokens:
     acces_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
   auth_refresh_token_urls:
