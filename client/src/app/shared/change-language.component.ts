@@ -44,7 +44,9 @@ export class ChangeLanguageComponent {
    * @param langToken The locale to change to, should probably be "de" or "en"
    */
   public changeLanguage(langToken: string) {
-    document.location.href = this.currentUrlForLanguage(langToken);
+    const newUrl = this.currentUrlForLanguage(langToken);
+    console.log(`Changing language to "${langToken}", new URL will be "${newUrl}"`)
+    document.location.href = newUrl;
   }
 
   /**
