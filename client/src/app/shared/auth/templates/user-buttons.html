@@ -1,9 +1,13 @@
 <mat-menu #userMenu="matMenu">
-  <button mat-menu-item [routerLink]="['/user/settings']">
+  <button mat-menu-item
+          [routerLink]="['/user/settings']"
+          i18n="@@userMenuSettings">
     Einstellungen
   </button>
 
-  <button mat-menu-item (click)="onLogout()">
+  <button mat-menu-item
+          (click)="onLogout()"
+          i18n="@@userMenuLogout">
     <span class="fa fa-fw fa-sign-out"></span>
     Logout
   </button>
@@ -20,12 +24,12 @@
   <ng-container logged_out>
     <button mat-button (click)="openDialog('signIn')">
       <span class="fa fa-fw fa-sign-in" aria-hidden="true"></span>
-      Anmelden
+      <ng-container i18n="@@userMenuSignIn">Anmelden</ng-container>
     </button>
 
     <button mat-button (click)="openDialog('signUp')">
       <span class="fa fa-fw fa-user-plus" aria-hidden="true"></span>
-      Registrieren
+      <ng-container i18n="@@userMenuRegister">Registrieren</ng-container>
     </button>
   </ng-container>
 </is-logged-in>

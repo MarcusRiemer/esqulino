@@ -14,11 +14,20 @@
 
 <div mat-dialog-content class="flex-column authentication">
   <div>
-    <h1>{{ isSignIn() ? "Anmelden" : "Registrieren" }}</h1>
+    <h1>
+      <ng-container *ngIf="isSignIn(); else headerRegister"
+                    i18n="@@authDialogHeaderSignIn">
+        Anmelden
+      </ng-container>
+      <ng-template #headerRegister
+                   i18n="@@authDialogHeaderRegister">
+        Registrieren
+      </ng-template>
+    </h1>
   </div>
   <providers-all-buttons
     (trigger)="showEmailContent()">
-  
+
   </providers-all-buttons>
 
   <ng-container *ngIf="emailContent">
@@ -30,7 +39,7 @@
         (content)="changeContent()">
       </sign-in>
       <!-- Second content -->
-      <request-reset-password 
+      <request-reset-password
         *ngIf="secondContent">
       </request-reset-password>
     </ng-container>

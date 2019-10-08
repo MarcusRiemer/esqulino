@@ -29,13 +29,64 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="authDialogHeaderSignIn" datatype="html">
+        <source>
+        Anmelden
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/auth-dialog.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="authDialogHeaderRegister" datatype="html">
+        <source>
+        Registrieren
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/auth-dialog.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userMenuSettings" datatype="html">
+        <source>
+    Einstellungen
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userMenuLogout" datatype="html">
+        <source>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    Logout
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userMenuSignIn" datatype="html">
+        <source>Anmelden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userMenuRegister" datatype="html">
+        <source>Registrieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <note priority="1" from="description">welcome message</note>
+        <note priority="1" from="description">Front page welcome message</note>
       </trans-unit>
       <trans-unit id="shortProjectIntroduction" datatype="html">
         <source>
@@ -165,11 +216,19 @@
         </context-group>
         <note priority="1" from="description">scientific work description</note>
       </trans-unit>
+      <trans-unit id="academiaThesisPublicationTypeConnector" datatype="html">
+        <source>von</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/academia.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <note priority="1" from="description">academia publication type connector</note>
+      </trans-unit>
       <trans-unit id="academiaThesisDatePrefix" datatype="html">
         <source>am</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <note priority="1" from="description">academia thesis date prefix</note>
       </trans-unit>
@@ -177,7 +236,7 @@
         <source>Download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/academia.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <note priority="1" from="description">academia thesis download link text</note>
       </trans-unit>
