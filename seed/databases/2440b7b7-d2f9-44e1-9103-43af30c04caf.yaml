@@ -33,9 +33,9 @@ concise_attributes:
     []}, {"name": "Geschichte", "columns": [{"name": "Geschichte_ID", "type": "INTEGER",
     "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "Geschichte_Name",
     "type": "TEXT", "index": 1, "primary": false, "not_null": false, "dflt_value":
-    null}, {"name": "Geschichte_Nr_Kosmos", "type": "TEXT", "index": 2, "primary":
+    null}, {"name": "Geschichte_Nr_Kosmos", "type": "INTEGER", "index": 2, "primary":
     false, "not_null": false, "dflt_value": null}, {"name": "Geschichte_Nr_Europa",
-    "type": "TEXT", "index": 3, "primary": false, "not_null": false, "dflt_value":
+    "type": "INTEGER", "index": 3, "primary": false, "not_null": false, "dflt_value":
     null}, {"name": "Geschichte_Jahr_Kosmos", "type": "INTEGER", "index": 4, "primary":
     false, "not_null": false, "dflt_value": null}, {"name": "Geschichte_Jahr_Europa",
     "type": "INTEGER", "index": 5, "primary": false, "not_null": false, "dflt_value":
@@ -48,6 +48,6 @@ concise_attributes:
   value_before_type_cast: '2019-10-04 11:49:05.603739'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-10-04 11:49:05.61778'
+  value_before_type_cast: '2019-10-09 15:08:42.930881'
 new_record: false
 active_record_yaml_version: 2
