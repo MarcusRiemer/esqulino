@@ -34,7 +34,7 @@ module AuthHelper
       },
       credentials: {
         expires: true,
-        expires_at: JwtHelper.acces_token_duration
+        expires_at: JwtHelper.access_token_duration
       }
     }
   end
