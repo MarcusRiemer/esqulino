@@ -4,17 +4,17 @@
       {{ localeFlag }}
     </button>
     <mat-menu #naturalLang="matMenu">
-      <ng-container *ngFor="let localItem of locales">
-        <button mat-menu-item (click)="changeLanguage(localItem.token)">
-          <span>{{localItem.flag}} {{localItem.name}}</span>
-        </button>
-      </ng-container>
+      <a mat-menu-item
+         *ngFor="let localItem of locales"
+         [href]="urlForLanguage(localItem.token)">
+        <span>{{localItem.flag}} {{localItem.name}}</span>
+      </a>
     </mat-menu>
   </ng-container>
   <ng-container inactive>
-      <a *ngFor="let localeItem of locales"
-         [href]='currentUrlForLanguage(localeItem.token)'>
-        {{ localeItem.flag }}
-      </a>
+    <a *ngFor="let localeItem of locales"
+       [href]='urlForLanguage(localeItem.token)'>
+      {{ localeItem.flag }}
+    </a>
   </ng-container>
 </app-requires-javascript>
