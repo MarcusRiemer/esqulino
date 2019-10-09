@@ -1,0 +1,53 @@
+--- !ruby/object:ProjectDatabase
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 2440b7b7-d2f9-44e1-9103-43af30c04caf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: schema
+  value_before_type_cast: '[{"name": "Auftritt", "columns": [{"name": "Geschichte_ID",
+    "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
+    null}, {"name": "Charakter_ID", "type": "INTEGER", "index": 1, "primary": true,
+    "not_null": false, "dflt_value": null}, {"name": "Sprecher_ID", "type": "INTEGER",
+    "index": 2, "primary": true, "not_null": false, "dflt_value": null}], "foreign_keys":
+    [{"references": [{"to_table": "Sprecher", "to_column": "Sprecher_ID", "from_column":
+    "Sprecher_ID"}]}, {"references": [{"to_table": "Charakter", "to_column": "Charakter_ID",
+    "from_column": "Charakter_ID"}]}, {"references": [{"to_table": "Geschichte", "to_column":
+    "Geschichte_ID", "from_column": "Geschichte_ID"}]}]}, {"name": "Charakter", "columns":
+    [{"name": "Charakter_ID", "type": "INTEGER", "index": 0, "primary": true, "not_null":
+    true, "dflt_value": null}, {"name": "Charakter_Name", "type": "TEXT", "index":
+    1, "primary": false, "not_null": false, "dflt_value": null}], "foreign_keys":
+    []}, {"name": "Geschichte", "columns": [{"name": "Geschichte_ID", "type": "INTEGER",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "Geschichte_Name",
+    "type": "TEXT", "index": 1, "primary": false, "not_null": false, "dflt_value":
+    null}, {"name": "Geschichte_Nr_Kosmos", "type": "TEXT", "index": 2, "primary":
+    false, "not_null": false, "dflt_value": null}, {"name": "Geschichte_Nr_Europa",
+    "type": "TEXT", "index": 3, "primary": false, "not_null": false, "dflt_value":
+    null}, {"name": "Geschichte_Jahr_Kosmos", "type": "INTEGER", "index": 4, "primary":
+    false, "not_null": false, "dflt_value": null}, {"name": "Geschichte_Jahr_Europa",
+    "type": "INTEGER", "index": 5, "primary": false, "not_null": false, "dflt_value":
+    null}], "foreign_keys": []}, {"name": "Sprecher", "columns": [{"name": "Sprecher_ID",
+    "type": "INTEGER", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "Sprecher_Name", "type": "TEXT", "index": 1, "primary": false,
+    "not_null": false, "dflt_value": null}], "foreign_keys": []}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-10-04 11:49:05.603739'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-10-04 11:49:05.61778'
+new_record: false
+active_record_yaml_version: 2

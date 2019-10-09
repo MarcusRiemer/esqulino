@@ -9,6 +9,8 @@ import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
 import { ValidationResult } from './validation-result';
 import { embraceNode } from './drop-embrace';
 
+export * from './coderesource.description'
+
 /**
  * A resource that is described by a syntaxtree.
  *

@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
-import { Location } from '@angular/common';
 
 import { environment } from './../../environments/environment';
+import { NaturalLanguagesService } from '../natural-languages.service';
 
 /**
  * @return The unicode string that represents a flag for the given locale
@@ -14,10 +14,9 @@ function localeToFlag(locale: string): string {
   }
 }
 
-export const locales = [
-  { token: 'de', name: 'Deutsch', flag: localeToFlag('de') },
-  { token: 'en', name: 'English', flag: localeToFlag('en') },
-]
+export const locales = environment.availableLanguages.map(l => {
+  return (Object.assign({}, l, { flag: localeToFlag(l.token) }));
+});
 
 @Component({
   selector: 'natural-language-selector',
@@ -33,35 +32,16 @@ export class ChangeLanguageComponent {
   readonly localeFlag = localeToFlag(this.locale);
 
   constructor(
-    @Inject(LOCALE_ID) private readonly _localeId: string,
-    private readonly _location: Location
+    @Inject(LOCALE_ID)
+    private readonly _localeId: string,
+    private readonly _naturalLanguages: NaturalLanguagesService
   ) {
-  }
-
-  /**
-   * Changes the natural language of the application.
-   *
-   * @param langToken The locale to change to, should probably be "de" or "en"
-   */
-  public changeLanguage(langToken: string) {
-    document.location.href = this.currentUrlForLanguage(langToken);
-  }
-
-  /**
-   * The path-portion of the URL that is currently visited by the browser. Also
-   * works with the universal rendering server.
-   */
-  get currentPath() {
-    return (this._location.path());
   }
 
   /**
    * @return The current URL for the given language token.
    */
-  public currentUrlForLanguage(langToken: string) {
-    const host = langToken == "de"
-      ? environment.canonicalHost
-      : langToken + "." + environment.canonicalHost;
-    return ("//" + host + this.currentPath);
+  public urlForLanguage(langToken: string) {
+    return (this._naturalLanguages.urlForLanguage(langToken));
   }
 }

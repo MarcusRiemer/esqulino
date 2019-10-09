@@ -1,4 +1,5 @@
-const LOGO_FHW_URL = "/vendor/logos/fhw.png";
+const LOGO_FHW_URL = "/vendor/logos/fhw.svg";
+const LOGO_PTL_URL = "/vendor/logos/ptl.svg";
 const LOGO_CAU_URL = "/vendor/logos/cau.png";
 
 /**
@@ -16,7 +17,7 @@ export default [
     author: {
       name: "Marcus Riemer"
     },
-    degree: "Master of Science",
+    publicationType: "Thesis (M.Sc.)",
     institutionLogo: LOGO_FHW_URL,
     url: `${THESIS_BASE_URL}/marcus-riemer-thesis-blattwerkzeug.pdf`,
     abstract: `
@@ -36,7 +37,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
     author: {
       name: "Marcus Riemer"
     },
-    degree: "Master of Science",
+    publicationType: "Thesis (M.Sc.)",
     institutionLogo: LOGO_FHW_URL,
     url: `${THESIS_BASE_URL}/marcus-riemer-thesis-blattwerkzeug.pdf`,
     abstract: `
@@ -56,7 +57,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       name: "Stefan Görgen"
     },
     institutionLogo: LOGO_CAU_URL,
-    degree: "Bachelor",
+    publicationType: "Thesis (B.A.)",
     url: `${THESIS_BASE_URL}/stefan-görgen-thesis-db-mittelstufe.pdf`,
     abstract: `<p>Erarbeitung einer Unterrichtseinheit zu Datenbanken in der Mittelstufe.</p>`,
     date: new Date('October 14, 2016')
@@ -70,7 +71,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       name: "Marco Pawlowski"
     },
     institutionLogo: LOGO_FHW_URL,
-    degree: "Bachelor",
+    publicationType: "Thesis (B.Sc.)",
     url: `${THESIS_BASE_URL}/marco-pawlowski-thesis-schema-editor.pdf`,
     abstract: `
 <p>Mit dieser Arbeit wird eine Lernsoftware entwickelt, die an Anfänger gerichtet ist. Es werden die elementaren Funktionen zur Erstellung von Datenbanken zur Verfügung gestellt werden. Dabei sollen Fehler nicht von der Software automatisch gelöst werden, sondern an den Benutzer kommuniziert werden. Dadurch soll der Benutzer ein Verständnis dafür entwickeln, welche Bedingungen vorher erfüllt sein müssen, um bestimmte Aktionen durchzuführen zu können.</p>`,
@@ -85,7 +86,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       name: "Ole Just"
     },
     institutionLogo: LOGO_FHW_URL,
-    degree: "Bachelor",
+    publicationType: "Thesis (B.Sc.)",
     url: `${THESIS_BASE_URL}/ole-just-thesis-images.pdf`,
     abstract: `<p>SQLino ist eine webbasierte IDE für HTML und SQL auf Einsteigerniveau. Diese Arbeit beschreibt die Entwicklung einer prototypischen Bildverwaltung für SQLino, die neben der bloßen Speicherung und Einbettung der Bilder in die erstellen Webseiten auch rechtliche Aspekte im Umgang mit der Veröffentlichung von Bildern beachtet.</p>`,
     date: new Date('October 31, 2017')
@@ -99,7 +100,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       name: "Sebastian Popp"
     },
     institutionLogo: LOGO_FHW_URL,
-    degree: "Bachelor",
+    publicationType: "Thesis (B.Sc.)",
     url: `${THESIS_BASE_URL}/sebastian-popp-thesis-trucklino.pdf`,
     abstract: `<p>Klassische Universalsprachen wie Java oder Python haben einen sehr großen Sprachumfang und sind daher nur bedingt zur Einführung in die Konzepte der Programmierung geeignet. Diese Arbeit implementiert eine Minisprache – eine im Sprachumfang reduzierte Programmiersprache – welche es den Schülern ermöglichen soll, spielerisch Programmieren zu lernen, indem ihre Programme einen Lastwagen durch eine Welt steuern und dadurch Aufgaben lösen.</p>`,
     date: new Date('Februar 13, 2019')
@@ -116,5 +117,24 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
     url: `${THESIS_BASE_URL}/marcus-riemer-project-ide-generation.pdf`,
     abstract: `<p>Im Rahmen dieser Promotion soll erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche syntaxfreie Entwicklungsumgebungen erzeugen lassen. Letztendlich soll Lehrkräften ein Werkzeug an die Hand gegeben werden, welches die Einstiegshürde in die Programmierung mit konventionellen Programmiersprachen wie SQL, HTML, CSS oder JavaScript senkt.</p>`,
     date: new Date('December 1, 2018')
+  },
+  {
+    id: "authentication-authorisation",
+    language: "de",
+    title: "Implementierung von Authentifizierung und Autorisierung",
+    subtitle: "in eine bereits vorhandene Webanwendung",
+    author: {
+      name: "Tom Hilge"
+    },
+    publicationType: "PTL Abschlussarbeit",
+    institutionLogo: LOGO_PTL_URL,
+    url: `${THESIS_BASE_URL}/tom-hilge-thesis-authorisation-authentication.pdf`,
+    abstract: `<p>
+      Vor dieser Arbeit war in Blattwerkzeug keine Benutzer-Authentisierung, -Authentifizierung und -Autorisierung implementiert. Dies hat zur Folge, dass zum jetzigen Zeitpunkt jeder Internet-Nutzer dazu autorisiert ist, beliebige Anfragen an den Server zu stellen und ohne spezifische Berechtigungs-Überprüfung Serverfunktionen auszuführen. Desweiteren sind Bereiche wie zum Beispiel das Adminpanel über die Seiten-Navigation frei zugänglich.
+    </p>
+    <p>
+      Mit Fertigstellung der Thesis ist es möglich, sich mit einer standardisierten Registrierung oder einem externen Anbieter bei Blattwerkzeug anzumelden. Außerdem werden je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt oder andere Operationen gestattet.
+    </p>`,
+    date: new Date('September 2, 2019')
   }
 ]

@@ -1,7 +1,7 @@
 import { NodeLocation } from './syntaxtree';
 
 /**
- * String -> String
+ * Any mapping from String -> String
  */
 export type KeyValuePairs = { [paramKey: string]: string };
 

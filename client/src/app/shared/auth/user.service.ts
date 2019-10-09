@@ -1,4 +1,3 @@
-import { NODE_CONVERTER } from './../syntaxtree/css/css.codegenerator';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -11,6 +10,7 @@ import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNam
 import { SignUpDescription, SignInDescription, ChangePasswordDescription } from './auth-description';
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
@@ -41,10 +41,10 @@ export class UserService {
         this.userData$.refresh();
         if (data.userId === UserService.GUEST_ID) {
           this._router.navigate(["/"]);
-          this._snackBar.open("Bitte erneut anmelden.", '', {duration: 2000})
-          throw new Error('User is logged out ( ACCESS-TOKEN expired? )'); 
-        }}
-      )
+          this._snackBar.open("Bitte erneut anmelden.", '', { duration: 2000 })
+          throw new Error('User is logged out ( ACCES-TOKEN expired? )');
+        }
+      })
     )
   }
 
@@ -56,14 +56,18 @@ export class UserService {
    * @return The Name of the currently authenticated user
    */
   public readonly userDisplayName$ = this.userData$.value.pipe(
-    map(u => u.displayName)
+    map(u => u.displayName),
+    // Error value if something breaks down horribly (server error, network outage, ...).
+    catchError(_ => of("userDisplayName: Unknown Error")),
   )
 
   /**
    * @return The ID of the currently authenticated user
    */
   public readonly userId$ = this.userData$.value.pipe(
-    map(u => u.userId)
+    map(u => u.userId),
+    // Assume guest role if something breaks down horribly (server error, network outage, ...).
+    catchError(_ => of(["guest"])),
   );
 
   /**
@@ -75,7 +79,9 @@ export class UserService {
   )
 
   public readonly roles$ = this.userData$.value.pipe(
-    map(u => u.roles)
+    map(u => u.roles),
+    // Assume guest ID if something breaks down horribly (server error, network outage, ...).
+    catchError(_ => of(UserService.GUEST_ID)),
   )
 
   public readonly primaryEmail$ = this.identities$.value.pipe(
@@ -141,7 +147,7 @@ export class UserService {
   }
 
   /**
-   * Sends a http-request to exchange the passwords of all linked password identities 
+   * Sends a http-request to exchange the passwords of all linked password identities
    * @param data current password, new password
    */
   public changePassword$(data: ChangePasswordDescription): Observable<UserDescription> {
@@ -164,7 +170,7 @@ export class UserService {
 
   /**
    * If the User wants to change his primary E-Mail,
-   * a confirmation email will be sent. 
+   * a confirmation email will be sent.
    * The user has to verify the email in order to change the primary email
    * @param data new primary e-mail
    */

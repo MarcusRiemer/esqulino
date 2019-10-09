@@ -42,6 +42,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "sourceMap": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -79,7 +80,8 @@
               "i18nFormat": "xlf",
               "encoding": "UTF-8",
               "defaultLanguage": "de",
-              "languages": ["en"]
+              "languages": ["en"],
+              "useSourceAsTarget": false
             }
           }
         },

@@ -22,5 +22,9 @@ export const environment: EnvironmentDescription = {
   version: {
     hash: VERSION.GIT_REVISION,
     date: VERSION.BUILD_DATE
-  }
+  },
+  availableLanguages: [
+    { token: 'de', name: 'Deutsch' },
+    { token: 'en', name: 'English' },
+  ]
 };

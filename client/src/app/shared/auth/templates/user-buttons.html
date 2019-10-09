@@ -1,10 +1,14 @@
 <mat-menu #userMenu="matMenu">
-  <button mat-menu-item [routerLink]="['/user/settings']">
+  <button mat-menu-item
+          [routerLink]="['/user/settings']"
+          i18n="@@userMenuSettings">
     Einstellungen
   </button>
 
-  <button mat-menu-item (click)="onLogout()">
-    <i class="fa fa-sign-out"></i>
+  <button mat-menu-item
+          (click)="onLogout()"
+          i18n="@@userMenuLogout">
+    <span class="fa fa-fw fa-sign-out"></span>
     Logout
   </button>
 </mat-menu>
@@ -12,26 +16,20 @@
 <is-logged-in class="user-buttons">
   <ng-container logged_in>
     <button mat-button [matMenuTriggerFor]="userMenu">
-      <span class="font-size">
-        {{ userDisplayName$ | async }}
-      </span>
-      <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+      <span class="fa fa-fw fa-user-circle-o" aria-hidden="true"></span>
+      {{ userDisplayName$ | async }}
     </button>
   </ng-container>
 
   <ng-container logged_out>
     <button mat-button (click)="openDialog('signIn')">
-      <span class="font-size">
-        Anmelden
-        <i class="fa fa-sign-in" aria-hidden="true"></i>
-      </span>
+      <span class="fa fa-fw fa-sign-in" aria-hidden="true"></span>
+      <ng-container i18n="@@userMenuSignIn">Anmelden</ng-container>
     </button>
 
     <button mat-button (click)="openDialog('signUp')">
-      <span class="font-size">
-        Registrieren
-        <i class="fa fa-user-plus" aria-hidden="true"></i>
-      </span>
+      <span class="fa fa-fw fa-user-plus" aria-hidden="true"></span>
+      <ng-container i18n="@@userMenuRegister">Registrieren</ng-container>
     </button>
   </ng-container>
 </is-logged-in>

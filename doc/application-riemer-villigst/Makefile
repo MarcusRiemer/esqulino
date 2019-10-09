@@ -24,7 +24,7 @@ ast-example-xml-node-two-attributes.pdf: ../manual/generated/ast-example-xml-nod
 	inkscape -z -f $< -A $@
 
 publish-draft: application.pdf
-	scp application.pdf marcus@kleopatra-tunnel:$(REMOTE_DIR)/application-riemer-villigst.pdf
+	scp application.pdf marcus@kleopatra-tunnel:$(REMOTE_DIR)/blattwerkzeug-project-description.pdf
 
 publish-draft-docx: application.docx
 	scp application.docx marcus@kleopatra-tunnel:$(REMOTE_DIR)/application-riemer-villigst.docx

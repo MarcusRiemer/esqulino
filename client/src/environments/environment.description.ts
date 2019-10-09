@@ -26,4 +26,9 @@ export interface EnvironmentDescription {
     hash: string;
     date: string;
   };
+
+  availableLanguages: {
+    token: string,
+    name: string,
+  }[];
 }

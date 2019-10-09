@@ -3,8 +3,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { Angulartics2Module } from 'angulartics2';
+
+import { filter } from 'rxjs/operators';
 
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
@@ -19,6 +22,8 @@ import { SqlScratchComponent } from './app.component';
 import { routing } from './app.routes';
 
 import { NotifyErrorHandler, isApplicationCrashed } from './error-handler';
+import { NaturalLanguagesService } from './natural-languages.service';
+import { LinkService } from './link.service';
 
 import registerLanguages from './locale-registration';
 import { UserModule } from './user/user.module';
@@ -82,9 +87,12 @@ if (environment.sentry && environment.sentry.active) {
     SqlScratchComponent,
   ],
   providers: [
+    { provide: ErrorHandler, useClass: NotifyErrorHandler },
     Title,
     { provide: ErrorHandler, useClass: NotifyErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: RequireLoggedInInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: RequireLoggedInInterceptor, multi: true},
+    LinkService,
+    NaturalLanguagesService,
   ],
   bootstrap: [
     SqlScratchComponent
@@ -94,7 +102,28 @@ if (environment.sentry && environment.sentry.active) {
   ]
 })
 export class AppModule {
-  constructor(@Inject(PLATFORM_ID) platformId: string) {
+  constructor(
+    @Inject(PLATFORM_ID) platformId: string,
+    private readonly _router: Router,
+    private readonly _naturalLanguagesService: NaturalLanguagesService,
+  ) {
+    // Calling service methods that need to be called exactly once
+    this.setupTracking(platformId);
+    this.setupDocumentLanguage();
+  }
+
+  private setupDocumentLanguage() {
+    this._naturalLanguagesService.updateRootLangAttribute();
+
+    // Ensure that the alternate languages are always mentioned in the <head>
+    this._router.events.pipe(
+      filter(evt => evt instanceof NavigationEnd)
+    ).subscribe(_ => {
+      this._naturalLanguagesService.updateAlternateUrls()
+    });
+  }
+
+  private setupTracking(platformId: string) {
     // Setting up Piwik if there is a configuration and we are running in the browser
     const piwikConf = environment.piwik;
     if (piwikConf && isPlatformBrowser(platformId)) {
