@@ -328,11 +328,22 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
 
         node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
           process.generateNode(c);
-          process.addConvertedFragment("DESC", c, OutputSeparator.SPACE_BEFORE);
           if (idx != arr.length - 1) {
             process.addConvertedFragment(', ', node);
           }
         });
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "sortOrder"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+        process.generateNode(node.getChildrenInCategory("expression")[0]);
+        process.addConvertedFragment(" " + node.properties.order, node)
       }
     }
   },
