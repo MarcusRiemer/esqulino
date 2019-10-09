@@ -13,13 +13,61 @@
       <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">13</context></context-group><context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news-details.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="continueReading" datatype="html">
         <source>Weiterlesen ...</source><target state="translated">Continue reading ...</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="welcomeMessage" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">app/shared/templates/news.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="authDialogHeaderSignIn" datatype="html">
+        <source>
+        Anmelden
+      </source><target state="translated">Sign In</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/auth-dialog.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit><trans-unit id="authDialogHeaderRegister" datatype="html">
+        <source>
+        Registrieren
+      </source><target state="translated">Register</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/auth-dialog.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit><trans-unit id="userMenuSettings" datatype="html">
+        <source>
+    Einstellungen
+  </source><target state="translated">Settings</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit><trans-unit id="userMenuLogout" datatype="html">
+        <source>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    Logout
+  </source><target state="new">
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    Logout
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit><trans-unit id="userMenuSignIn" datatype="html">
+        <source>Anmelden</source><target state="translated">Sign In</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit><trans-unit id="userMenuRegister" datatype="html">
+        <source>Registrieren</source><target state="translated">Register</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/auth/templates/user-buttons.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit><trans-unit id="welcomeMessage" datatype="html">
         <source>Willkommen bei </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <note priority="1" from="description">welcome message</note><target>Welcome to</target>
+        <note priority="1" from="description">Front page welcome message</note><target>Welcome to</target>
       </trans-unit>
       <trans-unit id="shortProjectIntroduction" datatype="html">
         <source>
@@ -32,9 +80,9 @@
         <note priority="1" from="description">short project introduction</note><target state="translated">A beginner-friendly development environment for dealing with SQL and web programming.</target>
       </trans-unit><trans-unit id="frontPrototypeWarning" datatype="html">
         <source>
-    Der hier verfügbare Stand ist ein <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Prototyp<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> um die SQL- und Trucklino-Editoren zu zeigen. Insbesondere die Funktionen rund um die <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Benutzerverwaltung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> sind noch <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>kaum getestet<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>!
+    Der hier verfügbare Stand ist ein <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Prototyp<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> um die SQL- und Trucklino-Editoren zu zeigen. Insbesondere die Funktionen rund um die <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Benutzerverwaltung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sind noch <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kaum getestet<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>!
   </source><target state="translated">
-    The state that is presented here is a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Prototype<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to show the editors for SQL and Trucklino. Especially the functionality around the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>user management<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>barely tested<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>!
+    The state that is presented here is a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Prototype<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to show the editors for SQL and Trucklino. Especially the functionality around the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>user management<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>barely tested<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>!
   </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/about.html</context>
@@ -120,25 +168,25 @@
       
       <trans-unit id="academiaThesesInfo" datatype="html">
         <source>
-    Anfertigung einer internen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> vorgenommen.
+    Anfertigung einer internen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> vorgenommen.
   </source>
-        <target state="translated">Preparation of an internal <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>. In this case the processing takes place in co-operation with the CAU Kiel, the initial evaluation is done by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.</target>
+        <target state="translated">Preparation of an internal <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bachelor<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>- oder <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Thesis<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. In this case the processing takes place in co-operation with the CAU Kiel, the initial evaluation is done by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         
         
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="academiaSeminarInfo" datatype="html">
         <source>
-    In von mir angebotenen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Seminaren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
+    In von mir angebotenen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Seminaren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
   </source>
-        <target state="translated">In <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>seminars<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> offered by me are always given appropriate themes. If you come to me with an interesting topic from the web environment, I would also like to receive suggestions.</target>
+        <target state="translated">In <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>seminars<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> offered by me are always given appropriate themes. If you come to me with an interesting topic from the web environment, I would also like to receive suggestions.</target>
         
         
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
       <trans-unit id="academiaMediaProjectInfo" datatype="html">
         <source>
-    Für Bachelor Medieninformatiker ist es möglich das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Medien-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> zu absolvieren, Informatik-Master-Studierende können das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Master-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> einbringen.
+    Für Bachelor Medieninformatiker ist es möglich das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Medien-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> zu absolvieren, Informatik-Master-Studierende können das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Master-Projekt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> einbringen.
   </source>
-        <target state="translated">For Bachelor Media Informatics it is possible to complete the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>media project<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, computer science master students can bring in the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>master project<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.</target>
+        <target state="translated">For Bachelor Media Informatics it is possible to complete the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>media project<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, computer science master students can bring in the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>master project<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         
         
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">37</context></context-group></trans-unit>
@@ -221,24 +269,31 @@
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">1</context></context-group></trans-unit>
       <trans-unit id="scientificWorkDescription" datatype="html">
         <source>
-  Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Marcus Riemer (Fachhochschule Wedel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> unter der Betreuung von <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/>Dr. Frank Huch (CAU Kiel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
+  Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Marcus Riemer (Fachhochschule Wedel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> unter der Betreuung von <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch (CAU Kiel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
 </source>
         
-        <note priority="1" from="description">scientific work description</note><target state="translated">This page brings together the scientific work that has been developed within the framework of this project. At the beginning there was the master thesis of <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Marcus Riemer (Fachhochschule Wedel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> under the supervision of <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/>Dr. Frank Huch (CAU Kiel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>. In addition, students from both universities have developed their theses in the context of this project.
+        <note priority="1" from="description">scientific work description</note><target state="translated">This page brings together the scientific work that has been developed within the framework of this project. At the beginning there was the master thesis of <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Marcus Riemer (Fachhochschule Wedel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> under the supervision of <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Dr. Frank Huch (CAU Kiel)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. In addition, students from both universities have developed their theses in the context of this project.
 </target>
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">2</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">2</context></context-group></trans-unit><trans-unit id="academiaThesisPublicationTypeConnector" datatype="html">
+        <source>von</source><target state="translated">of</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/front/templates/academia.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <note priority="1" from="description">academia publication type connector</note>
+      </trans-unit>
       <trans-unit id="academiaThesisDatePrefix" datatype="html">
         <source>am</source>
         <target state="translated">on</target>
         
         <note priority="1" from="description">academia thesis date prefix</note>
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">17</context></context-group></trans-unit>
       <trans-unit id="academiaThesisDownloadLinkText" datatype="html">
         <source>Download</source>
         <target state="translated">Download</target>
         
         <note priority="1" from="description">academia thesis download link text</note>
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">18</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/academia.html</context><context context-type="linenumber">25</context></context-group></trans-unit>
       <trans-unit id="imprintContactInformationHeadline" datatype="html">
         <source>Kontakt-Informationen</source>
         <target state="translated">Contact Information</target>
@@ -347,8 +402,8 @@
         <note priority="1" from="description">Example project explanation</note>
       </trans-unit><trans-unit id="deactivatedWebFunctions" datatype="html">
         <source>
-    <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Die Web-Funktionalität ist aktuell leider deaktiviert 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten, aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
-  </source><target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Sorry, the web functionality is currently disabled 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> A previous version of this application allowed the creation of websites, but that functionality had to be deactivated in the context of a major overhaul.</target>
+    <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Die Web-Funktionalität ist aktuell leider deaktiviert 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten, aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
+  </source><target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Sorry, the web functionality is currently disabled 😕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> A previous version of this application allowed the creation of websites, but that functionality had to be deactivated in the context of a major overhaul.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/project-list.html</context>
           <context context-type="linenumber">7</context>
@@ -481,9 +536,9 @@
       </trans-unit>
       <trans-unit id="privacyDataSavedOnServers" datatype="html">
         <source>
-    Die erfassten Daten werden auf <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>unseren Servern<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> gespeichert.
+    Die erfassten Daten werden auf <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>unseren Servern<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> gespeichert.
   </source>
-        <target state="translated">The collected data is stored on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>our servers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.</target>
+        <target state="translated">The collected data is stored on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>our servers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">11</context>
@@ -492,9 +547,9 @@
       </trans-unit>
       <trans-unit id="privacyDataNoThirdParty" datatype="html">
         <source>
-    Ihre Aktivitäten auf dieser Seite werden folglich <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>nicht an Drittanbietern<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> wie Google, Facebook, Microsoft, ... <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>übertragen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>.
+    Ihre Aktivitäten auf dieser Seite werden folglich <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht an Drittanbietern<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> wie Google, Facebook, Microsoft, ... <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>übertragen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
   </source>
-        <target state="translated">As a result, your activity on this site <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>will not be transferred to third parties<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> such as Google, Facebook, Microsoft, ...</target>
+        <target state="translated">As a result, your activity on this site <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>will not be transferred to third parties<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> such as Google, Facebook, Microsoft, ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">14</context>
@@ -503,9 +558,9 @@
       </trans-unit>
       <trans-unit id="privacyNoCommercialUse" datatype="html">
         <source>
-    Es erfolgt ausdrückliche <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>keine kommerzielle Verwertung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> der gesammelten Informationen.
+    Es erfolgt ausdrückliche <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>keine kommerzielle Verwertung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> der gesammelten Informationen.
   </source>
-        <target state="translated">There is expressly <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>no commercial exploitation<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> of the information collected.</target>
+        <target state="translated">There is expressly <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>no commercial exploitation<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of the information collected.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
           <context context-type="linenumber">17</context>
@@ -523,9 +578,9 @@
       </trans-unit>
       <trans-unit id="privacyMatomoText" datatype="html">
         <source>
-  Dieses Projekt verwendet die <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Open Source-Software Matomo (ehemals Piwik)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> um Besucherzugriffe statistisch auswerten zu können. Die dabei erhobenen Daten werden ausschließlich im Rahmen der Weiterentwicklung und der Forschung eingesetzt. Zum Beispiel um Fragestellungen wie die folgenden zu klären:
+  Dieses Projekt verwendet die <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Open Source-Software Matomo (ehemals Piwik)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> um Besucherzugriffe statistisch auswerten zu können. Die dabei erhobenen Daten werden ausschließlich im Rahmen der Weiterentwicklung und der Forschung eingesetzt. Zum Beispiel um Fragestellungen wie die folgenden zu klären:
 </source>
-        <target state="translated">This project uses the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>open source software Matomo (formerly Piwik)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to statistically evaluate visitor traffic. The data collected are used exclusively in the context of further development and research. For example to clarify questions like the following:
+        <target state="translated">This project uses the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>open source software Matomo (formerly Piwik)<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to statistically evaluate visitor traffic. The data collected are used exclusively in the context of further development and research. For example to clarify questions like the following:
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
@@ -571,9 +626,9 @@
       </trans-unit>
       <trans-unit id="privacyMatomoTrackedDataText" datatype="html">
         <source>
-  Piwik verwendet so genannte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Cookies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Wir merken uns, zusammen mit dieser anonymisierten IP und mit einem Zeitstempel, welche Seiten du benutzt oder wie du mit dem Block-Editor interagierst.
+  Piwik verwendet so genannte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Cookies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Wir merken uns, zusammen mit dieser anonymisierten IP und mit einem Zeitstempel, welche Seiten du benutzt oder wie du mit dem Block-Editor interagierst.
 </source>
-        <target state="translated">Piwik uses so-called <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>cookies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> which allow an analysis of the use of the website by you. The IP address is anonymized immediately after processing and prior to its storage. We remember, along with this anonymized IP and with a timestamp, which pages you use or how you interact with the block editor.
+        <target state="translated">Piwik uses so-called <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>cookies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> which allow an analysis of the use of the website by you. The IP address is anonymized immediately after processing and prior to its storage. We remember, along with this anonymized IP and with a timestamp, which pages you use or how you interact with the block editor.
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
@@ -634,9 +689,9 @@
       </trans-unit>
       <trans-unit id="privacySentryDescription" datatype="html">
         <source>
-  Deswegen gibt es auf dieser Seite einen automatischen Fehlerreporter namens <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Sentry<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>. Das ist eine Open Source-Software, die wir auf unseren eigenen Servern betreiben. Immer wenn es bei dir zu einem unerwarteten Fehler kommt färbt sich der Seitenhintergrund rot. Und zusätzlich bekommen wir noch einen ausführlichen Fehlerreport.
+  Deswegen gibt es auf dieser Seite einen automatischen Fehlerreporter namens <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Sentry<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Das ist eine Open Source-Software, die wir auf unseren eigenen Servern betreiben. Immer wenn es bei dir zu einem unerwarteten Fehler kommt färbt sich der Seitenhintergrund rot. Und zusätzlich bekommen wir noch einen ausführlichen Fehlerreport.
 </source>
-        <target state="translated">That's why there's an automatic bug reporter called <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Sentry<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> on this page. This is open source software that we run on our own servers. Whenever an unexpected error occurs in you, the page background turns red. And in addition we get a detailed error report.
+        <target state="translated">That's why there's an automatic bug reporter called <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Sentry<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on this page. This is open source software that we run on our own servers. Whenever an unexpected error occurs in you, the page background turns red. And in addition we get a detailed error report.
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>
@@ -655,9 +710,9 @@
       </trans-unit>
       <trans-unit id="privacySentryTrackedDataText" datatype="html">
         <source>
-  Sentry schreibt die folgenden Daten automatisch mit und schickt Sie <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/>im Fehlerfall<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> an unseren Server:
+  Sentry schreibt die folgenden Daten automatisch mit und schickt Sie <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>im Fehlerfall<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> an unseren Server:
 </source>
-        <target state="translated">Sentry automatically writes down the following data and sends it to our server <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/>in the event of an error<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/>:
+        <target state="translated">Sentry automatically writes down the following data and sends it to our server <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>in the event of an error<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>:
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/privacy.html</context>

@@ -8,7 +8,14 @@
   <mat-card-title class="card-title">{{ thesis.title }}</mat-card-title>
   <mat-card-subtitle class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</mat-card-subtitle>
   <mat-card-content>
-    <h3>{{ thesis.author.name }} <ng-container i18n="academia thesis date prefix@@academiaThesisDatePrefix">am</ng-container> {{ thesis.date | date: 'd. MMMM y' }}</h3>
+    <h3>
+      <ng-container *ngIf="thesis.publicationType">
+        {{ thesis.publicationType }}
+        <ng-container i18n="academia publication type connector@@academiaThesisPublicationTypeConnector">von</ng-container>
+      </ng-container>
+      {{ thesis.author.name }}
+      <ng-container i18n="academia thesis date prefix@@academiaThesisDatePrefix">am</ng-container> {{ thesis.date | date: 'd. MMMM y' }}
+    </h3>
     <div [innerHTML]="thesis.abstract"></div>
   </mat-card-content>
   <mat-card-actions>

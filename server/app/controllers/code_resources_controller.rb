@@ -41,7 +41,7 @@ class CodeResourcesController < ApplicationController
   def destroy
     begin
       CodeResource.destroy(params[:code_resource_id])
-      render :status => 200
+      render :status => 204
     rescue ActiveRecord::RecordNotFound
       render :status => 404
     end

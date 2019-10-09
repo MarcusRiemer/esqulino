@@ -12,7 +12,7 @@ module JwtHelper
     return 10.seconds
     # return Rails.configuration.sqlino['auth_tokens']['access_token'].seconds
   end
-  # Returns the default duration of an refresh token 
+  # Returns the default duration of an refresh token
   def self.refresh_token_duration
     return 10.seconds
     # return Rails.configuration.sqlino['auth_tokens']['refresh_token'].seconds
@@ -156,7 +156,8 @@ module JwtHelper
       value: value,
       httponly: true,
       expires: expires,
-      path: '/api'
+      path: '/api',
+      domain: "." + Rails.application.config.cookie_domain
     })
   end
 end

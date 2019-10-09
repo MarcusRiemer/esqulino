@@ -20,6 +20,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 import { AnalyticsService } from './analytics.service';
 import { BrowserService } from './browser.service'
@@ -47,6 +48,7 @@ import { AuthDialogComponent } from './auth/auth-dialog.component';
 import { LoginWrapperComponent } from './auth/login-wrapper.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
+import { EmptyComponent } from './empty.component';
 
 import { GrammarDataService, BlockLanguageDataService } from './serverdata'
 import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
@@ -63,7 +65,6 @@ import { IsAdminGuard } from './guards/is-admin.guard';
 import { MayPerformComponent } from './may-perform.component';
 import { PerformDataService } from './authorisation/perform-data.service';
 import { MessageDialogComponent } from './message-dialog.component';
-import { MatProgressSpinnerModule } from '@angular/material';
 import { MasterGuard } from './guards/master-guard';
 
 
@@ -97,6 +98,7 @@ const materialModules = [
     ...materialModules
   ],
   declarations: [
+    EmptyComponent,
     DefaultValuePipe,
     FlashMessageListComponent,
     ToolbarComponent,
