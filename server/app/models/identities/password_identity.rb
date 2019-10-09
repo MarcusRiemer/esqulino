@@ -75,7 +75,7 @@ class PasswordIdentity < Identity
   end
 
   def reset_token_expired?()
-    return self.own_data["password_reset_token_exp"] < Time.now
+    return self.own_data["password_reset_token_exp"] < Time.current
   end
 
   def password
@@ -183,15 +183,15 @@ class PasswordIdentity < Identity
     end
   end
 
-  def acces_token_duration
+  def access_token_duration
     return nil
   end
 
-  def acces_token_expired?
+  def access_token_expired?
     return false
   end
 
-  def refresh_acces_token
+  def refresh_access_token
     # TODO-Tom needs to be added
   end
 end

@@ -21,7 +21,7 @@ RSpec.describe "identities controller" do
       identity.user.email = identity.uid
       identity.user.save!
 
-      set_acces_token(identity.user)
+      set_access_token(identity.user)
 
       get "/api/identities"
       json_response = JSON.parse(response.body)
@@ -67,7 +67,7 @@ RSpec.describe "identities controller" do
 
     context "valid" do
       it "single identity" do
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         patch '/api/identities/change_password',
           :headers => json_headers,
@@ -81,7 +81,7 @@ RSpec.describe "identities controller" do
 
       it "all identities with password" do
         create(:identity_provider, :new)
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         patch '/api/identities/change_password',
           :headers => json_headers,
@@ -98,7 +98,7 @@ RSpec.describe "identities controller" do
 
     context "invalid" do
       it "current password" do
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         patch '/api/identities/change_password',
           :headers => json_headers,
@@ -111,7 +111,7 @@ RSpec.describe "identities controller" do
       end
 
       it "new password" do
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         patch '/api/identities/change_password',
           :headers => json_headers,
@@ -206,7 +206,7 @@ RSpec.describe "identities controller" do
 
     it "valid" do
       create(:identity_provider, :existing, user_id: identity.user_id)
-      set_acces_token(identity.user)
+      set_access_token(identity.user)
 
       expect(Identity.all.count).to eq(2)
 
@@ -223,7 +223,7 @@ RSpec.describe "identities controller" do
     context "invalid" do
       it "wrong uid" do
         create(:identity_provider, :existing)
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         expect(Identity.all.count).to eq(2)
 
@@ -239,7 +239,7 @@ RSpec.describe "identities controller" do
 
       it "from another user" do
         identity2 = create(:identity_provider, :existing)
-        set_acces_token(identity2.user)
+        set_access_token(identity2.user)
 
         expect(Identity.all.count).to eq(2)
 
@@ -256,7 +256,7 @@ RSpec.describe "identities controller" do
       it "passed uid is primary mail" do
         create(:identity_provider, :existing)
 
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
         identity.user.email = identity[:uid]
         identity.user.save!
 
@@ -273,7 +273,7 @@ RSpec.describe "identities controller" do
       end
 
       it "only one existing identity" do
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         delete '/api/identities/delete_identity',
           :headers => json_headers,

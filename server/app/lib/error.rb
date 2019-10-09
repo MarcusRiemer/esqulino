@@ -92,6 +92,30 @@ class AuthorizationError < EsqulinoError
   end
 end
 
+class JwtError < EsqulinoError
+  def initialize(msg = "JWT decode error", code = 500)
+    super msg, code
+  end
+
+  def json_data
+    {
+      "newUser" => User.guest.information
+    }
+  end
+end
+
+class AccessTokenError < JwtError
+  def initialize(msg = "Access-Token expired", code = 500)
+    super msg, code
+  end
+end
+
+class RefreshTokenError < JwtError
+  def initialize(msg = "Refresh-Token expired", code = 500)
+    super msg, code
+  end
+end
+
 # Thrown when a project is unknown
 class UnknownProjectError < EsqulinoError
   # @param project_id [string] The id of the unknown project

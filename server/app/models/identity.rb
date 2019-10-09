@@ -98,7 +98,7 @@ class Identity < ActiveRecord::Base
               :type => self.type,
               :email => self.email,
               :confirmed => self.confirmed?,
-              :acces_token_duration => self.acces_token_duration ? Time.at(self.acces_token_duration) : nil,
+              :access_token_duration => self.access_token_duration ? Time.at(self.access_token_duration) : nil,
               :changes => {
                 primary: self.change_primary_token_exp
               }
@@ -115,7 +115,7 @@ class Identity < ActiveRecord::Base
     )
   end
 
-  # Comes from Omniauth and contains an acces/refresh token from oauth2
+  # Comes from Omniauth and contains an access/refresh token from oauth2
   def credentials
     return self.provider_data["credentials"]
   end
@@ -139,7 +139,7 @@ class Identity < ActiveRecord::Base
   end
 
   def set_primary_email_token_expired()
-    self.own_data["change_primary_token_exp"] = Time.now - 1.hour
+    self.own_data["change_primary_token_exp"] = Time.current - 1.hour
   end
 
   def primary_email_token_eql?(token)
@@ -147,6 +147,6 @@ class Identity < ActiveRecord::Base
   end
 
   def primary_email_token_expired?()
-    return self.own_data["change_primary_token_exp"] < Time.now
+    return self.own_data["change_primary_token_exp"] < Time.current
   end
 end

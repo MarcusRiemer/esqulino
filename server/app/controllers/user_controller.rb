@@ -21,7 +21,7 @@ class UserController < ApplicationController
         error_response("This username is not valid")
       end
     else
-      error_response("You need to be logged in")
+      raise AccessTokenError.new
     end
   end
 
@@ -129,6 +129,16 @@ class UserController < ApplicationController
 
 
   private
+
+  def handle_exceptions(&block)
+    begin
+      block.call
+    rescue AccessTokenError => e
+      raise AccessTokenError.new(e.message)
+    rescue RefreshTokenError => e
+      raise RefreshTokenError.new(e.message)
+    end
+  end
 
   def change_email_params
     params
