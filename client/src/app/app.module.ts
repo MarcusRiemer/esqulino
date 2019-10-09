@@ -100,15 +100,22 @@ if (environment.sentry && environment.sentry.active) {
 export class AppModule {
   constructor(
     @Inject(PLATFORM_ID) platformId: string,
-    router: Router,
-    naturalLanguagesService: NaturalLanguagesService,
+    private readonly _router: Router,
+    private readonly _naturalLanguagesService: NaturalLanguagesService,
   ) {
+    // Calling service methods that need to be called exactly once
     this.setupTracking(platformId);
+    this.setupDocumentLanguage();
+  }
 
-    router.events.pipe(
+  private setupDocumentLanguage() {
+    this._naturalLanguagesService.updateRootLangAttribute();
+
+    // Ensure that the alternate languages are always mentioned in the <head>
+    this._router.events.pipe(
       filter(evt => evt instanceof NavigationEnd)
     ).subscribe(_ => {
-      naturalLanguagesService.updateAlternateUrls()
+      this._naturalLanguagesService.updateAlternateUrls()
     });
   }
 

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Location } from '@angular/common';
+import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { Location, DOCUMENT } from '@angular/common';
 
 import { LinkService } from './link.service';
 import { environment } from '../environments/environment';
@@ -11,8 +11,17 @@ import { environment } from '../environments/environment';
 export class NaturalLanguagesService {
   constructor(
     private readonly _location: Location,
-    private readonly _linkService: LinkService
+    private readonly _linkService: LinkService,
+    @Inject(DOCUMENT)
+    private readonly document: Document,
+    @Inject(LOCALE_ID)
+    private readonly _localeId: string,
   ) {
+  }
+
+  updateRootLangAttribute() {
+    const htmlElement = this.document.querySelector("html");
+    htmlElement.lang = this._localeId;
   }
 
   updateAlternateUrls() {
