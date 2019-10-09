@@ -2,8 +2,11 @@ import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { Angulartics2Module } from 'angulartics2';
+
+import { filter } from 'rxjs/operators';
 
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
@@ -18,6 +21,8 @@ import { SqlScratchComponent } from './app.component';
 import { routing } from './app.routes';
 
 import { NotifyErrorHandler, isApplicationCrashed } from './error-handler';
+import { NaturalLanguagesService } from './natural-languages.service';
+import { LinkService } from './link.service';
 
 import registerLanguages from './locale-registration';
 import { UserModule } from './user/user.module';
@@ -80,8 +85,10 @@ if (environment.sentry && environment.sentry.active) {
     SqlScratchComponent,
   ],
   providers: [
+    { provide: ErrorHandler, useClass: NotifyErrorHandler },
     Title,
-    { provide: ErrorHandler, useClass: NotifyErrorHandler }
+    LinkService,
+    NaturalLanguagesService,
   ],
   bootstrap: [
     SqlScratchComponent
@@ -91,7 +98,21 @@ if (environment.sentry && environment.sentry.active) {
   ]
 })
 export class AppModule {
-  constructor(@Inject(PLATFORM_ID) platformId: string) {
+  constructor(
+    @Inject(PLATFORM_ID) platformId: string,
+    router: Router,
+    naturalLanguagesService: NaturalLanguagesService,
+  ) {
+    this.setupTracking(platformId);
+
+    router.events.pipe(
+      filter(evt => evt instanceof NavigationEnd)
+    ).subscribe(_ => {
+      naturalLanguagesService.updateAlternateUrls()
+    });
+  }
+
+  private setupTracking(platformId: string) {
     // Setting up Piwik if there is a configuration and we are running in the browser
     const piwikConf = environment.piwik;
     if (piwikConf && isPlatformBrowser(platformId)) {
