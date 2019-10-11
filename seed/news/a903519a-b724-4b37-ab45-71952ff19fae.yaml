@@ -1,0 +1,46 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: a903519a-b724-4b37-ab45-71952ff19fae
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"SQL `DISTINCT`, `ASC` / `DESC` und neue \"Drei Fragezeichen\"
+    Datenbank", "en"=>"SQL `DISTINCT`, `ASC` / `DESC` and new \"Three Investigators\"
+    Database"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: |-
+    "de"=>"Für die Programmiersprache `SQL` werden jetzt auch die Operatoren `DISTINCT` und explizite Sortierreihenfolgen mit `ASC` / `DESC` unterstützt. Beide Neuerungen kommen in dem aktualisierten \"Drei Fragezeichen\"-Projekt zum Einsatz.
+
+    <!-- SNIP -->
+
+    * `DISTINCT` kann durch Nutzung im `SELECT` auf eine ganze Abfrage oder als erstes Argument einer Parameterliste (`COUNT(DISTINCT id)`) angewandt werden.
+    * Wenn man sich nicht auf die standardmäßige Sortierung der Datenbank verlassen möchte, kann man mit den Operatoren `ASC` und `DESC` jetzt die Sortierreihenfolge bestimmen.
+
+    Damit die Nutzung der Sortieroperationen bequemer geht als zum aktuellen Zeitpunkt, wird in den nächsten Wochen eine \"ummanteln\" Funktion in den Editor eingeführt. Man kann dann den Sortieroperator auf einen Ausdruck fallen lassen und den Ausdruck damit \"in\" den Sortieroperator hineinziehen. Sobald diese Funktion verfügbar ist, wird vermutlich auch der `AS` Operator hinzugefügt werden können.
+
+    Die neue \"Drei Fragezeichen\"-Datenbank nutzt beide der neuen SQL-Funktionalitäten zum Beispiel in der Abfrage [Sprecher mehrere Charaktere](/editor/drei-fragezeichen/ast/45e86848-62eb-48fc-b026-061e08dcf19b/block). Diese zeigt an, welche unterschiedlichen Charaktere ein einzelner Sprecher gesprochen hat.", "en"=>"The `SQL` programming language now also supports the `DISTINCT` operator and explicit sort orders with `ASC` / `DESC`. Both of these improvements are used in the updated \"Three Investigators\" project.
+
+    <!-- SNIP -->
+
+    * `DISTINCT` can be applied to an entire query or as the first argument of a parameter list (`COUNT(DISTINCT id)`) by using it in `SELECT`.
+    * If you do not want to rely on the default sort order of the database, you can now use the `ASC` and `DESC` operators to determine the sort order.
+
+    To make the use of the sorting operations more comfortable than at the current time, a \"wrapping\" function will be introduced into the editor in the next few weeks. You can then drop the sort operator on an expression and drag the expression \"into\" the sort operator. As soon as this function is available, the `AS` operator will probably be added as well.
+
+    The new \"Three Investigators\" database uses both of the new SQL functionalities for example in the [Speaker Multiple Characters](/editor/drei-fragezeichen/ast/45e86848-62eb-48fc-b026-061e08dcf19b/block) query. This shows which different characters a single voice actor has spoken."
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: '2019-10-11 00:00:00'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-10-11 12:46:49.512641'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-10-11 13:02:17.460808'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
+new_record: false
+active_record_yaml_version: 2
