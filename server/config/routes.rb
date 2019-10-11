@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       match 'failure', :to => 'auth#failure', via: [:get, :post]
       match 'failure_msg', :to => 'auth#failure_msg', via: [:get, :post]
     end
-  
+
     # Everything in the context of projects
     scope 'project' do
       root via: [:get], controller: 'projects', action: :index
@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         get 'preview', controller: 'projects', action: :preview_image
 
         resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
+        post 'code_resources/:code_resource_id/clone', controller:  'code_resources', action: 'clone'
 
         # Everything that does something with the database content via a query
         scope 'query' do

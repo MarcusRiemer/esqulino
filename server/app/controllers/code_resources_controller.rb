@@ -38,6 +38,16 @@ class CodeResourcesController < ApplicationController
     end
   end
 
+  # Clones a specific resource
+  def clone
+    original = CodeResource.find(params[:code_resource_id])
+
+    cloned = original.dup
+    cloned.save!
+
+    render :json => cloned.to_full_api_response, :status => 200
+  end
+
   def destroy
     begin
       CodeResource.destroy(params[:code_resource_id])

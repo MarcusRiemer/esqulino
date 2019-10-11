@@ -142,6 +142,31 @@ RSpec.describe "CodeResource request", :type => :request do
     end
   end
 
+  describe "CLONE" do
+    it "a resource does not exist" do
+      project = FactoryBot.create(:project)
+      post "/api/project/#{project.slug}/code_resources/nonexistant/clone",
+             :headers => json_headers
+
+      expect(response.status).to eq(404)
+    end
+
+    it "a resource that does exist" do
+      resource = FactoryBot.create(:code_resource)
+      project = resource.project
+      post "/api/project/#{project.slug}/code_resources/#{resource.id}/clone",
+             :headers => json_headers
+
+      expect(response.status).to eq(200)
+      expect(project.code_resources.length).to eq(2)
+
+      resources_attributes = CodeResource.all.map do |r|
+        r.attributes.except('id', 'created_at', 'updated_at')
+      end
+      expect(resources_attributes[0]).to eq(resources_attributes[1])
+    end
+  end
+
   describe "DELETE" do
     it "a resource does not exist" do
       project = FactoryBot.create(:project)
