@@ -324,7 +324,7 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity',
       :headers => json_headers,
       :params => identity_params.to_json
-    byebug
+
     expect(response.status).to eq(401)
     expect(response.cookies['ACCESS_TOKEN']).to be_nil
   end
