@@ -73,6 +73,17 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(_ => btnSave.isInProgress = false);
     });
+
+    // Making a copy
+    const btnClone = this._toolbarService.addButton("clone", "Klonen", "files-o", "o");
+    btnClone.onClick.subscribe(_ => {
+      this._codeResourceService.cloneCodeResource(this.peekResource)
+        .pipe(first())
+        .subscribe(clone => {
+          this.peekProject.addCodeResource(clone);
+          this._router.navigate([clone.id], { relativeTo: this._route.parent })
+        });
+    });
   }
 
 

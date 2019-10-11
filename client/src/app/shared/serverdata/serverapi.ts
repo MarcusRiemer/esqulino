@@ -19,7 +19,7 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the URL that is used to sign in 
+   * Retrieves the URL that is used to sign in
    */
   getSignInUrl(provider: string): string {
     return (`${this._apiBaseUrl}/auth/${provider}`)
@@ -110,7 +110,7 @@ export class ServerApi {
   getChangeUserNameUrl(): string {
     return (`${this._apiBaseUrl}/user/change_username`)
   }
-  
+
   /**
    * Retrieves the URL that is used to delete a linked identity
    */
@@ -294,6 +294,13 @@ export class ServerApi {
    */
   getCodeResourceUrl(projectId: string, codeResourceId: string): string {
     return this.getCodeResourceBaseUrl(projectId) + `/${codeResourceId}`
+  }
+
+  /**
+   * Retrieves the URL to clone code resources
+   */
+  getCodeResourceCloneUrl(projectId: string, codeResourceId: string): string {
+    return this.getCodeResourceBaseUrl(projectId) + `/${codeResourceId}/clone`
   }
 
   /**

@@ -46,6 +46,24 @@ export class CodeResourceService {
   }
 
   /**
+   * Asks the server to duplicate a block resource.
+   */
+  cloneCodeResource(resource: CodeResource) {
+    const project = resource.project;
+    const url = this._server.getCodeResourceCloneUrl(project.slug, resource.id);
+
+    const toReturn = this._http.post<CodeResourceDescription>(url, "")
+      .pipe(
+        catchError(this.handleError),
+        delay(250),
+        map(res => new CodeResource(res, project)),
+        shareReplay(1)
+      );
+
+    return (toReturn);
+  }
+
+  /**
    * Sends a updated code resource to the server
    */
   updateCodeResource(resource: CodeResource) {
