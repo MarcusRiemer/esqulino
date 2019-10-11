@@ -155,7 +155,7 @@ class SeedManager
     Seed::RoleSeed.store_all
   end
 
-  # Loads all roles that are available 
+  # Loads all roles that are available
   def load_all_roles
     Seed::RoleSeed.load_all
   end
@@ -169,12 +169,12 @@ class SeedManager
     Seed::UserRoleSeed.store_all
   end
 
-  # Loads all roles that are available 
+  # Loads all roles that are available
   def load_all_user_roles
     Seed::UserRoleSeed.load_all
   end
-  
-  
+
+
 
   #############################################
   # Programming Languages

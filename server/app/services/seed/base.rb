@@ -297,6 +297,8 @@ module Seed
           return seed_file_data.id
         end
       end
+
+      raise "Could not find item with ID \"#{load_seed_id}\" in serialized seed data"
     end
 
     # Takes a block and yield `disable_referential_integrity` if `defer_referential_checks` is true
