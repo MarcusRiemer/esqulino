@@ -22,20 +22,20 @@ class IdentitiesController < ApplicationController
     identity = PasswordIdentity.find_by_password_reset_token(permited_params[:token])
                                .first
 
-    if identity
-      if !identity.reset_token_expired?
-        identity.set_reset_token_expired
-        identity.save!
-        
-        # Sets passwords of all linked password identities
-        identity.set_all_passwords(permited_params[:password])
-        api_response(user_information)
-      else
-        error_response("token expired")
-      end
-    else 
-      error_response("token not valid")
+    if (not identity)
+      return error_response("token not valid")
     end
+
+    if identity.reset_token_expired?
+      return error_response("token expired")
+    end
+
+    identity.set_reset_token_expired
+    identity.save!
+    
+    # Sets passwords of all linked password identities
+    identity.set_all_passwords(permited_params[:password])
+    api_response(user_information)
   end
 
   # Sends a password reset mail
@@ -90,7 +90,7 @@ class IdentitiesController < ApplicationController
 
   # Changes passwords of all password identities
   def change_password
-    if (signed_in?) then
+    ensure_is_logged_in do
       identity = PasswordIdentity.find_by(user_id: current_user.id, provider: 'identity')
       begin
         if identity then
@@ -103,14 +103,12 @@ class IdentitiesController < ApplicationController
       rescue => e
         error_response(e.message)
       end
-    else
-      error_response("You need to be logged in")
     end
   end
 
   # Deletes a linked identity
   def destroy
-    if signed_in?
+    ensure_is_logged_in do
       permited_params = delete_identity_params
       identity = Identity.where(id: permited_params[:id]).first
 
@@ -138,12 +136,18 @@ class IdentitiesController < ApplicationController
 
       identity.delete
       api_response(current_user.all_providers)
-    else
-      error_response("You need to be logged in")
     end
   end
 
   private
+
+  def ensure_is_logged_in(&block)
+    if (signed_in?)
+      block.call
+    else
+      error_response("You need to be logged in")
+    end
+  end
 
   def change_password_params
     params

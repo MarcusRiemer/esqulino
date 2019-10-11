@@ -99,7 +99,7 @@ FactoryBot.define do
         email_verified: false,
         credentials: {
           expires: true,
-          expires_at: (Time.now + 3.hours).to_i
+          expires_at: 3.hours.from_now.to_i
         }
       }) }
     end
@@ -113,8 +113,7 @@ FactoryBot.define do
         email_verified: true,
         credentials: {
           expires: true,
-          # TODO-Tom ask marcus
-          expires_at: (Time.now + 3.hours).to_i
+          expires_at: 3.hours.from_now.to_i
         }
       }) }
     end

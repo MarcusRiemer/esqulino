@@ -27,14 +27,14 @@ RSpec.describe "auth controller" do
     context "logging in" do
       it "valid response" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['ACCES_TOKEN']).to be_truthy
-        expect(JwtHelper.decode(response.cookies['ACCES_TOKEN'])[:user_id]).to be_truthy
+        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
+        expect(JwtHelper.decode(response.cookies['ACCESS_TOKEN'])[:user_id]).to be_truthy
         expect(response.status).to eq(302)
       end
 
       it "existing user and existing identity" do
         identity = create(:developer_provider, :existing)
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         user_count = User.all.count
         identity_count = Identity.all.count
@@ -47,7 +47,7 @@ RSpec.describe "auth controller" do
 
       it "existing user and a new identity" do
         user = create(:user)
-        set_acces_token(user)
+        set_access_token(user)
 
         user_count = User.all.count
         identity_count = Identity.where("user_id = ?", user[:id]).count
@@ -71,16 +71,22 @@ RSpec.describe "auth controller" do
 
       it "valid jwt token, but invalid user_id" do
         identity = create(:google_provider, :new)
-        set_acces_token_with_invalid_user()
+        set_access_token_with_invalid_user()
 
         get '/api/auth/developer/callback'
         expect(response.status).to eq(500)
       end
 
       it "moved to sign in" do
-        set_expired_acces_token()
+        set_expired_access_token()
         get '/api/auth/developer/callback'
-        expect(response.status).to eq(302)
+        json_data = JSON.parse(response.body)
+
+        aggregate_failures "response" do
+          expect(response.status).to eq(500)
+          expect(json_data["message"]).to eq("Signature has expired")
+          expect(json_data["type"]).to eq("AccessTokenError")
+        end
       end
     end
 
@@ -88,9 +94,9 @@ RSpec.describe "auth controller" do
       it "testing the json response of a sign_in" do
         get '/api/auth/developer/callback'
 
-        expect(response.cookies['ACCES_TOKEN']).to be_truthy
+        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
 
-        cookies['ACCES_TOKEN'] = response.cookies['ACCES_TOKEN']
+        cookies['ACCESS_TOKEN'] = response.cookies['ACCESS_TOKEN']
         get '/api/user'
         json_data = JSON.parse(response.body)
         expect(json_data["roles"]).to eq(["user"])
@@ -100,19 +106,19 @@ RSpec.describe "auth controller" do
     context "logging out" do
       it "first logging in then logging out" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['ACCES_TOKEN']).to be_truthy
+        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
 
         delete '/api/auth/sign_out'
-        expect(cookies['ACCES_TOKEN']).to be_nil
+        expect(cookies['ACCESS_TOKEN']).to be_nil
         expect(response.status).to eq(200)
       end
 
       it "already logged in" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['ACCES_TOKEN']).to be_truthy
+        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
 
         delete '/api/auth/sign_out'
-        expect(cookies['ACCES_TOKEN']).to be_nil
+        expect(cookies['ACCESS_TOKEN']).to be_nil
 
         get '/api/user'
         json_data = JSON.parse(response.body)
@@ -123,7 +129,7 @@ RSpec.describe "auth controller" do
     context "account linking" do
       it "succesfully" do
         identity = create(:identity_provider, :new)
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
 
         count_identity = Identity.where(user_id: identity.user_id).count
 
@@ -135,7 +141,7 @@ RSpec.describe "auth controller" do
         identity = create(:developer_provider, :existing)
         get '/api/auth/developer/callback'
 
-        set_acces_token(identity.user)
+        set_access_token(identity.user)
         count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
         count_identities = Identity.all.count
 
@@ -147,10 +153,10 @@ RSpec.describe "auth controller" do
 
     context "jwt" do
       it "expired" do
-        set_expired_acces_token()
+        set_expired_access_token()
         get '/api/user'
         body = JSON.parse(response.body)
-        expect(response.cookies['ACCES_TOKEN']).to be_nil
+        expect(response.cookies['ACCESS_TOKEN']).to be_nil
       end
     end
   end
@@ -256,7 +262,7 @@ RSpec.describe "auth controller" do
 
   it "with identity" do
     identity = create(:identity_provider, :new)
-    set_acces_token(identity.user)
+    set_access_token(identity.user)
 
     count_identity = Identity.where(user_id: identity.user_id).count
 
@@ -270,7 +276,7 @@ RSpec.describe "auth controller" do
 
   it "with identity and existing extern provider" do
     identity = create(:developer_provider, :new)
-    set_acces_token(identity.user)
+    set_access_token(identity.user)
 
     count_identity = Identity.where(user_id: identity.user_id).count
 
@@ -307,7 +313,7 @@ RSpec.describe "auth controller" do
       :headers => json_headers,
       :params => identity_params.to_json
 
-    expect(response.cookies['ACCES_TOKEN']).to be_truthy
+    expect(response.cookies['ACCESS_TOKEN']).to be_truthy
   end
 
   it "with email and wrong password" do
@@ -318,9 +324,9 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity',
       :headers => json_headers,
       :params => identity_params.to_json
-
+    byebug
     expect(response.status).to eq(401)
-    expect(response.cookies['ACCES_TOKEN']).to be_nil
+    expect(response.cookies['ACCESS_TOKEN']).to be_nil
   end
 
   it "with wrong email and password" do
@@ -333,13 +339,13 @@ RSpec.describe "auth controller" do
       :params => identity_params.to_json
 
     expect(response.status).to eq(401)
-    expect(response.cookies['ACCES_TOKEN']).to be_nil
+    expect(response.cookies['ACCESS_TOKEN']).to be_nil
   end
 
 
   it "new email to an logged in user" do
     identity = create(:identity_provider, :new)
-    set_acces_token(identity.user)
+    set_access_token(identity.user)
 
     count_identity_by_user_id = Identity.where(user_id: identity.user_id).count
     count_identities = Identity.all.count

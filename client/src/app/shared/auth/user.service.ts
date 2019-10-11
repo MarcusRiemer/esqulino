@@ -44,8 +44,7 @@ export class UserService {
           this._snackBar.open("Bitte erneut anmelden.", '', { duration: 2000 })
           throw new Error('User is logged out ( ACCES-TOKEN expired? )');
         }
-      }
-      )
+      })
     )
   }
 
@@ -130,8 +129,8 @@ export class UserService {
    * @param data new password, token to reset a password
    */
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription | void> {
-    const catchedError = this.catchedError$(this._serverData.resetPassword$(data))
-    return this.requireLoggedIn$(catchedError)
+    const catchedError$ = this.catchedError$(this._serverData.resetPassword$(data))
+    return catchedError$
   }
 
   /**
@@ -139,10 +138,9 @@ export class UserService {
    * @param data new username
    */
   public changeUserName$(data: UserNameDescription) {
-    const catchedError = this.catchedError$(this._serverData.changeUserName$(data))
-    return this.requireLoggedIn$(catchedError).pipe(
+    return this._serverData.changeUserName$(data).pipe(
       tap(
-        _ => this._snackBar.open('Username changed', '', { duration: 3000 }),
+        _ => { this.userData$.refresh(); this._snackBar.open('Username changed', '', { duration: 3000 }) },
         (err) => console.log(err)
       )
     )
@@ -165,7 +163,7 @@ export class UserService {
    */
   public passwordResetRequest$(data: UserEmailDescription): Observable<UserDescription> {
     const catchedError$ = this.catchedError$(this._serverData.passwordResetRequest$(data))
-    return this.requireLoggedIn$(catchedError$).pipe(
+    return catchedError$.pipe(
       tap(_ => alert("Please check your e-mails"))
     )
   }
@@ -178,7 +176,7 @@ export class UserService {
    */
   public sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
     const catchedError$ = this.catchedError$(this._serverData.sendChangePrimaryEmail$(data))
-    return this.requireLoggedIn$(catchedError$).pipe(
+    return catchedError$.pipe(
       tap(_ => {
         this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
         this.identities$.refresh();
@@ -191,7 +189,7 @@ export class UserService {
    */
   public deleteIdentity$(uid: string): Observable<ServerProviderDescription> {
     const catchedError = this.catchedError$(this._serverData.deleteIdentity$(uid))
-    return this.requireLoggedIn$(catchedError).pipe(
+    return catchedError.pipe(
       tap(_ => {
         this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
         this.identities$.refresh();
@@ -204,8 +202,8 @@ export class UserService {
    * @param data If a password identity exists ( email ) | email, password
    */
   public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
-    const catchedError = this.catchedError$(this._serverData.addEmail$(data))
-    return this.requireLoggedIn$(catchedError).pipe(
+    const catchedError$ = this.catchedError$(this._serverData.addEmail$(data))
+    return catchedError$.pipe(
       tap(_ => {
         this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
         this.identities$.refresh();
@@ -219,7 +217,7 @@ export class UserService {
    */
   public sendVerifyEmail$(data: UserEmailDescription): Observable<UserDescription | void> {
     const catchedError = this.catchedError$(this._serverData.sendVerifyEmail$(data))
-    return this.requireLoggedIn$(catchedError).pipe(
+    return catchedError.pipe(
       tap(_ => this._snackBar.open('Please check your e-mails', '', { duration: 6000 }))
     )
   }
@@ -230,8 +228,8 @@ export class UserService {
   public logout$(): Observable<UserDescription> {
     return this.catchedError$(this._serverData.logout$()).pipe(
       tap(_ => {
-        this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
         this.userData$.refresh();
+        this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
       })
     )
   }

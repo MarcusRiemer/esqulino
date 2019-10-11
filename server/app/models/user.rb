@@ -157,9 +157,9 @@ class User < ApplicationRecord
 
   def refresh_token_if_expired
     self.identities.each do |identity|
-      if identity.acces_token_expired? then
+      if identity.access_token_expired? then
         if (not Rails.env.test?) then
-          identity.refresh_acces_token
+          identity.refresh_access_token
           identity.save!
         end
       end
