@@ -6,7 +6,7 @@
       "additionalProperties": false,
       "description": "Information about a User linked identity",
       "properties": {
-        "acces_token_duration": {
+        "access_token_duration": {
           "type": "string"
         },
         "changes": {

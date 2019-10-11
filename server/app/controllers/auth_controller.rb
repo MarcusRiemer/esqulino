@@ -20,11 +20,12 @@ class AuthController < ApplicationController
         identity.update_provider_data(auth_hash)
         identity.save!
       end
-
-      sign_in(identity, identity.acces_token_duration)
+      sign_in(identity, identity.access_token_duration)
       # The HTTP referer identifies the address of the webpage
       # which is linked to the resource being requested
-      redirect_to URI(request.referer || "/").path
+      # **omniauth.origin** Omniauth is saving the user location
+
+      redirect_to (request.env['omniauth.origin'] || URI(request.referer || "/").path)
     rescue => e
       raise RuntimeError.new(e.message)
     end
@@ -46,7 +47,7 @@ class AuthController < ApplicationController
       return error_response("Wrong password")
     end
 
-    sign_in(identity, identity.acces_token_duration)
+    sign_in(identity, identity.access_token_duration)
     api_response(user_information)
   end
 

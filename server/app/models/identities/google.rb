@@ -37,19 +37,19 @@ class Google < Identity
   end
 
   # TODO-Tom comments
-  def acces_token_duration
-    return self.credentials["expires_at"]
+  def access_token_duration
+    return Time.at(self.credentials["expires_at"])
   end
 
-  def acces_token_expired?
-    return self.acces_token_duration.to_i < Time.now.to_i
+  def access_token_expired?
+    return self.access_token_duration < Time.current
   end
 
-  def acces_token=(acces_token)
-    self.credentials["acces_token"] = acces_token
+  def access_token=(access_token)
+    self.credentials["access_token"] = access_token
   end
 
-  def refresh_acces_token
+  def refresh_access_token
     # TODO-Tom comments
     response = RestClient.post(
       Rails.configuration.sqlino["auth_refresh_token_urls"]["google"],
@@ -58,9 +58,15 @@ class Google < Identity
       :client_id => Rails.configuration.sqlino["auth_provider_keys"]["google_id"],
       :client_secret => Rails.configuration.sqlino["auth_provider_keys"]["google_secret"]
     )
-    parsed_response = JSON.parse(response.body).slice("access_token","expires_in")
+    parsed_response = JSON.parse(response.body)
     
-    self.credentials["acces_token"] = parsed_response["access_token"]
-    self.credentials["expires_at"] = (Time.now + parsed_response["expires_in"]).to_i
+    if (not parsed_response["access_token"]) then
+      raise RefreshAccessTokenError.new()
+    end
+
+    sliced_response = parsed_response.slice("access_token","expires_in")
+
+    self.credentials["access_token"] = sliced_response["access_token"]
+    self.credentials["expires_at"] = (Time.current + sliced_response["expires_in"]).to_i
   end
 end

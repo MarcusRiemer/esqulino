@@ -1,8 +1,8 @@
 module UserHelper
   include JwtHelper
-  
+
   # Had to be written into a helper, since
-  # access to the request object is not 
+  # access to the request object is not
   # possible within the model.
   def user_information
     return (get_private_claim() || current_user.information)
@@ -12,23 +12,18 @@ module UserHelper
   # if there was no jwt, the current user will be set to the guest user
   def current_user
     if (not @current_user) then
-      begin
-        acces_token = current_acces_token
-        if (acces_token) then
-          self.current_user = User.find(current_acces_token[:user_id].to_s)
-          @current_user.refresh_token_if_expired
-        else
-          sign_out!
+      access_token = current_access_token
+      if (access_token) then
+        begin
+          @current_user = User.find(current_access_token[:user_id].to_s)
+          @current_user.refresh_token_if_expired()
+        rescue ActiveRecord::RecordNotFound => err
+          raise EsqulinoError.new(err.message)
         end
-      rescue ActiveRecord::RecordNotFound => e
-        raise EsqulinoError.new(e.message)
       end
     end
-    return @current_user
-  end
 
-  def current_user=(user)
-    @current_user = user
+    return @current_user || User.guest
   end
 
   # Is used for logging out a user
@@ -42,43 +37,23 @@ module UserHelper
   end
 
   # sign in sets the current user and response with a jwt
-  def sign_in(identity, acces_token_duration = nil)
+  def sign_in(identity, refresh_token_duration = JwtHelper.refresh_token_duration.from_now)
     if (not signed_in?) then
       payload = identity.user.information
+      refresh_token = JwtHelper.encode({
+        user_id: identity.user.id,
+        identity: identity.id
+      }, refresh_token_duration)
 
-      if (acces_token_duration) then
-        response_secure_cookie("REFRESH_TOKEN",
-          JwtHelper.encode({user_id: identity.user.id}, JwtHelper.refresh_token_duration.from_now)
-        )
-      end
-
-      response_secure_cookie("ACCES_TOKEN", JwtHelper.encode(payload))
+      # Time will be automatically converted into GMT 
+      response_secure_cookie("REFRESH_TOKEN", refresh_token, refresh_token_duration)
+      response_secure_cookie("ACCESS_TOKEN", JwtHelper.encode(payload), JwtHelper.access_token_duration.from_now)
     end
   end
 
   # Sets the current user to the guest user and deletes the jwt
   def sign_out!
-    if (refresh_cookie) then
-      self.delete_refresh_cookie!
-    end
-
-    self.delete_acces_cookie!
-    self.current_user = User.guest
-  end
-
-  def delete_secure_cookie(name)
     self.clear_current_user
-    clear_current_acces_token
-
-    response_secure_cookie(name, "", 0.seconds.from_now)
-  end
-
-  # Deleting a jwt is done by setting the expiration time of the cookie
-  def delete_acces_cookie!()
-    delete_secure_cookie("ACCES_TOKEN")
-  end
-
-  def delete_refresh_cookie!()
-    delete_secure_cookie("REFRESH_TOKEN")
+    clear_secure_cookies()
   end
 end
