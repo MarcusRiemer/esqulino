@@ -20,6 +20,12 @@
 - - "../seed/code_resources"
   - 45e86848-62eb-48fc-b026-061e08dcf19b
   - *1
+- - "../seed/code_resources"
+  - 16c08184-cc97-4080-a531-7e1f2aff518d
+  - *1
+- - "../seed/code_resources"
+  - eab93485-f5e4-4f3f-ae26-c160bdc55e53
+  - *1
 - - "../seed/databases"
   - 2440b7b7-d2f9-44e1-9103-43af30c04caf
   - !ruby/class 'Seed::ProjectDatabaseSeed'

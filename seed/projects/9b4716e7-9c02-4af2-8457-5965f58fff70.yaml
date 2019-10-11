@@ -5,20 +5,19 @@ concise_attributes:
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Die drei ???
+  value_before_type_cast: Die drei ??? (Alte Datenbank)
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
-  value_before_type_cast: drei-fragezeichen
+  value_before_type_cast: drei-fragezeichen-legacy
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
-  value_before_type_cast: Datensammlung zu den Büchern und Hörspielen der drei Detektive
-    aus Rocky Beach.
+  value_before_type_cast: Diese Datenbank enthält einen strukturellen Fehler.
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
-  value_before_type_cast: true
+  value_before_type_cast: false
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: preview
-  value_before_type_cast: 218706b6-e699-4663-945a-51fd30623af1
+  value_before_type_cast:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
