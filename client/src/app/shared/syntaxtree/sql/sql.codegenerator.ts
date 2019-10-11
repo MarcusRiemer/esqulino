@@ -90,7 +90,20 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties["name"], node);
         process.addConvertedFragment("(", node);
-        node.getChildrenInCategory("arguments").forEach((a, idx, arr) => {
+
+        const distinct = node.getChildrenInCategory("distinct");
+        distinct.forEach(d => {
+          process.generateNode(d);
+        });
+
+        const args = node.getChildrenInCategory("arguments");
+
+        // Possibly stick a space between `distinct` and following columns
+        if (distinct.length > 0 && args.length > 0) {
+          process.addConvertedFragment(" ", node);
+        }
+
+        args.forEach((a, idx, arr) => {
           process.generateNode(a);
           if (idx != arr.length - 1) {
             process.addConvertedFragment(', ', node);
@@ -161,17 +174,35 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`SELECT `, node)
 
-        const distinct = node.properties['distinct'];
-        if (distinct && distinct.toLowerCase() === "true") {
-          process.addConvertedFragment(`DISTINCT `, node)
+        const distinct = node.getChildrenInCategory("distinct");
+        distinct.forEach(d => {
+          process.generateNode(d);
+        });
+
+        const columns = node.getChildrenInCategory("columns");
+
+        // Possibly stick a space between `distinct` and following columns
+        if (distinct.length > 0 && columns.length > 0) {
+          process.addConvertedFragment(" ", node);
         }
 
-        node.getChildrenInCategory("columns").forEach((c, idx, arr) => {
+        columns.forEach((c, idx, arr) => {
           process.generateNode(c);
           if (idx != arr.length - 1) {
             process.addConvertedFragment(', ', node);
           }
         });
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "distinct"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment("DISTINCT", node)
       }
     }
   },

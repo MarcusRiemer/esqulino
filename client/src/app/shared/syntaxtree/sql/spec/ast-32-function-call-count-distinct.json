@@ -1,0 +1,16 @@
+{
+  "language": "sql",
+  "name": "functionCall",
+  "properties": {
+    "name": "COUNT"
+  },
+  "children": {
+    "distinct": [
+      {
+        "language": "sql",
+        "name": "distinct"
+      }
+    ],
+    "arguments": []
+  }
+}

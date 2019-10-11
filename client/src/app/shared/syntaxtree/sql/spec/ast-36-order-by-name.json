@@ -1,0 +1,15 @@
+{
+  "language": "sql",
+  "name": "orderBy",
+  "children": {
+    "expressions": [
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "name"
+        }
+      }
+    ]
+  }
+}

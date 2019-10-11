@@ -1,0 +1,10 @@
+{
+  "language": "sql",
+  "name": "functionCall",
+  "properties": {
+    "name": "COUNT"
+  },
+  "children": {
+    "arguments": []
+  }
+}
