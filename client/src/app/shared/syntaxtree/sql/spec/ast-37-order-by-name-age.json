@@ -1,20 +1,20 @@
 {
   "language": "sql",
-  "name": "select",
+  "name": "orderBy",
   "children": {
-    "distinct": [
-      {
-        "language": "sql",
-        "name": "distinct"
-      }
-    ],
-    "columns": [
+    "expressions": [
       {
         "language": "sql",
         "name": "columnName",
         "properties": {
-          "columnName": "id",
-          "refTableName": "foo"
+          "columnName": "name"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "age"
         }
       }
     ]

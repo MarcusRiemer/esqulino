@@ -1,0 +1,31 @@
+{
+  "language": "sql",
+  "name": "functionCall",
+  "properties": {
+    "name": "COUNT"
+  },
+  "children": {
+    "distinct": [
+      {
+        "language": "sql",
+        "name": "distinct"
+      }
+    ],
+    "arguments": [
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "id"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "name"
+        }
+      }
+    ]
+  }
+}

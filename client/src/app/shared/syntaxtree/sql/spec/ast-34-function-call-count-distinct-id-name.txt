@@ -1,0 +1,1 @@
+COUNT(DISTINCT id, name)

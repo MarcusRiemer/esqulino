@@ -152,4 +152,36 @@ describe('Language: SQL (Codegen)', () => {
   it(`((1 - 2) + 3)`, () => {
     verifyFiles("ast-30-exp-nested-parentheses", emitTree);
   });
+
+  it(`COUNT()`, () => {
+    verifyFiles("ast-31-function-call-count", emitTree);
+  });
+
+  it(`COUNT(DISTINCT)`, () => {
+    verifyFiles("ast-32-function-call-count-distinct", emitTree);
+  });
+
+  it(`COUNT(DISTINCT name)`, () => {
+    verifyFiles("ast-33-function-call-count-distinct-name", emitTree);
+  });
+
+  it(`COUNT(DISTINCT id, name)`, () => {
+    verifyFiles("ast-34-function-call-count-distinct-id-name", emitTree);
+  });
+
+  it(`FROM foo, bar`, () => {
+    verifyFiles("ast-35-from-foo-bar", emitTree);
+  });
+
+  it(`ORDER BY name`, () => {
+    verifyFiles("ast-36-order-by-name", emitTree);
+  });
+
+  it(`ORDER BY name, age`, () => {
+    verifyFiles("ast-37-order-by-name-age", emitTree);
+  });
+
+  it(`ORDER BY name DESC`, () => {
+    verifyFiles("ast-38-order-by-name-desc", emitTree);
+  });
 });

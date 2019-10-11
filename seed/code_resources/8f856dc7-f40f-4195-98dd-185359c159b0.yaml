@@ -51,6 +51,6 @@ concise_attributes:
     SELECT Geschichte.Geschichte_Jahr_Europa, COUNT(), GROUP_CONCAT(Geschichte.Geschichte_Name)
     FROM Geschichte
     GROUP BY Geschichte.Geschichte_Jahr_Europa
-    ORDER BY Geschichte.Geschichte_Jahr_Europa DESC
+    ORDER BY Geschichte.Geschichte_Jahr_Europa
 new_record: false
 active_record_yaml_version: 2

@@ -1,0 +1,22 @@
+{
+  "language": "sql",
+  "name": "from",
+  "children": {
+    "tables": [
+      {
+        "language": "sql",
+        "name": "tableIntroduction",
+        "properties": {
+          "name": "foo"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "tableIntroduction",
+        "properties": {
+          "name": "bar"
+        }
+      }
+    ]
+  }
+}

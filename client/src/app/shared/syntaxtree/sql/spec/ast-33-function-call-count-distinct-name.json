@@ -1,6 +1,9 @@
 {
   "language": "sql",
-  "name": "select",
+  "name": "functionCall",
+  "properties": {
+    "name": "COUNT"
+  },
   "children": {
     "distinct": [
       {
@@ -8,13 +11,12 @@
         "name": "distinct"
       }
     ],
-    "columns": [
+    "arguments": [
       {
         "language": "sql",
         "name": "columnName",
         "properties": {
-          "columnName": "id",
-          "refTableName": "foo"
+          "columnName": "name"
         }
       }
     ]
