@@ -1,0 +1,75 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: eab93485-f5e4-4f3f-ae26-c160bdc55e53
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Charakter mehrere Sprecher
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"joins": [{"name": "innerJoinOn", "children": {"on": [{"name":
+    "binaryExpression", "children": {"lhs": [{"name": "columnName", "language": "sql",
+    "properties": {"columnName": "Sprecher_ID", "refTableName": "Auftritt"}}], "rhs":
+    [{"name": "columnName", "language": "sql", "properties": {"columnName": "Sprecher_ID",
+    "refTableName": "Sprecher"}}], "operator": [{"name": "relationalOperator", "language":
+    "sql", "properties": {"operator": "="}}]}, "language": "sql"}], "table": [{"name":
+    "tableIntroduction", "language": "sql", "properties": {"name": "Auftritt"}}]},
+    "language": "sql"}, {"name": "innerJoinOn", "children": {"on": [{"name": "binaryExpression",
+    "children": {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
+    "Charakter_ID", "refTableName": "Auftritt"}}], "rhs": [{"name": "columnName",
+    "language": "sql", "properties": {"columnName": "Charakter_ID", "refTableName":
+    "Charakter"}}], "operator": [{"name": "relationalOperator", "language": "sql",
+    "properties": {"operator": "="}}]}, "language": "sql"}], "table": [{"name": "tableIntroduction",
+    "language": "sql", "properties": {"name": "Charakter"}}]}, "language": "sql"}],
+    "tables": [{"name": "tableIntroduction", "language": "sql", "properties": {"name":
+    "Sprecher"}}]}, "language": "sql"}], "where": [], "select": [{"name": "select",
+    "children": {"columns": [{"name": "columnName", "language": "sql", "properties":
+    {"columnName": "Charakter_Name", "refTableName": "Charakter"}}, {"name": "functionCall",
+    "children": {"distinct": [{"name": "distinct", "language": "sql"}], "arguments":
+    [{"name": "columnName", "language": "sql", "properties": {"columnName": "Sprecher_ID",
+    "refTableName": "Sprecher"}}]}, "language": "sql", "properties": {"name": "COUNT"}},
+    {"name": "functionCall", "children": {"distinct": [{"name": "distinct", "language":
+    "sql"}], "arguments": [{"name": "columnName", "language": "sql", "properties":
+    {"columnName": "Sprecher_Name", "refTableName": "Sprecher"}}]}, "language": "sql",
+    "properties": {"name": "GROUP_CONCAT"}}]}, "language": "sql"}], "groupBy": [{"name":
+    "groupBy", "children": {"expressions": [{"name": "columnName", "language": "sql",
+    "properties": {"columnName": "Charakter_ID", "refTableName": "Charakter"}}]},
+    "language": "sql"}], "orderBy": [{"name": "orderBy", "children": {"expressions":
+    [{"name": "sortOrder", "children": {"expression": [{"name": "functionCall", "children":
+    {"distinct": [{"name": "distinct", "language": "sql"}], "arguments": [{"name":
+    "columnName", "language": "sql", "properties": {"columnName": "Sprecher_ID", "refTableName":
+    "Sprecher"}}]}, "language": "sql", "properties": {"name": "COUNT"}}]}, "language":
+    "sql", "properties": {"order": "DESC"}}]}, "language": "sql"}]}, "language": "sql"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-10-11 11:55:18.165091'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-10-11 11:56:41.941687'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: "SELECT Charakter.Charakter_Name, COUNT(DISTINCT Sprecher.Sprecher_ID),
+    GROUP_CONCAT(DISTINCT Sprecher.Sprecher_Name)\nFROM Sprecher\n\tINNER JOIN Auftritt
+    ON Auftritt.Sprecher_ID = Sprecher.Sprecher_ID\n\tINNER JOIN Charakter ON Auftritt.Charakter_ID
+    = Charakter.Charakter_ID\nGROUP BY Charakter.Charakter_ID\nORDER BY COUNT(DISTINCT
+    Sprecher.Sprecher_ID) DESC"
+new_record: false
+active_record_yaml_version: 2
