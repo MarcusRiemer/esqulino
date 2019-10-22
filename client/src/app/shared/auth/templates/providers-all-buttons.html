@@ -1,4 +1,4 @@
-<ng-container *ngFor="let provider of providers$.value | async">
+<ng-container *ngFor="let provider of providers.value | async">
   <provider-button
     (trigger)="onTrigger()"
     [provider]="provider">

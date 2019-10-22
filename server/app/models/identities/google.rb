@@ -61,7 +61,7 @@ class Google < Identity
     parsed_response = JSON.parse(response.body)
     
     if (not parsed_response["access_token"]) then
-      raise RefreshAccessTokenError.new()
+      raise RefreshAccessTokenError.new("Google: An error occured")
     end
 
     sliced_response = parsed_response.slice("access_token","expires_in")

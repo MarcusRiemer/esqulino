@@ -2,7 +2,6 @@ import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { Angulartics2Module } from 'angulartics2';
@@ -27,7 +26,6 @@ import { LinkService } from './link.service';
 
 import registerLanguages from './locale-registration';
 import { UserModule } from './user/user.module';
-import { RequireLoggedInInterceptor } from './shared/require-logged-in.interceptor';
 
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
@@ -90,7 +88,6 @@ if (environment.sentry && environment.sentry.active) {
     { provide: ErrorHandler, useClass: NotifyErrorHandler },
     Title,
     { provide: ErrorHandler, useClass: NotifyErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: RequireLoggedInInterceptor, multi: true},
     LinkService,
     NaturalLanguagesService,
   ],

@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -20,7 +20,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule, MatDialogModule } from '@angular/material';
 
 import { AnalyticsService } from './analytics.service';
 import { BrowserService } from './browser.service'
@@ -66,6 +66,8 @@ import { MayPerformComponent } from './may-perform.component';
 import { PerformDataService } from './authorisation/perform-data.service';
 import { MessageDialogComponent } from './message-dialog.component';
 import { MasterGuard } from './guards/master-guard';
+import { RequireLoggedInInterceptor } from './require-logged-in.interceptor';
+import { UserService } from './auth/user.service';
 
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
@@ -75,7 +77,7 @@ const materialModules = [
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
   MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
   MatNativeDateModule, MatInputModule, MatFormFieldModule,
-  MatCheckboxModule, MatProgressSpinnerModule
+  MatCheckboxModule, MatProgressSpinnerModule, MatDialogModule
 ]
 
 /**
@@ -161,13 +163,18 @@ const materialModules = [
     MessageDialogComponent,
     ProvidersAllButtonsComponent
   ],
-  entryComponents: [AuthDialogComponent, ChangePasswordComponent, MessageDialogComponent]
+  entryComponents: [
+    AuthDialogComponent, 
+    ChangePasswordComponent, 
+    MessageDialogComponent
+  ]
 })
 export class SharedAppModule {
   static forRoot(): ModuleWithProviders {
     return ({
       ngModule: SharedAppModule,
       providers: [
+        UserService,
         AnalyticsService,
         BrowserService,
         FlashService,
@@ -183,7 +190,12 @@ export class SharedAppModule {
         MasterGuard,
         IsUserGuard,
         PerformDataService,
-        IsAdminGuard
+        IsAdminGuard,
+        { provide: HTTP_INTERCEPTORS, 
+          useClass: RequireLoggedInInterceptor,
+          multi: true,
+          deps: [UserService]
+        },
       ]
     });
   }

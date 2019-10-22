@@ -1,5 +1,5 @@
-import { BasePerformData } from './base';
-export class NewsPerformData extends BasePerformData {
+import { ResourcesData } from './resources';
+export class NewsPerformData extends ResourcesData {
   constructor() {
     super("News")
   }
