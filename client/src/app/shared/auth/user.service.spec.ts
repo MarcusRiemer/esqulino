@@ -139,21 +139,26 @@ describe(`UserService`, () => {
       .toEqual(3);
   })
 
-  it('userData empty', () => {
+  xit('userData on error', () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
-    service.userDisplayName$
-      .pipe(first())
-      .subscribe(u => expect(u).toEqual(""))
+    let numCalls = 0;
 
-    service.userId$
-      .pipe(first())
-      .subscribe(u => expect(u).toEqual(""));
+    service.userData$
+      .pipe(
+        first(),
+        tap(_ => numCalls++)
+      )
+      .subscribe(d => expect(d.displayName).toContain("Error"))
 
     httpTestingController.expectOne(serverApi.getUserDataUrl())
-      .flush("");
+      .flush("", { statusText: "Unknown Error", status: 500 });
+
+    expect(numCalls)
+      .withContext("Server errors push a new user state, is this good?")
+      .toEqual(1)
   })
 
   // fit('identities', () => {
