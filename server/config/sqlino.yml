@@ -21,6 +21,8 @@ development:
   auth_tokens: 
     access_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
+    access_cookie: # Is empty because of the session duration
+    refresh_cookie: 1209600 # 14 days
   auth_refresh_token_urls:
     google: "https://accounts.google.com/o/oauth2/token"
   auth_provider: [Google, Github, PasswordIdentity, Developer]
@@ -57,9 +59,11 @@ test:
   seed:
     data_dir: ../seed-test
     output: false
-  auth_tokens: 
+  auth_tokens:
     access_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
+    access_cookie: # Is empty because of the session duration
+    refresh_cookie: 1209600 # 14 days
   auth_provider: [Google, Github, PasswordIdentity, Developer]
   auth_provider_keys:
     google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
@@ -91,8 +95,10 @@ production:
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
   auth_tokens:
-    acces_token: 180 # 3 minutes
+    access_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
+    access_cookie: # Is empty because of the session duration
+    refresh_cookie: 1209600 # 14 days
   auth_refresh_token_urls:
     google: "https://accounts.google.com/o/oauth2/token"
   auth_provider: [Google, Github, PasswordIdentity]

@@ -6,7 +6,7 @@ class IdentitiesController < ApplicationController
   
   # Responds with all linked identities
   def show
-    if signed_in?
+    ensure_is_logged_in do
       api_response(current_user.all_providers)
     end
   end
@@ -140,14 +140,6 @@ class IdentitiesController < ApplicationController
   end
 
   private
-
-  def ensure_is_logged_in(&block)
-    if (signed_in?)
-      block.call
-    else
-      error_response("You need to be logged in")
-    end
-  end
 
   def change_password_params
     params
