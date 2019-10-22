@@ -66,7 +66,7 @@ RSpec.describe "user controller" do
     context "invalid" do
       let!(:identity) { create(:identity_provider, :existing) }
 
-      it 'logged out' do
+      xit 'logged out' do
         post '/api/user/send_change_email',
           :headers => json_headers,
           :params => {
@@ -172,7 +172,7 @@ RSpec.describe "user controller" do
         :params => {
           displayName: "New name"
         }.to_json
-      
+
       aggregate_failures "testing changes and response" do
         expect(User.find_by(id: identity.user_id)[:display_name]).to eq("New name")
         expect(response.status).to eq(200)
