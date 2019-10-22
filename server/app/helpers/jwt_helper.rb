@@ -5,27 +5,27 @@ module JwtHelper
   end
   # Is used for issuer claim
   def self.issuer
-    return Rails.configuration.sqlino['editor_domain']
+    return Rails.configuration.sqlino[:editor_domain]
   end
   # Returns the default duration of an access token
   def self.access_token_duration
     # return 10.seconds
-    return Rails.configuration.sqlino['auth_tokens']['access_token'].seconds
+    return Rails.configuration.sqlino[:auth_tokens][:access_token].seconds
   end
   # Returns the default duration of an refresh token
   def self.refresh_token_duration
     # return 10.seconds
-    return Rails.configuration.sqlino['auth_tokens']['refresh_token'].seconds
+    return Rails.configuration.sqlino[:auth_tokens][:refresh_token].seconds
   end
 
   def self.access_cookie_duration
-    duration = Rails.configuration.sqlino['auth_tokens']['access_cookie']
+    duration = Rails.configuration.sqlino[:auth_tokens][:access_cookie]
     # nil value means session duration
     return duration ? duration.seconds : duration
   end
 
   def self.refresh_cookie_duration
-    return Rails.configuration.sqlino['auth_tokens']['refresh_cookie'].seconds
+    return Rails.configuration.sqlino[:auth_tokens][:refresh_cookie].seconds
   end
 
   def self.append_registered_claims(payload = {}, duration = access_token_duration.from_now)
