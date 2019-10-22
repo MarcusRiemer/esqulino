@@ -55,5 +55,6 @@ class Developer < Identity
 
   def refresh_access_token
     # TODO-Tom needs to be added
+    nil
   end
 end

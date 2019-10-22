@@ -109,7 +109,7 @@ RSpec.describe "auth controller" do
         expect(response.cookies['ACCESS_TOKEN']).to be_truthy
 
         delete '/api/auth/sign_out'
-        expect(cookies['ACCESS_TOKEN']).to eq("")
+        expect(cookies['ACCESS_TOKEN']).to be_nil
         expect(response.status).to eq(200)
       end
 
@@ -118,7 +118,7 @@ RSpec.describe "auth controller" do
         expect(response.cookies['ACCESS_TOKEN']).to be_truthy
 
         delete '/api/auth/sign_out'
-        expect(cookies['ACCESS_TOKEN']).to eq("")
+        expect(cookies['ACCESS_TOKEN']).to be_nil
 
         get '/api/user'
         json_data = JSON.parse(response.body)
@@ -324,7 +324,7 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity',
       :headers => json_headers,
       :params => identity_params.to_json
-    byebug
+      
     expect(response.status).to eq(401)
     expect(response.cookies['ACCESS_TOKEN']).to be_nil
   end
