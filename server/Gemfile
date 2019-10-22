@@ -59,7 +59,7 @@ gem "rest-client"
 ###########################
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 6.0'
 
 # Connecting to postgres databases
 gem 'pg'
@@ -70,6 +70,9 @@ gem 'rack-cors'
 # Use falcon as the server, puma has shown to hang under certain
 # hard to reproduce load scenarios.
 gem 'falcon', '~> 0.19'
+
+# Speed up Ruby by caching some expensive operations
+gem 'bootsnap'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -85,11 +88,11 @@ end
 
 # Use rspec for unit test
 group :development, :test do
-  gem 'database_cleaner', '~> 1.7'
-  gem 'rspec-rails', '~> 3.8'
+  gem 'database_cleaner'
+  gem 'rspec-rails', '4.0.0.beta3'
   gem 'rspec_junit_formatter'
   gem 'guard-rspec', require: false
-  gem 'pry', '~> 0.12.2'
+  gem 'pry'
 end
 
 group :development do
