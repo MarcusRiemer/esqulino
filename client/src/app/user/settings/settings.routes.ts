@@ -10,11 +10,11 @@ export const userSettingsRoutes: Routes = [
     component: UserSettingsComponent,
     children: [
       {
-        path: 'account',
+        path: 'account/:id',
         component: AccountSettingsComponent
       },
       {
-        path: '',
+        path: '**',
         component: AccountSettingsComponent
       },
     ]

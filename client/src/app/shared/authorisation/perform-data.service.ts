@@ -1,3 +1,4 @@
+import { SettingsPerformData } from './payload/settings';
 import { Injectable } from "@angular/core";
 
 import { ProjectPerformData } from './payload/project';
@@ -12,5 +13,9 @@ export class PerformDataService {
 
   public get project(): ProjectPerformData {
     return new ProjectPerformData()
+  }
+
+  public get settings(): SettingsPerformData {
+    return new SettingsPerformData();
   }
 }

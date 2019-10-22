@@ -2,7 +2,7 @@
   <h1>Primäre E-Mail</h1>
   <hr />
 
-  <ng-container *ngIf="(identities$.value | async) as identities">
+  <ng-container *ngIf="(identities.value | async) as identities">
     <p>
       Wähle eine primäre E-Mail an die jegliche E-Mails geschickt werden sollen.
       <strong>Achtung:</strong> Die primäre E-Mail kann so lange nicht gelöscht

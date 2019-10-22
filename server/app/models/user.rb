@@ -78,7 +78,7 @@ class User < ApplicationRecord
   #       The `eql?` predicate may or may not load `self.guest` via
   #       a DB query, but there is no actual reason to find out.
   def guest?
-    return self.eql? self.guest
+    return self.eql? User.guest
   end
 
   # Names of the roles of a logged in user
@@ -123,6 +123,10 @@ class User < ApplicationRecord
     return !self.email.nil?
   end
 
+  def has_confirmed_password_identity?
+    self.identities.any? { |k| k.instance_of?(PasswordIdentity) and k.confirmed?() }
+  end
+
   # Returns the current global role of a user
   # Global roles are roles
   def global_role
@@ -155,14 +159,10 @@ class User < ApplicationRecord
     "\"#{display_name}\" (#{id})"
   end
 
-  def refresh_token_if_expired
-    self.identities.each do |identity|
-      if identity.access_token_expired? then
-        if (not Rails.env.test?) then
-          identity.refresh_access_token
-          identity.save!
-        end
-      end
+  def refresh_token_if_expired(identity)
+    if identity.access_token_expired?
+      identity.refresh_access_token
+      identity.save!
     end
   end
 end

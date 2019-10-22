@@ -20,7 +20,7 @@
     </validate-input>
   </label>
 
-  <ng-container *ngIf="!existsPasswordIdentity()">
+  <ng-container *ngIf="!existsPasswordIdentity(identities.providers)">
     <validate-input 
       icon="key"
       [(value)]="newEmailData.password">

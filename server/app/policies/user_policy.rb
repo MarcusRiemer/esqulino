@@ -1,12 +1,20 @@
 class UserPolicy
-  attr_reader :user, :record
+  attr_reader :user, :second_user
 
-  def initialize(user, record)
+  def initialize(user, second_user)
     @user = user
-    @record = record
+    @second_user = second_user
   end
 
   def change_roles?
-    user.is_admin? && (not record.is_admin?)
+    user.is_admin?
+  end
+
+  def change_username?
+    not user.guest?
+  end
+
+  def send_change_email?
+    not user.guest?
   end
 end

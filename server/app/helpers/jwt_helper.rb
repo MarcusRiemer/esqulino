@@ -9,13 +9,23 @@ module JwtHelper
   end
   # Returns the default duration of an access token
   def self.access_token_duration
-    return 10.seconds
-    # return Rails.configuration.sqlino['auth_tokens']['access_token'].seconds
+    # return 10.seconds
+    return Rails.configuration.sqlino['auth_tokens']['access_token'].seconds
   end
   # Returns the default duration of an refresh token
   def self.refresh_token_duration
-    return 10.seconds
-    # return Rails.configuration.sqlino['auth_tokens']['refresh_token'].seconds
+    # return 10.seconds
+    return Rails.configuration.sqlino['auth_tokens']['refresh_token'].seconds
+  end
+
+  def self.access_cookie_duration
+    duration = Rails.configuration.sqlino['auth_tokens']['access_cookie']
+    # nil value means session duration
+    return duration ? duration.seconds : duration
+  end
+
+  def self.refresh_cookie_duration
+    return Rails.configuration.sqlino['auth_tokens']['refresh_cookie'].seconds
   end
 
   def self.append_registered_claims(payload = {}, duration = access_token_duration.from_now)
@@ -27,8 +37,8 @@ module JwtHelper
     JWT.encode(payload, JwtHelper.secret_key)
   end
 
-  def self.decode(token)
-    decoded = JWT.decode(token, JwtHelper.secret_key)[0]
+  def self.decode(token, options = {})
+    decoded = JWT.decode(token, JwtHelper.secret_key, true, options)[0]
     # Acces with symbols and strings
     HashWithIndifferentAccess.new decoded
   end
@@ -59,9 +69,11 @@ module JwtHelper
   def update_private_claim
     if (current_access_token) then
       duration = JwtHelper.access_token_duration.from_now
-      access_token = JwtHelper.encode(current_user.information, duration)
+      payload = current_user.information
+      access_token = JwtHelper.encode(payload, duration)
+      @current_access_token = payload
 
-      response_secure_cookie("ACCESS_TOKEN", access_token, duration)
+      response_access_cookie(access_token)
     end
   end
 
@@ -96,15 +108,35 @@ module JwtHelper
           end
 
           begin
-            @current_refresh_token = JwtHelper.decode(refresh_token)
+            @current_refresh_token = JwtHelper.decode(refresh_token, {
+              verify_expiration: false
+            })
+
+            exp = Time.at(@current_refresh_token[:exp]).utc
             user_id = @current_refresh_token[:user_id]
-            @current_access_token = renew_access_token(user_id)
-          # If an decode error occurs the user will be classified as guest
-          # Empty access_token means no one is logged in
+            user = User.find(user_id)
+            identity = Identity.find(@current_refresh_token[:identity_id])
           rescue JWT::DecodeError => refreshError
             self.clear_secure_cookies
             raise EsqulinoError::RefreshToken.new(refreshError.message)
+          rescue => e
+            self.clear_secure_cookies
+            raise EsqulinoError::Base.new(e.message)
           end
+
+        # If the current refresh token is expired try to renew the access token of the provider.
+        # The result of an renewd access token is a new blattwerkzeug refresh token
+        # Empty access_token & refresh_token means no one is logged in
+          if (Time.current > exp)
+            user.refresh_token_if_expired(identity)
+            if identity.access_token_expired?
+              self.clear_secure_cookies
+              raise EsqulinoError::RefreshToken.new(refreshError.message)
+            end
+
+            renew_refresh_token(user_id, identity)
+          end
+          renew_access_token(user_id)
         end
       end
     end
@@ -117,20 +149,29 @@ module JwtHelper
     payload = JwtHelper.append_registered_claims(user.information)
     duration = JwtHelper.access_token_duration.from_now
     access_token = JwtHelper.encode(payload, duration)
+    @current_access_token = payload
 
-    response_secure_cookie("ACCESS_TOKEN", access_token, duration)
+    response_access_cookie(access_token)
+  end
 
-    return payload
+  def renew_refresh_token(uid, identity)
+    duration = identity.access_token_duration || JwtHelper.refresh_token_duration
+    payload = { user_id: uid, identity_id: identity.id }
+    refresh_token = JwtHelper.encode(payload, duration)
+    @current_refresh_token = refresh_token
+
+    response_refresh_cookie(refresh_token)
   end
 
   def clear_secure_cookies
     if (self.refresh_cookie) then
       self.delete_refresh_cookie!
+      self.clear_current_refresh_token
     end
 
     if (self.access_cookie) then
-      self.clear_current_access_token
       self.delete_access_cookie!
+      self.clear_current_access_token
     end
   end
 
@@ -140,7 +181,6 @@ module JwtHelper
 
   # Deleting a jwt is done by setting the expiration time of the cookie
   def delete_access_cookie!()
-    self.clear_current_access_token
     delete_secure_cookie("ACCESS_TOKEN")
   end
 
@@ -159,5 +199,13 @@ module JwtHelper
       path: '/api',
       domain: "." + Rails.application.config.cookie_domain
     })
+  end
+
+  def response_refresh_cookie(refresh_token)
+    response_secure_cookie("REFRESH_TOKEN", refresh_token, JwtHelper.refresh_cookie_duration.from_now)
+  end
+
+  def response_access_cookie(access_token)
+    response_secure_cookie("ACCESS_TOKEN", access_token, JwtHelper.access_cookie_duration)
   end
 end

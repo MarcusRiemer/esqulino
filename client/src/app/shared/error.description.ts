@@ -25,5 +25,5 @@ export interface TokenErrorDescription extends ServerErrorDescription {
 }
 
 export function isSessionExpiredErrorDescription(obj: any): obj is TokenErrorDescription {
-  return (obj && (obj.type === "AccessTokenError" || obj.type === "RefreshTokenError"));
+  return (obj && (obj.type === "AccessTokenError" || obj.type === "RefreshTokenError" || obj.type === "AuthorizationError"));
 }
