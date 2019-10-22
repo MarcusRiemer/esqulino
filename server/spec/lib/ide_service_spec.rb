@@ -6,7 +6,7 @@ RSpec.describe "IDE Service" do
 
   # Retrieves the test configuration for the "exec" mode.
   def exec_configuration
-    Rails.configuration.sqlino['ide_service']['exec']
+    Rails.configuration.sqlino[:ide_service][:exec]
   end
 
   context "OneShot" do
@@ -29,18 +29,18 @@ RSpec.describe "IDE Service" do
 
   context "initialization" do
     it "creates a OneShot instance" do
-      service = IdeService.instantiate(service_config: { "exec" => { "mode" => "one-shot" } })
+      service = IdeService.instantiate(service_config: { :exec => { :mode => "one_shot" } })
       expect(service.class).to be OneShotExecIdeService
     end
 
     it "mocking has precedence" do
-      service = IdeService.instantiate(service_config: { "mock" => true, "exec" => { "mode" => "one-shot" } })
+      service = IdeService.instantiate(service_config: { :mock => true, :exec => { :mode => "one_shot" } })
       expect(service.class).to be MockIdeService
     end
 
     it "mocking has precedence (unless forbidden)" do
       service = IdeService.instantiate(
-        service_config: { "mock" => true, "exec" => { "mode" => "one-shot" } },
+        service_config: { :mock => true, :exec => { :mode => "one_shot" } },
         allow_mock: false
       )
       expect(service.class).to be OneShotExecIdeService

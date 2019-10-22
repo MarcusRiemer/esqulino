@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   scope '/api' do
 
     scope 'identities' do
-      root via: [:get], controller: 'identities', action: :show
+      get '/', controller: 'identities', action: :show
       get 'list', controller: 'identities', action: :list
       get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
       post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
 
     scope 'user' do
-      root via: [:get], controller: 'user', action: :index
+      get '/', controller: 'user', action: :index
       get 'change_primary_email/:token', controller: 'user', action: :change_primary_email
       post 'send_change_email', controller: 'user', action: :send_change_email
       post 'may_perform', controller: 'user', action: :may_perform
@@ -32,15 +32,15 @@ Rails.application.routes.draw do
 
     # Everything in the context of projects
     scope 'project' do
-      root via: [:get], controller: 'projects', action: :index
-      root via: [:post], controller: 'projects', action: :create
-      root via: [:delete], controller: 'projects', action: :destroy
+      get '/', controller: 'projects', action: :index
+      post '/', controller: 'projects', action: :create
+      delete '/', controller: 'projects', action: :destroy
 
       # Everything that does something in the context of a specific project
       scope ':project_id' do
-        root controller: 'projects', action: :show
-        root via: [:put], controller: 'projects', action: :update
-        root via: [:delete], controller: 'projects', action: :destroy
+        get '/', controller: 'projects', action: :show
+        put '/', controller: 'projects', action: :update
+        delete '/', controller: 'projects', action: :destroy
 
         get 'preview', controller: 'projects', action: :preview_image
 
@@ -68,13 +68,13 @@ Rails.application.routes.draw do
 
         # Everything that has something to do with images
         scope 'image' do
-          root via: [:get], controller: 'project_images', action: :list_show
-          root via: [:post], controller: 'project_images', action: :create
+          get '/', controller: 'project_images', action: :list_show
+          post '/', controller: 'project_images', action: :create
 
           scope ':image_id' do
-            root via: [:get], controller: 'project_images', action: :file_show
-            root via: [:post], controller: 'project_images', action: :file_update
-            root via: [:delete], controller: 'project_images', action: :file_delete
+            get '/', controller: 'project_images', action: :file_show
+            post '/', controller: 'project_images', action: :file_update
+            delete '/', controller: 'project_images', action: :file_delete
 
             get  'metadata', controller: 'project_images', action: :metadata_show
             post 'metadata', controller: 'project_images', action: :metadata_update
@@ -105,12 +105,12 @@ Rails.application.routes.draw do
     # Getting the News as JSON
     scope 'news' do
       scope 'admin' do
-        root via: [:get], controller: 'news', action: :index_admin
+        get '/', controller: 'news', action: :index_admin
         get ':id', controller: 'news', action: :show_admin
       end
 
-      root via: [:get], controller: 'news', action: :index
-      root via: [:post], controller: 'news', action: :create
+      get '/', controller: 'news', action: :index
+      post '/', controller: 'news', action: :create
       get ':id', controller: 'news', action: :show
       put ':id', controller: 'news', action: :update
       delete ':id', controller: 'news', action: :destroy

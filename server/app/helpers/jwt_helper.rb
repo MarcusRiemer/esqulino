@@ -7,7 +7,7 @@ module JwtHelper
   def self.issuer
     return Rails.configuration.sqlino['editor_domain']
   end
-  # Returns the default duration of an access token 
+  # Returns the default duration of an access token
   def self.access_token_duration
     return 10.seconds
     # return Rails.configuration.sqlino['auth_tokens']['access_token'].seconds
@@ -60,7 +60,7 @@ module JwtHelper
     if (current_access_token) then
       duration = JwtHelper.access_token_duration.from_now
       access_token = JwtHelper.encode(current_user.information, duration)
-      
+
       response_secure_cookie("ACCESS_TOKEN", access_token, duration)
     end
   end
@@ -92,7 +92,7 @@ module JwtHelper
         rescue JWT::DecodeError => accessError
           if (not refresh_token) then
             self.clear_secure_cookies
-            raise AccessTokenError.new(accessError.message)
+            raise EsqulinoError::AccessToken.new(accessError.message)
           end
 
           begin
@@ -103,7 +103,7 @@ module JwtHelper
           # Empty access_token means no one is logged in
           rescue JWT::DecodeError => refreshError
             self.clear_secure_cookies
-            raise RefreshTokenError.new(refreshError.message)
+            raise EsqulinoError::RefreshToken.new(refreshError.message)
           end
         end
       end

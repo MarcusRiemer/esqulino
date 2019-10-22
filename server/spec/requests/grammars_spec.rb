@@ -77,7 +77,7 @@ RSpec.describe BlockLanguagesController, type: :request do
              }
            }.to_json
 
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
@@ -101,7 +101,7 @@ RSpec.describe BlockLanguagesController, type: :request do
              "name" => "Spec Grammar"
            }.to_json
 
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
       expect(response.status).to eq(400)
 
       json_data = JSON.parse(response.body)

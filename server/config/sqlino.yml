@@ -12,13 +12,13 @@ development:
     exec:
       node_binary: /usr/bin/node
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
-      mode: one-shot
+      mode: one_shot
   seed:
     data_dir: ../seed
     output: true
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
-  auth_tokens: 
+  auth_tokens:
     access_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
   auth_refresh_token_urls:
@@ -53,11 +53,11 @@ test:
     exec:
       node_binary: /usr/bin/node
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
-      mode: one-shot
+      mode: one_shot
   seed:
     data_dir: ../seed-test
     output: false
-  auth_tokens: 
+  auth_tokens:
     access_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days
   auth_provider: [Google, Github, PasswordIdentity, Developer]
@@ -84,7 +84,7 @@ production:
     exec:
       node_binary: /usr/bin/node
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist-live/cli/bundle.cli.js' %>
-      mode: one-shot
+      mode: one_shot
   seed:
     data_dir: ../seed
     output: true

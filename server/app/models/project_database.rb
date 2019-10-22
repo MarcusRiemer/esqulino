@@ -1,10 +1,5 @@
 require "fileutils"
 
-require_dependency "error"
-require_dependency "schema_alter"
-require_dependency "schema_utils"
-require_dependency "schema"
-
 # The maximum number of rows a user facing query may return
 USER_RESULT_MAX_ROWS = 100
 
@@ -63,7 +58,8 @@ class ProjectDatabase < ApplicationRecord
     if table_exists? table_description["name"]
       raise CreateDuplicateTableNameDatabaseError.new(self, table_description["name"])
     else
-      db_connection_admin.execute(table_to_create_statement(table_description))
+      create_statement = SchemaTools::Alter:: table_to_create_statement(table_description)
+      db_connection_admin.execute(create_statement)
       refresh_schema
     end
   end
@@ -73,10 +69,10 @@ class ProjectDatabase < ApplicationRecord
     schema = table_schema(table_name)
     if schema
       # Do the actual altering and store the new schema
-      database_alter_schema(self, table_name, alter_commands_description)
+      SchemaTools::Alter::database_alter_schema(self, table_name, alter_commands_description)
       refresh_schema
     else
-      raise UnknownDatabaseTableError.new(self, table_name)
+      raise EsqulinoError::UnknownDatabaseTable.new(self, table_name)
     end
   end
 
@@ -89,7 +85,7 @@ class ProjectDatabase < ApplicationRecord
       db_connection_admin.execute("DROP TABLE #{table_name}")
       refresh_schema
     else
-      raise UnknownDatabaseTableError.new(self, table_name)
+      raise EsqulinoError::UnknownDatabaseTable.new(self, table_name)
     end
   end
 
@@ -104,7 +100,7 @@ class ProjectDatabase < ApplicationRecord
       result = execute_sql("SELECT * FROM #{table_name} LIMIT ? OFFSET ?", [amount.to_i, from.to_i], true)
       result["rows"]
     else
-      raise UnknownDatabaseTableError.new(self, table_name)
+      raise EsqulinoError::UnknownDatabaseTable.new(self, table_name)
     end
   end
 
@@ -117,7 +113,7 @@ class ProjectDatabase < ApplicationRecord
       result = execute_sql("SELECT COUNT(*) FROM #{table_name}", [], true)
       result["rows"].first.first.to_i
     else
-      raise UnknownDatabaseTableError.new(self, table_name)
+      raise EsqulinoError::UnknownDatabaseTable.new(self, table_name)
     end
   end
 
@@ -138,14 +134,14 @@ class ProjectDatabase < ApplicationRecord
 
       execute_sql(sql, [], false)
     else
-      raise UnknownDatabaseTableError.new(self, table_name)
+      raise EsqulinoError::UnknownDatabaseTable.new(self, table_name)
     end
   end
 
   # Refreshes the cached schema.
   def refresh_schema
     # Not so nice: Explicitly calling this complicated version of serializable_hash here
-    self.schema = database_describe_schema(db_connection_admin)
+    self.schema = SchemaTools::database_describe_schema(db_connection_admin)
       .map { |t| t.serializable_hash(include: { columns: {}, foreign_keys: {} }) }
   end
 
@@ -199,11 +195,11 @@ class ProjectDatabase < ApplicationRecord
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault
         # of the caller in some way.
-        raise DatabaseQueryError.new(self, sql, params, e, false)
+        raise EsqulinoError::DatabaseQuery.new(self, sql, params, e, false)
       rescue SQLite3::Exception => e
         # Something unanticipated went wrong. We assume this is an error in our
         # implementation (either server or client).
-        raise DatabaseQueryError.new(self, sql, params, e, true)
+        raise EsqulinoError::DatabaseQuery.new(self, sql, params, e, true)
       end
     end
   end
@@ -247,14 +243,14 @@ class ProjectDatabase < ApplicationRecord
     else
       # Writing connections need to be in synchronous mode so that the readonly
       # connection can see any changes immediately.
-      @db_connection ||= sqlite_open_augmented(sqlite_file_path, :synchronous => "full")
+      @db_connection ||= SchemaTools::sqlite_open_augmented(sqlite_file_path, :synchronous => "full")
     end
   end
 
   # @return
   #   A database connection that does not allow any changes to the underlying data or structure.
   def db_connection_readonly
-    @db_connection_readonly ||= sqlite_open_augmented(sqlite_file_path, :read_only => true)
+    @db_connection_readonly ||= SchemaTools::sqlite_open_augmented(sqlite_file_path, :read_only => true)
   end
 
   # @return
@@ -275,7 +271,7 @@ class ProjectDatabase < ApplicationRecord
 end
 
 # Something went wrong when altering a database schema.
-class AlterProjectDatabaseError < EsqulinoError
+class AlterProjectDatabaseError < EsqulinoError::Base
   # @param project_database [ProjectDatabase]
   #   The database the error occured in
   def initialize(project_database, data, code = 400)

@@ -7,7 +7,7 @@ RSpec.describe ProjectMailer, :type => :mailer do
       mail = ProjectMailer.with(project: proj).created_admin
 
       expect(mail.subject).to include(proj.name)
-      expect(mail.to).to eq([Rails.configuration.sqlino['mail']['admin']])
+      expect(mail.to).to eq([Rails.configuration.sqlino[:mail][:admin]])
 
       expect(mail.body.to_s).to include(proj.name)
       expect(mail.body.to_s).to include(proj.id)

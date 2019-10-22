@@ -1,8 +1,6 @@
 # coding: utf-8
 require 'rails_helper'
 
-require_dependency 'error'
-
 RSpec.describe News, type: :model do
   it 'default values of news' do
     news = build(:news)
@@ -40,7 +38,7 @@ RSpec.describe News, type: :model do
   end
 
   it 'select invalid language' do
-    expect{News.scope_single_language('abc')}.to raise_exception(EsqulinoMessageError)
+    expect{News.scope_single_language('abc')}.to raise_exception(EsqulinoError::Base)
   end
 
   it 'select only current languages (en) ' do
@@ -74,8 +72,8 @@ RSpec.describe News, type: :model do
   it 'rendering texts in unknown languages' do
     orig = build(:news, text: { "de" => "# Überschrift"})
 
-    expect{ orig.rendered_text(languages: ["en"]) }.to raise_exception(EsqulinoMessageError)
-    expect{ orig.rendered_text(languages: ["en", "de"]) }.to raise_exception(EsqulinoMessageError)
+    expect{ orig.rendered_text(languages: ["en"]) }.to raise_exception(EsqulinoError::Base)
+    expect{ orig.rendered_text(languages: ["en", "de"]) }.to raise_exception(EsqulinoError::Base)
   end
 
   it 'renders the text (start)' do

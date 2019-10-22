@@ -4,33 +4,30 @@ class AuthController < ApplicationController
   include LocaleHelper
 
   # This function is essential for omniauth.
-  # If youre authenticated by the external provider, you will be 
+  # If youre authenticated by the external provider, you will be
   # navigated to this function.
   def callback
-    begin
-      auth_hash = request.env["omniauth.auth"]
-      identity = Identity.search(auth_hash)
-      if (not identity) then
-        identity = Identity.create_with_auth(auth_hash, current_user)
-      else
-        if (signed_in?) and (not current_user.eql? identity.user) then
-          raise RuntimeError.new("Error: already linked with a user")
-        end
+    auth_hash = request.env.fetch("omniauth.auth")
 
-        identity.update_provider_data(auth_hash)
-        identity.save!
+    identity = Identity.search(auth_hash)
+    if (not identity) then
+      identity = Identity.create_with_auth(auth_hash, current_user)
+    else
+      if (signed_in?) and (not current_user.eql? identity.user) then
+        raise RuntimeError.new("Error: already linked with a user")
       end
-      sign_in(identity, identity.access_token_duration)
-      # The HTTP referer identifies the address of the webpage
-      # which is linked to the resource being requested
-      # **omniauth.origin** Omniauth is saving the user location
 
-      redirect_to (request.env['omniauth.origin'] || URI(request.referer || "/").path)
-    rescue => e
-      raise RuntimeError.new(e.message)
+      identity.update_provider_data(auth_hash)
+      identity.save!
     end
+    sign_in(identity, identity.access_token_duration)
+
+    # The HTTP referer identifies the address of the webpage
+    # which is linked to the resource being requested
+    # **omniauth.origin** Omniauth is saving the user location
+    redirect_to (request.env['omniauth.origin'] || URI(request.referer || "/").path)
   end
-  
+
   # Function is called by omniauth identity and
   # is used to login a user with password
   def login_with_password
@@ -55,19 +52,15 @@ class AuthController < ApplicationController
   # You use this for creating an identity with a password
   # with simulated callback data
   def register
-    begin
-      auth_hash = create_identity_data(register_params)
-      identity = Identity.search(auth_hash)
-      if (not identity) then
-        identity = Identity.create_with_auth(auth_hash, current_user)
-        # sends an confirmation e-mail
-        IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
-        api_response(current_user.information)
-      else
-        error_response("E-mail already registered")
-      end
-    rescue => e
-      error_response(e.message)
+    auth_hash = create_identity_data(register_params)
+    identity = Identity.search(auth_hash)
+    if (not identity) then
+      identity = Identity.create_with_auth(auth_hash, current_user)
+      # sends an confirmation e-mail
+      IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
+      api_response(current_user.information)
+    else
+      error_response("E-mail already registered")
     end
   end
 
@@ -95,4 +88,3 @@ class AuthController < ApplicationController
         .permit([:email, :password])
   end
 end
-

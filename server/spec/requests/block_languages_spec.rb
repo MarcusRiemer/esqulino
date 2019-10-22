@@ -67,7 +67,7 @@ RSpec.describe BlockLanguagesController, type: :request do
              "defaultProgrammingLanguageId" => g.programming_language_id
            }.to_json
 
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
@@ -119,7 +119,7 @@ RSpec.describe BlockLanguagesController, type: :request do
            :headers => json_headers,
            :params => block_lang_model.to_json
 
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []

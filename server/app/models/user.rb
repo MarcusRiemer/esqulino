@@ -6,7 +6,7 @@
 #
 class User < ApplicationRecord
   # The ID of the user that acts as a guest
-  GUEST_ID = Rails.configuration.sqlino["seed_users"]["guest"]
+  GUEST_ID = Rails.configuration.sqlino[:seed_users][:guest]
 
   # Only return true for roles that have been manually added
   # https://github.com/RolifyCommunity/rolify#strict-mode
@@ -60,7 +60,7 @@ class User < ApplicationRecord
     if Rails.env.development? or Rails.env.test?
       User.guest.add_role(:admin)
     else
-      raise EsqulinoError.new("Guests can't be admins outside of development environments", 401)
+      raise EsqulinoError::Base.new("Guests can't be admins outside of development environments", 401)
     end
   end
 
