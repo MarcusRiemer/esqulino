@@ -130,7 +130,7 @@ describe(`UserService`, () => {
     const logoutComplete = service.logout();
 
     httpTestingController.expectOne(serverApi.getSignOutUrl())
-      .flush("");
+      .flush(mkGuestResponse());
 
     await logoutComplete;
 
