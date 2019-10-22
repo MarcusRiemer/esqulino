@@ -1,4 +1,3 @@
-require_dependency 'error'
 require 'bcrypt'
 
 class ApplicationController < ActionController::API
@@ -6,7 +5,7 @@ class ApplicationController < ActionController::API
   include Pundit
 
   # Handle all errors that are specifc to our parts of the code
-  rescue_from EsqulinoError, :with => :handle_internal_exception
+  rescue_from EsqulinoError::Base, :with => :handle_internal_exception
 
   # Hand out 404 errors as fallbacks if Active Record doesn't find something
   rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
@@ -18,7 +17,7 @@ class ApplicationController < ActionController::API
   end
 
   def error_response(err = "something went wrong", code = 401)
-    raise EsqulinoError.new(err, code)
+    raise EsqulinoError::Base.new(err, code)
   end
 
   # An instance of EsqulinoError was thrown
@@ -27,7 +26,7 @@ class ApplicationController < ActionController::API
 
     # Handle errors that might be seen by users with a slightly nicer
     # representation than pure JSON.
-    if exception.is_a? EsqulinoMessageError then
+    if exception.is_a? EsqulinoError::Message then
       @exception = exception
       @admin_mail = Rails.configuration.sqlino["mail"]["admin"]
 

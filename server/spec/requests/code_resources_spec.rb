@@ -17,7 +17,7 @@ RSpec.describe "CodeResource request", :type => :request do
            }.to_json
 
       expect(response.status).to eq(200)
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
       expect(result['name']).to eq resource.name
@@ -34,7 +34,7 @@ RSpec.describe "CodeResource request", :type => :request do
            }.to_json
 
       expect(response.status).to eq(400)
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
       expect(result['errors']['name'].length).to eq 1
@@ -61,7 +61,7 @@ RSpec.describe "CodeResource request", :type => :request do
            }.to_json
 
       expect(response.status).to eq(200)
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
       expect(result['name']).to eq resource.name
@@ -83,7 +83,7 @@ RSpec.describe "CodeResource request", :type => :request do
            }.to_json
 
       expect(response.status).to eq(400)
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
 
@@ -102,7 +102,7 @@ RSpec.describe "CodeResource request", :type => :request do
           :params => { "name" => "Changed" }.to_json
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
       expect(result['name']).to eq "Changed"
@@ -119,7 +119,7 @@ RSpec.describe "CodeResource request", :type => :request do
           :params => { "programmingLanguageId" => new_lang.id }.to_json
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
       expect(result['programming_language_id']).to eq new_lang.id
@@ -135,7 +135,7 @@ RSpec.describe "CodeResource request", :type => :request do
           :params => '{ "ast": "null" }'
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       result = JSON.parse response.body
       expect(result['ast']).to eq nil

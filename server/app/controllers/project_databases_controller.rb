@@ -1,8 +1,5 @@
 require 'open3'
 
-require_dependency 'schema_graphviz'
-require_dependency 'schema_alter'
-
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
@@ -11,7 +8,7 @@ class ProjectDatabasesController < ApplicationController
   def visual_schema
     # Build the GraphViz description of the database
     db_path = current_database.sqlite_file_path
-    db_graphviz = database_graphviz_schema(db_path)
+    db_graphviz = SchemaTools::database_graphviz_schema(db_path)
 
     # The default renderer currently is svg:cairo, but
     # the user may override it.

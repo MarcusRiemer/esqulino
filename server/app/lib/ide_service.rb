@@ -108,8 +108,8 @@ end
 class ExecIdeService < BaseIdeService
   # Pulls the required paths from the Rails configuration
   def initialize(config: nil)
-    @node_binary = config['node_binary']
-    @program = config['program']
+    @node_binary = config[:node_binary]
+    @program = config[:program]
   end
 
   # The path to the cli program
@@ -176,7 +176,7 @@ module IdeService
 
   # The configuration that is currently in use
   def self.live_config
-    Rails.configuration.sqlino.fetch("ide_service", Hash.new)
+    Rails.configuration.sqlino.fetch(:ide_service, Hash.new)
   end
 
   # Retrieves an instance that may be mocked. Use this if the result
@@ -184,7 +184,7 @@ module IdeService
   def self.instance
     # The @@ide_service_instance may never be a MockIdeService, so
     # we need to take special care to not assign it by accident
-    if live_config["mock"]
+    if live_config[:mock]
       @@mock_instance
     else
       @@ide_service_instance ||= instantiate
@@ -204,17 +204,18 @@ module IdeService
     # Mocking currently takes precedence about every other option. This is by
     # design to "override" the default configuration when running tests, but
     # its quite an ugly hack.
-    if allow_mock && service_config["mock"]
+    if allow_mock && service_config[:mock]
       return @@mock_instance
     # Exec mode?
-    elsif exec_config = service_config["exec"] then
+    elsif exec_config = service_config[:exec] then
       # Which kind of exec mode?
-      case exec_config_mode = exec_config["mode"]
-      when "one-shot" then return OneShotExecIdeService.new(config: exec_config)
+      case exec_config_mode = exec_config[:mode]
+      when "one_shot" then return OneShotExecIdeService.new(config: exec_config)
       else raise IdeServiceError, "Unkown IDE exec mode \"#{exec_config_mode}\""
       end
     # No known mode
-    else raise IdeServiceError, "Unkown general IDE-service configuration"
+    else
+      raise IdeServiceError, "Unkown general IDE-service configuration"
     end
   end
 

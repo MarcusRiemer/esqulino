@@ -2,9 +2,6 @@ require 'rails_helper'
 require 'sqlite3'
 require 'tempfile'
 
-require_dependency 'schema'
-require_dependency 'schema_utils'
-
 RSpec.describe "Database Schema" do
   SCHEMA_SEQUENCE_DB = <<~EOS
     BEGIN TRANSACTION;
@@ -21,15 +18,15 @@ RSpec.describe "Database Schema" do
       );
     COMMIT;
   EOS
-  
+
   describe "sqlite3" do
     it 'sequence_db' do
-      db = sqlite_open_augmented(':memory:')
+      db = SchemaTools::sqlite_open_augmented(':memory:')
       db.default_temp_store = 'memory'
       db.journal_mode = 'memory'
       db.execute_batch(SCHEMA_SEQUENCE_DB)
 
-      schema = database_describe_schema(db)
+      schema = SchemaTools::database_describe_schema(db)
 
       expect(schema.size).to eq 2
       expect(schema[0].name).to eq "english_numbers"

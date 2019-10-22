@@ -27,7 +27,7 @@ class PasswordIdentity < Identity
 
   # Creates a password identity with the given hash and user
   # The auth hash is split into two different jsonb attributes
-  # provider_data 
+  # provider_data
   def self.create_with_auth(auth, user)
     new(
       :user => user,
@@ -116,7 +116,7 @@ class PasswordIdentity < Identity
     identities.each do |identity|
       identity.password = password
       if (identity.invalid?) then
-        raise EsqulinoError.new(identity.errors.full_messages[0])
+        raise EsqulinoError::Base.new(identity.errors.full_messages[0])
       end
       identity.save!
     end
@@ -145,7 +145,7 @@ class PasswordIdentity < Identity
     begin
       if (not self.password_eql?(permited_params[:new_password])) then
         if (not self.password_eql?(permited_params[:current_password])) then
-          raise EsqulinoError.new("current password is wrong.")
+          raise EsqulinoError::Base.new("current password is wrong.")
         end
 
         self.set_all_passwords(permited_params[:new_password])

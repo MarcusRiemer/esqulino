@@ -1,5 +1,3 @@
-require_dependency 'util'
-
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   # List all existing grammars
@@ -11,7 +9,7 @@ class GrammarsController < ApplicationController
   def show
     needle = id_params[:id]
 
-    grammar = if (string_is_uuid? needle) then
+    grammar = if (BlattwerkzeugUtil::string_is_uuid? needle) then
                 Grammar.find(needle)
               else
                 Grammar.find_by! slug: needle

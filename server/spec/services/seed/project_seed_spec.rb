@@ -3,7 +3,7 @@ require "securerandom" # To make up unique slugs on the fly
 require "fileutils"    # To ease file comparision
 
 RSpec.describe Seed::ProjectSeed do
-  let(:seed_data_dir) { Rails.configuration.sqlino["seed"]["data_dir"] }
+  let(:seed_data_dir) { Rails.configuration.sqlino[:seed][:data_dir] }
   let(:project) { FactoryBot.create(:project, name: "Test Proejct") }
   let(:payload) { project }
 

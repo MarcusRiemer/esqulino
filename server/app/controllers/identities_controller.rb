@@ -3,7 +3,7 @@
 class IdentitiesController < ApplicationController
   include UserHelper
   include LocaleHelper
-  
+
   # Responds with all linked identities
   def show
     if signed_in?
@@ -32,7 +32,7 @@ class IdentitiesController < ApplicationController
 
     identity.set_reset_token_expired
     identity.save!
-    
+
     # Sets passwords of all linked password identities
     identity.set_all_passwords(permited_params[:password])
     api_response(user_information)
@@ -72,7 +72,7 @@ class IdentitiesController < ApplicationController
     api_response(user_information)
   end
 
-  # Confirms a password identity 
+  # Confirms a password identity
   def email_confirmation
     permited_params = email_confirmation_params
     identity = PasswordIdentity.find_by_verify_token(permited_params[:verify_token])
@@ -92,16 +92,12 @@ class IdentitiesController < ApplicationController
   def change_password
     ensure_is_logged_in do
       identity = PasswordIdentity.find_by(user_id: current_user.id, provider: 'identity')
-      begin
-        if identity then
-          permited_params = change_password_params
-          identity.change_password(permited_params)
-          api_response(user_information)
-        else
-          raise EsqulinoError.new("no available identity found")
-        end
-      rescue => e
-        error_response(e.message)
+      if identity then
+        permited_params = change_password_params
+        identity.change_password(permited_params)
+        api_response(user_information)
+      else
+        raise EsqulinoError.new("no available identity found")
       end
     end
   end
@@ -121,13 +117,13 @@ class IdentitiesController < ApplicationController
       if (all_identities.count <= 1 && identity.confirmed?) then
         return error_response("You need more than one confirmed e-mail.")
       end
-  
-      # If the email to be deleted is the current primary email and 
+
+      # If the email to be deleted is the current primary email and
       # no more identities with the same email existing return.
       if (current_user.email.eql? identity.email) and (all_identities.filter { |m| current_user.email.eql? m }.length <= 1) then
         return error_response("You can't delete the primary e-mail.")
       end
-     
+
       # Checks if the identity to be deleted has the same
       # user_id as the logged in user
       if (not identity.user_id.eql? current_user.id) then

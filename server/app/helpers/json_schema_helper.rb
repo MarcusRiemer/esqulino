@@ -26,7 +26,7 @@ module JsonSchemaHelper
     result = self.json_schema_validate(schema_name, body)
 
     if result.length > 0 then
-      raise InvalidSchemaError.new(schema_name, result)
+      raise EsqulinoError::InvalidSchema.new(schema_name, result)
     else
       # All keys should be in "snake_case"
       return body.transform_keys { |k| k.underscore }

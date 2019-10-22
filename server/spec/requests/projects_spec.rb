@@ -12,7 +12,7 @@ RSpec.describe ProjectsController, type: :request do
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)
-        expect(response.content_type).to eq "application/json"
+        expect(response.media_type).to eq "application/json"
 
         created_project = Project.find_by(slug: "test")
         expect(created_project.name).to eq "Some project"
@@ -90,7 +90,7 @@ RSpec.describe ProjectsController, type: :request do
       it 'updates only the description' do
         put "/api/project/#{project.slug}",
             params: { "apiVersion" => 4, "description" => "Only" }
-  
+
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
         json_data = JSON.parse(response.body)
@@ -175,7 +175,7 @@ RSpec.describe ProjectsController, type: :request do
                 { "id" => use_added_block_language.id, "blockLanguageId": new_block_language.id }
               ]
             }
-  
+
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
         json_data = JSON.parse(response.body)

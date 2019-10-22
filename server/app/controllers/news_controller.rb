@@ -95,7 +95,7 @@ class NewsController < ApplicationController
   def parse_date(date_str)
     Date.parse(date_str)
   rescue ArgumentError => e
-    raise EsqulinoError.new("Invalid date #{date_str}", 400)
+    raise EsqulinoError::Base.new("Invalid date #{date_str}", 400)
   end
 
   # Appends current_user to a hash

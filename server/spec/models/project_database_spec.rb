@@ -159,7 +159,7 @@ RSpec.describe ProjectDatabase, type: :model do
     it 'deleting a nonexistant table' do
       @db = FactoryBot.build(:in_memory_project_database)
 
-      expect { @db.table_delete('nonexistant') }.to raise_exception(UnknownDatabaseTableError)
+      expect { @db.table_delete('nonexistant') }.to raise_exception(EsqulinoError::UnknownDatabaseTable)
     end
 
     it 'creating a duplicate table' do
@@ -411,7 +411,7 @@ RSpec.describe ProjectDatabase, type: :model do
             ['1', 'eins'],
           ]
         )
-      end.to raise_exception UnknownDatabaseTableError
+      end.to raise_exception EsqulinoError::UnknownDatabaseTable
     end
 
     it 'more data columns then actual columns' do
@@ -423,7 +423,7 @@ RSpec.describe ProjectDatabase, type: :model do
             ['1', 'eins', 'error_too_much'],
           ]
         )
-      end.to raise_exception DatabaseQueryError
+      end.to raise_exception EsqulinoError::DatabaseQuery
     end
 
     it 'less data columns then actual columns' do
@@ -435,7 +435,7 @@ RSpec.describe ProjectDatabase, type: :model do
             ['error_not_enough'],
           ]
         )
-      end.to raise_exception DatabaseQueryError
+      end.to raise_exception EsqulinoError::DatabaseQuery
     end
   end
 

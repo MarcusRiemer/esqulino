@@ -1,4 +1,3 @@
-
 require 'rails_helper'
 
 RSpec.describe "auth controller" do
@@ -74,7 +73,7 @@ RSpec.describe "auth controller" do
         set_access_token_with_invalid_user()
 
         get '/api/auth/developer/callback'
-        expect(response.status).to eq(500)
+        expect(response.status).to eq(404)
       end
 
       it "moved to sign in" do
@@ -85,7 +84,7 @@ RSpec.describe "auth controller" do
         aggregate_failures "response" do
           expect(response.status).to eq(500)
           expect(json_data["message"]).to eq("Signature has expired")
-          expect(json_data["type"]).to eq("AccessTokenError")
+          expect(json_data["type"]).to eq("EsqulinoError::AccessToken")
         end
       end
     end

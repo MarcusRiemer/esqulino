@@ -31,7 +31,7 @@ class CodeResourcesController < ApplicationController
       update_params["ast"] ||= nil
     end
 
-    if resource.update_attributes(update_params)
+    if resource.update(update_params)
       render :json => resource, :status => 200
     else
       render :json => { 'errors' => resource.errors }, :status => 400

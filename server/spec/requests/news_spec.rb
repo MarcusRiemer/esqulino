@@ -207,7 +207,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       news_params = news.api_attributes.merge({ "publishedFrom" => nil })
 
-      set_access_token(news.user)  
+      set_access_token(news.user)
 
       put "/api/news/#{news.id}",
           :headers => json_headers,

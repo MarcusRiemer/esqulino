@@ -1,5 +1,3 @@
-require_dependency 'error'
-
 # A news with a title and some text. May be published on a certain
 # date and is multilingual.
 class News < ApplicationRecord
@@ -21,7 +19,7 @@ class News < ApplicationRecord
   #
   # @param language [String] A valid language that is hopefully stored with the news
   scope :scope_single_language, -> (language) {
-    raise EsqulinoMessageError.new("Invalid language: #{language}") unless LocaleHelper.allowed_languages_s.include? language
+    raise EsqulinoError::Base.new("Invalid language: #{language}") unless LocaleHelper.allowed_languages_s.include? language
 
      where("title->? != '' AND text->? != ''", language, language)
     .where("published_from <= ?", Date.today)
@@ -65,7 +63,7 @@ class News < ApplicationRecord
   # Asserts that the given languages are part of the text
   def assert_languages(languages)
     if (!languages.all? { |entry| self.text.key? entry })
-      raise EsqulinoMessageError.new("A language in your array wasn't found")
+      raise EsqulinoError::Base.new("A language in your array wasn't found")
     end
   end
 

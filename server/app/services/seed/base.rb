@@ -1,15 +1,13 @@
 TEST_ENV = Rails.env == "test"
 
 module Seed
-  require_dependency "util"
-
   class Base
     # Global indentation level for log output
     @@indent = 0
 
     # base seed class as a parent class designed as a service to store and load seed classes with all the supported methods
     # BASE_SEED_DIRECTORY is a autoloaded pathe defined in sqlino.yaml in the config
-    BASE_SEED_DIRECTORY = Rails.configuration.sqlino["seed"]["data_dir"]
+    BASE_SEED_DIRECTORY = Rails.configuration.sqlino[:seed][:data_dir]
 
     attr_reader :seed_id, :dependencies
 
@@ -68,7 +66,7 @@ module Seed
     # if load_seed_id is neither a UUID nor a slug `find_load_seed_id` simply returns the provided seed_id during construction
     def load_id
       if load_seed_id
-        if string_is_uuid? load_seed_id.to_s
+        if BlattwerkzeugUtil::string_is_uuid? load_seed_id.to_s
           load_seed_id.to_s
         else
           find_load_seed_id(load_seed_id.to_s)
