@@ -49,3 +49,6 @@ export interface PasswordTokenDescription {
   token: string;
 }
 
+export function isUserResponse(obj: any): obj is UserDescription {
+  return obj && 'userId' in obj;
+}

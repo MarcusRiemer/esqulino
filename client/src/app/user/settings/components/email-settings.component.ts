@@ -17,7 +17,7 @@ export class EmailSettingsComponent {
   };
 
   // All linked identities
-  public identities$ = this._userService.identities$;
+  public identities = this._userService.identities;
 
   public get primaryEmail(): string {
     return this._primaryEmailData.primaryEmail;

@@ -1,27 +1,34 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, Optional, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 import { UserService } from "./../../../shared/auth/user.service";
 import { UserAddEmailDescription } from "./../../../shared/auth/user.description";
-import { ServerProviderDescription } from "./../../../shared/auth/provider.description";
+import { ServerProviderDescription, ProviderDescription } from "./../../../shared/auth/provider.description";
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 @Component({
   templateUrl: "./templates/add-email-dialog.html"
 })
-export class AddEmailDialogComponent {
+export class AddEmailDialogComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ServerProviderDescription,
+    @Optional()
+    @Inject(MAT_DIALOG_DATA) public data: Observable<ServerProviderDescription>,
     private dialogRef: MatDialogRef<AddEmailDialogComponent>,
     private _userService: UserService
   ) {}
 
-  // Passed linked indentities
-  private identities = this.data;
-
+  public identities: ServerProviderDescription;
   public passwordConfirmation: string;
   public newEmailData: UserAddEmailDescription = {
     email: undefined,
     password: undefined
   };
+
+  ngOnInit(): void {
+    this._userService.identities.value
+      .pipe(first())
+      .subscribe(v => this.identities = v)
+  }
 
   /**
    * Triggers the addition of a new password identity
@@ -39,7 +46,7 @@ export class AddEmailDialogComponent {
   /**
    * Is a password identity linked to the current user
    */
-  public existsPasswordIdentity(): boolean {
-    return this.identities.providers.some(v => v.type == "PasswordIdentity");
+  public existsPasswordIdentity(identities: ProviderDescription[]): boolean {
+    return identities.some(v => v.type == "PasswordIdentity");
   }
 }

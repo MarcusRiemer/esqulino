@@ -19,7 +19,7 @@ export class UserButtonsComponent {
   /**
    * Der aktuelle display-name eines Benutzers
    */
-  readonly userDisplayName$ = this._userService.userDisplayName$;
+  public userDisplayName$ = this._userService.userDisplayName$;
 
   /**
    * Opens a dialog for sign in or sign up
@@ -27,7 +27,7 @@ export class UserButtonsComponent {
    */
   public openDialog(type: "signIn" | "signUp"): void {
     AuthDialogComponent.showDialog(this._dialog, { type: type });
-    // If youre on the base url and your loggin in, the dialog will be closed
+    // If youre on the base url and your loggin in, the dialog will be closed#
     this._userService.isLoggedIn$
       .pipe(first())
       .subscribe(loggedIn => {
@@ -43,6 +43,7 @@ export class UserButtonsComponent {
   public onLogout(): void {
     this._userService
       .logout$()
+      .pipe(first())
       .subscribe(_ => {
         this._router.navigate(["/"]);
       });
