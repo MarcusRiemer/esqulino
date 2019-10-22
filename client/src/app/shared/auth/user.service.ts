@@ -22,7 +22,7 @@ export class UserService {
     private _serverData: ServerDataService,
     private _snackBar: MatSnackBar,
     private _matDialog: MatDialog
-  ) { 
+  ) {
     this._serverData.getUserData.value.subscribe(
       serverUserData => this._cachedUserData.next(serverUserData)
     )
@@ -45,7 +45,7 @@ export class UserService {
   public userWasLoggedOut$ = this._userWasLoggedOut$.asObservable();
   public userData$ = this._cachedUserData.asObservable()
     .pipe(filter(u => !!u));
-  
+
   public identities = this._serverData.getIdentities;
   public providerList = this._serverData.getProviders;
 
@@ -66,7 +66,7 @@ export class UserService {
    */
   public readonly userDisplayName$ = this.userData$.pipe(
     // Error value if something breaks down horribly (server error, network outage, ...).
-    catchError(_ => of({displayName: "userDisplayName: Unknown Error"})),
+    catchError(_ => of({ displayName: "userDisplayName: Unknown Error" })),
     map(u => u.displayName),
   )
 
@@ -74,7 +74,7 @@ export class UserService {
    * @return The ID of the currently authenticated user
    */
   public readonly userId$ = this.userData$.pipe(
-    catchError(_ => of({userId: UserService.GUEST_ID})),
+    catchError(_ => of({ userId: UserService.GUEST_ID })),
     map(u => u.userId),
     // Assume guest id if something breaks down horribly (server error, network outage, ...).
   );
@@ -89,7 +89,7 @@ export class UserService {
 
   public readonly roles$ = this.userData$.pipe(
     // Assume guest ID if something breaks down horribly (server error, network outage, ...).
-    catchError(_ => of({roles: ["guest"]})),
+    catchError(_ => of({ roles: ["guest"] })),
     map(u => u.roles),
   )
 
@@ -231,14 +231,14 @@ export class UserService {
   /**
    * Log out a logged in user
    */
-  public logout$(): Observable<UserDescription> {
-    this._logoutInProgess = true;
-    return this.catchedError$(this._serverData.logout$()).pipe(
-      tap(_ => {
-        this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
-      }),
-      finalize(() => this._logoutInProgess = false)
-    )
+  public async logout() {
+    try {
+      this._logoutInProgess = true;
+      await this._serverData.logout();
+      this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
+    } finally {
+      this._logoutInProgess = false
+    }
   }
 
   public loggedOutDialog(): Observable<any> {

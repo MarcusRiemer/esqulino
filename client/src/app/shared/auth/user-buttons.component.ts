@@ -40,12 +40,8 @@ export class UserButtonsComponent {
   /**
    * Sends a delete request and navigates back to the base url
    */
-  public onLogout(): void {
-    this._userService
-      .logout$()
-      .pipe(first())
-      .subscribe(_ => {
-        this._router.navigate(["/"]);
-      });
+  public async onLogout() {
+    await this._userService.logout();
+    this._router.navigate(["/"]);
   }
 }

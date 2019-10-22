@@ -1,9 +1,9 @@
-import { ServerProviderDescription } from './provider.description';
-import { MatSnackBar, MatDialogModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBar, MatSnackBarModule, MatDialogModule } from '@angular/material';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { first } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 import { UserDescription } from './user.description';
@@ -14,7 +14,7 @@ function mkUserResponse(displayName: string): UserDescription {
   return ({
     userId: "a",
     displayName: displayName,
-    roles: ["guest"],
+    roles: ["user"],
     email: "hans@wurst.de."
   });
 }
@@ -34,6 +34,8 @@ describe(`UserService`, () => {
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
+        MatSnackBarModule,
+        NoopAnimationsModule,
       ],
       providers: [
         ServerDataService,
@@ -47,17 +49,47 @@ describe(`UserService`, () => {
     return (TestBed.get(UserService));
   }
 
+  it(`default user data`, () => {
+    const service = instantiate();
 
-  it('userData', () => {
+    service.userData$
+      .pipe(first())
+      .subscribe(_ => fail("No request made, therefore no user data should be provided"))
+  });
+
+
+  it('user data after guest response', () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
-    const userData = mkUserResponse("Guest");
+    const userData = mkGuestResponse();
+
+    service.userData$
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(userData));
 
     service.userDisplayName$
       .pipe(first())
       .subscribe(u => expect(u).toEqual(userData.displayName))
-    
+
+    service.userId$
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(userData.userId));
+
+    httpTestingController.expectOne(serverApi.getUserDataUrl())
+      .flush(userData);
+  })
+
+  it('user data after proper user response', () => {
+    const service = instantiate();
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const userData = mkUserResponse("Tom");
+
+    service.userDisplayName$
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(userData.displayName))
+
     service.userData$
       .pipe(first())
       .subscribe(u => expect(u).toEqual(userData));
@@ -68,25 +100,61 @@ describe(`UserService`, () => {
 
     httpTestingController.expectOne(serverApi.getUserDataUrl())
       .flush(userData);
-    
   })
 
-  // it('userData empty', () => {
-  //   const service = instantiate();
-  //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-  //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
+  it('user data after logout', async () => {
+    const service = instantiate();
 
-  //   service.userDisplayName$
-  //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(""))
+    let numCalls = 0;
 
-  //   service.userId$
-  //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(""));
+    // First call after simulated login
+    service.userData$
+      .pipe(
+        first(),
+        tap(_ => numCalls++)
+      ).subscribe(_ => expect(numCalls).withContext("Live").toEqual(1));
 
-  //   httpTestingController.expectOne(serverApi.getUserDataUrl())
-  //     .flush(undefined);
-  // })
+    const userData = mkUserResponse("Tom");
+
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    httpTestingController.expectOne(serverApi.getUserDataUrl())
+      .flush(userData);
+
+    // Second and third call after simulated logout
+    service.userData$
+      .pipe(
+        tap(_ => numCalls++)
+      ).subscribe(_ => expect(numCalls).withContext("Cache and Update").toBeGreaterThan(1));
+
+    const logoutComplete = service.logout();
+
+    httpTestingController.expectOne(serverApi.getSignOutUrl())
+      .flush("");
+
+    await logoutComplete;
+
+    expect(numCalls)
+      .withContext("Live call, Cache call, Update call (logged out)")
+      .toEqual(3);
+  })
+
+  it('userData empty', () => {
+    const service = instantiate();
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+
+    service.userDisplayName$
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(""))
+
+    service.userId$
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(""));
+
+    httpTestingController.expectOne(serverApi.getUserDataUrl())
+      .flush("");
+  })
 
   // fit('identities', () => {
   //   const service = instantiate();
@@ -96,7 +164,7 @@ describe(`UserService`, () => {
   //   service.userDisplayName$
   //     .pipe(first())
   //     .subscribe(u => expect(u).toEqual(userData.displayName))
-    
+
   //   service.userData$
   //     .pipe(first())
   //     .subscribe(u => expect(u).toEqual(userData));
@@ -107,7 +175,7 @@ describe(`UserService`, () => {
 
   //   httpTestingController.expectOne(serverApi.getUserDataUrl())
   //     .flush(userData);
-    
+
   // })
 
   // fit('isLoggedIn Observable', async () => {
@@ -117,7 +185,7 @@ describe(`UserService`, () => {
   //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
   //   const isLoggedIn = await service.isLoggedIn$.pipe(first()).toPromise();
-      
+
   //   httpTestingController.expectOne(serverApi.getUserDataUrl())
   // })
 
@@ -130,7 +198,7 @@ describe(`UserService`, () => {
 
   //   service.userDisplayName$.pipe(first())
   //     .subscribe(v => expect(typeof v === 'string'))
-   
+
   //   httpTestingController.expectOne(serverApi.getUserDataUrl())
   // })
 
@@ -145,10 +213,10 @@ describe(`UserService`, () => {
   //       _ => fail("Request must fail"),
   //       (err: HttpErrorResponse) => expect(err.status).toEqual(404)
   //     )
-  
+
   //     httpTestingController.expectOne(serverApi.getUserDataUrl())
   //       .flush("", { status: 404, statusText: "Not found" });
-   
+
   // })
   // fit('userDisplayName Observable', async (done) => {
   //   const service = instantiate();
@@ -159,7 +227,7 @@ describe(`UserService`, () => {
   //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
   //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
-   
+
   //   httpTestingController.expectOne(serverApi.getUserDataUrl())
   //   return
   // })

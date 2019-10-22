@@ -83,8 +83,10 @@ export class ServerDataService {
   /**
    * Logging out a user
    */
-  logout$(): Observable<UserDescription> {
-    return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl());
+  logout(): Promise<UserDescription> {
+    return this._http.delete<UserDescription>(this._serverApi.getSignOutUrl())
+      .pipe(first())
+      .toPromise();
   }
 
   /**
