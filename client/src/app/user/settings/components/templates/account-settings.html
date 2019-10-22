@@ -1,13 +1,33 @@
 <div class="account-settings general">
-  <change-username></change-username>
+  <may-perform
+    [payload]="performData.changeUsername">
 
-  <email-settings></email-settings>
+    <change-username></change-username>
+  </may-perform>
 
-  <change-password></change-password>
+  <may-perform
+    [payload]="performData.changePrimaryEmail">
 
-  <display-all-linked-providers></display-all-linked-providers>
+    <email-settings></email-settings>
+  </may-perform>
 
-  <provider-linking *ngIf="(identities$.value | async) as identities"
-                    (trigger)="onTrigger()">
-  </provider-linking>
+  <may-perform
+    [payload]="performData.changePassword">
+
+    <change-password></change-password>
+  </may-perform>
+
+  <may-perform
+    [payload]="performData.displayLinkedProviders">
+
+    <display-all-linked-providers></display-all-linked-providers>
+  </may-perform>
+
+  <may-perform
+    [payload]="performData.availableProviders">
+
+    <provider-linking *ngIf="(identities.value | async) as identities"
+                      (trigger)="onTrigger()">
+    </provider-linking>
+  </may-perform>
 </div>

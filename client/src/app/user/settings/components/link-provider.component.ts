@@ -12,7 +12,7 @@ export class ProviderLinkingComponent {
     private _userService: UserService
   ) { }
 
-  readonly providers = this._userService.providerList$;
+  readonly providers = this._userService.providerList;
   
   public onTrigger(): void {
     this.trigger.emit()
