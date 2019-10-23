@@ -32,16 +32,6 @@ class ApplicationRecord < ActiveRecord::Base
     to_return.transform_keys { |k| k.camelize(:lower) }
   end
 
-  # This method is a more or less nasty hack to provide identifying
-  # attributes for the SeedManager.
-  def key_search_attributes
-    if not self.class.primary_key.nil? then
-      { self.class.primary_key => self.attributes[self.class.primary_key] }
-    else
-      raise RuntimeError.new ("Searching for keys requires a PK")
-    end
-  end
-
   # Some models can show a "nice" identification string when prompted to
   # do so (they might have a name or a slug), but the id itself is always
   # fine as a baseline.
