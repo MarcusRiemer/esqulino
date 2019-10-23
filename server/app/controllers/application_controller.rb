@@ -28,7 +28,7 @@ class ApplicationController < ActionController::API
     # representation than pure JSON.
     if exception.is_a? EsqulinoError::Message then
       @exception = exception
-      @admin_mail = Rails.configuration.sqlino["mail"]["admin"]
+      @admin_mail = Rails.configuration.sqlino[:mail][:admin]
 
       render status: @exception.code,
              template: "static_files/message_error",

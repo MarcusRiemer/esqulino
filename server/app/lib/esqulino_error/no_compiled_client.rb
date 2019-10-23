@@ -13,5 +13,4 @@ module EsqulinoError
       { "indexHtmlPath" => @index_html_path  }
     end
   end
-
 end
