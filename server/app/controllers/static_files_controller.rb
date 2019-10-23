@@ -26,7 +26,7 @@ class StaticFilesController < ApplicationController
       if requested_path.empty? or not File.exists? local_path then
         local_path = basepath.join(request_locale, 'index.html')
 
-        raise NoCompiledClientError.new(local_path) unless File.exists? local_path
+        raise EsqulinoError::NoCompiledClient.new(local_path) unless File.exists? local_path
       end
 
       send_file local_path, disposition: 'inline'
