@@ -57,7 +57,7 @@ RSpec.describe "user controller" do
 
       expect(response.status).to eq(200)
 
-      updated_identity = Identity.find_by(id: identity2.id)
+      updated_identity = Identity::Identity.find_by(id: identity2.id)
 
       get "/api/user/change_primary_email/#{updated_identity.change_primary_email_token}"
       expect(User.find(identity.user_id).email).to eq(identity2.uid)
@@ -149,7 +149,7 @@ RSpec.describe "user controller" do
             primaryEmail: identity2.uid
           }.to_json
 
-        expired = Identity.find_by(uid: identity2.uid)
+        expired = Identity::Identity.find_by(uid: identity2.uid)
         expired.set_primary_email_token_expired
         expired.save!
 

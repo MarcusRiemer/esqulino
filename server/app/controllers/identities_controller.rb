@@ -13,13 +13,13 @@ class IdentitiesController < ApplicationController
 
   # Responds with all available providers
   def list
-    api_array_response(Identity.all_client_information)
+    api_array_response(Identity::Identity.all_client_information)
   end
 
   # Resets the passwords of a specific user.
   def reset_password
     permited_params = reset_password_params
-    identity = PasswordIdentity.find_by_password_reset_token(permited_params[:token])
+    identity = Identity::Password.find_by_password_reset_token(permited_params[:token])
                                .first
 
     if (not identity)
@@ -40,7 +40,7 @@ class IdentitiesController < ApplicationController
 
   # Sends a password reset mail
   def reset_password_mail
-    identity = PasswordIdentity.find_by(uid: email_permit_param[:email])
+    identity = Identity::Password.find_by(uid: email_permit_param[:email])
     if (identity) then
       identity.set_reset_token
       identity.save!
@@ -52,7 +52,7 @@ class IdentitiesController < ApplicationController
 
   # Used to send a new verification email
   def send_verify_email
-    identity = PasswordIdentity.find_by(uid: email_permit_param[:email])
+    identity = Identity::Password.find_by(uid: email_permit_param[:email])
     if (not identity) then
       return error_response("e-mail not found")
     end
@@ -75,7 +75,7 @@ class IdentitiesController < ApplicationController
   # Confirms a password identity
   def email_confirmation
     permited_params = email_confirmation_params
-    identity = PasswordIdentity.find_by_verify_token(permited_params[:verify_token])
+    identity = Identity::Password.find_by_verify_token(permited_params[:verify_token])
                                .first
 
     # identity found and not confirmed
@@ -91,7 +91,7 @@ class IdentitiesController < ApplicationController
   # Changes passwords of all password identities
   def change_password
     ensure_is_logged_in do
-      identity = PasswordIdentity.find_by(user_id: current_user.id, provider: 'identity')
+      identity = Identity::Password.find_by(user_id: current_user.id, provider: 'identity')
       if identity then
         permited_params = change_password_params
         identity.change_password(permited_params)
@@ -106,7 +106,7 @@ class IdentitiesController < ApplicationController
   def destroy
     ensure_is_logged_in do
       permited_params = delete_identity_params
-      identity = Identity.where(id: permited_params[:id]).first
+      identity = Identity::Identity.where(id: permited_params[:id]).first
 
       if (not identity) then
         return error_response("There exist no identity with this email.")
