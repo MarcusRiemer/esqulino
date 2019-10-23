@@ -1,4 +1,3 @@
-
 require 'rails_helper'
 
 RSpec.describe "identities controller" do
@@ -8,7 +7,7 @@ RSpec.describe "identities controller" do
 
   it "saving password as hash" do
     identity = create(:identity_provider, :new, password: "1234567")
-    expect(PasswordIdentity.all.first.password_eql?("1234567")).to be_truthy
+    expect(Identity::Password.all.first.password_eql?("1234567")).to be_truthy
   end
 
   describe "listing response" do
@@ -30,9 +29,9 @@ RSpec.describe "identities controller" do
       aggregate_failures "response validation" do
         expect(json_response).to validate_against "ServerProviderDescription"
         expect(json_response["primary"]).to eq(identity.user.email)
-        expect(provider_list.include? "PasswordIdentity").to be_truthy
-        expect(provider_list.include? "Google").to be_truthy
-        expect(provider_list.include? "Developer").to be_truthy
+        expect(provider_list.include? "Identity::Password").to be_truthy
+        expect(provider_list.include? "Identity::Google").to be_truthy
+        expect(provider_list.include? "Identity::Developer").to be_truthy
       end
     end
 
@@ -50,7 +49,7 @@ RSpec.describe "identities controller" do
     it "valid" do
       expect(identity.confirmed?).to eq(false)
       get "/api/identities/confirmation/#{identity.verify_token}"
-      expect(Identity.find(identity.id).confirmed?).to eq(true)
+      expect(Identity::Identity.find(identity.id).confirmed?).to eq(true)
     end
 
     it "e-mail confirmation with wrong token" do
@@ -58,7 +57,7 @@ RSpec.describe "identities controller" do
 
       expect(confirmed).to eq(false)
       get "/api/identities/confirmation/123121212"
-      expect(Identity.find(identity.id).confirmed?).to eq(false)
+      expect(Identity::Identity.find(identity.id).confirmed?).to eq(false)
     end
   end
 
@@ -76,7 +75,7 @@ RSpec.describe "identities controller" do
             newPassword: "newPassword"
           }.to_json
 
-        expect(PasswordIdentity.all.first.password_eql?("newPassword"))
+        expect(Identity::Password.all.first.password_eql?("newPassword"))
       end
 
       it "all identities with password" do
@@ -90,9 +89,9 @@ RSpec.describe "identities controller" do
             newPassword: "newPassword"
           }.to_json
 
-        expect(Identity.all.count).to eq(2)
-        expect(PasswordIdentity.all.first.password_eql?("newPassword"))
-        expect(PasswordIdentity.all.last.password_eql?("newPassword"))
+        expect(Identity::Password.all.count).to eq(2)
+        expect(Identity::Password.all.first.password_eql?("newPassword"))
+        expect(Identity::Password.all.last.password_eql?("newPassword"))
       end
     end
 
@@ -107,7 +106,7 @@ RSpec.describe "identities controller" do
             newPassword: "newPassword"
           }.to_json
 
-        expect(PasswordIdentity.all.first.password).to eq(identity.password)
+        expect(Identity::Password.all.first.password).to eq(identity.password)
       end
 
       it "new password" do
@@ -122,7 +121,7 @@ RSpec.describe "identities controller" do
 
         json_data = JSON.parse(response.body)
 
-        expect(PasswordIdentity.all.first.password_eql?("12345")).to be_falsey
+        expect(Identity::Password.all.first.password_eql?("12345")).to be_falsey
         expect(json_data["message"]).to eq("Password is too short (minimum is 6 characters)")
       end
     end
@@ -143,11 +142,11 @@ RSpec.describe "identities controller" do
       patch "/api/identities/reset_password",
         :headers => json_headers,
         :params => {
-          token: PasswordIdentity.first.password_reset_token,
+          token: Identity::Password.first.password_reset_token,
           password: "reseted_password"
         }.to_json
 
-      expect(PasswordIdentity.all.first.password_eql?("reseted_password")).to be_truthy
+      expect(Identity::Password.all.first.password_eql?("reseted_password")).to be_truthy
     end
 
     context "invalid" do
@@ -208,7 +207,7 @@ RSpec.describe "identities controller" do
       create(:identity_provider, :existing, user_id: identity.user_id)
       set_access_token(identity.user)
 
-      expect(Identity.all.count).to eq(2)
+      expect(Identity::Password.all.count).to eq(2)
 
       delete '/api/identities/delete_identity',
         :headers => json_headers,
@@ -217,7 +216,7 @@ RSpec.describe "identities controller" do
         }.to_json
 
       expect(response.status).to eq(200)
-      expect(Identity.all.count).to eq(1)
+      expect(Identity::Password.all.count).to eq(1)
     end
 
     context "invalid" do
@@ -225,7 +224,7 @@ RSpec.describe "identities controller" do
         create(:identity_provider, :existing)
         set_access_token(identity.user)
 
-        expect(Identity.all.count).to eq(2)
+        expect(Identity::Password.all.count).to eq(2)
 
         delete '/api/identities/delete_identity',
           :headers => json_headers,
@@ -234,14 +233,14 @@ RSpec.describe "identities controller" do
           }.to_json
 
         expect(response.status).to eq(401)
-        expect(Identity.all.count).to eq(2)
+        expect(Identity::Password.all.count).to eq(2)
       end
 
       it "from another user" do
         identity2 = create(:identity_provider, :existing)
         set_access_token(identity2.user)
 
-        expect(Identity.all.count).to eq(2)
+        expect(Identity::Password.all.count).to eq(2)
 
         delete '/api/identities/delete_identity',
           :headers => json_headers,
@@ -250,7 +249,7 @@ RSpec.describe "identities controller" do
           }.to_json
 
         expect(response.status).to eq(401)
-        expect(Identity.all.count).to eq(2)
+        expect(Identity::Password.all.count).to eq(2)
       end
 
       it "passed uid is primary mail" do
@@ -260,7 +259,7 @@ RSpec.describe "identities controller" do
         identity.user.email = identity[:uid]
         identity.user.save!
 
-        expect(Identity.all.count).to eq(2)
+        expect(Identity::Password.all.count).to eq(2)
 
         delete '/api/identities/delete_identity',
           :headers => json_headers,
@@ -269,7 +268,7 @@ RSpec.describe "identities controller" do
           }.to_json
 
         expect(response.status).to eq(401)
-        expect(Identity.all.count).to eq(2)
+        expect(Identity::Password.all.count).to eq(2)
       end
 
       it "only one existing identity" do
@@ -282,7 +281,7 @@ RSpec.describe "identities controller" do
           }.to_json
 
         expect(response.status).to eq(401)
-        expect(Identity.all.count).to eq(1)
+        expect(Identity::Password.all.count).to eq(1)
       end
     end
   end

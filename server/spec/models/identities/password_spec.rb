@@ -1,21 +1,21 @@
 require 'rails_helper'
 require 'bcrypt'
 
-RSpec.describe PasswordIdentity, type: :model do
+RSpec.describe Identity::Password, type: :model do
   it "can't be persisted without parameters" do
-    a = PasswordIdentity.new
+    a = Identity::Password.new
     expect(a.validate).to eq false
   end
 
   it "can't be persisted with only a user" do
     u = create(:user)
-    a = PasswordIdentity.new(user: u)
+    a = Identity::Password.new(user: u)
     expect(a.validate).to eq false
     expect(a.user).to eq u
   end
 
   it "empty stored passwords don't ever match" do
-    a = PasswordIdentity.new
+    a = Identity::Password.new
 
     expect(a.password_eql? nil).to be false
     expect(a.password_eql? "").to be false
@@ -27,7 +27,7 @@ RSpec.describe PasswordIdentity, type: :model do
   end
 
   it "given empty or invalid passwords don't ever match" do
-    a = PasswordIdentity.new(password: "doof")
+    a = Identity::Password.new(password: "doof")
 
     expect(a.password_eql? nil).to be false
     expect(a.password_eql? "").to be false
@@ -39,7 +39,7 @@ RSpec.describe PasswordIdentity, type: :model do
   end
 
   it "can't be persisted with only a password" do
-    a = PasswordIdentity.new(password: "hahasicher")
+    a = Identity::Password.new(password: "hahasicher")
     expect(a.validate).to eq false
     expect(a.password_eql? "hahasicher").to eq true
   end
@@ -47,7 +47,7 @@ RSpec.describe PasswordIdentity, type: :model do
 
   it "can't be persisted with only a user and a valid password" do
     u = create(:user)
-    a = PasswordIdentity.new(user: u, password: "hahasicher")
+    a = Identity::Password.new(user: u, password: "hahasicher")
 
     aggregate_failures "validation" do
       expect(a.validate).to eq false
@@ -58,7 +58,7 @@ RSpec.describe PasswordIdentity, type: :model do
 
   it "can be persisted with required attributes and a valid hashed password" do
     u = create(:user)
-    a = PasswordIdentity.new(user: u, uid: "a@b.de", password: BCrypt::Password.create("hahasicher"))
+    a = Identity::Password.new(user: u, uid: "a@b.de", password: BCrypt::Password.create("hahasicher"))
 
     aggregate_failures "validation" do
       expect(a.valid?).to eq true
@@ -68,12 +68,12 @@ RSpec.describe PasswordIdentity, type: :model do
 
     expect(a.save).to eq true
     expect(a.persisted?).to eq true
-    expect(PasswordIdentity.first).to eq a
+    expect(Identity::Password.first).to eq a
   end
 
   it "can be persisted with required attributes and a valid plaintext password" do
     u = create(:user)
-    a = PasswordIdentity.new(user: u, uid: "a@b.de", password: "hahasicher")
+    a = Identity::Password.new(user: u, uid: "a@b.de", password: "hahasicher")
 
     aggregate_failures "validation" do
       expect(a.valid?).to eq true
@@ -85,7 +85,7 @@ RSpec.describe PasswordIdentity, type: :model do
 
   it "can be persisted with a user and a valid password via data" do
     u = create(:user)
-    a = PasswordIdentity.new(user: u, uid: "a@b.de", own_data: { password: "hahasicher" })
+    a = Identity::Password.new(user: u, uid: "a@b.de", own_data: { password: "hahasicher" })
 
     expect(a.validate).to eq true
     expect(a.password_eql? "hahasicher").to eq true
