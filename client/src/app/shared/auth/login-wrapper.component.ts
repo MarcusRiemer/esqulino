@@ -6,7 +6,7 @@ import { UserService } from './user.service';
   selector: 'is-logged-in',
   templateUrl: './templates/login-wrapper.html'
 })
-export class LoginWrapperComponent implements OnInit {
+export class LoginWrapperComponent {
   constructor(
     private _userData: UserService
   ) {}
@@ -16,14 +16,4 @@ export class LoginWrapperComponent implements OnInit {
    * on the content that is displayed
    */
   readonly isLoggedIn = this._userData.isLoggedIn$
-  private sub: Subscription;
-
-  ngOnInit() {
-    this.sub = this._userData._cachedUserData
-      .subscribe(val => console.log("Subscription: "+ JSON.stringify(val)))
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
 }

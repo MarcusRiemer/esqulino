@@ -41,9 +41,7 @@ export interface UserEmailDescription {
  * This token is used to to reset the password. 
  * The new password will be sent to the server, together with the newly created token. 
  * */
-export type UserPasswordDescription = PasswordTokenDescription;
-
-export interface PasswordTokenDescription {
+export type UserPasswordDescription = {
   password: string;
   confirmedPassword: string;
   token: string;

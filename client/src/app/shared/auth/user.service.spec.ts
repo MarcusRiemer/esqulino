@@ -1,9 +1,10 @@
+import { ServerProviderDescription } from './provider.description';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBar, MatSnackBarModule, MatDialogModule } from '@angular/material';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { first, tap } from 'rxjs/operators';
+import { first, tap, finalize } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 import { UserDescription } from './user.description';
@@ -25,6 +26,19 @@ function mkGuestResponse() {
     displayName: "Guest",
     roles: ["guest"],
     email: null
+  })
+}
+
+function mkIdentitiesResponse(): ServerProviderDescription {
+  return ({
+    providers: [
+      { 
+        id: "121212121212121212", 
+        type: "github", 
+        confirmed: true, 
+        changes: { primary: null }}
+    ],
+    primary: "blattwerkzeug.de"
   })
 }
 
@@ -97,6 +111,14 @@ describe(`UserService`, () => {
     service.userId$
       .pipe(first())
       .subscribe(u => expect(u).toEqual(userData.userId));
+    
+    service.isLoggedIn$
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(true));
+
+    service.roles$
+      .pipe(first())
+      .subscribe(r => expect(r).toEqual(["user"]));
 
     httpTestingController.expectOne(serverApi.getUserDataUrl())
       .flush(userData);
@@ -130,7 +152,7 @@ describe(`UserService`, () => {
     const logoutComplete = service.logout();
 
     httpTestingController.expectOne(serverApi.getSignOutUrl())
-      .flush("");
+      .flush(mkGuestResponse());
 
     await logoutComplete;
 
@@ -139,44 +161,111 @@ describe(`UserService`, () => {
       .toEqual(3);
   })
 
-  it('userData empty', () => {
-    const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
-    service.userDisplayName$
-      .pipe(first())
-      .subscribe(u => expect(u).toEqual(""))
-
-    service.userId$
-      .pipe(first())
-      .subscribe(u => expect(u).toEqual(""));
-
-    httpTestingController.expectOne(serverApi.getUserDataUrl())
-      .flush("");
-  })
-
-  // fit('identities', () => {
+  // it('userData empty', () => {
   //   const service = instantiate();
   //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
   //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
   //   service.userDisplayName$
   //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(userData.displayName))
-
-  //   service.userData$
-  //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(userData));
+  //     .subscribe(u => expect(u).toEqual(""))
 
   //   service.userId$
   //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(userData.userId));
+  //     .subscribe(u => expect(u).toEqual(""));
 
   //   httpTestingController.expectOne(serverApi.getUserDataUrl())
-  //     .flush(userData);
-
+  //     .flush({});
   // })
+
+  it('identities', () => {
+    const service = instantiate();
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const identities = mkIdentitiesResponse();
+
+    service.identities.value
+      .pipe(first())
+      .subscribe(u => expect(u).toEqual(identities))
+
+    service.primaryEmail$
+      .pipe(first())
+      .subscribe(v => expect(v).toEqual(identities.primary))
+    
+    service.providers$
+      .pipe(first())
+      .subscribe(p => expect(p).toEqual(p))
+
+    httpTestingController.expectOne(serverApi.getUserIdentitiesUrl())
+      .flush(identities);
+
+  })
+
+  it('Need to be replaced by a meaningful name', async () => {
+    const service = instantiate();
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const guest = mkGuestResponse();
+    const user = mkUserResponse("Tom");
+    const login = { email: "", username: "", password: "" };
+
+    let callCounter = 0;
+
+    spyOn(window, "alert");
+
+    service.userData$.subscribe(_ => callCounter++)
+
+    const signUp = service.signUp$(login)
+      .pipe(first())
+      .toPromise()
+
+    httpTestingController.expectOne(serverApi.getSignUpUrl())
+      .flush(guest)
+
+    const guestData = await signUp;
+
+    expect(window.alert).toHaveBeenCalledWith("Please confirm your e-mail");
+    expect(guestData).toEqual(guest)
+
+    const signIn = service.signIn$(login)
+      .pipe(first())
+      .toPromise();
+
+    httpTestingController.expectOne(serverApi.getSignInUrl("identity"))
+      .flush(user)
+
+    const userData = await signIn;
+
+    expect(userData).toEqual(user);
+    expect(callCounter).toEqual(2);
+  })
+
+  it('addEmail', async () => {
+    const service = instantiate();
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const identities = mkIdentitiesResponse();
+    const addEmail = { email: "", password: "" }
+
+    let callCounter = 0;
+
+    service.identities.value
+      .subscribe(_ => callCounter++);
+
+    const addEmail$ = service.addEmail$(addEmail)
+      .pipe(first())
+      .toPromise();
+    
+    httpTestingController.expectOne(serverApi.getSignUpUrl())
+      .flush(identities)
+
+    const newIdentities = await addEmail$;
+
+    expect(newIdentities).toEqual(identities)
+    expect(callCounter).toEqual(1);
+  })
+
+
 
   // fit('isLoggedIn Observable', async () => {
   //   const service = instantiate();

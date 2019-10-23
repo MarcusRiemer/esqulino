@@ -1,7 +1,8 @@
-import { Component, Optional, OnInit } from '@angular/core';
+import { Component, Optional, OnInit, OnDestroy } from '@angular/core';
 
 import { Angulartics2Piwik } from 'angulartics2/piwik';
 import { UserService } from './shared/auth/user.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'sql-scratch',
   template: `<router-outlet></router-outlet>`
@@ -19,8 +20,13 @@ export class SqlScratchComponent implements OnInit {
     }
   }
 
+
   ngOnInit(): void {
+    this._userService._cachedUserData
+      .subscribe(val => console.log("Subscription: "+ JSON.stringify(val)))
+
     this._userService.userWasLoggedOut$
       .subscribe(_ => this._userService.loggedOutDialog())
   }
+
 }
