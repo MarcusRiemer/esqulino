@@ -1,6 +1,7 @@
 require 'database_cleaner'
 require 'simplecov'
 require 'simplecov-cobertura'
+require 'webmock/rspec'
 
 RSpec.configure do |config|
   # We want coverage reports
@@ -34,4 +35,6 @@ RSpec.configure do |config|
     config.order = :random
     Kernel.srand config.seed
   end
+
+  WebMock.disable_net_connect!(allow_localhost: true)
 end
