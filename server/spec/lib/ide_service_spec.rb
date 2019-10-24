@@ -25,6 +25,27 @@ RSpec.describe "IDE Service" do
 
       expect(service.emit_code(tree_desc, "sql")).to eq "*"
     end
+
+    it "throws errors on incorrect requests" do
+      service = OneShotExecIdeService.new(config: exec_configuration)
+
+      tree_desc = {
+        "language" => "doesntExist",
+        "name" => "false"
+      }
+
+      expect { service.emit_code(tree_desc, "doesntExist") }.to raise_exception IdeServiceError
+    end
+  end
+
+  context "Mock" do
+    it "doesn't actually execute requests" do
+      service = MockIdeService.new()
+
+      req = { "type" => "ping" }
+
+      expect(service.execute_request(req)).to eq req.to_json
+    end
   end
 
   context "initialization" do
