@@ -1,10 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user) { create(:user, display_name: "Tom") }
-
   it 'creating a user' do
+    user = create(:user, display_name: "Tom")
+
     expect(user.display_name).to eq('Tom')
+    expect(user.readable_identification).to include('Tom')
+    expect(user.readable_identification).to include(user.id)
+  end
+
+  it 'guest behaves as a guest' do
+    create(:user, :guest)
+
+    expect(User.guest.guest?).to eq true
+    expect(User.guest.role_names).to eq ['guest']
   end
 
   describe 'promoting guests to admin' do
@@ -32,6 +41,7 @@ RSpec.describe User, type: :model do
     before { create(:user, id: User.guest_id) }
 
     it 'normal user in development' do
+      user = create(:user)
       expect(user.has_role?(:admin)).to eq false
 
       allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
@@ -41,6 +51,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'normal user in production' do
+      user = create(:user)
       expect(user.has_role?(:admin)).to eq false
 
       allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
