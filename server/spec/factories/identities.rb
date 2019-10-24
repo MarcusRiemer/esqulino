@@ -1,4 +1,3 @@
-
 FactoryBot.define do
 
   factory :identity, class: Identity::Identity do

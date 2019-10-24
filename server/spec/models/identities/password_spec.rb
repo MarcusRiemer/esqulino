@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'bcrypt'
 
 RSpec.describe Identity::Password, type: :model do
   it "can't be persisted without parameters" do
