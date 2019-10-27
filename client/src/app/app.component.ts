@@ -22,10 +22,10 @@ export class SqlScratchComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this._userService._cachedUserData
-      .subscribe(val => console.log("Subscription: "+ JSON.stringify(val)))
+    this._userService.userData$
+      .subscribe(val => console.log("Subscription: ", val))
 
-    this._userService.userWasLoggedOut$
+    this._userService.unexpectedLogout$
       .subscribe(_ => this._userService.loggedOutDialog())
   }
 

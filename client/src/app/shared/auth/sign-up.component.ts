@@ -1,8 +1,9 @@
 import { Component, Output, EventEmitter } from "@angular/core";
 
+import { first } from 'rxjs/operators';
+
 import { UserService } from "./user.service";
 import { SignUpDescription } from "./auth-description";
-
 @Component({
   selector: "sign-up",
   templateUrl: "./templates/sign-up.html"
@@ -57,7 +58,10 @@ export class SignUpComponent {
   public onSignUp(): void {
     if (this.isPasswordEq()) {
       if (!this.isPasswordEmpty()) {
-        this._userService.signUp$(this.signUpData).subscribe()
+        this._userService.signUp$(this.signUpData)
+          .pipe(first())
+          .subscribe()
+
       } else alert("Error: Password can not be empty")
     } else alert("Error: Your passwords do not match")
   }

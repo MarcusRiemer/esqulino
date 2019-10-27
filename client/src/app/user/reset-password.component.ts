@@ -44,13 +44,7 @@ export class ResetPasswordComponent implements AfterViewInit {
    * Resetting password
    */
   public onResetButton(): void {
-    this._userService
-      .resetPassword$(this.resetPasswordData)
-      .subscribe(_ => {
-        this._dialog.closeAll();
-        this._snackBar.open("Password succesfully updated", "", {
-          duration: 3000
-        });
-      });
+    this._userService.resetPassword$(this.resetPasswordData)
+      .subscribe(_ => this._dialog.closeAll());
   }
 }

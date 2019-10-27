@@ -23,14 +23,18 @@ export class UserService {
     private _snackBar: MatSnackBar,
     private _matDialog: MatDialog
   ) {
-    this._serverData.getUserData.value.subscribe(
-      serverUserData => this._cachedUserData.next(serverUserData)
-    )
+    this._serverData.getUserData.value
+      .subscribe(serverUserData =>
+        this._cachedUserData.next(serverUserData)
+      )
   }
 
-  private _logoutInProgess = false;
-  private _userWasLoggedOut$ = new Subject<void>();
-  public _cachedUserData = new BehaviorSubject<UserDescription>(undefined);
+  private _unexpectedLogout$ = new Subject<void>();
+  private _cachedUserData = new BehaviorSubject<UserDescription>(undefined);
+
+  private fireUserData(userData: UserDescription) {
+    this._cachedUserData.next(userData);
+  }
 
   /**
    * Commonly used pipe operators are used in this function
@@ -42,29 +46,22 @@ export class UserService {
     )
   }
 
-  public userWasLoggedOut$ = this._userWasLoggedOut$.asObservable();
-  public userData$ = this._cachedUserData.asObservable()
+  readonly userData$ = this._cachedUserData.asObservable()
     .pipe(filter(u => !!u));
 
-  public identities = this._serverData.getIdentities;
-  public providerList = this._serverData.getProviders;
+  readonly identities = this._serverData.getIdentities;
+  readonly providerList = this._serverData.getProviders;
+  readonly unexpectedLogout$ = this._unexpectedLogout$.asObservable();
 
-  public userWasLoggedOut() {
-    this._userWasLoggedOut$.next();
-  }
-
-  public onUserDataEvent(newUserData: UserDescription) {
-    const oldUserData = this._cachedUserData.value;
-    if (oldUserData && oldUserData.userId !== newUserData.userId && newUserData.userId === UserService.GUEST_ID) {
-      this.userWasLoggedOut();
-    }
+  public onUnexpectedLogout(newUserData: UserDescription) {
+    this._unexpectedLogout$.next();
     this._cachedUserData.next(newUserData);
   }
 
   /**
    * @return The Name of the currently authenticated user
    */
-  public readonly userDisplayName$ = this.userData$.pipe(
+  readonly userDisplayName$ = this.userData$.pipe(
     // Error value if something breaks down horribly (server error, network outage, ...).
     catchError(_ => of({ displayName: "userDisplayName: Unknown Error" })),
     map(u => u.displayName),
@@ -73,7 +70,7 @@ export class UserService {
   /**
    * @return The ID of the currently authenticated user
    */
-  public readonly userId$ = this.userData$.pipe(
+  readonly userId$ = this.userData$.pipe(
     catchError(_ => of({ userId: UserService.GUEST_ID })),
     map(u => u.userId),
     // Assume guest id if something breaks down horribly (server error, network outage, ...).
@@ -83,21 +80,21 @@ export class UserService {
    * Instead of relying on roles, the (seldomly used) check for the login state
    * relies on the guest user ID.
    */
-  public readonly isLoggedIn$ = this.userId$.pipe(
+  readonly isLoggedIn$ = this.userId$.pipe(
     map(id => id !== UserService.GUEST_ID)
   )
 
-  public readonly roles$ = this.userData$.pipe(
+  readonly roles$ = this.userData$.pipe(
     // Assume guest ID if something breaks down horribly (server error, network outage, ...).
     catchError(_ => of({ roles: ["guest"] })),
     map(u => u.roles),
   )
 
-  public readonly primaryEmail$ = this.identities.value.pipe(
+  readonly primaryEmail$ = this.identities.value.pipe(
     map(u => u.primary)
   )
 
-  public readonly providers$ = this.identities.value.pipe(
+  readonly providers$ = this.identities.value.pipe(
     map(u => u.providers)
   )
 
@@ -106,7 +103,7 @@ export class UserService {
    * @param data email, username, password
    */
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
-    return this.catchedError$(this._serverData.signUp$(data)).pipe(
+    return this._serverData.signUp$(data).pipe(
       tap(_ => alert("Please confirm your e-mail"))
     )
   }
@@ -127,7 +124,17 @@ export class UserService {
    * @param data email, password
    */
   public signIn$(data: SignInDescription): Observable<UserDescription> {
-    return this.catchedError$(this._serverData.signIn$(data))
+    return this._serverData.signIn$(data)
+      .pipe(
+        first(),
+        tap(u => {
+          this.fireUserData(u)
+          // If the user has the guest role, he won’t be recognized/identified as “signed in”
+          if (u.userId != UserService.GUEST_ID) {
+            this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
+          }
+        })
+      );
   }
 
   /**
@@ -136,7 +143,13 @@ export class UserService {
    * @param data new password, token to reset a password
    */
   public resetPassword$(data: UserPasswordDescription): Observable<UserDescription | void> {
-    return this.catchedError$(this._serverData.resetPassword$(data))
+    return this._serverData.resetPassword$(data)
+      .pipe(
+        first(),
+        tap(_ =>
+          this._snackBar.open("Password succesfully updated", "", { duration: 3000 })
+        )
+      );
   }
 
   /**
@@ -146,7 +159,10 @@ export class UserService {
   public changeUserName$(data: UserNameDescription) {
     return this._serverData.changeUserName$(data).pipe(
       tap(
-        _ => { this._snackBar.open('Username changed', '', { duration: 3000 }) },
+        u => {
+          this._snackBar.open('Username changed', '', { duration: 3000 });
+          this.fireUserData(u);
+        },
         (err) => console.log(err)
       )
     )
@@ -232,13 +248,9 @@ export class UserService {
    * Log out a logged in user
    */
   public async logout() {
-    try {
-      this._logoutInProgess = true;
-      await this._serverData.logout();
-      this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
-    } finally {
-      this._logoutInProgess = false
-    }
+    const userData = await this._serverData.logout();
+    this.fireUserData(userData);
+    this._snackBar.open('Succesfully logged out', '', { duration: 3000 })
   }
 
   public loggedOutDialog(): Observable<any> {

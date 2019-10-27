@@ -134,8 +134,8 @@ export class ServerDataService {
   /**
    * Changing the current username
    */
-  changeUserName$(data: UserNameDescription): Observable<UserNameDescription> {
-    return this._http.patch<UserNameDescription>(this._serverApi.getChangeUserNameUrl(), data)
+  changeUserName$(data: UserNameDescription): Observable<UserDescription> {
+    return this._http.patch<UserDescription>(this._serverApi.getChangeUserNameUrl(), data)
   }
 
   /**

@@ -36,15 +36,7 @@ export class SignInComponent {
    * Triggert eine HTTP Anfrage für ein sign-in 
    */
   public onSignIn(): void {
-    this._userService
-      .signIn$(this.signInData)
-      .subscribe(
-        user => {
-          // If the user has the guest role, he won’t be recognized/identified as “signed in”
-          if (!user.roles.includes(Roles.Guest)) {
-            this._snackBar.open('Succesfully logged in', '', { duration: 2000 })
-          }
-        },
-      )
+    this._userService.signIn$(this.signInData)
+      .subscribe()
   }
 }

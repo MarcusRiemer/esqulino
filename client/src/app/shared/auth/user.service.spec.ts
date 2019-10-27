@@ -126,7 +126,9 @@ describe(`UserService`, () => {
 
   it('user data after logout', async () => {
     const service = instantiate();
-
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    
     let numCalls = 0;
 
     // First call after simulated login
@@ -136,12 +138,8 @@ describe(`UserService`, () => {
         tap(_ => numCalls++)
       ).subscribe(_ => expect(numCalls).withContext("Live").toEqual(1));
 
-    const userData = mkUserResponse("Tom");
-
-    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
     httpTestingController.expectOne(serverApi.getUserDataUrl())
-      .flush(userData);
+      .flush(mkUserResponse("Tom"));
 
     // Second and third call after simulated logout
     service.userData$
@@ -201,7 +199,7 @@ describe(`UserService`, () => {
 
   })
 
-  it('Need to be replaced by a meaningful name', async () => {
+  fit('Need to be replaced by a meaningful name', async () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
@@ -213,7 +211,9 @@ describe(`UserService`, () => {
 
     spyOn(window, "alert");
 
-    service.userData$.subscribe(_ => callCounter++)
+    service.userData$
+      .pipe(tap(_ => callCounter++))
+      .subscribe();
 
     const signUp = service.signUp$(login)
       .pipe(first())
@@ -223,8 +223,11 @@ describe(`UserService`, () => {
       .flush(guest)
 
     const guestData = await signUp;
-
-    expect(window.alert).toHaveBeenCalledWith("Please confirm your e-mail");
+    
+    expect(callCounter)
+      .withContext("Single Subscription active")
+      .toEqual(0)
+  
     expect(guestData).toEqual(guest)
 
     const signIn = service.signIn$(login)
@@ -237,32 +240,73 @@ describe(`UserService`, () => {
     const userData = await signIn;
 
     expect(userData).toEqual(user);
-    expect(callCounter).toEqual(2);
+    expect(callCounter)
+      .withContext("Update after sign in")
+      .toEqual(1);
   })
 
   it('addEmail', async () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
-    const identities = mkIdentitiesResponse();
+    const user = mkUserResponse("Tom");
     const addEmail = { email: "", password: "" }
 
     let callCounter = 0;
 
     service.identities.value
-      .subscribe(_ => callCounter++);
+      .pipe(finalize(() => callCounter++))
+      .subscribe();
 
-    const addEmail$ = service.addEmail$(addEmail)
+    const test = service.addEmail$(addEmail)
+      .pipe(first())
+      .toPromise()
+    
+    httpTestingController.expectOne(serverApi.getSignUpUrl())
+      .flush(user)
+
+    await test;
+
+    const inProgressSub = service.identities.inProgress.pipe(first()).toPromise()
+    const inProgress = await inProgressSub;
+
+    expect(inProgress).toEqual(true);
+  })
+
+  it('unexpectedLogout', async () => {
+    const service = instantiate();
+    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const user = mkUserResponse("Tom");
+    const guest = mkGuestResponse();
+
+    let callCounter = 0;
+
+    const loggedIn = service.userData$
       .pipe(first())
       .toPromise();
     
-    httpTestingController.expectOne(serverApi.getSignUpUrl())
-      .flush(identities)
+    httpTestingController.expectOne(serverApi.getUserDataUrl())
+      .flush(user);
 
-    const newIdentities = await addEmail$;
+    let data = await loggedIn;
 
-    expect(newIdentities).toEqual(identities)
-    expect(callCounter).toEqual(1);
+    expect(data).toEqual(user)
+    
+    service.unexpectedLogout$
+      .pipe(tap(_ => callCounter++))
+      .subscribe();
+
+    const loggedOut = service.userData$
+      .pipe(first())
+      .toPromise()
+
+    httpTestingController.expectOne(serverApi.getUserDataUrl())
+      .flush(guest);
+
+    data = await loggedOut;
+
+    expect(data).toEqual(guest)
   })
 
 
