@@ -25,7 +25,7 @@ export class AddEmailDialogComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this._userService.identities.value
+    this._userService.identities
       .pipe(first())
       .subscribe(v => this.identities = v)
   }

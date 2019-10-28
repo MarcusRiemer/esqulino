@@ -24,16 +24,23 @@ export class UserService {
     private _matDialog: MatDialog
   ) {
     this._serverData.getUserData.value
-      .subscribe(serverUserData =>
-        this._cachedUserData.next(serverUserData)
-      )
+      .subscribe(u => this.fireUserData(u));
+    
+    this._serverData.getIdentities.value
+      .subscribe(i => this.fireIdentities(i));
   }
 
   private _unexpectedLogout$ = new Subject<void>();
   private _cachedUserData = new BehaviorSubject<UserDescription>(undefined);
+  private _cachedIdentities = new BehaviorSubject<ServerProviderDescription>(undefined);
 
   private fireUserData(userData: UserDescription) {
     this._cachedUserData.next(userData);
+  }
+
+  private fireIdentities(identities: ServerProviderDescription) {
+    console.log(identities)
+    this._cachedIdentities.next(identities);
   }
 
   /**
@@ -49,8 +56,8 @@ export class UserService {
   readonly userData$ = this._cachedUserData.asObservable()
     .pipe(filter(u => !!u));
 
-  readonly identities = this._serverData.getIdentities;
-  readonly providerList = this._serverData.getProviders;
+  readonly providerList = this._serverData.getProviders; 
+  readonly identities = this._cachedIdentities.asObservable();
   readonly unexpectedLogout$ = this._unexpectedLogout$.asObservable();
 
   public onUnexpectedLogout(newUserData: UserDescription) {
@@ -90,11 +97,11 @@ export class UserService {
     map(u => u.roles),
   )
 
-  readonly primaryEmail$ = this.identities.value.pipe(
+  readonly primaryEmail$ = this.identities.pipe(
     map(u => u.primary)
   )
 
-  readonly providers$ = this.identities.value.pipe(
+  readonly providers$ = this.identities.pipe(
     map(u => u.providers)
   )
 
@@ -199,9 +206,9 @@ export class UserService {
   public sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
     const catchedError$ = this.catchedError$(this._serverData.sendChangePrimaryEmail$(data))
     return catchedError$.pipe(
-      tap(_ => {
+      tap(i => {
+        this.fireIdentities(i);
         this._snackBar.open('Please confirm the e-mail', '', { duration: 5000 })
-        this.identities.refresh();
       })
     )
   }
@@ -212,9 +219,10 @@ export class UserService {
   public deleteIdentity$(uid: string): Observable<ServerProviderDescription> {
     const catchedError = this.catchedError$(this._serverData.deleteIdentity$(uid))
     return catchedError.pipe(
-      tap(_ => {
+      tap(i => {
+        console.log("Request: ", i);
+        this.fireIdentities(i);
         this._snackBar.open('E-Mail succesfully deleted', '', { duration: 3000 })
-        this.identities.refresh();
       })
     )
   }
@@ -226,9 +234,9 @@ export class UserService {
   public addEmail$(data: UserEmailDescription | UserAddEmailDescription): Observable<ServerProviderDescription> {
     const catchedError$ = this.catchedError$(this._serverData.addEmail$(data))
     return catchedError$.pipe(
-      tap(_ => {
+      tap(i => {
+        this.fireIdentities(i);
         this._snackBar.open('Please confirm the e-mail', '', { duration: 6000 })
-        this.identities.refresh();
       })
     )
   }

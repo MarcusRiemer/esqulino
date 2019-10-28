@@ -159,47 +159,29 @@ describe(`UserService`, () => {
       .toEqual(3);
   })
 
-  // it('userData empty', () => {
-  //   const service = instantiate();
-  //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-  //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
-  //   service.userDisplayName$
-  //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(""))
-
-  //   service.userId$
-  //     .pipe(first())
-  //     .subscribe(u => expect(u).toEqual(""));
-
-  //   httpTestingController.expectOne(serverApi.getUserDataUrl())
-  //     .flush({});
-  // })
-
-  it('identities', () => {
+  it('userData on error', () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
-    const identities = mkIdentitiesResponse();
 
-    service.identities.value
-      .pipe(first())
-      .subscribe(u => expect(u).toEqual(identities))
+    let numCalls = 0;
 
-    service.primaryEmail$
-      .pipe(first())
-      .subscribe(v => expect(v).toEqual(identities.primary))
-    
-    service.providers$
-      .pipe(first())
-      .subscribe(p => expect(p).toEqual(p))
+    service.userData$
+      .pipe(
+        first(),
+        tap(_ => numCalls++)
+      )
+      .subscribe(d => expect(d.displayName).toContain("Error"))
 
-    httpTestingController.expectOne(serverApi.getUserIdentitiesUrl())
-      .flush(identities);
+    httpTestingController.expectOne(serverApi.getUserDataUrl())
+      .flush("", { statusText: "Unknown Error", status: 500 });
 
+    expect(numCalls)
+      .withContext("Server errors push a new user state, is this good?")
+      .toEqual(1)
   })
 
-  fit('Need to be replaced by a meaningful name', async () => {
+  it('Need to be replaced by a meaningful name', async () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
@@ -208,8 +190,6 @@ describe(`UserService`, () => {
     const login = { email: "", username: "", password: "" };
 
     let callCounter = 0;
-
-    spyOn(window, "alert");
 
     service.userData$
       .pipe(tap(_ => callCounter++))
@@ -249,28 +229,28 @@ describe(`UserService`, () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
-    const user = mkUserResponse("Tom");
-    const addEmail = { email: "", password: "" }
+    const identities = mkIdentitiesResponse();
+    const addEmailData = { email: "", password: "" }
 
     let callCounter = 0;
 
-    service.identities.value
-      .pipe(finalize(() => callCounter++))
-      .subscribe();
+    service.identities
+      .pipe(tap(_ => callCounter++))
+      .subscribe()
 
-    const test = service.addEmail$(addEmail)
+    expect(callCounter).toEqual(1)
+  
+    const addEmail = service.addEmail$(addEmailData)
       .pipe(first())
       .toPromise()
     
     httpTestingController.expectOne(serverApi.getSignUpUrl())
-      .flush(user)
+      .flush(identities)
 
-    await test;
+    const response = await addEmail;
 
-    const inProgressSub = service.identities.inProgress.pipe(first()).toPromise()
-    const inProgress = await inProgressSub;
-
-    expect(inProgress).toEqual(true);
+    expect(response).toEqual(identities)
+    expect(callCounter).toEqual(2)
   })
 
   it('unexpectedLogout', async () => {
@@ -278,90 +258,42 @@ describe(`UserService`, () => {
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
     const user = mkUserResponse("Tom");
-    const guest = mkGuestResponse();
 
-    let callCounter = 0;
+    let userDataCalls = 0
+    let unexpectedCalls = 0;
 
-    const loggedIn = service.userData$
-      .pipe(first())
-      .toPromise();
-    
+    service.userData$
+      .pipe(tap(_ => userDataCalls++))
+      .subscribe()
+
     httpTestingController.expectOne(serverApi.getUserDataUrl())
       .flush(user);
 
-    let data = await loggedIn;
-
-    expect(data).toEqual(user)
+    expect(userDataCalls)
+      .withContext("First Subscription")
+      .toEqual(1);
     
     service.unexpectedLogout$
-      .pipe(tap(_ => callCounter++))
+      .pipe(tap(_ => unexpectedCalls++))
       .subscribe();
 
     const loggedOut = service.userData$
       .pipe(first())
       .toPromise()
 
-    httpTestingController.expectOne(serverApi.getUserDataUrl())
-      .flush(guest);
+    const userData = await loggedOut;
 
-    data = await loggedOut;
+    service.onUnexpectedLogout(userData)
 
-    expect(data).toEqual(guest)
+    expect(unexpectedCalls)
+      .withContext("Event was triggerd")
+      .toEqual(1);
+
+    expect(userDataCalls)
+      .withContext("Side Subscription")
+      .toEqual(2);
+
+    expect(userData)
+      .toEqual(user)
   })
-
-
-
-  // fit('isLoggedIn Observable', async () => {
-  //   const service = instantiate();
-
-  //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-  //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
-  //   const isLoggedIn = await service.isLoggedIn$.pipe(first()).toPromise();
-
-  //   httpTestingController.expectOne(serverApi.getUserDataUrl())
-  // })
-
-
-  // fit('userDisplayName Observable', async () => {
-  //   const service = instantiate();
-
-  //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-  //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
-  //   service.userDisplayName$.pipe(first())
-  //     .subscribe(v => expect(typeof v === 'string'))
-
-  //   httpTestingController.expectOne(serverApi.getUserDataUrl())
-  // })
-
-  // fit('userDisplayName Observable', async () => {
-  //   const service = instantiate();
-
-  //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-  //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
-  //   service.userDisplayName$.pipe(first())
-  //     .subscribe(
-  //       _ => fail("Request must fail"),
-  //       (err: HttpErrorResponse) => expect(err.status).toEqual(404)
-  //     )
-
-  //     httpTestingController.expectOne(serverApi.getUserDataUrl())
-  //       .flush("", { status: 404, statusText: "Not found" });
-
-  // })
-  // fit('userDisplayName Observable', async (done) => {
-  //   const service = instantiate();
-
-  //   service.userDisplayName$.pipe(first())
-
-
-  //   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
-  //   const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
-
-  //   httpTestingController.expectOne(serverApi.getUserDataUrl())
-  //   return
-  // })
 })

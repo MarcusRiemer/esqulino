@@ -113,8 +113,8 @@ export class ServerDataService {
   /**
    * Sending change primary e-mail
    */
-  sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<UserDescription> {
-    return this._http.post<UserDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
+  sendChangePrimaryEmail$(data: ChangePrimaryEmailDescription): Observable<ServerProviderDescription> {
+    return this._http.post<ServerProviderDescription>(this._serverApi.getChangePrimaryEmailUrl(), data)
   }
 
   /**
