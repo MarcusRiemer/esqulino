@@ -130,6 +130,7 @@ class IdentitiesController < ApplicationController
         return error_response("You have not the permission to delete this identity.")
       end
 
+      current_user.identities.delete(identity)
       identity.delete
       api_response(current_user.all_providers)
     end

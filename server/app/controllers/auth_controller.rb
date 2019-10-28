@@ -54,11 +54,16 @@ class AuthController < ApplicationController
   def register
     auth_hash = create_identity_data(register_params)
     identity = Identity.search(auth_hash)
+    # If a user is logged in, response with linked identities
+    if (current_user)
+      to_response = current_user.all_providers
+    end
+
     if (not identity) then
       identity = Identity.create_with_auth(auth_hash, current_user)
       # sends an confirmation e-mail
       IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
-      api_response(current_user.information)
+      api_response(to_response ? to_response : current_user.information)
     else
       error_response("E-mail already registered")
     end

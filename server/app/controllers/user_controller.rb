@@ -97,7 +97,7 @@ class UserController < ApplicationController
       identity.save!
 
       UserMailer.change_primary_email(identity, request_locale).deliver unless Rails.env.test?
-      api_response(user_information)
+      api_response(current_user.all_providers)
     end
   end
 

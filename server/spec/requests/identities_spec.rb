@@ -218,6 +218,7 @@ RSpec.describe "identities controller" do
 
       expect(response.status).to eq(200)
       expect(Identity.all.count).to eq(1)
+      expect(response.body).to eq(JSON(identity.user.all_providers))
     end
 
     context "invalid" do
