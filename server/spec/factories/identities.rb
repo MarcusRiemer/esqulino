@@ -1,7 +1,6 @@
-
 FactoryBot.define do
 
-  factory :identity, class: 'Identity' do
+  factory :identity, class: Identity::Identity do
     provider {}
     uid {}
     own_data { ({}) }
@@ -9,7 +8,7 @@ FactoryBot.define do
     association :user
   end
 
-  factory :identity_provider, class: "PasswordIdentity", parent: :identity do
+  factory :identity_provider, class: Identity::Password, parent: :identity do
     trait :new do
       provider { "identity" }
       uid { "identity@web.de" }
@@ -67,7 +66,7 @@ FactoryBot.define do
     end
   end
 
-  factory :developer_provider, class: "Developer", parent: :identity do
+  factory :developer_provider, class: Identity::Developer, parent: :identity do
     trait :new do
       provider { "developer" }
       uid { "developer@web.de" }
@@ -89,7 +88,7 @@ FactoryBot.define do
     end
   end
 
-  factory :google_provider, class: "Google", parent: :identity do
+  factory :google_provider, class: Identity::Google, parent: :identity do
     trait :new do
       provider { "google" }
       uid { "google@gmail.de" }
@@ -119,7 +118,7 @@ FactoryBot.define do
     end
   end
 
-  factory :github_provider, class: "Github", parent: :identity do
+  factory :github_provider, class: Identity::Github, parent: :identity do
     trait :new do
       provider { "github" }
       uid { "Stackoverflow is life" }

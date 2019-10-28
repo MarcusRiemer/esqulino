@@ -32,8 +32,9 @@ class UserController < ApplicationController
       return error_response("Invalid token")
     end
 
-    identity = Identity.find_by_change_primary_email_token(token)
-                       .first
+    identity = Identity::Identity
+                 .find_by_change_primary_email_token(token)
+                 .first
 
     if (not identity) then
       return error_response("No user was found")
@@ -81,9 +82,10 @@ class UserController < ApplicationController
 
       validated_identities = current_user.all_validated_emails
 
-      identity = Identity.where(user_id: current_user.id)
-                        .find_by_email(permited_params[:primary_email])
-                        .first
+      identity = Identity::Identity
+                   .where(user_id: current_user.id)
+                   .find_by_email(permited_params[:primary_email])
+                   .first
 
       if (not identity) then
         return error_response("Your account has no linked email with this name")
@@ -115,7 +117,7 @@ class UserController < ApplicationController
         if (not resource_id.eql? "") then
           resource = resource_type.constantize.find_by(id: resource_id)
         end
-       
+
         policy = "#{resource_type}Policy".constantize.new(current_user, resource)
         to_response << {"perform" => policy.send(policy_action)}
       end

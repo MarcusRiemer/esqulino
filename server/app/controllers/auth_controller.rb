@@ -9,9 +9,9 @@ class AuthController < ApplicationController
   def callback
     auth_hash = request.env.fetch("omniauth.auth")
 
-    identity = Identity.search(auth_hash)
+    identity = Identity::Identity.search(auth_hash)
     if (not identity) then
-      identity = Identity.create_with_auth(auth_hash, current_user)
+      identity = Identity::Identity.create_with_auth(auth_hash, current_user)
     else
       if (signed_in?) and (not current_user.eql? identity.user) then
         raise RuntimeError.new("Error: already linked with a user")
@@ -31,7 +31,7 @@ class AuthController < ApplicationController
   # Function is called by omniauth identity and
   # is used to login a user with password
   def login_with_password
-    identity = PasswordIdentity.find_by(uid: login_params[:email])
+    identity = Identity::Password.find_by(uid: login_params[:email])
     if (not identity)
       return error_response("E-Mail not found")
     end
@@ -53,14 +53,15 @@ class AuthController < ApplicationController
   # with simulated callback data
   def register
     auth_hash = create_identity_data(register_params)
-    identity = Identity.search(auth_hash)
+    identity = Identity::Identity.search(auth_hash)
+
     # If a user is logged in, response with linked identities
     if (current_user)
       to_response = current_user.all_providers
     end
 
     if (not identity) then
-      identity = Identity.create_with_auth(auth_hash, current_user)
+      identity = Identity::Identity.create_with_auth(auth_hash, current_user)
       # sends an confirmation e-mail
       IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
       api_response(to_response ? to_response : current_user.information)

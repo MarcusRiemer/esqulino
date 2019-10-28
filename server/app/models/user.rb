@@ -15,7 +15,7 @@ class User < ApplicationRecord
   # Projects are owned by a user
   has_many :projects
   # Every user can identify himself using multiple identities
-  has_many :identities
+  has_many :identities, class_name: "Identity::Identity"
   # Some users have written news
   has_many :news
 

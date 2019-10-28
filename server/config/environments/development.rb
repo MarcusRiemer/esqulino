@@ -1,8 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Ususally running under "localdomain"
+  # Ususally running under "localdomain", but may be using lvh.me for Google
   config.hosts << "localhost.localdomain"
+  config.hosts << "lvh.me"
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
