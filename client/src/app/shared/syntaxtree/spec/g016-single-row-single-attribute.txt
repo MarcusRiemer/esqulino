@@ -1,6 +1,6 @@
 grammar "g016-single-row-single-attribute" {
   node "g016"."root" {
-    row horizontal {
+    container horizontal {
       prop "a1" { integer }
     }
   }

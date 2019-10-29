@@ -64,7 +64,7 @@ export type NodeAttributeDescription =
   NodePropertyTypeDescription
   | NodeChildrenGroupDescription
   | NodeTerminalSymbolDescription
-  | NodeRowDescription;
+  | NodeVisualContainerDescription;
 
 /**
  * A terminal symbol that would be expected.
@@ -78,8 +78,8 @@ export interface NodeTerminalSymbolDescription {
 /**
  *
  */
-export interface NodeRowDescription {
-  type: "row";
+export interface NodeVisualContainerDescription {
+  type: "container";
   name: string;
   orientation: "horizontal" | "vertical";
   children: NodeAttributeDescription[];

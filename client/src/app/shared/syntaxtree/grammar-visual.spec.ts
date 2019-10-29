@@ -15,6 +15,37 @@ describe(`Visual Grammar`, () => {
     expect(isVisualGrammar(GRAMMAR_SQL_DESCRIPTION)).toBe(true);
   });
 
+  it(`isVisual() detects terminal symbols`, () => {
+    const g = singleLanguageGrammar("spec", "root", {
+      "root": {
+        type: "concrete",
+        attributes: [
+          { type: "terminal", name: "foo", symbol: "foo" }
+        ]
+      }
+    });
+    expect(isVisualGrammar(g)).toBe(true);
+  });
+
+  it(`isVisual() detects terminal rows`, () => {
+    const g = singleLanguageGrammar("spec", "root", {
+      "root": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "container",
+            orientation: "horizontal",
+            name: "argh",
+            children: [
+              { type: "allowed", name: "a1", nodeTypes: [] }
+            ]
+          }
+        ]
+      }
+    });
+    expect(isVisualGrammar(g)).toBe(true);
+  });
+
   it(`Parses terminals (and ignores them)`, () => {
     const g = singleLanguageGrammar("terminal", "root", {
       "root": {
@@ -47,7 +78,7 @@ describe(`Visual Grammar`, () => {
         type: "concrete",
         attributes: [
           {
-            type: "row",
+            type: "container",
             orientation: "horizontal",
             name: "argh",
             children: [
@@ -81,7 +112,7 @@ describe(`Visual Grammar`, () => {
         type: "concrete",
         attributes: [
           {
-            type: "row",
+            type: "container",
             orientation: "horizontal",
             name: "argh",
             children: [

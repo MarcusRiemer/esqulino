@@ -5,7 +5,7 @@
       "root": {
         "attributes": [
           {
-            "type": "row",
+            "type": "container",
             "orientation": "horizontal",
             "name": "argh",
             "children": [

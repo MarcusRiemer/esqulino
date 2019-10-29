@@ -144,9 +144,9 @@ export class NodeConcreteType extends NodeType {
             this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
             break;
           case "terminal":
-            // Do nothing
+            // Do nothing, terminals have no impact on validation
             break;
-          case "row":
+          case "container":
             // Consume the children
             this.loadAttributes(a.children);
             break;

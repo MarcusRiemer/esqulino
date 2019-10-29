@@ -78,8 +78,8 @@ export function prettyPrintConcreteNodeTypeAttribute(
     case "choice":
     case "parentheses":
       return (prettyPrintChildGroup(name, a));
-    case "row":
-      return (prettyPrintRow(name, a));
+    case "container":
+      return (prettyPrintContainer(name, a));
     default:
       throw new Error(`Unknown concrete node attribute type: ${JSON.stringify(a)}`);
   }
@@ -270,11 +270,11 @@ function prettyPrintChildGroupElements(nodeName: QualifiedTypeName, p: Desc.Node
   }
 }
 
-export function prettyPrintRow(
+export function prettyPrintContainer(
   name: QualifiedTypeName,
-  t: Desc.NodeRowDescription
+  t: Desc.NodeVisualContainerDescription
 ): NestedString {
-  const head = `row ${t.orientation}`;
+  const head = `container ${t.orientation}`;
   if ((t.children || []).length === 0) {
     return ([head + " { }"])
   } else {

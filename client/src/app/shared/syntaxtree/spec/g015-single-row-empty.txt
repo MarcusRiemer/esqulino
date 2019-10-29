@@ -1,5 +1,5 @@
 grammar "g015-single-row-empty" {
   node "g015"."root" {
-    row horizontal { }
+    container horizontal { }
   }
 }
