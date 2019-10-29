@@ -70,11 +70,15 @@ export function visualizeNode(
 
   return ({
     blockType: "block",
-    direction: "vertical",
     children: [
-      { blockType: "constant", text: `node "${name}" {` },
-      ...wrappedAttributes,
-      { blockType: "constant", text: "}" }
+      {
+        blockType: "container",
+        children: [
+          { blockType: "constant", text: `node "${name}" {` },
+          ...wrappedAttributes,
+          { blockType: "constant", text: "}" }
+        ]
+      }
     ]
   });
 }
@@ -110,7 +114,6 @@ export function visualizeChildGroup(
       {
         blockType: "iterator",
         childGroupName: t.name,
-        direction: "vertical"
       },
       {
         blockType: "constant",

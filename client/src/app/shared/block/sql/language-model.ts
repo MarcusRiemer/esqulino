@@ -296,7 +296,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           dropTarget: {
             visibility: { $var: "ifLegalChild" }
           },
@@ -398,7 +397,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
@@ -426,7 +424,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
@@ -462,7 +459,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
@@ -493,7 +489,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
@@ -545,7 +540,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "arguments",
-              direction: "horizontal",
             },
             {
               blockType: "constant",
@@ -563,7 +557,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "paddingLeft": "5px",
             "paddingRight": "5px",
@@ -604,7 +597,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "lhs",
-              direction: "horizontal",
             },
             {
               blockType: "dropTarget",
@@ -631,7 +623,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "operator",
-              direction: "horizontal",
             },
             {
               blockType: "dropTarget",
@@ -658,7 +649,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "rhs",
-              direction: "horizontal",
             }
           ]
         }
@@ -672,7 +662,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "input",
@@ -698,14 +687,12 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "vertical",
           style: {
             "cursor": "grab",
           },
           children: [
             {
               blockType: "block",
-              direction: "horizontal",
               dropTarget: {
                 visibility: { $var: "ifLegalChild" }
               },
@@ -739,12 +726,10 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                       },
                     } as VisualBlockDescriptions.EditorConstant,
                   ],
-                  direction: "horizontal",
                 },
                 {
                   blockType: "iterator",
                   childGroupName: "tables",
-                  direction: "horizontal",
                   between: [
                     {
                       blockType: "constant",
@@ -789,7 +774,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           dropTarget: {
             visibility: { $var: "ifLegalChild" }
           },
@@ -821,7 +805,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           dropTarget: {
             visibility: { $var: "ifLegalChild" }
           },
@@ -923,7 +906,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           dropTarget: {
             visibility: { $var: "ifLegalChild" }
           },
@@ -1025,7 +1007,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
@@ -1053,7 +1034,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           dropTarget: {
             visibility: { $var: "ifLegalChild" }
           },
@@ -1116,7 +1096,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "cursor": "grab",
           },
@@ -1182,7 +1161,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           style: {
             "cursor": "grab",
           },

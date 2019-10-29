@@ -1,8 +1,6 @@
 import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.description'
 import { Restricted } from './bool-mini-expression.description'
 
-export type Orientation = "horizontal" | "vertical";
-
 /**
  * Groups together all available options to describe a block in the
  * drag & drop UI.
@@ -51,17 +49,6 @@ export namespace VisualBlockDescriptions {
   }
 
   /**
-   * Allows very basic control over the layout of blocks. This is meant
-   * to be used for alignments in rows and columns, not for anything
-   * involving actual design.
-   */
-  export interface EditorLayout extends EditorBlockBase {
-    direction: Orientation;
-    children?: ConcreteBlock[];
-    wrapChildren?: boolean;
-  }
-
-  /**
    * An element that exists merely for layout purposes, think "div" or "span"
    */
   export interface EditorContainer extends EditorBlockBase {
@@ -73,9 +60,10 @@ export namespace VisualBlockDescriptions {
    * Describes how a certain block should be represented. Blocks are
    * always draggable and also possible drop targets.
    */
-  export interface EditorBlock extends EditorLayout {
+  export interface EditorBlock extends EditorBlockBase {
     blockType: "block";
     dropTarget?: DropTargetProperties;
+    children?: ConcreteBlock[];
     dropAction?: "append" | "replace";
   }
 
@@ -83,18 +71,19 @@ export namespace VisualBlockDescriptions {
    * Describes a "block" that only acts as a hole to drop things at.
    * It is not necesarily visible in every state and it is not draggable.
    */
-  export interface EditorDropTarget extends EditorLayout {
+  export interface EditorDropTarget extends EditorBlockBase {
     blockType: "dropTarget";
     dropTarget?: DropTargetProperties;
     // True, if a drop target should be shown even though an empty
     // child group is a perfectly valid syntax tree
     emptyDropTarget?: boolean;
+    children?: ConcreteBlock[];
   }
 
   /**
    * Allows to iterate over all blocks in a certain category.
    */
-  export interface EditorIterator extends EditorLayout {
+  export interface EditorIterator extends EditorBlockBase {
     blockType: "iterator";
     // The child group to iterate over
     childGroupName: string;

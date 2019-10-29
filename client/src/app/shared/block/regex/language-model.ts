@@ -161,11 +161,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "dropTarget",
-              direction: "horizontal",
               dropTarget: {
                 visibility: { $var: "ifLegalChild" }
               },
@@ -179,11 +177,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "expressions",
-              direction: "horizontal",
               between: [
                 {
                   blockType: "dropTarget",
-                  direction: "horizontal",
                   dropTarget: {
                     visibility: { $var: "ifLegalChild" }
                   },
@@ -213,7 +209,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
         {
           blockType: "iterator",
           childGroupName: "singleExpression",
-          direction: "horizontal",
         },
       ]
     }

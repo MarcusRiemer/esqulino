@@ -14,7 +14,6 @@ import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.com
 import { ValidationComponent } from './validation.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
-import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockBaseDirective } from './block/block-base.directive'
 import { BlockDebugOptionsService } from '../block-debug-options.service'
 import { BlockHostComponent } from './block/block-host.component'
@@ -54,7 +53,6 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     BlockRenderInputComponent,
     BlockRootComponent,
     BlockHostComponent,
-    BlockLayoutDirective,
     BlockBaseDirective,
     CodeGeneratorComponent,
     CodeResourceSettingsComponent,

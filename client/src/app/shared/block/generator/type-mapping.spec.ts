@@ -60,8 +60,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         blockType: "iterator",
         childGroupName: "c1",
-        direction: DefaultInstructions.iteratorInstructions.orientation,
-        wrapChildren: true,
         breakAfter: false,
         emptyDropTarget: false
       }
@@ -83,10 +81,8 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const res = mapChildren(
       nodeType, attrType,
       {
-        orientation: "horizontal",
         between: "ä",
         style: {},
-        allowWrap: true,
         breakAfter: false,
         emptyDropTarget: false,
       }
@@ -96,8 +92,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         blockType: "iterator",
         childGroupName: "c1",
-        direction: "horizontal",
-        wrapChildren: true,
         breakAfter: false,
         emptyDropTarget: false,
         between: [

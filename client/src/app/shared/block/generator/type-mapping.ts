@@ -114,8 +114,6 @@ export function mapChildren(
   const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
-    direction: instructions.orientation,
-    wrapChildren: instructions.allowWrap,
     breakAfter: instructions.breakAfter,
     emptyDropTarget: instructions.emptyDropTarget
   }
@@ -196,11 +194,9 @@ export function mapType(
     const blockInstructions = instructions.scopeBlock(i);
     const thisBlock: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
-      direction: blockInstructions.orientation,
       children: mapAttributes(typeDesc, instructions, i),
       dropTarget: blockInstructions.onDrop,
       breakAfter: blockInstructions.breakAfter,
-      wrapChildren: blockInstructions.allowWrap
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {

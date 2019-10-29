@@ -166,7 +166,6 @@ export class BlockRenderComponent {
   get iteratorDropTargetVisual(): VisualBlockDescriptions.EditorDropTarget {
     return ({
       blockType: "dropTarget",
-      direction: "horizontal", // TODO: Drop target block should not have children
       emptyDropTarget: this.asBlockIterator(this.visual).emptyDropTarget
     });
   }

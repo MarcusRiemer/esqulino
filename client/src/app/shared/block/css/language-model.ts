@@ -15,7 +15,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "vertical",
           dropTarget: {
             visibility: { $var: "ifLegalChild" }
           },
@@ -30,7 +29,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "rules",
-              direction: "vertical",
             },
           ]
         },
@@ -44,7 +42,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "dropTarget",
@@ -66,12 +63,10 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   },
                 },
               ],
-              direction: "horizontal"
             },
             {
               blockType: "iterator",
               childGroupName: "selectors",
-              direction: "horizontal",
             },
             {
               blockType: "constant",
@@ -102,13 +97,11 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 "cursor": "default",
               },
             },
-          ],
-          direction: "horizontal",
+          ]
         },
         {
           blockType: "iterator",
           childGroupName: "declarations",
-          direction: "vertical",
           style: {
             "marginLeft": "2ch"
           }
@@ -127,7 +120,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "input",
@@ -145,7 +137,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "constant",
@@ -167,7 +158,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "constant",
@@ -189,7 +179,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "dropTarget",
@@ -211,12 +200,10 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   },
                 },
               ],
-              direction: "horizontal",
             },
             {
               blockType: "iterator",
               childGroupName: "name",
-              direction: "horizontal"
             },
             {
               blockType: "constant",
@@ -245,12 +232,10 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   },
                 },
               ],
-              direction: "horizontal",
             },
             {
               blockType: "iterator",
               childGroupName: "value",
-              direction: "horizontal"
             },
             {
               blockType: "constant",
@@ -268,7 +253,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "input",
@@ -286,7 +270,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "input",
@@ -304,7 +287,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             {
               blockType: "input",

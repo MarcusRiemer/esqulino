@@ -1,6 +1,5 @@
 import { Instructions, DefaultInstructions } from './instructions.description'
 import { GeneratorInstructions, TypeInstructions } from './instructions'
-import { Orientation } from '../block.description';
 
 describe("BlockLanguage GeneratorInstructions", () => {
 
@@ -16,7 +15,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
   describe("Instructions for single blocks", () => {
     it("Exact and missing scope", () => {
       const specific: Partial<Instructions> = {
-        orientation: "horizontal"
+        "generateErrorIndicator": "start"
       };
       const inst = new TypeInstructions({
         attributes: {
@@ -63,7 +62,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
       });
 
       expect(bound.scopeBlock(0)).toEqual(jasmine.objectContaining({
-        "orientation": "horizontal" as Orientation,
+        // "orientation": "horizontal" as Orientation,
         "style": {
           "display": "block",
           "color": "red"
@@ -72,9 +71,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
 
       expect(bound.scopeIterator("this")).toEqual({
         "between": "ä",
-        "orientation": "horizontal",
         "breakAfter": false,
-        "allowWrap": true,
         "emptyDropTarget": false,
         "style": {
           "display": "block",
@@ -103,10 +100,10 @@ describe("BlockLanguage GeneratorInstructions", () => {
         ],
         attributes: {
           "t1": {
-            orientation: "horizontal"
+            between: "a"
           },
           "t2": {
-            orientation: "horizontal"
+            between: "b"
           }
         }
       });
