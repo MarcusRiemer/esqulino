@@ -74,4 +74,38 @@ describe(`Visual Grammar`, () => {
     expect(vRoot.allowedChildrenCategoryNames).toEqual(["a1", "a2"]);
     expect(vRoot.allowedPropertyNames).toEqual([]);
   });
+
+  it(`Parses rows and includes properties`, () => {
+    const g = singleLanguageGrammar("terminal", "root", {
+      "root": {
+        type: "concrete",
+        attributes: [
+          {
+            type: "row",
+            orientation: "horizontal",
+            name: "argh",
+            children: [
+              { type: "property", name: "p1", base: "integer" }
+            ]
+          },
+          { type: "property", name: "p2", base: "integer" }
+        ]
+      }
+    });
+
+    const v = new Validator([g]);
+
+    const ast = new AST.Tree({
+      language: "terminal",
+      name: "root"
+    });
+
+    expect(v.validateFromRoot(ast).isValid).toBe(false);
+
+    const vTerminal = v.getGrammarValidator("terminal");
+    const vRoot = vTerminal.getType("terminal", "root");
+
+    expect(vRoot.allowedChildrenCategoryNames).toEqual([]);
+    expect(vRoot.allowedPropertyNames).toEqual(["p1", "p2"]);
+  });
 });

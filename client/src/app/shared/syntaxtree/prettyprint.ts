@@ -47,22 +47,12 @@ export function prettyPrintQualifiedTypeName(name: QualifiedTypeName): string {
 /**
  * Prints the grammar for a concrete node.
  */
-export function prettyPrintConcreteNodeType(name: QualifiedTypeName, t: Desc.NodeConcreteTypeDescription): NestedString {
+export function prettyPrintConcreteNodeType(
+  name: QualifiedTypeName,
+  t: Desc.NodeConcreteTypeDescription
+): NestedString {
   const head = `node ${prettyPrintQualifiedTypeName(name)} {`;
-
-  const attributes = (t.attributes ? t.attributes : []).map(a => {
-    switch (a.type) {
-      case "property":
-        return (prettyPrintProperty(a));
-      case "terminal":
-        return (prettyPrintTerminal(a));
-      case "allowed":
-      case "sequence":
-      case "choice":
-      case "parentheses":
-        return (prettyPrintChildGroup(name, a));
-    }
-  });
+  const attributes = (t.attributes ? t.attributes : []).map(a => prettyPrintConcreteNodeTypeAttribute(name, a));
 
   if (attributes.length > 0) {
     return ([head, ...attributes, `}`]);
@@ -70,6 +60,31 @@ export function prettyPrintConcreteNodeType(name: QualifiedTypeName, t: Desc.Nod
     return ([head, `}`]);
   }
 }
+
+/**
+ * Prints a single attribute of a concrete node
+ */
+export function prettyPrintConcreteNodeTypeAttribute(
+  name: QualifiedTypeName,
+  a: Desc.NodeAttributeDescription,
+): NestedString {
+  switch (a.type) {
+    case "property":
+      return (prettyPrintProperty(a));
+    case "terminal":
+      return (prettyPrintTerminal(a));
+    case "allowed":
+    case "sequence":
+    case "choice":
+    case "parentheses":
+      return (prettyPrintChildGroup(name, a));
+    case "row":
+      return (prettyPrintRow(name, a));
+    default:
+      throw new Error(`Unknown concrete node attribute type: ${JSON.stringify(a)}`);
+  }
+}
+
 
 /**
  * Prints the grammar for a placeholder node.
@@ -252,6 +267,18 @@ function prettyPrintChildGroupElements(nodeName: QualifiedTypeName, p: Desc.Node
       )
     default:
       throw new Error(`Can't print child group of type "${(p as any).type}"`);
+  }
+}
+
+export function prettyPrintRow(
+  name: QualifiedTypeName,
+  t: Desc.NodeRowDescription
+): NestedString {
+  const head = `row ${t.orientation}`;
+  if ((t.children || []).length === 0) {
+    return ([head + " { }"])
+  } else {
+    return ([head + " {", ...t.children.map(sub => prettyPrintConcreteNodeTypeAttribute(name, sub)), "}"]);
   }
 }
 

@@ -1,4 +1,3 @@
-import * as d from './grammar.description'
 import * as p from './prettyprint'
 import { QualifiedTypeName } from './syntaxtree.description';
 
@@ -359,6 +358,14 @@ describe('Grammar PrettyPrinter', () => {
 
   it('Grammar g14: RegEx Language', () => {
     verifyFilesTxt('g014-regex-language', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g15: Single empty row', () => {
+    verifyFilesTxt('g015-single-row-empty', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g16: Single empty with single attribute', () => {
+    verifyFilesTxt('g016-single-row-single-attribute', p.prettyPrintGrammar);
   });
 });
 

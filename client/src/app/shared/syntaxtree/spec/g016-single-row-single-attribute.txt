@@ -1,0 +1,7 @@
+grammar "g016-single-row-single-attribute" {
+  node "g016"."root" {
+    row horizontal {
+      prop "a1" { integer }
+    }
+  }
+}
