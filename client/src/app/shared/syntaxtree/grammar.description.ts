@@ -46,6 +46,10 @@ export interface NodeOneOfTypeDescription {
  * or automatic UI generation. And whilst syntactic terminal symbols are
  * not actually required at all when validating a tree, they are meaningful
  * for the automation process.
+ *
+ * Over time the grammar structure has deviated from being "validation
+ * only", it now also contains visual information about the row layout of
+ * the text based representation.
  */
 export interface NodeConcreteTypeDescription {
   type: "concrete";
@@ -53,12 +57,14 @@ export interface NodeConcreteTypeDescription {
 }
 
 /**
- * Attributes of a node are either properties or children.
+ * Attributes of a node are either validation atoms like properties
+ * or children or visual cues like terminals or rows.
  */
 export type NodeAttributeDescription =
   NodePropertyTypeDescription
   | NodeChildrenGroupDescription
-  | NodeTerminalSymbolDescription;
+  | NodeTerminalSymbolDescription
+  | NodeRowDescription;
 
 /**
  * A terminal symbol that would be expected.
@@ -67,6 +73,16 @@ export interface NodeTerminalSymbolDescription {
   type: "terminal";
   name: string;
   symbol: string;
+}
+
+/**
+ *
+ */
+export interface NodeRowDescription {
+  type: "row";
+  name: string;
+  orientation: "horizontal" | "vertical";
+  children: NodeAttributeDescription[];
 }
 
 /**
