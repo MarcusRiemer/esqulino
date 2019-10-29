@@ -782,7 +782,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -874,7 +874,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -1106,9 +1106,12 @@
         },
         {
           "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeRowDescription"
         }
       ],
-      "description": "Attributes of a node are either properties or children."
+      "description": "Attributes of a node are either validation atoms like properties\nor children or visual cues like terminals or rows."
     },
     "NodeChildrenGroupDescription": {
       "anyOf": [
@@ -1129,7 +1132,7 @@
     },
     "NodeConcreteTypeDescription": {
       "additionalProperties": false,
-      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.",
+      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.\n\nOver time the grammar structure has deviated from being \"validation\nonly\", it now also contains visual information about the row layout of\nthe text based representation.",
       "properties": {
         "attributes": {
           "items": {
@@ -1334,6 +1337,40 @@
         }
       ],
       "description": "Properties are used for atomic values and may be optional."
+    },
+    "NodeRowDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/definitions/NodeAttributeDescription"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orientation": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "row"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "orientation",
+        "children"
+      ],
+      "type": "object"
     },
     "NodeStringTypeRestrictions": {
       "anyOf": [
@@ -1598,7 +1635,7 @@
     "ParameterBoolean": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "boolean"
           ],
@@ -1606,7 +1643,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -1655,7 +1692,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115705825494_[]_"
             }
           ]
         },
@@ -1678,7 +1715,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115705825494_[]_"
             }
           ]
         },
@@ -1728,7 +1765,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115705825494_[]_"
             }
           ]
         },
@@ -1751,7 +1788,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115705825494_[]_"
             }
           ]
         },
@@ -1785,7 +1822,7 @@
       ],
       "type": "object"
     },
-    "ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_": {
+    "ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_": {
       "additionalProperties": false,
       "properties": {
         "visibility": {
@@ -1801,7 +1838,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1843,7 +1880,7 @@
     "ParameterTypeColor": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "color"
           ],
@@ -1851,14 +1888,14 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
     "ParameterTypeString": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "string"
           ],
@@ -1866,7 +1903,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -2180,7 +2217,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
