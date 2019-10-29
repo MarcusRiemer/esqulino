@@ -16,59 +16,135 @@ RSpec.describe 'Rake Model Validation' do
     Rake.application.invoke_task parm_task
   end
 
-  it "validate_all without any projects" do
-    res = verify_all_projects
+  describe "Project" do
+    it "validate_all without any projects" do
+      res = verify_all_projects
 
-    expect(res).to eq []
-    expect{ run_validation_task("project", "validate_all") }.to_not output.to_stdout
+      expect(res).to eq []
+      expect{ run_validation_task("project", "validate_all") }.to_not output.to_stdout
+    end
+
+    it "validate_all with only valid projects" do
+      FactoryBot.create(:project)
+      FactoryBot.create(:project)
+
+      res = verify_all_projects
+
+      expect(res).to eq []
+      expect{ run_validation_task("project", "validate_all") }.to_not output.to_stdout
+    end
+
+    it "validate_all with valid and invalid project" do
+      FactoryBot.create(:project) # Valid project
+
+      p = FactoryBot.build(:project, slug: "?", name: "") # Invalid
+      p.save(validate: false)
+
+      res = verify_all_projects
+
+      expect(res).to eq [p]
+      expect{ run_validation_task("project", "validate_all") }.to output.to_stdout
+    end
+
+    it "validate valid project with valid and invalid project" do
+      FactoryBot.create(:project) # Valid project
+
+      p = FactoryBot.build(:project, slug: "?", name: "") # Invalid
+      p.save(validate: false)
+
+      res = verify_project(p)
+
+      expect(res).to eq [p]
+      expect{ run_validation_task("project", "validate", p.id) }.to output.to_stdout
+    end
+
+    it "validate_all with valid project that has invalid resources" do
+      p = FactoryBot.create(:project) # Valid project
+
+      # But with an invalid resource
+      c = FactoryBot.build(:code_resource, name: "", ast: Hash.new({ "foo" => "bar" }), project: p)
+
+      c.save(validate: false)
+
+      res = verify_all_projects
+
+      expect(res).to eq [c]
+      expect{ run_validation_task("project", "validate_all") }.to output.to_stdout
+    end
   end
 
-  it "validate_all with only valid projects" do
-    FactoryBot.create(:project)
-    FactoryBot.create(:project)
+  describe "Grammar" do
+    it "validate_all without any records" do
+      res = select_all_invalid_grammars
 
-    res = verify_all_projects
+      expect(res).to eq []
+      expect{ run_validation_task("grammar", "validate_all") }.to_not output.to_stdout
+    end
 
-    expect(res).to eq []
-    expect{ run_validation_task("project", "validate_all") }.to_not output.to_stdout
+    it "validate_all without only valid records" do
+      FactoryBot.create(:grammar)
+      FactoryBot.create(:grammar)
+
+      res = select_all_invalid_grammars
+
+      expect(res).to eq []
+      expect{ run_validation_task("grammar", "validate_all") }.to_not output.to_stdout
+    end
+
+    it "validate_all with valid and invalid record" do
+      FactoryBot.create(:grammar) # Valid
+
+      # Invalid, there should never be a node type "invalid", so this will trigger
+      # the schema validation
+      p = FactoryBot.build(:grammar, model: {
+                             "types" => {
+                               "spec" => {
+                                 "root" => {
+                                   "type" => "invalid"
+                                 }
+                               }
+                             }
+                           })
+      p.save(validate: false)
+
+      res = select_all_invalid_grammars
+
+      expect(res).to eq [p]
+      expect{ run_validation_task("grammar", "validate_all") }.to output.to_stdout
+    end
   end
 
-  it "validate_all with valid and invalid project" do
-    FactoryBot.create(:project) # Valid project
+  describe "BlockLanguage" do
+    it "validate_all without any records" do
+      res = select_all_invalid_block_languages
 
-    p = FactoryBot.build(:project, slug: "?", name: "") # Invalid
-    p.save(validate: false)
+      expect(res).to eq []
+      expect{ run_validation_task("block_language", "validate_all") }.to_not output.to_stdout
+    end
 
-    res = verify_all_projects
+    it "validate_all without only valid records" do
+      FactoryBot.create(:block_language)
+      FactoryBot.create(:block_language)
 
-    expect(res).to eq [p]
-    expect{ run_validation_task("project", "validate_all") }.to output.to_stdout
+      res = select_all_invalid_block_languages
+
+      expect(res).to eq []
+      expect{ run_validation_task("block_language", "validate_all") }.to_not output.to_stdout
+    end
+
+    it "validate_all with valid and invalid record" do
+      FactoryBot.create(:block_language) # Valid
+
+      # Invalid, partially because of given values, partially because fields are missing
+      p = FactoryBot.build(:block_language, model: {
+                             "sidebars" => false # Should be an array
+                           })
+      p.save(validate: false)
+
+      res = select_all_invalid_block_languages
+
+      expect(res).to eq [p]
+      expect{ run_validation_task("block_language", "validate_all") }.to output.to_stdout
+    end
   end
-
-  it "validate valid project with valid and invalid project" do
-    FactoryBot.create(:project) # Valid project
-
-    p = FactoryBot.build(:project, slug: "?", name: "") # Invalid
-    p.save(validate: false)
-
-    res = verify_project(p)
-
-    expect(res).to eq [p]
-    expect{ run_validation_task("project", "validate", p.id) }.to output.to_stdout
-  end
-
-  it "validate_all with valid project that has invalid resources" do
-    p = FactoryBot.create(:project) # Valid project
-
-    # But with an invalid resource
-    c = FactoryBot.build(:code_resource, name: "", ast: Hash.new({ "foo" => "bar" }), project: p)
-
-    c.save(validate: false)
-
-    res = verify_all_projects
-
-    expect(res).to eq [c]
-    expect{ run_validation_task("project", "validate_all") }.to output.to_stdout
-  end
-
 end

@@ -1,6 +1,6 @@
 # Validates all projects.
 #
-# @return [Array<ApplicationRecord>] All invalid resources
+# @return [Array<ApplicationRecord>] All invalid models
 def verify_all_projects
   invalid = []
 
@@ -28,11 +28,33 @@ def verify_project(proj)
   return invalid_models
 end
 
+# Returns only grammars that did not validate
+#
+# @return [Array<ApplicationRecord>] All invalid grammars
+def select_all_invalid_grammars
+  select_invalid Grammar.all
+end
+
+# Returns only block languages that did not validate
+#
+# @return [Array<ApplicationRecord>] All invalid block languages
+def select_all_invalid_block_languages
+  select_invalid BlockLanguage.all
+end
+
+# Returns only models that did not validate
+#
+# @return [Array<ApplicationRecord>] All invalid models
+def select_invalid(records)
+  records.select {|g| not g.validate }
+end
+
+
 # Prints all models that have been identified as invalid
 def output_invalid_models(invalid_models)
   invalid_models.each do |m|
-    puts m.readable_identification
-    puts m.errors
+    puts "#### #{m.readable_identification} ####"
+    puts m.errors.full_messages
     puts
   end
 end
@@ -47,6 +69,20 @@ namespace :blattwerkzeug do
     desc 'Validate integrity of all projects'
     task :validate_all => :environment do |t, args|
       output_invalid_models verify_all_projects
+    end
+  end
+
+  namespace :grammar do
+    desc 'Validate integrity of all grammars'
+    task :validate_all => :environment do |t, args|
+      output_invalid_models select_all_invalid_grammars
+    end
+  end
+
+  namespace :block_language do
+    desc 'Validate integrity of all block_languages'
+    task :validate_all => :environment do |t, args|
+      output_invalid_models select_all_invalid_block_languages
     end
   end
 end
