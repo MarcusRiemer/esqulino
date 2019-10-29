@@ -171,11 +171,6 @@ class Project < ApplicationRecord
     File.join data_directory_path, "databases"
   end
 
-  # Returns a nicely readable representation of id, slug and name
-  def readable_identification
-    "\"#{name}\" (#{slug}, #{id})"
-  end
-
   # Checks if the passed user is the owner of this project
   def owner?(user)
     return user.eql? self.user

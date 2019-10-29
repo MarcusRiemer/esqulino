@@ -493,4 +493,11 @@ RSpec.describe ProjectDatabase, type: :model do
     db.destroy!
     project.destroy!
   end
+
+  it "prints a readable identification" do
+    res = FactoryBot.create(:project_database, name: "debbie")
+    readable = res.readable_identification
+    expect(readable).to include res.id
+    expect(readable).to include res.name
+  end
 end

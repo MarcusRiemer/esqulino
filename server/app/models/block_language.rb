@@ -56,8 +56,4 @@ class BlockLanguage < ApplicationRecord
     #  .slice(include_list_calculations ? *calculatedFields : basic_fields)
   end
 
-  # Returns a nicely readable representation of name, id and slug
-  def readable_identification
-    "\"#{name}\" (#{slug}, #{id})"
-  end
 end

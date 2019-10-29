@@ -79,4 +79,12 @@ RSpec.describe BlockLanguage do
     res = FactoryBot.build(:block_language)
     expect(res.valid?).to be true
   end
+
+  it "prints a readable identification" do
+    res = FactoryBot.create(:block_language, slug: "iddy")
+    readable = res.readable_identification
+    expect(readable).to include res.id
+    expect(readable).to include res.name
+    expect(readable).to include res.slug
+  end
 end
