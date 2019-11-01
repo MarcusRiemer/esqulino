@@ -29,6 +29,30 @@ module Identity
               })
     end
 
+
+    # Asks Google whether the token that we currently have is still valid and
+    # also retrieve a new access_token.
+    def refresh_access_token
+      response = RestClient.post(
+        REFRESH_TOKEN_URL,
+        :grant_type => 'refresh_token',
+        :refresh_token => self.access_token,
+        :client_id => Rails.configuration.sqlino[:auth_provider_keys][:google_id],
+        :client_secret => Rails.configuration.sqlino[:auth_provider_keys][:google_secret]
+      )
+      parsed_response = JSON.parse(response.body)
+      sliced_response = parsed_response.slice("access_token","expires_in")
+
+      if (sliced_response.keys.length != 2)
+        raise EsqulinoError::Base.new("Malformed response from Google: #{sliced_response}")
+      end
+
+      self.access_token = sliced_response["access_token"]
+      self.credentials["expires_at"] = (Time.current + sliced_response["expires_in"]).to_i
+    rescue RestClient::BadRequest => err
+      raise EsqulinoError::Base.new("Refreshing Access Token failed: #{err}")
+    end
+
     # Google tells us whether the mail is valid
     def confirmed?
       return self.provider_data["email_verified"]
@@ -48,30 +72,15 @@ module Identity
       return self.access_token_duration < Time.current
     end
 
-    def access_token=(access_token)
-      self.credentials["access_token"] = access_token
+    # The current access token we have from Google
+    def access_token
+      self.credentials["token"]
     end
 
-    # Asks Google whether the token that we currently have is still valid
-    def refresh_access_token
-      response = RestClient.post(
-        REFRESH_TOKEN_URL,
-        :grant_type => 'refresh_token',
-        :refresh_token => self.credentials["token"],
-        :client_id => Rails.configuration.sqlino[:auth_provider_keys][:google_id],
-        :client_secret => Rails.configuration.sqlino[:auth_provider_keys][:google_secret]
-      )
-      parsed_response = JSON.parse(response.body)
-      sliced_response = parsed_response.slice("access_token","expires_in")
+    private
 
-      if (sliced_response.keys.length != 2)
-        raise EsqulinoError::Base.new("Malformed response from Google: #{sliced_response}")
-      end
-
-      self.credentials["access_token"] = sliced_response["access_token"]
-      self.credentials["expires_at"] = (Time.current + sliced_response["expires_in"]).to_i
-    rescue RestClient::BadRequest => err
-      raise EsqulinoError::Base.new("Refreshing Access Token failed: #{err}")
+    def access_token=(access_token)
+      self.credentials["token"] = access_token
     end
   end
 end
