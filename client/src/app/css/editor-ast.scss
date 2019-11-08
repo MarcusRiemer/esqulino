@@ -51,9 +51,12 @@ trash {
         display: contents;
     }
 
+
+
     /* An actual block being rendered */
     editor-block-render-block {
-        position: relative; // To serve as an anchor for the more exact drop locations
+        display: inline-block;   // To have "proper" rectangular borders / drag zones
+        position: relative;      // To serve as an anchor for the more exact drop locations
         background-color: white;
         cursor: grab;
 
@@ -69,7 +72,7 @@ trash {
 
         /* Indicators where to drop stuff relative to the current block, this
            is for a vertical layout where the indicators are displayed at top or bottom */
-        editor-block-render-block.vertical > {
+        &.vertical > {
 
             .begin-drop, .end-drop {
                 position: absolute;
@@ -109,7 +112,7 @@ trash {
         }
 
         /* Horizontal (left to right) indicators */
-        editor-block-render-block.horizontal > {
+        &.horizontal > {
 
             .begin-drop, .end-drop {
                 position: absolute;

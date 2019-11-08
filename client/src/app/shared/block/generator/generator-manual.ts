@@ -11,7 +11,6 @@ import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
 import { generateSidebar } from './sidebar'
 import { defaultEditorComponents } from './generator-default';
-import { QualifiedTypeName } from '../../syntaxtree';
 import { getQualifiedTypes } from '../../syntaxtree/grammar-util';
 
 /**

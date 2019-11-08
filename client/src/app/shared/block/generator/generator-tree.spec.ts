@@ -18,7 +18,7 @@ describe("Tree BlockLanguage Generator", () => {
 
       expect(r.editorBlocks).not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual))
-        .toEqual(`<block><container>node "t1" {}</container></block>`);
+        .toEqual(`<block class="vertical"><container class="vertical">node "t1" {}</container></block>`);
       expect(r.editorBlocks[0]).toEqual(jasmine.objectContaining({
         describedType: { languageName: "g1", typeName: "t1" },
       }));
@@ -43,7 +43,7 @@ describe("Tree BlockLanguage Generator", () => {
       expect(r.editorBlocks)
         .not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual))
-        .toEqual(`<block><container>node "t1" {<container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`);
+        .toEqual(`<block class="vertical"><container class="vertical">node "t1" {<container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`);
       expect(r.editorBlocks[0])
         .toEqual(jasmine.objectContaining({ describedType: { languageName: "g1", typeName: "t1" } }));
     });
@@ -72,7 +72,7 @@ describe("Tree BlockLanguage Generator", () => {
       expect(r.editorBlocks)
         .not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual))
-        .toEqual(`<block><container>node "t1" {<container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`);
+        .toEqual(`<block class="vertical"><container class="vertical">node "t1" {<container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`);
       expect(r.editorBlocks[0])
         .toEqual(jasmine.objectContaining({ describedType: { languageName: "g1", typeName: "t1" } }));
     });
@@ -108,7 +108,7 @@ describe("Tree BlockLanguage Generator", () => {
       expect(r.editorBlocks)
         .not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual))
-        .toEqual(`<block><container>node "t1" {<container class="indent vertical"><container class="vertical">children parentheses "p1" : [<iterator childGroup="p1">]</container></container>}</container></block>`);
+        .toEqual(`<block class="vertical"><container class="vertical">node "t1" {<container class="indent vertical"><container class="vertical">children parentheses "p1" : [<iterator childGroup="p1">]</container></container>}</container></block>`);
       expect(r.editorBlocks[0])
         .toEqual(jasmine.objectContaining({ describedType: { languageName: "g1", typeName: "t1" } }));
     });

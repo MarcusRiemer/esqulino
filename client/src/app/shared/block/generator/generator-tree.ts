@@ -70,9 +70,11 @@ export function visualizeNode(
 
   return ({
     blockType: "block",
+    cssClasses: ["vertical"],
     children: [
       {
         blockType: "container",
+        cssClasses: ["vertical"],
         children: [
           { blockType: "constant", text: `node "${name}" {` },
           ...wrappedAttributes,

@@ -188,7 +188,7 @@
           "$ref": "#/definitions/NodeTerminalSymbolDescription"
         },
         {
-          "$ref": "#/definitions/NodeRowDescription"
+          "$ref": "#/definitions/NodeVisualContainerDescription"
         }
       ],
       "description": "Attributes of a node are either validation atoms like properties\nor children or visual cues like terminals or rows."
@@ -381,40 +381,6 @@
         }
       ],
       "description": "Properties are used for atomic values and may be optional."
-    },
-    "NodeRowDescription": {
-      "additionalProperties": false,
-      "properties": {
-        "children": {
-          "items": {
-            "$ref": "#/definitions/NodeAttributeDescription"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        },
-        "orientation": {
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "type": "string"
-        },
-        "type": {
-          "enum": [
-            "row"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "name",
-        "orientation",
-        "children"
-      ],
-      "type": "object"
     },
     "NodeStringTypeRestrictions": {
       "anyOf": [
@@ -617,6 +583,40 @@
         "type",
         "name",
         "nodeTypes"
+      ],
+      "type": "object"
+    },
+    "NodeVisualContainerDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/definitions/NodeAttributeDescription"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orientation": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "container"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "orientation",
+        "children"
       ],
       "type": "object"
     },

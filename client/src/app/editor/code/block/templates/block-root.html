@@ -17,14 +17,13 @@
 
       <!-- If the tree is not empty, it wants to be rendered -->
       <ng-template #renderTree>
-        <div class="block-editor-root">
-          <editor-block-host  *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
-                              [blockLanguage]="currentBlockLanguage"
-                              [ngClass]="currentBlockLanguage.rootCssClasses"
-                              [codeResource]="currentResource"
-                              [node]="currentTree.rootNode"
-                              [readOnly]="readOnly"></editor-block-host>
-        </div>
+        <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
+                           class="block-editor-root"
+                           [blockLanguage]="currentBlockLanguage"
+                           [ngClass]="currentBlockLanguage.rootCssClasses"
+                           [codeResource]="currentResource"
+                           [node]="currentTree.rootNode"
+                           [readOnly]="readOnly"></editor-block-host>
         <ng-template #noRender>
           Darstellung nicht möglich
         </ng-template>
