@@ -90,7 +90,6 @@
          * (mouseover) informs the global state about drag events -->
     <editor-block-render-block #currentBlock
                                [@background]="currentBlock.backgroundState | async"
-                               [@isEmbraced]="currentBlock.isEmbraceDrop | async"
                                [blockLanguage]="blockLanguage"
                                [blockLayout]="visual"
                                [blockBase]="visual"
