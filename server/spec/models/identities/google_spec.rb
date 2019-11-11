@@ -19,10 +19,11 @@ RSpec.describe Identity::Google, type: :model do
   it "can be created from an auth hash" do
     u = create(:user)
     auth = {
-      :provider => {
+      :provider => "google",
+      :credentials => {
         "token" => "secret",
         "expires" => true,
-        "expires_at" => 1570803034
+        "expires_at" => 1570803034 # Expired
       },
       :info => {
         "name" => "Marcus Riemer",
@@ -38,25 +39,40 @@ RSpec.describe Identity::Google, type: :model do
 
     expect(i.email).to eq "dasgurke@gmail.com"
     expect(i.confirmed?).to eq true
+    expect(i.provider).to eq "google"
+    expect(i.access_token).to eq "secret"
+    expect(i.access_token_expired?).to eq true
+  end
+
+  it "has a working scope" do
+    create(:google_provider)
+    create(:developer_provider)
+
+    expect(::Identity::Identity.google.length).to eq 1
   end
 
   it "can be refeshed from Google" do
+    i = build(:google_provider, :existing)
+
     # Response was issued like this from Google in a single test, lets
     # hope that issue was exemplary ...
     refresh_response = {
-      "access_token"=>"secret",
+      "access_token"=>"new_secret",
       "expires_in"=>3261,
       "scope"=>"https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
       "token_type"=>"Bearer",
       "id_token"=>"secret"
     }.to_json
 
+    # Whatever request is coming, it must include the old access_token
     stub_request(:post, Identity::Google::REFRESH_TOKEN_URL)
+      .with(body: hash_including({ refresh_token: i.access_token }))
       .to_return(status: 200, body: refresh_response)
 
-    i = build(:google_provider, :existing)
-
     i.refresh_access_token
+
+    expect(i.access_token).to eq "new_secret"
+    expect(i.access_token_expired?).to eq false
   end
 
   it "reports errors if refresh fails" do
