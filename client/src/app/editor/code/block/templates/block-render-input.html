@@ -15,6 +15,7 @@
 </span>
 <ng-template #notEditing>
   <span class="not-editing"
+        [ngClass]="visual.cssClasses"
         [blockBase]="visual"
         (click)="onActivateEditing($event)">
     <ng-container *ngIf="hasValue; else noValue">

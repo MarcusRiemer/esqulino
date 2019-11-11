@@ -13,9 +13,13 @@ import {
 
 import { TypeInstructions } from './instructions'
 
+/**
+ * Checks whether the given attributes have any tags assigned. If that is the case
+ * they are immediatly added to the visual representation.
+ */
 function addTags(
   attr: NodeTerminalSymbolDescription | NodePropertyTypeDescription | NodeVisualContainerDescription,
-  visual: VisualBlockDescriptions.EditorConstant | VisualBlockDescriptions.EditorInterpolated | VisualBlockDescriptions.EditorContainer
+  visual: VisualBlockDescriptions.EditorConstant | VisualBlockDescriptions.EditorInterpolated | VisualBlockDescriptions.EditorContainer | VisualBlockDescriptions.EditorInput
 ) {
   if (attr.tags && attr.tags.length > 0) {
     const prev = visual.cssClasses || [];
@@ -91,6 +95,8 @@ export function mapProperty(
     if (Object.keys(instructions.style).length > 0) {
       toReturn.style = instructions.style;
     }
+
+    addTags(attr, toReturn);
 
     return (toReturn);
   }
