@@ -8,7 +8,8 @@
 @import 'admin';
 @import 'front';
 @import 'editor';
-@import 'editor-custom-blocks';
+@import 'editor-blocks-base';
+@import 'editor-blocks-sql';
 @import 'editor-ast';
 @import 'editor-images';
 @import 'editor-sql';

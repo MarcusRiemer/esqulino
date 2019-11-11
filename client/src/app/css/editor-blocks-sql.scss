@@ -1,0 +1,6 @@
+.sql.select, .sql.from, .sql.groupBy, .sql.orderBy {
+    & > .constant {
+        min-width: 10ch;
+        color: blue;
+    }
+}
