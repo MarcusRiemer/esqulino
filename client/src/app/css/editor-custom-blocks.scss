@@ -1,5 +1,8 @@
 .activate-block-outline editor-block-render-block {
     border: 1px solid black;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px;
 }
 
 .activate-indent .indent  {
@@ -7,10 +10,19 @@
     margin-right: 10px;
 }
 
+.activate-terminal-nowrap span.constant {
+    white-space: nowrap;
+}
+
+.activate-terminal-keyword span.keyword {
+    color: blue;
+}
+
 editor-block-container {
     display: flex;
     &.horizontal {
         flex-direction: row;
+        align-items: baseline;
     }
     &.vertical {
         flex-direction: column;
