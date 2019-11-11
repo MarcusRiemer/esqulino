@@ -364,8 +364,16 @@ describe('Grammar PrettyPrinter', () => {
     verifyFilesTxt('g015-single-row-empty', p.prettyPrintGrammar);
   });
 
-  it('Grammar g16: Single empty with single attribute', () => {
+  it('Grammar g16: Single empty row with single attribute', () => {
     verifyFilesTxt('g016-single-row-single-attribute', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g17: Terminal without name', () => {
+    verifyFilesTxt('g017-terminal-unnamed', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g18: Container without name', () => {
+    verifyFilesTxt('g018-container-unnamed', p.prettyPrintGrammar);
   });
 });
 

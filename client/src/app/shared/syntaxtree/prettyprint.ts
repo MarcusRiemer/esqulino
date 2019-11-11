@@ -97,8 +97,16 @@ export function prettyPrintOneOfType(name: QualifiedTypeName, t: Desc.NodeOneOfT
  * Prints the grammar for a terminal symbol
  */
 export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
+  // The escaped symbol without the surrounding " "
   const escapedSymbol = JSON.stringify(p.symbol).slice(1, -1);
-  return ([`terminal "${p.name}" "${escapedSymbol}"`]);
+
+  if (typeof p.name === "string") {
+    return ([`terminal "${p.name}" "${escapedSymbol}"`]);
+  } else {
+    return [escapedSymbol];
+  }
+
+
 }
 
 /**

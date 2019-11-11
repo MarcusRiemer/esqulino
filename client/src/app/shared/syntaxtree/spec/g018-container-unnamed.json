@@ -1,0 +1,16 @@
+{
+  "root": { "languageName": "g18", "typeName": "n1" },
+  "types": {
+    "g18": {
+      "n1": {
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "vertical",
+            "children": []
+          }
+        ]
+      }
+    }
+  }
+}
