@@ -11,7 +11,7 @@ import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
 import { generateSidebar } from './sidebar'
 import { defaultEditorComponents } from './generator-default';
-import { getQualifiedTypes } from '../../syntaxtree/grammar-util';
+import { getQualifiedTypes, ensureGrammarAttributeNames } from '../../syntaxtree/grammar-util';
 
 /**
  * Ensures that there should be no errors during generation.
@@ -52,9 +52,13 @@ export function convertGrammarManualInstructions(
     sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
   };
 
+  // If the grammar designer has decided to not name some things: This step still
+  // relies on unique names so they have to be generated
+  const strictlyNamedGrammar = ensureGrammarAttributeNames(g);
+
   // The blocks of the editor are based on the concrete types of the grammar,
   // "oneOf" types are not of interest here because they can never be nodes.
-  const concreteTypes = getQualifiedTypes(g)
+  const concreteTypes = getQualifiedTypes(strictlyNamedGrammar)
     .filter(t => t.type !== "oneOf");
 
   // Apply traits

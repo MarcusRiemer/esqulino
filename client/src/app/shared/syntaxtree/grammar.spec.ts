@@ -1754,32 +1754,48 @@ describe('Grammar Validation', () => {
     expect(JSON.stringify(res.errors[1].data)).toBeTruthy("Should be pure data");
   });
 
-  it(`Name clash: Property name "foo" defined twice`, () => {
-    const g = singleLanguageGrammar("spec", "root", {
-      "root": {
-        type: "concrete",
-        attributes: [
-          { type: "property", base: "integer", name: "foo" },
-          { type: "property", base: "integer", name: "foo" }
-        ]
-      }
+  describe(`Name-related`, () => {
+    it(`Name clash: Property name "foo" defined twice`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            { type: "property", base: "integer", name: "foo" },
+            { type: "property", base: "integer", name: "foo" }
+          ]
+        }
+      });
+
+      expect(() => new Validator([g])).toThrowError(/foo/);
     });
 
-    expect(() => new Validator([g])).toThrowError(/foo/);
-  });
+    it(`Name clash: Child group name "foo" defined twice`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            { type: "allowed", nodeTypes: [], name: "foo" },
+            { type: "allowed", nodeTypes: [], name: "foo" }
+          ]
+        }
+      });
 
-  it(`Name clash: Child group name "foo" defined twice`, () => {
-    const g = singleLanguageGrammar("spec", "root", {
-      "root": {
-        type: "concrete",
-        attributes: [
-          { type: "allowed", nodeTypes: [], name: "foo" },
-          { type: "allowed", nodeTypes: [], name: "foo" }
-        ]
-      }
+      expect(() => new Validator([g])).toThrowError(/foo/);
     });
 
-    expect(() => new Validator([g])).toThrowError(/foo/);
+    it(`Auto generated property names for visual types`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            { type: "terminal", symbol: "t" },
+            { type: "container", orientation: "vertical", children: [] }
+          ]
+        }
+      });
+
+      expect(() => new Validator([g])).not.toThrow();
+    });
   });
 
   describe(`Multiple Languages in Single Grammar`, () => {

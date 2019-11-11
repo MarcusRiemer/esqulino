@@ -111,7 +111,10 @@ export abstract class NodeType {
  */
 export class NodeConcreteType extends NodeType {
 
+  // Possible child groups of this type
   private _allowedChildren: { [category: string]: NodeTypeChildren } = {};
+
+  // Possible properties of this type
   private _allowedProperties: { [propName: string]: NodePropertyValidator } = {};
 
   constructor(validator: Validator, typeDesc: Desc.NodeConcreteTypeDescription, language: string, name: string) {
@@ -127,6 +130,7 @@ export class NodeConcreteType extends NodeType {
     if (attr) {
       // Put the existing attributes into their respective buckets
       attr.forEach(a => {
+        // Visual properties may not have a name
         switch (a.type) {
           case "property":
             if (a.name in this._allowedProperties) {
@@ -143,12 +147,12 @@ export class NodeConcreteType extends NodeType {
             }
             this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
             break;
+          case "container":
+            // Consume the children, they may define validation related attributes
+            this.loadAttributes(a.children);
+            break;
           case "terminal":
             // Do nothing, terminals have no impact on validation
-            break;
-          case "container":
-            // Consume the children
-            this.loadAttributes(a.children);
             break;
           default:
             throw new Error(`Unknown validator requested: ${JSON.stringify(a)}`);

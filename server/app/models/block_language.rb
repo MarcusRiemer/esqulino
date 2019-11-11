@@ -8,7 +8,9 @@ class BlockLanguage < ApplicationRecord
   validates :slug, uniqueness: true, allow_nil: true, length: { minimum: 1 }
 
   # The JSON document needs to be a valid block language
-  validates :model, json_schema: 'BlockLanguageDocument'
+  # TODO: Turn this on again once the generated output is stable,
+  #       Currently loads of visual components define obsolete properties like "breakAfter"
+  # validates :model, json_schema: 'BlockLanguageDocument'
 
   # The programming language that should be chosen as a default when
   # creating code resources.
@@ -46,14 +48,9 @@ class BlockLanguage < ApplicationRecord
                "blockLanguageGeneratorId", "grammarId", "generated")
     else
       to_json_api_response
-        .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId")
+        .slice("id", "slug", "name", "defaultProgrammingLanguageId",
+               "blockLanguageGeneratorId", "grammarId")
     end
-
-    # basic_fields = ["id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId"]
-    # calculatedFields = basic_fields + ["automaticallyGenerated"]
-
-    # to_json_api_response
-    #  .slice(include_list_calculations ? *calculatedFields : basic_fields)
   end
 
 end

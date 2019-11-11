@@ -1,7 +1,7 @@
 import {
   NodeConcreteTypeDescription, NodeAttributeDescription,
   NodeTerminalSymbolDescription, NodePropertyTypeDescription,
-  NodeChildrenGroupDescription
+  NodeChildrenGroupDescription, NodeVisualContainerDescription
 } from '../../syntaxtree/grammar.description'
 
 import { VisualBlockDescriptions } from '../block.description'
@@ -128,8 +128,23 @@ export function mapChildren(
     iteratorBlock.style = instructions.style;
   }
 
-  // Lets see whether we can eliminate drop targets from block descriptions
   return ([iteratorBlock]);
+}
+
+export function mapContainer(
+  _typeDesc: NodeConcreteTypeDescription,
+  attr: NodeVisualContainerDescription,
+  instructions: TypeInstructions,
+): VisualBlockDescriptions.ConcreteBlock {
+  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(a => mapAttribute(_typeDesc, a, instructions));
+
+  const container: VisualBlockDescriptions.EditorContainer = {
+    blockType: "container",
+    children: [].concat(...mappedChildren),
+    cssClasses: [attr.orientation],
+  };
+
+  return (container);
 }
 
 export function mapAttribute(
@@ -143,10 +158,12 @@ export function mapAttribute(
     case "choice":
     case "parentheses":
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
-    case "terminal":
-      return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
     case "property":
       return [mapProperty(attr, instructions.scopeProperty(attr.name))];
+    case "terminal":
+      return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
+    case "container":
+      return [mapContainer(typeDesc, attr, instructions)];
     default:
       throw new Error(`Unknown attribute type "${(attr as any).type}"`);
   }
@@ -158,13 +175,14 @@ export function mapAttribute(
  * either according to the order in the grammar or the order that is
  * given explicitly.
  */
-export function mapAttributes(
+export function mapBlockAttributes(
   typeDesc: NodeConcreteTypeDescription,
   instructions: TypeInstructions,
   blockNumber: number,
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // For every relevant attribute ...
   const generatedBlocks = instructions.relevantAttributes(blockNumber, typeDesc).map(t => {
+    console.log(`Block number`, blockNumber, t);
     // ... find its type ...
     const mappedType = typeDesc.attributes.find(a => a.name === t);
     if (mappedType) {
@@ -194,7 +212,7 @@ export function mapType(
     const blockInstructions = instructions.scopeBlock(i);
     const thisBlock: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
-      children: mapAttributes(typeDesc, instructions, i),
+      children: mapBlockAttributes(typeDesc, instructions, i),
       dropTarget: blockInstructions.onDrop,
       breakAfter: blockInstructions.breakAfter,
     };

@@ -2,12 +2,125 @@ import { GrammarDocument } from '../../syntaxtree/grammar.description'
 import { singleLanguageGrammar } from '../../syntaxtree/grammar.spec-util';
 
 import { VisualBlockDescriptions } from '../block.description';
+import { BlockLanguageDocument } from '../block-language.description';
 
 import { BlockLanguageGeneratorDocument } from './generator.description'
 import { convertGrammarManualInstructions } from './generator-manual'
 
+/**
+ * More comfortable access to mapped attributes
+ */
+function expectMappedAttribute(r: BlockLanguageDocument, blockIndex: number, visualIndex: number) {
+  const block = r.editorBlocks[blockIndex];
+  expect(block).toBeDefined();
+  const visualBlock = block.visual[0] as VisualBlockDescriptions.EditorBlock;
+  expect(visualBlock).toBeDefined();
+  expect(VisualBlockDescriptions.isEditorBlock(visualBlock)).toBe(true);
+  const visual = visualBlock.children[visualIndex + 1]; // Skip error block
+
+  return (visual);
+}
+
 describe("Manual BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
+    it("Grammar with only unnamed terminal symbols", () => {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            { type: "terminal", symbol: "t" }
+          ]
+        }
+      });
+
+      const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
+        editorComponents: []
+      };
+
+      const r = convertGrammarManualInstructions(generator, grammar);
+
+      expect(r.editorBlocks.length).toEqual(1);
+
+      const v = expectMappedAttribute(r, 0, 0);
+      expect(v.blockType).toEqual("constant");
+    });
+
+    it("Grammar with unnamed container", () => {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              children: [
+                { type: "terminal", symbol: "t" }
+              ],
+              orientation: "horizontal"
+            }
+          ]
+        }
+      });
+
+      const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
+        editorComponents: []
+      };
+
+      const r = convertGrammarManualInstructions(generator, grammar);
+
+      expect(r.editorBlocks.length).toEqual(1);
+
+      const c = expectMappedAttribute(r, 0, 0) as VisualBlockDescriptions.EditorContainer;
+      expect(c.blockType).toEqual("container");
+      expect(c.cssClasses).toEqual(["horizontal"]);
+      expect(c.children.length).toEqual(1);
+    });
+
+    it("Grammar with multiple unnamed containers for a single block", () => {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+        "t1": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              children: [
+                { type: "terminal", symbol: "1" },
+                { type: "terminal", symbol: "2" }
+              ],
+              orientation: "horizontal"
+            },
+            {
+              type: "container",
+              children: [{ type: "property", name: "i1", base: "integer" }],
+              orientation: "vertical"
+            }
+          ]
+        }
+      });
+
+      const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
+        editorComponents: []
+      };
+
+      const r = convertGrammarManualInstructions(generator, grammar);
+
+      expect(r.editorBlocks.length).toEqual(1);
+
+      const c1 = expectMappedAttribute(r, 0, 0) as VisualBlockDescriptions.EditorContainer;
+      expect(c1.blockType).toEqual("container");
+      expect(c1.cssClasses).toEqual(["horizontal"]);
+      expect(c1.children.length).toEqual(2);
+      expect(c1.children[0].blockType).toEqual("constant");
+
+      const c2 = expectMappedAttribute(r, 0, 1) as VisualBlockDescriptions.EditorContainer;
+      expect(c2.blockType).toEqual("container");
+      expect(c2.cssClasses).toEqual(["vertical"]);
+      expect(c2.children.length).toEqual(1);
+      expect(c2.children[0].blockType).toEqual("input");
+    });
+
     it("Almost empty grammar with no generation instructions", () => {
       const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         "t1": {

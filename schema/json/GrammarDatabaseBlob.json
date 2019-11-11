@@ -421,7 +421,6 @@
       },
       "required": [
         "type",
-        "name",
         "symbol"
       ],
       "type": "object"
@@ -614,7 +613,6 @@
       },
       "required": [
         "type",
-        "name",
         "orientation",
         "children"
       ],
