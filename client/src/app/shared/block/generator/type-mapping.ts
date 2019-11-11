@@ -182,7 +182,6 @@ export function mapBlockAttributes(
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // For every relevant attribute ...
   const generatedBlocks = instructions.relevantAttributes(blockNumber, typeDesc).map(t => {
-    console.log(`Block number`, blockNumber, t);
     // ... find its type ...
     const mappedType = typeDesc.attributes.find(a => a.name === t);
     if (mappedType) {

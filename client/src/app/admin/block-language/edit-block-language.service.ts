@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { ActivatedRoute, ParamMap } from '@angular/router'
 import { Title } from '@angular/platform-browser'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { BehaviorSubject } from 'rxjs'
 import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
@@ -28,6 +29,7 @@ export class EditBlockLanguageService {
     private _serverData: BlockLanguageDataService,
     private _grammarData: GrammarDataService,
     private _activatedRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar,
     private _title: Title,
   ) {
     // Ensures that a block language that matches the URL is loaded.
@@ -122,7 +124,9 @@ export class EditBlockLanguageService {
               // Try to generate the block language itself. If this fails something is
               // seriously wrong and we should probably do something smart about it.
               try {
-                return (generateBlockLanguage(blockLanguage, instructions, g));
+                const updated = generateBlockLanguage(blockLanguage, instructions, g);
+                this._snackBar.open(`Regenerated block language`, "", { duration: 3000 });
+                return (updated);
               } catch (e) {
                 // Pass on the error
                 this.generatorErrors.push({
@@ -130,6 +134,7 @@ export class EditBlockLanguageService {
                   message: "Could not generate block language",
                   exception: e
                 });
+                this._snackBar.open(`Could not regenerate block language`);
                 // But don't change the language
                 return (blockLanguage);
               }
