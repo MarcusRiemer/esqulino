@@ -5,7 +5,7 @@ RSpec.describe NewsController, type: :request do
 
   describe 'GET /api/news' do
     it 'Frontpage: retrieving news without anything published' do
-      news = create(:news, published_from: Date.new(2019, 11, 1) )
+      news = create(:news, published_from: Date.new(2999, 1, 1) )
       get '/api/news'
       json_data = JSON.parse(response.body)
 
