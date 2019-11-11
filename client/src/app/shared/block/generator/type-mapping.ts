@@ -13,6 +13,16 @@ import {
 
 import { TypeInstructions } from './instructions'
 
+function addTags(
+  attr: NodeTerminalSymbolDescription | NodePropertyTypeDescription | NodeVisualContainerDescription,
+  visual: VisualBlockDescriptions.EditorConstant | VisualBlockDescriptions.EditorInterpolated | VisualBlockDescriptions.EditorContainer
+) {
+  if (attr.tags && attr.tags.length > 0) {
+    const prev = visual.cssClasses || [];
+    visual.cssClasses = prev.concat(attr.tags);
+  }
+}
+
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
  * symbol will appear as the text.
@@ -33,6 +43,9 @@ export function mapTerminal(
     toReturn.style = instructions.style;
   }
 
+  // Possibly add some class
+  addTags(attr, toReturn);
+
   return (toReturn);
 }
 
@@ -51,6 +64,9 @@ export function mapInterpolated(
   if (Object.keys(instructions.style).length > 0) {
     toReturn.style = instructions.style;
   }
+
+  // Possibly add some class
+  addTags(attr, toReturn);
 
   return (toReturn);
 }
@@ -138,13 +154,16 @@ export function mapContainer(
 ): VisualBlockDescriptions.ConcreteBlock {
   const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(a => mapAttribute(_typeDesc, a, instructions));
 
-  const container: VisualBlockDescriptions.EditorContainer = {
+  const toReturn: VisualBlockDescriptions.EditorContainer = {
     blockType: "container",
     children: [].concat(...mappedChildren),
     cssClasses: [attr.orientation],
   };
 
-  return (container);
+  // Possibly add some class
+  addTags(attr, toReturn);
+
+  return (toReturn);
 }
 
 export function mapAttribute(

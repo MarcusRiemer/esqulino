@@ -1,6 +1,19 @@
-.sql.select, .sql.from, .sql.groupBy, .sql.orderBy {
-    & > .constant {
-        min-width: 10ch;
-        color: blue;
-    }
+.sql > .keyword {
+    color: blue;
+}
+
+.sql > .operator {
+    color: green;
+}
+
+.sql > .parameter {
+    color: orange;
+}
+
+.sql.constant {
+    color: red;
+}
+
+.sql > .component {
+    min-width: 10ch;
 }

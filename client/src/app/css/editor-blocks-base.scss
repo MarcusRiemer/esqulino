@@ -28,4 +28,8 @@ editor-block-container {
         flex-direction: column;
         align-items: flex-start; // Otherwise children occupy full width
     }
+
+    &.allow-wrap {
+        flex-wrap: wrap;
+    }
 }

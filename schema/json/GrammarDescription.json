@@ -303,6 +303,12 @@
         "name": {
           "type": "string"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "property"
@@ -339,6 +345,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "property"
@@ -372,6 +384,12 @@
         "restrictions": {
           "items": {
             "$ref": "#/definitions/NodeStringTypeRestrictions"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },
@@ -432,6 +450,12 @@
         },
         "symbol": {
           "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "type": {
           "enum": [
@@ -624,6 +648,12 @@
             "vertical"
           ],
           "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "type": {
           "enum": [

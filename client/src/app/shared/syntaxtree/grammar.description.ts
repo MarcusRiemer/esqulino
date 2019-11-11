@@ -73,6 +73,7 @@ export interface NodeTerminalSymbolDescription {
   type: "terminal";
   name?: string;
   symbol: string;
+  tags?: string[];
 }
 
 /**
@@ -81,6 +82,7 @@ export interface NodeTerminalSymbolDescription {
 export interface NodeVisualContainerDescription {
   type: "container";
   name?: string;
+  tags?: string[];
   orientation: "horizontal" | "vertical";
   children: NodeAttributeDescription[];
 }
@@ -107,6 +109,7 @@ export interface NodePropertyBooleanDescription {
   name: string
   base: "boolean"
   isOptional?: boolean
+  tags?: string[];
 }
 
 /**
@@ -117,7 +120,20 @@ export interface NodePropertyStringDescription {
   name: string
   base: "string"
   isOptional?: boolean
+  tags?: string[];
   restrictions?: NodeStringTypeRestrictions[]
+}
+
+/**
+ * Describes the "Integer" type and describes how it can be restricted.
+ */
+export interface NodePropertyIntegerDescription {
+  type: "property"
+  name: string
+  base: "integer"
+  isOptional?: boolean,
+  tags?: string[];
+  restrictions?: NodeIntegerTypeRestrictions[]
 }
 
 /**
@@ -175,17 +191,6 @@ export interface RegularExpressionRestrictionDescription {
  */
 export type NodeIntegerTypeRestrictions = MinInclusiveRestriction
   | MaxInclusiveRestriction
-
-/**
- * Describes the "Integer" type and describes how it can be restricted.
- */
-export interface NodePropertyIntegerDescription {
-  type: "property"
-  name: string
-  base: "integer"
-  isOptional?: boolean,
-  restrictions?: NodeIntegerTypeRestrictions[]
-}
 
 /**
  * Restricts the maximum numerical value.
