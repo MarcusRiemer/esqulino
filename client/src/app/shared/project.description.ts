@@ -144,7 +144,14 @@ export interface ProjectUpdateDescription {
 /**
  * These parameters are required to create a new project.
  */
-export interface ProjectCreationDescription {
+export interface ProjectCreationRequest {
   slug: ProjectSlug
   name: ProjectName
+}
+
+/**
+ * Server feedback when attempting project creation.
+ */
+export interface ProjectCreationResponse {
+  id: string
 }

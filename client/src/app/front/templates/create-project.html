@@ -60,7 +60,7 @@
              class="alert alert-danger"
              role="alert">
           <strong>Projekt konnte nicht angelegt werden!</strong> Der Server meldet das folgende Problem:
-          <pre [innerText]="currentError"></pre>
+          <pre [innerText]="currentError | json"></pre>
         </div>
         <button (click)="createProject()"
                 [disabled]="inProgress"
