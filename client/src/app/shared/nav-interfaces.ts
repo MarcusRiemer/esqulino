@@ -15,6 +15,7 @@ export interface NavLink {
   route: string[],
   requireRoles?: string[];
   icon?: string
+  highlightExact?: boolean
 }
 
 /**

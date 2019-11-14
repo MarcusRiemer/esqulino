@@ -8,15 +8,6 @@ export const adminItems: NavItem[] = [
   {
     type: "link",
     text: {
-      de: "Benutzer",
-      en: "User",
-    },
-    route: ["/admin"],
-    icon: "puzzle-piece",
-  },
-  {
-    type: "link",
-    text: {
       de: "Grammatiken",
       en: "Grammar",
     },
@@ -62,7 +53,7 @@ export const adminItems: NavItem[] = [
   templateUrl: 'templates/admin.html'
 })
 export class AdminComponent {
-  constructor(private _sideNavService: SideNavService) {}
+  constructor(private _sideNavService: SideNavService) { }
 
   /**
    * All items that need to be shown in the general navigation
