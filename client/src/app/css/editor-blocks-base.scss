@@ -10,12 +10,27 @@
     margin-right: 10px;
 }
 
+// Selectively deactivate wrapping in constants, useful for
+// logically related terminal symbols like "else if".
 .activate-terminal-nowrap span.constant {
     white-space: nowrap;
 }
 
+// Mark something as a keyword a language
 .activate-terminal-keyword span.keyword {
     color: blue;
+}
+
+// Add a whitespace after a terminal symbol
+.activate-terminal-whitespace .space-after {
+    margin-right: 1ch;
+}
+
+// Enquote a terminal symbol with quotes
+.activate-terminal-enquote span.double-quote {
+    &::after, &::before {
+        content: "\"";
+    }
 }
 
 editor-block-container {

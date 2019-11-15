@@ -4,35 +4,53 @@ concise_attributes:
   name: id
   value_before_type_cast: 89f9ca62-845c-435b-9b9a-cf52fe7df2b1
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Meta Grammar
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": {"typeName": "grammar", "languageName": "MetaGrammar"},
     "types": {"MetaGrammar": {"node": {"type": "oneOf", "oneOf": ["concreteNode",
-    "typedef"]}, "grammar": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "name", "type": "property"}, {"name": "nodes", "type": "sequence", "nodeTypes":
-    [{"occurs": "+", "nodeType": "node"}]}]}, "nodeRef": {"type": "concrete", "attributes":
-    [{"base": "string", "name": "name", "type": "property"}]}, "typedef": {"type":
-    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
-    {"name": "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "nodeRef"}]}]}, "children": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "name", "type": "property"}]}, "property": {"type": "concrete", "attributes":
-    [{"base": "string", "name": "name", "type": "property"}]}, "terminal": {"type":
-    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
-    {"base": "string", "name": "symbol", "type": "property"}]}, "attribute": {"type":
-    "oneOf", "oneOf": ["terminal", "property", "children"]}, "concreteNode": {"type":
-    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
-    {"name": "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "attribute"}]}]}}}}'
+    "typedef"]}, "grammar": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"type": "container", "children": [{"tags": ["space-after"], "type":
+    "terminal", "symbol": "grammar"}, {"base": "string", "name": "name", "tags": ["double-quote",
+    "space-after"], "type": "property"}, {"type": "terminal", "symbol": "{"}], "orientation":
+    "horizontal"}, {"name": "nodes", "type": "sequence", "nodeTypes": [{"occurs":
+    "+", "nodeType": "node"}]}, {"type": "terminal", "symbol": "}"}], "orientation":
+    "vertical"}]}, "nodeRef": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}]}, "typedef": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "name", "type": "property"}, {"name": "attributes",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}]},
+    "children": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"tags": ["space-after"], "type": "terminal", "symbol": "children"}, {"base":
+    "string", "name": "base", "tags": ["space-after"], "type": "property", "restrictions":
+    [{"type": "enum", "value": ["sequence", "allowed"]}]}, {"base": "string", "name":
+    "name", "tags": ["space-after"], "type": "property"}, {"tags": ["space-after"],
+    "type": "terminal", "symbol": "::="}, {"name": "attributes", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]},
+    "property": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"tags": ["space-after"], "type": "terminal", "symbol": "prop"}, {"base": "string",
+    "name": "name", "tags": ["double-quote", "space-after"], "type": "property"},
+    {"base": "string", "name": "base", "type": "property", "restrictions": [{"type":
+    "enum", "value": ["integer", "string", "boolean"]}]}], "orientation": "horizontal"}]},
+    "terminal": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
+    "type": "property"}, {"base": "string", "name": "symbol", "type": "property"}]},
+    "attribute": {"type": "oneOf", "oneOf": ["terminal", "property", "children"]},
+    "concreteNode": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"type": "container", "children": [{"tags": ["space-after"], "type": "terminal",
+    "symbol": "node"}, {"base": "string", "name": "languageName", "tags": ["double-quote"],
+    "type": "property"}, {"type": "terminal", "symbol": "."}, {"base": "string", "name":
+    "typeName", "tags": ["double-quote", "space-after"], "type": "property"}, {"type":
+    "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"name": "attributes",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}]},
+    {"type": "terminal", "symbol": "}"}], "orientation": "vertical"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-05-22 09:31:33.682761'
+  value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-12 11:20:24.258546'
+  value_before_type_cast: 2019-11-15 15:14:43.333878000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic

@@ -153,8 +153,8 @@ trash {
     }
 
     editor-block-render-input {
-        .not-editing {
-            display: inline-block;
+        .not-editing > .display-value {
+            display: inline-flex;
             border-bottom: 1px dashed black;
             min-height: 1ch;
             min-width: 1ch;
@@ -163,7 +163,7 @@ trash {
         // Input fields for users need to somehow "blend in" with the rest of the
         // blocks but also be recognizable.
         input {
-            display: inline-block;
+            display: inline-flex;
             border: 0px;
             border-bottom: 1px dashed black;
             background-color: transparent;

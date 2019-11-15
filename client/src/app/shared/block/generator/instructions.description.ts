@@ -82,14 +82,14 @@ export module DefaultInstructions {
   export const terminalInstructions: TerminalInstructions = {
     breakAfter: false,
     style: {
-      "display": "inline-block"
+      "display": "inline-flex"
     },
   }
 
   export const propertyInstructions: PropertyInstructions = {
     propReadOnly: false,
     style: {
-      "display": "inline-block"
+      "display": "inline-flex"
     }
   }
 }

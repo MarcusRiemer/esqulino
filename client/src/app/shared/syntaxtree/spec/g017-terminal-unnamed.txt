@@ -1,5 +1,5 @@
 grammar "g017-terminal-unnamed" {
   node "g17"."n1" {
-    i am required
+    "i am required"
   }
 }

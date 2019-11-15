@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 
-import { ServerDataService } from '../shared';
-
 /**
  * Administrative Overview, this is the "greeting" page for every
  * user that enters the administration panels.
@@ -13,7 +11,6 @@ import { ServerDataService } from '../shared';
 export class AdminOverviewComponent implements OnInit {
 
   constructor(
-    private _serverData: ServerDataService,
     private _title: Title,
   ) {
   }

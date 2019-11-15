@@ -4,93 +4,114 @@ concise_attributes:
   name: id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Meta Grammar
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta Grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "Meta",
-    "categories": [{"blocks": [{"defaultNode": {"name": "grammar", "children": {"nodes":
-    [{"name": "concreteNode", "language": "MetaGrammar", "properties": {"name": "root"}}]},
-    "language": "MetaGrammar"}, "displayName": "Leere Grammatik"}, {"defaultNode":
-    {"name": "concreteNode", "language": "MetaGrammar", "properties": {"name": "root"}},
-    "displayName": "Konkreter Typ"}, {"defaultNode": {"name": "property", "language":
-    "MetaGrammar", "properties": {"name": "root"}}, "displayName": "Eigenschaft"}],
-    "categoryCaption": "Grammatik"}]}], "editorBlocks": [{"visual": [{"children":
-    [{"text": "node \"grammar\" {", "blockType": "constant"}, {"children": [{"children":
-    [{"text": "prop \"name\": ", "blockType": "constant", "cssClasses": ["foobar-constant"]},
-    {"property": "name", "blockType": "input"}], "blockType": "container", "cssClasses":
-    ["horizontal"]}, {"children": [{"text": "children \"nodes\" : [", "blockType":
-    "constant"}, {"blockType": "iterator", "direction": "vertical", "childGroupName":
-    "nodes"}, {"text": "]", "blockType": "constant"}], "blockType": "container", "cssClasses":
-    ["vertical"]}], "blockType": "container", "cssClasses": ["indent", "vertical"]},
-    {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
-    "describedType": {"typeName": "grammar", "languageName": "MetaGrammar"}}, {"visual":
-    [{"children": [{"text": "node \"nodeRef\" {", "blockType": "constant"}, {"children":
-    [{"children": [{"text": "prop \"name\": ", "blockType": "constant", "cssClasses":
-    ["foobar-constant"]}, {"property": "name", "blockType": "input"}], "blockType":
-    "container", "cssClasses": ["horizontal"]}], "blockType": "container", "cssClasses":
-    ["indent", "vertical"]}, {"text": "}", "blockType": "constant"}], "blockType":
-    "block", "direction": "vertical"}], "describedType": {"typeName": "nodeRef", "languageName":
-    "MetaGrammar"}}, {"visual": [{"children": [{"text": "node \"typedef\" {", "blockType":
-    "constant"}, {"children": [{"children": [{"text": "prop \"name\": ", "blockType":
-    "constant", "cssClasses": ["foobar-constant"]}, {"property": "name", "blockType":
-    "input"}], "blockType": "container", "cssClasses": ["horizontal"]}, {"children":
-    [{"text": "children \"attributes\" : [", "blockType": "constant"}, {"blockType":
-    "iterator", "direction": "vertical", "childGroupName": "attributes"}, {"text":
-    "]", "blockType": "constant"}], "blockType": "container", "cssClasses": ["vertical"]}],
-    "blockType": "container", "cssClasses": ["indent", "vertical"]}, {"text": "}",
-    "blockType": "constant"}], "blockType": "block", "direction": "vertical"}], "describedType":
-    {"typeName": "typedef", "languageName": "MetaGrammar"}}, {"visual": [{"children":
-    [{"text": "node \"children\" {", "blockType": "constant"}, {"children": [{"children":
-    [{"text": "prop \"name\": ", "blockType": "constant", "cssClasses": ["foobar-constant"]},
-    {"property": "name", "blockType": "input"}], "blockType": "container", "cssClasses":
-    ["horizontal"]}], "blockType": "container", "cssClasses": ["indent", "vertical"]},
-    {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
-    "describedType": {"typeName": "children", "languageName": "MetaGrammar"}}, {"visual":
-    [{"children": [{"text": "node \"property\" {", "blockType": "constant"}, {"children":
-    [{"children": [{"text": "prop \"name\": ", "blockType": "constant", "cssClasses":
-    ["foobar-constant"]}, {"property": "name", "blockType": "input"}], "blockType":
-    "container", "cssClasses": ["horizontal"]}], "blockType": "container", "cssClasses":
-    ["indent", "vertical"]}, {"text": "}", "blockType": "constant"}], "blockType":
-    "block", "direction": "vertical"}], "describedType": {"typeName": "property",
-    "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"text": "node \"terminal\"
-    {", "blockType": "constant"}, {"children": [{"children": [{"text": "prop \"name\":
-    ", "blockType": "constant", "cssClasses": ["foobar-constant"]}, {"property": "name",
-    "blockType": "input"}], "blockType": "container", "cssClasses": ["horizontal"]},
-    {"children": [{"text": "prop \"symbol\": ", "blockType": "constant", "cssClasses":
-    ["foobar-constant"]}, {"property": "symbol", "blockType": "input"}], "blockType":
-    "container", "cssClasses": ["horizontal"]}], "blockType": "container", "cssClasses":
-    ["indent", "vertical"]}, {"text": "}", "blockType": "constant"}], "blockType":
-    "block", "direction": "vertical"}], "describedType": {"typeName": "terminal",
-    "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"text": "node \"concreteNode\"
-    {", "blockType": "constant"}, {"children": [{"children": [{"text": "prop \"name\":
-    ", "blockType": "constant", "cssClasses": ["foobar-constant"]}, {"property": "name",
-    "blockType": "input"}], "blockType": "container", "cssClasses": ["horizontal"]},
-    {"children": [{"text": "children \"attributes\" : [", "blockType": "constant"},
-    {"blockType": "iterator", "direction": "vertical", "childGroupName": "attributes"},
-    {"text": "]", "blockType": "constant"}], "blockType": "container", "cssClasses":
-    ["vertical"]}], "blockType": "container", "cssClasses": ["indent", "vertical"]},
-    {"text": "}", "blockType": "constant"}], "blockType": "block", "direction": "vertical"}],
+    "categories": [{"blocks": [{"defaultNode": {"name": "grammar", "language": "MetaGrammar",
+    "properties": {"name": "$lang"}}, "displayName": "Leere Grammatik"}, {"defaultNode":
+    {"name": "concreteNode", "language": "MetaGrammar", "properties": {"typeName":
+    "$type", "languageName": "$lang"}}, "displayName": "Konkreter Typ"}, {"defaultNode":
+    {"name": "property", "language": "MetaGrammar", "properties": {"base": "$type",
+    "name": "$prop"}}, "displayName": "Eigenschaft"}, {"defaultNode": {"name": "children",
+    "children": {"attributes": []}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "$childGroup"}}, "displayName": "Sequenz"}], "categoryCaption":
+    "Grammatik"}]}], "editorBlocks": [{"visual": [{"children": [{"style": {"color":
+    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
+    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
+    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children":
+    [{"children": [{"text": "grammar", "style": {"display": "inline-flex"}, "blockType":
+    "constant", "breakAfter": false, "cssClasses": ["space-after"]}, {"style": {"display":
+    "inline-flex"}, "property": "name", "blockType": "input", "cssClasses": ["double-quote",
+    "space-after"]}, {"text": "{", "style": {"display": "inline-flex"}, "blockType":
+    "constant", "breakAfter": false}], "blockType": "container", "cssClasses": ["horizontal"]},
+    {"blockType": "iterator", "breakAfter": false, "childGroupName": "nodes", "emptyDropTarget":
+    false}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant",
+    "breakAfter": false}], "blockType": "container", "cssClasses": ["vertical"]}],
+    "blockType": "block", "breakAfter": false, "dropTarget": {}}], "describedType":
+    {"typeName": "grammar", "languageName": "MetaGrammar"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"style": {"display": "inline-flex"}, "property": "name", "blockType": "input"}],
+    "blockType": "block", "breakAfter": false, "dropTarget": {}}], "describedType":
+    {"typeName": "nodeRef", "languageName": "MetaGrammar"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"style": {"display": "inline-flex"}, "property": "name", "blockType": "input"},
+    {"blockType": "iterator", "breakAfter": false, "childGroupName": "attributes",
+    "emptyDropTarget": false}], "blockType": "block", "breakAfter": false, "dropTarget":
+    {}}], "describedType": {"typeName": "typedef", "languageName": "MetaGrammar"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "children", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "breakAfter": false, "cssClasses": ["space-after"]},
+    {"style": {"display": "inline-flex"}, "property": "base", "blockType": "input",
+    "cssClasses": ["space-after"]}, {"style": {"display": "inline-flex"}, "property":
+    "name", "blockType": "input", "cssClasses": ["space-after"]}, {"text": "::=",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "breakAfter": false,
+    "cssClasses": ["space-after"]}, {"blockType": "iterator", "breakAfter": false,
+    "childGroupName": "attributes", "emptyDropTarget": false}], "blockType": "container",
+    "cssClasses": ["horizontal"]}], "blockType": "block", "breakAfter": false, "dropTarget":
+    {}}], "describedType": {"typeName": "children", "languageName": "MetaGrammar"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "prop", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "breakAfter": false, "cssClasses": ["space-after"]},
+    {"style": {"display": "inline-flex"}, "property": "name", "blockType": "input",
+    "cssClasses": ["double-quote", "space-after"]}, {"style": {"display": "inline-flex"},
+    "property": "base", "blockType": "input"}], "blockType": "container", "cssClasses":
+    ["horizontal"]}], "blockType": "block", "breakAfter": false, "dropTarget": {}}],
+    "describedType": {"typeName": "property", "languageName": "MetaGrammar"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
+    "name", "blockType": "input"}, {"style": {"display": "inline-flex"}, "property":
+    "symbol", "blockType": "input"}], "blockType": "block", "breakAfter": false, "dropTarget":
+    {}}], "describedType": {"typeName": "terminal", "languageName": "MetaGrammar"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text": "node", "style":
+    {"display": "inline-flex"}, "blockType": "constant", "breakAfter": false, "cssClasses":
+    ["space-after"]}, {"style": {"display": "inline-flex"}, "property": "languageName",
+    "blockType": "input", "cssClasses": ["double-quote"]}, {"text": ".", "style":
+    {"display": "inline-flex"}, "blockType": "constant", "breakAfter": false}, {"style":
+    {"display": "inline-flex"}, "property": "typeName", "blockType": "input", "cssClasses":
+    ["double-quote", "space-after"]}, {"text": "{", "style": {"display": "inline-flex"},
+    "blockType": "constant", "breakAfter": false}], "blockType": "container", "cssClasses":
+    ["horizontal"]}, {"blockType": "iterator", "breakAfter": false, "childGroupName":
+    "attributes", "emptyDropTarget": false}, {"text": "}", "style": {"display": "inline-flex"},
+    "blockType": "constant", "breakAfter": false}], "blockType": "container", "cssClasses":
+    ["vertical"]}], "blockType": "block", "breakAfter": false, "dropTarget": {}}],
     "describedType": {"typeName": "concreteNode", "languageName": "MetaGrammar"}}],
-    "rootCssClasses": ["activate-indent", "activate-block-outline"], "editorComponents":
-    [{"componentType": "block-root"}, {"componentType": "validator"}, {"componentType":
-    "generated-code"}], "localGeneratorInstructions": {"type": "tree", "staticSidebars":
-    [{"type": "fixedBlocks", "caption": "Meta", "categories": [{"blocks": [{"defaultNode":
-    {"name": "grammar", "children": {"nodes": [{"name": "concreteNode", "language":
-    "MetaGrammar", "properties": {"name": "root"}}]}, "language": "MetaGrammar"},
-    "displayName": "Leere Grammatik"}, {"defaultNode": {"name": "concreteNode", "language":
-    "MetaGrammar", "properties": {"name": "root"}}, "displayName": "Konkreter Typ"},
-    {"defaultNode": {"name": "property", "language": "MetaGrammar", "properties":
-    {"name": "root"}}, "displayName": "Eigenschaft"}], "categoryCaption": "Grammatik"}]}]}}'
+    "rootCssClasses": ["activate-indent", "activate-block-outline", "activate-terminal-whitespace",
+    "activate-terminal-enquote"], "editorComponents": [{"componentType": "block-root"},
+    {"componentType": "validator"}, {"componentType": "generated-code"}], "localGeneratorInstructions":
+    {"type": "manual", "staticSidebars": [{"type": "fixedBlocks", "caption": "Meta",
+    "categories": [{"blocks": [{"defaultNode": {"name": "grammar", "language": "MetaGrammar",
+    "properties": {"name": "$lang"}}, "displayName": "Leere Grammatik"}, {"defaultNode":
+    {"name": "concreteNode", "language": "MetaGrammar", "properties": {"typeName":
+    "$type", "languageName": "$lang"}}, "displayName": "Konkreter Typ"}, {"defaultNode":
+    {"name": "property", "language": "MetaGrammar", "properties": {"base": "$type",
+    "name": "$prop"}}, "displayName": "Eigenschaft"}, {"defaultNode": {"name": "children",
+    "children": {"attributes": []}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "$childGroup"}}, "displayName": "Sequenz"}], "categoryCaption":
+    "Grammatik"}]}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-05-22 11:09:10.812796'
+  value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-09 11:08:17.3999'
+  value_before_type_cast: 2019-11-15 15:21:59.129973000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic

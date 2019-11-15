@@ -2,6 +2,7 @@
      all draggable events during editing.-->
 <span *ngIf="currentlyEditing; else notEditing"
       (dragstart)="onDragStart($event)"
+      [ngClass]="visual.cssClasses"
       [blockBase]="visual"
       draggable="true">
   <input [focus]="true" [(ngModel)]="editedValue"
@@ -18,9 +19,10 @@
         [ngClass]="visual.cssClasses"
         [blockBase]="visual"
         (click)="onActivateEditing($event)">
-    <ng-container *ngIf="hasValue; else noValue">
+    <span *ngIf="hasValue; else noValue"
+          class="display-value">
       {{ currentDisplayValue }}
-    </ng-container>
+    </span>
     <ng-template #noValue>
       <i>undefined</i>
     </ng-template>

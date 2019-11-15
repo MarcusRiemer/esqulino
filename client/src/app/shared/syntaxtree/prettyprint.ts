@@ -103,7 +103,7 @@ export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
   if (typeof p.name === "string") {
     return ([`terminal "${p.name}" "${escapedSymbol}"`]);
   } else {
-    return [escapedSymbol];
+    return [`"${escapedSymbol}"`];
   }
 
 
