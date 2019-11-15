@@ -8,6 +8,7 @@ import * as Forward from './block-language.forward'
 
 import { DatabaseSchemaSidebar } from './sql/database-schema-sidebar'
 import { ProgramUserFunctionsSidebar } from './truck/program-user-functions-sidebar'
+import { MetaDefinedTypesSidebar } from './meta/meta-defined-types-sidebar';
 
 /**
  * Augments an existing language with additional information on how to
@@ -39,6 +40,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
         case "fixedBlocks": return new FixedBlocksSidebar(this, sidebarDesc);
         case "databaseSchema": return new DatabaseSchemaSidebar();
         case "truckProgramUserFunctions": return new ProgramUserFunctionsSidebar();
+        case "metaDefinedTypes": return new MetaDefinedTypesSidebar();
         default: throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
       }
     });

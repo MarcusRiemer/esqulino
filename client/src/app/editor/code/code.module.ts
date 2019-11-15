@@ -37,6 +37,8 @@ import { WorldControllerComponent } from './truck/world-controller.component';
 import { WorldSensorsComponent } from './truck/world-sensors.component';
 import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component';
 
+import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
+
 @NgModule({
   imports: [
     SharedEditorModule,
@@ -69,7 +71,8 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     WorldControllerComponent,
     WorldSensorsComponent,
     WorldSelectorComponent,
-    UserFunctionsSidebarComponent
+    UserFunctionsSidebarComponent,
+    DefinedTypesSidebarComponent
   ],
   entryComponents: [
     BlockRootComponent,
@@ -84,7 +87,8 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     WorldRenderComponent,
     WorldControllerComponent,
     WorldSensorsComponent,
-    UserFunctionsSidebarComponent
+    UserFunctionsSidebarComponent,
+    DefinedTypesSidebarComponent
   ],
   providers: [
     ResourceChangedGuard

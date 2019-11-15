@@ -212,12 +212,20 @@ export interface TruckProgramUserFunctionsSidebarDescription {
   type: "truckProgramUserFunctions"
 }
 
+export interface MetaDefinedTypeSidebarDescription {
+  /**
+   * Unique identification for this type.
+   */
+  type: "metaDefinedTypes"
+}
+
 /**
  * All possible sidebar types
  */
 export type SidebarDescription = FixedBlocksSidebarDescription
   | DatabaseSchemaSidebarDescription
-  | TruckProgramUserFunctionsSidebarDescription;
+  | TruckProgramUserFunctionsSidebarDescription
+  | MetaDefinedTypeSidebarDescription;
 
 /**
  * Describes how certain nodes in the syntaxtree should be presented

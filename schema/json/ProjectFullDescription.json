@@ -772,7 +772,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4512_"
+                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_"
                   }
                 ]
               },
@@ -795,7 +795,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4512_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
                   }
                 ]
               }
@@ -844,7 +844,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4512_"
+                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_"
                   }
                 ]
               },
@@ -857,7 +857,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4512_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
                   }
                 ]
               }
@@ -972,6 +972,22 @@
       "required": [
         "type",
         "value"
+      ],
+      "type": "object"
+    },
+    "MetaDefinedTypeSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "metaDefinedTypes"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
       ],
       "type": "object"
     },
@@ -1673,7 +1689,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6800_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
             }
           ]
         },
@@ -1696,7 +1712,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6800_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
             }
           ]
         },
@@ -1746,7 +1762,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6800_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
             }
           ]
         },
@@ -1769,7 +1785,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6800_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
             }
           ]
         },
@@ -1803,7 +1819,7 @@
       ],
       "type": "object"
     },
-    "ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4512_": {
+    "ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_": {
       "additionalProperties": false,
       "properties": {
         "visibility": {
@@ -1819,7 +1835,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6800_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1832,7 +1848,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4512_": {
+    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -2188,7 +2204,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4512_"
+                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_"
                   }
                 ]
               },
@@ -2211,7 +2227,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4512_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
                   }
                 ]
               }
@@ -2421,6 +2437,9 @@
         },
         {
           "$ref": "#/definitions/TruckProgramUserFunctionsSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/MetaDefinedTypeSidebarDescription"
         }
       ],
       "description": "All possible sidebar types"
