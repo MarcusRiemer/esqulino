@@ -79,14 +79,23 @@ export type FullNodeAttributeDescription = NodeAttributeDescription & {
  */
 export function getFullQualifiedAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
+  const namedGrammar = ensureGrammarAttributeNames(g);
 
-  getQualifiedTypes(g).forEach(t => {
+  const recurseAttribute = (t: QualifiedNodeTypeDescription, a: NodeAttributeDescription) => {
+    toReturn.push(Object.assign({}, a, {
+      languageName: t.languageName,
+      typeName: t.typeName
+    }));
+
+    if (a.type === "container") {
+      a.children.forEach(c => recurseAttribute(t, c));
+    }
+  }
+
+  getQualifiedTypes(namedGrammar).forEach(t => {
     if (isNodeConcreteTypeDescription(t)) {
       (t.attributes || []).forEach(attribute => {
-        toReturn.push(Object.assign({}, attribute, {
-          languageName: t.languageName,
-          typeName: t.typeName
-        }));
+        recurseAttribute(t, attribute);
       });
     }
   });
