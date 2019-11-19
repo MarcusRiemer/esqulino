@@ -1,3 +1,9 @@
 <div class="ast">
   <h5>Definierte Typen</h5>
+  <div *ngFor="let node of (availableNodes | async)"
+       (dragstart)="startDrag($event, node)"
+       draggable="true"
+       class="block rounded">
+    {{ printableName(node) }}
+  </div>
 </div>
