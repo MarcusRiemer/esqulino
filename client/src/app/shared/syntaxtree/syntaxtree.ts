@@ -197,6 +197,19 @@ export class Node {
   }
 
   /**
+   * @return The single child in a specific category, or undefined if no such child
+   *         or category exists.
+   */
+  getChildInCategory(categoryName: string): Node {
+    const result = this.getChildrenInCategory(categoryName);
+    if (result.length > 0) {
+      return (result[0]);
+    } else {
+      return (undefined);
+    }
+  }
+
+  /**
    * @return The names of the available categories.
    */
   get childrenCategoryNames() {

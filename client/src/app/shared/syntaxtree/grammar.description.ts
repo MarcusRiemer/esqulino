@@ -1,5 +1,6 @@
-import { QualifiedTypeName } from './syntaxtree.description'
+import { QualifiedTypeName, NodeDescription } from './syntaxtree.description'
 import { OccursDescription } from './occurs.description';
+import { Tree, Node } from './syntaxtree';
 
 /**
  * Types may either be concrete new type or an alias
@@ -398,4 +399,69 @@ export function isNodePropertyBooleanDesciption(obj: any): obj is NodePropertyBo
  */
 export function isNodePropertyIntegerDesciption(obj: any): obj is NodePropertyBooleanDescription {
   return (obj instanceof Object && obj.base === "integer");
+}
+
+export function readAttributes(attrNode: Node, target: NodeAttributeDescription[]) {
+  switch (attrNode.typeName) {
+    case "property":
+      target.push({
+        type: "property",
+        base: attrNode.properties["base"] as any,
+        name: attrNode.properties["name"]
+      });
+      break;
+  }
+}
+
+/**
+ * Convert an AST to a "proper" JSON-object.
+ */
+export function readFromNode(node: NodeDescription): GrammarDocument {
+  const toReturn: ReturnType<typeof readFromNode> = {
+    types: {},
+    root: undefined
+  };
+
+  const tree = new Tree(node);
+
+  // Extract the root this tree defines
+  const nodeRoot = tree.rootNode.getChildInCategory("root");
+  if (nodeRoot) {
+    toReturn.root = {
+      languageName: nodeRoot.properties["languageName"],
+      typeName: nodeRoot.properties["typeName"]
+    };
+  }
+
+  // Add all defined types
+  const definedTypes = tree.rootNode.getChildrenInCategory("nodes");
+  definedTypes.forEach(n => {
+    const languageName = n.properties["languageName"];
+    const typeName = n.properties["typeName"];
+
+    // Ensure the language is known
+    if (!toReturn.types[languageName]) {
+      toReturn.types[languageName] = {};
+    }
+
+    // Ensure the type is not already taken
+    const lang = toReturn.types[languageName];
+    if (lang[typeName]) {
+      throw new Error(`Duplicate type "${languageName}.${typeName}"`);
+    }
+
+    // Add the correct type of type
+    if (n.typeName === "concreteNode") {
+      const concreteNode: NodeConcreteTypeDescription = {
+        type: "concrete",
+        attributes: []
+      };
+
+      n.getChildrenInCategory("attributes").forEach(a => readAttributes(a, concreteNode.attributes));
+
+      lang[typeName] = concreteNode;
+    }
+  });
+
+  return (toReturn);
 }
