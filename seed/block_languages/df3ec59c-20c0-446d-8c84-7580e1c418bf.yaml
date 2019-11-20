@@ -33,33 +33,39 @@ concise_attributes:
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
     ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text":
     "grammar", "style": {"display": "inline-flex"}, "blockType": "constant", "breakAfter":
-    false, "cssClasses": ["space-after"]}, {"style": {"display": "inline-flex"}, "property":
-    "name", "blockType": "input", "cssClasses": ["double-quote", "space-after"]},
+    false, "cssClasses": ["space-after", "keyword"]}, {"style": {"display": "inline-flex"},
+    "property": "name", "blockType": "input", "cssClasses": ["double-quote", "space-after"]},
     {"text": "{", "style": {"display": "inline-flex"}, "blockType": "constant", "breakAfter":
-    false}], "blockType": "container", "cssClasses": ["horizontal"]}, {"blockType":
-    "iterator", "breakAfter": false, "childGroupName": "nodes", "emptyDropTarget":
-    false}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant",
-    "breakAfter": false}], "blockType": "container", "cssClasses": ["vertical"]}],
-    "blockType": "block", "breakAfter": false, "dropTarget": {}}], "describedType":
-    {"typeName": "grammar", "languageName": "MetaGrammar"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"style": {"display": "inline-flex"}, "property": "languageName",
-    "blockType": "input"}, {"text": ".", "style": {"display": "inline-flex"}, "blockType":
-    "constant", "breakAfter": false}, {"style": {"display": "inline-flex"}, "property":
-    "typeName", "blockType": "input"}], "blockType": "container", "cssClasses": ["horizontal"]}],
-    "blockType": "block", "breakAfter": false, "dropTarget": {}}], "describedType":
-    {"typeName": "nodeRef", "languageName": "MetaGrammar"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"text": "typedef", "style": {"display": "inline-flex"}, "blockType":
-    "constant", "breakAfter": false, "cssClasses": ["space-after"]}, {"style": {"display":
-    "inline-flex"}, "property": "languageName", "blockType": "input", "cssClasses":
-    ["double-quote"]}, {"text": ".", "style": {"display": "inline-flex"}, "blockType":
-    "constant", "breakAfter": false}, {"style": {"display": "inline-flex"}, "property":
-    "typeName", "blockType": "input", "cssClasses": ["double-quote", "space-after"]},
+    false}], "blockType": "container", "cssClasses": ["horizontal"]}, {"children":
+    [{"children": [{"text": "root", "style": {"display": "inline-flex"}, "blockType":
+    "constant", "breakAfter": false, "cssClasses": ["space-after", "keyword"]}, {"text":
+    "=", "style": {"display": "inline-flex"}, "blockType": "constant", "breakAfter":
+    false, "cssClasses": ["space-after"]}, {"blockType": "iterator", "breakAfter":
+    false, "childGroupName": "root", "emptyDropTarget": false}], "blockType": "container",
+    "cssClasses": ["horizontal"]}, {"blockType": "iterator", "breakAfter": false,
+    "childGroupName": "nodes", "emptyDropTarget": false}], "blockType": "container",
+    "cssClasses": ["vertical", "indent"]}, {"text": "}", "style": {"display": "inline-flex"},
+    "blockType": "constant", "breakAfter": false}], "blockType": "container", "cssClasses":
+    ["vertical"]}], "blockType": "block", "breakAfter": false, "dropTarget": {}}],
+    "describedType": {"typeName": "grammar", "languageName": "MetaGrammar"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display": "inline-flex"},
+    "property": "languageName", "blockType": "input"}, {"text": ".", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "breakAfter": false}, {"style": {"display":
+    "inline-flex"}, "property": "typeName", "blockType": "input"}], "blockType": "container",
+    "cssClasses": ["horizontal"]}], "blockType": "block", "breakAfter": false, "dropTarget":
+    {}}], "describedType": {"typeName": "nodeRef", "languageName": "MetaGrammar"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "typedef", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "breakAfter": false, "cssClasses": ["space-after"]},
+    {"style": {"display": "inline-flex"}, "property": "languageName", "blockType":
+    "input", "cssClasses": ["double-quote"]}, {"text": ".", "style": {"display": "inline-flex"},
+    "blockType": "constant", "breakAfter": false}, {"style": {"display": "inline-flex"},
+    "property": "typeName", "blockType": "input", "cssClasses": ["double-quote", "space-after"]},
     {"text": "::=", "style": {"display": "inline-flex"}, "blockType": "constant",
     "breakAfter": false, "cssClasses": ["space-after"]}, {"blockType": "iterator",
     "breakAfter": false, "childGroupName": "references", "emptyDropTarget": true}],
@@ -106,14 +112,15 @@ concise_attributes:
     "blockType": "constant", "breakAfter": false}, {"style": {"display": "inline-flex"},
     "property": "typeName", "blockType": "input", "cssClasses": ["double-quote", "space-after"]},
     {"text": "{", "style": {"display": "inline-flex"}, "blockType": "constant", "breakAfter":
-    false}], "blockType": "container", "cssClasses": ["horizontal"]}, {"blockType":
-    "iterator", "breakAfter": false, "childGroupName": "attributes", "emptyDropTarget":
-    false}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant",
+    false}], "blockType": "container", "cssClasses": ["horizontal"]}, {"children":
+    [{"blockType": "iterator", "breakAfter": false, "childGroupName": "attributes",
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["vertical",
+    "indent"]}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant",
     "breakAfter": false}], "blockType": "container", "cssClasses": ["vertical"]}],
     "blockType": "block", "breakAfter": false, "dropTarget": {}}], "describedType":
     {"typeName": "concreteNode", "languageName": "MetaGrammar"}}], "rootCssClasses":
     ["activate-indent", "activate-block-outline", "activate-terminal-whitespace",
-    "activate-terminal-enquote"], "editorComponents": [{"componentType": "block-root"},
+    "activate-terminal-keyword"], "editorComponents": [{"componentType": "block-root"},
     {"componentType": "validator"}, {"componentType": "generated-code"}], "localGeneratorInstructions":
     {"type": "manual", "traits": {"softHole": {"applyMode": "deepMerge", "instructions":
     {"emptyDropTarget": true}}}, "traitScopes": [{"traits": ["softHole"], "attributes":
@@ -140,7 +147,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-11-19 12:01:08.213682000 Z
+  value_before_type_cast: 2019-11-20 12:48:40.295845000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
