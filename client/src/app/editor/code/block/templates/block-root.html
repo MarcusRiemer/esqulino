@@ -18,9 +18,7 @@
       <!-- If the tree is not empty, it wants to be rendered -->
       <ng-template #renderTree>
         <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
-                           class="block-editor-root"
                            [blockLanguage]="currentBlockLanguage"
-                           [ngClass]="currentBlockLanguage.rootCssClasses"
                            [codeResource]="currentResource"
                            [node]="currentTree.rootNode"
                            [readOnly]="readOnly"></editor-block-host>
