@@ -401,14 +401,55 @@ export function isNodePropertyIntegerDesciption(obj: any): obj is NodePropertyBo
   return (obj instanceof Object && obj.base === "integer");
 }
 
+export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
+  return ({
+    type: "property",
+    base: attrNode.properties["base"] as any,
+    name: attrNode.properties["name"]
+  });
+}
+
+export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
+  const toReturn: ReturnType<typeof convertTerminal> = {
+    type: "terminal",
+    symbol: attrNode.properties["symbol"]
+  };
+
+  if (attrNode.properties["name"]) {
+    toReturn.name = attrNode.properties["name"];
+  }
+
+  return (toReturn);
+}
+
+export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
+  const toReturn: ReturnType<typeof convertChildren> = {
+    type: attrNode.properties["base"] as ("sequence" | "allowed"),
+    name: attrNode.properties["name"],
+    nodeTypes: []
+  };
+
+  attrNode.getChildrenInCategory("references").forEach(ref => {
+    switch (ref.typeName) {
+      case "nodeRefOne":
+        break;
+    }
+  });
+
+  return (toReturn);
+}
+
+/**
+ * Converts the given node into a description that is appended to the given
+ * target list.
+ */
 export function readAttributes(attrNode: Node, target: NodeAttributeDescription[]) {
   switch (attrNode.typeName) {
     case "property":
-      target.push({
-        type: "property",
-        base: attrNode.properties["base"] as any,
-        name: attrNode.properties["name"]
-      });
+      target.push(convertProperty(attrNode));
+      break;
+    case "terminal":
+      target.push(convertTerminal(attrNode));
       break;
   }
 }

@@ -51,15 +51,6 @@ concise_attributes:
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display": "inline-flex"},
-    "property": "languageName", "blockType": "input"}, {"text": ".", "style": {"display":
-    "inline-flex"}, "blockType": "constant", "breakAfter": false}, {"style": {"display":
-    "inline-flex"}, "property": "typeName", "blockType": "input"}], "blockType": "container",
-    "cssClasses": ["horizontal"]}], "blockType": "block", "breakAfter": false, "dropTarget":
-    {}}], "describedType": {"typeName": "nodeRef", "languageName": "MetaGrammar"}},
-    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
-    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
-    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
     "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "typedef", "style": {"display":
     "inline-flex"}, "blockType": "constant", "breakAfter": false, "cssClasses": ["space-after"]},
     {"style": {"display": "inline-flex"}, "property": "languageName", "blockType":
@@ -105,6 +96,15 @@ concise_attributes:
     [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
     "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
     "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"style": {"display": "inline-flex"}, "property": "languageName",
+    "blockType": "input"}, {"text": ".", "style": {"display": "inline-flex"}, "blockType":
+    "constant", "breakAfter": false}, {"style": {"display": "inline-flex"}, "property":
+    "typeName", "blockType": "input"}], "blockType": "container", "cssClasses": ["horizontal"]}],
+    "blockType": "block", "breakAfter": false, "dropTarget": {}}], "describedType":
+    {"typeName": "nodeRefOne", "languageName": "MetaGrammar"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
     {"children": [{"children": [{"text": "node", "style": {"display": "inline-flex"},
     "blockType": "constant", "breakAfter": false, "cssClasses": ["space-after"]},
     {"style": {"display": "inline-flex"}, "property": "languageName", "blockType":
@@ -147,7 +147,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-11-20 12:48:40.295845000 Z
+  value_before_type_cast: 2019-11-27 14:32:31.004069000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic

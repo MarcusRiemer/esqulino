@@ -18,14 +18,14 @@ concise_attributes:
   value_before_type_cast: XML
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRef",
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
     "xml"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
     "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
-    "name"}}, {"name": "children", "children": {"references": [{"name": "nodeRef",
+    "name"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "attribute", "languageName":
     "xml"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "attributes"}}, {"name": "children", "children": {"references": [{"name": "nodeRef",
+    "attributes"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
     "xml"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
     "elements"}}]}, "language": "MetaGrammar", "properties": {"typeName": "element",

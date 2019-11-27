@@ -21,11 +21,11 @@ concise_attributes:
   value_before_type_cast: '{"name": "grammar", "children": {"nodes": [{"name": "concreteNode",
     "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
     {"base": "integer", "name": "$prop"}}, {"name": "children", "children": {"references":
-    [{"name": "nodeRef", "language": "MetaGrammar", "properties": {"typeName": "t1",
-    "languageName": "l1"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
-    "name": "$childGroup"}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "grammar", "languageName": "meta"}}]}, "language": "MetaGrammar", "properties":
-    {"name": "meta"}}'
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "t1", "languageName": "l1"}}]}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "$childGroup"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "grammar", "languageName": "meta"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "meta"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-11-14 10:19:54.438160000 Z

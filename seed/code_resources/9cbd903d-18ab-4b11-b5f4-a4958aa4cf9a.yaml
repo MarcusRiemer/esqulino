@@ -18,42 +18,42 @@ concise_attributes:
   value_before_type_cast: CSS
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRef",
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "document", "languageName":
     "css"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
-    "children", "children": {"references": [{"name": "nodeRef", "language": "MetaGrammar",
+    "children", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
     "properties": {"typeName": "rule", "languageName": "css"}}]}, "language": "MetaGrammar",
     "properties": {"base": "sequence", "name": "rules"}}]}, "language": "MetaGrammar",
     "properties": {"typeName": "document", "languageName": "css"}}, {"name": "concreteNode",
     "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
-    "nodeRef", "language": "MetaGrammar", "properties": {"typeName": "selector", "languageName":
-    "css"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "selector"}}, {"name": "children", "children": {"references": [{"name": "nodeRef",
-    "language": "MetaGrammar", "properties": {"typeName": "property", "languageName":
-    "css"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "properties"}}]}, "language": "MetaGrammar", "properties": {"typeName": "rule",
-    "languageName": "css"}}, {"name": "typedef", "children": {"references": [{"name":
-    "nodeRef", "language": "MetaGrammar", "properties": {"typeName": "simpleSelector",
-    "languageName": "css"}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "selector", "languageName": "css"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
-    "name": "elementName"}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "simpleSelector", "languageName": "css"}}, {"name": "typedef", "children": {"references":
-    [{"name": "nodeRef", "language": "MetaGrammar", "properties": {"typeName": "propBackgroundColor",
-    "languageName": "css"}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "property", "languageName": "css"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
-    "name": "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "valueColor",
-    "languageName": "css"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
-    "property", "language": "MetaGrammar", "properties": {"base": "integer", "name":
-    "value"}}, {"name": "property", "language": "MetaGrammar", "properties": {"base":
-    "string", "name": "unit"}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "valueLength", "languageName": "css"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "children", "children": {"references": [{"name": "nodeRef", "language":
-    "MetaGrammar", "properties": {"typeName": "valueColor", "languageName": "css"}}]},
-    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "value"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "propBackgroundColor", "languageName":
-    "css"}}]}, "language": "MetaGrammar", "properties": {"name": "css"}}'
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "selector",
+    "languageName": "css"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "selector"}}, {"name": "children", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "property",
+    "languageName": "css"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "properties"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "rule", "languageName": "css"}}, {"name": "typedef", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "simpleSelector", "languageName": "css"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "selector", "languageName": "css"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "elementName"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "simpleSelector", "languageName": "css"}}, {"name": "typedef", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "propBackgroundColor", "languageName": "css"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "property", "languageName": "css"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "valueColor", "languageName": "css"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "integer", "name": "value"}}, {"name": "property", "language": "MetaGrammar",
+    "properties": {"base": "string", "name": "unit"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "valueLength", "languageName": "css"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "valueColor",
+    "languageName": "css"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "propBackgroundColor",
+    "languageName": "css"}}]}, "language": "MetaGrammar", "properties": {"name": "css"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-11-19 11:46:31.673447000 Z
