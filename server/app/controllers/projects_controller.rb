@@ -17,6 +17,7 @@ class ProjectsController < ApplicationController
                        .only_public
                        .order({ order_key => order_dir})
                        .limit(project_list_params.fetch("limit", 100))
+                       .offset(project_list_params.fetch("offset", 0))
 
     render json: {
              data: response_query.map{|p| p.to_list_api_response},
@@ -110,7 +111,7 @@ class ProjectsController < ApplicationController
 
   # These attributes
   def project_list_params
-    params.permit(:limit, :orderField, :orderDirection)
+    params.permit(:limit, :offset, :orderField, :orderDirection)
       .transform_keys { |k| k.underscore }
   end
 

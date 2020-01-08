@@ -22,21 +22,19 @@ export class OverviewProjectComponent {
   @ViewChild(MatSort, { static: false })
   _sort: MatSort;
 
-  private _limit = 1;
-
   constructor(
     private _serverData: ProjectDataService
   ) { }
 
   availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;
 
-  resultsLength = observableOf(30);
+  resultsLength = this._serverData.listTotalCount;
 
   /**
    * User has requested a different chunk of data
    */
   onChangePagination() {
-    this._serverData.setListPagination(this._limit++);
+    this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**

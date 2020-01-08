@@ -1,11 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
-import { CachedRequest, IndividualDescriptionCache } from './request-cache';
-import { first } from 'rxjs/operators';
 import { IdentifiableResourceDescription } from '../resource.description';
+
+import { JsonApiListResponse, isJsonApiListResponse } from './json-api-response'
+import { CachedRequest, IndividualDescriptionCache } from './request-cache';
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -14,7 +16,10 @@ export abstract class DataService<
   TList extends IdentifiableResourceDescription,
   TSingle extends IdentifiableResourceDescription> {
 
+  // These parameters are passed to every listing request
   private _listGetParams = new HttpParams();
+
+  private _listTotalCount = new BehaviorSubject<number | undefined>(undefined);
 
   public constructor(
     protected _http: HttpClient,
@@ -27,11 +32,7 @@ export abstract class DataService<
   /**
    * The cache of all descriptions that are available to the current user.
    */
-  readonly listCache = new CachedRequest<TList[]>(
-    this._http.get<TList[]>(this._listUrl, {
-      params: this._listGetParams
-    })
-  );
+  readonly listCache = new CachedRequest<TList[]>(this.createListRequest());
 
   /**
    * The individually cached resources.
@@ -47,6 +48,15 @@ export abstract class DataService<
   readonly list = this.listCache.value;
 
   /**
+   * @return The total number of list items available.
+   */
+  get peekListTotalCount() {
+    return (this._listTotalCount.value);
+  }
+
+  readonly listTotalCount = this._listTotalCount.asObservable();
+
+  /**
    * Calculates the URL that can be used to retrieve the resource in question.
    *
    * @param id The ID of the resource to retrieve.
@@ -54,18 +64,20 @@ export abstract class DataService<
    */
   protected abstract resolveIndividualUrl(id: string): string;
 
-  /**
-   * @param id The id of the searched resource
-   * @param refresh True, if the cache must be updated
-   *
-   * @return The details of the specified resource.
-   */
-  getSingle(id: string, refresh = false): Observable<TSingle> {
-    if (refresh) {
-      this._individualCache.refreshDescription(id);
-    }
-
-    return (this._individualCache.getDescription(id));
+  private createListRequest() {
+    return this._http.get<TList[] | JsonApiListResponse<TList>>(this._listUrl, {
+      params: this._listGetParams
+    }).pipe(
+      map(response => {
+        if (isJsonApiListResponse<TList>(response)) {
+          this._listTotalCount.next(response.meta.totalCount);
+          return (response.data);
+        } else {
+          this._listTotalCount.next(undefined);
+          return (response);
+        }
+      })
+    );
   }
 
   /**
@@ -74,12 +86,7 @@ export abstract class DataService<
    */
   private changeListParameters(newParams: HttpParams) {
     this._listGetParams = newParams;
-    // TODO: This is redundant, see initialisation of listCache
-    this.listCache.refresh(
-      this._http.get<TList[]>(this._listUrl, {
-        params: this._listGetParams
-      })
-    )
+    this.listCache.refresh(this.createListRequest())
   }
 
   /**
@@ -103,10 +110,25 @@ export abstract class DataService<
   /**
    * Set the limits that should be used for all subsequent listing requests.
    */
-  setListPagination(limit: number) {
-    this._listGetParams = this._listGetParams.set("limit", limit.toString());
+  setListPagination(pageSize: number, currentPage: number) {
+    this._listGetParams = this._listGetParams.set("limit", pageSize.toString());
+    this._listGetParams = this._listGetParams.set("offset", (pageSize * currentPage).toString());
 
     this.changeListParameters(this._listGetParams);
+  }
+
+  /**
+   * @param id The id of the searched resource
+   * @param refresh True, if the cache must be updated
+   *
+   * @return The details of the specified resource.
+   */
+  getSingle(id: string, refresh = false): Observable<TSingle> {
+    if (refresh) {
+      this._individualCache.refreshDescription(id);
+    }
+
+    return (this._individualCache.getDescription(id));
   }
 
   /**
