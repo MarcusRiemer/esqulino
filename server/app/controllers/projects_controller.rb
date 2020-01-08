@@ -6,7 +6,19 @@ class ProjectsController < ApplicationController
 
   # Lists all projects
   def index
-    render json: Project.only_public.map{|p| p.to_list_api_response}
+    order_key = project_list_params.fetch("order_field", "name")
+    order_dir = project_list_params.fetch("order_direction", "asc")
+
+    if (not Project.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
+      raise EsqulinoError::InvalidOrder.new(order_key, order_dir)
+    end
+
+    response_query = Project
+                       .only_public
+                       .order({ order_key => order_dir})
+                       .limit(project_list_params.fetch("limit", 100))
+
+    render json: response_query.map{|p| p.to_list_api_response}
   end
 
   # Retrieves all information about a single project. This is the only
@@ -28,7 +40,7 @@ class ProjectsController < ApplicationController
       project = Project.new(creation_params)
       if project.save
         ProjectMailer.with(project: project).created_admin.deliver_later
-  
+
         render json: { 'id' => project.slug }, :status => 200
       else
         render :json => { 'errors' => project.errors }, :status => 400
@@ -55,7 +67,7 @@ class ProjectsController < ApplicationController
   def destroy
     begin
       authorize current_project
-      
+
       current_project.destroy
     rescue Pundit::NotAuthorizedError => e
       error_response("You need the permission")
@@ -88,6 +100,12 @@ class ProjectsController < ApplicationController
   # These attributes may be changed once a project has been created
   def project_update_params
     params.permit(:name, :description, :indexPageId, :preview)
+      .transform_keys { |k| k.underscore }
+  end
+
+  # These attributes
+  def project_list_params
+    params.permit(:limit, :orderField, :orderDirection)
       .transform_keys { |k| k.underscore }
   end
 
