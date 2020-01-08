@@ -45,16 +45,6 @@
         }
       ]
     },
-    "ApiVersionToken": {
-      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "type": "string"
-    },
     "AttributeMappingOrder": {
       "anyOf": [
         {
@@ -772,7 +762,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -844,7 +834,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -1632,7 +1622,7 @@
     "ParameterBoolean": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "boolean"
           ],
@@ -1640,7 +1630,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -1689,7 +1679,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1712,7 +1702,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1762,7 +1752,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1785,7 +1775,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1819,7 +1809,7 @@
       ],
       "type": "object"
     },
-    "ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_": {
+    "ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_": {
       "additionalProperties": false,
       "properties": {
         "visibility": {
@@ -1835,7 +1825,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1877,7 +1867,7 @@
     "ParameterTypeColor": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "color"
           ],
@@ -1885,14 +1875,14 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
     "ParameterTypeString": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "string"
           ],
@@ -1900,7 +1890,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -1930,10 +1920,6 @@
       "properties": {
         "activeDatabase": {
           "type": "string"
-        },
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "availableDatabases": {
           "additionalProperties": {
@@ -2009,7 +1995,6 @@
         }
       },
       "required": [
-        "apiVersion",
         "blockLanguages",
         "codeResources",
         "description",
@@ -2204,7 +2189,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-129-236-1002692191-0-4510_"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
