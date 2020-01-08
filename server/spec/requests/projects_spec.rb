@@ -198,7 +198,7 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'lists a single public project' do
-      FactoryBot.create(:project, :public, api_version: "4")
+      FactoryBot.create(:project, :public)
       get "/api/project/"
 
       expect(response).to have_http_status(200)
@@ -213,7 +213,7 @@ RSpec.describe ProjectsController, type: :request do
     describe 'does not list private projects' do
       before do
         FactoryBot.create(:project, :private)
-        FactoryBot.create(:project, api_version: 4, public: true)
+        FactoryBot.create(:project, public: true)
         get "/api/project/"
         @json_data = JSON.parse(response.body)
       end
