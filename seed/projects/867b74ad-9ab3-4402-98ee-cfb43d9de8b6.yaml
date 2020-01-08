@@ -27,8 +27,6 @@ concise_attributes:
   name: updated_at
   value_before_type_cast: '2019-05-21 14:22:01.817985'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: api_version
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2
 - !ruby/object:ActiveModel::Attribute::FromDatabase
