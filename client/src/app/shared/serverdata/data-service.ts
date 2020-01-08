@@ -72,7 +72,7 @@ export abstract class DataService<
    * Change the parameters that are passed to the HTTP GET requests for
    * lists of data. This is useful for pagination and sorting.
    */
-  changeListParameters(newParams: HttpParams) {
+  private changeListParameters(newParams: HttpParams) {
     this._listGetParams = newParams;
     // TODO: This is redundant, see initialisation of listCache
     this.listCache.refresh(
@@ -80,6 +80,33 @@ export abstract class DataService<
         params: this._listGetParams
       })
     )
+  }
+
+  /**
+   * Set the ordering parameters that should be used for all subsequent
+   * listing requests.
+   */
+  setListOrdering(columnName: string, order: "asc" | "desc" | "") {
+    if (order === "") {
+      this._listGetParams = this._listGetParams
+        .delete("orderDirection")
+        .delete("orderField");
+    } else {
+      this._listGetParams = this._listGetParams
+        .set("orderDirection", order)
+        .set("orderField", columnName);
+    }
+
+    this.changeListParameters(this._listGetParams);
+  }
+
+  /**
+   * Set the limits that should be used for all subsequent listing requests.
+   */
+  setListPagination(limit: number) {
+    this._listGetParams = this._listGetParams.set("limit", limit.toString());
+
+    this.changeListParameters(this._listGetParams);
   }
 
   /**

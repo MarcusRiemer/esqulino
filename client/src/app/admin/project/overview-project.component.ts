@@ -1,12 +1,10 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 
-import { map, switchMap } from 'rxjs/operators';
-import { combineLatest, Observable, of as observableOf } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
 
 import { ProjectDataService } from '../../shared/serverdata';
 import { ProjectListDescription } from '../../shared/project.description';
-import { HttpParams } from '@angular/common/http';
 
 @Component({
   templateUrl: './templates/overview-project.html'
@@ -15,7 +13,7 @@ import { HttpParams } from '@angular/common/http';
 /**
  *
  */
-export class OverviewProjectComponent implements AfterViewInit {
+export class OverviewProjectComponent {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator, { static: false })
   _paginator: MatPaginator;
@@ -32,34 +30,22 @@ export class OverviewProjectComponent implements AfterViewInit {
 
   availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;
 
-  resultsLength = observableOf(0);
+  resultsLength = observableOf(30);
 
-  ngAfterViewInit(): void {
-    /*this.availableProjects = combineLatest(this._paginator.page, this._sort.sortChange).pipe(
-      switchMap(() => this._serverData.list)
-    );
-
-    this.resultsLength = this.availableProjects.pipe(
-      map(p => p.length)
-    )*/
+  /**
+   * User has requested a different chunk of data
+   */
+  onChangePagination() {
+    this._serverData.setListPagination(this._limit++);
   }
 
-  onChangeParams() {
-    this._serverData.changeListParameters(new HttpParams().set("limit", (this._limit++).toString()));
-  }
-
+  /**
+   * User has requested different sorting options
+   */
   onChangeSort() {
-    let params = new HttpParams();
-
-    if (this._sort.direction) {
-      params = params.set("orderDirection", this._sort.direction)
-        .set("orderField", this._sort.active);
-    }
-
-    this._serverData.changeListParameters(params);
+    this._serverData.setListOrdering(this._sort.active, this._sort.direction);
   }
 
 
   displayedColumns: (keyof ProjectListDescription)[] = ["id", "slug", "name"];
-
 }
