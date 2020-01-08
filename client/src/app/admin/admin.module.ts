@@ -5,6 +5,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, MatSortModule } from '@angular/material';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -28,17 +30,20 @@ import { EditInputParameterValueComponent } from './block-language/edit-input-pa
 import { EditTraitScopesComponent } from './block-language/edit-trait-scopes.component'
 import { EditSingleTraitScopeComponent } from './block-language/edit-single-trait-scope.component'
 import { ErrorListComponent } from './block-language/error-list.component'
+import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
 
 import { CreateGrammarComponent } from './grammar/create-grammar.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
-import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
+
+import { OverviewProjectComponent } from './project/overview-project.component'
 
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
 import { ChangeRoles } from './change-roles.component';
 
 const materialModules = [
-  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule
+  MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule,
+  MatTableModule, MatPaginatorModule, MatSortModule
 ]
 
 @NgModule({
@@ -65,6 +70,7 @@ const materialModules = [
     JsonEditor,
     OverviewGrammarComponent,
     OverviewBlockLanguageComponent,
+    OverviewProjectComponent,
     AdminNewsListComponent,
     AdminNewsEditComponent,
     ChangeRoles

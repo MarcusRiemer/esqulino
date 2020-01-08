@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs';
@@ -13,6 +13,9 @@ import { IdentifiableResourceDescription } from '../resource.description';
 export abstract class DataService<
   TList extends IdentifiableResourceDescription,
   TSingle extends IdentifiableResourceDescription> {
+
+  private _listGetParams = new HttpParams();
+
   public constructor(
     protected _http: HttpClient,
     private _snackBar: MatSnackBar,
@@ -25,7 +28,9 @@ export abstract class DataService<
    * The cache of all descriptions that are available to the current user.
    */
   readonly listCache = new CachedRequest<TList[]>(
-    this._http.get<TList[]>(this._listUrl)
+    this._http.get<TList[]>(this._listUrl, {
+      params: this._listGetParams
+    })
   );
 
   /**
@@ -61,6 +66,20 @@ export abstract class DataService<
     }
 
     return (this._individualCache.getDescription(id));
+  }
+
+  /**
+   * Change the parameters that are passed to the HTTP GET requests for
+   * lists of data. This is useful for pagination and sorting.
+   */
+  changeListParameters(newParams: HttpParams) {
+    this._listGetParams = newParams;
+    // TODO: This is redundant, see initialisation of listCache
+    this.listCache.refresh(
+      this._http.get<TList[]>(this._listUrl, {
+        params: this._listGetParams
+      })
+    )
   }
 
   /**

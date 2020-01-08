@@ -20,8 +20,7 @@ export class Renderer {
    * Initializes the renderer.
    * @param world World to be drawn.
    * @param ctx Canvas 2d context.
-   * @param width Width of the canvas.
-   * @param height Height of the canvas.
+   * @param d Width & height of the canvas.
    */
   constructor(world: World, ctx: CanvasRenderingContext2D, d: BehaviorSubject<RenderingDimensions>) {
     this.running = true;

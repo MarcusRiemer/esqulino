@@ -1,0 +1,26 @@
+<table class="full-width"
+       mat-table matSort
+       [dataSource]="availableProjects | async"
+       (matSortChange)="onChangeSort()">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let project">{{ project.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let project">{{ project.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="slug">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Slug</th>
+    <td mat-cell *matCellDef="let project">{{ project.slug }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [length]="resultsLength | async" [pageSize]="30"></mat-paginator>
+
+<button (click)="onChangeParams()">Test</button>

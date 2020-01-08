@@ -50,7 +50,7 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
 
-import { GrammarDataService, BlockLanguageDataService } from './serverdata'
+import { GrammarDataService, BlockLanguageDataService, ProjectDataService } from './serverdata'
 import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
 import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
@@ -68,7 +68,6 @@ import { MessageDialogComponent } from './message-dialog.component';
 import { MasterGuard } from './guards/master-guard';
 import { RequireLoggedInInterceptor } from './require-logged-in.interceptor';
 import { UserService } from './auth/user.service';
-
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -164,8 +163,8 @@ const materialModules = [
     ProvidersAllButtonsComponent
   ],
   entryComponents: [
-    AuthDialogComponent, 
-    ChangePasswordComponent, 
+    AuthDialogComponent,
+    ChangePasswordComponent,
     MessageDialogComponent
   ]
 })
@@ -181,6 +180,7 @@ export class SharedAppModule {
         ServerApiService,
         ServerDataService,
         ProjectDescriptionService,
+        ProjectDataService,
         VideoService,
         LanguageService,
         ToolbarService,
@@ -191,7 +191,8 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
-        { provide: HTTP_INTERCEPTORS, 
+        {
+          provide: HTTP_INTERCEPTORS,
           useClass: RequireLoggedInInterceptor,
           multi: true,
           deps: [UserService]
