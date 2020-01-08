@@ -194,7 +194,8 @@ RSpec.describe ProjectsController, type: :request do
       get "/api/project/"
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).length).to eq 0
+      parsed = JSON.parse(response.body)
+      expect(parsed['data'].length).to eq 0
     end
 
     it 'lists a single public project' do
@@ -203,11 +204,9 @@ RSpec.describe ProjectsController, type: :request do
 
       expect(response).to have_http_status(200)
 
-      json_data = JSON.parse(response.body)
-
-      expect(json_data.length).to eq 1
-
-      expect(json_data[0]).to validate_against "ProjectListDescription"
+      parsed = JSON.parse(response.body)
+      expect(parsed['data'].length).to eq 1
+      expect(parsed['data'][0]).to validate_against "ProjectListDescription"
     end
 
     describe 'does not list private projects' do
@@ -215,7 +214,7 @@ RSpec.describe ProjectsController, type: :request do
         FactoryBot.create(:project, :private)
         FactoryBot.create(:project, public: true)
         get "/api/project/"
-        @json_data = JSON.parse(response.body)
+        @json_data = JSON.parse(response.body)['data']
       end
 
       it 'returns 200' do
@@ -234,16 +233,16 @@ RSpec.describe ProjectsController, type: :request do
       FactoryBot.create(:project, :public)
 
       get "/api/project?limit=1"
-      expect(JSON.parse(response.body).length).to eq 1
+      expect(JSON.parse(response.body)['data'].length).to eq 1
 
       get "/api/project?limit=2"
-      expect(JSON.parse(response.body).length).to eq 2
+      expect(JSON.parse(response.body)['data'].length).to eq 2
 
       get "/api/project?limit=3"
-      expect(JSON.parse(response.body).length).to eq 3
+      expect(JSON.parse(response.body)['data'].length).to eq 3
 
       get "/api/project?limit=4"
-      expect(JSON.parse(response.body).length).to eq 3
+      expect(JSON.parse(response.body)['data'].length).to eq 3
     end
 
     describe 'order by' do
@@ -261,7 +260,7 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'slug' do
         get "/api/project?orderField=slug"
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)['data']
 
         expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
@@ -274,28 +273,28 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'slug desc' do
         get "/api/project?orderField=slug&orderDirection=desc"
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)['data']
 
         expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'slug asc' do
         get "/api/project?orderField=slug&orderDirection=asc"
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)['data']
 
         expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
 
       it 'name desc' do
         get "/api/project?orderField=name&orderDirection=desc"
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)['data']
 
         expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'name asc' do
         get "/api/project?orderField=name&orderDirection=asc"
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)['data']
 
         expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end

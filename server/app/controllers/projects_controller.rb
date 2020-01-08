@@ -18,7 +18,12 @@ class ProjectsController < ApplicationController
                        .order({ order_key => order_dir})
                        .limit(project_list_params.fetch("limit", 100))
 
-    render json: response_query.map{|p| p.to_list_api_response}
+    render json: {
+             data: response_query.map{|p| p.to_list_api_response},
+             meta: {
+               totalCount: Project.only_public.count
+             }
+           }
   end
 
   # Retrieves all information about a single project. This is the only
