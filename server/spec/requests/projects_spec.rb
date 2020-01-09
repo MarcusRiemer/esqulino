@@ -301,6 +301,40 @@ RSpec.describe ProjectsController, type: :request do
     end
   end
 
+  describe 'GET /api/project/list_admin' do
+    it 'guest user: not permitted' do
+      get "/api/project/list_admin"
+
+      expect(response).to have_http_status(403)
+    end
+
+    it 'ordinary user: not permitted' do
+      user = create(:user)
+      set_access_token(user)
+
+      get "/api/project/list_admin"
+
+      expect(response).to have_http_status(403)
+    end
+
+    it 'admin user: properly paginated' do
+      FactoryBot.create(:project, :public, name: 'cccc', slug: 'cccc')
+      FactoryBot.create(:project, :public, name: 'aaaa', slug: 'aaaa')
+      FactoryBot.create(:project, :public, name: 'bbbb', slug: 'bbbb')
+
+      user = create(:user, :admin)
+      set_access_token(user)
+
+      get "/api/project/list_admin?orderField=slug&orderDirection=desc"
+
+      expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)['data']
+
+      expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+    end
+  end
+
+
   describe 'GET /api/project/:project_id' do
     it 'empty project satisfies the JSON schema' do
       empty_project = FactoryBot.create(:project)
