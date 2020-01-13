@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { NodeLocation } from '../syntaxtree.description';
 
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
-const GeneratorFunction = Object.getPrototypeOf(function* () { }).constructor;
+const GeneratorFunction = Object.getPrototypeOf(function*() { }).constructor;
 
 /**
  * A callback that is meant to be triggered when the execution of the program
@@ -435,15 +435,15 @@ export class World {
       const f = new GeneratorFunction('truck', code);
 
       this._currentGenerator = f.call({}, {
-        goForward: function* () { yield self._commandAsync(Command.goForward); },
-        turnLeft: function* () { yield self._commandAsync(Command.turnLeft); },
-        turnRight: function* () { yield self._commandAsync(Command.turnRight); },
-        noTurn: function* () { yield self._commandAsync(Command.noTurn); },
-        load: function* () { yield self._commandAsync(Command.load); },
-        unload: function* () { yield self._commandAsync(Command.unload); },
-        wait: function* () { yield self._commandAsync(Command.wait); },
-        pause: function* () { yield self._commandAsync(Command.pause); },
-        doNothing: function* () { yield self._commandAsync(Command.doNothing); },
+        goForward: function*() { yield self._commandAsync(Command.goForward); },
+        turnLeft: function*() { yield self._commandAsync(Command.turnLeft); },
+        turnRight: function*() { yield self._commandAsync(Command.turnRight); },
+        noTurn: function*() { yield self._commandAsync(Command.noTurn); },
+        load: function*() { yield self._commandAsync(Command.load); },
+        unload: function*() { yield self._commandAsync(Command.unload); },
+        wait: function*() { yield self._commandAsync(Command.wait); },
+        pause: function*() { yield self._commandAsync(Command.pause); },
+        doNothing: function*() { yield self._commandAsync(Command.doNothing); },
 
         lightIsRed: () => this.sensor(Sensor.lightIsRed),
         lightIsGreen: () => this.sensor(Sensor.lightIsGreen),
@@ -502,7 +502,7 @@ export class World {
    */
   private async _resumeCode() {
     if (this._currentGenerator) {
-      let result: { value: Promise<void>, done: boolean };
+      let result: IteratorResult<any>;
       while (!this.codeShouldPause.value && !(result = this._currentGenerator.next()).done) {
         await result.value;
       }
