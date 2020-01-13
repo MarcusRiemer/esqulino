@@ -11,8 +11,7 @@
 
 <div id="available-projects"
      class="card-columns">
-  <project-list-item
-      *ngFor="let project of projects"
-      [project]="project">
+  <project-list-item *ngFor="let project of projects | async"
+                     [project]="project">
   </project-list-item>
 </div>

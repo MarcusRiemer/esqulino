@@ -27,7 +27,6 @@ import { BrowserService } from './browser.service'
 import { DefaultValuePipe } from './default-value.pipe'
 import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
-import { ProjectDescriptionService } from './project.description.service';
 import { LanguageService } from './language.service';
 import { ServerApiService } from './serverdata/serverapi.service';
 import { ServerDataService } from './serverdata/server-data.service'
@@ -50,7 +49,10 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
 
-import { GrammarDataService, BlockLanguageDataService, ProjectDataService } from './serverdata'
+import {
+  GrammarDataService, BlockLanguageDataService,
+  ProjectDataService, AdminProjectDataService
+} from './serverdata'
 import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
 import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
@@ -179,8 +181,8 @@ export class SharedAppModule {
         FlashService,
         ServerApiService,
         ServerDataService,
-        ProjectDescriptionService,
         ProjectDataService,
+        AdminProjectDataService,
         VideoService,
         LanguageService,
         ToolbarService,

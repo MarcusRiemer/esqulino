@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { ProjectDataService } from '../../shared/serverdata';
+import { AdminProjectDataService } from '../../shared/serverdata';
 import { ProjectListDescription } from '../../shared/project.description';
 
 @Component({
@@ -23,7 +23,7 @@ export class OverviewProjectComponent {
   _sort: MatSort;
 
   constructor(
-    private _serverData: ProjectDataService
+    private _serverData: AdminProjectDataService
   ) { }
 
   availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;

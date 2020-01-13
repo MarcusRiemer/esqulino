@@ -1,7 +1,7 @@
 import { Component, Input, PLATFORM_ID, Inject } from '@angular/core'
 import { isPlatformBrowser } from '@angular/common'
 
-import { ProjectFullDescription } from '../shared/project.description.service'
+import { ProjectListDescription } from '../shared/project.description';
 
 /**
  * A single project list item entry.
@@ -11,7 +11,7 @@ import { ProjectFullDescription } from '../shared/project.description.service'
   templateUrl: 'templates/project-list-item.html',
 })
 export class ProjectListItemComponent {
-  @Input() project: ProjectFullDescription;
+  @Input() project: ProjectListDescription;
 
   /**
    * TODO: Make this configurable

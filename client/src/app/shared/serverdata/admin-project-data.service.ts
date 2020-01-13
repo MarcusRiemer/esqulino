@@ -11,14 +11,14 @@ import { DataService } from './data-service';
  * Convenient and cached access to server side project descriptions.
  */
 @Injectable()
-export class ProjectDataService extends DataService<ProjectListDescription, ProjectDescription> {
+export class AdminProjectDataService extends DataService<ProjectListDescription, ProjectDescription> {
 
   public constructor(
     private _serverApi: ServerApiService,
     snackBar: MatSnackBar,
     http: HttpClient
   ) {
-    super(http, snackBar, _serverApi.getProjectListUrl(), "Project");
+    super(http, snackBar, _serverApi.getAdminProjectListUrl(), "Project");
   }
 
   protected resolveIndividualUrl(id: string): string {

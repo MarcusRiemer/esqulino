@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 
-import { ProjectFullDescription } from '../shared/project.description'
-import { ProjectDescriptionService } from '../shared/project.description.service'
+import { ProjectDataService } from '../shared/serverdata';
 
 /**
  * Lists all publicly available projects
@@ -10,21 +9,10 @@ import { ProjectDescriptionService } from '../shared/project.description.service
   selector: 'project-list',
   templateUrl: 'templates/project-list.html',
 })
-export class ProjectListComponent implements OnInit {
-  public projects: ProjectFullDescription[]
-
-  /**
-   * Used for dependency injection.
-   */
+export class ProjectListComponent {
   constructor(
-    private _projectService: ProjectDescriptionService
+    private _serverData: ProjectDataService
   ) { }
 
-  /**
-   * Ensures that the project service has projects available
-   */
-  ngOnInit() {
-    this._projectService.fetchProjects()
-      .subscribe(projects => this.projects = projects)
-  }
+  readonly projects = this._serverData.list;
 }
