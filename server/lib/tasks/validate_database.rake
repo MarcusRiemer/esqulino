@@ -57,6 +57,11 @@ def output_invalid_models(invalid_models)
     puts m.errors.full_messages
     puts
   end
+
+  puts "Summary of invalid models:"
+  invalid_models.each do |m|
+    puts m.readable_identification
+  end
 end
 
 namespace :blattwerkzeug do
