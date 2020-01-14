@@ -8,9 +8,7 @@ class BlockLanguage < ApplicationRecord
   validates :slug, uniqueness: true, allow_nil: true, length: { minimum: 1 }
 
   # The JSON document needs to be a valid block language
-  # TODO: Turn this on again once the generated output is stable,
-  #       Currently loads of visual components define obsolete properties like "breakAfter"
-  # validates :model, json_schema: 'BlockLanguageDocument'
+  validates :model, json_schema: 'BlockLanguageDocument'
 
   # The programming language that should be chosen as a default when
   # creating code resources.

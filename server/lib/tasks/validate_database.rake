@@ -58,9 +58,11 @@ def output_invalid_models(invalid_models)
     puts
   end
 
-  puts "Summary of invalid models:"
-  invalid_models.each do |m|
-    puts m.readable_identification
+  if invalid_models.any?
+    puts "Summary of #{invalid_models.count} invalid block languages:"
+    invalid_models.each do |m|
+      puts m.readable_identification
+    end
   end
 end
 
