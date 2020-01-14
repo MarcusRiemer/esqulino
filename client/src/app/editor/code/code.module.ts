@@ -14,7 +14,6 @@ import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.com
 import { ValidationComponent } from './validation.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
-import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockBaseDirective } from './block/block-base.directive'
 import { BlockDebugOptionsService } from '../block-debug-options.service'
 import { BlockHostComponent } from './block/block-host.component'
@@ -38,6 +37,8 @@ import { WorldControllerComponent } from './truck/world-controller.component';
 import { WorldSensorsComponent } from './truck/world-sensors.component';
 import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component';
 
+import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
+
 @NgModule({
   imports: [
     SharedEditorModule,
@@ -54,7 +55,6 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     BlockRenderInputComponent,
     BlockRootComponent,
     BlockHostComponent,
-    BlockLayoutDirective,
     BlockBaseDirective,
     CodeGeneratorComponent,
     CodeResourceSettingsComponent,
@@ -71,7 +71,8 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     WorldControllerComponent,
     WorldSensorsComponent,
     WorldSelectorComponent,
-    UserFunctionsSidebarComponent
+    UserFunctionsSidebarComponent,
+    DefinedTypesSidebarComponent
   ],
   entryComponents: [
     BlockRootComponent,
@@ -86,7 +87,8 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
     WorldRenderComponent,
     WorldControllerComponent,
     WorldSensorsComponent,
-    UserFunctionsSidebarComponent
+    UserFunctionsSidebarComponent,
+    DefinedTypesSidebarComponent
   ],
   providers: [
     ResourceChangedGuard

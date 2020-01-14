@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage } from '../../../shared/block';
@@ -12,28 +12,43 @@ import { BlockLanguage } from '../../../shared/block';
 })
 export class BlockHostComponent {
 
-  @Input() public codeResource: CodeResource;
+  @Input()
+  codeResource: CodeResource;
 
   /**
    * The node that represents the root of the tree to display.
    */
-  @Input() public node: Node;
+  @Input()
+  node: Node;
 
   /**
    * Optionally override the block language that comes with the code resource.
    */
-  @Input() public blockLanguage?: BlockLanguage;
+  @Input()
+  blockLanguage?: BlockLanguage;
 
   /**
    * Disables any interaction with this block if true.
    */
-  @Input() public readOnly = false;
+  @Input()
+  readOnly = false;
+
+  @HostBinding('class')
+  get hostCssClasses() {
+    return (this.usedBlockLanguage.rootCssClasses.join(" "));
+  }
 
   /**
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
-    const bl = this.blockLanguage || this.codeResource.blockLanguagePeek;
-    return (bl.getEditorBlock(this.node.qualifiedName));
+    return (this.usedBlockLanguage.getEditorBlock(this.node.qualifiedName));
+  }
+
+  /**
+   * @return The block language that should be used to represent the node
+   */
+  get usedBlockLanguage() {
+    return (this.blockLanguage || this.codeResource.blockLanguagePeek);
   }
 }

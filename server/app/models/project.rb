@@ -125,7 +125,6 @@ class Project < ApplicationRecord
   def to_project_api_response
     to_return = to_json_api_response
 
-    to_return['apiVersion'] = '4'
     to_return['activeDatabase'] = "default"
     to_return['sources'] = self.project_sources.map(&:to_full_api_response)
     to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
@@ -169,11 +168,6 @@ class Project < ApplicationRecord
   # The folder for databases
   def databases_directory_path
     File.join data_directory_path, "databases"
-  end
-
-  # Returns a nicely readable representation of id, slug and name
-  def readable_identification
-    "\"#{name}\" (#{slug}, #{id})"
   end
 
   # Checks if the passed user is the owner of this project

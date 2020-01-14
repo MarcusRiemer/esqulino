@@ -38,6 +38,29 @@ class ApplicationRecord < ActiveRecord::Base
   #
   # @return [string] A human friendly representation of the ID
   def readable_identification
-    self.id
+    has_slug = self.has_attribute? :slug
+    has_name = self.has_attribute? :name
+
+    # Even if the columns exist, there may be no data
+    printed_slug = "<no slug>"
+    if (has_slug and not slug.nil?)
+      printed_slug = slug
+    end
+
+    printed_name = "<no name>"
+    if (has_name and not name.nil?)
+      printed_name = "\"" + name + "\""
+    end
+
+    if (has_name and has_slug)
+      return "#{printed_name} (#{printed_slug}, #{id})"
+    elsif (has_name)
+      return "#{printed_name} (#{id})"
+    elsif (has_slug)
+      return "\"#{printed_slug}\" (#{id})"
+    else
+      # Nothing available but the ID
+      return self.id
+    end
   end
 end

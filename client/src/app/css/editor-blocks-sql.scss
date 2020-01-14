@@ -1,0 +1,19 @@
+.sql > .keyword {
+    color: blue;
+}
+
+.sql > .operator {
+    color: green;
+}
+
+.sql > .parameter {
+    color: orange;
+}
+
+.sql.constant {
+    color: red;
+}
+
+.sql > .component {
+    min-width: 10ch;
+}

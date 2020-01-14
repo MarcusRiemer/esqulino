@@ -45,9 +45,9 @@ describe(`Merging TypeInstructions`, () => {
   it(`Clashing and unrelated attributes`, () => {
     expect(mergeTypeInstructions(
       { "g1": { "t1": { attributes: { "a1": { between: "1", "propReadOnly": true } } } } },
-      { "g1": { "t1": { attributes: { "a1": { between: "2", "orientation": "vertical" } } } } }
+      { "g1": { "t1": { attributes: { "a1": { between: "2", "generateErrorIndicator": "start" } } } } }
     )).toEqual({
-      "g1": { "t1": { attributes: { "a1": { between: "2", "propReadOnly": true, "orientation": "vertical" } } }, },
+      "g1": { "t1": { attributes: { "a1": { between: "2", "propReadOnly": true, "generateErrorIndicator": "start" } } }, },
     });
   });
 
@@ -72,63 +72,63 @@ describe(`Merging TypeInstructions`, () => {
   it(`Merging blocks, first empty`, () => {
     expect(mergeTypeInstructions(
       { "g1": { "t1": { blocks: [{}, {}] } } },
-      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } }
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] }, },
     });
   });
 
   it(`Merging blocks, second empty`, () => {
     expect(mergeTypeInstructions(
-      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } },
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } },
       { "g1": { "t1": { blocks: [{}, {}] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] }, },
     });
   });
 
   it(`Merging blocks, same value`, () => {
     expect(mergeTypeInstructions(
-      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } },
-      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } }
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } },
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] }, },
     });
   });
 
   it(`Merging blocks, differing value`, () => {
     expect(mergeTypeInstructions(
-      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } },
-      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } }
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } },
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "end" }, {}] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "end" }, {}] }, },
     });
   });
 
   it(`Merging blocks, different length (first empty)`, () => {
     expect(mergeTypeInstructions(
       { "g1": { "t1": { blocks: [] } } },
-      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } }
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] }, },
     });
   });
 
   it(`Merging blocks, different length (second empty)`, () => {
     expect(mergeTypeInstructions(
-      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } },
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } },
       { "g1": { "t1": { blocks: [] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] }, },
     });
   });
 
   it(`Merging blocks, same length but differing indices`, () => {
     expect(mergeTypeInstructions(
-      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } },
-      { "g1": { "t1": { blocks: [{}, { orientation: "vertical" }] } } }
+      { "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, {}] } } },
+      { "g1": { "t1": { blocks: [{}, { "generateErrorIndicator": "start" }] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{ orientation: "vertical" }, { orientation: "vertical" }] }, },
+      "g1": { "t1": { blocks: [{ "generateErrorIndicator": "start" }, { "generateErrorIndicator": "start" }] }, },
     });
   });
 });

@@ -126,10 +126,10 @@ concise_attributes:
     "truck_world"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-02-05 11:07:49.391243'
+  value_before_type_cast: 2019-02-05 11:07:49.391243000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-05 11:17:12.433482'
+  value_before_type_cast: 2019-02-05 11:17:12.433482000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: d3909e4c-e40a-4815-8966-9b9a4555a009

@@ -1,8 +1,8 @@
 {
-  "$ref": "#/definitions/ProjectCreationDescription",
+  "$ref": "#/definitions/ProjectCreationRequest",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "ProjectCreationDescription": {
+    "ProjectCreationRequest": {
       "additionalProperties": false,
       "description": "These parameters are required to create a new project.",
       "properties": {

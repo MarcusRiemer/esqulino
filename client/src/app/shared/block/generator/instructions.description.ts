@@ -1,4 +1,4 @@
-import { Orientation, VisualBlockDescriptions } from '../block.description'
+import { VisualBlockDescriptions } from '../block.description'
 import { ParameterReferenceable } from './parameters.description';
 
 // Alias to shorten some typing
@@ -14,10 +14,6 @@ export type Position = "start" | "end" | "none";
  * Customization instructions for a specific visual that may be specified by a user.
  */
 export interface Instructions {
-  // Controls whether children should be layed out vertically or horizontally
-  orientation: Orientation;
-  // Allow wrapping of elements if the space is not enough
-  allowWrap: boolean;
   // Used to separate iterated elements
   between: string;
   // Defines the order in which the attributes appear
@@ -47,12 +43,12 @@ export type ReferenceableInstructions = ParameterReferenceable<Instructions>;
 /**
  * Instructions that are useful on an iterating visual.
  */
-export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style" | "breakAfter" | "allowWrap" | "emptyDropTarget">>;
+export type IteratorInstructions = Readonly<Pick<Instructions, "between" | "style" | "breakAfter" | "emptyDropTarget">>;
 
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "onDrop" | "generateErrorIndicator" | "breakAfter" | "allowWrap">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "style" | "onDrop" | "generateErrorIndicator" | "breakAfter">>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -69,35 +65,31 @@ export type PropertyInstructions = Readonly<Pick<Instructions, "style" | "propRe
  */
 export module DefaultInstructions {
   export const iteratorInstructions: IteratorInstructions = {
-    orientation: "horizontal",
     between: "",
     style: {},
     breakAfter: false,
-    allowWrap: true,
     emptyDropTarget: false
   }
 
   export const blockInstructions: BlockInstructions = {
-    orientation: "horizontal",
     attributeMapping: "grammar",
     style: {},
     onDrop: VisualBlockDescriptions.DefaultDropTargetProperties,
     generateErrorIndicator: "start",
     breakAfter: false,
-    allowWrap: true
   }
 
   export const terminalInstructions: TerminalInstructions = {
     breakAfter: false,
     style: {
-      "display": "inline-block"
+      "display": "inline-flex"
     },
   }
 
   export const propertyInstructions: PropertyInstructions = {
     propReadOnly: false,
     style: {
-      "display": "inline-block"
+      "display": "inline-flex"
     }
   }
 }

@@ -40,7 +40,7 @@ trash {
 }
 
 /* The "block" AST editor */
-.block-editor-root {
+editor-block-host {
     /* Default font settings */
     font-family: $monospace-font;
     font-size: 1.2rem;
@@ -51,9 +51,12 @@ trash {
         display: contents;
     }
 
+
+
     /* An actual block being rendered */
     editor-block-render-block {
-        position: relative; // To serve as an anchor for the more exact drop locations
+        display: inline-block;   // To have "proper" rectangular borders / drag zones
+        position: relative;      // To serve as an anchor for the more exact drop locations
         background-color: white;
         cursor: grab;
 
@@ -69,7 +72,7 @@ trash {
 
         /* Indicators where to drop stuff relative to the current block, this
            is for a vertical layout where the indicators are displayed at top or bottom */
-        editor-block-render-block.vertical > {
+        &.vertical > {
 
             .begin-drop, .end-drop {
                 position: absolute;
@@ -109,7 +112,7 @@ trash {
         }
 
         /* Horizontal (left to right) indicators */
-        editor-block-render-block.horizontal > {
+        &.horizontal > {
 
             .begin-drop, .end-drop {
                 position: absolute;
@@ -150,8 +153,8 @@ trash {
     }
 
     editor-block-render-input {
-        .not-editing {
-            display: inline-block;
+        .not-editing > .display-value {
+            display: inline-flex;
             border-bottom: 1px dashed black;
             min-height: 1ch;
             min-width: 1ch;
@@ -160,7 +163,7 @@ trash {
         // Input fields for users need to somehow "blend in" with the rest of the
         // blocks but also be recognizable.
         input {
-            display: inline-block;
+            display: inline-flex;
             border: 0px;
             border-bottom: 1px dashed black;
             background-color: transparent;

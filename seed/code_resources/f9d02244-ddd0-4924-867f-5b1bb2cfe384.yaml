@@ -45,10 +45,10 @@ concise_attributes:
     "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-07-31 19:23:15.879559'
+  value_before_type_cast: 2018-07-31 19:23:15.879559000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-09-17 15:40:30.786665'
+  value_before_type_cast: 2018-09-17 15:40:30.786665000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -62,6 +62,6 @@ concise_attributes:
     FROM Charakter, Auftritt
     WHERE Charakter.Charakter_ID = Auftritt.Charakter_ID
     GROUP BY Charakter.Charakter_ID
-    ORDER BY COUNT(Charakter.Charakter_ID) DESC, Charakter.Charakter_Name DESC
+    ORDER BY COUNT(Charakter.Charakter_ID), Charakter.Charakter_Name
 new_record: false
 active_record_yaml_version: 2

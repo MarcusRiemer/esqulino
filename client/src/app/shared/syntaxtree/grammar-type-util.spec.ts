@@ -290,5 +290,99 @@ describe(`Grammar Type Utilities`, () => {
         { languageName: "foo", typeName: "unref" },
       ]);
     });
+
+    it(`Visual containers`, () => {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+        "a1_3": { type: "concrete", attributes: [] },
+        "a1": {
+          type: "concrete",
+          attributes: [
+            { type: "sequence", name: "n", nodeTypes: ["a1_1"] },
+            {
+              type: "container",
+              children: [
+                { type: "sequence", name: "n", nodeTypes: ["a1_2"] }
+              ],
+              orientation: "horizontal",
+            },
+            { type: "sequence", name: "n", nodeTypes: ["a1_1"] }
+          ]
+        },
+        "a1_1": { type: "concrete", attributes: [] },
+        "r": {
+          type: "concrete",
+          attributes: [
+            { type: "sequence", name: "n", nodeTypes: ["a1"] }
+          ]
+        },
+        "a1_2": { type: "concrete", attributes: [] },
+      });
+
+      const r = orderTypes(g);
+      expect(r).toEqual([
+        { languageName: "foo", typeName: "r" },
+        { languageName: "foo", typeName: "a1" },
+        { languageName: "foo", typeName: "a1_1" },
+        { languageName: "foo", typeName: "a1_2" },
+        { languageName: "foo", typeName: "a1_3" },
+      ]);
+    });
+
+    it(`Nested Visual containers`, () => {
+      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+        "a1_3": { type: "concrete", attributes: [] },
+        "a1": {
+          type: "concrete",
+          attributes: [
+            { type: "sequence", name: "n", nodeTypes: ["a1_1"] },
+            {
+              type: "container",
+              children: [
+                {
+                  type: "container",
+                  orientation: "horizontal",
+                  children: [
+                    { type: "sequence", name: "n", nodeTypes: ["a1_2"] }
+                  ]
+                }
+              ],
+              orientation: "horizontal",
+            },
+            { type: "sequence", name: "n", nodeTypes: ["a1_1"] }
+          ]
+        },
+        "a1_2_1": { type: "concrete", attributes: [] },
+        "a1_1": { type: "concrete", attributes: [] },
+        "r": {
+          type: "concrete",
+          attributes: [
+            { type: "sequence", name: "n", nodeTypes: ["a1"] }
+          ]
+        },
+        "a1_2": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              children: [
+                { type: "sequence", name: "n", nodeTypes: ["a1_2"] },
+                { type: "sequence", name: "n", nodeTypes: ["a1_2_1"] }
+              ]
+            }
+          ]
+        },
+      });
+
+      const r = orderTypes(g);
+      expect(r).toEqual([
+        { languageName: "foo", typeName: "r" },
+        { languageName: "foo", typeName: "a1" },
+        { languageName: "foo", typeName: "a1_1" },
+        { languageName: "foo", typeName: "a1_2" },
+        { languageName: "foo", typeName: "a1_2_1" },
+        { languageName: "foo", typeName: "a1_3" },
+      ]);
+    });
   });
 });

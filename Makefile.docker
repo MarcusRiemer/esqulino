@@ -65,7 +65,7 @@ build-all: build-base build-server-dev build-client-dev build-test
 
 # Pulls all images from the registry
 pull-all:
-        docker-compose pull
+	docker-compose pull
 
 # Pushes locally built base image back to the docker hub, requires privileges
 push-base:

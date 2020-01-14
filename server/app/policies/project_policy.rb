@@ -6,6 +6,10 @@ class ProjectPolicy
     @project = project
   end
 
+  def list_all?
+    user.has_role?(:admin)
+  end
+
   def create?
     user.has_role?(:user) || user.has_role?(:admin)
   end

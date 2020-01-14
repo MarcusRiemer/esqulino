@@ -55,10 +55,10 @@ concise_attributes:
     "properties": {"name": "move"}}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-03-13 11:12:00.33096'
+  value_before_type_cast: 2019-03-13 11:12:00.330960000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-19 09:30:32.54744'
+  value_before_type_cast: 2019-03-19 09:30:32.547440000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f

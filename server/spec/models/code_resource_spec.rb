@@ -142,4 +142,11 @@ RSpec.describe CodeResource, type: :model do
     expect(res.validate).to be false
     expect(res.errors[:block_language].length).to be 1
   end
+
+  it "prints a readable identification" do
+    res = FactoryBot.create(:code_resource)
+    readable = res.readable_identification
+    expect(readable).to include res.id
+    expect(readable).to include res.name
+  end
 end

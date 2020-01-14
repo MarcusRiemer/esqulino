@@ -8,10 +8,10 @@ concise_attributes:
   value_before_type_cast: Guest
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-07-05 10:43:57.432336'
+  value_before_type_cast: 2019-07-05 10:43:57.432336000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-05 10:43:57.432336'
+  value_before_type_cast: 2019-07-05 10:43:57.432336000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: email
 new_record: false

@@ -2,24 +2,10 @@
   "$ref": "#/definitions/ProjectListDescription",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "ApiVersionToken": {
-      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "type": "string"
-    },
     "ProjectListDescription": {
       "additionalProperties": false,
       "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-        },
         "createdAt": {
           "type": "string"
         },
@@ -52,11 +38,10 @@
         }
       },
       "required": [
-        "apiVersion",
-        "description",
         "id",
+        "slug",
         "name",
-        "slug"
+        "description"
       ],
       "type": "object"
     },

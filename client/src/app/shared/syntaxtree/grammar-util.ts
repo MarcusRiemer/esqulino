@@ -79,14 +79,23 @@ export type FullNodeAttributeDescription = NodeAttributeDescription & {
  */
 export function getFullQualifiedAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
+  const namedGrammar = ensureGrammarAttributeNames(g);
 
-  getQualifiedTypes(g).forEach(t => {
+  const recurseAttribute = (t: QualifiedNodeTypeDescription, a: NodeAttributeDescription) => {
+    toReturn.push(Object.assign({}, a, {
+      languageName: t.languageName,
+      typeName: t.typeName
+    }));
+
+    if (a.type === "container") {
+      a.children.forEach(c => recurseAttribute(t, c));
+    }
+  }
+
+  getQualifiedTypes(namedGrammar).forEach(t => {
     if (isNodeConcreteTypeDescription(t)) {
       (t.attributes || []).forEach(attribute => {
-        toReturn.push(Object.assign({}, attribute, {
-          languageName: t.languageName,
-          typeName: t.typeName
-        }));
+        recurseAttribute(t, attribute);
       });
     }
   });
@@ -136,4 +145,40 @@ export function getAllTypes(g: GrammarDocument): QualifiedTypeName[] {
  */
 export function getConcreteTypes(g: GrammarDocument): QualifiedTypeName[] {
   return (collectTypes(g, isNodeConcreteTypeDescription));
+}
+
+/**
+ * If no name is provided: Generates a name based on a running number and the type.
+ */
+export function ensureAttributeName(desc: NodeAttributeDescription, i: number, path: string[]) {
+  const printedPath = path.length > 0 ? path.join('_') + '_' : '';
+  return (desc.name || `${printedPath}${desc.type}_${i}`);
+}
+
+/**
+ * Constructs a new grammar where attributes in the given grammar are guarenteed to be named.
+ */
+export function ensureGrammarAttributeNames(desc: GrammarDocument): GrammarDocument {
+  const copy: GrammarDocument = JSON.parse(JSON.stringify(desc));
+
+  const impl = (attributes: NodeAttributeDescription[], path: string[]) => {
+    attributes
+      .forEach((a, i) => {
+        a.name = ensureAttributeName(a, i, path);
+
+        if (a.type === "container") {
+          impl(a.children, path.concat(a.name));
+        }
+      });
+  }
+
+  Object.values(copy.types).forEach(n => {
+    Object.values(n).forEach(t => {
+      if (t.type === "concrete") {
+        impl(t.attributes, [])
+      }
+    });
+  });
+
+  return (copy);
 }

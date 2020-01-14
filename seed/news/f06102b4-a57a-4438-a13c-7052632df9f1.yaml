@@ -37,13 +37,13 @@ concise_attributes:
     <img src=\"/api/project/ltb/db/default/visual_schema?format=png\" class=\"img-fluid mx-auto d-block\">"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: published_from
-  value_before_type_cast: '2019-06-23 00:00:00'
+  value_before_type_cast: 2019-06-23 00:00:00.000000000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-24 19:49:11.846419'
+  value_before_type_cast: 2019-06-24 19:49:11.846419000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-24 20:08:02.313356'
+  value_before_type_cast: 2019-06-24 20:08:02.313356000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002

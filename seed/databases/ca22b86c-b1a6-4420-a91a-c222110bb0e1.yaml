@@ -35,9 +35,9 @@ concise_attributes:
     "article_id", "from_column": "article_id"}]}]}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-26 10:26:54.527608'
+  value_before_type_cast: 2018-02-26 10:26:54.527608000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-26 10:27:29.1439'
+  value_before_type_cast: 2018-02-26 10:27:29.143900000 Z
 new_record: false
 active_record_yaml_version: 2

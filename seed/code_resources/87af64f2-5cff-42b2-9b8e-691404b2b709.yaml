@@ -33,10 +33,10 @@ concise_attributes:
     "language": "sql"}], "groupBy": []}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-20 20:48:21.830298'
+  value_before_type_cast: 2018-02-20 20:48:21.830298000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-20 10:30:50.524843'
+  value_before_type_cast: 2018-07-20 10:30:50.524843000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d

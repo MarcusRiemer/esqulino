@@ -99,6 +99,11 @@ export abstract class NodeType {
    * These names are valid child categories
    */
   abstract get allowedChildrenCategoryNames(): string[];
+
+  /**
+   * These names are valid properties.
+   */
+  abstract get allowedPropertyNames(): string[];
 }
 
 /**
@@ -106,27 +111,48 @@ export abstract class NodeType {
  */
 export class NodeConcreteType extends NodeType {
 
+  // Possible child groups of this type
   private _allowedChildren: { [category: string]: NodeTypeChildren } = {};
+
+  // Possible properties of this type
   private _allowedProperties: { [propName: string]: NodePropertyValidator } = {};
 
   constructor(validator: Validator, typeDesc: Desc.NodeConcreteTypeDescription, language: string, name: string) {
     super(validator, language, name);
+    this.loadAttributes(typeDesc.attributes);
+  }
 
-    if (typeDesc.attributes) {
+  /**
+   * Loads all of the given attributes to be part of this concrete node. Skips over
+   * terminal symbols but recursively loads rows.
+   */
+  private loadAttributes(attr: Desc.NodeAttributeDescription[]) {
+    if (attr) {
       // Put the existing attributes into their respective buckets
-      typeDesc.attributes.forEach(a => {
+      attr.forEach(a => {
+        // Visual properties may not have a name
         switch (a.type) {
           case "property":
+            if (a.name in this._allowedProperties) {
+              throw new Error(`Duplicate property "${a.name}"`);
+            }
             this._allowedProperties[a.name] = this.instanciatePropertyValidator(a);
             break;
           case "allowed":
           case "sequence":
           case "choice":
           case "parentheses":
+            if (a.name in this._allowedChildren) {
+              throw new Error(`Duplicate child group "${a.name}"`);
+            }
             this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
             break;
+          case "container":
+            // Consume the children, they may define validation related attributes
+            this.loadAttributes(a.children);
+            break;
           case "terminal":
-            // Do nothing
+            // Do nothing, terminals have no impact on validation
             break;
           default:
             throw new Error(`Unknown validator requested: ${JSON.stringify(a)}`);
@@ -140,6 +166,13 @@ export class NodeConcreteType extends NodeType {
    */
   get allowedChildrenCategoryNames() {
     return (Object.keys(this._allowedChildren));
+  }
+
+  /**
+   * @return Names of all properties
+   */
+  get allowedPropertyNames(): string[] {
+    return (Object.keys(this._allowedProperties));
   }
 
   /**
@@ -1045,6 +1078,14 @@ class NodeOneOfType extends NodeType {
    * it for child categories is meaningless.
    */
   get allowedChildrenCategoryNames() {
+    return ([]);
+  }
+
+  /**
+   * As this node should never physically appear in a tree, asking
+   * it for property names is meaningless.
+   */
+  get allowedPropertyNames(): string[] {
     return ([]);
   }
 

@@ -1,0 +1,19 @@
+{
+  "root": { "languageName": "g016", "typeName": "root" },
+  "types": {
+    "g016": {
+      "root": {
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "name": "argh",
+            "children": [
+              { "type": "property", "name": "a1", "base": "integer" }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

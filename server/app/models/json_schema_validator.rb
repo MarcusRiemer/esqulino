@@ -18,9 +18,10 @@ class JsonSchemaValidator < ActiveModel::EachValidator
   # @param value The value of the tested attribute
   def validate_each(record, attribute, value)
     validation_errors = self.json_schema_validate(@description_name, value)
-    
+
     validation_errors.each do |err|
-      record.errors[attribute] << err
+      # We don't want to see the violated schema repeated again and again
+      record.errors[attribute] << err.except("schema", "root_schema")
     end
   end
 end

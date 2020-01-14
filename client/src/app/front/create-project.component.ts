@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'
 
 import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
-import { ProjectCreationDescription, StringValidator, ProjectDescription } from '../shared/project.description'
+import { ProjectCreationRequest, StringValidator, ProjectCreationResponse } from '../shared/project.description'
 import { ServerApiService } from '../shared'
 
 @Component({
@@ -12,14 +13,14 @@ import { ServerApiService } from '../shared'
 })
 export class CreateProjectComponent {
 
-  private _currentRequest: Observable<ProjectDescription>
+  private _currentRequest: Observable<ProjectCreationResponse>
 
   private _currentError: any;
 
   /**
    * The definition that will be sent to the server.
    */
-  public params: ProjectCreationDescription = {
+  public params: ProjectCreationRequest = {
     slug: undefined,
     name: undefined,
   };
@@ -31,13 +32,12 @@ export class CreateProjectComponent {
   ) {
   }
 
-  get regExpSlug() {
-    return (StringValidator.ProjectSlug);
-  }
+  // Defines how a valid slug could look like
+  readonly regExpSlug = StringValidator.ProjectSlug;
 
-  get regExpName() {
-    return (StringValidator.ProjectName);
-  }
+  // Defines how a valid project name would look like
+  readonly regExpName = StringValidator.ProjectName;
+
 
   get currentError() {
     return (this._currentError);
@@ -50,25 +50,26 @@ export class CreateProjectComponent {
   /**
    * Sends the current state of the the request to the server.
    */
-  createProject() {
+  async createProject() {
     if (!this._currentRequest) {
       this._currentError = undefined;
 
-      this._currentRequest = this._http.post<ProjectDescription>(
+      this._currentRequest = this._http.post<ProjectCreationResponse>(
         this._serverApi.createProjectUrl(), this.params
-      );
+      ).pipe(first());
 
-      this._currentRequest
-        .subscribe(
-          res => {
-            this._router.navigateByUrl(`/editor/${res.id}`);
-            this._currentRequest = undefined;
-          },
-          err => {
-            this._currentError = JSON.stringify(err);
-            this._currentRequest = undefined;
-          }
-        );
+      try {
+        const res = await this._currentRequest.toPromise();
+        this._router.navigateByUrl(`/editor/${res.id}`);
+
+        return res;
+      } catch (err) {
+        this._currentError = err.error;
+      } finally {
+        this._currentRequest = undefined;
+      }
+    } else {
+      throw new Error("Another creation request is in progress");
     }
   }
 }

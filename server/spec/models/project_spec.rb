@@ -123,4 +123,12 @@ RSpec.describe Project do
       expect(p.data_directory_path).to end_with(p.id)
     end
   end
+
+  it "prints a readable identification" do
+    res = FactoryBot.create(:project, slug: "sluggy")
+    readable = res.readable_identification
+    expect(readable).to include res.id
+    expect(readable).to include res.name
+    expect(readable).to include res.slug
+  end
 end

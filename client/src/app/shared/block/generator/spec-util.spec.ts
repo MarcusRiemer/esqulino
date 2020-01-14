@@ -24,7 +24,6 @@ describe("BlockLanguage Spec Utilities", () => {
       const r = readableConstants([
         {
           blockType: "block",
-          direction: "horizontal",
           children: [
             { blockType: "constant", text: "a" },
           ]

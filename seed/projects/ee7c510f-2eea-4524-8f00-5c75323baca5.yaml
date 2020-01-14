@@ -2,16 +2,15 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: a88b637e-188e-4c5d-80dd-32928be0cde7
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Meta Projekt
+  value_before_type_cast: ee7c510f-2eea-4524-8f00-5c75323baca5
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
-  value_before_type_cast: meta
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta Grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
-  value_before_type_cast: Dieses Projekt beschreibt Grammatiken.
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -21,16 +20,14 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-07 11:25:30.083047'
+  value_before_type_cast: 2019-11-12 09:53:15.066356000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-07 11:38:02.001873'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: api_version
+  value_before_type_cast: 2019-11-12 09:53:15.066356000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
-  value_before_type_cast: 00000000-0000-0000-0000-000000000002
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
 new_record: false
 active_record_yaml_version: 2

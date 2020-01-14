@@ -1,6 +1,5 @@
 import { ProjectFullDescription } from './project'
 import { BlockLanguageDescription } from './block/block-language.description'
-import { CURRENT_API_VERSION } from './resource.description'
 
 /**
  * Return a valid description of an empty project. Individual parts of
@@ -18,7 +17,6 @@ export function emptyProject(override: Partial<ProjectFullDescription>): Project
     public: true,
     projectUsesBlockLanguages: [],
     activeDatabase: "default",
-    apiVersion: CURRENT_API_VERSION,
     availableDatabases: {},
     blockLanguages: [],
     grammars: [],

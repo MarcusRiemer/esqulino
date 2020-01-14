@@ -4,86 +4,100 @@ concise_attributes:
   name: id
   value_before_type_cast: ef57a1ef-810c-4133-839d-2c02763a8504
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Trucklino Program
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: trucklino-program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino Program
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": {"typeName": "program", "languageName": "trucklino_program"},
-    "types": {"trucklino_program": {"if": {"type": "concrete", "attributes": [{"name":
-    "if", "type": "terminal", "symbol": "if"}, {"name": "parenOpen", "type": "terminal",
-    "symbol": " ("}, {"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]},
-    {"name": "parenClose", "type": "terminal", "symbol": ")"}, {"name": "bodyOpen",
-    "type": "terminal", "symbol": " {"}, {"name": "body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "statement"}]}, {"name": "bodyClose", "type": "terminal",
-    "symbol": "}"}, {"name": "elseIf", "type": "sequence", "nodeTypes": [{"occurs":
-    "*", "nodeType": "ifElseIf"}]}, {"name": "else", "type": "sequence", "nodeTypes":
-    [{"occurs": "?", "nodeType": "ifElse"}]}]}, "ifElse": {"type": "concrete", "attributes":
-    [{"name": "else", "type": "terminal", "symbol": "else"}, {"name": "bodyOpen",
-    "type": "terminal", "symbol": " {"}, {"name": "body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "statement"}]}, {"name": "bodyClose", "type": "terminal",
-    "symbol": "}"}]}, "sensor": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "type", "type": "property", "restrictions": [{"type": "enum", "value":
-    ["lightIsRed", "lightIsGreen", "canGoStraight", "canTurnLeft", "canTurnRight",
-    "canLoad", "canUnload", "isOnTarget", "isSolved"]}]}]}, "loopFor": {"type": "concrete",
-    "attributes": [{"name": "for", "type": "terminal", "symbol": "for"}, {"name":
-    "parenOpen", "type": "terminal", "symbol": " ("}, {"base": "integer", "name":
-    "times", "type": "property", "restrictions": [{"type": "minInclusive", "value":
-    0}]}, {"name": "parenClose", "type": "terminal", "symbol": ")"}, {"name": "bodyOpen",
-    "type": "terminal", "symbol": " {"}, {"name": "body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "statement"}]}, {"name": "bodyClose", "type": "terminal",
-    "symbol": "}"}]}, "program": {"type": "concrete", "attributes": [{"name": "procedures",
-    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "procedureDeclaration"}]},
+    "types": {"trucklino_program": {"if": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"name": "if", "tags": ["keyword"], "type": "terminal",
+    "symbol": "if"}, {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"type":
+    "container", "children": [{"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]}],
+    "orientation": "horizontal"}, {"name": "parenClose", "type": "terminal", "symbol":
+    ")"}, {"name": "bodyOpen", "type": "terminal", "symbol": " {"}], "orientation":
+    "horizontal"}, {"type": "container", "children": [{"name": "body", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}], "orientation": "vertical"},
+    {"type": "container", "children": [{"name": "bodyClose", "type": "terminal", "symbol":
+    "}"}, {"name": "elseIf", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "ifElseIf"}]}, {"name": "else", "type": "sequence", "nodeTypes": [{"occurs": "?",
+    "nodeType": "ifElse"}]}], "orientation": "vertical"}]}, "ifElse": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "else", "type": "terminal",
+    "symbol": "else"}, {"name": "bodyOpen", "type": "terminal", "symbol": " {"}],
+    "orientation": "horizontal"}, {"type": "container", "children": [{"name": "body",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]},
+    {"name": "bodyClose", "type": "terminal", "symbol": "}"}], "orientation": "vertical"}]},
+    "sensor": {"type": "concrete", "attributes": [{"base": "string", "name": "type",
+    "type": "property", "restrictions": [{"type": "enum", "value": ["lightIsRed",
+    "lightIsGreen", "canGoStraight", "canTurnLeft", "canTurnRight", "canLoad", "canUnload",
+    "isOnTarget", "isSolved"]}]}]}, "loopFor": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "for", "type": "terminal", "symbol":
+    "for"}, {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"base": "integer",
+    "name": "times", "type": "property", "restrictions": [{"type": "minInclusive",
+    "value": 0}]}, {"name": "parenClose", "type": "terminal", "symbol": ")"}, {"name":
+    "bodyOpen", "type": "terminal", "symbol": " {"}], "orientation": "horizontal"},
+    {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "statement"}]}, {"name": "bodyClose", "type": "terminal", "symbol": "}"}]}, "program":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
+    "procedures", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "procedureDeclaration"}]},
     {"name": "main", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "statement"}]}]}, "ifElseIf": {"type": "concrete", "attributes": [{"name": "elseIf",
-    "type": "terminal", "symbol": "else if"}, {"name": "parenOpen", "type": "terminal",
-    "symbol": " ("}, {"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]},
-    {"name": "parenClose", "type": "terminal", "symbol": ")"}, {"name": "bodyOpen",
-    "type": "terminal", "symbol": " {"}, {"name": "body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "statement"}]}, {"name": "bodyClose", "type": "terminal",
-    "symbol": "}"}]}, "loopWhile": {"type": "concrete", "attributes": [{"name": "while",
-    "type": "terminal", "symbol": "while"}, {"name": "parenOpen", "type": "terminal",
-    "symbol": " ("}, {"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]},
-    {"name": "parenClose", "type": "terminal", "symbol": ")"}, {"name": "bodyOpen",
-    "type": "terminal", "symbol": " {"}, {"name": "body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "statement"}]}, {"name": "bodyClose", "type": "terminal",
-    "symbol": "}"}]}, "statement": {"type": "oneOf", "oneOf": ["procedureCall", "if",
-    "loopFor", "loopWhile"]}, "procedureCall": {"type": "concrete", "attributes":
-    [{"base": "string", "name": "name", "type": "property"}, {"name": "parenOpen",
-    "type": "terminal", "symbol": "("}, {"name": "arguments", "type": "sequence",
-    "nodeTypes": [{"occurs": "*", "nodeType": "booleanExpression"}]}, {"name": "parenClose",
-    "type": "terminal", "symbol": ")"}]}, "booleanConstant": {"type": "concrete",
-    "attributes": [{"base": "string", "name": "value", "type": "property", "restrictions":
-    [{"type": "enum", "value": ["true", "false"]}]}]}, "negateExpression": {"type":
-    "concrete", "attributes": [{"name": "not", "type": "terminal", "symbol": "(NOT "},
-    {"name": "expr", "type": "sequence", "nodeTypes": ["booleanExpression"]}, {"name":
-    "close", "type": "terminal", "symbol": ")"}]}, "booleanExpression": {"type": "oneOf",
-    "oneOf": ["sensor", "negateExpression", "booleanBinaryExpression", "booleanConstant"]},
-    "procedureParameter": {"type": "concrete", "attributes": [{"base": "string", "name":
-    "name", "type": "property"}]}, "relationalOperator": {"type": "concrete", "attributes":
-    [{"base": "string", "name": "operator", "type": "property", "restrictions": [{"type":
-    "enum", "value": ["AND", "OR"]}]}]}, "procedureDeclaration": {"type": "concrete",
-    "attributes": [{"name": "function", "type": "terminal", "symbol": "function "},
+    "statement"}]}], "orientation": "vertical"}]}, "ifElseIf": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "elseIf", "type": "terminal",
+    "symbol": "else if"}, {"name": "parenOpen", "type": "terminal", "symbol": " ("},
+    {"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]}, {"name":
+    "parenClose", "type": "terminal", "symbol": ")"}, {"name": "bodyOpen", "type":
+    "terminal", "symbol": " {"}], "orientation": "horizontal"}, {"type": "container",
+    "children": [{"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*",
+    "nodeType": "statement"}]}, {"name": "bodyClose", "type": "terminal", "symbol":
+    "}"}], "orientation": "vertical"}]}, "loopWhile": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "while", "type": "terminal", "symbol":
+    "while"}, {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"name":
+    "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]}, {"name": "parenClose",
+    "type": "terminal", "symbol": ")"}, {"name": "bodyOpen", "type": "terminal", "symbol":
+    " {"}], "orientation": "horizontal"}, {"type": "container", "children": [{"name":
+    "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}],
+    "orientation": "vertical"}, {"name": "bodyClose", "type": "terminal", "symbol":
+    "}"}]}, "statement": {"type": "oneOf", "oneOf": ["procedureCall", "if", "loopFor",
+    "loopWhile"]}, "procedureCall": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}, {"name": "parenOpen", "type": "terminal",
+    "symbol": "("}, {"name": "arguments", "type": "sequence", "nodeTypes": [{"occurs":
+    "*", "nodeType": "booleanExpression"}]}, {"name": "parenClose", "type": "terminal",
+    "symbol": ")"}]}, "booleanConstant": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "value", "type": "property", "restrictions": [{"type": "enum",
+    "value": ["true", "false"]}]}]}, "negateExpression": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "not", "type": "terminal", "symbol":
+    "(NOT "}, {"name": "expr", "type": "sequence", "nodeTypes": ["booleanExpression"]},
+    {"name": "close", "type": "terminal", "symbol": ")"}], "orientation": "horizontal"}]},
+    "booleanExpression": {"type": "oneOf", "oneOf": ["sensor", "negateExpression",
+    "booleanBinaryExpression", "booleanConstant"]}, "procedureParameter": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"}]},
+    "relationalOperator": {"type": "concrete", "attributes": [{"base": "string", "name":
+    "operator", "type": "property", "restrictions": [{"type": "enum", "value": ["AND",
+    "OR"]}]}]}, "procedureDeclaration": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"name": "function", "type": "terminal", "symbol": "function "},
     {"base": "string", "name": "name", "type": "property"}, {"name": "parenOpen",
     "type": "terminal", "symbol": "("}, {"name": "arguments", "type": "sequence",
     "nodeTypes": [{"occurs": "*", "nodeType": "procedureParameter"}]}, {"name": "parenClose",
     "type": "terminal", "symbol": ")"}, {"name": "bodyOpen", "type": "terminal", "symbol":
-    " {"}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "statement"}]}, {"name": "bodyClose", "type": "terminal", "symbol": "}"}]}, "booleanBinaryExpression":
-    {"type": "concrete", "attributes": [{"name": "open", "type": "terminal", "symbol":
-    "("}, {"name": "lhs", "type": "sequence", "nodeTypes": ["booleanExpression"]},
-    {"name": "spaceBefore", "type": "terminal", "symbol": " "}, {"name": "operator",
-    "type": "sequence", "nodeTypes": ["relationalOperator"]}, {"name": "spaceAfter",
-    "type": "terminal", "symbol": " "}, {"name": "rhs", "type": "sequence", "nodeTypes":
-    ["booleanExpression"]}, {"name": "close", "type": "terminal", "symbol": ")"}]}}}}'
+    " {"}], "orientation": "horizontal"}, {"type": "container", "children": [{"name":
+    "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}],
+    "orientation": "vertical"}, {"type": "container", "children": [{"name": "bodyClose",
+    "type": "terminal", "symbol": "}"}], "orientation": "horizontal"}]}, "booleanBinaryExpression":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
+    "open", "type": "terminal", "symbol": "("}, {"name": "lhs", "type": "sequence",
+    "nodeTypes": ["booleanExpression"]}, {"name": "spaceBefore", "type": "terminal",
+    "symbol": " "}, {"name": "operator", "type": "sequence", "nodeTypes": ["relationalOperator"]},
+    {"name": "spaceAfter", "type": "terminal", "symbol": " "}, {"name": "rhs", "type":
+    "sequence", "nodeTypes": ["booleanExpression"]}, {"name": "close", "type": "terminal",
+    "symbol": ")"}], "orientation": "horizontal"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-12-19 11:24:42.99628'
+  value_before_type_cast: 2018-12-19 11:24:42.996280000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-12 11:20:24.246711'
+  value_before_type_cast: 2019-11-11 12:29:38.379830000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-lang

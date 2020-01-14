@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import {
@@ -34,12 +34,6 @@ export class BlockRenderComponent {
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
-  ngOnInit() {
-    if (!this.visual) {
-      debugger;
-    }
-  }
-
   /**
    * Optionally override the block language that comes with the code resource.
    */
@@ -49,6 +43,14 @@ export class BlockRenderComponent {
    * Disables any interaction with this block if true.
    */
   @Input() public readOnly = false;
+
+  @HostBinding('class')
+  private _hostClassNodeType = "errLang errType";
+
+
+  ngOnInit() {
+    this._hostClassNodeType = this.node.languageName + " " + this.node.typeName;
+  }
 
   /**
    * Dirty Hack: Template "Typecast"
@@ -166,7 +168,6 @@ export class BlockRenderComponent {
   get iteratorDropTargetVisual(): VisualBlockDescriptions.EditorDropTarget {
     return ({
       blockType: "dropTarget",
-      direction: "horizontal", // TODO: Drop target block should not have children
       emptyDropTarget: this.asBlockIterator(this.visual).emptyDropTarget
     });
   }

@@ -1,0 +1,15 @@
+{
+  "root": { "languageName": "g17", "typeName": "n1" },
+  "types": {
+    "g17": {
+      "n1": {
+        "attributes": [
+          {
+            "type": "terminal",
+            "symbol": "i am required"
+          }
+        ]
+      }
+    }
+  }
+}

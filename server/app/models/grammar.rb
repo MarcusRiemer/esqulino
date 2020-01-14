@@ -36,9 +36,4 @@ class Grammar < ApplicationRecord
     to_json_api_response
       .slice("id", "slug", "name", "technicalName", "programmingLanguageId")
   end
-
-  # Returns a nicely readable representation of id and name
-  def readable_identification
-    "\"#{name}\" (#{slug}, #{id})"
-  end
 end

@@ -78,9 +78,4 @@ class CodeResource < ApplicationRecord
   def to_full_api_response
     to_json_api_response.slice("name", "id", "ast", "createdAt", "updatedAt", "blockLanguageId", "programmingLanguageId")
   end
-
-  # Returns a nicely readable representation of id and name
-  def readable_identification
-    "\"#{name}\" (#{id})"
-  end
 end

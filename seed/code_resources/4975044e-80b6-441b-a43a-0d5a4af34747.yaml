@@ -37,10 +37,10 @@ concise_attributes:
     "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-08-03 12:05:27.079685'
+  value_before_type_cast: 2018-08-03 12:05:27.079685000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-04 17:05:58.597364'
+  value_before_type_cast: 2018-08-04 17:05:58.597364000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -53,6 +53,6 @@ concise_attributes:
     SELECT Geschichte.Geschichte_Jahr_Europa, COUNT(), GROUP_CONCAT(Geschichte.Geschichte_Name)
     FROM Geschichte
     GROUP BY Geschichte.Geschichte_Jahr_Europa
-    ORDER BY Geschichte.Geschichte_Jahr_Europa DESC, COUNT() DESC
+    ORDER BY Geschichte.Geschichte_Jahr_Europa, COUNT()
 new_record: false
 active_record_yaml_version: 2

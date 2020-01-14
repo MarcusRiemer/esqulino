@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 33e4959f-cf2d-481b-bb0c-06211e2ab0b3
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: JSON
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: JSON
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": {"typeName": "value", "languageName": "json"},
@@ -34,10 +34,10 @@ concise_attributes:
     "1", "nodeType": "value"}]}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-07-20 20:33:04.813374'
+  value_before_type_cast: 2018-07-20 20:33:04.813374000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-12 11:20:24.244608'
+  value_before_type_cast: 2019-07-12 11:20:24.244608000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: json

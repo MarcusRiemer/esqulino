@@ -62,7 +62,7 @@ gem "rest-client"
 gem 'rails', '~> 6.0'
 
 # Connecting to postgres databases
-gem 'pg'
+gem 'pg', '~> 1.2'
 
 # Adding CORS headers
 gem 'rack-cors'
@@ -79,7 +79,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   # Generate code coverage reports
-  gem 'simplecov', '~> 0.16'
+  gem 'simplecov', '~> 0.18.0.beta1'
   gem 'simplecov-cobertura'
 
   # Factories seem to be so much nicer then fixtures

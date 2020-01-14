@@ -30,10 +30,10 @@ concise_attributes:
     "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-18 19:19:54.991882'
+  value_before_type_cast: 2019-06-18 19:19:54.991882000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-24 19:29:05.988877'
+  value_before_type_cast: 2019-06-24 19:29:05.988877000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -46,6 +46,6 @@ concise_attributes:
     SELECT *
     FROM geschichte
     GROUP BY geschichte.geschichte_code
-    ORDER BY geschichte.seitenanzahl DESC
+    ORDER BY geschichte.seitenanzahl
 new_record: false
 active_record_yaml_version: 2

@@ -124,7 +124,7 @@ class User < ApplicationRecord
   end
 
   def has_confirmed_password_identity?
-    self.identities.any? { |k| k.instance_of?(PasswordIdentity) and k.confirmed?() }
+    self.identities.any? { |k| k.instance_of?(Identity::Password) and k.confirmed?() }
   end
 
   # Returns the current global role of a user

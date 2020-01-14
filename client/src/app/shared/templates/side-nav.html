@@ -7,20 +7,18 @@
   >
     <!-- Sidebar item output -->
 
-    <mat-nav-list 
+    <mat-nav-list
       id="main-nav"
     >
       <ng-container *ngFor="let nav of navItems">
         <ng-container *ngIf="userHasRoles$(nav.requireRoles) | async">
           <ng-container [ngSwitch]="nav.type">
             <!-- Rendering internal links -->
-            <a
-                *ngSwitchCase="'link'"
-                mat-list-item
-                [routerLink]="nav.route"
-                routerLinkActive="router-link-active"
-                [routerLinkActiveOptions]="{ exact: true }"
-            >
+            <a *ngSwitchCase="'link'"
+               mat-list-item
+               [routerLink]="nav.route"
+               routerLinkActive="router-link-active"
+               [routerLinkActiveOptions]="{ exact: !!nav.highlightExact }">
               <span
                   *ngIf="nav.icon"
                   class="fa fa-fw fa-{{ nav.icon }}"

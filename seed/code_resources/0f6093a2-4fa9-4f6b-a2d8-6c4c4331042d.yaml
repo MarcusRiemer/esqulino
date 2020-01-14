@@ -24,10 +24,10 @@ concise_attributes:
     "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-01-23 13:19:41.282131'
+  value_before_type_cast: 2019-01-23 13:19:41.282131000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-23 13:20:59.649561'
+  value_before_type_cast: 2019-01-23 13:20:59.649561000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f

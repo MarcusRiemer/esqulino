@@ -81,7 +81,6 @@ RSpec.describe Identity::Password, type: :model do
     end
   end
 
-
   it "can be persisted with a user and a valid password via data" do
     u = create(:user)
     a = Identity::Password.new(user: u, uid: "a@b.de", own_data: { password: "hahasicher" })

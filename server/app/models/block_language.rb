@@ -46,18 +46,9 @@ class BlockLanguage < ApplicationRecord
                "blockLanguageGeneratorId", "grammarId", "generated")
     else
       to_json_api_response
-        .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId")
+        .slice("id", "slug", "name", "defaultProgrammingLanguageId",
+               "blockLanguageGeneratorId", "grammarId")
     end
-
-    # basic_fields = ["id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId"]
-    # calculatedFields = basic_fields + ["automaticallyGenerated"]
-
-    # to_json_api_response
-    #  .slice(include_list_calculations ? *calculatedFields : basic_fields)
   end
 
-  # Returns a nicely readable representation of name, id and slug
-  def readable_identification
-    "\"#{name}\" (#{slug}, #{id})"
-  end
 end

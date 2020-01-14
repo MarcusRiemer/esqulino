@@ -22,7 +22,7 @@ $ide-app-accent:  mat-palette($mat-lime, A200, A100, A400);
 $ide-app-warn:    mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$ide-app-theme: mat-light-theme($ide-app-primary, $ide-app-accent, $ide-app-warn);
+$ide-app-theme:   mat-light-theme($ide-app-primary, $ide-app-accent, $ide-app-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -87,4 +87,9 @@ mat-nav-list#main-nav {
 
 mat-card.alert-warning {
     background-color: mat-color($ide-app-warn, 100);
+}
+
+/* We don't want to have background colours on loads of components */
+.mat-table, .mat-paginator {
+    background: unset;
 }

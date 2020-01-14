@@ -1,0 +1,5 @@
+grammar "g018-container-unnamed" {
+  node "g18"."n1" {
+    container vertical { }
+  }
+}

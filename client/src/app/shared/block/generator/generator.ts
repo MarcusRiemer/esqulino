@@ -44,5 +44,7 @@ export function generateBlockLanguage(
   const generated = runGenerator();
   const toReturn = Object.assign({}, l, generated);
 
+  console.log(`Generated block language using "${d.type}" generator`);
+
   return (toReturn);
 }

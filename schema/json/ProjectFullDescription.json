@@ -45,16 +45,6 @@
         }
       ]
     },
-    "ApiVersionToken": {
-      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "type": "string"
-    },
     "AttributeMappingOrder": {
       "anyOf": [
         {
@@ -716,16 +706,6 @@
           "additionalProperties": {
             "additionalProperties": false,
             "properties": {
-              "allowWrap": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
-              },
               "attributeMapping": {
                 "anyOf": [
                   {
@@ -782,17 +762,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
-                  }
-                ]
-              },
-              "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -815,7 +785,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
                   }
                 ]
               }
@@ -828,16 +798,6 @@
           "items": {
             "additionalProperties": false,
             "properties": {
-              "allowWrap": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
-              },
               "attributeMapping": {
                 "anyOf": [
                   {
@@ -874,17 +834,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
-                  }
-                ]
-              },
-              "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -897,7 +847,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
                   }
                 ]
               }
@@ -1015,6 +965,22 @@
       ],
       "type": "object"
     },
+    "MetaDefinedTypeSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "metaDefinedTypes"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
     "MinInclusiveRestriction": {
       "additionalProperties": false,
       "description": "Restricts the minimum numerical value.",
@@ -1106,9 +1072,12 @@
         },
         {
           "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeVisualContainerDescription"
         }
       ],
-      "description": "Attributes of a node are either properties or children."
+      "description": "Attributes of a node are either validation atoms like properties\nor children or visual cues like terminals or rows."
     },
     "NodeChildrenGroupDescription": {
       "anyOf": [
@@ -1129,7 +1098,7 @@
     },
     "NodeConcreteTypeDescription": {
       "additionalProperties": false,
-      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.",
+      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.\n\nOver time the grammar structure has deviated from being \"validation\nonly\", it now also contains visual information about the row layout of\nthe text based representation.",
       "properties": {
         "attributes": {
           "items": {
@@ -1235,6 +1204,12 @@
         "name": {
           "type": "string"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "property"
@@ -1271,6 +1246,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "property"
@@ -1304,6 +1285,12 @@
         "restrictions": {
           "items": {
             "$ref": "#/definitions/NodeStringTypeRestrictions"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },
@@ -1365,6 +1352,12 @@
         "symbol": {
           "type": "string"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "terminal"
@@ -1374,7 +1367,6 @@
       },
       "required": [
         "type",
-        "name",
         "symbol"
       ],
       "type": "object"
@@ -1539,6 +1531,45 @@
       ],
       "type": "object"
     },
+    "NodeVisualContainerDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/definitions/NodeAttributeDescription"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orientation": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "container"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "orientation",
+        "children"
+      ],
+      "type": "object"
+    },
     "OccursDescription": {
       "anyOf": [
         {
@@ -1588,17 +1619,10 @@
       ],
       "type": "object"
     },
-    "Orientation": {
-      "enum": [
-        "horizontal",
-        "vertical"
-      ],
-      "type": "string"
-    },
     "ParameterBoolean": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "boolean"
           ],
@@ -1606,7 +1630,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -1655,7 +1679,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1678,7 +1702,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1728,7 +1752,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1751,7 +1775,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
             }
           ]
         },
@@ -1785,7 +1809,7 @@
       ],
       "type": "object"
     },
-    "ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_": {
+    "ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_": {
       "additionalProperties": false,
       "properties": {
         "visibility": {
@@ -1801,7 +1825,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-346-550-1782179087-344-5092-1782179087-207-5092-1782179087-0-7115_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1814,7 +1838,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_": {
+    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -1843,7 +1867,7 @@
     "ParameterTypeColor": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "color"
           ],
@@ -1851,14 +1875,14 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
     "ParameterTypeString": {
       "additionalProperties": false,
       "properties": {
-        "\"type\"": {
+        "type": {
           "enum": [
             "string"
           ],
@@ -1866,7 +1890,7 @@
         }
       },
       "required": [
-        "\"type\""
+        "type"
       ],
       "type": "object"
     },
@@ -1896,10 +1920,6 @@
       "properties": {
         "activeDatabase": {
           "type": "string"
-        },
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "availableDatabases": {
           "additionalProperties": {
@@ -1975,7 +1995,6 @@
         }
       },
       "required": [
-        "apiVersion",
         "blockLanguages",
         "codeResources",
         "description",
@@ -2114,16 +2133,6 @@
           "instructions": {
             "additionalProperties": false,
             "properties": {
-              "allowWrap": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
-              },
               "attributeMapping": {
                 "anyOf": [
                   {
@@ -2180,17 +2189,7 @@
                     "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_alias-1002692191-142-249-1002692191-0-4875_"
-                  }
-                ]
-              },
-              "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
                   }
                 ]
               },
@@ -2213,7 +2212,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-1003-1035-1002692191-956-1036-1002692191-487-1471-1002692191-0-4875_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
                   }
                 ]
               }
@@ -2423,6 +2422,9 @@
         },
         {
           "$ref": "#/definitions/TruckProgramUserFunctionsSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/MetaDefinedTypeSidebarDescription"
         }
       ],
       "description": "All possible sidebar types"
@@ -2676,9 +2678,6 @@
           },
           "type": "array"
         },
-        "direction": {
-          "$ref": "#/definitions/Orientation"
-        },
         "dropAction": {
           "enum": [
             "append",
@@ -2691,14 +2690,10 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
-        },
-        "wrapChildren": {
-          "type": "boolean"
         }
       },
       "required": [
-        "blockType",
-        "direction"
+        "blockType"
       ],
       "type": "object"
     },
@@ -2793,9 +2788,6 @@
           },
           "type": "array"
         },
-        "direction": {
-          "$ref": "#/definitions/Orientation"
-        },
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
         },
@@ -2804,14 +2796,10 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
-        },
-        "wrapChildren": {
-          "type": "boolean"
         }
       },
       "required": [
-        "blockType",
-        "direction"
+        "blockType"
       ],
       "type": "object"
     },
@@ -2938,35 +2926,22 @@
         "childGroupName": {
           "type": "string"
         },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
-          },
-          "type": "array"
-        },
         "cssClasses": {
           "items": {
             "type": "string"
           },
           "type": "array"
         },
-        "direction": {
-          "$ref": "#/definitions/Orientation"
-        },
         "emptyDropTarget": {
           "type": "boolean"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
-        },
-        "wrapChildren": {
-          "type": "boolean"
         }
       },
       "required": [
         "blockType",
-        "childGroupName",
-        "direction"
+        "childGroupName"
       ],
       "type": "object"
     },

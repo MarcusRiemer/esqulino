@@ -37,10 +37,10 @@ concise_attributes:
     "nummer", "refTableName": "pokedex"}}]}, "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-01-30 13:13:58.705649'
+  value_before_type_cast: 2019-01-30 13:13:58.705649000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-30 13:16:41.448053'
+  value_before_type_cast: 2019-01-30 13:16:41.448053000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d

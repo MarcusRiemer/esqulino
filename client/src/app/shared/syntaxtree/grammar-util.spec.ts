@@ -1,7 +1,194 @@
-import { resolveChildOccurs, isHoleIfEmpty, getFullQualifiedAttributes, getConcreteTypes } from "./grammar-util";
-import { NodeTypeDescription, GrammarDocument } from "./grammar.description";
+import { resolveChildOccurs, isHoleIfEmpty, getFullQualifiedAttributes, getConcreteTypes, ensureGrammarAttributeNames, getQualifiedTypes } from "./grammar-util";
+import { NodeTypeDescription, GrammarDocument, NodeConcreteTypeDescription, NodeOneOfTypeDescription } from "./grammar.description";
+
+import { singleLanguageGrammar } from './grammar.spec-util';
 
 describe(`Grammar Utilities`, () => {
+  describe(`Ensuring attribute names`, () => {
+    it(`Single terminal`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            { type: "terminal", symbol: "t" },
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([{ type: "terminal", symbol: "t", name: "terminal_0" }]);
+    });
+
+    it(`Terminals and properties mixed`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            { type: "terminal", symbol: "t1" },
+            { type: "property", base: "integer", name: "p" },
+            { type: "terminal", symbol: "t2" },
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([
+        { type: "terminal", symbol: "t1", name: "terminal_0" },
+        { type: "property", base: "integer", name: "p" },
+        { type: "terminal", symbol: "t2", name: "terminal_2" }
+      ]);
+    });
+
+    it(`oneOf doesn't have names and must remain unchanged`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "oneOf",
+          oneOf: ["a", "b"]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const processed = named.types["spec"]["root"] as NodeOneOfTypeDescription;
+      const original = g.types["spec"]["root"] as NodeOneOfTypeDescription;
+
+      expect(processed).toEqual(original);
+    });
+
+    it(`Single unnamed container`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            { type: "container", orientation: "horizontal", children: [] }
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([
+        { type: "container", name: "container_0", orientation: "horizontal", children: [] }
+      ]);
+    });
+
+    it(`Single named container with unnamed child`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              name: "foobar",
+              children: [
+                { type: "terminal", symbol: "t1" },
+              ]
+            }
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([{
+        type: "container",
+        name: "foobar",
+        orientation: "horizontal",
+        children: [{ type: "terminal", symbol: "t1", name: "foobar_terminal_0" }]
+      }]);
+    });
+
+    it(`Single named container with named child`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              name: "upper",
+              children: [
+                { type: "terminal", symbol: "t1", name: "lower" },
+              ]
+            }
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([{
+        type: "container",
+        name: "upper",
+        orientation: "horizontal",
+        children: [{ type: "terminal", symbol: "t1", name: "lower" }]
+      }]);
+    });
+
+    it(`Single unnamed container with unnamed child`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              children: [
+                { type: "terminal", symbol: "t1" },
+              ]
+            }
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([{
+        type: "container",
+        name: "container_0",
+        orientation: "horizontal",
+        children: [{ type: "terminal", symbol: "t1", name: "container_0_terminal_0" }]
+      }]);
+    });
+
+    it(`Single unnamed container with named child`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        "root": {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              children: [
+                { type: "terminal", symbol: "t1", name: "bottom" },
+              ]
+            }
+          ]
+        }
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toEqual([{
+        type: "container",
+        name: "container_0",
+        orientation: "horizontal",
+        children: [{ type: "terminal", symbol: "t1", name: "bottom" }]
+      }]);
+    });
+  });
+
+
+
   describe(`resolveOccurs`, () => {
     it(`t1 | g1.t1 => 1`, () => {
       expect(resolveChildOccurs("a")).toEqual({ minOccurs: 1, maxOccurs: 1 });
@@ -169,7 +356,65 @@ describe(`Grammar Utilities`, () => {
     });
   });
 
-  describe(`getAllTypes`, () => {
+  describe(`getQualifiedTypes`, () => {
+    it(`No languages`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {}
+      };
+
+      expect(getQualifiedTypes(g)).toEqual([]);
+    });
+
+    it(`Empty language`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          g: {}
+        }
+      };
+
+      expect(getQualifiedTypes(g)).toEqual([]);
+    });
+
+    it(`Single language`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "concrete",
+            }
+          }
+        }
+      };
+
+      expect(getQualifiedTypes(g)).toEqual([
+        { type: "concrete", languageName: "g", typeName: "t1" }
+      ]);
+    });
+
+    it(`Two languages`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g1": {
+            "t1": { type: "concrete", }
+          },
+          "g2": {
+            "t2": { type: "concrete", }
+          }
+        }
+      };
+
+      expect(getQualifiedTypes(g)).toEqual([
+        { type: "concrete", languageName: "g1", typeName: "t1" },
+        { type: "concrete", languageName: "g2", typeName: "t2" }
+      ]);
+    });
+  });
+
+  describe(`getConcreteTypes`, () => {
     it(`g.t1`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
@@ -268,6 +513,95 @@ describe(`Grammar Utilities`, () => {
       };
 
       expect(getConcreteTypes(g)).toEqual([]);
+    });
+  });
+
+  describe(`getFullQualifiedAttributes`, () => {
+    it(`No languages`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {}
+      };
+
+      expect(getFullQualifiedAttributes(g)).toEqual([]);
+    });
+
+    it(`Single language`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "concrete",
+              attributes: [
+                { type: "property", name: "a", base: "string" }
+              ]
+            }
+          }
+        }
+      };
+
+      expect(getFullQualifiedAttributes(g)).toEqual([
+        { type: "property", name: "a", base: "string", languageName: "g", typeName: "t1" }
+      ]);
+    });
+
+    it(`Two languages`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g1": {
+            "t1": {
+              type: "concrete",
+              attributes: [
+                { type: "property", name: "a", base: "string" }
+              ]
+            }
+          },
+          "g2": {
+            "t1": {
+              type: "concrete",
+              attributes: [
+                { type: "property", name: "a", base: "string" }
+              ]
+            }
+          }
+        }
+      };
+
+      expect(getFullQualifiedAttributes(g)).toEqual([
+        { type: "property", name: "a", base: "string", languageName: "g1", typeName: "t1" },
+        { type: "property", name: "a", base: "string", languageName: "g2", typeName: "t1" }
+      ]);
+    });
+
+    it(`Container with attributes`, () => {
+      const g: GrammarDocument = {
+        root: { languageName: "g", typeName: "t1" },
+        types: {
+          "g": {
+            "t1": {
+              type: "concrete",
+              attributes: [
+                { type: "property", name: "top", base: "string" },
+                {
+                  type: "container",
+                  orientation: "vertical",
+                  children: [
+                    { type: "property", name: "nested", base: "string" },
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      };
+
+      expect(getFullQualifiedAttributes(g)).toEqual([
+        { type: "property", name: "top", base: "string", languageName: "g", typeName: "t1" },
+        jasmine.objectContaining({ languageName: "g", typeName: "t1", type: "container", name: "container_1" }),
+        { type: "property", name: "nested", base: "string", languageName: "g", typeName: "t1" }
+      ]);
     });
   });
 });

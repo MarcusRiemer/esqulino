@@ -226,6 +226,13 @@ export class ServerApi {
   }
 
   /**
+   * Retrieves the URL that is used to list all public projects.
+   */
+  getAdminProjectListUrl(): string {
+    return (`${this._apiBaseUrl}/project/list_admin`)
+  }
+
+  /**
    * Retrieves the URL that uniquely describes a project.
    */
   getProjectUrl(projectId: string): string {

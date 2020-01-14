@@ -57,7 +57,7 @@ export class CachedRequest<T> {
   private _error = new BehaviorSubject<any>(undefined);
 
   constructor(
-    private _httpRequest: Observable<T>
+    private _sourceObservable: Observable<T>
   ) { }
 
   /**
@@ -68,7 +68,7 @@ export class CachedRequest<T> {
     // Ensure that no new request is started if a previous request caused an error
     filter(_ => !this._error.value),
     // Hand over to the Angular request
-    switchMap(_ => this._httpRequest),
+    switchMap(_ => this._sourceObservable),
     // Log that the request has been fulfilled
     tap(_ => this.changeRequestCount(-1)),
     // Treat errors as non existant values (for the moment)
@@ -98,7 +98,10 @@ export class CachedRequest<T> {
   /**
    * Unconditionally triggers a new request.
    */
-  refresh() {
+  refresh(newObs?: Observable<T>) {
+    if (newObs) {
+      this._sourceObservable = newObs;
+    }
     this.changeRequestCount(1);
     this._trigger.next("trigger");
   }

@@ -36,7 +36,7 @@
   <mat-autocomplete #autoAttributes="matAutocomplete"
                     (optionSelected)="selectedAttribute($event)">
     <mat-option *ngFor="let attribute of filteredAvailableAttributes | async" [value]="attribute">
-      {{ attribute.grammarName }}.{{ attribute.typeName }}.{{ attribute.name }} (<code>{{ attribute.type }}</code>)
+      {{ attribute.languageName }}.{{ attribute.typeName }}.{{ attribute.name }} (<code>{{ attribute.type }}</code>)
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>

@@ -222,11 +222,6 @@ class ProjectDatabase < ApplicationRecord
     end
   end
 
-  # Returns a nicely readable representation of id and name
-  def readable_identification
-    "\"#{self.name}\" (#{self.id})"
-  end
-
   protected
 
   # Allows to access the underlying database connection.

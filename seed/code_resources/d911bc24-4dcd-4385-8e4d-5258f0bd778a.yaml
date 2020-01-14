@@ -39,10 +39,10 @@ concise_attributes:
     "-"}}]}, "language": "sql"}]}, "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-03-08 15:07:08.055063'
+  value_before_type_cast: 2019-03-08 15:07:08.055063000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-08 15:15:48.381654'
+  value_before_type_cast: 2019-03-08 15:15:48.381654000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -54,6 +54,6 @@ concise_attributes:
   value_before_type_cast: |-
     SELECT ereignis.bezeichnung, ereignis.beginn_jahr, ereignis.ende_jahr, ereignis.ende_jahr - ereignis.beginn_jahr
     FROM ereignis
-    ORDER BY ereignis.ende_jahr - ereignis.beginn_jahr DESC
+    ORDER BY ereignis.ende_jahr - ereignis.beginn_jahr
 new_record: false
 active_record_yaml_version: 2

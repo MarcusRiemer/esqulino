@@ -9,6 +9,10 @@ class ApplicationController < ActionController::API
 
   # Hand out 404 errors as fallbacks if Active Record doesn't find something
   rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
+
+  #
+  rescue_from Pundit::NotAuthorizedError, :with => :handle_authorization_exception
+
   protected
 
   def api_response(response)
@@ -43,6 +47,10 @@ class ApplicationController < ActionController::API
   # Active record couldn't find a specific record
   def handle_record_not_found
     render status: 404, plain: ""
+  end
+
+  def handle_authorization_exception(exception)
+    render status: 403
   end
 
 end

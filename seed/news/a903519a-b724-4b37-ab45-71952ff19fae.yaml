@@ -32,13 +32,13 @@ concise_attributes:
     The new \"Three Investigators\" database uses both of the new SQL functionalities for example in the [Speaker Multiple Characters](/editor/drei-fragezeichen/ast/45e86848-62eb-48fc-b026-061e08dcf19b/block) query. This shows which different characters a single voice actor has spoken."
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: published_from
-  value_before_type_cast: '2019-10-11 00:00:00'
+  value_before_type_cast: 2019-10-11 00:00:00.000000000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-10-11 12:46:49.512641'
+  value_before_type_cast: 2019-10-11 12:46:49.512641000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-10-11 13:02:17.460808'
+  value_before_type_cast: 2019-10-11 13:02:17.460808000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000001

@@ -67,6 +67,9 @@ FactoryBot.define do
   end
 
   factory :developer_provider, class: Identity::Developer, parent: :identity do
+    provider { "developer" }
+    sequence (:uid) { |n| "developer#{n}" }
+
     trait :new do
       provider { "developer" }
       uid { "developer@web.de" }
@@ -89,6 +92,9 @@ FactoryBot.define do
   end
 
   factory :google_provider, class: Identity::Google, parent: :identity do
+    provider { "google" }
+    sequence (:uid) { |n| "user#{n}@gmail.com" }
+
     trait :new do
       provider { "google" }
       uid { "google@gmail.de" }
@@ -111,6 +117,7 @@ FactoryBot.define do
         email: "tom@gmail.com",
         email_verified: true,
         credentials: {
+          token: "factory_bot_token",
           expires: true,
           expires_at: 3.hours.from_now.to_i
         }

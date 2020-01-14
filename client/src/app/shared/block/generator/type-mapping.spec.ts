@@ -2,7 +2,7 @@ import { NodeConcreteTypeDescription, NodeAttributeDescription } from '../../syn
 
 import { VisualBlockDescriptions } from '../block.description';
 
-import { mapTerminal, mapProperty, mapChildren, mapType, mapAttributes } from './type-mapping'
+import { mapTerminal, mapProperty, mapChildren, mapType, mapBlockAttributes } from './type-mapping'
 import { DefaultInstructions } from './instructions.description';
 import { TypeInstructions } from './instructions';
 
@@ -60,8 +60,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         blockType: "iterator",
         childGroupName: "c1",
-        direction: DefaultInstructions.iteratorInstructions.orientation,
-        wrapChildren: true,
         breakAfter: false,
         emptyDropTarget: false
       }
@@ -83,10 +81,8 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const res = mapChildren(
       nodeType, attrType,
       {
-        orientation: "horizontal",
         between: "ä",
         style: {},
-        allowWrap: true,
         breakAfter: false,
         emptyDropTarget: false,
       }
@@ -96,8 +92,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         blockType: "iterator",
         childGroupName: "c1",
-        direction: "horizontal",
-        wrapChildren: true,
         breakAfter: false,
         emptyDropTarget: false,
         between: [
@@ -128,7 +122,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
         { type: "terminal", name: "p1", symbol: "p1Text", },
       ]
     };
-    const res = mapAttributes(concreteType, instr, 0);
+    const res = mapBlockAttributes(concreteType, instr, 0);
     expect(res.length).toEqual(1);
   });
 
@@ -190,7 +184,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
         { type: "terminal", name: "p1", symbol: "p1Text", },
       ]
     };
-    expect(() => mapAttributes(concreteType, instr, 0)).toThrowError();
+    expect(() => mapBlockAttributes(concreteType, instr, 0)).toThrowError();
   });
 });
 

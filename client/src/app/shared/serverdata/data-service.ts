@@ -1,11 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
-import { CachedRequest, IndividualDescriptionCache } from './request-cache';
-import { first } from 'rxjs/operators';
 import { IdentifiableResourceDescription } from '../resource.description';
+
+import { JsonApiListResponse, isJsonApiListResponse } from './json-api-response'
+import { CachedRequest, IndividualDescriptionCache } from './request-cache';
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -13,6 +15,12 @@ import { IdentifiableResourceDescription } from '../resource.description';
 export abstract class DataService<
   TList extends IdentifiableResourceDescription,
   TSingle extends IdentifiableResourceDescription> {
+
+  // These parameters are passed to every listing request
+  private _listGetParams = new HttpParams();
+
+  private _listTotalCount = new BehaviorSubject<number | undefined>(undefined);
+
   public constructor(
     protected _http: HttpClient,
     private _snackBar: MatSnackBar,
@@ -24,9 +32,7 @@ export abstract class DataService<
   /**
    * The cache of all descriptions that are available to the current user.
    */
-  readonly listCache = new CachedRequest<TList[]>(
-    this._http.get<TList[]>(this._listUrl)
-  );
+  readonly listCache = new CachedRequest<TList[]>(this.createListRequest());
 
   /**
    * The individually cached resources.
@@ -42,12 +48,74 @@ export abstract class DataService<
   readonly list = this.listCache.value;
 
   /**
+   * @return The total number of list items available.
+   */
+  get peekListTotalCount() {
+    return (this._listTotalCount.value);
+  }
+
+  readonly listTotalCount = this._listTotalCount.asObservable();
+
+  /**
    * Calculates the URL that can be used to retrieve the resource in question.
    *
    * @param id The ID of the resource to retrieve.
    * @return The URL that can be used to retrieve the resource in question.
    */
   protected abstract resolveIndividualUrl(id: string): string;
+
+  private createListRequest() {
+    return this._http.get<TList[] | JsonApiListResponse<TList>>(this._listUrl, {
+      params: this._listGetParams
+    }).pipe(
+      map(response => {
+        if (isJsonApiListResponse<TList>(response)) {
+          this._listTotalCount.next(response.meta.totalCount);
+          return (response.data);
+        } else {
+          this._listTotalCount.next(undefined);
+          return (response);
+        }
+      })
+    );
+  }
+
+  /**
+   * Change the parameters that are passed to the HTTP GET requests for
+   * lists of data. This is useful for pagination and sorting.
+   */
+  private changeListParameters(newParams: HttpParams) {
+    this._listGetParams = newParams;
+    this.listCache.refresh(this.createListRequest())
+  }
+
+  /**
+   * Set the ordering parameters that should be used for all subsequent
+   * listing requests.
+   */
+  setListOrdering(columnName: string, order: "asc" | "desc" | "") {
+    if (order === "") {
+      this._listGetParams = this._listGetParams
+        .delete("orderDirection")
+        .delete("orderField");
+    } else {
+      this._listGetParams = this._listGetParams
+        .set("orderDirection", order)
+        .set("orderField", columnName);
+    }
+
+    this.changeListParameters(this._listGetParams);
+  }
+
+  /**
+   * Set the limits that should be used for all subsequent listing requests.
+   */
+  setListPagination(pageSize: number, currentPage: number) {
+    this._listGetParams = this._listGetParams.set("limit", pageSize.toString());
+    this._listGetParams = this._listGetParams.set("offset", (pageSize * currentPage).toString());
+
+    this.changeListParameters(this._listGetParams);
+  }
 
   /**
    * @param id The id of the searched resource

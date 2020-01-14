@@ -4,8 +4,7 @@ import { LanguageService } from './language.service'
 
 import {
   ProjectFullDescription, ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
-  ProjectUpdateDescription, ProjectUsesBlockLanguageDescription,
-  ApiVersion, ApiVersionToken, CURRENT_API_VERSION
+  ProjectUpdateDescription, ProjectUsesBlockLanguageDescription
 } from './project.description'
 import { Schema } from './schema/schema'
 import { Saveable, SaveStateEvent } from './interfaces'
@@ -35,7 +34,7 @@ const compareIgnoreCase = (lhs: { name: string }, rhs: { name: string }) => {
  * A loaded project with editing capatabilities. This is were all
  * information is lumped together.
  */
-export class Project implements ApiVersion, Saveable {
+export class Project implements Saveable {
   public slug: string;
   public schema: Schema;
 
@@ -87,10 +86,6 @@ export class Project implements ApiVersion, Saveable {
     this.grammarDescriptions = json.grammars;
     this.schema = new Schema(json.schema);
 
-    if (json.apiVersion as string != this.apiVersion) {
-      throw new Error(`Attempted to load a project "${json.slug}" with version ${json.apiVersion}, current version is ${this.apiVersion}`);
-    }
-
     // Map all descriptions to their concrete objects
     this._codeResources = (json.codeResources || [])
       .map(val => new CodeResource(val, this))
@@ -132,13 +127,6 @@ export class Project implements ApiVersion, Saveable {
    */
   get id() {
     return (this._id);
-  }
-
-  /**
-   * @return The version of this project
-   */
-  get apiVersion(): ApiVersionToken {
-    return (CURRENT_API_VERSION);
   }
 
   /**

@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: FH Abbild
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: fhw-abbild
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: FH Abbild
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Diese Datenbank wird an der FH Wedel im Übungsbetrieb verwendet
@@ -23,12 +23,10 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-12-11 10:07:21.942602'
+  value_before_type_cast: 2018-12-11 10:07:21.942602000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-21 14:21:58.770649'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: api_version
+  value_before_type_cast: 2019-05-21 14:21:58.770649000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: d47a01c7-71eb-4512-9ceb-1fbdc949385f

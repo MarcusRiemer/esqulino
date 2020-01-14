@@ -27,7 +27,6 @@ import { BrowserService } from './browser.service'
 import { DefaultValuePipe } from './default-value.pipe'
 import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
-import { ProjectDescriptionService } from './project.description.service';
 import { LanguageService } from './language.service';
 import { ServerApiService } from './serverdata/serverapi.service';
 import { ServerDataService } from './serverdata/server-data.service'
@@ -50,7 +49,10 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
 
-import { GrammarDataService, BlockLanguageDataService } from './serverdata'
+import {
+  GrammarDataService, BlockLanguageDataService,
+  ProjectDataService, AdminProjectDataService
+} from './serverdata'
 import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
 import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
@@ -68,7 +70,6 @@ import { MessageDialogComponent } from './message-dialog.component';
 import { MasterGuard } from './guards/master-guard';
 import { RequireLoggedInInterceptor } from './require-logged-in.interceptor';
 import { UserService } from './auth/user.service';
-
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -164,8 +165,8 @@ const materialModules = [
     ProvidersAllButtonsComponent
   ],
   entryComponents: [
-    AuthDialogComponent, 
-    ChangePasswordComponent, 
+    AuthDialogComponent,
+    ChangePasswordComponent,
     MessageDialogComponent
   ]
 })
@@ -180,7 +181,8 @@ export class SharedAppModule {
         FlashService,
         ServerApiService,
         ServerDataService,
-        ProjectDescriptionService,
+        ProjectDataService,
+        AdminProjectDataService,
         VideoService,
         LanguageService,
         ToolbarService,
@@ -191,7 +193,8 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
-        { provide: HTTP_INTERCEPTORS, 
+        {
+          provide: HTTP_INTERCEPTORS,
           useClass: RequireLoggedInInterceptor,
           multi: true,
           deps: [UserService]

@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Trucklino
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: trucklino-legacy
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Eine Welt voller Waren und ein einsamer Truck der sie an
@@ -23,12 +23,10 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-12-20 14:29:04.862138'
+  value_before_type_cast: 2018-12-20 14:29:04.862138000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-21 14:22:00.018375'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: api_version
+  value_before_type_cast: 2019-05-21 14:22:00.018375000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

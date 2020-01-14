@@ -101,8 +101,7 @@ function prettyPrintVisualIterator(desc: VisualBlockDescriptions.EditorIterator)
 
   // For the moment the mandatory properties have to be stated verbosely
   const props = [
-    `childGroup "${desc.childGroupName}"`,
-    `direction ${desc.direction}`
+    `childGroup "${desc.childGroupName}"`
   ]
 
   // The between property is optional
@@ -126,9 +125,7 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
   const head = `dropTarget {`;
 
   // For the moment the mandatory properties have to be stated verbosely
-  const props = [
-    `direction ${desc.direction}`
-  ]
+  const props = []
 
   const dropTarget = (desc.dropTarget)
     ? prettyPrintDropTargetProperties(desc.dropTarget)
@@ -150,9 +147,7 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 function prettyPrintLayoutBlock(desc: VisualBlockDescriptions.EditorContainer | VisualBlockDescriptions.EditorBlock) {
   const head = `${desc.blockType} {`;
 
-  const props = (VisualBlockDescriptions.isEditorContainer(desc))
-    ? [``]
-    : [`direction ${desc.direction}`]
+  const props = []
 
   if (typeof (desc.breakAfter) !== "undefined") {
     props.push(`breakAfter ${desc.breakAfter}`);

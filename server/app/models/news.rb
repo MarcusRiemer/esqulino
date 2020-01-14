@@ -92,4 +92,9 @@ class News < ApplicationRecord
 
     return (to_return)
   end
+
+  def readable_identification
+    _, printed_title = title.first
+    return "\"#{printed_title}\" (#{id})"
+  end
 end

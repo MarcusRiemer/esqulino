@@ -1,12 +1,7 @@
 import { TableDescription } from "./schema/schema.description"
 import { GrammarDescription } from './syntaxtree/grammar.description';
 import { CodeResourceDescription } from './syntaxtree/coderesource.description'
-import {
-  ApiVersion, ApiVersionToken, CURRENT_API_VERSION
-} from "./resource.description"
 import { BlockLanguageDescription } from "./block/block-language.description";
-
-export { ApiVersion, ApiVersionToken, CURRENT_API_VERSION }
 
 /**
  * The url-friendly name of the project. May only contain characters that do not
@@ -83,7 +78,7 @@ export interface ProjectSourceDescription {
  * existing project properties that is used to list available
  * projects.
  */
-export interface ProjectListDescription extends ApiVersion {
+export interface ProjectListDescription {
   id: string
   slug: ProjectSlug
   name: ProjectName
@@ -144,7 +139,14 @@ export interface ProjectUpdateDescription {
 /**
  * These parameters are required to create a new project.
  */
-export interface ProjectCreationDescription {
+export interface ProjectCreationRequest {
   slug: ProjectSlug
   name: ProjectName
+}
+
+/**
+ * Server feedback when attempting project creation.
+ */
+export interface ProjectCreationResponse {
+  id: string
 }

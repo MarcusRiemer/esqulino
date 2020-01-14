@@ -1,7 +1,7 @@
 import {
   NodeConcreteTypeDescription, NodeAttributeDescription,
   NodeTerminalSymbolDescription, NodePropertyTypeDescription,
-  NodeChildrenGroupDescription
+  NodeChildrenGroupDescription, NodeVisualContainerDescription
 } from '../../syntaxtree/grammar.description'
 
 import { VisualBlockDescriptions } from '../block.description'
@@ -12,6 +12,20 @@ import {
 } from './instructions.description'
 
 import { TypeInstructions } from './instructions'
+
+/**
+ * Checks whether the given attributes have any tags assigned. If that is the case
+ * they are immediatly added to the visual representation.
+ */
+function addTags(
+  attr: NodeTerminalSymbolDescription | NodePropertyTypeDescription | NodeVisualContainerDescription,
+  visual: VisualBlockDescriptions.EditorConstant | VisualBlockDescriptions.EditorInterpolated | VisualBlockDescriptions.EditorContainer | VisualBlockDescriptions.EditorInput
+) {
+  if (attr.tags && attr.tags.length > 0) {
+    const prev = visual.cssClasses || [];
+    visual.cssClasses = prev.concat(attr.tags);
+  }
+}
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
@@ -33,6 +47,9 @@ export function mapTerminal(
     toReturn.style = instructions.style;
   }
 
+  // Possibly add some class
+  addTags(attr, toReturn);
+
   return (toReturn);
 }
 
@@ -51,6 +68,9 @@ export function mapInterpolated(
   if (Object.keys(instructions.style).length > 0) {
     toReturn.style = instructions.style;
   }
+
+  // Possibly add some class
+  addTags(attr, toReturn);
 
   return (toReturn);
 }
@@ -75,6 +95,8 @@ export function mapProperty(
     if (Object.keys(instructions.style).length > 0) {
       toReturn.style = instructions.style;
     }
+
+    addTags(attr, toReturn);
 
     return (toReturn);
   }
@@ -114,8 +136,6 @@ export function mapChildren(
   const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
-    direction: instructions.orientation,
-    wrapChildren: instructions.allowWrap,
     breakAfter: instructions.breakAfter,
     emptyDropTarget: instructions.emptyDropTarget
   }
@@ -130,8 +150,26 @@ export function mapChildren(
     iteratorBlock.style = instructions.style;
   }
 
-  // Lets see whether we can eliminate drop targets from block descriptions
   return ([iteratorBlock]);
+}
+
+export function mapContainer(
+  _typeDesc: NodeConcreteTypeDescription,
+  attr: NodeVisualContainerDescription,
+  instructions: TypeInstructions,
+): VisualBlockDescriptions.ConcreteBlock {
+  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(a => mapAttribute(_typeDesc, a, instructions));
+
+  const toReturn: VisualBlockDescriptions.EditorContainer = {
+    blockType: "container",
+    children: [].concat(...mappedChildren),
+    cssClasses: [attr.orientation],
+  };
+
+  // Possibly add some class
+  addTags(attr, toReturn);
+
+  return (toReturn);
 }
 
 export function mapAttribute(
@@ -145,10 +183,12 @@ export function mapAttribute(
     case "choice":
     case "parentheses":
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
-    case "terminal":
-      return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
     case "property":
       return [mapProperty(attr, instructions.scopeProperty(attr.name))];
+    case "terminal":
+      return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
+    case "container":
+      return [mapContainer(typeDesc, attr, instructions)];
     default:
       throw new Error(`Unknown attribute type "${(attr as any).type}"`);
   }
@@ -160,7 +200,7 @@ export function mapAttribute(
  * either according to the order in the grammar or the order that is
  * given explicitly.
  */
-export function mapAttributes(
+export function mapBlockAttributes(
   typeDesc: NodeConcreteTypeDescription,
   instructions: TypeInstructions,
   blockNumber: number,
@@ -196,11 +236,9 @@ export function mapType(
     const blockInstructions = instructions.scopeBlock(i);
     const thisBlock: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
-      direction: blockInstructions.orientation,
-      children: mapAttributes(typeDesc, instructions, i),
+      children: mapBlockAttributes(typeDesc, instructions, i),
       dropTarget: blockInstructions.onDrop,
       breakAfter: blockInstructions.breakAfter,
-      wrapChildren: blockInstructions.allowWrap
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {

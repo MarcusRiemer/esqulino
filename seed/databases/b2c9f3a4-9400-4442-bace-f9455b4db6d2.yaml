@@ -42,9 +42,9 @@ concise_attributes:
     "from_column": "event_id"}]}]}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-26 10:37:47.05661'
+  value_before_type_cast: 2018-02-26 10:37:47.056610000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-26 10:38:32.426182'
+  value_before_type_cast: 2018-02-26 10:38:32.426182000 Z
 new_record: false
 active_record_yaml_version: 2

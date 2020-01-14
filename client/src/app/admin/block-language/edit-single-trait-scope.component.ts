@@ -135,7 +135,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
     const instructions = this._editedBlockLanguageService.editedSubject.localGeneratorInstructions;
     if (instructions && instructions.type === "manual") {
       return (
-        Object.keys(instructions.traits)
+        Object.keys(instructions.traits || {})
           .filter(traitName => this.scope.traits.indexOf(traitName) < 0)
       );
     } else {
@@ -164,13 +164,12 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
 
   readonly filteredAvailableAttributes = this.formControlAttribute.valueChanges
     .pipe(
-      tap(console.log),
       map(
         value => this.allPossibleAttributes.filter(
           option =>
             option.languageName.includes(value)
             || option.typeName.includes(value)
-            || option.name.includes(value)
+            || (option.name && option.name.includes(value))
         )
       )
     );

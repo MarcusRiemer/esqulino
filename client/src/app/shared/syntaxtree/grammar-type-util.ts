@@ -85,8 +85,32 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
     const usedTypes = new Set<string>();
     const order: OrderedTypes = [];
 
+    // Forward declaration
+    let recurseType: ((curr: QualifiedTypeName) => void) = undefined;
+
+    const handleAttribute = (a: Desc.NodeAttributeDescription, currLanguageName: string) => {
+      switch (a.type) {
+        case "allowed":
+        case "sequence":
+          a.nodeTypes.forEach(t => {
+            recurseType(ensureTypename(t, currLanguageName));
+          });
+          break;
+        case "choice":
+          a.choices.forEach(t => {
+            recurseType(ensureTypename(t, currLanguageName));
+          });
+          break;
+        case "container":
+          a.children.forEach(t => {
+            handleAttribute(t, currLanguageName);
+          });
+          break;
+      }
+    }
+
     // Recursively walk through all types that are mentioned
-    const impl = (curr: QualifiedTypeName) => {
+    recurseType = (curr: QualifiedTypeName) => {
       // Don't do anything if the type has been mentioned already
       if (!usedTypes.has(stableQualifiedTypename(curr))) {
         usedTypes.add(stableQualifiedTypename(curr));
@@ -99,31 +123,17 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
           switch (def.type) {
             // For concrete types: Add all types mentioned in childgroups
             case "concrete":
-              (def.attributes || []).forEach(a => {
-                switch (a.type) {
-                  case "allowed":
-                  case "sequence":
-                    a.nodeTypes.forEach(t => {
-                      impl(ensureTypename(t, curr.languageName));
-                    });
-                    break;
-                  case "choice":
-                    a.choices.forEach(t => {
-                      impl(ensureTypename(t, curr.languageName));
-                    });
-                    break;
-                }
-              });
+              (def.attributes || []).forEach(a => handleAttribute(a, curr.languageName));
               break;
             case "oneOf":
-              (def.oneOf || []).forEach(t => impl(ensureTypename(t, curr.languageName)));
+              (def.oneOf || []).forEach(t => recurseType(ensureTypename(t, curr.languageName)));
               break;
           }
         }
       }
     }
 
-    impl(g.root);
+    recurseType(g.root);
 
     // Add all unreferenced types
     const unreferenced = getQualifiedTypes(g)

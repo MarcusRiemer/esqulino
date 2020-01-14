@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 867b74ad-9ab3-4402-98ee-cfb43d9de8b6
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Olympia
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: olympic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Olympia
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Statistiken zu olympischen Sommerspielen
@@ -22,12 +22,10 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-26 10:35:11.345867'
+  value_before_type_cast: 2018-02-26 10:35:11.345867000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-21 14:22:01.817985'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: api_version
+  value_before_type_cast: 2019-05-21 14:22:01.817985000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2

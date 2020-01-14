@@ -9,6 +9,7 @@ import { OverviewBlockLanguageComponent } from './block-language/overview-block-
 import { NavSiteComponent } from '../shared/nav-page.component';
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
+import { OverviewProjectComponent } from './project/overview-project.component';
 
 export const adminRoutes: Routes = [
   {
@@ -40,6 +41,10 @@ export const adminRoutes: Routes = [
       {
         path: 'block-language/:blockLanguageId',
         component: EditBlockLanguageComponent
+      },
+      {
+        path: 'project',
+        component: OverviewProjectComponent
       },
       {
         path: 'news',

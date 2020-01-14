@@ -4,9 +4,15 @@ class ProjectsController < ApplicationController
   include JsonSchemaHelper
   include UserHelper
 
-  # Lists all projects
+  # Lists all public projects
   def index
-    render json: Project.only_public.map{|p| p.to_list_api_response}
+    render json: index_pagination_response(Project.only_public)
+  end
+
+  # Lists all projects that exist in the system (if the user is an admin)
+  def index_admin
+    authorize Project, :list_all?
+    render json: index_pagination_response(Project.all)
   end
 
   # Retrieves all information about a single project. This is the only
@@ -24,11 +30,11 @@ class ProjectsController < ApplicationController
   def create
     begin
       authorize Project, :create?
-      creation_params = append_current_user(project_creation_params)
+      creation_params = project_creation_params
       project = Project.new(creation_params)
       if project.save
         ProjectMailer.with(project: project).created_admin.deliver_later
-  
+
         render json: { 'id' => project.slug }, :status => 200
       else
         render :json => { 'errors' => project.errors }, :status => 400
@@ -55,7 +61,7 @@ class ProjectsController < ApplicationController
   def destroy
     begin
       authorize current_project
-      
+
       current_project.destroy
     rescue Pundit::NotAuthorizedError => e
       error_response("You need the permission")
@@ -74,20 +80,47 @@ class ProjectsController < ApplicationController
 
   private
 
-  def append_current_user(hash)
-    hash["user"] = current_user
-    return hash
+  # Pagination for any query that lists projects
+  def index_pagination_response(query)
+    order_key = project_list_params.fetch("order_field", "name")
+    order_dir = project_list_params.fetch("order_direction", "asc")
+
+    if (not Project.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
+      raise EsqulinoError::InvalidOrder.new(order_key, order_dir)
+    end
+
+    paginated_query = query
+              .order({ order_key => order_dir})
+              .limit(project_list_params.fetch("limit", 100))
+              .offset(project_list_params.fetch("offset", 0))
+
+    return {
+      data: paginated_query.map{|p| p.to_list_api_response},
+      meta: {
+        totalCount: query.count
+      }
+    }
   end
 
   # These attributes are mandatory when a project is created
   def project_creation_params
-    params.permit(:name, :slug)
+    to_return = params.permit(:name, :slug)
       .transform_keys { |k| k.underscore }
+
+    to_return["user"] = current_user
+
+    return (to_return)
   end
 
   # These attributes may be changed once a project has been created
   def project_update_params
     params.permit(:name, :description, :indexPageId, :preview)
+      .transform_keys { |k| k.underscore }
+  end
+
+  # These attributes
+  def project_list_params
+    params.permit(:limit, :offset, :orderField, :orderDirection)
       .transform_keys { |k| k.underscore }
   end
 
@@ -99,6 +132,7 @@ class ProjectsController < ApplicationController
       attributes = used_block_languages
                      .map { |used| used.transform_keys! { |k| k.underscore } }
                      .each { |used| used.permit! }
+
       to_return = ActionController::Parameters
                     .new({ "project_uses_block_languages_attributes" => attributes})
                     .permit!

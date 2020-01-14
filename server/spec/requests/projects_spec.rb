@@ -194,28 +194,27 @@ RSpec.describe ProjectsController, type: :request do
       get "/api/project/"
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).length).to eq 0
+      parsed = JSON.parse(response.body)
+      expect(parsed['data'].length).to eq 0
     end
 
     it 'lists a single public project' do
-      FactoryBot.create(:project, :public, api_version: "4")
+      FactoryBot.create(:project, :public)
       get "/api/project/"
 
       expect(response).to have_http_status(200)
 
-      json_data = JSON.parse(response.body)
-
-      expect(json_data.length).to eq 1
-
-      expect(json_data[0]).to validate_against "ProjectListDescription"
+      parsed = JSON.parse(response.body)
+      expect(parsed['data'].length).to eq 1
+      expect(parsed['data'][0]).to validate_against "ProjectListDescription"
     end
 
     describe 'does not list private projects' do
       before do
         FactoryBot.create(:project, :private)
-        FactoryBot.create(:project, api_version: 4, public: true)
+        FactoryBot.create(:project, public: true)
         get "/api/project/"
-        @json_data = JSON.parse(response.body)
+        @json_data = JSON.parse(response.body)['data']
       end
 
       it 'returns 200' do
@@ -227,7 +226,114 @@ RSpec.describe ProjectsController, type: :request do
         expect(@json_data[0]).to validate_against "ProjectListDescription"
       end
     end
+
+    it 'limit' do
+      FactoryBot.create(:project, :public)
+      FactoryBot.create(:project, :public)
+      FactoryBot.create(:project, :public)
+
+      get "/api/project?limit=1"
+      expect(JSON.parse(response.body)['data'].length).to eq 1
+
+      get "/api/project?limit=2"
+      expect(JSON.parse(response.body)['data'].length).to eq 2
+
+      get "/api/project?limit=3"
+      expect(JSON.parse(response.body)['data'].length).to eq 3
+
+      get "/api/project?limit=4"
+      expect(JSON.parse(response.body)['data'].length).to eq 3
+    end
+
+    describe 'order by' do
+      before do
+        FactoryBot.create(:project, :public, name: 'cccc', slug: 'cccc')
+        FactoryBot.create(:project, :public, name: 'aaaa', slug: 'aaaa')
+        FactoryBot.create(:project, :public, name: 'bbbb', slug: 'bbbb')
+      end
+
+      it 'nonexistant column' do
+        get "/api/project?orderField=nonexistant"
+
+        expect(response.status).to eq 400
+      end
+
+      it 'slug' do
+        get "/api/project?orderField=slug"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+
+      it 'slug invalid direction' do
+        get "/api/project?orderField=slug&orderDirection=north"
+
+        expect(response.status).to eq 400
+      end
+
+      it 'slug desc' do
+        get "/api/project?orderField=slug&orderDirection=desc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+      end
+
+      it 'slug asc' do
+        get "/api/project?orderField=slug&orderDirection=asc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+
+      it 'name desc' do
+        get "/api/project?orderField=name&orderDirection=desc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
+      end
+
+      it 'name asc' do
+        get "/api/project?orderField=name&orderDirection=asc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+    end
   end
+
+  describe 'GET /api/project/list_admin' do
+    it 'guest user: not permitted' do
+      get "/api/project/list_admin"
+
+      expect(response).to have_http_status(403)
+    end
+
+    it 'ordinary user: not permitted' do
+      user = create(:user)
+      set_access_token(user)
+
+      get "/api/project/list_admin"
+
+      expect(response).to have_http_status(403)
+    end
+
+    it 'admin user: properly paginated' do
+      FactoryBot.create(:project, :public, name: 'cccc', slug: 'cccc')
+      FactoryBot.create(:project, :public, name: 'aaaa', slug: 'aaaa')
+      FactoryBot.create(:project, :public, name: 'bbbb', slug: 'bbbb')
+
+      user = create(:user, :admin)
+      set_access_token(user)
+
+      get "/api/project/list_admin?orderField=slug&orderDirection=desc"
+
+      expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)['data']
+
+      expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+    end
+  end
+
 
   describe 'GET /api/project/:project_id' do
     it 'empty project satisfies the JSON schema' do

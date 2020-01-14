@@ -34,9 +34,9 @@ concise_attributes:
     "chapter_from"}]}]}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-26 10:22:36.331336'
+  value_before_type_cast: 2018-02-26 10:22:36.331336000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-26 10:24:43.034854'
+  value_before_type_cast: 2018-02-26 10:24:43.034854000 Z
 new_record: false
 active_record_yaml_version: 2

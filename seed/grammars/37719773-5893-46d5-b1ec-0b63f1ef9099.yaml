@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 37719773-5893-46d5-b1ec-0b63f1ef9099
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: CSS
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: css
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: CSS
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": {"typeName": "document", "languageName": "css"},
@@ -33,10 +33,10 @@ concise_attributes:
     "value", "type": "property"}]}, "selectorUniversal": {"type": "concrete"}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-05-15 18:48:24.782086'
+  value_before_type_cast: 2018-05-15 18:48:24.782086000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-12 11:20:24.239925'
+  value_before_type_cast: 2019-07-12 11:20:24.239925000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: css

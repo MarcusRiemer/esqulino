@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Dynamisches XML
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: dxml
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Dynamisches XML
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": {"typeName": "element", "languageName": "dxml"},
@@ -41,10 +41,10 @@ concise_attributes:
     "concrete", "attributes": [{"base": "string", "name": "operator", "type": "property"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-05-15 18:48:12.004676'
+  value_before_type_cast: 2018-05-15 18:48:12.004676000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-07-12 11:20:24.251053'
+  value_before_type_cast: 2019-07-12 11:20:24.251053000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby
