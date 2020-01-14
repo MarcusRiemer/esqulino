@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Pokédex
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: pokedex
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Pokédex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Welche Attacke kann von den meisten Pokémon gelernt werden?
@@ -24,10 +24,10 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-08-10 11:06:11.638562'
+  value_before_type_cast: 2019-08-10 11:06:11.638562000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-08-10 12:15:26.159257'
+  value_before_type_cast: 2019-08-10 12:15:26.159257000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 3fdf9b83-08a3-4792-96a8-d18cce420985

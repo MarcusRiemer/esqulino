@@ -213,9 +213,9 @@ concise_attributes:
     [{"references": [{"to_table": "dozent", "to_column": "PIN", "from_column": "PIN"}]}]}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-12-11 13:10:12.060064'
+  value_before_type_cast: 2018-12-11 13:10:12.060064000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-12-12 12:34:01.310553'
+  value_before_type_cast: 2018-12-12 12:34:01.310553000 Z
 new_record: false
 active_record_yaml_version: 2

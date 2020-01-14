@@ -45,10 +45,10 @@ concise_attributes:
     {"name": "COUNT"}}]}, "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-18 18:53:00.440382'
+  value_before_type_cast: 2019-06-18 18:53:00.440382000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-18 18:56:09.413688'
+  value_before_type_cast: 2019-06-18 18:56:09.413688000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -60,6 +60,6 @@ concise_attributes:
   value_before_type_cast: "SELECT charakter.name, COUNT()\nFROM geschichte\n\tINNER
     JOIN geschichte_to_charakter ON geschichte.id = geschichte_to_charakter.geschichte_id\n\tINNER
     JOIN charakter ON charakter.id = geschichte_to_charakter.charakter_id\nGROUP BY
-    charakter.id\nORDER BY COUNT() DESC"
+    charakter.id\nORDER BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

@@ -29,10 +29,10 @@ concise_attributes:
     "properties": {"name": "unload"}}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-02-05 10:28:45.033203'
+  value_before_type_cast: 2019-02-05 10:28:45.033203000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-02-05 10:52:50.6218'
+  value_before_type_cast: 2019-02-05 10:52:50.621800000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f

@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Die drei ??? (Alte Datenbank)
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: drei-fragezeichen-legacy
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Die drei ??? (Alte Datenbank)
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Diese Datenbank enthält einen strukturellen Fehler.
@@ -17,15 +17,14 @@ concise_attributes:
   value_before_type_cast: false
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: preview
-  value_before_type_cast:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-26 10:41:22.283084'
+  value_before_type_cast: 2018-02-26 10:41:22.283084000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-21 14:22:02.775626'
+  value_before_type_cast: 2019-05-21 14:22:02.775626000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 6f180522-1a62-4acd-bbeb-8e9ad89ac927

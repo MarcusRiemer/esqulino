@@ -146,10 +146,10 @@ concise_attributes:
     ["seq_trucks", "trucks"]}]}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-12-20 14:25:50.522385'
+  value_before_type_cast: 2018-12-20 14:25:50.522385000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-03 10:58:08.406723'
+  value_before_type_cast: 2020-01-14 19:25:19.111324000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-world

@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: 'Test: Web'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: webtest
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Test: Web'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Gehen Sie weiter, hier gibt es nichts zu sehen ...
@@ -22,10 +22,10 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-25 19:13:02.563495'
+  value_before_type_cast: 2018-02-25 19:13:02.563495000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-21 14:22:01.833874'
+  value_before_type_cast: 2019-05-21 14:22:01.833874000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

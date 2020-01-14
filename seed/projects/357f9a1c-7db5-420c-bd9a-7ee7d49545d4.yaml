@@ -4,11 +4,11 @@ concise_attributes:
   name: id
   value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
-  value_before_type_cast: Ereignisse
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: events
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Ereignisse
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen
@@ -25,10 +25,10 @@ concise_attributes:
   value_before_type_cast: f04bca19-cecd-4996-96a8-0749b4f25311
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-20 20:48:21.693124'
+  value_before_type_cast: 2018-02-20 20:48:21.693124000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-21 14:22:01.967283'
+  value_before_type_cast: 2019-05-21 14:22:01.967283000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4

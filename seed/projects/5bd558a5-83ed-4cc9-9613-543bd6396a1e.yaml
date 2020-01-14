@@ -4,10 +4,10 @@ concise_attributes:
   name: id
   value_before_type_cast: 5bd558a5-83ed-4cc9-9613-543bd6396a1e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: name
+  name: slug
   value_before_type_cast: Test
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: slug
+  name: name
   value_before_type_cast: Test
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
@@ -20,10 +20,10 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-04 14:48:12.659782'
+  value_before_type_cast: 2019-06-04 14:48:12.659782000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-04 14:50:33.822525'
+  value_before_type_cast: 2019-06-04 14:50:33.822525000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b8c133b2-eda7-4664-ae9a-dac928b20dd5

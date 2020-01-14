@@ -28,13 +28,13 @@ concise_attributes:
     * Support for `HTML`"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: published_from
-  value_before_type_cast: '2019-05-15 00:00:00'
+  value_before_type_cast: 2019-05-15 00:00:00.000000000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-05-08 14:20:43.253857'
+  value_before_type_cast: 2019-05-08 14:20:43.253857000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-05-16 14:41:23.949988'
+  value_before_type_cast: 2019-05-16 14:41:23.949988000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002

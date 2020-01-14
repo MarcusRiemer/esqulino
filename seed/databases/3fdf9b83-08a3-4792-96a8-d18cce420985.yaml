@@ -56,9 +56,9 @@ concise_attributes:
     null}], "foreign_keys": []}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-08-10 11:06:37.700147'
+  value_before_type_cast: 2019-08-10 11:06:37.700147000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-08-10 11:07:08.339664'
+  value_before_type_cast: 2019-08-10 11:07:08.339664000 Z
 new_record: false
 active_record_yaml_version: 2

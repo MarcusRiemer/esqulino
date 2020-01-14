@@ -54,10 +54,10 @@ concise_attributes:
     "sql", "properties": {"order": "DESC"}}]}, "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-10-11 11:55:18.165091'
+  value_before_type_cast: 2019-10-11 11:55:18.165091000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-10-11 11:56:41.941687'
+  value_before_type_cast: 2019-10-11 11:56:41.941687000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d

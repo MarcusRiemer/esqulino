@@ -48,10 +48,10 @@ concise_attributes:
     "sql", "properties": {"name": "COUNT"}}]}, "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-04 14:58:50.061919'
+  value_before_type_cast: 2019-06-04 14:58:50.061919000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-04 15:09:24.390514'
+  value_before_type_cast: 2019-06-04 15:09:24.390514000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -63,6 +63,6 @@ concise_attributes:
   value_before_type_cast: "SELECT COUNT(), Sprecher.Sprecher_Name, Charakter.Charakter_Name\nFROM
     Auftritt\n\tINNER JOIN Sprecher ON Auftritt.Sprecher_ID = Sprecher.Sprecher_ID\n\tINNER
     JOIN Charakter ON Auftritt.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Sprecher.Sprecher_ID,
-    Charakter.Charakter_Name\nORDER BY COUNT() DESC"
+    Charakter.Charakter_Name\nORDER BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

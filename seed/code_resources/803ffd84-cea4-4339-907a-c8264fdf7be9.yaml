@@ -45,10 +45,10 @@ concise_attributes:
     "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-08-10 11:12:03.147351'
+  value_before_type_cast: 2019-08-10 11:12:03.147351000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-08-10 11:15:10.826412'
+  value_before_type_cast: 2019-08-10 11:15:10.826412000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -59,6 +59,6 @@ concise_attributes:
   name: compiled
   value_before_type_cast: "SELECT type.name_de, COUNT()\nFROM type\n\tINNER JOIN pokemon_to_type
     ON type.id = pokemon_to_type.type_id\n\tINNER JOIN pokemon ON pokemon.id = pokemon_to_type.pokemon_id\nGROUP
-    BY type.id\nORDER BY COUNT() DESC"
+    BY type.id\nORDER BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

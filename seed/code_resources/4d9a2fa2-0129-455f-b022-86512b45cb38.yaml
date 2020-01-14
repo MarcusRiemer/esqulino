@@ -32,10 +32,10 @@ concise_attributes:
     "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-18 18:56:55.314861'
+  value_before_type_cast: 2019-06-18 18:56:55.314861000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-18 19:18:33.556226'
+  value_before_type_cast: 2019-06-18 19:18:33.556226000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -48,6 +48,6 @@ concise_attributes:
     SELECT geschichte.herkunftsland, COUNT()
     FROM geschichte
     GROUP BY geschichte.herkunftsland
-    ORDER BY COUNT() DESC
+    ORDER BY COUNT()
 new_record: false
 active_record_yaml_version: 2

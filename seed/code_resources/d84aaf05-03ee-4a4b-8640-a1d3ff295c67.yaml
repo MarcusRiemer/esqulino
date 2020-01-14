@@ -51,10 +51,10 @@ concise_attributes:
     "language": "sql"}]}, "language": "sql"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-03-05 12:17:49.771123'
+  value_before_type_cast: 2018-03-05 12:17:49.771123000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-11-25 11:33:50.873138'
+  value_before_type_cast: 2018-11-25 11:33:50.873138000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
@@ -67,6 +67,6 @@ concise_attributes:
     GROUP_CONCAT(Charakter.Charakter_Name)\nFROM Sprecher\n\tINNER JOIN Charakter_Sprecher
     ON Sprecher.Sprecher_ID = Charakter_Sprecher.Sprecher_Id\n\tINNER JOIN Charakter
     ON Charakter_Sprecher.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Sprecher.Sprecher_ID\nORDER
-    BY COUNT(Charakter.Charakter_ID) DESC"
+    BY COUNT(Charakter.Charakter_ID)"
 new_record: false
 active_record_yaml_version: 2

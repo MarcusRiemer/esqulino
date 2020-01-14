@@ -99,10 +99,10 @@ concise_attributes:
     "E"}}]}, "language": "truck_world"}]}, "language": "truck_world"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-01-22 12:22:15.130114'
+  value_before_type_cast: 2019-01-22 12:22:15.130114000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-23 13:16:24.455593'
+  value_before_type_cast: 2019-01-23 13:16:24.455593000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: d3909e4c-e40a-4815-8966-9b9a4555a009

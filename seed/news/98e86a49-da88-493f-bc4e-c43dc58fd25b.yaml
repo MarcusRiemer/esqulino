@@ -24,13 +24,13 @@ concise_attributes:
     <img src=\"/api/project/pokedex/db/default/visual_schema?format=png\" class=\"img-fluid mx-auto d-block\">"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: published_from
-  value_before_type_cast: '2019-08-10 00:00:00'
+  value_before_type_cast: 2019-08-10 00:00:00.000000000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-08-10 11:36:38.174687'
+  value_before_type_cast: 2019-08-10 11:36:38.174687000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-08-10 11:48:58.835282'
+  value_before_type_cast: 2019-08-10 11:48:58.835282000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002

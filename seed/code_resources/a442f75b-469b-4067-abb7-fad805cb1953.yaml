@@ -40,10 +40,10 @@ concise_attributes:
     "properties": {"name": "smartGoForward"}}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-02-05 11:25:31.852172'
+  value_before_type_cast: 2019-02-05 11:25:31.852172000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-03-12 14:10:14.754907'
+  value_before_type_cast: 2019-03-12 14:10:14.754907000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f

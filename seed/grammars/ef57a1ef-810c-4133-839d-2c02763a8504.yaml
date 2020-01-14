@@ -13,8 +13,8 @@ concise_attributes:
   name: model
   value_before_type_cast: '{"root": {"typeName": "program", "languageName": "trucklino_program"},
     "types": {"trucklino_program": {"if": {"type": "concrete", "attributes": [{"type":
-    "container", "children": [{"name": "if", "type": "terminal", "symbol": "if", "tags":
-    ["keyword"]}, {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"type":
+    "container", "children": [{"name": "if", "tags": ["keyword"], "type": "terminal",
+    "symbol": "if"}, {"name": "parenOpen", "type": "terminal", "symbol": " ("}, {"type":
     "container", "children": [{"name": "pred", "type": "sequence", "nodeTypes": ["booleanExpression"]}],
     "orientation": "horizontal"}, {"name": "parenClose", "type": "terminal", "symbol":
     ")"}, {"name": "bodyOpen", "type": "terminal", "symbol": " {"}], "orientation":

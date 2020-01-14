@@ -61,9 +61,9 @@ concise_attributes:
     [{"to_table": "geschichte", "to_column": "id", "from_column": "geschichte_id"}]}]}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2019-06-18 18:50:41.080768'
+  value_before_type_cast: 2019-06-18 18:50:41.080768000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-06-18 19:40:20.628961'
+  value_before_type_cast: 2019-06-18 19:40:20.628961000 Z
 new_record: false
 active_record_yaml_version: 2
