@@ -45,5 +45,5 @@ export class OverviewProjectComponent {
   }
 
 
-  displayedColumns: (keyof ProjectListDescription)[] = ["id", "slug", "name"];
+  displayedColumns: (keyof ProjectListDescription)[] = ["name", "slug", "id"];
 }
