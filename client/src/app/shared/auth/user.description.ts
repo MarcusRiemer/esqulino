@@ -38,8 +38,8 @@ export interface UserEmailDescription {
 
 /**
  * If the password is being reset, a token will be created.
- * This token is used to to reset the password. 
- * The new password will be sent to the server, together with the newly created token. 
+ * This token is used to to reset the password.
+ * The new password will be sent to the server, together with the newly created token.
  * */
 export type UserPasswordDescription = {
   password: string;
@@ -47,6 +47,9 @@ export type UserPasswordDescription = {
   token: string;
 }
 
+/**
+ *
+ */
 export function isUserResponse(obj: any): obj is UserDescription {
-  return obj && 'userId' in obj;
+  return typeof obj === "object" && 'userId' in obj;
 }

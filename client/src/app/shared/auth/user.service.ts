@@ -25,7 +25,7 @@ export class UserService {
   ) {
     this._serverData.getUserData.value
       .subscribe(u => this.fireUserData(u));
-    
+
     this._serverData.getIdentities.value
       .subscribe(i => this.fireIdentities(i));
   }
@@ -56,7 +56,7 @@ export class UserService {
   readonly userData$ = this._cachedUserData.asObservable()
     .pipe(filter(u => !!u));
 
-  readonly providerList = this._serverData.getProviders; 
+  readonly providerList = this._serverData.getProviders;
   readonly identities = this._cachedIdentities.asObservable();
   readonly unexpectedLogout$ = this._unexpectedLogout$.asObservable();
 
@@ -111,7 +111,7 @@ export class UserService {
    */
   public signUp$(data: SignUpDescription): Observable<UserDescription> {
     return this._serverData.signUp$(data).pipe(
-      tap(_ => alert("Please confirm your e-mail"))
+      tap(_ => this._snackBar.open('Please confirm your email', 'OK'))
     )
   }
 

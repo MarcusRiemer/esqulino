@@ -4,7 +4,7 @@ import { MatSnackBar, MatSnackBarModule, MatDialogModule } from '@angular/materi
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { first, tap, finalize } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 import { UserDescription } from './user.description';
@@ -32,11 +32,12 @@ function mkGuestResponse() {
 function mkIdentitiesResponse(): ServerProviderDescription {
   return ({
     providers: [
-      { 
-        id: "121212121212121212", 
-        type: "github", 
-        confirmed: true, 
-        changes: { primary: null }}
+      {
+        id: "121212121212121212",
+        type: "github",
+        confirmed: true,
+        changes: { primary: null }
+      }
     ],
     primary: "blattwerkzeug.de"
   })
@@ -111,7 +112,7 @@ describe(`UserService`, () => {
     service.userId$
       .pipe(first())
       .subscribe(u => expect(u).toEqual(userData.userId));
-    
+
     service.isLoggedIn$
       .pipe(first())
       .subscribe(u => expect(u).toEqual(true));
@@ -128,7 +129,7 @@ describe(`UserService`, () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
-    
+
     let numCalls = 0;
 
     // First call after simulated login
@@ -159,7 +160,7 @@ describe(`UserService`, () => {
       .toEqual(3);
   })
 
-  it('userData on error', () => {
+  it('userData on error generic error', () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
@@ -177,8 +178,8 @@ describe(`UserService`, () => {
       .flush("", { statusText: "Unknown Error", status: 500 });
 
     expect(numCalls)
-      .withContext("Server errors push a new user state, is this good?")
-      .toEqual(1)
+      .withContext("Server errors could push a new user state, is this good?")
+      .toEqual(0)
   })
 
   it('Need to be replaced by a meaningful name', async () => {
@@ -203,11 +204,11 @@ describe(`UserService`, () => {
       .flush(guest)
 
     const guestData = await signUp;
-    
+
     expect(callCounter)
       .withContext("Single Subscription active")
       .toEqual(0)
-  
+
     expect(guestData).toEqual(guest)
 
     const signIn = service.signIn$(login)
@@ -239,11 +240,11 @@ describe(`UserService`, () => {
       .subscribe()
 
     expect(callCounter).toEqual(1)
-  
+
     const addEmail = service.addEmail$(addEmailData)
       .pipe(first())
       .toPromise()
-    
+
     httpTestingController.expectOne(serverApi.getSignUpUrl())
       .flush(identities)
 
@@ -272,7 +273,7 @@ describe(`UserService`, () => {
     expect(userDataCalls)
       .withContext("First Subscription")
       .toEqual(1);
-    
+
     service.unexpectedLogout$
       .pipe(tap(_ => unexpectedCalls++))
       .subscribe();
