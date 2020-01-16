@@ -3,18 +3,19 @@ module JwtHelper
   def self.secret_key
     return Rails.application.secrets.secret_key_base.to_s
   end
+
   # Is used for issuer claim
   def self.issuer
     return Rails.configuration.sqlino[:editor_domain]
   end
+
   # Returns the default duration of an access token
   def self.access_token_duration
-    # return 10.seconds
     return Rails.configuration.sqlino[:auth_tokens][:access_token].seconds
   end
+
   # Returns the default duration of an refresh token
   def self.refresh_token_duration
-    # return 10.seconds
     return Rails.configuration.sqlino[:auth_tokens][:refresh_token].seconds
   end
 
@@ -100,33 +101,33 @@ module JwtHelper
         begin
           @current_access_token = JwtHelper.decode(access_token)
         # If the access_token is expired check for a refresh token.
-        # A valid refresh token renew the access token
+        # A valid refresh token may renew the access token
         rescue JWT::DecodeError => accessError
           if (not refresh_token) then
             self.clear_secure_cookies
-            raise EsqulinoError::AccessToken.new(accessError.message)
+            raise EsqulinoError::AccessToken.new(accessError.message, 400)
           end
 
           begin
             @current_refresh_token = JwtHelper.decode(refresh_token, {
-              verify_expiration: false
-            })
+                                                        verify_expiration: false
+                                                      })
 
             exp = Time.at(@current_refresh_token[:exp]).utc
             user_id = @current_refresh_token[:user_id]
             user = User.find(user_id)
-            identity = Identity.find(@current_refresh_token[:identity_id])
+            identity = Identity::Identity.find(@current_refresh_token[:identity_id])
           rescue JWT::DecodeError => refreshError
             self.clear_secure_cookies
             raise EsqulinoError::RefreshToken.new(refreshError.message)
           rescue => e
             self.clear_secure_cookies
-            raise EsqulinoError::Base.new(e.message)
+            raise
           end
 
-        # If the current refresh token is expired try to renew the access token of the provider.
-        # The result of an renewd access token is a new blattwerkzeug refresh token
-        # Empty access_token & refresh_token means no one is logged in
+          # If the current refresh token is expired try to renew the access token of the provider.
+          # The result of an renewd access token is a new blattwerkzeug refresh token
+          # Empty access_token & refresh_token means no one is logged in
           if (Time.current > exp)
             user.refresh_token_if_expired(identity)
             if identity.access_token_expired?

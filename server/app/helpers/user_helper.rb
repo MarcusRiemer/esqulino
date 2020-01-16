@@ -14,11 +14,7 @@ module UserHelper
     if (not @current_user) then
       access_token = current_access_token
       if (access_token) then
-        begin
-          @current_user = User.find(current_access_token[:user_id].to_s)
-        rescue ActiveRecord::RecordNotFound => err
-          raise EsqulinoError.new(err.message)
-        end
+        @current_user = User.find(current_access_token[:user_id].to_s)
       end
     end
 
@@ -39,7 +35,7 @@ module UserHelper
     if (signed_in?)
       block.call
     else
-      api_response(self.current_user.information)
+      raise EsqulinoError::Base.new("Not logged in", 401)
     end
   end
 
@@ -53,7 +49,7 @@ module UserHelper
         identity_id: identity.id
       }, refresh_token_duration)
 
-      # Time will be automatically converted into GMT 
+      # Time will be automatically converted into GMT
       response_refresh_cookie(refresh_token)
       response_access_cookie(JwtHelper.encode(payload))
     end

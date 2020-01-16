@@ -69,6 +69,7 @@ class UserController < ApplicationController
   # Sends e-mail to primary mail
   # Change of primary e-mail needs to be confirmed
   def send_change_email
+    # TODO: Replace with Pundit
     ensure_is_logged_in do
       permited_params = change_email_params
 
@@ -98,7 +99,7 @@ class UserController < ApplicationController
       identity.set_primary_email_token
       identity.save!
 
-      UserMailer.change_primary_email(identity, request_locale).deliver unless Rails.env.test?
+      UserMailer.change_primary_email(identity, request_locale).deliver
       api_response(current_user.all_providers)
     end
   end

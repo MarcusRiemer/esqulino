@@ -74,16 +74,17 @@ RSpec.describe "auth controller" do
         set_access_token_with_invalid_user()
 
         get '/api/auth/developer/callback'
+
         expect(response.status).to eq(404)
       end
 
-      it "moved to sign in" do
+      it "expired access token for callback" do
         set_expired_access_token()
         get '/api/auth/developer/callback'
         json_data = JSON.parse(response.body)
 
         aggregate_failures "response" do
-          expect(response.status).to eq(500)
+          expect(response.status).to eq(400)
           expect(json_data["message"]).to eq("Signature has expired")
           expect(json_data["type"]).to eq("EsqulinoError::AccessToken")
         end

@@ -96,8 +96,6 @@ FactoryBot.define do
     sequence (:uid) { |n| "user#{n}@gmail.com" }
 
     trait :new do
-      provider { "google" }
-      uid { "google@gmail.de" }
       provider_data { ({
         name: "Tom",
         email: "tom@gmail.com",
@@ -110,8 +108,6 @@ FactoryBot.define do
     end
 
     trait :existing do
-      provider { "google" }
-      uid { "google@gmail.de" }
       provider_data { ({
         name: "Tom",
         email: "tom@gmail.com",
@@ -122,6 +118,21 @@ FactoryBot.define do
           expires_at: 3.hours.from_now.to_i
         }
       }) }
+    end
+
+    trait :expired do
+      provider_data {
+        ({
+           name: "Tom",
+           email: "tom@gmail.com",
+           email_verified: true,
+           credentials: {
+             token: "factory_bot_token",
+             expires: true,
+             expires_at: 3.hours.before.to_i
+           }
+         })
+      }
     end
   end
 

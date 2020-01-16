@@ -30,10 +30,10 @@ RSpec.describe "user controller" do
 
       get '/api/user'
       json_data = JSON.parse(response.body)
-      aggregate_failures "testing changes and response" do
+      aggregate_failures do
         expect(json_data["newUser"]["user_id"]).to eq(User.guest_id)
         expect(json_data["newUser"]["display_name"]).to eq("Guest")
-        expect(response.status).to eq(500)
+        expect(response.status).to eq(400)
       end
     end
   end
@@ -66,7 +66,7 @@ RSpec.describe "user controller" do
     context "invalid" do
       let!(:identity) { create(:identity_provider, :existing) }
 
-      xit 'logged out' do
+      it 'logged out' do
         post '/api/user/send_change_email',
           :headers => json_headers,
           :params => {
