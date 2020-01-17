@@ -1,8 +1,6 @@
 module Identity
   # Represents a sign in option
   class Identity < ActiveRecord::Base
-    attr_accessor :credentials
-
     # The uid is a unique identifier of an identity that has to be set
     validates :uid, presence: true
     validates :provider, presence: true

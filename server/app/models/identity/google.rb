@@ -33,32 +33,45 @@ module Identity
     # Asks Google whether the token that we currently have is still valid and
     # also retrieve a new access_token.
     def refresh_access_token
-      response = RestClient.post(
-        REFRESH_TOKEN_URL,
-        :grant_type => 'refresh_token',
-        :refresh_token => self.access_token,
-        :client_id => Rails.configuration.sqlino[:auth_provider_keys][:google_id],
-        :client_secret => Rails.configuration.sqlino[:auth_provider_keys][:google_secret],
-      )
-      parsed_response = JSON.parse(response.body)
-      sliced_response = parsed_response.slice("access_token","expires_in")
+      if (provider_data.key? "credentials")
+        begin
+          response = RestClient.post(
+            REFRESH_TOKEN_URL,
+            :grant_type => 'refresh_token',
+            :refresh_token => self.access_token,
+            :client_id => Rails.configuration.sqlino[:auth_provider_keys][:google_id],
+            :client_secret => Rails.configuration.sqlino[:auth_provider_keys][:google_secret],
+          )
+          parsed_response = JSON.parse(response.body)
+          sliced_response = parsed_response.slice("access_token","expires_in")
 
-      if (sliced_response.keys.length != 2)
+          if (sliced_response.keys.length != 2)
+            raise EsqulinoError::UnexpectedLogout.new(
+                    message: "Malformed response from Google: #{response.body}",
+                    code: 500
+                  )
+          end
+
+          self.access_token = sliced_response["access_token"]
+          self.credentials["expires_at"] = (Time.current + sliced_response["expires_in"]).to_i
+        rescue RestClient::BadRequest => err
+          # If something went wrong during the request, we have to expect the worst: Google somehow
+          # revoked this token and we therefore have to forget about it
+          provider_data.delete! "credentials"
+          save!
+
+          raise EsqulinoError::UnexpectedLogout.new(
+                  message: "Error refreshing the access token from Google",
+                  code: 500,
+                  inner_exception: err
+                )
+        end
+      else
         raise EsqulinoError::UnexpectedLogout.new(
-                message: "Malformed response from Google: #{response.body}",
+                message: "No server side data to renew from Google",
                 code: 500
               )
       end
-
-      self.access_token = sliced_response["access_token"]
-      self.credentials["expires_at"] = (Time.current + sliced_response["expires_in"]).to_i
-    rescue RestClient::BadRequest => err
-      # If something went wrong during the request, we have to expect the worst
-      raise EsqulinoError::UnexpectedLogout.new(
-              message: "Error refreshing the access token from Google",
-              code: 500,
-              inner_exception: err
-            )
     end
 
     # Google tells us whether the mail is valid
