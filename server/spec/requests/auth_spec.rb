@@ -85,8 +85,8 @@ RSpec.describe "auth controller" do
 
         aggregate_failures "response" do
           expect(response.status).to eq(400)
-          expect(json_data["message"]).to eq("Signature has expired")
-          expect(json_data["type"]).to eq("EsqulinoError::AccessToken")
+          expect(json_data["message"]).to include("REFRESH_TOKEN")
+          expect(json_data["type"]).to eq("EsqulinoError::UnexpectedLogout")
         end
       end
     end

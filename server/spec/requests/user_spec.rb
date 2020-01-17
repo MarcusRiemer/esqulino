@@ -21,18 +21,22 @@ RSpec.describe "user controller" do
       get '/api/user'
 
       json_data = JSON.parse(response.body)
-      expect(json_data["roles"]).to eq(["guest"])
+
+      aggregate_failures do
+        expect(json_data["userId"]).to eq(User.guest_id)
+        expect(json_data["displayName"]).to eq(User.guest.display_name)
+        expect(json_data["roles"]).to eq(["guest"])
+        expect(response.status).to eq(200)
+      end
     end
 
     it "access token expired" do
-      user = create(:user)
       set_expired_access_token()
 
       get '/api/user'
       json_data = JSON.parse(response.body)
       aggregate_failures do
-        expect(json_data["newUser"]["user_id"]).to eq(User.guest_id)
-        expect(json_data["newUser"]["display_name"]).to eq("Guest")
+        expect(json_data["type"]).to eq "EsqulinoError::UnexpectedLogout"
         expect(response.status).to eq(400)
       end
     end

@@ -36,5 +36,6 @@ RSpec.configure do |config|
     Kernel.srand config.seed
   end
 
+  # No test should ever connect to any external host
   WebMock.disable_net_connect!(allow_localhost: true)
 end

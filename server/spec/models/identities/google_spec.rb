@@ -28,7 +28,7 @@ RSpec.describe Identity::Google, type: :model do
       :info => {
         "name" => "Marcus Riemer",
         "email" => "dasgurke@gmail.com",
-        "image" => "https://lh3.googleusercontent.com/a-/AAuE7mCej5ghaodkis09YsvJrlzSicMDq_wmZT4MCBJ0",
+        "image" => "https://lh3.googleusercontent.com/a-/AAuE7mej5ghaodkis09YsvJrlzSicMDq_wmZT4MCBJ0",
         "last_name" => "Riemer",
         "first_name" => "Marcus",
         "email_verified" => true,
@@ -51,8 +51,13 @@ RSpec.describe Identity::Google, type: :model do
     expect(::Identity::Identity.google.length).to eq 1
   end
 
+  it "can expire" do
+    i = build(:google_provider, :expired)
+    expect(i.access_token_expired?).to eq true
+  end
+
   it "can be refeshed from Google" do
-    i = build(:google_provider, :existing)
+    i = build(:google_provider, :expired)
 
     # Response was issued like this from Google in a single test, lets
     # hope that issue was exemplary ...
@@ -78,10 +83,9 @@ RSpec.describe Identity::Google, type: :model do
   it "reports errors if refresh fails" do
     stub_request(:post, Identity::Google::REFRESH_TOKEN_URL)
       .to_return(status: 400, body: "Foo", headers: {})
-
     i = build(:google_provider, :existing)
 
-    expect { i.refresh_access_token }.to raise_exception EsqulinoError::Base
+    expect { i.refresh_access_token }.to raise_exception EsqulinoError::UnexpectedLogout
   end
 
   it "detects basic ill formed responses (missing expiration)" do
@@ -98,6 +102,6 @@ RSpec.describe Identity::Google, type: :model do
 
     i = build(:google_provider, :existing)
 
-    expect { i.refresh_access_token }.to raise_exception EsqulinoError::Base
+    expect { i.refresh_access_token }.to raise_exception EsqulinoError::UnexpectedLogout
   end
 end

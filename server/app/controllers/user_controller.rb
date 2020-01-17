@@ -1,7 +1,6 @@
 class UserController < ApplicationController
   include UserHelper
   include LocaleHelper
-  include JwtHelper
 
   # Response with current user information
   def index

@@ -3,15 +3,19 @@ require 'bcrypt'
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include Pundit
-
-  # Handle all errors that are specifc to our parts of the code
-  rescue_from EsqulinoError::Base, :with => :handle_internal_exception
+  include JwtHelper # This pulls very many things only to handle the unexpected logout ...
 
   # Hand out 404 errors as fallbacks if Active Record doesn't find something
   rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
 
-  #
+  # Hand out 403 errors if something is forbidden
   rescue_from Pundit::NotAuthorizedError, :with => :handle_authorization_exception
+
+  # Escape hatch for everything that requires a sudden logout
+  rescue_from EsqulinoError::UnexpectedLogout, :with => :handle_unexpected_logout
+
+  # Fall handling of all errors that are specifc to our parts of the code
+  rescue_from EsqulinoError::Base, :with => :handle_internal_exception
 
   protected
 
@@ -24,7 +28,21 @@ class ApplicationController < ActionController::API
     raise EsqulinoError::Base.new(err, code)
   end
 
-  # An instance of EsqulinoError was thrown
+  # Active record couldn't find a specific record
+  def handle_record_not_found
+    render status: 404, plain: ""
+  end
+
+  def handle_authorization_exception(exception)
+    render status: 403
+  end
+
+  def handle_unexpected_logout(exception)
+    clear_secure_cookies
+
+    handle_internal_exception(exception)
+  end
+
   def handle_internal_exception(exception)
     Raven.capture_exception(exception)
 
@@ -44,13 +62,5 @@ class ApplicationController < ActionController::API
     end
   end
 
-  # Active record couldn't find a specific record
-  def handle_record_not_found
-    render status: 404, plain: ""
-  end
-
-  def handle_authorization_exception(exception)
-    render status: 403
-  end
 
 end

@@ -104,8 +104,10 @@ module JwtHelper
         # A valid refresh token may renew the access token
         rescue JWT::DecodeError => accessError
           if (not refresh_token) then
-            self.clear_secure_cookies
-            raise EsqulinoError::AccessToken.new(accessError.message, 400)
+            raise EsqulinoError::UnexpectedLogout.new(
+                    message: "Error decoding ACCESS_TOKEN, no REFRESH_TOKEN present",
+                    inner_exception: accessError
+                  )
           end
 
           begin
@@ -117,27 +119,40 @@ module JwtHelper
             user_id = @current_refresh_token[:user_id]
             user = User.find(user_id)
             identity = Identity::Identity.find(@current_refresh_token[:identity_id])
-          rescue JWT::DecodeError => refreshError
-            self.clear_secure_cookies
-            raise EsqulinoError::RefreshToken.new(refreshError.message)
-          rescue => e
-            self.clear_secure_cookies
-            raise
-          end
 
-          # If the current refresh token is expired try to renew the access token of the provider.
-          # The result of an renewd access token is a new blattwerkzeug refresh token
-          # Empty access_token & refresh_token means no one is logged in
-          if (Time.current > exp)
-            user.refresh_token_if_expired(identity)
-            if identity.access_token_expired?
-              self.clear_secure_cookies
-              raise EsqulinoError::RefreshToken.new(refreshError.message)
+            # If the current refresh token is expired try to renew the access token of the provider.
+            # The result of an renewd access token is a new blattwerkzeug refresh token
+            # Empty access_token & refresh_token means no one is logged in
+            if (Time.current > exp)
+              user.refresh_token_if_expired(identity)
+              if identity.access_token_expired?
+                self.clear_secure_cookies
+                raise EsqulinoError::RefreshToken.new(refreshError.message)
+              end
+
+              renew_refresh_token(user_id, identity)
             end
 
-            renew_refresh_token(user_id, identity)
+            # The ACCESS_TOKEN should be renewed with every request where it has
+            # been touched
+            renew_access_token(user_id)
+
+          rescue JWT::DecodeError => accessError
+            # Specifically tell what token is broken
+            raise EsqulinoError::UnexpectedLogout.new(
+                    message: "Error decoding REFRESH_TOKEN",
+                    inner_exception: accessError
+                  )
+          rescue EsqulinoError::UnexpectedLogout
+            # Pass through unexpected logouts
+            raise
+          rescue => e
+            # Everything else is an unexpected logout
+            raise EsqulinoError::UnexpectedLogout.new(
+                    message: "General error during ACCESS_TOKEN retrieval",
+                    inner_exception: e
+                  )
           end
-          renew_access_token(user_id)
         end
       end
     end
@@ -164,6 +179,8 @@ module JwtHelper
     response_refresh_cookie(refresh_token)
   end
 
+  # Removes all local and remote traces of the ACCESS_TOKEN
+  # and the REFRESH_TOKEN
   def clear_secure_cookies
     if (self.refresh_cookie) then
       self.delete_refresh_cookie!
