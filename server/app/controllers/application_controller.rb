@@ -37,9 +37,10 @@ class ApplicationController < ActionController::API
     render status: 403
   end
 
+  # Controllers may signal some kind of authentication problem by throwing
+  # an exception.
   def handle_unexpected_logout(exception)
     clear_secure_cookies
-
     handle_internal_exception(exception)
   end
 

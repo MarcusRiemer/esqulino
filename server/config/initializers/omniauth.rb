@@ -25,10 +25,15 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   end
 
   if auth_providers.include? "Identity::Google"
-    provider :google_oauth2, config[:auth_provider_keys][:google_id], config[:auth_provider_keys][:google_secret]
+    provider :google_oauth2,
+             config[:auth_provider_keys][:google_id],
+             config[:auth_provider_keys][:google_secret],
+             access_type: "offline"
   end
 
   if auth_providers.include? "Identity::Github"
-    provider :github, config[:auth_provider_keys][:github_id], config[:auth_provider_keys][:github_secret]
+    provider :github,
+             config[:auth_provider_keys][:github_id],
+             config[:auth_provider_keys][:github_secret]
   end
 end

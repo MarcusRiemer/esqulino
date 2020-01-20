@@ -38,13 +38,15 @@ module Identity
           response = RestClient.post(
             REFRESH_TOKEN_URL,
             :grant_type => 'refresh_token',
-            :refresh_token => self.access_token,
+            :refresh_token => self.refresh_token,
             :client_id => Rails.configuration.sqlino[:auth_provider_keys][:google_id],
             :client_secret => Rails.configuration.sqlino[:auth_provider_keys][:google_secret],
           )
           parsed_response = JSON.parse(response.body)
           sliced_response = parsed_response.slice("access_token","expires_in")
 
+          # Ensure that google answers with the two datapoints that we actually
+          # asked for.
           if (sliced_response.keys.length != 2)
             raise EsqulinoError::UnexpectedLogout.new(
                     message: "Malformed response from Google: #{response.body}",
@@ -57,7 +59,7 @@ module Identity
         rescue RestClient::BadRequest => err
           # If something went wrong during the request, we have to expect the worst: Google somehow
           # revoked this token and we therefore have to forget about it
-          provider_data.delete! "credentials"
+          provider_data.delete "credentials"
           save!
 
           raise EsqulinoError::UnexpectedLogout.new(
@@ -84,18 +86,29 @@ module Identity
       return self.provider_data["email"]
     end
 
-    # TODO-Tom comments
+    # The duration that is left of the current token that we have received
+    # from Google.
     def access_token_duration
-      return Time.at(self.credentials["expires_at"])
+      expires_at = self.provider_data.dig("credentials", "expires_at")
+      if expires_at
+        return Time.at(expires_at)
+      else
+        return nil
+      end
     end
 
     def access_token_expired?
-      return self.access_token_duration < Time.current
+      self.access_token_duration.nil? || self.access_token_duration < Time.current
     end
 
     # The current access token we have from Google
     def access_token
       self.credentials["token"]
+    end
+
+    # The current refresh token we have from Google
+    def refresh_token
+      self.credentials["refresh_token"]
     end
 
     private
