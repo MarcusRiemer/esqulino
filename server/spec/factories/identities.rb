@@ -113,7 +113,8 @@ FactoryBot.define do
         email: "tom@gmail.com",
         email_verified: true,
         credentials: {
-          token: "factory_bot_token",
+          token: "a_google_access_token",
+          refresh_token: "a_google_refresh_token",
           expires: true,
           expires_at: 3.hours.from_now.to_i
         }
@@ -127,7 +128,8 @@ FactoryBot.define do
            email: "tom@gmail.com",
            email_verified: true,
            credentials: {
-             token: "factory_bot_token",
+             token: "a_google_access_token",
+             refresh_token: "a_google_refresh_token",
              expires: true,
              expires_at: 3.hours.before.to_i
            }

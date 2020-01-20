@@ -71,7 +71,7 @@ RSpec.describe Identity::Google, type: :model do
 
     # Whatever request is coming, it must include the old access_token
     stub_request(:post, Identity::Google::REFRESH_TOKEN_URL)
-      .with(body: hash_including({ refresh_token: i.access_token }))
+      .with(body: hash_including({ refresh_token: i.refresh_token }))
       .to_return(status: 200, body: refresh_response)
 
     i.refresh_access_token
