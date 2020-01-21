@@ -7,13 +7,20 @@ class AuthController < ApplicationController
   # If youre authenticated by the external provider, you will be
   # navigated to this function.
   def callback
+    # In this context, there is no sense in trying to renew the
+    # ACCESS_TOKEN of the current user, as it will be rewritten
+    # anyway
+    current_user(false)
+
+    # Shortcut to central Omniauth hash, see
+    # https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
     auth_hash = request.env.fetch("omniauth.auth")
 
     identity = Identity::Identity.search(auth_hash)
     if (not identity) then
       identity = Identity::Identity.create_with_auth(auth_hash, current_user)
     else
-      if (signed_in?) and (not current_user.eql? identity.user) then
+      if signed_in? and current_user.id != identity.user_id
         raise RuntimeError.new("Error: already linked with a user")
       end
 
@@ -22,9 +29,10 @@ class AuthController < ApplicationController
     end
     sign_in(identity, identity.access_token_duration)
 
-    # The HTTP referer identifies the address of the webpage
-    # which is linked to the resource being requested
-    # **omniauth.origin** Omniauth is saving the user location
+    # Where did the user start his login process? Three steps ...
+    # 1) Omniauth may have the previous user location
+    # 2) The referer may still be properly set
+    # 3) Just go back to the root
     redirect_to (request.env['omniauth.origin'] || URI(request.referer || "/").path)
   end
 

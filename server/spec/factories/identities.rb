@@ -92,7 +92,7 @@ FactoryBot.define do
   end
 
   factory :google_provider, class: Identity::Google, parent: :identity do
-    provider { "google" }
+    provider { "google_oauth2" }
     sequence (:uid) { |n| "user#{n}@gmail.com" }
 
     trait :new do
@@ -110,7 +110,7 @@ FactoryBot.define do
     trait :existing do
       provider_data { ({
         name: "Tom",
-        email: "tom@gmail.com",
+        email: uid,
         email_verified: true,
         credentials: {
           token: "a_google_access_token",
@@ -125,7 +125,7 @@ FactoryBot.define do
       provider_data {
         ({
            name: "Tom",
-           email: "tom@gmail.com",
+           email: uid,
            email_verified: true,
            credentials: {
              token: "a_google_access_token",
@@ -141,7 +141,7 @@ FactoryBot.define do
       provider_data {
         ({
            name: "Tom",
-           email: "tom@gmail.com",
+           email: uid,
            email_verified: true,
            credentials: {
              token: "a_google_access_token",

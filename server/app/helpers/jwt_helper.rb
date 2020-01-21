@@ -106,6 +106,13 @@ module JwtHelper
           # If everything is fine, decoding the data from the client should be enough
           @current_access_token = JwtHelper.decode(access_token)
         rescue JWT::DecodeError => accessError
+          # Even if something went wrong, skipping the refresh may be the way to go.
+          # This is the case if the ACCESS_TOKEN might be overridden anyway (e.g.
+          # on login or logout)
+          if (not attempt_refresh)
+            return nil
+          end
+
           # If the access_token is expired check for a refresh token.
           # A valid refresh token may renew the access token
           if (not refresh_token) then

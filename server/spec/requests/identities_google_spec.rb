@@ -187,30 +187,95 @@ RSpec.describe "identities controller (with Google Identity)" do
       )
     }
 
-
     before(:all) do
       OmniAuth.config.test_mode = true
     end
 
     after(:all) do
       OmniAuth.config.test_mode = false
+      Rails.application.env_config.delete("omniauth.auth")
     end
 
-    xit"first login of new user" do
+    before(:each) do
+      create(:user, :guest) # Some comparisions require the guest user to be present
+      Rails.application.env_config.delete("omniauth.auth")
+
+      # OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash
+    end
+
+    it "first login of new user" do
       expect(Identity::Google.count).to eq 0
+      old_user_count = User.count
 
-      get '/api/auth/google_oauth2'
-
-      expect(response.redirect_url).to include('/api/auth/google_oauth2/callback')
-
+      # Boy, this is ugly ... It seems that the object in these two
+      # configuration values must be the **exact same** instance.
+      # If these are not exactly the same, sometimes one instance takes
+      # some kind of precedence over the other which is dangerous in
+      # the case of changed values.
       OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash
-      Rails.application.env_config["omniauth.auth"]= default_google_auth_hash
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
 
-      get response.redirect_url
-
-      expect(response).to have_http_status(200)
+      get '/api/auth/google_oauth2/callback'
 
       expect(Identity::Google.count).to eq 1
+      expect(User.count).to eq (old_user_count + 1)
+      expect(response).to have_http_status 302
+    end
+
+    it "recurring login of existing user" do
+      identity = create(:google_provider, :existing)
+
+      expect(Identity::Google.count).to eq 1
+      old_user_count = User.count
+
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: identity.uid})
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
+      get '/api/auth/google_oauth2/callback'
+
+      expect(Identity::Google.count).to eq 1
+      expect(User.count).to eq (old_user_count)
+      expect(response).to have_http_status 302
+    end
+
+    it "recurring login of existing user with expired google auth token" do
+      identity = create(:google_provider, :expired)
+
+      expect(Identity::Google.count).to eq 1
+      old_user_count = User.count
+
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: identity.uid})
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
+      get '/api/auth/google_oauth2/callback'
+
+      expect(Identity::Google.count).to eq 1
+      expect(User.count).to eq (old_user_count)
+      expect(response).to have_http_status 302
+    end
+
+    it "recurring login of existing user without google renew credentials and expired BlattWerkzeug tokens" do
+      user_identity = create(:google_provider, :no_renew_credentials)
+      user = user_identity.user
+      cookies['ACCESS_TOKEN'] = JwtHelper.encode({
+                                                   "user_id" => user.id
+                                                 }, 300.seconds.before)
+
+      cookies['REFRESH_TOKEN'] = JwtHelper.encode({
+                                                    "user_id" => user.id,
+                                                    "identity_id" => user_identity.id,
+                                                    "exp" => 180.seconds.before,
+                                                    "iss": "localhost.localdomain:9292"
+                                                  }, 240.seconds.before)
+
+      expect(Identity::Google.count).to eq 1
+      old_user_count = User.count
+
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: user_identity.uid})
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
+      get '/api/auth/google_oauth2/callback'
+
+      expect(Identity::Google.count).to eq 1
+      expect(User.count).to eq (old_user_count)
+      expect(response).to have_http_status 302
     end
   end
 end

@@ -15,5 +15,5 @@ end
 def set_expired_access_token()
   cookies['ACCESS_TOKEN'] = JwtHelper.encode({
     user_id: "irrelevant"
-  }, 0.seconds.from_now)
+  }, 1.seconds.before)
 end

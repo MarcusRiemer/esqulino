@@ -8,17 +8,24 @@ module UserHelper
     return (get_private_claim() || current_user.information)
   end
 
-  # A user is logged in if a HTTP-request contains a cookie with a value that is a valid jwt
-  # if there was no jwt, the current user will be set to the guest user
-  def current_user
+  # A user is logged in if a HTTP-request contains a cookie with a value that is a valid jwt.
+  # If there was no jwt, the current user will be set to the guest user.
+  #
+  # @param attempt_refresh [Boolean] Defines whether an attempt
+  # to refresh an expired access_token should be made. In the case
+  # of login or logout operations this is not helpful.
+  def current_user(attempt_refresh = true)
+    # @current_user may only be nil if this method was never called before
     if (not @current_user) then
-      access_token = current_access_token
+      access_token = current_access_token(attempt_refresh)
       if (access_token) then
         @current_user = User.find(current_access_token[:user_id].to_s)
+      else
+        @current_user = User.guest
       end
     end
 
-    return @current_user || User.guest
+    return @current_user
   end
 
   # Is used for logging out a user

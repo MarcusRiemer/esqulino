@@ -81,13 +81,10 @@ RSpec.describe "auth controller" do
       it "expired access token for callback" do
         set_expired_access_token()
         get '/api/auth/developer/callback'
-        json_data = JSON.parse(response.body)
 
-        aggregate_failures "response" do
-          expect(response.status).to eq(400)
-          expect(json_data["message"]).to include("REFRESH_TOKEN")
-          expect(json_data["type"]).to eq("EsqulinoError::UnexpectedLogout")
-        end
+        # The expired token should not matter in this case, it will be reset anyway
+        # Therefore this should redirect the user
+        expect(response).to have_http_status 302
       end
     end
 
