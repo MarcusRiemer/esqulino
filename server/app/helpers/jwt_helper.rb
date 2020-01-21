@@ -93,16 +93,21 @@ module JwtHelper
 
   # If the request contains a cookie with jwt, set the current_jwt
   # currernt_jwt is used for accessing to the requested jwt
-  def current_access_token
+  #
+  # @param attempt_refresh [Boolean] Defines whether an attempt
+  # to refresh an expired access_token should be made. In the case
+  # of login or logout operations this is not helpful.
+  def current_access_token(attempt_refresh = true)
     if (not @current_access_token) then
       access_token = self.access_cookie
       refresh_token = self.refresh_cookie
       if (access_token || refresh_token) then
         begin
+          # If everything is fine, decoding the data from the client should be enough
           @current_access_token = JwtHelper.decode(access_token)
-        # If the access_token is expired check for a refresh token.
-        # A valid refresh token may renew the access token
         rescue JWT::DecodeError => accessError
+          # If the access_token is expired check for a refresh token.
+          # A valid refresh token may renew the access token
           if (not refresh_token) then
             raise EsqulinoError::UnexpectedLogout.new(
                     message: "Error decoding ACCESS_TOKEN, no REFRESH_TOKEN present",
@@ -111,25 +116,26 @@ module JwtHelper
           end
 
           begin
+            # We use the REFRESH_TOKEN the client send to update the ACCESS_TOKEN
             @current_refresh_token = JwtHelper.decode(refresh_token, {
                                                         verify_expiration: false
                                                       })
 
-            exp = Time.at(@current_refresh_token[:exp]).utc
+            exp_client_refresh_token = Time.at(@current_refresh_token[:exp]).utc
             user_id = @current_refresh_token[:user_id]
-            user = User.find(user_id)
             identity = Identity::Identity.find(@current_refresh_token[:identity_id])
 
-            # If the current refresh token is expired try to renew the access token of the provider.
-            # The result of an renewd access token is a new blattwerkzeug refresh token
-            # Empty access_token & refresh_token means no one is logged in
-            if (Time.current > exp)
-              user.refresh_token_if_expired(identity)
+            # If the current REFRESH_TOKEN is expired it may be updated if the provider
+            # who provided it is fine with that.
+            if (Time.current > exp_client_refresh_token)
+              # If the local copy of the providers access token is expired, we need
+              # to ask that provider to give us a new one ...
               if identity.access_token_expired?
-                self.clear_secure_cookies
-                raise EsqulinoError::RefreshToken.new(refreshError.message)
+                identity.refresh_access_token
+                identity.save!
               end
 
+              # ... and then we can renew the REFRESH_TOKEN that we send back to the client.
               renew_refresh_token(user_id, identity)
             end
 
@@ -144,10 +150,10 @@ module JwtHelper
                     inner_exception: accessError
                   )
           rescue EsqulinoError::UnexpectedLogout
-            # Pass through unexpected logouts
+            # Pass through unexpected logouts as they are
             raise
           rescue => e
-            # Everything else is an unexpected logout
+            # Everything else must be treated as an unexpected logout
             raise EsqulinoError::UnexpectedLogout.new(
                     message: "General error during ACCESS_TOKEN retrieval",
                     inner_exception: e

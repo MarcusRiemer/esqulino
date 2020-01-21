@@ -33,7 +33,9 @@ module Identity
     # Asks Google whether the token that we currently have is still valid and
     # also retrieve a new access_token.
     def refresh_access_token
-      if (provider_data.key? "credentials")
+      logger.info("Refreshing access_token for Google Identity #{self.id}")
+
+      if (refresh_token)
         begin
           response = RestClient.post(
             REFRESH_TOKEN_URL,
@@ -103,12 +105,12 @@ module Identity
 
     # The current access token we have from Google
     def access_token
-      self.credentials["token"]
+      provider_data.dig("credentials", "token")
     end
 
     # The current refresh token we have from Google
     def refresh_token
-      self.credentials["refresh_token"]
+      provider_data.dig("credentials", "refresh_token")
     end
 
     private

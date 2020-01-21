@@ -158,11 +158,4 @@ class User < ApplicationRecord
   def readable_identification
     "\"#{display_name}\" (#{id})"
   end
-
-  def refresh_token_if_expired(identity)
-    if identity.access_token_expired?
-      identity.refresh_access_token
-      identity.save!
-    end
-  end
 end

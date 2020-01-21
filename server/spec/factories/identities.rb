@@ -136,6 +136,21 @@ FactoryBot.define do
          })
       }
     end
+
+    trait :no_renew_credentials do
+      provider_data {
+        ({
+           name: "Tom",
+           email: "tom@gmail.com",
+           email_verified: true,
+           credentials: {
+             token: "a_google_access_token",
+             expires: true,
+             expires_at: 3.hours.before.to_i
+           }
+         })
+      }
+    end
   end
 
   factory :github_provider, class: Identity::Github, parent: :identity do
