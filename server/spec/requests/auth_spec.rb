@@ -26,9 +26,10 @@ RSpec.describe "auth controller" do
     context "logging in" do
       it "valid response" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
+        expect(response).to have_http_status 302
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
         expect(JwtHelper.decode(response.cookies['ACCESS_TOKEN'])[:user_id]).to be_truthy
-        expect(response.status).to eq(302)
       end
 
       it "existing user and existing identity" do
@@ -39,6 +40,9 @@ RSpec.describe "auth controller" do
         identity_count = Identity::Identity.all.count
 
         get '/api/auth/developer/callback'
+
+        expect(response).to have_http_status 302
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"] # Old cookies overridden
 
         expect(User.all.count).to eq(user_count)
         expect(Identity::Identity.all.count).to eq(identity_count)
@@ -53,6 +57,10 @@ RSpec.describe "auth controller" do
         new_identity_count = identity_count + 1
 
         get '/api/auth/developer/callback'
+
+        expect(response).to have_http_status 302
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"] # Old cookies overridden
+
         expect(User.all.count).to eq(user_count)
         expect(Identity::Identity.where("user_id = ?", user[:id]).count).to eq(new_identity_count)
       end
@@ -65,17 +73,21 @@ RSpec.describe "auth controller" do
 
         get '/api/auth/developer/callback'
 
+        expect(response).to have_http_status 302
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"] # Old cookies overridden
+
         expect(User.all.count).not_to eq(user_count)
         expect(Identity::Identity.developer.count).not_to eq(identity_count)
       end
 
-      it "valid jwt token, but invalid user_id" do
+      it "valid jwt token, but invalid user_id (association gone wrong?)" do
         identity = create(:google_provider, :new)
         set_access_token_with_invalid_user()
 
         get '/api/auth/developer/callback'
 
         expect(response.status).to eq(404)
+        expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
       end
 
       it "expired access token for callback" do
@@ -85,17 +97,20 @@ RSpec.describe "auth controller" do
         # The expired token should not matter in this case, it will be reset anyway
         # Therefore this should redirect the user
         expect(response).to have_http_status 302
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
       end
     end
 
     context "logged in" do
       it "testing the json response of a sign_in" do
         get '/api/auth/developer/callback'
-
-        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
         cookies['ACCESS_TOKEN'] = response.cookies['ACCESS_TOKEN']
         get '/api/user'
+
+        expect(response).not_to set_cookie ["REFRESH_TOKEN"]
+
         json_data = JSON.parse(response.body)
         expect(json_data["roles"]).to eq(["user"])
       end
@@ -104,21 +119,24 @@ RSpec.describe "auth controller" do
     context "logging out" do
       it "first logging in then logging out" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
         delete '/api/auth/sign_out'
-        expect(cookies['ACCESS_TOKEN']).to be_nil
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status 200
+        expect(response).to delete_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
       end
 
       it "already logged in" do
         get '/api/auth/developer/callback'
-        expect(response.cookies['ACCESS_TOKEN']).to be_truthy
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
         delete '/api/auth/sign_out'
-        expect(cookies['ACCESS_TOKEN']).to be_nil
+        expect(response).to have_http_status 200
+        expect(response).to delete_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
         get '/api/user'
+        expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
         json_data = JSON.parse(response.body)
         expect(json_data["roles"]).to eq(["guest"])
       end
@@ -132,6 +150,7 @@ RSpec.describe "auth controller" do
         count_identity = Identity::Identity.where(user_id: identity.user_id).count
 
         get '/api/auth/developer/callback'
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
         expect(Identity::Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
       end
 
@@ -154,8 +173,9 @@ RSpec.describe "auth controller" do
       it "expired" do
         set_expired_access_token()
         get '/api/user'
-        body = JSON.parse(response.body)
+
         expect(response.cookies['ACCESS_TOKEN']).to be_nil
+        # expect(response).to delete_cookie ["ACCESS_TOKEN"]
       end
     end
   end

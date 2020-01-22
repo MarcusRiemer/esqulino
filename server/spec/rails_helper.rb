@@ -80,6 +80,33 @@ end
 
 ApplicationRecord.include ApplicationRecordSpecExtensions
 
+# More natural way to expect cookies that should be set
+RSpec::Matchers.define :set_cookie do |names|
+  match do |response|
+    names.all? do |name|
+      not response.cookies[name].nil?
+    end
+  end
+
+  failure_message do |actual|
+    "Got cookies [#{actual.cookies.keys.join ', '}] but expected [#{names.join ', '}]"
+  end
+end
+
+# More natural way to expect cookies that should be deleted
+RSpec::Matchers.define :delete_cookie do |names|
+  match do |response|
+    names.all? do |name|
+      response.cookies.keys.include?(name) and response.cookies[name].nil?
+    end
+  end
+
+  failure_message do |actual|
+    deleted_cookies = response.cookies.keys.filter {|name| response.cookies[name].nil? }
+    "Deleted cookies [#{deleted_cookies.join ', '}] but expected [#{names.join ', '}] to be deleted"
+  end
+end
+
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

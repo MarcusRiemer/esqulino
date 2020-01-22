@@ -27,6 +27,7 @@ class AuthController < ApplicationController
       identity.update_provider_data(auth_hash)
       identity.save!
     end
+
     sign_in(identity, identity.access_token_duration)
 
     # Where did the user start his login process? Three steps ...

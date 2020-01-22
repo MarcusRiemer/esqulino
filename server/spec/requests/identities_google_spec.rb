@@ -158,7 +158,7 @@ RSpec.describe "identities controller (with Google Identity)" do
       aggregate_failures do
         expect(response).to have_http_status(500)
         expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
-        expect(response.cookies.keys).not_to include("ACCESS_TOKEN", "REFRESH_TOKEN")
+        expect(response.cookies.keys).not_to include("REFRESH_TOKEN", "ACCESS_TOKEN")
       end
     end
   end
@@ -219,7 +219,9 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       expect(Identity::Google.count).to eq 1
       expect(User.count).to eq (old_user_count + 1)
+
       expect(response).to have_http_status 302
+      expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
     end
 
     it "recurring login of existing user" do
@@ -234,7 +236,9 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       expect(Identity::Google.count).to eq 1
       expect(User.count).to eq (old_user_count)
+
       expect(response).to have_http_status 302
+      expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
     end
 
     it "recurring login of existing user with expired google auth token" do
@@ -249,7 +253,9 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       expect(Identity::Google.count).to eq 1
       expect(User.count).to eq (old_user_count)
+
       expect(response).to have_http_status 302
+      expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
     end
 
     it "recurring login of existing user without google renew credentials and expired BlattWerkzeug tokens" do
@@ -276,6 +282,35 @@ RSpec.describe "identities controller (with Google Identity)" do
       expect(Identity::Google.count).to eq 1
       expect(User.count).to eq (old_user_count)
       expect(response).to have_http_status 302
+      expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+    end
+
+    it "logout without google renew credentials and expired BlattWerkzeug tokens" do
+      user_identity = create(:google_provider, :no_renew_credentials)
+      user = user_identity.user
+      cookies['ACCESS_TOKEN'] = JwtHelper.encode({
+                                                   "user_id" => user.id
+                                                 }, 300.seconds.before)
+
+      cookies['REFRESH_TOKEN'] = JwtHelper.encode({
+                                                    "user_id" => user.id,
+                                                    "identity_id" => user_identity.id,
+                                                    "exp" => 180.seconds.before,
+                                                    "iss": "localhost.localdomain:9292"
+                                                  }, 240.seconds.before)
+
+      expect(Identity::Google.count).to eq 1
+      old_user_count = User.count
+
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: user_identity.uid})
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
+      delete '/api/auth/sign_out'
+
+      expect(Identity::Google.count).to eq 1
+      expect(User.count).to eq (old_user_count)
+
+      expect(response).to have_http_status 200
+      expect(response).to delete_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
     end
   end
 end

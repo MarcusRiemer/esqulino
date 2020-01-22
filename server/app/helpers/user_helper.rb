@@ -46,20 +46,19 @@ module UserHelper
     end
   end
 
-  # sign in sets the current user and response with a jwt
+  # Sets the relevant tokens a user needs to identify himself.
   def sign_in(identity, refresh_token_duration = JwtHelper.refresh_token_duration.from_now)
     refresh_token_duration ||= JwtHelper.refresh_token_duration.from_now
-    if (not signed_in?) then
-      payload = identity.user.information
-      refresh_token = JwtHelper.encode({
-        user_id: identity.user.id,
-        identity_id: identity.id
-      }, refresh_token_duration)
 
-      # Time will be automatically converted into GMT
-      response_refresh_cookie(refresh_token)
-      response_access_cookie(JwtHelper.encode(payload))
-    end
+    payload = identity.user.information
+    refresh_token = JwtHelper.encode({
+                                       user_id: identity.user.id,
+                                       identity_id: identity.id
+                                     }, refresh_token_duration)
+
+    # Time will be automatically converted into GMT
+    response_refresh_cookie(refresh_token)
+    response_access_cookie(JwtHelper.encode(payload))
   end
 
   # Sets the current user to the guest user and deletes the jwt

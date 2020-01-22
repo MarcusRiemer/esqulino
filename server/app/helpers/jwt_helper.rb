@@ -195,19 +195,21 @@ module JwtHelper
   # Removes all local and remote traces of the ACCESS_TOKEN
   # and the REFRESH_TOKEN
   def clear_secure_cookies
+    # Unset both cookies on the client
+    self.delete_refresh_cookie!
+    self.delete_access_cookie!
+
     if (self.refresh_cookie) then
-      self.delete_refresh_cookie!
       self.clear_current_refresh_token
     end
 
     if (self.access_cookie) then
-      self.delete_access_cookie!
       self.clear_current_access_token
     end
   end
 
   def delete_secure_cookie(name)
-    response_secure_cookie(name, "", 0.seconds.from_now)
+    response_secure_cookie(name, "", 300.seconds.before)
   end
 
   # Deleting a jwt is done by setting the expiration time of the cookie
