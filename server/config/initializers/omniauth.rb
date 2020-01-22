@@ -28,7 +28,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     provider :google_oauth2,
              config[:auth_provider_keys][:google_id],
              config[:auth_provider_keys][:google_secret],
-             access_type: "offline"
+             prompt: "consent"
   end
 
   if auth_providers.include? "Identity::Github"
