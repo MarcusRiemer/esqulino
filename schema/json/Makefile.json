@@ -111,3 +111,6 @@ NewsFrontpageDescription.json : $(SRC_PATH)/shared/news.description.ts
 
 ServerProviderDescription.json : $(SRC_PATH)/shared/auth/provider.description.ts
 	$(CONVERT_COMMAND)
+
+UnexpectedLogoutDescription.json : $(SRC_PATH)/shared/error.description.ts
+	$(CONVERT_COMMAND)

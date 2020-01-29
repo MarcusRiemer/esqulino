@@ -1,0 +1,67 @@
+{
+  "$ref": "#/definitions/UnexpectedLogoutDescription",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "UnexpectedLogoutDescription": {
+      "additionalProperties": false,
+      "description": "The user was unexpectedly logged out during a operation that should not result\nin a logout. Business logic services shouldn't ever see this exception as it\nis handled by a global interceptor.",
+      "properties": {
+        "code": {
+          "type": "number"
+        },
+        "implError": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "newUser": {
+          "$ref": "#/definitions/UserDescription"
+        },
+        "type": {
+          "enum": [
+            "AccessTokenError",
+            "RefreshTokenError"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "implError",
+        "message",
+        "newUser",
+        "type"
+      ],
+      "type": "object"
+    },
+    "UserDescription": {
+      "additionalProperties": false,
+      "description": "The description contains the most\nimportant information about a USER.",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "displayName",
+        "roles",
+        "userId",
+        "email"
+      ],
+      "type": "object"
+    }
+  }
+}

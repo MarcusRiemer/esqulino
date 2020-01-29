@@ -68,7 +68,7 @@ import { MayPerformComponent } from './may-perform.component';
 import { PerformDataService } from './authorisation/perform-data.service';
 import { MessageDialogComponent } from './message-dialog.component';
 import { MasterGuard } from './guards/master-guard';
-import { RequireLoggedInInterceptor } from './require-logged-in.interceptor';
+import { UnexpectedLogoutInterceptor } from './unexpected-logout.interceptor';
 import { UserService } from './auth/user.service';
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
@@ -195,7 +195,7 @@ export class SharedAppModule {
         IsAdminGuard,
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: RequireLoggedInInterceptor,
+          useClass: UnexpectedLogoutInterceptor,
           multi: true,
           deps: [UserService]
         },
