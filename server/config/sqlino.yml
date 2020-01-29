@@ -5,6 +5,7 @@ development:
   schema_dir: ../schema/json
   project_domains: ["projects.localdomain:9292"]
   editor_domain: "localhost.localdomain:9292"
+  # editor_domain: "lvh.me:9292"
   mail:
     default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
     admin: "Marcus@GurXite.de"
@@ -64,10 +65,10 @@ test:
     refresh_cookie: 1209600 # 14 days
   auth_provider: ["Identity::Google", "Identity::Github", "Identity::Password", "Identity::Developer"]
   auth_provider_keys:
-    google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
-    google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
-    github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
-    github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+    google_id: 'GOOGLE_CLIENT_ID'
+    google_secret: 'GOOGLE_CLIENT_SECRET'
+    github_id: 'GITHUB_CLIENT_ID'
+    github_secret: 'GITHUB_CLIENT_SECRET'
   seed_users:
     guest: "00000000-0000-0000-0000-000000000001"
     system: "00000000-0000-0000-0000-000000000002"
