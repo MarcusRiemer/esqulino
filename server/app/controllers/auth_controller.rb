@@ -36,9 +36,17 @@ class AuthController < ApplicationController
 
     # Where did the user start his login process?
     # 1) Omniauth may have the previous user location
-    # 2) The referer may still be properly set
-    # 3) Just go back to the root
-    redirect_to (request.env['omniauth.origin'] || URI(request.referer || "/").path)
+    # 2) Just go back to the root
+    #
+    # Sadly the previous location that is provided by omniauth may be a API
+    # endpoint URL that was used for the login. This *seems* to only happen
+    # with the developer identity, but if that is the case we also redirect
+    # to the root.
+    redirect_url = request.env['omniauth.origin']
+    if not redirect_url or redirect_url.include? "/auth/"
+      redirect_url = "/"
+    end
+    redirect_to redirect_url
   end
 
   # Function is called by omniauth identity and
