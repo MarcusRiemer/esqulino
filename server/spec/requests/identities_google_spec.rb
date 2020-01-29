@@ -19,7 +19,7 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       aggregate_failures do
         expect(response).to have_http_status(400)
-        expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
+        expect(body).to validate_against "UnexpectedLogoutDescription"
         expect(response).to delete_cookie ["ACCESS_TOKEN"]
         expect(response).not_to set_cookie ["REFRESH_TOKEN"]
       end
@@ -110,6 +110,9 @@ RSpec.describe "identities controller (with Google Identity)" do
     end
 
     it "access_token expired, refresh_token expired and googles token expired (and can't be renewed)" do
+        # This test must fall back to the guest user
+      create(:user, :guest)
+
       user_identity = create(:google_provider, :expired)
       user = user_identity.user
       cookies['ACCESS_TOKEN'] = JwtHelper.encode({
@@ -132,12 +135,15 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       aggregate_failures do
         expect(response).to have_http_status(500)
-        expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
+        expect(body).to validate_against "UnexpectedLogoutDescription"
         expect(response).to delete_cookie ["ACCESS_TOKEN", "REFRESH_TOKEN"]
       end
     end
 
     it "access_token expired, refresh_token expired and no renewal credentials from Google" do
+      # This test must fall back to the guest user
+      create(:user, :guest)
+
       user_identity = create(:google_provider, :no_renew_credentials)
       user = user_identity.user
       cookies['ACCESS_TOKEN'] = JwtHelper.encode({
@@ -157,8 +163,7 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       aggregate_failures do
         expect(response).to have_http_status(500)
-        expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
-
+        expect(body).to validate_against "UnexpectedLogoutDescription"
         expect(response).to delete_cookie ["ACCESS_TOKEN", "REFRESH_TOKEN"]
       end
     end

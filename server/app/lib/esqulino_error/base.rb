@@ -37,7 +37,9 @@ module EsqulinoError
       {
         "code" => @code,
         "message" => self.to_s,
-        "type" => self.class.name,
+        # The name of the module is an implementation detail that should
+        # not be part of the JSON-object that is sent over the wire.
+        "type" => self.class.name.demodulize,
         "implError" => @impl_error
       }.merge(json_data)
     end

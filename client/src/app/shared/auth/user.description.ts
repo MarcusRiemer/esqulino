@@ -14,7 +14,7 @@ export interface UserDescription {
   displayName: string;
   roles: string[];
   userId: string;
-  email: string;
+  email?: string;
 }
 
 /**

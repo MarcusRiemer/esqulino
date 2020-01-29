@@ -90,12 +90,17 @@ class User < ApplicationRecord
   # The information is used for the clientside representation
   # of a either signed in or signed out user
   def information
-    return {
+    to_return = {
       user_id: self.id,
       display_name: self.display_name,
       roles: self.role_names,
-      email: self.email
     }
+
+    if self.email?
+      to_return[:email] = self.email
+    end
+
+    return to_return
   end
 
   # The resulting hash will be rendered as json and is used

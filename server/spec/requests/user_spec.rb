@@ -36,7 +36,7 @@ RSpec.describe "user controller" do
       get '/api/user'
       json_data = JSON.parse(response.body)
       aggregate_failures do
-        expect(json_data["type"]).to eq "EsqulinoError::UnexpectedLogout"
+        expect(json_data).to validate_against "UnexpectedLogoutDescription"
         expect(response.status).to eq(400)
       end
     end

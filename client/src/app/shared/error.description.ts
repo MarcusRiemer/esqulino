@@ -9,6 +9,7 @@ export interface ServerErrorDescription {
   type: string;
   implError: boolean;
   message: string;
+  innerException?: string
 }
 
 /**
@@ -28,7 +29,7 @@ export interface DatabaseQueryErrorDescription extends ServerErrorDescription {
  * @see UnexpectedLogoutInterceptor
  */
 export interface UnexpectedLogoutDescription extends ServerErrorDescription {
-  type: "AccessTokenError" | "RefreshTokenError"
+  type: "UnexpectedLogout"
   newUser: UserDescription
 }
 

@@ -12,6 +12,9 @@
         "implError": {
           "type": "boolean"
         },
+        "innerException": {
+          "type": "string"
+        },
         "message": {
           "type": "string"
         },
@@ -20,8 +23,7 @@
         },
         "type": {
           "enum": [
-            "AccessTokenError",
-            "RefreshTokenError"
+            "UnexpectedLogout"
           ],
           "type": "string"
         }
@@ -58,8 +60,7 @@
       "required": [
         "displayName",
         "roles",
-        "userId",
-        "email"
+        "userId"
       ],
       "type": "object"
     }
