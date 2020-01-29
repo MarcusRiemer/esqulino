@@ -2,7 +2,7 @@ class UserController < ApplicationController
   include UserHelper
   include LocaleHelper
 
-  # Response with current user information
+  # Responds with current user information
   def index
     api_response(user_information)
   end

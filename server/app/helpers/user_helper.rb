@@ -47,6 +47,9 @@ module UserHelper
   end
 
   # Sets the relevant tokens a user needs to identify himself.
+  #
+  # @param identity [Identity] The identity that was used to authenticate the user
+  # @param refresh_token_duration [Integer] Duration of the session from now on (in s)
   def sign_in(identity, refresh_token_duration = JwtHelper.refresh_token_duration.from_now)
     refresh_token_duration ||= JwtHelper.refresh_token_duration.from_now
 

@@ -1,5 +1,3 @@
-
-
 class IdentitiesController < ApplicationController
   include UserHelper
   include LocaleHelper

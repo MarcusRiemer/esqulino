@@ -20,8 +20,8 @@ RSpec.describe "identities controller (with Google Identity)" do
       aggregate_failures do
         expect(response).to have_http_status(400)
         expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
-        expect(response.cookies.keys).not_to include("REFRESH_TOKEN")
-        expect(response.cookies["ACCESS_TOKEN"]).to be nil
+        expect(response).to delete_cookie ["ACCESS_TOKEN"]
+        expect(response).not_to set_cookie ["REFRESH_TOKEN"]
       end
     end
 
@@ -133,7 +133,7 @@ RSpec.describe "identities controller (with Google Identity)" do
       aggregate_failures do
         expect(response).to have_http_status(500)
         expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
-        expect(response.cookies.keys).not_to include("ACCESS_TOKEN", "REFRESH_TOKEN")
+        expect(response).to delete_cookie ["ACCESS_TOKEN", "REFRESH_TOKEN"]
       end
     end
 
@@ -158,7 +158,8 @@ RSpec.describe "identities controller (with Google Identity)" do
       aggregate_failures do
         expect(response).to have_http_status(500)
         expect(body["type"]).to eq "EsqulinoError::UnexpectedLogout"
-        expect(response.cookies.keys).not_to include("REFRESH_TOKEN", "ACCESS_TOKEN")
+
+        expect(response).to delete_cookie ["ACCESS_TOKEN", "REFRESH_TOKEN"]
       end
     end
   end

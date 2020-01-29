@@ -5,7 +5,8 @@ class AuthController < ApplicationController
 
   # This function is essential for omniauth.
   # If youre authenticated by the external provider, you will be
-  # navigated to this function.
+  # navigated to this function once the external provider has
+  # finished whatever it did.
   def callback
     # In this context, there is no sense in trying to renew the
     # ACCESS_TOKEN of the current user, as it will be rewritten
@@ -16,6 +17,8 @@ class AuthController < ApplicationController
     # https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
     auth_hash = request.env.fetch("omniauth.auth")
 
+    # A login via the callback may be from a recurring or from a
+    # new user.
     identity = Identity::Identity.search(auth_hash)
     if (not identity) then
       identity = Identity::Identity.create_with_auth(auth_hash, current_user)
@@ -28,9 +31,10 @@ class AuthController < ApplicationController
       identity.save!
     end
 
+    # Set the appropriate cookies
     sign_in(identity, identity.access_token_duration)
 
-    # Where did the user start his login process? Three steps ...
+    # Where did the user start his login process?
     # 1) Omniauth may have the previous user location
     # 2) The referer may still be properly set
     # 3) Just go back to the root

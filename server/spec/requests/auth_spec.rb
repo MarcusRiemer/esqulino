@@ -163,6 +163,9 @@ RSpec.describe "auth controller" do
         count_identities = Identity::Identity.all.count
 
         get '/api/auth/developer/callback'
+
+        expect(response).to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
         expect(Identity::Identity.where(user_id: identity.user_id).count)
           .to eq(count_identity_by_user_id)
         expect(Identity::Identity.all.count).to eq(count_identities)
@@ -174,8 +177,7 @@ RSpec.describe "auth controller" do
         set_expired_access_token()
         get '/api/user'
 
-        expect(response.cookies['ACCESS_TOKEN']).to be_nil
-        # expect(response).to delete_cookie ["ACCESS_TOKEN"]
+        expect(response).to delete_cookie ["ACCESS_TOKEN"]
       end
     end
   end
@@ -188,6 +190,9 @@ RSpec.describe "auth controller" do
       :headers => json_headers,
       :params => identity_params.to_json
 
+    # Must wait for confirmation mail
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
     expect(User.all.count).to_not eq(user_count)
     expect(Identity::Identity.all.count).to_not eq(identity_count)
   end
@@ -196,6 +201,9 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity/register',
         :headers => json_headers,
         :params => identity_params.to_json
+
+    # Must wait for confirmation mail
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.all.first[:uid]).to eq(identity_params[:email])
     expect(Identity::Identity.all.first.confirmed?).to eq(false)
@@ -210,6 +218,9 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity/register',
         :headers => json_headers,
         :params => identity_params.to_json
+
+    # Must wait for confirmation mail
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.all.count).to eq(identity_count)
   end
@@ -226,6 +237,8 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity/register',
         :headers => json_headers,
         :params => identity_params.to_json
+
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     json_data = JSON.parse(response.body)
 
@@ -244,6 +257,8 @@ RSpec.describe "auth controller" do
         :headers => json_headers,
         :params => identity_params.to_json
 
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
     json_data = JSON.parse(response.body)
 
     expect(json_data["message"]).to eq("Password is too short (minimum is 6 characters)")
@@ -261,6 +276,8 @@ RSpec.describe "auth controller" do
         :headers => json_headers,
         :params => identity_params.to_json
 
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
     expect(Identity::Identity.all.count).to eq(identity_count)
   end
 
@@ -275,6 +292,8 @@ RSpec.describe "auth controller" do
         :headers => json_headers,
         :params => identity_params.to_json
 
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
     expect(Identity::Identity.all.count).to eq(identity_count)
   end
 
@@ -288,6 +307,8 @@ RSpec.describe "auth controller" do
     post '/api/auth/identity/register',
       :headers => json_headers,
       :params => identity_params.to_json
+
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
@@ -305,6 +326,8 @@ RSpec.describe "auth controller" do
       :headers => json_headers,
       :params => identity_params.to_json
 
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
+
     expect(Identity::Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
 
@@ -319,6 +342,7 @@ RSpec.describe "auth controller" do
       :headers => json_headers,
       :params => identity_params.to_json
 
+    expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.where(user_id: identity.user_id).count).to eq(count_identity_by_user_id)
     expect(Identity::Identity.all.count).to eq(count_identities)
