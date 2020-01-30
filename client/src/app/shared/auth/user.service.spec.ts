@@ -1,6 +1,5 @@
-import { ServerProviderDescription } from './provider.description';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSnackBar, MatSnackBarModule, MatDialogModule } from '@angular/material';
+import { MatSnackBar, MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
@@ -8,6 +7,8 @@ import { first, tap } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 import { UserDescription } from './user.description';
+import { ServerProviderDescription } from './provider.description';
+
 import { ServerDataService } from '../serverdata/server-data.service';
 import { ServerApiService } from '../serverdata/serverapi.service';
 
@@ -123,6 +124,7 @@ describe(`UserService`, () => {
 
     httpTestingController.expectOne(serverApi.getUserDataUrl())
       .flush(userData);
+
   })
 
   it('user data after logout', async () => {
@@ -182,7 +184,7 @@ describe(`UserService`, () => {
       .toEqual(0)
   })
 
-  it('Need to be replaced by a meaningful name', async () => {
+  it('Sign up and sign in', async () => {
     const service = instantiate();
     const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
