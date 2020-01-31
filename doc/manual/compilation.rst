@@ -2,7 +2,7 @@
  Compilation Guide
 ===================
 
-This part of the documentation is aimed at people want to compile the project. As there are currently no pre-compiled distributions available, it is also relevant for administrators wanting to run their own server.
+This part of the documentation is aimed at people want to compile the project. As there are currently no pre-compiled distributions available, it is also relevant for administrators wanting to run their own server. If you are extending the project, please be sure to read the :ref:`programming_guidelines`.
 
 .. note:: Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of `UNIX`-centric assumptions.
 
@@ -38,6 +38,8 @@ Execute this command to install the dependencies in a single step (works with Ub
      imagemagick libmagickcore-dev libmagickwand-dev \
      magic libmagic-dev graphviz sqlite libsqlite3-dev sqlite3-pcre \
      nodejs npm
+
+The versions of ``nodejs`` and ``npm`` on Ubuntu are sometimes badly outdated. In that case you probably want to use the `binary distributions by NodeSource <https://github.com/nodesource/distributions/blob/master/README.md#debinstall>`_.
 
 
 SQLite and PCRE
@@ -107,46 +109,7 @@ Ensure you have the "main" dependencies installed (``ruby`` and ``bundle`` for t
    4. You may now run the server, to do this locally simply use ``make run-dev`` and it will spin up a local server instance listening on port ``9292``. You can alternatively run a production server using ``make run``.
    5. If you require administrative rights, :ref:`you can give the permissions via the Rails shell <shell-create-admin-account>`.
 
-The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
-
-* Typical targets in the ``client`` folder:
-
-  * Run ``NG_OPTS="--watch" make client-compile-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
-  * Run ``make client-test-watch`` to continously run the client testcases in the background.
-
-* Typical targets in the ``server`` folder:
-
-  * Run ``make reset-live-data dev-make-guest-admin run-dev`` if you have pulled any seed data changes that need to be reflected. The ``dev-make-guest-admin`` target is optional, but very convenient during development.
-  * Run ``make test-watch`` to continously run the server testcases in the background. This requires a running PostgreSQL database server.
-
-
-Testing and code coverage
--------------------------
-
-Calling ``make test`` in the ``client`` folder will run the tests once against a headless version of Google Chrome and Firefox.
-
-* ``make test-watch`` will run the tests continously after every change to the clients code.
-* The environment variable ``TEST_BROWSERS`` controls which browsers will run the test, multiple browsers may be specified using a ``,`` and spaces are not allowed. The following values should be valid:
-
-  * ``Firefox`` and ``Chrome`` for the non-headless variants that open dedicated browser windows.
-  * ``FirefoxHeadless`` and ``ChromeHeadless`` that run in the background without any visible window.
-
-After running tests the folder ``coverage`` will contain a navigateable code coverage report:
-
-.. image :: screenshots/dev-coverage-client.png
-
-Tests for the server are run in the same fashion: Call ``make test`` in the ``server`` folder to run them once, ``make test-watch`` run them continously. And again the folder ``coverage`` will contain a code coverage report:
-
-.. image :: screenshots/dev-coverage-server.png
-
-Modifying seed data
--------------------
-
-BlattWerkzeug comes with a complex set of required objects to work properly. This includes grammars, block languages, example projects, ... The "normal" Rails way of providing those objects via ``db/seeds.rb`` does not work for these structures at all: They are simply to complex to be meaningfully edited by hand.
-
-The ``Makefile`` therefore exposes the ``store-live-data`` target which stores the current state of the programing languages and projects in the ``seed`` folder. This allows programmers to edit grammars, block languages and projects using the web-IDE and to persist those changes in the git repository.
-
-.. important:: The YAML-files in the ``seed``-folder are **very** prone to merge conflicts. Please make sure to only ever commit as small changes as possible. It is good practive to routinely use ``make reset-live-data run-dev`` when starting the server to ensure that your database-state is always up do date. If you run ``store-live-data`` from an old database state you may override newer changes that are part of the repository already.
+The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the options descibed in :ref:`explanation_seed_data`.
 
 Running via Docker
 ------------------
