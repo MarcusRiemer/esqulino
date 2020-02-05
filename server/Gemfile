@@ -92,7 +92,10 @@ group :development, :test do
   gem 'rspec-rails', '4.0.0.beta3'
   gem 'rspec_junit_formatter'
   gem 'guard-rspec', require: false
-  gem 'pry'
+  # Use a bleeding edge version of pry to get rid of ruby 2.7 warnings
+  # https://github.com/pry/pry/issues/2097
+  gem 'pry' , git: 'https://github.com/pry/pry.git', ref: '272b3290b5250d28ee82a5ff65aa3b29b825e37b'
+  gem 'pry-byebug'
   gem 'webmock'
 end
 
