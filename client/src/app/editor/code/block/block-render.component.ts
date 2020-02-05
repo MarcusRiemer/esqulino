@@ -47,7 +47,6 @@ export class BlockRenderComponent {
   @HostBinding('class')
   private _hostClassNodeType = "errLang errType";
 
-
   ngOnInit() {
     this._hostClassNodeType = this.node.languageName + " " + this.node.typeName;
   }
@@ -85,13 +84,6 @@ export class BlockRenderComponent {
    */
   asBlockContainer(block: VisualBlockDescriptions.EditorBlockBase) {
     return (block as VisualBlockDescriptions.EditorContainer);
-  }
-
-  /**
-   * @return True, if there should be a break after this element
-   */
-  get breakAfter() {
-    return (this.visual && !!this.visual.breakAfter);
   }
 
   /**

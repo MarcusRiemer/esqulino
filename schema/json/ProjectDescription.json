@@ -1576,7 +1576,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
             }
           ]
         },
@@ -1599,7 +1599,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
             }
           ]
         },
@@ -1649,7 +1649,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
             }
           ]
         },
@@ -1672,7 +1672,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
             }
           ]
         },
@@ -1722,7 +1722,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4777-1782179087-153-4777-1782179087-0-6975705825494_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -2515,9 +2515,6 @@
           ],
           "type": "string"
         },
-        "breakAfter": {
-          "type": "boolean"
-        },
         "children": {
           "items": {
             "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
@@ -2559,9 +2556,6 @@
           ],
           "type": "string"
         },
-        "breakAfter": {
-          "type": "boolean"
-        },
         "cssClasses": {
           "items": {
             "type": "string"
@@ -2590,9 +2584,6 @@
             "container"
           ],
           "type": "string"
-        },
-        "breakAfter": {
-          "type": "boolean"
         },
         "children": {
           "items": {
@@ -2624,9 +2615,6 @@
             "dropTarget"
           ],
           "type": "string"
-        },
-        "breakAfter": {
-          "type": "boolean"
         },
         "children": {
           "items": {
@@ -2665,9 +2653,6 @@
           ],
           "type": "string"
         },
-        "breakAfter": {
-          "type": "boolean"
-        },
         "cssClasses": {
           "items": {
             "type": "string"
@@ -2698,9 +2683,6 @@
             "input"
           ],
           "type": "string"
-        },
-        "breakAfter": {
-          "type": "boolean"
         },
         "cssClasses": {
           "items": {
@@ -2733,9 +2715,6 @@
             "interpolated"
           ],
           "type": "string"
-        },
-        "breakAfter": {
-          "type": "boolean"
         },
         "cssClasses": {
           "items": {
@@ -2771,9 +2750,6 @@
             "iterator"
           ],
           "type": "string"
-        },
-        "breakAfter": {
-          "type": "boolean"
         },
         "childGroupName": {
           "type": "string"

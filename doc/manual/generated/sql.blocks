@@ -1,8 +1,7 @@
 language "Generated SQL" {
   type "sql.from" {
     block {
-      direction horizontal
-      breakAfter true
+      breakAfter false
       dropOptions {
 
       }
@@ -10,14 +9,11 @@ language "Generated SQL" {
         TODO: error blocks
         "FROM" {
           style {
-            color: #0000ff
-            width: 9ch
             display: inline-block
           }
         }
         iterate {
           childGroup "tables"
-          direction horizontal
           between {
             "," {
               style {
@@ -26,23 +22,19 @@ language "Generated SQL" {
             }
           }
         }
-        iterate {
-          childGroup "joins"
-          direction horizontal
+        container {
+          visual {
+            iterate {
+              childGroup "joins"
+            }
+          }
         }
-      }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
       }
     }
   }
   type "sql.where" {
     block {
-      direction horizontal
-      breakAfter true
+      breakAfter false
       dropOptions {
 
       }
@@ -50,27 +42,17 @@ language "Generated SQL" {
         TODO: error blocks
         "WHERE" {
           style {
-            color: #0000ff
-            width: 9ch
             display: inline-block
           }
         }
         iterate {
           childGroup "expressions"
-          direction horizontal
         }
-      }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
       }
     }
   }
   type "sql.delete" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -87,37 +69,36 @@ language "Generated SQL" {
   }
   type "sql.select" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
       }
       visual {
         TODO: error blocks
-        "SELECT" {
-          style {
-            color: #0000ff
-            width: 9ch
-            display: inline-block
+        container {
+          visual {
+            "SELECT" {
+              style {
+                display: inline-block
+              }
+            }
+            iterate {
+              childGroup "distinct"
+            }
+            container {
+              visual {
+                iterate {
+                  childGroup "columns"
+                }
+              }
+            }
           }
         }
-        iterate {
-          childGroup "columns"
-          direction horizontal
-          emptyDropTarget true
-        }
-      }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
       }
     }
   }
   type "sql.groupBy" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -126,14 +107,11 @@ language "Generated SQL" {
         TODO: error blocks
         "GROUP BY" {
           style {
-            color: #0000ff
-            width: 9ch
             display: inline-block
           }
         }
         iterate {
           childGroup "expressions"
-          direction horizontal
           between {
             "," {
               style {
@@ -143,17 +121,10 @@ language "Generated SQL" {
           }
         }
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.orderBy" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -162,34 +133,17 @@ language "Generated SQL" {
         TODO: error blocks
         "ORDER BY" {
           style {
-            color: #0000ff
-            width: 9ch
             display: inline-block
           }
         }
         iterate {
           childGroup "expressions"
-          direction horizontal
-          between {
-            "," {
-              style {
-                display: inline-block
-              }
-            }
-          }
         }
-      }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
       }
     }
   }
   type "sql.constant" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -198,17 +152,26 @@ language "Generated SQL" {
         TODO: error blocks
         TODO: input blocks
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
+    }
+  }
+  type "sql.distinct" {
+    block {
+      breakAfter false
+      dropOptions {
+
+      }
+      visual {
+        TODO: error blocks
+        "DISTINCT" {
+          style {
+            display: inline-block
+          }
+        }
       }
     }
   }
   type "sql.crossJoin" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -217,14 +180,12 @@ language "Generated SQL" {
         TODO: error blocks
         iterate {
           childGroup "table"
-          direction horizontal
         }
       }
     }
   }
   type "sql.parameter" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -238,30 +199,29 @@ language "Generated SQL" {
         }
         TODO: input blocks
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.sortOrder" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
       }
       visual {
         TODO: error blocks
-        TODO: input blocks
+        iterate {
+          childGroup "expression"
+        }
+        {{ order }} {
+          style {
+            display: inline-block
+          }
+        }
       }
     }
   }
   type "sql.columnName" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -284,18 +244,11 @@ language "Generated SQL" {
           }
         }
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.innerJoinOn" {
     block {
-      direction horizontal
-      breakAfter true
+      breakAfter false
       dropOptions {
 
       }
@@ -303,40 +256,25 @@ language "Generated SQL" {
         TODO: error blocks
         "INNER JOIN" {
           style {
-            color: #0000ff
             display: inline-block
-            margin-right: 1ch
           }
         }
         iterate {
           childGroup "table"
-          direction horizontal
         }
         "ON" {
           style {
-            color: #0000ff
             display: inline-block
-            margin-left: 1ch
-            margin-right: 1ch
           }
         }
         iterate {
           childGroup "on"
-          direction horizontal
         }
-      }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        margin-left: 2ch
-        borderRadius: 5px
       }
     }
   }
   type "sql.parentheses" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -350,7 +288,6 @@ language "Generated SQL" {
         }
         iterate {
           childGroup "expression"
-          direction horizontal
         }
         ")" {
           style {
@@ -358,17 +295,10 @@ language "Generated SQL" {
           }
         }
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.queryDelete" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -377,54 +307,48 @@ language "Generated SQL" {
         TODO: error blocks
         iterate {
           childGroup "delete"
-          direction horizontal
         }
         iterate {
           childGroup "from"
-          direction horizontal
         }
         iterate {
           childGroup "where"
-          direction horizontal
         }
       }
     }
   }
   type "sql.querySelect" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
       }
       visual {
         TODO: error blocks
-        iterate {
-          childGroup "select"
-          direction horizontal
-        }
-        iterate {
-          childGroup "from"
-          direction horizontal
-        }
-        iterate {
-          childGroup "where"
-          direction horizontal
-        }
-        iterate {
-          childGroup "groupBy"
-          direction horizontal
-        }
-        iterate {
-          childGroup "orderBy"
-          direction horizontal
+        container {
+          visual {
+            iterate {
+              childGroup "select"
+            }
+            iterate {
+              childGroup "from"
+            }
+            iterate {
+              childGroup "where"
+            }
+            iterate {
+              childGroup "groupBy"
+            }
+            iterate {
+              childGroup "orderBy"
+            }
+          }
         }
       }
     }
   }
   type "sql.functionCall" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -442,8 +366,10 @@ language "Generated SQL" {
           }
         }
         iterate {
+          childGroup "distinct"
+        }
+        iterate {
           childGroup "arguments"
-          direction horizontal
           between {
             "," {
               style {
@@ -458,17 +384,10 @@ language "Generated SQL" {
           }
         }
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.starOperator" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -481,18 +400,11 @@ language "Generated SQL" {
           }
         }
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.innerJoinUsing" {
     block {
-      direction horizontal
-      breakAfter true
+      breakAfter false
       dropOptions {
 
       }
@@ -505,7 +417,6 @@ language "Generated SQL" {
         }
         iterate {
           childGroup "table"
-          direction horizontal
         }
         "USING" {
           style {
@@ -514,15 +425,13 @@ language "Generated SQL" {
         }
         iterate {
           childGroup "using"
-          direction horizontal
         }
       }
     }
   }
   type "sql.whereAdditional" {
     block {
-      direction horizontal
-      breakAfter true
+      breakAfter false
       dropOptions {
 
       }
@@ -530,21 +439,17 @@ language "Generated SQL" {
         TODO: error blocks
         {{ operator }} {
           style {
-            color: #0000ff
-            width: 9ch
             display: inline-block
           }
         }
         iterate {
           childGroup "expression"
-          direction horizontal
         }
       }
     }
   }
   type "sql.binaryExpression" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -553,32 +458,18 @@ language "Generated SQL" {
         TODO: error blocks
         iterate {
           childGroup "lhs"
-          direction horizontal
         }
         iterate {
           childGroup "operator"
-          direction horizontal
-          style {
-            margin-left: 1ch
-            margin-right: 1ch
-          }
         }
         iterate {
           childGroup "rhs"
-          direction horizontal
         }
-      }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
       }
     }
   }
   type "sql.tableIntroduction" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -591,17 +482,10 @@ language "Generated SQL" {
           }
         }
       }
-      style {
-        border: 1px solid red
-        margin: 2px
-        padding: 2px
-        borderRadius: 5px
-      }
     }
   }
   type "sql.relationalOperator" {
     block {
-      direction horizontal
       breakAfter false
       dropOptions {
 
@@ -707,6 +591,9 @@ language "Generated SQL" {
           }
         }
       }
+      sidebarBlock "... DISTINCT" {
+        node "sql.distinct"
+      }
       sidebarBlock "FROM" {
         node "sql.from" {
           childGroup "tables" {
@@ -775,6 +662,20 @@ language "Generated SQL" {
       sidebarBlock "ORDER BY" {
         node "sql.orderBy" {
           childGroup "expressions" {
+          }
+        }
+      }
+      sidebarBlock "<expr> ASC" {
+        node "sql.sortOrder" {
+          prop "order" ASC
+          childGroup "expression" {
+          }
+        }
+      }
+      sidebarBlock "<expr> DESC" {
+        node "sql.sortOrder" {
+          prop "order" DESC
+          childGroup "expression" {
           }
         }
       }

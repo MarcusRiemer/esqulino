@@ -39,7 +39,6 @@ export function mapTerminal(
   const toReturn: VisualBlockDescriptions.EditorConstant = {
     blockType: "constant",
     text: attr.symbol,
-    breakAfter: instructions.breakAfter,
   };
 
   // Possibly add some style
@@ -136,7 +135,6 @@ export function mapChildren(
   const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
-    breakAfter: instructions.breakAfter,
     emptyDropTarget: instructions.emptyDropTarget
   }
 
@@ -238,7 +236,6 @@ export function mapType(
       blockType: "block",
       children: mapBlockAttributes(typeDesc, instructions, i),
       dropTarget: blockInstructions.onDrop,
-      breakAfter: blockInstructions.breakAfter,
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {

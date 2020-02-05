@@ -20,7 +20,7 @@ Every top level definition introduces a new type that can be referenced. Grammar
 This lookup may yield one of two different type definitions: A definition of type ``node`` matches an actual node in an abstract syntax tree, it may define properties and children. A ``typedef`` on the other hand denotes a type that will never exist in a tree, it's a mere placeholder for a set of other types that could appear in the referenced position.
 
 Top level: ``node``
-=================
+===================
 
 This type defines which attributes (properties or children) a certain node may have. Both types of attributes share a common namespace, it is therefore not possible to have a property **and** a child group named ``foo`` on the same ``node`` definition.
 
@@ -117,7 +117,7 @@ Note that it is currently **not** possible to mix e.g. ``sequence`` and ``allowe
 Now every ``Document`` requires a single ``Text`` node in the ``Heading`` childgroup.
 
 Top level: ``typedef``
-====================
+======================
 
 A ``typedef`` denotes a type that will never exist in a tree, it's a mere placeholder for a set of other types that could appear in the referenced position. This is useful when in certain places different but related types could be expected. Instead of repeating sets like ``{unaryExpression, binaryExpression, constant}`` again and again, a single typedef may group these common usage together.
 

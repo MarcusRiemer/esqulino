@@ -24,8 +24,6 @@ export interface Instructions {
   onDrop: DropTargetProperties;
   // Where (and if) to generate error indicators
   generateErrorIndicator: Position;
-  // Should a break be inserted after this element?
-  breakAfter: boolean;
   // Should the drop marker be shown, even if it is valid without children?
   emptyDropTarget: boolean;
   // Some properties are not meant to be edited.
@@ -43,17 +41,17 @@ export type ReferenceableInstructions = ParameterReferenceable<Instructions>;
 /**
  * Instructions that are useful on an iterating visual.
  */
-export type IteratorInstructions = Readonly<Pick<Instructions, "between" | "style" | "breakAfter" | "emptyDropTarget">>;
+export type IteratorInstructions = Readonly<Pick<Instructions, "between" | "style" | "emptyDropTarget">>;
 
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "style" | "onDrop" | "generateErrorIndicator" | "breakAfter">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "style" | "onDrop" | "generateErrorIndicator">>;
 
 /**
  * Instructions that are useful on a terminal visual.
  */
-export type TerminalInstructions = Readonly<Pick<Instructions, "style" | "breakAfter">>;
+export type TerminalInstructions = Readonly<Pick<Instructions, "style">>;
 
 /**
  * Instructions that are useful on a property.
@@ -67,7 +65,6 @@ export module DefaultInstructions {
   export const iteratorInstructions: IteratorInstructions = {
     between: "",
     style: {},
-    breakAfter: false,
     emptyDropTarget: false
   }
 
@@ -76,11 +73,9 @@ export module DefaultInstructions {
     style: {},
     onDrop: VisualBlockDescriptions.DefaultDropTargetProperties,
     generateErrorIndicator: "start",
-    breakAfter: false,
   }
 
   export const terminalInstructions: TerminalInstructions = {
-    breakAfter: false,
     style: {
       "display": "inline-flex"
     },

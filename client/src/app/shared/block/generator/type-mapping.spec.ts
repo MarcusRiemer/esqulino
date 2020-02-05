@@ -11,18 +11,18 @@ describe("BlockLanguage Generator Type Mapping", () => {
   it("Terminal => Constant", () => {
     const res = mapTerminal(
       { type: "terminal", name: "t", symbol: "t" },
-      { style: {}, breakAfter: true }
+      { style: {} }
     );
-    expect(res).toEqual({ blockType: "constant", text: "t", breakAfter: true });
+    expect(res).toEqual({ blockType: "constant", text: "t" });
   });
 
   it("Styled Terminal => Styled Constant", () => {
     const res = mapTerminal(
       { type: "terminal", name: "t", symbol: "t" },
-      { style: { color: "green" }, breakAfter: false }
+      { style: { color: "green" } }
     );
     expect(res).toEqual(
-      { blockType: "constant", text: "t", style: { color: "green" }, breakAfter: false },
+      { blockType: "constant", text: "t", style: { color: "green" } },
     );
   });
 
@@ -60,7 +60,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         blockType: "iterator",
         childGroupName: "c1",
-        breakAfter: false,
         emptyDropTarget: false
       }
     ]);
@@ -83,7 +82,6 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         between: "ä",
         style: {},
-        breakAfter: false,
         emptyDropTarget: false,
       }
     );
@@ -92,14 +90,12 @@ describe("BlockLanguage Generator Type Mapping", () => {
       {
         blockType: "iterator",
         childGroupName: "c1",
-        breakAfter: false,
         emptyDropTarget: false,
         between: [
           {
             blockType: "constant",
             text: "ä",
             style: DefaultInstructions.terminalInstructions.style,
-            breakAfter: false
           }
         ]
       }

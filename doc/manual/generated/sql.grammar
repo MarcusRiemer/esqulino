@@ -1,20 +1,32 @@
 grammar "sql" {
   typedef "sql"."query" ::= querySelect | queryDelete
   node "sql"."querySelect" {
-    children sequence "select" ::= select
-    children sequence "from" ::= from
-    children sequence "where" ::= where?
-    children sequence "groupBy" ::= groupBy?
-    children sequence "orderBy" ::= orderBy?
+    container vertical {
+      children sequence "select" ::= select
+      children sequence "from" ::= from
+      children sequence "where" ::= where?
+      children sequence "groupBy" ::= groupBy?
+      children sequence "orderBy" ::= orderBy?
+    }
   }
   node "sql"."select" {
-    terminal "keyword" "SELECT"
-    children allowed "columns" ::= (expression* & starOperator?)
+    container horizontal {
+      "SELECT"
+      children sequence "distinct" ::= distinct?
+      container horizontal {
+        children allowed "columns" ::= (expression* & starOperator?)
+      }
+    }
+  }
+  node "sql"."distinct" {
+    "DISTINCT"
   }
   node "sql"."from" {
-    terminal "keyword" "FROM"
+    "FROM"
     children sequence "tables", between: "," ::= tableIntroduction+
-    children sequence "joins" ::= join*
+    container vertical {
+      children sequence "joins" ::= join*
+    }
   }
   node "sql"."tableIntroduction" {
     prop "name" { string }
@@ -24,9 +36,9 @@ grammar "sql" {
     children sequence "table" ::= tableIntroduction
   }
   node "sql"."innerJoinUsing" {
-    terminal "keyword" "INNER JOIN"
+    "INNER JOIN"
     children sequence "table" ::= tableIntroduction
-    terminal "keywordUsing" "USING"
+    "USING"
     children sequence "using" ::= expression
   }
   typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
@@ -53,6 +65,7 @@ grammar "sql" {
   node "sql"."functionCall" {
     prop "name" { string }
     terminal "paren-open" "("
+    children sequence "distinct" ::= distinct?
     children sequence "arguments", between: "," ::= expression*
     terminal "paren-close" ")"
   }
@@ -62,13 +75,13 @@ grammar "sql" {
     terminal "parenClose" ")"
   }
   node "sql"."innerJoinOn" {
-    terminal "keyword" "INNER JOIN"
+    "INNER JOIN"
     children sequence "table" ::= tableIntroduction
-    terminal "keywordOn" "ON"
+    "ON"
     children sequence "on" ::= expression
   }
   node "sql"."where" {
-    terminal "keyword" "WHERE"
+    "WHERE"
     children sequence "expressions" ::= expression whereAdditional*
   }
   node "sql"."whereAdditional" {
@@ -76,12 +89,12 @@ grammar "sql" {
     children sequence "expression" ::= expression
   }
   node "sql"."groupBy" {
-    terminal "keyword" "GROUP BY"
+    "GROUP BY"
     children allowed "expressions", between: "," ::= expression+
   }
   node "sql"."orderBy" {
-    terminal "keyword" "ORDER BY"
-    children allowed "expressions", between: "," ::= expression+
+    "ORDER BY"
+    children allowed "expressions" ::= (expression* & sortOrder*)+
   }
   node "sql"."queryDelete" {
     children sequence "delete" ::= delete
@@ -89,12 +102,13 @@ grammar "sql" {
     children sequence "where" ::= where?
   }
   node "sql"."delete" {
-    terminal "keyword" "DELETE"
+    "DELETE"
   }
   node "sql"."sortOrder" {
+    children sequence "expression" ::= expression
     prop "order" { string enum "ASC" "DESC" }
   }
   node "sql"."starOperator" {
-    terminal "star" "*"
+    "*"
   }
 }

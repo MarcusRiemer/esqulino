@@ -149,10 +149,6 @@ function prettyPrintLayoutBlock(desc: VisualBlockDescriptions.EditorContainer | 
 
   const props = []
 
-  if (typeof (desc.breakAfter) !== "undefined") {
-    props.push(`breakAfter ${desc.breakAfter}`);
-  }
-
   const dropTarget = (desc.blockType === "block" && desc.dropTarget)
     ? prettyPrintDropTargetProperties(desc.dropTarget)
     : [];

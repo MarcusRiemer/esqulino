@@ -50,7 +50,7 @@ export class SchemaEditorModule {
   }
 
   constructor(reg: RegistrationService) {
-    console.log("Registering SchemaEditor ...");
+    console.log("Registering Database-Schema-Editor ...");
 
     // Register the schema-editor-sidebar
     reg.registerSidebarType({
@@ -64,6 +64,6 @@ export class SchemaEditorModule {
     });
 
 
-    console.log("Registered SchemaEditor!");
+    console.log("Registered Database-Schema-Editor!");
   }
 }

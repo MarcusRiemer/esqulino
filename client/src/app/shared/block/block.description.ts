@@ -37,7 +37,6 @@ export namespace VisualBlockDescriptions {
   export interface EditorBlockBase {
     blockType: string;
     style?: BlockStyle;
-    breakAfter?: boolean;
     cssClasses?: string[];
   }
 
