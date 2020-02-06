@@ -11,9 +11,12 @@
     <div mat-card-avatar>
       <i class="fa fa-{{ link.icon }} fa-3x" aria-hidden="true"></i>
     </div>
-    <mat-card-title>{{ link.title[localeId] }}</mat-card-title>
+    <mat-card-title>
+      {{ link.title[localeId] }}
+    </mat-card-title>
     <mat-card-subtitle>
       <a [href]="link.href">
+        <img *ngIf="link.titleBadgeImage" [src]="link.titleBadgeImage">
         {{ link.subtitle[localeId] }}
       </a>
     </mat-card-subtitle>

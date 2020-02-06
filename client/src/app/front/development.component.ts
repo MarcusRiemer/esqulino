@@ -7,6 +7,7 @@ import { MultiLangString } from '../shared/nav-interfaces';
 interface DevelopmentLink {
   icon: string;
   title: MultiLangString;
+  titleBadgeImage?: string;
   subtitle: MultiLangString;
   href: string;
   content: MultiLangString;
@@ -60,6 +61,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
       "de": `Kompiliert das Projekt noch nach meinem letzten Commit? Laufen die Testfälle noch durch? Der CI-Dienst läuft nach jedem "push" und findet es heraus.`,
       "en": `Did my last commit break anything for the build? Do the tests still run? The CI-service runs after every push and finds out.`
     },
+    titleBadgeImage: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_apis/build/status/Docker%20CI?branchName=master",
     href: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build"
   }
 ]
