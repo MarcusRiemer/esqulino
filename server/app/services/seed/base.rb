@@ -262,7 +262,7 @@ module Seed
 
       deps = YAML.load_file(deps)
       deps
-        .filter do |_, seed_id| not loaded.include? seed_id end
+        .select do |_, seed_id| not loaded.include? seed_id end
         .each do |_, seed_id, seed| seed.new(seed_id).start_load(loaded) end
     end
 
