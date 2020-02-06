@@ -34,9 +34,11 @@ import { OverviewBlockLanguageComponent } from './block-language/overview-block-
 
 import { CreateGrammarComponent } from './grammar/create-grammar.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
-import { GrammarGalleryComponent } from './grammar/gallery.component'
+import { GalleryGrammarComponent } from './grammar/gallery-grammar.component'
 
 import { OverviewProjectComponent } from './project/overview-project.component'
+
+import { CodeResourceGalleryComponent } from './code-resource-gallery.component';
 
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
@@ -60,6 +62,7 @@ const materialModules = [
     AdminOverviewComponent,
     CreateBlockLanguageComponent,
     CreateGrammarComponent,
+    CodeResourceGalleryComponent,
     EditBlockLanguageComponent,
     EditActualParametersComponent,
     EditInputParameterValueComponent,
@@ -75,7 +78,7 @@ const materialModules = [
     AdminNewsListComponent,
     AdminNewsEditComponent,
     ChangeRoles,
-    GrammarGalleryComponent
+    GalleryGrammarComponent
   ],
   providers: [
     JsonSchemaValidationService

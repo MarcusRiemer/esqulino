@@ -10,7 +10,7 @@ import { NavSiteComponent } from '../shared/nav-page.component'
 import { AdminNewsListComponent } from './news.component'
 import { AdminNewsEditComponent } from './edit-news.component'
 import { OverviewProjectComponent } from './project/overview-project.component'
-import { GrammarGalleryComponent } from './grammar/gallery.component'
+import { GalleryGrammarComponent } from './grammar/gallery-grammar.component'
 
 export const adminRoutes: Routes = [
   {
@@ -37,7 +37,7 @@ export const adminRoutes: Routes = [
       },
       {
         path: 'grammar/:grammarId/gallery',
-        component: GrammarGalleryComponent
+        component: GalleryGrammarComponent
       },
       {
         path: 'block-language',

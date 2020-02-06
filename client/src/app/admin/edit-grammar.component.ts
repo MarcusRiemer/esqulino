@@ -3,7 +3,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { Title } from '@angular/platform-browser'
 
-import { switchMap, map, first } from 'rxjs/operators'
+import { from } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators'
 
 import { ToolbarService } from '../shared/toolbar.service'
 import { CachedRequest, GrammarDataService } from '../shared/serverdata'
@@ -43,16 +44,19 @@ export class EditGrammarComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Grab the first grammar from the server and do not update it if
-    // the server data changes.
+    // Grab the first grammar from the server or the local cache. The grammar must not
+    // be updated if re-requested from the server by someone else.
     this._activatedRoute.paramMap.pipe(
       map((params: ParamMap) => params.get('grammarId')),
-      switchMap((id: string) => this._grammarData.getSingle(id).pipe(first())),
+      switchMap((id: string) => from(this._grammarData.getLocal(id, "request"))),
     ).subscribe(g => {
       this.grammar = g;
-      this.availableTypes = getAllTypes(this.grammar)
+      this.availableTypes = getAllTypes(this.grammar);
       this.grammarRoot = g.root;
-      this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`)
+      this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
+
+      // We want a local copy of the resource that is being edited available "globally"
+      this._grammarData.setLocal(g);
     });
 
     // Always grab fresh related block languages

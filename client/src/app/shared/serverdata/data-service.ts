@@ -11,6 +11,8 @@ import { CachedRequest, IndividualDescriptionCache } from './request-cache';
 
 /**
  * Basic building block to access "typically" structured data from the server.
+ * May additionally also provide a local cache for objects that need to be
+ * persisted across multiple components.
  */
 export abstract class DataService<
   TList extends IdentifiableResourceDescription,
@@ -20,6 +22,10 @@ export abstract class DataService<
   private _listGetParams = new HttpParams();
 
   private _listTotalCount = new BehaviorSubject<number | undefined>(undefined);
+
+  // Backing field for local cache, (obviously) not persisted between browser
+  // sessions
+  private _localCache: { [id: string]: TSingle } = {};
 
   public constructor(
     protected _http: HttpClient,
@@ -186,5 +192,30 @@ export abstract class DataService<
     });
 
     return (toReturn);
+  }
+
+  /**
+   * @param id The ID of the item to retrieve from cache
+   * @param onMissing What to do if the item does not exist: Issue a request or return `undefined`
+   * @return A locally cached version of the given resource
+   */
+  async getLocal(id: string, onMissing: "request" | "undefined" = "undefined") {
+    let toReturn = this._localCache[id];
+    if (!toReturn && onMissing === "request") {
+      // Without taking only the first item from `getSingle`, the promise
+      // will never be fulfilled
+      toReturn = await this.getSingle(id).pipe(first()).toPromise();
+      this.setLocal(toReturn);
+    }
+
+    return (toReturn);
+  }
+
+  /**
+   * @param res The resource to cache locally
+   */
+  setLocal(res: TSingle) {
+    console.log(`Item with id ${res.id} added to cache: `, res);
+    this._localCache[res.id] = res;
   }
 }
