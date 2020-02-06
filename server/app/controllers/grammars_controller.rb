@@ -1,5 +1,7 @@
 # Manages operations on grammars
 class GrammarsController < ApplicationController
+  include UserHelper
+
   # List all existing grammars
   def index
     render :json => Grammar.scope_list.map{|g| g.to_list_api_response}
@@ -55,12 +57,24 @@ class GrammarsController < ApplicationController
     end
   end
 
-  # Finds block languages that are related to this grammar
+  # Finds block languages that are related to a grammar
   def related_block_languages
     render :json => BlockLanguage.scope_list
                       .where(grammar_id: id_params[:id])
                       .map{|b| b.to_list_api_response}
   end
+
+  # List all code resources that depend on a single grammar
+  def code_resources_gallery
+    grammar = Grammar.find(id_params[:id])
+
+    authorize grammar
+
+    render json: grammar
+             .code_resources
+             .map { |c| c.to_full_api_response }
+  end
+
 
   private
 

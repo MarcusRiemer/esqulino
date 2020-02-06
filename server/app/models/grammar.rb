@@ -1,8 +1,5 @@
 # Basic building block of any language.
 class Grammar < ApplicationRecord
-  # Many block languages may be based on a single grammar
-  has_many :block_language
-
   # A user defined name
   validates :name, presence: true
 
@@ -16,6 +13,12 @@ class Grammar < ApplicationRecord
   validates :model, json_schema: 'GrammarDatabaseBlob'
 
   belongs_to :programming_language
+
+  # Many block languages may be based on a single grammar
+  has_many :block_languages
+
+  # Many code resources may depend on a single grammar
+  has_many :code_resources, through: :block_languages
 
   # Grammar with properties that are relevant when listing
   scope :scope_list, -> {

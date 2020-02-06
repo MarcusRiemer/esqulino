@@ -190,6 +190,70 @@ RSpec.describe BlockLanguagesController, type: :request do
   end
 
   describe 'GET /api/grammars/:grammarId/related_block_languages' do
+    it 'Guest: not allowed' do
+      create(:user, :guest)
+      original = FactoryBot.create(:grammar)
+
+      get "/api/grammars/#{original.id}/code_resources_gallery",
+          :headers => json_headers
+
+      expect(response.status).to eq(403)
+    end
+
+    it 'Admin: No resources exist' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
+
+      grammar = FactoryBot.create(:grammar)
+
+      get "/api/grammars/#{grammar.id}/code_resources_gallery",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
+
+      json_data = JSON.parse(response.body)
+      expect(json_data).to eq []
+    end
+
+    it 'Admin: Single resource exists and is referenced' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
+
+      block_language = FactoryBot.create(:block_language)
+      grammar = block_language.grammar
+
+      res_1 = FactoryBot.create(:code_resource, block_language: block_language)
+
+      get "/api/grammars/#{grammar.id}/code_resources_gallery",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
+
+      json_data = JSON.parse(response.body)
+      json_ids = Set.new(json_data.map {|c| c["id"] })
+      expect(json_ids).to eq Set.new([res_1.id])
+    end
+
+    it 'Admin: Single resource exists and is not referenced' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
+
+      block_language = FactoryBot.create(:block_language)
+      grammar = block_language.grammar
+
+      res_1 = FactoryBot.create(:code_resource)
+
+      get "/api/grammars/#{grammar.id}/code_resources_gallery",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
+
+      json_data = JSON.parse(response.body)
+      expect(json_data).to eq []
+    end
+  end
+
+  describe 'GET /api/grammars/:grammarId/related_block_languages' do
     it 'Finds nothing for an unused grammar' do
       original = FactoryBot.create(:grammar)
 

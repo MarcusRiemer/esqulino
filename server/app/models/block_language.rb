@@ -17,6 +17,9 @@ class BlockLanguage < ApplicationRecord
   # The grammar that this block language may describe
   belongs_to :grammar
 
+  # The code resources that are rendered using this language
+  has_many :code_resources
+
   # A block language with only the information that is relevant when listing it.
   # Adds the following calculated fields:
   #   generated: Indicates whether this language can be generated automatically
