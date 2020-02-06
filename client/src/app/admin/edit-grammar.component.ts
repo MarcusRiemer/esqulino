@@ -9,10 +9,9 @@ import { ToolbarService } from '../shared/toolbar.service'
 import { CachedRequest, GrammarDataService } from '../shared/serverdata'
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
-import { GrammarDescription, QualifiedTypeName, NodeTypeDescription, NamedLanguages } from '../shared/syntaxtree'
+import { GrammarDescription, QualifiedTypeName } from '../shared/syntaxtree'
 import { BlockLanguageListDescription } from '../shared/block/block-language.description'
-import { getAllTypes } from '../shared/syntaxtree/grammar-util';
-import { stableQualifiedTypename } from '../shared/syntaxtree/grammar-type-util';
+import { getAllTypes } from '../shared/syntaxtree/grammar-util'
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
