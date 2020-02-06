@@ -28,6 +28,7 @@ export abstract class DataService<
   private _localCache: { [id: string]: TSingle } = {};
 
   public constructor(
+    // Deriving classes may need to make HTTP requests of their own
     protected _http: HttpClient,
     private _snackBar: MatSnackBar,
     private _listUrl: string,

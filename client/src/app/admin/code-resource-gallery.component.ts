@@ -1,22 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input } from '@angular/core'
 
-import { CodeResourceDescription, CodeResource } from '../shared';
+import { CodeResource } from '../shared';
 import { BlockLanguage } from '../shared/block';
 
 @Component({
   templateUrl: 'templates/code-resource-gallery.html',
   selector: `code-resource-gallery`
 })
-export class CodeResourceGalleryComponent implements OnInit {
+export class CodeResourceGalleryComponent {
   @Input()
-  public resourceDescriptions: CodeResourceDescription[] = [];
+  public toRender: CodeResource[] = [];
 
   @Input()
   public blockLanguage: BlockLanguage;
-
-  public toRender: CodeResource[] = [];
-
-  ngOnInit() {
-    this.toRender = this.resourceDescriptions.map(desc => new CodeResource(desc));
-  }
 }

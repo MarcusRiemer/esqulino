@@ -212,6 +212,13 @@ export class ServerApi {
   }
 
   /**
+   * Retrieves code resources that may be visualized for a grammar code gallery.
+   */
+  individualGrammarCodeResourceGallery(id: string) {
+    return (`${this.individualGrammarUrl(id)}/code_resources_gallery`)
+  }
+
+  /**
    * Retrieves the URL that is used to list all public block language generators.
    */
   getBlockLanguageGeneratorListUrl(): string {
