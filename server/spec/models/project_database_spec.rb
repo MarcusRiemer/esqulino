@@ -165,7 +165,7 @@ RSpec.describe ProjectDatabase, type: :model do
     it 'creating a duplicate table' do
       @db = FactoryBot.build(:tempfile_project_database)
       @db.table_create(database_description_key_value[0])
-      expect { @db.table_create(database_description_key_value[0]) }.to raise_exception(CreateDuplicateTableNameDatabaseError)
+      expect { @db.table_create(database_description_key_value[0]) }.to raise_exception(ProjectDatabase::CreateDuplicateTableNameDatabaseError)
     end
 
     it 'creating and deleting a single table' do

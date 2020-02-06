@@ -1,16 +1,22 @@
 require "fileutils"
 
-# The maximum number of rows a user facing query may return
-USER_RESULT_MAX_ROWS = 100
-
-# The maximum number of rows that are tested
-COUNT_RESULT_MAX_ROWS = 5000
-
 # This is a database that is part of a certain project. In the current state
 # of affairs we only support SQLite for these databases, but this might change
 # sometime in the future.
 class ProjectDatabase < ApplicationRecord
   belongs_to :project
+
+  # The maximum number of rows a user facing query may return
+  def user_result_max_rows
+    100
+  end
+
+  # The maximum number of rows that are tested before giving
+  # up on reporting a total count
+  def count_result_max_rows
+    5000
+  end
+
 
   # Creating the database record for this instance is the trivial part.
   # The actual work is to create some sort of database-thing in the
@@ -162,8 +168,8 @@ class ProjectDatabase < ApplicationRecord
   # @return [Hash] { columns :: List, rows :: List of List }
   def execute_sql(sql, params,
                   read_only = false,
-                  user_row_limit = USER_RESULT_MAX_ROWS,
-                  count_row_limit = COUNT_RESULT_MAX_ROWS)
+                  user_row_limit = user_result_max_rows,
+                  count_row_limit = count_result_max_rows)
     # The SQLite driver returns the names of the columns in the first row. But we want
     # those to go in a hash with explicit names.
     execute_sql_raw(read_only) do |db|
@@ -222,6 +228,23 @@ class ProjectDatabase < ApplicationRecord
     end
   end
 
+  # Something went wrong when altering a database schema.
+  class AlterProjectDatabaseError < EsqulinoError::Base
+    # @param project_database [ProjectDatabase]
+    #   The database the error occured in
+    def initialize(project_database, data, code = 400)
+      super "Could not alter database \"#{project_database.id}\" of project \"#{project_database.project_id}\"", code
+      @data = data
+    end
+  end
+
+  # Attempted to create a table with a name that already exists.
+  class CreateDuplicateTableNameDatabaseError < AlterProjectDatabaseError
+    def initialize(project_database, table_name)
+      super(project_database, { "tableName" => table_name })
+    end
+  end
+
   protected
 
   # Allows to access the underlying database connection.
@@ -262,22 +285,5 @@ class ProjectDatabase < ApplicationRecord
     db.execute("PRAGMA foreign_keys = ON")
     yield db
     db.execute("PRAGMA foreign_keys = OFF")
-  end
-end
-
-# Something went wrong when altering a database schema.
-class AlterProjectDatabaseError < EsqulinoError::Base
-  # @param project_database [ProjectDatabase]
-  #   The database the error occured in
-  def initialize(project_database, data, code = 400)
-    super "Could not alter database \"#{project_database.id}\" of project \"#{project_database.project_id}\"", code
-    @data = data
-  end
-end
-
-# Attempted to create a table with a name that already exists.
-class CreateDuplicateTableNameDatabaseError < AlterProjectDatabaseError
-  def initialize(project_database, table_name)
-    super(project_database, { "tableName" => table_name })
   end
 end
