@@ -1,10 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { MatSnackBar } from '@angular/material';
+import { Overlay } from '@angular/cdk/overlay';
+
 import { specLoadEmptyProject, buildBlockLanguage } from '../../editor/shared/spec-util';
 import { ServerApiService, LanguageService } from '../../shared';
+import { BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
 import { CodeResourceDescription } from '../../shared/syntaxtree';
 import { EmptyComponent } from '../../shared/empty.component';
 
@@ -15,8 +20,6 @@ import { CodeResourceService } from '../coderesource.service';
 import { RegistrationService } from '../registration.service';
 
 import { CreateCodeResourceComponent } from './create-code-resource.component';
-import { Router } from '@angular/router';
-
 
 describe(`CreateCodeResourceComponent`, () => {
   async function createComponent() {
@@ -36,6 +39,10 @@ describe(`CreateCodeResourceComponent`, () => {
         SidebarService,
         ProjectService,
         CodeResourceService,
+        BlockLanguageDataService,
+        GrammarDataService,
+        MatSnackBar,
+        Overlay
       ],
       declarations: [
         CreateCodeResourceComponent,

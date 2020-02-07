@@ -35,9 +35,9 @@ export class BlockRenderComponent {
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
   /**
-   * Optionally override the block language that comes with the code resource.
+   * The block language that is used to render this block
    */
-  @Input() public blockLanguage?: BlockLanguage;
+  @Input() public blockLanguage: BlockLanguage;
 
   /**
    * Disables any interaction with this block if true.
@@ -126,8 +126,7 @@ export class BlockRenderComponent {
    * @return The visual editor block that should be used to represent the given node.
    */
   iteratorGetEditorBlock(node: Node) {
-    const bl = this.blockLanguage || this.codeResource.blockLanguagePeek;
-    return (bl.getEditorBlock(node.qualifiedName));
+    return (this.blockLanguage.getEditorBlock(node.qualifiedName));
   }
 
   locationAppend(loc: NodeLocation): NodeLocation {

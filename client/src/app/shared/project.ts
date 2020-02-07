@@ -1,16 +1,15 @@
 import { BehaviorSubject, Observable } from 'rxjs'
 
-import { LanguageService } from './language.service'
-
 import {
   ProjectFullDescription, ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
   ProjectUpdateDescription, ProjectUsesBlockLanguageDescription
 } from './project.description'
 import { Schema } from './schema/schema'
 import { Saveable, SaveStateEvent } from './interfaces'
-import { CodeResource, Language, GrammarDescription } from './syntaxtree'
+import { CodeResource, GrammarDescription } from './syntaxtree'
 import { BlockLanguage } from '../shared/block';
 import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
+import { ResourceReferences } from './resource-references';
 
 export { ProjectDescription, ProjectFullDescription }
 
@@ -58,8 +57,6 @@ export class Project implements Saveable {
 
   private _blockLanguages: BlockLanguage[];
 
-  private _validationLanguages: Language[];
-
   readonly grammarDescriptions: GrammarDescription[];
 
   // Tracking added and removed block languages
@@ -71,7 +68,7 @@ export class Project implements Saveable {
    */
   constructor(
     json: ProjectFullDescription,
-    private _languageService: LanguageService
+    readonly resourceReferences: ResourceReferences
   ) {
     this.slug = json.slug;
     this._id = json.id;
@@ -88,19 +85,12 @@ export class Project implements Saveable {
 
     // Map all descriptions to their concrete objects
     this._codeResources = (json.codeResources || [])
-      .map(val => new CodeResource(val, this))
+      .map(val => new CodeResource(val, this.resourceReferences))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
 
     // Construct relevant block languages
     this._blockLanguages = (json.blockLanguages || [])
       .map(val => new BlockLanguage(val));
-
-    // Construct relevant validation languages
-    this._validationLanguages = (json.grammars || [])
-      .map(g => {
-        const baseLanguage = this._languageService.getLanguage(g.programmingLanguageId);
-        return (baseLanguage.cloneWithAlternateGrammar(g));
-      });
   }
 
   /**
@@ -367,24 +357,6 @@ export class Project implements Saveable {
     const index = this._codeResources.findIndex(c => c.id == code.id);
     if (index >= 0) {
       this._codeResources.splice(index, 1);
-    }
-  }
-
-  /**
-   * @param id The id for a certain language
-   * @todo Use enum
-   */
-  getProgrammingLanguageByCoreLanguageId(id: string) {
-    return (this._languageService.getLanguage(id));
-  }
-
-  getLocalProgrammingLanguage(id: string) {
-    const lang = this._validationLanguages.find(candidate => candidate.id === id);
-    if (lang) {
-      return (lang);
-    } else {
-      const knownLanguages = this._validationLanguages.map(l => `"${l.id}"`).join(", ");
-      throw new Error(`Language with ID "${id}" is unknown to the Project, known IDs are: ${knownLanguages}`);
     }
   }
 

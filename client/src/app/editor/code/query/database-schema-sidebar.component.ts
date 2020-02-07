@@ -6,6 +6,7 @@ import { Table, Column } from '../../../shared/schema';
 import { SIDEBAR_MODEL_TOKEN } from '../../editor.token';
 
 import { DragService } from '../../drag.service';
+import { SchemaService } from '../../schema.service';
 
 @Component({
   templateUrl: 'templates/database-schema-sidebar.html',
@@ -14,22 +15,23 @@ export class DatabaseSchemaSidebarComponent {
   constructor(
     @Inject(SIDEBAR_MODEL_TOKEN)
     private _codeResource: CodeResource,
-    private _dragService: DragService
+    private _dragService: DragService,
+    private _schemaService: SchemaService
   ) {
   }
 
   /**
    * @return The tables that should be shown.
    */
-  get possibleTables() {
-    return (this._codeResource.project.schema.tables);
+  get possibleTables(): Table[] {
+    return (this._schemaService.currentSchema.tables);
   }
 
   /**
    * @return The name of the current database
    */
   get databaseName() {
-    return (this._codeResource.project.currentDatabaseName);
+    return (this._schemaService.currentDatabaseName);
   }
 
   /**

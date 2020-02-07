@@ -293,7 +293,7 @@ export class DragService {
     // Find out which locations are currently candidates for drags
     const smartDropLocations = smartDropLocation(
       smartDropOptions,
-      currentCodeResource.validationLanguagePeek.validator,
+      currentCodeResource.validatorPeek,
       currentCodeResource.syntaxTreePeek,
       dropLocation,
       dragData.draggedDescription

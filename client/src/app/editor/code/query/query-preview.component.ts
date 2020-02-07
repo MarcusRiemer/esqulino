@@ -8,6 +8,7 @@ import { Tree } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { ToolbarService, ToolbarItem } from '../../toolbar.service';
+import { ProjectService } from '../../project.service';
 
 import { QueryService, QueryResultRows, QueryParamsDescription } from './query.service'
 
@@ -37,6 +38,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
     private _currentCodeResource: CurrentCodeResourceService,
     private _toolbarService: ToolbarService,
     private _queryService: QueryService,
+    private _projectService: ProjectService
   ) {
   }
 
@@ -95,7 +97,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
     // Fire the query every time the ast changes into a valid tree.
     const subResource = this._currentQuery
-      .pipe(flatMap(c => c.validationResult))
+      .pipe(flatMap(c => c.validationResult(this._projectService.cachedProject, c.blockLanguagePeek.grammarId)))
       .subscribe(res => {
         if (res.isValid) {
           this._btnRun.fire();

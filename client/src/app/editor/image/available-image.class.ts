@@ -20,10 +20,10 @@ export class AvailableImage extends ProjectResource {
 
   constructor(
     private _serverApi: ServerApiService,
-    project: Project,
+    private _project: Project,
     desc: AvailableImageDescription
   ) {
-    super(desc, project);
+    super(desc, _project.resourceReferences);
 
     this._authorUrl = desc["author-url"];
     this._authorName = desc["author-name"];
@@ -32,7 +32,7 @@ export class AvailableImage extends ProjectResource {
   }
 
   get url() {
-    return (this._serverApi.getImageUrl(this.project.slug, this.id));
+    return (this._serverApi.getImageUrl(this._project.slug, this.id));
   }
 
   get authorUrl() {

@@ -5,11 +5,12 @@ import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, flatMap } from 'rxjs/operators';
 
 import { locationIsOnPath } from '../../../shared/util';
-import { Node, CodeResource, NodeLocation, ErrorCodes, ErrorMissingChild } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions } from '../../../shared/block';
+import { Node, CodeResource, NodeLocation, ErrorCodes, ErrorMissingChild, ValidationResult } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService, CurrentDrag } from '../../drag.service';
+import { ProjectService } from '../../project.service';
 
 import { targetState, DragTargetState, _isChildRequiredSchema, dropLocationHasChildren } from './drop-target-state';
 
@@ -139,19 +140,25 @@ export class BlockRenderDropTargetComponent {
   @Input() public readOnly = false;
 
   /**
+   * The block language that is used to render this block
+   */
+  @Input() public blockLanguage: BlockLanguage;
+
+  /**
    * Indicates whether the mouse is currently over exactly this target.
    */
   private _currentMouseTarget = new BehaviorSubject(false);
 
   constructor(
     private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _projectService: ProjectService,
   ) {
   }
 
   /** @return The current validator of this code resource */
   private get _peekValidator() {
-    return (this.codeResource.validationLanguagePeek.validator);
+    return (this.codeResource.validatorPeek);
   }
 
   /** @return The current syntaxtree of this code resource */
@@ -162,9 +169,19 @@ export class BlockRenderDropTargetComponent {
   /**
    * The latest validation result for the current resource
    */
-  private readonly _latestValidation = this._currentCodeResource.currentResource.pipe(
-    flatMap(c => c.validationResult),
-  );
+  private _latestValidation: Observable<ValidationResult> = undefined;
+  private get latestValidation() {
+    if (!this._latestValidation) {
+
+      this._latestValidation = combineLatest(
+        this._projectService.activeProject,
+        this._currentCodeResource.currentResource
+      ).pipe(
+        flatMap(([proj, res]) => res.validationResult(proj, this.blockLanguage.grammarId)),
+      );
+    }
+    return (this._latestValidation);
+  }
 
   /**
    * Tells whether a drag is in progress and what the actual drag data is.
@@ -182,7 +199,10 @@ export class BlockRenderDropTargetComponent {
   );
 
   /** @return True, if this drop target requires children (as per validation) */
-  private readonly _parentRequiresChildren = combineLatest(this._latestValidation, this._currentCodeResource.currentTree).pipe(
+  private readonly _parentRequiresChildren = combineLatest(
+    this.latestValidation,
+    this._currentCodeResource.currentTree
+  ).pipe(
     map(([v, t]) => {
       const parentNode = t.locateOrUndefined(this.dropLocation.slice(0, -1));
       if (!parentNode) {

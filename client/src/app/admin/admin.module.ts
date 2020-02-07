@@ -32,6 +32,8 @@ import { EditSingleTraitScopeComponent } from './block-language/edit-single-trai
 import { ErrorListComponent } from './block-language/error-list.component'
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
 
+import { EditorModule } from '../editor/editor.module';
+
 import { CreateGrammarComponent } from './grammar/create-grammar.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
 import { GalleryGrammarComponent } from './grammar/gallery-grammar.component'
@@ -54,6 +56,7 @@ const materialModules = [
     AceEditorModule,
     CommonModule,
     SharedAppModule,
+    EditorModule,
     adminRouting,
     ...materialModules
   ],

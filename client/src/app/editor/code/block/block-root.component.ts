@@ -9,13 +9,13 @@ import { DragService } from '../../drag.service';
  */
 @Component({
   templateUrl: 'templates/block-root.html',
-  selector: `block-root`
 })
 export class BlockRootComponent {
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _dragService: DragService,
-  ) { }
+  ) {
+  }
 
   /**
    * @return The resource that is currently edited
@@ -23,8 +23,6 @@ export class BlockRootComponent {
   readonly currentResource$ = this._currentCodeResource.currentResource;
 
   readonly currentBlockLanguage$ = this._currentCodeResource.currentBlockLanguage;
-
-
 
   /**
    * When something draggable enters the empty area a program may start with,

@@ -7,6 +7,11 @@ import { map, switchMap, startWith } from 'rxjs/operators';
 
 import { GrammarDataService, ServerApiService } from '../../shared/serverdata';
 import { GrammarDescription, CodeResource, CodeResourceDescription } from '../../shared';
+import { BlockLanguage } from '../../shared/block';
+import { generateBlockLanguage } from '../../shared/block/generator/generator';
+import { BlockLanguageListDescription } from '../../shared/block/block-language.description';
+import { BlockLanguageGeneratorDocument } from '../../shared/block/generator/generator.description';
+import { ResourceReferencesService } from '../../shared/resource-references.service';
 
 @Component({
   templateUrl: 'templates/gallery-grammar.html'
@@ -17,7 +22,8 @@ export class GalleryGrammarComponent implements OnInit {
     private _http: HttpClient,
     private _activatedRoute: ActivatedRoute,
     private _grammarData: GrammarDataService,
-    private _serverApi: ServerApiService
+    private _serverApi: ServerApiService,
+    private _resourceReferences: ResourceReferencesService
   ) { }
 
   ngOnInit() {
@@ -44,8 +50,36 @@ export class GalleryGrammarComponent implements OnInit {
    */
   readonly codeResources$: Observable<CodeResource[]> = this.grammarId$.pipe(
     switchMap(id => this.createGrammarCodeResourceGalleryRequest(id)),
-    map(descriptions => descriptions.map(d => new CodeResource(d))),
+    map(descriptions =>
+      descriptions
+        .slice(0, 1)
+        .map(d => new CodeResource(d, this._resourceReferences))
+    ),
     startWith([]),
+  );
+
+  /**
+   * A automatically generated block language that is based on the grammar
+   */
+  readonly blockLanguage$: Observable<BlockLanguage> = this.grammar$.pipe(
+    map(g => {
+      // We don't actually care too much about this part, the language is generated
+      // on the fly and never persisted.
+      const blockListDesc: BlockLanguageListDescription = {
+        defaultProgrammingLanguageId: "generic",
+        id: "artificial",
+        grammarId: g.id,
+        name: "artificial",
+      };
+
+      const genDesc: BlockLanguageGeneratorDocument = {
+        type: "manual",
+      }
+
+      const blockDesc = generateBlockLanguage(blockListDesc, genDesc, g);
+      console.log(`Generated block language for "${g.name}" grammar gallery`);
+      return (new BlockLanguage(blockDesc));
+    })
   );
 
   private createGrammarCodeResourceGalleryRequest(id: string) {

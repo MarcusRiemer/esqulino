@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { ProviderDescription } from './auth/provider.description';
 
@@ -6,8 +6,8 @@ import { ProviderDescription } from './auth/provider.description';
   selector: 'provider-show',
   templateUrl: './templates/provider-show.html'
 })
-export class ProviderShowComponent{
+export class ProviderShowComponent {
   @Input() provider: ProviderDescription;
 
-  constructor() {}
+  constructor() { }
 }

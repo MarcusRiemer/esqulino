@@ -1,11 +1,16 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { MatSnackBar } from '@angular/material';
+import { Overlay } from '@angular/cdk/overlay';
+
 import { ProjectService } from './project.service';
+import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
+
 import { specLoadEmptyProject } from './shared/spec-util';
 
 import { LanguageService, ServerApiService } from '../shared';
-import { HttpErrorResponse } from '@angular/common/http';
 
 describe(`ProjectService`, () => {
   function instantiate(): ProjectService {
@@ -17,6 +22,10 @@ describe(`ProjectService`, () => {
         LanguageService,
         ServerApiService,
         ProjectService,
+        BlockLanguageDataService,
+        GrammarDataService,
+        MatSnackBar,
+        Overlay
       ],
       declarations: [
       ]

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
-import { tap, flatMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs'
+import { tap, flatMap, map, filter } from 'rxjs/operators';
 
+import { convertGrammarTreeInstructions } from '../shared/block/generator/generator-tree';
+import { BlockLanguageDescription } from '../shared/block/block-language.description';
+import { BlockLanguageDataService } from '../shared/serverdata';
+import { ResourceReferencesService } from '../shared/resource-references.service';
 import { BlockLanguage } from '../shared/block';
 import { CodeResource, NodeLocation, Tree } from '../shared/syntaxtree';
 
@@ -12,8 +16,6 @@ import { BlockDebugOptionsService } from './block-debug-options.service';
 
 // TODO: Promote the new sidebar system
 import { CodeSidebarComponent } from './code/code.sidebar'
-import { convertGrammarTreeInstructions } from '../shared/block/generator/generator-tree';
-import { BlockLanguageDescription } from '../shared/block/block-language.description';
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -36,6 +38,7 @@ export class CurrentCodeResourceService {
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
     private _debugOptions: BlockDebugOptionsService,
+    private _resourceReferences: ResourceReferencesService,
   ) {
     // Things that need to happen every time the resource changes
     this._codeResource
@@ -81,29 +84,33 @@ export class CurrentCodeResourceService {
    * Informs interested components about the tree behind the current resource
    */
   readonly currentTree: Observable<Tree> = this._codeResource.pipe(
+    filter(c => !!c),
     flatMap(c => c.syntaxTree)
   );
 
   /**
    * The block language that is configured on the resource.
    */
-  readonly resourceBlockLanguage: Observable<BlockLanguage> = this.currentResource.pipe(
-    flatMap(c => c.blockLanguage)
+  readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
+    flatMap(c => c.blockLanguageId)
   );
 
   /**
    * The block language that should be used to display the code resource.
    */
   readonly currentBlockLanguage: Observable<BlockLanguage> = combineLatest(
-    this.resourceBlockLanguage, this._debugOptions.showInternalAst.value$
+    this.resourceBlockLanguageId, this._debugOptions.showInternalAst.value$
   ).pipe(
-    map(([res, internalAst]) => {
-      if (internalAst) {
-        return (this.getInternalBlockLanguage(res.grammarId));
+    map(async ([blockLangId, showInternalAst]) => {
+      debugger;
+      const blockLang = await this._resourceReferences.getBlockLanguage(blockLangId);
+      if (blockLang && showInternalAst) {
+        return (this.getTreeBlockLanguage(blockLang.grammarId));
       } else {
-        return (res);
+        return (blockLang);
       }
-    })
+    }),
+    flatMap(p => p),
   );
 
   /**
@@ -112,7 +119,7 @@ export class CurrentCodeResourceService {
    *
    * @param grammarId The grammar to base the block language on.
    */
-  private getInternalBlockLanguage(grammarId: string): BlockLanguage {
+  private getTreeBlockLanguage(grammarId: string): BlockLanguage {
     // Was the block language for that grammar created already?
     if (!this._blockLanguageCache[grammarId]) {
       // Nope, we build it on the fly

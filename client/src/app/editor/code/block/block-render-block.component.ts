@@ -90,7 +90,7 @@ export class BlockRenderBlockComponent {
    * @return True, if the current drop operation would result in an embrace.
    */
   private _isEmbraceDrop() {
-    const validator = this.codeResource.validationLanguagePeek.validator;
+    const validator = this.codeResource.validatorPeek;
     const ownLocation = this.node.location;
     const dropCandidates = this._dragService.peekDragData.draggedDescription;
 
@@ -181,7 +181,7 @@ export class BlockRenderBlockComponent {
     map(([inProgress, currentDrag]) => {
       if (inProgress && !this.readOnly && currentDrag) {
         return (currentDrag.hoverNode === this.node && !nodeIsInSingularHole(
-          this.codeResource.validationLanguagePeek.validator,
+          this.codeResource.validatorPeek,
           this.node
         ));
       } else {

@@ -22,10 +22,10 @@ export class BlockHostComponent {
   node: Node;
 
   /**
-   * Optionally override the block language that comes with the code resource.
+   * The block language to display this tree
    */
   @Input()
-  blockLanguage?: BlockLanguage;
+  blockLanguage: BlockLanguage;
 
   /**
    * Disables any interaction with this block if true.
@@ -35,20 +35,13 @@ export class BlockHostComponent {
 
   @HostBinding('class')
   get hostCssClasses() {
-    return (this.usedBlockLanguage.rootCssClasses.join(" "));
+    return (this.blockLanguage.rootCssClasses.join(" "));
   }
 
   /**
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
-    return (this.usedBlockLanguage.getEditorBlock(this.node.qualifiedName));
-  }
-
-  /**
-   * @return The block language that should be used to represent the node
-   */
-  get usedBlockLanguage() {
-    return (this.blockLanguage || this.codeResource.blockLanguagePeek);
+    return (this.blockLanguage.getEditorBlock(this.node.qualifiedName));
   }
 }

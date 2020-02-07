@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { CodeResource } from '../../shared/syntaxtree';
 
-import { CurrentCodeResourceService } from '../current-coderesource.service';
+import { ProjectService } from '../project.service';
 
 /**
  * Provides a convenient way to select language models.
@@ -18,16 +18,16 @@ export class LanguageModelSelectorComponent {
   @Input() codeResource: CodeResource;
 
   constructor(
-    private _currentCodeResource: CurrentCodeResourceService,
+    private _projectService: ProjectService
   ) {
   }
 
   /**
    * @return All available language models
    */
-  get availableBlockLanguages() {
-    return (this._currentCodeResource.currentResource.pipe(map(c => c.project.projectBlockLanguages)));
-  }
+  readonly availableBlockLanguages = this._projectService.activeProject.pipe(
+    map(p => p.projectBlockLanguages)
+  )
 
   /**
    * @return The ID of the currently selected language

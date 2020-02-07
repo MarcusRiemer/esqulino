@@ -28,6 +28,7 @@ import { PreferencesService } from './preferences.service'
 import { RegistrationService } from './registration.service'
 
 import { SettingsComponent } from './project-settings/settings.component'
+import { BlockHostComponent } from './code/block/block-host.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { SettingsComponent } from './project-settings/settings.component'
     EditorComponent,
     SettingsComponent,
     SchemaEditorModule,
+    BlockHostComponent,
   ]
 
 })
