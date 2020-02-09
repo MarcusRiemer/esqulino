@@ -84,7 +84,6 @@ export class CodeResource extends ProjectResource {
    * @return The language that is currently in use
    */
   get blockLanguage(): Observable<BlockLanguage> {
-    debugger;
     return (this._blockLanguageId.pipe(
       map(l => this.resourceReferences.getBlockLanguage(l)),
     ));

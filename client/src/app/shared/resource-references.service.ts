@@ -22,11 +22,10 @@ export class ResourceReferencesService implements ResourceReferences {
   ) { }
 
   getBlockLanguage(id: string) {
-    debugger;
-
     if (!this._blockLanguages[id]) {
       const desc = this._blockLanguageData.getLocal(id, "undefined");
       if (!desc) {
+        debugger;
         throw new Error(`Could not construct block language "${id}" on the fly`);
       }
 

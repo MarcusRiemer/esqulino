@@ -1,16 +1,19 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage } from '../../../shared/block';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Renders all editor blocks that are mandated by the given node.
  */
 @Component({
   templateUrl: 'templates/block-host.html',
-  selector: `editor-block-host`
+  selector: `editor-block-host`,
+  providers: [RenderedCodeResourceService]
 })
-export class BlockHostComponent {
+export class BlockHostComponent implements OnChanges {
 
   @Input()
   codeResource: CodeResource;
@@ -36,6 +39,16 @@ export class BlockHostComponent {
   @HostBinding('class')
   get hostCssClasses() {
     return (this.blockLanguage.rootCssClasses.join(" "));
+  }
+
+  constructor(
+    private _renderedCodeResourceService: RenderedCodeResourceService
+  ) { }
+
+  ngOnChanges() {
+    this._renderedCodeResourceService._updateRenderData(
+      this.codeResource, this.blockLanguage, this.node, this.readOnly
+    )
   }
 
   /**

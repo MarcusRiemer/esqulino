@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 
 import { EditorComponentDescription } from '../../shared/block/block-language.description';
@@ -19,6 +20,7 @@ import { WorldSensorsComponent } from './truck/world-sensors.component';
  * Allows registration of available editor components and hands them
  * out on demand.
  */
+@Injectable()
 export class EditorComponentsService {
   createComponent(description: EditorComponentDescription): ComponentPortal<{}> {
     switch (description.componentType) {

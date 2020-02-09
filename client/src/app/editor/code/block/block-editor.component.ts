@@ -22,8 +22,8 @@ interface PlacedEditorComponent {
 }
 
 /**
- * The "usual" editor folks will interact with. Displays all sorts
- * of nice and colourful blocks.
+ * The "usual" editor folks will interact with. Is configurable to display many different
+ * components.
  */
 @Component({
   templateUrl: 'templates/block-editor.html',
