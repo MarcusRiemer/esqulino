@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ResourceReferences } from './resource-references';
+import { ResourceReferences, RequiredResource } from './resource-references';
 import { LanguageService } from './language.service';
 import { BlockLanguageDataService, GrammarDataService } from './serverdata';
 import { BlockLanguage } from './block';
@@ -21,12 +21,15 @@ export class ResourceReferencesService implements ResourceReferences {
     private _grammarLanguageData: GrammarDataService,
   ) { }
 
-  getBlockLanguage(id: string) {
+  getBlockLanguage(id: string, onMissing: "undefined" | "throw" = "throw") {
     if (!this._blockLanguages[id]) {
       const desc = this._blockLanguageData.getLocal(id, "undefined");
       if (!desc) {
-        debugger;
-        throw new Error(`Could not construct block language "${id}" on the fly`);
+        if (onMissing === "throw") {
+          throw new Error(`Could not construct block language "${id}" on the fly`);
+        } else {
+          return (undefined);
+        }
       }
 
       const blockLanguage = new BlockLanguage(desc);
@@ -49,7 +52,31 @@ export class ResourceReferencesService implements ResourceReferences {
     return (validator);
   }
 
-  async getCoreProgrammingLanguage(programmingLanguageId: string) {
+  getCoreProgrammingLanguage(programmingLanguageId: string) {
     return this._languageService.getLanguage(programmingLanguageId);
+  }
+
+  async ensureResources(req: RequiredResource[]) {
+    const requests: Promise<any>[] = req.map(r => {
+      switch (r.type) {
+        case "blockLanguage": return this._blockLanguageData.getLocal(r.id, "request");
+        case "grammar": return this._grammarLanguageData.getLocal(r.id, "request");
+      }
+    });
+
+
+    const toReturn = await Promise.all(requests);
+    return toReturn.every(v => !!v);
+  }
+
+  hasResources(req: RequiredResource[]) {
+    return (
+      req.every(r => {
+        switch (r.type) {
+          case "blockLanguage": return !!this._blockLanguageData.getLocal(r.id, "undefined");
+          case "grammar": return !!this._grammarLanguageData.getLocal(r.id, "undefined");
+        }
+      })
+    );
   }
 }

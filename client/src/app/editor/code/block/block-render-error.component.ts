@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { Node } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
-import { ProjectService } from '../../project.service';
-import { ResourceReferencesService } from 'src/app/shared/resource-references.service';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Shows an error-marker if there is an error on the given node
@@ -15,7 +15,6 @@ import { ResourceReferencesService } from 'src/app/shared/resource-references.se
   selector: `editor-block-render-error`,
 })
 export class BlockRenderErrorComponent {
-  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorErrorIndicator;
 
@@ -25,7 +24,7 @@ export class BlockRenderErrorComponent {
   @Input() public blockLanguage: BlockLanguage;
 
   constructor(
-    private _projectService: ProjectService,
+    private _renderData: RenderedCodeResourceService,
   ) { }
 
   /**
@@ -45,13 +44,9 @@ export class BlockRenderErrorComponent {
   /**
    * All errors that occur on this block
    */
-  public get nodeErrors() {
-    return (this.codeResource.validationResult(
-      this._projectService.cachedProject, this.blockLanguage.grammarId
-    ).pipe(
-      map(validationResult => validationResult.getErrorsOn(this.node))
-    ));
-  }
+  readonly nodeErrors = this._renderData.validationResult$.pipe(
+    map(validationResult => validationResult.getErrorsOn(this.node))
+  )
 
   /**
    * True, if the error indicator should be shown.

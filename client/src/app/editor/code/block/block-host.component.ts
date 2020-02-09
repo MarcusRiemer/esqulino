@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, HostBinding, OnChanges } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage } from '../../../shared/block';
@@ -47,9 +47,11 @@ export class BlockHostComponent implements OnChanges {
 
   ngOnChanges() {
     this._renderedCodeResourceService._updateRenderData(
-      this.codeResource, this.blockLanguage, this.node, this.readOnly
+      this.codeResource, this.blockLanguage, this.readOnly
     )
   }
+
+  readonly renderDataAvailable$ = this._renderedCodeResourceService.dataAvailable$;
 
   /**
    * @return The visual editor block that should be used to represent the node.

@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { Node } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Allows editing of atomic values. These are cached inside this component
@@ -12,14 +14,12 @@ import { VisualBlockDescriptions } from '../../../shared/block';
   selector: `editor-block-render-input`,
 })
 export class BlockRenderInputComponent {
-  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorInput;
 
-  /**
-   * Disallows the change into edit mode
-   */
-  @Input() public readOnly = false;
+  constructor(
+    private _renderData: RenderedCodeResourceService,
+  ) { }
 
   private _editedValue: string;
 
@@ -62,7 +62,7 @@ export class BlockRenderInputComponent {
    */
   onActivateEditing(event: MouseEvent) {
     event.stopPropagation();
-    if (!this.readOnly) {
+    if (!this._renderData.readOnly) {
       this.currentlyEditing = true;
     }
   }
@@ -146,7 +146,7 @@ export class BlockRenderInputComponent {
    */
   setEditedProperty(newValue: string) {
     if (newValue != this.currentValue) {
-      this.codeResource.setProperty(this.node.location, this.visual.property, newValue);
+      this._renderData.codeResource.setProperty(this.node.location, this.visual.property, newValue);
     }
   }
 }

@@ -1,18 +1,20 @@
-<!-- If a block language does not define a sidebar something went wrong somewhere. -->
-<ng-template #noSidebarDefined>
-  <div class="alert alert-danger">
-    <p>
-      <strong>Die Blocksprache <q>{{ (currentBlockLanguage | async)?.name }}</q> hat keine Seitenleiste definiert!</strong> Vermutlich ist das einfach ein Fehler des Sprachdesigners, auf jeden Fall kann man mit dieser Sprache im Augenblick wohl nicht vernünftig arbeiten 🙁
-    </p>
-    <p>
-      Du kennst dich mit den Interna von Blocksprachen aus? Dann kannst du versuchen den Fehler <a [routerLink]="['/admin/block-language/',  (currentBlockLanguage | async)?.id]"> im Admin-Editor zu beheben</a>.
-    </p>
-  </div>
-</ng-template>
+<ng-container *ngIf="hasBlockLanguage | async">
+  <!-- Showing all sidebars -->
+  <ng-container *ngIf="(portalInstances | async)?.length > 0; else noSidebarDefined">
+    <sidebar-item-host *ngFor="let portal of portalInstances | async">
+      <ng-template [cdkPortalOutlet]="portal"></ng-template>
+    </sidebar-item-host>
+  </ng-container>
 
-<!-- Showing all sidebars -->
-<ng-container *ngIf="(portalInstances | async)?.length > 0; else noSidebarDefined">
-  <sidebar-item-host *ngFor="let portal of portalInstances | async">
-    <ng-template [cdkPortalOutlet]="portal"></ng-template>
-  </sidebar-item-host>
+  <!-- If a block language does not define a sidebar something went wrong somewhere. -->
+  <ng-template #noSidebarDefined>
+    <div class="alert alert-danger">
+      <p>
+        <strong>Die Blocksprache <q>{{ (currentBlockLanguage | async).name }}</q> hat keine Seitenleiste definiert!</strong> Vermutlich ist das einfach ein Fehler des Sprachdesigners, auf jeden Fall kann man mit dieser Sprache im Augenblick wohl nicht vernünftig arbeiten 🙁
+      </p>
+      <p>
+        Du kennst dich mit den Interna von Blocksprachen aus? Dann kannst du versuchen den Fehler <a [routerLink]="['/admin/block-language/',  (currentBlockLanguage | async).id]"> im Admin-Editor zu beheben</a>.
+      </p>
+    </div>
+  </ng-template>
 </ng-container>

@@ -2,17 +2,16 @@ import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { locationIsOnPath } from '../../../shared/util';
-import { Node, CodeResource, NodeLocation, ErrorCodes, ErrorMissingChild, ValidationResult } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
+import { Node, NodeLocation, ErrorCodes, ErrorMissingChild } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService, CurrentDrag } from '../../drag.service';
-import { ProjectService } from '../../project.service';
 
 import { targetState, DragTargetState, _isChildRequiredSchema, dropLocationHasChildren } from './drop-target-state';
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 const CSS_WHITE = "255, 255, 255";
 const CSS_YELLOW = "255, 255, 0";
@@ -114,11 +113,6 @@ const CSS_ALPHA = "0.3";
 })
 export class BlockRenderDropTargetComponent {
   /**
-   * The code resource that is rendered here.
-   */
-  @Input() public codeResource: CodeResource;
-
-  /**
    * If applicable: The node that has something dropped on to it.
    */
   @Input() public node?: Node;
@@ -135,52 +129,24 @@ export class BlockRenderDropTargetComponent {
   @Input() public dropLocation: NodeLocation;
 
   /**
-   * Disables any interaction with this block if true.
-   */
-  @Input() public readOnly = false;
-
-  /**
-   * The block language that is used to render this block
-   */
-  @Input() public blockLanguage: BlockLanguage;
-
-  /**
    * Indicates whether the mouse is currently over exactly this target.
    */
   private _currentMouseTarget = new BehaviorSubject(false);
 
   constructor(
     private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService,
-    private _projectService: ProjectService,
+    private _renderData: RenderedCodeResourceService,
   ) {
   }
 
   /** @return The current validator of this code resource */
   private get _peekValidator() {
-    return (this.codeResource.validatorPeek);
+    return (this._renderData.validator);
   }
 
   /** @return The current syntaxtree of this code resource */
   private get _peekTree() {
-    return (this.codeResource.syntaxTreePeek);
-  }
-
-  /**
-   * The latest validation result for the current resource
-   */
-  private _latestValidation: Observable<ValidationResult> = undefined;
-  private get latestValidation() {
-    if (!this._latestValidation) {
-
-      this._latestValidation = combineLatest(
-        this._projectService.activeProject,
-        this._currentCodeResource.currentResource
-      ).pipe(
-        flatMap(([proj, res]) => res.validationResult(proj, this.blockLanguage.grammarId)),
-      );
-    }
-    return (this._latestValidation);
+    return (this._renderData.syntaxTree);
   }
 
   /**
@@ -194,14 +160,14 @@ export class BlockRenderDropTargetComponent {
   );
 
   /** @return True, if this drop target is acting as a hole */
-  private readonly _isHole = this._currentCodeResource.currentTree.pipe(
+  private readonly _isHole = this._renderData.syntaxTree$.pipe(
     map(tree => _isChildRequiredSchema(this._peekValidator, tree, this.dropLocation))
   );
 
   /** @return True, if this drop target requires children (as per validation) */
   private readonly _parentRequiresChildren = combineLatest(
-    this.latestValidation,
-    this._currentCodeResource.currentTree
+    this._renderData.validationResult$,
+    this._renderData.syntaxTree$
   ).pipe(
     map(([v, t]) => {
       const parentNode = t.locateOrUndefined(this.dropLocation.slice(0, -1));
@@ -217,7 +183,7 @@ export class BlockRenderDropTargetComponent {
   );
 
   /** @return True, if the syntaxtree behind this drop target has any children */
-  private readonly _hasChildren = this._currentCodeResource.currentTree.pipe(
+  private readonly _hasChildren = this._renderData.syntaxTree$.pipe(
     map(tree => dropLocationHasChildren(tree, this.dropLocation))
   );
 
@@ -254,7 +220,7 @@ export class BlockRenderDropTargetComponent {
     this._hasChildren
   ).pipe(
     map(([drag, isHole, requiresChildren, hasChildren]) => {
-      if (this.readOnly) {
+      if (this._renderData.readOnly) {
         return ("unknown");
       } else {
         const targetState = this._targetState(drag);
@@ -301,7 +267,7 @@ export class BlockRenderDropTargetComponent {
    */
   onMouseEnter(evt: MouseEvent) {
     this._currentMouseTarget.next(true);
-    if (!this.readOnly && this._dragService.peekIsDragInProgress) {
+    if (!this._renderData.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.dropLocation, undefined, { allowExact: true });
     }
   }

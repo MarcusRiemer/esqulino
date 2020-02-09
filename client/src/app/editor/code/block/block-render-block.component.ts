@@ -1,16 +1,18 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map, withLatestFrom, distinctUntilChanged, tap } from 'rxjs/operators';
 
-import { Node, CodeResource, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
+import { Node, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions } from '../../../shared/block';
 import { arrayEqual } from '../../../shared/util';
 import { canEmbraceNode } from '../../../shared/syntaxtree/drop-embrace';
 import { nodeIsInSingularHole, relativeDropLocation, RelativeDropLocation } from '../../../shared/syntaxtree/drop-util';
 
 import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
 
@@ -23,11 +25,6 @@ export type BackgroundState = "executed" | "replaced" | "neutral";
 })
 export class BlockRenderBlockComponent {
   /**
-   * The code resource that is rendered here.
-   */
-  @Input() public codeResource: CodeResource;
-
-  /**
    * The node to be rendered
    */
   @Input() public node: Node;
@@ -37,21 +34,10 @@ export class BlockRenderBlockComponent {
    */
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
 
-  /**
-   * Disables any interaction with this block if true.
-   */
-  @Input() public readOnly = false;
-
-  /**
-   * Optionally override the block language that comes with the code resource.
-   */
-  @Input() public blockLanguage?: BlockLanguage;
-
-  private _currentDropLocationHint = new BehaviorSubject<RelativeDropLocation>(undefined);
-
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
+    private _renderData: RenderedCodeResourceService,
     private _changeDetector: ChangeDetectorRef
   ) {
   }
@@ -90,7 +76,7 @@ export class BlockRenderBlockComponent {
    * @return True, if the current drop operation would result in an embrace.
    */
   private _isEmbraceDrop() {
-    const validator = this.codeResource.validatorPeek;
+    const validator = this._renderData.validator;
     const ownLocation = this.node.location;
     const dropCandidates = this._dragService.peekDragData.draggedDescription;
 
@@ -101,10 +87,10 @@ export class BlockRenderBlockComponent {
    * Notifies the drag service about the drag we have just started.
    */
   onStartDrag(evt: MouseEvent) {
-    if (!this.readOnly) {
+    if (!this._renderData.readOnly) {
       this._dragService.dragStart(evt, [this.node.toModel()], undefined, {
         node: this.node,
-        codeResource: this.codeResource
+        codeResource: this._renderData.codeResource
       });
     }
   }
@@ -113,7 +99,7 @@ export class BlockRenderBlockComponent {
    * A mouse has entered the block and might want to drop something.
    */
   onMouseEnter(evt: MouseEvent, dropLocationHint: RelativeDropLocation) {
-    if (!this.readOnly && this._dragService.peekIsDragInProgress) {
+    if (!this._renderData.readOnly && this._dragService.peekIsDragInProgress) {
       const shiftedLocation = relativeDropLocation(this.node.location, dropLocationHint);
       const explicitLocation = dropLocationHint !== "block";
 
@@ -179,9 +165,9 @@ export class BlockRenderBlockComponent {
     this._dragService.currentDrag
   ).pipe(
     map(([inProgress, currentDrag]) => {
-      if (inProgress && !this.readOnly && currentDrag) {
+      if (inProgress && !this._renderData.readOnly && currentDrag) {
         return (currentDrag.hoverNode === this.node && !nodeIsInSingularHole(
-          this.codeResource.validatorPeek,
+          this._renderData.codeResource.validatorPeek,
           this.node
         ));
       } else {
@@ -198,7 +184,7 @@ export class BlockRenderBlockComponent {
     this.isCurrentlyExecuted
   ).pipe(
     map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
-      if (isBeingReplaced && !this.readOnly) {
+      if (isBeingReplaced && !this._renderData.readOnly) {
         return ("replaced");
       } else if (isCurrentlyExecuted) {
         return ("executed");

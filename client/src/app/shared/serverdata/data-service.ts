@@ -208,10 +208,10 @@ export abstract class DataService<
   ): TSingle | Promise<TSingle> {
     let toReturn = this._localCache[id];
     if (!toReturn && onMissing === "request") {
-      // Without taking only the first item from `getSingle`, the promise
-      // will never be fulfilled
       return (
         this.getSingle(id).pipe(
+          // Without taking only the first item from `getSingle`, the promise
+          // will never be fulfilled
           first(),
           // Store value as a side effect
           tap(value => this.setLocal(value))

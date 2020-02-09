@@ -38,7 +38,6 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
     private _currentCodeResource: CurrentCodeResourceService,
     private _toolbarService: ToolbarService,
     private _queryService: QueryService,
-    private _projectService: ProjectService
   ) {
   }
 
@@ -96,15 +95,14 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
     });
 
     // Fire the query every time the ast changes into a valid tree.
-    const subResource = this._currentQuery
-      .pipe(flatMap(c => c.validationResult(this._projectService.cachedProject, c.blockLanguagePeek.grammarId)))
+    const subValidation = this._currentCodeResource.validationResult
       .subscribe(res => {
         if (res.isValid) {
           this._btnRun.fire();
         }
       });
 
-    this._subscriptions.push(subResource);
+    this._subscriptions.push(subValidation);
   }
 
   /**

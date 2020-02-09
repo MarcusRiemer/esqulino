@@ -1,16 +1,13 @@
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map, flatMap, first, tap } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
 
 import { ProjectResource } from '../resource';
 import { ResourceReferences } from '../resource-references';
-import { Project } from '../project';
 
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
-import { ValidationResult } from './validation-result';
 import { embraceNode } from './drop-embrace';
 import { BlockLanguage } from '../block/block-language';
-import { Validator } from './validator';
 
 export * from './coderesource.description'
 
@@ -75,8 +72,7 @@ export class CodeResource extends ProjectResource {
    */
   get emittedLanguage() {
     return (this._emittedLanguageId.pipe(
-      map(l => this.resourceReferences.getCoreProgrammingLanguage(l)),
-      flatMap(p => p),
+      map(l => this.resourceReferences.getCoreProgrammingLanguage(l))
     ));
   }
 
@@ -85,7 +81,7 @@ export class CodeResource extends ProjectResource {
    */
   get blockLanguage(): Observable<BlockLanguage> {
     return (this._blockLanguageId.pipe(
-      map(l => this.resourceReferences.getBlockLanguage(l)),
+      map(l => this.resourceReferences.getBlockLanguage(l, "throw")),
     ));
   }
 
@@ -113,7 +109,7 @@ export class CodeResource extends ProjectResource {
   }
 
   get blockLanguagePeek() {
-    return (this.resourceReferences.getBlockLanguage(this.blockLanguageIdPeek));
+    return (this.resourceReferences.getBlockLanguage(this.blockLanguageIdPeek, "undefined"));
   }
 
   /**
@@ -249,23 +245,6 @@ export class CodeResource extends ProjectResource {
       this._tree.next(new Tree(tree));
     }
     this.markSaveRequired();
-  }
-
-  /**
-   * @return The latest validation result for this resource.
-   */
-  validationResult(project: Project, grammarId: string) {
-    return (combineLatest(this.syntaxTree)
-      .pipe(
-        map(([tree]) => {
-          if (tree) {
-            const validator = this.resourceReferences.getValidator(this.emittedLanguageIdPeek, grammarId);
-            return (validator.validateFromRoot(tree, project.additionalValidationContext));
-          } else {
-            return (ValidationResult.EMPTY);
-          }
-        })
-      ));
   }
 
   /**

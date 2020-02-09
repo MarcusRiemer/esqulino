@@ -1,46 +1,174 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnDestroy } from '@angular/core'
 
-import { CodeResource, Node } from '../../../shared';
+import { BehaviorSubject, combineLatest, Observable, Subscription, concat } from 'rxjs';
+import { filter, distinctUntilChanged, flatMap, map, shareReplay, tap } from 'rxjs/operators';
+
+import { CodeResource, Validator, ValidationResult, Tree } from '../../../shared';
 import { BlockLanguage } from '../../../shared/block';
-import { Subject } from 'rxjs';
+import { ResourceReferencesService } from '../../../shared/resource-references.service';
+import { ProjectService } from '../../project.service';
+import { RequiredResource } from 'src/app/shared/resource-references';
+import { GrammarDataService } from 'src/app/shared/serverdata';
 
 /**
  * This service is provided at the root component that is used to render a coderesource.
- * It shares all data in the rendertree that is required "globally" by all components.
+ *
+ * - Shares all data in the rendertree that is required "globally" by all components.
+ * - Ensures that all dependant data is available
+ *
+ * The observables (suffixed with `$`) should be used in templates: This ensures as little as
+ * possible unneeded change detection runs as possible.
  */
 @Injectable()
-export class RenderedCodeResourceService {
+export class RenderedCodeResourceService implements OnDestroy {
 
-  private readonly _codeResource = new Subject<CodeResource>();
+  private readonly _codeResource = new BehaviorSubject<CodeResource>(undefined);
 
-  private readonly _blockLanguage = new Subject<BlockLanguage>();
+  private readonly _blockLanguage = new BehaviorSubject<BlockLanguage>(undefined);
 
-  private readonly _node = new Subject<Node>();
+  private readonly _readOnly = new BehaviorSubject<boolean>(undefined);
 
-  private readonly _readOnly = new Subject<boolean>();
+  private readonly _resourcesFetched = new BehaviorSubject(false);
 
-  readonly codeResource = this._codeResource.asObservable();
+  // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
+  // that flows in is connected by the constructor.
+  private readonly _validator = new BehaviorSubject<Validator>(undefined);
 
-  readonly blockLanguage = this._blockLanguage.asObservable();
+  /**
+   * @return The validator that should be used based on the current block language.
+   *
+   * @remarks Must be defined in the constructor, because the implementation requires the
+   *          ResourceReferencesService to retrieve validator.
+   */
+  readonly validator$: Observable<Validator>;
 
-  readonly node = this._node.asObservable();
+  readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
+    flatMap(c => c.syntaxTree)
+  );
 
-  readonly readOnly = this._readOnly.asObservable();
+  // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
+  // that flows in is connected by the constructor.
+  private readonly _syntaxTree = new BehaviorSubject<Tree>(undefined);
+
+  // All manual subscriptions that are part of this service
+  private _subscriptions: Subscription[] = [];
+
+  constructor(
+    private _resourceReferences: ResourceReferencesService,
+    private _grammarData: GrammarDataService,
+    private _projectService: ProjectService,
+  ) {
+    // TODO: Remove this indirection step by using a proper guard that ensures
+    //       everything is loaded exactly once for a certain page.
+    const blockLanguageGrammar$ = this.blockLanguage$.pipe(
+      flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
+    )
+
+    this.validator$ = combineLatest(blockLanguageGrammar$, this.codeResource$).pipe(
+      map(([g, c]) => this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)),
+    );
+
+    const subValidator = this.validator$.subscribe(this._validator);
+    const subTree = this.syntaxTree$.subscribe(this._syntaxTree);
+
+    this._subscriptions = [subValidator, subTree];
+  }
+
+  ngOnDestroy() {
+    // Better safe than sorry: Avoiding circular references
+    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions = [];
+  }
+
+
+  readonly codeResource$ = this._codeResource.pipe(
+    filter(c => !!c),
+    distinctUntilChanged()
+  );
+
+  readonly blockLanguage$ = this._blockLanguage.pipe(
+    filter(c => !!c),
+    distinctUntilChanged()
+  );
+
+  readonly readOnly$ = this._readOnly.pipe(
+    // `false` is well ... falsy
+    filter(c => typeof c === "undefined"),
+    distinctUntilChanged()
+  );
+
+  /**
+   * @return True, if everything is ready to be rendered
+   */
+  readonly dataAvailable$: Observable<boolean> = this._resourcesFetched.asObservable();
+
+  private readonly _validationContext$ = this._projectService.activeProject.pipe(
+    map(p => p.additionalValidationContext)
+  );
+
+  readonly validationResult$ = combineLatest(
+    this.dataAvailable$,
+    this.validator$,
+    this.syntaxTree$,
+    this._validationContext$
+  ).pipe(
+    filter(([available, ..._]) => available),
+    distinctUntilChanged(),
+    map(([_, v, t, vc]) => t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY),
+    shareReplay(1)
+  );
+
+  get codeResource() {
+    return this._codeResource.value;
+  }
+
+  get blockLanguage() {
+    return this._blockLanguage.value;
+  }
+
+  get readOnly() {
+    return this._readOnly.value;
+  }
+
+  get validator() {
+    return this._validator.value;
+  }
+
+  get syntaxTree() {
+    return this._syntaxTree.value;
+  }
 
   _updateRenderData(
     codeResource: CodeResource,
     blockLanguage: BlockLanguage,
-    node: Node,
     readOnly: boolean,
   ) {
-    this._codeResource.next(codeResource);
-    this._node.next(node);
-    this._readOnly.next(readOnly);
+    const newBlockLang = blockLanguage || codeResource.blockLanguagePeek;
+    const requiredResources: RequiredResource[] = [
+      { type: "blockLanguage", id: newBlockLang.id },
+      { type: "grammar", id: newBlockLang.grammarId },
+    ];
 
-    if (blockLanguage) {
-      this._blockLanguage.next(blockLanguage);
+    const fetchRequired = !this._resourceReferences.hasResources(requiredResources);
+
+    console.log(`Preparing to render syntaxtree of code resource: `, codeResource);
+    console.log(`Required resources:`, requiredResources);
+    console.log(`Requires fetch:`, fetchRequired);
+
+    // If required resources are missing: Immediately block any rendering and possibly resolve
+    // it later.
+    if (fetchRequired) {
+      this._resourcesFetched.next(false);
+      this._resourceReferences.ensureResources(requiredResources)
+        .then(res => this._resourcesFetched.next(res))
     } else {
-      this._blockLanguage.next(codeResource.blockLanguagePeek);
+      this._resourcesFetched.next(true);
     }
+
+    this._codeResource.next(codeResource);
+    this._readOnly.next(readOnly);
+    this._blockLanguage.next(newBlockLang);
+
+
   }
 }

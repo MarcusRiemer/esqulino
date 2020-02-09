@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs'
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
 import { tap, flatMap, map, filter } from 'rxjs/operators';
 
-import { convertGrammarTreeInstructions } from '../shared/block/generator/generator-tree';
-import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import { BlockLanguageDataService } from '../shared/serverdata';
 import { ResourceReferencesService } from '../shared/resource-references.service';
-import { BlockLanguage } from '../shared/block';
-import { CodeResource, NodeLocation, Tree } from '../shared/syntaxtree';
+import { CodeResource, NodeLocation, Tree, ValidationResult } from '../shared/syntaxtree';
+import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
 
 import { ProjectService } from './project.service';
 import { SidebarService } from './sidebar.service';
-import { BlockDebugOptionsService } from './block-debug-options.service';
 
 // TODO: Promote the new sidebar system
 import { CodeSidebarComponent } from './code/code.sidebar'
+
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -32,13 +29,12 @@ export class CurrentCodeResourceService {
 
   private _executionLocation = new BehaviorSubject<NodeLocation>(undefined);
 
-  private _blockLanguageCache: { [id: string]: BlockLanguage } = {};
-
   constructor(
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
-    private _debugOptions: BlockDebugOptionsService,
     private _resourceReferences: ResourceReferencesService,
+    private _blockLanguageData: BlockLanguageDataService,
+    private _grammarData: GrammarDataService,
   ) {
     // Things that need to happen every time the resource changes
     this._codeResource
@@ -95,49 +91,33 @@ export class CurrentCodeResourceService {
     flatMap(c => c.blockLanguageId)
   );
 
-  /**
-   * The block language that should be used to display the code resource.
-   */
-  readonly currentBlockLanguage: Observable<BlockLanguage> = combineLatest(
-    this.resourceBlockLanguageId, this._debugOptions.showInternalAst.value$
-  ).pipe(
-    map(async ([blockLangId, showInternalAst]) => {
-      debugger;
-      const blockLang = await this._resourceReferences.getBlockLanguage(blockLangId);
-      if (blockLang && showInternalAst) {
-        return (this.getTreeBlockLanguage(blockLang.grammarId));
-      } else {
-        return (blockLang);
-      }
-    }),
-    flatMap(p => p),
+  readonly blockLanguageGrammar = this.currentResource.pipe(
+    flatMap(r => r.blockLanguageId),
+    flatMap(id => this._blockLanguageData.getLocal(id, "request")),
+    flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
   );
 
   /**
-   * Generates a block language on the fly to represent an AST for the grammar
-   * with the given ID.
-   *
-   * @param grammarId The grammar to base the block language on.
+   * @return The latest validation result for this resource.
    */
-  private getTreeBlockLanguage(grammarId: string): BlockLanguage {
-    // Was the block language for that grammar created already?
-    if (!this._blockLanguageCache[grammarId]) {
-      // Nope, we build it on the fly
-      console.log(`Generating AST block language for grammar with ID "${grammarId}"`);
-
-      const grammar = this._projectService.cachedProject.grammarDescriptions.find(g => g.id === grammarId);
-      const blockLangModel = convertGrammarTreeInstructions({ type: "tree" }, grammar);
-      const blockLangDesc: BlockLanguageDescription = Object.assign(blockLangModel, {
-        id: grammarId,
-        name: `Automatically generated from "${grammar.name}"`,
-        defaultProgrammingLanguageId: grammar.programmingLanguageId
-      });
-
-      this._blockLanguageCache[grammarId] = new BlockLanguage(blockLangDesc);
-    }
-
-    return (this._blockLanguageCache[grammarId]);
-  }
+  readonly validationResult = combineLatest(
+    this.currentTree,
+    this._projectService.activeProject,
+    this.blockLanguageGrammar
+  )
+    .pipe(
+      map(
+        ([tree, project, grammar]) => {
+          if (tree) {
+            const validator = this._resourceReferences.getValidator(
+              this.peekResource.emittedLanguageIdPeek, grammar.id
+            );
+            return (validator.validateFromRoot(tree, project.additionalValidationContext));
+          } else {
+            return (ValidationResult.EMPTY);
+          }
+        })
+    );
 
   /**
    *
