@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ResourceReferences, RequiredResource } from './resource-references';
+import { ResourceReferences, RequiredResource, isRequiredResource } from './resource-references';
 import { LanguageService } from './language.service';
 import { BlockLanguageDataService, GrammarDataService } from './serverdata';
 import { BlockLanguage } from './block';
@@ -12,16 +12,18 @@ import { Validator } from './syntaxtree/validator';
 @Injectable({
   providedIn: 'root'
 })
-export class ResourceReferencesService implements ResourceReferences {
+export class ResourceReferencesService extends ResourceReferences {
   private _blockLanguages: { [blockLanguageId: string]: BlockLanguage } = {};
 
   constructor(
     private _languageService: LanguageService,
     private _blockLanguageData: BlockLanguageDataService,
     private _grammarLanguageData: GrammarDataService,
-  ) { }
+  ) {
+    super()
+  }
 
-  getBlockLanguage(id: string, onMissing: "undefined" | "throw" = "throw") {
+  getBlockLanguage(id: string, onMissing: "undefined" | "throw") {
     if (!this._blockLanguages[id]) {
       const desc = this._blockLanguageData.getLocal(id, "undefined");
       if (!desc) {
@@ -37,6 +39,15 @@ export class ResourceReferencesService implements ResourceReferences {
     }
 
     return (this._blockLanguages[id]);
+  }
+
+  getGrammarDescription(id: string, onMissing: "undefined" | "throw") {
+    const g = this._grammarLanguageData.getLocal(id, "undefined");
+    if (!g && onMissing === "throw") {
+      throw new Error(`Could not retriebe grammar "${id}" on the fly`);
+    } else {
+      return (g);
+    }
   }
 
   getValidator(programmingLanguageId: string, grammarId: string) {
@@ -56,27 +67,18 @@ export class ResourceReferencesService implements ResourceReferences {
     return this._languageService.getLanguage(programmingLanguageId);
   }
 
-  async ensureResources(req: RequiredResource[]) {
+  async ensureResources(req: RequiredResource[] | RequiredResource) {
+    req = this.wrapRequired(req);
     const requests: Promise<any>[] = req.map(r => {
       switch (r.type) {
         case "blockLanguage": return this._blockLanguageData.getLocal(r.id, "request");
         case "grammar": return this._grammarLanguageData.getLocal(r.id, "request");
+        case "blockLanguageGrammar": return this.ensureBlockLanguageGrammar(r.id);
       }
     });
 
 
     const toReturn = await Promise.all(requests);
     return toReturn.every(v => !!v);
-  }
-
-  hasResources(req: RequiredResource[]) {
-    return (
-      req.every(r => {
-        switch (r.type) {
-          case "blockLanguage": return !!this._blockLanguageData.getLocal(r.id, "undefined");
-          case "grammar": return !!this._grammarLanguageData.getLocal(r.id, "undefined");
-        }
-      })
-    );
   }
 }

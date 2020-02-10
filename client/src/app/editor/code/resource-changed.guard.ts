@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
 
+import { ResourceReferencesService } from '../../shared/resource-references.service';
+
 import { CurrentCodeResourceService } from '../current-coderesource.service'
 
 /**
@@ -9,12 +11,20 @@ import { CurrentCodeResourceService } from '../current-coderesource.service'
  */
 @Injectable()
 export class ResourceChangedGuard implements CanActivate {
-  constructor(private _editorService: CurrentCodeResourceService) {
-  }
+  constructor(
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _resourceReferences: ResourceReferencesService
+  ) { }
 
-  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
+  async canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
     const resourceId = route.params["resourceId"];
-    this._editorService._changeCurrentResource(resourceId);
-    return (true);
+    this._currentCodeResource._changeCurrentResource(resourceId);
+
+    const activatedResource = this._currentCodeResource.peekResource;
+    const blockLanguageId = activatedResource.blockLanguageIdPeek;
+
+    return (this._resourceReferences.ensureResources(
+      { type: "blockLanguageGrammar", id: blockLanguageId }
+    ));
   }
 }
