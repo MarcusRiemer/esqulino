@@ -7,15 +7,13 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 
 import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
 import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree';
+import { SmartDropOptions, SmartDropLocation } from '../shared/syntaxtree/drop.description';
+import { smartDropLocation } from '../shared/syntaxtree/drop';
 import { FixedSidebarBlock } from '../shared/block';
 
 import { TrashService } from './shared/trash.service';
-
 import { DraggedBlockComponent } from './dragged-block.component';
 import { CurrentCodeResourceService } from './current-coderesource.service';
-import { SmartDropOptions, SmartDropLocation } from '../shared/syntaxtree/drop.description';
-import { smartDropLocation } from '../shared/syntaxtree/drop';
-
 
 /**
  * All information about the origin of this drag if it came from
