@@ -7,10 +7,10 @@ import { RegistrationService } from './registration.service'
 
 /**
  * Manages the global state of the sidebar. Components should *never*
- * interact with the sidebar directly but always use this service 
+ * interact with the sidebar directly but always use this service
  * instead.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class SidebarService {
 
   /**
@@ -80,9 +80,9 @@ export class SidebarService {
 
   /**
    * Triggers showing a different sidebar.
-   * 
+   *
    * @param newType The new type of sidebar to show. This is a
-   *    string, but the identifier should be retrieved using the 
+   *    string, but the identifier should be retrieved using the
    *    SIDEBAR_IDENTIFIER property of the Sidebar Component you
    *    are using.
    * @param param The parameter to pass to the sidebar, this depends

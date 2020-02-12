@@ -15,7 +15,7 @@ export interface SidebarType {
  * the editor has started. This is usually done to register types
  * with the sidebar or similar services.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class RegistrationService {
 
   // These types are waiting to be registered

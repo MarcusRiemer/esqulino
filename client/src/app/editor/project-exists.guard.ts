@@ -11,7 +11,7 @@ import { ProjectService } from './project.service'
 /**
  * Ensures there is a project at the target of the navigation.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ProjectExistsGuard implements CanActivate {
   /**
    * Requires an instance of the current project.

@@ -16,7 +16,7 @@ import { BlockRenderInputComponent } from './block-render-input.component';
 import { BlockBaseDirective } from './block-base.directive';
 import { BlockHostComponent } from './block-host.component';
 //import { BlockRenderBlockComponent } from './block-render-block.component';
-//import { BlockRenderComponent } from './block-render.component';
+import { BlockRenderComponent } from './block-render.component';
 
 
 describe('BlockHostComponent', () => {
@@ -40,9 +40,9 @@ describe('BlockHostComponent', () => {
         ProjectService,
       ],
       declarations: [
-        //BlockRenderComponent,
+        BlockRenderComponent,
         BlockRenderInputComponent,
-        //BlockRenderBlockComponent,
+        // BlockRenderBlockComponent,
         BlockHostComponent,
         BlockBaseDirective,
         FocusDirective

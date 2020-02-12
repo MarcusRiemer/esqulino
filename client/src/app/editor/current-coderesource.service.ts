@@ -20,7 +20,7 @@ import { CodeSidebarComponent } from './code/code.sidebar'
  * enables components like the validator and the compiler to automatically
  * do their work.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class CurrentCodeResourceService {
   /**
    * The resource that is currently edited.

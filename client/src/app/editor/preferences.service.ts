@@ -15,7 +15,7 @@ export interface PaneOrder {
  * Allows access to user preferences. This mainly allows customization
  * of UI-related features.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class PreferencesService {
 
   // The side is normally not visible on mobile devices

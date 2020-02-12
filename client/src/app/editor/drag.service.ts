@@ -60,7 +60,7 @@ export interface CurrentDrag {
  * Manages state for everything involved dragging. This involves at least sidebars
  * and actual editors, but may very well extend to other pieces of UI.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class DragService {
   // The thing we are currently dragging, including the complete hovering
   // state and everything that may be of concern.

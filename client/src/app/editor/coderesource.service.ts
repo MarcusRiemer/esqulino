@@ -9,7 +9,7 @@ import { CodeResource } from '../shared/syntaxtree'
 import { CodeResourceDescription } from '../shared/syntaxtree/coderesource.description';
 import { Project } from '../shared/project'
 
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class CodeResourceService {
   /**
    * @param _http Used to do HTTP requests

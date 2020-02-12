@@ -15,7 +15,7 @@ export { Project, ProjectFullDescription }
  * Wraps access to a single project, which is deemed to be "active"
  * and should be displayed in the editor view.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ProjectService {
 
   /**
