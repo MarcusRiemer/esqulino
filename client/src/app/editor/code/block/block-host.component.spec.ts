@@ -9,13 +9,13 @@ import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../s
 import { BlockLanguageDataService, GrammarDataService, ServerApiService } from '../../../shared/serverdata';
 
 import { ProjectService } from '../../project.service';
-//import { DragService } from '../../drag.service';
+import { DragService } from '../../drag.service';
 
 import { RenderedCodeResourceService } from './rendered-coderesource.service';
 import { BlockRenderInputComponent } from './block-render-input.component';
 import { BlockBaseDirective } from './block-base.directive';
 import { BlockHostComponent } from './block-host.component';
-//import { BlockRenderBlockComponent } from './block-render-block.component';
+import { BlockRenderBlockComponent } from './block-render-block.component';
 import { BlockRenderComponent } from './block-render.component';
 
 
@@ -32,7 +32,7 @@ describe('BlockHostComponent', () => {
       ],
       providers: [
         BlockLanguageDataService,
-        // DragService,
+        DragService,
         GrammarDataService,
         LanguageService,
         RenderedCodeResourceService,
@@ -42,7 +42,7 @@ describe('BlockHostComponent', () => {
       declarations: [
         BlockRenderComponent,
         BlockRenderInputComponent,
-        // BlockRenderBlockComponent,
+        BlockRenderBlockComponent,
         BlockHostComponent,
         BlockBaseDirective,
         FocusDirective
@@ -105,5 +105,46 @@ describe('BlockHostComponent', () => {
     const c = await createComponent(treeDesc, editorBlocks);
 
     expect(c.component.blockLanguage).not.toBeUndefined();
+  });
+
+  it(`Single terminal`, async () => {
+    const treeDesc: NodeDescription = {
+      language: "spec",
+      name: "constant"
+    };
+
+    const editorBlocks: EditorBlockDescription[] = [
+      {
+        describedType: { languageName: "spec", typeName: "constant" },
+        visual: [{ blockType: "constant", text: "constant" }]
+      }
+    ]
+
+    const c = await createComponent(treeDesc, editorBlocks);
+
+    expect(c.component.blockLanguage).not.toBeUndefined();
+    expect(c.element.textContent).toEqual("constant");
+  });
+
+  it(`Single terminal`, async () => {
+    const treeDesc: NodeDescription = {
+      language: "spec",
+      name: "interpolated",
+      properties: {
+        "text": "interpolated"
+      }
+    };
+
+    const editorBlocks: EditorBlockDescription[] = [
+      {
+        describedType: { languageName: "spec", typeName: "constant" },
+        visual: [{ blockType: "interpolated", property: "text" }]
+      }
+    ]
+
+    const c = await createComponent(treeDesc, editorBlocks);
+
+    expect(c.component.blockLanguage).not.toBeUndefined();
+    expect(c.element.textContent).toEqual("interpolated");
   });
 });
