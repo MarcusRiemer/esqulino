@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
-import { EditorModule } from '../editor.module'
 import { RegistrationService } from '../registration.service'
+import { EditorSharedComponentsModule } from '../shared-components/editor-shared-components.module'
 
 import { ResourceChangedGuard } from './resource-changed.guard'
 import { CodeGeneratorComponent } from './code-generator.component'
@@ -36,9 +36,10 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
 
 import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
 
+
 @NgModule({
   imports: [
-    EditorModule
+    EditorSharedComponentsModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

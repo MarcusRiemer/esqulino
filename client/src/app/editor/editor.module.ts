@@ -15,7 +15,6 @@ import { ToolbarComponent } from './toolbar.component'
 import { NavbarComponent } from './navbar.component'
 import { SidebarLoaderComponent } from './sidebar-loader.component'
 import { SettingsComponent } from './project-settings/settings.component'
-import { DatabaseEmptyComponent } from './database-empty.component'
 import { QueryIconComponent } from './query-icon.component'
 import { SidebarItemHost } from './sidebar-item-host.component'
 import { TrashComponent } from './trash.component'
@@ -46,7 +45,6 @@ import { SourceIconComponent } from './source-icon.component'
     SidebarItemHost,
     ContenteditableModel,
     TrashComponent,
-    DatabaseEmptyComponent,
     SourceIconComponent,
   ],
   entryComponents: [
@@ -64,7 +62,6 @@ import { SourceIconComponent } from './source-icon.component'
     SidebarItemHost,
     TrashComponent,
     ContenteditableModel,
-    DatabaseEmptyComponent,
     SourceIconComponent,
   ]
 

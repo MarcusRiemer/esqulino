@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { Project } from '../shared/project'
+import { Project } from '../../shared/project'
 
 @Component({
   selector: 'database-empty',
