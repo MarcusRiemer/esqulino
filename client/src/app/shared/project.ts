@@ -9,7 +9,7 @@ import { Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource, GrammarDescription } from './syntaxtree'
 import { BlockLanguage } from '../shared/block';
 import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
-import { ResourceReferences } from './resource-references';
+import { ResourceReferencesService } from './resource-references.service';
 
 export { ProjectDescription, ProjectFullDescription }
 
@@ -68,7 +68,7 @@ export class Project implements Saveable {
    */
   constructor(
     json: ProjectFullDescription,
-    readonly resourceReferences: ResourceReferences
+    readonly resourceReferences: ResourceReferencesService
   ) {
     this.slug = json.slug;
     this._id = json.id;

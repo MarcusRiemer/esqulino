@@ -8,7 +8,7 @@ import {
   ApiVersion, ApiVersionToken, ProjectResourceDescription,
   CURRENT_API_VERSION
 } from './resource.description'
-import { ResourceReferences } from './resource-references';
+import { ResourceReferencesService } from './resource-references.service';
 
 export {
   ProjectResourceDescription,
@@ -40,7 +40,7 @@ export abstract class ProjectResource implements Saveable {
 
   constructor(
     desc: ProjectResourceDescription,
-    public resourceReferences: ResourceReferences
+    public resourceReferences: ResourceReferencesService
   ) {
     this._id = desc.id;
     this._name = desc.name;

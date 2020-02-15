@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
 
-import { ResourceReferencesService } from '../../shared/resource-references.service';
+import { ResourceReferencesService } from '../../shared/resource-references.service'
 
 import { CurrentCodeResourceService } from '../current-coderesource.service'
 

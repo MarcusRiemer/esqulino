@@ -17,6 +17,7 @@ import { BlockBaseDirective } from './block-base.directive';
 import { BlockHostComponent } from './block-host.component';
 import { BlockRenderBlockComponent } from './block-render-block.component';
 import { BlockRenderComponent } from './block-render.component';
+import { first } from 'rxjs/operators';
 
 
 describe('BlockHostComponent', () => {
@@ -53,7 +54,7 @@ describe('BlockHostComponent', () => {
     let fixture = TestBed.createComponent(BlockHostComponent);
     let component = fixture.componentInstance;
 
-    const renderData = TestBed.get(RenderedCodeResourceService) as RenderedCodeResourceService;
+    const renderData = TestBed.inject(RenderedCodeResourceService);
 
     const blockLanguage = new BlockLanguage({
       id: "specBlockLang",
@@ -74,6 +75,7 @@ describe('BlockHostComponent', () => {
 
     component.node = new Tree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
+    component.codeResource = codeResource;
 
     renderData._updateRenderData(
       codeResource,
@@ -82,11 +84,32 @@ describe('BlockHostComponent', () => {
     )
 
     fixture.detectChanges();
+    await fixture.whenStable();
 
-    return ({ fixture, component, element: fixture.nativeElement as HTMLElement });
+    const renderDataAvailable = await component.renderDataAvailable$.pipe(first()).toPromise();
+
+    expect(renderDataAvailable)
+      .withContext("Render data must be available")
+      .toBe(true);
+    expect(component.node)
+      .withContext("Component must have a valid node")
+      .not.toBeUndefined();
+    expect(component.codeResource)
+      .withContext("Component must have a valid code resource")
+      .not.toBeUndefined();
+    expect(component.blockLanguage)
+      .withContext("Component must have a valid block language")
+      .not.toBeUndefined();
+
+    return ({
+      fixture,
+      component,
+      renderDataAvailable,
+      element: fixture.nativeElement as HTMLElement
+    });
   }
 
-  it(`Single input`, async () => {
+  fit(`Single input`, async () => {
     const treeDesc: NodeDescription = {
       language: "spec",
       name: "input",
@@ -103,8 +126,7 @@ describe('BlockHostComponent', () => {
     ]
 
     const c = await createComponent(treeDesc, editorBlocks);
-
-    expect(c.component.blockLanguage).not.toBeUndefined();
+    expect(c.renderDataAvailable).toEqual(true);
   });
 
   it(`Single terminal`, async () => {
@@ -122,8 +144,7 @@ describe('BlockHostComponent', () => {
 
     const c = await createComponent(treeDesc, editorBlocks);
 
-    expect(c.component.blockLanguage).not.toBeUndefined();
-    expect(c.element.textContent).toEqual("constant");
+    expect(c.element.innerText).toEqual("constant");
   });
 
   it(`Single terminal`, async () => {
@@ -144,7 +165,6 @@ describe('BlockHostComponent', () => {
 
     const c = await createComponent(treeDesc, editorBlocks);
 
-    expect(c.component.blockLanguage).not.toBeUndefined();
-    expect(c.element.textContent).toEqual("interpolated");
+    expect(c.element.innerText).toEqual("interpolated");
   });
 });

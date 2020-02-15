@@ -1,14 +1,14 @@
 import { Injectable, OnDestroy } from '@angular/core'
 
-import { BehaviorSubject, combineLatest, Observable, Subscription, concat } from 'rxjs';
-import { filter, distinctUntilChanged, flatMap, map, shareReplay, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, distinctUntilChanged, flatMap, map, shareReplay } from 'rxjs/operators';
 
 import { CodeResource, Validator, ValidationResult, Tree } from '../../../shared';
 import { BlockLanguage } from '../../../shared/block';
-import { ResourceReferencesService } from '../../../shared/resource-references.service';
+import { ResourceReferencesService, RequiredResource } from '../../../shared/resource-references.service'
+import { GrammarDataService } from '../../../shared/serverdata';
+
 import { ProjectService } from '../../project.service';
-import { RequiredResource } from 'src/app/shared/resource-references';
-import { GrammarDataService } from 'src/app/shared/serverdata';
 
 /**
  * This service is provided at the root component that is used to render a coderesource.

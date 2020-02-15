@@ -11,7 +11,7 @@ import { BlockLanguage } from '../../shared/block';
 import { generateBlockLanguage } from '../../shared/block/generator/generator';
 import { BlockLanguageListDescription } from '../../shared/block/block-language.description';
 import { BlockLanguageGeneratorDocument } from '../../shared/block/generator/generator.description';
-import { ResourceReferencesService } from '../../shared/resource-references.service';
+import { ResourceReferencesService } from '../../shared/resource-references.service'
 
 @Component({
   templateUrl: 'templates/gallery-grammar.html'
@@ -23,7 +23,7 @@ export class GalleryGrammarComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _grammarData: GrammarDataService,
     private _serverApi: ServerApiService,
-    private _resourceReferences: ResourceReferencesService
+    private _resourceReferences: ResourceReferencesService,
   ) { }
 
   ngOnInit() {

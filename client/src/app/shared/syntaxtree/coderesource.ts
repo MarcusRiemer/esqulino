@@ -1,8 +1,8 @@
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { ProjectResource } from '../resource';
-import { ResourceReferences } from '../resource-references';
+import { ResourceReferencesService } from '../resource-references.service';
 
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
@@ -33,7 +33,7 @@ export class CodeResource extends ProjectResource {
 
   constructor(
     desc: CodeResourceDescription,
-    resourceReferences: ResourceReferences
+    resourceReferences: ResourceReferencesService
   ) {
     super(desc, resourceReferences);
 

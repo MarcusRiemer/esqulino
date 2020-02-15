@@ -6,7 +6,6 @@ import { catchError, delay, first, filter, tap, map, share } from 'rxjs/operator
 
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
-
 import { ResourceReferencesService } from '../shared/resource-references.service';
 
 export { Project, ProjectFullDescription }

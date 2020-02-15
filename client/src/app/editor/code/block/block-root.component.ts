@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 import { Observable, combineLatest } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { BlockLanguage } from '../../../shared/block';
-import { ResourceReferencesService } from '../../../shared/resource-references.service';
+import { ResourceReferencesService } from '../../../shared/resource-references.service'
 import { convertGrammarTreeInstructions } from '../../../shared/block/generator/generator-tree';
 import { BlockLanguageDescription } from '../../../shared/block/block-language.description';
 

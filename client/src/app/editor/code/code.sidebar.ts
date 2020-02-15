@@ -3,7 +3,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 
 import { map, flatMap, tap } from 'rxjs/operators'
 
-import { ResourceReferencesService } from '../../shared/resource-references.service';
+import { ResourceReferencesService } from '../../shared/resource-references.service'
 
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 

@@ -29,7 +29,6 @@ import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
 import { LanguageService } from './language.service';
 import { ServerApiService } from './serverdata/serverapi.service';
-import { ServerDataService } from './serverdata/server-data.service'
 import { VideoService } from './video.service';
 import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
@@ -70,6 +69,8 @@ import { MessageDialogComponent } from './message-dialog.component';
 import { MasterGuard } from './guards/master-guard';
 import { UnexpectedLogoutInterceptor } from './unexpected-logout.interceptor';
 import { UserService } from './auth/user.service';
+import { ResourceReferencesService } from './resource-references.service';
+import { ResourceReferencesOnlineService } from './resource-references-online.service';
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -192,6 +193,10 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService
+        },
         {
           provide: HTTP_INTERCEPTORS,
           useClass: UnexpectedLogoutInterceptor,
