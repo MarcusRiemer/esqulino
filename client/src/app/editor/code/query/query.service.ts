@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs'
@@ -53,6 +54,7 @@ export type QueryResult = QueryResultRows | QueryResultError;
  * Allows interaction with the query specific operations
  * of the server.
  */
+@Injectable({ providedIn: 'root' })
 export class QueryService {
   /**
    * @param _http Used to do HTTP requests

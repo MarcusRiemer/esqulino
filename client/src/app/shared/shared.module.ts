@@ -171,7 +171,7 @@ const materialModules = [
   ]
 })
 export class SharedAppModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SharedAppModule> {
     return ({
       ngModule: SharedAppModule,
       providers: [
@@ -180,7 +180,6 @@ export class SharedAppModule {
         BrowserService,
         FlashService,
         ServerApiService,
-        ServerDataService,
         ProjectDataService,
         AdminProjectDataService,
         VideoService,

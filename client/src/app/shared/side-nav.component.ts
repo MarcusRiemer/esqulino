@@ -17,7 +17,7 @@ import { UserService } from './auth/user.service';
 export class SideNavComponent implements OnDestroy {
   @Input('items') navItems: NavItem[];
 
-  @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
+  @ViewChild('sideNav') sidenav: MatSidenav;
 
   /**
    * Used for dependency injection

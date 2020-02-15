@@ -21,7 +21,7 @@ import { MayPerformRequestDescription, MayPerformResponseDescription } from './.
 /**
  * Convenient and cached access to server side descriptions.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ServerDataService {
   public constructor(
     private _serverApi: ServerApiService,

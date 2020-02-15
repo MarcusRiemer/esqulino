@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { map, flatMap, tap, shareReplay } from 'rxjs/operators'
+import { map, flatMap, tap } from 'rxjs/operators'
 
 import { ResourceReferencesService } from '../../shared/resource-references.service';
 
@@ -11,7 +11,6 @@ import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.com
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component'
 import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
-
 /**
  * Maps ids of sidebar components to their actual components.
  */
@@ -43,6 +42,7 @@ export class CodeSidebarComponent {
     private _currentCodeResource: CurrentCodeResourceService,
     private _resourceReferences: ResourceReferencesService,
   ) {
+
   }
 
   readonly hasBlockLanguage = this._currentCodeResource.currentResource.pipe(

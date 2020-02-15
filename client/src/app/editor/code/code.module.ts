@@ -89,7 +89,7 @@ import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.compo
   ]
 })
 export class CodeEditorModule {
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders<CodeEditorModule> {
     return ({
       ngModule: CodeEditorModule,
       providers: [

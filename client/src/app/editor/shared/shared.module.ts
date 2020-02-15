@@ -43,7 +43,7 @@ import { SourceIconComponent } from './source-icon.component'
   ]
 })
 export class SharedEditorModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SharedEditorModule> {
     return ({
       ngModule: SharedEditorModule,
       providers: [

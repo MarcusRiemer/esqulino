@@ -1,9 +1,6 @@
-
-import { MayPerformRequestDescription } from './may-perform.description';
 import { Component, Inject, LOCALE_ID } from "@angular/core";
 
 import { ServerDataService } from './serverdata/server-data.service';
-import { PerformDataService } from './authorisation/perform-data.service';
 
 @Component({
   selector: 'news-list',

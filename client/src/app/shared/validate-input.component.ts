@@ -21,8 +21,8 @@ export class ValidateInputComponent implements AfterViewInit {
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() clicked = new EventEmitter<void>();
 
-  @ViewChild('spanRef', { static: false }) spanRef: ElementRef;
-  @ContentChild("inputRef", { static: false }) inputRef: ElementRef;
+  @ViewChild('spanRef') spanRef: ElementRef;
+  @ContentChild("inputRef") inputRef: ElementRef;
 
   @HostListener('change') onChange() {
     this.emitInput()

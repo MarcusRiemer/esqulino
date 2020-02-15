@@ -26,7 +26,7 @@ import { ImageService } from './image.service'
   ]
 })
 export class ImageEditorModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<ImageEditorModule> {
     return ({
       ngModule: ImageEditorModule,
       providers: [ImageService]

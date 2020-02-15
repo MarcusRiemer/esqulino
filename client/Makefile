@@ -53,16 +53,11 @@ src/environments/version.ts :
 # Webclient
 ##################################
 
-client-compile : msg-pre-build client-compile-de client-compile-en
-
-client-compile-de : src/environments/version.ts
-	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --outputPath="dist/browser/de"
-
-client-compile-en : src/environments/version.ts
-	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf"  --i18nLocale="en" --outputPath="dist/browser/en"
+client-compile : msg-pre-build src/environments/version.ts
+	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --localize --outputPath="dist/browser"
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot  $(NG_OPTS) --i18n-locale $(NG_LOCALE) --outputPath="dist/browser/$(NG_LOCALE)"
+	$(NG_BIN) build --aot  $(NG_OPTS) --localize --outputPath="dist/browser/"
 
 client-test : src/environments/version.ts
 	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true

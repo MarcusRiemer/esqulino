@@ -15,11 +15,11 @@ import { ProjectListDescription } from '../../shared/project.description';
  */
 export class OverviewProjectComponent {
   // Angular Material UI to paginate
-  @ViewChild(MatPaginator, { static: false })
+  @ViewChild(MatPaginator)
   _paginator: MatPaginator;
 
   // Angular Material UI to sort by different columns
-  @ViewChild(MatSort, { static: false })
+  @ViewChild(MatSort)
   _sort: MatSort;
 
   constructor(

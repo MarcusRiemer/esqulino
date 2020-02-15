@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
-import { tap, flatMap, map, filter } from 'rxjs/operators';
+import { flatMap, map, filter } from 'rxjs/operators';
 
 import { ResourceReferencesService } from '../shared/resource-references.service';
 import { CodeResource, NodeLocation, Tree, ValidationResult } from '../shared/syntaxtree';
 import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
 
 import { ProjectService } from './project.service';
-import { SidebarService } from './sidebar.service';
-
-// TODO: Promote the new sidebar system
-import { CodeSidebarComponent } from './code/code.sidebar'
 
 
 /**
@@ -30,24 +26,11 @@ export class CurrentCodeResourceService {
   private _executionLocation = new BehaviorSubject<NodeLocation>(undefined);
 
   constructor(
-    private _sidebarService: SidebarService,
     private _projectService: ProjectService,
     private _resourceReferences: ResourceReferencesService,
     private _blockLanguageData: BlockLanguageDataService,
     private _grammarData: GrammarDataService,
   ) {
-    // Things that need to happen every time the resource changes
-    this._codeResource
-      .pipe(
-        tap(r => {
-          if (r) {
-            // Show the new sidebar
-            console.log("Sidebar change because of current code resource");
-            this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
-          }
-        })
-      )
-      .subscribe();
   }
 
   /**

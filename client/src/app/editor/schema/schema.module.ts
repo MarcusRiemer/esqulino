@@ -42,7 +42,7 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
   ]
 })
 export class SchemaEditorModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SchemaEditorModule> {
     return ({
       ngModule: SchemaEditorModule,
       providers: [SchemaService]
