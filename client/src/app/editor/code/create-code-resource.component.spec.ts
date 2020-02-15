@@ -7,7 +7,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar } from '@angular/material';
 import { Overlay } from '@angular/cdk/overlay';
 
-import { specLoadEmptyProject, buildBlockLanguage } from '../../editor/shared/spec-util';
+import { specLoadEmptyProject, buildBlockLanguage } from '../../editor/spec-util';
+
 import { ServerApiService, LanguageService } from '../../shared';
 import { BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
 import { CodeResourceDescription } from '../../shared/syntaxtree';

@@ -11,7 +11,7 @@ import { SmartDropOptions, SmartDropLocation } from '../shared/syntaxtree/drop.d
 import { smartDropLocation } from '../shared/syntaxtree/drop';
 import { FixedSidebarBlock } from '../shared/block';
 
-import { TrashService } from './shared/trash.service';
+import { TrashService } from './trash.service';
 import { DraggedBlockComponent } from './dragged-block.component';
 import { CurrentCodeResourceService } from './current-coderesource.service';
 

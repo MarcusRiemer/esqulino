@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms'
 
 import { SharedAppModule } from '../shared/shared.module'
 
-import { SharedEditorModule } from './shared/shared.module'
 import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
 import { CodeEditorModule } from './code/code.module'
@@ -15,9 +14,15 @@ import { DraggedBlockComponent } from './dragged-block.component'
 import { ToolbarComponent } from './toolbar.component'
 import { NavbarComponent } from './navbar.component'
 import { SidebarLoaderComponent } from './sidebar-loader.component'
-
 import { SettingsComponent } from './project-settings/settings.component'
-import { BlockHostComponent } from './code/block/block-host.component';
+import { DatabaseEmptyComponent } from './database-empty.component'
+import { QueryIconComponent } from './query-icon.component'
+import { SidebarItemHost } from './sidebar-item-host.component'
+import { TrashComponent } from './trash.component'
+import { TrashService } from './trash.service'
+import { ContenteditableModel } from './contenteditable-model.directive'
+import { SourceIconComponent } from './source-icon.component'
+
 
 @NgModule({
   imports: [
@@ -27,7 +32,6 @@ import { BlockHostComponent } from './code/block/block-host.component';
     SharedAppModule,
 
     ImageEditorModule.forRoot(),
-    SharedEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
   ],
@@ -38,16 +42,30 @@ import { BlockHostComponent } from './code/block/block-host.component';
     NavbarComponent,
     SidebarLoaderComponent,
     SettingsComponent,
+    QueryIconComponent,
+    SidebarItemHost,
+    ContenteditableModel,
+    TrashComponent,
+    DatabaseEmptyComponent,
+    SourceIconComponent,
   ],
   entryComponents: [
     DraggedBlockComponent,
   ],
+  providers: [
+    TrashService
+  ],
   exports: [
-    SharedEditorModule,
     EditorComponent,
     SettingsComponent,
     SchemaEditorModule,
-    BlockHostComponent,
+
+    QueryIconComponent,
+    SidebarItemHost,
+    TrashComponent,
+    ContenteditableModel,
+    DatabaseEmptyComponent,
+    SourceIconComponent,
   ]
 
 })

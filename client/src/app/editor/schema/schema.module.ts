@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 
-import { SharedEditorModule } from '../shared/shared.module'
+import { EditorModule } from '../editor.module'
 import { RegistrationService } from '../registration.service'
 import { SchemaService } from '../schema.service'
 
@@ -18,7 +18,7 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
 
 @NgModule({
   imports: [
-    SharedEditorModule,
+    EditorModule
   ],
   declarations: [
     SchemaHostComponent,

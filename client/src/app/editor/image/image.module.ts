@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 
-import { SharedEditorModule } from '../shared/shared.module'
+import { EditorModule } from '../editor.module'
 import { RegistrationService } from '../registration.service'
 
 import { ImageListComponent } from './image-list.component'
@@ -11,7 +11,7 @@ import { ImageService } from './image.service'
 
 @NgModule({
   imports: [
-    SharedEditorModule,
+    EditorModule,
   ],
   declarations: [
     ImageListComponent,

@@ -8,7 +8,7 @@ import { Overlay } from '@angular/cdk/overlay';
 import { ProjectService } from './project.service';
 import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
 
-import { specLoadEmptyProject } from './shared/spec-util';
+import { specLoadEmptyProject } from './spec-util';
 
 import { LanguageService, ServerApiService } from '../shared';
 

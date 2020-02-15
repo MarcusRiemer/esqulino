@@ -1,12 +1,9 @@
-import { UserService } from './../../../shared/auth/user.service';
-import { UserDescription } from './../../../shared/auth/user.description';
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
 
-
-import { ServerApiService } from '../../../shared';
-import { generateUUIDv4 } from '../../../shared/util-browser';
-
+import { ServerApiService } from '../../shared';
+import { generateUUIDv4 } from '../../shared/util-browser';
+import { UserDescription } from '../../shared/auth/user.description';
 
 const DEFAULT_EMPTY_USER: UserDescription = {
   userId: "28066939-7d53-40de-a89b-95bf37c982be",
