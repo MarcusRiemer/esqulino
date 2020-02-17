@@ -9,6 +9,9 @@ import { Overlay } from '@angular/cdk/overlay';
 
 import { specLoadEmptyProject, buildBlockLanguage } from '../../editor/spec-util';
 
+import { ResourceReferencesService } from '../../shared/resource-references.service';
+import { ResourceReferencesOnlineService } from '../../shared/resource-references-online.service';
+
 import { ServerApiService, LanguageService } from '../../shared';
 import { BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
 import { CodeResourceDescription } from '../../shared/syntaxtree';
@@ -43,7 +46,11 @@ describe(`CreateCodeResourceComponent`, () => {
         BlockLanguageDataService,
         GrammarDataService,
         MatSnackBar,
-        Overlay
+        Overlay,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        }
       ],
       declarations: [
         CreateCodeResourceComponent,

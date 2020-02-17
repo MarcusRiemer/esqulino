@@ -100,7 +100,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   /**
    * @return True, if everything is ready to be rendered
    */
-  readonly dataAvailable$: Observable<boolean> = this._resourcesFetched.asObservable();
+  readonly dataAvailable$: Observable<boolean> = this._resourcesFetched;
 
   private readonly _validationContext$ = this._projectService.activeProject.pipe(
     map(p => p.additionalValidationContext)

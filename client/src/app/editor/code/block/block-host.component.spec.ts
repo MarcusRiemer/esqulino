@@ -1,12 +1,16 @@
 import { FormsModule } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+import { first } from 'rxjs/operators';
 
 import { VisualBlockDescriptions, BlockLanguage, EditorBlockDescription } from '../../../shared/block';
 import { FocusDirective } from '../../../shared/focus-element.directive';
 import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../shared';
 import { BlockLanguageDataService, GrammarDataService, ServerApiService } from '../../../shared/serverdata';
+import { ResourceReferencesOnlineService } from '../../../shared/resource-references-online.service';
+import { ResourceReferencesService } from '../../../shared/resource-references.service';
 
 import { ProjectService } from '../../project.service';
 import { DragService } from '../../drag.service';
@@ -17,7 +21,7 @@ import { BlockBaseDirective } from './block-base.directive';
 import { BlockHostComponent } from './block-host.component';
 import { BlockRenderBlockComponent } from './block-render-block.component';
 import { BlockRenderComponent } from './block-render.component';
-import { first } from 'rxjs/operators';
+import { ensureLocalBlockLanguageRequest, buildBlockLanguage, ensureLocalGrammarRequest, buildGrammar } from '../../spec-util';
 
 
 describe('BlockHostComponent', () => {
@@ -39,6 +43,10 @@ describe('BlockHostComponent', () => {
         RenderedCodeResourceService,
         ServerApiService,
         ProjectService,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        }
       ],
       declarations: [
         BlockRenderComponent,
@@ -51,26 +59,38 @@ describe('BlockHostComponent', () => {
     })
       .compileComponents();
 
+    const grammarDesc = await ensureLocalGrammarRequest(
+      buildGrammar({})
+    )
+
+    const blockLangDesc = await ensureLocalBlockLanguageRequest(
+      buildBlockLanguage({
+        editorBlocks,
+        grammarId: grammarDesc.id
+      })
+    );
+
     let fixture = TestBed.createComponent(BlockHostComponent);
     let component = fixture.componentInstance;
 
-    const renderData = TestBed.inject(RenderedCodeResourceService);
+    // The component instantiates the service for the particular subtree. I had a loooong
+    // search for nasty bugs because this basic assumption didn't hold, so I will leave
+    // the expectation enabled just as a warning to myself.
+    //
+    // The cast to "any" is a hack to remove the private-ness of the injected service.
+    const renderData = (component as any)._renderedCodeResourceService as RenderedCodeResourceService;
+    expect(renderData)
+      .withContext("Spec and component must share same service")
+      .toBe((component as any)._renderedCodeResourceService);
 
-    const blockLanguage = new BlockLanguage({
-      id: "specBlockLang",
-      name: "Spec Block Lang",
-      sidebars: [],
-      editorBlocks,
-      editorComponents: [],
-      defaultProgrammingLanguageId: "generic",
-    });
+    const blockLanguage = new BlockLanguage(blockLangDesc);
 
     const codeResource = new CodeResource({
       ast: nodeDesc,
       name: "Spec",
       id: "spec",
       blockLanguageId: blockLanguage.id,
-      programmingLanguageId: "generic"
+      programmingLanguageId: blockLangDesc.defaultProgrammingLanguageId
     }, undefined);
 
     component.node = new Tree(nodeDesc).rootNode;
@@ -86,11 +106,19 @@ describe('BlockHostComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const renderDataAvailable = await component.renderDataAvailable$.pipe(first()).toPromise();
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    httpTestingController.verify();
 
-    expect(renderDataAvailable)
-      .withContext("Render data must be available")
+    const serviceRenderDataAvailable = await renderData.dataAvailable$.pipe(first()).toPromise();
+    const componentRenderDataAvailable = await component.renderDataAvailable$.pipe(first()).toPromise();
+
+    expect(componentRenderDataAvailable)
+      .withContext("Component render data must be available")
       .toBe(true);
+    expect(serviceRenderDataAvailable)
+      .withContext("Service render data must be available")
+      .toBe(true);
+
     expect(component.node)
       .withContext("Component must have a valid node")
       .not.toBeUndefined();
@@ -104,12 +132,12 @@ describe('BlockHostComponent', () => {
     return ({
       fixture,
       component,
-      renderDataAvailable,
+      componentRenderDataAvailable,
       element: fixture.nativeElement as HTMLElement
     });
   }
 
-  fit(`Single input`, async () => {
+  it(`Single input`, async () => {
     const treeDesc: NodeDescription = {
       language: "spec",
       name: "input",
@@ -123,10 +151,10 @@ describe('BlockHostComponent', () => {
         describedType: { languageName: "spec", typeName: "input" },
         visual: [{ blockType: "input", property: "text" }]
       }
-    ]
+    ];
 
     const c = await createComponent(treeDesc, editorBlocks);
-    expect(c.renderDataAvailable).toEqual(true);
+    expect(c.element.innerText).toEqual("original");
   });
 
   it(`Single terminal`, async () => {
@@ -158,7 +186,7 @@ describe('BlockHostComponent', () => {
 
     const editorBlocks: EditorBlockDescription[] = [
       {
-        describedType: { languageName: "spec", typeName: "constant" },
+        describedType: { languageName: "spec", typeName: "interpolated" },
         visual: [{ blockType: "interpolated", property: "text" }]
       }
     ]

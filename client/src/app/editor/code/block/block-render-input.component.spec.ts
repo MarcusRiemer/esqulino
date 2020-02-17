@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { ResourceReferencesService } from '../../../shared/resource-references.service';
+import { ResourceReferencesOnlineService } from '../../../shared/resource-references-online.service';
 import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
 import { FocusDirective } from '../../../shared/focus-element.directive';
 import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../shared';
@@ -32,6 +34,10 @@ describe('BlockRenderInputComponent', () => {
         RenderedCodeResourceService,
         ServerApiService,
         ProjectService,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        }
       ],
       declarations: [
         BlockRenderInputComponent,

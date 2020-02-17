@@ -57,7 +57,18 @@ export abstract class ResourceReferencesService {
    * @param grammarId The grammar to verify against
    * @return A validator that checks for both kinds of errors
    */
-  abstract getValidator(programmingLanguageId: string, grammarId: string): Validator;
+  getValidator(programmingLanguageId: string, grammarId: string) {
+    const programmingLanguage = this.getCoreProgrammingLanguage(programmingLanguageId);
+    const specializedValidators = programmingLanguage.validator.specializedValidators;
+    const grammarDescription = this.getGrammarDescription(grammarId, "undefined");
+    if (!grammarDescription) {
+      throw new Error(`Could not construct validator for "${programmingLanguageId}" with grammar ${grammarId} on the fly: Grammar missing`);
+    }
+
+    const validator = new Validator([grammarDescription, ...specializedValidators]);
+
+    return (validator);
+  }
 
   /**
    * @param programmingLanguageId The id of the core language
@@ -110,6 +121,7 @@ export abstract class ResourceReferencesService {
     if (!hasBlockLang) {
       return (false);
     }
+    // We know that the block language must exist, so we may as well throw
     const blockLang = this.getBlockLanguage(blockLanguageId, "throw");
 
     return (this.ensureResources({ type: "grammar", id: blockLang.grammarId }));

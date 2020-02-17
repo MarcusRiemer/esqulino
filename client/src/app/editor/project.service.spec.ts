@@ -5,12 +5,14 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { MatSnackBar } from '@angular/material';
 import { Overlay } from '@angular/cdk/overlay';
 
-import { ProjectService } from './project.service';
+import { ResourceReferencesService } from '../shared/resource-references.service';
+import { ResourceReferencesOnlineService } from '../shared/resource-references-online.service';
+import { LanguageService, ServerApiService } from '../shared';
 import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
 
+import { ProjectService } from './project.service';
 import { specLoadEmptyProject } from './spec-util';
 
-import { LanguageService, ServerApiService } from '../shared';
 
 describe(`ProjectService`, () => {
   function instantiate(): ProjectService {
@@ -25,7 +27,11 @@ describe(`ProjectService`, () => {
         BlockLanguageDataService,
         GrammarDataService,
         MatSnackBar,
-        Overlay
+        Overlay,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        }
       ],
       declarations: [
       ]

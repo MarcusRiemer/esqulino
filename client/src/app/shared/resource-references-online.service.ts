@@ -4,10 +4,10 @@ import { ResourceReferencesService, RequiredResource } from './resource-referenc
 import { LanguageService } from './language.service';
 import { BlockLanguageDataService, GrammarDataService } from './serverdata';
 import { BlockLanguage } from './block';
-import { Validator } from './syntaxtree/validator';
 
 /**
- * Provides access to the most recent state of all resources that are loaded.
+ * Provides access to the most recent state of all resources that are available through
+ * the existing data services.
  */
 @Injectable()
 export class ResourceReferencesOnlineService extends ResourceReferencesService {
@@ -46,19 +46,6 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     } else {
       return (g);
     }
-  }
-
-  getValidator(programmingLanguageId: string, grammarId: string) {
-    const programmingLanguage = this._languageService.getLanguage(programmingLanguageId);
-    const specializedValidators = programmingLanguage.validator.specializedValidators;
-    const grammarDescription = this._grammarLanguageData.getLocal(grammarId, "undefined");
-    if (!grammarDescription) {
-      throw new Error(`Could not construct validator for "${programmingLanguageId}" with grammar ${grammarId} on the fly: Grammar missing`);
-    }
-
-    const validator = new Validator([grammarDescription, ...specializedValidators]);
-
-    return (validator);
   }
 
   getCoreProgrammingLanguage(programmingLanguageId: string) {
