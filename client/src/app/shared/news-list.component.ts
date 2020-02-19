@@ -4,15 +4,14 @@ import { ServerDataService } from './serverdata/server-data.service';
 
 @Component({
   selector: 'news-list',
-  templateUrl: './templates/news.html'
+  templateUrl: './templates/news-list.html'
 })
-export class NewsComponent {
+export class NewsListComponent {
   constructor(
     @Inject(LOCALE_ID)
-    private readonly _localeId: string,
+    readonly locale: string,
     private _serverData: ServerDataService
   ) { }
 
-  readonly userNewsList = this._serverData.getUserNewsList;
-  readonly locale = this._localeId;
+  readonly newsList$ = this._serverData.newsListFrontpage.value;
 }

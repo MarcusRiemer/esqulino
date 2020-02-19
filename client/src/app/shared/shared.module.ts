@@ -36,7 +36,7 @@ import { ChangeLanguageComponent } from './change-language.component';
 import { JavascriptRequiredComponent } from './javascript-required.component';
 import { SideNavComponent } from './side-nav.component';
 import { NavSiteComponent } from './nav-page.component';
-import { NewsComponent } from './news.component';
+import { NewsListComponent } from './news-list.component';
 import { NewsDetailsComponent } from './news-details.component';
 import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
@@ -110,7 +110,7 @@ const materialModules = [
     JavascriptRequiredComponent,
     SideNavComponent,
     NavSiteComponent,
-    NewsComponent,
+    NewsListComponent,
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
@@ -145,7 +145,7 @@ const materialModules = [
     JavascriptRequiredComponent,
     SideNavComponent,
     NavSiteComponent,
-    NewsComponent,
+    NewsListComponent,
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,

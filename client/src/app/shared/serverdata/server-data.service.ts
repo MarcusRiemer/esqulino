@@ -27,7 +27,7 @@ export class ServerDataService {
   ) {
   }
 
-  readonly getUserNewsList = new CachedRequest<NewsFrontpageDescription[]>(
+  readonly newsListFrontpage = new CachedRequest<NewsFrontpageDescription[]>(
     this._http.get<NewsFrontpageDescription[]>(this._serverApi.getUserNewsListUrl())
   );
 

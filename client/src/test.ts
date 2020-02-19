@@ -11,6 +11,8 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
+import registerLanguages from './app/locale-registration';
+
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare const __karma__: any;
 declare const require: any;
@@ -23,6 +25,10 @@ getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting(),
 );
+
+// Ensure that all relevant languages are loaded
+registerLanguages();
+
 // Then we find all the tests.
 const context = require.context('./', true, /\.spec(\..*)?\.ts$/);
 // And load the modules.
