@@ -1,7 +1,11 @@
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
 import { of, Observable, BehaviorSubject, Observer } from "rxjs";
 
 import { CachedRequest } from './request-cache';
 import { first } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 describe(`Request Cache`, () => {
   it(`Retrieves the correct value`, () => {
@@ -101,5 +105,33 @@ describe(`Request Cache`, () => {
     c.value.subscribe(v => expect(v).toBe(undefined));
     c.inProgress.pipe(first()).subscribe(p => expect(p).toBe(true, "Progress"));
     c.hasError.subscribe(err => expect(err).toBe(true, "Error Reported"));
+  });
+
+  it(`Works for Angular HTTP requests`, async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    })
+      .compileComponents();
+
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const httpClient = TestBed.inject(HttpClient);
+
+    const obs = httpClient.get<string>("/test");
+    const c = new CachedRequest<string>(obs);
+
+    let inProgress = await c.inProgress.pipe(first()).toPromise();
+    expect(inProgress)
+      .withContext("Answer not yet given")
+      .toEqual(true);
+
+    c.value.subscribe(response => expect(response).toEqual("response"));
+
+    httpTestingController.expectOne("/test")
+      .flush("response");
+
+    inProgress = await c.inProgress.pipe(first()).toPromise();
+    expect(inProgress)
+      .withContext("Answer received")
+      .toEqual(false);
   });
 });

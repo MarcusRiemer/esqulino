@@ -16,8 +16,6 @@ import { UserEmailDescription, UserPasswordDescription, UserNameDescription, Use
 import { AvailableProvidersDescription } from './../auth/provider.description';
 import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 
-
-
 /**
  * Convenient and cached access to server side descriptions.
  */
