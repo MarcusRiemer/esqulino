@@ -9,7 +9,7 @@ import { DatabaseEmptyComponent } from './database-empty.component'
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
     DatabaseEmptyComponent,

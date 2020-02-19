@@ -44,24 +44,18 @@ export class BlockRenderErrorComponent {
   /**
    * All errors that occur on this block
    */
-  readonly nodeErrors = this._renderData.validationResult$.pipe(
+  private readonly nodeErrors$ = this._renderData.validationResult$.pipe(
     map(validationResult => validationResult.getErrorsOn(this.node))
   )
 
   /**
    * True, if the error indicator should be shown.
    */
-  public get showIndicator() {
-    return (
-      this.nodeErrors.pipe(
-        map(validationResult => validationResult.filter(e => this.showErrorFor(e.code)).length > 0)
-      )
-    );
-  }
+  readonly showIndicator$ = this.nodeErrors$.pipe(
+    map(validationResult => validationResult.some(e => this.showErrorFor(e.code)))
+  )
 
-  public get message() {
-    return (this.nodeErrors.pipe(
-      map(errors => errors.map(e => e.code).join(", "))
-    ));
-  }
+  readonly message$ = this.nodeErrors$.pipe(
+    map(errors => errors.map(e => e.code).join(", "))
+  )
 }

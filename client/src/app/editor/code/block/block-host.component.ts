@@ -25,7 +25,8 @@ export class BlockHostComponent implements OnChanges {
   node: Node;
 
   /**
-   * The block language to display this tree
+   * The block language to display this tree. If left undefined, the block language
+   * is determined based on the code resource.
    */
   @Input()
   blockLanguage: BlockLanguage;
@@ -38,7 +39,8 @@ export class BlockHostComponent implements OnChanges {
 
   @HostBinding('class')
   get hostCssClasses() {
-    return (this.blockLanguage.rootCssClasses.join(" "));
+    const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
+    return (usedBlockLanguage.rootCssClasses.join(" "));
   }
 
   constructor(
@@ -57,6 +59,7 @@ export class BlockHostComponent implements OnChanges {
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
-    return (this.blockLanguage.getEditorBlock(this.node.qualifiedName));
+    const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
+    return (usedBlockLanguage.getEditorBlock(this.node.qualifiedName));
   }
 }

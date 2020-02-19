@@ -21,6 +21,7 @@ import { TrashComponent } from './trash.component'
 import { TrashService } from './trash.service'
 import { ContenteditableModel } from './contenteditable-model.directive'
 import { SourceIconComponent } from './source-icon.component'
+import { SchemaService } from './schema.service'
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { SourceIconComponent } from './source-icon.component'
     DraggedBlockComponent,
   ],
   providers: [
-    TrashService
+    TrashService,
+    SchemaService,
   ],
   exports: [
     EditorComponent,

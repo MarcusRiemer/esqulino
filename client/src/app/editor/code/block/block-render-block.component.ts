@@ -1,7 +1,7 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, OnInit } from '@angular/core';
 
 import { combineLatest, Observable } from 'rxjs';
-import { map, withLatestFrom, distinctUntilChanged, tap } from 'rxjs/operators';
+import { map, withLatestFrom, distinctUntilChanged, tap, filter } from 'rxjs/operators';
 
 import { Node, locationEquals, locationMatchingLength } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
@@ -40,6 +40,12 @@ export class BlockRenderBlockComponent {
     private _renderData: RenderedCodeResourceService,
     private _changeDetector: ChangeDetectorRef
   ) {
+  }
+
+  ngOnInit() {
+    if (!this.node) {
+      debugger;
+    }
   }
 
   /**
@@ -130,8 +136,11 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isCurrentlyExecuted = this._currentCodeResource.currentExecutionLocation
+  readonly isCurrentlyExecuted$ = this._currentCodeResource.currentExecutionLocation
     .pipe(
+      // Even if the node is properly initialized, the input property may be missing
+      // because it is initialized later
+      filter(_ => !!this.node),
       map(loc => locationEquals(loc, this.node.location)),
       distinctUntilChanged(),
       tap(_ => this._changeDetector.markForCheck())
@@ -181,7 +190,7 @@ export class BlockRenderBlockComponent {
    */
   readonly backgroundState: Observable<BackgroundState> = combineLatest(
     this.isBeingReplaced,
-    this.isCurrentlyExecuted
+    this.isCurrentlyExecuted$
   ).pipe(
     map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
       if (isBeingReplaced && !this._renderData.readOnly) {

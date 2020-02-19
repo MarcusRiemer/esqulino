@@ -1,5 +1,7 @@
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
+import { SharedAppModule } from '../../shared/shared.module'
+
 import { RegistrationService } from '../registration.service'
 import { EditorSharedComponentsModule } from '../shared-components/editor-shared-components.module'
 
@@ -39,7 +41,8 @@ import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.compo
 
 @NgModule({
   imports: [
-    EditorSharedComponentsModule
+    EditorSharedComponentsModule,
+    SharedAppModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

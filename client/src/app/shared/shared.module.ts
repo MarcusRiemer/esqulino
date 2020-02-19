@@ -137,6 +137,7 @@ const materialModules = [
     RouterModule,
     PortalModule,
     HttpClientModule,
+
     ...materialModules,
     ToolbarComponent,
     FlashMessageListComponent,

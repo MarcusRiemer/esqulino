@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core'
 
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, distinctUntilChanged, flatMap, map, shareReplay } from 'rxjs/operators';
+import { filter, distinctUntilChanged, flatMap, map, shareReplay, tap } from 'rxjs/operators';
 
 import { CodeResource, Validator, ValidationResult, Tree } from '../../../shared';
 import { BlockLanguage } from '../../../shared/block';
@@ -43,7 +43,12 @@ export class RenderedCodeResourceService implements OnDestroy {
   readonly validator$: Observable<Validator>;
 
   readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
-    flatMap(c => c.syntaxTree)
+    flatMap(c => c.syntaxTree),
+    // Somewhere some value inside some observable is undefined which leads to the following
+    // warning all over the place:
+    // TypeError: "You provided 'undefined' where a stream was expected. You can provide an Observable, Promise, Array, or Iterable."
+    // This tap is an attempt to figure out the value that is missing
+    tap(v => { if (!v) { debugger; } })
   );
 
   // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
