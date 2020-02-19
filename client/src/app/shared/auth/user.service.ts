@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatDialog } from '@angular/material';
 
-import { Observable, of, Subject, BehaviorSubject, merge, ReplaySubject } from 'rxjs';
-import { map, tap, first, catchError, shareReplay, finalize, filter } from 'rxjs/operators';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { map, tap, first, catchError, filter } from 'rxjs/operators';
 
 import { ServerDataService } from '../serverdata/server-data.service';
 import { UserDescription, UserEmailDescription, UserPasswordDescription, UserNameDescription, UserAddEmailDescription } from './user.description';
@@ -10,7 +10,8 @@ import { SignUpDescription, SignInDescription, ChangePasswordDescription } from 
 import { ServerProviderDescription, ChangePrimaryEmailDescription } from './provider.description';
 import { MayPerformResponseDescription, MayPerformRequestDescription } from './../may-perform.description';
 import { AuthDialogComponent } from './auth-dialog.component';
-@Injectable({ providedIn: 'root' })
+
+@Injectable()
 export class UserService {
 
   /**

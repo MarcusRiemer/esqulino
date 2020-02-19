@@ -195,13 +195,12 @@ export class SharedAppModule {
         IsAdminGuard,
         {
           provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService
+          useClass: ResourceReferencesOnlineService,
         },
         {
           provide: HTTP_INTERCEPTORS,
           useClass: UnexpectedLogoutInterceptor,
-          multi: true,
-          deps: [UserService]
+          multi: true
         },
       ]
     });
