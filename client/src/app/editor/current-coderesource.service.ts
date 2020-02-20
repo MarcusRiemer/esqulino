@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
-import { flatMap, map, filter } from 'rxjs/operators';
+import { flatMap, map, filter, tap } from 'rxjs/operators';
 
 import { ResourceReferencesService } from '../shared/resource-references.service';
 import { CodeResource, NodeLocation, Tree, ValidationResult } from '../shared/syntaxtree';
@@ -16,7 +16,7 @@ import { ProjectService } from './project.service';
  * enables components like the validator and the compiler to automatically
  * do their work.
  */
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class CurrentCodeResourceService {
   /**
    * The resource that is currently edited.
@@ -99,7 +99,10 @@ export class CurrentCodeResourceService {
           } else {
             return (ValidationResult.EMPTY);
           }
-        })
+        }),
+      tap(r => {
+        console.log("CurrentCodeResourceService: Validation result", r)
+      })
     );
 
   /**

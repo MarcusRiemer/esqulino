@@ -38,7 +38,6 @@ import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.co
 
 import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
 
-
 @NgModule({
   imports: [
     EditorSharedComponentsModule,

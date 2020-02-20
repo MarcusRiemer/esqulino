@@ -22,6 +22,7 @@ import { TrashService } from './trash.service'
 import { ContenteditableModel } from './contenteditable-model.directive'
 import { SourceIconComponent } from './source-icon.component'
 import { SchemaService } from './schema.service'
+import { CurrentCodeResourceService } from './current-coderesource.service'
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { SchemaService } from './schema.service'
   providers: [
     TrashService,
     SchemaService,
+    CurrentCodeResourceService
   ],
   exports: [
     EditorComponent,

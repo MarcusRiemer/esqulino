@@ -13,6 +13,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AceEditorModule } from 'ng2-ace-editor';
 
 import { SharedAppModule } from '../shared/shared.module'
+import { EditorModule } from '../editor/editor.module';
+import { CodeEditorModule } from '../editor/code/code.module';
+
 
 import { adminRouting } from './admin.routes'
 
@@ -31,8 +34,6 @@ import { EditTraitScopesComponent } from './block-language/edit-trait-scopes.com
 import { EditSingleTraitScopeComponent } from './block-language/edit-single-trait-scope.component'
 import { ErrorListComponent } from './block-language/error-list.component'
 import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component';
-
-import { EditorModule } from '../editor/editor.module';
 
 import { CreateGrammarComponent } from './grammar/create-grammar.component'
 import { OverviewGrammarComponent } from './grammar/overview-grammar.component';
@@ -57,6 +58,8 @@ const materialModules = [
     CommonModule,
     SharedAppModule,
     EditorModule,
+    CodeEditorModule,
+
     adminRouting,
     ...materialModules
   ],
