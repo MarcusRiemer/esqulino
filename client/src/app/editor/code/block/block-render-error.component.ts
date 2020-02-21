@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Node } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
@@ -15,13 +15,11 @@ import { RenderedCodeResourceService } from './rendered-coderesource.service';
   selector: `editor-block-render-error`,
 })
 export class BlockRenderErrorComponent {
-  @Input() public node: Node;
-  @Input() public visual: VisualBlockDescriptions.EditorErrorIndicator;
+  @Input()
+  public node: Node;
 
-  /**
-   * The block language that is used to render this block
-   */
-  @Input() public blockLanguage: BlockLanguage;
+  @Input()
+  public visual: VisualBlockDescriptions.EditorErrorIndicator;
 
   constructor(
     private _renderData: RenderedCodeResourceService,
@@ -44,8 +42,10 @@ export class BlockRenderErrorComponent {
   /**
    * All errors that occur on this block
    */
-  private readonly nodeErrors$ = this._renderData.validationResult$.pipe(
-    map(validationResult => validationResult.getErrorsOn(this.node))
+  readonly nodeErrors$ = this._renderData.validationResult$.pipe(
+    tap(res => console.log("Unfiltered result on ", this.node.location, ":", res)),
+    map(validationResult => validationResult.getErrorsOn(this.node)),
+    tap(res => console.log("Filtered result on ", this.node.location, ":", res)),
   )
 
   /**

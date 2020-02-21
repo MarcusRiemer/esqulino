@@ -37,6 +37,9 @@ export class BlockHostComponent implements OnChanges {
   @Input()
   readOnly = false;
 
+  @Input()
+  validationContext: any = undefined;
+
   @HostBinding('class')
   get hostCssClasses() {
     const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
@@ -49,7 +52,10 @@ export class BlockHostComponent implements OnChanges {
 
   ngOnChanges() {
     this._renderedCodeResourceService._updateRenderData(
-      this.codeResource, this.blockLanguage, this.readOnly
+      this.codeResource,
+      this.blockLanguage,
+      this.readOnly,
+      this.validationContext || {}
     )
   }
 

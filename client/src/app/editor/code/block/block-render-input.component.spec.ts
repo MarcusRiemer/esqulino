@@ -73,13 +73,14 @@ describe('BlockRenderInputComponent', () => {
       programmingLanguageId: "generic"
     }, undefined);
 
-    component.node = new Tree(nodeDesc).rootNode;
+    component.node = codeResource.syntaxTreePeek.rootNode;
     component.visual = visual;
 
     renderData._updateRenderData(
       codeResource,
       blockLanguage,
       false,
+      {}
     )
 
     fixture.detectChanges();

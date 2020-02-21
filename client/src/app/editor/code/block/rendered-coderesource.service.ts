@@ -8,8 +8,6 @@ import { BlockLanguage } from '../../../shared/block';
 import { ResourceReferencesService, RequiredResource } from '../../../shared/resource-references.service'
 import { GrammarDataService } from '../../../shared/serverdata';
 
-import { ProjectService } from '../../project.service';
-
 /**
  * This service is provided at the root component that is used to render a coderesource.
  *
@@ -29,6 +27,8 @@ export class RenderedCodeResourceService implements OnDestroy {
   private readonly _readOnly = new BehaviorSubject<boolean>(undefined);
 
   private readonly _resourcesFetched = new BehaviorSubject(false);
+
+  private readonly _validationContext = new BehaviorSubject<any>(undefined);
 
   // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
   // that flows in is connected by the constructor.
@@ -61,7 +61,6 @@ export class RenderedCodeResourceService implements OnDestroy {
   constructor(
     private _resourceReferences: ResourceReferencesService,
     private _grammarData: GrammarDataService,
-    private _projectService: ProjectService,
   ) {
     // TODO: Remove this indirection step by using a proper guard that ensures
     //       everything is loaded exactly once for a certain page.
@@ -85,7 +84,6 @@ export class RenderedCodeResourceService implements OnDestroy {
     this._subscriptions = [];
   }
 
-
   readonly codeResource$ = this._codeResource.pipe(
     filter(c => !!c),
     distinctUntilChanged()
@@ -102,24 +100,30 @@ export class RenderedCodeResourceService implements OnDestroy {
     distinctUntilChanged()
   );
 
+  readonly validationContext$ = this._validationContext.pipe(
+    filter(c => !!c),
+    distinctUntilChanged()
+  )
+
   /**
    * @return True, if everything is ready to be rendered
    */
   readonly dataAvailable$: Observable<boolean> = this._resourcesFetched;
 
-  private readonly _validationContext$ = this._projectService.activeProject.pipe(
-    map(p => p.additionalValidationContext)
-  );
-
   readonly validationResult$ = combineLatest(
     this.dataAvailable$,
     this.validator$,
     this.syntaxTree$,
-    this._validationContext$
+    this.validationContext$
   ).pipe(
+    tap(_ => { debugger; }),
     filter(([available, ..._]) => available),
     distinctUntilChanged(),
-    map(([_, v, t, vc]) => t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY),
+    map(([_, v, t, vc]) => {
+      debugger;
+      return (t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY)
+    }),
+    tap(res => console.log(`RenderedCodeResource.validationResult$ =>`, res)),
     shareReplay(1)
   );
 
@@ -147,10 +151,10 @@ export class RenderedCodeResourceService implements OnDestroy {
     codeResource: CodeResource,
     blockLanguage: BlockLanguage,
     readOnly: boolean,
+    validationContext: any,
   ) {
     const newBlockLang = blockLanguage || codeResource.blockLanguagePeek;
     const requiredResources: RequiredResource[] = [
-      { type: "blockLanguage", id: newBlockLang.id },
       { type: "grammar", id: newBlockLang.grammarId },
     ];
 
@@ -173,7 +177,6 @@ export class RenderedCodeResourceService implements OnDestroy {
     this._codeResource.next(codeResource);
     this._readOnly.next(readOnly);
     this._blockLanguage.next(newBlockLang);
-
-
+    this._validationContext.next(validationContext);
   }
 }

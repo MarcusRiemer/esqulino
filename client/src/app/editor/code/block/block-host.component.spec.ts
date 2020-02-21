@@ -5,15 +5,15 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { first } from 'rxjs/operators';
 
-import { VisualBlockDescriptions, BlockLanguage, EditorBlockDescription } from '../../../shared/block';
+import { BlockLanguage, EditorBlockDescription } from '../../../shared/block';
 import { FocusDirective } from '../../../shared/focus-element.directive';
 import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../shared';
 import { BlockLanguageDataService, GrammarDataService, ServerApiService } from '../../../shared/serverdata';
 import { ResourceReferencesOnlineService } from '../../../shared/resource-references-online.service';
 import { ResourceReferencesService } from '../../../shared/resource-references.service';
 
-import { ProjectService } from '../../project.service';
 import { DragService } from '../../drag.service';
+import { ensureLocalBlockLanguageRequest, buildBlockLanguage, ensureLocalGrammarRequest, buildGrammar } from '../../spec-util';
 
 import { RenderedCodeResourceService } from './rendered-coderesource.service';
 import { BlockRenderInputComponent } from './block-render-input.component';
@@ -21,7 +21,6 @@ import { BlockBaseDirective } from './block-base.directive';
 import { BlockHostComponent } from './block-host.component';
 import { BlockRenderBlockComponent } from './block-render-block.component';
 import { BlockRenderComponent } from './block-render.component';
-import { ensureLocalBlockLanguageRequest, buildBlockLanguage, ensureLocalGrammarRequest, buildGrammar } from '../../spec-util';
 
 
 describe('BlockHostComponent', () => {
@@ -42,7 +41,6 @@ describe('BlockHostComponent', () => {
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,
-        ProjectService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
@@ -101,6 +99,7 @@ describe('BlockHostComponent', () => {
       codeResource,
       blockLanguage,
       false,
+      {}
     )
 
     fixture.detectChanges();
