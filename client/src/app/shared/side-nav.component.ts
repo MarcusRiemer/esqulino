@@ -1,6 +1,6 @@
 import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit, AfterViewChecked, AfterViewInit, OnDestroy } from "@angular/core";
 import { BrowserService } from './browser.service';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';

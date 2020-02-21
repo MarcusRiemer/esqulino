@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ResourceReferencesService } from '../../../shared/resource-references.service';

@@ -1,6 +1,6 @@
 import { PerformDataService } from './../../../shared/authorisation/perform-data.service';
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { UserService } from '../../../shared/auth/user.service';
 import { ServerProviderDescription } from '../../../shared/auth/provider.description';

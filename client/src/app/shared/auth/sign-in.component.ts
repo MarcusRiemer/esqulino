@@ -1,4 +1,4 @@
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, Output, EventEmitter } from "@angular/core";
 
 import { SignInDescription } from './auth-description';
