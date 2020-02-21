@@ -73,8 +73,8 @@ export class CachedRequest<T> {
     tap(_ => this.changeRequestCount(-1)),
     // Treat errors as non existant values (for the moment)
     catchError(e => {
-      console.exception(`Error in cached request`, e);
-      this._error.next(true);
+      console.error(`Error in cached request`, e);
+      this._error.next(e);
       return (of(undefined));
     }),
     // Ensure that the request is properly cached
