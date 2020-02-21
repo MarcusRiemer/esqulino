@@ -50,6 +50,10 @@ export class BlockRootComponent {
    */
   readonly currentResource$ = this._currentCodeResource.currentResource;
 
+  readonly validationContext = this._projectService.activeProject.pipe(
+    map(p => p.additionalValidationContext)
+  );
+
   /**
    * The block language that should be used to display the code resource.
    */

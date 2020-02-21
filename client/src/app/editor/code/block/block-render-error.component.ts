@@ -43,9 +43,7 @@ export class BlockRenderErrorComponent {
    * All errors that occur on this block
    */
   readonly nodeErrors$ = this._renderData.validationResult$.pipe(
-    tap(res => console.log("Unfiltered result on ", this.node.location, ":", res)),
     map(validationResult => validationResult.getErrorsOn(this.node)),
-    tap(res => console.log("Filtered result on ", this.node.location, ":", res)),
   )
 
   /**

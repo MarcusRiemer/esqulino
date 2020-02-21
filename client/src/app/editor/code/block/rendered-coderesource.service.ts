@@ -34,23 +34,6 @@ export class RenderedCodeResourceService implements OnDestroy {
   // that flows in is connected by the constructor.
   private readonly _validator = new BehaviorSubject<Validator>(undefined);
 
-  /**
-   * @return The validator that should be used based on the current block language.
-   *
-   * @remarks Must be defined in the constructor, because the implementation requires the
-   *          ResourceReferencesService to retrieve validator.
-   */
-  readonly validator$: Observable<Validator>;
-
-  readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
-    flatMap(c => c.syntaxTree),
-    // Somewhere some value inside some observable is undefined which leads to the following
-    // warning all over the place:
-    // TypeError: "You provided 'undefined' where a stream was expected. You can provide an Observable, Promise, Array, or Iterable."
-    // This tap is an attempt to figure out the value that is missing
-    tap(v => { if (!v) { debugger; } })
-  );
-
   // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
   // that flows in is connected by the constructor.
   private readonly _syntaxTree = new BehaviorSubject<Tree>(undefined);
@@ -62,16 +45,6 @@ export class RenderedCodeResourceService implements OnDestroy {
     private _resourceReferences: ResourceReferencesService,
     private _grammarData: GrammarDataService,
   ) {
-    // TODO: Remove this indirection step by using a proper guard that ensures
-    //       everything is loaded exactly once for a certain page.
-    const blockLanguageGrammar$ = this.blockLanguage$.pipe(
-      flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
-    )
-
-    this.validator$ = combineLatest(blockLanguageGrammar$, this.codeResource$).pipe(
-      map(([g, c]) => this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)),
-    );
-
     const subValidator = this.validator$.subscribe(this._validator);
     const subTree = this.syntaxTree$.subscribe(this._syntaxTree);
 
@@ -79,7 +52,8 @@ export class RenderedCodeResourceService implements OnDestroy {
   }
 
   ngOnDestroy() {
-    // Better safe than sorry: Avoiding circular references
+    // Better safe than sorry: Avoiding circular references that might occur from
+    // a unreleased subscription.
     this._subscriptions.forEach(s => s.unsubscribe());
     this._subscriptions = [];
   }
@@ -87,6 +61,10 @@ export class RenderedCodeResourceService implements OnDestroy {
   readonly codeResource$ = this._codeResource.pipe(
     filter(c => !!c),
     distinctUntilChanged()
+  );
+
+  readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
+    flatMap(c => c.syntaxTree)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(
@@ -105,6 +83,21 @@ export class RenderedCodeResourceService implements OnDestroy {
     distinctUntilChanged()
   )
 
+  private readonly _blockLanguageGrammar$ = this.blockLanguage$.pipe(
+    flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
+  )
+
+  /**
+   * @return The validator that should be used based on the current block language.
+   */
+  readonly validator$: Observable<Validator> = combineLatest(
+    this._blockLanguageGrammar$,
+    this.codeResource$
+  ).pipe(
+    map(([g, c]) => this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)),
+  );
+
+
   /**
    * @return True, if everything is ready to be rendered
    */
@@ -116,14 +109,9 @@ export class RenderedCodeResourceService implements OnDestroy {
     this.syntaxTree$,
     this.validationContext$
   ).pipe(
-    tap(_ => { debugger; }),
     filter(([available, ..._]) => available),
     distinctUntilChanged(),
-    map(([_, v, t, vc]) => {
-      debugger;
-      return (t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY)
-    }),
-    tap(res => console.log(`RenderedCodeResource.validationResult$ =>`, res)),
+    map(([_, v, t, vc]) => t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY),
     shareReplay(1)
   );
 

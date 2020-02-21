@@ -21,6 +21,7 @@
                            [blockLanguage]="currentBlockLanguage"
                            [codeResource]="currentResource"
                            [node]="currentTree.rootNode"
+                           [validationContext]="validationContext | async"
                            [readOnly]="readOnly"></editor-block-host>
         <ng-template #noRender>
           Darstellung nicht möglich
