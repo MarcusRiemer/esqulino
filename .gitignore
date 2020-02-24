@@ -1,6 +1,8 @@
 .idea
+.DS_Store
 seed-test
 **/.directory
 **/.vagrant
 **/.envrc
 **/~$*x
+**/.vscode
