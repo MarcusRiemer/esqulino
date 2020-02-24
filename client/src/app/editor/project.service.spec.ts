@@ -1,11 +1,18 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ProjectService } from './project.service';
-import { specLoadEmptyProject } from './shared/spec-util';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Overlay } from '@angular/cdk/overlay';
 
+import { ResourceReferencesService } from '../shared/resource-references.service';
+import { ResourceReferencesOnlineService } from '../shared/resource-references-online.service';
 import { LanguageService, ServerApiService } from '../shared';
-import { HttpErrorResponse } from '@angular/common/http';
+import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
+
+import { ProjectService } from './project.service';
+import { specLoadEmptyProject } from './spec-util';
+
 
 describe(`ProjectService`, () => {
   function instantiate(): ProjectService {
@@ -17,6 +24,14 @@ describe(`ProjectService`, () => {
         LanguageService,
         ServerApiService,
         ProjectService,
+        BlockLanguageDataService,
+        GrammarDataService,
+        MatSnackBar,
+        Overlay,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        }
       ],
       declarations: [
       ]

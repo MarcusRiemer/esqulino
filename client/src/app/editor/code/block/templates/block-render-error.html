@@ -1,6 +1,6 @@
-<span *ngIf="showIndicator | async"
+<span *ngIf="showIndicator$ | async"
       [blockBase]="visual"
-      [matTooltip]="message | async"
+      [matTooltip]="message$ | async"
       matTooltipClass="error-marker-tooltip">
   <span class="fa fa-exclamation-circle"></span>
 </span>

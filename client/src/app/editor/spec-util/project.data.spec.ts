@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
 
-import { ProjectService } from '../../project.service';
+import { ProjectService } from '../project.service';
 
-import { ProjectFullDescription, Project } from '../../../shared/project';
-import { ServerApiService } from '../../../shared';
-import { generateUUIDv4 } from '../../../shared/util-browser';
+import { ProjectFullDescription, Project } from '../../shared/project';
+import { ServerApiService } from '../../shared';
+import { generateUUIDv4 } from '../../shared/util-browser';
 
 
 const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {

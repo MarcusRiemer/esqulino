@@ -20,7 +20,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule, MatDialogModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AnalyticsService } from './analytics.service';
 import { BrowserService } from './browser.service'
@@ -29,7 +30,6 @@ import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
 import { LanguageService } from './language.service';
 import { ServerApiService } from './serverdata/serverapi.service';
-import { ServerDataService } from './serverdata/server-data.service'
 import { VideoService } from './video.service';
 import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
@@ -37,7 +37,7 @@ import { ChangeLanguageComponent } from './change-language.component';
 import { JavascriptRequiredComponent } from './javascript-required.component';
 import { SideNavComponent } from './side-nav.component';
 import { NavSiteComponent } from './nav-page.component';
-import { NewsComponent } from './news.component';
+import { NewsListComponent } from './news-list.component';
 import { NewsDetailsComponent } from './news-details.component';
 import { MultiLingualInputComponent } from './multilingual-input.component';
 import { MultiLingualEditorComponent } from './multilingual-editor.component';
@@ -70,6 +70,8 @@ import { MessageDialogComponent } from './message-dialog.component';
 import { MasterGuard } from './guards/master-guard';
 import { UnexpectedLogoutInterceptor } from './unexpected-logout.interceptor';
 import { UserService } from './auth/user.service';
+import { ResourceReferencesService } from './resource-references.service';
+import { ResourceReferencesOnlineService } from './resource-references-online.service';
 
 const dataServices = [GrammarDataService, BlockLanguageDataService];
 
@@ -109,7 +111,7 @@ const materialModules = [
     JavascriptRequiredComponent,
     SideNavComponent,
     NavSiteComponent,
-    NewsComponent,
+    NewsListComponent,
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
@@ -136,6 +138,7 @@ const materialModules = [
     RouterModule,
     PortalModule,
     HttpClientModule,
+
     ...materialModules,
     ToolbarComponent,
     FlashMessageListComponent,
@@ -144,7 +147,7 @@ const materialModules = [
     JavascriptRequiredComponent,
     SideNavComponent,
     NavSiteComponent,
-    NewsComponent,
+    NewsListComponent,
     NewsDetailsComponent,
     MultiLingualInputComponent,
     MultiLingualEditorComponent,
@@ -171,7 +174,7 @@ const materialModules = [
   ]
 })
 export class SharedAppModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SharedAppModule> {
     return ({
       ngModule: SharedAppModule,
       providers: [
@@ -180,7 +183,6 @@ export class SharedAppModule {
         BrowserService,
         FlashService,
         ServerApiService,
-        ServerDataService,
         ProjectDataService,
         AdminProjectDataService,
         VideoService,
@@ -194,10 +196,13 @@ export class SharedAppModule {
         PerformDataService,
         IsAdminGuard,
         {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        },
+        {
           provide: HTTP_INTERCEPTORS,
           useClass: UnexpectedLogoutInterceptor,
-          multi: true,
-          deps: [UserService]
+          multi: true
         },
       ]
     });

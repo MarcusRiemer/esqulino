@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { ProjectSourceDescription } from '../../shared/project.description'
+import { ProjectSourceDescription } from '../shared/project.description'
 
 /**
  * Renders a matching icon for a source.

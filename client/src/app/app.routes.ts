@@ -38,6 +38,6 @@ const AppRoutes: Routes = [
 // Ensure that "global" parameters (especially the projectId)
 // is passed down to the editor modules.
 export const routing = RouterModule.forRoot(AppRoutes, {
-  paramsInheritanceStrategy: "always",
-  // onSameUrlNavigation: 'reload',
+    paramsInheritanceStrategy: "always",
+    initialNavigation: 'enabled'
 });

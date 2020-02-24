@@ -2,7 +2,7 @@ import { Injectable, TemplateRef } from '@angular/core'
 import { Router, NavigationStart } from '@angular/router'
 import { TemplatePortal, Portal } from '@angular/cdk/portal'
 
-import { BehaviorSubject, Subject } from 'rxjs'
+import { BehaviorSubject } from 'rxjs'
 
 /**
  * Controls which items should be shown on the toolbar.

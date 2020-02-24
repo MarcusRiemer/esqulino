@@ -11,8 +11,8 @@
          type="text"
          draggable="false"
          #lineInput>
-  <button (click)="acceptInput()" class="btn btn-sm btn-success">✓</button>
-  <button (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
+  <button #btnAccept (click)="acceptInput()" class="btn btn-sm btn-success">✓</button>
+  <button #btnCancel (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
 </span>
 <ng-template #notEditing>
   <span class="not-editing"

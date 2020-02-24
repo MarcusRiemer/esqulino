@@ -6,13 +6,17 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AceEditorModule } from 'ng2-ace-editor';
 
 import { SharedAppModule } from '../shared/shared.module'
+import { EditorModule } from '../editor/editor.module';
+import { CodeEditorModule } from '../editor/code/code.module';
+
 
 import { adminRouting } from './admin.routes'
 
@@ -54,6 +58,9 @@ const materialModules = [
     AceEditorModule,
     CommonModule,
     SharedAppModule,
+    EditorModule,
+    CodeEditorModule,
+
     adminRouting,
     ...materialModules
   ],

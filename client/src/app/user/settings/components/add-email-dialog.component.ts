@@ -1,5 +1,5 @@
 import { Component, Inject, Optional, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 import { UserService } from "./../../../shared/auth/user.service";
 import { UserAddEmailDescription } from "./../../../shared/auth/user.description";

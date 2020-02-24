@@ -1,13 +1,10 @@
-<span *ngIf="isCurrentlyExecuted | async"
+<span *ngIf="isCurrentlyExecuted$ | async"
       class="fa fa-cog fa-spin fa-fw"></span>
 
 <!-- Render all components of this block -->
 <editor-block-render *ngFor="let childVisualBlock of visual.children"
-                     [blockLanguage]="blockLanguage"
                      [visual]="childVisualBlock"
-                     [codeResource]="codeResource"
-                     [node]="node"
-                     [readOnly]="readOnly">
+                     [node]="node">
 </editor-block-render>
 
 <ng-container *ngIf="showRelativeDropLocations | async">

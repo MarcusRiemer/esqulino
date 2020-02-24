@@ -1,16 +1,19 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, OnChanges } from '@angular/core';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage } from '../../../shared/block';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Renders all editor blocks that are mandated by the given node.
  */
 @Component({
   templateUrl: 'templates/block-host.html',
-  selector: `editor-block-host`
+  selector: `editor-block-host`,
+  providers: [RenderedCodeResourceService]
 })
-export class BlockHostComponent {
+export class BlockHostComponent implements OnChanges {
 
   @Input()
   codeResource: CodeResource;
@@ -22,10 +25,11 @@ export class BlockHostComponent {
   node: Node;
 
   /**
-   * Optionally override the block language that comes with the code resource.
+   * The block language to display this tree. If left undefined, the block language
+   * is determined based on the code resource.
    */
   @Input()
-  blockLanguage?: BlockLanguage;
+  blockLanguage: BlockLanguage;
 
   /**
    * Disables any interaction with this block if true.
@@ -33,22 +37,35 @@ export class BlockHostComponent {
   @Input()
   readOnly = false;
 
+  @Input()
+  validationContext: any = undefined;
+
   @HostBinding('class')
   get hostCssClasses() {
-    return (this.usedBlockLanguage.rootCssClasses.join(" "));
+    const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
+    return (usedBlockLanguage.rootCssClasses.join(" "));
   }
+
+  constructor(
+    private _renderedCodeResourceService: RenderedCodeResourceService
+  ) { }
+
+  ngOnChanges() {
+    this._renderedCodeResourceService._updateRenderData(
+      this.codeResource,
+      this.blockLanguage,
+      this.readOnly,
+      this.validationContext || {}
+    )
+  }
+
+  readonly renderDataAvailable$ = this._renderedCodeResourceService.dataAvailable$;
 
   /**
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
-    return (this.usedBlockLanguage.getEditorBlock(this.node.qualifiedName));
-  }
-
-  /**
-   * @return The block language that should be used to represent the node
-   */
-  get usedBlockLanguage() {
-    return (this.blockLanguage || this.codeResource.blockLanguagePeek);
+    const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
+    return (usedBlockLanguage.getEditorBlock(this.node.qualifiedName));
   }
 }

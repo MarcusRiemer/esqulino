@@ -60,6 +60,14 @@ export class SchemaService {
     this._currentlyEdited.stack = new TableCommandHolder(this._currentlyEdited.table);
   }
 
+  get currentSchema() {
+    return (this._projectService.cachedProject.schema);
+  }
+
+  get currentDatabaseName() {
+    return (this._projectService.cachedProject.currentDatabaseName);
+  }
+
   /**
    * @return The table that is currently being edited.
    */

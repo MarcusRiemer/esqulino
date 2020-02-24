@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { ProjectService } from '../../project.service';
 
 /**
  * Provides a convenient way to select a world to run a truck
@@ -19,7 +19,7 @@ export class WorldSelectorComponent {
   private _selectedWorldId: string = undefined;
 
   constructor(
-    private _currentCodeResource: CurrentCodeResourceService,
+    private _projectService: ProjectService,
   ) {
   }
 
@@ -27,7 +27,7 @@ export class WorldSelectorComponent {
    * @return All worlds that are applicable to the current program.
    */
   get availableWorlds() {
-    const codeResources = this._currentCodeResource.peekResource.project.codeResources;
+    const codeResources = this._projectService.cachedProject.codeResources;
     return (codeResources.filter(res => res.emittedLanguageIdPeek == "truck-world"));
   }
 

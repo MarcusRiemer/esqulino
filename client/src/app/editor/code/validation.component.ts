@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { tap } from 'rxjs/operators';
+
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
 /**
@@ -11,8 +13,10 @@ import { CurrentCodeResourceService } from '../current-coderesource.service';
 export class ValidationComponent {
 
   constructor(
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
   ) { }
 
-  readonly codeResource = this._currentCodeResource.currentResource
+  readonly codeResource = this._currentCodeResource.currentResource;
+
+  readonly result$ = this._currentCodeResource.validationResult;
 }

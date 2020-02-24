@@ -1,5 +1,10 @@
 <ul>
   <li *ngFor="let resource of toRender">
-    {{ resource.name }}
+    <h4>{{ resource.name }}</h4>
+    <editor-block-host [codeResource]="resource"
+                       [node]="(resource.syntaxTree | async).rootNode"
+                       [blockLanguage]="blockLanguage"
+                       [readOnly]="true">
+    </editor-block-host>
   </li>
 </ul>

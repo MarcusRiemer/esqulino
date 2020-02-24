@@ -7,10 +7,25 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "i18n": {
+        "sourceLocale": {
+          "code": "de",
+          "baseHref": ""
+        },
+        "locales": {
+          "en":  {
+            "translation": "src/locale/messages.en.xlf",
+            "baseHref": ""
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": [
+              "en"
+            ],
             "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -19,6 +34,8 @@
             "aot": true,
             "extractCss": true,
             "sourceMap": true,
+            "vendorSourceMap": true,
+            "statsJson": true,
             "outputHashing": "all",
             "assets": [
               "src/vendor"
@@ -33,10 +50,16 @@
               ]
             },
             "scripts": [],
-            "i18nLocale": "de"
+            "showCircularDependencies": true
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "outputPath": "dist/browser",
               "optimization": true,
               "extractLicenses": true,
@@ -80,7 +103,9 @@
               "i18nFormat": "xlf",
               "encoding": "UTF-8",
               "defaultLanguage": "de",
-              "languages": ["en"],
+              "languages": [
+                "en"
+              ],
               "useSourceAsTarget": false
             }
           }
@@ -108,10 +133,38 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/server/de",
-            "main": "src/main.server.ts",
+            "outputPath": "dist/server",
+            "main": "src/universal-server.ts",
             "tsConfig": "src/tsconfig.server.json",
-            "i18nLocale": "de"
+            "localize": [
+              "en", "de"
+            ],
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "blattwerkzeug-client:build",
+            "serverTarget": "blattwerkzeug-client:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "blattwerkzeug-client:build:production",
+              "serverTarget": "blattwerkzeug-client:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "blattwerkzeug-client:build:production",
+            "serverTarget": "blattwerkzeug-client:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }
@@ -144,7 +197,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
@@ -153,6 +206,7 @@
   "cli": {
     "warnings": {
       "typescriptMismatch": true
-    }
+    },
+    "analytics": false
   }
 }

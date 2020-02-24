@@ -14,7 +14,7 @@ export const userRoutes: Routes = [
       {
         path: 'settings',
         canActivate: [LoggedInGuard],
-        loadChildren: './settings/settings.module#UserSettingsModule',
+        loadChildren: () => import('./settings/settings.module').then(m => m.UserSettingsModule),
       },
       {
         path: 'reset_password/:token',

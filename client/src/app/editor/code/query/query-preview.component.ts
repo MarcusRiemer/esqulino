@@ -8,6 +8,7 @@ import { Tree } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { ToolbarService, ToolbarItem } from '../../toolbar.service';
+import { ProjectService } from '../../project.service';
 
 import { QueryService, QueryResultRows, QueryParamsDescription } from './query.service'
 
@@ -94,15 +95,14 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
     });
 
     // Fire the query every time the ast changes into a valid tree.
-    const subResource = this._currentQuery
-      .pipe(flatMap(c => c.validationResult))
+    const subValidation = this._currentCodeResource.validationResult
       .subscribe(res => {
         if (res.isValid) {
           this._btnRun.fire();
         }
       });
 
-    this._subscriptions.push(subResource);
+    this._subscriptions.push(subValidation);
   }
 
   /**

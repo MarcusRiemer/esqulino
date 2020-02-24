@@ -117,7 +117,7 @@ export class ToolbarItem {
 /**
  * Allows to adress the toolbar from any component.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ToolbarService {
   // All items on the toolbar
   private _items: ToolbarItem[] = [];

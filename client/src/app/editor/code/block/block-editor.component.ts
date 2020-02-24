@@ -3,9 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { ComponentPortal } from '@angular/cdk/portal';
 
 import { Observable } from 'rxjs';
-import { map, switchMap, first, combineLatest, tap } from 'rxjs/operators';
+import { map, switchMap, first, combineLatest } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
+import { BlockLanguageDataService } from '../../../shared/serverdata';
 
 import { ToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
@@ -14,6 +15,8 @@ import { CodeResourceService } from '../../coderesource.service';
 import { EditorComponentsService } from '../editor-components.service';
 
 import { BlockDebugOptionsService } from '../../block-debug-options.service';
+import { ProjectService } from '../../project.service';
+
 
 interface PlacedEditorComponent {
   portal: ComponentPortal<{}>;
@@ -21,8 +24,8 @@ interface PlacedEditorComponent {
 }
 
 /**
- * The "usual" editor folks will interact with. Displays all sorts
- * of nice and colourful blocks.
+ * The "usual" editor folks will interact with. Is configurable to display many different
+ * components.
  */
 @Component({
   templateUrl: 'templates/block-editor.html',
@@ -40,11 +43,13 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
+    private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
+    private _blockLanguageData: BlockLanguageDataService,
   ) {
   }
 
@@ -55,7 +60,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     // Deleting this code resource
     const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
     btnDelete.onClick.subscribe(_ => {
-      this._codeResourceService.deleteCodeResource(this.peekResource)
+      this._codeResourceService.deleteCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
         .subscribe(_ => {
           this.peekProject.removedCodeResource(this.peekResource);
@@ -69,7 +74,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
 
     btnSave.onClick.subscribe(_ => {
       btnSave.isInProgress = true;
-      this._codeResourceService.updateCodeResource(this.peekResource)
+      this._codeResourceService.updateCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
         .subscribe(_ => btnSave.isInProgress = false);
     });
@@ -77,7 +82,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     // Making a copy
     const btnClone = this._toolbarService.addButton("clone", "Klonen", "files-o", "o");
     btnClone.onClick.subscribe(_ => {
-      this._codeResourceService.cloneCodeResource(this.peekResource)
+      this._codeResourceService.cloneCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
         .subscribe(clone => {
           this.peekProject.addCodeResource(clone);
@@ -113,7 +118,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * @return A peek at the project of the currently edited resource
    */
   get peekProject() {
-    return (this.peekResource.project);
+    return (this._projectService.cachedProject);
   }
 
   /**
@@ -128,7 +133,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   readonly editorComponentDescriptions = this.currentResource
     .pipe(
-      switchMap(codeResource => codeResource.blockLanguage),
+      switchMap(c => c.blockLanguageId),
+      switchMap(id => this._blockLanguageData.getLocal(id, "request")),
       combineLatest(
         this._debugOptions.showDropDebug.value$,
         this._debugOptions.showLanguageSelector.value$,

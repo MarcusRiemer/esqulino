@@ -2,7 +2,7 @@
      re-triggered when the drop placeholder is swapped out with
      the pre-rendered block.-->
 <div *ngIf="(showAnything | async)"
-     [@background-color]="targetState | async"
+     [@background-color]="targetState$ | async"
      (mouseover)="onMouseEnter($event)"
      (mouseout)="onMouseOut($event)">
   &nbsp;{{ displayText | async }}&nbsp;

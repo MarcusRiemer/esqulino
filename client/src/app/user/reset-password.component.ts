@@ -1,6 +1,7 @@
 import { TemplateRef } from "@angular/core";
 import { Component, AfterViewInit, ViewChild } from "@angular/core";
-import { MatDialog, MatSnackBar } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { UserService } from "../shared/auth/user.service";

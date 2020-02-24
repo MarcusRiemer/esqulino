@@ -16,12 +16,10 @@ import { UserEmailDescription, UserPasswordDescription, UserNameDescription, Use
 import { AvailableProvidersDescription } from './../auth/provider.description';
 import { MayPerformRequestDescription, MayPerformResponseDescription } from './../may-perform.description';
 
-
-
 /**
  * Convenient and cached access to server side descriptions.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ServerDataService {
   public constructor(
     private _serverApi: ServerApiService,
@@ -29,7 +27,7 @@ export class ServerDataService {
   ) {
   }
 
-  readonly getUserNewsList = new CachedRequest<NewsFrontpageDescription[]>(
+  readonly newsListFrontpage = new CachedRequest<NewsFrontpageDescription[]>(
     this._http.get<NewsFrontpageDescription[]>(this._serverApi.getUserNewsListUrl())
   );
 

@@ -1,7 +1,9 @@
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
-import { SharedEditorModule } from '../shared/shared.module'
+import { SharedAppModule } from '../../shared/shared.module'
+
 import { RegistrationService } from '../registration.service'
+import { EditorSharedComponentsModule } from '../shared-components/editor-shared-components.module'
 
 import { ResourceChangedGuard } from './resource-changed.guard'
 import { CodeGeneratorComponent } from './code-generator.component'
@@ -13,16 +15,13 @@ import { CodeSidebarComponent } from './code.sidebar'
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
 
-import { BlockEditorComponent } from './block/block-editor.component'
-import { BlockBaseDirective } from './block/block-base.directive'
-import { BlockDebugOptionsService } from '../block-debug-options.service'
-import { BlockHostComponent } from './block/block-host.component'
-import { BlockRenderComponent } from './block/block-render.component'
-import { BlockRenderBlockComponent } from './block/block-render-block.component'
-import { BlockRenderDropTargetComponent } from './block/block-render-drop-target.component'
-import { BlockRenderInputComponent } from './block/block-render-input.component'
-import { BlockRenderErrorComponent } from './block/block-render-error.component'
-import { BlockRootComponent } from './block/block-root.component'
+import { BLOCK_RENDER_COMPONENTS } from './block/index'
+import { BlockRootComponent } from './block/block-root.component';
+import { BlockEditorComponent } from './block/block-editor.component';
+
+import { BlockHostComponent } from './block/block-host.component';
+import { BlockDebugOptionsService } from '../block-debug-options.service';
+
 import { CodeResourceSettingsComponent } from './block/code-resource-settings.component'
 import { DropDebugComponent } from './block/drop-debug.component'
 
@@ -41,21 +40,16 @@ import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.compo
 
 @NgModule({
   imports: [
-    SharedEditorModule,
+    EditorSharedComponentsModule,
+    SharedAppModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
   ],
   declarations: [
+    ...BLOCK_RENDER_COMPONENTS,
     BlockEditorComponent,
-    BlockRenderComponent,
-    BlockRenderBlockComponent,
-    BlockRenderDropTargetComponent,
-    BlockRenderErrorComponent,
-    BlockRenderInputComponent,
     BlockRootComponent,
-    BlockHostComponent,
-    BlockBaseDirective,
     CodeGeneratorComponent,
     CodeResourceSettingsComponent,
     CreateCodeResourceComponent,
@@ -98,7 +92,7 @@ import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.compo
   ]
 })
 export class CodeEditorModule {
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders<CodeEditorModule> {
     return ({
       ngModule: CodeEditorModule,
       providers: [

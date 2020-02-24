@@ -8,15 +8,11 @@
       "node"
     ]
   },
-  "exclude": [
-    "test.ts",
-    "main.cli.ts",
-    "cli/**",
-    "admin/**",
-    "editor/**",
-    "**/*.spec.*ts"
-  ],
   "angularCompilerOptions": {
     "entryModule": "app/app.server.module#AppServerModule"
-  }
+  },
+  "files": [
+    "main.server.ts",
+    "universal-server.ts"
+  ]
 }

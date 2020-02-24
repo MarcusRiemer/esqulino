@@ -1,6 +1,6 @@
 import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 
 import { UserService } from './../auth/user.service';

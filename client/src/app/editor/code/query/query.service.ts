@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs'
@@ -8,6 +9,7 @@ import {
 } from '../../../shared/syntaxtree/sql/query.description';
 import { ServerApiService, DatabaseQueryErrorDescription } from '../../../shared';
 import { CodeResource } from '../../../shared/syntaxtree';
+import { ProjectService } from '../../project.service';
 
 export { QueryParamsDescription }
 
@@ -52,6 +54,7 @@ export type QueryResult = QueryResultRows | QueryResultError;
  * Allows interaction with the query specific operations
  * of the server.
  */
+@Injectable({ providedIn: 'root' })
 export class QueryService {
   /**
    * @param _http Used to do HTTP requests
@@ -59,7 +62,8 @@ export class QueryService {
    */
   constructor(
     private _http: HttpClient,
-    private _server: ServerApiService
+    private _server: ServerApiService,
+    private _projectService: ProjectService
   ) {
   }
 
@@ -73,7 +77,7 @@ export class QueryService {
   runArbitraryQuery(sqlResource: CodeResource, params: QueryParamsDescription) {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    const url = this._server.getRunQueryUrl(sqlResource.project.slug);
+    const url = this._server.getRunQueryUrl(this._projectService.cachedProject.slug);
 
     const body: ArbitraryQueryRequestDescription = {
       ast: sqlResource.syntaxTreePeek.toModel(),

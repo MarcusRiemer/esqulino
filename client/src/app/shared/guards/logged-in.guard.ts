@@ -1,4 +1,4 @@
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { CanActivate, Router, UrlTree } from "@angular/router";
 import { Injectable } from "@angular/core";
 import { first } from "rxjs/operators";

@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { Node } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Shows an error-marker if there is an error on the given node
@@ -13,9 +15,15 @@ import { VisualBlockDescriptions } from '../../../shared/block';
   selector: `editor-block-render-error`,
 })
 export class BlockRenderErrorComponent {
-  @Input() public codeResource: CodeResource;
-  @Input() public node: Node;
-  @Input() public visual: VisualBlockDescriptions.EditorErrorIndicator;
+  @Input()
+  public node: Node;
+
+  @Input()
+  public visual: VisualBlockDescriptions.EditorErrorIndicator;
+
+  constructor(
+    private _renderData: RenderedCodeResourceService,
+  ) { }
 
   /**
    * These error codes should not trigger this indicator.
@@ -34,26 +42,18 @@ export class BlockRenderErrorComponent {
   /**
    * All errors that occur on this block
    */
-  public get nodeErrors() {
-    return (this.codeResource.validationResult.pipe(
-      map(validationResult => validationResult.getErrorsOn(this.node))
-    ));
-  }
+  readonly nodeErrors$ = this._renderData.validationResult$.pipe(
+    map(validationResult => validationResult.getErrorsOn(this.node)),
+  )
 
   /**
    * True, if the error indicator should be shown.
    */
-  public get showIndicator() {
-    return (
-      this.nodeErrors.pipe(
-        map(validationResult => validationResult.filter(e => this.showErrorFor(e.code)).length > 0)
-      )
-    );
-  }
+  readonly showIndicator$ = this.nodeErrors$.pipe(
+    map(validationResult => validationResult.some(e => this.showErrorFor(e.code)))
+  )
 
-  public get message() {
-    return (this.nodeErrors.pipe(
-      map(errors => errors.map(e => e.code).join(", "))
-    ));
-  }
+  readonly message$ = this.nodeErrors$.pipe(
+    map(errors => errors.map(e => e.code).join(", "))
+  )
 }

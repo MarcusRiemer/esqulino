@@ -67,13 +67,14 @@ export class CachedRequest<T> {
   readonly value: Observable<T> = this._trigger.pipe(
     // Ensure that no new request is started if a previous request caused an error
     filter(_ => !this._error.value),
-    // Hand over to the Angular request
+    // Hand over to the wrapped observable
     switchMap(_ => this._sourceObservable),
     // Log that the request has been fulfilled
     tap(_ => this.changeRequestCount(-1)),
     // Treat errors as non existant values (for the moment)
-    catchError(_ => {
-      this._error.next(true);
+    catchError(e => {
+      console.error(`Error in cached request`, e);
+      this._error.next(e);
       return (of(undefined));
     }),
     // Ensure that the request is properly cached

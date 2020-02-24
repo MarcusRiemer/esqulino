@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable, BehaviorSubject } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 
 import { IdentifiableResourceDescription } from '../resource.description';
 
@@ -200,23 +200,36 @@ export abstract class DataService<
    * @param onMissing What to do if the item does not exist: Issue a request or return `undefined`
    * @return A locally cached version of the given resource
    */
-  async getLocal(id: string, onMissing: "request" | "undefined" = "undefined") {
+  getLocal(id: string, onMissing: "undefined"): TSingle;
+  getLocal(id: string, onMissing: "request"): Promise<TSingle>;
+  getLocal(
+    id: string,
+    onMissing: "request" | "undefined" = "undefined"
+  ): TSingle | Promise<TSingle> {
     let toReturn = this._localCache[id];
     if (!toReturn && onMissing === "request") {
-      // Without taking only the first item from `getSingle`, the promise
-      // will never be fulfilled
-      toReturn = await this.getSingle(id).pipe(first()).toPromise();
-      this.setLocal(toReturn);
+      return (
+        this.getSingle(id).pipe(
+          // Without taking only the first item from `getSingle`, the promise
+          // will never be fulfilled
+          first(),
+          // Store value as a side effect
+          tap(value => this.setLocal(value))
+        ).toPromise()
+      );
+    } else if (onMissing === "request") {
+      return (Promise.resolve(toReturn));
     }
-
-    return (toReturn);
+    else {
+      return (toReturn);
+    }
   }
 
   /**
    * @param res The resource to cache locally
    */
   setLocal(res: TSingle) {
-    console.log(`Item with id ${res.id} added to cache: `, res);
+    console.log(`Cache "${this._speakingName}" - Item with id ${res.id} added: `, res);
     this._localCache[res.id] = res;
   }
 }

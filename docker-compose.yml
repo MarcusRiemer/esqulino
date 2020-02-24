@@ -65,6 +65,7 @@ services:
     environment:
       - POSTGRES_DB=esqulino_test
       - POSTGRES_USER=esqulino
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - data-postgres-volume:/var/lib/postgresql/data
 

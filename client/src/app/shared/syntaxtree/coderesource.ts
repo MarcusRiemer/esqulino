@@ -1,13 +1,13 @@
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Project } from '../project';
 import { ProjectResource } from '../resource';
+import { ResourceReferencesService } from '../resource-references.service';
 
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
-import { ValidationResult } from './validation-result';
 import { embraceNode } from './drop-embrace';
+import { BlockLanguage } from '../block/block-language';
 
 export * from './coderesource.description'
 
@@ -33,9 +33,9 @@ export class CodeResource extends ProjectResource {
 
   constructor(
     desc: CodeResourceDescription,
-    project?: Project,
+    resourceReferences: ResourceReferencesService
   ) {
-    super(desc, project);
+    super(desc, resourceReferences);
 
     this._tree.next(new Tree(desc.ast));
     this._emittedLanguageId.next(desc.programmingLanguageId);
@@ -60,21 +60,29 @@ export class CodeResource extends ProjectResource {
    * @return A snapshot of the language that is currently in use.
    */
   get emittedLanguagePeek() {
-    return (this.project.getProgrammingLanguageByCoreLanguageId(this.emittedLanguageIdPeek));
+    return (this.resourceReferences.getCoreProgrammingLanguage(this.emittedLanguageIdPeek));
+  }
+
+  get validatorPeek() {
+    return (this.resourceReferences.getValidator(this.emittedLanguageIdPeek, this.blockLanguagePeek.grammarId));
   }
 
   /**
    * @return The language that is currently in use
    */
   get emittedLanguage() {
-    return (this._emittedLanguageId.pipe(map(l => this.project.getProgrammingLanguageByCoreLanguageId(l))));
+    return (this._emittedLanguageId.pipe(
+      map(l => this.resourceReferences.getCoreProgrammingLanguage(l))
+    ));
   }
 
   /**
    * @return The language that is currently in use
    */
-  get blockLanguage() {
-    return (this._blockLanguageId.pipe(map(l => this.project.getBlockLanguage(l))));
+  get blockLanguage(): Observable<BlockLanguage> {
+    return (this._blockLanguageId.pipe(
+      map(l => this.resourceReferences.getBlockLanguage(l, "throw")),
+    ));
   }
 
   /**
@@ -101,7 +109,7 @@ export class CodeResource extends ProjectResource {
   }
 
   get blockLanguagePeek() {
-    return (this.project.getBlockLanguage(this.blockLanguageIdPeek));
+    return (this.resourceReferences.getBlockLanguage(this.blockLanguageIdPeek, "undefined"));
   }
 
   /**
@@ -163,8 +171,7 @@ export class CodeResource extends ProjectResource {
   embraceNode(loc: NodeLocation, desc: NodeDescription[]) {
     console.log(`Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`, desc);
 
-    const validator = this.validationLanguagePeek.validator;
-    this.replaceSyntaxTree(embraceNode(validator, this.syntaxTreePeek, loc, desc));
+    this.replaceSyntaxTree(embraceNode(this.validatorPeek, this.syntaxTreePeek, loc, desc));
   }
 
   /**
@@ -239,34 +246,6 @@ export class CodeResource extends ProjectResource {
     }
     this.markSaveRequired();
   }
-
-  /**
-   * The language that is used for validation.
-   */
-  readonly validationLanguage = this.blockLanguage.pipe(
-    map(b => this.project.getLocalProgrammingLanguage(b.grammarId))
-  );
-
-  /**
-   * The language that is used for validation.
-   */
-  get validationLanguagePeek() {
-    return (this.project.getLocalProgrammingLanguage(this.blockLanguagePeek.grammarId));
-  }
-
-  /**
-   * @return The latest validation result for this resource.
-   */
-  readonly validationResult = combineLatest(this.syntaxTree, this.validationLanguage)
-    .pipe(
-      map(([tree, lang]) => {
-        if (tree && lang) {
-          return (lang.validateTree(tree, this.project.additionalValidationContext));
-        } else {
-          return (ValidationResult.EMPTY);
-        }
-      })
-    );
 
   /**
    * @return The latest generated code for this resource.

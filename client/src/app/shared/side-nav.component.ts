@@ -1,6 +1,6 @@
 import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit, AfterViewChecked, AfterViewInit, OnDestroy } from "@angular/core";
 import { BrowserService } from './browser.service';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -17,7 +17,7 @@ import { UserService } from './auth/user.service';
 export class SideNavComponent implements OnDestroy {
   @Input('items') navItems: NavItem[];
 
-  @ViewChild('sideNav', { static: false }) sidenav: MatSidenav;
+  @ViewChild('sideNav') sidenav: MatSidenav;
 
   /**
    * Used for dependency injection

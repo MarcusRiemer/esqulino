@@ -1,5 +1,5 @@
 import { Router } from "@angular/router";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Component } from "@angular/core";
 import { first } from "rxjs/operators";
 

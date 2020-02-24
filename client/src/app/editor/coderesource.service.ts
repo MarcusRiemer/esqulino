@@ -9,7 +9,7 @@ import { CodeResource } from '../shared/syntaxtree'
 import { CodeResourceDescription } from '../shared/syntaxtree/coderesource.description';
 import { Project } from '../shared/project'
 
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class CodeResourceService {
   /**
    * @param _http Used to do HTTP requests
@@ -37,7 +37,7 @@ export class CodeResourceService {
       .pipe(
         catchError(this.handleError),
         delay(250),
-        map(res => new CodeResource(res, project)),
+        map(res => new CodeResource(res, project.resourceReferences)),
         shareReplay(1)
       );
 
@@ -48,15 +48,14 @@ export class CodeResourceService {
   /**
    * Asks the server to duplicate a block resource.
    */
-  cloneCodeResource(resource: CodeResource) {
-    const project = resource.project;
+  cloneCodeResource(project: Project, resource: CodeResource) {
     const url = this._server.getCodeResourceCloneUrl(project.slug, resource.id);
 
     const toReturn = this._http.post<CodeResourceDescription>(url, "")
       .pipe(
         catchError(this.handleError),
         delay(250),
-        map(res => new CodeResource(res, project)),
+        map(res => new CodeResource(res, project.resourceReferences)),
         shareReplay(1)
       );
 
@@ -66,8 +65,8 @@ export class CodeResourceService {
   /**
    * Sends a updated code resource to the server
    */
-  updateCodeResource(resource: CodeResource) {
-    const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
+  updateCodeResource(project: Project, resource: CodeResource) {
+    const url = this._server.getCodeResourceUrl(project.slug, resource.id);
 
     // The actual document that should be sent
     const bodyJson = resource.toModel();
@@ -93,8 +92,8 @@ export class CodeResourceService {
   /**
    * Deletes the resource with the given ID from the server.
    */
-  deleteCodeResource(resource: CodeResource) {
-    const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
+  deleteCodeResource(project: Project, resource: CodeResource) {
+    const url = this._server.getCodeResourceUrl(project.slug, resource.id);
 
     const toReturn = this._http.delete<void>(url)
       .pipe(

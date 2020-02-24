@@ -3,11 +3,12 @@ import { BehaviorSubject, Subject, Observable } from 'rxjs'
 import {
   Invalidateable, Saveable, SaveStateEvent
 } from './interfaces'
-import { Project } from './project'
+
 import {
   ApiVersion, ApiVersionToken, ProjectResourceDescription,
   CURRENT_API_VERSION
 } from './resource.description'
+import { ResourceReferencesService } from './resource-references.service';
 
 export {
   ProjectResourceDescription,
@@ -23,7 +24,6 @@ export {
 export abstract class ProjectResource implements Saveable {
   private _id: string;
   private _name: string;
-  private _project: Project;
 
   // Does this resource require saving?
   private _saveRequired = false;
@@ -38,30 +38,18 @@ export abstract class ProjectResource implements Saveable {
     saveRequired: this._saveRequired
   });
 
-  constructor(desc: ProjectResourceDescription, project: Project) {
+  constructor(
+    desc: ProjectResourceDescription,
+    public resourceReferences: ResourceReferencesService
+  ) {
     this._id = desc.id;
     this._name = desc.name;
-    this._project = project;
   }
 
   /**
    * Convert this resource to it's JSON description
    */
   abstract toModel(): ProjectResourceDescription;
-
-  /**
-   * @return The project this resource is associated with. Because the tests
-   *         do not always provide a project, this does some sanity checking
-   *         that there actually is a project.
-   */
-  get project() {
-    // Give a friendly error message if the project is missing
-    if (!this._project) {
-      throw new Error(`Project Resource "${this._name}" (id: ${this._id}) has no associated project.`);
-    }
-
-    return (this._project);
-  }
 
   /**
    * @return The name the user has given to this page

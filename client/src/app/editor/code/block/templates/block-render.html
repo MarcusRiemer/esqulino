@@ -15,8 +15,7 @@
 
   <!-- Allowing the user to edit a value -->
   <ng-container *ngSwitchCase="'error'">
-    <editor-block-render-error [codeResource]="codeResource"
-                               [node]="node"
+    <editor-block-render-error [node]="node"
                                [visual]="visual"
                                [ngClass]="visual.cssClasses">
     </editor-block-render-error>
@@ -24,30 +23,24 @@
 
   <!-- Allowing the user to edit a value -->
   <ng-container *ngSwitchCase="'input'">
-    <editor-block-render-input [codeResource]="codeResource"
-                               [node]="node"
-                               [visual]="visual"
-                               [readOnly]="readOnly">
+    <editor-block-render-input [node]="node"
+                               [visual]="visual">
     </editor-block-render-input>
   </ng-container>
   <!-- Iterate over children of a node -->
   <ng-container *ngSwitchCase="'dropTarget'">
-    <editor-block-render-drop-target [codeResource]="codeResource"
-                                     [node]="node"
+    <editor-block-render-drop-target [node]="node"
                                      [dropLocation]="node.location"
                                      [visual]="visual"
-                                     [readOnly]="readOnly"
                                      [ngClass]="visual.cssClasses">
     </editor-block-render-drop-target>
   </ng-container>
   <!-- Iterate over children of a node -->
   <ng-container *ngSwitchCase="'iterator'">
     <ng-container *ngFor="let childNode of childNodes; let lastChild = last; let firstChild = first;">
-      <editor-block-render-drop-target [codeResource]="codeResource"
-                                       [node]="childNode"
+      <editor-block-render-drop-target [node]="childNode"
                                        [dropLocation]="childNode.location"
                                        [visual]="iteratorDropTargetVisual"
-                                       [readOnly]="readOnly"
                                        [ngClass]="visual.cssClasses">
       </editor-block-render-drop-target>
 
@@ -55,27 +48,20 @@
            flex-element above. It is therefore the only place where flex-children specific
            properties can be applied.-->
       <editor-block-render *ngFor="let childVisualBlock of iteratorGetEditorBlock(childNode).visual"
-                           [blockLanguage]="blockLanguage"
-                           [codeResource]="codeResource"
                            [node]="childNode"
-                           [visual]="childVisualBlock"
-                           [readOnly]="readOnly"></editor-block-render>
+                           [visual]="childVisualBlock"></editor-block-render>
 
       <!-- Possibly render something in between the nodes. -->
       <ng-container *ngIf="!lastChild; else lastDrop;">
         <editor-block-render *ngFor="let sepBlock of iteratorSeparatorBlocks"
-                             [blockLanguage]="blockLanguage"
-                             [codeResource]="codeResource"
                              [visual]="sepBlock"
                              [node]="childNode"></editor-block-render>
       </ng-container>
     </ng-container>
 
     <!-- Show a drop target to insert after the last block -->
-    <editor-block-render-drop-target [codeResource]="codeResource"
-                                     [dropLocation]="lastNodeLocation"
+    <editor-block-render-drop-target [dropLocation]="lastNodeLocation"
                                      [visual]="iteratorDropTargetVisual"
-                                     [readOnly]="readOnly"
                                      [ngClass]="visual.cssClasses">
     </editor-block-render-drop-target>
   </ng-container>
@@ -84,19 +70,15 @@
     <!-- Okay, these properties are a convoluted mess that should probably be cleared
          up sometime in the future. Lets see what we have:
 
-         * codeResource, node, visual and readOnly are basicly passed through
+         * node and visual are basicly passed through
          * TODO: The animations should be defined on the child
          * draggable and (dragStart) offload the drag detection to the browser
          * (mouseover) informs the global state about drag events -->
     <editor-block-render-block #currentBlock
                                [@background]="currentBlock.backgroundState | async"
-                               [blockLanguage]="blockLanguage"
-                               [blockLayout]="visual"
                                [blockBase]="visual"
-                               [codeResource]="codeResource"
                                [node]="node"
                                [visual]="visual"
-                               [readOnly]="readOnly"
                                [ngClass]="visual.cssClasses"
                                class="{{ visual.direction }}"
                                [class.read-only]="readOnly"
@@ -110,15 +92,12 @@
   <editor-block-container *ngSwitchCase="'container'"
                           [ngClass]="visual.cssClasses">
     <editor-block-render *ngFor="let childVisual of childVisuals;"
-                         [blockLanguage]="blockLanguage"
                          [visual]="childVisual"
-                         [codeResource]="codeResource"
-                         [node]="node"
-                         [readOnly]="readOnly"></editor-block-render>
+                         [node]="node"></editor-block-render>
   </editor-block-container>
 
   <!-- Something is broken, display an error message -->
   <div *ngSwitchDefault>
-    Implementierungsfehler: Kein passender Blocktyp "{{ visual.blockType }}" verfügbar
+    Implementation Error: No matching component for block type "{{ visual.blockType }}" available
   </div>
 </ng-container>

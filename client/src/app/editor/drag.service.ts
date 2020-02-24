@@ -7,15 +7,13 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 
 import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
 import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree';
-import { FixedSidebarBlock } from '../shared/block';
-
-import { TrashService } from './shared/trash.service';
-
-import { DraggedBlockComponent } from './dragged-block.component';
-import { CurrentCodeResourceService } from './current-coderesource.service';
 import { SmartDropOptions, SmartDropLocation } from '../shared/syntaxtree/drop.description';
 import { smartDropLocation } from '../shared/syntaxtree/drop';
+import { FixedSidebarBlock } from '../shared/block';
 
+import { TrashService } from './trash.service';
+import { DraggedBlockComponent } from './dragged-block.component';
+import { CurrentCodeResourceService } from './current-coderesource.service';
 
 /**
  * All information about the origin of this drag if it came from
@@ -62,7 +60,7 @@ export interface CurrentDrag {
  * Manages state for everything involved dragging. This involves at least sidebars
  * and actual editors, but may very well extend to other pieces of UI.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class DragService {
   // The thing we are currently dragging, including the complete hovering
   // state and everything that may be of concern.
@@ -293,7 +291,7 @@ export class DragService {
     // Find out which locations are currently candidates for drags
     const smartDropLocations = smartDropLocation(
       smartDropOptions,
-      currentCodeResource.validationLanguagePeek.validator,
+      currentCodeResource.validatorPeek,
       currentCodeResource.syntaxTreePeek,
       dropLocation,
       dragData.draggedDescription

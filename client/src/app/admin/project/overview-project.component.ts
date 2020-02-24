@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 import { Observable } from 'rxjs';
 
@@ -15,11 +16,11 @@ import { ProjectListDescription } from '../../shared/project.description';
  */
 export class OverviewProjectComponent {
   // Angular Material UI to paginate
-  @ViewChild(MatPaginator, { static: false })
+  @ViewChild(MatPaginator)
   _paginator: MatPaginator;
 
   // Angular Material UI to sort by different columns
-  @ViewChild(MatSort, { static: false })
+  @ViewChild(MatSort)
   _sort: MatSort;
 
   constructor(

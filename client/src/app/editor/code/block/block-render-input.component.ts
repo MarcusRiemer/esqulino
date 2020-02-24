@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { Node } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
+
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Allows editing of atomic values. These are cached inside this component
@@ -12,16 +14,17 @@ import { VisualBlockDescriptions } from '../../../shared/block';
   selector: `editor-block-render-input`,
 })
 export class BlockRenderInputComponent {
-  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorInput;
 
   /**
-   * Disallows the change into edit mode
+   * The value that may or may not be accepted as new value
    */
-  @Input() public readOnly = false;
+  public editedValue: string;
 
-  private _editedValue: string;
+  constructor(
+    private _renderData: RenderedCodeResourceService,
+  ) { }
 
   /**
    * True, if this block is currently beeing edited.
@@ -32,7 +35,7 @@ export class BlockRenderInputComponent {
    * Initializes default values.
    */
   ngOnInit() {
-    this._editedValue = this.currentValue;
+    this.editedValue = this.currentValue;
   }
 
   /**
@@ -62,7 +65,7 @@ export class BlockRenderInputComponent {
    */
   onActivateEditing(event: MouseEvent) {
     event.stopPropagation();
-    if (!this.readOnly) {
+    if (!this._renderData.readOnly) {
       this.currentlyEditing = true;
     }
   }
@@ -98,6 +101,10 @@ export class BlockRenderInputComponent {
 
   set currentlyEditing(value: boolean) {
     this._currentlyEditing = value;
+
+    if (value) {
+      this.editedValue = this.currentValue;
+    }
   }
 
   /**
@@ -108,20 +115,6 @@ export class BlockRenderInputComponent {
   get inputSize() {
     const value = this.editedValue || "";
     return (Math.max(1, value.length));
-  }
-
-  /**
-   *
-   */
-  set editedValue(value: string) {
-    this._editedValue = value;
-  }
-
-  /**
-   *
-   */
-  get editedValue() {
-    return (this._editedValue);
   }
 
   /**
@@ -137,7 +130,7 @@ export class BlockRenderInputComponent {
    */
   cancelInput() {
     this.currentlyEditing = false;
-    this._editedValue = this.currentValue;
+    this.editedValue = this.currentValue;
   }
 
   /**
@@ -146,7 +139,7 @@ export class BlockRenderInputComponent {
    */
   setEditedProperty(newValue: string) {
     if (newValue != this.currentValue) {
-      this.codeResource.setProperty(this.node.location, this.visual.property, newValue);
+      this._renderData.codeResource.setProperty(this.node.location, this.visual.property, newValue);
     }
   }
 }

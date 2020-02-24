@@ -3,13 +3,14 @@ import { ComponentPortal } from '@angular/cdk/portal';
 
 import { map, flatMap, tap } from 'rxjs/operators'
 
-import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
+import { ResourceReferencesService } from '../../shared/resource-references.service'
+
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
+import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component'
 import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
-
 /**
  * Maps ids of sidebar components to their actual components.
  */
@@ -38,9 +39,16 @@ export class CodeSidebarComponent {
   public static get SIDEBAR_IDENTIFIER() { return "tree" };
 
   constructor(
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _resourceReferences: ResourceReferencesService,
   ) {
+
   }
+
+  readonly hasBlockLanguage = this._currentCodeResource.currentResource.pipe(
+    flatMap(c => c.blockLanguageId),
+    flatMap(id => this._resourceReferences.ensureResources([{ type: "blockLanguage", id }])),
+  );
 
   /**
    * The block language that is currently in use.

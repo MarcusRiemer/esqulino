@@ -4,8 +4,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DragService } from '../drag.service';
-
+import { DragService } from './drag.service';
 import { TrashService } from './trash.service'
 
 type AnimationState = "available" | "over" | "hidden";

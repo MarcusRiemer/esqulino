@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, delay, first, filter, tap, map, publish, share } from 'rxjs/operators';
+import { catchError, delay, first, filter, tap, map, share } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
-
-import { LanguageService } from '../shared/language.service'
+import { ResourceReferencesService } from '../shared/resource-references.service';
 
 export { Project, ProjectFullDescription }
 
@@ -15,7 +14,7 @@ export { Project, ProjectFullDescription }
  * Wraps access to a single project, which is deemed to be "active"
  * and should be displayed in the editor view.
  */
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ProjectService {
 
   /**
@@ -31,12 +30,12 @@ export class ProjectService {
   /**
    * @param _http To make HTTP requests
    * @param _server To know where the requests should go
-   * @param _languageService Can retrieve languages
+   * @param _resourceReferences The currently available resources
    */
   constructor(
     private _http: HttpClient,
     private _server: ServerApiService,
-    private _languageService: LanguageService
+    private _resourceReferences: ResourceReferencesService
   ) {
     // Create a single subject once and for all. This instance is not
     // allowed to changed as it is passed on to every subscriber.
@@ -76,7 +75,7 @@ export class ProjectService {
     this._httpRequest = this._http.get<ProjectFullDescription>(url)
       .pipe(
         first(),
-        map(res => new Project(res, this._languageService)),
+        map(res => new Project(res, this._resourceReferences)),
         share() // Ensure that the request is not executed multiple times
       );
 

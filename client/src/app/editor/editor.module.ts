@@ -4,30 +4,26 @@ import { FormsModule } from '@angular/forms'
 
 import { SharedAppModule } from '../shared/shared.module'
 
-import { SharedEditorModule } from './shared/shared.module'
 import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
 import { CodeEditorModule } from './code/code.module'
 
-import { CurrentCodeResourceService } from './current-coderesource.service'
-
 import { EditorComponent } from './editor.component'
 
-import { ProjectExistsGuard } from './project-exists.guard'
-
-import { CodeResourceService } from './coderesource.service'
-import { DragService } from './drag.service'
 import { DraggedBlockComponent } from './dragged-block.component'
-import { ProjectService } from './project.service'
-import { ToolbarService } from './toolbar.service'
 import { ToolbarComponent } from './toolbar.component'
 import { NavbarComponent } from './navbar.component'
 import { SidebarLoaderComponent } from './sidebar-loader.component'
-import { SidebarService } from './sidebar.service'
-import { PreferencesService } from './preferences.service'
-import { RegistrationService } from './registration.service'
-
 import { SettingsComponent } from './project-settings/settings.component'
+import { QueryIconComponent } from './query-icon.component'
+import { SidebarItemHost } from './sidebar-item-host.component'
+import { TrashComponent } from './trash.component'
+import { TrashService } from './trash.service'
+import { ContenteditableModel } from './contenteditable-model.directive'
+import { SourceIconComponent } from './source-icon.component'
+import { SchemaService } from './schema.service'
+import { CurrentCodeResourceService } from './current-coderesource.service'
+
 
 @NgModule({
   imports: [
@@ -37,7 +33,6 @@ import { SettingsComponent } from './project-settings/settings.component'
     SharedAppModule,
 
     ImageEditorModule.forRoot(),
-    SharedEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
   ],
@@ -48,26 +43,30 @@ import { SettingsComponent } from './project-settings/settings.component'
     NavbarComponent,
     SidebarLoaderComponent,
     SettingsComponent,
+    QueryIconComponent,
+    SidebarItemHost,
+    ContenteditableModel,
+    TrashComponent,
+    SourceIconComponent,
   ],
   entryComponents: [
     DraggedBlockComponent,
   ],
   providers: [
-    CodeResourceService,
-    DragService as any,
-    SidebarService,
-    RegistrationService,
-    PreferencesService,
-    ProjectService,
-    ProjectExistsGuard,
-    ToolbarService,
-    CurrentCodeResourceService,
+    TrashService,
+    SchemaService,
+    CurrentCodeResourceService
   ],
   exports: [
-    SharedEditorModule,
     EditorComponent,
     SettingsComponent,
     SchemaEditorModule,
+
+    QueryIconComponent,
+    SidebarItemHost,
+    TrashComponent,
+    ContenteditableModel,
+    SourceIconComponent,
   ]
 
 })

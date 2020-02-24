@@ -1,8 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 
-import { SharedEditorModule } from '../shared/shared.module'
+import { EditorSharedComponentsModule } from '../shared-components/editor-shared-components.module'
 import { RegistrationService } from '../registration.service'
-import { SchemaService } from '../schema.service'
 
 import { SchemaHostComponent } from './host.component'
 import { SchemaRedirectComponent } from './schema-redirect.component'
@@ -18,7 +17,7 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
 
 @NgModule({
   imports: [
-    SharedEditorModule,
+    EditorSharedComponentsModule
   ],
   declarations: [
     SchemaHostComponent,
@@ -42,10 +41,9 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
   ]
 })
 export class SchemaEditorModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SchemaEditorModule> {
     return ({
       ngModule: SchemaEditorModule,
-      providers: [SchemaService]
     });
   }
 

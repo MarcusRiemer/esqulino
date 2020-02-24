@@ -2,9 +2,10 @@ import { Component, Input, HostBinding } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import {
-  Node, CodeResource, NodeLocation, locationIncLastIndex
+  Node, NodeLocation, locationIncLastIndex
 } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
+import { VisualBlockDescriptions } from '../../../shared/block';
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -30,25 +31,23 @@ import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
   ]
 })
 export class BlockRenderComponent {
-  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
-
-  /**
-   * Optionally override the block language that comes with the code resource.
-   */
-  @Input() public blockLanguage?: BlockLanguage;
-
-  /**
-   * Disables any interaction with this block if true.
-   */
-  @Input() public readOnly = false;
 
   @HostBinding('class')
   private _hostClassNodeType = "errLang errType";
 
+  constructor(
+    private _renderData: RenderedCodeResourceService
+  ) {
+  }
+
+
   ngOnInit() {
     this._hostClassNodeType = this.node.languageName + " " + this.node.typeName;
+    if (!this.node) {
+      debugger;
+    }
   }
 
   /**
@@ -126,8 +125,7 @@ export class BlockRenderComponent {
    * @return The visual editor block that should be used to represent the given node.
    */
   iteratorGetEditorBlock(node: Node) {
-    const bl = this.blockLanguage || this.codeResource.blockLanguagePeek;
-    return (bl.getEditorBlock(node.qualifiedName));
+    return (this._renderData.blockLanguage.getEditorBlock(node.qualifiedName));
   }
 
   locationAppend(loc: NodeLocation): NodeLocation {

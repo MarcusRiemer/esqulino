@@ -2,16 +2,16 @@ import { Component, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { locationIsOnPath } from '../../../shared/util';
-import { Node, CodeResource, NodeLocation, ErrorCodes, ErrorMissingChild } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, ErrorCodes, ErrorMissingChild, Tree, Validator } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService, CurrentDrag } from '../../drag.service';
 
 import { targetState, DragTargetState, _isChildRequiredSchema, dropLocationHasChildren } from './drop-target-state';
+import { RenderedCodeResourceService } from './rendered-coderesource.service';
 
 const CSS_WHITE = "255, 255, 255";
 const CSS_YELLOW = "255, 255, 0";
@@ -113,11 +113,6 @@ const CSS_ALPHA = "0.3";
 })
 export class BlockRenderDropTargetComponent {
   /**
-   * The code resource that is rendered here.
-   */
-  @Input() public codeResource: CodeResource;
-
-  /**
    * If applicable: The node that has something dropped on to it.
    */
   @Input() public node?: Node;
@@ -134,55 +129,39 @@ export class BlockRenderDropTargetComponent {
   @Input() public dropLocation: NodeLocation;
 
   /**
-   * Disables any interaction with this block if true.
-   */
-  @Input() public readOnly = false;
-
-  /**
    * Indicates whether the mouse is currently over exactly this target.
    */
   private _currentMouseTarget = new BehaviorSubject(false);
 
   constructor(
     private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService
+    private _renderData: RenderedCodeResourceService,
   ) {
   }
-
-  /** @return The current validator of this code resource */
-  private get _peekValidator() {
-    return (this.codeResource.validationLanguagePeek.validator);
-  }
-
-  /** @return The current syntaxtree of this code resource */
-  private get _peekTree() {
-    return (this.codeResource.syntaxTreePeek);
-  }
-
-  /**
-   * The latest validation result for the current resource
-   */
-  private readonly _latestValidation = this._currentCodeResource.currentResource.pipe(
-    flatMap(c => c.validationResult),
-  );
 
   /**
    * Tells whether a drag is in progress and what the actual drag data is.
    * It is important to have both things at hand because the UI should react
    * to ended drag events, so filtering out all "empty" drags is no option.
    */
-  private readonly _latestDragData = combineLatest(
+  private readonly _latestDragData$ = combineLatest(
     this._dragService.currentDrag,
     this._dragService.isDragInProgress
   );
 
   /** @return True, if this drop target is acting as a hole */
-  private readonly _isHole = this._currentCodeResource.currentTree.pipe(
-    map(tree => _isChildRequiredSchema(this._peekValidator, tree, this.dropLocation))
+  private readonly _isHole$ = combineLatest(
+    this._renderData.syntaxTree$,
+    this._renderData.validator$
+  ).pipe(
+    map(([tree, validator]) => _isChildRequiredSchema(validator, tree, this.dropLocation))
   );
 
   /** @return True, if this drop target requires children (as per validation) */
-  private readonly _parentRequiresChildren = combineLatest(this._latestValidation, this._currentCodeResource.currentTree).pipe(
+  private readonly _parentRequiresChildren$ = combineLatest(
+    this._renderData.validationResult$,
+    this._renderData.syntaxTree$
+  ).pipe(
     map(([v, t]) => {
       const parentNode = t.locateOrUndefined(this.dropLocation.slice(0, -1));
       if (!parentNode) {
@@ -197,12 +176,12 @@ export class BlockRenderDropTargetComponent {
   );
 
   /** @return True, if the syntaxtree behind this drop target has any children */
-  private readonly _hasChildren = this._currentCodeResource.currentTree.pipe(
+  private readonly _hasChildren$ = this._renderData.syntaxTree$.pipe(
     map(tree => dropLocationHasChildren(tree, this.dropLocation))
   );
 
   /** @return True, if this drop target is currently a possible drag location */
-  private readonly _isCurrentDropCandidate = this._latestDragData.pipe(
+  private readonly _isCurrentDropCandidate = this._latestDragData$.pipe(
     map(([currentDrag, inProgress]) => {
       if (inProgress && currentDrag && currentDrag.smartDrops.length > 0) {
         currentDrag.smartDrops.some(op =>
@@ -215,30 +194,22 @@ export class BlockRenderDropTargetComponent {
   );
 
   /**
-   * Convenience method to calculate the targeting state of this drop target. Simply
-   * calls the `targetState` function with all relevant parameters.
-   *
-   * @return The state that should be used for the current drag event.
-   */
-  private _targetState(drag: CurrentDrag): DragTargetState {
-    return (targetState(drag, this.dropLocation, this._peekValidator, this._peekTree));
-  }
-
-  /**
    * @return The current targeting state of this drop target
    */
-  readonly targetState: Observable<DragTargetState | "hole" | "optional"> = combineLatest(
+  readonly targetState$: Observable<DragTargetState | "hole" | "optional"> = combineLatest(
     this._dragService.currentDrag,
-    this._isHole,
-    this._parentRequiresChildren,
-    this._hasChildren
+    this._isHole$,
+    this._parentRequiresChildren$,
+    this._hasChildren$,
+    this._renderData.validator$,
+    this._renderData.syntaxTree$
   ).pipe(
-    map(([drag, isHole, requiresChildren, hasChildren]) => {
-      if (this.readOnly) {
+    map(([drag, isHole, requiresChildren, hasChildren, val, tree]) => {
+      if (this._renderData.readOnly) {
         return ("unknown");
       } else {
-        const targetState = this._targetState(drag);
-        if (targetState === "unknown") {
+        const toReturn = targetState(drag, this.dropLocation, val, tree);
+        if (toReturn === "unknown") {
           if (isHole || requiresChildren)
             return ("hole");
           else if (!hasChildren && this.visual.emptyDropTarget)
@@ -246,7 +217,7 @@ export class BlockRenderDropTargetComponent {
           else
             return ("unknown");
         } else {
-          return (targetState);
+          return (toReturn);
         }
       }
     })
@@ -261,8 +232,8 @@ export class BlockRenderDropTargetComponent {
    * True if either the drop target or the drop location should be shown.
    */
   readonly showAnything: Observable<boolean> = combineLatest(
-    this._isCurrentDropCandidate, this._isHole, this._parentRequiresChildren,
-    this._hasChildren, this.currentMouseTarget
+    this._isCurrentDropCandidate, this._isHole$, this._parentRequiresChildren$,
+    this._hasChildren$, this.currentMouseTarget
   ).pipe(
     map(([isCurrentDropLocation, isHole, requiresChildren, hasChildren, currentMouseTarget]) => {
       return (
@@ -281,7 +252,7 @@ export class BlockRenderDropTargetComponent {
    */
   onMouseEnter(evt: MouseEvent) {
     this._currentMouseTarget.next(true);
-    if (!this.readOnly && this._dragService.peekIsDragInProgress) {
+    if (!this._renderData.readOnly && this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, this.dropLocation, undefined, { allowExact: true });
     }
   }
