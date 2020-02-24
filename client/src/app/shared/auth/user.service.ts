@@ -27,11 +27,14 @@ export class UserService {
   ) {
     // Trigger retrieval of initial user data
     this._serverData.getUserData.value
-      .subscribe(u => {
-        this.fireUserData(u);
+      .pipe(
+        filter(u => !!u) // Don't set empty users, logout is handled via the interceptor
+      )
+      .subscribe(newUser => {
+        this.fireUserData(newUser);
 
         // If this is not the guest user: Grab its identities
-        if (u.userId !== UserService.GUEST_ID) {
+        if (newUser.userId !== UserService.GUEST_ID) {
           this._serverData.getIdentities.value
             .pipe(first())
             .subscribe(i => this.fireIdentities(i));
