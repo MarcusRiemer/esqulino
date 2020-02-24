@@ -17,7 +17,7 @@ BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 # All files that together define the client in its various forms
 # The `version.ts` file is excluded because it is automatically generated
 # and shouldn't trigger a rebuild.
-CLIENT_ALL_SOURCES = $(shell find src ! -name 'version.ts' 2> /dev/null) universal-server.ts webpack.server.config.js package.json package-lock.json
+CLIENT_ALL_SOURCES = $(shell find src ! -name 'version.ts' 2> /dev/null) angular.json package.json package-lock.json
 
 # All sources except the translation files
 CLIENT_NON_XLF_SOURCES = $(filter-out %.xlf, $(CLIENT_ALL_SOURCES))
@@ -87,35 +87,17 @@ cli-ping: cli-compile
 # Universal Rendering Server
 ##################################
 
-# The german Angular universal app
-dist/server/de/server.js: $(CLIENT_NON_XLF_SOURCES)
-	$(NG_BIN) run blattwerkzeug-client:server --no-progress
+universal-compile:
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
+	$(NG_BIN) run blattwerkzeug-client:server
 
-# The english Angular universal app
-dist/server/en/server.js: $(CLIENT_NON_XLF_SOURCES)
-	$(NG_BIN) run blattwerkzeug-client:server --no-progress --i18nFile="src/locale/messages.en.xlf" --i18nFormat="xlf" --i18nLocale="en" --outputPath="dist/server/en"
-
-# German version of the universal server
-universal-de: dist/server/de/server.js
-
-# English version of the universal server
-universal-en: dist/server/en/server.js
-
-# The Angular universal server that does the actual rendering and routing
-dist/server/universal-server.js: universal-server.ts universal-compile-langs
-	node_modules/.bin/webpack --config webpack.server.config.js --no-progress
-
-universal-compile-langs: dist/server/de/server.js dist/server/en/server.js
-
-universal-compile: msg-pre-universal-build universal-compile-langs client-compile dist/server/universal-server.js
-
-universal-run: dist/server/universal-server.js
+universal-run: universal-compile
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
-	$(NODE_BIN) dist/server/universal-server.js
+	$(NG_BIN) run blattwerkzeug-client:serve-ssr
 
-universal-run-nodeps:
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
-	$(NODE_BIN) dist/server/universal-server.js
+##################################
+# Preparing assets
+##################################
 
 %.gz : %
 	gzip --keep $^
@@ -153,9 +135,6 @@ clean-deps : msg-pre-clean-deps
 ##################################
 # Messaging targets
 ##################################
-
-msg-pre-universal-build :
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
 
 msg-pre-build :
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling ..."; $(TPUT_BIN) sgr0
