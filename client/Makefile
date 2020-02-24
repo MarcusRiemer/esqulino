@@ -54,10 +54,10 @@ src/environments/version.ts :
 ##################################
 
 client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --no-progress $(NG_PROD) $(NG_OPTS) --localize --outputPath="dist/browser"
+	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --no-progress $(NG_PROD)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot  $(NG_OPTS) --localize --outputPath="dist/browser/"
+	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --watch
 
 client-test : src/environments/version.ts
 	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true

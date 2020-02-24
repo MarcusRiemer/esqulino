@@ -13,7 +13,7 @@ It is recommended to use four terminal windows when developing, that each show t
 
 * Targets in the ``client`` folder:
 
-  * Run ``NG_OPTS="--watch" make client-compile-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
+  * Run ``make client-compile-dev`` in the ``client`` folder. This will starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
   * Run ``make client-test-watch`` to continously run the client testcases in the background.
 
 * Targets in the ``server`` folder:
