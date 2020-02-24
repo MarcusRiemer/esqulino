@@ -133,10 +133,38 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/server/de",
-            "main": "src/main.server.ts",
+            "outputPath": "dist/server",
+            "main": "src/universal-server.ts",
             "tsConfig": "src/tsconfig.server.json",
-            "i18nLocale": "de"
+            "localize": [
+              "en", "de"
+            ],
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "blattwerkzeug-client:build",
+            "serverTarget": "blattwerkzeug-client:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "blattwerkzeug-client:build:production",
+              "serverTarget": "blattwerkzeug-client:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "blattwerkzeug-client:build:production",
+            "serverTarget": "blattwerkzeug-client:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }
