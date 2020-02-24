@@ -60,84 +60,91 @@ concise_attributes:
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "FROM", "style": {"display": "inline-flex"},
-    "blockType": "constant", "cssClasses": ["keyword", "component"]}, {"between":
-    [{"text": ",", "style": {"display": "inline-flex"}, "blockType": "constant"}],
-    "blockType": "iterator", "childGroupName": "tables", "emptyDropTarget": false},
-    {"children": [{"blockType": "iterator", "childGroupName": "joins", "emptyDropTarget":
-    false}], "blockType": "container", "cssClasses": ["vertical"]}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "from", "languageName":
-    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "WHERE", "style": {"display":
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "FROM", "style": {"display":
     "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword", "component"]},
-    {"blockType": "iterator", "childGroupName": "expressions", "emptyDropTarget":
-    false}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "where", "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color":
-    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
-    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text":
-    "DELETE", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
-    ["keyword", "component"]}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "delete", "languageName": "sql"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"text": "SELECT", "style": {"display": "inline-flex"}, "blockType":
-    "constant", "cssClasses": ["keyword", "component"]}, {"blockType": "iterator",
-    "childGroupName": "distinct", "emptyDropTarget": false}, {"children": [{"blockType":
-    "iterator", "childGroupName": "columns", "emptyDropTarget": false}], "blockType":
-    "container", "cssClasses": ["horizontal", "allow-wrap"]}], "blockType": "container",
-    "cssClasses": ["horizontal"]}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "select", "languageName": "sql"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "GROUP BY", "style": {"display": "inline-flex"}, "blockType": "constant",
-    "cssClasses": ["keyword", "component"]}, {"between": [{"text": ",", "style": {"display":
-    "inline-flex"}, "blockType": "constant"}], "blockType": "iterator", "childGroupName":
-    "expressions", "emptyDropTarget": false}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "groupBy", "languageName": "sql"}}, {"visual":
+    {"between": [{"text": ",", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "iterator", "childGroupName": "tables", "emptyDropTarget": false}],
+    "blockType": "container", "cssClasses": ["horizontal"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "joins", "emptyDropTarget": false}], "blockType":
+    "container", "cssClasses": ["vertical"]}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "from", "languageName": "sql"}}, {"visual":
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "ORDER BY", "style": {"display": "inline-flex"},
-    "blockType": "constant", "cssClasses": ["keyword", "component"]}, {"blockType":
-    "iterator", "childGroupName": "expressions", "emptyDropTarget": false}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "orderBy", "languageName":
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "WHERE", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword", "component"]},
+    {"children": [{"blockType": "iterator", "childGroupName": "expressions", "emptyDropTarget":
+    false}], "blockType": "container", "cssClasses": ["vertical"]}], "blockType":
+    "container", "cssClasses": ["horizontal"]}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "where", "languageName": "sql"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "DELETE", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["keyword", "component"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "delete", "languageName":
     "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
     solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
-    "property": "value", "blockType": "input"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "constant", "languageName": "sql"}}, {"visual":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "SELECT",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword",
+    "component"]}, {"blockType": "iterator", "childGroupName": "distinct", "emptyDropTarget":
+    false}, {"children": [{"between": [{"text": ",", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "iterator", "childGroupName": "columns",
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["horizontal",
+    "allow-wrap"]}], "blockType": "container", "cssClasses": ["horizontal"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "select", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "GROUP BY",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword",
+    "component"]}, {"between": [{"text": ",", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "iterator", "childGroupName": "expressions",
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["horizontal"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "groupBy",
+    "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text":
+    "ORDER BY", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
+    ["keyword", "component"]}, {"between": [{"text": ",", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "iterator", "childGroupName": "expressions",
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["horizontal"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "orderBy",
+    "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "value", "blockType": "input"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "constant", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "DISTINCT", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "distinct", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName":
+    "table", "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}],
+    "describedType": {"typeName": "crossJoin", "languageName": "sql"}}, {"visual":
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "DISTINCT", "style": {"display": "inline-flex"},
-    "blockType": "constant", "cssClasses": ["keyword"]}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "distinct", "languageName": "sql"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "table",
-    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "crossJoin", "languageName": "sql"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": ":", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
-    ["parameter"]}, {"style": {"display": "inline-flex"}, "property": "name", "blockType":
-    "input", "cssClasses": ["parameter"]}], "blockType": "block", "dropTarget": {}}],
-    "describedType": {"typeName": "parameter", "languageName": "sql"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "expression",
-    "emptyDropTarget": false}, {"style": {"display": "inline-flex"}, "property": "order",
-    "blockType": "interpolated", "cssClasses": ["keyword"]}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "sortOrder", "languageName":
+    "INVALID_MIN_OCCURENCES"]}, {"text": ":", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["parameter"]}, {"style": {"display": "inline-flex"},
+    "property": "name", "blockType": "input", "cssClasses": ["parameter"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "parameter", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator",
+    "childGroupName": "expression", "emptyDropTarget": false}, {"style": {"display":
+    "inline-flex"}, "property": "order", "blockType": "interpolated", "cssClasses":
+    ["keyword"]}], "blockType": "container", "cssClasses": ["horizontal"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "sortOrder", "languageName":
     "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
     solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
@@ -149,97 +156,102 @@ concise_attributes:
     "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
     solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "INNER JOIN", "style":
-    {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword",
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "INNER JOIN",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword",
     "component"]}, {"blockType": "iterator", "childGroupName": "table", "emptyDropTarget":
     false}, {"text": "ON", "style": {"display": "inline-flex"}, "blockType": "constant",
     "cssClasses": ["keyword"]}, {"blockType": "iterator", "childGroupName": "on",
-    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "innerJoinOn", "languageName": "sql"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "(", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["horizontal"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "innerJoinOn",
+    "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text":
+    "(", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
     "iterator", "childGroupName": "expression", "emptyDropTarget": false}, {"text":
     ")", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "parentheses", "languageName":
-    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName":
-    "delete", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
-    "from", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
-    "where", "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}],
-    "describedType": {"typeName": "queryDelete", "languageName": "sql"}}, {"visual":
+    "container", "cssClasses": ["horizontal"]}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "parentheses", "languageName": "sql"}}, {"visual":
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator", "childGroupName":
-    "select", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
-    "from", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
-    "where", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
-    "groupBy", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
-    "orderBy", "emptyDropTarget": false}], "blockType": "container", "cssClasses":
-    ["vertical"]}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "querySelect", "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color":
-    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
-    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style":
-    {"display": "inline-flex"}, "property": "name", "blockType": "interpolated", "cssClasses":
+    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "delete",
+    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "from",
+    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "where",
+    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "queryDelete", "languageName": "sql"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"blockType": "iterator", "childGroupName": "select", "emptyDropTarget":
+    false}, {"blockType": "iterator", "childGroupName": "from", "emptyDropTarget":
+    false}, {"blockType": "iterator", "childGroupName": "where", "emptyDropTarget":
+    false}, {"blockType": "iterator", "childGroupName": "groupBy", "emptyDropTarget":
+    false}, {"blockType": "iterator", "childGroupName": "orderBy", "emptyDropTarget":
+    false}], "blockType": "container", "cssClasses": ["vertical"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "querySelect", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display":
+    "inline-flex"}, "property": "name", "blockType": "interpolated", "cssClasses":
     ["keyword"]}, {"text": "(", "style": {"display": "inline-flex"}, "blockType":
     "constant"}, {"blockType": "iterator", "childGroupName": "distinct", "emptyDropTarget":
     false}, {"between": [{"text": ",", "style": {"display": "inline-flex"}, "blockType":
     "constant"}], "blockType": "iterator", "childGroupName": "arguments", "emptyDropTarget":
     false}, {"text": ")", "style": {"display": "inline-flex"}, "blockType": "constant"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "functionCall",
+    "blockType": "container", "cssClasses": ["horizontal"]}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "functionCall", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "*", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["operator"]}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "starOperator", "languageName":
+    "sql"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "INNER JOIN",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword",
+    "component"]}, {"blockType": "iterator", "childGroupName": "table", "emptyDropTarget":
+    false}, {"text": "USING", "style": {"display": "inline-flex"}, "blockType": "constant",
+    "cssClasses": ["keyword"]}, {"blockType": "iterator", "childGroupName": "using",
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["horizontal"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "innerJoinUsing",
     "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
     "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "*",
-    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["operator"]}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "starOperator",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"style":
+    {"display": "inline-flex"}, "property": "operator", "blockType": "interpolated",
+    "cssClasses": ["operator"]}, {"blockType": "iterator", "childGroupName": "expression",
+    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["horizontal"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "whereAdditional",
     "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
     "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "INNER
-    JOIN", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
-    ["keyword", "component"]}, {"blockType": "iterator", "childGroupName": "table",
-    "emptyDropTarget": false}, {"text": "USING", "style": {"display": "inline-flex"},
-    "blockType": "constant", "cssClasses": ["keyword"]}, {"blockType": "iterator",
-    "childGroupName": "using", "emptyDropTarget": false}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "innerJoinUsing", "languageName": "sql"}},
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "lhs", "emptyDropTarget": false}, {"blockType":
+    "iterator", "childGroupName": "operator", "emptyDropTarget": false}, {"blockType":
+    "iterator", "childGroupName": "rhs", "emptyDropTarget": false}], "blockType":
+    "container", "cssClasses": ["horizontal"]}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "binaryExpression", "languageName": "sql"}},
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
     "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
-    "operator", "blockType": "interpolated", "cssClasses": ["operator"]}, {"blockType":
-    "iterator", "childGroupName": "expression", "emptyDropTarget": false}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "whereAdditional",
-    "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
-    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
-    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType":
-    "iterator", "childGroupName": "lhs", "emptyDropTarget": false}, {"blockType":
-    "iterator", "childGroupName": "operator", "emptyDropTarget": false}, {"blockType":
-    "iterator", "childGroupName": "rhs", "emptyDropTarget": false}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "binaryExpression",
-    "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
-    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
-    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
-    "inline-flex"}, "property": "name", "blockType": "interpolated"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "tableIntroduction",
-    "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
-    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
-    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
-    "inline-flex"}, "property": "operator", "blockType": "input", "cssClasses": ["operator"]}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "relationalOperator",
-    "languageName": "sql"}}], "rootCssClasses": ["activate-block-outline"], "editorComponents":
-    [{"componentType": "block-root"}, {"columnClasses": ["col-lg-6"], "componentType":
-    "validator"}, {"columnClasses": ["col-lg-6"], "componentType": "generated-code"},
-    {"componentType": "query-preview"}], "localGeneratorInstructions": {"type": "manual",
-    "traits": {"readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
+    "name", "blockType": "interpolated"}], "blockType": "block", "dropTarget": {}}],
+    "describedType": {"typeName": "tableIntroduction", "languageName": "sql"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
+    "operator", "blockType": "input", "cssClasses": ["operator"]}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "relationalOperator", "languageName":
+    "sql"}}], "rootCssClasses": ["activate-block-outline"], "editorComponents": [{"componentType":
+    "block-root"}, {"columnClasses": ["col-lg-6"], "componentType": "validator"},
+    {"columnClasses": ["col-lg-6"], "componentType": "generated-code"}, {"componentType":
+    "query-preview"}], "localGeneratorInstructions": {"type": "manual", "traits":
+    {"readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
     true}}}, "traitScopes": [{"traits": ["readOnlyProperty"], "attributes": {"sql":
     {"sortOrder": ["order"], "columnName": ["refTableName", "columnName"], "functionCall":
     ["name"], "whereAdditional": ["operator"], "tableIntroduction": ["name"]}}}],
@@ -300,7 +312,7 @@ concise_attributes:
   value_before_type_cast: 2018-07-17 11:08:14.302566000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-02-05 10:28:25.521032000 Z
+  value_before_type_cast: 2020-02-24 20:40:32.562377000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
