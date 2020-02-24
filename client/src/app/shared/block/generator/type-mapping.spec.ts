@@ -102,6 +102,52 @@ describe("BlockLanguage Generator Type Mapping", () => {
     ]);
   });
 
+
+  it("Parentheses (+Between) => Iterator", () => {
+    const attrType: NodeAttributeDescription = {
+      type: "parentheses",
+      name: "childGroup",
+      group: {
+        type: "allowed",
+        nodeTypes: ["a", "b"]
+      },
+      cardinality: "+",
+      between: {
+        type: "terminal",
+        symbol: "::"
+      }
+    };
+    const nodeType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        attrType
+      ]
+    };
+    const res = mapChildren(
+      nodeType, attrType,
+      {
+        between: undefined,
+        emptyDropTarget: false,
+        style: {}
+      }
+    );
+
+    expect(res).toEqual([
+      {
+        blockType: "iterator",
+        childGroupName: "childGroup",
+        emptyDropTarget: false,
+        between: [
+          {
+            blockType: "constant",
+            text: "::",
+            style: DefaultInstructions.terminalInstructions.style
+          }
+        ]
+      }
+    ]);
+  });
+
   it("Mentioned attributes only", () => {
     const instr = new TypeInstructions({
       blocks: [

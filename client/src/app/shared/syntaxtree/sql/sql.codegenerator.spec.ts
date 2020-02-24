@@ -184,4 +184,8 @@ describe('Language: SQL (Codegen)', () => {
   it(`ORDER BY name DESC`, () => {
     verifyFiles("ast-38-order-by-name-desc", emitTree);
   });
+
+  it(`... AND <hole>`, () => {
+    verifyFiles("ast-39-additional-and-hole", emitTree);
+  });
 });

@@ -112,7 +112,16 @@ export function mapChildren(
   // Find out what goes between the elements
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
 
-  // A simple seperation character that is explicitly specified by the instructions?
+  // The grammar may have defined a seperation character
+  if (attr.type === "parentheses" || attr.type === "allowed" || attr.type === "sequence") {
+    if (attr.between) {
+      between = [
+        mapTerminal(attr.between, DefaultInstructions.terminalInstructions)
+      ]
+    }
+  }
+
+  // A simple separation character that is explicitly specified by the instructions?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
     // Create a single terminal character to go in between
     between = [

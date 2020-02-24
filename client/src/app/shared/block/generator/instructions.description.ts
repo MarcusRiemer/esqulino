@@ -63,7 +63,7 @@ export type PropertyInstructions = Readonly<Pick<Instructions, "style" | "propRe
  */
 export module DefaultInstructions {
   export const iteratorInstructions: IteratorInstructions = {
-    between: "",
+    between: undefined,
     style: {},
     emptyDropTarget: false
   }

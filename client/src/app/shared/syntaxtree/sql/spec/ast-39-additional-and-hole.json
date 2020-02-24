@@ -1,0 +1,11 @@
+{
+  "language": "sql",
+  "name": "whereAdditional",
+  "children": {
+    "expression": [
+    ]
+  },
+  "properties": {
+    "operator": "and"
+  }
+}

@@ -326,7 +326,9 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         const expr = node.children['expression'][0];
 
         process.addConvertedFragment(op.toUpperCase() + ' ', node);
-        process.generateNode(expr);
+        if (expr) {
+          process.generateNode(expr);
+        }
       }
     }
   },
