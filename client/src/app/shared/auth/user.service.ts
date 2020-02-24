@@ -25,11 +25,18 @@ export class UserService {
     private _snackBar: MatSnackBar,
     private _matDialog: MatDialog
   ) {
+    // Trigger retrieval of initial user data
     this._serverData.getUserData.value
-      .subscribe(u => this.fireUserData(u));
+      .subscribe(u => {
+        this.fireUserData(u);
 
-    this._serverData.getIdentities.value
-      .subscribe(i => this.fireIdentities(i));
+        // If this is not the guest user: Grab its identities
+        if (u.userId !== UserService.GUEST_ID) {
+          this._serverData.getIdentities.value
+            .pipe(first())
+            .subscribe(i => this.fireIdentities(i));
+        }
+      });
   }
 
   private _unexpectedLogout$ = new Subject<void>();
