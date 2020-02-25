@@ -55,12 +55,14 @@ These packages should install a single library at ``/usr/lib/sqlite3/pcre.so`` w
 DNS and Subdomains
 ------------------
 
-The development environment assumes that any subdomains of ``localdomain`` will be routed to the ``localhost``. This works out of the box on various GNU/Linux-distributions, but as this behaviour is not standardised it should not be relied upon. To reliably resolve project-subdomains you should either write custom entries for each project in ``/etc/hosts`` or use a lightweight local DNS-server like `Dnsmasq <http://www.thekelleys.org.uk/dnsmasq/doc.html>`_. In a production environment you should run the server on a dedicated domain and route all subdomains to the same server instance.
-
-These subomdains are required for under two different circumstances:
+BlattWerkzeug requires subdomains for two different purposes:
 
 * The application itself is available in multiple languages. ``en.blattwerkzeug.localdomain`` should render the english version, ``de.blattwerkzeug.localdomain`` the german version.
 * The web-projects will be rendered on their own subdomains.
+
+The currently configured environment uses ``lvh.me`` to have a "proper" domain to talk to, which eases the initially required setup. It additionally allows to properly test the OAuth2 workflows with Google, which forbids the use of ``localhost.localdomain`` as a redirection target.
+
+Alternatively you may configure the ``localdomain`` to be routed to the ``localhost``. This works out of the box on various GNU/Linux-distributions, but as this behaviour is not standardised it should not be relied upon. To reliably resolve project-subdomains you should either write custom entries for each project in ``/etc/hosts`` or use a lightweight local DNS-server like `Dnsmasq <http://www.thekelleys.org.uk/dnsmasq/doc.html>`_. In a production environment you should run the server on a dedicated domain and route all subdomains to the same server instance.
 
 PostgreSQL
 ----------

@@ -4,8 +4,7 @@ development:
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
   project_domains: ["projects.localdomain:9292"]
-  editor_domain: "localhost.localdomain:9292"
-  # editor_domain: "lvh.me:9292"
+  editor_domain: "lvh.me:9292"
   mail:
     default_sender: "BlattWerkzeug <system@blattwerkzeug.de>"
     admin: "Marcus@GurXite.de"
