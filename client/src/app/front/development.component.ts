@@ -31,7 +31,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
     },
     href: "https://bitbucket.org/marcusriemer/esqulino/"
   },
-  {
+  /*{
     icon: "trello",
     title: {
       "de": "Feature-Planung",
@@ -46,7 +46,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
       "en": `Which feature is currently being worked on? Who is working on what? These organisational questions are organised with Trello.`
     },
     href: "https://trello.com/b/vQ5vkMpV/esqulino"
-  },
+  },*/
   {
     icon: "check-circle-o",
     title: {
@@ -54,8 +54,8 @@ const DevelopmentLinks: DevelopmentLink[] = [
       "en": "Continous Integration Pipeline"
     },
     subtitle: {
-      "de": "Via Azure DevOps und Docker-Images",
-      "en": "Via Azure DevOps and Docker-imaeges"
+      "de": "via Azure DevOps und Docker-Images",
+      "en": "via Azure DevOps and Docker-imaeges"
     },
     content: {
       "de": `Kompiliert das Projekt noch nach meinem letzten Commit? Laufen die Testfälle noch durch? Der CI-Dienst läuft nach jedem "push" und findet es heraus.`,
@@ -63,7 +63,23 @@ const DevelopmentLinks: DevelopmentLink[] = [
     },
     titleBadgeImage: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_apis/build/status/Docker%20CI?branchName=master",
     href: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build"
-  }
+  },
+  {
+    icon: "slack",
+    title: {
+      "de": "Entwickler-Kommunikation",
+      "en": "Development-Communication"
+    },
+    subtitle: {
+      "de": "Als Chat bei Slack",
+      "en": "As Chat on Slack"
+    },
+    content: {
+      "de": `Welche akuten Änderungen stehen gerade an? Wie kann ich eigentlich ..? Hinweise und Antworten gibt es im Chat.`,
+      "en": `Which acute changes are about to happen? How can I ..? Hints and answers are available in chat.`
+    },
+    href: "https://blattwerkzeug.slack.com"
+  },
 ]
 
 /**
