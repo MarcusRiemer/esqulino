@@ -45,7 +45,11 @@ module Seed
     def move_data_from_tmp_to_data_directory
       # Remove existing folder, it will be (more or less) atomically overwritten
       # if a new folder was created.
-      FileUtils.remove_dir(path_to_data_directory)
+      #
+      # remove_dir throws if the target path doesn't exist, so we double check
+      if File.directory? path_to_data_directory
+        FileUtils.remove_dir(path_to_data_directory)
+      end
 
       # Move temporary folder with updated content into position
       if File.directory? path_to_data_directory + "_tmp"
