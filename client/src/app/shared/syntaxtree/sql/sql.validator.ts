@@ -10,7 +10,8 @@ import { isInOccurs } from '../occurs';
  * SQL validation requires a schema as additional context.
  */
 export interface DatabaseSchemaAdditionalContext {
-  databaseSchema: Schema
+  databaseSchema: Schema,
+  validateGroupBy?: boolean;
 }
 
 export function isDatabaseSchemaAdditionalContext(obj: any): obj is DatabaseSchemaAdditionalContext {
@@ -23,7 +24,7 @@ const FUNCTION_AGGREGATION = new Set(["min", "max", "count", "avg", "sum", "grou
 
 // These are the required argument counts for various accounts
 // Based on: https://sqlite.org/lang_aggfunc.html
-const FUNCTION_ARGUMENT_COUNT: { [key: string]: OccursDescription } = {
+const FUNCTION_ARGUMENT_COUNT: Readonly<{ [key: string]: OccursDescription }> = Object.freeze({
   "avg": "1",
   "count": "*",
   "group_concat": { minOccurs: 1, maxOccurs: 2 },
@@ -31,7 +32,7 @@ const FUNCTION_ARGUMENT_COUNT: { [key: string]: OccursDescription } = {
   "max": "1",
   "total": "1",
   "sum": "1"
-}
+});
 
 /**
  * Extended validation for SQL. Mainly checks the tables and columns
@@ -41,15 +42,23 @@ const FUNCTION_ARGUMENT_COUNT: { [key: string]: OccursDescription } = {
 export class SqlValidator extends SpecializedValidator {
 
   validateFromRoot(ast: AST.Node, context: ValidationContext) {
-    if (!isDatabaseSchemaAdditionalContext(context.additional)) {
-      context.addError("NO_DATABASE_SCHEMA", ast);
-    } else {
-      const schema = context.additional.databaseSchema;
 
-      this.validateColumnAndTableNames(ast, schema, context);
-      //this.validateAggregationGroupBy(ast, schema, context);
-      this.validateNumberOfArguments(ast, schema, context);
+    // Most in depth checks require a schema
+    if (isDatabaseSchemaAdditionalContext(context.additional)) {
+      const schema = context.additional.databaseSchema;
+      this.validateNamesAgainstSchema(ast, schema, context);
     }
+
+    // But some basic checks can be made without
+    this.validateReferenceNamesExistingAndUnique(ast, context);
+
+    // Validating "GROUP BY" is optional, because its a heuristic
+    if (context.additional.validateGroupBy) {
+      this.validateAggregationGroupBy(ast, context);
+    }
+
+    // Very basic type checks for function arguments
+    this.validateNumberOfArguments(ast, context);
   }
 
   /**
@@ -57,7 +66,36 @@ export class SqlValidator extends SpecializedValidator {
    * - All mentioned tables exist
    * - All columns only mention existing columns on existing tables
    */
-  private validateColumnAndTableNames(ast: AST.Node, schema: Schema, context: ValidationContext) {
+  private validateNamesAgainstSchema(ast: AST.Node, schema: Schema, context: ValidationContext) {
+    // There should obviously only be a single `FROM`, but because there may be
+    // as well no `FROM` at all we simply roll with whatever bizarre structure
+    // we need to validate.
+    const allFroms = ast.getNodesOfType({ languageName: "sql", typeName: "from" });
+    allFroms.forEach(from => {
+
+      const allIntroduced = from.getNodesOfType({ languageName: "sql", typeName: "tableIntroduction" });
+      allIntroduced.forEach(introduced => {
+        const introducedTableName = introduced.properties["name"];
+
+        // Does that table exist in our schema?
+        if (!schema.hasTable(introducedTableName)) {
+          context.addError("UNKNOWN_TABLE", introduced)
+        }
+      });
+    });
+
+    // Ensure that every mentioned column is valid, no matter where it appears
+    const allColumns = ast.getNodesOfType({ languageName: "sql", typeName: "columnName" });
+    allColumns.forEach(column => {
+      const referencedTable = column.properties["refTableName"];
+      const columnName = column.properties["columnName"];
+      if (!schema.hasColumn(referencedTable, columnName)) {
+        context.addError("UNKNOWN_COLUMN", column);
+      }
+    });
+  }
+
+  private validateReferenceNamesExistingAndUnique(ast: AST.Node, context: ValidationContext) {
     // Collects all names that seem to be available
     const fromAvailableNames = new Set<string>();
 
@@ -75,11 +113,6 @@ export class SqlValidator extends SpecializedValidator {
         // This name counts as available from now on
         fromAvailableNames.add(introducedTableName);
 
-        // Does that table exist in our schema?
-        if (!schema.hasTable(introducedTableName)) {
-          context.addError("UNKNOWN_TABLE", introduced)
-        }
-
         // Is that name already taken?
         if (takenNames.has(introducedTableName)) {
           context.addError("DUPLICATE_TABLE_NAME", introduced);
@@ -89,25 +122,20 @@ export class SqlValidator extends SpecializedValidator {
       });
     });
 
-    // Ensure that every mentioned column is valid, no matter where it appears
+    // Ensure that every mentioned column only uses mentioned tables
     const allColumns = ast.getNodesOfType({ languageName: "sql", typeName: "columnName" });
     allColumns.forEach(column => {
       const referencedTable = column.properties["refTableName"];
-      const columnName = column.properties["columnName"];
       if (!fromAvailableNames.has(referencedTable)) {
         context.addError("TABLE_NOT_IN_FROM", column);
-      } else {
-        if (!schema.hasColumn(referencedTable, columnName)) {
-          context.addError("UNKNOWN_COLUMN", column);
-        }
       }
     });
   }
 
   /**
-   *
+   * Attempts to guess whether an aggregation function is used meaningfully.
    */
-  private validateAggregationGroupBy(ast: AST.Node, _: Schema, context: ValidationContext) {
+  private validateAggregationGroupBy(ast: AST.Node, context: ValidationContext) {
     // Are there any calls to aggregation functions without GROUP BY?
     const allFunctions = ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" });
 
@@ -124,7 +152,7 @@ export class SqlValidator extends SpecializedValidator {
     }
   }
 
-  private validateNumberOfArguments(ast: AST.Node, _: Schema, context: ValidationContext) {
+  private validateNumberOfArguments(ast: AST.Node, context: ValidationContext) {
     ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" }).forEach(callNode => {
       const funcName = callNode.properties["name"].toLocaleLowerCase();
       const numParameters = callNode.getChildrenInCategory("arguments").length;

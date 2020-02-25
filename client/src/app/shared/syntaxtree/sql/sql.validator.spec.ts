@@ -6,9 +6,13 @@ import { NodeDescription } from '../syntaxtree.description';
 import { Node } from '../syntaxtree';
 import { ValidationContext } from '../validation-result';
 
-function specContext(schemaDescription = SPEC_TABLES): DatabaseSchemaAdditionalContext {
+function specContext(
+  schemaDescription = SPEC_TABLES,
+  validateGroupBy = false
+): DatabaseSchemaAdditionalContext {
   return ({
-    databaseSchema: new Schema(schemaDescription)
+    databaseSchema: new Schema(schemaDescription),
+    validateGroupBy
   });
 }
 
@@ -68,8 +72,7 @@ function createTreeWithCall(funcName: string, colNames: string[]): NodeDescripti
 }
 
 describe(`Specialized SQL Validator`, () => {
-  it(`Error: UNKNOWN_TABLE`, () => {
-    const context = new ValidationContext(specContext());
+  describe(`Error: UNKNOWN_TABLE`, () => {
     const sqlValidator = new SqlValidator();
 
     const astDesc: NodeDescription = {
@@ -97,16 +100,23 @@ describe(`Specialized SQL Validator`, () => {
     };
 
     const ast = new Node(astDesc, undefined);
-    sqlValidator.validateFromRoot(ast, context);
 
-    expect(context.errors.length).toEqual(1);
-    expect(context.errors[0].code).toEqual("UNKNOWN_TABLE");
+    it(`With schema`, () => {
+      const context = new ValidationContext(specContext());
+      sqlValidator.validateFromRoot(ast, context);
+
+      expect(context.errors.map(e => e.code)).toEqual(["UNKNOWN_TABLE"]);
+    });
+
+    it(`Without schema`, () => {
+      const context = new ValidationContext({});
+      sqlValidator.validateFromRoot(ast, context);
+
+      expect(context.errors.map(e => e.code)).toEqual([]);
+    });
   });
 
-  it(`Error: DUPLICATE_TABLE_NAME`, () => {
-    const context = new ValidationContext(specContext());
-    const sqlValidator = new SqlValidator();
-
+  describe(`Error: DUPLICATE_TABLE_NAME`, () => {
     const astDesc: NodeDescription = {
       "name": "querySelect",
       "language": "sql",
@@ -139,14 +149,141 @@ describe(`Specialized SQL Validator`, () => {
     };
 
     const ast = new Node(astDesc, undefined);
-    sqlValidator.validateFromRoot(ast, context);
+    const sqlValidator = new SqlValidator();
 
-    expect(context.errors.length).toEqual(1);
-    expect(context.errors[0].code).toEqual("DUPLICATE_TABLE_NAME");
+    it(`With schema`, () => {
+      const context = new ValidationContext(specContext());
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["DUPLICATE_TABLE_NAME"]);
+    });
+
+    it(`Without schema`, () => {
+      const context = new ValidationContext({});
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["DUPLICATE_TABLE_NAME"]);
+    });
   });
 
-  it(`Error: DUPLICATE_TABLE_NAME, UNKNOWN_TABLE`, () => {
-    const context = new ValidationContext(specContext());
+  describe(`Error: TABLE_NOT_IN_FROM`, () => {
+
+    const astDesc: NodeDescription = {
+      "name": "querySelect",
+      "language": "sql",
+      "children": {
+        "select": [
+          {
+            "name": "select",
+            "language": "sql",
+            "children": {
+              "columns": [
+                {
+                  "language": "sql",
+                  "name": "columnName",
+                  "properties": {
+                    "columnName": "name",
+                    "refTableName": "person"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "from": [
+          {
+            "name": "from",
+            "language": "sql",
+            "children": {
+              "tables": [
+                {
+                  "name": "tableIntroduction",
+                  "language": "sql",
+                  "properties": {
+                    "name": "ereignis"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+    const ast = new Node(astDesc, undefined);
+    const sqlValidator = new SqlValidator();
+
+    it(`With schema`, () => {
+      const context = new ValidationContext(specContext());
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["TABLE_NOT_IN_FROM"]);
+    });
+
+    it(`Without schema`, () => {
+      const context = new ValidationContext({});
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["TABLE_NOT_IN_FROM"]);
+    });
+  });
+
+  describe(`Error: UNKNOWN_COLUMN`, () => {
+    const astDesc: NodeDescription = {
+      "name": "querySelect",
+      "language": "sql",
+      "children": {
+        "select": [
+          {
+            "name": "select",
+            "language": "sql",
+            "children": {
+              "columns": [
+                {
+                  "language": "sql",
+                  "name": "columnName",
+                  "properties": {
+                    "columnName": "doesntexist",
+                    "refTableName": "ereignis"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "from": [
+          {
+            "name": "from",
+            "language": "sql",
+            "children": {
+              "tables": [
+                {
+                  "name": "tableIntroduction",
+                  "language": "sql",
+                  "properties": {
+                    "name": "ereignis"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+    const ast = new Node(astDesc, undefined);
+    const sqlValidator = new SqlValidator();
+
+    it(`With schema`, () => {
+      const context = new ValidationContext(specContext());
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["UNKNOWN_COLUMN"]);
+    });
+
+    it(`Without schema`, () => {
+      const context = new ValidationContext({});
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual([]);
+    });
+  });
+
+  describe(`Error: DUPLICATE_TABLE_NAME, UNKNOWN_TABLE`, () => {
     const sqlValidator = new SqlValidator();
 
     const astDesc: NodeDescription = {
@@ -181,18 +318,22 @@ describe(`Specialized SQL Validator`, () => {
     };
 
     const ast = new Node(astDesc, undefined);
-    sqlValidator.validateFromRoot(ast, context);
 
-    expect(context.errors.length).toEqual(3);
-    expect(context.errors[0].code).toEqual("UNKNOWN_TABLE", 0);
-    expect(context.errors[1].code).toEqual("UNKNOWN_TABLE", 1);
-    expect(context.errors[2].code).toEqual("DUPLICATE_TABLE_NAME", 2);
+    it(`Error: DUPLICATE_TABLE_NAME, UNKNOWN_TABLE`, () => {
+      const context = new ValidationContext(specContext());
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["UNKNOWN_TABLE", "UNKNOWN_TABLE", "DUPLICATE_TABLE_NAME"]);
+    });
+
+    it(`Error: DUPLICATE_TABLE_NAME, UNKNOWN_TABLE`, () => {
+      const context = new ValidationContext({});
+      sqlValidator.validateFromRoot(ast, context);
+      expect(context.errors.map(e => e.code)).toEqual(["DUPLICATE_TABLE_NAME"]);
+    });
   });
 
   it(`Error: AGGREGATION_WITHOUT_GROUP_BY`, () => {
-    pending("Deactivated for the moment, error doesn't seem to be very helpful");
-
-    const context = new ValidationContext(specContext());
+    const context = new ValidationContext(specContext(SPEC_TABLES, true));
     const sqlValidator = new SqlValidator();
 
     const astDesc: NodeDescription = {
