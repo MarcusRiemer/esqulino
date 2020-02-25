@@ -71,9 +71,7 @@
          up sometime in the future. Lets see what we have:
 
          * node and visual are basicly passed through
-         * TODO: The animations should be defined on the child
-         * draggable and (dragStart) offload the drag detection to the browser
-         * (mouseover) informs the global state about drag events -->
+         * TODO: The animations should be defined on the child  -->
     <editor-block-render-block #currentBlock
                                [@background]="currentBlock.backgroundState | async"
                                [blockBase]="visual"
@@ -83,9 +81,7 @@
                                class="{{ visual.direction }}"
                                [class.read-only]="readOnly"
                                [class.being-replaced]="(currentBlock.isBeingReplaced | async)"
-                               draggable="true"
-                               (dragstart)="currentBlock.onStartDrag($event, block)"
-                               (mouseover)="currentBlock.onMouseEnter($event, 'block')">
+                               draggable="true">
     </editor-block-render-block>
   </ng-container>
   <!-- Render multiple visuals for the same node -->

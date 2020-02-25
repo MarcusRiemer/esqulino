@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, HostListener } from '@angular/core';
 
 import { combineLatest, Observable } from 'rxjs';
 import { map, withLatestFrom, distinctUntilChanged, tap, filter } from 'rxjs/operators';
@@ -40,12 +40,6 @@ export class BlockRenderBlockComponent {
     private _renderData: RenderedCodeResourceService,
     private _changeDetector: ChangeDetectorRef
   ) {
-  }
-
-  ngOnInit() {
-    if (!this.node) {
-      debugger;
-    }
   }
 
   /**
@@ -92,6 +86,7 @@ export class BlockRenderBlockComponent {
   /**
    * Notifies the drag service about the drag we have just started.
    */
+  @HostListener('dragstart', ['$event'])
   onStartDrag(evt: MouseEvent) {
     if (!this._renderData.readOnly) {
       this._dragService.dragStart(evt, [this.node.toModel()], undefined, {
@@ -104,7 +99,9 @@ export class BlockRenderBlockComponent {
   /**
    * A mouse has entered the block and might want to drop something.
    */
-  onMouseEnter(evt: MouseEvent, dropLocationHint: RelativeDropLocation) {
+  @HostListener('mouseover', ['$event', `'block'`])
+  onMouseOver(evt: MouseEvent, dropLocationHint: RelativeDropLocation) {
+    // If we may react to a drag operation: Advertise us as a target
     if (!this._renderData.readOnly && this._dragService.peekIsDragInProgress) {
       const shiftedLocation = relativeDropLocation(this.node.location, dropLocationHint);
       const explicitLocation = dropLocationHint !== "block";
