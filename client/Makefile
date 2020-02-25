@@ -25,10 +25,12 @@ CLIENT_NON_XLF_SOURCES = $(filter-out %.xlf, $(CLIENT_ALL_SOURCES))
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
 
-# Default to german locale in dev build
-NG_LOCALE       ?= de
 # Default to production build in complete build
 NG_PROD         ?= --prod
+
+# Targets that may be used in the `dist` target have some special flags
+DIST_FLAGS      ?= --no-progress
+
 
 all : dist
 
@@ -54,7 +56,7 @@ src/environments/version.ts :
 ##################################
 
 client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --no-progress $(NG_PROD)
+	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --watch
@@ -89,7 +91,7 @@ cli-ping: cli-compile
 
 universal-compile:
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
-	$(NG_BIN) run blattwerkzeug-client:server
+	$(NG_BIN) run blattwerkzeug-client:server $(DIST_FLAGS)
 
 universal-run: universal-compile
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
