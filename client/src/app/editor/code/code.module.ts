@@ -14,6 +14,7 @@ import { LanguageEmittedSelectorComponent } from './language-emitted-selector.co
 import { CodeSidebarComponent } from './code.sidebar'
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
+import { UnknownCodeResourceComponent } from './unknown-code-resource.component'
 
 import { BLOCK_RENDER_COMPONENTS } from './block/index'
 import { BlockRootComponent } from './block/block-root.component';
@@ -66,6 +67,7 @@ import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.compo
     WorldSensorsComponent,
     WorldSelectorComponent,
     UserFunctionsSidebarComponent,
+    UnknownCodeResourceComponent,
     DefinedTypesSidebarComponent
   ],
   entryComponents: [

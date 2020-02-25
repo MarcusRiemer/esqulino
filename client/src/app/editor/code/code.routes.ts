@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router'
 
 import { CreateCodeResourceComponent } from './create-code-resource.component'
+import { UnknownCodeResourceComponent } from './unknown-code-resource.component'
+
 import { BlockEditorComponent } from './block/block-editor.component'
 
 import { ResourceChangedGuard } from './resource-changed.guard'
@@ -21,4 +23,8 @@ export const codeEditorRoutes: Routes = [
     canActivate: [ResourceChangedGuard],
     component: BlockEditorComponent
   },
+  {
+    path: ':resourceId/unknown',
+    component: UnknownCodeResourceComponent
+  }
 ]

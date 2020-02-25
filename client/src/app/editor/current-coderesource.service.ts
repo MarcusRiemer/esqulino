@@ -43,14 +43,17 @@ export class CurrentCodeResourceService {
     console.log(`Current resource ID changed to: ${codeResourceId}`);
 
     // Check whether the referenced resource exists
-    if (codeResourceId) {
+    const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
+    if (resource) {
       // Yes, we resolve the actual resource
-      const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
       console.log(`Set new resource "${resource.name}" (${codeResourceId})`);
       this._codeResource.next(resource);
+      return (resource);
     } else {
       // No, we inform everybody that there is no resource
+      console.error(`CodeResource ${codeResourceId} doesn't seem to exist`);
       this._codeResource.next(undefined);
+      return (undefined);
     }
   }
 

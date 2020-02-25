@@ -2,33 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="de" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="news" datatype="html">
-        <source>Neuigkeiten</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="newsPublicationDate" datatype="html">
-        <source>
-      Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:&apos;dd.MM.yyyy&apos;}}"/>
-    </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news-details.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="continueReading" datatype="html">
-        <source>Weiterlesen ...</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/shared/templates/news.html</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="authDialogHeaderSignIn" datatype="html">
         <source>
         Anmelden
@@ -45,6 +18,33 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/auth/templates/auth-dialog.html</context>
           <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="news" datatype="html">
+        <source>Neuigkeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news-list.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="newsPublicationDate" datatype="html">
+        <source>
+      Neuigkeiten vom <x id="INTERPOLATION" equiv-text="{{item.publishedFrom | date:&apos;dd.MM.yyyy&apos;}}"/>
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news-list.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news-details.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="continueReading" datatype="html">
+        <source>Weiterlesen ...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/shared/templates/news-list.html</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="userMenuSettings" datatype="html">
@@ -717,7 +717,7 @@
         <source>Projektvorschläge</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="projectProposalsIntro" datatype="html">
@@ -726,7 +726,7 @@
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="academiaThesesInfo" datatype="html">
@@ -735,7 +735,7 @@
   </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="academiaSeminarInfo" datatype="html">
@@ -744,7 +744,7 @@
   </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="academiaMediaProjectInfo" datatype="html">
@@ -753,7 +753,7 @@
   </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="softwareStackIntro" datatype="html">
@@ -762,58 +762,74 @@
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="testDrivenDevelopment" datatype="html">
         <source>Test Driven Development</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="testDrivenDevelopmentDescription" datatype="html">
         <source>Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dockerAndCi" datatype="html">
         <source>Docker &amp; Continuous Integration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dockerAndCiDescription" datatype="html">
         <source>Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="singlePageAndApi" datatype="html">
         <source>Single Page Applications &amp; API-Server</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="singlePageAndApiDescription" datatype="html">
         <source>Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="devEnvironmentUsed" datatype="html">
         <source>Umgebung: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/front/templates/development.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <note priority="1" from="description">dev environment used</note>
+      </trans-unit>
+      <trans-unit id="unknownCodeResource" datatype="html">
+        <source>Unbekannte Code-Resource</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/templates/unknown-code-resource.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="unknownCodeResourceTextNotFound" datatype="html">
+        <source>
+  Die Code-Resource mit der obigen ID wurde nicht gefunden.
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/templates/unknown-code-resource.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="deleteNews" datatype="html">
         <source>News Löschen</source>
