@@ -18,12 +18,12 @@ import { TypeInstructions } from './instructions'
  * they are immediatly added to the visual representation.
  */
 function addTags(
-  attr: NodeTerminalSymbolDescription | NodePropertyTypeDescription | NodeVisualContainerDescription,
-  visual: VisualBlockDescriptions.EditorConstant | VisualBlockDescriptions.EditorInterpolated | VisualBlockDescriptions.EditorContainer | VisualBlockDescriptions.EditorInput
+  attr: NodeAttributeDescription,
+  visual: VisualBlockDescriptions.ConcreteBlock
 ) {
-  if (attr.tags && attr.tags.length > 0) {
+  if (attr.tags?.length > 0) {
     const prev = visual.cssClasses || [];
-    visual.cssClasses = prev.concat(attr.tags);
+    visual.cssClasses = [...prev, ...attr.tags];
   }
 }
 
@@ -156,6 +156,9 @@ export function mapChildren(
   if (Object.keys(instructions.style).length > 0) {
     iteratorBlock.style = instructions.style;
   }
+
+  // Possibly add the tags
+  addTags(attr, iteratorBlock);
 
   return ([iteratorBlock]);
 }

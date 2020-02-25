@@ -65,6 +65,31 @@ describe("BlockLanguage Generator Type Mapping", () => {
     ]);
   });
 
+  it("Sequence (+Tags) => Iterator", () => {
+    const attrType: NodeAttributeDescription = {
+      type: "sequence",
+      name: "c1",
+      nodeTypes: [],
+      tags: ["a", "b"]
+    };
+    const nodeType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        attrType
+      ]
+    };
+    const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
+
+    expect(res).toEqual([
+      {
+        blockType: "iterator",
+        childGroupName: "c1",
+        emptyDropTarget: false,
+        cssClasses: ["a", "b"]
+      }
+    ]);
+  });
+
   it("Sequence (+Between) => Iterator", () => {
     const attrType: NodeAttributeDescription = {
       type: "sequence",

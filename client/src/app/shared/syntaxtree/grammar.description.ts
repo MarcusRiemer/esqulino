@@ -232,6 +232,7 @@ export interface NodeTypesSequenceDescription {
   name: string
   nodeTypes: NodeTypesChildReference[]
   between?: NodeTerminalSymbolDescription
+  tags?: string[]
 }
 
 /**
@@ -243,6 +244,7 @@ export interface NodeTypesAllowedDescription {
   name: string,
   nodeTypes: NodeTypesChildReference[],
   between?: NodeTerminalSymbolDescription
+  tags?: string[]
 }
 
 /**
@@ -253,6 +255,7 @@ export interface NodeTypesChoiceDescription {
   type: "choice",
   name: string,
   choices: TypeReference[]
+  tags?: string[]
 }
 
 /**
@@ -270,6 +273,7 @@ export interface NodeTypesParenthesesDescription {
   },
   cardinality: OccursDescription,
   between?: NodeTerminalSymbolDescription
+  tags?: string[]
 }
 
 /**

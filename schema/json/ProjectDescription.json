@@ -623,16 +623,6 @@
                   }
                 ]
               },
-              "breakAfter": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
-              },
               "emptyDropTarget": {
                 "anyOf": [
                   {
@@ -682,7 +672,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
                   }
                 ]
               }
@@ -702,16 +692,6 @@
                   },
                   {
                     "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
-                  }
-                ]
-              },
-              "breakAfter": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
                   }
                 ]
               },
@@ -744,7 +724,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
                   }
                 ]
               }
@@ -1295,6 +1275,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "allowed"
@@ -1411,6 +1397,12 @@
         "nodeTypes": {
           "items": {
             "$ref": "#/definitions/NodeTypesChildReference"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },
@@ -1735,7 +1727,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_": {
+    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -2036,16 +2028,6 @@
                   }
                 ]
               },
-              "breakAfter": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
-              },
               "emptyDropTarget": {
                 "anyOf": [
                   {
@@ -2095,7 +2077,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1271-1002692191-0-4510_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
                   }
                 ]
               }

@@ -482,6 +482,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "allowed"
@@ -598,6 +604,12 @@
         "nodeTypes": {
           "items": {
             "$ref": "#/definitions/NodeTypesChildReference"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         },
