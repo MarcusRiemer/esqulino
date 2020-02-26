@@ -1,5 +1,5 @@
 import {
-  GrammarDocument, readFromNode, NodeTerminalSymbolDescription, convertProperty, convertTerminal
+  GrammarDocument, readFromNode, NodeTerminalSymbolDescription, convertProperty, convertTerminal, NodeTypesSequenceDescription
 } from "./grammar.description";
 import { Node } from './syntaxtree'
 
@@ -229,6 +229,111 @@ describe(`Convert AST => GrammarDescription`, () => {
         root: undefined,
         types: {
           "l": { "t": { type: "concrete", attributes: [terminalDesc] } }
+        }
+      });
+    });
+
+    it(`Type with single, empty sequence`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "meta",
+        name: "grammar",
+        children: {
+          "nodes": [
+            {
+              language: "meta",
+              name: "concreteNode",
+              properties: {
+                "languageName": "l",
+                "typeName": "t"
+              },
+              children: {
+                "attributes": [
+                  {
+                    language: "meta",
+                    name: "children",
+                    properties: {
+                      "base": "sequence",
+                      "name": "seq",
+                    },
+                    children: {
+
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      });
+
+      const seqDesc: NodeTypesSequenceDescription = {
+        type: "sequence",
+        name: "seq",
+        nodeTypes: []
+      };
+
+      expect(g).toEqual({
+        root: undefined,
+        types: {
+          "l": { "t": { type: "concrete", attributes: [seqDesc] } }
+        }
+      });
+    });
+
+    it(`Type with single sequence that references a single type`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "meta",
+        name: "grammar",
+        children: {
+          "nodes": [
+            {
+              language: "meta",
+              name: "concreteNode",
+              properties: {
+                "languageName": "l",
+                "typeName": "t"
+              },
+              children: {
+                "attributes": [
+                  {
+                    language: "meta",
+                    name: "children",
+                    properties: {
+                      "base": "sequence",
+                      "name": "seq",
+                    },
+                    children: {
+                      "references": [
+                        {
+                          language: "meta",
+                          name: "nodeRefOne",
+                          properties: {
+                            "languageName": "l",
+                            "typeName": "t"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      });
+
+      const seqDesc: NodeTypesSequenceDescription = {
+        type: "sequence",
+        name: "seq",
+        nodeTypes: [
+          { languageName: "l", typeName: "t" }
+        ]
+      };
+
+      expect(g).toEqual({
+        root: undefined,
+        types: {
+          "l": { "t": { type: "concrete", attributes: [seqDesc] } }
         }
       });
     });

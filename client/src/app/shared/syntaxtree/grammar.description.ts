@@ -431,17 +431,24 @@ export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
 
 export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
   const toReturn: ReturnType<typeof convertChildren> = {
-    type: attrNode.properties["base"] as ("sequence" | "allowed"),
+    type: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
-    nodeTypes: []
+    nodeTypes: undefined
   };
 
-  attrNode.getChildrenInCategory("references").forEach(ref => {
-    switch (ref.typeName) {
-      case "nodeRefOne":
-        break;
-    }
-  });
+  if (isNodeTypesAllowedDescription(toReturn) || isNodeTypesSequenceDescription(toReturn)) {
+    const typeReferences: NodeTypesChildReference[] = attrNode.getChildrenInCategory("references").map(ref => {
+      switch (ref.typeName) {
+        case "nodeRefOne":
+          return ({
+            languageName: ref.properties["languageName"],
+            typeName: ref.properties["typeName"]
+          });
+      }
+    });
+
+    toReturn.nodeTypes = typeReferences;
+  }
 
   return (toReturn);
 }
@@ -457,6 +464,9 @@ export function readAttributes(attrNode: Node, target: NodeAttributeDescription[
       break;
     case "terminal":
       target.push(convertTerminal(attrNode));
+      break;
+    case "children":
+      target.push(convertChildren(attrNode));
       break;
   }
 }
