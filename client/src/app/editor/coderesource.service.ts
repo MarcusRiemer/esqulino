@@ -6,7 +6,7 @@ import { catchError, delay, map, tap, shareReplay } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared'
 import { CodeResource } from '../shared/syntaxtree'
-import { CodeResourceDescription } from '../shared/syntaxtree/coderesource.description';
+import { CodeResourceDescription, CodeResourceRequestUpdateDescription } from '../shared/syntaxtree/coderesource.description';
 import { Project } from '../shared/project'
 
 @Injectable({ providedIn: "root" })
@@ -69,17 +69,21 @@ export class CodeResourceService {
     const url = this._server.getCodeResourceUrl(project.slug, resource.id);
 
     // The actual document that should be sent
-    const bodyJson = resource.toModel();
+    const requestModel = resource.toModel();
 
     // The actual document may not contain the ID (that's part of the URL)
-    delete bodyJson.id;
+    delete requestModel.id;
 
     // If there is no ast present: Ensure that an empty AST is transferred
     if (resource.syntaxTreePeek.isEmpty) {
-      bodyJson.ast = null;
+      requestModel.ast = null;
     }
 
-    const toReturn = this._http.put(url, bodyJson)
+    const request: CodeResourceRequestUpdateDescription = {
+      resource: requestModel
+    }
+
+    const toReturn = this._http.put(url, request)
       .pipe(
         catchError(this.handleError),
         delay(250),

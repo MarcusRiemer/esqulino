@@ -4,6 +4,8 @@
 # controllers.
 class CodeResourcesController < ApplicationController
 
+  include JsonSchemaHelper
+
   # Create a new resource that is part of a specific project
   def create
     project_slug = params[:project_id]
@@ -22,15 +24,14 @@ class CodeResourcesController < ApplicationController
 
   # Updates a specific resource
   def update
+    # See what the new data looks like
+    request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
+    update_params = request_data
+                      .dig("resource")
+                      .transform_keys { |k| k.underscore }
+
+    # Do the actual update
     resource = CodeResource.find(params[:code_resource_id])
-    update_params = code_resource_update_params.to_hash
-
-    # Explicitly include an empty AST if it has not been sent. Without this
-    # the user could never delete a syntax tree that existed previously
-    if params.has_key? "ast"
-      update_params["ast"] ||= nil
-    end
-
     if resource.update(update_params)
       render :json => resource, :status => 200
     else
@@ -61,13 +62,6 @@ class CodeResourcesController < ApplicationController
 
   # Possible parameters when creating
   def code_resource_create_params
-    params
-      .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
-      .transform_keys { |k| k.underscore }
-  end
-
-  # Possible parameters when updating
-  def code_resource_update_params
     params
       .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
       .transform_keys { |k| k.underscore }
