@@ -413,6 +413,9 @@ export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   });
 }
 
+/**
+ * Converts a node that represents a terminal symbol to a description.
+ */
 export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
   const toReturn: ReturnType<typeof convertTerminal> = {
     type: "terminal",

@@ -1,38 +1,23 @@
 editor-block-host {
-    &.activate-block-outline editor-block-render-block {
-        border: 1px solid black;
-        border-radius: 5px;
-        //margin: 2px;
-        //padding: 2px;
 
-        margin-top: 2px;
-        margin-bottom: 2px;
-        padding-top: 2px;
-        padding-bottom: 2px;
-        margin-left: -1px;
-        margin-right: 1px;
-    }
-
-    &.activate-indent .indent  {
-        margin-left: 2ch;
-    }
-
-    // Selectively deactivate wrapping in constants, useful for
-    // logically related terminal symbols like "else if".
-    &.activate-terminal-nowrap span.constant {
-        white-space: nowrap;
-    }
-
-    // Mark something as a keyword a language
-    &.activate-terminal-keyword span.keyword {
-        color: blue;
-    }
-
-    // Enquote a terminal symbol with quotes
-    &.activate-terminal-enquote span.double-quote {
-        &::after, &::before {
-            content: "\"";
+    editor-block-container {
+        display: flex;
+        &.horizontal {
+            flex-direction: row;
+            align-items: baseline;
         }
+        &.vertical {
+            flex-direction: column;
+            align-items: flex-start; // Otherwise children occupy full width
+        }
+
+        &.allow-wrap {
+            flex-wrap: wrap;
+        }
+    }
+
+    .indent  {
+        margin-left: 2ch;
     }
 
     .space-around {
@@ -53,19 +38,35 @@ editor-block-host {
         }
     }
 
-    editor-block-container {
-        display: flex;
-        &.horizontal {
-            flex-direction: row;
-            align-items: baseline;
+    // Enquote something
+    .double-quote {
+        &::after, &::before {
+            content: "\"";
         }
-        &.vertical {
-            flex-direction: column;
-            align-items: flex-start; // Otherwise children occupy full width
-        }
+    }
 
-        &.allow-wrap {
-            flex-wrap: wrap;
-        }
+    &.activate-block-outline editor-block-render-block {
+        border: 1px solid black;
+        border-radius: 5px;
+        //margin: 2px;
+        //padding: 2px;
+
+        margin-top: 2px;
+        margin-bottom: 2px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        margin-left: -1px;
+        margin-right: 1px;
+    }
+
+    // Selectively deactivate wrapping in constants, useful for
+    // logically related terminal symbols like "else if".
+    &.activate-nowrap span.no-wrap {
+        white-space: nowrap;
+    }
+
+    // Mark something as a keyword a language
+    &.activate-keyword span.keyword {
+        color: blue;
     }
 }

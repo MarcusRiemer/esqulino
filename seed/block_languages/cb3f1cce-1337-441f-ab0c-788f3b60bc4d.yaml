@@ -249,8 +249,8 @@ concise_attributes:
     "inline-flex"}, "property": "operator", "blockType": "input", "cssClasses": ["operator",
     "space-around"]}], "blockType": "block", "dropTarget": {}}], "describedType":
     {"typeName": "relationalOperator", "languageName": "sql"}}], "rootCssClasses":
-    ["activate-indent"], "editorComponents": [{"componentType": "block-root"}, {"columnClasses":
-    ["col-lg-6"], "componentType": "validator"}, {"columnClasses": ["col-lg-6"], "componentType":
+    [], "editorComponents": [{"componentType": "block-root"}, {"columnClasses": ["col-lg-6"],
+    "componentType": "validator"}, {"columnClasses": ["col-lg-6"], "componentType":
     "generated-code"}, {"componentType": "query-preview"}], "localGeneratorInstructions":
     {"type": "manual", "traits": {"readOnlyProperty": {"applyMode": "deepMerge", "instructions":
     {"propReadOnly": true}}}, "traitScopes": [{"traits": ["readOnlyProperty"], "attributes":
@@ -305,15 +305,13 @@ concise_attributes:
     "editorComponents": [{"componentType": "block-root"}, {"columnClasses": ["col-lg-6"],
     "componentType": "validator"}, {"columnClasses": ["col-lg-6"], "componentType":
     "generated-code"}, {"componentType": "query-preview"}], "typeInstructions": {},
-    "parameterDeclarations": {"keywordColor": {"type": {"type": "color"}, "defaultValue":
-    "#0000ff"}, "indentSubComponent": {"type": {"type": "string"}, "defaultValue":
-    "2ch"}}}}'
+    "parameterDeclarations": {}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-07-17 11:08:14.302566000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-02-25 10:15:36.417988000 Z
+  value_before_type_cast: 2020-02-26 12:43:32.912516000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
