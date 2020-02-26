@@ -28,11 +28,6 @@ editor-block-host {
         color: blue;
     }
 
-    // Add a whitespace after a terminal symbol
-    &.activate-terminal-whitespace .space-after {
-        margin-right: 1ch;
-    }
-
     // Enquote a terminal symbol with quotes
     &.activate-terminal-enquote span.double-quote {
         &::after, &::before {
