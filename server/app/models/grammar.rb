@@ -29,6 +29,23 @@ class Grammar < ApplicationRecord
     select(:id, :slug, :name, :created_at, :updated_at, :programming_language_id)
   }
 
+  # Takes the current state of the backing code resource and assigns
+  # the newly generated model.
+  #
+  # @param ide_service [IdeService] A connection to the ide service
+  #        that may be used to generate the source code.
+  #
+  # @raise [IdeServiceError] If anything goes wrong during compilation.
+  def emit_ast!(ide_service = IdeService.instance)
+    ide_service.emit_code(self.ast, self.programming_language_id)
+  end
+  def regenerate_from_code_resource!(ide_service = IdeService.instance)
+    compiled = self.generated_from.emit_ast!(ide_service)
+    grammar_document = JSON.parse(compiled)
+
+    self.model = grammar_document.slice('types', 'foreignTypes', 'root')
+  end
+
   # Computes a hash that may be sent back to the client if it requires
   # full access to grammar.
   def to_full_api_response

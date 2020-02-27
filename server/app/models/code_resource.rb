@@ -12,6 +12,9 @@ class CodeResource < ApplicationRecord
   # ... and compiles to exactly one programming language.
   belongs_to :programming_language
 
+  # May be the basis for generated grammars
+  has_many :grammar, foreign_key: 'generated_from_id', class_name: 'Grammar'
+
   # Name may not be empty
   validates :name, presence: true
   # The AST is a single root node or empty
@@ -69,9 +72,16 @@ class CodeResource < ApplicationRecord
   # Takes the current syntaxtree and asks the IDE service for the
   # compiled representation.
   #
+  # @param ide_service [IdeService] A connection to the ide service
+  #        that may be used to generate the source code.
+  # @param programming_language_id [string] The id of the language
+  #        that should be used for code generation. May be `nil`
+  #        to roll with the language that is defined on the model.
+  #
   # @raise [IdeServiceError] If anything goes wrong during compilation.
-  def emit_ast!
-    IdeService.instance.emit_code(self.ast, self.programming_language_id)
+  def emit_ast!(ide_service = IdeService.instance, programming_language_id: nil)
+    programming_language_id ||= self.programming_language_id
+    ide_service.emit_code(self.ast, programming_language_id)
   end
 
   # Computes a hash that may be sent back to the client

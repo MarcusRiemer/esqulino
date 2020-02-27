@@ -120,6 +120,18 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
+  context "Traits for builtin snippets" do
+    it "SQL" do
+      res = FactoryBot.build(:code_resource, :sql_key_value_select_double)
+      expect(res.programming_language_id).to eq "sql"
+    end
+
+    it "Meta Grammar" do
+      res = FactoryBot.build(:code_resource, :grammar_single_type)
+      expect(res.programming_language_id).to eq "meta-grammar"
+    end
+  end
+
   it "project is required" do
     res = FactoryBot.build(:code_resource, project: nil)
 

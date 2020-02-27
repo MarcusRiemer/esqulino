@@ -30,12 +30,18 @@ class CodeResourcesController < ApplicationController
                       .dig("resource")
                       .transform_keys { |k| k.underscore }
 
-    # Do the actual update
     resource = CodeResource.find(params[:code_resource_id])
-    if resource.update(update_params)
-      render :json => resource, :status => 200
-    else
-      render :json => { 'errors' => resource.errors }, :status => 400
+
+    ApplicationRecord.transaction do
+      # Do the actual update of the code resource
+      if resource.update(update_params)
+
+        # Do updates on dependant resources
+
+        render :json => resource, :status => 200
+      else
+        render :json => { 'errors' => resource.errors }, :status => 400
+      end
     end
   end
 

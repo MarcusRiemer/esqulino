@@ -76,8 +76,38 @@ RSpec.describe Grammar, type: :model do
       expect { res.save }.to raise_error ActiveRecord::InvalidForeignKey
     end
 
-    it "may associate a code resource" do
-      res = FactoryBot.build(:grammar, generated_from: nil)
+    it "can associate a code resource" do
+      grammar = FactoryBot.create(:grammar, generated_from: nil)
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+
+      grammar.generated_from = resource
+
+      grammar.save!
+
+      grammar.reload
+      expect(grammar.generated_from_id).to eq resource.id
+    end
+
+    it "can regenerate" do
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      expect(grammar.model).to eq Hash.new
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+      grammar.regenerate_from_code_resource!(ide_service)
+
+      expect(grammar.model).to eq ({
+                                     "root" => { "languageName" => "lang", "typeName" => "root" },
+                                     "types" => {
+                                       "lang" => {
+                                         "root" => {
+                                           "type" => "concrete",
+                                           "attributes" => []
+                                         }
+                                       }
+                                     }
+                                   })
     end
   end
 end
