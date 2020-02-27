@@ -62,10 +62,6 @@
           "$ref": "#/definitions/NamedLanguages"
         }
       },
-      "required": [
-        "root",
-        "types"
-      ],
       "type": "object"
     },
     "LengthRestrictionDescription": {
@@ -526,6 +522,12 @@
         "name": {
           "type": "string"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "choice"
@@ -575,6 +577,12 @@
         },
         "name": {
           "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "type": {
           "enum": [

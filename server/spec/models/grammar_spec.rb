@@ -40,18 +40,44 @@ RSpec.describe Grammar, type: :model do
   end
 
   context "model" do
-    it "rejects missing root and missing types" do
-      res = FactoryBot.build(:grammar, model: Hash.new)
+    it "rejects missing model" do
+      res = FactoryBot.build(:grammar, model: nil)
 
       res.validate
       expect(res.errors["model"]).not_to be_empty
     end
 
-    it "factory created" do
+    it "factory created: Empty" do
       res = FactoryBot.build(:grammar)
 
       res.validate
       expect(res.errors["model"]).to be_empty
+    end
+
+    it "factory created: Empty" do
+      res = FactoryBot.build(:grammar, :model_single_type)
+
+      res.validate
+      expect(res.errors["model"]).to be_empty
+    end
+  end
+
+  context "based on CodeResource" do
+    it "may exist without a associated code resource" do
+      res = FactoryBot.build(:grammar, generated_from: nil)
+
+      res.validate
+      expect(res.errors["generated_from"]).to be_empty
+    end
+
+    it "may not exist without a associated non-existant code resource" do
+      res = FactoryBot.build(:grammar, generated_from_id: SecureRandom.uuid)
+
+      expect { res.save }.to raise_error ActiveRecord::InvalidForeignKey
+    end
+
+    it "may associate a code resource" do
+      res = FactoryBot.build(:grammar, generated_from: nil)
     end
   end
 end

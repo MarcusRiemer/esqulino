@@ -12,7 +12,11 @@ class Grammar < ApplicationRecord
   # The JSON document needs to be a valid grammar
   validates :model, json_schema: 'GrammarDatabaseBlob'
 
+  # The programming language that may define additional validation
   belongs_to :programming_language
+
+  # A grammar may be based on a meta grammar code resource
+  belongs_to :generated_from, class_name: 'CodeResource', optional: true
 
   # Many block languages may be based on a single grammar
   has_many :block_languages

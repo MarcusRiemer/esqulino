@@ -317,13 +317,13 @@ export type NamedLanguages = { [languageName: string]: NamedTypes };
  */
 export interface GrammarDatabaseBlob {
   // All types that are defined on this language
-  types: NamedLanguages
+  types?: NamedLanguages
 
   // All types that come from different languages
   foreignTypes?: NamedLanguages
 
   // The type that needs to be at the root of the language.
-  root: QualifiedTypeName
+  root?: QualifiedTypeName
 }
 
 /**
@@ -341,6 +341,13 @@ export interface GrammarDocument extends GrammarDatabaseBlob {
 export interface GrammarDescription extends GrammarDocument, GrammarListDescription {
 
 }
+
+/**
+ * A request to update a grammar.
+ */
+export type GrammarRequestUpdateDescription = Partial<
+  Omit<GrammarDescription, "id">
+>
 
 /**
  * @return True if the given instance satisfies "QualifiedTypeName"
