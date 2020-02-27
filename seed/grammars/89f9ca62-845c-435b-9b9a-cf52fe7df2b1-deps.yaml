@@ -1,4 +1,4 @@
 ---
 - - "../seed/programming_language"
-  - generic
+  - meta-grammar
   - !ruby/class 'Seed::ProgrammingLanguageSeed'
