@@ -12,7 +12,7 @@ export const GRAMMAR_NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const grammarDocument = readFromNode(node.toModel());
         process.addConvertedFragment(
-          JSON.stringify(grammarDocument),
+          JSON.stringify(grammarDocument, undefined, 2),
           node,
           OutputSeparator.NEW_LINE_AFTER
         );

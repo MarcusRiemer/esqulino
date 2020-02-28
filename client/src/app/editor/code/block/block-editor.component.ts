@@ -8,7 +8,7 @@ import { map, switchMap, first, combineLatest } from 'rxjs/operators';
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 import { BlockLanguageDataService } from '../../../shared/serverdata';
 
-import { ToolbarService } from '../../toolbar.service';
+import { EditorToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
@@ -40,7 +40,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   public readOnly = false;
 
   constructor(
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
     private _projectService: ProjectService,

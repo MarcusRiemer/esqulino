@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { ServerApiService } from '../../shared'
 import { ProjectService } from '../../editor/project.service'
-import { ToolbarService } from '../toolbar.service'
+import { EditorToolbarService } from '../toolbar.service'
 import { SidebarService } from '../sidebar.service'
 
 import { AvailableImage, AvailableImageDescription } from './available-image.class'
@@ -24,7 +24,7 @@ export class ImageEditComponent {
     private _http: HttpClient,
     private _projectService: ProjectService,
     private _routeParams: ActivatedRoute,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router
   ) {

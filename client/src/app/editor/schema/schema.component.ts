@@ -11,7 +11,7 @@ import { ServerApiService } from '../../shared';
 import { ProjectService, Project } from '../project.service'
 import { SchemaService } from '../schema.service'
 import { SidebarService } from '../sidebar.service'
-import { ToolbarService } from '../toolbar.service'
+import { EditorToolbarService } from '../toolbar.service'
 
 /**
  * A class as entry-point for the representation of a schema
@@ -37,7 +37,7 @@ export class SchemaComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private _http: HttpClient,
     private _projectService: ProjectService,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _sidebarService: SidebarService,

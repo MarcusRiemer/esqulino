@@ -17,7 +17,7 @@ import { BlockLanguageDataService, GrammarDataService } from '../../shared/serve
 import { CodeResourceDescription } from '../../shared/syntaxtree';
 import { EmptyComponent } from '../../shared/empty.component';
 
-import { ToolbarService } from '../toolbar.service';
+import { EditorToolbarService } from '../toolbar.service';
 import { SidebarService } from '../sidebar.service';
 import { ProjectService } from '../project.service';
 import { CodeResourceService } from '../coderesource.service';
@@ -39,7 +39,7 @@ describe(`CreateCodeResourceComponent`, () => {
         LanguageService,
         ServerApiService,
         RegistrationService,
-        ToolbarService,
+        EditorToolbarService,
         SidebarService,
         ProjectService,
         CodeResourceService,
