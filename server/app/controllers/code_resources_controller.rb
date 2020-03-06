@@ -22,7 +22,8 @@ class CodeResourcesController < ApplicationController
     end
   end
 
-  # Updates a specific resource
+  # Updates a specific resource. As other models in the database may
+  # depend on this specific resource, they may be updated as well.
   def update
     # See what the new data looks like
     request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
@@ -35,8 +36,8 @@ class CodeResourcesController < ApplicationController
     ApplicationRecord.transaction do
       # Do the actual update of the code resource
       if resource.update(update_params)
-
         # Do updates on dependant resources
+        resource.regenerate_immediate_dependants!
 
         render :json => resource, :status => 200
       else

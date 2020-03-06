@@ -132,6 +132,38 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
+  context "immediate_dependants" do
+    it "is empty if nothing depends on this" do
+      res = FactoryBot.build(:code_resource, :grammar_single_type)
+      expect(res.immediate_dependants.to_a).to eq []
+    end
+
+    it "with a single grammar" do
+      res = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: res)
+
+      expect(res.immediate_dependants.to_a).to eq [grammar]
+    end
+  end
+
+  context "regenerate_immediate_dependants!" do
+    it "is empty if nothing depends on this" do
+      unrelated = FactoryBot.create(:grammar)
+      res = FactoryBot.create(:code_resource, :grammar_single_type)
+      changed = res.regenerate_immediate_dependants!
+
+      expect(changed).to eq []
+    end
+
+    it "with a single grammar" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+
+      changed = related.regenerate_immediate_dependants!
+      expect(changed).to eq [grammar]
+    end
+  end
+
   it "project is required" do
     res = FactoryBot.build(:code_resource, project: nil)
 

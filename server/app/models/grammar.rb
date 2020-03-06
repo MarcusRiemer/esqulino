@@ -36,14 +36,20 @@ class Grammar < ApplicationRecord
   #        that may be used to generate the source code.
   #
   # @raise [IdeServiceError] If anything goes wrong during compilation.
-  def emit_ast!(ide_service = IdeService.instance)
-    ide_service.emit_code(self.ast, self.programming_language_id)
-  end
   def regenerate_from_code_resource!(ide_service = IdeService.instance)
     compiled = self.generated_from.emit_ast!(ide_service)
     grammar_document = JSON.parse(compiled)
+    model_attributes = grammar_document.slice('types', 'foreignTypes', 'root')
 
-    self.model = grammar_document.slice('types', 'foreignTypes', 'root')
+    # Can't use ActiveModel::Dirty because this relies on saves to the database
+    # as anchor points. In this method we want to know whether this concrete
+    # regenenaration changed something in practice.
+    if (not self.model.eql? model_attributes)
+      self.model = model_attributes
+      return (true)
+    else
+      return (false)
+    end
   end
 
   # Computes a hash that may be sent back to the client if it requires

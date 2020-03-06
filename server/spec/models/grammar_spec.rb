@@ -95,8 +95,9 @@ RSpec.describe Grammar, type: :model do
       expect(grammar.model).to eq Hash.new
 
       ide_service = IdeService.instantiate(allow_mock: false)
-      grammar.regenerate_from_code_resource!(ide_service)
+      did_change = grammar.regenerate_from_code_resource!(ide_service)
 
+      expect(did_change).to eq true
       expect(grammar.model).to eq ({
                                      "root" => { "languageName" => "lang", "typeName" => "root" },
                                      "types" => {
@@ -108,6 +109,16 @@ RSpec.describe Grammar, type: :model do
                                        }
                                      }
                                    })
+    end
+
+    it "regenerates only once" do
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq true
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq false
     end
   end
 end

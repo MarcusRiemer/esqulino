@@ -13,7 +13,7 @@ class CodeResource < ApplicationRecord
   belongs_to :programming_language
 
   # May be the basis for generated grammars
-  has_many :grammar, foreign_key: 'generated_from_id', class_name: 'Grammar'
+  has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
 
   # Name may not be empty
   validates :name, presence: true
@@ -82,6 +82,25 @@ class CodeResource < ApplicationRecord
   def emit_ast!(ide_service = IdeService.instance, programming_language_id: nil)
     programming_language_id ||= self.programming_language_id
     ide_service.emit_code(self.ast, programming_language_id)
+  end
+
+  # All records that are immediatly depending on this code resource. This
+  # is of interest when e.g. saving this resource, as it may require updates
+  # to these objects.
+  def immediate_dependants
+    self.grammars
+  end
+
+  # Regenerates other resources that depend on this code resource.
+  #
+  # @return [Array<Grammar|CodeResource>] All dependants that have been regenerated
+  def regenerate_immediate_dependants!
+    changed_dependants = []
+
+    self.immediate_dependants.each do |i|
+      i.regenerate_from_code_resource!
+      i.save!
+    end
   end
 
   # Computes a hash that may be sent back to the client
