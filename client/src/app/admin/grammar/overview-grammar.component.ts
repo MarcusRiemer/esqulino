@@ -47,6 +47,6 @@ resultsLength = this._serverData.listTotalCount;
     this._serverData.setListOrdering(this._sort.active, this._sort.direction);
   }
 
-  displayedColumns: (keyof GrammarListDescription)[] = ["name", "slug", "id"];
+  displayedColumns = ["name", "slug", "id","actions"];
 
 }
