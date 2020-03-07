@@ -100,7 +100,7 @@ export abstract class DataService<
    * Set the ordering parameters that should be used for all subsequent
    * listing requests.
    */
-  setListOrdering(columnName: string, order: "asc" | "desc" | "") {
+  setListOrdering(columnName: keyof TList, order: "asc" | "desc" | "") {
     if (order === "") {
       this._listGetParams = this._listGetParams
         .delete("orderDirection")
@@ -108,7 +108,7 @@ export abstract class DataService<
     } else {
       this._listGetParams = this._listGetParams
         .set("orderDirection", order)
-        .set("orderField", columnName);
+        .set("orderField", columnName.toString());
     }
 
     this.changeListParameters(this._listGetParams);

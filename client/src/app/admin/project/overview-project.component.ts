@@ -6,14 +6,17 @@ import { Observable } from 'rxjs';
 
 import { AdminProjectDataService } from '../../shared/serverdata';
 import { ProjectListDescription } from '../../shared/project.description';
+import { StringUnion } from '../../shared/string-union';
 
-@Component({
-  templateUrl: './templates/overview-project.html'
-})
+const ProjectListItemKey = StringUnion("id", "slug", "name");
+type ProjectListItemKey = typeof ProjectListItemKey.type;
 
 /**
  *
  */
+@Component({
+  templateUrl: './templates/overview-project.html'
+})
 export class OverviewProjectComponent {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
@@ -42,7 +45,12 @@ export class OverviewProjectComponent {
    * User has requested different sorting options
    */
   onChangeSort() {
-    this._serverData.setListOrdering(this._sort.active, this._sort.direction);
+    if (ProjectListItemKey.guard(this._sort.active)) {
+      this._serverData.setListOrdering(
+        this._sort.active,
+        this._sort.direction
+      );
+    }
   }
 
 
