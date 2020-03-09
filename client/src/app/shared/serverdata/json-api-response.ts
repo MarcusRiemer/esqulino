@@ -1,5 +1,9 @@
-export interface JsonApiListResponse<TList> {
-  data: TList[];
+/**
+ * A response that also informs about the total number of items
+ * that are available.
+ */
+export interface JsonApiListResponse<TListItem> {
+  data: TListItem[];
   meta: {
     totalCount: number;
   }
