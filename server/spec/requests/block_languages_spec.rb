@@ -8,7 +8,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       get "/api/block_languages"
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).length).to eq 0
+      expect(JSON.parse(response.body)['data'].length).to eq 0
     end
 
     it 'lists a single block language' do
@@ -18,8 +18,9 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)
-      expect(json_data.length).to eq 1
-      expect(json_data[0]).to validate_against "BlockLanguageListResponseDescription"
+    
+      expect(json_data['data'].length).to eq 1
+      expect(json_data).to validate_against "BlockLanguageListResponseDescription"
     end
   end
 

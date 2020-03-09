@@ -3,9 +3,9 @@
   Grammatiken
 </h2>
 <table class="table table-sm"
- mat-table matSort
- [dataSource]="availableGrammars | async"
- (matSortChange)="onChangeSort()">
+       mat-table matSort
+       [dataSource]="availableGrammars | async"
+       (matSortChange)="onChangeSort()">
 
  <ng-container matColumnDef="name">
    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>

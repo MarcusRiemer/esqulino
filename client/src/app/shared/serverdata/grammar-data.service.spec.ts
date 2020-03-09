@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
@@ -80,6 +79,33 @@ describe(`GrammarDataService`, () => {
     expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
   });
 
+  it(`Listing dataset with two items (name descending)`, async () => {
+    const fixture = instantiate();
+
+    const expectedList = [
+      buildGrammar({ name: "B" }),
+      buildGrammar({ name: "A" }),
+    ]
+
+    const order: GrammarOrder = {
+      direction: "desc",
+      field: "name",
+    }
+
+    fixture.service.setListOrdering(order.field, order.direction);
+
+    const pending = fixture.service.list.pipe(first()).toPromise();
+    provideGrammarList(expectedList, { order });
+
+    const list = await pending;
+    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+
+    expect(list).toEqual(expectedList);
+    expect(totalCount).toEqual(expectedList.length);
+    expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
+  });
+
+
   it(`Listing dataset with two items (name ascending)`, async () => {
     const fixture = instantiate();
 
@@ -105,6 +131,7 @@ describe(`GrammarDataService`, () => {
     expect(totalCount).toEqual(expectedList.length);
     expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
   });
+
 
   it(`Listing dataset with two items (slug descending)`, async () => {
     const fixture = instantiate();

@@ -11,7 +11,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 # TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/ts-json-schema-generator/bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json NewsDescription.json NewsUpdateDescription.json NewsFrontpageDescription.json ServerProviderDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json NewsDescription.json NewsUpdateDescription.json NewsFrontpageDescription.json ServerProviderDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -59,6 +59,9 @@ BlockLanguageDescription.json : $(SRC_PATH)/shared/block/block-language.descript
 	$(CONVERT_COMMAND)
 
 BlockLanguageListDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
+	$(CONVERT_COMMAND)
+
+BlockLanguageListItemDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
 BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts

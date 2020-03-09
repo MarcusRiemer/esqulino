@@ -66,8 +66,8 @@ RSpec.describe BlockLanguage do
       b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
 
       api_response = BlockLanguage.scope_list.first.to_list_api_response(true)
-
-      expect(api_response).to validate_against "BlockLanguageListResponseDescription"
+      
+      expect(api_response).to validate_against "BlockLanguageListItemDescription"
       expect(api_response['id']).to eq b.id
       expect(api_response['name']).to eq b.name
       expect(api_response['slug']).to eq b.slug

@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/BlockLanguageListResponseDescription",
+  "$ref": "#/definitions/BlockLanguageListItemDescription",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "BlockLanguageListItemDescription": {
@@ -47,38 +47,6 @@
         "generated",
         "id",
         "name"
-      ],
-      "type": "object"
-    },
-    "BlockLanguageListResponseDescription": {
-      "$ref": "#/definitions/JsonApiListResponse_BlockLanguageListItemDescription_"
-    },
-    "JsonApiListResponse_BlockLanguageListItemDescription_": {
-      "additionalProperties": false,
-      "description": "A response that also informs about the total number of items\nthat are available.",
-      "properties": {
-        "data": {
-          "items": {
-            "$ref": "#/definitions/BlockLanguageListItemDescription"
-          },
-          "type": "array"
-        },
-        "meta": {
-          "additionalProperties": false,
-          "properties": {
-            "totalCount": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "totalCount"
-          ],
-          "type": "object"
-        }
-      },
-      "required": [
-        "data",
-        "meta"
       ],
       "type": "object"
     }

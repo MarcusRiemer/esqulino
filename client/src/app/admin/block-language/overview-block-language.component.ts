@@ -53,9 +53,9 @@ export class OverviewBlockLanguageComponent implements OnInit {
      * User has requested different sorting options
      */
     onChangeSort() {
-      this._serverData.setListOrdering(this._sort.active, this._sort.direction);
+      this._serverData.setListOrdering(this._sort.active as any, this._sort.direction);
     }
 
-    displayedColumns = ["name", "slug", "id","grammar","generator","actions"];
+    displayedColumns: (keyof(BlockLanguageListDescription) |"generator"|"actions" |"grammar")[] = ["name", "slug", "id","grammar","actions","generator"];
 
 }

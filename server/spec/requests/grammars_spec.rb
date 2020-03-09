@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BlockLanguagesController, type: :request do
+RSpec.describe GrammarsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   describe 'GET /api/grammars' do
@@ -8,7 +8,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       get "/api/grammars"
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).length).to eq 0
+      expect(JSON.parse(response.body)['data'].length).to eq 0
     end
 
     it 'lists a grammar' do
@@ -19,8 +19,8 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       json_data = JSON.parse(response.body)
 
-      expect(json_data.length).to eq 1
-      expect(json_data[0]).to validate_against "GrammarListDescription"
+      expect(json_data['data'].length).to eq 1
+      expect(json_data['data'][0]).to validate_against "GrammarListDescription"
     end
   end
 
