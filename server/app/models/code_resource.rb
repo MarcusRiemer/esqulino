@@ -12,6 +12,9 @@ class CodeResource < ApplicationRecord
   # ... and compiles to exactly one programming language.
   belongs_to :programming_language
 
+  # May be the basis for generated grammars
+  has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+
   # Name may not be empty
   validates :name, presence: true
   # The AST is a single root node or empty
@@ -25,6 +28,12 @@ class CodeResource < ApplicationRecord
       errors.add(:block_language, "not allowed by project")
     end
   end
+
+  # List CodeResources that are using a specific programing language
+  scope :list_by_programming_language, lambda { |programming_language_id|
+    select(:id, :name)
+      .where(programming_language_id: programming_language_id)
+  }
 
   # Okay, this is tricky: We somehow need to keep the compiled version
   # of the syntaxtree in sync with the "actual" syntaxtree. So we want
@@ -69,9 +78,35 @@ class CodeResource < ApplicationRecord
   # Takes the current syntaxtree and asks the IDE service for the
   # compiled representation.
   #
+  # @param ide_service [IdeService] A connection to the ide service
+  #        that may be used to generate the source code.
+  # @param programming_language_id [string] The id of the language
+  #        that should be used for code generation. May be `nil`
+  #        to roll with the language that is defined on the model.
+  #
   # @raise [IdeServiceError] If anything goes wrong during compilation.
-  def emit_ast!
-    IdeService.instance.emit_code(self.ast, self.programming_language_id)
+  def emit_ast!(ide_service = IdeService.instance, programming_language_id: nil)
+    programming_language_id ||= self.programming_language_id
+    ide_service.emit_code(self.ast, programming_language_id)
+  end
+
+  # All records that are immediatly depending on this code resource. This
+  # is of interest when e.g. saving this resource, as it may require updates
+  # to these objects.
+  def immediate_dependants
+    self.grammars
+  end
+
+  # Regenerates other resources that depend on this code resource.
+  #
+  # @return [Array<Grammar|CodeResource>] All dependants that have been regenerated
+  def regenerate_immediate_dependants!
+    changed_dependants = []
+
+    self.immediate_dependants.each do |i|
+      i.regenerate_from_code_resource!
+      i.save!
+    end
   end
 
   # Computes a hash that may be sent back to the client

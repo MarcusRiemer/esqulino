@@ -8,6 +8,7 @@ import { IdentifiableResourceDescription } from '../resource.description';
 
 import { JsonApiListResponse, isJsonApiListResponse } from './json-api-response'
 import { CachedRequest, IndividualDescriptionCache } from './request-cache';
+import { objectOmit } from '../util';
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -144,7 +145,10 @@ export abstract class DataService<
    */
   updateSingle(desc: TSingle, showErrorFeedback = true): Promise<TSingle> {
     const toReturn = new Promise<TSingle>((resolve, reject) => {
-      this._http.put<TSingle>(this.resolveIndividualUrl(desc.id), desc)
+
+      const descWithoutId = objectOmit("id", desc);
+
+      this._http.put<TSingle>(this.resolveIndividualUrl(desc.id), descWithoutId)
         .pipe(first())
         .subscribe(updatedDesc => {
           console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);

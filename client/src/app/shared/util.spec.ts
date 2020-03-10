@@ -114,3 +114,25 @@ describe("locationIsOnPath", () => {
     expect(Util.locationIsOnPath([["a", 0], ["b", 0]], [["a", 0], ["a", 0]])).toBe(false);
   });
 });
+
+describe(`objectOmit`, () => {
+  it(`{ a: "a" } without "a"`, () => {
+    const res = Util.objectOmit("a", { a: "a" });
+    expect(res).toEqual({});
+  });
+
+  it(`{ a: "a", b: "b" } without "a"`, () => {
+    const res = Util.objectOmit("a", { a: "a", b: "b" });
+    expect(res).toEqual({ b: "b" });
+  });
+
+  it(`{ a: "a", b: "b" } without "b"`, () => {
+    const res = Util.objectOmit("b", { a: "a", b: "b" });
+    expect(res).toEqual({ a: "a" });
+  });
+
+  it(`{ a: "a", b: "b" } without "c" (which normally wouldn't compile)`, () => {
+    const res = Util.objectOmit("c" as any, { a: "a", b: "b" });
+    expect(res).toEqual({ a: "a", b: "b" });
+  });
+});

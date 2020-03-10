@@ -11,7 +11,7 @@ import { CodeEditorModule } from './code/code.module'
 import { EditorComponent } from './editor.component'
 
 import { DraggedBlockComponent } from './dragged-block.component'
-import { ToolbarComponent } from './toolbar.component'
+import { EditorToolbarComponent } from './editor-toolbar.component'
 import { NavbarComponent } from './navbar.component'
 import { SidebarLoaderComponent } from './sidebar-loader.component'
 import { SettingsComponent } from './project-settings/settings.component'
@@ -23,6 +23,7 @@ import { ContenteditableModel } from './contenteditable-model.directive'
 import { SourceIconComponent } from './source-icon.component'
 import { SchemaService } from './schema.service'
 import { CurrentCodeResourceService } from './current-coderesource.service'
+import { EditorToolbarService } from './toolbar.service'
 
 
 @NgModule({
@@ -39,7 +40,7 @@ import { CurrentCodeResourceService } from './current-coderesource.service'
   declarations: [
     DraggedBlockComponent,
     EditorComponent,
-    ToolbarComponent,
+    EditorToolbarComponent,
     NavbarComponent,
     SidebarLoaderComponent,
     SettingsComponent,
@@ -55,7 +56,8 @@ import { CurrentCodeResourceService } from './current-coderesource.service'
   providers: [
     TrashService,
     SchemaService,
-    CurrentCodeResourceService
+    CurrentCodeResourceService,
+    EditorToolbarService
   ],
   exports: [
     EditorComponent,

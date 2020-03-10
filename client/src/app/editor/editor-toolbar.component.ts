@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 
-import { ToolbarService } from './toolbar.service';
+import { EditorToolbarService } from './toolbar.service';
 import { PreferencesService } from './preferences.service';
 import { BlockDebugOptionsService } from './block-debug-options.service';
 
 @Component({
-  templateUrl: 'templates/toolbar.html',
+  templateUrl: 'templates/editor-toolbar.html',
   selector: 'editor-toolbar',
 })
-export class ToolbarComponent {
+export class EditorToolbarComponent {
   constructor(
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _preferences: PreferencesService,
     readonly debugOptions: BlockDebugOptionsService,
   ) { }

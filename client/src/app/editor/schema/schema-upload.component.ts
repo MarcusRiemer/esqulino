@@ -6,7 +6,7 @@ import { ServerApiService } from '../../shared/'
 import { TableDescription } from '../../shared/schema';
 
 import { ProjectService } from '../project.service';
-import { ToolbarService } from '../toolbar.service';
+import { EditorToolbarService } from '../toolbar.service';
 import { SidebarService } from '../sidebar.service';
 import { SchemaService } from '../schema.service';
 
@@ -20,7 +20,7 @@ export class SchemaUploadComponent {
 
   constructor(
     private _projectService: ProjectService,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _schemaService: SchemaService,
     private _server: ServerApiService,

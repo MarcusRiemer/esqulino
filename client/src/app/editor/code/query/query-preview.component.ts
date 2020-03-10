@@ -7,7 +7,7 @@ import { DatabaseQueryErrorDescription } from '../../../shared';
 import { Tree } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { ToolbarService, ToolbarItem } from '../../toolbar.service';
+import { EditorToolbarService, ToolbarItem } from '../../toolbar.service';
 import { ProjectService } from '../../project.service';
 
 import { QueryService, QueryResultRows, QueryParamsDescription } from './query.service'
@@ -36,7 +36,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _queryService: QueryService,
   ) {
   }

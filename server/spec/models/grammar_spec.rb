@@ -40,18 +40,85 @@ RSpec.describe Grammar, type: :model do
   end
 
   context "model" do
-    it "rejects missing root and missing types" do
-      res = FactoryBot.build(:grammar, model: Hash.new)
+    it "rejects missing model" do
+      res = FactoryBot.build(:grammar, model: nil)
 
       res.validate
       expect(res.errors["model"]).not_to be_empty
     end
 
-    it "factory created" do
+    it "factory created: Empty" do
       res = FactoryBot.build(:grammar)
 
       res.validate
       expect(res.errors["model"]).to be_empty
+    end
+
+    it "factory created: Empty" do
+      res = FactoryBot.build(:grammar, :model_single_type)
+
+      res.validate
+      expect(res.errors["model"]).to be_empty
+    end
+  end
+
+  context "based on CodeResource" do
+    it "may exist without a associated code resource" do
+      res = FactoryBot.build(:grammar, generated_from: nil)
+
+      res.validate
+      expect(res.errors["generated_from"]).to be_empty
+    end
+
+    it "may not exist without a associated non-existant code resource" do
+      res = FactoryBot.build(:grammar, generated_from_id: SecureRandom.uuid)
+
+      expect { res.save }.to raise_error ActiveRecord::InvalidForeignKey
+    end
+
+    it "can associate a code resource" do
+      grammar = FactoryBot.create(:grammar, generated_from: nil)
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+
+      grammar.generated_from = resource
+
+      grammar.save!
+
+      grammar.reload
+      expect(grammar.generated_from_id).to eq resource.id
+    end
+
+    it "can regenerate" do
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      expect(grammar.model).to eq Hash.new
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+      did_change = grammar.regenerate_from_code_resource!(ide_service)
+
+      expect(did_change).to eq true
+      expect(grammar.model).to eq ({
+                                     "root" => { "languageName" => "lang", "typeName" => "root" },
+                                     "types" => {
+                                       "lang" => {
+                                         "root" => {
+                                           "type" => "concrete",
+                                           "attributes" => []
+                                         }
+                                       }
+                                     }
+                                   })
+    end
+
+    it "regenerates only once" do
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq true
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq false
     end
   end
 end

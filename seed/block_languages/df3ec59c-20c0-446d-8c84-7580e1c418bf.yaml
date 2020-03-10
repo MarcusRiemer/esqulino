@@ -111,8 +111,7 @@ concise_attributes:
     "container", "cssClasses": ["vertical", "indent"]}, {"text": "}", "style": {"display":
     "inline-flex"}, "blockType": "constant"}], "blockType": "container", "cssClasses":
     ["vertical"]}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "concreteNode", "languageName": "MetaGrammar"}}], "rootCssClasses": ["activate-indent",
-    "activate-block-outline", "activate-terminal-whitespace", "activate-terminal-keyword"],
+    "concreteNode", "languageName": "MetaGrammar"}}], "rootCssClasses": ["activate-keyword"],
     "editorComponents": [{"componentType": "block-root"}, {"componentType": "validator"},
     {"componentType": "generated-code"}], "localGeneratorInstructions": {"type": "manual",
     "traits": {"softHole": {"applyMode": "deepMerge", "instructions": {"emptyDropTarget":
@@ -140,7 +139,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-02-05 10:28:39.185949000 Z
+  value_before_type_cast: 2020-02-26 12:56:10.956787000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic

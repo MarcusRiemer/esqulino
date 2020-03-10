@@ -1,6 +1,7 @@
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   include UserHelper
+  include JsonSchemaHelper
 
   # List all existing grammars
   def index
@@ -34,6 +35,8 @@ class GrammarsController < ApplicationController
 
   # Updates an existing grammar
   def update
+    ensure_request("GrammarRequestUpdateDescription", request.body.read)
+
     grammar = Grammar.find(id_params['id'])
     grammar.assign_attributes basic_params
     grammar.model = model_params

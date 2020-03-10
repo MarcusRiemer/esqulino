@@ -116,5 +116,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
 new_record: false
 active_record_yaml_version: 2

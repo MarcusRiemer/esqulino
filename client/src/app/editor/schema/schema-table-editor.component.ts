@@ -15,7 +15,7 @@ import {
 import { SchemaService } from '../schema.service'
 
 import { ProjectService, Project } from '../project.service'
-import { ToolbarService } from '../toolbar.service'
+import { EditorToolbarService } from '../toolbar.service'
 import { SidebarService } from '../sidebar.service'
 
 import { TableEditorSidebarStackComponent } from './table-editor-stack.sidebar'
@@ -35,7 +35,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     private _projectService: ProjectService,
     private _routeParams: ActivatedRoute,
     private _router: Router,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService) {
 
   }

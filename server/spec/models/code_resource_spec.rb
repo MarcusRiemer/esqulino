@@ -120,6 +120,73 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
+  context "by_programming_language" do
+    it "No resources available at all" do
+      expect(CodeResource.list_by_programming_language("css")).to eq []
+    end
+
+    it "A single sql resource" do
+      res = FactoryBot.create(:code_resource, :sql_key_value_select_double)
+
+      queried = CodeResource.list_by_programming_language("sql")
+      expect(queried).to eq([res])
+      expect(queried[0].attributes.keys).to eq(["id", "name"])
+    end
+
+    it "A single sql resource and a unrelated resource" do
+      FactoryBot.create(:code_resource)
+      res = FactoryBot.create(:code_resource, :sql_key_value_select_double)
+
+      queried = CodeResource.list_by_programming_language("sql")
+      expect(queried).to eq([res])
+      expect(queried[0].attributes.keys).to eq(["id", "name"])
+    end
+  end
+
+  context "Traits for builtin snippets" do
+    it "SQL" do
+      res = FactoryBot.build(:code_resource, :sql_key_value_select_double)
+      expect(res.programming_language_id).to eq "sql"
+    end
+
+    it "Meta Grammar" do
+      res = FactoryBot.build(:code_resource, :grammar_single_type)
+      expect(res.programming_language_id).to eq "meta-grammar"
+    end
+  end
+
+  context "immediate_dependants" do
+    it "is empty if nothing depends on this" do
+      res = FactoryBot.build(:code_resource, :grammar_single_type)
+      expect(res.immediate_dependants.to_a).to eq []
+    end
+
+    it "with a single grammar" do
+      res = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: res)
+
+      expect(res.immediate_dependants.to_a).to eq [grammar]
+    end
+  end
+
+  context "regenerate_immediate_dependants!" do
+    it "is empty if nothing depends on this" do
+      unrelated = FactoryBot.create(:grammar)
+      res = FactoryBot.create(:code_resource, :grammar_single_type)
+      changed = res.regenerate_immediate_dependants!
+
+      expect(changed).to eq []
+    end
+
+    it "with a single grammar" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+
+      changed = related.regenerate_immediate_dependants!
+      expect(changed).to eq [grammar]
+    end
+  end
+
   it "project is required" do
     res = FactoryBot.build(:code_resource, project: nil)
 

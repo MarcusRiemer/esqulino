@@ -113,3 +113,13 @@ export function locationIsOnPath(prefix: NodeLocation, full: NodeLocation): bool
     return (false);
   }
 }
+
+/**
+ * Returns a deep copy of the object with the named key removed.
+ */
+export function objectOmit<K extends keyof T, T>(omit: K, obj: T): Omit<T, K> {
+  const deepCopy = JSON.parse(JSON.stringify(obj));
+  delete deepCopy[omit];
+
+  return (deepCopy);
+}

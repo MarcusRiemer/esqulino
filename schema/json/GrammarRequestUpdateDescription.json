@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/GrammarDatabaseBlob",
+  "$ref": "#/definitions/GrammarRequestUpdateDescription",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "ChildCardinalityDescription": {
@@ -42,15 +42,30 @@
       ],
       "type": "object"
     },
-    "GrammarDatabaseBlob": {
+    "GrammarRequestUpdateDescription": {
       "additionalProperties": false,
-      "description": "This part of the grammar is stored as a JSON blob in the database.",
+      "description": "A request to update a grammar.",
       "properties": {
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },
+        "includedGrammars": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "programmingLanguageId": {
+          "type": "string"
+        },
         "root": {
           "$ref": "#/definitions/QualifiedTypeName"
+        },
+        "slug": {
+          "type": "string"
         },
         "types": {
           "$ref": "#/definitions/NamedLanguages"

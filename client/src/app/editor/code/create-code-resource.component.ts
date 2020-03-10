@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { first, switchMap, shareReplay } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { ToolbarService } from '../toolbar.service';
+import { EditorToolbarService } from '../toolbar.service';
 import { SidebarService } from '../sidebar.service';
 import { ProjectService } from '../project.service';
 import { CodeResourceService } from '../coderesource.service';
@@ -21,7 +21,7 @@ export class CreateCodeResourceComponent {
   public blockLanguageId: string;
 
   constructor(
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
