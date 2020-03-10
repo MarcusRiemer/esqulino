@@ -22,6 +22,79 @@ RSpec.describe GrammarsController, type: :request do
       expect(json_data['data'].length).to eq 1
       expect(json_data['data'][0]).to validate_against "GrammarListDescription"
     end
+
+    it 'limit' do
+      FactoryBot.create(:grammar)
+      FactoryBot.create(:grammar)
+      FactoryBot.create(:grammar)
+
+      get "/api/grammars?limit=1"
+      expect(JSON.parse(response.body)['data'].length).to eq 1
+
+      get "/api/grammars?limit=2"
+      expect(JSON.parse(response.body)['data'].length).to eq 2
+
+      get "/api/grammars?limit=3"
+      expect(JSON.parse(response.body)['data'].length).to eq 3
+
+      get "/api/grammars?limit=4"
+      expect(JSON.parse(response.body)['data'].length).to eq 3
+    end
+
+    describe 'order by' do
+      before do
+        FactoryBot.create(:grammar, name: 'cccc', slug: 'cccc')
+        FactoryBot.create(:grammar, name: 'aaaa', slug: 'aaaa')
+        FactoryBot.create(:grammar, name: 'bbbb', slug: 'bbbb')
+      end
+
+      it 'nonexistant column' do
+        get "/api/grammars?orderField=nonexistant"
+
+        expect(response.status).to eq 400
+      end
+
+      it 'slug' do
+        get "/api/grammars?orderField=slug"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+
+      it 'slug invalid direction' do
+        get "/api/grammars?orderField=slug&orderDirection=north"
+
+        expect(response.status).to eq 400
+      end
+
+      it 'slug desc' do
+        get "/api/grammars?orderField=slug&orderDirection=desc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+      end
+
+      it 'slug asc' do
+        get "/api/grammars?orderField=slug&orderDirection=asc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+
+      it 'name desc' do
+        get "/api/grammars?orderField=name&orderDirection=desc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
+      end
+
+      it 'name asc' do
+        get "/api/grammars?orderField=name&orderDirection=asc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+    end
   end
 
   describe 'GET /api/grammars/:grammarId' do

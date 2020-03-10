@@ -1,9 +1,10 @@
 # Manages operations on block languages
 class BlockLanguagesController < ApplicationController
+  include PaginationHelper
   # List all existing block languages and embed additional information
   # that is relevant when listing
   def index
-    render :json => index_pagination_response(BlockLanguage.scope_list)
+    render :json => pagination_response(BlockLanguage.scope_list,true)
   end
 
   # Find a single block language by ID or by slug
@@ -56,33 +57,6 @@ class BlockLanguagesController < ApplicationController
   end
 
   private
-
-  # Pagination for any query that lists projects
-  def index_pagination_response(query)
-    order_key = bl_list_params.fetch("order_field", "name")
-    order_dir = bl_list_params.fetch("order_direction", "asc")
-
-    if (not Grammar.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
-      raise EsqulinoError::InvalidOrder.new(order_key, order_dir)
-    end
-
-    paginated_query = query
-              .order({ order_key => order_dir})
-              .limit(bl_list_params.fetch("limit", 100))
-              .offset(bl_list_params.fetch("offset", 0))
-    return {
-      data: paginated_query.map{|p| p.to_list_api_response(true)},
-      meta: {
-        totalCount: query.size
-      }
-    }
-  end
-
-  # These attributes
-  def bl_list_params
-    params.permit(:limit, :offset, :orderField, :orderDirection)
-      .transform_keys { |k| k.underscore }
-  end
 
   # These parameters may be used to identify a block language
   def id_params

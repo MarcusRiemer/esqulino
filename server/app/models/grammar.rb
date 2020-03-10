@@ -35,7 +35,7 @@ class Grammar < ApplicationRecord
   # Computes a hash that may be sent back to the client if only superficial
   # information is required. This usually happens when the client attempts
   # to list available grammars.
-  def to_list_api_response
+  def to_list_api_response(include_list_calculations = false)
     to_json_api_response
       .slice("id", "slug", "name", "technicalName", "programmingLanguageId")
   end

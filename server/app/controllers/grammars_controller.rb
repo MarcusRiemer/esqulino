@@ -1,10 +1,11 @@
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   include UserHelper
+  include PaginationHelper
 
   # List all existing grammars
   def index
-    render :json => index_pagination_response(Grammar.scope_list)
+    render :json => pagination_response(Grammar.scope_list)
   end
 
   # Find a single grammar
@@ -76,33 +77,6 @@ class GrammarsController < ApplicationController
   end
 
   private
-
-  # Pagination for any query that lists projects
-  def index_pagination_response(query)
-    order_key = grammar_list_params.fetch("order_field", "name")
-    order_dir = grammar_list_params.fetch("order_direction", "asc")
-
-    if (not Grammar.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
-      raise EsqulinoError::InvalidOrder.new(order_key, order_dir)
-    end
-
-    paginated_query = query
-              .order({ order_key => order_dir})
-              .limit(grammar_list_params.fetch("limit", 100))
-              .offset(grammar_list_params.fetch("offset", 0))
-    return {
-      data: paginated_query.map{|p| p.to_list_api_response},
-      meta: {
-        totalCount: query.size
-      }
-    }
-  end
-
-  # These attributes
-  def grammar_list_params
-    params.permit(:limit, :offset, :orderField, :orderDirection)
-      .transform_keys { |k| k.underscore }
-  end
 
   # These parameters may be used to identify a grammar
   def id_params
