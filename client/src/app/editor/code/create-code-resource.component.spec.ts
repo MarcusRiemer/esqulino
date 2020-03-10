@@ -13,7 +13,7 @@ import { ResourceReferencesService } from '../../shared/resource-references.serv
 import { ResourceReferencesOnlineService } from '../../shared/resource-references-online.service';
 
 import { ServerApiService, LanguageService } from '../../shared';
-import { BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
+import { IndividualBlockLanguageDataService, IndividualGrammarDataService } from '../../shared/serverdata';
 import { CodeResourceDescription } from '../../shared/syntaxtree';
 import { EmptyComponent } from '../../shared/empty.component';
 
@@ -43,8 +43,8 @@ describe(`CreateCodeResourceComponent`, () => {
         SidebarService,
         ProjectService,
         CodeResourceService,
-        BlockLanguageDataService,
-        GrammarDataService,
+        IndividualBlockLanguageDataService,
+        IndividualGrammarDataService,
         MatSnackBar,
         Overlay,
         {

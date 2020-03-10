@@ -3,37 +3,50 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
-import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
-import { DataService } from './data-service';
+import { ListData } from './data-service';
+import { IndividualData } from './individual-data';
+import { MutateData } from './mutate-data';
 
-import { map } from 'rxjs/operators';
+const urlResolver = (serverApi: ServerApiService) => {
+  return ((id: string) => serverApi.individualGrammarUrl(id))
+}
 
 /**
- * Convenient and cached access to server side grammar descriptions.
+ * Cached access to individual grammars
  */
 @Injectable()
-export class GrammarDataService extends DataService<GrammarListDescription, GrammarDescription> {
+export class IndividualGrammarDataService extends IndividualData<GrammarDescription> {
+  constructor(
+    serverApi: ServerApiService,
+    http: HttpClient,
+  ) {
+    super(http, urlResolver(serverApi), "Grammar")
+  }
+}
 
-  public constructor(
-    private _serverApi: ServerApiService,
-    snackBar: MatSnackBar,
+/**
+ * Cached access to lists of grammars.
+ */
+@Injectable()
+export class ListGrammarDataService extends ListData<GrammarListDescription> {
+  constructor(
+    serverApi: ServerApiService,
     http: HttpClient
   ) {
-    super(http, snackBar, _serverApi.getGrammarListUrl(), "Grammar");
+    super(http, serverApi.getGrammarListUrl());
   }
+}
 
-  protected resolveIndividualUrl(id: string): string {
-    return (this._serverApi.individualGrammarUrl(id));
+@Injectable()
+export class MutateGrammarService extends MutateData<GrammarDescription> {
+  public constructor(
+    // Deriving classes may need to make HTTP requests of their own
+    http: HttpClient,
+    snackBar: MatSnackBar,
+    serverApi: ServerApiService,
+  ) {
+    super(http, snackBar, urlResolver(serverApi), "Grammar")
   }
-
-  /**
-   * Grammars in stable sort order.
-   *
-   * @return All grammars that are known on the server and available for the current user.
-   */
-  readonly list = this.listCache.value.pipe(
-    map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
-  );
 }

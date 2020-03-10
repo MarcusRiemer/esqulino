@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 
 import { Observable } from 'rxjs';
 
-import { AdminProjectDataService } from '../../shared/serverdata';
+import { AdminListProjectDataService } from '../../shared/serverdata';
 import { ProjectListDescription } from '../../shared/project.description';
 import { StringUnion } from '../../shared/string-union';
 
@@ -27,7 +27,7 @@ export class OverviewProjectComponent {
   _sort: MatSort;
 
   constructor(
-    private _serverData: AdminProjectDataService
+    private _serverData: AdminListProjectDataService
   ) { }
 
   availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;

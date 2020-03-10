@@ -8,7 +8,7 @@ import { ResourceReferencesOnlineService } from '../../../shared/resource-refere
 import { VisualBlockDescriptions, BlockLanguage } from '../../../shared/block';
 import { FocusDirective } from '../../../shared/focus-element.directive';
 import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../shared';
-import { BlockLanguageDataService, GrammarDataService, ServerApiService } from '../../../shared/serverdata';
+import { IndividualBlockLanguageDataService, IndividualGrammarDataService, ServerApiService } from '../../../shared/serverdata';
 
 import { ProjectService } from '../../project.service';
 
@@ -28,8 +28,8 @@ describe('BlockRenderInputComponent', () => {
         HttpClientTestingModule
       ],
       providers: [
-        BlockLanguageDataService,
-        GrammarDataService,
+        IndividualBlockLanguageDataService,
+        IndividualGrammarDataService,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,

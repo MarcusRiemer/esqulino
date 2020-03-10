@@ -4,7 +4,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { first, map, tap } from 'rxjs/operators';
 
-import { GrammarDataService } from '../../shared/serverdata';
+import { IndividualGrammarDataService } from '../../shared/serverdata';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
 import { FullNodeAttributeDescription, getFullQualifiedAttributes, getConcreteTypes } from '../../shared/syntaxtree/grammar-util';
 
@@ -38,7 +38,7 @@ interface TargetBlock {
 export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
   constructor(
     private _editedBlockLanguageService: EditBlockLanguageService,
-    private _grammarData: GrammarDataService,
+    private _individualGrammarData: IndividualGrammarDataService,
   ) { }
 
   /**
@@ -71,7 +71,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
    * Used to get hold of the grammar that is used by this block language.
    */
   ngOnInit() {
-    this._grammarData.getSingle(this._editedBlockLanguageService.editedSubject.grammarId)
+    this._individualGrammarData.getSingle(this._editedBlockLanguageService.editedSubject.grammarId)
       .pipe(first())
       .subscribe(g => {
         this.allPossibleAttributes = getFullQualifiedAttributes(g);

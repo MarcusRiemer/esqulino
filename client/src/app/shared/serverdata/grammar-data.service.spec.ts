@@ -12,7 +12,7 @@ import { provideGrammarList, buildGrammar, GrammarOrder } from '../../editor/spe
 import { ResourceReferencesService } from '../resource-references.service';
 import { ResourceReferencesOnlineService } from '../resource-references-online.service';
 
-import { GrammarDataService } from './grammar-data.service';
+import { ListGrammarDataService } from './grammar-data.service';
 import { ServerApiService } from './serverapi.service';
 
 
@@ -24,7 +24,7 @@ describe(`GrammarDataService`, () => {
       ],
       providers: [
         ServerApiService,
-        GrammarDataService,
+        ListGrammarDataService,
         MatSnackBar,
         Overlay,
         {
@@ -37,7 +37,7 @@ describe(`GrammarDataService`, () => {
     });
 
     return ({
-      service: TestBed.inject(GrammarDataService)
+      service: TestBed.inject(ListGrammarDataService)
     });
   }
 

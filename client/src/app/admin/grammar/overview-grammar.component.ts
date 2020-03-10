@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GrammarDataService } from '../../shared/serverdata';
+import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -8,14 +8,13 @@ import { GrammarDataService } from '../../shared/serverdata';
 
 export class OverviewGrammarComponent {
   constructor(
-    private _serverData: GrammarDataService
+    private _list: ListGrammarDataService,
+    private _mutate: MutateGrammarService,
   ) { }
 
-  public get availableGrammars() {
-    return (this._serverData.listCache);
-  }
+  readonly availableGrammars = this._list.listCache;
 
   public deleteGrammar(id: string) {
-    this._serverData.deleteSingle(id);
+    this._mutate.deleteSingle(id);
   }
 }

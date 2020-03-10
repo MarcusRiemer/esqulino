@@ -5,37 +5,47 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlockLanguageListDescription, BlockLanguageDescription } from '../block/block-language.description';
 
 import { ServerApiService } from './serverapi.service';
-import { DataService } from './data-service';
+import { ListData } from './data-service';
+import { IndividualData } from './individual-data';
+import { MutateData } from './mutate-data';
+
+const urlResolver = (serverApi: ServerApiService) => {
+  return ((id: string) => serverApi.individualBlockLanguageUrl(id))
+}
+
+
+@Injectable()
+export class IndividualBlockLanguageDataService extends IndividualData<BlockLanguageDescription> {
+  constructor(
+    serverApi: ServerApiService,
+    http: HttpClient,
+  ) {
+    super(http, urlResolver(serverApi), "BlockLanguage")
+  }
+}
 
 /**
  * Convenient and cached access to server side grammar descriptions.
  */
 @Injectable()
-export class BlockLanguageDataService extends DataService<BlockLanguageListDescription, BlockLanguageDescription> {
+export class ListBlockLanguageDataService extends ListData<BlockLanguageListDescription> {
 
   public constructor(
     private _serverApi: ServerApiService,
-    snackBar: MatSnackBar,
     http: HttpClient
   ) {
-    super(http, snackBar, _serverApi.getBlockLanguageListUrl(), "BlockLanguage");
+    super(http, _serverApi.getBlockLanguageListUrl());
   }
+}
 
-  protected resolveIndividualUrl(id: string): string {
-    return (this._serverApi.individualBlockLanguageUrl(id));
-  }
-
-  /**
-   * Deletes the block language with the given ID.
-   */
-  deleteBlockLanguage(id: string) {
-    this.deleteSingle(id);
-  }
-
-  /**
-   * Updates the given block language
-   */
-  updateBlockLanguage(desc: BlockLanguageDescription) {
-    this.updateSingle(desc);
+@Injectable()
+export class MutateBlockLanguageService extends MutateData<BlockLanguageDescription> {
+  public constructor(
+    // Deriving classes may need to make HTTP requests of their own
+    http: HttpClient,
+    snackBar: MatSnackBar,
+    serverApi: ServerApiService,
+  ) {
+    super(http, snackBar, urlResolver(serverApi), "BlockLanguage")
   }
 }
