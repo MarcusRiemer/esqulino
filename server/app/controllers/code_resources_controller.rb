@@ -60,8 +60,9 @@ class CodeResourcesController < ApplicationController
     begin
       CodeResource.destroy(params[:code_resource_id])
       render :status => 204
-    rescue ActiveRecord::RecordNotFound
-      render :status => 404
+    rescue ActiveRecord::InvalidForeignKey
+      c = CodeResource.find(params[:code_resource_id])
+      raise EsqulinoError::CodeResourceReferenced.new(c)
     end
   end
 

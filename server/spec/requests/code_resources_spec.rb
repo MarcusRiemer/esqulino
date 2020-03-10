@@ -252,7 +252,27 @@ RSpec.describe "CodeResource request", :type => :request do
       delete "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
              :headers => json_headers
 
-      expect(response.status).to eq(204)
+      aggregate_failures do
+        expect(response.status).to eq(204)
+        expect(CodeResource.find_by(id: resource.id)).to eq nil
+      end
+    end
+
+    it "keeps a resource that a grammar is based on" do
+      resource = FactoryBot.create(:code_resource)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      delete "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
+             :headers => json_headers
+
+      aggregate_failures do
+        expect(response.status).to eq(400)
+        expect(response.body).to include grammar.id
+        expect(response.body).to include resource.id
+
+        expect(Grammar.find_by(id: grammar.id)).to eq grammar
+        expect(CodeResource.find_by(id: resource.id)).to eq resource
+      end
     end
   end
 
