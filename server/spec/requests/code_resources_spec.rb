@@ -4,6 +4,51 @@ RSpec.describe "CodeResource request", :type => :request do
 
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
+  describe "GET code_resources/by_programming_language/:programming_language_id" do
+    def url_for(lang)
+      "/api/code_resources/by_programming_language/#{lang}"
+    end
+
+    describe "No code resources at all" do
+      it "css" do
+        get url_for("css")
+
+        result = JSON.parse response.body
+        expect(result).to eq []
+      end
+
+      it "sql" do
+        get url_for("sql")
+
+        result = JSON.parse response.body
+        expect(result).to eq []
+      end
+    end
+
+    describe "Single SQL and CSS resource" do
+      before (:each) do
+        FactoryBot.create(:programming_language, id: "css")
+        FactoryBot.create(:code_resource, :sql_key_value_select_double, name: "sql")
+        FactoryBot.create(:code_resource, programming_language_id: "css", name: "css")
+      end
+
+      it "css" do
+        get url_for("css")
+
+        result = JSON.parse response.body
+        expect(result.length).to eq 1
+        expect(result[0]["name"]).to eq "css"
+      end
+
+      it "sql" do
+        get url_for("sql")
+
+        result = JSON.parse response.body
+        expect(result[0]["name"]).to eq "sql"
+      end
+    end
+  end
+
   describe "CREATE" do
     it "works with default factory bot object" do
       resource = FactoryBot.build(:code_resource)

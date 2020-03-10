@@ -25,7 +25,7 @@ class Grammar < ApplicationRecord
   has_many :code_resources, through: :block_languages
 
   # Grammar with properties that are relevant when listing
-  scope :scope_list, -> {
+  scope :scope_list, lambda {
     select(:id, :slug, :name, :created_at, :updated_at, :programming_language_id)
   }
 

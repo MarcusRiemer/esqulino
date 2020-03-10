@@ -6,6 +6,12 @@ class CodeResourcesController < ApplicationController
 
   include JsonSchemaHelper
 
+  # All available code resources for a certain programming language
+  def index_by_programming_language
+    render json: CodeResource
+      .list_by_programming_language(params[:programming_language_id])
+  end
+
   # Create a new resource that is part of a specific project
   def create
     project_slug = params[:project_id]

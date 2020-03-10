@@ -120,6 +120,29 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
+  context "by_programming_language" do
+    it "No resources available at all" do
+      expect(CodeResource.list_by_programming_language("css")).to eq []
+    end
+
+    it "A single sql resource" do
+      res = FactoryBot.create(:code_resource, :sql_key_value_select_double)
+
+      queried = CodeResource.list_by_programming_language("sql")
+      expect(queried).to eq([res])
+      expect(queried[0].attributes.keys).to eq(["id", "name"])
+    end
+
+    it "A single sql resource and a unrelated resource" do
+      FactoryBot.create(:code_resource)
+      res = FactoryBot.create(:code_resource, :sql_key_value_select_double)
+
+      queried = CodeResource.list_by_programming_language("sql")
+      expect(queried).to eq([res])
+      expect(queried[0].attributes.keys).to eq(["id", "name"])
+    end
+  end
+
   context "Traits for builtin snippets" do
     it "SQL" do
       res = FactoryBot.build(:code_resource, :sql_key_value_select_double)

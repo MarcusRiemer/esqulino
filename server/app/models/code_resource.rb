@@ -29,6 +29,12 @@ class CodeResource < ApplicationRecord
     end
   end
 
+  # List CodeResources that are using a specific programing language
+  scope :list_by_programming_language, lambda { |programming_language_id|
+    select(:id, :name)
+      .where(programming_language_id: programming_language_id)
+  }
+
   # Okay, this is tricky: We somehow need to keep the compiled version
   # of the syntaxtree in sync with the "actual" syntaxtree. So we want
   # to have some action that checks whether the syntaxtree has been
