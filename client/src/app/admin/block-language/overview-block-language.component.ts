@@ -34,28 +34,28 @@ export class OverviewBlockLanguageComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarItems);
   }
 
- availableBlockLanguages: Observable<BlockLanguageListDescription[]> = this._serverData.list;
- resultsLength = this._serverData.listTotalCount;
+  readonly availableBlockLanguages: Observable<BlockLanguageListDescription[]> = this._serverData.list;
+  readonly resultsLength = this._serverData.listTotalCount;
 
   public deleteBlockLanguage(id: string) {
     this._serverData.deleteBlockLanguage(id);
   }
 
 
-    /**
-     * User has requested a different chunk of data
-     */
-    onChangePagination() {
-      this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
-    }
+  /**
+  * User has requested a different chunk of data
+  */
+  onChangePagination() {
+    this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
+  }
 
-    /**
-     * User has requested different sorting options
-     */
-    onChangeSort() {
-      this._serverData.setListOrdering(this._sort.active as any, this._sort.direction);
-    }
+  /**
+  * User has requested different sorting options
+  */
+  onChangeSort() {
+    this._serverData.setListOrdering(this._sort.active as any, this._sort.direction);
+  }
 
-    displayedColumns: (keyof(BlockLanguageListDescription) |"generator"|"actions" |"grammar")[] = ["name", "slug", "id","grammar","actions","generator"];
+  displayedColumns: (keyof(BlockLanguageListDescription) |"generator"|"actions" |"grammar")[] = ["name", "slug", "id","grammar","actions","generator"];
 
 }

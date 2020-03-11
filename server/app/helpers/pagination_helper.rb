@@ -1,6 +1,6 @@
 module PaginationHelper
       # Pagination for any query that will be displayed in a listing
-  def pagination_response(query,include_list_calculations = false)
+  def pagination_response(query,options:{})
     order_key = list_params.fetch("order_field", "name")
     order_dir = list_params.fetch("order_direction", "asc")
 
@@ -14,7 +14,7 @@ module PaginationHelper
               .offset(list_params.fetch("offset", 0))
 
     return {
-      data: paginated_query.map{|p| p.to_list_api_response(include_list_calculations)},
+      data: paginated_query.map{|p| p.to_list_api_response(options:options)},
       meta: {
         # size() runs count() or length(), depending on if the collection has already been loaded or not.
         # count() will be executed if the collection hasn't been loaded yet 

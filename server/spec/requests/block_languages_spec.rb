@@ -200,7 +200,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(200)
 
       expect(json_data).to validate_against "BlockLanguageDescription"
-      expect(json_data.except("id")).to eq block_lang_model
+      expect(json_data.except("id", "createdAt", "updatedAt")).to eq block_lang_model
     end
 
     describe 'PUT /api/block_languages/:id' do

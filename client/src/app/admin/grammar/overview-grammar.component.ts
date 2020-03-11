@@ -26,9 +26,8 @@ export class OverviewGrammarComponent {
     private _serverData: GrammarDataService
   ) { }
 
-  availableGrammars: Observable<GrammarListDescription[]> = this._serverData.list;
-
-  resultsLength = this._serverData.listTotalCount;
+  readonly availableGrammars: Observable<GrammarListDescription[]> = this._serverData.list;
+  readonly resultsLength = this._serverData.listTotalCount;
 
   public deleteGrammar(id: string) {
     this._serverData.deleteSingle(id);

@@ -42,13 +42,13 @@ RSpec.describe BlockLanguage do
 
   context "to_full_api_response" do
     it "works for empty languages" do
-      b = FactoryBot.build(:block_language, id: SecureRandom.uuid)
-      api_response = b.to_full_api_response
-
+      block_language = FactoryBot.build(:block_language, id: SecureRandom.uuid)
+      api_response = block_language.to_full_api_response
+      
       expect(api_response).to validate_against "BlockLanguageDescription"
-      expect(api_response['id']).to eq b.id
-      expect(api_response['name']).to eq b.name
-      expect(api_response['slug']).to eq b.slug
+      expect(api_response['id']).to eq block_language.id
+      expect(api_response['name']).to eq block_language.name
+      expect(api_response['slug']).to eq block_language.slug
     end
   end
 
@@ -64,15 +64,26 @@ RSpec.describe BlockLanguage do
   context "to_list_api_response" do
     it "with 'generated' field" do
       b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(options:{include_list_calculations:true})
 
-      api_response = BlockLanguage.scope_list.first.to_list_api_response(true)
-      
       expect(api_response).to validate_against "BlockLanguageListItemDescription"
       expect(api_response['id']).to eq b.id
       expect(api_response['name']).to eq b.name
       expect(api_response['slug']).to eq b.slug
       expect(api_response['generated']).to equal false
     end
+
+    it "without 'generated' field" do
+      b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(options:{include_list_calculations:false})
+
+      expect(api_response).to validate_against "BlockLanguageListDescription"
+      expect(api_response['id']).to eq b.id
+      expect(api_response['name']).to eq b.name
+      expect(api_response['slug']).to eq b.slug
+      expect(api_response).not_to have_key("generated")
+    end
+
   end
 
   it "can be valid" do
