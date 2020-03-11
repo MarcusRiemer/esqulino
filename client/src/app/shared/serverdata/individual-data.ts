@@ -4,15 +4,9 @@ import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 
 import { IdentifiableResourceDescription } from '../resource.description';
-import { IndividualDescriptionCache } from './request-cache';
 
-/**
- * Calculates the URL that can be used to retrieve the resource in question.
- *
- * @param id The ID of the resource to retrieve.
- * @return The URL that can be used to retrieve the resource in question.
- */
-export type ResolveIndividualUrl = (id: string) => string;
+import { IndividualDescriptionCache } from './request-cache';
+import { ResolveIndividualUrl } from './url-resolve';
 
 /**
  * Access individual resources from a server.

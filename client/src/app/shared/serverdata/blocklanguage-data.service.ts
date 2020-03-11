@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlockLanguageListDescription, BlockLanguageDescription } from '../block/block-language.description';
 
 import { ServerApiService } from './serverapi.service';
-import { ListData } from './data-service';
+import { ListData } from './list-data';
 import { IndividualData } from './individual-data';
 import { MutateData } from './mutate-data';
 
@@ -31,10 +31,10 @@ export class IndividualBlockLanguageDataService extends IndividualData<BlockLang
 export class ListBlockLanguageDataService extends ListData<BlockLanguageListDescription> {
 
   public constructor(
-    private _serverApi: ServerApiService,
+    serverApi: ServerApiService,
     http: HttpClient
   ) {
-    super(http, _serverApi.getBlockLanguageListUrl());
+    super(http, serverApi.getBlockLanguageListUrl());
   }
 }
 

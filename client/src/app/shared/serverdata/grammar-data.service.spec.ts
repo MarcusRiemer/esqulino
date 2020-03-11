@@ -1,9 +1,5 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Overlay } from '@angular/cdk/overlay';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { first } from 'rxjs/operators';
 
@@ -16,7 +12,7 @@ import { ListGrammarDataService } from './grammar-data.service';
 import { ServerApiService } from './serverapi.service';
 
 
-describe(`GrammarDataService`, () => {
+describe(`ListGrammarDataService`, () => {
   function instantiate() {
     TestBed.configureTestingModule({
       imports: [
@@ -25,8 +21,6 @@ describe(`GrammarDataService`, () => {
       providers: [
         ServerApiService,
         ListGrammarDataService,
-        MatSnackBar,
-        Overlay,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

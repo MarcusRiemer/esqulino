@@ -6,13 +6,7 @@ import { first } from 'rxjs/operators';
 import { IdentifiableResourceDescription } from '../resource.description';
 import { objectOmit } from '../util';
 
-/**
- * Calculates the URL that can be used to retrieve the resource in question.
- *
- * @param id The ID of the resource to retrieve.
- * @return The URL that can be used to retrieve the resource in question.
- */
-export type ResolveIndividualUrl = (id: string) => string;
+import { ResolveIndividualUrl } from './url-resolve';
 
 export class MutateData<TSingle extends IdentifiableResourceDescription> {
   public constructor(

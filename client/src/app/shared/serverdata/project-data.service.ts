@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ProjectDescription, ProjectListDescription } from '../project.description';
 
 import { ServerApiService } from './serverapi.service';
-import { ListData } from './data-service';
+import { ListData } from './list-data';
 import { IndividualData } from './individual-data';
 
 @Injectable()

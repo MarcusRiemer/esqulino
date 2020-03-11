@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
 
 import { ServerApiService } from './serverapi.service';
-import { ListData } from './data-service';
+import { ListData } from './list-data';
 import { IndividualData } from './individual-data';
 import { MutateData } from './mutate-data';
 
