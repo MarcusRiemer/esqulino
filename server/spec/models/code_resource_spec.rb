@@ -140,6 +140,7 @@ RSpec.describe CodeResource, type: :model do
       queried = CodeResource.list_by_programming_language("sql")
       expect(queried).to eq([res])
       expect(queried[0].attributes.keys).to eq(["id", "name"])
+      expect(queried[0].to_json_api_response.keys).to eq(["id", "name"])
     end
   end
 

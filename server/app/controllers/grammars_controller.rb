@@ -6,7 +6,7 @@ class GrammarsController < ApplicationController
 
   # List all existing grammars
   def index
-    render :json => pagination_response(Grammar.scope_list)
+    render :json => pagination_response(Grammar.scope_list,options:{})
   end
 
   # Find a single grammar
@@ -65,7 +65,7 @@ class GrammarsController < ApplicationController
   def related_block_languages
     render :json => BlockLanguage.scope_list
                       .where(grammar_id: id_params[:id])
-                      .map{|b| b.to_list_api_response}
+                      .map{|b| b.to_list_api_response(options:{include_list_calculations: false})}
   end
 
   # List all code resources that depend on a single grammar

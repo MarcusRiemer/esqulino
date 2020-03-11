@@ -30,9 +30,8 @@ export class OverviewProjectComponent {
     private _serverData: AdminProjectDataService
   ) { }
 
-  availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;
-
-  resultsLength = this._serverData.listTotalCount;
+  readonly availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;
+  readonly resultsLength = this._serverData.listTotalCount;
 
   /**
    * User has requested a different chunk of data
