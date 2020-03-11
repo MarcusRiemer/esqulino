@@ -11,7 +11,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 # TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/ts-json-schema-generator/bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json NewsDescription.json NewsUpdateDescription.json NewsFrontpageDescription.json ServerProviderDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json CodeResourceRequestUpdateDescription.json GrammarDatabaseBlob.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json GrammarRequestUpdateDescription.json NewsDescription.json NewsFrontpageDescription.json NewsUpdateDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -85,6 +85,9 @@ NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
 CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
 	$(CONVERT_COMMAND)
 
+CodeResourceRequestUpdateDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
+	$(CONVERT_COMMAND)
+
 RequestTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
 
@@ -101,6 +104,9 @@ GrammarDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
 
 GrammarListDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
+	$(CONVERT_COMMAND)
+
+GrammarRequestUpdateDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
 
 NewsDescription.json : $(SRC_PATH)/shared/news.description.ts

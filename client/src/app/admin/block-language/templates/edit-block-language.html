@@ -56,21 +56,21 @@
 
   <!-- The CSS classes to apply -->
   <div class="form-group row">
-    <label for="block-language-grammar-id"
-           class="col-sm-2 col-form-label">Wurzel CSS Klassen</label>
-    <div class="col-sm-10">
-      <span *ngFor="let cssClass of editedSubject.rootCssClasses"
-            (click)="onRemoveCssRootClass(cssClass)"
-            class="badge badge-primary block-lang-css-root-class">
-        {{ cssClass }}
-      </span>
-      <div>
-        <input #cssClassName>
-        <button (click)="onAddCssRootClass(cssClassName.value)"
-                mat-button>
-          <span class="fa fa-plus-circle" aria-hidden="true"></span>
-          CSS Klasse hinzufügen
-        </button>
+    <div class="col-sm-2 col-form-label">Wurzel CSS Klassen</div>
+    <div class="col-sm-10 col-form-label">
+      <div class="form-inline">
+        <div *ngFor="let cssClass of availableCssRootClasses"
+             class="form-check mr-sm-2">
+          <input type="checkbox"
+                 name="css-root-{{ cssClass.name }}"
+                 id="css-root-{{ cssClass.name }}"
+                 class="form-check-input"
+                 [(ngModel)]="cssClass.checked">
+          <label class="form-check-label"
+                 for="css-root-{{ cssClass.name }}">
+            <code>{{ cssClass.name }}</code>
+          </label>
+        </div>
       </div>
     </div>
   </div>

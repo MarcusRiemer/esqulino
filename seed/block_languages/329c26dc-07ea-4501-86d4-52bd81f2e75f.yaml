@@ -241,22 +241,22 @@ concise_attributes:
     \"rhs\", \"emptyDropTarget\": false}], \"blockType\": \"container\", \"cssClasses\":
     [\"horizontal\"]}], \"blockType\": \"block\", \"dropTarget\": {}}], \"describedType\":
     {\"typeName\": \"booleanBinaryExpression\", \"languageName\": \"trucklino_program\"}}],
-    \"rootCssClasses\": [\"activate-terminal-nowrap\", \"activate-terminal-keyword\",
-    \"activate-indent\"], \"editorComponents\": [{\"componentType\": \"truck-controller\"},
-    {\"columnClasses\": [\"col-lg-6\"], \"componentType\": \"truck-world\"}, {\"columnClasses\":
-    [\"col-lg-6\"], \"componentType\": \"block-root\"}, {\"componentType\": \"truck-sensors\"},
-    {\"componentType\": \"generated-code\"}], \"localGeneratorInstructions\": {\"type\":
-    \"manual\", \"traits\": {\"softHole\": {\"applyMode\": \"deepMerge\", \"instructions\":
-    {\"emptyDropTarget\": true}}, \"readOnlyProperty\": {\"applyMode\": \"deepMerge\",
-    \"instructions\": {\"propReadOnly\": true}}}, \"traitScopes\": [{\"traits\": [\"softHole\"],
-    \"attributes\": {\"trucklino_program\": {\"if\": [\"body\"], \"ifElse\": [\"body\"],
-    \"loopFor\": [\"body\"], \"program\": [\"main\"], \"ifElseIf\": [\"body\"], \"loopWhile\":
-    [\"body\"]}}}, {\"traits\": [\"readOnlyProperty\"], \"attributes\": {\"trucklino_program\":
-    {\"sensor\": [\"type\"], \"procedureCall\": [\"name\"], \"booleanConstant\": [\"value\"]}}}],
-    \"staticSidebars\": [{\"type\": \"fixedBlocks\", \"caption\": \"Trucklino Programm\",
-    \"categories\": [{\"blocks\": [{\"defaultNode\": {\"name\": \"program\", \"children\":
-    {\"main\": []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Leeres
-    Programm\"}, {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
+    \"rootCssClasses\": [\"activate-keyword\"], \"editorComponents\": [{\"componentType\":
+    \"truck-controller\"}, {\"columnClasses\": [\"col-lg-6\"], \"componentType\":
+    \"truck-world\"}, {\"columnClasses\": [\"col-lg-6\"], \"componentType\": \"block-root\"},
+    {\"componentType\": \"truck-sensors\"}, {\"componentType\": \"generated-code\"}],
+    \"localGeneratorInstructions\": {\"type\": \"manual\", \"traits\": {\"softHole\":
+    {\"applyMode\": \"deepMerge\", \"instructions\": {\"emptyDropTarget\": true}},
+    \"readOnlyProperty\": {\"applyMode\": \"deepMerge\", \"instructions\": {\"propReadOnly\":
+    true}}}, \"traitScopes\": [{\"traits\": [\"softHole\"], \"attributes\": {\"trucklino_program\":
+    {\"if\": [\"body\"], \"ifElse\": [\"body\"], \"loopFor\": [\"body\"], \"program\":
+    [\"main\"], \"ifElseIf\": [\"body\"], \"loopWhile\": [\"body\"]}}}, {\"traits\":
+    [\"readOnlyProperty\"], \"attributes\": {\"trucklino_program\": {\"sensor\": [\"type\"],
+    \"procedureCall\": [\"name\"], \"booleanConstant\": [\"value\"]}}}], \"staticSidebars\":
+    [{\"type\": \"fixedBlocks\", \"caption\": \"Trucklino Programm\", \"categories\":
+    [{\"blocks\": [{\"defaultNode\": {\"name\": \"program\", \"children\": {\"main\":
+    []}, \"language\": \"trucklino_program\"}, \"displayName\": \"Leeres Programm\"},
+    {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
     \"properties\": {\"name\": \"goForward\"}}, \"displayName\": \"←\U0001F69A Fahren\"},
     {\"defaultNode\": {\"name\": \"procedureCall\", \"language\": \"trucklino_program\",
     \"properties\": {\"name\": \"turnRight\"}}, \"displayName\": \"↱ Blinker rechts\"},
@@ -324,7 +324,7 @@ concise_attributes:
   value_before_type_cast: 2019-01-09 12:30:41.478228000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-02-25 11:07:34.310907000 Z
+  value_before_type_cast: 2020-02-26 12:55:43.948497000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-lang

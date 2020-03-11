@@ -66,6 +66,8 @@ concise_attributes:
   value_before_type_cast: 2019-11-27 14:30:31.638408000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: generic
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
 new_record: false
 active_record_yaml_version: 2

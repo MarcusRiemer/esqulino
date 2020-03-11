@@ -6,7 +6,7 @@ import { PerformDataService } from '../../shared/authorisation/perform-data.serv
 
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
-import { ToolbarService } from '../toolbar.service'
+import { EditorToolbarService } from '../toolbar.service'
 
 @Component({
   templateUrl: 'templates/settings.html'
@@ -27,7 +27,7 @@ export class SettingsComponent {
    */
   constructor(
     private _projectService: ProjectService,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router,
     private _serverData: BlockLanguageDataService,

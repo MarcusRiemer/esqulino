@@ -7,13 +7,13 @@ import { DragService } from '../../drag.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 /**
- * Create appropriate descriptions from the available procedure
+ * Create appropriate descriptions from the given typename
  */
-function makeCallBlock(name: QualifiedTypeName): NodeDescription[] {
+function makeReferenceBlock(name: QualifiedTypeName): NodeDescription[] {
   return ([
     {
       language: "MetaGrammar",
-      name: "nodeRef",
+      name: "nodeRefOne",
       properties: {
         "languageName": name.languageName,
         "typeName": name.typeName
@@ -59,7 +59,7 @@ export class DefinedTypesSidebarComponent {
    */
   startDrag(evt: DragEvent, name: QualifiedTypeName) {
     try {
-      this._dragService.dragStart(evt, makeCallBlock(name));
+      this._dragService.dragStart(evt, makeReferenceBlock(name));
     } catch (e) {
       alert(e);
     }

@@ -10,7 +10,7 @@ import { ServerApiService } from '../../shared';
 import { ResponseTabularInsertDescription } from '../../shared/schema/schema.description';
 
 import { ProjectService } from '../project.service';
-import { ToolbarService } from '../toolbar.service';
+import { EditorToolbarService } from '../toolbar.service';
 
 import { first } from 'rxjs/operators';
 
@@ -67,7 +67,7 @@ export class SchemaTableImportComponent implements OnInit {
   // used for dependency injection
   constructor(
     private _projectService: ProjectService,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _serverApi: ServerApiService,
     private _http: HttpClient,
     private _route: ActivatedRoute,

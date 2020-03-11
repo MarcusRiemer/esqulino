@@ -317,13 +317,13 @@ export type NamedLanguages = { [languageName: string]: NamedTypes };
  */
 export interface GrammarDatabaseBlob {
   // All types that are defined on this language
-  types: NamedLanguages
+  types?: NamedLanguages
 
   // All types that come from different languages
   foreignTypes?: NamedLanguages
 
   // The type that needs to be at the root of the language.
-  root: QualifiedTypeName
+  root?: QualifiedTypeName
 }
 
 /**
@@ -341,6 +341,13 @@ export interface GrammarDocument extends GrammarDatabaseBlob {
 export interface GrammarDescription extends GrammarDocument, GrammarListDescription {
 
 }
+
+/**
+ * A request to update a grammar.
+ */
+export type GrammarRequestUpdateDescription = Partial<
+  Omit<GrammarDescription, "id">
+>
 
 /**
  * @return True if the given instance satisfies "QualifiedTypeName"
@@ -413,6 +420,9 @@ export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   });
 }
 
+/**
+ * Converts a node that represents a terminal symbol to a description.
+ */
 export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
   const toReturn: ReturnType<typeof convertTerminal> = {
     type: "terminal",
@@ -428,17 +438,24 @@ export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
 
 export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
   const toReturn: ReturnType<typeof convertChildren> = {
-    type: attrNode.properties["base"] as ("sequence" | "allowed"),
+    type: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
-    nodeTypes: []
+    nodeTypes: undefined
   };
 
-  attrNode.getChildrenInCategory("references").forEach(ref => {
-    switch (ref.typeName) {
-      case "nodeRefOne":
-        break;
-    }
-  });
+  if (isNodeTypesAllowedDescription(toReturn) || isNodeTypesSequenceDescription(toReturn)) {
+    const typeReferences: NodeTypesChildReference[] = attrNode.getChildrenInCategory("references").map(ref => {
+      switch (ref.typeName) {
+        case "nodeRefOne":
+          return ({
+            languageName: ref.properties["languageName"],
+            typeName: ref.properties["typeName"]
+          });
+      }
+    });
+
+    toReturn.nodeTypes = typeReferences;
+  }
 
   return (toReturn);
 }
@@ -454,6 +471,9 @@ export function readAttributes(attrNode: Node, target: NodeAttributeDescription[
       break;
     case "terminal":
       target.push(convertTerminal(attrNode));
+      break;
+    case "children":
+      target.push(convertChildren(attrNode));
       break;
   }
 }

@@ -18,28 +18,30 @@ concise_attributes:
   value_before_type_cast: Meta
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "grammar", "children": {"nodes": [{"name": "concreteNode",
-    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "integer", "name": "$prop"}}, {"name": "children", "children": {"references":
-    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "t1", "languageName": "l1"}}]}, "language": "MetaGrammar", "properties": {"base":
-    "sequence", "name": "$childGroup"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "grammar", "languageName": "meta"}}]}, "language": "MetaGrammar",
-    "properties": {"name": "meta"}}'
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "grammar", "languageName":
+    "meta"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": []},
+    "language": "MetaGrammar", "properties": {"typeName": "grammar", "languageName":
+    "meta"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "languageName"}},
+    {"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "typeName"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "node", "languageName": "meta"}}]}, "language": "MetaGrammar", "properties": {"name":
+    "meta"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-11-14 10:19:54.438160000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-11-19 09:59:47.537436000 Z
+  value_before_type_cast: 2020-02-27 10:23:45.100045000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: generic
+  value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: Generic Language without code generator
+  value_before_type_cast: '{"types":{"meta":{"grammar":{"type":"concrete","attributes":[]},"node":{"type":"concrete","attributes":[{"type":"property","base":"string","name":"languageName"},{"type":"property","base":"string","name":"typeName"}]}}},"root":{"languageName":"meta","typeName":"grammar"}}'
 new_record: false
 active_record_yaml_version: 2

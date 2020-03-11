@@ -16,8 +16,44 @@ FactoryBot.define do
       end
     end
 
+    trait :grammar_single_type do
+      association :programming_language, factory: [:programming_language, :meta_grammar]
+      ast {
+        ({
+           "children"=> {
+             "nodes"=> [
+               {
+                 "language"=> "MetaGrammar",
+                 "name"=> "concreteNode",
+                 "properties"=> {
+                   "languageName"=> "lang",
+                   "typeName"=> "root"
+                 }
+               }
+             ],
+             "root"=> [
+               {
+                 "language"=> "MetaGrammar",
+                 "name"=> "nodeRefOne",
+                 "properties"=> {
+                   "languageName"=> "lang",
+                   "typeName"=> "root"
+                 }
+               }
+             ]
+           },
+           "language"=> "MetaGrammar",
+           "name"=> "grammar",
+           "properties"=> {
+             "name"=> "lang"
+           }
+         })
+      }
+    end
+
     # A query that re-uses the same columns in the SELECT portion
     trait :sql_key_value_select_double do |query|
+      association :programming_language, factory: [:programming_language, :sql]
       query.ast {
         ({
            "name"=> "querySelect",

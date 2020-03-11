@@ -589,9 +589,7 @@
       "required": [
         "id",
         "name",
-        "programmingLanguageId",
-        "root",
-        "types"
+        "programmingLanguageId"
       ],
       "type": "object"
     },
@@ -1319,6 +1317,12 @@
         "name": {
           "type": "string"
         },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "choice"
@@ -1368,6 +1372,12 @@
         },
         "name": {
           "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "type": {
           "enum": [

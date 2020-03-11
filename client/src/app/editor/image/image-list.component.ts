@@ -6,7 +6,7 @@ import { first } from 'rxjs/operators';
 import { ServerApiService } from '../../shared'
 import { ProjectService } from '../project.service'
 import { SidebarService } from '../sidebar.service'
-import { ToolbarService } from '../toolbar.service'
+import { EditorToolbarService } from '../toolbar.service'
 
 import { ImageService } from './image.service'
 
@@ -37,7 +37,7 @@ export class ImageListComponent {
     private _projectService: ProjectService,
     private _imageService: ImageService,
     private _sidebarService: SidebarService,
-    private _toolbarService: ToolbarService
+    private _toolbarService: EditorToolbarService
   ) {
   }
 

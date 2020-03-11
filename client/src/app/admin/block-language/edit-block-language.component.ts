@@ -121,4 +121,31 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   onGeneratorDataUpdate(json: any) {
     this._current.updateGeneratorData(json);
   }
+
+  /**
+   * Wrapper for checkbox style operations for CSS root classes
+   */
+  static RootCssClass = class {
+    constructor(
+      readonly name: string,
+      private readonly _parent: EditBlockLanguageComponent,
+    ) { }
+
+    get checked() {
+      return (this._parent.editedSubject?.rootCssClasses?.includes(this.name));
+    }
+
+    set checked(v: boolean) {
+      if (v) {
+        this._parent.onAddCssRootClass(this.name);
+      } else {
+        this._parent.onRemoveCssRootClass(this.name);
+      }
+    }
+  }
+
+  readonly availableCssRootClasses = [
+    new EditBlockLanguageComponent.RootCssClass("activate-block-outline", this),
+    new EditBlockLanguageComponent.RootCssClass("activate-keyword", this),
+  ]
 }

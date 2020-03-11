@@ -6,7 +6,7 @@ import { MayPerformRequestDescription } from './../shared/may-perform.descriptio
 /**
  * Used to subscribe to click events.
  */
-export type ClickHandler = Observable<string>;
+export type ClickHandler = Observable<void>;
 
 /**
  * Represents a button on the toolbar. These items may be "native",
@@ -14,15 +14,9 @@ export type ClickHandler = Observable<string>;
  * upon resetting the toolbar.
  */
 export class ToolbarItem {
-  private _caption: string;
-  private _icon: string;
-  private _id: string;
-  private _native: boolean;
-  private _key: string;
   private _inProgress: boolean = false;
-  private _performDesc: MayPerformRequestDescription;
 
-  private _onClick: Subject<string>;
+  private _onClick: Subject<void>;
 
   /**
    * @param caption The text to display on the button
@@ -30,15 +24,17 @@ export class ToolbarItem {
    * @param key     The key this item should be bound to
    * @param native  True, if this is a native item of the toolbar
    */
-  constructor(id: string, caption: string, icon: string, key: string, native: boolean, performDesc: MayPerformRequestDescription = undefined) {
-    this._caption = caption;
-    this._icon = icon;
-    this._id = id;
-    this._key = key.toLowerCase();
-    this._native = native;
-    this._performDesc = performDesc;
+  constructor(
+    private _id: string,
+    private _caption: string,
+    private _icon: string,
+    private _key: string,
+    private _native: boolean,
+    private _mayPerform: MayPerformRequestDescription = undefined
+  ) {
+    this._key = _key.toLowerCase();
 
-    this._onClick = new Subject<string>();
+    this._onClick = new Subject<void>();
   }
 
   /**
@@ -85,7 +81,7 @@ export class ToolbarItem {
   }
 
   set performDesc(desc: MayPerformRequestDescription) {
-    this._performDesc = desc;
+    this._mayPerform = desc;
   }
 
   /**
@@ -96,14 +92,14 @@ export class ToolbarItem {
   }
 
   get performDesc() {
-    return (this._performDesc);
+    return (this._mayPerform);
   }
 
   /**
    * Emits the click event.
    */
   fire() {
-    this._onClick.next("");
+    this._onClick.next();
   }
 
   /**
@@ -117,8 +113,8 @@ export class ToolbarItem {
 /**
  * Allows to adress the toolbar from any component.
  */
-@Injectable({ providedIn: "root" })
-export class ToolbarService {
+@Injectable()
+export class EditorToolbarService {
   // All items on the toolbar
   private _items: ToolbarItem[] = [];
 

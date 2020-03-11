@@ -2,22 +2,32 @@ FactoryBot.define do
   factory :grammar do
     name { "Spec Grammar" }
     sequence (:slug) { |n| "grammar-#{n}" }
-    association :programming_language, factory: :programming_language
-    model {
-      ({
-         "types" => {
-           "spec" => {
-             "root" => {
-               "type" => "concrete",
-               "attributes" => []
+    association :programming_language
+    model { Hash.new }
+
+    # A grammar that has a single type that is the root
+    trait :model_single_type do
+      model {
+        ({
+           "types" => {
+             "spec" => {
+               "root" => {
+                 "type" => "concrete",
+                 "attributes" => []
+               }
              }
+           },
+           "root" => {
+             "languageName" => "spec",
+             "typeName" => "root"
            }
-         },
-         "root" => {
-           "languageName" => "spec",
-           "typeName" => "root"
-         }
-       })
-    }
+         })
+      }
+    end
+
+    # A grammar that is generated from a code resource
+    trait :generated_model_single_type do
+      association :generated_from, factory: [:code_resource, :grammar_single_type]
+    end
   end
 end

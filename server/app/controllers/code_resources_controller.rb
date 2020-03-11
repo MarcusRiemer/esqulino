@@ -4,6 +4,14 @@
 # controllers.
 class CodeResourcesController < ApplicationController
 
+  include JsonSchemaHelper
+
+  # All available code resources for a certain programming language
+  def index_by_programming_language
+    render json: CodeResource
+      .list_by_programming_language(params[:programming_language_id])
+  end
+
   # Create a new resource that is part of a specific project
   def create
     project_slug = params[:project_id]
@@ -20,21 +28,27 @@ class CodeResourcesController < ApplicationController
     end
   end
 
-  # Updates a specific resource
+  # Updates a specific resource. As other models in the database may
+  # depend on this specific resource, they may be updated as well.
   def update
+    # See what the new data looks like
+    request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
+    update_params = request_data
+                      .dig("resource")
+                      .transform_keys { |k| k.underscore }
+
     resource = CodeResource.find(params[:code_resource_id])
-    update_params = code_resource_update_params.to_hash
 
-    # Explicitly include an empty AST if it has not been sent. Without this
-    # the user could never delete a syntax tree that existed previously
-    if params.has_key? "ast"
-      update_params["ast"] ||= nil
-    end
+    ApplicationRecord.transaction do
+      # Do the actual update of the code resource
+      if resource.update(update_params)
+        # Do updates on dependant resources
+        resource.regenerate_immediate_dependants!
 
-    if resource.update(update_params)
-      render :json => resource, :status => 200
-    else
-      render :json => { 'errors' => resource.errors }, :status => 400
+        render :json => resource, :status => 200
+      else
+        render :json => { 'errors' => resource.errors }, :status => 400
+      end
     end
   end
 
@@ -52,8 +66,9 @@ class CodeResourcesController < ApplicationController
     begin
       CodeResource.destroy(params[:code_resource_id])
       render :status => 204
-    rescue ActiveRecord::RecordNotFound
-      render :status => 404
+    rescue ActiveRecord::InvalidForeignKey
+      c = CodeResource.find(params[:code_resource_id])
+      raise EsqulinoError::CodeResourceReferenced.new(c)
     end
   end
 
@@ -61,13 +76,6 @@ class CodeResourcesController < ApplicationController
 
   # Possible parameters when creating
   def code_resource_create_params
-    params
-      .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
-      .transform_keys { |k| k.underscore }
-  end
-
-  # Possible parameters when updating
-  def code_resource_update_params
     params
       .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
       .transform_keys { |k| k.underscore }

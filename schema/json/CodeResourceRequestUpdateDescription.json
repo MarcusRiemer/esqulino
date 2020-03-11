@@ -1,0 +1,84 @@
+{
+  "$ref": "#/definitions/CodeResourceRequestUpdateDescription",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "CodeResourceRequestUpdateDescription": {
+      "additionalProperties": false,
+      "description": "A request to update a code resource. May omit values to be updated\nand may explicitly set the ast to `null` which will delete it.",
+      "properties": {
+        "resource": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "ast": {
+                  "$ref": "#/definitions/NodeDescription"
+                },
+                "blockLanguageId": {
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The user-chosen name of this resource. This property is free to change.",
+                  "type": "string"
+                },
+                "programmingLanguageId": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "ast": {
+                  "type": "null"
+                }
+              },
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "required": [
+        "resource"
+      ],
+      "type": "object"
+    },
+    "NodeDescription": {
+      "additionalProperties": false,
+      "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            "type": "array"
+          },
+          "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "language"
+      ],
+      "type": "object"
+    }
+  }
+}
