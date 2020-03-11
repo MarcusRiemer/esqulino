@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { first } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { ResourceReferencesOnlineService } from '../resource-references-online.s
 
 import { ListGrammarDataService, MutateGrammarService } from './grammar-data.service';
 import { ServerApiService } from './serverapi.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 describe(`ListGrammarDataService`, () => {
@@ -169,4 +170,122 @@ describe(`ListGrammarDataService`, () => {
     expect(totalCount).toEqual(0);
     expect(fixture.service.peekListTotalCount).toEqual(0);
   });
+});
+
+describe(`MutateGrammarDataService`, () => {
+  function instantiate() {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        ServerApiService,
+        ListGrammarDataService,
+        MutateGrammarService,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        }
+      ],
+      declarations: [
+      ]
+    });
+
+    return ({
+      list: TestBed.inject(ListGrammarDataService),
+      mutate: TestBed.inject(MutateGrammarService),
+      httpTesting: TestBed.inject(HttpTestingController),
+      serverApi: TestBed.inject(ServerApiService),
+    });
+  }
+
+  it(`can be instantiated`, async () => {
+    const fixture = instantiate();
+
+    expect(fixture.mutate).toBeDefined();
+  });
+
+  it(`makes a successful DELETE request`, async () => {
+    const fixture = instantiate();
+
+    let listInvalidatedCalls = 0;
+    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+
+    const done = fixture.mutate.deleteSingle("grammarId");
+    fixture.httpTesting.expectOne({
+      url: fixture.serverApi.individualGrammarUrl("grammarId"),
+      method: "DELETE"
+    }).flush("");
+
+    await done;
+
+    expect(listInvalidatedCalls).toEqual(1);
+  });
+
+  it(`makes a unsuccessful DELETE request`, async () => {
+    const fixture = instantiate();
+
+    let listInvalidatedCalls = 0;
+    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+
+    const done = fixture.mutate.deleteSingle("grammarId", false);
+    fixture.httpTesting.expectOne({
+      url: fixture.serverApi.individualGrammarUrl("grammarId"),
+      method: "DELETE"
+    }).flush("", { status: 400, statusText: "Nope" });
+
+    try {
+      await done;
+      fail("Must throw");
+    } catch { }
+
+    expect(listInvalidatedCalls).toEqual(0);
+  });
+
+  it(`makes a POST request`, async () => {
+    const fixture = instantiate();
+
+    let listInvalidatedCalls = 0;
+    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+
+    const originalDescription = { id: "grammarId" } as any;
+
+    const done = fixture.mutate.updateSingle(originalDescription);
+    fixture.httpTesting.expectOne({
+      url: fixture.serverApi.individualGrammarUrl("grammarId"),
+      method: "PUT"
+    }).flush("");
+
+    await done;
+
+    expect(listInvalidatedCalls).toEqual(1);
+    expect(originalDescription)
+      .withContext("Original description must not be mutated")
+      .toEqual({ id: "grammarId" });
+  });
+
+  it(`makes a unsuccessful POST request`, async () => {
+    const fixture = instantiate();
+
+    let listInvalidatedCalls = 0;
+    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+
+    const originalDescription = { id: "grammarId" } as any;
+    const done = fixture.mutate.updateSingle(originalDescription, false);
+    fixture.httpTesting.expectOne({
+      url: fixture.serverApi.individualGrammarUrl("grammarId"),
+      method: "PUT"
+    }).flush("", { status: 400, statusText: "Nope" });
+
+    try {
+      await done;
+      fail("Must throw");
+    } catch { }
+
+    expect(listInvalidatedCalls).toEqual(0);
+  });
+
+
 });
