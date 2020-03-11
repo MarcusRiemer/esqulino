@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { IdentifiableResourceDescription } from '../resource.description';
@@ -18,6 +19,11 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
   ) {
   }
 
+
+  private readonly _listInvalidated = new Subject<void>();
+
+  readonly listInvalidated = this._listInvalidated.asObservable();
+
   /**
    * Updates an individual resource on the server. Uses the same
    * URL as the individual data access, but with HTTP PUT.
@@ -33,8 +39,7 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
           console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
           this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
 
-          // TODO: Inform others about the change
-          // this.listCache.refresh();
+          this._listInvalidated.next();
 
           resolve(updatedDesc);
         }, err => {
@@ -66,8 +71,7 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
           console.log(`Deleted ${this._speakingName} with  "${id}"`);
           this._snackBar.open(`Deleted ${this._speakingName} with ID "${id}"`, "", { duration: 3000 });
 
-          // TODO: Inform others about the change
-          // this.listCache.refresh();
+          this._listInvalidated.next();
 
           resolve();
         }, err => {

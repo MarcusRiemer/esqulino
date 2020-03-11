@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { Subscription } from 'rxjs';
 
 import { BlockLanguageListDescription, BlockLanguageDescription } from '../block/block-language.description';
 
@@ -24,28 +26,35 @@ export class IndividualBlockLanguageDataService extends IndividualData<BlockLang
   }
 }
 
-/**
- * Convenient and cached access to server side grammar descriptions.
- */
-@Injectable()
-export class ListBlockLanguageDataService extends ListData<BlockLanguageListDescription> {
-
-  public constructor(
-    serverApi: ServerApiService,
-    http: HttpClient
-  ) {
-    super(http, serverApi.getBlockLanguageListUrl());
-  }
-}
-
 @Injectable()
 export class MutateBlockLanguageService extends MutateData<BlockLanguageDescription> {
   public constructor(
-    // Deriving classes may need to make HTTP requests of their own
     http: HttpClient,
     snackBar: MatSnackBar,
     serverApi: ServerApiService,
   ) {
     super(http, snackBar, urlResolver(serverApi), "BlockLanguage")
+  }
+}
+
+@Injectable()
+export class ListBlockLanguageDataService extends ListData<BlockLanguageListDescription> implements OnDestroy {
+  private _subscriptions: Subscription[] = [];
+
+  public constructor(
+    serverApi: ServerApiService,
+    http: HttpClient,
+    mutateService: MutateBlockLanguageService,
+  ) {
+    super(http, serverApi.getBlockLanguageListUrl());
+
+    const s = mutateService.listInvalidated.subscribe(() => this.listCache.refresh());
+
+    this._subscriptions = [s];
+  }
+
+  ngOnDestroy() {
+    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions = [];
   }
 }

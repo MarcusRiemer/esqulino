@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { first } from 'rxjs/operators';
 
@@ -8,7 +9,7 @@ import { provideGrammarList, buildGrammar, GrammarOrder } from '../../editor/spe
 import { ResourceReferencesService } from '../resource-references.service';
 import { ResourceReferencesOnlineService } from '../resource-references-online.service';
 
-import { ListGrammarDataService } from './grammar-data.service';
+import { ListGrammarDataService, MutateGrammarService } from './grammar-data.service';
 import { ServerApiService } from './serverapi.service';
 
 
@@ -17,10 +18,12 @@ describe(`ListGrammarDataService`, () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        MatSnackBarModule,
       ],
       providers: [
         ServerApiService,
         ListGrammarDataService,
+        MutateGrammarService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

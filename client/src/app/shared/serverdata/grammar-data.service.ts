@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { Subscription } from 'rxjs';
 
 import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
 
@@ -26,27 +28,38 @@ export class IndividualGrammarDataService extends IndividualData<GrammarDescript
   }
 }
 
-/**
- * Cached access to lists of grammars.
- */
-@Injectable()
-export class ListGrammarDataService extends ListData<GrammarListDescription> {
-  constructor(
-    serverApi: ServerApiService,
-    http: HttpClient
-  ) {
-    super(http, serverApi.getGrammarListUrl());
-  }
-}
-
 @Injectable()
 export class MutateGrammarService extends MutateData<GrammarDescription> {
   public constructor(
-    // Deriving classes may need to make HTTP requests of their own
     http: HttpClient,
     snackBar: MatSnackBar,
     serverApi: ServerApiService,
   ) {
     super(http, snackBar, urlResolver(serverApi), "Grammar")
+  }
+}
+
+/**
+ * Cached access to lists of grammars.
+ */
+@Injectable()
+export class ListGrammarDataService extends ListData<GrammarListDescription> implements OnDestroy {
+  private _subscriptions: Subscription[] = [];
+
+  constructor(
+    serverApi: ServerApiService,
+    http: HttpClient,
+    mutateService: MutateGrammarService,
+  ) {
+    super(http, serverApi.getGrammarListUrl());
+
+    const s = mutateService.listInvalidated.subscribe(() => this.listCache.refresh());
+
+    this._subscriptions = [s];
+  }
+
+  ngOnDestroy() {
+    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions = [];
   }
 }
