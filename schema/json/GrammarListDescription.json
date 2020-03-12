@@ -6,6 +6,9 @@
       "additionalProperties": false,
       "description": "Listing data about grammars",
       "properties": {
+        "generatedFromId": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },

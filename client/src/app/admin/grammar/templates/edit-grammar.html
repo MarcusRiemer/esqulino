@@ -33,22 +33,11 @@
     </div>
   </div>
 
-  <!-- The type that should be trated as the root -->
   <div class="form-group row">
-    <label for="grammar-root"
-           class="col-sm-2 col-form-label">Wurzel</label>
+    <div for="grammar-name"
+         class="col-sm-2 col-form-label">Meta Code Ressource</div>
     <div class="col-sm-10">
-      <select id="grammar-root"
-              class="custom-select"
-              required
-              name="grammar-root"
-              [(ngModel)]="grammar.root">
-        <option [ngValue]="undefined">-- Wurzeltyp wählen --</option>
-        <option *ngFor="let type of availableTypes;"
-                [ngValue]="type">
-          {{ type.languageName }}.{{ type.typeName }}
-        </option>
-      </select>
+      <meta-code-resource-select [(selectedCodeResourceId)]="grammar.generatedFromId"></meta-code-resource-select>
     </div>
   </div>
 
@@ -65,6 +54,25 @@
           </a>
         </li>
       </ul>
+    </div>
+  </div>
+
+  <!-- The type that should be trated as the root -->
+  <div class="form-group row">
+    <label for="grammar-root"
+           class="col-sm-2 col-form-label">Wurzel</label>
+    <div class="col-sm-10">
+      <select id="grammar-root"
+              class="custom-select"
+              required
+              name="grammar-root"
+              [(ngModel)]="grammar.root">
+        <option [ngValue]="undefined">-- Wurzeltyp wählen --</option>
+        <option *ngFor="let type of availableTypes;"
+                [ngValue]="type">
+          {{ type.languageName }}.{{ type.typeName }}
+        </option>
+      </select>
     </div>
   </div>
 

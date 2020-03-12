@@ -52,7 +52,7 @@ export class GalleryGrammarComponent implements OnInit {
     switchMap(id => this.createGrammarCodeResourceGalleryRequest(id)),
     map(descriptions =>
       descriptions
-        .slice(0, 1)
+        .slice(0, 10)
         .map(d => new CodeResource(d, this._resourceReferences))
     ),
     startWith([]),

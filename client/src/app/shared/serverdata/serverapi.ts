@@ -175,6 +175,14 @@ export class ServerApi {
   }
 
   /**
+   * Retrieves the URL that is used to list meta code resources (that may be used
+   * as the basis for a grammar).
+   */
+  getMetaCodeResourceListUrl(): string {
+    return (`${this._apiBaseUrl}/code_resources/by_programming_language/meta-grammar`);
+  }
+
+  /**
    * Retrieves the URL that accepts uploaded databases
    */
   uploadDatabase(projectId: string, dbId: string) {

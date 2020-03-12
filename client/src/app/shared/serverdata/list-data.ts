@@ -13,7 +13,7 @@ import { CachedRequest } from './request-cache';
  * May additionally also provide a local cache for objects that need to be
  * persisted across multiple components.
  */
-export abstract class ListData<TList extends IdentifiableResourceDescription> {
+export class ListData<TList extends IdentifiableResourceDescription> {
 
   public constructor(
     // Deriving classes may need to make HTTP requests of their own

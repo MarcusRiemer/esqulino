@@ -1,0 +1,10 @@
+<select id="grammar-root"
+        class="custom-select"
+        name="meta-code-resource"
+        [(ngModel)]="selectedCodeResourceId">
+  <option [ngValue]="undefined">-- Freie JSON Definition --</option>
+  <option *ngFor="let res of metaCodeResources$ | async;"
+          [ngValue]="res.id">
+    {{ res.name }}
+  </option>
+</select>
