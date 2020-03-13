@@ -54,6 +54,9 @@ gem "rolify"
 # Used for HTTP-Requests
 gem "rest-client"
 
+# Used to build a strongly-typed API
+gem 'graphql'
+
 ############################
 # Rails dependencies
 ###########################
@@ -84,6 +87,9 @@ group :development, :test do
 
   # Factories seem to be so much nicer then fixtures
   gem 'factory_bot_rails', '~> 4.11'
+
+  # Used for manually testing graphql queries
+  gem 'graphiql-rails'
 end
 
 # Use rspec for unit test

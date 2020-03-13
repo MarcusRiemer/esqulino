@@ -128,6 +128,10 @@ GEM
     formatador (0.2.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
+    graphql (1.10.4)
     guard (2.16.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -360,6 +364,8 @@ DEPENDENCIES
   database_cleaner
   factory_bot_rails (~> 4.11)
   falcon (~> 0.19)
+  graphiql-rails
+  graphql
   guard-rspec
   irb
   json_schemer (~> 0.2)
