@@ -2,9 +2,9 @@
         class="custom-select"
         name="meta-code-resource"
         [(ngModel)]="selectedCodeResourceId">
-  <option [ngValue]="undefined">-- Freie JSON Definition --</option>
+  <option value="">-- Freie JSON Definition --</option>
   <option *ngFor="let res of metaCodeResources$ | async;"
-          [ngValue]="res.id">
+          [value]="res.id">
     {{ res.name }}
   </option>
 </select>
