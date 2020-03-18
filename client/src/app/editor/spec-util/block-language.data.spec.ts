@@ -3,7 +3,7 @@ import { HttpTestingController } from '@angular/common/http/testing';
 
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import { generateUUIDv4 } from '../../shared/util-browser';
-import { ServerApiService, BlockLanguageDataService } from '../../shared/serverdata';
+import { ServerApiService, IndividualBlockLanguageDataService } from '../../shared/serverdata';
 
 const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -29,7 +29,7 @@ export const ensureLocalBlockLanguageRequest = (
 ) => {
   const httpTestingController = TestBed.inject(HttpTestingController);
   const serverApi = TestBed.inject(ServerApiService);
-  const blockData = TestBed.inject(BlockLanguageDataService);
+  const blockData = TestBed.inject(IndividualBlockLanguageDataService);
 
   const toReturn = blockData.getLocal(response.id, "request");
 

@@ -8,7 +8,7 @@ import { first } from 'rxjs/operators';
 import { BlockLanguage, EditorBlockDescription } from '../../../shared/block';
 import { FocusDirective } from '../../../shared/focus-element.directive';
 import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../shared';
-import { BlockLanguageDataService, GrammarDataService, ServerApiService } from '../../../shared/serverdata';
+import { IndividualBlockLanguageDataService, IndividualGrammarDataService, ServerApiService } from '../../../shared/serverdata';
 import { ResourceReferencesOnlineService } from '../../../shared/resource-references-online.service';
 import { ResourceReferencesService } from '../../../shared/resource-references.service';
 
@@ -35,9 +35,9 @@ describe('BlockHostComponent', () => {
         HttpClientTestingModule
       ],
       providers: [
-        BlockLanguageDataService,
+        IndividualBlockLanguageDataService,
         DragService,
-        GrammarDataService,
+        IndividualGrammarDataService,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,
@@ -174,7 +174,7 @@ describe('BlockHostComponent', () => {
     expect(c.element.innerText).toEqual("constant");
   });
 
-  it(`Single terminal`, async () => {
+  it(`Single interpolated`, async () => {
     const treeDesc: NodeDescription = {
       language: "spec",
       name: "interpolated",

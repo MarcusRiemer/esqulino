@@ -1,11 +1,12 @@
 import { Component, ViewChild, TemplateRef, OnInit } from "@angular/core";
-
-import { ToolbarService } from '../../shared';
-import { BlockLanguageDataService } from '../../shared/serverdata';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Observable } from 'rxjs';
-import { BlockLanguageDescription, BlockLanguageListDescription } from '../../shared/block/block-language.description';
+
+import { ToolbarService } from '../../shared';
+import { BlockLanguageListDescription } from '../../shared/block/block-language.description';
+import { ListBlockLanguageDataService, MutateBlockLanguageService } from '../../shared/serverdata';
+
+
 /**
  * Shows All block languages that are known to the server.
  */
@@ -26,7 +27,8 @@ export class OverviewBlockLanguageComponent implements OnInit {
   toolbarItems: TemplateRef<any>;
 
   constructor(
-    private _serverData: BlockLanguageDataService,
+    private _list: ListBlockLanguageDataService,
+    private _mutate: MutateBlockLanguageService,
     private _toolbarService: ToolbarService,
   ) { }
 
@@ -34,11 +36,12 @@ export class OverviewBlockLanguageComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarItems);
   }
 
-  readonly availableBlockLanguages: Observable<BlockLanguageListDescription[]> = this._serverData.list;
-  readonly resultsLength = this._serverData.listTotalCount;
+
+  readonly resultsLength = this._list.peekListTotalCount;
+  readonly availableBlockLanguages = this._list.listCache;
 
   public deleteBlockLanguage(id: string) {
-    this._serverData.deleteBlockLanguage(id);
+    this._mutate.deleteSingle(id);
   }
 
 
@@ -46,14 +49,14 @@ export class OverviewBlockLanguageComponent implements OnInit {
   * User has requested a different chunk of data
   */
   onChangePagination() {
-    this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
+    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**
   * User has requested different sorting options
   */
   onChangeSort() {
-    this._serverData.setListOrdering(this._sort.active as any, this._sort.direction);
+    this._list.setListOrdering(this._sort.active as any, this._sort.direction);
   }
 
   displayedColumns: (keyof(BlockLanguageListDescription) |"generator"|"actions" |"grammar")[] = ["name", "slug", "id","grammar","actions","generator"];

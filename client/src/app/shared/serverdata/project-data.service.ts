@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ProjectDescription, ProjectListDescription } from '../project.description';
 
 import { ServerApiService } from './serverapi.service';
-import { DataService } from './data-service';
+import { ListData } from './list-data';
+import { IndividualData } from './individual-data';
+
+@Injectable()
+export class IndividualProjectDataService extends IndividualData<ProjectDescription> {
+  constructor(
+    serverApi: ServerApiService,
+    http: HttpClient,
+  ) {
+    super(http, (id) => serverApi.getProjectUrl(id), "Project")
+  }
+}
 
 /**
  * Convenient and cached access to server side project descriptions.
  */
 @Injectable()
-export class ProjectDataService extends DataService<ProjectListDescription, ProjectDescription> {
+export class ProjectDataService extends ListData<ProjectListDescription> {
 
   public constructor(
-    private _serverApi: ServerApiService,
-    snackBar: MatSnackBar,
+    serverApi: ServerApiService,
     http: HttpClient
   ) {
-    super(http, snackBar, _serverApi.getProjectListUrl(), "Project");
-  }
-
-  protected resolveIndividualUrl(id: string): string {
-    return (this._serverApi.getProjectUrl(id));
+    super(http, serverApi.getProjectListUrl());
   }
 }

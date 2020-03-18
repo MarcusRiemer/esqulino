@@ -1,40 +1,65 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
-import { fieldCompare } from '../util';
 
 import { ServerApiService } from './serverapi.service';
-import { DataService } from './data-service';
+import { ListData } from './list-data';
+import { IndividualData } from './individual-data';
+import { MutateData } from './mutate-data';
 
+const urlResolver = (serverApi: ServerApiService) => {
+  return ((id: string) => serverApi.individualGrammarUrl(id))
+}
 
 /**
- * Convenient and cached access to server side grammar descriptions.
+ * Cached access to individual grammars
  */
 @Injectable()
-export class GrammarDataService extends DataService<GrammarListDescription, GrammarDescription> {
-
-  public constructor(
-    private _serverApi: ServerApiService,
-    snackBar: MatSnackBar,
-    http: HttpClient
+export class IndividualGrammarDataService extends IndividualData<GrammarDescription> {
+  constructor(
+      serverApi: ServerApiService,
+      http: HttpClient,
   ) {
-    super(http, snackBar, _serverApi.getGrammarListUrl(), "Grammar");
+    super(http, urlResolver(serverApi), "Grammar")
+  }
+}
+
+@Injectable()
+export class MutateGrammarService extends MutateData<GrammarDescription> {
+  public constructor(
+      http: HttpClient,
+      snackBar: MatSnackBar,
+      serverApi: ServerApiService,
+  ) {
+    super(http, snackBar, urlResolver(serverApi), "Grammar")
+  }
+}
+
+/**
+ * Cached access to lists of grammars.
+ */
+@Injectable()
+export class ListGrammarDataService extends ListData<GrammarListDescription> implements OnDestroy {
+  private _subscriptions: Subscription[] = [];
+
+  constructor(
+      serverApi: ServerApiService,
+      http: HttpClient,
+      mutateService: MutateGrammarService,
+  ) {
+    super(http, serverApi.getGrammarListUrl());
+
+    const s = mutateService.listInvalidated.subscribe(() => this.listCache.refresh());
+
+    this._subscriptions = [s];
   }
 
-  protected resolveIndividualUrl(id: string): string {
-    return (this._serverApi.individualGrammarUrl(id));
+  ngOnDestroy() {
+    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions = [];
   }
-
-  /**
-   * Grammars in stable sort order.
-   *
-   * @return All grammars that are known on the server and available for the current user.
-   */
-  readonly list = this.listCache.value.pipe(
-    map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
-  );
 }

@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { first } from 'rxjs/operators';
 
-import { BlockLanguageDataService, GrammarDataService, ServerApiService } from '../../../shared/serverdata';
+import { IndividualBlockLanguageDataService, IndividualGrammarDataService, ServerApiService } from '../../../shared/serverdata';
 
 import { ResourceReferencesService } from '../../../shared/resource-references.service';
 import { ResourceReferencesOnlineService } from '../../../shared/resource-references-online.service';
@@ -29,9 +29,9 @@ describe(`BlockRenderErrorComponent`, () => {
         HttpClientTestingModule,
       ],
       providers: [
-        BlockLanguageDataService,
+        IndividualBlockLanguageDataService,
         DragService,
-        GrammarDataService,
+        IndividualGrammarDataService,
         LanguageService,
         ServerApiService,
         RenderedCodeResourceService,

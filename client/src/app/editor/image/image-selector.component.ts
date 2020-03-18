@@ -14,9 +14,11 @@ export { AvailableImage }
   selector: 'image-selector'
 })
 export class ImageSelectorComponent {
-  @Output() projectImageIdChange = new EventEmitter<string>();
+  @Output()
+  projectImageIdChange = new EventEmitter<string>();
 
-  @Input() public project: Project;
+  @Input()
+  public project: Project;
 
   private _projectImageId: string;
 

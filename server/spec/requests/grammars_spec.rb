@@ -124,6 +124,20 @@ RSpec.describe GrammarsController, type: :request do
       get "/api/grammars/0"
       expect(response).to have_http_status(404)
     end
+
+    it 'includes the CodeResource a grammar is based on' do
+      meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
+
+      get "/api/grammars/#{original.id}"
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+
+      expect(json_data).to validate_against "GrammarDescription"
+      expect(json_data["generatedFromId"]).to eq meta_code_resource.id
+
+    end
   end
 
   describe 'POST /api/grammars' do
@@ -267,7 +281,45 @@ RSpec.describe GrammarsController, type: :request do
       expect(Grammar.find_by id: new_id).to be nil
     end
 
+    it 'Set the a CodeResouce that a grammar is generated from' do
+      original = FactoryBot.create(:grammar)
+      meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
 
+      put "/api/grammars/#{original.id}",
+          :headers => json_headers,
+          :params => { "generatedFromId" => meta_code_resource.id }.to_json
+
+      original.reload
+
+      expect(original.generated_from).to eq meta_code_resource
+    end
+
+    it 'Attempt to set a non-existant CodeResouce that a grammar is generated from' do
+      original = FactoryBot.create(:grammar)
+      ref_id = SecureRandom.uuid
+
+      put "/api/grammars/#{original.id}",
+          :headers => json_headers,
+          :params => { "generatedFromId" => ref_id }.to_json
+
+      expect(response.status).to eq(400)
+
+      original.reload
+      expect(original.generated_from).to eq nil
+    end
+
+    it 'Unset the a CodeResouce that a grammar is generated from' do
+      meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
+
+      put "/api/grammars/#{original.id}",
+          :headers => json_headers,
+          :params => { "generatedFromId" => nil }.to_json
+
+      original.reload
+
+      expect(original.generated_from).to be nil
+    end
   end
 
   describe 'DELETE /api/grammars/:grammarId' do

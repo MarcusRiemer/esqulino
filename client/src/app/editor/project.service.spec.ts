@@ -8,7 +8,7 @@ import { Overlay } from '@angular/cdk/overlay';
 import { ResourceReferencesService } from '../shared/resource-references.service';
 import { ResourceReferencesOnlineService } from '../shared/resource-references-online.service';
 import { LanguageService, ServerApiService } from '../shared';
-import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
+import { IndividualBlockLanguageDataService, IndividualGrammarDataService } from '../shared/serverdata';
 
 import { ProjectService } from './project.service';
 import { specLoadEmptyProject } from './spec-util';
@@ -24,8 +24,8 @@ describe(`ProjectService`, () => {
         LanguageService,
         ServerApiService,
         ProjectService,
-        BlockLanguageDataService,
-        GrammarDataService,
+        IndividualBlockLanguageDataService,
+        IndividualGrammarDataService,
         MatSnackBar,
         Overlay,
         {

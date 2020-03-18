@@ -5,7 +5,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { map, switchMap, startWith } from 'rxjs/operators';
 
-import { GrammarDataService, ServerApiService } from '../../shared/serverdata';
+import { IndividualGrammarDataService, ServerApiService } from '../../shared/serverdata';
 import { GrammarDescription, CodeResource, CodeResourceDescription } from '../../shared';
 import { BlockLanguage } from '../../shared/block';
 import { generateBlockLanguage } from '../../shared/block/generator/generator';
@@ -21,7 +21,7 @@ export class GalleryGrammarComponent implements OnInit {
   constructor(
     private _http: HttpClient,
     private _activatedRoute: ActivatedRoute,
-    private _grammarData: GrammarDataService,
+    private _grammarData: IndividualGrammarDataService,
     private _serverApi: ServerApiService,
     private _resourceReferences: ResourceReferencesService,
   ) { }
@@ -52,7 +52,7 @@ export class GalleryGrammarComponent implements OnInit {
     switchMap(id => this.createGrammarCodeResourceGalleryRequest(id)),
     map(descriptions =>
       descriptions
-        .slice(0, 1)
+        .slice(0, 10)
         .map(d => new CodeResource(d, this._resourceReferences))
     ),
     startWith([]),

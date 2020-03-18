@@ -2,11 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
-import { GrammarDataService } from '../../shared/serverdata';
-import { GrammarDescription, GrammarListDescription } from '../../shared/syntaxtree';
+import { GrammarListDescription } from '../../shared/syntaxtree';
+import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -23,28 +20,29 @@ export class OverviewGrammarComponent {
   _sort: MatSort;
 
   constructor(
-    private _serverData: GrammarDataService
+    private _list: ListGrammarDataService,
+    private _mutate: MutateGrammarService,
   ) { }
 
-  readonly availableGrammars: Observable<GrammarListDescription[]> = this._serverData.list;
-  readonly resultsLength = this._serverData.listTotalCount;
+  readonly resultsLength = this._list.peekListTotalCount;
+  readonly availableGrammars = this._list.listCache;
 
   public deleteGrammar(id: string) {
-    this._serverData.deleteSingle(id);
+    this._mutate.deleteSingle(id);
   }
 
   /**
    * User has requested a different chunk of data
    */
   onChangePagination() {
-    this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
+    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**
    * User has requested different sorting options
    */
   onChangeSort() {
-    this._serverData.setListOrdering(this._sort.active as any, this._sort.direction);
+    this._list.setListOrdering(this._sort.active as any, this._sort.direction);
   }
 
   displayedColumns : (keyof(GrammarListDescription) | "actions" )[] = ["name", "slug", "id","actions"];

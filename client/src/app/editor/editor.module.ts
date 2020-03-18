@@ -25,7 +25,6 @@ import { SchemaService } from './schema.service'
 import { CurrentCodeResourceService } from './current-coderesource.service'
 import { EditorToolbarService } from './toolbar.service'
 
-
 @NgModule({
   imports: [
     CommonModule,

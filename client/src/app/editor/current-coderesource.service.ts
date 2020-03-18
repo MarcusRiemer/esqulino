@@ -5,10 +5,9 @@ import { flatMap, map, filter, tap } from 'rxjs/operators';
 
 import { ResourceReferencesService } from '../shared/resource-references.service';
 import { CodeResource, NodeLocation, Tree, ValidationResult } from '../shared/syntaxtree';
-import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
+import { IndividualBlockLanguageDataService, IndividualGrammarDataService } from '../shared/serverdata';
 
 import { ProjectService } from './project.service';
-
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -28,8 +27,8 @@ export class CurrentCodeResourceService {
   constructor(
     private _projectService: ProjectService,
     private _resourceReferences: ResourceReferencesService,
-    private _blockLanguageData: BlockLanguageDataService,
-    private _grammarData: GrammarDataService,
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _individualGrammarData: IndividualGrammarDataService,
   ) {
   }
 
@@ -79,8 +78,8 @@ export class CurrentCodeResourceService {
 
   readonly blockLanguageGrammar = this.currentResource.pipe(
     flatMap(r => r.blockLanguageId),
-    flatMap(id => this._blockLanguageData.getLocal(id, "request")),
-    flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
+    flatMap(id => this._individualBlockLanguageData.getLocal(id, "request")),
+    flatMap(b => this._individualGrammarData.getLocal(b.grammarId, "request")),
   );
 
   /**

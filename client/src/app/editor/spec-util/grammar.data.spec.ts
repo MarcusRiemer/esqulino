@@ -3,7 +3,7 @@ import { HttpTestingController } from '@angular/common/http/testing';
 
 import { GrammarDescription, GrammarListDescription } from "../../shared/";
 import { generateUUIDv4 } from '../../shared/util-browser';
-import { ServerApiService, GrammarDataService } from '../../shared/serverdata';
+import { ServerApiService, IndividualGrammarDataService } from '../../shared/serverdata';
 import { JsonApiListResponse } from '../../shared/serverdata/json-api-response';
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
@@ -38,9 +38,9 @@ export const ensureLocalGrammarRequest = (
 ): Promise<GrammarDescription> => {
   const httpTestingController = TestBed.inject(HttpTestingController);
   const serverApi = TestBed.inject(ServerApiService);
-  const GrammarData = TestBed.inject(GrammarDataService);
+  const grammarData = TestBed.inject(IndividualGrammarDataService);
 
-  const toReturn = GrammarData.getLocal(response.id, "request");
+  const toReturn = grammarData.getLocal(response.id, "request");
 
   httpTestingController.expectOne(serverApi.individualGrammarUrl(response.id))
     .flush(response);

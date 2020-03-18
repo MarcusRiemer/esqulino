@@ -50,9 +50,14 @@ import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
 
 import {
-  GrammarDataService, BlockLanguageDataService,
-  ProjectDataService, AdminProjectDataService
+  ListGrammarDataService, IndividualGrammarDataService,
+  ListBlockLanguageDataService, IndividualBlockLanguageDataService,
+  ProjectDataService, IndividualProjectDataService,
+  AdminListProjectDataService,
+  MutateGrammarService,
+  MutateBlockLanguageService
 } from './serverdata'
+
 import { RequestResetPasswordComponent } from './auth/request-reset-password.component';
 import { ProviderButtonComponent } from './auth/provider-button.component';
 import { SignInComponent } from './auth/sign-in.component';
@@ -73,7 +78,12 @@ import { UserService } from './auth/user.service';
 import { ResourceReferencesService } from './resource-references.service';
 import { ResourceReferencesOnlineService } from './resource-references-online.service';
 
-const dataServices = [GrammarDataService, BlockLanguageDataService];
+const dataServices = [
+  ListGrammarDataService, IndividualGrammarDataService, MutateGrammarService,
+  ListBlockLanguageDataService, IndividualBlockLanguageDataService, MutateBlockLanguageService,
+  ProjectDataService, IndividualProjectDataService,
+  AdminListProjectDataService
+];
 
 const materialModules = [
   MatToolbarModule, MatButtonModule, MatMenuModule,
@@ -183,8 +193,6 @@ export class SharedAppModule {
         BrowserService,
         FlashService,
         ServerApiService,
-        ProjectDataService,
-        AdminProjectDataService,
         VideoService,
         LanguageService,
         ToolbarService,

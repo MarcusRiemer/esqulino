@@ -42,9 +42,15 @@ class GrammarsController < ApplicationController
     grammar.assign_attributes basic_params
     grammar.model = model_params
 
-    if grammar.save
+    # Possibly update the code resource that this grammar is based on
+    if params.key? "generatedFromId"
+      grammar.generated_from_id = params.fetch("generatedFromId", nil)
+    end
+
+    begin
+      grammar.save!
       render status: 204
-    else
+    rescue ActiveRecord::InvalidForeignKey, ActiveRecord::RecordInvalid
       render json: { 'errors' => grammar.errors.as_json }, :status => 400
     end
   end
