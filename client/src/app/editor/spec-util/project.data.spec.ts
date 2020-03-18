@@ -29,9 +29,10 @@ export const specLoadEmptyProject = (
   const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
   const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
-  const p = Object.assign({ id: generateUUIDv4() }, DEFAULT_EMPTY_PROJECT, override || {});
+  const id = override?.id ?? generateUUIDv4();
+  const p = Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
 
-  const toReturn = projectService.setActiveProject(DEFAULT_EMPTY_PROJECT.id, true).toPromise();
+  const toReturn = projectService.setActiveProject(p.id, true);
 
   httpTestingController.expectOne(serverApi.getProjectUrl(p.id))
     .flush(p);

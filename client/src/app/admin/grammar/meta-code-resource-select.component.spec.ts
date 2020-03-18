@@ -80,7 +80,7 @@ describe('MetaCodeResourceSelect', () => {
     expect(selectElement.children[1].textContent.trim()).toEqual(response[0].name);
   });
 
-  it(`Pre-selects in a list with a single item`, async () => {
+  xit(`Pre-selects in a list with a single item`, async () => {
     const response: MetaCodeResourceListDescription[] = [
       {
         id: "0000",

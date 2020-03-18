@@ -7,6 +7,7 @@ import { catchError, delay, first, filter, tap, map, share } from 'rxjs/operator
 import { ServerApiService } from '../shared/serverdata/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
 import { ResourceReferencesService } from '../shared/resource-references.service';
+import { isValidId } from '../shared/util';
 
 export { Project, ProjectFullDescription }
 
@@ -49,15 +50,15 @@ export class ProjectService {
    * requiring a new project to be loaded.
    */
   forgetCurrentProject() {
+    console.log("ProjectService got told to forget current project");
     this._subject.next(undefined);
-    console.log("Project Service: Told to forget current project");
   }
 
   /**
-   * @param id The id of the project to set for all subscribers.
+   * @param slugOrId The id of the project to set for all subscribers.
    * @param forceRefresh True, if the project should be reloaded if its already known.
    */
-  setActiveProject(id: string, forceRefresh: boolean) {
+  async setActiveProject(slugOrId: string, forceRefresh: boolean) {
     // Projects shouldn't change while other requests are in progress
     if (this._httpRequest) {
       throw { "err": "HTTP request in progress" };
@@ -66,12 +67,12 @@ export class ProjectService {
     // Clear out the reference to the current project if we are loading
     // a new project or must reload by sheer force.
     const currentProject = this._subject.getValue();
-    if (forceRefresh || (currentProject && currentProject.slug != id)) {
+    if (forceRefresh || (currentProject && !currentProject.hasSlugOrId(slugOrId))) {
       this.forgetCurrentProject();
     }
 
     // Build the HTTP-request
-    const url = this._server.getProjectUrl(id);
+    const url = this._server.getProjectUrl(slugOrId);
     this._httpRequest = this._http.get<ProjectFullDescription>(url)
       .pipe(
         first(),
@@ -89,22 +90,18 @@ export class ProjectService {
         this._httpRequest = undefined
       },
         (error: Response) => {
-          if (error instanceof Error) {
-            console.log(error);
-          }
-
           // Something has gone wrong, pass the error on to the subscribers
           // of the project and hope they know what to do about it.
           console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
           this._subject.error(error);
 
           // Reset the internal to be as blank as possible
-          this._subject = new BehaviorSubject<Project>(undefined);
+          this._subject.next(undefined);
           this._httpRequest = undefined;
         })
 
     // Others may also be interested in the result
-    return (this._httpRequest);
+    return (this._httpRequest.toPromise());
   }
 
   /**
