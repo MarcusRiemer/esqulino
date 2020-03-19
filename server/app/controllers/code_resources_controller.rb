@@ -14,17 +14,14 @@ class CodeResourcesController < ApplicationController
 
   # Create a new resource that is part of a specific project
   def create
-    project_slug = params[:project_id]
-    proj = Project.find_by slug: project_slug
-    if proj
-      res = proj.code_resources.new(code_resource_create_params)
-      if res.save
-        render :json => res.to_full_api_response, :status => 200
-      else
-        render :json => { 'errors' => res.errors }, :status => 400
-      end
+    project_id = params[:project_id]
+    proj = Project.find_by_slug_or_id! project_id
+
+    res = proj.code_resources.new(code_resource_create_params)
+    if res.save
+      render :json => res.to_full_api_response, :status => 200
     else
-      raise UnknownProjectError, project_id
+      render :json => { 'errors' => res.errors }, :status => 400
     end
   end
 

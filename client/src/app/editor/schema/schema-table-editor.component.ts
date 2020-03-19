@@ -237,7 +237,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   /**
    * Function for the save button
    */
-  saveBtn() {
+  async saveBtn() {
     console.log("Save!");
     // Do we need to create a new table or alter an existing table?
     if (this.isNewTable) {
@@ -252,16 +252,13 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
           }
         }
         console.log(tableToSend);
-        let schemaref = this._schemaService.saveNewTable(this._project, tableToSend)
-          .pipe(first())
-          .subscribe(
-            _ => {
-              window.alert("Änderungen gespeichert!");
-              this._schemaService.clearCurrentlyEdited();
-              this._router.navigate(["../../"], { relativeTo: this._routeParams });
-            },
-            error => this.showError(error));
-        this._subscriptionRefs.push(schemaref);
+        await this._schemaService.saveNewTable(this._project, tableToSend)
+
+        window.alert("Änderungen gespeichert!");
+        this._schemaService.clearCurrentlyEdited();
+        this._router.navigate(["../../"], { relativeTo: this._routeParams });
+
+
       } else {
         alert("Tabellenname ist leer!");
       }
@@ -269,16 +266,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
       // Alter existing table
       this.dbErrorCode = -1;
       this.commandsHolder.prepareToSend();
-      let schemaref = this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
-        .pipe(first())
-        .subscribe(
-          _ => {
-            window.alert("Änderungen gespeichert!");
-            this._schemaService.clearCurrentlyEdited();
-            this._router.navigate(["../../"], { relativeTo: this._routeParams });
-          },
-          error => this.showError(error));
-      this._subscriptionRefs.push(schemaref);
+      await this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder);
+
+      window.alert("Änderungen gespeichert!");
+      this._schemaService.clearCurrentlyEdited();
+      this._router.navigate(["../../"], { relativeTo: this._routeParams });
     }
   }
 

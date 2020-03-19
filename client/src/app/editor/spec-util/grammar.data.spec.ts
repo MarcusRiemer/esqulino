@@ -27,7 +27,8 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
 export const buildGrammar = (
   override?: Partial<GrammarDescription>
 ): GrammarDescription => {
-  return (Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id: generateUUIDv4() }));
+  const id = override?.id ?? generateUUIDv4();
+  return (Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id }));
 };
 
 /**

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
 
 import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
 
@@ -11,6 +12,7 @@ describe('MetaCodeResourceSelect', () => {
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        FormsModule,
       ],
       providers: [
         ServerApiService
@@ -58,7 +60,7 @@ describe('MetaCodeResourceSelect', () => {
     expect(selectElement.children.length).toEqual(1);
   });
 
-  it(`Shows a list with a single item`, async () => {
+  it(`Shows a list with a single unselected item`, async () => {
     const fixture = await createComponent();
 
     const response: MetaCodeResourceListDescription[] = [
@@ -75,7 +77,7 @@ describe('MetaCodeResourceSelect', () => {
     await fixture.fixture.whenRenderingDone();
 
     const selectElement = fixture.element.querySelector("select");
-    expect(selectElement.selectedIndex).toEqual(0);
+    expect(selectElement.selectedIndex).toEqual(-1);
     expect(selectElement.children.length).toEqual(2);
     expect(selectElement.children[1].textContent.trim()).toEqual(response[0].name);
   });
@@ -89,6 +91,7 @@ describe('MetaCodeResourceSelect', () => {
     ];
 
     const fixture = await createComponent(response[0].id);
+    expect(fixture.component.selectedCodeResourceId).toEqual(response[0].id);
 
     fixture.httpTesting.expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
       .flush(response);
@@ -98,7 +101,7 @@ describe('MetaCodeResourceSelect', () => {
 
     const selectElement = fixture.element.querySelector("select");
 
-    expect(selectElement.value).toEqual(response[0].id)
+    expect(selectElement.selectedIndex).toEqual(1)
     expect(selectElement.children.length).toEqual(2);
     expect(selectElement.children[1].textContent.trim()).toEqual(response[0].name);
   });

@@ -25,7 +25,7 @@ export class CodeResourceService {
    * Asks the server to create a new block resource.
    */
   createCodeResource(project: Project, name: string, blockLanguageId: string, programmingLanguageId: string) {
-    const url = this._server.getCodeResourceBaseUrl(project.slug);
+    const url = this._server.getCodeResourceBaseUrl(project.id);
 
     const body = {
       "name": name,
