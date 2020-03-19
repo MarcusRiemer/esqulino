@@ -54,9 +54,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual([]);
-    expect(totalCount).toEqual(0);
-    expect(fixture.service.peekListTotalCount).toEqual(0);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(0);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(0);
   });
 
   it(`Listing dataset with two items (default order)`, async () => {
@@ -73,9 +79,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual(expectedList);
-    expect(totalCount).toEqual(expectedList.length);
-    expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(expectedList.length);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(expectedList.length);
   });
 
   it(`Listing dataset with two items (name descending)`, async () => {
@@ -99,9 +111,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual(expectedList);
-    expect(totalCount).toEqual(expectedList.length);
-    expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(expectedList.length);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(expectedList.length);
   });
 
 
@@ -126,9 +144,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual(expectedList);
-    expect(totalCount).toEqual(expectedList.length);
-    expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(expectedList.length);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(expectedList.length);
   });
 
 
@@ -153,9 +177,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual(expectedList);
-    expect(totalCount).toEqual(expectedList.length);
-    expect(fixture.service.peekListTotalCount).toEqual(expectedList.length);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(expectedList.length);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(expectedList.length);
   });
 
   it(`Listing dataset while resetting the list order`, async () => {
@@ -173,9 +203,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual([]);
-    expect(totalCount).toEqual(0);
-    expect(fixture.service.peekListTotalCount).toEqual(0);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(0);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(0);
   });
 
   it(`Listing dataset with pagination`, async () => {
@@ -194,9 +230,15 @@ describe(`ListGrammarDataService`, () => {
     const list = await pending;
     const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
 
-    expect(list).toEqual([]);
-    expect(totalCount).toEqual(0);
-    expect(fixture.service.peekListTotalCount).toEqual(0);
+    expect(list)
+      .withContext("Direct list comparision")
+      .toEqual([]);
+    expect(totalCount)
+      .withContext("listTotalCount$")
+      .toEqual(0);
+    expect(fixture.service.peekListTotalCount)
+      .withContext("peekListTotalCount")
+      .toEqual(0);
   });
 });
 
