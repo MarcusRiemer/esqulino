@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -21,8 +21,8 @@ const urlResolver = (serverApi: ServerApiService) => {
 @Injectable()
 export class IndividualGrammarDataService extends IndividualData<GrammarDescription> {
   constructor(
-      serverApi: ServerApiService,
-      http: HttpClient,
+    serverApi: ServerApiService,
+    http: HttpClient,
   ) {
     super(http, urlResolver(serverApi), "Grammar")
   }
@@ -31,9 +31,9 @@ export class IndividualGrammarDataService extends IndividualData<GrammarDescript
 @Injectable()
 export class MutateGrammarService extends MutateData<GrammarDescription> {
   public constructor(
-      http: HttpClient,
-      snackBar: MatSnackBar,
-      serverApi: ServerApiService,
+    http: HttpClient,
+    snackBar: MatSnackBar,
+    serverApi: ServerApiService,
   ) {
     super(http, snackBar, urlResolver(serverApi), "Grammar")
   }
@@ -47,14 +47,13 @@ export class ListGrammarDataService extends ListData<GrammarListDescription> imp
   private _subscriptions: Subscription[] = [];
 
   constructor(
-      serverApi: ServerApiService,
-      http: HttpClient,
-      mutateService: MutateGrammarService,
+    serverApi: ServerApiService,
+    http: HttpClient,
+    mutateService: MutateGrammarService,
   ) {
     super(http, serverApi.getGrammarListUrl());
 
     const s = mutateService.listInvalidated.subscribe(() => this.listCache.refresh());
-
     this._subscriptions = [s];
   }
 
