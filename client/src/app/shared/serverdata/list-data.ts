@@ -40,7 +40,9 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   /**
    * @return The total number of list items available.
    */
-  readonly peekListTotalCount = this._listTotalCount.value;
+  get peekListTotalCount() {
+    return (this._listTotalCount.value)
+  };
 
   readonly listTotalCount = this._listTotalCount.asObservable();
 

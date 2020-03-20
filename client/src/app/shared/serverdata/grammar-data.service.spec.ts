@@ -81,7 +81,7 @@ describe(`ListGrammarDataService`, () => {
 
     expect(list)
       .withContext("Direct list comparision")
-      .toEqual([]);
+      .toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -113,7 +113,7 @@ describe(`ListGrammarDataService`, () => {
 
     expect(list)
       .withContext("Direct list comparision")
-      .toEqual([]);
+      .toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -146,7 +146,7 @@ describe(`ListGrammarDataService`, () => {
 
     expect(list)
       .withContext("Direct list comparision")
-      .toEqual([]);
+      .toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -179,7 +179,7 @@ describe(`ListGrammarDataService`, () => {
 
     expect(list)
       .withContext("Direct list comparision")
-      .toEqual([]);
+      .toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
