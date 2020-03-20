@@ -1,5 +1,5 @@
 <ng-template cdkPortal #toolbarItems>
-  <button (click)="availableBlockLanguages.refresh()"
+  <button (click)="onRefresh()"
           mat-button>
     <span class="fa fa-refresh fa-fw"></span>
     Refresh
@@ -7,14 +7,14 @@
 </ng-template>
 
 <h2>
-  <!--<span *ngIf="(availableBlockLanguages.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>-->
+  <span *ngIf="(inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
   Blocksprachen
 </h2>
 
 <table class="table table-sm"
- mat-table matSort
- [dataSource]="availableBlockLanguages | async"
- (matSortChange)="onChangeSort()">
+       mat-table matSort
+       [dataSource]="availableBlockLanguages | async"
+       (matSortChange)="onChangeSort()">
 
  <ng-container matColumnDef="name">
    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -76,5 +76,6 @@
                 [pageSize]="25"
                 [pageSizeOptions]="[5,25,100]">
  </mat-paginator>
+
 <!-- Classes hack in some visual spacing between creation forms -->
 <create-block-language class="mb-5 d-block"></create-block-language>

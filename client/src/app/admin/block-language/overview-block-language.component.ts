@@ -37,28 +37,36 @@ export class OverviewBlockLanguageComponent implements OnInit {
   }
 
 
-  readonly resultsLength = this._list.peekListTotalCount;
-  readonly availableBlockLanguages = this._list.listCache;
+  readonly resultsLength = this._list.listTotalCount;
+  readonly availableBlockLanguages = this._list.listCache.value;
+  readonly inProgress = this._list.listCache.inProgress;
 
   public deleteBlockLanguage(id: string) {
     this._mutate.deleteSingle(id);
   }
 
+  /**
+   * User wants to see a refreshed dataset.
+   */
+  onRefresh() {
+    this._list.listCache.refresh();
+  }
+
 
   /**
-  * User has requested a different chunk of data
-  */
+   * User has requested a different chunk of data
+   */
   onChangePagination() {
     this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**
-  * User has requested different sorting options
-  */
+   * User has requested different sorting options
+   */
   onChangeSort() {
     this._list.setListOrdering(this._sort.active as any, this._sort.direction);
   }
 
-  displayedColumns: (keyof(BlockLanguageListDescription) |"generator"|"actions" |"grammar")[] = ["name", "slug", "id","grammar","actions","generator"];
+  displayedColumns: (keyof (BlockLanguageListDescription) | "generator" | "actions" | "grammar")[] = ["name", "slug", "id", "grammar", "actions", "generator"];
 
 }
