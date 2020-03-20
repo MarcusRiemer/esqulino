@@ -6,6 +6,6 @@ module Types
     field :createdAt, Types::Datetime, null:false
     field :updatedAt, Types::Datetime, null:false
     field :programmingLanguage, Types::ProgrammingLanguageType,null:true
-    #TODO: generated_from_id ???
+    field :generatedFrom, Types::CodeResourceType, null:true
   end
 end

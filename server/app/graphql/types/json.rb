@@ -2,7 +2,7 @@
 
 class Types::Json < Types::BaseScalar
   def self.coerce_result(value,context)
-    value.to_s
+    value
   end
 
   def self.coerce_input(value,context)
