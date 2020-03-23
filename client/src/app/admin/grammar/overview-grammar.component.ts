@@ -27,9 +27,17 @@ export class OverviewGrammarComponent {
 
   resultsLength$ = this._list.listTotalCount;
   readonly availableGrammars = this._list.list;
+  readonly inProgress = this._list.listCache.inProgress;
 
   public deleteGrammar(id: string) {
     this._mutate.deleteSingle(id);
+  }
+
+  /**
+   * User wants to see a refreshed dataset.
+   */
+  onRefresh() {
+    this._list.listCache.refresh();
   }
 
   /**
