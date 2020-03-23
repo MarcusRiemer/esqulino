@@ -8,5 +8,6 @@ module Types
     field :blockLanguage, Types::BlockLanguageType,null:false
     field :programmingLanguage, Types::ProgrammingLanguageType,null:false
     field :compiled, String, null:true
+    field :grammars, Types::GrammarType, null:true
   end
 end

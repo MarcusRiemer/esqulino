@@ -7,5 +7,7 @@ module Types
     field :updatedAt, Types::Datetime, null:false
     field :slug, String, null:true
     field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:true
+    field :grammar, Types::GrammarType, null:true
+    field :codeResources, [Types::CodeResourceType], null:true
   end
 end

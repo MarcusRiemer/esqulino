@@ -7,5 +7,7 @@ module Types
     field :updatedAt, Types::Datetime, null:false
     field :programmingLanguage, Types::ProgrammingLanguageType,null:true
     field :generatedFrom, Types::CodeResourceType, null:true
+    field :blockLanguages, [Types::BlockLanguageType], null:true
+    field :codeResources, [Types::CodeResourceType], null:true
   end
 end
