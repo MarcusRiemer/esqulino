@@ -20,27 +20,30 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
-    "xml"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
-    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
-    "name"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "attribute", "languageName":
-    "xml"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "attributes"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
-    "xml"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "elements"}}]}, "language": "MetaGrammar", "properties": {"typeName": "element",
-    "languageName": "xml"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
-    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
-    "name"}}, {"name": "property", "language": "MetaGrammar", "properties": {"base":
-    "string", "name": "value"}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "attribute", "languageName": "xml"}}]}, "language": "MetaGrammar", "properties":
-    {"name": "XML"}}'
+    "xml"}}], "nodes": [{"name": "comment", "language": "MetaGrammar", "properties":
+    {"text": "An element may have an arbitrary number of attributes and children"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "string", "name": "name"}}, {"name": "children",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "attribute", "languageName": "xml"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "attributes"}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "element", "languageName": "xml"}}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "elements"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "element", "languageName": "xml"}}, {"name": "comment",
+    "language": "MetaGrammar", "properties": {"text": "Attributes are modelled as
+    free form key-value pairs"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "name"}}, {"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "attribute", "languageName": "xml"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "XML"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-11-19 10:05:39.389555000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-02-27 10:18:49.230020000 Z
+  value_before_type_cast: 2020-03-23 14:17:21.849776000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -49,6 +52,62 @@ concise_attributes:
   value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: Generic Language without code generator
+  value_before_type_cast: |-
+    {
+      "types": {
+        "undefined": {},
+        "xml": {
+          "element": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "name"
+              },
+              {
+                "type": "sequence",
+                "name": "attributes",
+                "nodeTypes": [
+                  {
+                    "languageName": "xml",
+                    "typeName": "attribute"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "elements",
+                "nodeTypes": [
+                  {
+                    "languageName": "xml",
+                    "typeName": "element"
+                  }
+                ]
+              }
+            ]
+          },
+          "attribute": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "name"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          }
+        }
+      },
+      "root": {
+        "languageName": "xml",
+        "typeName": "element"
+      }
+    }
 new_record: false
 active_record_yaml_version: 2
