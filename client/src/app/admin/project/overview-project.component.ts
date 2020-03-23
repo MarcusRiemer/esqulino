@@ -27,17 +27,17 @@ export class OverviewProjectComponent {
   _sort: MatSort;
 
   constructor(
-    private _serverData: AdminListProjectDataService
+    private _list: AdminListProjectDataService
   ) { }
 
-  readonly availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;
-  readonly resultsLength = this._serverData.listTotalCount;
+  readonly availableProjects = this._list.list;
+  readonly resultsLength$ = this._list.listTotalCount;
 
   /**
    * User has requested a different chunk of data
    */
   onChangePagination() {
-    this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
+    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**
@@ -45,7 +45,7 @@ export class OverviewProjectComponent {
    */
   onChangeSort() {
     if (ProjectListItemKey.guard(this._sort.active)) {
-      this._serverData.setListOrdering(
+      this._list.setListOrdering(
         this._sort.active,
         this._sort.direction
       );

@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 
 import { GrammarListDescription } from '../../shared/syntaxtree';
 import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
+import {last} from "rxjs/operators";
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -24,8 +25,8 @@ export class OverviewGrammarComponent {
     private _mutate: MutateGrammarService,
   ) { }
 
-  readonly resultsLength = this._list.peekListTotalCount;
-  readonly availableGrammars = this._list.listCache;
+  resultsLength$ = this._list.listTotalCount;
+  readonly availableGrammars = this._list.list;
 
   public deleteGrammar(id: string) {
     this._mutate.deleteSingle(id);

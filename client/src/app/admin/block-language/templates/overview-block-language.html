@@ -13,7 +13,7 @@
 
 <table class="table table-sm"
        mat-table matSort
-       [dataSource]="availableBlockLanguages | async"
+       [dataSource]="availableBlockLanguages"
        (matSortChange)="onChangeSort()">
 
  <ng-container matColumnDef="name">
@@ -72,7 +72,7 @@
  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
  </table>
  <mat-paginator (page)="onChangePagination()"
-                [length]="resultsLength | async"
+                [length]="resultsLength$ | async"
                 [pageSize]="25"
                 [pageSizeOptions]="[5,25,100]">
  </mat-paginator>

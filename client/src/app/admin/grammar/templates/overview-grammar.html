@@ -4,7 +4,7 @@
 </h2>
 <table class="table table-sm"
        mat-table matSort
-       [dataSource]="availableGrammars | async"
+       [dataSource]="availableGrammars"
        (matSortChange)="onChangeSort()">
 
  <ng-container matColumnDef="name">
@@ -46,7 +46,7 @@
  </table>
 
 <mat-paginator (page)="onChangePagination()"
-               [length]="resultsLength | async"
+               [length]="resultsLength$ | async"
                [pageSize]="25"
                [pageSizeOptions]="[5,25,100]">
 </mat-paginator>

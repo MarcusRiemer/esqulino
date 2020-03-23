@@ -37,8 +37,8 @@ export class OverviewBlockLanguageComponent implements OnInit {
   }
 
 
-  readonly resultsLength = this._list.listTotalCount;
-  readonly availableBlockLanguages = this._list.listCache.value;
+  resultsLength$ = this._list.listTotalCount;
+  readonly availableBlockLanguages = this._list.list;
   readonly inProgress = this._list.listCache.inProgress;
 
   public deleteBlockLanguage(id: string) {

@@ -1,6 +1,6 @@
 <table class="full-width"
        mat-table matSort
-       [dataSource]="availableProjects | async"
+       [dataSource]="availableProjects"
        (matSortChange)="onChangeSort()">
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -26,7 +26,7 @@
 </table>
 
 <mat-paginator (page)="onChangePagination()"
-               [length]="resultsLength | async"
+               [length]="resultsLength$ | async"
                [pageSize]="25"
                [pageSizeOptions]="[5,25,100]">
 </mat-paginator>
