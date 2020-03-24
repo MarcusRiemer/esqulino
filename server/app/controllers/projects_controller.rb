@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
 
   # Lists all public projects
   def index
-    render json: pagination_response(Project.only_public,options:{})
+    render json: pagination_response(policy_scope(Project),options:{})
   end
 
   # Lists all projects that exist in the system (if the user is an admin)

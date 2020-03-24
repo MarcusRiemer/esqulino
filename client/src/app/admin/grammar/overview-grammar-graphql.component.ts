@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 
-import { GrammarListDescription } from '../../shared/syntaxtree';
+import { GrammarListDescription, GrammarListGraphQlResponse } from '../../shared/syntaxtree';
 import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
 import {last} from "rxjs/operators";
 
@@ -15,9 +15,11 @@ import {last} from "rxjs/operators";
 })
 
 export class OverviewGrammarGraphQLComponent implements OnInit {
-    responseData: any;
-    loading = true;
+    response: GrammarListGraphQlResponse;
+    availableGrammars: GrammarListDescription[];
+    loading: boolean = true;
     error: any;
+    resultsLength:number;
     // Angular Material UI to paginate
     @ViewChild(MatPaginator)
     _paginator: MatPaginator;
@@ -36,32 +38,25 @@ export class OverviewGrammarGraphQLComponent implements OnInit {
         this.apollo
             .watchQuery({
                 query: gql`
-          {
-            users {
+           {
+            grammars {
+                id
                 name
+                slug
+                programmingLanguageId
             }
           }
         `,
             })
             .valueChanges.subscribe(result => {
-            this.responseData = result.data;
-            this.loading = result.loading;
-            this.error = result.errors;
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
-            console.log("TEEEEEEEEEEEEEEEEEST");
+            this.response = result;
+            this.availableGrammars =  this.response.data["grammars"];
+            this.resultsLength = this.availableGrammars.length;
+            this.loading = this.response.loading;
+            this.error = this.response.errors;
         });
     }
 
-    resultsLength$ = this._list.listTotalCount;
-    readonly availableGrammars = this._list.list;
-    readonly inProgress = this._list.listCache.inProgress;
 
     public deleteGrammar(id: string) {
         this._mutate.deleteSingle(id);

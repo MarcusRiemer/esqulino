@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
+import { fieldCompare } from '../util'
 
 import { ServerApiService } from './serverapi.service';
 import { ListData } from './list-data';
@@ -14,6 +16,7 @@ import { MutateData } from './mutate-data';
 const urlResolver = (serverApi: ServerApiService) => {
   return ((id: string) => serverApi.individualGrammarUrl(id))
 }
+
 
 /**
  * Cached access to individual grammars
@@ -61,4 +64,13 @@ export class ListGrammarDataService extends ListData<GrammarListDescription> imp
     this._subscriptions.forEach(s => s.unsubscribe());
     this._subscriptions = [];
   }
+
+  /**
+   * Grammars in stable sort order.
+   *
+   * @return All grammars that are known on the server and available for the current user.
+   */
+  readonly list = this.listCache.value.pipe(
+    map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
+  );
 }

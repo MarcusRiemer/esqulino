@@ -36,10 +36,10 @@ export class OverviewBlockLanguageComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarItems);
   }
 
-
   resultsLength$ = this._list.listTotalCount;
   readonly availableBlockLanguages = this._list.list;
   readonly inProgress = this._list.listCache.inProgress;
+
 
   public deleteBlockLanguage(id: string) {
     this._mutate.deleteSingle(id);
@@ -51,7 +51,6 @@ export class OverviewBlockLanguageComponent implements OnInit {
   onRefresh() {
     this._list.listCache.refresh();
   }
-
 
   /**
    * User has requested a different chunk of data
@@ -68,5 +67,6 @@ export class OverviewBlockLanguageComponent implements OnInit {
   }
 
   displayedColumns: (keyof (BlockLanguageListDescription) | "generator" | "actions" | "grammar")[] = ["name", "slug", "id", "grammar", "actions", "generator"];
+
 
 }

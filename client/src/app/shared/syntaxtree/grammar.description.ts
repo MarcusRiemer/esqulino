@@ -285,6 +285,7 @@ export type NodeChildrenGroupDescription =
   | NodeTypesChoiceDescription
   | NodeTypesParenthesesDescription;
 
+
 /**
  * Listing data about grammars
  */
@@ -304,6 +305,18 @@ export interface GrammarListDescription {
   // The code resource that this grammar is generated from
   generatedFromId?: string
 }
+
+export interface  GrammarListGraphQlResponse {
+  // The data field with the requested data
+  data: {"grammars":GrammarListDescription[]}
+
+  // The errors field with corresponding error messages if something goes wrong
+  errors: any
+
+  // The loading field with the current state
+  loading: boolean
+}
+
 
 /**
  * Types for a single language

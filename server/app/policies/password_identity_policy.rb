@@ -1,4 +1,4 @@
-class PasswordIdentityPolicy
+class PasswordIdentityPolicy < ApplicationPolicy
   attr_reader :user, :identity
 
   def initialize(user, identity)

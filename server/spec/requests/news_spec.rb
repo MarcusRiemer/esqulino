@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe NewsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
+  before(:each) { create(:user, :guest) }
 
   describe 'GET /api/news' do
+    let(:user) { create(:user) }
     it 'Frontpage: retrieving news without anything published' do
       news = create(:news, published_from: Date.new(2999, 1, 1) )
       get '/api/news'
@@ -142,6 +144,7 @@ RSpec.describe NewsController, type: :request do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
       set_access_token(n.user)
       get "/api/news/admin/#{n.id}"
+      byebug
       json_data = JSON.parse(response.body)
 
       aggregate_failures "frontpage detail response" do

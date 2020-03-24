@@ -47,9 +47,8 @@
 </table>
 
 <mat-paginator (page)="onChangePagination()"
-               [length]="resultsLength$ | async"
+               [length]="resultsLength"
                [pageSize]="25"
                [pageSizeOptions]="[5,25,100]">
 </mat-paginator>
 
-<create-grammar></create-grammar>
