@@ -15,9 +15,8 @@ import { DefaultValuePipe } from '../../shared/default-value.pipe';
 import { provideGrammarList, buildGrammar } from '../../editor/spec-util';
 
 import { OverviewGrammarComponent } from './overview-grammar.component';
-import {CreateGrammarComponent} from "./create-grammar.component";
 
-describe('OverviewBlockLanguageComponent', () => {
+describe('OverviewGrammarComponent', () => {
     async function createComponent() {
         await TestBed.configureTestingModule({
             imports: [
@@ -141,37 +140,4 @@ describe('OverviewBlockLanguageComponent', () => {
         expect(refreshedData).toEqual([]);
     });
 
-    /*it(`create grammar`, async () => {
-        const t = await createComponent();
-        const g1 = buildGrammar({ name: "G1Test", programmingLanguageId: "sql" });
-
-        provideGrammarList([]);
-
-        t.fixture.detectChanges();
-        await t.fixture.whenRenderingDone();
-
-        const nameInput: HTMLInputElement = t.element.querySelector('input[id=grammar-name]');
-        const plSelect: HTMLSelectElement = t.element.querySelector('select[id=grammar-programming-language-id]');
-        const createButton = t.element.querySelector("button[type=submit]") as HTMLButtonElement;
-
-        // simulate user entering a new name into the input box
-        nameInput.value = 'G1Test';
-        plSelect.value = plSelect.options[0].value;
-
-        // dispatch a DOM event so that Angular learns of input value change.
-        // use newEvent utility function (not provided by Angular) for better browser compatibility
-        nameInput.dispatchEvent(new Event('input'));
-        plSelect.dispatchEvent(new Event('change'));
-
-        t.fixture.detectChanges();
-
-        createButton.click();
-
-        t.httpTesting.expectOne({method: "POST", url: t.serverApi.createGrammarUrl()}).flush("");
-
-        provideGrammarList([g1]);
-
-        const refreshedData = await t.component.availableGrammars.pipe(first()).toPromise();
-        expect(refreshedData).toEqual([g1]);
-    });*/
 });
