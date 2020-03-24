@@ -11,6 +11,7 @@ import { AdminNewsListComponent } from './news.component'
 import { AdminNewsEditComponent } from './edit-news.component'
 import { OverviewProjectComponent } from './project/overview-project.component'
 import { GalleryGrammarComponent } from './grammar/gallery-grammar.component'
+import {OverviewGrammarGraphQLComponent} from "./grammar/overview-grammar-graphql.component";
 
 export const adminRoutes: Routes = [
   {
@@ -30,6 +31,10 @@ export const adminRoutes: Routes = [
       {
         path: 'grammar',
         component: OverviewGrammarComponent
+      },
+      {
+        path: 'grammar-graphql',
+        component: OverviewGrammarGraphQLComponent
       },
       {
         path: 'grammar/:grammarId',
