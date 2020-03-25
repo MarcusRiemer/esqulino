@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
 import { GrammarListDescription} from '../../shared/syntaxtree';
-import { ListGrammarDataService, MutateGrammarService, GrammarListQL } from '../../shared/serverdata';
+import { ListGrammarDataService, MutateGrammarService, GrammarListRequestQL } from '../../shared/serverdata';
 
 import {first, map} from "rxjs/operators";
 @Component({
@@ -12,10 +12,9 @@ import {first, map} from "rxjs/operators";
 })
 
 export class OverviewGrammarGraphQLComponent implements OnInit {
-    availableGrammars: any;
-    loading: boolean = true;
-    error: any;
+    availableGrammars: GrammarListDescription[];
     resultsLength:number;
+
     // Angular Material UI to paginate
     @ViewChild(MatPaginator)
     _paginator: MatPaginator;
@@ -27,7 +26,7 @@ export class OverviewGrammarGraphQLComponent implements OnInit {
     constructor(
         private _list: ListGrammarDataService,
         private _mutate: MutateGrammarService,
-        private _query: GrammarListQL
+        private _query: GrammarListRequestQL
     ) { }
 
     ngOnInit() {

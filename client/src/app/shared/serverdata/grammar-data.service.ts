@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {Query} from "apollo-angular";
+import {Mutation, Query} from "apollo-angular";
 import gql from 'graphql-tag';
 
 import { Subscription } from 'rxjs';
@@ -84,7 +84,7 @@ export class ListGrammarDataService extends ListData<GrammarListDescription> imp
 @Injectable({
   providedIn: 'root'
 })
-export class GrammarListQL extends Query<GrammarListGraphQlResponse> {
+export class GrammarListRequestQL extends Query<GrammarListGraphQlResponse> {
   document = gql`
            {
             grammars {
@@ -97,10 +97,16 @@ export class GrammarListQL extends Query<GrammarListGraphQlResponse> {
         `;
 }
 
-/**
- * lists of grammars.
- */
-@Injectable()
-export class ListGrammarDataServiceGQL  extends Query<Response>  {
-
+@Injectable({
+  providedIn: 'root',
+})
+export class GrammarListMutateQL extends Mutation {
+  document = gql`
+    mutation upvotePost($postId: Int!) {
+      upvotePost(postId: $postId) {
+        id
+        votes
+      }
+    }
+  `;
 }

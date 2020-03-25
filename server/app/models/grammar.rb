@@ -24,7 +24,7 @@ class Grammar < ApplicationRecord
   # Many code resources may depend on a single grammar
   has_many :code_resources, through: :block_languages
 
-  # Grammar with properties that are relevant when listing
+  # Grammar with properties that are relevant when listingpr
   scope :scope_list, lambda {
     select(:id, :slug, :name, :created_at, :updated_at, :programming_language_id)
   }
