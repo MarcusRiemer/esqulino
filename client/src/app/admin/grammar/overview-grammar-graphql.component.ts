@@ -2,21 +2,17 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
-import {Apollo} from 'apollo-angular';
-import gql from 'graphql-tag';
+import { GrammarListDescription} from '../../shared/syntaxtree';
+import { ListGrammarDataService, MutateGrammarService, GrammarListQL } from '../../shared/serverdata';
 
-import { GrammarListDescription, GrammarListGraphQlResponse } from '../../shared/syntaxtree';
-import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
-import {last} from "rxjs/operators";
-
+import {first, map} from "rxjs/operators";
 @Component({
     selector: 'grammar-overview-selector',
     templateUrl: './templates/overview-grammar-graphql.html'
 })
 
 export class OverviewGrammarGraphQLComponent implements OnInit {
-    response: GrammarListGraphQlResponse;
-    availableGrammars: GrammarListDescription[];
+    availableGrammars: any;
     loading: boolean = true;
     error: any;
     resultsLength:number;
@@ -31,32 +27,16 @@ export class OverviewGrammarGraphQLComponent implements OnInit {
     constructor(
         private _list: ListGrammarDataService,
         private _mutate: MutateGrammarService,
-        private apollo: Apollo
+        private _query: GrammarListQL
     ) { }
 
     ngOnInit() {
-        this.apollo
-            .watchQuery({
-                query: gql`
-           {
-            grammars {
-                id
-                name
-                slug
-                programmingLanguageId
-            }
-          }
-        `,
-            })
-            .valueChanges.subscribe(result => {
-            this.response = result;
-            this.availableGrammars =  this.response.data["grammars"];
-            this.resultsLength = this.availableGrammars.length;
-            this.loading = this.response.loading;
-            this.error = this.response.errors;
-        });
+        this.availableGrammars = this._query.watch()
+            .valueChanges.pipe(
+                map(result => result.data.grammars)
+        );
+        this.availableGrammars.pipe(first()).subscribe( grammars => this.resultsLength = grammars.reduce((acc,_) => acc + 1, 0));
     }
-
 
     public deleteGrammar(id: string) {
         this._mutate.deleteSingle(id);
@@ -83,9 +63,5 @@ export class OverviewGrammarGraphQLComponent implements OnInit {
         this._list.setListOrdering(this._sort.active as any, this._sort.direction);
     }
 
-
-
-
     displayedColumns : (keyof(GrammarListDescription) | "actions" )[] = ["name", "slug", "id","actions"];
-
 }

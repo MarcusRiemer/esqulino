@@ -48,7 +48,7 @@ import { CodeResourceGalleryComponent } from './code-resource-gallery.component'
 import { AdminNewsListComponent } from './news.component';
 import { AdminNewsEditComponent } from './edit-news.component';
 import { ChangeRoles } from './change-roles.component';
-import {OverviewGrammarGraphQLComponent} from "./grammar/overview-grammar-graphql.component";
+import { OverviewGrammarGraphQLComponent } from "./grammar/overview-grammar-graphql.component";
 
 const materialModules = [
   MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule,
@@ -82,14 +82,14 @@ const materialModules = [
     LinkGrammarComponent,
     JsonEditor,
     OverviewGrammarComponent,
+    OverviewGrammarGraphQLComponent,
     OverviewBlockLanguageComponent,
     OverviewProjectComponent,
     AdminNewsListComponent,
     AdminNewsEditComponent,
     ChangeRoles,
     GalleryGrammarComponent,
-    MetaCodeResourceSelectComponent,
-    OverviewGrammarGraphQLComponent
+    MetaCodeResourceSelectComponent
   ],
   providers: [
     JsonSchemaValidationService

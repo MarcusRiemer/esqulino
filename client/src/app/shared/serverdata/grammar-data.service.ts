@@ -2,10 +2,13 @@ import { Injectable, OnDestroy, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import {Query} from "apollo-angular";
+import gql from 'graphql-tag';
+
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GrammarDescription, GrammarListDescription } from '../syntaxtree';
+import { GrammarDescription, GrammarListDescription,GrammarListGraphQlResponse } from '../syntaxtree';
 import { fieldCompare } from '../util'
 
 import { ServerApiService } from './serverapi.service';
@@ -73,4 +76,31 @@ export class ListGrammarDataService extends ListData<GrammarListDescription> imp
   readonly list = this.listCache.value.pipe(
     map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
   );
+}
+
+/**
+ * Graphql Query for lists of grammars.
+ */
+@Injectable({
+  providedIn: 'root'
+})
+export class GrammarListQL extends Query<GrammarListGraphQlResponse> {
+  document = gql`
+           {
+            grammars {
+                id
+                name
+                slug
+                programmingLanguageId
+            }
+          }
+        `;
+}
+
+/**
+ * lists of grammars.
+ */
+@Injectable()
+export class ListGrammarDataServiceGQL  extends Query<Response>  {
+
 }

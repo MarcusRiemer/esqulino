@@ -306,17 +306,12 @@ export interface GrammarListDescription {
   generatedFromId?: string
 }
 
+/**
+ * Response when requesting listing data about grammars via graphql
+ */
 export interface  GrammarListGraphQlResponse {
-  // The data field with the requested data
-  data: {"grammars":GrammarListDescription[]}
-
-  // The errors field with corresponding error messages if something goes wrong
-  errors: any
-
-  // The loading field with the current state
-  loading: boolean
+  grammars: (GrammarListDescription)[] | null
 }
-
 
 /**
  * Types for a single language
