@@ -28,22 +28,23 @@ concise_attributes:
     "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
     "vertical"}]}, "nodeRef": {"type": "oneOf", "oneOf": ["nodeRefOne"]}, "typedef":
     {"type": "concrete", "attributes": [{"type": "container", "children": [{"tags":
-    ["space-after"], "type": "terminal", "symbol": "typedef"}, {"base": "string",
-    "name": "languageName", "tags": ["double-quote"], "type": "property"}, {"type":
-    "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "tags": ["double-quote",
-    "space-after"], "type": "property"}, {"tags": ["space-after"], "type": "terminal",
-    "symbol": "::="}, {"name": "references", "type": "sequence", "nodeTypes": [{"occurs":
-    "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]}, "children": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"tags": ["space-after",
-    "keyword"], "type": "terminal", "symbol": "children"}, {"base": "string", "name":
-    "base", "tags": ["space-after"], "type": "property", "restrictions": [{"type":
-    "enum", "value": ["sequence", "allowed"]}]}, {"base": "string", "name": "name",
-    "tags": ["space-after"], "type": "property"}, {"tags": ["space-after"], "type":
-    "terminal", "symbol": "::="}, {"name": "references", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]}, "property":
+    ["space-after", "keyword"], "type": "terminal", "symbol": "typedef"}, {"base":
+    "string", "name": "languageName", "tags": ["double-quote"], "type": "property"},
+    {"type": "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "tags":
+    ["double-quote", "space-after"], "type": "property"}, {"tags": ["space-after"],
+    "type": "terminal", "symbol": "::="}, {"name": "references", "type": "sequence",
+    "between": {"tags": ["space-around"], "type": "terminal", "symbol": "|"}, "nodeTypes":
+    [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]}, "children":
     {"type": "concrete", "attributes": [{"type": "container", "children": [{"tags":
-    ["space-after", "keyword"], "type": "terminal", "symbol": "prop"}, {"base": "string",
-    "name": "name", "tags": ["double-quote", "space-after"], "type": "property"},
+    ["space-after", "keyword"], "type": "terminal", "symbol": "children"}, {"base":
+    "string", "name": "base", "tags": ["space-after"], "type": "property", "restrictions":
+    [{"type": "enum", "value": ["sequence", "allowed"]}]}, {"base": "string", "name":
+    "name", "tags": ["space-after"], "type": "property"}, {"tags": ["space-after"],
+    "type": "terminal", "symbol": "::="}, {"name": "references", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]},
+    "property": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol": "prop"}, {"base":
+    "string", "name": "name", "tags": ["double-quote", "space-after"], "type": "property"},
     {"base": "string", "name": "base", "type": "property", "restrictions": [{"type":
     "enum", "value": ["integer", "string", "boolean"]}]}], "orientation": "horizontal"}]},
     "terminal": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
@@ -67,7 +68,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-03-23 14:22:41.321653000 Z
+  value_before_type_cast: 2020-03-26 17:45:24.576135000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar

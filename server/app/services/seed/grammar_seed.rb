@@ -11,7 +11,7 @@ module Seed
     def initialize(seed_id)
       super(seed_id, dependencies = {
               "programming_language" => ProgrammingLanguageSeed
-            })
+            }, defer_referential_checks = true)
     end
   end
 end
