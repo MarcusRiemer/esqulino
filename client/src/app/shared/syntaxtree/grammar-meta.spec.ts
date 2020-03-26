@@ -1,6 +1,7 @@
 import {
-  GrammarDocument, readFromNode, NodeTerminalSymbolDescription, convertProperty, convertTerminal, NodeTypesSequenceDescription
+  GrammarDocument, NodeTerminalSymbolDescription, NodeTypesSequenceDescription
 } from "./grammar.description";
+import { readFromNode, convertProperty, convertTerminal, } from './grammar-meta'
 import { Node } from './syntaxtree'
 
 describe(`Convert AST => GrammarDescription`, () => {
@@ -76,6 +77,41 @@ describe(`Convert AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: { languageName: "l", typeName: "t" },
         types: {},
+      });
+    });
+
+    it(`Empty concrete type with comment`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "meta",
+        name: "grammar",
+        children: {
+          "nodes": [
+            {
+              language: "meta",
+              name: "concreteNode",
+              properties: {
+                "languageName": "l",
+                "typeName": "t"
+              },
+              children: {
+                "attributes": [
+                  {
+                    language: "meta",
+                    name: "comment",
+                    properties: {
+                      "text": "this is a comment"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        types: { "l": { "t": { type: "concrete", attributes: [] } } }
       });
     });
 
