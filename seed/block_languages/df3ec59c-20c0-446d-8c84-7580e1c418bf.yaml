@@ -151,10 +151,10 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-03-23 14:22:44.833851000 Z
+  value_before_type_cast: 2020-03-26 12:13:41.763288000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
-  value_before_type_cast: generic
+  value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: grammar_id
   value_before_type_cast: 89f9ca62-845c-435b-9b9a-cf52fe7df2b1
