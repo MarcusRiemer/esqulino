@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
@@ -11,7 +11,7 @@ import {last} from "rxjs/operators";
   templateUrl: './templates/overview-grammar.html'
 })
 
-export class OverviewGrammarComponent implements AfterViewInit{
+export class OverviewGrammarComponent {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;
@@ -24,11 +24,6 @@ export class OverviewGrammarComponent implements AfterViewInit{
     private _list: ListGrammarDataService,
     private _mutate: MutateGrammarService,
   ) { }
-
-  ngAfterViewInit(): void {
-    this.onChangeSort(false);
-    this.onChangePagination();
-  }
 
   resultsLength$ = this._list.listTotalCount;
   readonly availableGrammars = this._list.list;
@@ -48,15 +43,15 @@ export class OverviewGrammarComponent implements AfterViewInit{
   /**
    * User has requested a different chunk of data
    */
-  onChangePagination(refresh:boolean=true) {
-    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex,refresh);
+  onChangePagination() {
+    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**
    * User has requested different sorting options
    */
-  onChangeSort(refresh:boolean=true) {
-    this._list.setListOrdering(this._sort.active as any, this._sort.direction,refresh);
+  onChangeSort() {
+    this._list.setListOrdering(this._sort.active as any, this._sort.direction);
   }
 
   displayedColumns : (keyof(GrammarListDescription) | "actions" )[] = ["name", "slug", "id","actions"];

@@ -1,4 +1,8 @@
-<table class="full-width"
+<h2>
+  <!--<span *ngIf="(availableGrammars.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>-->
+  Grammatiken
+</h2>
+<table class="table table-sm"
        mat-table matSort
        [dataSource]="availableGrammars"
        (matSortChange)="onChangeSort()">

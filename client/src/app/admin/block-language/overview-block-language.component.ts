@@ -1,4 +1,4 @@
-import {Component, ViewChild, TemplateRef, OnInit, AfterViewInit} from "@angular/core";
+import { Component, ViewChild, TemplateRef, OnInit } from "@angular/core";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
@@ -14,7 +14,7 @@ import { ListBlockLanguageDataService, MutateBlockLanguageService } from '../../
   templateUrl: './templates/overview-block-language.html'
 })
 
-export class OverviewBlockLanguageComponent implements OnInit,AfterViewInit {
+export class OverviewBlockLanguageComponent implements OnInit {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;
@@ -34,11 +34,6 @@ export class OverviewBlockLanguageComponent implements OnInit,AfterViewInit {
 
   ngOnInit(): void {
     this._toolbarService.addItem(this.toolbarItems);
-  }
-
-  ngAfterViewInit(): void {
-    this.onChangeSort(false);
-    this.onChangePagination();
   }
 
 
@@ -61,18 +56,17 @@ export class OverviewBlockLanguageComponent implements OnInit,AfterViewInit {
   /**
    * User has requested a different chunk of data
    */
-  onChangePagination(refresh:boolean=true) {
-    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex,refresh);
+  onChangePagination() {
+    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
   }
 
   /**
    * User has requested different sorting options
    */
-  onChangeSort(refresh:boolean=true) {
-    this._list.setListOrdering(this._sort.active as any, this._sort.direction,refresh);
+  onChangeSort() {
+    this._list.setListOrdering(this._sort.active as any, this._sort.direction);
   }
 
   displayedColumns: (keyof (BlockLanguageListDescription) | "generator" | "actions" | "grammar")[] = ["name", "slug", "id", "grammar", "actions", "generator"];
-
 
 }

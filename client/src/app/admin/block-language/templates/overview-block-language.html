@@ -6,7 +6,12 @@
   </button>
 </ng-template>
 
-<table class="full-width"
+<h2>
+  <span *ngIf="(inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
+  Blocksprachen
+</h2>
+
+<table class="table table-sm"
        mat-table matSort
        [dataSource]="availableBlockLanguages"
        (matSortChange)="onChangeSort()">
