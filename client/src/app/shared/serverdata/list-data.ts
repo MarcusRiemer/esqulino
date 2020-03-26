@@ -66,16 +66,18 @@ export class ListData<TList extends IdentifiableResourceDescription> {
    * Change the parameters that are passed to the HTTP GET requests for
    * lists of data. This is useful for pagination and sorting.
    */
-  private changeListParameters(newParams: HttpParams) {
+  private changeListParameters(newParams: HttpParams,refresh: boolean = true) {
     this._listGetParams = newParams;
-    this.listCache.refresh(this.createListRequest())
+    if (refresh){
+      this.listCache.refresh(this.createListRequest()) ;
+    }
   }
 
   /**
    * Set the ordering parameters that should be used for all subsequent
    * listing requests.
    */
-  setListOrdering(columnName: keyof TList, order: "asc" | "desc" | "") {
+  setListOrdering(columnName: keyof TList, order: "asc" | "desc" | "",refresh: boolean = true) {
     if (order === "") {
       this._listGetParams = this._listGetParams
         .delete("orderDirection")
@@ -86,16 +88,16 @@ export class ListData<TList extends IdentifiableResourceDescription> {
         .set("orderField", columnName.toString());
     }
 
-    this.changeListParameters(this._listGetParams);
+    this.changeListParameters(this._listGetParams,refresh);
   }
 
   /**
    * Set the limits that should be used for all subsequent listing requests.
    */
-  setListPagination(pageSize: number, currentPage: number) {
+  setListPagination(pageSize: number, currentPage: number,refresh: boolean = true) {
     this._listGetParams = this._listGetParams.set("limit", pageSize.toString());
     this._listGetParams = this._listGetParams.set("offset", (pageSize * currentPage).toString());
 
-    this.changeListParameters(this._listGetParams);
+    this.changeListParameters(this._listGetParams,refresh);
   }
 }
