@@ -103,8 +103,17 @@ describe('BlockRenderInputComponent', () => {
     property: "text"
   };
 
-  it(`Displays the text of a node`, async () => {
+  it(`Displays the text of a node without explicit spaces`, async () => {
     const c = await createComponent(mkNode("the text"), DEFAULT_VISUAL)
+
+    expect(c.component.currentlyEditing).toEqual(false);
+    expect(c.component.currentValue).toEqual("the text");
+    expect(c.component.currentDisplayValue).toEqual("the text");
+  });
+
+  it(`Displays the text of a node with explicit spaces`, async () => {
+    const visualExplicitSpaces = Object.assign({}, DEFAULT_VISUAL, { cssClasses: ["explicit-spaces"] });
+    const c = await createComponent(mkNode("the text"), visualExplicitSpaces)
 
     expect(c.component.currentlyEditing).toEqual(false);
     expect(c.component.currentValue).toEqual("the text");
