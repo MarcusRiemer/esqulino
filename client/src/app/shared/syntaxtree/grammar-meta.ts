@@ -1,4 +1,4 @@
-import { NodeDescription } from './syntaxtree.description'
+import { NodeDescription, QualifiedTypeName } from './syntaxtree.description'
 import { Tree, Node } from './syntaxtree';
 import {
   NodePropertyTypeDescription, NodeTerminalSymbolDescription, NodeChildrenGroupDescription,
@@ -7,7 +7,8 @@ import {
   NodeTypesChildReference,
   NodeAttributeDescription,
   GrammarDocument,
-  NodeConcreteTypeDescription
+  NodeConcreteTypeDescription,
+  NodeOneOfTypeDescription
 } from './grammar.description';
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
@@ -76,6 +77,18 @@ export function readAttributes(attrNode: Node, target: NodeAttributeDescription[
   }
 }
 
+export function resolveReference(refNode: Node): QualifiedTypeName {
+  switch (refNode.typeName) {
+    case "nodeRefOne":
+      return ({
+        languageName: refNode.properties["languageName"],
+        typeName: refNode.properties["typeName"]
+      });
+    default:
+      throw new Error(`Could not resolve reference of type "${refNode.languageName}"."${refNode.typeName}"`);
+  }
+}
+
 /**
  * Convert an AST to a "proper" JSON-object.
  */
@@ -102,6 +115,10 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
     const languageName = n.properties["languageName"];
     const typeName = n.properties["typeName"];
 
+    if (!typeName || !languageName) {
+      throw new Error(`Attempted to read node without qualified Type: ${JSON.stringify(n.toModel())}`);
+    }
+
     // Ensure the language is known
     if (!toReturn.types[languageName]) {
       toReturn.types[languageName] = {};
@@ -114,15 +131,29 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
     }
 
     // Add the correct type of type
-    if (n.typeName === "concreteNode") {
-      const concreteNode: NodeConcreteTypeDescription = {
-        type: "concrete",
-        attributes: []
-      };
+    switch (n.typeName) {
+      case "concreteNode":
+        const concreteNode: NodeConcreteTypeDescription = {
+          type: "concrete",
+          attributes: []
+        };
 
-      n.getChildrenInCategory("attributes").forEach(a => readAttributes(a, concreteNode.attributes));
+        n.getChildrenInCategory("attributes").forEach(a => readAttributes(a, concreteNode.attributes));
 
-      lang[typeName] = concreteNode;
+        lang[typeName] = concreteNode;
+        break;
+      case "typedef":
+        const references = n.getChildrenInCategory("references").map(resolveReference);
+
+        const oneOfNode: NodeOneOfTypeDescription = {
+          type: "oneOf",
+          oneOf: references
+        };
+
+        lang[typeName] = oneOfNode;
+        break;
+      default:
+        throw Error(`Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`);
     }
   });
 

@@ -1,6 +1,5 @@
-import { QualifiedTypeName, NodeDescription } from './syntaxtree.description'
+import { QualifiedTypeName } from './syntaxtree.description'
 import { OccursDescription } from './occurs.description';
-import { Tree, Node } from './syntaxtree';
 
 /**
  * Types may either be concrete new type or an alias
