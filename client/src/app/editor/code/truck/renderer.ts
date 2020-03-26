@@ -10,21 +10,34 @@ export class Renderer {
   /** True until the animation is stopped. */
   private running: boolean;
 
+  /** The handle of the current pending rendering request. Might be undefined. */
+  private currentAnimationRequest?: number;
+
   /** Renderer for the world to be drawn. */
   private worldRenderer: WorldRenderer;
 
   /** Rendering context. */
-  private ctx: RenderingContext;
+  private readonly ctx: RenderingContext;
+
+  /** The dimension of the rendering context (parent object). Gets updated every frame. */
+  private readonly dimensions: RenderingDimensions;
 
   /**
    * Initializes the renderer.
    * @param world World to be drawn.
-   * @param ctx Canvas 2d context.
-   * @param d Width & height of the canvas.
+   * @param canvasElement Canvas element.
    */
-  constructor(world: World, ctx: CanvasRenderingContext2D, d: BehaviorSubject<RenderingDimensions>) {
+  constructor(world: World, private readonly canvasElement: HTMLCanvasElement) {
+    // Setup the dimension calculation
+    this.dimensions = {
+      height: 0,
+      width: 0
+    };
+    const nativeRenderingContext = this.canvasElement.getContext('2d', { alpha: false });
+
     this.running = true;
-    this.ctx = new RenderingContext(ctx, d, world);
+
+    this.ctx = new RenderingContext(nativeRenderingContext, this.dimensions, world);
 
     this.worldRenderer = new WorldRenderer(this.ctx.world, this);
   }
@@ -34,6 +47,16 @@ export class Renderer {
    */
   stop() {
     this.running = false;
+    if (this.currentAnimationRequest != undefined) {
+      cancelAnimationFrame(this.currentAnimationRequest);
+    }
+  }
+
+  /**
+   * Returns the current with of the parent that hosts the rendering canvas.
+   */
+  private get parentWidthPeek() {
+    return (this.canvasElement.parentElement.offsetWidth);
   }
 
   /**
@@ -41,10 +64,30 @@ export class Renderer {
    * @param timestamp Timestamp.
    */
   render(timestamp: DOMHighResTimeStamp = null) {
+    this.currentAnimationRequest = undefined;
     if (!this.running) { return; }
 
     // Set timestamp
     this.ctx.timestamp(timestamp);
+
+    // The dimensions are updated every frame in order to resize the canvas even
+    // if another neighbor element has changed his size.
+    // Adding a window size listener is insufficient and other mechanisms
+    // to detect size-changes are not supported everywhere.
+
+    // The canvas will always have size of it's parent's width as a square.
+    const currentDimension = this.parentWidthPeek;
+    this.dimensions.width = currentDimension;
+    this.dimensions.height = currentDimension;
+
+    // Since resizing the canvas is expensive and will reset a
+    // lot of internal variables inside the native context,
+    // we only want to resize if it's necessary.
+    if (this.canvasElement.width != this.dimensions.width ||
+        this.canvasElement.height != this.dimensions.height) {
+      this.canvasElement.width = this.dimensions.width;
+      this.canvasElement.height = this.dimensions.height;
+    }
 
     // Clear canvas
     this.ctx.ctx.fillStyle = '#FFFFFF';
@@ -53,8 +96,8 @@ export class Renderer {
     // Draw world
     this.worldRenderer.draw(this.ctx);
 
-    // Again
-    requestAnimationFrame((ts: DOMHighResTimeStamp) => this.render(ts));
+    // Requeue next request
+    this.currentAnimationRequest = requestAnimationFrame((ts: DOMHighResTimeStamp) => this.render(ts));
   }
 }
 
@@ -74,14 +117,13 @@ class RenderingContext {
   /**
    * Initializes the rendering context.
    * @param ctx Canvas 2d context.
-   * @param width Width of the canvas.
-   * @param height Height of the canvas.
+   * @param dimensions The dimensions of the rendering context.
    * @param world World.
    */
   constructor(
-    readonly ctx: CanvasRenderingContext2D,
-    private readonly dimensions: BehaviorSubject<RenderingDimensions>,
-    readonly world: World) {
+    public readonly ctx: CanvasRenderingContext2D,
+    private readonly dimensions: RenderingDimensions,
+    public readonly world: World) {
     this.ctx = ctx;
     this.world = world;
 
@@ -94,14 +136,14 @@ class RenderingContext {
    * Current target width to render.
    */
   get width() {
-    return (this.dimensions.value.width);
+    return this.dimensions.width;
   }
 
   /**
    * Current target width to render.
    */
   get height() {
-    return (this.dimensions.value.height);
+    return this.dimensions.height;
   }
 
   /**
