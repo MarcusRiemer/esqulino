@@ -111,51 +111,53 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
 
   // Add all defined types
   const definedTypes = tree.rootNode.getChildrenInCategory("nodes");
-  definedTypes.forEach(n => {
-    const languageName = n.properties["languageName"];
-    const typeName = n.properties["typeName"];
+  definedTypes
+    .filter(n => n.typeName.match(/typedef|concreteNode/))
+    .forEach(n => {
+      const languageName = n.properties["languageName"];
+      const typeName = n.properties["typeName"];
 
-    if (!typeName || !languageName) {
-      throw new Error(`Attempted to read node without qualified Type: ${JSON.stringify(n.toModel())}`);
-    }
+      if (!typeName || !languageName) {
+        throw new Error(`Attempted to read node without qualified Type: ${JSON.stringify(n.toModel())}`);
+      }
 
-    // Ensure the language is known
-    if (!toReturn.types[languageName]) {
-      toReturn.types[languageName] = {};
-    }
+      // Ensure the language is known
+      if (!toReturn.types[languageName]) {
+        toReturn.types[languageName] = {};
+      }
 
-    // Ensure the type is not already taken
-    const lang = toReturn.types[languageName];
-    if (lang[typeName]) {
-      throw new Error(`Duplicate type "${languageName}.${typeName}"`);
-    }
+      // Ensure the type is not already taken
+      const lang = toReturn.types[languageName];
+      if (lang[typeName]) {
+        throw new Error(`Duplicate type "${languageName}.${typeName}"`);
+      }
 
-    // Add the correct type of type
-    switch (n.typeName) {
-      case "concreteNode":
-        const concreteNode: NodeConcreteTypeDescription = {
-          type: "concrete",
-          attributes: []
-        };
+      // Add the correct type of type
+      switch (n.typeName) {
+        case "concreteNode":
+          const concreteNode: NodeConcreteTypeDescription = {
+            type: "concrete",
+            attributes: []
+          };
 
-        n.getChildrenInCategory("attributes").forEach(a => readAttributes(a, concreteNode.attributes));
+          n.getChildrenInCategory("attributes").forEach(a => readAttributes(a, concreteNode.attributes));
 
-        lang[typeName] = concreteNode;
-        break;
-      case "typedef":
-        const references = n.getChildrenInCategory("references").map(resolveReference);
+          lang[typeName] = concreteNode;
+          break;
+        case "typedef":
+          const references = n.getChildrenInCategory("references").map(resolveReference);
 
-        const oneOfNode: NodeOneOfTypeDescription = {
-          type: "oneOf",
-          oneOf: references
-        };
+          const oneOfNode: NodeOneOfTypeDescription = {
+            type: "oneOf",
+            oneOf: references
+          };
 
-        lang[typeName] = oneOfNode;
-        break;
-      default:
-        throw Error(`Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`);
-    }
-  });
+          lang[typeName] = oneOfNode;
+          break;
+        default:
+          throw Error(`Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`);
+      }
+    });
 
   return (toReturn);
 }

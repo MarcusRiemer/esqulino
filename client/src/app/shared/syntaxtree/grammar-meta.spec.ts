@@ -81,6 +81,29 @@ describe(`Convert AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Empty grammar with comment`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          "nodes": [
+            {
+              language: "MetaGrammar",
+              name: "comment",
+              properties: {
+                "text": "this is a comment"
+              }
+            }
+          ]
+        }
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        types: {}
+      });
+    });
+
     it(`Empty concrete type with comment`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",
