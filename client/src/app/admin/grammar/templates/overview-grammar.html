@@ -1,6 +1,6 @@
 <table class="full-width"
        mat-table matSort
-       [dataSource]="availableGrammars"
+       [dataSource]="availableGrammars|async"
        (matSortChange)="onChangeSort()">
 
  <ng-container matColumnDef="name">
