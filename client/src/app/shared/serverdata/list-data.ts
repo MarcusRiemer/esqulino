@@ -64,12 +64,19 @@ export class ListData<TList extends IdentifiableResourceDescription> {
 
   /**
    * Change the parameters that are passed to the HTTP GET requests for
-   * lists of data. This is useful for pagination and sorting.
+   * lists of data. This is used for pagination, sorting and possibly filtering.
+   *
+   * Per default changed parameters will result in a new request (and therfore an
+   * updated list), but if many parameters are changed peu à peuit may be smarter
+   * to only issue the new request once all parameters are known.
+   *
+   * @param newParams The new set of HTTP GET parameters that will be sent with every request.
+   * @param refresh True, if a new request should be issued immediatly.
    */
-  private changeListParameters(newParams: HttpParams,refresh: boolean = true) {
+  private changeListParameters(newParams: HttpParams, refresh: boolean = true) {
     this._listGetParams = newParams;
-    if (refresh){
-      this.listCache.refresh(this.createListRequest()) ;
+    if (refresh) {
+      this.listCache.refresh(this.createListRequest());
     }
   }
 
@@ -77,27 +84,26 @@ export class ListData<TList extends IdentifiableResourceDescription> {
    * Set the ordering parameters that should be used for all subsequent
    * listing requests.
    */
-  setListOrdering(columnName: keyof TList, order: "asc" | "desc" | "",refresh: boolean = true) {
-    if (order === "") {
-      this._listGetParams = this._listGetParams
+  setListOrdering(columnName: keyof TList, order: "asc" | "desc" | "", refresh: boolean = true) {
+    let newParams = (order === "")
+      ? this._listGetParams
         .delete("orderDirection")
-        .delete("orderField");
-    } else {
-      this._listGetParams = this._listGetParams
+        .delete("orderField")
+      : this._listGetParams
         .set("orderDirection", order)
         .set("orderField", columnName.toString());
-    }
 
-    this.changeListParameters(this._listGetParams,refresh);
+    this.changeListParameters(newParams, refresh);
   }
 
   /**
    * Set the limits that should be used for all subsequent listing requests.
    */
-  setListPagination(pageSize: number, currentPage: number,refresh: boolean = true) {
-    this._listGetParams = this._listGetParams.set("limit", pageSize.toString());
-    this._listGetParams = this._listGetParams.set("offset", (pageSize * currentPage).toString());
+  setListPagination(pageSize: number, currentPage: number, refresh: boolean = true) {
+    const newParams = this._listGetParams
+      .set("limit", pageSize.toString())
+      .set("offset", (pageSize * currentPage).toString());
 
-    this.changeListParameters(this._listGetParams,refresh);
+    this.changeListParameters(newParams, refresh);
   }
 }
