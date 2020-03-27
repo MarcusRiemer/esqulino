@@ -12,10 +12,12 @@ import { EditorToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
-import { EditorComponentsService } from '../editor-components.service';
-
 import { BlockDebugOptionsService } from '../../block-debug-options.service';
 import { ProjectService } from '../../project.service';
+import { SidebarService } from '../../sidebar.service';
+
+import { CodeSidebarComponent } from '../code.sidebar';
+import { EditorComponentsService } from '../editor-components.service';
 
 
 interface PlacedEditorComponent {
@@ -50,6 +52,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
     private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _sidebarService: SidebarService,
   ) {
   }
 
@@ -89,6 +92,13 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
           this._router.navigate([clone.id], { relativeTo: this._route.parent })
         });
     });
+
+    // Keep the sidebar updated
+    const sub = this._currentCodeResource.currentResource.subscribe((c) => {
+      this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, c);
+    })
+
+    this._subscriptionRefs.push(sub);
   }
 
 

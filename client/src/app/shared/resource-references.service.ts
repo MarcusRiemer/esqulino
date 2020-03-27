@@ -81,15 +81,14 @@ export abstract class ResourceReferencesService {
    *
    * @param req All resources that must be available after the promise is fulfilled.
    */
-  abstract ensureResources(req: RequiredResource[] | RequiredResource): Promise<boolean>;
+  abstract ensureResources(...req: RequiredResource[]): Promise<boolean>;
 
   /**
    * May be used to check whether a certain set of resources is available.
    *
    * @param req All resources that must be available on the spot.
    */
-  hasResources(req: RequiredResource[] | RequiredResource) {
-    req = this.wrapRequired(req);
+  hasResources(...req: RequiredResource[]) {
     return (
       req.every(r => {
         switch (r.type) {
@@ -125,16 +124,5 @@ export abstract class ResourceReferencesService {
     const blockLang = this.getBlockLanguage(blockLanguageId, "throw");
 
     return (this.ensureResources({ type: "grammar", id: blockLang.grammarId }));
-  }
-
-  /**
-   * Helper method to ensure that required resources are always an array.
-   */
-  protected wrapRequired(req: RequiredResource[] | RequiredResource) {
-    if (isRequiredResource(req)) {
-      return ([req]);
-    } else {
-      return (req);
-    }
   }
 }

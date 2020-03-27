@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core'
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, distinctUntilChanged, flatMap, map, shareReplay } from 'rxjs/operators';
 
-import { CodeResource, Validator, ValidationResult, Tree } from '../../../shared';
+import { CodeResource, Validator, ValidationResult, Tree, speakingResourceName } from '../../../shared';
 import { BlockLanguage } from '../../../shared/block';
 import { ResourceReferencesService, RequiredResource } from '../../../shared/resource-references.service'
 import { IndividualGrammarDataService } from '../../../shared/serverdata';
@@ -146,9 +146,9 @@ export class RenderedCodeResourceService implements OnDestroy {
       { type: "grammar", id: newBlockLang.grammarId },
     ];
 
-    const fetchRequired = !this._resourceReferences.hasResources(requiredResources);
+    const fetchRequired = !this._resourceReferences.hasResources(...requiredResources);
 
-    console.log(`Preparing to render syntaxtree of code resource: `, codeResource);
+    console.log(`Preparing to render syntaxtree of code resource:`, speakingResourceName(codeResource));
     console.log(`Required resources:`, requiredResources);
     console.log(`Requires fetch:`, fetchRequired);
 
@@ -156,7 +156,7 @@ export class RenderedCodeResourceService implements OnDestroy {
     // it later.
     if (fetchRequired) {
       this._resourcesFetched.next(false);
-      this._resourceReferences.ensureResources(requiredResources)
+      this._resourceReferences.ensureResources(...requiredResources)
         .then(res => this._resourcesFetched.next(res))
     } else {
       this._resourcesFetched.next(true);

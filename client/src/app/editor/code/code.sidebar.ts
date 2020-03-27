@@ -29,8 +29,8 @@ function resolvePortalComponentId(id: string): any {
  * dropped if they are meant to be deleted.
  */
 @Component({
-  templateUrl: 'templates/sidebar.html',
-  selector: "tree-sidebar"
+  templateUrl: 'templates/code-sidebar.html',
+  selector: "code-sidebar"
 })
 export class CodeSidebarComponent {
   /**
@@ -45,16 +45,19 @@ export class CodeSidebarComponent {
 
   }
 
-  readonly hasBlockLanguage = this._currentCodeResource.currentResource.pipe(
-    flatMap(c => c.blockLanguageId),
-    flatMap(id => this._resourceReferences.ensureResources([{ type: "blockLanguage", id }])),
+  readonly currentBlockLanguageId$ = this._currentCodeResource.currentResource.pipe(
+    flatMap(res => res.blockLanguageId)
+  );
+
+  readonly hasBlockLanguage = this.currentBlockLanguageId$.pipe(
+    flatMap(id => this._resourceReferences.ensureResources({ type: "blockLanguage", id })),
   );
 
   /**
    * The block language that is currently in use.
    */
-  readonly currentBlockLanguage = this._currentCodeResource.currentResource.pipe(
-    flatMap(res => res.blockLanguage)
+  readonly currentBlockLanguage = this.currentBlockLanguageId$.pipe(
+    map(id => this._resourceReferences.getBlockLanguage(id, "throw"))
   );
 
   /**

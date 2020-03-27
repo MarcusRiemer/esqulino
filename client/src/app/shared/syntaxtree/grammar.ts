@@ -404,6 +404,10 @@ class ChildCardinality {
     if (typeof (typeDesc) === "string") {
       // Simple strings always refer to the language of the parent.
       this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
+    }
+    else if (Desc.isQualifiedTypeName(typeDesc)) {
+      // Qualified names are easy, because it is clear what they refer to
+      this._nodeType = new TypeReference(parent.validator, typeDesc.typeName, typeDesc.languageName);
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may refer to a different language
       if (typeof (typeDesc.nodeType) === "string") {

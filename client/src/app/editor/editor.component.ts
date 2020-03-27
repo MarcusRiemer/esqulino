@@ -3,7 +3,7 @@ import {
 } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 
-import { delay, map } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 
 import { BrowserService } from '../shared/browser.service';
 
@@ -66,6 +66,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       // This has the not-so-nice side-effect of sliding the sidebar in on the inital page
       // load, well ...
       delay(1),
+      tap(visible => console.log(`isSidebarVisible:`, visible))
     );
 
   /**

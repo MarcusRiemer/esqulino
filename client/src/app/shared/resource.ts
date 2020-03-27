@@ -6,7 +6,8 @@ import {
 
 import {
   ApiVersion, ApiVersionToken, ProjectResourceDescription,
-  CURRENT_API_VERSION
+  CURRENT_API_VERSION,
+  IdentifiableResourceDescription
 } from './resource.description'
 import { ResourceReferencesService } from './resource-references.service';
 
@@ -14,6 +15,15 @@ export {
   ProjectResourceDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION,
   Invalidateable, Saveable
+}
+
+export function speakingResourceName(res: IdentifiableResourceDescription) {
+  const name = res["name"];
+  if (name) {
+    return (`"${name}" (${res.id})`);
+  } else {
+    return (res.id);
+  }
 }
 
 /**

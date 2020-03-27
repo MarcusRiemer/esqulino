@@ -1,4 +1,4 @@
-<ng-container *ngIf="hasBlockLanguage | async">
+<ng-container *ngIf="hasBlockLanguage | async; else elseBlock">
   <!-- Showing all sidebars -->
   <ng-container *ngIf="(portalInstances | async)?.length > 0; else noSidebarDefined">
     <sidebar-item-host *ngFor="let portal of portalInstances | async">
@@ -18,3 +18,6 @@
     </div>
   </ng-template>
 </ng-container>
+<ng-template #elseBlock>
+  Loading BlockLanguage {{ currentBlockLanguageId$ | async }}
+</ng-template>

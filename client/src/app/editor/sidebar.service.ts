@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 
 import { RegistrationService } from './registration.service'
 
-
 /**
  * Manages the global state of the sidebar. Components should *never*
  * interact with the sidebar directly but always use this service
@@ -35,7 +34,7 @@ export class SidebarService {
   private _knownTypes: { [typeName: string]: Type<any> } = {};
 
   constructor(
-    registrationService: RegistrationService
+    registrationService: RegistrationService,
   ) {
     registrationService.sidebarTypes.subscribe(reg => {
       this.registerType(reg.typeId, reg.componentType);
@@ -90,25 +89,17 @@ export class SidebarService {
    *    are using.
    * @param param The parameter to pass to the sidebar, this depends
    *    on the sidebar that is going to be displayed.
-   *
-   * @return The ID of the single sidebar.
    */
-  showSingleSidebar(newType: string, param?: any): number {
-    const ids = this.showMultiple([
+  showSingleSidebar(newType: string, param?: any) {
+    this.showMultiple([
       { type: newType, param: param }
     ], true);
-
-    // Return the single Id that we added
-    return (ids[0]);
   }
 
-  showAdditionalSidebar(newType: string, param?: any): number {
-    const ids = this.showMultiple([
+  showAdditionalSidebar(newType: string, param?: any) {
+    this.showMultiple([
       { type: newType, param: param }
     ], false);
-
-    // Return the single Id that we added
-    return (ids[0]);
   }
 
   /**
@@ -117,7 +108,7 @@ export class SidebarService {
    * @return The IDs of these sidebars.
    */
   showMultiple(mult: SidebarModel[], replace = true): number[] {
-    console.log(`Requested new Sidebars: [${mult.map(s => s.type).join(', ')}]`);
+    console.log(`Requested new Sidebars:`, mult);
 
     // Ensure every type is known. This does not use `every`
     // but `forEach` with a side-effect because we wan't to
@@ -148,31 +139,6 @@ export class SidebarService {
     this._model.next(internal);
 
     return (internal.map(m => m.id));
-  }
-
-  /**
-   * Hides a single sidebar.
-   */
-  hideById(id: number) {
-    const model = this._model.getValue();
-    const index = model.findIndex(v => v.id === id);
-
-    if (index < 0) {
-      throw new Error(`Could not remove sidebar, unknown id "${id}"`);
-    }
-
-    // Don't splice here, we need a fresh reference
-    this._model.next(model.filter((_, i) => i != index));
-  }
-
-  /**
-   * Hides all sidebars that are not sticky.
-   */
-  hideNonSticky() {
-    const model = this._model.getValue();
-
-    // Put a changed array back into the observable
-    this._model.next(model.filter((v) => v.sticky));
   }
 
   /**

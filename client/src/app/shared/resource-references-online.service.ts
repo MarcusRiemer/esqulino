@@ -52,18 +52,28 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     return this._languageService.getLanguage(programmingLanguageId);
   }
 
-  async ensureResources(req: RequiredResource[] | RequiredResource) {
-    req = this.wrapRequired(req);
+  async ensureResources(...req: RequiredResource[]) {
     const requests: Promise<any>[] = req.map(r => {
       switch (r.type) {
-        case "blockLanguage": return this._individualBlockLanguageData.getLocal(r.id, "request");
-        case "grammar": return this._individualGrammarData.getLocal(r.id, "request");
-        case "blockLanguageGrammar": return this.ensureBlockLanguageGrammar(r.id);
+        case "blockLanguage": return (this._individualBlockLanguageData.getLocal(r.id, "request"));
+        case "grammar": return (this._individualGrammarData.getLocal(r.id, "request"));
+        case "blockLanguageGrammar": return (this.ensureBlockLanguageGrammar(r.id));
+        default: throw new Error(`Unknown resource required: ${r.type}`);
       }
     });
 
+    if (requests.some(v => !v)) {
+      console.error("Ensural promise was falsy", req, "=>", requests);
+      throw new Error("Ensural promise was falsy");
+    }
+
 
     const toReturn = await Promise.all(requests);
+    if (toReturn.some(v => v === undefined)) {
+      console.error("Ensural result was falsy", req, "=>", requests);
+      throw new Error("Ensural result was falsy")
+    }
+
     return toReturn.every(v => !!v);
   }
 }

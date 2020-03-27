@@ -36,9 +36,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     private _routeParams: ActivatedRoute,
     private _router: Router,
     private _toolbarService: EditorToolbarService,
-    private _sidebarService: SidebarService) {
-
-  }
+    private _sidebarService: SidebarService
+  ) { }
 
   /**
    * The original table name

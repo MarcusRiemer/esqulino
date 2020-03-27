@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 
 @Component({
   templateUrl: 'templates/sidebar-fixed-blocks.html',
-  selector: "tree-sidebar"
+  selector: "code-sidebar-fixed-blocks"
 })
 export class CodeSidebarFixedBlocksComponent {
   constructor(
