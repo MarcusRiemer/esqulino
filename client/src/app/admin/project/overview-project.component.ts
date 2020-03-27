@@ -31,8 +31,10 @@ export class OverviewProjectComponent implements AfterViewInit{
   ) { }
 
   ngAfterViewInit(): void {
-    this.onChangeSort(false);
-    this.onChangePagination();
+    setTimeout(()=>{
+      this.onChangeSort(false);
+      this.onChangePagination();
+      },100);
   }
 
 

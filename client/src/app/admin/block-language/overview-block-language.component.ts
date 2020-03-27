@@ -37,8 +37,10 @@ export class OverviewBlockLanguageComponent implements OnInit,AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.onChangeSort(false);
-    this.onChangePagination();
+    setTimeout(()=>{
+      this.onChangeSort(false);
+      this.onChangePagination();
+    },100);
   }
 
 

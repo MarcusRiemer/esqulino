@@ -4,7 +4,6 @@ import { MatSort } from '@angular/material/sort';
 
 import { GrammarListDescription } from '../../shared/syntaxtree';
 import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
-import {last} from "rxjs/operators";
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -26,8 +25,10 @@ export class OverviewGrammarComponent implements AfterViewInit{
   ) { }
 
   ngAfterViewInit(): void {
-    this.onChangeSort(false);
-    this.onChangePagination();
+    setTimeout(()=>{
+      this.onChangeSort(false);
+      this.onChangePagination();
+    },100);
   }
 
   resultsLength$ = this._list.listTotalCount;
