@@ -31,7 +31,6 @@ NG_PROD         ?= --prod
 # Targets that may be used in the `dist` target have some special flags
 DIST_FLAGS      ?= --no-progress
 
-
 all : dist
 
 clean : msg-pre-clean
@@ -41,6 +40,14 @@ clean : msg-pre-clean
 dist: client-compile cli-compile universal-compile
 
 dist-dev: client-compile cli-compile universal-compile
+
+# Run the currently configured formatting toolset
+format-code:
+	npx prettier --write "src/**/*.{html,ts}"
+
+# Verify that the coding style is sound
+verify-format-code:
+	npx prettier --check "src/**/*.{html,ts}"
 
 ##################################
 # Revision tracking file
