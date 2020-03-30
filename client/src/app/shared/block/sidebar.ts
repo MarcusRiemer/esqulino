@@ -5,5 +5,5 @@ export interface Sidebar {
   /**
    * The id for the component that needs to be instantiated for this sidebar.
    */
-  readonly portalComponentTypeId: string
+  readonly portalComponentTypeId: string;
 }

@@ -1,17 +1,22 @@
 import {
-  NodeConcreteTypeDescription, NodeAttributeDescription,
-  NodeTerminalSymbolDescription, NodePropertyTypeDescription,
-  NodeChildrenGroupDescription, NodeVisualContainerDescription
-} from '../../syntaxtree/grammar.description'
+  NodeConcreteTypeDescription,
+  NodeAttributeDescription,
+  NodeTerminalSymbolDescription,
+  NodePropertyTypeDescription,
+  NodeChildrenGroupDescription,
+  NodeVisualContainerDescription,
+} from "../../syntaxtree/grammar.description";
 
-import { VisualBlockDescriptions } from '../block.description'
+import { VisualBlockDescriptions } from "../block.description";
 
 import {
-  DefaultInstructions, IteratorInstructions,
-  TerminalInstructions, PropertyInstructions
-} from './instructions.description'
+  DefaultInstructions,
+  IteratorInstructions,
+  TerminalInstructions,
+  PropertyInstructions,
+} from "./instructions.description";
 
-import { TypeInstructions } from './instructions'
+import { TypeInstructions } from "./instructions";
 
 /**
  * Checks whether the given attributes have any tags assigned. If that is the case
@@ -49,7 +54,7 @@ export function mapTerminal(
   // Possibly add some class
   addTags(attr, toReturn);
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -61,7 +66,7 @@ export function mapInterpolated(
 ): VisualBlockDescriptions.EditorInterpolated {
   const toReturn: VisualBlockDescriptions.EditorInterpolated = {
     blockType: "interpolated",
-    property: attr.name
+    property: attr.name,
   };
 
   if (Object.keys(instructions.style).length > 0) {
@@ -71,7 +76,7 @@ export function mapInterpolated(
   // Possibly add some class
   addTags(attr, toReturn);
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -80,15 +85,17 @@ export function mapInterpolated(
 export function mapProperty(
   attr: NodePropertyTypeDescription,
   instructions: PropertyInstructions
-): VisualBlockDescriptions.EditorInput | VisualBlockDescriptions.EditorInterpolated {
+):
+  | VisualBlockDescriptions.EditorInput
+  | VisualBlockDescriptions.EditorInterpolated {
   if (instructions.propReadOnly) {
     // If the instructions demand this value to be read only: Treat it as an interpolated value
-    return (mapInterpolated(attr, instructions));
+    return mapInterpolated(attr, instructions);
   } else {
     // Otherwise generate an input field
     const toReturn: VisualBlockDescriptions.EditorInput = {
       blockType: "input",
-      property: attr.name
+      property: attr.name,
     };
 
     if (Object.keys(instructions.style).length > 0) {
@@ -97,9 +104,9 @@ export function mapProperty(
 
     addTags(attr, toReturn);
 
-    return (toReturn);
+    return toReturn;
   }
-};
+}
 
 /**
  * Maps children of a specific child group to an iterable block.
@@ -113,29 +120,36 @@ export function mapChildren(
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
 
   // The grammar may have defined a seperation character
-  if (attr.type === "parentheses" || attr.type === "allowed" || attr.type === "sequence") {
+  if (
+    attr.type === "parentheses" ||
+    attr.type === "allowed" ||
+    attr.type === "sequence"
+  ) {
     if (attr.between) {
       between = [
-        mapTerminal(attr.between, DefaultInstructions.terminalInstructions)
-      ]
+        mapTerminal(attr.between, DefaultInstructions.terminalInstructions),
+      ];
     }
   }
 
   // A simple separation character that is explicitly specified by the instructions?
-  if (typeof instructions.between === "string" && instructions.between.length > 0) {
+  if (
+    typeof instructions.between === "string" &&
+    instructions.between.length > 0
+  ) {
     // Create a single terminal character to go in between
     between = [
       mapTerminal(
         { type: "terminal", name: "t", symbol: instructions.between },
         DefaultInstructions.terminalInstructions
-      )
+      ),
     ];
   }
   // "allowed" and "sequence" may provide fallbacks in the grammar
   else if (attr.type === "allowed" || attr.type === "sequence") {
     if (attr.between) {
       between = [
-        mapTerminal(attr.between, DefaultInstructions.terminalInstructions)
+        mapTerminal(attr.between, DefaultInstructions.terminalInstructions),
       ];
     }
   }
@@ -144,8 +158,8 @@ export function mapChildren(
   const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
-    emptyDropTarget: instructions.emptyDropTarget
-  }
+    emptyDropTarget: instructions.emptyDropTarget,
+  };
 
   // And only add between instructions if there are any
   if (between) {
@@ -160,15 +174,17 @@ export function mapChildren(
   // Possibly add the tags
   addTags(attr, iteratorBlock);
 
-  return ([iteratorBlock]);
+  return [iteratorBlock];
 }
 
 export function mapContainer(
   _typeDesc: NodeConcreteTypeDescription,
   attr: NodeVisualContainerDescription,
-  instructions: TypeInstructions,
+  instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock {
-  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(a => mapAttribute(_typeDesc, a, instructions));
+  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(
+    (a) => mapAttribute(_typeDesc, a, instructions)
+  );
 
   const toReturn: VisualBlockDescriptions.EditorContainer = {
     blockType: "container",
@@ -179,13 +195,13 @@ export function mapContainer(
   // Possibly add some class
   addTags(attr, toReturn);
 
-  return (toReturn);
+  return toReturn;
 }
 
 export function mapAttribute(
   typeDesc: NodeConcreteTypeDescription,
   attr: NodeAttributeDescription,
-  instructions: TypeInstructions,
+  instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
   switch (attr.type) {
     case "allowed":
@@ -202,7 +218,6 @@ export function mapAttribute(
     default:
       throw new Error(`Unknown attribute type "${(attr as any).type}"`);
   }
-
 }
 
 /**
@@ -213,21 +228,27 @@ export function mapAttribute(
 export function mapBlockAttributes(
   typeDesc: NodeConcreteTypeDescription,
   instructions: TypeInstructions,
-  blockNumber: number,
+  blockNumber: number
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // For every relevant attribute ...
-  const generatedBlocks = instructions.relevantAttributes(blockNumber, typeDesc).map(t => {
-    // ... find its type ...
-    const mappedType = typeDesc.attributes.find(a => a.name === t);
-    if (mappedType) {
-      // ... and map that to one (or multiple) blocks
-      return (mapAttribute(typeDesc, mappedType, instructions));
-    } else {
-      throw new Error(`Could not find property "${t}" mentioned by generating instructions for "${typeDesc.type}"`);
-    }
-  });
+  const generatedBlocks = instructions
+    .relevantAttributes(blockNumber, typeDesc)
+    .map((t) => {
+      // ... find its type ...
+      const mappedType = typeDesc.attributes.find((a) => a.name === t);
+      if (mappedType) {
+        // ... and map that to one (or multiple) blocks
+        return mapAttribute(typeDesc, mappedType, instructions);
+      } else {
+        throw new Error(
+          `Could not find property "${t}" mentioned by generating instructions for "${typeDesc.type}"`
+        );
+      }
+    });
   // Flatten the list of lists that we got
-  return (([] as VisualBlockDescriptions.ConcreteBlock[]).concat(...generatedBlocks));
+  return ([] as VisualBlockDescriptions.ConcreteBlock[]).concat(
+    ...generatedBlocks
+  );
 }
 
 /**
@@ -237,7 +258,7 @@ export function mapBlockAttributes(
  */
 export function mapType(
   typeDesc: NodeConcreteTypeDescription,
-  instructions: TypeInstructions,
+  instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
   const toReturn: VisualBlockDescriptions.ConcreteBlock[] = [];
   // Most types will resolve to a single block, but technically each type
@@ -255,25 +276,28 @@ export function mapType(
     }
 
     if (blockInstructions.generateErrorIndicator !== "none") {
-      let position = blockInstructions.generateErrorIndicator === "start" ? 0 : thisBlock.children.length;
+      let position =
+        blockInstructions.generateErrorIndicator === "start"
+          ? 0
+          : thisBlock.children.length;
       thisBlock.children.splice(position, 0, {
         blockType: "error",
         style: {
-          "paddingLeft": "1ch",
-          "paddingRight": "1ch",
+          paddingLeft: "1ch",
+          paddingRight: "1ch",
           "background-color": "red",
-          "border": "2px solid red",
+          border: "2px solid red",
           "border-radius": "500px",
-          "color": "white",
-          "cursor": "default",
+          color: "white",
+          cursor: "default",
         },
         // These errors are typically indicated by drop locations
-        excludedErrors: ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]
+        excludedErrors: ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"],
       });
     }
 
     toReturn.push(thisBlock);
   }
 
-  return (toReturn);
+  return toReturn;
 }

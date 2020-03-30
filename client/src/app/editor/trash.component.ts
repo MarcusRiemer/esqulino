@@ -1,51 +1,64 @@
-import { Component } from '@angular/core'
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Component } from "@angular/core";
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from "@angular/animations";
 
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { DragService } from './drag.service';
-import { TrashService } from './trash.service'
+import { DragService } from "./drag.service";
+import { TrashService } from "./trash.service";
 
 type AnimationState = "available" | "over" | "hidden";
 
 @Component({
   selector: `trash`,
-  templateUrl: 'templates/trash.html',
+  templateUrl: "templates/trash.html",
   animations: [
-    trigger('animationState', [
-      state('available', style({
-        opacity: 0.5,
-        transform: 'scale(1)'
-      })),
-      state('over', style({
-        opacity: 1.0,
-        transform: 'scale(1.5)'
-      })),
-      state('hidden', style({
-        opacity: 0,
-        transform: 'scale(0)',
-        display: 'none',
-      })),
+    trigger("animationState", [
+      state(
+        "available",
+        style({
+          opacity: 0.5,
+          transform: "scale(1)",
+        })
+      ),
+      state(
+        "over",
+        style({
+          opacity: 1.0,
+          transform: "scale(1.5)",
+        })
+      ),
+      state(
+        "hidden",
+        style({
+          opacity: 0,
+          transform: "scale(0)",
+          display: "none",
+        })
+      ),
       /* Hmmpf, surely there must be a way to state "all transitions except
          :enter and :leave"? The "* => *"-syntax takes those into account and
          then animates the initial display. */
-      transition('available => over', animate('500ms ease-out')),
-      transition('hidden => over', animate('500ms ease-out')),
-      transition('hidden => available', animate('500ms ease-out')),
-      transition('over => available', animate('500ms ease-out')),
-      transition('available => hidden', animate('500ms ease-out')),
-      transition('over => hidden', animate('500ms ease-out')),
-    ])
-  ]
+      transition("available => over", animate("500ms ease-out")),
+      transition("hidden => over", animate("500ms ease-out")),
+      transition("hidden => available", animate("500ms ease-out")),
+      transition("over => available", animate("500ms ease-out")),
+      transition("available => hidden", animate("500ms ease-out")),
+      transition("over => hidden", animate("500ms ease-out")),
+    ]),
+  ],
 })
 export class TrashComponent {
-
   constructor(
     private _trashService: TrashService,
     private _dragService: DragService
-  ) {
-  }
+  ) {}
 
   /**
    * Communicates the current mouse over state
@@ -55,20 +68,24 @@ export class TrashComponent {
   /**
    * Only regards the mouse over state if there is a drag going on.
    */
-  readonly animationState = combineLatest(this._mouseOver, this._trashService.isTrashShown)
-    .pipe(
-      map(([mouseIn, trashShown]): AnimationState => {
+  readonly animationState = combineLatest(
+    this._mouseOver,
+    this._trashService.isTrashShown
+  ).pipe(
+    map(
+      ([mouseIn, trashShown]): AnimationState => {
         if (trashShown) {
           if (mouseIn) {
-            return ("over");
+            return "over";
           } else {
-            return ("available");
+            return "available";
           }
         } else {
-          return ("hidden");
+          return "hidden";
         }
-      })
-    );
+      }
+    )
+  );
 
   mouseEnter() {
     this._mouseOver.next(true);

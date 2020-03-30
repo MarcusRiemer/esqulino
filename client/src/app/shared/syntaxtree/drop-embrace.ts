@@ -1,7 +1,11 @@
-import { NodeDescription, NodeLocation, QualifiedTypeName } from './syntaxtree.description';
-import { Tree, Node } from './syntaxtree';
-import { Validator } from './validator';
-import { EmbraceDropLocation } from './drop.description';
+import {
+  NodeDescription,
+  NodeLocation,
+  QualifiedTypeName,
+} from "./syntaxtree.description";
+import { Tree, Node } from "./syntaxtree";
+import { Validator } from "./validator";
+import { EmbraceDropLocation } from "./drop.description";
 
 /**
  * Calculates which holes of the given parent would like to be
@@ -13,8 +17,8 @@ import { EmbraceDropLocation } from './drop.description';
 export function _findPossibleLocations(
   parentNode: Node,
   fillType: QualifiedTypeName,
-  validator: Validator)
-  : NodeLocation[] {
+  validator: Validator
+): NodeLocation[] {
   const p = validator.getType(parentNode.qualifiedName);
 
   // TODO: Factor in the actual validity of the given filling node
@@ -22,12 +26,13 @@ export function _findPossibleLocations(
   //       but also after validation could be preferred.
   //       This would require to actually use the validator, not only
   //       to ask it for allowed child types.
-  return (
-    p.allowedChildrenCategoryNames
-      .filter(existingCategory => p.allowsChildType(fillType, existingCategory))
-      .filter(allowedCategory => parentNode.getChildrenInCategory(allowedCategory).length === 0)
-      .map(emptyCategory => [[emptyCategory, 0]] as NodeLocation)
-  );
+  return p.allowedChildrenCategoryNames
+    .filter((existingCategory) => p.allowsChildType(fillType, existingCategory))
+    .filter(
+      (allowedCategory) =>
+        parentNode.getChildrenInCategory(allowedCategory).length === 0
+    )
+    .map((emptyCategory) => [[emptyCategory, 0]] as NodeLocation);
 }
 
 /**
@@ -40,9 +45,12 @@ export function _localEmbrace(
   insertionLocation: NodeLocation
 ): NodeDescription {
   const embracingNode = new Tree(embracingDescription);
-  const newTree = embracingNode.insertNode(insertionLocation, embracedNode.toModel());
+  const newTree = embracingNode.insertNode(
+    insertionLocation,
+    embracedNode.toModel()
+  );
 
-  return (newTree.toModel());
+  return newTree.toModel();
 }
 
 /**
@@ -61,13 +69,17 @@ export function _findMatchInCandidate(
 ): [NodeDescription, NodeLocation] | undefined {
   for (const candidate of candidates) {
     const candidateNode = new Tree(candidate).rootNode;
-    const holes = _findPossibleLocations(candidateNode, targetNode.qualifiedName, validator);
+    const holes = _findPossibleLocations(
+      candidateNode,
+      targetNode.qualifiedName,
+      validator
+    );
     if (holes.length > 0) {
-      return ([candidate, holes[0]]);
+      return [candidate, holes[0]];
     }
   }
 
-  return (undefined);
+  return undefined;
 }
 
 /**
@@ -88,23 +100,27 @@ export function embraceMatches(
   const targetNode = tree.locateOrUndefined(loc);
   if (targetNode) {
     const toReturn: EmbraceDropLocation[] = [];
-    candidates.forEach(candidate => {
+    candidates.forEach((candidate) => {
       const candidateNode = new Tree(candidate).rootNode;
-      const holes = _findPossibleLocations(candidateNode, targetNode.qualifiedName, validator);
-      holes.forEach(hole => {
+      const holes = _findPossibleLocations(
+        candidateNode,
+        targetNode.qualifiedName,
+        validator
+      );
+      holes.forEach((hole) => {
         toReturn.push({
           location: loc,
           algorithm: "allowEmbrace",
           nodeDescription: candidate,
           operation: "embrace",
-          candidateHole: hole
+          candidateHole: hole,
         });
       });
     });
 
-    return (toReturn);
+    return toReturn;
   } else {
-    return ([]);
+    return [];
   }
 }
 
@@ -129,22 +145,30 @@ export function embraceNode(
   const targetNode = tree.locateOrUndefined(loc);
   if (targetNode) {
     // Find out where in the given candidates the target node could be placed
-    const findMatchResult = _findMatchInCandidate(validator, targetNode, candidates);
+    const findMatchResult = _findMatchInCandidate(
+      validator,
+      targetNode,
+      candidates
+    );
 
     if (findMatchResult) {
       // The target node exists and can be embraced
       const embracingDescription = findMatchResult[0];
       const localPosition = findMatchResult[1];
       // Create a subtree where the embrace took place
-      const embracedNode = _localEmbrace(targetNode, embracingDescription, localPosition);
+      const embracedNode = _localEmbrace(
+        targetNode,
+        embracingDescription,
+        localPosition
+      );
       // Replace the previous node with the subtree it is embedded in
-      return (tree.replaceNode(loc, embracedNode));
+      return tree.replaceNode(loc, embracedNode);
     } else {
       // The target exists, but no candidate is a match
-      return (tree);
+      return tree;
     }
   } else {
-    return (tree.insertNode(loc, candidates[0]));
+    return tree.insertNode(loc, candidates[0]);
   }
 }
 
@@ -164,5 +188,5 @@ export function canEmbraceNode(
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): boolean {
-  return (embraceMatches(validator, tree, loc, candidates).length > 0);
+  return embraceMatches(validator, tree, loc, candidates).length > 0;
 }

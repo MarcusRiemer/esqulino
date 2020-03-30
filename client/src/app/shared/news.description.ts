@@ -1,4 +1,4 @@
-import { MultilingualString } from './multilingual-string.description';
+import { MultilingualString } from "./multilingual-string.description";
 
 /**
  * News as it is displayed on the frontpage. The text may or may not

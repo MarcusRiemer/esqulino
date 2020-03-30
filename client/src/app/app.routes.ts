@@ -1,43 +1,44 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule } from "@angular/router";
 
-import { editorRoutes } from './editor/editor.routes'
-import { frontRoutes } from './front/front.routes'
-import { IsAdminGuard } from './shared/guards/is-admin.guard';
-import { MasterGuard } from './shared/guards/master-guard';
+import { editorRoutes } from "./editor/editor.routes";
+import { frontRoutes } from "./front/front.routes";
+import { IsAdminGuard } from "./shared/guards/is-admin.guard";
+import { MasterGuard } from "./shared/guards/master-guard";
 
 const AppRoutes: Routes = [
   {
-    path: 'editor/:projectId',
-    children: editorRoutes
+    path: "editor/:projectId",
+    children: editorRoutes,
   },
   {
-    path: 'about',
-    children: frontRoutes
+    path: "about",
+    children: frontRoutes,
   },
   {
-    path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    path: "user",
+    loadChildren: () => import("./user/user.module").then((m) => m.UserModule),
   },
   {
     // The admin module has a few heavyweight dependencies and is
     // therefore not bundled with the main application.
-    path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    path: "admin",
+    loadChildren: () =>
+      import("./admin/admin.module").then((m) => m.AdminModule),
     data: {
-      guards: [IsAdminGuard]
+      guards: [IsAdminGuard],
     },
-    canActivate: [MasterGuard]
+    canActivate: [MasterGuard],
   },
   {
-    path: '',
-    redirectTo: '/about',
-    pathMatch: 'full',
+    path: "",
+    redirectTo: "/about",
+    pathMatch: "full",
   },
-]
+];
 
 // Ensure that "global" parameters (especially the projectId)
 // is passed down to the editor modules.
 export const routing = RouterModule.forRoot(AppRoutes, {
-    paramsInheritanceStrategy: "always",
-    initialNavigation: 'enabled'
+  paramsInheritanceStrategy: "always",
+  initialNavigation: "enabled",
 });

@@ -1,20 +1,29 @@
-import { QualifiedTypeName, NodeLocation, Validator, Tree } from '../../../shared/syntaxtree';
-import { embraceNode } from '../../../shared/syntaxtree/drop-embrace';
-import { _cardinalityAllowsInsertion } from '../../../shared/syntaxtree/drop-util';
-import { VisualBlockDescriptions } from '../../../shared/block';
-import { Restricted } from '../../../shared/block/bool-mini-expression.description'
-import { evalExpression } from '../../../shared/block/bool-mini-expression'
-import { arrayEqual } from '../../../shared/util';
+import {
+  QualifiedTypeName,
+  NodeLocation,
+  Validator,
+  Tree,
+} from "../../../shared/syntaxtree";
+import { embraceNode } from "../../../shared/syntaxtree/drop-embrace";
+import { _cardinalityAllowsInsertion } from "../../../shared/syntaxtree/drop-util";
+import { VisualBlockDescriptions } from "../../../shared/block";
+import { Restricted } from "../../../shared/block/bool-mini-expression.description";
+import { evalExpression } from "../../../shared/block/bool-mini-expression";
+import { arrayEqual } from "../../../shared/util";
 
-import { CurrentDrag } from '../../drag.service';
+import { CurrentDrag } from "../../drag.service";
 
-export type DragTargetState = "unknown" | "validTarget" | "invalidTarget" | "targeted";
+export type DragTargetState =
+  | "unknown"
+  | "validTarget"
+  | "invalidTarget"
+  | "targeted";
 
 /**
  * @return The name of the referenced child group (if there is any)
  */
 function dropLocationChildGroupName(loc: NodeLocation): string {
-  return (loc[loc.length - 1][0]);
+  return loc[loc.length - 1][0];
 }
 
 /**
@@ -25,9 +34,9 @@ export function dropLocationHasChildren(tree: Tree, loc: NodeLocation) {
     const dropLocation = loc.slice(0, -1);
     const dropCategory = dropLocationChildGroupName(loc);
     const dropNode = tree.locateOrUndefined(dropLocation);
-    return (dropNode && dropNode.getChildrenInCategory(dropCategory).length > 0);
+    return dropNode && dropNode.getChildrenInCategory(dropCategory).length > 0;
   } else {
-    return (true);
+    return true;
   }
 }
 
@@ -45,12 +54,12 @@ const isLegalImmediateChild = (
   }
 
   // If any of the described blocks is allowed, we assume the drag is allowed
-  return (drag.draggedDescription.some(dragged => {
+  return drag.draggedDescription.some((dragged) => {
     try {
       const newNodeType: QualifiedTypeName = {
         languageName: dragged.language,
-        typeName: dragged.name
-      }
+        typeName: dragged.name,
+      };
 
       // If the tree is empty, the drop is always forbidden.
       // This happens if some block is rendered in the sidebar or as a dragged
@@ -60,17 +69,28 @@ const isLegalImmediateChild = (
         const parentNodeType = validator.getType(parentNode.qualifiedName);
         const [category, index] = loc[loc.length - 1];
 
-        return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(loc))
-          && _cardinalityAllowsInsertion(validator, parentNode, dragged, category, index));
+        return (
+          parentNodeType.allowsChildType(
+            newNodeType,
+            dropLocationChildGroupName(loc)
+          ) &&
+          _cardinalityAllowsInsertion(
+            validator,
+            parentNode,
+            dragged,
+            category,
+            index
+          )
+        );
       } else {
-        return (false);
+        return false;
       }
     } catch (e) {
-      return (false);
+      return false;
       //debugger;
     }
-  }));
-}
+  });
+};
 
 /**
  * @return True, if the given location generally requires children.
@@ -82,21 +102,23 @@ export const _isChildRequiredSchema = (
 ) => {
   // Only empty trees want insertions at the root
   if (dropLocation.length === 0) {
-    return (tree.isEmpty);
+    return tree.isEmpty;
   }
 
   const parentLoc = dropLocation.slice(0, -1);
   const parentNode = tree.locateOrUndefined(parentLoc);
   if (!parentNode) {
-    return (false);
+    return false;
   }
 
   const category = dropLocationChildGroupName(dropLocation);
   const parentType = validator.getType(parentNode);
   const cardinality = parentType.validCardinality(category);
 
-  return (cardinality.minOccurs > parentNode.getChildrenInCategory(category).length);
-}
+  return (
+    cardinality.minOccurs > parentNode.getChildrenInCategory(category).length
+  );
+};
 
 function _buildExpression(
   drag: CurrentDrag,
@@ -113,25 +135,36 @@ function _buildExpression(
 
     const newNode = drag.draggedDescription;
 
-    const newTree = embraceNode(validator, tree, dropLocation, newNode)
+    const newTree = embraceNode(validator, tree, dropLocation, newNode);
     const result = validator.validateFromRoot(newTree);
-    return (result.isValid);
-  }
+    return result.isValid;
+  };
 
   // Build the value map that corresponds to the state for the current block
   const map: Restricted.VariableMap<VisualBlockDescriptions.VisibilityVars> = {
     ifAnyDrag: !!drag,
     ifEmpty: () => !dropLocationHasChildren(tree, dropLocation),
     ifLegalChild: isLegalSubtree.bind(this),
-    ifLegalDrag: isLegalImmediateChild.bind(this, drag, validator, tree, dropLocation),
-    ifChildrenRequired: _isChildRequiredSchema.bind(this, validator, tree, dropLocation)
+    ifLegalDrag: isLegalImmediateChild.bind(
+      this,
+      drag,
+      validator,
+      tree,
+      dropLocation
+    ),
+    ifChildrenRequired: _isChildRequiredSchema.bind(
+      this,
+      validator,
+      tree,
+      dropLocation
+    ),
   };
 
   // Evaluation of the expression function may be costly. So we postpone it until
   // it is actually required.
   const visibilityEvalFunc = evalExpression.bind(this, visibilityExpr, map);
 
-  return (visibilityEvalFunc);
+  return visibilityEvalFunc;
 }
 
 /**
@@ -145,10 +178,18 @@ export function targetState(
   tree: Tree
 ): DragTargetState {
   // Does the description come with a visibility expression? If not assume isEmpty
-  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $var: "ifLegalDrag" };
+  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = {
+    $var: "ifLegalDrag",
+  };
 
   // Build the value map that corresponds to the state for the current block
-  const stateFunc = _buildExpression(drag, dropLocation, validator, tree, visibilityExpr);
+  const stateFunc = _buildExpression(
+    drag,
+    dropLocation,
+    validator,
+    tree,
+    visibilityExpr
+  );
 
   // Ongoing drags trump almost any other possibility
   if (drag) {
@@ -157,15 +198,15 @@ export function targetState(
     const onThis = arrayEqual(drag.dropLocation, dropLocation);
 
     if (onThis) {
-      return ("targeted");
+      return "targeted";
     } else {
       if (stateFunc()) {
-        return ("validTarget");
+        return "validTarget";
       } else {
-        return ("invalidTarget");
+        return "invalidTarget";
       }
     }
   } else {
-    return ("unknown");
+    return "unknown";
   }
 }

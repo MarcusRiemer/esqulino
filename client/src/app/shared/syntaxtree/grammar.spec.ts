@@ -1,10 +1,14 @@
-import * as AST from './syntaxtree'
-import { Validator } from './validator'
-import { ErrorCodes } from './validation-result'
-import { NodePropertyIntegerValidator } from './grammar';
-import { singleLanguageGrammar, multiLanguageGrammar, comparableErrors } from './grammar.spec-util';
-import { getQualifiedTypes } from './grammar-util';
-import { NodeDescription } from './syntaxtree.description';
+import * as AST from "./syntaxtree";
+import { Validator } from "./validator";
+import { ErrorCodes } from "./validation-result";
+import { NodePropertyIntegerValidator } from "./grammar";
+import {
+  singleLanguageGrammar,
+  multiLanguageGrammar,
+  comparableErrors,
+} from "./grammar.spec-util";
+import { getQualifiedTypes } from "./grammar-util";
+import { NodeDescription } from "./syntaxtree.description";
 
 /**
  * Describes a language where each document would be the equivalent
@@ -19,27 +23,27 @@ import { NodeDescription } from './syntaxtree.description';
  * </html>
  */
 const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
-  "text": {
+  text: {
     type: "concrete",
     attributes: [
       {
         name: "text",
         type: "property",
         base: "string",
-      }
-    ]
+      },
+    ],
   },
-  "html": {
+  html: {
     type: "concrete",
     attributes: [
       {
         name: "children",
         type: "sequence",
-        nodeTypes: ["head", "body"]
-      }
-    ]
+        nodeTypes: ["head", "body"],
+      },
+    ],
   },
-  "head": {
+  head: {
     type: "concrete",
     attributes: [
       {
@@ -48,13 +52,13 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "text",
-            occurs: "*"
-          }
-        ]
-      }
-    ]
+            occurs: "*",
+          },
+        ],
+      },
+    ],
   },
-  "body": {
+  body: {
     type: "concrete",
     attributes: [
       {
@@ -63,17 +67,17 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "paragraph",
-            occurs: "*"
+            occurs: "*",
           },
           {
             nodeType: "heading",
-            occurs: "*"
-          }
-        ]
-      }
-    ]
+            occurs: "*",
+          },
+        ],
+      },
+    ],
   },
-  "paragraph": {
+  paragraph: {
     type: "concrete",
     attributes: [
       {
@@ -82,9 +86,9 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "attr-class",
-            occurs: "?"
-          }
-        ]
+            occurs: "?",
+          },
+        ],
       },
       {
         name: "children",
@@ -92,14 +96,13 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "text",
-            occurs: "*"
-          }
-        ]
-
-      }
-    ]
+            occurs: "*",
+          },
+        ],
+      },
+    ],
   },
-  "heading": {
+  heading: {
     type: "concrete",
     attributes: [
       {
@@ -108,9 +111,9 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "attr-id",
-            occurs: "?"
-          }
-        ]
+            occurs: "?",
+          },
+        ],
       },
       {
         name: "children",
@@ -118,12 +121,11 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "text",
-            occurs: "*"
-          }
-        ]
-
-      }
-    ]
+            occurs: "*",
+          },
+        ],
+      },
+    ],
   },
   "attr-class": {
     type: "concrete",
@@ -134,11 +136,11 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
         nodeTypes: [
           {
             nodeType: "text",
-            occurs: "*"
-          }
-        ]
-      }
-    ]
+            occurs: "*",
+          },
+        ],
+      },
+    ],
   },
   "attr-id": {
     type: "concrete",
@@ -146,10 +148,10 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
       {
         name: "id",
         type: "property",
-        base: "string"
-      }
-    ]
-  }
+        base: "string",
+      },
+    ],
+  },
 });
 
 /**
@@ -167,23 +169,23 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
  * WHERE
  */
 const langMiniSql = singleLanguageGrammar("mini-sql", "root", {
-  "root": {
+  root: {
     type: "oneOf",
-    oneOf: ["query-select", "query-delete"]
+    oneOf: ["query-select", "query-delete"],
   },
-  "select": { type: "concrete" },
-  "delete": { type: "concrete" },
-  "from": { type: "concrete" },
-  "where": { type: "concrete" },
+  select: { type: "concrete" },
+  delete: { type: "concrete" },
+  from: { type: "concrete" },
+  where: { type: "concrete" },
   "query-select": {
     type: "concrete",
     attributes: [
       {
         name: "children",
         type: "sequence",
-        nodeTypes: ["select", "from", "where"]
-      }
-    ]
+        nodeTypes: ["select", "from", "where"],
+      },
+    ],
   },
   "query-delete": {
     type: "concrete",
@@ -191,219 +193,232 @@ const langMiniSql = singleLanguageGrammar("mini-sql", "root", {
       {
         name: "children",
         type: "sequence",
-        nodeTypes: ["delete", "from", "where"]
-      }
-    ]
-  }
+        nodeTypes: ["delete", "from", "where"],
+      },
+    ],
+  },
 });
 
 /**
  * A single node that uses every possible string constraint.
  */
-const langStringConstraint = singleLanguageGrammar("string-constraint", "root", {
-  root: {
-    type: "concrete",
-    attributes: [
-      {
-        name: "len",
-        type: "property",
-        base: "string",
-        restrictions: [
-          { type: "length", value: 1 }
-        ]
-      },
-      {
-        name: "min",
-        type: "property",
-        base: "string",
-        restrictions: [
-          { type: "minLength", value: 2 }
-        ]
-      },
-      {
-        name: "max",
-        type: "property",
-        base: "string",
-        restrictions: [
-          { type: "maxLength", value: 2 }
-        ]
-      },
-      {
-        name: "enum",
-        type: "property",
-        base: "string",
-        restrictions: [
-          {
-            type: "enum",
-            value: ["a", "b", "c"]
-          }
-        ]
-      },
-      {
-        name: "regex",
-        type: "property",
-        base: "string",
-        restrictions: [
-          {
-            type: "regex",
-            value: "^[a-zA-Z][a-zA-Z0-9_]*$"
-          }
-        ]
-      }
-    ]
+const langStringConstraint = singleLanguageGrammar(
+  "string-constraint",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "len",
+          type: "property",
+          base: "string",
+          restrictions: [{ type: "length", value: 1 }],
+        },
+        {
+          name: "min",
+          type: "property",
+          base: "string",
+          restrictions: [{ type: "minLength", value: 2 }],
+        },
+        {
+          name: "max",
+          type: "property",
+          base: "string",
+          restrictions: [{ type: "maxLength", value: 2 }],
+        },
+        {
+          name: "enum",
+          type: "property",
+          base: "string",
+          restrictions: [
+            {
+              type: "enum",
+              value: ["a", "b", "c"],
+            },
+          ],
+        },
+        {
+          name: "regex",
+          type: "property",
+          base: "string",
+          restrictions: [
+            {
+              type: "regex",
+              value: "^[a-zA-Z][a-zA-Z0-9_]*$",
+            },
+          ],
+        },
+      ],
+    },
   }
-});
+);
 
 /**
  * A single node that uses every possible integer constraint.
  */
-const langIntegerConstraint = singleLanguageGrammar("integer-constraint", "root", {
-  root: {
-    type: "concrete",
-    attributes: [
-      {
-        name: "minInclusive",
-        type: "property",
-        base: "integer",
-        restrictions: [
-          { type: "minInclusive", value: 1 }
-        ]
-      },
-      {
-        name: "maxInclusive",
-        type: "property",
-        base: "integer",
-        restrictions: [
-          { type: "maxInclusive", value: 1 }
-        ]
-      }
-    ]
+const langIntegerConstraint = singleLanguageGrammar(
+  "integer-constraint",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "minInclusive",
+          type: "property",
+          base: "integer",
+          restrictions: [{ type: "minInclusive", value: 1 }],
+        },
+        {
+          name: "maxInclusive",
+          type: "property",
+          base: "integer",
+          restrictions: [{ type: "maxInclusive", value: 1 }],
+        },
+      ],
+    },
   }
-});
+);
 
 /**
  * A single root node that uses some children with the "allowed" constraint
  */
-const langAllowedConstraint = singleLanguageGrammar("allowed-constraint", "root", {
-  "root": {
-    type: "concrete",
-    attributes: [
-      {
-        name: "nodes",
-        type: "allowed",
-        nodeTypes: [
-          {
-            nodeType: "a",
-            occurs: "*"
-          },
-          {
-            nodeType: "b",
-            occurs: {
-              minOccurs: 0,
-              maxOccurs: 2
-            }
-          },
-          {
-            nodeType: "c",
-            occurs: "1"
-          }
-        ]
-      }
-    ],
-  },
-  "a": { type: "concrete" },
-  "b": { type: "concrete" },
-  "c": { type: "concrete" }
-});
+const langAllowedConstraint = singleLanguageGrammar(
+  "allowed-constraint",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "nodes",
+          type: "allowed",
+          nodeTypes: [
+            {
+              nodeType: "a",
+              occurs: "*",
+            },
+            {
+              nodeType: "b",
+              occurs: {
+                minOccurs: 0,
+                maxOccurs: 2,
+              },
+            },
+            {
+              nodeType: "c",
+              occurs: "1",
+            },
+          ],
+        },
+      ],
+    },
+    a: { type: "concrete" },
+    b: { type: "concrete" },
+    c: { type: "concrete" },
+  }
+);
 
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSingleSequenceConstraint = singleLanguageGrammar("single-sequence-constraint", "root", {
-  "root": {
-    type: "concrete",
-    attributes: [
-      {
-        name: "nodes",
-        type: "sequence",
-        nodeTypes: ["a"]
-      }
-    ],
-  },
-  "a": { type: "concrete" }
-});
+const langSingleSequenceConstraint = singleLanguageGrammar(
+  "single-sequence-constraint",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "nodes",
+          type: "sequence",
+          nodeTypes: ["a"],
+        },
+      ],
+    },
+    a: { type: "concrete" },
+  }
+);
 
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSequenceConstraint = singleLanguageGrammar("sequence-constraint", "root", {
-  "root": {
-    type: "concrete",
-    attributes: [
-      {
-        name: "nodes",
-        type: "sequence",
-        nodeTypes: [
-          "a",
-          {
-            nodeType: "b",
-            occurs: {
-              minOccurs: 0,
-              maxOccurs: 2,
-            }
-          },
-          "a",
-          {
-            nodeType: "c",
-            occurs: {
-              minOccurs: 1,
-              maxOccurs: 2
-            }
-          }
-        ]
-      }
-    ],
-  },
-  "a": { type: "concrete" },
-  "b": { type: "concrete" },
-  "c": { type: "concrete" }
-});
+const langSequenceConstraint = singleLanguageGrammar(
+  "sequence-constraint",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "nodes",
+          type: "sequence",
+          nodeTypes: [
+            "a",
+            {
+              nodeType: "b",
+              occurs: {
+                minOccurs: 0,
+                maxOccurs: 2,
+              },
+            },
+            "a",
+            {
+              nodeType: "c",
+              occurs: {
+                minOccurs: 1,
+                maxOccurs: 2,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    a: { type: "concrete" },
+    b: { type: "concrete" },
+    c: { type: "concrete" },
+  }
+);
 
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
 const langOneOfNodes = singleLanguageGrammar("oneof-nodes", "root", {
-  "root": {
+  root: {
     type: "oneOf",
-    oneOf: ["a", "b"]
+    oneOf: ["a", "b"],
   },
-  "a": { type: "concrete" },
-  "b": { type: "concrete" },
-  "c": { type: "concrete" }
+  a: { type: "concrete" },
+  b: { type: "concrete" },
+  c: { type: "concrete" },
 });
 
 /**
  * A single node with only boolean properties.
  */
-const langBooleanConstraint = singleLanguageGrammar("boolean-constraint", "root", {
-
-  "root": {
-    type: "concrete",
-    attributes: [
-      {
-        name: "foo",
-        type: "property",
-        base: "boolean",
-      }
-    ]
+const langBooleanConstraint = singleLanguageGrammar(
+  "boolean-constraint",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "foo",
+          type: "property",
+          base: "boolean",
+        },
+      ],
+    },
   }
-});
+);
 
 /**
  * A single node that may have optional properties.
  */
 const langOptionalProperty = singleLanguageGrammar("optionalProperty", "root", {
-  "root": {
+  root: {
     type: "concrete",
     attributes: [
       {
@@ -415,66 +430,65 @@ const langOptionalProperty = singleLanguageGrammar("optionalProperty", "root", {
         name: "optional",
         type: "property",
         base: "string",
-        isOptional: true
-      }
-    ]
-  }
+        isOptional: true,
+      },
+    ],
+  },
 });
 
 const langSimpleChoice = singleLanguageGrammar("simpleChoice", "root", {
-  "root": {
+  root: {
     type: "concrete",
     attributes: [
       {
         name: "nodes",
         type: "choice",
-        choices: ["a", "b"]
-      }
-    ]
+        choices: ["a", "b"],
+      },
+    ],
   },
-  "a": { type: "concrete" },
-  "b": { type: "concrete" }
+  a: { type: "concrete" },
+  b: { type: "concrete" },
 });
 
 const langComplexChoice = singleLanguageGrammar("complexChoice", "root", {
-  "root": {
+  root: {
     type: "concrete",
     attributes: [
       {
         name: "choice",
         type: "choice",
-        choices: ["a", "b"]
-      }
-    ]
+        choices: ["a", "b"],
+      },
+    ],
   },
-  "a": {
+  a: {
     type: "concrete",
     attributes: [
       {
         name: "sequence",
         type: "sequence",
-        nodeTypes: ["c", "c"]
-      }
-    ]
+        nodeTypes: ["c", "c"],
+      },
+    ],
   },
-  "b": {
+  b: {
     type: "concrete",
     attributes: [
       {
         name: "allowed",
         type: "allowed",
-        nodeTypes: ["d", "c"]
-      }
-    ]
+        nodeTypes: ["d", "c"],
+      },
+    ],
   },
-  "c": { type: "concrete" },
-  "d": { type: "concrete" }
+  c: { type: "concrete" },
+  d: { type: "concrete" },
 });
 
-describe('Grammar Validation', () => {
-
-  describe('Property Validators', () => {
-    it('Integer', () => {
+describe("Grammar Validation", () => {
+  describe("Property Validators", () => {
+    it("Integer", () => {
       const validator = new NodePropertyIntegerValidator({
         type: "property",
         name: "int",
@@ -506,45 +520,43 @@ describe('Grammar Validation', () => {
    * definition allows the definition of "empty types" without having a
    * clash between oneOf and complex types.
    */
-  it('Grammar Empty Nodes', () => {
+  it("Grammar Empty Nodes", () => {
     const g = singleLanguageGrammar("emptyNodes", "r", {
-      "r": { type: "concrete" }
+      r: { type: "concrete" },
     });
 
     const v = new Validator([g]);
 
     const ast = new AST.Tree({
       language: "emptyNodes",
-      name: "r"
+      name: "r",
     });
 
     expect(v.validateFromRoot(ast).isValid).toBe(true);
     expect(v.getGrammarValidator("emptyNodes")).toBeTruthy();
   });
 
-
-  it('Empty Tree', () => {
+  it("Empty Tree", () => {
     const v = new Validator([langStringConstraint]);
 
     const ast = new AST.Tree(undefined);
     const res = v.validateFromRoot(ast);
-    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.Empty]);
+    expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.Empty]);
   });
 
-
-  it('String Constraints (Valid)', () => {
+  it("String Constraints (Valid)", () => {
     const v = new Validator([langStringConstraint]);
 
     const astDesc: AST.NodeDescription = {
       language: "string-constraint",
       name: "root",
       properties: {
-        "len": "1",
-        "min": "12",
-        "max": "12",
-        "enum": "a",
-        "regex": "A"
-      }
+        len: "1",
+        min: "12",
+        max: "12",
+        enum: "a",
+        regex: "A",
+      },
     };
 
     const ast = new AST.Node(astDesc, undefined);
@@ -553,51 +565,53 @@ describe('Grammar Validation', () => {
     expect(res.errors).toEqual([]);
   });
 
-  it('String Constraints (Invalid)', () => {
+  it("String Constraints (Invalid)", () => {
     const v = new Validator([langStringConstraint]);
 
     const astDesc: AST.NodeDescription = {
       language: "string-constraint",
       name: "root",
       properties: {
-        "len": "12",
-        "min": "1",
-        "max": "123",
-        "enum": "d",
-        "regex": "_A"
-      }
+        len: "12",
+        min: "1",
+        max: "123",
+        enum: "d",
+        regex: "_A",
+      },
     };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(5);
-    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType);
     expect(res.errors[0].data.condition).toEqual("2 != 1");
-    expect(res.errors[1].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[1].code).toEqual(ErrorCodes.IllegalPropertyType);
     expect(res.errors[1].data.condition).toEqual("1 < 2");
-    expect(res.errors[2].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[2].code).toEqual(ErrorCodes.IllegalPropertyType);
     expect(res.errors[2].data.condition).toEqual("3 > 2");
-    expect(res.errors[3].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[3].code).toEqual(ErrorCodes.IllegalPropertyType);
     expect(res.errors[3].data.condition).toEqual(`"d" in ["a","b","c"]`);
-    expect(res.errors[4].code).toEqual(ErrorCodes.IllegalPropertyType)
-    expect(res.errors[4].data.condition).toEqual(`"_A" did not match regular expression "^[a-zA-Z][a-zA-Z0-9_]*$"`);
+    expect(res.errors[4].code).toEqual(ErrorCodes.IllegalPropertyType);
+    expect(res.errors[4].data.condition).toEqual(
+      `"_A" did not match regular expression "^[a-zA-Z][a-zA-Z0-9_]*$"`
+    );
   });
 
-  it('Integer value is incorrectly an actual integer (must be string)', () => {
+  it("Integer value is incorrectly an actual integer (must be string)", () => {
     const v = new Validator([langIntegerConstraint]);
 
     const astDesc: AST.NodeDescription = {
       language: "integer-constraint",
       name: "root",
       properties: {
-        "minInclusive": "1",
-        "maxInclusive": "1"
-      }
+        minInclusive: "1",
+        maxInclusive: "1",
+      },
     };
 
-    astDesc.properties["minInclusive"] = (1 as any);
-    astDesc.properties["maxInclusive"] = ("asdf" as any);
+    astDesc.properties["minInclusive"] = 1 as any;
+    astDesc.properties["maxInclusive"] = "asdf" as any;
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -605,16 +619,16 @@ describe('Grammar Validation', () => {
     expect(res.errors.length).toEqual(2);
   });
 
-  it('Integer Constraints (Valid)', () => {
+  it("Integer Constraints (Valid)", () => {
     const v = new Validator([langIntegerConstraint]);
 
     const astDesc: AST.NodeDescription = {
       language: "integer-constraint",
       name: "root",
       properties: {
-        "minInclusive": "1",
-        "maxInclusive": "1"
-      }
+        minInclusive: "1",
+        maxInclusive: "1",
+      },
     };
 
     const ast = new AST.Node(astDesc, undefined);
@@ -623,16 +637,16 @@ describe('Grammar Validation', () => {
     expect(res.errors).toEqual([]);
   });
 
-  it('Integer Constraints (Invalid)', () => {
+  it("Integer Constraints (Invalid)", () => {
     const v = new Validator([langIntegerConstraint]);
 
     const astDesc: AST.NodeDescription = {
       language: "integer-constraint",
       name: "root",
       properties: {
-        "minInclusive": "0",
-        "maxInclusive": "2"
-      }
+        minInclusive: "0",
+        maxInclusive: "2",
+      },
     };
 
     const ast = new AST.Node(astDesc, undefined);
@@ -641,15 +655,15 @@ describe('Grammar Validation', () => {
     expect(res.errors.length).toEqual(2);
   });
 
-  it('Boolean Constraint', () => {
+  it("Boolean Constraint", () => {
     const v = new Validator([langBooleanConstraint]);
 
     const astDescTrue: AST.NodeDescription = {
       language: "boolean-constraint",
       name: "root",
       properties: {
-        "foo": "true"
-      }
+        foo: "true",
+      },
     };
 
     const astTrue = new AST.Node(astDescTrue, undefined);
@@ -660,8 +674,8 @@ describe('Grammar Validation', () => {
       language: "boolean-constraint",
       name: "root",
       properties: {
-        "foo": "false"
-      }
+        foo: "false",
+      },
     };
 
     const astFalse = new AST.Node(astDescFalse, undefined);
@@ -672,26 +686,26 @@ describe('Grammar Validation', () => {
       language: "boolean-constraint",
       name: "root",
       properties: {
-        "foo": "foo"
-      }
+        foo: "foo",
+      },
     };
 
     const astInvalid = new AST.Node(astDescInvalid, undefined);
     const resInvalid = v.validateFromRoot(astInvalid);
-    expect(resInvalid.errors.length).toEqual(1)
+    expect(resInvalid.errors.length).toEqual(1);
     expect(resInvalid.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType);
   });
 
-  it('Optional property missing', () => {
+  it("Optional property missing", () => {
     const v = new Validator([langOptionalProperty]);
 
     const astDesc: AST.NodeDescription = {
       language: "optionalProperty",
       name: "root",
       properties: {
-        "required": ""
-      }
-    }
+        required: "",
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -699,13 +713,13 @@ describe('Grammar Validation', () => {
     expect(res.isValid).toBeTruthy();
   });
 
-  it('Required property missing', () => {
+  it("Required property missing", () => {
     const v = new Validator([langOptionalProperty]);
 
     const astDesc: AST.NodeDescription = {
       language: "optionalProperty",
       name: "root",
-    }
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -714,7 +728,7 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.MissingProperty);
   });
 
-  it('Invalid oneOf: oneOf node in AST', () => {
+  it("Invalid oneOf: oneOf node in AST", () => {
     const v = new Validator([langOneOfNodes]);
 
     const astDesc: AST.NodeDescription = {
@@ -729,7 +743,7 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.TransientNode);
   });
 
-  it('Invalid oneOf: No match', () => {
+  it("Invalid oneOf: No match", () => {
     const v = new Validator([langOneOfNodes]);
 
     const astDesc: AST.NodeDescription = {
@@ -744,7 +758,7 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
   });
 
-  it('oneOf: allowsChildType() and validCardinality()', () => {
+  it("oneOf: allowsChildType() and validCardinality()", () => {
     const v = new Validator([langOneOfNodes]);
 
     const vRoot = v.availableTypes[0];
@@ -761,25 +775,37 @@ describe('Grammar Validation', () => {
     expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
     expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeFalsy("c in root");
     expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
-    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vRoot.validCardinality("nodes")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
 
     expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBe(false);
-    expect(vNodeA.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeA.validCardinality("nodes")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
 
     expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBe(false);
-    expect(vNodeB.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeB.validCardinality("nodes")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
 
     expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBe(false);
-    expect(vNodeC.validCardinality("nodes")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeC.validCardinality("nodes")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
   });
 
   it('"sequence": validCardinality()', () => {
@@ -789,12 +815,27 @@ describe('Grammar Validation', () => {
     const vNodeB = v.availableTypes[2];
     const vNodeC = v.availableTypes[3];
 
-    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 3, maxOccurs: 6 });
-    expect(vRoot.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vRoot.validCardinality("nodes")).toEqual({
+      minOccurs: 3,
+      maxOccurs: 6,
+    });
+    expect(vRoot.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
 
-    expect(vNodeA.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
-    expect(vNodeB.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
-    expect(vNodeC.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeA.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
+    expect(vNodeB.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
+    expect(vNodeC.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
   });
 
   it('"sequence": allowsChildType()', () => {
@@ -836,12 +877,12 @@ describe('Grammar Validation', () => {
     const astDesc: AST.NodeDescription = {
       language: "single-sequence-constraint",
       name: "root",
-    }
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.MissingChild]);
+    expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.MissingChild]);
   });
 
   it('Invalid single "sequence": Two items', () => {
@@ -851,17 +892,17 @@ describe('Grammar Validation', () => {
       language: "single-sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           { language: "single-sequence-constraint", name: "a" },
-          { language: "single-sequence-constraint", name: "a" }
-        ]
-      }
-    }
+          { language: "single-sequence-constraint", name: "a" },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild]);
+    expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
   it('Invalid single "sequence": Unexpected item', () => {
@@ -871,16 +912,16 @@ describe('Grammar Validation', () => {
       language: "single-sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
-          { language: "single-sequence-constraint", name: "root" }
-        ]
-      }
-    }
+        nodes: [{ language: "single-sequence-constraint", name: "root" }],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
+    expect(res.errors.map((e) => e.code)).toEqual([
+      ErrorCodes.IllegalChildType,
+    ]);
   });
 
   it('Invalid "sequence": Completely Empty', () => {
@@ -889,7 +930,7 @@ describe('Grammar Validation', () => {
     const astDesc: AST.NodeDescription = {
       language: "sequence-constraint",
       name: "root",
-    }
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -902,7 +943,7 @@ describe('Grammar Validation', () => {
         typeName: "a",
       },
       index: 0,
-      category: "nodes"
+      category: "nodes",
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
@@ -911,7 +952,7 @@ describe('Grammar Validation', () => {
         typeName: "a",
       },
       index: 1,
-      category: "nodes"
+      category: "nodes",
     });
     expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[2].data).toEqual({
@@ -920,7 +961,7 @@ describe('Grammar Validation', () => {
         typeName: "c",
       },
       index: 2,
-      category: "nodes"
+      category: "nodes",
     });
   });
 
@@ -931,14 +972,14 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
-        ]
-      }
-    }
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -948,19 +989,19 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].data).toEqual({
       expected: {
         languageName: "sequence-constraint",
-        typeName: "a"
+        typeName: "a",
       },
       index: 1,
-      category: "nodes"
+      category: "nodes",
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
       expected: {
         languageName: "sequence-constraint",
-        typeName: "c"
+        typeName: "c",
       },
       index: 2,
-      category: "nodes"
+      category: "nodes",
     });
   });
 
@@ -971,18 +1012,18 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "a"
-          }
-        ]
-      }
-    }
+            name: "a",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -992,10 +1033,10 @@ describe('Grammar Validation', () => {
     expect(res.errors[0].data).toEqual({
       expected: {
         languageName: "sequence-constraint",
-        typeName: "c"
+        typeName: "c",
       },
       index: 2,
-      category: "nodes"
+      category: "nodes",
     });
   });
 
@@ -1006,22 +1047,22 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1036,26 +1077,26 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1070,30 +1111,30 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1108,34 +1149,34 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "c"
+            name: "c",
           },
           {
             language: "sequence-constraint",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1150,43 +1191,43 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "c"
+            name: "c",
           },
           {
             language: "sequence-constraint",
-            name: "c"
+            name: "c",
           },
           {
             language: "sequence-constraint",
-            name: "a"
-          }
-        ]
-      }
-    }
+            name: "a",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild]);
+    expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
   it('Invalid "sequence": Three required nodes + three optional "b"-nodes', () => {
@@ -1196,34 +1237,34 @@ describe('Grammar Validation', () => {
       language: "sequence-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "sequence-constraint",
-            name: "a"
+            name: "a",
           },
           {
             language: "sequence-constraint",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1238,20 +1279,47 @@ describe('Grammar Validation', () => {
     const vNodeB = v.availableTypes[2];
     const vNodeC = v.availableTypes[3];
 
-    expect(vRoot.validCardinality("nodes")).toEqual({ minOccurs: 1, maxOccurs: Infinity });
-    expect(vRoot.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vRoot.validCardinality("nodes")).toEqual({
+      minOccurs: 1,
+      maxOccurs: Infinity,
+    });
+    expect(vRoot.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
 
-    expect(vNodeA.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
-    expect(vNodeB.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
-    expect(vNodeC.validCardinality("nonexistant")).toEqual({ minOccurs: 0, maxOccurs: 0 });
+    expect(vNodeA.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
+    expect(vNodeB.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
+    expect(vNodeC.validCardinality("nonexistant")).toEqual({
+      minOccurs: 0,
+      maxOccurs: 0,
+    });
   });
 
   it('"allowed": allowsChildType', () => {
     const v = new Validator([langAllowedConstraint]);
-    const vRoot = v.getType({ languageName: "allowed-constraint", typeName: "root" });
-    const vNodeA = v.getType({ languageName: "allowed-constraint", typeName: "a" });
-    const vNodeB = v.getType({ languageName: "allowed-constraint", typeName: "b" });
-    const vNodeC = v.getType({ languageName: "allowed-constraint", typeName: "c" });
+    const vRoot = v.getType({
+      languageName: "allowed-constraint",
+      typeName: "root",
+    });
+    const vNodeA = v.getType({
+      languageName: "allowed-constraint",
+      typeName: "a",
+    });
+    const vNodeB = v.getType({
+      languageName: "allowed-constraint",
+      typeName: "b",
+    });
+    const vNodeC = v.getType({
+      languageName: "allowed-constraint",
+      typeName: "c",
+    });
 
     const tNodeA = { languageName: "allowed-constraint", typeName: "a" };
     const tNodeB = { languageName: "allowed-constraint", typeName: "b" };
@@ -1286,9 +1354,9 @@ describe('Grammar Validation', () => {
       language: "allowed-constraint",
       name: "root",
       children: {
-        "nodes": []
-      }
-    }
+        nodes: [],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1303,14 +1371,14 @@ describe('Grammar Validation', () => {
       language: "allowed-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "allowed-constraint",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1325,22 +1393,22 @@ describe('Grammar Validation', () => {
       language: "allowed-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "allowed-constraint",
-            name: "c"
+            name: "c",
           },
           {
             language: "allowed-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "allowed-constraint",
-            name: "a"
-          }
-        ]
-      }
-    }
+            name: "a",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1355,22 +1423,22 @@ describe('Grammar Validation', () => {
       language: "allowed-constraint",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "allowed-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "allowed-constraint",
-            name: "b"
+            name: "b",
           },
           {
             language: "allowed-constraint",
-            name: "b"
-          }
-        ]
-      }
-    }
+            name: "b",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
@@ -1380,102 +1448,100 @@ describe('Grammar Validation', () => {
     expect(res.errors[1].code).toEqual(ErrorCodes.InvalidMinOccurences);
   });
 
-  it('Valid Choice (simple): a', () => {
+  it("Valid Choice (simple): a", () => {
     const v = new Validator([langSimpleChoice]);
 
     const astDesc: AST.NodeDescription = {
       language: "simpleChoice",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "simpleChoice",
-            name: "a"
-          }
-        ]
-      }
-    }
+            name: "a",
+          },
+        ],
+      },
+    };
 
-    const ast = new AST.Tree(astDesc)
+    const ast = new AST.Tree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
   });
 
-  it('Valid Choice (simple): b', () => {
+  it("Valid Choice (simple): b", () => {
     const v = new Validator([langSimpleChoice]);
 
     const astDesc: AST.NodeDescription = {
       language: "simpleChoice",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "simpleChoice",
-            name: "b"
-          }
-        ]
-      }
-    }
+            name: "b",
+          },
+        ],
+      },
+    };
 
-    const ast = new AST.Tree(astDesc)
+    const ast = new AST.Tree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
   });
 
-  it('Invalid Choice (simple): c', () => {
+  it("Invalid Choice (simple): c", () => {
     const v = new Validator([langSimpleChoice]);
 
     const astDesc: AST.NodeDescription = {
       language: "simpleChoice",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "simpleChoice",
-            name: "c"
-          }
-        ]
-      }
-    }
+            name: "c",
+          },
+        ],
+      },
+    };
 
-    const ast = new AST.Tree(astDesc)
+    const ast = new AST.Tree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
     expect(res.errors[0].code).toEqual(ErrorCodes.NoChoiceMatching);
   });
 
-  it('Valid Choice: a, but a itself is not valid', () => {
+  it("Valid Choice: a, but a itself is not valid", () => {
     const v = new Validator([langSimpleChoice]);
 
     const astDesc: AST.NodeDescription = {
       language: "simpleChoice",
       name: "root",
       children: {
-        "nodes": [
+        nodes: [
           {
             language: "simpleChoice",
             name: "a",
             children: {
-              "tooMuch": [
+              tooMuch: [],
+            },
+          },
+        ],
+      },
+    };
 
-              ]
-            }
-          }
-        ]
-      }
-    }
-
-    const ast = new AST.Tree(astDesc)
+    const ast = new AST.Tree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
     expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory);
   });
 
-  it('Valid Choice (complex): allowsChildType', () => {
+  it("Valid Choice (complex): allowsChildType", () => {
     const v = new Validator([langComplexChoice]);
 
     const type_root = { languageName: "complexChoice", typeName: "root" };
@@ -1484,36 +1550,72 @@ describe('Grammar Validation', () => {
     const type_c = { languageName: "complexChoice", typeName: "c" };
     const type_d = { languageName: "complexChoice", typeName: "d" };
 
-    expect(v.getType(type_root).allowsChildType(type_a, "choice")).toBe(true, "root => a");
-    expect(v.getType(type_root).allowsChildType(type_b, "choice")).toBe(true, "root => b");
-    expect(v.getType(type_root).allowsChildType(type_c, "choice")).toBe(false, "root => c");
-    expect(v.getType(type_root).allowsChildType(type_d, "choice")).toBe(false, "root => d");
+    expect(v.getType(type_root).allowsChildType(type_a, "choice")).toBe(
+      true,
+      "root => a"
+    );
+    expect(v.getType(type_root).allowsChildType(type_b, "choice")).toBe(
+      true,
+      "root => b"
+    );
+    expect(v.getType(type_root).allowsChildType(type_c, "choice")).toBe(
+      false,
+      "root => c"
+    );
+    expect(v.getType(type_root).allowsChildType(type_d, "choice")).toBe(
+      false,
+      "root => d"
+    );
 
-    expect(v.getType(type_a).allowsChildType(type_a, "sequence")).toBe(false, "a => a");
-    expect(v.getType(type_a).allowsChildType(type_b, "sequence")).toBe(false, "a => b");
-    expect(v.getType(type_a).allowsChildType(type_c, "sequence")).toBe(true, "a => c");
-    expect(v.getType(type_a).allowsChildType(type_d, "sequence")).toBe(false, "a => d");
+    expect(v.getType(type_a).allowsChildType(type_a, "sequence")).toBe(
+      false,
+      "a => a"
+    );
+    expect(v.getType(type_a).allowsChildType(type_b, "sequence")).toBe(
+      false,
+      "a => b"
+    );
+    expect(v.getType(type_a).allowsChildType(type_c, "sequence")).toBe(
+      true,
+      "a => c"
+    );
+    expect(v.getType(type_a).allowsChildType(type_d, "sequence")).toBe(
+      false,
+      "a => d"
+    );
 
-    expect(v.getType(type_b).allowsChildType(type_a, "allowed")).toBe(false, "b => a");
-    expect(v.getType(type_b).allowsChildType(type_b, "allowed")).toBe(false, "b => b");
-    expect(v.getType(type_b).allowsChildType(type_c, "allowed")).toBe(true, "b => c");
-    expect(v.getType(type_b).allowsChildType(type_d, "allowed")).toBe(true, "b => d");
+    expect(v.getType(type_b).allowsChildType(type_a, "allowed")).toBe(
+      false,
+      "b => a"
+    );
+    expect(v.getType(type_b).allowsChildType(type_b, "allowed")).toBe(
+      false,
+      "b => b"
+    );
+    expect(v.getType(type_b).allowsChildType(type_c, "allowed")).toBe(
+      true,
+      "b => c"
+    );
+    expect(v.getType(type_b).allowsChildType(type_d, "allowed")).toBe(
+      true,
+      "b => d"
+    );
   });
 
-  it('Valid Choice (complex): sequence in a is too short', () => {
+  it("Valid Choice (complex): sequence in a is too short", () => {
     const v = new Validator([langComplexChoice]);
 
     const astDesc: AST.NodeDescription = {
       language: "complexChoice",
       name: "root",
       children: {
-        "choice": [
+        choice: [
           {
             language: "complexChoice",
-            name: "c"
-          }
-        ]
-      }
+            name: "c",
+          },
+        ],
+      },
     };
 
     const ast = new AST.Node(astDesc, undefined);
@@ -1521,7 +1623,7 @@ describe('Grammar Validation', () => {
     expect(res.errors.length).toEqual(1);
   });
 
-  it('Validating tree of unknown language', () => {
+  it("Validating tree of unknown language", () => {
     const v = new Validator([langAllowedConstraint, langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -1537,54 +1639,57 @@ describe('Grammar Validation', () => {
     const err = res.errors[0];
     expect(err.code).toEqual(ErrorCodes.UnknownRootLanguage);
     expect(err.data.requiredLanguage).toEqual(astDesc.language);
-    expect(err.data.availableLanguages).toEqual(["allowed-constraint", "sequence-constraint"]);
+    expect(err.data.availableLanguages).toEqual([
+      "allowed-constraint",
+      "sequence-constraint",
+    ]);
   });
 
-  it('Mini-SQL: Empty SELECT query', () => {
+  it("Mini-SQL: Empty SELECT query", () => {
     const v = new Validator([langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
       language: "mini-sql",
-      name: "query-select"
-    }
+      name: "query-select",
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(3, res);
-    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild)
-    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
-    expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild);
+    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
+    expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild);
   });
 
-  it('Mini-SQL: registers types', () => {
+  it("Mini-SQL: registers types", () => {
     const v = new Validator([langMiniSql]);
 
     expect(v.isKnownLanguage("mini-sql")).toBeTruthy();
 
     const allTypes = getQualifiedTypes(langMiniSql);
-    allTypes.forEach(t => {
+    allTypes.forEach((t) => {
       expect(v.isKnownType(t.languageName, t.typeName)).toBe(true);
     });
   });
 
-  it('Mini-HTML: registers types', () => {
+  it("Mini-HTML: registers types", () => {
     const v = new Validator([langMiniHtml]);
 
     const allTypes = getQualifiedTypes(langMiniHtml);
-    allTypes.forEach(t => {
+    allTypes.forEach((t) => {
       expect(v.isKnownType(t.languageName, t.typeName)).toBe(true);
     });
   });
 
-  it('Mini-HTML: empty', () => {
+  it("Mini-HTML: empty", () => {
     const v = new Validator([langMiniHtml]);
     const res = v.validateFromRoot(undefined);
 
     expect(res.errors.length).toEqual(1);
   });
 
-  it('Mini-HTML: superflous children', () => {
+  it("Mini-HTML: superflous children", () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
@@ -1593,39 +1698,37 @@ describe('Grammar Validation', () => {
       children: {
         children: [
           { language: "mini-html", name: "head" },
-          { language: "mini-html", name: "body" }
+          { language: "mini-html", name: "body" },
         ],
-        superflous: [
-          { language: "mini-html", name: "mini-html" }
-        ]
-      }
-    }
+        superflous: [{ language: "mini-html", name: "mini-html" }],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory)
+    expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory);
   });
 
-  it('Mini-HTML: Empty document', () => {
+  it("Mini-HTML: Empty document", () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
       language: "mini-html",
-      name: "html"
-    }
+      name: "html",
+    };
 
     const ast = new AST.Node(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(2, res);
 
-    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild)
-    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild);
+    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
   });
 
-  it('Mini-HTML: Minimal document', () => {
+  it("Mini-HTML: Minimal document", () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
@@ -1642,16 +1745,16 @@ describe('Grammar Validation', () => {
                   language: "mini-html",
                   name: "text",
                   properties: {
-                    "text": "Minimal"
-                  }
-                }
-              ]
-            }
+                    text: "Minimal",
+                  },
+                },
+              ],
+            },
           },
-          { language: "mini-html", name: "body" }
-        ]
-      }
-    }
+          { language: "mini-html", name: "body" },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
 
@@ -1659,7 +1762,7 @@ describe('Grammar Validation', () => {
     expect(res.errors.length).toEqual(0, res);
   });
 
-  it('Mini-HTML: Heading and paragraph', () => {
+  it("Mini-HTML: Heading and paragraph", () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
@@ -1675,18 +1778,18 @@ describe('Grammar Validation', () => {
               children: [
                 {
                   language: "mini-html",
-                  name: "heading"
+                  name: "heading",
                 },
                 {
                   language: "mini-html",
-                  name: "paragraph"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
+                  name: "paragraph",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
 
@@ -1694,7 +1797,7 @@ describe('Grammar Validation', () => {
     expect(res.errors.length).toEqual(0, res);
   });
 
-  it('Mini-HTML: Invalid body (HTML again)', () => {
+  it("Mini-HTML: Invalid body (HTML again)", () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
@@ -1710,24 +1813,26 @@ describe('Grammar Validation', () => {
               children: [
                 {
                   language: "mini-html",
-                  name: "html"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
+                  name: "html",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(1, res);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
-    expect(JSON.stringify(res.errors[0].data)).toBeTruthy("Should be pure data");
+    expect(JSON.stringify(res.errors[0].data)).toBeTruthy(
+      "Should be pure data"
+    );
   });
 
-  it('Mini-HTML: Invalid single child (SQL query)', () => {
+  it("Mini-HTML: Invalid single child (SQL query)", () => {
     const v = new Validator([langMiniHtml, langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
@@ -1737,11 +1842,11 @@ describe('Grammar Validation', () => {
         children: [
           {
             language: "mini-sql",
-            name: "query-select"
-          }
-        ]
-      }
-    }
+            name: "query-select",
+          },
+        ],
+      },
+    };
 
     const ast = new AST.Node(astDesc, undefined);
 
@@ -1749,21 +1854,25 @@ describe('Grammar Validation', () => {
     expect(res.isValid).toBeFalsy();
     expect(res.errors.length).toEqual(2);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
-    expect(JSON.stringify(res.errors[0].data)).toBeTruthy("Should be pure data");
+    expect(JSON.stringify(res.errors[0].data)).toBeTruthy(
+      "Should be pure data"
+    );
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
-    expect(JSON.stringify(res.errors[1].data)).toBeTruthy("Should be pure data");
+    expect(JSON.stringify(res.errors[1].data)).toBeTruthy(
+      "Should be pure data"
+    );
   });
 
   describe(`Name-related`, () => {
     it(`Name clash: Property name "foo" defined twice`, () => {
       const g = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             { type: "property", base: "integer", name: "foo" },
-            { type: "property", base: "integer", name: "foo" }
-          ]
-        }
+            { type: "property", base: "integer", name: "foo" },
+          ],
+        },
       });
 
       expect(() => new Validator([g])).toThrowError(/foo/);
@@ -1771,13 +1880,13 @@ describe('Grammar Validation', () => {
 
     it(`Name clash: Child group name "foo" defined twice`, () => {
       const g = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             { type: "allowed", nodeTypes: [], name: "foo" },
-            { type: "allowed", nodeTypes: [], name: "foo" }
-          ]
-        }
+            { type: "allowed", nodeTypes: [], name: "foo" },
+          ],
+        },
       });
 
       expect(() => new Validator([g])).toThrowError(/foo/);
@@ -1785,13 +1894,13 @@ describe('Grammar Validation', () => {
 
     it(`Auto generated property names for visual types`, () => {
       const g = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             { type: "terminal", symbol: "t" },
-            { type: "container", orientation: "vertical", children: [] }
-          ]
-        }
+            { type: "container", orientation: "vertical", children: [] },
+          ],
+        },
       });
 
       expect(() => new Validator([g])).not.toThrow();
@@ -1804,27 +1913,31 @@ describe('Grammar Validation', () => {
         "g",
         { languageName: "g", typeName: "t1" },
         {
-          "g": {
-            "t1": {
+          g: {
+            t1: {
               type: "concrete",
-              attributes: []
-            }
+              attributes: [],
+            },
           },
-          "h": {
-            "t1": {
+          h: {
+            t1: {
               type: "concrete",
-              attributes: []
-            }
-          }
+              attributes: [],
+            },
+          },
         }
       );
 
       const v = new Validator([g]);
 
-      expect(v.getGrammarValidator("g").rootType.description)
-        .toEqual({ languageName: "g", typeName: "t1" });
-      expect(v.getGrammarValidator("h").rootType.description)
-        .toEqual({ languageName: "g", typeName: "t1" });
+      expect(v.getGrammarValidator("g").rootType.description).toEqual({
+        languageName: "g",
+        typeName: "t1",
+      });
+      expect(v.getGrammarValidator("h").rootType.description).toEqual({
+        languageName: "g",
+        typeName: "t1",
+      });
 
       expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
       expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
@@ -1839,8 +1952,8 @@ describe('Grammar Validation', () => {
       const astDesc: AST.NodeDescription = {
         language: "g",
         name: "t1",
-        children: {}
-      }
+        children: {},
+      };
 
       const ast = new AST.Tree(astDesc);
       expect(comparableErrors(v.validateFromRoot(ast))).toEqual([]);
@@ -1851,8 +1964,8 @@ describe('Grammar Validation', () => {
         "g",
         { languageName: "g", typeName: "t1" },
         {
-          "g": {
-            "t1": {
+          g: {
+            t1: {
               type: "concrete",
               attributes: [
                 {
@@ -1861,28 +1974,32 @@ describe('Grammar Validation', () => {
                   nodeTypes: [
                     {
                       nodeType: { languageName: "h", typeName: "t1" },
-                      occurs: "1"
-                    }
-                  ]
-                }
-              ]
-            }
+                      occurs: "1",
+                    },
+                  ],
+                },
+              ],
+            },
           },
-          "h": {
-            "t1": {
+          h: {
+            t1: {
               type: "concrete",
-              attributes: []
-            }
-          }
+              attributes: [],
+            },
+          },
         }
       );
 
       const v = new Validator([g]);
 
-      expect(v.getGrammarValidator("g").rootType.description)
-        .toEqual({ languageName: "g", typeName: "t1" });
-      expect(v.getGrammarValidator("h").rootType.description)
-        .toEqual({ languageName: "g", typeName: "t1" });
+      expect(v.getGrammarValidator("g").rootType.description).toEqual({
+        languageName: "g",
+        typeName: "t1",
+      });
+      expect(v.getGrammarValidator("h").rootType.description).toEqual({
+        languageName: "g",
+        typeName: "t1",
+      });
 
       expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
       expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
@@ -1898,14 +2015,14 @@ describe('Grammar Validation', () => {
         language: "g",
         name: "t1",
         children: {
-          "t1_c1": [
+          t1_c1: [
             {
               language: "h",
-              name: "t1"
-            }
-          ]
-        }
-      }
+              name: "t1",
+            },
+          ],
+        },
+      };
 
       const ast = new AST.Tree(astDesc);
       const res = v.validateFromRoot(ast);
@@ -1917,34 +2034,38 @@ describe('Grammar Validation', () => {
         "g",
         { languageName: "g", typeName: "root" },
         {
-          "g": {
-            "root": {
+          g: {
+            root: {
               type: "oneOf",
               oneOf: [
                 { languageName: "g", typeName: "t1" },
-                { languageName: "h", typeName: "t1" }
-              ]
+                { languageName: "h", typeName: "t1" },
+              ],
             },
-            "t1": {
+            t1: {
               type: "concrete",
-              attributes: []
-            }
+              attributes: [],
+            },
           },
-          "h": {
-            "t1": {
+          h: {
+            t1: {
               type: "concrete",
-              attributes: []
-            }
-          }
+              attributes: [],
+            },
+          },
         }
       );
 
       const v = new Validator([g]);
 
-      expect(v.getGrammarValidator("g").rootType.description)
-        .toEqual({ languageName: "g", typeName: "root" });
-      expect(v.getGrammarValidator("h").rootType.description)
-        .toEqual({ languageName: "g", typeName: "root" });
+      expect(v.getGrammarValidator("g").rootType.description).toEqual({
+        languageName: "g",
+        typeName: "root",
+      });
+      expect(v.getGrammarValidator("h").rootType.description).toEqual({
+        languageName: "g",
+        typeName: "root",
+      });
 
       expect(v.isKnownLanguage("g")).withContext("g known").toBe(true);
       expect(v.isKnownLanguage("h")).withContext("h known").toBe(true);
@@ -1955,7 +2076,6 @@ describe('Grammar Validation', () => {
 
       expect(v.isKnownType("h", "t1")).withContext("h.t1 known").toBe(true);
       expect(v.isKnownType("h", "t2")).withContext("h.t2 known").toBe(false);
-
 
       const validDescs: NodeDescription[] = [
         {
@@ -1968,7 +2088,7 @@ describe('Grammar Validation', () => {
         },
       ];
 
-      validDescs.forEach(astDesc => {
+      validDescs.forEach((astDesc) => {
         const ast = new AST.Tree(astDesc);
         const res = v.validateFromRoot(ast);
         expect(comparableErrors(res))

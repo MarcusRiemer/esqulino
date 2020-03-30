@@ -1,21 +1,20 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { Table } from '../../shared/schema'
+import { Table } from "../../shared/schema";
 
-import { SchemaService } from '../schema.service'
-import { ProjectService, Project } from '../project.service'
+import { SchemaService } from "../schema.service";
+import { ProjectService, Project } from "../project.service";
 
 /**
  * Displays the schema for a list of tables.
  */
 @Component({
-  templateUrl: 'templates/schema-table.html',
-  selector: "sql-table"
+  templateUrl: "templates/schema-table.html",
+  selector: "sql-table",
 })
 export class SchemaTableComponent {
-
   /**
    * The tables to display.
    */
@@ -35,19 +34,17 @@ export class SchemaTableComponent {
 
   @Input() columnToHighlight: any;
 
-  @Output('columnToHighlightChange') selectedColumnName = new EventEmitter();
-
+  @Output("columnToHighlightChange") selectedColumnName = new EventEmitter();
 
   constructor(
     private _schemaService: SchemaService,
-    private _projectService: ProjectService) {
-  }
+    private _projectService: ProjectService
+  ) {}
 
   ngOnInit() {
-    let subRef = this._projectService.activeProject
-      .subscribe(res => {
-        this._project = res;
-      });
+    let subRef = this._projectService.activeProject.subscribe((res) => {
+      this._project = res;
+    });
 
     this._subscriptionRefs.push(subRef);
   }
@@ -112,6 +109,11 @@ export class SchemaTableComponent {
    * Function to show an alert [TODO: Make it look good]
    */
   showError(error: any) {
-    window.alert(`Ein Fehler ist aufgetreten!\nNachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+    window.alert(
+      `Ein Fehler ist aufgetreten!\nNachricht: ${error
+        .json()
+        .errorBody.toString()
+        .replace(new RegExp("\\\\", "g"), "")}`
+    );
   }
 }

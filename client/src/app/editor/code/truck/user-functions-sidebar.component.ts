@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { flatMap, map } from 'rxjs/operators';
-import { QualifiedTypeName, NodeDescription } from '../../../shared/syntaxtree';
+import { flatMap, map } from "rxjs/operators";
+import { QualifiedTypeName, NodeDescription } from "../../../shared/syntaxtree";
 
-import { DragService } from '../../drag.service';
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { DragService } from "../../drag.service";
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
 
 /**
  * This is the typename according to the grammar. If it ever changes on the
@@ -12,7 +12,7 @@ import { CurrentCodeResourceService } from '../../current-coderesource.service';
  */
 const GRAMMAR_PROCEDURE_DECLARATION: QualifiedTypeName = {
   languageName: "trucklino_program",
-  typeName: "procedureDeclaration"
+  typeName: "procedureDeclaration",
 };
 
 /**
@@ -26,41 +26,44 @@ interface AvailableProcedure {
  * Create appropriate descriptions from the available procedure
  */
 function makeCallBlock(proc: AvailableProcedure): NodeDescription[] {
-  return ([
+  return [
     {
       language: "trucklino_program",
       name: "procedureCall",
       properties: {
-        "name": proc.name
-      }
-    }
-  ]);
+        name: proc.name,
+      },
+    },
+  ];
 }
 
 @Component({
-  templateUrl: 'templates/user-functions-sidebar.html',
+  templateUrl: "templates/user-functions-sidebar.html",
 })
 export class UserFunctionsSidebarComponent {
   constructor(
     private _dragService: DragService,
     private _current: CurrentCodeResourceService
-  ) {
-  }
+  ) {}
 
   get name() {
-    return (this._current.peekResource.name);
+    return this._current.peekResource.name;
   }
 
   readonly availableProcedures = this._current.currentResource.pipe(
-    flatMap(res => res.syntaxTree),
+    flatMap((res) => res.syntaxTree),
     map((tree): AvailableProcedure[] => {
       const nodes = tree.getNodesOfType(GRAMMAR_PROCEDURE_DECLARATION);
-      return (nodes.map((n): AvailableProcedure => { return ({ name: n.properties['name'] }); }));
+      return nodes.map(
+        (n): AvailableProcedure => {
+          return { name: n.properties["name"] };
+        }
+      );
     })
   );
 
   readonly hasAvailableProcedures = this.availableProcedures.pipe(
-    map(nodes => nodes.length > 0)
+    map((nodes) => nodes.length > 0)
   );
 
   /**

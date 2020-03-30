@@ -1,7 +1,7 @@
-import { SideNavService } from './../shared/side-nav.service';
-import { Component, OnInit } from '@angular/core'
+import { SideNavService } from "./../shared/side-nav.service";
+import { Component, OnInit } from "@angular/core";
 
-import { NavItem } from '../shared/nav-interfaces';
+import { NavItem } from "../shared/nav-interfaces";
 
 export const indexItems: NavItem[] = [
   {
@@ -12,7 +12,7 @@ export const indexItems: NavItem[] = [
     },
     route: ["/about/"],
     icon: "home",
-    highlightExact: true
+    highlightExact: true,
   },
   {
     type: "link",
@@ -21,10 +21,10 @@ export const indexItems: NavItem[] = [
       en: "Example Projects",
     },
     route: ["/about/projects"],
-    icon: "cubes"
+    icon: "cubes",
   },
   {
-    type: "divider"
+    type: "divider",
   },
   {
     type: "link",
@@ -33,7 +33,7 @@ export const indexItems: NavItem[] = [
       en: "Academia",
     },
     route: ["/about/academia"],
-    icon: "flask"
+    icon: "flask",
   },
   {
     type: "link",
@@ -42,7 +42,7 @@ export const indexItems: NavItem[] = [
       en: "Development",
     },
     route: ["/about/development"],
-    icon: "code-fork"
+    icon: "code-fork",
   },
   {
     type: "link",
@@ -51,7 +51,7 @@ export const indexItems: NavItem[] = [
       en: "Imprint",
     },
     route: ["/about/imprint"],
-    icon: "file-text-o"
+    icon: "file-text-o",
   },
   {
     type: "link",
@@ -60,10 +60,10 @@ export const indexItems: NavItem[] = [
       en: "Privacy",
     },
     route: ["/about/privacy"],
-    icon: "user-secret"
+    icon: "user-secret",
   },
   {
-    type: "fill"
+    type: "fill",
   },
   {
     type: "header",
@@ -99,12 +99,10 @@ export const indexItems: NavItem[] = [
  * but not the actual content.
  */
 @Component({
-  templateUrl: 'templates/index.html',
+  templateUrl: "templates/index.html",
 })
 export class FrontComponent implements OnInit {
-  constructor(
-    private _sideNavService: SideNavService
-  ) { }
+  constructor(private _sideNavService: SideNavService) {}
   /**
    * All items that need to be shown in the general navigation
    */

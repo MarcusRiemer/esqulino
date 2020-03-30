@@ -1,75 +1,81 @@
-import * as readline from 'readline'
-import * as process from 'process'
-import { URL } from 'url'
+import * as readline from "readline";
+import * as process from "process";
+import { URL } from "url";
 
-import { httpRequest } from './cli/request-promise'
+import { httpRequest } from "./cli/request-promise";
 
-import { Tree } from './app/shared/syntaxtree/syntaxtree'
+import { Tree } from "./app/shared/syntaxtree/syntaxtree";
 
-import { ServerApi } from './app/shared/serverdata/serverapi';
+import { ServerApi } from "./app/shared/serverdata/serverapi";
 
-import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
-import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
+import { prettyPrintGrammar } from "./app/shared/syntaxtree/prettyprint";
+import { GrammarDescription } from "./app/shared/syntaxtree/grammar.description";
 
-import { AvailableLanguages } from './app/shared/syntaxtree/'
+import { AvailableLanguages } from "./app/shared/syntaxtree/";
 
-import { BlockLanguageDescription } from './app/shared/block/block-language.description'
-import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
+import { BlockLanguageDescription } from "./app/shared/block/block-language.description";
+import { prettyPrintBlockLanguage } from "./app/shared/block/prettyprint";
 
-import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
-import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
+import { graphvizSyntaxTree } from "./app/shared/syntaxtree/prettyprint";
+import { NodeDescription } from "./app/shared/syntaxtree/syntaxtree.description";
 
 /**
  * Can be used to test whether the IDE-service is actually available.
  */
 interface PingCommand {
-  type: "ping"
+  type: "ping";
 }
 
 /**
  * Prints the grammar for a specific language.
  */
 interface PrintGrammarCommand {
-  type: "printGrammar"
-  programmingLanguageId: string
+  type: "printGrammar";
+  programmingLanguageId: string;
 }
 
 /**
  * Prints the block language definition for a certain language
  */
 interface PrintBlockLanguageCommand {
-  type: "printBlockLanguage"
-  blockLanguageId: string
+  type: "printBlockLanguage";
+  blockLanguageId: string;
 }
 
 /**
  * Prints the Graphviz representation of the given model.
  */
 interface GraphvizSyntaxTreeCommand {
-  type: "graphvizTree"
-  model: NodeDescription
+  type: "graphvizTree";
+  model: NodeDescription;
 }
 
 /**
  * Prints the compiled version of the given syntaxtree.
  */
 interface EmitSyntaxTreeCommand {
-  type: "emitTree"
-  model: NodeDescription
-  languageId: string
+  type: "emitTree";
+  model: NodeDescription;
+  languageId: string;
 }
 
 /**
  * Prints a list of all available programming languages.
  */
 interface AvailableProgrammingLanguagesCommand {
-  type: "available"
+  type: "available";
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+type Command =
+  | PingCommand
+  | PrintGrammarCommand
+  | PrintBlockLanguageCommand
+  | AvailableProgrammingLanguagesCommand
+  | GraphvizSyntaxTreeCommand
+  | EmitSyntaxTreeCommand;
 
 // Knows all URLs that are avaiable to the API
-const serverApi: ServerApi = new ServerApi("http://localhost:9292/api")
+const serverApi: ServerApi = new ServerApi("http://localhost:9292/api");
 
 /**
  * Retrieves a single grammar by name
@@ -83,9 +89,8 @@ async function findGrammar(slug: string) {
  * Retrieves a single Language by its name
  */
 function findLanguage(id: string) {
-  const desc = Object.values(AvailableLanguages).find(l => l.id == id);
-  if (desc)
-    return (desc);
+  const desc = Object.values(AvailableLanguages).find((l) => l.id == id);
+  if (desc) return desc;
   else {
     throw new Error(`Unknown language ${id}`);
   }
@@ -105,23 +110,23 @@ async function findBlockLanguage(slug: string) {
 async function executeCommand(command: Command): Promise<string | any[]> {
   switch (command.type) {
     case "ping":
-      return ("pong");
+      return "pong";
     case "printGrammar":
       const g = await findGrammar(command.programmingLanguageId);
-      return (prettyPrintGrammar(command.programmingLanguageId, g));
+      return prettyPrintGrammar(command.programmingLanguageId, g);
     case "printBlockLanguage": {
       const l = await findBlockLanguage(command.blockLanguageId);
-      return (prettyPrintBlockLanguage(l));
+      return prettyPrintBlockLanguage(l);
     }
     case "graphvizTree":
-      return (graphvizSyntaxTree(command.model));
+      return graphvizSyntaxTree(command.model);
     case "emitTree": {
       if (command.languageId !== "generic") {
         const l = findLanguage(command.languageId);
         const t = new Tree(command.model);
-        return (l.emitTree(t));
+        return l.emitTree(t);
       } else {
-        return ("Generic Language without code generator");
+        return "Generic Language without code generator";
       }
     }
   }
@@ -130,11 +135,11 @@ async function executeCommand(command: Command): Promise<string | any[]> {
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  terminal: false
+  terminal: false,
 });
 
 // Each given line is expected to be a self contained JSON object.
-rl.on('line', function(line) {
+rl.on("line", function (line) {
   try {
     const command = JSON.parse(line) as Command;
     let result = executeCommand(command);
@@ -142,9 +147,9 @@ rl.on('line', function(line) {
     // Did we get something meaningful back?
     if (result !== undefined) {
       Promise.resolve(result)
-        .then(res => {
+        .then((res) => {
           // One or multiple results?
-          if (typeof (res) === "string") {
+          if (typeof res === "string") {
             // Exactly on, so no trailing newline please
             console.log(JSON.stringify(res));
           } else {
@@ -155,15 +160,14 @@ rl.on('line', function(line) {
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(`Error during operation "${command.type}"`);
           console.error(err);
         });
     } else {
       console.error("Unknown operation");
     }
-  }
-  catch (e) {
+  } catch (e) {
     console.error("Invalid command");
     console.error(e);
   }

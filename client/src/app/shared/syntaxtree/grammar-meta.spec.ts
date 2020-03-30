@@ -1,52 +1,67 @@
 import {
-  GrammarDocument, NodeTerminalSymbolDescription, NodeTypesSequenceDescription
+  GrammarDocument,
+  NodeTerminalSymbolDescription,
+  NodeTypesSequenceDescription,
 } from "./grammar.description";
-import { readFromNode, convertProperty, convertTerminal, } from './grammar-meta'
-import { Node } from './syntaxtree'
-import { NodeDescription } from './syntaxtree.description';
+import { readFromNode, convertProperty, convertTerminal } from "./grammar-meta";
+import { Node } from "./syntaxtree";
+import { NodeDescription } from "./syntaxtree.description";
 
 describe(`Convert AST => GrammarDescription`, () => {
   describe(`Utility Functions`, () => {
     it(`Property`, () => {
-      const n = new Node({
-        language: "MetaGrammar",
-        name: "property",
-        properties: {
-          "name": "prop1",
-          "base": "integer",
-        }
-      }, undefined);
+      const n = new Node(
+        {
+          language: "MetaGrammar",
+          name: "property",
+          properties: {
+            name: "prop1",
+            base: "integer",
+          },
+        },
+        undefined
+      );
 
       expect(convertProperty(n)).toEqual({
         type: "property",
         base: "integer",
-        name: "prop1"
+        name: "prop1",
       });
     });
 
     it(`Named Terminal`, () => {
-      const n = new Node({
-        language: "MetaGrammar",
-        name: "terminal",
-        properties: {
-          "name": "t1",
-          "symbol": "t",
-        }
-      }, undefined);
+      const n = new Node(
+        {
+          language: "MetaGrammar",
+          name: "terminal",
+          properties: {
+            name: "t1",
+            symbol: "t",
+          },
+        },
+        undefined
+      );
 
       expect(convertTerminal(n)).toEqual({
-        type: "terminal", name: "t1", symbol: "t"
+        type: "terminal",
+        name: "t1",
+        symbol: "t",
       });
     });
 
     it(`Unnamed Terminal`, () => {
-      const n = new Node({
-        language: "MetaGrammar", name: "terminal", properties: { "symbol": "t", }
-      }, undefined);
+      const n = new Node(
+        {
+          language: "MetaGrammar",
+          name: "terminal",
+          properties: { symbol: "t" },
+        },
+        undefined
+      );
 
       expect(convertTerminal(n)).toEqual({
         type: "terminal",
-        symbol: "t"
+        symbol: "t",
       });
     });
   });
@@ -55,7 +70,7 @@ describe(`Convert AST => GrammarDescription`, () => {
     it(`Only Root Node, no properties`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",
-        name: "grammar"
+        name: "grammar",
       });
 
       expect(g).toEqual({
@@ -69,10 +84,14 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "root": [
-            { language: "MetaGrammar", name: "nodeRef", properties: { "languageName": "l", "typeName": "t" } }
-          ]
-        }
+          root: [
+            {
+              language: "MetaGrammar",
+              name: "nodeRef",
+              properties: { languageName: "l", typeName: "t" },
+            },
+          ],
+        },
       });
 
       expect(g).toEqual({
@@ -86,21 +105,21 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "comment",
               properties: {
-                "text": "this is a comment"
-              }
-            }
-          ]
-        }
+                text: "this is a comment",
+              },
+            },
+          ],
+        },
       });
 
       expect(g).toEqual({
         root: undefined,
-        types: {}
+        types: {},
       });
     });
 
@@ -109,33 +128,33 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "comment",
                     properties: {
-                      "text": "this is a comment"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      text: "this is a comment",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       expect(g).toEqual({
         root: undefined,
-        types: { "l": { "t": { type: "concrete", attributes: [] } } }
+        types: { l: { t: { type: "concrete", attributes: [] } } },
       });
     });
 
@@ -144,25 +163,25 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
             },
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
-            }
-          ]
-        }
+            },
+          ],
+        },
       };
 
       expect(() => readFromNode(n)).toThrowError();
@@ -173,27 +192,27 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "typeName": "t"
+                typeName: "t",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "comment",
                     properties: {
-                      "text": "this is a comment"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      text: "this is a comment",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       };
 
       expect(() => readFromNode(n)).toThrowError();
@@ -204,27 +223,27 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l"
+                languageName: "l",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "comment",
                     properties: {
-                      "text": "this is a comment"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      text: "this is a comment",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       };
 
       expect(() => readFromNode(n)).toThrowError();
@@ -235,27 +254,27 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "attributes": []
-              }
-            }
-          ]
-        }
+                attributes: [],
+              },
+            },
+          ],
+        },
       });
 
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l": { "t": { type: "concrete", attributes: [] } }
-        }
+          l: { t: { type: "concrete", attributes: [] } },
+        },
       });
     });
 
@@ -264,94 +283,93 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "typedef",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "references": [
+                references: [
                   {
                     language: "MetaGrammar",
                     name: "nodeRefOne",
                     properties: {
-                      "languageName": "l",
-                      "typeName": "a1"
-                    }
+                      languageName: "l",
+                      typeName: "a1",
+                    },
                   },
                   {
                     language: "MetaGrammar",
                     name: "nodeRefOne",
                     properties: {
-                      "languageName": "q",
-                      "typeName": "a2"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      languageName: "q",
+                      typeName: "a2",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l": {
-            "t": {
+          l: {
+            t: {
               type: "oneOf",
               oneOf: [
                 { languageName: "l", typeName: "a1" },
-                { languageName: "q", typeName: "a2" }
-              ]
-            }
-          }
-        }
+                { languageName: "q", typeName: "a2" },
+              ],
+            },
+          },
+        },
       });
     });
-
 
     it(`Empty concrete type in two languages`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l1",
-                "typeName": "t"
+                languageName: "l1",
+                typeName: "t",
               },
               children: {
-                "attributes": []
-              }
+                attributes: [],
+              },
             },
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l2",
-                "typeName": "t"
+                languageName: "l2",
+                typeName: "t",
               },
               children: {
-                "attributes": []
-              }
-            }
-          ]
-        }
+                attributes: [],
+              },
+            },
+          ],
+        },
       });
 
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l1": { "t": { type: "concrete", attributes: [] } },
-          "l2": { "t": { type: "concrete", attributes: [] } }
-        }
+          l1: { t: { type: "concrete", attributes: [] } },
+          l2: { t: { type: "concrete", attributes: [] } },
+        },
       });
     });
 
@@ -360,28 +378,28 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "terminal",
                     properties: {
-                      "symbol": "s"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      symbol: "s",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       const terminalDesc: NodeTerminalSymbolDescription = {
@@ -392,8 +410,8 @@ describe(`Convert AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l": { "t": { type: "concrete", attributes: [terminalDesc] } }
-        }
+          l: { t: { type: "concrete", attributes: [terminalDesc] } },
+        },
       });
     });
 
@@ -402,28 +420,28 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "terminal",
                     properties: {
-                      "symbol": "s"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      symbol: "s",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       const terminalDesc: NodeTerminalSymbolDescription = {
@@ -434,8 +452,8 @@ describe(`Convert AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l": { "t": { type: "concrete", attributes: [terminalDesc] } }
-        }
+          l: { t: { type: "concrete", attributes: [terminalDesc] } },
+        },
       });
     });
 
@@ -444,45 +462,43 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "children",
                     properties: {
-                      "base": "sequence",
-                      "name": "seq",
+                      base: "sequence",
+                      name: "seq",
                     },
-                    children: {
-
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                    children: {},
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       const seqDesc: NodeTypesSequenceDescription = {
         type: "sequence",
         name: "seq",
-        nodeTypes: []
+        nodeTypes: [],
       };
 
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l": { "t": { type: "concrete", attributes: [seqDesc] } }
-        }
+          l: { t: { type: "concrete", attributes: [seqDesc] } },
+        },
       });
     });
 
@@ -491,56 +507,54 @@ describe(`Convert AST => GrammarDescription`, () => {
         language: "MetaGrammar",
         name: "grammar",
         children: {
-          "nodes": [
+          nodes: [
             {
               language: "MetaGrammar",
               name: "concreteNode",
               properties: {
-                "languageName": "l",
-                "typeName": "t"
+                languageName: "l",
+                typeName: "t",
               },
               children: {
-                "attributes": [
+                attributes: [
                   {
                     language: "MetaGrammar",
                     name: "children",
                     properties: {
-                      "base": "sequence",
-                      "name": "seq",
+                      base: "sequence",
+                      name: "seq",
                     },
                     children: {
-                      "references": [
+                      references: [
                         {
                           language: "MetaGrammar",
                           name: "nodeRefOne",
                           properties: {
-                            "languageName": "l",
-                            "typeName": "t"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                            languageName: "l",
+                            typeName: "t",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       });
 
       const seqDesc: NodeTypesSequenceDescription = {
         type: "sequence",
         name: "seq",
-        nodeTypes: [
-          { languageName: "l", typeName: "t" }
-        ]
+        nodeTypes: [{ languageName: "l", typeName: "t" }],
       };
 
       expect(g).toEqual({
         root: undefined,
         types: {
-          "l": { "t": { type: "concrete", attributes: [seqDesc] } }
-        }
+          l: { t: { type: "concrete", attributes: [seqDesc] } },
+        },
       });
     });
   });

@@ -9,18 +9,21 @@ export interface SmartDropOptions {
   allowAnyParent?: boolean;
   allowExact?: boolean;
   allowReplace?: boolean;
-};
+}
 
 /**
  * These algorithms may be used to calculate a drop.
  */
-export type SmartDropAlgorithmNames = keyof (SmartDropOptions) | "root";
+export type SmartDropAlgorithmNames = keyof SmartDropOptions | "root";
 
 /**
  * A drop operation that would not "worsen" the tree by violating
  * basic type or cardinality laws.
  */
-export type SmartDropLocation = InsertDropLocation | ReplaceDropLocation | EmbraceDropLocation;
+export type SmartDropLocation =
+  | InsertDropLocation
+  | ReplaceDropLocation
+  | EmbraceDropLocation;
 
 /**
  * An insertion at the given location.

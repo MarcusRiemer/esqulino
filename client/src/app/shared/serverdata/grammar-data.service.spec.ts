@@ -1,26 +1,32 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TestBed } from "@angular/core/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { provideGrammarList, buildGrammar, GrammarOrder } from '../../editor/spec-util';
+import {
+  provideGrammarList,
+  buildGrammar,
+  GrammarOrder,
+} from "../../editor/spec-util";
 
-import { ResourceReferencesService } from '../resource-references.service';
-import { ResourceReferencesOnlineService } from '../resource-references-online.service';
+import { ResourceReferencesService } from "../resource-references.service";
+import { ResourceReferencesOnlineService } from "../resource-references-online.service";
 
-import { ListGrammarDataService, MutateGrammarService } from './grammar-data.service';
-import { ServerApiService } from './serverapi.service';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
+import {
+  ListGrammarDataService,
+  MutateGrammarService,
+} from "./grammar-data.service";
+import { ServerApiService } from "./serverapi.service";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 describe(`ListGrammarDataService`, () => {
   function instantiate() {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatSnackBarModule,
-      ],
+      imports: [HttpClientTestingModule, MatSnackBarModule],
       providers: [
         ServerApiService,
         ListGrammarDataService,
@@ -28,15 +34,14 @@ describe(`ListGrammarDataService`, () => {
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
-        }
+        },
       ],
-      declarations: [
-      ]
+      declarations: [],
     });
 
-    return ({
-      service: TestBed.inject(ListGrammarDataService)
-    });
+    return {
+      service: TestBed.inject(ListGrammarDataService),
+    };
   }
 
   it(`Can be instantiated`, async () => {
@@ -52,14 +57,12 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList([]);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual([]);
-    expect(totalCount)
-      .withContext("listTotalCount$")
-      .toEqual(0);
+    expect(list).withContext("Direct list comparision").toEqual([]);
+    expect(totalCount).withContext("listTotalCount$").toEqual(0);
     expect(fixture.service.peekListTotalCount)
       .withContext("peekListTotalCount")
       .toEqual(0);
@@ -68,20 +71,17 @@ describe(`ListGrammarDataService`, () => {
   it(`Listing dataset with two items (default order)`, async () => {
     const fixture = instantiate();
 
-    const expectedList = [
-      buildGrammar(),
-      buildGrammar(),
-    ]
+    const expectedList = [buildGrammar(), buildGrammar()];
 
     const pending = fixture.service.list.pipe(first()).toPromise();
     provideGrammarList(expectedList);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual(expectedList);
+    expect(list).withContext("Direct list comparision").toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -96,12 +96,12 @@ describe(`ListGrammarDataService`, () => {
     const expectedList = [
       buildGrammar({ name: "B" }),
       buildGrammar({ name: "A" }),
-    ]
+    ];
 
     const order: GrammarOrder = {
       direction: "desc",
       field: "name",
-    }
+    };
 
     fixture.service.setListOrdering(order.field, order.direction);
 
@@ -109,11 +109,11 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual(expectedList);
+    expect(list).withContext("Direct list comparision").toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -121,7 +121,6 @@ describe(`ListGrammarDataService`, () => {
       .withContext("peekListTotalCount")
       .toEqual(expectedList.length);
   });
-
 
   it(`Listing dataset with two items (name ascending)`, async () => {
     const fixture = instantiate();
@@ -129,12 +128,12 @@ describe(`ListGrammarDataService`, () => {
     const expectedList = [
       buildGrammar({ name: "A" }),
       buildGrammar({ name: "B" }),
-    ]
+    ];
 
     const order: GrammarOrder = {
       direction: "asc",
       field: "name",
-    }
+    };
 
     fixture.service.setListOrdering(order.field, order.direction);
 
@@ -142,11 +141,11 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual(expectedList);
+    expect(list).withContext("Direct list comparision").toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -155,19 +154,18 @@ describe(`ListGrammarDataService`, () => {
       .toEqual(expectedList.length);
   });
 
-
   it(`Listing dataset with two items (slug descending)`, async () => {
     const fixture = instantiate();
 
     const expectedList = [
       buildGrammar({ slug: "B" }),
       buildGrammar({ slug: "A" }),
-    ]
+    ];
 
     const order: GrammarOrder = {
       direction: "desc",
       field: "slug",
-    }
+    };
 
     fixture.service.setListOrdering(order.field, order.direction);
 
@@ -175,11 +173,11 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual(expectedList);
+    expect(list).withContext("Direct list comparision").toEqual(expectedList);
     expect(totalCount)
       .withContext("listTotalCount$")
       .toEqual(expectedList.length);
@@ -201,14 +199,12 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual([]);
-    expect(totalCount)
-      .withContext("listTotalCount$")
-      .toEqual(0);
+    expect(list).withContext("Direct list comparision").toEqual([]);
+    expect(totalCount).withContext("listTotalCount$").toEqual(0);
     expect(fixture.service.peekListTotalCount)
       .withContext("peekListTotalCount")
       .toEqual(0);
@@ -220,22 +216,20 @@ describe(`ListGrammarDataService`, () => {
     const expectedList = [];
     const pagination = {
       limit: 5,
-      page: 2
-    }
+      page: 2,
+    };
 
     fixture.service.setListPagination(pagination.limit, pagination.page);
     const pending = fixture.service.list.pipe(first()).toPromise();
     provideGrammarList(expectedList, { pagination });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
-    expect(list)
-      .withContext("Direct list comparision")
-      .toEqual([]);
-    expect(totalCount)
-      .withContext("listTotalCount$")
-      .toEqual(0);
+    expect(list).withContext("Direct list comparision").toEqual([]);
+    expect(totalCount).withContext("listTotalCount$").toEqual(0);
     expect(fixture.service.peekListTotalCount)
       .withContext("peekListTotalCount")
       .toEqual(0);
@@ -257,18 +251,17 @@ describe(`MutateGrammarDataService`, () => {
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
-        }
+        },
       ],
-      declarations: [
-      ]
+      declarations: [],
     });
 
-    return ({
+    return {
       list: TestBed.inject(ListGrammarDataService),
       mutate: TestBed.inject(MutateGrammarService),
       httpTesting: TestBed.inject(HttpTestingController),
       serverApi: TestBed.inject(ServerApiService),
-    });
+    };
   }
 
   it(`can be instantiated`, async () => {
@@ -281,13 +274,15 @@ describe(`MutateGrammarDataService`, () => {
     const fixture = instantiate();
 
     let listInvalidatedCalls = 0;
-    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+    fixture.mutate.listInvalidated.subscribe((_) => ++listInvalidatedCalls);
 
     const done = fixture.mutate.deleteSingle("grammarId");
-    fixture.httpTesting.expectOne({
-      url: fixture.serverApi.individualGrammarUrl("grammarId"),
-      method: "DELETE"
-    }).flush("");
+    fixture.httpTesting
+      .expectOne({
+        url: fixture.serverApi.individualGrammarUrl("grammarId"),
+        method: "DELETE",
+      })
+      .flush("");
 
     await done;
 
@@ -298,18 +293,20 @@ describe(`MutateGrammarDataService`, () => {
     const fixture = instantiate();
 
     let listInvalidatedCalls = 0;
-    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+    fixture.mutate.listInvalidated.subscribe((_) => ++listInvalidatedCalls);
 
     const done = fixture.mutate.deleteSingle("grammarId", false);
-    fixture.httpTesting.expectOne({
-      url: fixture.serverApi.individualGrammarUrl("grammarId"),
-      method: "DELETE"
-    }).flush("", { status: 400, statusText: "Nope" });
+    fixture.httpTesting
+      .expectOne({
+        url: fixture.serverApi.individualGrammarUrl("grammarId"),
+        method: "DELETE",
+      })
+      .flush("", { status: 400, statusText: "Nope" });
 
     try {
       await done;
       fail("Must throw");
-    } catch { }
+    } catch {}
 
     expect(listInvalidatedCalls).toEqual(0);
   });
@@ -318,15 +315,17 @@ describe(`MutateGrammarDataService`, () => {
     const fixture = instantiate();
 
     let listInvalidatedCalls = 0;
-    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+    fixture.mutate.listInvalidated.subscribe((_) => ++listInvalidatedCalls);
 
     const originalDescription = { id: "grammarId" } as any;
 
     const done = fixture.mutate.updateSingle(originalDescription);
-    fixture.httpTesting.expectOne({
-      url: fixture.serverApi.individualGrammarUrl("grammarId"),
-      method: "PUT"
-    }).flush("");
+    fixture.httpTesting
+      .expectOne({
+        url: fixture.serverApi.individualGrammarUrl("grammarId"),
+        method: "PUT",
+      })
+      .flush("");
 
     await done;
 
@@ -340,22 +339,22 @@ describe(`MutateGrammarDataService`, () => {
     const fixture = instantiate();
 
     let listInvalidatedCalls = 0;
-    fixture.mutate.listInvalidated.subscribe(_ => ++listInvalidatedCalls);
+    fixture.mutate.listInvalidated.subscribe((_) => ++listInvalidatedCalls);
 
     const originalDescription = { id: "grammarId" } as any;
     const done = fixture.mutate.updateSingle(originalDescription, false);
-    fixture.httpTesting.expectOne({
-      url: fixture.serverApi.individualGrammarUrl("grammarId"),
-      method: "PUT"
-    }).flush("", { status: 400, statusText: "Nope" });
+    fixture.httpTesting
+      .expectOne({
+        url: fixture.serverApi.individualGrammarUrl("grammarId"),
+        method: "PUT",
+      })
+      .flush("", { status: 400, statusText: "Nope" });
 
     try {
       await done;
       fail("Must throw");
-    } catch { }
+    } catch {}
 
     expect(listInvalidatedCalls).toEqual(0);
   });
-
-
 });

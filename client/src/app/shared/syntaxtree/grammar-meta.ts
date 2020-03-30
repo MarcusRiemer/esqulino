@@ -1,22 +1,24 @@
-import { NodeDescription, QualifiedTypeName } from './syntaxtree.description'
-import { Tree, Node } from './syntaxtree';
+import { NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
+import { Tree, Node } from "./syntaxtree";
 import {
-  NodePropertyTypeDescription, NodeTerminalSymbolDescription, NodeChildrenGroupDescription,
+  NodePropertyTypeDescription,
+  NodeTerminalSymbolDescription,
+  NodeChildrenGroupDescription,
   isNodeTypesSequenceDescription,
   isNodeTypesAllowedDescription,
   NodeTypesChildReference,
   NodeAttributeDescription,
   GrammarDocument,
   NodeConcreteTypeDescription,
-  NodeOneOfTypeDescription
-} from './grammar.description';
+  NodeOneOfTypeDescription,
+} from "./grammar.description";
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
-  return ({
+  return {
     type: "property",
     base: attrNode.properties["base"] as any,
-    name: attrNode.properties["name"]
-  });
+    name: attrNode.properties["name"],
+  };
 }
 
 /**
@@ -25,45 +27,53 @@ export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
 export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
   const toReturn: ReturnType<typeof convertTerminal> = {
     type: "terminal",
-    symbol: attrNode.properties["symbol"]
+    symbol: attrNode.properties["symbol"],
   };
 
   if (attrNode.properties["name"]) {
     toReturn.name = attrNode.properties["name"];
   }
 
-  return (toReturn);
+  return toReturn;
 }
 
 export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
   const toReturn: ReturnType<typeof convertChildren> = {
     type: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
-    nodeTypes: undefined
+    nodeTypes: undefined,
   };
 
-  if (isNodeTypesAllowedDescription(toReturn) || isNodeTypesSequenceDescription(toReturn)) {
-    const typeReferences: NodeTypesChildReference[] = attrNode.getChildrenInCategory("references").map(ref => {
-      switch (ref.typeName) {
-        case "nodeRefOne":
-          return ({
-            languageName: ref.properties["languageName"],
-            typeName: ref.properties["typeName"]
-          });
-      }
-    });
+  if (
+    isNodeTypesAllowedDescription(toReturn) ||
+    isNodeTypesSequenceDescription(toReturn)
+  ) {
+    const typeReferences: NodeTypesChildReference[] = attrNode
+      .getChildrenInCategory("references")
+      .map((ref) => {
+        switch (ref.typeName) {
+          case "nodeRefOne":
+            return {
+              languageName: ref.properties["languageName"],
+              typeName: ref.properties["typeName"],
+            };
+        }
+      });
 
     toReturn.nodeTypes = typeReferences;
   }
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
  * Converts the given node into a description that is appended to the given
  * target list.
  */
-export function readAttributes(attrNode: Node, target: NodeAttributeDescription[]) {
+export function readAttributes(
+  attrNode: Node,
+  target: NodeAttributeDescription[]
+) {
   switch (attrNode.typeName) {
     case "property":
       target.push(convertProperty(attrNode));
@@ -80,12 +90,14 @@ export function readAttributes(attrNode: Node, target: NodeAttributeDescription[
 export function resolveReference(refNode: Node): QualifiedTypeName {
   switch (refNode.typeName) {
     case "nodeRefOne":
-      return ({
+      return {
         languageName: refNode.properties["languageName"],
-        typeName: refNode.properties["typeName"]
-      });
+        typeName: refNode.properties["typeName"],
+      };
     default:
-      throw new Error(`Could not resolve reference of type "${refNode.languageName}"."${refNode.typeName}"`);
+      throw new Error(
+        `Could not resolve reference of type "${refNode.languageName}"."${refNode.typeName}"`
+      );
   }
 }
 
@@ -95,7 +107,7 @@ export function resolveReference(refNode: Node): QualifiedTypeName {
 export function readFromNode(node: NodeDescription): GrammarDocument {
   const toReturn: ReturnType<typeof readFromNode> = {
     types: {},
-    root: undefined
+    root: undefined,
   };
 
   const tree = new Tree(node);
@@ -105,20 +117,24 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   if (nodeRoot) {
     toReturn.root = {
       languageName: nodeRoot.properties["languageName"],
-      typeName: nodeRoot.properties["typeName"]
+      typeName: nodeRoot.properties["typeName"],
     };
   }
 
   // Add all defined types
   const definedTypes = tree.rootNode.getChildrenInCategory("nodes");
   definedTypes
-    .filter(n => n.typeName.match(/typedef|concreteNode/))
-    .forEach(n => {
+    .filter((n) => n.typeName.match(/typedef|concreteNode/))
+    .forEach((n) => {
       const languageName = n.properties["languageName"];
       const typeName = n.properties["typeName"];
 
       if (!typeName || !languageName) {
-        throw new Error(`Attempted to read node without qualified Type: ${JSON.stringify(n.toModel())}`);
+        throw new Error(
+          `Attempted to read node without qualified Type: ${JSON.stringify(
+            n.toModel()
+          )}`
+        );
       }
 
       // Ensure the language is known
@@ -137,27 +153,33 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
         case "concreteNode":
           const concreteNode: NodeConcreteTypeDescription = {
             type: "concrete",
-            attributes: []
+            attributes: [],
           };
 
-          n.getChildrenInCategory("attributes").forEach(a => readAttributes(a, concreteNode.attributes));
+          n.getChildrenInCategory("attributes").forEach((a) =>
+            readAttributes(a, concreteNode.attributes)
+          );
 
           lang[typeName] = concreteNode;
           break;
         case "typedef":
-          const references = n.getChildrenInCategory("references").map(resolveReference);
+          const references = n
+            .getChildrenInCategory("references")
+            .map(resolveReference);
 
           const oneOfNode: NodeOneOfTypeDescription = {
             type: "oneOf",
-            oneOf: references
+            oneOf: references,
           };
 
           lang[typeName] = oneOfNode;
           break;
         default:
-          throw Error(`Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`);
+          throw Error(
+            `Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`
+          );
       }
     });
 
-  return (toReturn);
+  return toReturn;
 }

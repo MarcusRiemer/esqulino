@@ -1,6 +1,5 @@
-
 <h1>Konto verknüpfen</h1>
-<hr>
+<hr />
 
 <div class="row">
   <mat-card *ngFor="let provider of providers.value | async;">
@@ -12,8 +11,8 @@
     <mat-card-actions>
       <provider-button
         [provider]="provider"
-        (trigger)="onTrigger()">
-      </provider-button>
+        (trigger)="onTrigger()"
+      ></provider-button>
     </mat-card-actions>
   </mat-card>
 </div>

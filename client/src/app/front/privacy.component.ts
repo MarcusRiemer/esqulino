@@ -1,8 +1,6 @@
-import { Component } from '@angular/core'
+import { Component } from "@angular/core";
 
 @Component({
-  templateUrl: 'templates/privacy.html',
+  templateUrl: "templates/privacy.html",
 })
-export class PrivacyComponent {
-
-}
+export class PrivacyComponent {}

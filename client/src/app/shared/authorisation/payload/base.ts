@@ -3,8 +3,7 @@
  */
 export class BasePerformData {
   constructor(resourceType?: string) {
-    if (resourceType)
-      this.resourceType = resourceType;
+    if (resourceType) this.resourceType = resourceType;
   }
 
   // Which resource-typ (Example: News, Projekt)

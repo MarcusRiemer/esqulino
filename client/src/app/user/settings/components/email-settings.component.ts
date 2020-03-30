@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { UserService } from '../../../shared/auth/user.service';
-import { ChangePrimaryEmailDescription, ServerProviderDescription } from '../../../shared/auth/provider.description';
+import { UserService } from "../../../shared/auth/user.service";
+import {
+  ChangePrimaryEmailDescription,
+  ServerProviderDescription,
+} from "../../../shared/auth/provider.description";
 @Component({
   selector: "email-settings",
-  templateUrl: './templates/email-settings.html'
+  templateUrl: "./templates/email-settings.html",
 })
 export class EmailSettingsComponent {
-
-  constructor(
-    private _userService: UserService,
-  ) { }
+  constructor(private _userService: UserService) {}
 
   private _primaryEmailData: ChangePrimaryEmailDescription = {
-    primaryEmail: ""
+    primaryEmail: "",
   };
 
   // All linked identities
@@ -35,12 +35,11 @@ export class EmailSettingsComponent {
   }
 
   public validEmails(identities: ServerProviderDescription): Set<string> {
-    //All distinct e-mails from all providers  
+    //All distinct e-mails from all providers
     const emails: Set<string> = new Set();
-    identities.providers.forEach(v => {
-      if (v.email)
-        emails.add(v.email);
-    })
+    identities.providers.forEach((v) => {
+      if (v.email) emails.add(v.email);
+    });
     return emails;
   }
 
@@ -55,9 +54,9 @@ export class EmailSettingsComponent {
    */
   public onSave(emails: Set<string>): void {
     if (emails.has(this.primaryEmail)) {
-      this._userService.sendChangePrimaryEmail$(this._primaryEmailData)
-        .subscribe()
-
+      this._userService
+        .sendChangePrimaryEmail$(this._primaryEmailData)
+        .subscribe();
     }
   }
 }

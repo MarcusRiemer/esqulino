@@ -5,16 +5,14 @@
   <ng-container *ngIf="(identities | async) as identities">
     <p>
       Wähle eine primäre E-Mail an die jegliche E-Mails geschickt werden sollen.
-      <strong>Achtung:</strong> Die primäre E-Mail kann so lange nicht gelöscht
-      werden, bis sie durch eine andere ersetzt wird.
+      <strong>Achtung:</strong>
+      Die primäre E-Mail kann so lange nicht gelöscht werden, bis sie durch eine
+      andere ersetzt wird.
     </p>
 
     <ng-container *ngIf="validEmails(identities) as emails">
       <div class="d-flex">
-        <select
-          class="custom-select"
-          (change)="onChange($event.target.value)"
-        >
+        <select class="custom-select" (change)="onChange($event.target.value)">
           <option *ngFor="let email of emails" [value]="email">
             {{ email }}
           </option>
@@ -27,16 +25,11 @@
             color="primary"
             mode="indeterminate"
             matTooltip="Primary e-mail change is in progress."
-          >
-          </mat-progress-spinner>
+          ></mat-progress-spinner>
         </ng-container>
       </div>
 
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onSave(emails)"
-      >
+      <button mat-raised-button color="primary" (click)="onSave(emails)">
         Speichern
       </button>
     </ng-container>

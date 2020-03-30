@@ -1,6 +1,11 @@
 import {
-  Directive, ElementRef, Input, Output, EventEmitter, OnInit
-} from "@angular/core"
+  Directive,
+  ElementRef,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+} from "@angular/core";
 
 /**
  * Allows to meaningfully bind the `contenteditable` property. This also
@@ -8,17 +13,17 @@ import {
  * to cause havoc.
  */
 @Directive({
-  selector: '[contenteditableModel]',
+  selector: "[contenteditableModel]",
   // We need to know if the hosting component loses focus.
   host: {
-    '(blur)': 'onChange()',
-    '(dragover)': 'onDragOperation($event)',
-    '(drop)': 'onDragOperation($event)',
-    '(keydown)': 'onKeyDown($event)'
-  }
+    "(blur)": "onChange()",
+    "(dragover)": "onDragOperation($event)",
+    "(drop)": "onDragOperation($event)",
+    "(keydown)": "onKeyDown($event)",
+  },
 })
 export class ContenteditableModel implements OnInit {
-  @Input('contenteditableModel') model: any;
+  @Input("contenteditableModel") model: any;
 
   /**
    *
@@ -28,18 +33,17 @@ export class ContenteditableModel implements OnInit {
   /**
    * Required to tell angular what to change.
    */
-  @Output('contenteditableModelChange') update = new EventEmitter();
+  @Output("contenteditableModelChange") update = new EventEmitter();
 
   private lastViewModel: any;
 
-  constructor(private elRef: ElementRef) {
-  }
+  constructor(private elRef: ElementRef) {}
 
   /**
    * @return The text property of the native element
    */
   get nativeText() {
-    return (this.elRef.nativeElement.textContent);
+    return this.elRef.nativeElement.textContent;
   }
 
   /**
@@ -74,7 +78,7 @@ export class ContenteditableModel implements OnInit {
    */
   onDragOperation(evt: Event): boolean {
     evt.preventDefault();
-    return (false);
+    return false;
   }
 
   /**

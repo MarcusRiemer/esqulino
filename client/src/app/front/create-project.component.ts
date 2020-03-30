@@ -1,19 +1,22 @@
-import { Component } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router'
+import { Component } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { first } from "rxjs/operators";
 
-import { ProjectCreationRequest, StringValidator, ProjectCreationResponse } from '../shared/project.description'
-import { ServerApiService } from '../shared'
+import {
+  ProjectCreationRequest,
+  StringValidator,
+  ProjectCreationResponse,
+} from "../shared/project.description";
+import { ServerApiService } from "../shared";
 
 @Component({
-  templateUrl: 'templates/create-project.html'
+  templateUrl: "templates/create-project.html",
 })
 export class CreateProjectComponent {
-
-  private _currentRequest: Observable<ProjectCreationResponse>
+  private _currentRequest: Observable<ProjectCreationResponse>;
 
   private _currentError: any;
 
@@ -29,8 +32,7 @@ export class CreateProjectComponent {
     private _http: HttpClient,
     private _serverApi: ServerApiService,
     private _router: Router
-  ) {
-  }
+  ) {}
 
   // Defines how a valid slug could look like
   readonly regExpSlug = StringValidator.ProjectSlug;
@@ -38,13 +40,12 @@ export class CreateProjectComponent {
   // Defines how a valid project name would look like
   readonly regExpName = StringValidator.ProjectName;
 
-
   get currentError() {
-    return (this._currentError);
+    return this._currentError;
   }
 
   get inProgress(): boolean {
-    return (!!this._currentRequest);
+    return !!this._currentRequest;
   }
 
   /**
@@ -54,9 +55,12 @@ export class CreateProjectComponent {
     if (!this._currentRequest) {
       this._currentError = undefined;
 
-      this._currentRequest = this._http.post<ProjectCreationResponse>(
-        this._serverApi.createProjectUrl(), this.params
-      ).pipe(first());
+      this._currentRequest = this._http
+        .post<ProjectCreationResponse>(
+          this._serverApi.createProjectUrl(),
+          this.params
+        )
+        .pipe(first());
 
       try {
         const res = await this._currentRequest.toPromise();

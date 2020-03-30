@@ -1,27 +1,24 @@
 <h1>Anzeigename & ID</h1>
-<hr>
+<hr />
 
 <p>
-  Deine Benutzer ID lautet <code>{{ userId$ | async }}</code>. Diese ID ist unabhängig von deinem
-  gewählten Benutzernamen und kann nicht geändert werden. Wenn du Probleme hast und dich an uns wendest,
-  solltest du uns bitte immer auch diese ID mitteilen. Wenn du deinen Anzeigenamen ändern möchtest,
-  kannst du das hier tun:
+  Deine Benutzer ID lautet
+  <code>{{ userId$ | async }}</code>
+  . Diese ID ist unabhängig von deinem gewählten Benutzernamen und kann nicht
+  geändert werden. Wenn du Probleme hast und dich an uns wendest, solltest du
+  uns bitte immer auch diese ID mitteilen. Wenn du deinen Anzeigenamen ändern
+  möchtest, kannst du das hier tun:
 </p>
 
-<validate-input
-  icon="pencil"
-  [(value)]="userNameData.displayName">
-
-  <input #inputRef
+<validate-input icon="pencil" [(value)]="userNameData.displayName">
+  <input
+    #inputRef
     type="text"
     class="form-control"
-    [value]="(username$ | async)">
+    [value]="(username$ | async)"
+  />
 </validate-input>
 
-<button
-  mat-raised-button
-  color="primary"
-  (click)="onChangeUserName()">
-
+<button mat-raised-button color="primary" (click)="onChangeUserName()">
   Speichern
 </button>

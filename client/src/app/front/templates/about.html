@@ -1,19 +1,32 @@
 <mat-card class="jumbotron mb-3">
   <div class="container">
-    <h1><ng-container i18n="Front page welcome message@@welcomeMessage">Willkommen bei </ng-container>
-      <img src="/vendor/logos/blattwerkzeug-logo.svg"
-           title="BlattWerkzeug"><img src="/vendor/logos/blattwerkzeug-caption.svg"
-                                      title="BlattWerkzeug">
+    <h1>
+      <ng-container i18n="Front page welcome message@@welcomeMessage">
+        Willkommen bei
+      </ng-container>
+      <img src="/vendor/logos/blattwerkzeug-logo.svg" title="BlattWerkzeug" />
+      <img
+        src="/vendor/logos/blattwerkzeug-caption.svg"
+        title="BlattWerkzeug"
+      />
     </h1>
     <p i18n="short project introduction@@shortProjectIntroduction">
-      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL- und Webprogrammierung.
+      Eine einsteigerfreundliche Entwicklungsumgebung für den Umgang mit SQL-
+      und Webprogrammierung.
     </p>
   </div>
 </mat-card>
 
 <mat-card class="alert-warning mb-3">
   <p i18n="prototypeWarning@@frontPrototypeWarning">
-    Der hier verfügbare Stand ist ein <strong>Prototyp</strong> um die SQL- und Trucklino-Editoren zu zeigen. Insbesondere die Funktionen rund um die <strong>Benutzerverwaltung</strong> sind noch <strong>kaum getestet</strong>!
+    Der hier verfügbare Stand ist ein
+    <strong>Prototyp</strong>
+    um die SQL- und Trucklino-Editoren zu zeigen. Insbesondere die Funktionen
+    rund um die
+    <strong>Benutzerverwaltung</strong>
+    sind noch
+    <strong>kaum getestet</strong>
+    !
   </p>
 </mat-card>
 
@@ -21,19 +34,27 @@
   <!-- For Pupils -->
   <div class="col-lg-4">
     <mat-card class="mb-3">
-      <mat-card-title class="card-title"
-                      i18n="for pupils headline@@forPupilsHeadline">
+      <mat-card-title
+        class="card-title"
+        i18n="for pupils headline@@forPupilsHeadline"
+      >
         Für Schüler
       </mat-card-title>
       <mat-card-content i18n="for pupils description@@forPupilsDescription">
-        Du wolltest schon immer mal deine eigene Blog&shy;software entwickeln? Oder deine stärksten Pokémon präsentieren? Interaktive Abenteuer&shy;geschichten schreiben? (Fast) egal worum es geht, mit BlattWerkzeug kannst du deine eigenen Webseiten programmieren und sie deinen Freunden zeigen.
+        Du wolltest schon immer mal deine eigene Blog&shy;software entwickeln?
+        Oder deine stärksten Pokémon präsentieren? Interaktive
+        Abenteuer&shy;geschichten schreiben? (Fast) egal worum es geht, mit
+        BlattWerkzeug kannst du deine eigenen Webseiten programmieren und sie
+        deinen Freunden zeigen.
       </mat-card-content>
       <mat-card-actions>
-        <hr>
-        <a [routerLink]="['/about', 'pupil']"
-           mat-button>
-          <span class="fa fa-play" aria-hidden="true"></span> &nbsp;
-          <span i18n="get started button text@@getStartedButtonText">So legst du los</span>
+        <hr />
+        <a [routerLink]="['/about', 'pupil']" mat-button>
+          <span class="fa fa-play" aria-hidden="true"></span>
+          &nbsp;
+          <span i18n="get started button text@@getStartedButtonText">
+            So legst du los
+          </span>
         </a>
       </mat-card-actions>
     </mat-card>
@@ -42,21 +63,27 @@
   <!-- For teachers -->
   <div class="col-lg-4">
     <mat-card class="mb-3">
-      <mat-card-title class="card-title"
-                      i18n="for teachers headline@@forTeachersHeadline">
+      <mat-card-title
+        class="card-title"
+        i18n="for teachers headline@@forTeachersHeadline"
+      >
         Für Lehrkräfte
       </mat-card-title>
       <mat-card-content i18n="for teachers description@@forTeachersDescription">
-        Konventionelle Ent&shy;wick&shy;lungs&shy;um&shy;ge&shy;bun&shy;gen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. BlattWerkzeug hingegen kann an den Lernfortschritt der Klassengemeinschaft angepasst werden!
+        Konventionelle Ent&shy;wick&shy;lungs&shy;um&shy;ge&shy;bun&shy;gen sind
+        Programme von Profis für Profis und bieten einen dementsprechend
+        ausgerichteten Funktionsumfang. BlattWerkzeug hingegen kann an den
+        Lernfortschritt der Klassengemeinschaft angepasst werden!
       </mat-card-content>
       <mat-card-actions>
-        <hr>
-        <a [routerLink]="['/about', 'teacher']"
-           mat-button>
-          <span class="fa fa-cogs" aria-hidden="true"></span> &nbsp;
+        <hr />
+        <a [routerLink]="['/about', 'teacher']" mat-button>
+          <span class="fa fa-cogs" aria-hidden="true"></span>
+          &nbsp;
           <span i18n="concept@@wordConcept">Konzept</span>
           &amp;
-          <span class="fa fa-film" aria-hidden="true"></span> &nbsp;
+          <span class="fa fa-film" aria-hidden="true"></span>
+          &nbsp;
           <span i18n="demo videos@@wordDemoVideos">Demo-Videos</span>
         </a>
       </mat-card-actions>
@@ -66,19 +93,22 @@
   <!-- For Developers -->
   <div class="col-lg-4">
     <mat-card class="mb-3">
-      <mat-card-title class="card-title"
-                      i18n="@@forDevelopersHeadline">
+      <mat-card-title class="card-title" i18n="@@forDevelopersHeadline">
         Für Entwickler
       </mat-card-title>
       <mat-card-content i18n="@@forDevelopersDescription">
-        Leider gibt es viel zu wenig Lern&shy;software für den Einstieg in die Web&shy;entwicklung. Wenn du dabei helfen möchtest, Kinder und Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu eingeladen zum quelloffenen BlattWerkzeug Projekt beizutragen.
+        Leider gibt es viel zu wenig Lern&shy;software für den Einstieg in die
+        Web&shy;entwicklung. Wenn du dabei helfen möchtest, Kinder und
+        Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu
+        eingeladen zum quelloffenen BlattWerkzeug Projekt beizutragen.
       </mat-card-content>
       <mat-card-actions>
-        <hr>
-        <a [routerLink]="['/about', 'development']"
-           mat-button>
+        <hr />
+        <a [routerLink]="['/about', 'development']" mat-button>
           <span class="fa fa-code-fork" aria-hidden="true"></span>
-          <span i18n="project git repo link title@@projectGitRepoLinkTitle">BlattWerkzeug Entwicklung</span>
+          <span i18n="project git repo link title@@projectGitRepoLinkTitle">
+            BlattWerkzeug Entwicklung
+          </span>
         </a>
       </mat-card-actions>
     </mat-card>

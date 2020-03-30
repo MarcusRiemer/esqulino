@@ -1,35 +1,40 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, Input, OnInit, OnDestroy } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { Table, ColumnStatus } from '../../shared/schema'
+import { Table, ColumnStatus } from "../../shared/schema";
 import {
-  AddNewColumn, DeleteColumn,
-  SwitchColumnOrder, RenameColumn,
-  ChangeColumnType, ChangeColumnPrimaryKey,
-  ChangeColumnNotNull, ChangeColumnStandardValue,
-  ChangeTableName, AddForeignKey, RemoveForeignKey
-} from '../../shared/schema/table-commands'
+  AddNewColumn,
+  DeleteColumn,
+  SwitchColumnOrder,
+  RenameColumn,
+  ChangeColumnType,
+  ChangeColumnPrimaryKey,
+  ChangeColumnNotNull,
+  ChangeColumnStandardValue,
+  ChangeTableName,
+  AddForeignKey,
+  RemoveForeignKey,
+} from "../../shared/schema/table-commands";
 
-import { SchemaService } from '../schema.service'
+import { SchemaService } from "../schema.service";
 
-import { ProjectService, Project } from '../project.service'
-import { EditorToolbarService } from '../toolbar.service'
-import { SidebarService } from '../sidebar.service'
+import { ProjectService, Project } from "../project.service";
+import { EditorToolbarService } from "../toolbar.service";
+import { SidebarService } from "../sidebar.service";
 
-import { TableEditorSidebarStackComponent } from './table-editor-stack.sidebar'
-import { TableEditorSidebarControlsComponent } from './table-editor-controls.sidebar'
+import { TableEditorSidebarStackComponent } from "./table-editor-stack.sidebar";
+import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sidebar";
 
 /**
  * Displays the schema for a list of tables.
  */
 @Component({
-  templateUrl: 'templates/schema-table-editor.html',
-  selector: "sql-table-editor"
+  templateUrl: "templates/schema-table-editor.html",
+  selector: "sql-table-editor",
 })
 export class SchemaTableEditorComponent implements OnInit, OnDestroy {
-
   constructor(
     private _schemaService: SchemaService,
     private _projectService: ProjectService,
@@ -37,7 +42,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService
-  ) { }
+  ) {}
 
   /**
    * The original table name
@@ -73,7 +78,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   private _showPreview: boolean = true;
 
   private get commandsHolder() {
-    return (this._schemaService.getCurrentlyEditedStack());
+    return this._schemaService.getCurrentlyEditedStack();
   }
 
   /**
@@ -109,46 +114,60 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     console.log("Editor loading!");
-    let subRef = this._routeParams.params.subscribe(params => {
-      this._originalTableName = params['tableName'];
+    let subRef = this._routeParams.params.subscribe((params) => {
+      this._originalTableName = params["tableName"];
       if (this._originalTableName) {
         // TODO: Rewrite this to use a guard
         if (this._schemaService.getCurrentlyEdited()) {
-          if (this._originalTableName != this._schemaService.getCurrentlyEditedTable().name) {
-            alert("Eine andere Tabelle wurde zurzeit bearbeitet, dieser Vorgang wurde abgebrochen!");
-            let projref = this._projectService.activeProject
-              .subscribe(res => {
+          if (
+            this._originalTableName !=
+            this._schemaService.getCurrentlyEditedTable().name
+          ) {
+            alert(
+              "Eine andere Tabelle wurde zurzeit bearbeitet, dieser Vorgang wurde abgebrochen!"
+            );
+            let projref = this._projectService.activeProject.subscribe(
+              (res) => {
                 this._project = res;
-                this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
+                this._schemaService.initCurrentlyEdit(
+                  res.schema.getTable(this._originalTableName)
+                );
                 this.table = this._schemaService.getCurrentlyEditedTable();
-              })
+              }
+            );
             this._subscriptionRefs.push(projref);
           } else {
-            let projref = this._projectService.activeProject
-              .subscribe(res => {
+            let projref = this._projectService.activeProject.subscribe(
+              (res) => {
                 this._project = res;
                 this.table = this._schemaService.getCurrentlyEditedTable();
-              })
+              }
+            );
             this._subscriptionRefs.push(projref);
           }
         } else {
-          let projref = this._projectService.activeProject
-            .subscribe(res => {
-              this._project = res;
-              this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
-              this.table = this._schemaService.getCurrentlyEditedTable();
-            })
+          let projref = this._projectService.activeProject.subscribe((res) => {
+            this._project = res;
+            this._schemaService.initCurrentlyEdit(
+              res.schema.getTable(this._originalTableName)
+            );
+            this.table = this._schemaService.getCurrentlyEditedTable();
+          });
           this._subscriptionRefs.push(projref);
         }
-
       } else {
-        let projref = this._projectService.activeProject
-          .subscribe(res => {
-            this._project = res;
-          })
+        let projref = this._projectService.activeProject.subscribe((res) => {
+          this._project = res;
+        });
         this._subscriptionRefs.push(projref);
         this.isNewTable = true;
-        this._schemaService.initCurrentlyEdit(new Table({ name: "", columns: [], foreign_keys: [], system_table: false }, [], []));
+        this._schemaService.initCurrentlyEdit(
+          new Table(
+            { name: "", columns: [], foreign_keys: [], system_table: false },
+            [],
+            []
+          )
+        );
         this.table = this._schemaService.getCurrentlyEditedTable();
       }
     });
@@ -158,53 +177,68 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
 
     // Button to show the preview of the currently editing table
     if (!this.isNewTable) {
-      let btnCreate = this._toolbarService.addButton("preview", "Vorschau", "search", "p");
-      subRef = btnCreate.onClick.subscribe(_ => {
+      let btnCreate = this._toolbarService.addButton(
+        "preview",
+        "Vorschau",
+        "search",
+        "p"
+      );
+      subRef = btnCreate.onClick.subscribe((_) => {
         this.previewBtn();
-      })
+      });
       this._subscriptionRefs.push(subRef);
     }
 
     // Button to undo the last change
     let btnCreate = this._toolbarService.addButton("undo", "Undo", "undo", "z");
-    subRef = btnCreate.onClick.subscribe(_ => {
+    subRef = btnCreate.onClick.subscribe((_) => {
       this.undoBtn();
-    })
+    });
     this._subscriptionRefs.push(subRef);
 
     // Button to redo the last undone change
     btnCreate = this._toolbarService.addButton("redo", "Redo", "repeat", "y");
-    subRef = btnCreate.onClick.subscribe(_ => {
+    subRef = btnCreate.onClick.subscribe((_) => {
       this.redoBtn();
-    })
+    });
     this._subscriptionRefs.push(subRef);
 
     // Button to save all changes on the Server
     this._toolbarService.savingEnabled = false;
-    btnCreate = this._toolbarService.addButton("save", "Speichern", "floppy-o", "s");
-    subRef = btnCreate.onClick.subscribe(_ => {
+    btnCreate = this._toolbarService.addButton(
+      "save",
+      "Speichern",
+      "floppy-o",
+      "s"
+    );
+    subRef = btnCreate.onClick.subscribe((_) => {
       this.saveBtn();
-    })
+    });
     this._subscriptionRefs.push(subRef);
 
     // Button to cancle the editing without saving
-    btnCreate = this._toolbarService.addButton("cancel", "Abbrechen", "times", "x");
-    subRef = btnCreate.onClick.subscribe(_ => {
+    btnCreate = this._toolbarService.addButton(
+      "cancel",
+      "Abbrechen",
+      "times",
+      "x"
+    );
+    subRef = btnCreate.onClick.subscribe((_) => {
       this.cancelBtn();
-    })
+    });
     this._subscriptionRefs.push(subRef);
 
     // Showing the sidebars
     const stackSidebarId = TableEditorSidebarStackComponent.SIDEBAR_IDENTIFIER;
     this._sidebarService.showSingleSidebar(stackSidebarId, null);
 
-    const controlsSidebarId = TableEditorSidebarControlsComponent.SIDEBAR_IDENTIFIER;
+    const controlsSidebarId =
+      TableEditorSidebarControlsComponent.SIDEBAR_IDENTIFIER;
     this._sidebarService.showAdditionalSidebar(controlsSidebarId, null);
-
   }
 
   ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];
   }
 
@@ -230,7 +264,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   }
 
   get showPreview() {
-    return (this._showPreview);
+    return this._showPreview;
   }
 
   /**
@@ -251,13 +285,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
           }
         }
         console.log(tableToSend);
-        await this._schemaService.saveNewTable(this._project, tableToSend)
+        await this._schemaService.saveNewTable(this._project, tableToSend);
 
         window.alert("Änderungen gespeichert!");
         this._schemaService.clearCurrentlyEdited();
         this._router.navigate(["../../"], { relativeTo: this._routeParams });
-
-
       } else {
         alert("Tabellenname ist leer!");
       }
@@ -265,7 +297,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
       // Alter existing table
       this.dbErrorCode = -1;
       this.commandsHolder.prepareToSend();
-      await this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder);
+      await this._schemaService.sendAlterTableCommands(
+        this._project,
+        this._originalTableName,
+        this.commandsHolder
+      );
 
       window.alert("Änderungen gespeichert!");
       this._schemaService.clearCurrentlyEdited();
@@ -279,14 +315,32 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   showError(error: any) {
     this.dbErrorCode = error.json().index;
     if (error.json().errorCode == 1) {
-      window.alert(`Ein Fehler ist aufgetretten in Stacknummer: ${error.json().index} \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+      window.alert(
+        `Ein Fehler ist aufgetretten in Stacknummer: ${
+          error.json().index
+        } \n mit Nachricht: ${error
+          .json()
+          .errorBody.toString()
+          .replace(new RegExp("\\\\", "g"), "")}`
+      );
     } else if (error.json().errorCode == 2) {
-      window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} ist die Datenbank nicht mehr konsistent \n Datenbank meldet: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+      window.alert(
+        `Nach der Änderung im Stack Nummer: ${
+          error.json().index
+        } ist die Datenbank nicht mehr konsistent \n Datenbank meldet: ${error
+          .json()
+          .errorBody.toString()
+          .replace(new RegExp("\\\\", "g"), "")}`
+      );
     } else if (error.json().errorCode == 3) {
-      window.alert(`Ein Fehler ist aufgetretten! \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+      window.alert(
+        `Ein Fehler ist aufgetretten! \n mit Nachricht: ${error
+          .json()
+          .errorBody.toString()
+          .replace(new RegExp("\\\\", "g"), "")}`
+      );
     }
   }
-
 
   /**
    * Function for the cancle button
@@ -345,7 +399,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   changedColumnName(index: number, newValue: string) {
     if (this._oldValue != newValue) {
       this.removeErrorCode();
-      this.commandsHolder.do(new RenameColumn(this.table, index, this._oldValue, newValue));
+      this.commandsHolder.do(
+        new RenameColumn(this.table, index, this._oldValue, newValue)
+      );
       this.clearOldValue();
     }
   }
@@ -358,7 +414,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   changedColumnType(index: number, newValue: string) {
     if (this._oldValue != newValue) {
       this.removeErrorCode();
-      this.commandsHolder.do(new ChangeColumnType(this.table, index, this._oldValue, newValue));
+      this.commandsHolder.do(
+        new ChangeColumnType(this.table, index, this._oldValue, newValue)
+      );
       this.clearOldValue();
     }
   }
@@ -371,7 +429,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   changedColumnStandartValue(index: number, newValue: string) {
     if (this._oldValue != newValue) {
       this.removeErrorCode();
-      this.commandsHolder.do(new ChangeColumnStandardValue(this.table, index, this._oldValue, newValue));
+      this.commandsHolder.do(
+        new ChangeColumnStandardValue(
+          this.table,
+          index,
+          this._oldValue,
+          newValue
+        )
+      );
       this.clearOldValue();
     }
   }
@@ -383,7 +448,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   changedTableName(newValue: string) {
     if (this._oldValue != newValue) {
       this.removeErrorCode();
-      this.commandsHolder.do(new ChangeTableName(this.table, this._oldValue, newValue));
+      this.commandsHolder.do(
+        new ChangeTableName(this.table, this._oldValue, newValue)
+      );
       this.clearOldValue();
     }
   }
@@ -394,7 +461,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   changeColumnOrder() {
     if (this.colToSwitch != undefined && this.switch_to != undefined) {
       this.removeErrorCode();
-      this.commandsHolder.do(new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to));
+      this.commandsHolder.do(
+        new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to)
+      );
     }
     this.switch_to = undefined;
     this.colToSwitch = undefined;
@@ -404,9 +473,23 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
    * Function to add a Foreign Key [later changed to drag]
    */
   addForeignKey() {
-    if (this.fk_addColumn != undefined && this.fk_addTable != undefined && this.fk_fromColumn != undefined) {
+    if (
+      this.fk_addColumn != undefined &&
+      this.fk_addTable != undefined &&
+      this.fk_fromColumn != undefined
+    ) {
       this.removeErrorCode();
-      this.commandsHolder.do(new AddForeignKey(this.table, this.fk_fromColumn, { references: [{ to_table: this.fk_addTable, from_column: this.table.getColumnByIndex(this.fk_fromColumn).name, to_column: this.fk_addColumn }] }))
+      this.commandsHolder.do(
+        new AddForeignKey(this.table, this.fk_fromColumn, {
+          references: [
+            {
+              to_table: this.fk_addTable,
+              from_column: this.table.getColumnByIndex(this.fk_fromColumn).name,
+              to_column: this.fk_addColumn,
+            },
+          ],
+        })
+      );
     }
     this.fk_addColumn = undefined;
     this.fk_addTable = undefined;
@@ -416,9 +499,23 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   /**
    * Function to add a Foreign Key [later changed to drag]
    */
-  removeForeignKey(fk_fromColumn: number, fk_addTable: string, fk_addColumn: string) {
+  removeForeignKey(
+    fk_fromColumn: number,
+    fk_addTable: string,
+    fk_addColumn: string
+  ) {
     this.removeErrorCode();
-    this.commandsHolder.do(new RemoveForeignKey(this.table, fk_fromColumn, { references: [{ to_table: fk_addTable, from_column: this.table.getColumnByIndex(fk_fromColumn).name, to_column: fk_addColumn }] }))
+    this.commandsHolder.do(
+      new RemoveForeignKey(this.table, fk_fromColumn, {
+        references: [
+          {
+            to_table: fk_addTable,
+            from_column: this.table.getColumnByIndex(fk_fromColumn).name,
+            to_column: fk_addColumn,
+          },
+        ],
+      })
+    );
   }
 
   /**

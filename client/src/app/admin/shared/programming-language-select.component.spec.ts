@@ -1,22 +1,16 @@
-import { TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { TestBed } from "@angular/core/testing";
+import { FormsModule } from "@angular/forms";
 
 import { ProgrammingLanguageSelectComponent } from "./programming-language-select.component";
-import { AvailableLanguages } from '../../shared';
+import { AvailableLanguages } from "../../shared";
 
-describe('ProgrammingLanguageSelect', () => {
+describe("ProgrammingLanguageSelect", () => {
   async function createComponent(preSelectedId = undefined) {
     await TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-      ],
-      providers: [
-      ],
-      declarations: [
-        ProgrammingLanguageSelectComponent
-      ]
-    })
-      .compileComponents();
+      imports: [FormsModule],
+      providers: [],
+      declarations: [ProgrammingLanguageSelectComponent],
+    }).compileComponents();
 
     let fixture = TestBed.createComponent(ProgrammingLanguageSelectComponent);
     let component = fixture.componentInstance;
@@ -27,11 +21,11 @@ describe('ProgrammingLanguageSelect', () => {
 
     fixture.detectChanges();
 
-    return ({
+    return {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
-    });
+    };
   }
 
   it(`can be instantiated`, async () => {

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 
-import { ListProgrammingLanguagesService } from './programming-language-list.service';
+import { ListProgrammingLanguagesService } from "./programming-language-list.service";
 
 /**
  * Allows the selection of a single meta code resource (or none).
@@ -8,17 +8,13 @@ import { ListProgrammingLanguagesService } from './programming-language-list.ser
 @Component({
   templateUrl: `templates/programming-language-select.html`,
   selector: `programming-language-select`,
-  providers: [
-    ListProgrammingLanguagesService
-  ]
+  providers: [ListProgrammingLanguagesService],
 })
 export class ProgrammingLanguageSelectComponent {
   @Output()
   selectedIdChange = new EventEmitter<string>();
 
-  constructor(
-    private _list: ListProgrammingLanguagesService
-  ) { }
+  constructor(private _list: ListProgrammingLanguagesService) {}
 
   /**
    * The code resources that are available.
@@ -32,7 +28,7 @@ export class ProgrammingLanguageSelectComponent {
    */
   @Input()
   get selectedId() {
-    return (this._selectedId);
+    return this._selectedId;
   }
 
   /**

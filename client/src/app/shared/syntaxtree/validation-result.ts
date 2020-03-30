@@ -1,4 +1,4 @@
-import * as AST from './syntaxtree'
+import * as AST from "./syntaxtree";
 
 // Groups together all error codes that exist in the core of the validator.
 export enum ErrorCodes {
@@ -35,7 +35,7 @@ export enum ErrorCodes {
   // There should have been exactly one node but there where too many
   SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE",
   // A parentheses group had no types and is therefore undecidable
-  ParenthesesEmptyTypes = "PARENTHESES_EMPTY_TYPES"
+  ParenthesesEmptyTypes = "PARENTHESES_EMPTY_TYPES",
 }
 
 /**
@@ -43,35 +43,35 @@ export enum ErrorCodes {
  * and possibly the types that were originally expected.
  */
 export interface ErrorUnexpectedType {
-  present: AST.QualifiedTypeName
-  expected: AST.QualifiedTypeName[]
+  present: AST.QualifiedTypeName;
+  expected: AST.QualifiedTypeName[];
 }
 
 /**
  * A child is not allowed in a certain position.
  */
 export interface ErrorIllegalChildType {
-  expected: AST.QualifiedTypeName
-  present: AST.QualifiedTypeName
-  category: string
-  index: number
+  expected: AST.QualifiedTypeName;
+  present: AST.QualifiedTypeName;
+  category: string;
+  index: number;
 }
 
 export interface ErrorMissingChild {
-  expected: AST.QualifiedTypeName
-  category: string
-  index: number
+  expected: AST.QualifiedTypeName;
+  category: string;
+  index: number;
 }
 
 export interface ErrorSuperflousChild {
-  present: AST.QualifiedTypeName
-  category: string
-  index: number
+  present: AST.QualifiedTypeName;
+  category: string;
+  index: number;
 }
 
 export interface ErrorMissingProperty {
-  expected: string
-  name: string
+  expected: string;
+  name: string;
 }
 
 // Details about an unknown child category
@@ -80,11 +80,11 @@ export interface ErrorUnknownChildCategory {
 }
 
 export type ErrorData =
-  ErrorUnexpectedType |
-  ErrorUnknownChildCategory |
-  ErrorMissingChild |
-  ErrorMissingProperty |
-  any;
+  | ErrorUnexpectedType
+  | ErrorUnknownChildCategory
+  | ErrorMissingChild
+  | ErrorMissingProperty
+  | any;
 
 /**
  * Core data about the error. In every case the user will be confronted with the
@@ -101,12 +101,12 @@ export interface ValidationError {
  * A view of an actual error that does not contain any circular references.
  */
 interface PrintableError {
-  code: string
-  data?: ErrorData
+  code: string;
+  data?: ErrorData;
   offendingNode?: {
-    qualifiedName: AST.QualifiedTypeName
-    location?: AST.NodeLocation
-  }
+    qualifiedName: AST.QualifiedTypeName;
+    location?: AST.NodeLocation;
+  };
 }
 
 /**
@@ -116,22 +116,20 @@ export function printableError(e: ValidationError) {
   const toReturn: PrintableError = {
     code: e.code,
     data: e.data,
-    offendingNode: undefined
+    offendingNode: undefined,
   };
 
   if (e.node) {
     toReturn.offendingNode = {
-      qualifiedName: e.node.qualifiedName
+      qualifiedName: e.node.qualifiedName,
     };
 
     try {
       toReturn.offendingNode.location = e.node.location;
-    } catch {
-
-    }
+    } catch {}
   }
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -141,17 +139,14 @@ export function printableError(e: ValidationError) {
 export class ValidationContext {
   private _errors: ValidationError[] = [];
 
-  constructor(
-    public additional: Readonly<any> = {}
-  ) {
-  }
+  constructor(public additional: Readonly<any> = {}) {}
 
   addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = {}) {
     this._errors.push({ code: code, node: node, data: data });
   }
 
   get errors() {
-    return (this._errors);
+    return this._errors;
   }
 }
 
@@ -171,16 +166,14 @@ export class ValidationResult {
    * @return All errors that happened on the given node.
    */
   getErrorsOn(node: AST.Node) {
-    return (
-      this._errors.filter(e => e.node === node)
-    );
+    return this._errors.filter((e) => e.node === node);
   }
 
   get isValid() {
-    return (this._errors.length === 0);
+    return this._errors.length === 0;
   }
 
   get errors() {
-    return (this._errors);
+    return this._errors;
   }
 }

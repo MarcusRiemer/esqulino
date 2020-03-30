@@ -1,18 +1,22 @@
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from "rxjs";
 
 import {
-  ProjectFullDescription, ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
-  ProjectUpdateDescription, ProjectUsesBlockLanguageDescription
-} from './project.description'
-import { Schema } from './schema/schema'
-import { Saveable, SaveStateEvent } from './interfaces'
-import { CodeResource, GrammarDescription } from './syntaxtree'
-import { BlockLanguage } from '../shared/block';
-import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
-import { ResourceReferencesService } from './resource-references.service';
-import { isValidId } from './util'
+  ProjectFullDescription,
+  ProjectDescription,
+  AvailableDatabaseDescription,
+  ProjectSourceDescription,
+  ProjectUpdateDescription,
+  ProjectUsesBlockLanguageDescription,
+} from "./project.description";
+import { Schema } from "./schema/schema";
+import { Saveable, SaveStateEvent } from "./interfaces";
+import { CodeResource, GrammarDescription } from "./syntaxtree";
+import { BlockLanguage } from "../shared/block";
+import { DatabaseSchemaAdditionalContext } from "./syntaxtree/sql/sql.validator";
+import { ResourceReferencesService } from "./resource-references.service";
+import { isValidId } from "./util";
 
-export { ProjectDescription, ProjectFullDescription }
+export { ProjectDescription, ProjectFullDescription };
 
 /**
  * Compares two named things in a case-insensitive manner.
@@ -28,7 +32,7 @@ const compareIgnoreCase = (lhs: { name: string }, rhs: { name: string }) => {
   } else {
     return 0;
   }
-}
+};
 
 /**
  * A loaded project with editing capatabilities. This is were all
@@ -79,19 +83,20 @@ export class Project implements Saveable {
     this._currentDatabase = json.activeDatabase;
     this._availableDatabases = json.availableDatabases;
     this._projectImageId = json.preview;
-    this._sources = json.sources || [] // Sources may be undefined
+    this._sources = json.sources || []; // Sources may be undefined
     this._usesBlockLanguages = json.projectUsesBlockLanguages;
     this.grammarDescriptions = json.grammars;
     this.schema = new Schema(json.schema);
 
     // Map all descriptions to their concrete objects
     this._codeResources = (json.codeResources || [])
-      .map(val => new CodeResource(val, this.resourceReferences))
+      .map((val) => new CodeResource(val, this.resourceReferences))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
 
     // Construct relevant block languages
-    this._blockLanguages = (json.blockLanguages || [])
-      .map(val => new BlockLanguage(val));
+    this._blockLanguages = (json.blockLanguages || []).map(
+      (val) => new BlockLanguage(val)
+    );
   }
 
   /**
@@ -103,28 +108,31 @@ export class Project implements Saveable {
     console.log("Updated Project:", desc);
     // Simply take the now used languages for granted
     this._usesBlockLanguages = desc.projectUsesBlockLanguages;
-    this._blockLanguages = desc.blockLanguages.map(blockDesc => new BlockLanguage(blockDesc));
+    this._blockLanguages = desc.blockLanguages.map(
+      (blockDesc) => new BlockLanguage(blockDesc)
+    );
   }
 
-
   // Fired when the save-state has changed
-  private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
-    resource: this,
-    saveRequired: this._saveRequired
-  });
+  private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>(
+    {
+      resource: this,
+      saveRequired: this._saveRequired,
+    }
+  );
 
   /**
    * @return The unique ID of this project.
    */
   get id() {
-    return (this._id);
+    return this._id;
   }
 
   hasSlugOrId(slugOrId: string) {
     if (isValidId(slugOrId)) {
-      return (this.id == slugOrId);
+      return this.id == slugOrId;
     } else {
-      return (this.slug == slugOrId);
+      return this.slug == slugOrId;
     }
   }
 
@@ -132,37 +140,37 @@ export class Project implements Saveable {
    * @return Project wide data that may or may not be relevant during validation.
    */
   get additionalValidationContext(): DatabaseSchemaAdditionalContext {
-    return ({
-      databaseSchema: this.schema
-    });
+    return {
+      databaseSchema: this.schema,
+    };
   }
 
   /**
    * @return True if this project utilizes content from third party sources.
    */
   get hasSources(): boolean {
-    return (this._sources.length > 0);
+    return this._sources.length > 0;
   }
 
   /**
    * @return The sources that are associated with this project.
    */
   get sources() {
-    return (this._sources);
+    return this._sources;
   }
 
   /**
    * @return True, if this project should be saved
    */
   get isSavingRequired() {
-    return (this._saveRequired);
+    return this._saveRequired;
   }
 
   /**
    * Allows subscription to state-changes for the save event.
    */
   get saveStateChanged(): Observable<SaveStateEvent<Project>> {
-    return (this._saveStateChangedEvent);
+    return this._saveStateChangedEvent;
   }
 
   /**
@@ -193,7 +201,7 @@ export class Project implements Saveable {
   private fireCurrentSaveState() {
     this._saveStateChangedEvent.next({
       resource: this,
-      saveRequired: this._saveRequired
+      saveRequired: this._saveRequired,
     });
   }
 
@@ -201,7 +209,7 @@ export class Project implements Saveable {
    * @return The name of this project
    */
   get name() {
-    return (this._name);
+    return this._name;
   }
 
   /**
@@ -216,7 +224,7 @@ export class Project implements Saveable {
    * @return The description of this project.
    */
   get description() {
-    return (this._description);
+    return this._description;
   }
 
   /**
@@ -231,7 +239,7 @@ export class Project implements Saveable {
    * @return The name of the currently active database.
    */
   get currentDatabaseName() {
-    return (this._currentDatabase);
+    return this._currentDatabase;
   }
 
   /**
@@ -247,9 +255,9 @@ export class Project implements Saveable {
    */
   get availableDatabaseNames() {
     if (this._availableDatabases) {
-      return (Object.keys(this._availableDatabases));
+      return Object.keys(this._availableDatabases);
     } else {
-      return ([]);
+      return [];
     }
   }
 
@@ -257,21 +265,23 @@ export class Project implements Saveable {
    * @return All block languages that are available as part of this project.
    */
   get projectBlockLanguages() {
-    return (this._blockLanguages);
+    return this._blockLanguages;
   }
 
   /**
    * @return True, if the given block language is used by any resource.
    */
   isBlockLanguageReferenced(blockLanguageId: string) {
-    return (this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
+    return this._codeResources.some(
+      (c) => c.blockLanguageIdPeek == blockLanguageId
+    );
   }
 
   /**
    * @return All block languages as they are used by this project.
    */
   get usesBlockLanguages(): ReadonlyArray<ProjectUsesBlockLanguageDescription> {
-    return (this._usesBlockLanguages);
+    return this._usesBlockLanguages;
   }
 
   /**
@@ -281,7 +291,7 @@ export class Project implements Saveable {
     console.log(blockLanguageId);
     this._usesBlockLanguages.push({
       id: undefined,
-      blockLanguageId: blockLanguageId
+      blockLanguageId: blockLanguageId,
     });
   }
 
@@ -290,19 +300,21 @@ export class Project implements Saveable {
    * use by any code resource.
    */
   removeUsedBlockLanguage(usedId: string) {
-    const used = this._usesBlockLanguages.find(u => u.id === usedId);
+    const used = this._usesBlockLanguages.find((u) => u.id === usedId);
 
     // Is the language unknown or referenced?
     if (!used || this.isBlockLanguageReferenced(used.blockLanguageId)) {
       // If it is: Don't change anything
-      return (false);
+      return false;
     } else {
       // It isn't: Lets remove it
-      this._usesBlockLanguages = this._usesBlockLanguages.filter(b => b.id !== usedId);
+      this._usesBlockLanguages = this._usesBlockLanguages.filter(
+        (b) => b.id !== usedId
+      );
       this._removedBlockLanguages.push(used.id);
       this.markSaveRequired();
 
-      return (true);
+      return true;
     }
   }
 
@@ -310,14 +322,14 @@ export class Project implements Saveable {
    * @return All available code resources, no order guaranteed.
    */
   get codeResources() {
-    return (this._codeResources);
+    return this._codeResources;
   }
 
   /**
    * @return The id of the index page.
    */
   get indexPageId() {
-    return (this._indexPageId);
+    return this._indexPageId;
   }
 
   /**
@@ -332,7 +344,7 @@ export class Project implements Saveable {
    * @return The id of the project image
    */
   get projectImageId() {
-    return (this._projectImageId);
+    return this._projectImageId;
   }
 
   /**
@@ -349,7 +361,7 @@ export class Project implements Saveable {
    * @param id A single code resource identified by it's ID
    */
   getCodeResourceById(id: string) {
-    return (this._codeResources.find(res => res.id === id));
+    return this._codeResources.find((res) => res.id === id);
   }
 
   /**
@@ -363,7 +375,7 @@ export class Project implements Saveable {
    * Needs to be called after a code resource has been deleted.
    */
   removedCodeResource(code: CodeResource) {
-    const index = this._codeResources.findIndex(c => c.id == code.id);
+    const index = this._codeResources.findIndex((c) => c.id == code.id);
     if (index >= 0) {
       this._codeResources.splice(index, 1);
     }
@@ -373,7 +385,9 @@ export class Project implements Saveable {
    * @param id_or_slug The id or slug for a certain block language
    */
   getBlockLanguage(id_or_slug: string) {
-    return (this._blockLanguages.find(l => l.id === id_or_slug || l.slug === id_or_slug));
+    return this._blockLanguages.find(
+      (l) => l.id === id_or_slug || l.slug === id_or_slug
+    );
   }
 
   /**
@@ -384,20 +398,20 @@ export class Project implements Saveable {
       name: this.name,
       description: this.description,
       activeDatabase: this._currentDatabase,
-      projectUsesBlockLanguages: []
+      projectUsesBlockLanguages: [],
     };
 
-    this._removedBlockLanguages.forEach(removed => {
+    this._removedBlockLanguages.forEach((removed) => {
       toReturn.projectUsesBlockLanguages.push({
         id: removed,
-        _destroy: true
-      })
+        _destroy: true,
+      });
     });
 
-    this._usesBlockLanguages.forEach(used => {
+    this._usesBlockLanguages.forEach((used) => {
       toReturn.projectUsesBlockLanguages.push({
         id: used.id,
-        blockLanguageId: used.blockLanguageId
+        blockLanguageId: used.blockLanguageId,
       });
     });
 
@@ -409,6 +423,6 @@ export class Project implements Saveable {
       toReturn.preview = this._projectImageId;
     }
 
-    return (toReturn);
+    return toReturn;
   }
 }

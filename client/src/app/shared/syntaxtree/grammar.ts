@@ -1,17 +1,20 @@
-import * as Desc from './grammar.description'
-import * as AST from './syntaxtree'
+import * as Desc from "./grammar.description";
+import * as AST from "./syntaxtree";
 
-import { Validator } from './validator'
+import { Validator } from "./validator";
 import {
-  ErrorCodes, ValidationContext, ErrorMissingChild, ErrorMissingProperty,
+  ErrorCodes,
+  ValidationContext,
+  ErrorMissingChild,
+  ErrorMissingProperty,
   ErrorUnexpectedType,
   ErrorIllegalChildType,
-  ErrorSuperflousChild
-} from './validation-result'
+  ErrorSuperflousChild,
+} from "./validation-result";
 
-import { resolveChildOccurs } from './grammar-util';
-import { OccursSpecificDescription, resolveOccurs } from './occurs';
-import { QualifiedTypeName } from './syntaxtree.description';
+import { resolveChildOccurs } from "./grammar-util";
+import { OccursSpecificDescription, resolveOccurs } from "./occurs";
+import { QualifiedTypeName } from "./syntaxtree.description";
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -43,38 +46,41 @@ export abstract class NodeType {
    *         of the given type.
    */
   matchesType(typeName: AST.QualifiedTypeName) {
-    return (this._languageName == typeName.languageName && this._typeName == typeName.typeName);
+    return (
+      this._languageName == typeName.languageName &&
+      this._typeName == typeName.typeName
+    );
   }
 
   /**
    * @return The name of the language this type belongs to.
    */
   get languageName() {
-    return (this._languageName);
+    return this._languageName;
   }
 
   /**
    * @return The type of node this instance will validate.
    */
   get typeName() {
-    return (this._typeName);
+    return this._typeName;
   }
 
   /**
    * @return The fully qualified typename this validator expects.
    */
   get qualifiedName(): AST.QualifiedTypeName {
-    return ({
+    return {
       languageName: this._languageName,
-      typeName: this._typeName
-    });
+      typeName: this._typeName,
+    };
   }
 
   /**
    * @return The validator this node is associated with.
    */
   get validator() {
-    return (this._validator);
+    return this._validator;
   }
 
   /**
@@ -88,7 +94,10 @@ export abstract class NodeType {
    *
    * @return True, if this would be a legal, immediate fit.
    */
-  abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
+  abstract allowsChildType(
+    childType: AST.QualifiedTypeName,
+    categoryName: string
+  ): boolean;
 
   /**
    * Valid amounts of children inside a certain category.
@@ -110,14 +119,20 @@ export abstract class NodeType {
  * Describes a complex node that may have any kind of children.
  */
 export class NodeConcreteType extends NodeType {
-
   // Possible child groups of this type
   private _allowedChildren: { [category: string]: NodeTypeChildren } = {};
 
   // Possible properties of this type
-  private _allowedProperties: { [propName: string]: NodePropertyValidator } = {};
+  private _allowedProperties: {
+    [propName: string]: NodePropertyValidator;
+  } = {};
 
-  constructor(validator: Validator, typeDesc: Desc.NodeConcreteTypeDescription, language: string, name: string) {
+  constructor(
+    validator: Validator,
+    typeDesc: Desc.NodeConcreteTypeDescription,
+    language: string,
+    name: string
+  ) {
     super(validator, language, name);
     this.loadAttributes(typeDesc.attributes);
   }
@@ -129,14 +144,16 @@ export class NodeConcreteType extends NodeType {
   private loadAttributes(attr: Desc.NodeAttributeDescription[]) {
     if (attr) {
       // Put the existing attributes into their respective buckets
-      attr.forEach(a => {
+      attr.forEach((a) => {
         // Visual properties may not have a name
         switch (a.type) {
           case "property":
             if (a.name in this._allowedProperties) {
               throw new Error(`Duplicate property "${a.name}"`);
             }
-            this._allowedProperties[a.name] = this.instanciatePropertyValidator(a);
+            this._allowedProperties[a.name] = this.instanciatePropertyValidator(
+              a
+            );
             break;
           case "allowed":
           case "sequence":
@@ -145,7 +162,11 @@ export class NodeConcreteType extends NodeType {
             if (a.name in this._allowedChildren) {
               throw new Error(`Duplicate child group "${a.name}"`);
             }
-            this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
+            this._allowedChildren[a.name] = new NodeTypeChildren(
+              this,
+              a,
+              a.name
+            );
             break;
           case "container":
             // Consume the children, they may define validation related attributes
@@ -155,7 +176,9 @@ export class NodeConcreteType extends NodeType {
             // Do nothing, terminals have no impact on validation
             break;
           default:
-            throw new Error(`Unknown validator requested: ${JSON.stringify(a)}`);
+            throw new Error(
+              `Unknown validator requested: ${JSON.stringify(a)}`
+            );
         }
       });
     }
@@ -165,14 +188,14 @@ export class NodeConcreteType extends NodeType {
    * @return Names of all categories that could have children.
    */
   get allowedChildrenCategoryNames() {
-    return (Object.keys(this._allowedChildren));
+    return Object.keys(this._allowedChildren);
   }
 
   /**
    * @return Names of all properties
    */
   get allowedPropertyNames(): string[] {
-    return (Object.keys(this._allowedProperties));
+    return Object.keys(this._allowedProperties);
   }
 
   /**
@@ -181,9 +204,9 @@ export class NodeConcreteType extends NodeType {
   validCardinality(categoryName: string): OccursSpecificDescription {
     const category = this._allowedChildren[categoryName];
     if (category) {
-      return (category.validCardinality());
+      return category.validCardinality();
     } else {
-      return ({ maxOccurs: 0, minOccurs: 0 });
+      return { maxOccurs: 0, minOccurs: 0 };
     }
   }
 
@@ -193,14 +216,17 @@ export class NodeConcreteType extends NodeType {
    */
   validate(ast: AST.Node, context: ValidationContext) {
     // Does the type of the given node match the type we expect?
-    if (this.languageName == ast.languageName && this.typeName == ast.typeName) {
+    if (
+      this.languageName == ast.languageName &&
+      this.typeName == ast.typeName
+    ) {
       // Further validation is done by specific implementations
       this.validateImpl(ast, context);
     } else {
       // Skip any further validation, leave an error
       context.addError(ErrorCodes.UnexpectedType, ast, {
         expected: [this.qualifiedName],
-        present: ast.qualifiedName
+        present: ast.qualifiedName,
       } as ErrorUnexpectedType);
     }
   }
@@ -210,17 +236,19 @@ export class NodeConcreteType extends NodeType {
    */
   private validateImpl(ast: AST.Node, context: ValidationContext) {
     // Check all required children
-    this.allowedChildrenCategoryNames.forEach(categoryName => {
+    this.allowedChildrenCategoryNames.forEach((categoryName) => {
       const catChildren = ast.getChildrenInCategory(categoryName);
       this._allowedChildren[categoryName].validate(ast, catChildren, context);
     });
 
     // Check that there are no unwanted children
     const requiredCategories = new Set(this.allowedChildrenCategoryNames);
-    const superflousCategories = ast.childrenCategoryNames.filter(cat => !requiredCategories.has(cat));
-    superflousCategories.forEach(categoryName => {
+    const superflousCategories = ast.childrenCategoryNames.filter(
+      (cat) => !requiredCategories.has(cat)
+    );
+    superflousCategories.forEach((categoryName) => {
       context.addError(ErrorCodes.SuperflousChildCategory, ast, {
-        categoryName: categoryName
+        categoryName: categoryName,
       });
     });
 
@@ -235,7 +263,7 @@ export class NodeConcreteType extends NodeType {
       else if (!validator.isOptional) {
         context.addError(ErrorCodes.MissingProperty, ast, {
           expected: validator.baseName,
-          name: name
+          name: name,
         } as ErrorMissingProperty);
       }
     });
@@ -244,7 +272,10 @@ export class NodeConcreteType extends NodeType {
   /**
    * @return True if the given type is allowed in the given category.
    */
-  allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean {
+  allowsChildType(
+    childType: AST.QualifiedTypeName,
+    categoryName: string
+  ): boolean {
     const category = this._allowedChildren[categoryName];
     return !!(category && category.allowsChildType(childType));
   }
@@ -252,13 +283,15 @@ export class NodeConcreteType extends NodeType {
   /**
    * @return A NodePropertyValidator that validates the correct type.
    */
-  private instanciatePropertyValidator(desc: Desc.NodePropertyTypeDescription): NodePropertyValidator {
+  private instanciatePropertyValidator(
+    desc: Desc.NodePropertyTypeDescription
+  ): NodePropertyValidator {
     if (Desc.isNodePropertyStringDesciption(desc)) {
-      return (new NodePropertyStringValidator(desc));
+      return new NodePropertyStringValidator(desc);
     } else if (Desc.isNodePropertyBooleanDesciption(desc)) {
-      return (new NodePropertyBooleanValidator(desc));
+      return new NodePropertyBooleanValidator(desc);
     } else if (Desc.isNodePropertyIntegerDesciption(desc)) {
-      return (new NodePropertyIntegerValidator(desc));
+      return new NodePropertyIntegerValidator(desc);
     } else {
       throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
@@ -271,16 +304,19 @@ export class NodeConcreteType extends NodeType {
  * @param desc The description of the child group validator
  * @return A matching child group validator
  */
-function instanciateChildGroupValidator(group: NodeTypeChildren, desc: Desc.NodeChildrenGroupDescription) {
+function instanciateChildGroupValidator(
+  group: NodeTypeChildren,
+  desc: Desc.NodeChildrenGroupDescription
+) {
   switch (desc.type) {
     case "allowed":
-      return (new NodeComplexTypeChildrenAllowed(group, desc));
+      return new NodeComplexTypeChildrenAllowed(group, desc);
     case "sequence":
-      return (new NodeComplexTypeChildrenSequence(group, desc));
+      return new NodeComplexTypeChildrenSequence(group, desc);
     case "choice":
-      return (new NodeComplexTypeChildrenChoice(group, desc));
+      return new NodeComplexTypeChildrenChoice(group, desc);
     case "parentheses":
-      return (new NodeComplexTypeChildrenParentheses(group, desc));
+      return new NodeComplexTypeChildrenParentheses(group, desc);
     default:
       throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
   }
@@ -294,7 +330,11 @@ class NodeTypeChildren {
   private _childValidator: NodeComplexTypeChildrenValidator;
   private _parent: NodeConcreteType;
 
-  constructor(parent: NodeConcreteType, desc: Desc.NodeChildrenGroupDescription, name: string) {
+  constructor(
+    parent: NodeConcreteType,
+    desc: Desc.NodeChildrenGroupDescription,
+    name: string
+  ) {
     this._categoryName = name;
     this._parent = parent;
     this._childValidator = instanciateChildGroupValidator(this, desc);
@@ -305,11 +345,18 @@ class NodeTypeChildren {
    */
   validate(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
     // Check the top-level structure of the children
-    const validChildren = this._childValidator.validateChildren(parent, children, context);
+    const validChildren = this._childValidator.validateChildren(
+      parent,
+      children,
+      context
+    );
 
     // Check the children themselves
-    validChildren.forEach(child => {
-      const childType = this._parent.validator.getType(child.languageName, child.typeName);
+    validChildren.forEach((child) => {
+      const childType = this._parent.validator.getType(
+        child.languageName,
+        child.typeName
+      );
       childType.validate(child, context);
     });
   }
@@ -325,43 +372,45 @@ class NodeTypeChildren {
    * @return True, if this would be a legal, immediate fit.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
-    return (this._childValidator.allowsChildType(childType));
+    return this._childValidator.allowsChildType(childType);
   }
 
   /**
    * Valid amounts of children inside this category
    */
   validCardinality(): OccursSpecificDescription {
-    return (this._childValidator.validCardinality());
-  };
+    return this._childValidator.validCardinality();
+  }
 
   /**
    * @return The node that is the parent to all of these node.
    */
   get parent() {
-    return (this._parent);
+    return this._parent;
   }
 
   /**
    * @return The name of the category these children are attached to.
    */
   get categoryName() {
-    return (this._categoryName);
+    return this._categoryName;
   }
 }
-
 
 /**
  * Classes implementing this interface can check whether certain
  * child nodes are structurally valid.
  */
 abstract class NodeComplexTypeChildrenValidator {
-
   /**
    * Delegates further checks to an implementation defined variation
    */
-  validateChildren(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
-    return (this.validateChildrenImpl(parent, ast, context));
+  validateChildren(
+    parent: AST.Node,
+    ast: AST.Node[],
+    context: ValidationContext
+  ): AST.Node[] {
+    return this.validateChildrenImpl(parent, ast, context);
   }
 
   /**
@@ -370,7 +419,11 @@ abstract class NodeComplexTypeChildrenValidator {
    *
    * @return All children that are in valid positions and should be checked further.
    */
-  protected abstract validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[];
+  protected abstract validateChildrenImpl(
+    parent: AST.Node,
+    ast: AST.Node[],
+    context: ValidationContext
+  ): AST.Node[];
 
   /**
    * Determines whether the given type would be an *immediate* fit for this
@@ -401,23 +454,35 @@ class ChildCardinality {
     const parent = group.parent;
     this._occurs = resolveChildOccurs(typeDesc);
 
-    if (typeof (typeDesc) === "string") {
+    if (typeof typeDesc === "string") {
       // Simple strings always refer to the language of the parent.
-      this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
-    }
-    else if (Desc.isQualifiedTypeName(typeDesc)) {
+      this._nodeType = new TypeReference(
+        parent.validator,
+        typeDesc,
+        parent.languageName
+      );
+    } else if (Desc.isQualifiedTypeName(typeDesc)) {
       // Qualified names are easy, because it is clear what they refer to
-      this._nodeType = new TypeReference(parent.validator, typeDesc.typeName, typeDesc.languageName);
+      this._nodeType = new TypeReference(
+        parent.validator,
+        typeDesc.typeName,
+        typeDesc.languageName
+      );
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may refer to a different language
-      if (typeof (typeDesc.nodeType) === "string") {
-        this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
+      if (typeof typeDesc.nodeType === "string") {
+        this._nodeType = new TypeReference(
+          parent.validator,
+          typeDesc.nodeType,
+          parent.languageName
+        );
       } else {
         this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType);
       }
-
     } else {
-      throw new Error(`Unknown child cardinality: "${JSON.stringify(typeDesc)}"`);
+      throw new Error(
+        `Unknown child cardinality: "${JSON.stringify(typeDesc)}"`
+      );
     }
   }
 
@@ -425,21 +490,21 @@ class ChildCardinality {
    * @return The type that is restricted in its cardinality.
    */
   get nodeType() {
-    return (this._nodeType);
+    return this._nodeType;
   }
 
   /**
    * @return The minimum number of occurences that are expected
    */
   get minOccurs() {
-    return (this._occurs.minOccurs);
+    return this._occurs.minOccurs;
   }
 
   /**
    * @return The maximum number of occurences that are expected
    */
   get maxOccurs() {
-    return (this._occurs.maxOccurs);
+    return this._occurs.maxOccurs;
   }
 }
 
@@ -462,8 +527,8 @@ type ChildrenValidationFunc = (
   firstIndex: number,
   context: ValidationContext
 ) => {
-  firstUncheckedIndex: number,
-  validNodes: AST.Node[]
+  firstUncheckedIndex: number;
+  validNodes: AST.Node[];
 };
 
 /**
@@ -488,7 +553,7 @@ const validateSequence: ChildrenValidationFunc = (
 
   // Using `foreach` over the node types to ensure that all types
   // we are expecting are actually present
-  nodeTypes.forEach(expected => {
+  nodeTypes.forEach((expected) => {
     // This index starts counting for every type. It is used
     // to track whether minOccurences and maxOccurences are
     // satisfied or not.
@@ -496,7 +561,6 @@ const validateSequence: ChildrenValidationFunc = (
 
     // Try to "eat" as many children as possible
     while (subIndex < expected.maxOccurs) {
-
       // Is a child actually present?
       let child = children[childIndex];
 
@@ -546,11 +610,11 @@ const validateSequence: ChildrenValidationFunc = (
     }
   });
 
-  return ({
+  return {
     firstUncheckedIndex: childIndex,
-    validNodes: validIndices
-  });
-}
+    validNodes: validIndices,
+  };
+};
 
 /**
  * Enforces a specific sequence of child-nodes of a parent node.
@@ -559,11 +623,16 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
   private _group: NodeTypeChildren;
 
-  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesSequenceDescription) {
+  constructor(
+    group: NodeTypeChildren,
+    desc: Desc.NodeTypesSequenceDescription
+  ) {
     super();
 
     this._group = group;
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
+    this._nodeTypes = desc.nodeTypes.map(
+      (typeDesc) => new ChildCardinality(typeDesc, group)
+    );
   }
 
   /**
@@ -575,7 +644,14 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
     context: ValidationContext
   ): AST.Node[] {
     // The actual sequence validation walks over the existing node types
-    let res = validateSequence(this._nodeTypes, this._group, parent, children, 0, context);
+    let res = validateSequence(
+      this._nodeTypes,
+      this._group,
+      parent,
+      children,
+      0,
+      context
+    );
 
     // Any children left at this point are errors
     for (let i = res.firstUncheckedIndex; i < children.length; i++) {
@@ -588,32 +664,33 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
     }
 
     // Valid children that should be checked more thorughly
-    return (res.validNodes);
+    return res.validNodes;
   }
 
   /**
    * @return True, if the given type occurs anywhere in the list of possible types.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
-    return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+    return this._nodeTypes.some((t) => t.nodeType.matchesType(childType));
   }
 
   /**
    * @return The minimum and maximum number of children in this category as a whole
    */
   validCardinality(): OccursSpecificDescription {
-    return (
-      this._nodeTypes.reduce<OccursSpecificDescription>((akku, curr): OccursSpecificDescription => {
-        return ({
+    return this._nodeTypes.reduce<OccursSpecificDescription>(
+      (akku, curr): OccursSpecificDescription => {
+        return {
           maxOccurs: akku.maxOccurs + curr.maxOccurs,
-          minOccurs: akku.minOccurs + curr.minOccurs
-        });
-      }, { minOccurs: 0, maxOccurs: 0 })
+          minOccurs: akku.minOccurs + curr.minOccurs,
+        };
+      },
+      { minOccurs: 0, maxOccurs: 0 }
     );
   }
 }
 
-const validateAllowed: ChildrenValidationFunc = function(
+const validateAllowed: ChildrenValidationFunc = function (
   this: void,
   nodeTypes: ChildCardinality[],
   group: NodeTypeChildren,
@@ -627,20 +704,22 @@ const validateAllowed: ChildrenValidationFunc = function(
   // These children are expected
   const toReturn: AST.Node[] = [];
   // Initially no node has occured so far
-  const occurences: number[] = nodeTypes.map(_ => 0);
+  const occurences: number[] = nodeTypes.map((_) => 0);
 
   // The "allowed" restriction can be checked by iterating over children
   // directly, the types are resolved on demand.
   for (; index < children.length; ++index) {
     const node = children[index];
     // Find a matching type
-    const cardinalityRef = nodeTypes.find(type => type.nodeType.matchesType(node.qualifiedName));
+    const cardinalityRef = nodeTypes.find((type) =>
+      type.nodeType.matchesType(node.qualifiedName)
+    );
     if (!cardinalityRef) {
       // The node is entirely unexpected
       context.addError(ErrorCodes.IllegalChildType, node, {
         index: index,
         present: node.qualifiedName,
-        expected: nodeTypes.map(t => t.nodeType.description)
+        expected: nodeTypes.map((t) => t.nodeType.description),
       });
     } else {
       // The node is expected, but may occur too often. For the moment we simply count it.
@@ -659,7 +738,7 @@ const validateAllowed: ChildrenValidationFunc = function(
         category: group.categoryName,
         type: nodeTypes[index].nodeType.description,
         minOccurs: cardinalityRef.minOccurs,
-        actual: num
+        actual: num,
       });
     }
 
@@ -669,16 +748,16 @@ const validateAllowed: ChildrenValidationFunc = function(
         category: group.categoryName,
         type: nodeTypes[index].nodeType.description,
         maxOccurs: cardinalityRef.maxOccurs,
-        actual: num
+        actual: num,
       });
     }
   });
 
-  return ({
+  return {
     firstUncheckedIndex: index,
     validNodes: [],
-  });
-}
+  };
+};
 
 /**
  * Ensures that every child-node is of a type that has been explicitly
@@ -687,38 +766,55 @@ const validateAllowed: ChildrenValidationFunc = function(
 class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
 
-  constructor(private _group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
+  constructor(
+    private _group: NodeTypeChildren,
+    desc: Desc.NodeTypesAllowedDescription
+  ) {
     super();
 
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, _group));
+    this._nodeTypes = desc.nodeTypes.map(
+      (typeDesc) => new ChildCardinality(typeDesc, _group)
+    );
   }
 
   /**
    * Ensures that every child has at least a matching type.
    */
-  validateChildrenImpl(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
-    const res = validateAllowed(this._nodeTypes, this._group, parent, children, 0, context);
-    return (res.validNodes);
+  validateChildrenImpl(
+    parent: AST.Node,
+    children: AST.Node[],
+    context: ValidationContext
+  ) {
+    const res = validateAllowed(
+      this._nodeTypes,
+      this._group,
+      parent,
+      children,
+      0,
+      context
+    );
+    return res.validNodes;
   }
 
   /**
    * @return True, if the given type occurs anywhere in the list of possible types.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
-    return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+    return this._nodeTypes.some((t) => t.nodeType.matchesType(childType));
   }
 
   /**
    * @return The minimum and maximum number of children in this category as a whole
    */
   validCardinality(): OccursSpecificDescription {
-    return (
-      this._nodeTypes.reduce<OccursSpecificDescription>((akku, curr): OccursSpecificDescription => {
-        return ({
+    return this._nodeTypes.reduce<OccursSpecificDescription>(
+      (akku, curr): OccursSpecificDescription => {
+        return {
           maxOccurs: akku.maxOccurs + curr.maxOccurs,
-          minOccurs: akku.minOccurs + curr.minOccurs
-        });
-      }, { minOccurs: 0, maxOccurs: 0 })
+          minOccurs: akku.minOccurs + curr.minOccurs,
+        };
+      },
+      { minOccurs: 0, maxOccurs: 0 }
     );
   }
 }
@@ -739,19 +835,23 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
   /**
    * Runs the choice validation against a certain node.
    */
-  protected validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
+  protected validateChildrenImpl(
+    parent: AST.Node,
+    ast: AST.Node[],
+    context: ValidationContext
+  ): AST.Node[] {
     if (ast.length === 0) {
       // TODO: Tell category
       context.addError(ErrorCodes.NoChoiceNodeAvailable, parent, {});
-      return ([]);
+      return [];
     } else {
       // Check whether the first (and hopefully only) node is a match?
-      const hasMatch = this._desc.choices.some(possible => {
+      const hasMatch = this._desc.choices.some((possible) => {
         // Build fully qualified type for this possibility.
         const possibleType = this.typeNameFromChoice(possible);
 
         // Check whether the type matches or not
-        return (AST.typenameEquals(possibleType, ast[0].qualifiedName));
+        return AST.typenameEquals(possibleType, ast[0].qualifiedName);
       });
 
       if (!hasMatch) {
@@ -759,9 +859,13 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
       }
 
       // If there are any more nodes: They shouldn't be there
-      ast.slice(1).forEach(node => context.addError(ErrorCodes.SuperflousChoiceNodeAvailable, node, {}));
+      ast
+        .slice(1)
+        .forEach((node) =>
+          context.addError(ErrorCodes.SuperflousChoiceNodeAvailable, node, {})
+        );
 
-      return (hasMatch ? [ast[0]] : []);
+      return hasMatch ? [ast[0]] : [];
     }
   }
 
@@ -769,33 +873,39 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
    * @return The name of the language this validator is part of.
    */
   protected get ownLanguageName() {
-    return (this._group.parent.languageName)
+    return this._group.parent.languageName;
   }
 
-  protected typeNameFromChoice(possible: Desc.TypeReference): AST.QualifiedTypeName {
-    const possibleName = typeof possible === "string" ? possible : possible.typeName;
-    const possibleLanguage = typeof possible === "string" ? this.ownLanguageName : possible.languageName;
+  protected typeNameFromChoice(
+    possible: Desc.TypeReference
+  ): AST.QualifiedTypeName {
+    const possibleName =
+      typeof possible === "string" ? possible : possible.typeName;
+    const possibleLanguage =
+      typeof possible === "string"
+        ? this.ownLanguageName
+        : possible.languageName;
 
     return {
       languageName: possibleLanguage,
-      typeName: possibleName
-    }
+      typeName: possibleName,
+    };
   }
 
   /**
    * @return True, if the given type occurs anywhere in the list of possible types.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
-    return (this._desc.choices
-      .map(choice => this.typeNameFromChoice(choice))
-      .some(choiceType => AST.typenameEquals(childType, choiceType)));
+    return this._desc.choices
+      .map((choice) => this.typeNameFromChoice(choice))
+      .some((choiceType) => AST.typenameEquals(childType, choiceType));
   }
 
   /**
    * @return The minimum and maximum number of children in this category as a whole
    */
   validCardinality(): OccursSpecificDescription {
-    return ({ maxOccurs: 0, minOccurs: 0 });
+    return { maxOccurs: 0, minOccurs: 0 };
   }
 }
 
@@ -803,16 +913,20 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
  * A child group in parentheses to verify the cardinality of more then a single item.
  */
 class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidator {
-
   private _group: NodeTypeChildren;
   private _cardinality: OccursSpecificDescription;
   private _nodeTypes: ChildCardinality[];
   private _subChildValidator: ChildrenValidationFunc;
 
-  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesParenthesesDescription) {
+  constructor(
+    group: NodeTypeChildren,
+    desc: Desc.NodeTypesParenthesesDescription
+  ) {
     super();
     this._cardinality = resolveOccurs(desc.cardinality);
-    this._nodeTypes = desc.group.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
+    this._nodeTypes = desc.group.nodeTypes.map(
+      (typeDesc) => new ChildCardinality(typeDesc, group)
+    );
     this._group = group;
 
     switch (desc.group.type) {
@@ -823,14 +937,20 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
         this._subChildValidator = validateAllowed;
         break;
       default:
-        throw new Error(`Unknown parentheses group validator: ${JSON.stringify(desc.group)}`);
+        throw new Error(
+          `Unknown parentheses group validator: ${JSON.stringify(desc.group)}`
+        );
     }
   }
 
   /**
    * Checks whether the grouping is valid and appears an appropriate number of times.
    */
-  protected validateChildrenImpl(p: AST.Node, children: AST.Node[], c: ValidationContext): AST.Node[] {
+  protected validateChildrenImpl(
+    p: AST.Node,
+    children: AST.Node[],
+    c: ValidationContext
+  ): AST.Node[] {
     let currChildIndex = 0;
     let validNodes: AST.Node[] = [];
 
@@ -842,7 +962,14 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
     if (this._nodeTypes.length > 0) {
       // Try to do as many iterations over the existing children as possible
       while (currChildIndex < children.length) {
-        const res = this._subChildValidator(this._nodeTypes, this._group, p, children, currChildIndex, c);
+        const res = this._subChildValidator(
+          this._nodeTypes,
+          this._group,
+          p,
+          children,
+          currChildIndex,
+          c
+        );
 
         validNodes.push(...res.validNodes);
         currChildIndex = res.firstUncheckedIndex;
@@ -864,14 +991,14 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
     }
 
     // Return only children that have been explicitly marked as valid
-    return (validNodes);
+    return validNodes;
   }
 
   /**
    * @return True, if any of the mentioned children matches the given type.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
-    return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+    return this._nodeTypes.some((t) => t.nodeType.matchesType(childType));
   }
 
   /**
@@ -881,24 +1008,28 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
    * @return The actual range of children that could occur.
    */
   validCardinality(): OccursSpecificDescription {
-    const childCardinality: OccursSpecificDescription =
-      this._nodeTypes.reduce<OccursSpecificDescription>((akku, curr): OccursSpecificDescription => {
-        return ({
+    const childCardinality: OccursSpecificDescription = this._nodeTypes.reduce<
+      OccursSpecificDescription
+    >(
+      (akku, curr): OccursSpecificDescription => {
+        return {
           maxOccurs: akku.maxOccurs + curr.maxOccurs,
-          minOccurs: akku.minOccurs + curr.minOccurs
-        });
-      }, { minOccurs: 0, maxOccurs: 0 })
+          minOccurs: akku.minOccurs + curr.minOccurs,
+        };
+      },
+      { minOccurs: 0, maxOccurs: 0 }
+    );
 
     // A group that is not optional requires at least a single child,
     // Or to be more precise: There must be at least as many children as the cardinality
     // of the group itself requires.
-    return ({
+    return {
       maxOccurs: childCardinality.maxOccurs * this._cardinality.maxOccurs,
       minOccurs: Math.max(
         childCardinality.minOccurs * this._cardinality.minOccurs,
         this._cardinality.minOccurs
       ),
-    });
+    };
   }
 }
 
@@ -914,20 +1045,24 @@ abstract class NodePropertyValidator {
     this._base = desc.base;
   }
 
-  abstract validate(node: AST.Node, value: string, context: ValidationContext): void;
+  abstract validate(
+    node: AST.Node,
+    value: string,
+    context: ValidationContext
+  ): void;
 
   /**
    * @return This property may be omitted from a node.
    */
   get isOptional() {
-    return (this._isOptional);
+    return this._isOptional;
   }
 
   /**
    * @return The typename of the property
    */
   get baseName() {
-    return (this._base);
+    return this._base;
   }
 }
 
@@ -935,7 +1070,6 @@ abstract class NodePropertyValidator {
  * Validates boolean properties
  */
 export class NodePropertyBooleanValidator extends NodePropertyValidator {
-
   constructor(desc: Desc.NodePropertyBooleanDescription) {
     super(desc);
   }
@@ -943,7 +1077,7 @@ export class NodePropertyBooleanValidator extends NodePropertyValidator {
   validate(node: AST.Node, value: string, context: ValidationContext): void {
     if (value != "true" && value != "false") {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
-        condition: `"${value}" must be either "true" or "false"`
+        condition: `"${value}" must be either "true" or "false"`,
       });
     }
   }
@@ -963,28 +1097,28 @@ export class NodePropertyIntegerValidator extends NodePropertyValidator {
   validValue(value: string): boolean {
     // The typescript type system forbids other values then strings, but
     // they occasionally happen anyway.
-    return (typeof value === "string" && /^-?[0-9]+$/.test(value));
+    return typeof value === "string" && /^-?[0-9]+$/.test(value);
   }
 
   validate(node: AST.Node, value: string, context: ValidationContext): void {
     if (!this.validValue(value)) {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
-        condition: `"${value}" must be a string that looks like an integer`
+        condition: `"${value}" must be a string that looks like an integer`,
       });
     } else {
-      this._restrictions.forEach(r => {
+      this._restrictions.forEach((r) => {
         switch (r.type) {
           case "minInclusive":
             if (+value < r.value) {
               context.addError(ErrorCodes.IllegalPropertyType, node, {
-                condition: `Failed: ${value} ≥ ${r.value}`
+                condition: `Failed: ${value} ≥ ${r.value}`,
               });
             }
             break;
           case "maxInclusive":
             if (+value > r.value) {
               context.addError(ErrorCodes.IllegalPropertyType, node, {
-                condition: `Failed: ${value} ≤ ${r.value}`
+                condition: `Failed: ${value} ≤ ${r.value}`,
               });
             }
             break;
@@ -1008,33 +1142,33 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
   }
 
   validate(node: AST.Node, value: string, context: ValidationContext) {
-    this._restrictions.forEach(restriction => {
+    this._restrictions.forEach((restriction) => {
       switch (restriction.type as string) {
         case "length":
           if (value.length != restriction.value) {
             context.addError(ErrorCodes.IllegalPropertyType, node, {
-              condition: `${value.length} != ${restriction.value}`
-            })
+              condition: `${value.length} != ${restriction.value}`,
+            });
           }
           break;
         case "minLength":
           if (value.length < restriction.value) {
             context.addError(ErrorCodes.IllegalPropertyType, node, {
-              condition: `${value.length} < ${restriction.value}`
-            })
+              condition: `${value.length} < ${restriction.value}`,
+            });
           }
           break;
         case "maxLength":
           if (value.length > restriction.value) {
             context.addError(ErrorCodes.IllegalPropertyType, node, {
-              condition: `${value.length} > ${restriction.value}`
-            })
+              condition: `${value.length} > ${restriction.value}`,
+            });
           }
           break;
         case "enum":
           if (!(restriction.value as string[]).includes(value)) {
             context.addError(ErrorCodes.IllegalPropertyType, node, {
-              condition: `"${value}" in ${JSON.stringify(restriction.value)}`
+              condition: `"${value}" in ${JSON.stringify(restriction.value)}`,
             });
           }
           break;
@@ -1042,7 +1176,7 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
           const regex = new RegExp(restriction.value as string);
           if (!regex.test(value)) {
             context.addError(ErrorCodes.IllegalPropertyType, node, {
-              condition: `"${value}" did not match regular expression "${restriction.value}"`
+              condition: `"${value}" did not match regular expression "${restriction.value}"`,
             });
           }
           break;
@@ -1060,12 +1194,18 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
 class NodeOneOfType extends NodeType {
   private _possibilities: TypeReference[] = [];
 
-  constructor(validator: Validator, typeDesc: Desc.NodeOneOfTypeDescription, language: string, name: string) {
+  constructor(
+    validator: Validator,
+    typeDesc: Desc.NodeOneOfTypeDescription,
+    language: string,
+    name: string
+  ) {
     super(validator, language, name);
 
-    this._possibilities = typeDesc.oneOf.map(t => typeof (t) === "string"
-      ? new TypeReference(validator, t, language)
-      : new TypeReference(validator, t)
+    this._possibilities = typeDesc.oneOf.map((t) =>
+      typeof t === "string"
+        ? new TypeReference(validator, t, language)
+        : new TypeReference(validator, t)
     );
   }
 
@@ -1074,7 +1214,7 @@ class NodeOneOfType extends NodeType {
    * it for child categories is meaningless.
    */
   get requiredChildrenCategoryNames() {
-    return ([]);
+    return [];
   }
 
   /**
@@ -1082,7 +1222,7 @@ class NodeOneOfType extends NodeType {
    * it for child categories is meaningless.
    */
   get allowedChildrenCategoryNames() {
-    return ([]);
+    return [];
   }
 
   /**
@@ -1090,7 +1230,7 @@ class NodeOneOfType extends NodeType {
    * it for property names is meaningless.
    */
   get allowedPropertyNames(): string[] {
-    return ([]);
+    return [];
   }
 
   /**
@@ -1098,7 +1238,7 @@ class NodeOneOfType extends NodeType {
    * it for valid cardinalities is meaningless.
    */
   validCardinality(_: string): OccursSpecificDescription {
-    return ({ maxOccurs: 0, minOccurs: 0 });
+    return { maxOccurs: 0, minOccurs: 0 };
   }
 
   /**
@@ -1106,19 +1246,24 @@ class NodeOneOfType extends NodeType {
    */
   validate(ast: AST.Node, context: ValidationContext): void {
     // The "oneOf" node is not really a node that could be used anywhere
-    if (this.languageName === ast.languageName && this.typeName === ast.typeName) {
+    if (
+      this.languageName === ast.languageName &&
+      this.typeName === ast.typeName
+    ) {
       context.addError(ErrorCodes.TransientNode, ast, {
         present: ast.qualifiedName,
       } as ErrorUnexpectedType);
     } else {
       // Find a type that volunteers to do the actual further matching
-      const concrete = this._possibilities.find(v => v.matchesType(ast.qualifiedName));
+      const concrete = this._possibilities.find((v) =>
+        v.matchesType(ast.qualifiedName)
+      );
       if (concrete) {
         concrete.validate(ast, context);
       } else {
         context.addError(ErrorCodes.UnexpectedType, ast, {
           present: ast.qualifiedName,
-          expected: this._possibilities.map(p => p.description)
+          expected: this._possibilities.map((p) => p.description),
         } as ErrorUnexpectedType);
       }
     }
@@ -1129,11 +1274,14 @@ class NodeOneOfType extends NodeType {
    *         of the given type.
    */
   matchesType(typeName: AST.QualifiedTypeName) {
-    return (this._possibilities.some(t => t.matchesType(typeName)));
+    return this._possibilities.some((t) => t.matchesType(typeName));
   }
 
-  allowsChildType(childType: AST.QualifiedTypeName, _categoryName: string): boolean {
-    return (this.matchesType(childType));
+  allowsChildType(
+    childType: AST.QualifiedTypeName,
+    _categoryName: string
+  ): boolean {
+    return this.matchesType(childType);
   }
 }
 
@@ -1152,9 +1300,13 @@ class TypeReference {
    * @param desc The reference in qualified or unqualified form
    * @param currentLang The language to use in case of an unqualified reference
    */
-  constructor(_validator: Validator, desc: QualifiedTypeName)
-  constructor(_validator: Validator, desc: string, currentLang: string)
-  constructor(_validator: Validator, desc: Desc.TypeReference, currentLang?: string) {
+  constructor(_validator: Validator, desc: QualifiedTypeName);
+  constructor(_validator: Validator, desc: string, currentLang: string);
+  constructor(
+    _validator: Validator,
+    desc: Desc.TypeReference,
+    currentLang?: string
+  ) {
     this._validator = _validator;
 
     if (Desc.isQualifiedTypeName(desc)) {
@@ -1172,7 +1324,7 @@ class TypeReference {
    * @return True, if the given node could be matched by the underlying type.
    */
   matchesType(qualifiedName: AST.QualifiedTypeName) {
-    return (this.type.matchesType(qualifiedName));
+    return this.type.matchesType(qualifiedName);
   }
 
   /**
@@ -1186,7 +1338,7 @@ class TypeReference {
    * @return True if this reference can be resolved to a "proper" type.
    */
   get isResolveable() {
-    return (this._validator.isKnownType(this._languageName, this._typeName));
+    return this._validator.isKnownType(this._languageName, this._typeName);
   }
 
   /**
@@ -1195,9 +1347,11 @@ class TypeReference {
    */
   private get type() {
     if (!this.isResolveable) {
-      throw new Error(`Could not resolve type "${this._languageName}.${this._typeName}"`);
+      throw new Error(
+        `Could not resolve type "${this._languageName}.${this._typeName}"`
+      );
     } else {
-      return (this._validator.getType(this._languageName, this._typeName));
+      return this._validator.getType(this._languageName, this._typeName);
     }
   }
 
@@ -1205,10 +1359,10 @@ class TypeReference {
    * @return The description that is equivalent to this reference.
    */
   get description(): AST.QualifiedTypeName {
-    return ({
+    return {
       languageName: this._languageName,
-      typeName: this._typeName
-    });
+      typeName: this._typeName,
+    };
   }
 }
 
@@ -1216,7 +1370,9 @@ class TypeReference {
  * A language consists of type definitions and a set of types that may occur at the root.
  */
 export class GrammarValidator {
-  private _registeredTypes: { [languageName: string]: { [typeName: string]: NodeType } } = {};
+  private _registeredTypes: {
+    [languageName: string]: { [typeName: string]: NodeType };
+  } = {};
 
   public readonly validator: Validator;
   public readonly rootType: TypeReference;
@@ -1233,7 +1389,7 @@ export class GrammarValidator {
 
     Object.entries(desc.types).forEach(([langName, types]) => {
       Object.entries(types).forEach(([typeName, typeDesc]) => {
-        this.registerTypeValidator(langName, typeName, typeDesc)
+        this.registerTypeValidator(langName, typeName, typeDesc);
       });
     });
 
@@ -1244,9 +1400,10 @@ export class GrammarValidator {
    * @return All types that are part of this grammar.
    */
   get availableTypes(): NodeType[] {
-    const nested = Object.values(this._registeredTypes)
-      .map(lang => Object.values(lang));
-    return ([].concat.apply([], nested));
+    const nested = Object.values(this._registeredTypes).map((lang) =>
+      Object.values(lang)
+    );
+    return [].concat.apply([], nested);
   }
 
   /**
@@ -1255,7 +1412,7 @@ export class GrammarValidator {
   get availableLanguages() {
     const toReturn = new Set<string>();
 
-    this.availableTypes.forEach(t => toReturn.add(t.languageName));
+    this.availableTypes.forEach((t) => toReturn.add(t.languageName));
 
     return Array.from(toReturn);
   }
@@ -1277,7 +1434,7 @@ export class GrammarValidator {
    */
   isKnownType(languageName: string, typename: string): boolean {
     const lang = this._registeredTypes[languageName];
-    return (lang && !!lang[typename]);
+    return lang && !!lang[typename];
   }
 
   /**
@@ -1287,7 +1444,7 @@ export class GrammarValidator {
     if (!this.isKnownType(languageName, typename)) {
       throw new Error(`Language does not have type "${typename}"`);
     } else {
-      return (this._registeredTypes[languageName][typename]);
+      return this._registeredTypes[languageName][typename];
     }
   }
 
@@ -1301,7 +1458,11 @@ export class GrammarValidator {
   ) {
     // Ensure that we don't override any types
     if (this.isKnownType(languageName, nodeName)) {
-      throw new Error(`Attempted to register node "${nodeName}" twice for "${languageName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
+      throw new Error(
+        `Attempted to register node "${nodeName}" twice for "${languageName}. Previous definition: ${JSON.stringify(
+          this._registeredTypes[nodeName]
+        )}, Conflicting Definition: ${JSON.stringify(desc)}`
+      );
     }
 
     // Ensure the object for the language in question exists
@@ -1313,9 +1474,19 @@ export class GrammarValidator {
 
     // Actually instantiate the correct validator
     if (Desc.isNodeConcreteTypeDescription(desc)) {
-      langTypes[nodeName] = new NodeConcreteType(this.validator, desc, languageName, nodeName);
+      langTypes[nodeName] = new NodeConcreteType(
+        this.validator,
+        desc,
+        languageName,
+        nodeName
+      );
     } else if (Desc.isNodeOneOfTypeDescription(desc)) {
-      langTypes[nodeName] = new NodeOneOfType(this.validator, desc, languageName, nodeName);
+      langTypes[nodeName] = new NodeOneOfType(
+        this.validator,
+        desc,
+        languageName,
+        nodeName
+      );
     }
   }
 }

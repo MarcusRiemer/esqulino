@@ -1,27 +1,22 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { FormsModule } from '@angular/forms';
+import { TestBed } from "@angular/core/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { FormsModule } from "@angular/forms";
 
 import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
 
-import { ServerApiService } from '../../shared';
-import { MetaCodeResourceListDescription } from './meta-code-resource.description';
+import { ServerApiService } from "../../shared";
+import { MetaCodeResourceListDescription } from "./meta-code-resource.description";
 
-describe('MetaCodeResourceSelect', () => {
+describe("MetaCodeResourceSelect", () => {
   async function createComponent(preSelectedId = undefined) {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        FormsModule,
-      ],
-      providers: [
-        ServerApiService
-      ],
-      declarations: [
-        MetaCodeResourceSelectComponent
-      ]
-    })
-      .compileComponents();
+      imports: [HttpClientTestingModule, FormsModule],
+      providers: [ServerApiService],
+      declarations: [MetaCodeResourceSelectComponent],
+    }).compileComponents();
 
     let fixture = TestBed.createComponent(MetaCodeResourceSelectComponent);
     let component = fixture.componentInstance;
@@ -32,13 +27,13 @@ describe('MetaCodeResourceSelect', () => {
 
     fixture.detectChanges();
 
-    return ({
+    return {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
       httpTesting: TestBed.inject(HttpTestingController),
       serverApi: TestBed.inject(ServerApiService),
-    });
+    };
   }
 
   it(`can be instantiated`, async () => {
@@ -49,7 +44,8 @@ describe('MetaCodeResourceSelect', () => {
   it(`Shows an empty list`, async () => {
     const fixture = await createComponent();
 
-    fixture.httpTesting.expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
+    fixture.httpTesting
+      .expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
       .flush([]);
 
     fixture.fixture.detectChanges();
@@ -66,11 +62,12 @@ describe('MetaCodeResourceSelect', () => {
     const response: MetaCodeResourceListDescription[] = [
       {
         id: "0",
-        name: "zero"
-      }
+        name: "zero",
+      },
     ];
 
-    fixture.httpTesting.expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
+    fixture.httpTesting
+      .expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
       .flush(response);
 
     fixture.fixture.detectChanges();
@@ -79,21 +76,24 @@ describe('MetaCodeResourceSelect', () => {
     const selectElement = fixture.element.querySelector("select");
     expect(selectElement.selectedIndex).toEqual(-1);
     expect(selectElement.children.length).toEqual(2);
-    expect(selectElement.children[1].textContent.trim()).toEqual(response[0].name);
+    expect(selectElement.children[1].textContent.trim()).toEqual(
+      response[0].name
+    );
   });
 
   it(`Pre-selects in a list with a single item`, async () => {
     const response: MetaCodeResourceListDescription[] = [
       {
         id: "0000",
-        name: "zero"
-      }
+        name: "zero",
+      },
     ];
 
     const fixture = await createComponent(response[0].id);
     expect(fixture.component.selectedCodeResourceId).toEqual(response[0].id);
 
-    fixture.httpTesting.expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
+    fixture.httpTesting
+      .expectOne(fixture.serverApi.getMetaCodeResourceListUrl())
       .flush(response);
 
     fixture.fixture.detectChanges();
@@ -101,8 +101,10 @@ describe('MetaCodeResourceSelect', () => {
 
     const selectElement = fixture.element.querySelector("select");
 
-    expect(selectElement.selectedIndex).toEqual(1)
+    expect(selectElement.selectedIndex).toEqual(1);
     expect(selectElement.children.length).toEqual(2);
-    expect(selectElement.children[1].textContent.trim()).toEqual(response[0].name);
+    expect(selectElement.children[1].textContent.trim()).toEqual(
+      response[0].name
+    );
   });
 });

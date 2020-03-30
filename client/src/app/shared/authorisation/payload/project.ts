@@ -1,6 +1,6 @@
-import { ResourcesData } from './resources';
+import { ResourcesData } from "./resources";
 export class ProjectPerformData extends ResourcesData {
   constructor() {
-    super("Project")
+    super("Project");
   }
 }

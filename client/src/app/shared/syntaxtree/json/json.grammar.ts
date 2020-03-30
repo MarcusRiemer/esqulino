@@ -1,4 +1,4 @@
-import * as Schema from '../grammar.description'
+import * as Schema from "../grammar.description";
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "33e4959f-cf2d-481b-bb0c-06211e2ab0b3",
@@ -6,33 +6,31 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "json",
   root: { languageName: "json", typeName: "value" },
   types: {
-    "json": {
-      "object": {
+    json: {
+      object: {
         type: "concrete",
         attributes: [
           {
             type: "terminal",
             symbol: "{",
-            name: "object-open"
+            name: "object-open",
           },
           {
             type: "allowed",
             name: "values",
-            nodeTypes: [
-              { nodeType: "key-value", occurs: "*" }
-            ],
+            nodeTypes: [{ nodeType: "key-value", occurs: "*" }],
             between: {
               type: "terminal",
               symbol: ",",
-              name: "object-sep"
-            }
+              name: "object-sep",
+            },
           },
           {
             type: "terminal",
             symbol: "}",
-            name: "object-close"
+            name: "object-close",
           },
-        ]
+        ],
       },
       "key-value": {
         type: "concrete",
@@ -40,107 +38,99 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           {
             type: "allowed",
             name: "key",
-            nodeTypes: [
-              { nodeType: "string", occurs: "1" }
-            ]
+            nodeTypes: [{ nodeType: "string", occurs: "1" }],
           },
           {
             type: "terminal",
             symbol: ":",
-            name: "colon"
+            name: "colon",
           },
           {
             type: "allowed",
             name: "value",
-            nodeTypes: [
-              { nodeType: "value", occurs: "1" }
-            ]
-          }
-        ]
+            nodeTypes: [{ nodeType: "value", occurs: "1" }],
+          },
+        ],
       },
-      "array": {
+      array: {
         type: "concrete",
         attributes: [
           {
             type: "terminal",
             symbol: "[",
-            name: "array-open"
+            name: "array-open",
           },
           {
             type: "allowed",
             name: "values",
-            nodeTypes: [
-              { nodeType: "value", occurs: "*" }
-            ],
+            nodeTypes: [{ nodeType: "value", occurs: "*" }],
             between: {
               type: "terminal",
               symbol: ",",
-              name: "array-sep"
-            }
+              name: "array-sep",
+            },
           },
           {
             type: "terminal",
             symbol: "]",
-            name: "array-close"
+            name: "array-close",
           },
-        ]
+        ],
       },
-      "value": {
+      value: {
         type: "oneOf",
-        oneOf: [
-          "string", "number", "boolean", "object", "array", "null"
-        ]
+        oneOf: ["string", "number", "boolean", "object", "array", "null"],
       },
-      "string": {
+      string: {
         type: "concrete",
         attributes: [
           {
             type: "terminal",
-            symbol: "\"",
-            name: "quot-begin"
+            symbol: '"',
+            name: "quot-begin",
           },
           {
             type: "property",
             name: "value",
-            base: "string"
+            base: "string",
           },
           {
             type: "terminal",
-            symbol: "\"",
-            name: "quot-end"
+            symbol: '"',
+            name: "quot-end",
           },
-        ]
+        ],
       },
-      "number": {
-        type: "concrete",
-        attributes: [
-          {
-            type: "property",
-            name: "value",
-            base: "integer"
-          }
-        ]
-      },
-      "boolean": {
+      number: {
         type: "concrete",
         attributes: [
           {
             type: "property",
             name: "value",
-            base: "boolean"
-          }
-        ]
+            base: "integer",
+          },
+        ],
       },
-      "null": {
+      boolean: {
+        type: "concrete",
+        attributes: [
+          {
+            type: "property",
+            name: "value",
+            base: "boolean",
+          },
+        ],
+      },
+      null: {
         type: "concrete",
         attributes: [
           {
             type: "terminal",
             name: "value",
-            symbol: "null"
-          }
-        ]
-      }
-    }
-  }
-}
+            symbol: "null",
+          },
+        ],
+      },
+    },
+  },
+};

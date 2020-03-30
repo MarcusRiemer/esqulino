@@ -1,15 +1,17 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { Component, ViewChild } from "@angular/core";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
 
-import { GrammarListDescription } from '../../shared/syntaxtree';
-import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
+import { GrammarListDescription } from "../../shared/syntaxtree";
+import {
+  ListGrammarDataService,
+  MutateGrammarService,
+} from "../../shared/serverdata";
 
 @Component({
-  selector: 'grammar-overview-selector',
-  templateUrl: './templates/overview-grammar.html'
+  selector: "grammar-overview-selector",
+  templateUrl: "./templates/overview-grammar.html",
 })
-
 export class OverviewGrammarComponent {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
@@ -21,8 +23,8 @@ export class OverviewGrammarComponent {
 
   constructor(
     private _list: ListGrammarDataService,
-    private _mutate: MutateGrammarService,
-  ) { }
+    private _mutate: MutateGrammarService
+  ) {}
 
   resultsLength$ = this._list.listTotalCount;
   readonly availableGrammars = this._list.list;
@@ -35,7 +37,10 @@ export class OverviewGrammarComponent {
    * User has requested a different chunk of data
    */
   onChangePagination() {
-    this._list.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
+    this._list.setListPagination(
+      this._paginator.pageSize,
+      this._paginator.pageIndex
+    );
   }
 
   /**
@@ -45,6 +50,10 @@ export class OverviewGrammarComponent {
     this._list.setListOrdering(this._sort.active as any, this._sort.direction);
   }
 
-  displayedColumns: (keyof (GrammarListDescription) | "actions")[] = ["name", "slug", "id", "actions"];
-
+  displayedColumns: (keyof GrammarListDescription | "actions")[] = [
+    "name",
+    "slug",
+    "id",
+    "actions",
+  ];
 }

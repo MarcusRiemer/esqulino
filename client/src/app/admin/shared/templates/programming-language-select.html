@@ -1,8 +1,9 @@
-<select class="custom-select"
-        name="programming-language"
-        [(ngModel)]="selectedId">
-  <option *ngFor="let res of programmingLanguages$ | async;"
-          [value]="res.id">
+<select
+  class="custom-select"
+  name="programming-language"
+  [(ngModel)]="selectedId"
+>
+  <option *ngFor="let res of programmingLanguages$ | async;" [value]="res.id">
     {{ res.name }}
   </option>
 </select>

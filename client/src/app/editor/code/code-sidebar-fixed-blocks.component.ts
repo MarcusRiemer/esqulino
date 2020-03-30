@@ -1,24 +1,22 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject } from "@angular/core";
 
-import { CodeResource } from '../../shared/syntaxtree';
-import { FixedSidebarBlock } from '../../shared/block';
+import { CodeResource } from "../../shared/syntaxtree";
+import { FixedSidebarBlock } from "../../shared/block";
 
-import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
+import { SIDEBAR_MODEL_TOKEN } from "../editor.token";
 
-import { DragService } from '../drag.service';
-import { map } from 'rxjs/operators';
-
+import { DragService } from "../drag.service";
+import { map } from "rxjs/operators";
 
 @Component({
-  templateUrl: 'templates/sidebar-fixed-blocks.html',
-  selector: "code-sidebar-fixed-blocks"
+  templateUrl: "templates/sidebar-fixed-blocks.html",
+  selector: "code-sidebar-fixed-blocks",
 })
 export class CodeSidebarFixedBlocksComponent {
   constructor(
     @Inject(SIDEBAR_MODEL_TOKEN) private _codeResource: CodeResource,
     private _dragService: DragService
-  ) {
-  }
+  ) {}
 
   /**
    * The user has decided to start dragging something from the sidebar.
@@ -26,7 +24,7 @@ export class CodeSidebarFixedBlocksComponent {
   startDrag(evt: DragEvent, block: FixedSidebarBlock) {
     try {
       this._dragService.dragStart(evt, block.defaultNode, {
-        sidebarBlockDescription: block
+        sidebarBlockDescription: block,
       });
     } catch (e) {
       alert(e);
@@ -37,10 +35,12 @@ export class CodeSidebarFixedBlocksComponent {
    * @return Relevant languages along with their available types
    */
   get currentLanguage() {
-    return (this._codeResource.blockLanguage);
+    return this._codeResource.blockLanguage;
   }
 
   readonly fixedBlockSidebars = this._codeResource.blockLanguage.pipe(
-    map(b => b.sidebars.filter(s => s.portalComponentTypeId === "fixedBlocks"))
+    map((b) =>
+      b.sidebars.filter((s) => s.portalComponentTypeId === "fixedBlocks")
+    )
   );
 }

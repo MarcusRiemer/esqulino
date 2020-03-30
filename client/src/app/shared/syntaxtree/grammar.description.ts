@@ -1,11 +1,13 @@
-import { QualifiedTypeName } from './syntaxtree.description'
-import { OccursDescription } from './occurs.description';
+import { QualifiedTypeName } from "./syntaxtree.description";
+import { OccursDescription } from "./occurs.description";
 
 /**
  * Types may either be concrete new type or an alias
  * grouping together multiple other types.
  */
-export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDescription;
+export type NodeTypeDescription =
+  | NodeConcreteTypeDescription
+  | NodeOneOfTypeDescription;
 
 /**
  * Creates a possibility to define multiple NodeTypes as alternatives
@@ -61,7 +63,7 @@ export interface NodeConcreteTypeDescription {
  * or children or visual cues like terminals or rows.
  */
 export type NodeAttributeDescription =
-  NodePropertyTypeDescription
+  | NodePropertyTypeDescription
   | NodeChildrenGroupDescription
   | NodeTerminalSymbolDescription
   | NodeVisualContainerDescription;
@@ -91,24 +93,24 @@ export interface NodeVisualContainerDescription {
  * Properties are used for atomic values and may be optional.
  */
 export type NodePropertyTypeDescription =
-  NodePropertyBooleanDescription |
-  NodePropertyIntegerDescription |
-  NodePropertyStringDescription;
+  | NodePropertyBooleanDescription
+  | NodePropertyIntegerDescription
+  | NodePropertyStringDescription;
 
 /**
  * Simple strings are used to refer to local types that share the
  * same language name.
  */
-export type TypeReference = QualifiedTypeName | string
+export type TypeReference = QualifiedTypeName | string;
 
 /**
  * Denotes a "boolean" type.
  */
 export interface NodePropertyBooleanDescription {
-  type: "property"
-  name: string
-  base: "boolean"
-  isOptional?: boolean
+  type: "property";
+  name: string;
+  base: "boolean";
+  isOptional?: boolean;
   tags?: string[];
 }
 
@@ -116,122 +118,125 @@ export interface NodePropertyBooleanDescription {
  * Denotes the "string" type and describes ways it can be further restricted.
  */
 export interface NodePropertyStringDescription {
-  type: "property"
-  name: string
-  base: "string"
-  isOptional?: boolean
+  type: "property";
+  name: string;
+  base: "string";
+  isOptional?: boolean;
   tags?: string[];
-  restrictions?: NodeStringTypeRestrictions[]
+  restrictions?: NodeStringTypeRestrictions[];
 }
 
 /**
  * Describes the "Integer" type and describes how it can be restricted.
  */
 export interface NodePropertyIntegerDescription {
-  type: "property"
-  name: string
-  base: "integer"
-  isOptional?: boolean,
+  type: "property";
+  name: string;
+  base: "integer";
+  isOptional?: boolean;
   tags?: string[];
-  restrictions?: NodeIntegerTypeRestrictions[]
+  restrictions?: NodeIntegerTypeRestrictions[];
 }
 
 /**
  * The restrictions that are applicable to strings
  */
 export type NodeStringTypeRestrictions =
-  LengthRestrictionDescription
+  | LengthRestrictionDescription
   | MinimumLengthRestrictionDescription
   | MaximumLengthRestrictionDescription
   | EnumRestrictionDescription
-  | RegularExpressionRestrictionDescription
+  | RegularExpressionRestrictionDescription;
 
 /**
  * Restricts the minimum length of things.
  */
 export interface MinimumLengthRestrictionDescription {
-  type: "minLength"
-  value: number
+  type: "minLength";
+  value: number;
 }
 
 /**
  * Restricts the maximum length of things.
  */
 export interface MaximumLengthRestrictionDescription {
-  type: "maxLength"
-  value: number
+  type: "maxLength";
+  value: number;
 }
 
 /**
  * Restricts the maximum length of things.
  */
 export interface LengthRestrictionDescription {
-  type: "length"
-  value: number
+  type: "length";
+  value: number;
 }
 
 /**
  * Restricts a string to be one of a given set of values
  */
 export interface EnumRestrictionDescription {
-  type: "enum",
-  value: string[]
+  type: "enum";
+  value: string[];
 }
 
 /**
  * Restricts to match a regular expression
  */
 export interface RegularExpressionRestrictionDescription {
-  type: "regex",
-  value: string
+  type: "regex";
+  value: string;
 }
 
 /**
  * The restrictions that are applicable to integers
  */
-export type NodeIntegerTypeRestrictions = MinInclusiveRestriction
-  | MaxInclusiveRestriction
+export type NodeIntegerTypeRestrictions =
+  | MinInclusiveRestriction
+  | MaxInclusiveRestriction;
 
 /**
  * Restricts the maximum numerical value.
  */
 export interface MaxInclusiveRestriction {
-  type: "maxInclusive"
-  value: number
+  type: "maxInclusive";
+  value: number;
 }
 
 /**
  * Restricts the minimum numerical value.
  */
 export interface MinInclusiveRestriction {
-  type: "minInclusive"
-  value: number
+  type: "minInclusive";
+  value: number;
 }
 
 /**
  * Describes how often a certain type may appear in a sequence.
  */
 export interface ChildCardinalityDescription {
-  nodeType: TypeReference
-  occurs: OccursDescription
+  nodeType: TypeReference;
+  occurs: OccursDescription;
 }
 
 /**
  * A simple type reference is a shortcut for an element with
  * minOccurs = 1 and maxOccurs = 1;
  */
-export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescription);
+export type NodeTypesChildReference =
+  | TypeReference
+  | ChildCardinalityDescription;
 
 /**
  * In a sequence every child must occur in exact the order and cardinality
  * that is specified by this description.
  */
 export interface NodeTypesSequenceDescription {
-  type: "sequence"
-  name: string
-  nodeTypes: NodeTypesChildReference[]
-  between?: NodeTerminalSymbolDescription
-  tags?: string[]
+  type: "sequence";
+  name: string;
+  nodeTypes: NodeTypesChildReference[];
+  between?: NodeTerminalSymbolDescription;
+  tags?: string[];
 }
 
 /**
@@ -239,11 +244,11 @@ export interface NodeTypesSequenceDescription {
  * in which these children appear in is not relevant.
  */
 export interface NodeTypesAllowedDescription {
-  type: "allowed",
-  name: string,
-  nodeTypes: NodeTypesChildReference[],
-  between?: NodeTerminalSymbolDescription
-  tags?: string[]
+  type: "allowed";
+  name: string;
+  nodeTypes: NodeTypesChildReference[];
+  between?: NodeTerminalSymbolDescription;
+  tags?: string[];
 }
 
 /**
@@ -251,10 +256,10 @@ export interface NodeTypesAllowedDescription {
  * satisfied, the child group is considered valid.
  */
 export interface NodeTypesChoiceDescription {
-  type: "choice",
-  name: string,
-  choices: TypeReference[]
-  tags?: string[]
+  type: "choice";
+  name: string;
+  choices: TypeReference[];
+  tags?: string[];
 }
 
 /**
@@ -264,22 +269,22 @@ export interface NodeTypesChoiceDescription {
  * combinators.
  */
 export interface NodeTypesParenthesesDescription {
-  type: "parentheses",
-  name: string,
+  type: "parentheses";
+  name: string;
   group: {
-    type: "sequence" | "allowed",
-    nodeTypes: NodeTypesChildReference[]
-  },
-  cardinality: OccursDescription,
-  between?: NodeTerminalSymbolDescription
-  tags?: string[]
+    type: "sequence" | "allowed";
+    nodeTypes: NodeTypesChildReference[];
+  };
+  cardinality: OccursDescription;
+  between?: NodeTerminalSymbolDescription;
+  tags?: string[];
 }
 
 /**
  * All children group types that are available
  */
 export type NodeChildrenGroupDescription =
-  NodeTypesSequenceDescription
+  | NodeTypesSequenceDescription
   | NodeTypesAllowedDescription
   | NodeTypesChoiceDescription
   | NodeTypesParenthesesDescription;
@@ -289,19 +294,19 @@ export type NodeChildrenGroupDescription =
  */
 export interface GrammarListDescription {
   // The unique ID of this language
-  id: string
+  id: string;
 
   // The name of the language
-  name: string
+  name: string;
 
   // The name of the programming language this grammar implements
-  programmingLanguageId: string
+  programmingLanguageId: string;
 
   // The possible slug for URL usage
-  slug?: string
+  slug?: string;
 
   // The code resource that this grammar is generated from
-  generatedFromId?: string
+  generatedFromId?: string;
 }
 
 /**
@@ -319,13 +324,13 @@ export type NamedLanguages = { [languageName: string]: NamedTypes };
  */
 export interface GrammarDatabaseBlob {
   // All types that are defined on this language
-  types?: NamedLanguages
+  types?: NamedLanguages;
 
   // All types that come from different languages
-  foreignTypes?: NamedLanguages
+  foreignTypes?: NamedLanguages;
 
   // The type that needs to be at the root of the language.
-  root?: QualifiedTypeName
+  root?: QualifiedTypeName;
 }
 
 /**
@@ -334,82 +339,98 @@ export interface GrammarDatabaseBlob {
  */
 export interface GrammarDocument extends GrammarDatabaseBlob {
   // These grammars are included in this grammar
-  includedGrammars?: string[]
+  includedGrammars?: string[];
 }
 
 /**
  * A whole grammar with all user-facing documentation.
  */
-export interface GrammarDescription extends GrammarDocument, GrammarListDescription {
-
-}
+export interface GrammarDescription
+  extends GrammarDocument,
+    GrammarListDescription {}
 
 /**
  * A request to update a grammar. The "generateFromId" field may be null to explicitly unset it.
  */
-export type GrammarRequestUpdateDescription = Partial<
-  Omit<GrammarDescription, "id">
-> | { "generatedFromId": null }
+export type GrammarRequestUpdateDescription =
+  | Partial<Omit<GrammarDescription, "id">>
+  | { generatedFromId: null };
 
 /**
  * @return True if the given instance satisfies "QualifiedTypeName"
  */
 export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
-  return (arg instanceof Object && arg.typeName && arg.languageName);
+  return arg instanceof Object && arg.typeName && arg.languageName;
 }
 
 /**
  * @return True if the given instance satisfies "NodeConcreteTypeDescription"
  */
-export function isNodeConcreteTypeDescription(arg: any): arg is NodeConcreteTypeDescription {
-  return (arg instanceof Object && !arg.oneOf);
+export function isNodeConcreteTypeDescription(
+  arg: any
+): arg is NodeConcreteTypeDescription {
+  return arg instanceof Object && !arg.oneOf;
 }
 
 /**
  * @return True if the given instance satisfies "NodeConcreteTypeDescription"
  */
-export function isNodeOneOfTypeDescription(arg: any): arg is NodeOneOfTypeDescription {
-  return (arg instanceof Object && arg.oneOf instanceof Array);
+export function isNodeOneOfTypeDescription(
+  arg: any
+): arg is NodeOneOfTypeDescription {
+  return arg instanceof Object && arg.oneOf instanceof Array;
 }
 
 /**
  * @return True if the given instance probably satisfies "NodeTypesAllowedDescription"
  */
-export function isNodeTypesAllowedDescription(obj: any): obj is NodeTypesAllowedDescription {
-  return (obj instanceof Object && obj.type === "allowed");
+export function isNodeTypesAllowedDescription(
+  obj: any
+): obj is NodeTypesAllowedDescription {
+  return obj instanceof Object && obj.type === "allowed";
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodeTypesSequenceDescription"
  */
-export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequenceDescription {
-  return (obj instanceof Object && obj.type === "sequence");
+export function isNodeTypesSequenceDescription(
+  obj: any
+): obj is NodeTypesSequenceDescription {
+  return obj instanceof Object && obj.type === "sequence";
 }
 
 /**
  * @return True, if the given instance probably satisfies "ChildCardinalityDescription"
  */
-export function isChildCardinalityDescription(obj: any): obj is ChildCardinalityDescription {
-  return (obj instanceof Object && "occurs" in obj && "nodeType" in obj);
+export function isChildCardinalityDescription(
+  obj: any
+): obj is ChildCardinalityDescription {
+  return obj instanceof Object && "occurs" in obj && "nodeType" in obj;
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodePropertyStringDescription"
  */
-export function isNodePropertyStringDesciption(obj: any): obj is NodePropertyStringDescription {
-  return (obj instanceof Object && obj.base === "string");
+export function isNodePropertyStringDesciption(
+  obj: any
+): obj is NodePropertyStringDescription {
+  return obj instanceof Object && obj.base === "string";
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodePropertyBooleanDescription"
  */
-export function isNodePropertyBooleanDesciption(obj: any): obj is NodePropertyBooleanDescription {
-  return (obj instanceof Object && obj.base === "boolean");
+export function isNodePropertyBooleanDesciption(
+  obj: any
+): obj is NodePropertyBooleanDescription {
+  return obj instanceof Object && obj.base === "boolean";
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodePropertyIntegerDescription"
  */
-export function isNodePropertyIntegerDesciption(obj: any): obj is NodePropertyBooleanDescription {
-  return (obj instanceof Object && obj.base === "integer");
+export function isNodePropertyIntegerDesciption(
+  obj: any
+): obj is NodePropertyBooleanDescription {
+  return obj instanceof Object && obj.base === "integer";
 }

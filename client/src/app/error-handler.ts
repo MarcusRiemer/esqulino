@@ -1,14 +1,20 @@
-import { Injectable, ErrorHandler, Inject, Optional, PLATFORM_ID } from '@angular/core'
+import {
+  Injectable,
+  ErrorHandler,
+  Inject,
+  Optional,
+  PLATFORM_ID,
+} from "@angular/core";
 
-import * as Sentry from '@sentry/browser';
+import * as Sentry from "@sentry/browser";
 
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from "@angular/common";
 
 /**
  * @return The element that is used to give a strong visual "hint" about a crash.
  */
 export function crashFeedbackElement(): HTMLElement {
-  return (document.querySelector<HTMLElement>('mat-toolbar'));
+  return document.querySelector<HTMLElement>("mat-toolbar");
 }
 
 /**
@@ -17,7 +23,7 @@ export function crashFeedbackElement(): HTMLElement {
 export function applyCrashFeedbackStyle() {
   const elem = crashFeedbackElement();
   if (elem) {
-    elem.style.backgroundColor = 'red';
+    elem.style.backgroundColor = "red";
   }
 }
 
@@ -27,7 +33,7 @@ let _isApplicationCrashed = false;
  * @return True, if the application has crashed without chance of recovery.
  */
 export function isApplicationCrashed() {
-  return (_isApplicationCrashed);
+  return _isApplicationCrashed;
 }
 
 /**
@@ -36,13 +42,12 @@ export function isApplicationCrashed() {
  */
 @Injectable()
 export class NotifyErrorHandler extends ErrorHandler {
-
   constructor(
     @Inject(PLATFORM_ID)
     @Optional()
     private _platformId: Object
   ) {
-    super()
+    super();
   }
 
   handleError(error: any): void {

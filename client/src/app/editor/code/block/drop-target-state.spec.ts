@@ -1,10 +1,10 @@
 import { NodeDescription, Validator, Tree } from "../../../shared/syntaxtree";
-import { GRAMMAR_BOOLEAN_DESCRIPTION } from '../../../shared/syntaxtree/grammar.spec.boolean';
-import { _isChildRequiredSchema } from './drop-target-state';
+import { GRAMMAR_BOOLEAN_DESCRIPTION } from "../../../shared/syntaxtree/grammar.spec.boolean";
+import { _isChildRequiredSchema } from "./drop-target-state";
 
 describe("Drop Target State", () => {
   describe("isChildRequired", () => {
-    it('EmptyTree)', () => {
+    it("EmptyTree)", () => {
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
       const inTree = new Tree(undefined);
 
@@ -12,32 +12,41 @@ describe("Drop Target State", () => {
         .withContext("Empty trees always want insertion at the root")
         .toBe(true);
       expect(_isChildRequiredSchema(validator, inTree, [["lhs", 0]]))
-        .withContext("Unknown parent, we don't assume something should be inserted")
+        .withContext(
+          "Unknown parent, we don't assume something should be inserted"
+        )
         .toBe(false);
-      expect(_isChildRequiredSchema(validator, inTree, [["lhs", 0], ["expr", 0]]))
-        .withContext("Unknown parent, we don't assume something should be inserted")
+      expect(
+        _isChildRequiredSchema(validator, inTree, [
+          ["lhs", 0],
+          ["expr", 0],
+        ])
+      )
+        .withContext(
+          "Unknown parent, we don't assume something should be inserted"
+        )
         .toBe(false);
     });
 
-    it('(TRUE AND <hole>)', () => {
+    it("(TRUE AND <hole>)", () => {
       const inTreeDesc: NodeDescription = {
         language: "expr",
         name: "booleanBinary",
         children: {
-          "lhs": [
+          lhs: [
             {
               language: "expr",
               name: "booleanConstant",
               properties: {
-                "value": "true"
-              }
-            }
+                value: "true",
+              },
+            },
           ],
-          "rhs": []
+          rhs: [],
         },
         properties: {
-          "operator": "AND"
-        }
+          operator: "AND",
+        },
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
@@ -46,8 +55,15 @@ describe("Drop Target State", () => {
       expect(_isChildRequiredSchema(validator, inTree, []))
         .withContext("Non empty trees don't want insertions")
         .toBe(false);
-      expect(_isChildRequiredSchema(validator, inTree, [["lhs", 0], ["expr", 0]]))
-        .withContext("Unknown parent, we don't assume something should be inserted")
+      expect(
+        _isChildRequiredSchema(validator, inTree, [
+          ["lhs", 0],
+          ["expr", 0],
+        ])
+      )
+        .withContext(
+          "Unknown parent, we don't assume something should be inserted"
+        )
         .toBe(false);
 
       expect(_isChildRequiredSchema(validator, inTree, [["lhs", 0]]))
@@ -61,17 +77,17 @@ describe("Drop Target State", () => {
         .toBe(false);
     });
 
-    it('(<hole> AND <hole>)', () => {
+    it("(<hole> AND <hole>)", () => {
       const inTreeDesc: NodeDescription = {
         language: "expr",
         name: "booleanBinary",
         children: {
-          "lhs": [],
-          "rhs": []
+          lhs: [],
+          rhs: [],
         },
         properties: {
-          "operator": "AND"
-        }
+          operator: "AND",
+        },
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);

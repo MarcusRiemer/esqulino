@@ -2,7 +2,8 @@
   <!-- Projects can't be created without activated JavaScript -->
   <ng-container inactive>
     <div class="alert alert-danger" role="alert">
-      <strong>Warnung</strong><br>
+      <strong>Warnung</strong>
+      <br />
       Zum Anlegen von Projekten muss Javascript aktiviert sein.
     </div>
   </ng-container>
@@ -11,61 +12,80 @@
   <ng-container active>
     <mat-card class="alert-warning mb-3" role="alert">
       <p>
-        <strong>Dieses Projekt wird vermutlich nicht von Dauer sein!</strong> Für den Augenblick kann hier einfach jeder Internetbewohner neue Projekte anlegen, daher wird wohl manchmal aufgeräumt werden müssen ...
+        <strong>Dieses Projekt wird vermutlich nicht von Dauer sein!</strong>
+        Für den Augenblick kann hier einfach jeder Internetbewohner neue
+        Projekte anlegen, daher wird wohl manchmal aufgeräumt werden müssen ...
       </p>
     </mat-card>
     <div class="card mb-3">
       <form class="card-body">
-        <div class="form-group row"
-             [class.has-danger]="name.errors && (name.dirty || name.touched)"
-             [class.has-success]="name.valid">
-          <label for="project-name"
-                 class="col-sm-2 form-control-label">
+        <div
+          class="form-group row"
+          [class.has-danger]="name.errors && (name.dirty || name.touched)"
+          [class.has-success]="name.valid"
+        >
+          <label for="project-name" class="col-sm-2 form-control-label">
             Projektname
           </label>
           <div class="col-sm-10">
-            <input [(ngModel)]="params.name"
-                   [class.form-control-danger]="name.errors && (name.dirty || name.touched)"
-                   [class.form-control-success]="name.valid"
-                   [pattern]="regExpName"
-                   #name="ngModel"
-                   name="project-name"
-                   class="form-control"
-                   id="project-name"
-                   required>
-            <small class="text-muted">Dieser Name wird zum Beispiel auf Übersichtsseiten angezeigt und lässt sich jederzeit verändern.</small>
+            <input
+              [(ngModel)]="params.name"
+              [class.form-control-danger]="name.errors && (name.dirty || name.touched)"
+              [class.form-control-success]="name.valid"
+              [pattern]="regExpName"
+              #name="ngModel"
+              name="project-name"
+              class="form-control"
+              id="project-name"
+              required
+            />
+            <small class="text-muted">
+              Dieser Name wird zum Beispiel auf Übersichtsseiten angezeigt und
+              lässt sich jederzeit verändern.
+            </small>
           </div>
         </div>
-        <div class="form-group row"
-             [class.has-danger]="id.errors && (id.dirty || id.touched)"
-             [class.has-success]="id.valid">
-          <label for="project-id"
-                 class="col-sm-2 form-control-label">
+        <div
+          class="form-group row"
+          [class.has-danger]="id.errors && (id.dirty || id.touched)"
+          [class.has-success]="id.valid"
+        >
+          <label for="project-id" class="col-sm-2 form-control-label">
             Slug
           </label>
           <div class="col-sm-10">
-            <input [(ngModel)]="params.slug"
-                   [class.form-control-danger]="id.errors && (id.dirty || id.touched)"
-                   [class.form-control-success]="id.valid"
-                   [pattern]="regExpSlug"
-                   #id="ngModel"
-                   name="project-id"
-                   class="form-control"
-                   id="project-id"
-                   required>
-            <small class="text-muted">Dieser "Name" taucht später in der <code>URL</code> auf und ist einzigartig für dein Projekt. Er kann nur Zeichen enthalten die in einer <code>URL</code> nicht für Probleme sorgen können.</small>
+            <input
+              [(ngModel)]="params.slug"
+              [class.form-control-danger]="id.errors && (id.dirty || id.touched)"
+              [class.form-control-success]="id.valid"
+              [pattern]="regExpSlug"
+              #id="ngModel"
+              name="project-id"
+              class="form-control"
+              id="project-id"
+              required
+            />
+            <small class="text-muted">
+              Dieser "Name" taucht später in der
+              <code>URL</code>
+              auf und ist einzigartig für dein Projekt. Er kann nur Zeichen
+              enthalten die in einer
+              <code>URL</code>
+              nicht für Probleme sorgen können.
+            </small>
           </div>
         </div>
-        <div *ngIf="currentError"
-             class="alert alert-danger"
-             role="alert">
-          <strong>Projekt konnte nicht angelegt werden!</strong> Der Server meldet das folgende Problem:
+        <div *ngIf="currentError" class="alert alert-danger" role="alert">
+          <strong>Projekt konnte nicht angelegt werden!</strong>
+          Der Server meldet das folgende Problem:
           <pre [innerText]="currentError | json"></pre>
         </div>
-        <button (click)="createProject()"
-                [disabled]="inProgress"
-                type="submit"
-                class="btn btn-primary btn-lg btn-block">
+        <button
+          (click)="createProject()"
+          [disabled]="inProgress"
+          type="submit"
+          class="btn btn-primary btn-lg btn-block"
+        >
           Projekt Anlegen!
         </button>
       </form>

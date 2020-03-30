@@ -1,40 +1,36 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
-import { map } from 'rxjs/operators';
+import { map } from "rxjs/operators";
 
-import { CodeResource } from '../../shared/syntaxtree';
+import { CodeResource } from "../../shared/syntaxtree";
 
-import { ProjectService } from '../project.service';
+import { ProjectService } from "../project.service";
 
 /**
  * Provides a convenient way to select language models.
  */
 @Component({
-  templateUrl: 'templates/language-model-selector.html',
-  selector: 'language-model-selector'
+  templateUrl: "templates/language-model-selector.html",
+  selector: "language-model-selector",
 })
 export class LanguageModelSelectorComponent {
-
   @Input() codeResource: CodeResource;
 
-  constructor(
-    private _projectService: ProjectService
-  ) {
-  }
+  constructor(private _projectService: ProjectService) {}
 
   /**
    * @return All available language models
    */
   readonly availableBlockLanguages = this._projectService.activeProject.pipe(
-    map(p => p.projectBlockLanguages)
-  )
+    map((p) => p.projectBlockLanguages)
+  );
 
   /**
    * @return The ID of the currently selected language
    */
   @Input()
   get selectedBlockLanguageId() {
-    return (this.codeResource.blockLanguageIdPeek);
+    return this.codeResource.blockLanguageIdPeek;
   }
 
   /**
@@ -43,5 +39,4 @@ export class LanguageModelSelectorComponent {
   set selectedBlockLanguageId(id: string) {
     this.codeResource.setBlockLanguageId(id);
   }
-
 }

@@ -1,7 +1,7 @@
-import { CodeGenerator } from '../codegenerator'
-import { Node, NodeDescription } from '../syntaxtree'
+import { CodeGenerator } from "../codegenerator";
+import { Node, NodeDescription } from "../syntaxtree";
 
-import { NODE_CONVERTER } from './sql.codegenerator'
+import { NODE_CONVERTER } from "./sql.codegenerator";
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -10,7 +10,10 @@ import { NODE_CONVERTER } from './sql.codegenerator'
  * to `require` are relative to the file the function is defined in.
  * So for the moment this function is copy and pasted into some spec files :(
  */
-export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) {
+export function verifyFiles<T>(
+  fileName: string,
+  transform: (obj: T) => string
+) {
   const input = require(`./spec/${fileName}.json`);
   let expected = require(`raw-loader!./spec/${fileName}.txt`).default as string;
 
@@ -28,12 +31,11 @@ function emitTree(astDesc: NodeDescription) {
   const ast = new Node(astDesc, undefined);
   const codeGen = new CodeGenerator(NODE_CONVERTER);
 
-  return (codeGen.emit(ast));
+  return codeGen.emit(ast);
 }
 
-
-describe('Language: SQL (Codegen)', () => {
-  it('Constant Number: 1', () => {
+describe("Language: SQL (Codegen)", () => {
+  it("Constant Number: 1", () => {
     verifyFiles("ast-01-constant-num", emitTree);
   });
 

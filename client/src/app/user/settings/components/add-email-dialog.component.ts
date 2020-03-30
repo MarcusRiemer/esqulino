@@ -3,16 +3,20 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 import { UserService } from "./../../../shared/auth/user.service";
 import { UserAddEmailDescription } from "./../../../shared/auth/user.description";
-import { ServerProviderDescription, ProviderDescription } from "./../../../shared/auth/provider.description";
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import {
+  ServerProviderDescription,
+  ProviderDescription,
+} from "./../../../shared/auth/provider.description";
+import { Observable } from "rxjs";
+import { first } from "rxjs/operators";
 @Component({
-  templateUrl: "./templates/add-email-dialog.html"
+  templateUrl: "./templates/add-email-dialog.html",
 })
 export class AddEmailDialogComponent implements OnInit {
   constructor(
     @Optional()
-    @Inject(MAT_DIALOG_DATA) public data: Observable<ServerProviderDescription>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: Observable<ServerProviderDescription>,
     private dialogRef: MatDialogRef<AddEmailDialogComponent>,
     private _userService: UserService
   ) {}
@@ -21,13 +25,13 @@ export class AddEmailDialogComponent implements OnInit {
   public passwordConfirmation: string;
   public newEmailData: UserAddEmailDescription = {
     email: undefined,
-    password: undefined
+    password: undefined,
   };
 
   ngOnInit(): void {
     this._userService.identities
       .pipe(first())
-      .subscribe(v => this.identities = v)
+      .subscribe((v) => (this.identities = v));
   }
 
   /**
@@ -38,7 +42,7 @@ export class AddEmailDialogComponent implements OnInit {
       if (this.passwordConfirmation === this.newEmailData.password) {
         this._userService
           .addEmail$(this.newEmailData)
-          .subscribe(_ => this.dialogRef.close());
+          .subscribe((_) => this.dialogRef.close());
       } else alert("Deine Passwörter stimmen nicht über ein!");
     } else alert("Bitte wähle ein Passwort.");
   }
@@ -47,6 +51,6 @@ export class AddEmailDialogComponent implements OnInit {
    * Is a password identity linked to the current user
    */
   public existsPasswordIdentity(identities: ProviderDescription[]): boolean {
-    return identities.some(v => v.type == "PasswordIdentity");
+    return identities.some((v) => v.type == "PasswordIdentity");
   }
 }

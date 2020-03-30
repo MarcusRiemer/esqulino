@@ -1,17 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { ImageService } from './image.service'
-import { AvailableImage } from './available-image.class'
-import { Project } from '../project.service'
+import { ImageService } from "./image.service";
+import { AvailableImage } from "./available-image.class";
+import { Project } from "../project.service";
 
-export { AvailableImage }
+export { AvailableImage };
 
 /**
  * Allows to select a specific image from the list of available images.
  */
 @Component({
-  templateUrl: 'templates/image-selector.html',
-  selector: 'image-selector'
+  templateUrl: "templates/image-selector.html",
+  selector: "image-selector",
 })
 export class ImageSelectorComponent {
   @Output()
@@ -22,16 +22,13 @@ export class ImageSelectorComponent {
 
   private _projectImageId: string;
 
-  constructor(
-    private _imageService: ImageService
-  ) {
-  }
+  constructor(private _imageService: ImageService) {}
 
   /**
    * @return The ID of the currently selected image.
    */
   @Input() get projectImageId() {
-    return (this._projectImageId)
+    return this._projectImageId;
   }
 
   /**
@@ -46,7 +43,7 @@ export class ImageSelectorComponent {
    * @return The data of the image that is currently selected.
    */
   get currentImage() {
-    return (this.images.find(c => c.id === this.projectImageId));
+    return this.images.find((c) => c.id === this.projectImageId);
   }
 
   ngOnInit() {
@@ -54,6 +51,6 @@ export class ImageSelectorComponent {
   }
 
   get images() {
-    return (this._imageService.images || []);
+    return this._imageService.images || [];
   }
 }

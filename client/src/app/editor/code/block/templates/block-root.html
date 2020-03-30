@@ -1,28 +1,37 @@
 <!-- Ensuring there is a resource -->
 <ng-container *ngIf="(currentResource$ | async); let currentResource">
   <!-- Ensuring there is a block language -->
-  <ng-container *ngIf="(currentBlockLanguage$ | async); let currentBlockLanguage;">
+  <ng-container
+    *ngIf="(currentBlockLanguage$ | async); let currentBlockLanguage;"
+  >
     <!-- Ensuring there is a tree -->
-    <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
+    <ng-container
+      *ngIf="(currentResource.syntaxTree | async); let currentTree;"
+    >
       <!-- If the tree is empty, allow the user to populate it -->
-      <div *ngIf="currentTree.isEmpty; else renderTree;"
-           (mouseover)="onPlaceholderDragEnter($event)">
+      <div
+        *ngIf="currentTree.isEmpty; else renderTree;"
+        (mouseover)="onPlaceholderDragEnter($event)"
+      >
         <div class="empty-tree">
           <h3>Hey, hier sollte eigentlich Code stehen!</h3>
           <p>
-            Ziehe einen Block aus der Seitenleiste auf diesen freien Platz um mit der Programmierung zu beginnen!
+            Ziehe einen Block aus der Seitenleiste auf diesen freien Platz um
+            mit der Programmierung zu beginnen!
           </p>
         </div>
       </div>
 
       <!-- If the tree is not empty, it wants to be rendered -->
       <ng-template #renderTree>
-        <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
-                           [blockLanguage]="currentBlockLanguage"
-                           [codeResource]="currentResource"
-                           [node]="currentTree.rootNode"
-                           [validationContext]="validationContext | async"
-                           [readOnly]="readOnly"></editor-block-host>
+        <editor-block-host
+          *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
+          [blockLanguage]="currentBlockLanguage"
+          [codeResource]="currentResource"
+          [node]="currentTree.rootNode"
+          [validationContext]="validationContext | async"
+          [readOnly]="readOnly"
+        ></editor-block-host>
         <ng-template #noRender>
           Darstellung nicht möglich
         </ng-template>

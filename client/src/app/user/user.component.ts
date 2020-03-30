@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { NavItem } from '../shared/nav-interfaces';
-import { SideNavService } from '../shared/side-nav.service';
+import { NavItem } from "../shared/nav-interfaces";
+import { SideNavService } from "../shared/side-nav.service";
 
 export const userItems: NavItem[] = [
   {
@@ -11,12 +11,12 @@ export const userItems: NavItem[] = [
       en: "Manual 🇬🇧",
     },
     url: "http://manual.blattwerkzeug.de/",
-    icon: "book"
+    icon: "book",
   },
 ];
 
 @Component({
-  templateUrl: './templates/user-index.html'
+  templateUrl: "./templates/user-index.html",
 })
 export class UserComponent {
   constructor(private _sideNavService: SideNavService) {}

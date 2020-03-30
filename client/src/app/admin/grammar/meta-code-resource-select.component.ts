@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 
-import { ListMetaCodeResourcesService } from './meta-code-resource-list.service';
+import { ListMetaCodeResourcesService } from "./meta-code-resource-list.service";
 
 /**
  * Allows the selection of a single meta code resource (or none).
@@ -8,17 +8,13 @@ import { ListMetaCodeResourcesService } from './meta-code-resource-list.service'
 @Component({
   templateUrl: `templates/meta-code-resource-select.html`,
   selector: `meta-code-resource-select`,
-  providers: [
-    ListMetaCodeResourcesService
-  ]
+  providers: [ListMetaCodeResourcesService],
 })
 export class MetaCodeResourceSelectComponent {
   @Output()
   selectedCodeResourceIdChange = new EventEmitter<string>();
 
-  constructor(
-    private _list: ListMetaCodeResourcesService
-  ) { }
+  constructor(private _list: ListMetaCodeResourcesService) {}
 
   /**
    * The code resources that are available.
@@ -32,7 +28,7 @@ export class MetaCodeResourceSelectComponent {
    */
   @Input()
   get selectedCodeResourceId() {
-    return (this._selectedCodeResourceId);
+    return this._selectedCodeResourceId;
   }
 
   /**

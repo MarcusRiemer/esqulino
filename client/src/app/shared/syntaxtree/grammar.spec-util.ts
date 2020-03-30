@@ -1,6 +1,10 @@
-import { GrammarDocument, NamedTypes, NamedLanguages } from './grammar.description';
-import { QualifiedTypeName, NodeLocation } from './syntaxtree.description';
-import { ValidationResult } from './validation-result';
+import {
+  GrammarDocument,
+  NamedTypes,
+  NamedLanguages,
+} from "./grammar.description";
+import { QualifiedTypeName, NodeLocation } from "./syntaxtree.description";
+import { ValidationResult } from "./validation-result";
 
 export function singleLanguageGrammar(
   langName: string,
@@ -16,7 +20,7 @@ export function singleLanguageGrammar(
   // the key is a variable.
   toReturn.types[langName] = types;
 
-  return (toReturn);
+  return toReturn;
 }
 
 export function multiLanguageGrammar(
@@ -24,25 +28,27 @@ export function multiLanguageGrammar(
   rootType: QualifiedTypeName,
   languages: NamedLanguages
 ): GrammarDocument {
-  return ({
+  return {
     types: languages,
     root: rootType,
-  });
+  };
 }
 
 export interface ComparableValidationError {
-  code: string,
-  location: NodeLocation,
+  code: string;
+  location: NodeLocation;
 }
 
 /**
  * Actual errors may contain all sorts of circular references that are handy when
  */
 export function comparableErrors(result: ValidationResult) {
-  return (result.errors.map((e): ComparableValidationError => {
-    return ({
-      code: e.code,
-      location: e.node.location
-    });
-  }));
+  return result.errors.map(
+    (e): ComparableValidationError => {
+      return {
+        code: e.code,
+        location: e.node.location,
+      };
+    }
+  );
 }

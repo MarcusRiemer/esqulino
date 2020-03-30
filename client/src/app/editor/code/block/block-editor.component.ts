@@ -1,24 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
-import { ComponentPortal } from '@angular/cdk/portal';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import { ComponentPortal } from "@angular/cdk/portal";
 
-import { Observable } from 'rxjs';
-import { map, switchMap, first, combineLatest } from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { map, switchMap, first, combineLatest } from "rxjs/operators";
 
-import { EditorComponentDescription } from '../../../shared/block/block-language.description';
-import { IndividualBlockLanguageDataService } from '../../../shared/serverdata';
+import { EditorComponentDescription } from "../../../shared/block/block-language.description";
+import { IndividualBlockLanguageDataService } from "../../../shared/serverdata";
 
-import { EditorToolbarService } from '../../toolbar.service';
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { DragService } from '../../drag.service';
-import { CodeResourceService } from '../../coderesource.service';
-import { BlockDebugOptionsService } from '../../block-debug-options.service';
-import { ProjectService } from '../../project.service';
-import { SidebarService } from '../../sidebar.service';
+import { EditorToolbarService } from "../../toolbar.service";
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { DragService } from "../../drag.service";
+import { CodeResourceService } from "../../coderesource.service";
+import { BlockDebugOptionsService } from "../../block-debug-options.service";
+import { ProjectService } from "../../project.service";
+import { SidebarService } from "../../sidebar.service";
 
-import { CodeSidebarComponent } from '../code.sidebar';
-import { EditorComponentsService } from '../editor-components.service';
-
+import { CodeSidebarComponent } from "../code.sidebar";
+import { EditorComponentsService } from "../editor-components.service";
 
 interface PlacedEditorComponent {
   portal: ComponentPortal<{}>;
@@ -30,10 +29,9 @@ interface PlacedEditorComponent {
  * components.
  */
 @Component({
-  templateUrl: 'templates/block-editor.html',
+  templateUrl: "templates/block-editor.html",
 })
 export class BlockEditorComponent implements OnInit, OnDestroy {
-
   /**
    * Subscriptions that need to be released
    */
@@ -52,22 +50,27 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
     private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _sidebarService: SidebarService,
-  ) {
-  }
+    private _sidebarService: SidebarService
+  ) {}
 
   ngOnInit(): void {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
 
     // Deleting this code resource
-    const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
-    btnDelete.onClick.subscribe(_ => {
-      this._codeResourceService.deleteCodeResource(this.peekProject, this.peekResource)
+    const btnDelete = this._toolbarService.addButton(
+      "delete",
+      "Löschen",
+      "trash",
+      "w"
+    );
+    btnDelete.onClick.subscribe((_) => {
+      this._codeResourceService
+        .deleteCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
-        .subscribe(_ => {
+        .subscribe((_) => {
           this.peekProject.removedCodeResource(this.peekResource);
-          this._router.navigate(["create"], { relativeTo: this._route.parent })
+          this._router.navigate(["create"], { relativeTo: this._route.parent });
         });
     });
 
@@ -75,38 +78,47 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     this._toolbarService.savingEnabled = true;
     let btnSave = this._toolbarService.saveItem;
 
-    btnSave.onClick.subscribe(_ => {
+    btnSave.onClick.subscribe((_) => {
       btnSave.isInProgress = true;
-      this._codeResourceService.updateCodeResource(this.peekProject, this.peekResource)
+      this._codeResourceService
+        .updateCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
-        .subscribe(_ => btnSave.isInProgress = false);
+        .subscribe((_) => (btnSave.isInProgress = false));
     });
 
     // Making a copy
-    const btnClone = this._toolbarService.addButton("clone", "Klonen", "files-o", "o");
-    btnClone.onClick.subscribe(_ => {
-      this._codeResourceService.cloneCodeResource(this.peekProject, this.peekResource)
+    const btnClone = this._toolbarService.addButton(
+      "clone",
+      "Klonen",
+      "files-o",
+      "o"
+    );
+    btnClone.onClick.subscribe((_) => {
+      this._codeResourceService
+        .cloneCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
-        .subscribe(clone => {
+        .subscribe((clone) => {
           this.peekProject.addCodeResource(clone);
-          this._router.navigate([clone.id], { relativeTo: this._route.parent })
+          this._router.navigate([clone.id], { relativeTo: this._route.parent });
         });
     });
 
     // Keep the sidebar updated
     const sub = this._currentCodeResource.currentResource.subscribe((c) => {
-      this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, c);
-    })
+      this._sidebarService.showSingleSidebar(
+        CodeSidebarComponent.SIDEBAR_IDENTIFIER,
+        c
+      );
+    });
 
     this._subscriptionRefs.push(sub);
   }
-
 
   /**
    * Cleans up all acquired references
    */
   ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];
   }
 
@@ -114,79 +126,83 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * @return A peek at the currently edited resource.
    */
   get peekResource() {
-    return (this._currentCodeResource.peekResource);
+    return this._currentCodeResource.peekResource;
   }
 
   /**
    * @return The resource that is currently edited
    */
   get currentResource() {
-    return (this._currentCodeResource.currentResource);
+    return this._currentCodeResource.currentResource;
   }
 
   /**
    * @return A peek at the project of the currently edited resource
    */
   get peekProject() {
-    return (this._projectService.cachedProject);
+    return this._projectService.cachedProject;
   }
 
   /**
    * @return The resolved portal for the given description
    */
   getEditorComponentPortal(desc: EditorComponentDescription) {
-    return (this._editorComponentsService.createComponent(desc));
+    return this._editorComponentsService.createComponent(desc);
   }
 
   /**
    * These editor components should be shown
    */
-  readonly editorComponentDescriptions = this.currentResource
-    .pipe(
-      switchMap(c => c.blockLanguageId),
-      switchMap(id => this._individualBlockLanguageData.getLocal(id, "request")),
-      combineLatest(
-        this._debugOptions.showDropDebug.value$,
-        this._debugOptions.showLanguageSelector.value$,
-      ),
-      map(
-        ([blockLanguage, showDropDebug, showLanguageSelector]) => {
-          // Take all of the default block languages
-          const toReturn = [...blockLanguage.editorComponents];
+  readonly editorComponentDescriptions = this.currentResource.pipe(
+    switchMap((c) => c.blockLanguageId),
+    switchMap((id) =>
+      this._individualBlockLanguageData.getLocal(id, "request")
+    ),
+    combineLatest(
+      this._debugOptions.showDropDebug.value$,
+      this._debugOptions.showLanguageSelector.value$
+    ),
+    map(([blockLanguage, showDropDebug, showLanguageSelector]) => {
+      // Take all of the default block languages
+      const toReturn = [...blockLanguage.editorComponents];
 
-          // Possibly inject the debug component
-          if (showDropDebug) {
-            const blockEditorIndex = toReturn.findIndex(c => c.componentType === "block-root");
-            if (blockEditorIndex >= 0) {
-              toReturn.splice(blockEditorIndex + 1, 0, {
-                componentType: "drop-debug"
-              });
-            }
-          }
-
-          // Possibly inject the renaming component
-          if (showLanguageSelector) {
-            toReturn.splice(0, 0, { componentType: "code-resource-settings" });
-          }
-
-          return (toReturn);
+      // Possibly inject the debug component
+      if (showDropDebug) {
+        const blockEditorIndex = toReturn.findIndex(
+          (c) => c.componentType === "block-root"
+        );
+        if (blockEditorIndex >= 0) {
+          toReturn.splice(blockEditorIndex + 1, 0, {
+            componentType: "drop-debug",
+          });
         }
-      )
-    );
+      }
+
+      // Possibly inject the renaming component
+      if (showLanguageSelector) {
+        toReturn.splice(0, 0, { componentType: "code-resource-settings" });
+      }
+
+      return toReturn;
+    })
+  );
 
   /**
    * The visual components that should be displayed.
    */
-  readonly editorComponents: Observable<PlacedEditorComponent[]> = this.editorComponentDescriptions
-    .pipe(
-      map((components): PlacedEditorComponent[] => components.map(c => {
+  readonly editorComponents: Observable<
+    PlacedEditorComponent[]
+  > = this.editorComponentDescriptions.pipe(
+    map((components): PlacedEditorComponent[] =>
+      components.map((c) => {
         // Resolved component and sane defaults for components that are displayed
-        return ({
+        return {
           portal: this.getEditorComponentPortal(c),
-          columnClasses: c.columnClasses || ['col-12']
-        });
-      }))
-    );
+          columnClasses: c.columnClasses || ["col-12"],
+        };
+      })
+    )
+  );
 
   /**
    * When something draggable enters the editor area itself there is no

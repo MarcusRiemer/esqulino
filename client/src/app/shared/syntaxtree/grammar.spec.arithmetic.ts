@@ -3,30 +3,28 @@ import { GrammarDocument } from "./grammar.description";
 export const GRAMMAR_ARITHMETIC_DESCRIPTION: GrammarDocument = {
   root: { languageName: "expr", typeName: "expression" },
   types: {
-    "expr": {
-      "expression": {
+    expr: {
+      expression: {
         type: "oneOf",
-        oneOf: ["constant"]
+        oneOf: ["constant"],
       },
-      "constant": {
+      constant: {
         type: "concrete",
         attributes: [
           {
             type: "property",
             base: "integer",
-            name: "value"
-          }
-        ]
+            name: "value",
+          },
+        ],
       },
-      "binaryExpression": {
+      binaryExpression: {
         type: "concrete",
         attributes: [
           {
             type: "sequence",
             name: "lhs",
-            nodeTypes: [
-              "expression"
-            ]
+            nodeTypes: ["expression"],
           },
           {
             type: "property",
@@ -35,19 +33,17 @@ export const GRAMMAR_ARITHMETIC_DESCRIPTION: GrammarDocument = {
             restrictions: [
               {
                 type: "enum",
-                value: ["+", "-", "*", "/"]
-              }
-            ]
+                value: ["+", "-", "*", "/"],
+              },
+            ],
           },
           {
             type: "sequence",
             name: "rhs",
-            nodeTypes: [
-              "expression"
-            ]
-          }
-        ]
-      }
-    }
-  }
+            nodeTypes: ["expression"],
+          },
+        ],
+      },
+    },
+  },
 };

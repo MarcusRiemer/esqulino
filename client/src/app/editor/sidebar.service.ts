@@ -1,9 +1,9 @@
-import { Injectable, Type } from '@angular/core'
+import { Injectable, Type } from "@angular/core";
 
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { RegistrationService } from './registration.service'
+import { RegistrationService } from "./registration.service";
 
 /**
  * Manages the global state of the sidebar. Components should *never*
@@ -12,7 +12,6 @@ import { RegistrationService } from './registration.service'
  */
 @Injectable({ providedIn: "root" })
 export class SidebarService {
-
   /**
    * Used to hand out IDs that are guaranteed to be unique.
    * These IDs are then later used to distinguish created
@@ -26,17 +25,15 @@ export class SidebarService {
    */
   private _model = new BehaviorSubject<InternalSidebarModel[]>([]);
 
-  private _visibilityObs = this._model.pipe(map(s => s.length > 0));
+  private _visibilityObs = this._model.pipe(map((s) => s.length > 0));
 
   /**
    * Valid types for sidebars.
    */
   private _knownTypes: { [typeName: string]: Type<any> } = {};
 
-  constructor(
-    registrationService: RegistrationService,
-  ) {
-    registrationService.sidebarTypes.subscribe(reg => {
+  constructor(registrationService: RegistrationService) {
+    registrationService.sidebarTypes.subscribe((reg) => {
       this.registerType(reg.typeId, reg.componentType);
     });
   }
@@ -70,14 +67,14 @@ export class SidebarService {
    * @return True, if the given type could be shown by the sidebar.
    */
   isKnownType(newType: string): boolean {
-    return (!!this._knownTypes[newType]);
+    return !!this._knownTypes[newType];
   }
 
   /**
    * @return The component type for the given identifier.
    */
   getComponentType(newType: string): any {
-    return (this._knownTypes[newType]);
+    return this._knownTypes[newType];
   }
 
   /**
@@ -91,15 +88,11 @@ export class SidebarService {
    *    on the sidebar that is going to be displayed.
    */
   showSingleSidebar(newType: string, param?: any) {
-    this.showMultiple([
-      { type: newType, param: param }
-    ], true);
+    this.showMultiple([{ type: newType, param: param }], true);
   }
 
   showAdditionalSidebar(newType: string, param?: any) {
-    this.showMultiple([
-      { type: newType, param: param }
-    ], false);
+    this.showMultiple([{ type: newType, param: param }], false);
   }
 
   /**
@@ -113,20 +106,20 @@ export class SidebarService {
     // Ensure every type is known. This does not use `every`
     // but `forEach` with a side-effect because we wan't to
     // know the offending type.
-    mult.forEach(e => {
+    mult.forEach((e) => {
       if (!this.isKnownType(e.type)) {
         throw new Error(`Unknown sidebar type: ${e.type}`);
       }
     });
 
     // Assign the Id to each model
-    let internal: InternalSidebarModel[] = mult.map(m => {
-      return ({
+    let internal: InternalSidebarModel[] = mult.map((m) => {
+      return {
         id: ++SidebarService._idCounter,
         type: m.type,
         param: m.param,
-        sticky: !!m.sticky
-      });
+        sticky: !!m.sticky,
+      };
     });
 
     // If the existing model shouldn't be replaced, it needs to
@@ -138,7 +131,7 @@ export class SidebarService {
     // Kick off the rendering by placing a new value in the observable
     this._model.next(internal);
 
-    return (internal.map(m => m.id));
+    return internal.map((m) => m.id);
   }
 
   /**
@@ -146,14 +139,14 @@ export class SidebarService {
    *         the visibility of the sidebar changes.
    */
   get isSidebarVisible() {
-    return (this._visibilityObs);
+    return this._visibilityObs;
   }
 
   /**
    * @return An observable for the current type of the sidebar
    */
   get sidebarModel(): Observable<InternalSidebarModel[]> {
-    return (this._model);
+    return this._model;
   }
 }
 
@@ -162,11 +155,11 @@ export class SidebarService {
  */
 export interface SidebarModel {
   // The sidebar-type-id to show
-  type: string
+  type: string;
   // The parameter to pass to the sidebar
-  param?: any
+  param?: any;
   // True, if the sidebar should usually be displayed.
-  sticky?: boolean
+  sticky?: boolean;
 }
 
 /**
@@ -174,5 +167,5 @@ export interface SidebarModel {
  * an id.
  */
 export interface InternalSidebarModel extends SidebarModel {
-  id: number
+  id: number;
 }

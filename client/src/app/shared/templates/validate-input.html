@@ -1,15 +1,13 @@
 <div class="input-group">
-
   <ng-content></ng-content>
 
-  <div *ngIf="isIconActive()"
-    class="input-group-prepend">
-
+  <div *ngIf="isIconActive()" class="input-group-prepend">
     <!-- Addable icon -->
-    <span #spanRef
+    <span
+      #spanRef
       (click)="isClickAble() && onClick()"
-      class="input-group-text">
-
+      class="input-group-text"
+    >
       <i [class]="getIconClass()" aria-hidden="true"></i>
     </span>
   </div>

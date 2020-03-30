@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from "@angular/core";
 
-import { AvailableLanguages, Language } from './syntaxtree'
+import { AvailableLanguages, Language } from "./syntaxtree";
 
 /**
  * Groups together information about languages that are available
@@ -8,19 +8,18 @@ import { AvailableLanguages, Language } from './syntaxtree'
  */
 @Injectable()
 export class LanguageService {
-
   /**
    * @return All languages that may be used to compile and validate code.
    */
   get availableLanguages(): ReadonlyArray<Language> {
-    return (Object.values(AvailableLanguages));
+    return Object.values(AvailableLanguages);
   }
 
   /**
    * @return IDs of all available language models.
    */
   get availableLanguageIds() {
-    return (this.availableLanguages.map(m => m.id));
+    return this.availableLanguages.map((m) => m.id);
   }
 
   /**
@@ -28,13 +27,14 @@ export class LanguageService {
    * @return The specific Language that was asked for.
    */
   getLanguage(id: string) {
-    const toReturn = this.availableLanguages.find(l => l.id === id);
+    const toReturn = this.availableLanguages.find((l) => l.id === id);
     if (!toReturn) {
-      const available = this.availableLanguageIds.join(', ');
-      throw new Error(`Language with ID "${id}" is unknown to the LanguageService, known languages are: ${available}`);
+      const available = this.availableLanguageIds.join(", ");
+      throw new Error(
+        `Language with ID "${id}" is unknown to the LanguageService, known languages are: ${available}`
+      );
     }
 
-    return (toReturn);
+    return toReturn;
   }
-
 }

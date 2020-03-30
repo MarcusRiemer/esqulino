@@ -1,21 +1,29 @@
-import { ForeignKeyDescription } from './schema.description'
-import { Table } from './table'
-import { Column, ColumnStatus } from './column'
+import { ForeignKeyDescription } from "./schema.description";
+import { Table } from "./table";
+import { Column, ColumnStatus } from "./column";
 
 import {
-  AddColumnDescription, AddForeignKeyDescription, AlterSchemaRequestDescription,
-  ChangeColumnNotNullDescription, ChangeColumnPrimaryKeyDescription,
-  ChangeColumnStandardValueDescription, ChangeColumnTypeDescription,
-  ChangeTableNameDescription, CommandDescription, DeleteColumnDescription,
-  RemoveForeignKeyDescription, RenameColumnDescription, SwitchColumnDescription,
-  ConcreteCommand
-} from './table-commands.description'
+  AddColumnDescription,
+  AddForeignKeyDescription,
+  AlterSchemaRequestDescription,
+  ChangeColumnNotNullDescription,
+  ChangeColumnPrimaryKeyDescription,
+  ChangeColumnStandardValueDescription,
+  ChangeColumnTypeDescription,
+  ChangeTableNameDescription,
+  CommandDescription,
+  DeleteColumnDescription,
+  RemoveForeignKeyDescription,
+  RenameColumnDescription,
+  SwitchColumnDescription,
+  ConcreteCommand,
+} from "./table-commands.description";
 
 /**
  * A collection of classes to implement a redo/undo functiont to the
  * editing of a table. Designed after Command design pattern.
  * The list of commands can be sent to the server, to do the corresponding changes
- * on the server. 
+ * on the server.
  */
 
 /**
@@ -38,10 +46,12 @@ export abstract class TableCommand {
    * @param table - the edited table
    */
   markColumnChanged(table: Table): void {
-    if (table.getColumnByIndex(this._columnIndex).state == ColumnStatus.unchanged) {
+    if (
+      table.getColumnByIndex(this._columnIndex).state == ColumnStatus.unchanged
+    ) {
       table.getColumnByIndex(this._columnIndex).state = ColumnStatus.changed;
     }
-  };
+  }
 
   /**
    * Setter for the index value
@@ -75,7 +85,7 @@ export abstract class TableCommand {
    */
   restoreLastStatus(table: Table): void {
     table.getColumnByIndex(this._columnIndex).state = this._lastStatus;
-  };
+  }
 
   abstract toModel(): CommandDescription;
 
@@ -86,7 +96,6 @@ export abstract class TableCommand {
  * Class for adding a new column to the table
  */
 export class AddNewColumn extends TableCommand {
-
   do(table: Table): void {
     table.addColumn();
   }
@@ -99,12 +108,12 @@ export class AddNewColumn extends TableCommand {
     return {
       type: "addColumn",
       index: this._index,
-      columnIndex: this._columnIndex // is undefined
+      columnIndex: this._columnIndex, // is undefined
     };
   }
 
   get commandText(): String {
-    return "Neue Spalte hinzugefügt"
+    return "Neue Spalte hinzugefügt";
   }
 }
 
@@ -112,13 +121,14 @@ export class AddNewColumn extends TableCommand {
  * Class for deleting a column of a table
  */
 export class DeleteColumn extends TableCommand {
-
   constructor(table: Table, columnIndex: number) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
   }
 
   do(table: Table): void {
-    table.removeColumn(table.columns.indexOf(table.getColumnByIndex(this._columnIndex)));
+    table.removeColumn(
+      table.columns.indexOf(table.getColumnByIndex(this._columnIndex))
+    );
   }
 
   undo(table: Table): void {
@@ -129,12 +139,12 @@ export class DeleteColumn extends TableCommand {
     return {
       type: "deleteColumn",
       index: this._index,
-      columnIndex: this._columnIndex
+      columnIndex: this._columnIndex,
     };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} entfernt`
+    return `Spalte ${this._columnIndex} entfernt`;
   }
 }
 
@@ -155,7 +165,11 @@ export class SwitchColumnOrder extends TableCommand {
   do(table: Table): void {
     this.markColumnChanged(table);
     this.moveColumn(table.columns, this._from, this._to);
-    table.columns.map(col => { if (col.state != ColumnStatus.deleted) { this._indexOrder.push(col.index) } });
+    table.columns.map((col) => {
+      if (col.state != ColumnStatus.deleted) {
+        this._indexOrder.push(col.index);
+      }
+    });
   }
 
   undo(table: Table): void {
@@ -173,12 +187,12 @@ export class SwitchColumnOrder extends TableCommand {
       type: "switchColumn",
       index: this._index,
       columnIndex: +this._columnIndex,
-      indexOrder: this._indexOrder
+      indexOrder: this._indexOrder,
     };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} von Position ${this._from} nach ${this._to} verschoben`
+    return `Spalte ${this._columnIndex} von Position ${this._from} nach ${this._to} verschoben`;
   }
 }
 
@@ -189,10 +203,15 @@ export class RenameColumn extends TableCommand {
   private _oldName: string;
   private _newName: string;
 
-  constructor(table: Table, columnIndex: number, oldName: string, newName: string) {
+  constructor(
+    table: Table,
+    columnIndex: number,
+    oldName: string,
+    newName: string
+  ) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
     this._newName = newName;
-    this._oldName = oldName
+    this._oldName = oldName;
   }
 
   do(table: Table): void {
@@ -211,12 +230,12 @@ export class RenameColumn extends TableCommand {
       index: this._index,
       columnIndex: +this._columnIndex,
       newName: this._newName,
-      oldName: this._oldName
+      oldName: this._oldName,
     };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} von ${this._oldName} nach ${this._newName} umbenannt`
+    return `Spalte ${this._columnIndex} von ${this._oldName} nach ${this._newName} umbenannt`;
   }
 }
 
@@ -227,7 +246,12 @@ export class ChangeColumnType extends TableCommand {
   private _oldType: string;
   private _newType: string;
 
-  constructor(table: Table, columnIndex: number, oldType: string, newType: string) {
+  constructor(
+    table: Table,
+    columnIndex: number,
+    oldType: string,
+    newType: string
+  ) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
     this._newType = newType;
     this._oldType = oldType;
@@ -249,12 +273,12 @@ export class ChangeColumnType extends TableCommand {
       index: this._index,
       columnIndex: +this._columnIndex,
       newType: this._newType,
-      oldType: this._oldType
+      oldType: this._oldType,
     };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} Type zu ${this._newType} geaendert`
+    return `Spalte ${this._columnIndex} Type zu ${this._newType} geaendert`;
   }
 }
 
@@ -262,32 +286,34 @@ export class ChangeColumnType extends TableCommand {
  * Class to change the primary key state of a column
  */
 export class ChangeColumnPrimaryKey extends TableCommand {
-
   constructor(table: Table, columnIndex: number) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
   }
 
   do(table: Table): void {
-    table.getColumnByIndex(this._columnIndex).primary = !table.getColumnByIndex(this._columnIndex).primary;
+    table.getColumnByIndex(this._columnIndex).primary = !table.getColumnByIndex(
+      this._columnIndex
+    ).primary;
     this.markColumnChanged(table);
   }
 
   undo(table: Table): void {
-    table.getColumnByIndex(this._columnIndex).primary = !table.getColumnByIndex(this._columnIndex).primary;
+    table.getColumnByIndex(this._columnIndex).primary = !table.getColumnByIndex(
+      this._columnIndex
+    ).primary;
     this.restoreLastStatus(table);
   }
 
   toModel(): ChangeColumnPrimaryKeyDescription {
-
     return {
       type: "changeColumnPrimaryKey",
       index: this._index,
-      columnIndex: this._columnIndex
+      columnIndex: this._columnIndex,
     };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} Primaerschluessel Status veraendert`
+    return `Spalte ${this._columnIndex} Primaerschluessel Status veraendert`;
   }
 }
 
@@ -295,18 +321,21 @@ export class ChangeColumnPrimaryKey extends TableCommand {
  * Class to change the not null state of a column
  */
 export class ChangeColumnNotNull extends TableCommand {
-
   constructor(table: Table, columnIndex: number) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
   }
 
   do(table: Table): void {
-    table.getColumnByIndex(this._columnIndex).not_null = !table.getColumnByIndex(this._columnIndex).not_null;
+    table.getColumnByIndex(
+      this._columnIndex
+    ).not_null = !table.getColumnByIndex(this._columnIndex).not_null;
     this.markColumnChanged(table);
   }
 
   undo(table: Table): void {
-    table.getColumnByIndex(this._columnIndex).not_null = !table.getColumnByIndex(this._columnIndex).not_null;
+    table.getColumnByIndex(
+      this._columnIndex
+    ).not_null = !table.getColumnByIndex(this._columnIndex).not_null;
     this.restoreLastStatus(table);
   }
 
@@ -314,12 +343,12 @@ export class ChangeColumnNotNull extends TableCommand {
     return {
       type: "changeColumnNotNull",
       index: this._index,
-      columnIndex: this._columnIndex
-    }
+      columnIndex: this._columnIndex,
+    };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} Not Null Status veraendert`
+    return `Spalte ${this._columnIndex} Not Null Status veraendert`;
   }
 }
 
@@ -330,7 +359,12 @@ export class ChangeColumnStandardValue extends TableCommand {
   private _oldValue: string;
   private _newValue: string;
 
-  constructor(table: Table, columnIndex: number, oldValue: string, newValue: string) {
+  constructor(
+    table: Table,
+    columnIndex: number,
+    oldValue: string,
+    newValue: string
+  ) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
     this._newValue = newValue;
     this._oldValue = oldValue;
@@ -347,18 +381,17 @@ export class ChangeColumnStandardValue extends TableCommand {
   }
 
   toModel(): ChangeColumnStandardValueDescription {
-
     return {
       type: "changeColumnStandardValue",
       index: this._index,
       columnIndex: +this._columnIndex,
       newValue: this._newValue,
-      oldValue: this._oldValue
+      oldValue: this._oldValue,
     };
   }
 
   get commandText(): String {
-    return `Spalte ${this._columnIndex} Default Value zu ${this._newValue} geaendert`
+    return `Spalte ${this._columnIndex} Default Value zu ${this._newValue} geaendert`;
   }
 }
 
@@ -366,15 +399,26 @@ export class AddForeignKey extends TableCommand {
   private _newForeignKey: ForeignKeyDescription;
   private _toInsert: ForeignKeyDescription;
 
-  constructor(table: Table, columnIndex: number, foreignKey: ForeignKeyDescription) {
+  constructor(
+    table: Table,
+    columnIndex: number,
+    foreignKey: ForeignKeyDescription
+  ) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
     this._newForeignKey = foreignKey;
   }
 
   do(table: Table): void {
     this._toInsert = { references: [] };
-    for (let ref of this._newForeignKey.references.slice(0, this._newForeignKey.references.length)) {
-      this._toInsert.references.push({ from_column: ref.from_column, to_column: ref.to_column, to_table: ref.to_table });
+    for (let ref of this._newForeignKey.references.slice(
+      0,
+      this._newForeignKey.references.length
+    )) {
+      this._toInsert.references.push({
+        from_column: ref.from_column,
+        to_column: ref.to_column,
+        to_table: ref.to_table,
+      });
     }
     table.foreign_keys.push(this._toInsert);
     this.markColumnChanged(table);
@@ -382,8 +426,15 @@ export class AddForeignKey extends TableCommand {
 
   undo(table: Table): void {
     this._toInsert = { references: [] };
-    for (let ref of this._newForeignKey.references.slice(0, this._newForeignKey.references.length)) {
-      this._toInsert.references.push({ from_column: ref.from_column, to_column: ref.to_column, to_table: ref.to_table });
+    for (let ref of this._newForeignKey.references.slice(
+      0,
+      this._newForeignKey.references.length
+    )) {
+      this._toInsert.references.push({
+        from_column: ref.from_column,
+        to_column: ref.to_column,
+        to_table: ref.to_table,
+      });
     }
     this._toInsert = table.removeForeignKey(this._toInsert);
     this.restoreLastStatus(table);
@@ -394,29 +445,39 @@ export class AddForeignKey extends TableCommand {
       type: "addForeignKey",
       index: this._index,
       columnIndex: +this._columnIndex,
-      newForeignKey: this._newForeignKey
+      newForeignKey: this._newForeignKey,
     };
   }
 
   get commandText(): String {
-    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._newForeignKey.references[0].to_table} mit Spalte ${this._newForeignKey.references[0].to_column} erzeugt`
+    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._newForeignKey.references[0].to_table} mit Spalte ${this._newForeignKey.references[0].to_column} erzeugt`;
   }
-
 }
 
 export class RemoveForeignKey extends TableCommand {
   private _oldForeignKey: ForeignKeyDescription;
   private _toRemove: ForeignKeyDescription;
 
-  constructor(table: Table, columnIndex: number, foreignKey: ForeignKeyDescription) {
+  constructor(
+    table: Table,
+    columnIndex: number,
+    foreignKey: ForeignKeyDescription
+  ) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
     this._oldForeignKey = foreignKey;
   }
 
   do(table: Table): void {
     this._toRemove = { references: [] };
-    for (let ref of this._oldForeignKey.references.slice(0, this._oldForeignKey.references.length)) {
-      this._toRemove.references.push({ from_column: ref.from_column, to_column: ref.to_column, to_table: ref.to_table });
+    for (let ref of this._oldForeignKey.references.slice(
+      0,
+      this._oldForeignKey.references.length
+    )) {
+      this._toRemove.references.push({
+        from_column: ref.from_column,
+        to_column: ref.to_column,
+        to_table: ref.to_table,
+      });
     }
     this._oldForeignKey = table.removeForeignKey(this._toRemove);
     this.markColumnChanged(table);
@@ -424,12 +485,18 @@ export class RemoveForeignKey extends TableCommand {
 
   undo(table: Table): void {
     this._toRemove = { references: [] };
-    for (let ref of this._oldForeignKey.references.slice(0, this._oldForeignKey.references.length)) {
-      this._toRemove.references.push({ from_column: ref.from_column, to_column: ref.to_column, to_table: ref.to_table });
+    for (let ref of this._oldForeignKey.references.slice(
+      0,
+      this._oldForeignKey.references.length
+    )) {
+      this._toRemove.references.push({
+        from_column: ref.from_column,
+        to_column: ref.to_column,
+        to_table: ref.to_table,
+      });
     }
     table.foreign_keys.push(this._toRemove);
     this.restoreLastStatus(table);
-
   }
 
   toModel(): RemoveForeignKeyDescription {
@@ -437,14 +504,13 @@ export class RemoveForeignKey extends TableCommand {
       type: "removeForeignKey",
       index: this._index,
       columnIndex: +this._columnIndex,
-      foreignKeyToRemove: this._oldForeignKey
+      foreignKeyToRemove: this._oldForeignKey,
     };
   }
 
   get commandText(): String {
-    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._oldForeignKey.references[0].to_table} mit Spalte ${this._oldForeignKey.references[0].to_column} entfernt`
+    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._oldForeignKey.references[0].to_table} mit Spalte ${this._oldForeignKey.references[0].to_column} entfernt`;
   }
-
 }
 
 /**}'
@@ -474,12 +540,12 @@ export class ChangeTableName extends TableCommand {
       index: this._index,
       columnIndex: undefined,
       newName: this._newName,
-      oldName: this._oldName
+      oldName: this._oldName,
     };
   }
 
   get commandText(): String {
-    return `Tabelle unbenannt in ${this._newName}`
+    return `Tabelle unbenannt in ${this._newName}`;
   }
 }
 
@@ -517,7 +583,7 @@ export class TableCommandHolder {
 
   /**
    * Function to do and add a new command
-   * @param newCommand -  the new command to add 
+   * @param newCommand -  the new command to add
    */
   do(newCommand: TableCommand) {
     newCommand.do(this._table);
@@ -528,7 +594,7 @@ export class TableCommandHolder {
    * Function to redo the last undone function
    */
   redo() {
-    if (this._activeIndex != (this._commands.length - 1)) {
+    if (this._activeIndex != this._commands.length - 1) {
       this._activeIndex++;
       this._commands[this._activeIndex].do(this._table);
     }
@@ -536,7 +602,7 @@ export class TableCommandHolder {
 
   /**
    * Function to add a new command to the list, while deleting the undone commands ahead
-   * @param newCommand -  the new command to add 
+   * @param newCommand -  the new command to add
    */
   private addCommand(newCommand: TableCommand) {
     if (this._activeIndex < this._commands.length - 1) {
@@ -557,12 +623,12 @@ export class TableCommandHolder {
   }
 
   /**
-   * Function to create a json representation to send it 
+   * Function to create a json representation to send it
    * to the server.
    */
   toModel(): AlterSchemaRequestDescription {
-    return ({
-      commands: this.commands.map(val => val.toModel() as ConcreteCommand)
-    });
+    return {
+      commands: this.commands.map((val) => val.toModel() as ConcreteCommand),
+    };
   }
 }
