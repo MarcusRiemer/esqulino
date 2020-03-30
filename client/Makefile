@@ -47,7 +47,7 @@ format-code:
 	npx prettier --write "src/**/*.{html,ts}"
 
 # Verify that the coding style is sound
-verify-code:
+verify-format-code:
 	npx prettier --check "src/**/*.{html,ts}"
 
 ##################################
