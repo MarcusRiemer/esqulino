@@ -22,6 +22,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AnalyticsService } from './analytics.service';
 import { BrowserService } from './browser.service'
@@ -48,6 +51,7 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
+import { MatTableComponent } from './table/mat-table.component';
 
 import {
   ListGrammarDataService, IndividualGrammarDataService,
@@ -90,7 +94,8 @@ const materialModules = [
   MatTooltipModule, MatSnackBarModule, MatTabsModule,
   MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
   MatNativeDateModule, MatInputModule, MatFormFieldModule,
-  MatCheckboxModule, MatProgressSpinnerModule, MatDialogModule
+  MatCheckboxModule, MatProgressSpinnerModule, MatDialogModule,
+  MatTableModule, MatPaginatorModule, MatSortModule
 ]
 
 /**
@@ -140,7 +145,8 @@ const materialModules = [
     ProviderShowComponent,
     MayPerformComponent,
     ProvidersAllButtonsComponent,
-    MessageDialogComponent
+    MessageDialogComponent,
+    MatTableComponent
   ],
   exports: [
     CommonModule,
@@ -175,7 +181,8 @@ const materialModules = [
     MayPerformComponent,
     ProviderShowComponent,
     MessageDialogComponent,
-    ProvidersAllButtonsComponent
+    ProvidersAllButtonsComponent,
+    MatTableComponent
   ],
   entryComponents: [
     AuthDialogComponent,
