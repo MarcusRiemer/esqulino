@@ -4,58 +4,79 @@
     <p>Hier siehst du alle Bilder, die du für dein Projekt verwenden kannst.</p>
 
     <form class="form">
-      <input type="text"
-             name="imageNameFilter"
-             class="form-control filter-input mt-1 mb-1 mr-1"
-             placeholder="Titelfilter"
-             [(ngModel)]="imageNameFilter">
-      <input type="text"
-             name="authorNameFilter"
-             class="form-control filter-input mt-1 mb-1 mr-1"
-             placeholder="Urheberfilter"
-             [(ngModel)]="authorNameFilter">
-      <input type="text"
-             name="licenceNameFilter"
-             class="form-control filter-input mt-1 mb-1 mr-1"
-             placeholder="Lizenzfilter"
-             [(ngModel)]="licenceNameFilter">
-      <div class="btn-group btn-toggle"
-           data-toggle="buttons">
-        <label class="btn mt-1 mb-1"
-               [class.btn-primary]="currentDisplayType == dt"
-               [class.btn-info]="currentDisplayType != dt"
-               *ngFor="let dt of availableDisplayTypes">
-          <input type="radio"
-                 name="dt"
-                 value="{{dt}}"
-                 [(ngModel)]="currentDisplayType">
+      <input
+        type="text"
+        name="imageNameFilter"
+        class="form-control filter-input mt-1 mb-1 mr-1"
+        placeholder="Titelfilter"
+        [(ngModel)]="imageNameFilter"
+      />
+      <input
+        type="text"
+        name="authorNameFilter"
+        class="form-control filter-input mt-1 mb-1 mr-1"
+        placeholder="Urheberfilter"
+        [(ngModel)]="authorNameFilter"
+      />
+      <input
+        type="text"
+        name="licenceNameFilter"
+        class="form-control filter-input mt-1 mb-1 mr-1"
+        placeholder="Lizenzfilter"
+        [(ngModel)]="licenceNameFilter"
+      />
+      <div class="btn-group btn-toggle" data-toggle="buttons">
+        <label
+          class="btn mt-1 mb-1"
+          [class.btn-primary]="currentDisplayType == dt"
+          [class.btn-info]="currentDisplayType != dt"
+          *ngFor="let dt of availableDisplayTypes"
+        >
+          <input
+            type="radio"
+            name="dt"
+            value="{{dt}}"
+            [(ngModel)]="currentDisplayType"
+          />
           {{displayNames[dt]}}
         </label>
       </div>
     </form>
     <div [ngSwitch]="currentDisplayType">
-      <div *ngSwitchCase="'card'"
-           class="card-columns">
-        <div *ngFor="let image of images"
-             class="card image-card">
-          <img class="card-img-top img-fluid"
-               src="{{image.url}}?width=400"
-               alt="{{image.name}}">
+      <div *ngSwitchCase="'card'" class="card-columns">
+        <div *ngFor="let image of images" class="card image-card">
+          <img
+            class="card-img-top img-fluid"
+            src="{{image.url}}?width=400"
+            alt="{{image.name}}"
+          />
           <div class="card-img-overlay">
             <ul class="list-group">
               <li class="list-group-item">{{image.name}}</li>
-              <li class="list-group-item"><a href="{{image.authorUrl}}">{{image.authorName}}</a></li>
-              <li class="list-group-item"><a href="{{image.licenceUrl}}">{{image.licenceName}}</a></li>
               <li class="list-group-item">
-                <a [routerLink]="[image.id,'edit']"><button class="btn btn-sm btn-warning float-left">Bearbeiten</button></a>
-                <button class="btn btn-sm btn-danger float-right" (click)="deleteImage(image.id, image.name)">Löschen</button>
+                <a href="{{image.authorUrl}}">{{image.authorName}}</a>
+              </li>
+              <li class="list-group-item">
+                <a href="{{image.licenceUrl}}">{{image.licenceName}}</a>
+              </li>
+              <li class="list-group-item">
+                <a [routerLink]="[image.id,'edit']">
+                  <button class="btn btn-sm btn-warning float-left">
+                    Bearbeiten
+                  </button>
+                </a>
+                <button
+                  class="btn btn-sm btn-danger float-right"
+                  (click)="deleteImage(image.id, image.name)"
+                >
+                  Löschen
+                </button>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <table *ngSwitchCase="'list'"
-             class="table table-hover">
+      <table *ngSwitchCase="'list'" class="table table-hover">
         <thead>
           <th></th>
           <th>Titel</th>
@@ -66,16 +87,28 @@
         <tbody>
           <tr *ngFor="let image of images">
             <td class="table-icon-col">
-              <img class="table-icon"
-                   src="{{image.url}}?width=128"
-                   alt="{{image.name}}">
+              <img
+                class="table-icon"
+                src="{{image.url}}?width=128"
+                alt="{{image.name}}"
+              />
             </td>
             <td>{{image.name}}</td>
             <td><a href="{{image.authorUrl}}">{{image.authorName}}</a></td>
             <td><a href="{{image.licenceUrl}}">{{image.licenceName}}</a></td>
             <td>
-              <a [routerLink]="[image.id,'edit']"><button class="table-button btn btn-warning m-1">Bearbeiten</button></a>
-              <button class="table-button btn btn-danger m-1" (click)="deleteImage(image.id, image.name)">Löschen</button></td>
+              <a [routerLink]="[image.id,'edit']">
+                <button class="table-button btn btn-warning m-1">
+                  Bearbeiten
+                </button>
+              </a>
+              <button
+                class="table-button btn btn-danger m-1"
+                (click)="deleteImage(image.id, image.name)"
+              >
+                Löschen
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

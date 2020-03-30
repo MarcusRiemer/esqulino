@@ -1,4 +1,4 @@
-import * as Schema from '../grammar.description'
+import * as Schema from "../grammar.description";
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "f28a9a42-73c7-4214-9aba-17443acfc5ce",
@@ -6,51 +6,47 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "regex",
   root: { languageName: "regex", typeName: "root" },
   types: {
-    "regex": {
-      "constant": {
+    regex: {
+      constant: {
         type: "concrete",
         attributes: [
           {
             name: "value",
             type: "property",
-            base: "string"
-          }
-        ]
+            base: "string",
+          },
+        ],
       },
-      "alternative": {
+      alternative: {
         type: "concrete",
         attributes: [
           {
             name: "expressions",
             type: "allowed",
-            nodeTypes: [
-              { nodeType: "expr", occurs: "+" }
-            ]
-          }
-        ]
+            nodeTypes: [{ nodeType: "expr", occurs: "+" }],
+          },
+        ],
       },
-      "expr": {
+      expr: {
         type: "concrete",
         attributes: [
           {
             name: "singleExpression",
             type: "choice",
-            choices: ["constant", "alternative"]
-          }
-        ]
+            choices: ["constant", "alternative"],
+          },
+        ],
       },
-      "root": {
+      root: {
         type: "concrete",
         attributes: [
           {
             name: "expressions",
             type: "allowed",
-            nodeTypes: [
-              { nodeType: "expr", occurs: "+" }
-            ]
-          }
-        ]
+            nodeTypes: [{ nodeType: "expr", occurs: "+" }],
+          },
+        ],
       },
-    }
-  }
-}
+    },
+  },
+};

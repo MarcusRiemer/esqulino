@@ -1,17 +1,21 @@
 import {
-  Component, Input, EventEmitter,
-  Output, ElementRef, HostListener,
-  ContentChild, Renderer2, AfterViewInit,
-  ViewChild
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  ElementRef,
+  HostListener,
+  ContentChild,
+  Renderer2,
+  AfterViewInit,
+  ViewChild,
 } from "@angular/core";
 
-
 @Component({
-  selector: 'validate-input',
-  templateUrl: './templates/validate-input.html'
+  selector: "validate-input",
+  templateUrl: "./templates/validate-input.html",
 })
 export class ValidateInputComponent implements AfterViewInit {
-
   @Input() error: string;
   @Input() value: string;
   @Input() icon: string;
@@ -21,26 +25,22 @@ export class ValidateInputComponent implements AfterViewInit {
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() clicked = new EventEmitter<void>();
 
-  @ViewChild('spanRef') spanRef: ElementRef;
+  @ViewChild("spanRef") spanRef: ElementRef;
   @ContentChild("inputRef") inputRef: ElementRef;
 
-  @HostListener('change') onChange() {
-    this.emitInput()
+  @HostListener("change") onChange() {
+    this.emitInput();
   }
 
-  constructor(private _renderer: Renderer2) { }
+  constructor(private _renderer: Renderer2) {}
 
   public getErrorMessage(): string {
-    return this.error
+    return this.error;
   }
 
   public ngAfterViewInit(): void {
     if (this.clickAble) {
-      this._renderer.setStyle(
-        this.spanRef.nativeElement,
-        "cursor",
-        "pointer"
-      )
+      this._renderer.setStyle(this.spanRef.nativeElement, "cursor", "pointer");
     }
   }
 
@@ -49,19 +49,19 @@ export class ValidateInputComponent implements AfterViewInit {
    * @retun font awesome class
    */
   public getIconClass(): string {
-    return `fa fa-${this.icon}`
+    return `fa fa-${this.icon}`;
   }
 
-  /** 
+  /**
    * Returns the value of the input field
    * @return string or number depends on the type
-  */
+   */
   public getValueOfInput(): string | number {
     return this.inputRef.nativeElement.value;
   }
 
   public isClickAble(): boolean {
-    return this.clickAble
+    return this.clickAble;
   }
 
   /**
@@ -76,7 +76,7 @@ export class ValidateInputComponent implements AfterViewInit {
    * Should the icon displayed?
    */
   public isIconActive(): boolean {
-    return this.icon !== undefined
+    return this.icon !== undefined;
   }
 
   /**
@@ -87,11 +87,7 @@ export class ValidateInputComponent implements AfterViewInit {
   }
 
   public emitInput(): void {
-    const value = this.isInputValid()
-      ? this.getValueOfInput()
-      : undefined
-      ;
-
-    this.valueChange.emit(value)
+    const value = this.isInputValid() ? this.getValueOfInput() : undefined;
+    this.valueChange.emit(value);
   }
 }

@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from "@angular/core";
 
 /**
  * A message that should be displayed.
  */
 export interface FlashMessage {
-  caption: string
-  text: string
-  type: "success" | "info" | "warning" | "danger"
+  caption: string;
+  text: string;
+  type: "success" | "info" | "warning" | "danger";
 }
 
 /**
@@ -29,7 +29,7 @@ export class FlashService {
    * @return All messages that should currently be shown.
    */
   get messages(): FlashMessage[] {
-    return (this._messages);
+    return this._messages;
   }
 
   /**

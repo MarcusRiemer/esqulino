@@ -15,7 +15,7 @@ export class LoggedInGuard implements CanActivate {
     private _userService: UserService,
     private _router: Router,
     private _matDialog: MatDialog
-  ) { }
+  ) {}
 
   public async canActivate(): Promise<true | UrlTree> {
     console.log(`LoggedIn Guard -> ?`);
@@ -32,8 +32,8 @@ export class LoggedInGuard implements CanActivate {
           data: {
             type: "signIn",
             message: "You need to login to view this content!",
-            message_type: "error"
-          }
+            message_type: "error",
+          },
         })
         .afterClosed()
         .pipe(first())

@@ -1,12 +1,11 @@
 <h1 i18n="@@developmentPageHeadline">BlattWerkzeug-Entwicklung</h1>
 <p i18n="@@developmentPageText">
-  BlattWerkzeug ist ein OpenSource-Projekt, konkret wird es unter der AGPL-3.0 bereitgestellt.
-  Es hat also jeder (auch du!) das Recht, in den Quelltext hineinzuschauen oder ihn sogar zu
-  verändern.
+  BlattWerkzeug ist ein OpenSource-Projekt, konkret wird es unter der AGPL-3.0
+  bereitgestellt. Es hat also jeder (auch du!) das Recht, in den Quelltext
+  hineinzuschauen oder ihn sogar zu verändern.
 </p>
 
-<mat-card *ngFor="let link of developmentLinks | async"
-          class="mb-3">
+<mat-card *ngFor="let link of developmentLinks | async" class="mb-3">
   <mat-card-header>
     <div mat-card-avatar>
       <i class="fa fa-{{ link.icon }} fa-3x" aria-hidden="true"></i>
@@ -16,7 +15,7 @@
     </mat-card-title>
     <mat-card-subtitle>
       <a [href]="link.href">
-        <img *ngIf="link.titleBadgeImage" [src]="link.titleBadgeImage">
+        <img *ngIf="link.titleBadgeImage" [src]="link.titleBadgeImage" />
         {{ link.subtitle[localeId] }}
       </a>
     </mat-card-subtitle>
@@ -28,42 +27,73 @@
 
 <h1 i18n="@@projectProposalsHeadline">Projektvorschläge</h1>
 <p i18n="@@projectProposalsIntro">
-  Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten bearbeitet werden:
+  Interessierte Studierende finden hier Themenvorschläge, an der FH Wedel können
+  diese auch im Rahmen diverser Projekte, Seminare oder Abschlußarbeiten
+  bearbeitet werden:
 </p>
 <ul>
   <li i18n="@@academiaThesesInfo">
-    Anfertigung einer internen <strong>Bachelor</strong>- oder <strong>Master-Thesis</strong>. In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel, die Erstbegutachtung wird durch <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch</a> vorgenommen.
+    Anfertigung einer internen
+    <strong>Bachelor</strong>
+    - oder
+    <strong>Master-Thesis</strong>
+    . In diesem Fall erfolgt die Bearbeitung in Kooperation mit der CAU Kiel,
+    die Erstbegutachtung wird durch
+    <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch</a>
+    vorgenommen.
   </li>
   <li i18n="@@academiaSeminarInfo">
-    In von mir angebotenen <strong>Seminaren</strong> werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch gerne Vorschläge entgegen.
+    In von mir angebotenen
+    <strong>Seminaren</strong>
+    werden immer wieder passende Themen vergeben. Sofern Sie mit einem für mich
+    interessantes Thema aus dem Web-Umfeld auf mich zukommen nehme ich auch
+    gerne Vorschläge entgegen.
   </li>
   <li i18n="@@academiaMediaProjectInfo">
-    Für Bachelor Medieninformatiker ist es möglich das <strong>Medien-Projekt</strong> zu absolvieren, Informatik-Master-Studierende können das <strong>Master-Projekt</strong> einbringen.
+    Für Bachelor Medieninformatiker ist es möglich das
+    <strong>Medien-Projekt</strong>
+    zu absolvieren, Informatik-Master-Studierende können das
+    <strong>Master-Projekt</strong>
+    einbringen.
   </li>
 </ul>
 
 <p i18n="@@softwareStackIntro">
-  BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich hervorragend um viele typische Verfahren moderner Softwareentwicklung kennenzulernen:
+  BlattWerkzeug ist mittlerweile ein komplexes Software-Produkt und eignet sich
+  hervorragend um viele typische Verfahren moderner Softwareentwicklung
+  kennenzulernen:
 </p>
 <dl>
   <dt i18n="@@testDrivenDevelopment">Test Driven Development</dt>
-  <dd i18n="@@testDrivenDevelopmentDescription">Wann immer möglich beginnt die Entwicklung eines neuen Features mit der Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind davon aktuell leider ausgenommen.</dd>
+  <dd i18n="@@testDrivenDevelopmentDescription">
+    Wann immer möglich beginnt die Entwicklung eines neuen Features mit der
+    Formulierung von Testfällen. Lediglich komplexe grafische Oberflächen sind
+    davon aktuell leider ausgenommen.
+  </dd>
   <dt i18n="@@dockerAndCi">Docker &amp; Continuous Integration</dt>
-  <dd i18n="@@dockerAndCiDescription">Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig automatisch übersetzt und getestet.</dd>
+  <dd i18n="@@dockerAndCiDescription">
+    Aufbauend auf Docker-Images wird BlattWerkzeug nach Commits regelmäßig
+    automatisch übersetzt und getestet.
+  </dd>
   <dt i18n="@@singlePageAndApi">Single Page Applications &amp; API-Server</dt>
-  <dd i18n="@@singlePageAndApiDescription">Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige Teil verwendet Ruby on Rails.</dd>
+  <dd i18n="@@singlePageAndApiDescription">
+    Das BlattWerkzeug-Frontend ist eine Angular-Anwendung, der serverseitige
+    Teil verwendet Ruby on Rails.
+  </dd>
 </dl>
 
-<mat-card *ngFor="let proposal of projectProposals | async"
-          class="academia-item"
-          [id]="proposal.id">
+<mat-card
+  *ngFor="let proposal of projectProposals | async"
+  class="academia-item"
+  [id]="proposal.id"
+>
   <mat-card-title>
     {{ proposal.title }}
   </mat-card-title>
   <mat-card-content>
     <div [innerHTML]="proposal.text"></div>
     <p>
-      <strong i18n="dev environment used@@devEnvironmentUsed">Umgebung: </strong>
+      <strong i18n="dev environment used@@devEnvironmentUsed">Umgebung:</strong>
       <span [innerHTML]="proposal.tools"></span>
     </p>
   </mat-card-content>

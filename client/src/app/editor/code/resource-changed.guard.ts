@@ -1,12 +1,17 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router'
+import { Injectable } from "@angular/core";
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from "@angular/router";
 
-import { ResourceReferencesService } from '../../shared/resource-references.service'
+import { ResourceReferencesService } from "../../shared/resource-references.service";
 
-import { CurrentCodeResourceService } from '../current-coderesource.service'
+import { CurrentCodeResourceService } from "../current-coderesource.service";
 
-import { SidebarService } from '../sidebar.service';
-import { CodeSidebarComponent } from './code.sidebar';
+import { SidebarService } from "../sidebar.service";
+import { CodeSidebarComponent } from "./code.sidebar";
 
 /**
  * Listens to changes of the resource ID in the URL and then propagates
@@ -18,22 +23,31 @@ export class ResourceChangedGuard implements CanActivate {
     private _currentCodeResource: CurrentCodeResourceService,
     private _resourceReferences: ResourceReferencesService,
     private _sidebarService: SidebarService,
-    private _router: Router,
-  ) { }
+    private _router: Router
+  ) {}
 
-  async canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
+  ) {
     const resourceId = route.params["resourceId"];
-    const activatedResource = this._currentCodeResource._changeCurrentResource(resourceId);
+    const activatedResource = this._currentCodeResource._changeCurrentResource(
+      resourceId
+    );
 
     if (activatedResource) {
       // Ensure that all previous sidebars are hidden
-      this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, activatedResource);
+      this._sidebarService.showSingleSidebar(
+        CodeSidebarComponent.SIDEBAR_IDENTIFIER,
+        activatedResource
+      );
 
       // Ensure that the relevant block language is fully loaded
       const blockLanguageId = activatedResource.blockLanguageIdPeek;
-      return (this._resourceReferences.ensureResources(
-        { type: "blockLanguageGrammar", id: blockLanguageId }
-      ));
+      return this._resourceReferences.ensureResources({
+        type: "blockLanguageGrammar",
+        id: blockLanguageId,
+      });
     } else {
       // May not use the `route` parameter, must use injected `ActivatedRoute` (which is the
       // state *before* navigation happens so it doesn't help here at all).

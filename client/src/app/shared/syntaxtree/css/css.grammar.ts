@@ -1,4 +1,4 @@
-import * as Schema from '../grammar.description'
+import * as Schema from "../grammar.description";
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "37719773-5893-46d5-b1ec-0b63f1ef9099",
@@ -6,130 +6,129 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "css",
   root: { languageName: "css", typeName: "document" },
   types: {
-    "css": {
-      "document": {
+    css: {
+      document: {
         type: "concrete",
         attributes: [
           {
             name: "rules",
             type: "allowed",
-            nodeTypes: [
-              { nodeType: "rule", occurs: "*" }
-            ]
-          }
-        ]
+            nodeTypes: [{ nodeType: "rule", occurs: "*" }],
+          },
+        ],
       },
 
-      "rule": {
+      rule: {
         type: "concrete",
         attributes: [
           {
             name: "selectors",
             type: "sequence",
-            nodeTypes: [
-              { nodeType: "selector", occurs: "*" }
-            ]
+            nodeTypes: [{ nodeType: "selector", occurs: "*" }],
           },
           {
             name: "declarations",
             type: "allowed",
-            nodeTypes: [
-              { nodeType: "declaration", occurs: "*" },
-            ]
-          }
-        ]
+            nodeTypes: [{ nodeType: "declaration", occurs: "*" }],
+          },
+        ],
       },
 
-      "selector": {
+      selector: {
         type: "oneOf",
-        oneOf: ["selectorType", "selectorClass", "selectorId", "selectorUniversal"]
+        oneOf: [
+          "selectorType",
+          "selectorClass",
+          "selectorId",
+          "selectorUniversal",
+        ],
       },
 
-      "selectorType": {
+      selectorType: {
         type: "concrete",
         attributes: [
           {
             name: "value",
             type: "property",
-            base: "string"
-          }
-        ]
+            base: "string",
+          },
+        ],
       },
 
-      "selectorClass": {
+      selectorClass: {
         type: "concrete",
         attributes: [
           {
             name: "value",
             type: "property",
-            base: "string"
-          }
-        ]
+            base: "string",
+          },
+        ],
       },
 
-      "selectorId": {
+      selectorId: {
         type: "concrete",
         attributes: [
           {
             name: "value",
             type: "property",
-            base: "string"
-          }
-        ]
+            base: "string",
+          },
+        ],
       },
 
-      "selectorUniversal": {
+      selectorUniversal: {
         type: "concrete",
       },
 
-      "declaration": {
+      declaration: {
         type: "concrete",
         attributes: [
           {
             name: "name",
             type: "choice",
-            choices: ["propertyName"]
+            choices: ["propertyName"],
           },
           {
             name: "value",
             type: "choice",
-            choices: ["exprColor", "exprAny"]
-          }
-        ]
+            choices: ["exprColor", "exprAny"],
+          },
+        ],
       },
 
-      "exprColor": {
+      exprColor: {
         type: "concrete",
         attributes: [
           {
             name: "value",
             type: "property",
-            base: "string"
-          }
-        ]
+            base: "string",
+          },
+        ],
       },
 
-      "exprAny": {
+      exprAny: {
         type: "concrete",
         attributes: [
           {
             name: "value",
             type: "property",
-            base: "string"
-          }
-        ]
+            base: "string",
+          },
+        ],
       },
 
-      "propertyName": {
+      propertyName: {
         type: "concrete",
         attributes: [
           {
             name: "name",
             type: "property",
-            base: "string"
-          }
-        ]
-      }
+            base: "string",
+          },
+        ],
+      },
     },
   },
-}
+};

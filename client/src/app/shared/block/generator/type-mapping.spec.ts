@@ -1,13 +1,21 @@
-import { NodeConcreteTypeDescription, NodeAttributeDescription } from '../../syntaxtree/grammar.description'
+import {
+  NodeConcreteTypeDescription,
+  NodeAttributeDescription,
+} from "../../syntaxtree/grammar.description";
 
-import { VisualBlockDescriptions } from '../block.description';
+import { VisualBlockDescriptions } from "../block.description";
 
-import { mapTerminal, mapProperty, mapChildren, mapType, mapBlockAttributes } from './type-mapping'
-import { DefaultInstructions } from './instructions.description';
-import { TypeInstructions } from './instructions';
+import {
+  mapTerminal,
+  mapProperty,
+  mapChildren,
+  mapType,
+  mapBlockAttributes,
+} from "./type-mapping";
+import { DefaultInstructions } from "./instructions.description";
+import { TypeInstructions } from "./instructions";
 
 describe("BlockLanguage Generator Type Mapping", () => {
-
   it("Terminal => Constant", () => {
     const res = mapTerminal(
       { type: "terminal", name: "t", symbol: "t" },
@@ -21,9 +29,11 @@ describe("BlockLanguage Generator Type Mapping", () => {
       { type: "terminal", name: "t", symbol: "t" },
       { style: { color: "green" } }
     );
-    expect(res).toEqual(
-      { blockType: "constant", text: "t", style: { color: "green" } },
-    );
+    expect(res).toEqual({
+      blockType: "constant",
+      text: "t",
+      style: { color: "green" },
+    });
   });
 
   it("Writeable Property => Input", () => {
@@ -46,22 +56,24 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const attrType: NodeAttributeDescription = {
       type: "sequence",
       name: "c1",
-      nodeTypes: []
+      nodeTypes: [],
     };
     const nodeType: NodeConcreteTypeDescription = {
       type: "concrete",
-      attributes: [
-        attrType
-      ]
+      attributes: [attrType],
     };
-    const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
+    const res = mapChildren(
+      nodeType,
+      attrType,
+      DefaultInstructions.iteratorInstructions
+    );
 
     expect(res).toEqual([
       {
         blockType: "iterator",
         childGroupName: "c1",
-        emptyDropTarget: false
-      }
+        emptyDropTarget: false,
+      },
     ]);
   });
 
@@ -70,23 +82,25 @@ describe("BlockLanguage Generator Type Mapping", () => {
       type: "sequence",
       name: "c1",
       nodeTypes: [],
-      tags: ["a", "b"]
+      tags: ["a", "b"],
     };
     const nodeType: NodeConcreteTypeDescription = {
       type: "concrete",
-      attributes: [
-        attrType
-      ]
+      attributes: [attrType],
     };
-    const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
+    const res = mapChildren(
+      nodeType,
+      attrType,
+      DefaultInstructions.iteratorInstructions
+    );
 
     expect(res).toEqual([
       {
         blockType: "iterator",
         childGroupName: "c1",
         emptyDropTarget: false,
-        cssClasses: ["a", "b"]
-      }
+        cssClasses: ["a", "b"],
+      },
     ]);
   });
 
@@ -94,22 +108,17 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const attrType: NodeAttributeDescription = {
       type: "sequence",
       name: "c1",
-      nodeTypes: []
+      nodeTypes: [],
     };
     const nodeType: NodeConcreteTypeDescription = {
       type: "concrete",
-      attributes: [
-        attrType
-      ]
+      attributes: [attrType],
     };
-    const res = mapChildren(
-      nodeType, attrType,
-      {
-        between: "ä",
-        style: {},
-        emptyDropTarget: false,
-      }
-    );
+    const res = mapChildren(nodeType, attrType, {
+      between: "ä",
+      style: {},
+      emptyDropTarget: false,
+    });
 
     expect(res).toEqual([
       {
@@ -121,12 +130,11 @@ describe("BlockLanguage Generator Type Mapping", () => {
             blockType: "constant",
             text: "ä",
             style: DefaultInstructions.terminalInstructions.style,
-          }
-        ]
-      }
+          },
+        ],
+      },
     ]);
   });
-
 
   it("Parentheses (+Between) => Iterator", () => {
     const attrType: NodeAttributeDescription = {
@@ -134,28 +142,23 @@ describe("BlockLanguage Generator Type Mapping", () => {
       name: "childGroup",
       group: {
         type: "allowed",
-        nodeTypes: ["a", "b"]
+        nodeTypes: ["a", "b"],
       },
       cardinality: "+",
       between: {
         type: "terminal",
-        symbol: "::"
-      }
+        symbol: "::",
+      },
     };
     const nodeType: NodeConcreteTypeDescription = {
       type: "concrete",
-      attributes: [
-        attrType
-      ]
+      attributes: [attrType],
     };
-    const res = mapChildren(
-      nodeType, attrType,
-      {
-        between: undefined,
-        emptyDropTarget: false,
-        style: {}
-      }
-    );
+    const res = mapChildren(nodeType, attrType, {
+      between: undefined,
+      emptyDropTarget: false,
+      style: {},
+    });
 
     expect(res).toEqual([
       {
@@ -166,10 +169,10 @@ describe("BlockLanguage Generator Type Mapping", () => {
           {
             blockType: "constant",
             text: "::",
-            style: DefaultInstructions.terminalInstructions.style
-          }
-        ]
-      }
+            style: DefaultInstructions.terminalInstructions.style,
+          },
+        ],
+      },
     ]);
   });
 
@@ -177,17 +180,17 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const instr = new TypeInstructions({
       blocks: [
         {
-          attributeMapping: ["p1"]
-        }
-      ]
+          attributeMapping: ["p1"],
+        },
+      ],
     });
 
     const concreteType: NodeConcreteTypeDescription = {
       type: "concrete",
       attributes: [
         { type: "property", name: "ignored", base: "string" },
-        { type: "terminal", name: "p1", symbol: "p1Text", },
-      ]
+        { type: "terminal", name: "p1", symbol: "p1Text" },
+      ],
     };
     const res = mapBlockAttributes(concreteType, instr, 0);
     expect(res.length).toEqual(1);
@@ -195,18 +198,17 @@ describe("BlockLanguage Generator Type Mapping", () => {
 
   it("Error Indicator (start)", () => {
     const instr = new TypeInstructions({
-      blocks: [
-        { generateErrorIndicator: "start" }
-      ]
+      blocks: [{ generateErrorIndicator: "start" }],
     });
 
     const concreteType: NodeConcreteTypeDescription = {
       type: "concrete",
-      attributes: [
-        { type: "terminal", name: "p1", symbol: "p1Text", },
-      ]
+      attributes: [{ type: "terminal", name: "p1", symbol: "p1Text" }],
     };
-    const res = mapType(concreteType, instr) as VisualBlockDescriptions.EditorBlock[];
+    const res = mapType(
+      concreteType,
+      instr
+    ) as VisualBlockDescriptions.EditorBlock[];
     expect(res.length).toEqual(1);
     expect(res[0].blockType).toEqual("block");
     expect(res[0].children.length).toEqual(2);
@@ -216,18 +218,17 @@ describe("BlockLanguage Generator Type Mapping", () => {
 
   it("Error Indicator (end)", () => {
     const instr = new TypeInstructions({
-      blocks: [
-        { generateErrorIndicator: "end" }
-      ]
+      blocks: [{ generateErrorIndicator: "end" }],
     });
 
     const concreteType: NodeConcreteTypeDescription = {
       type: "concrete",
-      attributes: [
-        { type: "terminal", name: "p1", symbol: "p1Text", },
-      ]
+      attributes: [{ type: "terminal", name: "p1", symbol: "p1Text" }],
     };
-    const res = mapType(concreteType, instr) as VisualBlockDescriptions.EditorBlock[];
+    const res = mapType(
+      concreteType,
+      instr
+    ) as VisualBlockDescriptions.EditorBlock[];
     expect(res.length).toEqual(1);
     expect(res[0].blockType).toEqual("block");
     expect(res[0].children.length).toEqual(2);
@@ -239,17 +240,17 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const instr = new TypeInstructions({
       blocks: [
         {
-          attributeMapping: ["missing"]
-        }
-      ]
+          attributeMapping: ["missing"],
+        },
+      ],
     });
 
     const concreteType: NodeConcreteTypeDescription = {
       type: "concrete",
       attributes: [
         { type: "property", name: "ignored", base: "string" },
-        { type: "terminal", name: "p1", symbol: "p1Text", },
-      ]
+        { type: "terminal", name: "p1", symbol: "p1Text" },
+      ],
     };
     expect(() => mapBlockAttributes(concreteType, instr, 0)).toThrowError();
   });
@@ -258,10 +259,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
 describe("Multi Block Types", () => {
   it("Identical relevant terminals with ignored property", () => {
     const instructions = new TypeInstructions({
-      blocks: [
-        { attributeMapping: ["p1"] },
-        { attributeMapping: ["p1"] }
-      ]
+      blocks: [{ attributeMapping: ["p1"] }, { attributeMapping: ["p1"] }],
     });
 
     const concreteType: NodeConcreteTypeDescription = {
@@ -270,16 +268,19 @@ describe("Multi Block Types", () => {
         {
           type: "property",
           name: "ignored",
-          base: "string"
+          base: "string",
         },
         {
           type: "terminal",
           name: "p1",
           symbol: "p1Text",
         },
-      ]
-    }
-    const res = mapType(concreteType, instructions) as VisualBlockDescriptions.EditorBlock[];
+      ],
+    };
+    const res = mapType(
+      concreteType,
+      instructions
+    ) as VisualBlockDescriptions.EditorBlock[];
     expect(res.length).toEqual(2, "Two generated blocks");
 
     const expBlock = jasmine.objectContaining({
@@ -288,13 +289,17 @@ describe("Multi Block Types", () => {
 
     const expConstant = jasmine.objectContaining({
       blockType: "constant",
-      text: "p1Text"
+      text: "p1Text",
     } as Partial<VisualBlockDescriptions.EditorConstant>);
 
-    res.forEach(b => {
+    res.forEach((b) => {
       expect(b).toEqual(expBlock);
       expect(b.children.length).toEqual(2, "Error and a single child");
-      expect(b.children[0]).toEqual(jasmine.objectContaining({ blockType: "error" } as Partial<VisualBlockDescriptions.EditorErrorIndicator>));
+      expect(b.children[0]).toEqual(
+        jasmine.objectContaining({ blockType: "error" } as Partial<
+          VisualBlockDescriptions.EditorErrorIndicator
+        >)
+      );
       expect(b.children[1]).toEqual(expConstant);
     });
   });

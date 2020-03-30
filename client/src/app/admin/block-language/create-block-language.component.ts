@@ -1,21 +1,25 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Component } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { BlockLanguageDescription } from '../../shared/block/block-language.description';
-import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description'
-import { generateBlockLanguage } from '../../shared/block/generator/generator'
+import { BlockLanguageDescription } from "../../shared/block/block-language.description";
+import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
+import { generateBlockLanguage } from "../../shared/block/generator/generator";
 
-import { ServerApiService, BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
+import {
+  ServerApiService,
+  BlockLanguageDataService,
+  GrammarDataService,
+} from "../../shared/serverdata";
 
 /**
  * A comprehensive way to create new block languages
  */
 @Component({
-  templateUrl: 'templates/create-block-language.html',
-  selector: 'create-block-language'
+  templateUrl: "templates/create-block-language.html",
+  selector: "create-block-language",
 })
 export class CreateBlockLanguageComponent {
   // Synced with form
@@ -28,7 +32,7 @@ export class CreateBlockLanguageComponent {
     grammarId: "",
     editorBlocks: [],
     editorComponents: [],
-    sidebars: []
+    sidebars: [],
   };
 
   // Enables usage of slugs
@@ -39,15 +43,14 @@ export class CreateBlockLanguageComponent {
     private _grammarData: GrammarDataService,
     private _serverApi: ServerApiService,
     private _http: HttpClient,
-    private _router: Router,
-  ) {
-  }
+    private _router: Router
+  ) {}
 
   /**
    * Grammars that may be used for creation
    */
   public get availableGrammars() {
-    return (this._grammarData.list);
+    return this._grammarData.list;
   }
 
   /**
@@ -59,9 +62,13 @@ export class CreateBlockLanguageComponent {
     this._grammarData
       .getSingle(this.blockLanguage.grammarId)
       .pipe(first())
-      .subscribe(g => {
+      .subscribe((g) => {
         // Generate some default blocks
-        const toCreate = generateBlockLanguage(this.blockLanguage, DEFAULT_GENERATOR, g);
+        const toCreate = generateBlockLanguage(
+          this.blockLanguage,
+          DEFAULT_GENERATOR,
+          g
+        );
 
         // Default the default programming language to use the same value as
         // the grammar.
@@ -73,13 +80,19 @@ export class CreateBlockLanguageComponent {
         }
 
         this._http
-          .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
-          .subscribe(res => {
-            this._serverData.listCache.refresh();
-            this._router.navigateByUrl(`/admin/block-language/${res.id}`);
-          }, err => {
-            console.log(err);
-          });
+          .post<{ id: string }>(
+            this._serverApi.createBlockLanguageUrl(),
+            toCreate
+          )
+          .subscribe(
+            (res) => {
+              this._serverData.listCache.refresh();
+              this._router.navigateByUrl(`/admin/block-language/${res.id}`);
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
       });
   }
 }

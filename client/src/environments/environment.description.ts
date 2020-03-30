@@ -11,16 +11,19 @@ export interface EnvironmentDescription {
     host: string;
     id: number;
   };
-  loginEnabled: boolean,
+  loginEnabled: boolean;
   // Tracking bugs in the live environment with Sentry
   sentry: {
     dsn: string;
-  } & ({
-    active: true;
-    showDialogue: boolean;
-  } | {
-    active: false;
-  });
+  } & (
+    | {
+        active: true;
+        showDialogue: boolean;
+      }
+    | {
+        active: false;
+      }
+  );
   // Build information
   version: {
     hash: string;
@@ -28,7 +31,7 @@ export interface EnvironmentDescription {
   };
 
   availableLanguages: {
-    token: string,
-    name: string,
+    token: string;
+    name: string;
   }[];
 }

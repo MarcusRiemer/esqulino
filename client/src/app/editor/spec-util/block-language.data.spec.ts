@@ -1,9 +1,12 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from "@angular/core/testing";
+import { HttpTestingController } from "@angular/common/http/testing";
 
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
-import { generateUUIDv4 } from '../../shared/util-browser';
-import { ServerApiService, BlockLanguageDataService } from '../../shared/serverdata';
+import { generateUUIDv4 } from "../../shared/util-browser";
+import {
+  ServerApiService,
+  BlockLanguageDataService,
+} from "../../shared/serverdata";
 
 const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -11,7 +14,7 @@ const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
   sidebars: [],
   editorBlocks: [],
   editorComponents: [],
-  defaultProgrammingLanguageId: "spec"
+  defaultProgrammingLanguageId: "spec",
 });
 
 /**
@@ -21,7 +24,9 @@ const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
 export const buildBlockLanguage = (
   override?: Partial<BlockLanguageDescription>
 ): BlockLanguageDescription => {
-  return (Object.assign({}, DEFAULT_EMPTY_BLOCKLANGUAGE, override || {}, { id: generateUUIDv4() }));
+  return Object.assign({}, DEFAULT_EMPTY_BLOCKLANGUAGE, override || {}, {
+    id: generateUUIDv4(),
+  });
 };
 
 export const ensureLocalBlockLanguageRequest = (
@@ -33,8 +38,9 @@ export const ensureLocalBlockLanguageRequest = (
 
   const toReturn = blockData.getLocal(response.id, "request");
 
-  httpTestingController.expectOne(serverApi.individualBlockLanguageUrl(response.id))
+  httpTestingController
+    .expectOne(serverApi.individualBlockLanguageUrl(response.id))
     .flush(response);
 
-  return (toReturn);
-}
+  return toReturn;
+};

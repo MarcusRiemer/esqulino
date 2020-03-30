@@ -3,32 +3,50 @@
     <div class="row">
       <div class="col-md-3">
         <label>Wähle eine Sprache</label>
-        <select class="custom-select"  name="language" required [(ngModel)]="selectedLanguage">
-          <option *ngFor="let item of languages" [value]="item.token">{{item.name}}</option>
+        <select
+          class="custom-select"
+          name="language"
+          required
+          [(ngModel)]="selectedLanguage"
+        >
+          <option *ngFor="let item of languages" [value]="item.token">
+            {{item.name}}
+          </option>
         </select>
       </div>
       <div class="col-md-3">
         <label>Wähle einen Editor</label>
-        <select class="custom-select" name="editor" required [(ngModel)]="selectedEditor">
-          <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
+        <select
+          class="custom-select"
+          name="editor"
+          required
+          [(ngModel)]="selectedEditor"
+        >
+          <option *ngFor="let item of editors" [value]="item.name">
+            {{item.description}}
+          </option>
         </select>
       </div>
       <div class="col-md-3">
         <label>Suche:</label>
-        <input class="form-control" name="search-for" (ngModelChange)="change()" [(ngModel)]="searchFor">
+        <input
+          class="form-control"
+          name="search-for"
+          (ngModelChange)="change()"
+          [(ngModel)]="searchFor"
+        />
       </div>
 
-      <may-perform
-        [payload]="performCreateData">
-
+      <may-perform [payload]="performCreateData">
         <div class="col-md-3">
-          <button (click)="createNews()" class="btn btn-primary">Erstellen</button>
+          <button (click)="createNews()" class="btn btn-primary">
+            Erstellen
+          </button>
         </div>
       </may-perform>
-
     </div>
   </form>
- 
+
   <table class="table table-hover">
     <thead>
       <tr>
@@ -41,9 +59,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of (searchList | async)"
-          [routerLink]="['edit', item.id]"
-          [queryParams]="{ mode: selectedEditor, language: selectedLanguage }">
+      <tr
+        *ngFor="let item of (searchList | async)"
+        [routerLink]="['edit', item.id]"
+        [queryParams]="{ mode: selectedEditor, language: selectedLanguage }"
+      >
         <td scope="row">{{item.id}}</td>
         <td>{{item.title ? item.title[selectedLanguage] || '' : ''}}</td>
         <td>{{getLanguagesFlags(item.text)}}</td>

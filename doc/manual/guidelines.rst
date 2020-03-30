@@ -6,6 +6,11 @@
 
 Please read through these guidelines when developing for BlattWerkzeug.
 
+Code formatting
+===============
+
+Code-formatting for the ``client`` folder is automated and enforced by `prettier <https://prettier.io/>`_. You may either run ``make format-code`` in the ``client`` folder manually or setup your IDE or editor of choice to run ``prettier`` automatically: `Official guidelines for editor integration <https://prettier.io/docs/en/editors.html>`_.
+
 Typical development setup
 =========================
 

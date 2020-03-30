@@ -1,22 +1,22 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { EditorToolbarService } from './toolbar.service';
-import { PreferencesService } from './preferences.service';
-import { BlockDebugOptionsService } from './block-debug-options.service';
+import { EditorToolbarService } from "./toolbar.service";
+import { PreferencesService } from "./preferences.service";
+import { BlockDebugOptionsService } from "./block-debug-options.service";
 
 @Component({
-  templateUrl: 'templates/editor-toolbar.html',
-  selector: 'editor-toolbar',
+  templateUrl: "templates/editor-toolbar.html",
+  selector: "editor-toolbar",
 })
 export class EditorToolbarComponent {
   constructor(
     private _toolbarService: EditorToolbarService,
     private _preferences: PreferencesService,
-    readonly debugOptions: BlockDebugOptionsService,
-  ) { }
+    readonly debugOptions: BlockDebugOptionsService
+  ) {}
 
   get toolbarService() {
-    return (this._toolbarService);
+    return this._toolbarService;
   }
 
   toggleNavbar() {

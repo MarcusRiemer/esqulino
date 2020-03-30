@@ -9,7 +9,7 @@ import { UserPasswordDescription } from "../shared/auth/user.description";
 import { first } from "rxjs/operators";
 
 @Component({
-  templateUrl: "./templates/reset-password.html"
+  templateUrl: "./templates/reset-password.html",
 })
 export class ResetPasswordComponent implements AfterViewInit {
   @ViewChild("dialog", { static: true }) dialog: TemplateRef<MatDialog>;
@@ -20,12 +20,12 @@ export class ResetPasswordComponent implements AfterViewInit {
     private _activeRoute: ActivatedRoute,
     private _userService: UserService,
     private _snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   public resetPasswordData: UserPasswordDescription = {
     password: undefined,
     confirmedPassword: undefined,
-    token: this._activeRoute.snapshot.paramMap.get("token")
+    token: this._activeRoute.snapshot.paramMap.get("token"),
   };
 
   /**
@@ -36,7 +36,7 @@ export class ResetPasswordComponent implements AfterViewInit {
       .open(this.dialog)
       .afterClosed()
       .pipe(first())
-      .subscribe(_ => {
+      .subscribe((_) => {
         this._router.navigate(["/"]);
       });
   }
@@ -45,7 +45,8 @@ export class ResetPasswordComponent implements AfterViewInit {
    * Resetting password
    */
   public onResetButton(): void {
-    this._userService.resetPassword$(this.resetPasswordData)
-      .subscribe(_ => this._dialog.closeAll());
+    this._userService
+      .resetPassword$(this.resetPasswordData)
+      .subscribe((_) => this._dialog.closeAll());
   }
 }

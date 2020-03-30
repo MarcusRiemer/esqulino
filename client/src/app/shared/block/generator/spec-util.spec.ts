@@ -2,11 +2,8 @@ import { readableConstants } from "./spec-util";
 
 describe("BlockLanguage Spec Utilities", () => {
   describe("readableConstants()", () => {
-
     it(`"a"`, () => {
-      const r = readableConstants([
-        { blockType: "constant", text: "a" }
-      ]);
+      const r = readableConstants([{ blockType: "constant", text: "a" }]);
 
       expect(r).toEqual("a");
     });
@@ -14,7 +11,7 @@ describe("BlockLanguage Spec Utilities", () => {
     it(`"ab"`, () => {
       const r = readableConstants([
         { blockType: "constant", text: "a" },
-        { blockType: "constant", text: "b" }
+        { blockType: "constant", text: "b" },
       ]);
 
       expect(r).toEqual("ab");
@@ -24,9 +21,7 @@ describe("BlockLanguage Spec Utilities", () => {
       const r = readableConstants([
         {
           blockType: "block",
-          children: [
-            { blockType: "constant", text: "a" },
-          ]
+          children: [{ blockType: "constant", text: "a" }],
         },
       ]);
 

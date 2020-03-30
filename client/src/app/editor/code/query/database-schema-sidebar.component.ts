@@ -1,15 +1,15 @@
-import { Component, Inject } from '@angular/core'
+import { Component, Inject } from "@angular/core";
 
-import { CodeResource, QualifiedTypeName } from '../../../shared/syntaxtree';
-import { Table, Column } from '../../../shared/schema';
+import { CodeResource, QualifiedTypeName } from "../../../shared/syntaxtree";
+import { Table, Column } from "../../../shared/schema";
 
-import { SIDEBAR_MODEL_TOKEN } from '../../editor.token';
+import { SIDEBAR_MODEL_TOKEN } from "../../editor.token";
 
-import { DragService } from '../../drag.service';
-import { SchemaService } from '../../schema.service';
+import { DragService } from "../../drag.service";
+import { SchemaService } from "../../schema.service";
 
 @Component({
-  templateUrl: 'templates/database-schema-sidebar.html',
+  templateUrl: "templates/database-schema-sidebar.html",
 })
 export class DatabaseSchemaSidebarComponent {
   constructor(
@@ -17,21 +17,20 @@ export class DatabaseSchemaSidebarComponent {
     private _codeResource: CodeResource,
     private _dragService: DragService,
     private _schemaService: SchemaService
-  ) {
-  }
+  ) {}
 
   /**
    * @return The tables that should be shown.
    */
   get possibleTables(): Table[] {
-    return (this._schemaService.currentSchema.tables);
+    return this._schemaService.currentSchema.tables;
   }
 
   /**
    * @return The name of the current database
    */
   get databaseName() {
-    return (this._schemaService.currentDatabaseName);
+    return this._schemaService.currentDatabaseName;
   }
 
   /**
@@ -44,9 +43,9 @@ export class DatabaseSchemaSidebarComponent {
           language: "sql",
           name: "tableIntroduction",
           properties: {
-            "name": table.name
-          }
-        }
+            name: table.name,
+          },
+        },
       ]);
     } catch (e) {
       alert(e);
@@ -63,10 +62,10 @@ export class DatabaseSchemaSidebarComponent {
           language: "sql",
           name: "columnName",
           properties: {
-            "columnName": column.name,
-            "refTableName": table.name
-          }
-        }
+            columnName: column.name,
+            refTableName: table.name,
+          },
+        },
       ]);
     } catch (e) {
       alert(e);
@@ -78,17 +77,20 @@ export class DatabaseSchemaSidebarComponent {
    * @return A list of columns that may be rendered
    */
   columnsOfTable(table: Table): Column[] {
-    const searchType: QualifiedTypeName = { languageName: "sql", typeName: "tableIntroduction" };
+    const searchType: QualifiedTypeName = {
+      languageName: "sql",
+      typeName: "tableIntroduction",
+    };
     const knownTables = new Set(
       this._codeResource.syntaxTreePeek
         .getNodesOfType(searchType)
-        .map(node => node.properties['name'])
+        .map((node) => node.properties["name"])
     );
 
     if (knownTables.has(table.name)) {
-      return (table.columns);
+      return table.columns;
     } else {
-      return ([]);
+      return [];
     }
   }
 }

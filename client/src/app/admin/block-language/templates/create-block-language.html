@@ -2,52 +2,61 @@
   <h3>Neue Blocksprache</h3>
   <!-- Editable name of the blockLanguage -->
   <div class="form-group row">
-    <label for="block-language-name"
-           class="col-sm-2 col-form-label">Name</label>
+    <label for="block-language-name" class="col-sm-2 col-form-label">
+      Name
+    </label>
     <div class="col-sm-10">
-      <input id="block-language-name"
-             name="name"
-             class="form-control"
-             required
-             [(ngModel)]="blockLanguage.name">
+      <input
+        id="block-language-name"
+        name="name"
+        class="form-control"
+        required
+        [(ngModel)]="blockLanguage.name"
+      />
     </div>
   </div>
 
   <!-- Editable slug of the blockLanguage -->
   <div class="form-group row">
-    <label for="block-language-slug"
-           class="col-sm-2 col-form-label">Slug</label>
+    <label for="block-language-slug" class="col-sm-2 col-form-label">
+      Slug
+    </label>
     <div class="col-sm-10">
       <div class="input-group">
         <div class="input-group-prepend">
           <div class="input-group-text">
-            <input type="checkbox"
-                   name="use-slug"
-                   [(ngModel)]="useSlug">
+            <input type="checkbox" name="use-slug" [(ngModel)]="useSlug" />
           </div>
         </div>
-        <input id="block-language-slug"
-               name="slug"
-               class="form-control"
-               [readonly]="!useSlug"
-               [(ngModel)]="blockLanguage.slug">
+        <input
+          id="block-language-slug"
+          name="slug"
+          class="form-control"
+          [readonly]="!useSlug"
+          [(ngModel)]="blockLanguage.slug"
+        />
       </div>
     </div>
   </div>
 
   <!-- Allow the user to pick a grammar -->
   <div class="form-group row">
-    <label for="block-language-grammar-id"
-           class="col-sm-2 col-form-label">Grammatik</label>
+    <label for="block-language-grammar-id" class="col-sm-2 col-form-label">
+      Grammatik
+    </label>
     <div class="col-sm-10">
-      <select id="block-language-grammar-id"
-              name="grammar_id"
-              class="custom-select"
-              required
-              [(ngModel)]="blockLanguage.grammarId">
+      <select
+        id="block-language-grammar-id"
+        name="grammar_id"
+        class="custom-select"
+        required
+        [(ngModel)]="blockLanguage.grammarId"
+      >
         <option value="">-- Grammatik Wählen --</option>
-        <option *ngFor="let grammar of availableGrammars | async"
-                [value]="grammar.id">
+        <option
+          *ngFor="let grammar of availableGrammars | async"
+          [value]="grammar.id"
+        >
           {{ grammar.name }}
         </option>
       </select>
@@ -55,9 +64,7 @@
   </div>
 
   <!-- Submitting -->
-  <button (click)="submitForm()"
-          type="submit"
-          class="btn btn-primary">
+  <button (click)="submitForm()" type="submit" class="btn btn-primary">
     Neue Blocksprache Anlegen
   </button>
 </form>

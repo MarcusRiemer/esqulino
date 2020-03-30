@@ -1,16 +1,25 @@
 import {
-  NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName,
-  locateNode
-} from './syntaxtree.description'
-import { arrayEqual } from '../util';
+  NodeDescription,
+  NodeLocation,
+  NodeLocationStep,
+  QualifiedTypeName,
+  locateNode,
+} from "./syntaxtree.description";
+import { arrayEqual } from "../util";
 
-export { NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName, locateNode };
+export {
+  NodeDescription,
+  NodeLocation,
+  NodeLocationStep,
+  QualifiedTypeName,
+  locateNode,
+};
 
 /**
  * @return True, if both parameters denote the same type.
  */
 export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
-  return (lhs.languageName === rhs.languageName && lhs.typeName === rhs.typeName);
+  return lhs.languageName === rhs.languageName && lhs.typeName === rhs.typeName;
 }
 
 /**
@@ -18,21 +27,21 @@ export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
  */
 export function locationEquals(lhs: NodeLocation, rhs: NodeLocation): boolean {
   if (!lhs || !rhs) {
-    return (false);
+    return false;
   }
 
   if (lhs === rhs) {
-    return (true);
+    return true;
   }
 
   if (lhs.length != rhs.length) {
-    return (false);
+    return false;
   }
 
   // Length is the same, so it does not matter which side is checked
-  return (lhs.every((_, i) => {
-    return (arrayEqual(lhs[i], rhs[i]));
-  }));
+  return lhs.every((_, i) => {
+    return arrayEqual(lhs[i], rhs[i]);
+  });
 }
 
 /**
@@ -40,18 +49,21 @@ export function locationEquals(lhs: NodeLocation, rhs: NodeLocation): boolean {
  * @param fullPath The path that is traced from the root.
  * @return The number of path segments that match beginning at the root.
  */
-export function locationMatchingLength(loc: NodeLocation, fullPath: NodeLocation): number | false {
+export function locationMatchingLength(
+  loc: NodeLocation,
+  fullPath: NodeLocation
+): number | false {
   if (!loc || !fullPath) {
-    return (false);
+    return false;
   }
 
   if (loc === fullPath) {
-    return (loc.length);
+    return loc.length;
   }
 
   // The full path must be at least as long as the given path
   if (loc.length > fullPath.length) {
-    return (false);
+    return false;
   }
 
   // Count number of matching segments from the root
@@ -64,7 +76,7 @@ export function locationMatchingLength(loc: NodeLocation, fullPath: NodeLocation
     }
   }
 
-  return (count);
+  return count;
 }
 
 /**
@@ -73,9 +85,9 @@ export function locationMatchingLength(loc: NodeLocation, fullPath: NodeLocation
 export function locationIncLastIndex(loc: NodeLocation): NodeLocation {
   if (loc.length > 0) {
     const [c, i] = loc[loc.length - 1];
-    return ([...loc.slice(0, -1), [c, i + 1]]);
+    return [...loc.slice(0, -1), [c, i + 1]];
   } else {
-    return ([]);
+    return [];
   }
 }
 
@@ -84,12 +96,12 @@ export function locationIncLastIndex(loc: NodeLocation): NodeLocation {
  * Certain validators may be used to check whether the string
  * contains something useful.
  */
-type NodeProperties = { [propertyName: string]: string }
+type NodeProperties = { [propertyName: string]: string };
 
 /**
  * Children of a node are always sorted.
  */
-export type NodeChildren = { [childrenCategory: string]: Node[] }
+export type NodeChildren = { [childrenCategory: string]: Node[] };
 
 /**
  * The core building block of the AST is this class. It contains
@@ -115,8 +127,8 @@ export class Node {
     this._nodeParent = parent;
 
     // We don't want any undefined fields during runtime
-    this._nodeProperties = {}
-    this._nodeChildren = {}
+    this._nodeProperties = {};
+    this._nodeChildren = {};
 
     // Load properties (if there are any)
     if (desc.properties) {
@@ -129,7 +141,9 @@ export class Node {
       // Load all children in all categories
       for (let categoryName in desc.children) {
         const category = desc.children[categoryName];
-        this._nodeChildren[categoryName] = category.map(childDesc => new Node(childDesc, this))
+        this._nodeChildren[categoryName] = category.map(
+          (childDesc) => new Node(childDesc, this)
+        );
       }
     }
   }
@@ -146,42 +160,42 @@ export class Node {
 
     // Carry over properties (if there are any)
     if (this.hasProperties) {
-      toReturn.properties = JSON.parse(JSON.stringify(this._nodeProperties))
+      toReturn.properties = JSON.parse(JSON.stringify(this._nodeProperties));
     }
 
     // Carry over children (if there are any)
     if (Object.keys(this._nodeChildren).length > 0) {
       toReturn.children = {};
       Object.entries(this._nodeChildren).forEach(([name, children]) => {
-        toReturn.children[name] = children.map(child => child.toModel());
+        toReturn.children[name] = children.map((child) => child.toModel());
       });
     }
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
    * @return The name of the type this node should be validated against.
    */
   get typeName(): string {
-    return (this._nodeName);
+    return this._nodeName;
   }
 
   /**
    * @return The name of the language containing the type this node should be validated against.
    */
   get languageName(): string {
-    return (this._nodeLanguage);
+    return this._nodeLanguage;
   }
 
   /**
    * @return The fully qualified of the type of this node.
    */
   get qualifiedName(): QualifiedTypeName {
-    return ({
+    return {
       typeName: this.typeName,
-      languageName: this.languageName
-    });
+      languageName: this.languageName,
+    };
   }
 
   /**
@@ -190,9 +204,9 @@ export class Node {
   getChildrenInCategory(categoryName: string): Node[] {
     const result = this._nodeChildren[categoryName];
     if (result) {
-      return (result);
+      return result;
     } else {
-      return ([]);
+      return [];
     }
   }
 
@@ -203,9 +217,9 @@ export class Node {
   getChildInCategory(categoryName: string): Node {
     const result = this.getChildrenInCategory(categoryName);
     if (result.length > 0) {
-      return (result[0]);
+      return result[0];
     } else {
-      return (undefined);
+      return undefined;
     }
   }
 
@@ -213,7 +227,7 @@ export class Node {
    * @return The names of the available categories.
    */
   get childrenCategoryNames() {
-    return (Object.keys(this._nodeChildren));
+    return Object.keys(this._nodeChildren);
   }
 
   /**
@@ -221,28 +235,28 @@ export class Node {
    */
   get hasChildren() {
     const categories = Object.values(this._nodeChildren);
-    return (categories.some(c => c.length > 0));
+    return categories.some((c) => c.length > 0);
   }
 
   /**
    * @return All children in all categories.
    */
   get children() {
-    return (this._nodeChildren);
+    return this._nodeChildren;
   }
 
   /**
    * @return True if this node has any properties.
    */
   get hasProperties() {
-    return (Object.keys(this._nodeProperties).length > 0);
+    return Object.keys(this._nodeProperties).length > 0;
   }
 
   /**
    * @return All properties with keys and values.
    */
   get properties(): NodeProperties {
-    return (this._nodeProperties);
+    return this._nodeProperties;
   }
 
   /**
@@ -250,9 +264,9 @@ export class Node {
    */
   get nodeParent(): Node {
     if (this._nodeParent instanceof Node) {
-      return (this._nodeParent);
+      return this._nodeParent;
     } else {
-      return (undefined);
+      return undefined;
     }
   }
 
@@ -263,7 +277,7 @@ export class Node {
     const parent = this.nodeParent;
     if (parent) {
       const loc = this.location;
-      return (loc[loc.length - 1][0]);
+      return loc[loc.length - 1][0];
     } else {
       return undefined;
     }
@@ -279,9 +293,9 @@ export class Node {
     }
 
     if (p instanceof Tree) {
-      return (p);
+      return p;
     } else {
-      return (undefined);
+      return undefined;
     }
   }
 
@@ -289,7 +303,7 @@ export class Node {
    * @return The location of this node in the tree.
    */
   get location(): NodeLocation {
-    return (this.treePathImpl([]));
+    return this.treePathImpl([]);
   }
 
   /**
@@ -299,26 +313,28 @@ export class Node {
   private treePathImpl(prev: NodeLocation): NodeLocation {
     // The root node uses the empty path
     if (this._nodeParent instanceof Tree) {
-      return (prev);
+      return prev;
     } else {
       // Take all categories of the parent object
-      const found = Object.entries(this._nodeParent.children).some(([categoryName, children]) => {
-        // And look for ourself
-        const childIndex = children.indexOf(this);
-        if (childIndex >= 0) {
-          // Update the location parameter
-          prev = [[categoryName, childIndex], ...prev];
-          return (true);
-        } else {
-          return (false);
+      const found = Object.entries(this._nodeParent.children).some(
+        ([categoryName, children]) => {
+          // And look for ourself
+          const childIndex = children.indexOf(this);
+          if (childIndex >= 0) {
+            // Update the location parameter
+            prev = [[categoryName, childIndex], ...prev];
+            return true;
+          } else {
+            return false;
+          }
         }
-      });
+      );
 
       if (!found) {
-        throw new Error("Node must exist in parent!")
+        throw new Error("Node must exist in parent!");
       }
 
-      return (this._nodeParent.treePathImpl(prev));
+      return this._nodeParent.treePathImpl(prev);
     }
   }
 
@@ -337,13 +353,13 @@ export class Node {
     }
 
     // Does any child node match?
-    Object.values(this._nodeChildren).forEach(children => {
-      children.forEach(child => {
+    Object.values(this._nodeChildren).forEach((children) => {
+      children.forEach((child) => {
         toReturn.push(...child.getNodesOfType(typename));
       });
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -353,11 +369,11 @@ export class Node {
    */
   collectTypes(collected: Set<string>) {
     collected.add(JSON.stringify(this.qualifiedName));
-    Object.values(this.children).forEach(cat => {
-      cat.forEach(n => n.collectTypes(collected));
+    Object.values(this.children).forEach((cat) => {
+      cat.forEach((n) => n.collectTypes(collected));
     });
 
-    return (collected);
+    return collected;
   }
 }
 
@@ -382,14 +398,14 @@ export class Tree {
       throw new Error("No root node available, tree is empty");
     }
 
-    return (this._root);
+    return this._root;
   }
 
   /**
    * @return True if this tree is actually empty.
    */
   get isEmpty(): boolean {
-    return (!this._root);
+    return !this._root;
   }
 
   /**
@@ -398,9 +414,9 @@ export class Tree {
    */
   toModel() {
     if (this.isEmpty) {
-      return (undefined);
+      return undefined;
     } else {
-      return (this.rootNode.toModel());
+      return this.rootNode.toModel();
     }
   }
 
@@ -409,9 +425,9 @@ export class Tree {
    */
   get typesPresent(): Set<string> {
     if (this.isEmpty) {
-      return (new Set());
+      return new Set();
     } else {
-      return (this.rootNode.collectTypes(new Set()));
+      return this.rootNode.collectTypes(new Set());
     }
   }
 
@@ -420,23 +436,29 @@ export class Tree {
    */
   locate(loc: NodeLocation): Node {
     if (this.isEmpty) {
-      throw new Error(`SyntaxTree: Could not locate ${JSON.stringify(loc)} in an empty tree`);
+      throw new Error(
+        `SyntaxTree: Could not locate ${JSON.stringify(loc)} in an empty tree`
+      );
     }
 
     let current: Node = this._root;
     loc.forEach(([categoryName, childIndex], i) => {
       const children = current.children[categoryName];
-      if ((children && childIndex < children.length) && childIndex >= 0) {
+      if (children && childIndex < children.length && childIndex >= 0) {
         current = children[childIndex];
       } else {
         const currentLevel = Object.entries(current.children)
           .map(([k, v]) => `${k}[${v.length}]`)
-          .join(', ');
-        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)} of ${currentLevel}`);
+          .join(", ");
+        throw new Error(
+          `SyntaxTree: Could not locate step ${i} of ${JSON.stringify(
+            loc
+          )} of ${currentLevel}`
+        );
       }
-    })
+    });
 
-    return (current);
+    return current;
   }
 
   /**
@@ -444,9 +466,9 @@ export class Tree {
    */
   locateOrUndefined(loc: NodeLocation): Node | undefined {
     try {
-      return (this.locate(loc));
+      return this.locate(loc);
     } catch {
-      return (undefined);
+      return undefined;
     }
   }
 
@@ -461,9 +483,8 @@ export class Tree {
     // Replacing the root needs to work different because there is no parent
     // that needs a child replaced.
     if (loc.length === 0) {
-      return (new Tree(desc));
-    }
-    else {
+      return new Tree(desc);
+    } else {
       // Build the description of the current tree to replace the new node in it
       let newDescription = this.toModel();
 
@@ -473,7 +494,7 @@ export class Tree {
 
       // Actually replace the node and build the new tree
       parent.children[parentCat][parentIndex] = desc;
-      return (new Tree(newDescription));
+      return new Tree(newDescription);
     }
   }
 
@@ -489,7 +510,7 @@ export class Tree {
     if (loc.length === 0) {
       // Inserting is equivalent to replacing on an empty tree
       if (this.isEmpty) {
-        return (this.replaceNode([], desc));
+        return this.replaceNode([], desc);
       } else {
         throw new Error(`Nothing can be appended after the root node.`);
       }
@@ -514,7 +535,7 @@ export class Tree {
       // Append the node in the category and build the new tree
       let cat = parent.children[parentCat];
       cat.splice(parentIndex, 0, desc);
-      return (new Tree(newDescription));
+      return new Tree(newDescription);
     }
   }
 
@@ -527,7 +548,7 @@ export class Tree {
   deleteNode(loc: NodeLocation): Tree {
     // The root can only be replaced, not deleted.
     if (loc.length === 0) {
-      return (new Tree(undefined));
+      return new Tree(undefined);
     } else {
       // Build the description of the current tree to insert the new node in it
       let newDescription = this.toModel();
@@ -540,7 +561,7 @@ export class Tree {
       // Actually delete the node
       parent.children[parentCat].splice(parentIndex, 1);
 
-      return (new Tree(newDescription));
+      return new Tree(newDescription);
     }
   }
 
@@ -564,7 +585,7 @@ export class Tree {
 
     node.properties[key] = value;
 
-    return (new Tree(newDescription));
+    return new Tree(newDescription);
   }
 
   /**
@@ -579,9 +600,13 @@ export class Tree {
     let node = locateNode(newDescription, loc);
 
     if (node.properties && key in node.properties) {
-      throw new Error(`Can not add property "${key}" at ${JSON.stringify(loc)}: Name already exists`);
+      throw new Error(
+        `Can not add property "${key}" at ${JSON.stringify(
+          loc
+        )}: Name already exists`
+      );
     } else {
-      return (this.setProperty(loc, key, ""));
+      return this.setProperty(loc, key, "");
     }
   }
 
@@ -598,17 +623,25 @@ export class Tree {
     let node = locateNode(newDescription, loc);
 
     if (!node.properties || !node.properties[key]) {
-      throw new Error(`Could not rename property "${key}" at ${JSON.stringify(loc)}: Doesn't exist`);
+      throw new Error(
+        `Could not rename property "${key}" at ${JSON.stringify(
+          loc
+        )}: Doesn't exist`
+      );
     }
 
     if (newKey in node.properties) {
-      throw new Error(`Could not rename property "${key}" to "${newKey}" at ${JSON.stringify(loc)}: New name exists`);
+      throw new Error(
+        `Could not rename property "${key}" to "${newKey}" at ${JSON.stringify(
+          loc
+        )}: New name exists`
+      );
     }
 
     node.properties[newKey] = node.properties[key];
     delete node.properties[key];
 
-    return (new Tree(newDescription));
+    return new Tree(newDescription);
   }
 
   /**
@@ -627,12 +660,16 @@ export class Tree {
     }
 
     if (key in node.children) {
-      throw new Error(`Could not add child group "${key}" at ${JSON.stringify(loc)}: Name exists`);
+      throw new Error(
+        `Could not add child group "${key}" at ${JSON.stringify(
+          loc
+        )}: Name exists`
+      );
     }
 
     node.children[key] = [];
 
-    return (new Tree(newDescription));
+    return new Tree(newDescription);
   }
 
   /**
@@ -642,9 +679,9 @@ export class Tree {
    */
   getNodesOfType(typename: QualifiedTypeName): Node[] {
     if (this.isEmpty) {
-      return ([]);
+      return [];
     } else {
-      return (this._root.getNodesOfType(typename));
+      return this._root.getNodesOfType(typename);
     }
   }
 }

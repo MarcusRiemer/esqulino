@@ -1,10 +1,14 @@
-import { ColumnDescription, TableDescription, ForeignKeyDescription } from './schema.description'
-import { Column, ColumnStatus } from './column'
+import {
+  ColumnDescription,
+  TableDescription,
+  ForeignKeyDescription,
+} from "./schema.description";
+import { Column, ColumnStatus } from "./column";
 
 /**
- * A Class to represent a Table with all containing Columns. 
+ * A Class to represent a Table with all containing Columns.
  * This will replace the TableDescribtion used in the original design, but it
- * includes all variables for downwards compatibility. 
+ * includes all variables for downwards compatibility.
  */
 export class Table {
   private _name: string;
@@ -12,11 +16,14 @@ export class Table {
   private _foreign_keys: ForeignKeyDescription[];
   private _isSystemTable: boolean;
 
-  constructor(desc: TableDescription, col: ColumnDescription[], foreign_keys: ForeignKeyDescription[]) {
+  constructor(
+    desc: TableDescription,
+    col: ColumnDescription[],
+    foreign_keys: ForeignKeyDescription[]
+  ) {
     this._name = desc.name;
     this._isSystemTable = desc.system_table;
-    this._columns = col
-      .map(val => new Column(val, ColumnStatus.unchanged));
+    this._columns = col.map((val) => new Column(val, ColumnStatus.unchanged));
     this._foreign_keys = foreign_keys;
   }
 
@@ -33,7 +40,7 @@ export class Table {
       index: newIndex,
       not_null: false,
       primary: false,
-      type: "TEXT"
+      type: "TEXT",
     };
     this._columns.push(new Column(newColumn, ColumnStatus.new));
   }
@@ -96,7 +103,7 @@ export class Table {
    * @return True, if this table is an implementation detail.
    */
   get system_table() {
-    return (this._isSystemTable);
+    return this._isSystemTable;
   }
 
   /**
@@ -112,7 +119,7 @@ export class Table {
    * @return: The column with the index
    */
   getColumnByIndex(index: number): Column {
-    return this._columns.find(col => col.index == index);
+    return this._columns.find((col) => col.index == index);
   }
 
   /**
@@ -129,10 +136,14 @@ export class Table {
     let toReturn: ForeignKeyDescription = { references: [] };
     for (let fkRef of this.foreign_keys) {
       for (let fk of fkRef.references) {
-        if (fk.from_column === toRemove.references[0].from_column
-          && fk.to_column === toRemove.references[0].to_column
-          && fk.to_table === toRemove.references[0].to_table) {
-          toReturn.references.push(fkRef.references.splice(fkRef.references.indexOf(fk), 1)[0]);
+        if (
+          fk.from_column === toRemove.references[0].from_column &&
+          fk.to_column === toRemove.references[0].to_column &&
+          fk.to_table === toRemove.references[0].to_table
+        ) {
+          toReturn.references.push(
+            fkRef.references.splice(fkRef.references.indexOf(fk), 1)[0]
+          );
         }
       }
       if (fkRef.references.length == 0) {
@@ -143,15 +154,15 @@ export class Table {
   }
 
   /**
-   * Function to create a json representation to send it 
+   * Function to create a json representation to send it
    * to the server.
    */
   toModel(): TableDescription {
     return {
       name: this._name,
-      columns: this._columns.map(val => val.toModel()),
+      columns: this._columns.map((val) => val.toModel()),
       foreign_keys: this._foreign_keys,
-      system_table: this._isSystemTable
-    }
+      system_table: this._isSystemTable,
+    };
   }
 }

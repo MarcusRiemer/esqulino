@@ -1,13 +1,15 @@
 <ng-template cdkPortal #toolbarItems>
-  <button (click)="availableBlockLanguages.refresh()"
-          mat-button>
+  <button (click)="availableBlockLanguages.refresh()" mat-button>
     <span class="fa fa-refresh fa-fw"></span>
     Refresh
   </button>
 </ng-template>
 
 <h2>
-  <span *ngIf="(availableBlockLanguages.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
+  <span
+    *ngIf="(availableBlockLanguages.inProgress | async)"
+    class="fa fa-refresh fa-spin fa-fw"
+  ></span>
   Blocksprachen
 </h2>
 
@@ -37,9 +39,11 @@
       </ng-template>
     </td>
     <td>
-      <button (click)="deleteBlockLanguage(blockLanguage.id)"
-              type="button"
-              class="btn btn-outline-danger btn-sm">
+      <button
+        (click)="deleteBlockLanguage(blockLanguage.id)"
+        type="button"
+        class="btn btn-outline-danger btn-sm"
+      >
         <span class="fa fa-trash-o" aria-hidden="true"></span>
       </button>
     </td>

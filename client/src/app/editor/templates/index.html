@@ -8,20 +8,23 @@
   <!-- Three column layout -->
   <mat-sidenav-container class="editor">
     <!-- Navigation -->
-    <mat-sidenav [opened]="showSideNav$ | async"
-                 [mode]="sidebarMode$ | async"
-                 (closedStart)="onSideNavClosed()"
-                 class="navbar">
+    <mat-sidenav
+      [opened]="showSideNav$ | async"
+      [mode]="sidebarMode$ | async"
+      (closedStart)="onSideNavClosed()"
+      class="navbar"
+    >
       <editor-navbar [project]="project"></editor-navbar>
     </mat-sidenav>
 
     <!-- Toolbox -->
-    <mat-sidenav [opened]="isSidebarVisible$ | async"
-                 mode="side"
-                 position="end"
-                 class="navbar">
-      <sidebar-loader>
-      </sidebar-loader>
+    <mat-sidenav
+      [opened]="isSidebarVisible$ | async"
+      mode="side"
+      position="end"
+      class="navbar"
+    >
+      <sidebar-loader></sidebar-loader>
     </mat-sidenav>
 
     <mat-sidenav-content class="content">

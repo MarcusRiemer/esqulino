@@ -1,6 +1,6 @@
-import { TableDescription } from "./schema/schema.description"
-import { GrammarDescription } from './syntaxtree/grammar.description';
-import { CodeResourceDescription } from './syntaxtree/coderesource.description'
+import { TableDescription } from "./schema/schema.description";
+import { GrammarDescription } from "./syntaxtree/grammar.description";
+import { CodeResourceDescription } from "./syntaxtree/coderesource.description";
 import { BlockLanguageDescription } from "./block/block-language.description";
 
 /**
@@ -43,7 +43,7 @@ export const StringValidator = {
  * Describes a database that could possibly be used.
  */
 export interface AvailableDatabaseDescription {
-  type: string
+  type: string;
 }
 
 /**
@@ -52,11 +52,11 @@ export interface AvailableDatabaseDescription {
  * correctly acknowledge such sources.
  */
 export interface ProjectSourceDescription {
-  id: string,
-  title: string,
-  type: "data",
-  url: string,
-  display: string
+  id: string;
+  title: string;
+  type: "data";
+  url: string;
+  display: string;
   readOnly: boolean;
 
   /**
@@ -79,16 +79,16 @@ export interface ProjectSourceDescription {
  * projects.
  */
 export interface ProjectListDescription {
-  id: string
-  slug: ProjectSlug
-  name: ProjectName
-  public?: boolean
-  description: string
-  preview?: string
-  indexPageId?: string
-  createdAt?: string
-  updatedAt?: string
-  userId?: string
+  id: string;
+  slug: ProjectSlug;
+  name: ProjectName;
+  public?: boolean;
+  description: string;
+  preview?: string;
+  indexPageId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: string;
 }
 
 /**
@@ -96,12 +96,12 @@ export interface ProjectListDescription {
  * complicated standalone resources.
  */
 export interface ProjectDescription extends ProjectListDescription {
-  availableDatabases?: { [id: string]: AvailableDatabaseDescription }
-  activeDatabase?: string
-  projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[]
-  blockLanguages: BlockLanguageDescription[]
-  grammars: GrammarDescription[]
-  sources: ProjectSourceDescription[]
+  availableDatabases?: { [id: string]: AvailableDatabaseDescription };
+  activeDatabase?: string;
+  projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[];
+  blockLanguages: BlockLanguageDescription[];
+  grammars: GrammarDescription[];
+  sources: ProjectSourceDescription[];
 }
 
 /**
@@ -110,43 +110,45 @@ export interface ProjectDescription extends ProjectListDescription {
  * everything that is needed in the normal editor workflow.
  */
 export interface ProjectFullDescription extends ProjectDescription {
-  schema: TableDescription[]
-  codeResources: CodeResourceDescription[]
+  schema: TableDescription[];
+  codeResources: CodeResourceDescription[];
 }
 
 /**
  * A block language that is used by this project.
  */
 export interface ProjectUsesBlockLanguageDescription {
-  id: string
-  blockLanguageId: string
+  id: string;
+  blockLanguageId: string;
 }
 
-export type ProjectUpdateUsedBlockLanguage = { blockLanguageId: string } | { id: string, _destroy: boolean }
+export type ProjectUpdateUsedBlockLanguage =
+  | { blockLanguageId: string }
+  | { id: string; _destroy: boolean };
 
 /**
  * These things can be provided when updating the project itself.
  */
 export interface ProjectUpdateDescription {
-  name?: ProjectName
-  description?: string
-  activeDatabase?: string
-  preview?: string
-  indexPageId?: string
-  projectUsesBlockLanguages?: ProjectUpdateUsedBlockLanguage[]
+  name?: ProjectName;
+  description?: string;
+  activeDatabase?: string;
+  preview?: string;
+  indexPageId?: string;
+  projectUsesBlockLanguages?: ProjectUpdateUsedBlockLanguage[];
 }
 
 /**
  * These parameters are required to create a new project.
  */
 export interface ProjectCreationRequest {
-  slug: ProjectSlug
-  name: ProjectName
+  slug: ProjectSlug;
+  name: ProjectName;
 }
 
 /**
  * Server feedback when attempting project creation.
  */
 export interface ProjectCreationResponse {
-  id: string
+  id: string;
 }

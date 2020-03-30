@@ -1,19 +1,24 @@
 <div class="card-group">
   <div class="col-sm-7">
-	  <div class="card">
-	    <sql-table id="schema-table"
-				         [table]="table"
-				         [readOnly]="false">
-	    </sql-table>
-	  </div>
+    <div class="card">
+      <sql-table
+        id="schema-table"
+        [table]="table"
+        [readOnly]="false"
+      ></sql-table>
+    </div>
   </div>
   <div class="col-sm-5">
-	  <div *ngIf="highlightedColumn && getTargetTable(highlightedColumn)" class="card">
-	    <sql-table id="schema-table-foreign-key"
-				         [table]="getTargetTable(highlightedColumn)"
-				         [columnToHighlight]="getTargetColumn(highlightedColumn)"
-				         [readOnly]="true">
-	    </sql-table>
-	  </div>
+    <div
+      *ngIf="highlightedColumn && getTargetTable(highlightedColumn)"
+      class="card"
+    >
+      <sql-table
+        id="schema-table-foreign-key"
+        [table]="getTargetTable(highlightedColumn)"
+        [columnToHighlight]="getTargetColumn(highlightedColumn)"
+        [readOnly]="true"
+      ></sql-table>
+    </div>
   </div>
 </div>

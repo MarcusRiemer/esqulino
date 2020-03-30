@@ -1,10 +1,11 @@
-<div *ngIf="hasAvailableProcedures | async"
-     class="ast">
+<div *ngIf="hasAvailableProcedures | async" class="ast">
   <h5>Eigene Prozeduren</h5>
-  <div *ngFor="let proc of (availableProcedures | async)"
-       (dragstart)="startDrag($event, proc)"
-       draggable="true"
-       class="block rounded">
+  <div
+    *ngFor="let proc of (availableProcedures | async)"
+    (dragstart)="startDrag($event, proc)"
+    draggable="true"
+    class="block rounded"
+  >
     {{ proc.name }}
   </div>
 </div>

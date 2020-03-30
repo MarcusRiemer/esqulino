@@ -1,24 +1,35 @@
-<div *ngIf="isStackAvailable"
-     class="list-group">
+<div *ngIf="isStackAvailable" class="list-group">
   <!--List of stack entrys-->
-  <button type="button"
-          class="list-group-item list-group-item-action active">
-	  <span class="badge badge-default badge-pill">{{ commandsHolder.commands.length }}</span> Bearbeitungsschritte
+  <button type="button" class="list-group-item list-group-item-action active">
+    <span class="badge badge-default badge-pill">
+      {{ commandsHolder.commands.length }}
+    </span>
+    Bearbeitungsschritte
   </button>
-  <button type="button"
-          class="list-group-item list-group-item-action"
-          (click)="loadStackPosition(-1)">
-	  <span *ngIf="-1 == commandsHolder.activeIndex"
-          class="fa fa-play"
-          aria-hidden="true"></span>
-	  Ursprungstabelle
+  <button
+    type="button"
+    class="list-group-item list-group-item-action"
+    (click)="loadStackPosition(-1)"
+  >
+    <span
+      *ngIf="-1 == commandsHolder.activeIndex"
+      class="fa fa-play"
+      aria-hidden="true"
+    ></span>
+    Ursprungstabelle
   </button>
   <!--List body, with every stack entry-->
-  <button type="button"
-          class="list-group-item list-group-item-action"
-          *ngFor="let cmd of commandsHolder.commands"
-          (click)="loadStackPosition(cmd.index)">
-	  <span *ngIf="cmd.index == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
-	  {{cmd.index}} : {{ cmd.commandText }}
+  <button
+    type="button"
+    class="list-group-item list-group-item-action"
+    *ngFor="let cmd of commandsHolder.commands"
+    (click)="loadStackPosition(cmd.index)"
+  >
+    <span
+      *ngIf="cmd.index == commandsHolder.activeIndex"
+      class="fa fa-play"
+      aria-hidden="true"
+    ></span>
+    {{cmd.index}} : {{ cmd.commandText }}
   </button>
 </div>

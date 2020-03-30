@@ -1,23 +1,32 @@
-import { Component, Inject, LOCALE_ID, Input, ViewChild, OnInit, AfterViewChecked, AfterViewInit, OnDestroy } from "@angular/core";
-import { BrowserService } from './browser.service';
-import { MatSidenav } from '@angular/material/sidenav';
+import {
+  Component,
+  Inject,
+  LOCALE_ID,
+  Input,
+  ViewChild,
+  OnInit,
+  AfterViewChecked,
+  AfterViewInit,
+  OnDestroy,
+} from "@angular/core";
+import { BrowserService } from "./browser.service";
+import { MatSidenav } from "@angular/material/sidenav";
 
-import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { map } from "rxjs/operators";
+import { of } from "rxjs";
 
-import { NavItem } from './nav-interfaces';
-import { SideNavService } from './side-nav.service';
-import { UserService } from './auth/user.service';
+import { NavItem } from "./nav-interfaces";
+import { SideNavService } from "./side-nav.service";
+import { UserService } from "./auth/user.service";
 
 @Component({
-  selector: 'side-nav-selector',
-  templateUrl: './templates/side-nav.html'
+  selector: "side-nav-selector",
+  templateUrl: "./templates/side-nav.html",
 })
-
 export class SideNavComponent implements OnDestroy {
-  @Input('items') navItems: NavItem[];
+  @Input("items") navItems: NavItem[];
 
-  @ViewChild('sideNav') sidenav: MatSidenav;
+  @ViewChild("sideNav") sidenav: MatSidenav;
 
   /**
    * Used for dependency injection
@@ -27,7 +36,7 @@ export class SideNavComponent implements OnDestroy {
     private readonly _browser: BrowserService,
     private readonly _sideNav: SideNavService,
     private readonly _userService: UserService
-  ) { }
+  ) {}
 
   readonly navItems$ = this._sideNav.sideNavItems$();
 
@@ -43,8 +52,9 @@ export class SideNavComponent implements OnDestroy {
   // The actual locale that is currently in use
   readonly locale = this._localeId;
 
-  readonly sideNavToggleSub = this._sideNav.sideNavToggle$()
-    .subscribe(() => this.sidenav.toggle())
+  readonly sideNavToggleSub = this._sideNav
+    .sideNavToggle$()
+    .subscribe(() => this.sidenav.toggle());
 
   ngOnDestroy(): void {
     this.sideNavToggleSub.unsubscribe();
@@ -60,11 +70,11 @@ export class SideNavComponent implements OnDestroy {
   public userHasRoles$(roles: string[]) {
     if (roles && roles.length > 0) {
       return this._userService.roles$.pipe(
-        map(userRoles => roles.every(r => userRoles.includes(r)))
+        map((userRoles) => roles.every((r) => userRoles.includes(r)))
       );
     } else {
       // "of" is a constructor function that wraps a static value as an observable
-      return (of(true));
+      return of(true);
     }
   }
 }

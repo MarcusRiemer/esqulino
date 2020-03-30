@@ -1,16 +1,15 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input } from "@angular/core";
 
-import { ProjectSourceDescription } from '../shared/project.description'
+import { ProjectSourceDescription } from "../shared/project.description";
 
 /**
  * Renders a matching icon for a source.
  */
 @Component({
   template: '<span class="fa {{ fontAwesomeIcon }} fa-fw"></span>',
-  selector: 'source-icon'
+  selector: "source-icon",
 })
 export class SourceIconComponent {
-
   @Input() source: ProjectSourceDescription;
 
   /**
@@ -18,8 +17,10 @@ export class SourceIconComponent {
    */
   get fontAwesomeIcon() {
     switch (this.source.type) {
-      case "data": return "fa-database";
-      default: return "fa-bug";
+      case "data":
+        return "fa-database";
+      default:
+        return "fa-bug";
     }
   }
 }

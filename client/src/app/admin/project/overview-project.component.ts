@@ -1,12 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { Component, ViewChild } from "@angular/core";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
 
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 
-import { AdminProjectDataService } from '../../shared/serverdata';
-import { ProjectListDescription } from '../../shared/project.description';
-import { StringUnion } from '../../shared/string-union';
+import { AdminProjectDataService } from "../../shared/serverdata";
+import { ProjectListDescription } from "../../shared/project.description";
+import { StringUnion } from "../../shared/string-union";
 
 const ProjectListItemKey = StringUnion("id", "slug", "name");
 type ProjectListItemKey = typeof ProjectListItemKey.type;
@@ -15,7 +15,7 @@ type ProjectListItemKey = typeof ProjectListItemKey.type;
  *
  */
 @Component({
-  templateUrl: './templates/overview-project.html'
+  templateUrl: "./templates/overview-project.html",
 })
 export class OverviewProjectComponent {
   // Angular Material UI to paginate
@@ -26,11 +26,10 @@ export class OverviewProjectComponent {
   @ViewChild(MatSort)
   _sort: MatSort;
 
-  constructor(
-    private _serverData: AdminProjectDataService
-  ) { }
+  constructor(private _serverData: AdminProjectDataService) {}
 
-  availableProjects: Observable<ProjectListDescription[]> = this._serverData.list;
+  availableProjects: Observable<ProjectListDescription[]> = this._serverData
+    .list;
 
   resultsLength = this._serverData.listTotalCount;
 
@@ -38,7 +37,10 @@ export class OverviewProjectComponent {
    * User has requested a different chunk of data
    */
   onChangePagination() {
-    this._serverData.setListPagination(this._paginator.pageSize, this._paginator.pageIndex);
+    this._serverData.setListPagination(
+      this._paginator.pageSize,
+      this._paginator.pageIndex
+    );
   }
 
   /**
@@ -46,13 +48,9 @@ export class OverviewProjectComponent {
    */
   onChangeSort() {
     if (ProjectListItemKey.guard(this._sort.active)) {
-      this._serverData.setListOrdering(
-        this._sort.active,
-        this._sort.direction
-      );
+      this._serverData.setListOrdering(this._sort.active, this._sort.direction);
     }
   }
-
 
   displayedColumns: (keyof ProjectListDescription)[] = ["name", "slug", "id"];
 }

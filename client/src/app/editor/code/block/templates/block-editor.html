@@ -1,11 +1,12 @@
 <!-- Outside capture to inform the drag-process about being "out of bounds" -->
-<div class="ast"
-     (mouseover)="onEditorDragEnter($event)">
+<div class="ast" (mouseover)="onEditorDragEnter($event)">
   <!-- The actual editor is composed based on the instructions of the block
        language. These are loaded dynamically here. -->
   <div class="row">
-    <div *ngFor="let editorComponent of (editorComponents | async)"
-         [ngClass]="editorComponent.columnClasses">
+    <div
+      *ngFor="let editorComponent of (editorComponents | async)"
+      [ngClass]="editorComponent.columnClasses"
+    >
       <div class="card card-body mb-3">
         <ng-template [cdkPortalOutlet]="editorComponent.portal"></ng-template>
       </div>

@@ -1,24 +1,23 @@
+import { Routes, RouterModule } from "@angular/router";
 
-import { Routes, RouterModule } from '@angular/router';
-
-import { AccountSettingsComponent } from './components/account-settings.component';
-import { UserSettingsComponent } from './settings.component';
+import { AccountSettingsComponent } from "./components/account-settings.component";
+import { UserSettingsComponent } from "./settings.component";
 
 export const userSettingsRoutes: Routes = [
   {
-    path: '',
+    path: "",
     component: UserSettingsComponent,
     children: [
       {
-        path: 'account/:id',
-        component: AccountSettingsComponent
+        path: "account/:id",
+        component: AccountSettingsComponent,
       },
       {
-        path: '**',
-        component: AccountSettingsComponent
+        path: "**",
+        component: AccountSettingsComponent,
       },
-    ]
-  }
-]
+    ],
+  },
+];
 
-export const userSettingsRouting = RouterModule.forChild(userSettingsRoutes)
+export const userSettingsRouting = RouterModule.forChild(userSettingsRoutes);

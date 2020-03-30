@@ -1,14 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs'
-import { flatMap, map, filter, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest } from "rxjs";
+import { flatMap, map, filter, tap } from "rxjs/operators";
 
-import { ResourceReferencesService } from '../shared/resource-references.service';
-import { CodeResource, NodeLocation, Tree, ValidationResult } from '../shared/syntaxtree';
-import { BlockLanguageDataService, GrammarDataService } from '../shared/serverdata';
+import { ResourceReferencesService } from "../shared/resource-references.service";
+import {
+  CodeResource,
+  NodeLocation,
+  Tree,
+  ValidationResult,
+} from "../shared/syntaxtree";
+import {
+  BlockLanguageDataService,
+  GrammarDataService,
+} from "../shared/serverdata";
 
-import { ProjectService } from './project.service';
-
+import { ProjectService } from "./project.service";
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -29,9 +36,8 @@ export class CurrentCodeResourceService {
     private _projectService: ProjectService,
     private _resourceReferences: ResourceReferencesService,
     private _blockLanguageData: BlockLanguageDataService,
-    private _grammarData: GrammarDataService,
-  ) {
-  }
+    private _grammarData: GrammarDataService
+  ) {}
 
   /**
    * Allows to change the resource that is currently displayed.
@@ -43,17 +49,19 @@ export class CurrentCodeResourceService {
     console.log(`Current resource ID changed to: ${codeResourceId}`);
 
     // Check whether the referenced resource exists
-    const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
+    const resource = this._projectService.cachedProject.getCodeResourceById(
+      codeResourceId
+    );
     if (resource) {
       // Yes, we resolve the actual resource
       console.log(`Set new resource "${resource.name}" (${codeResourceId})`);
       this._codeResource.next(resource);
-      return (resource);
+      return resource;
     } else {
       // No, we inform everybody that there is no resource
       console.error(`CodeResource ${codeResourceId} doesn't seem to exist`);
       this._codeResource.next(undefined);
-      return (undefined);
+      return undefined;
     }
   }
 
@@ -66,21 +74,21 @@ export class CurrentCodeResourceService {
    * Informs interested components about the tree behind the current resource
    */
   readonly currentTree: Observable<Tree> = this._codeResource.pipe(
-    filter(c => !!c),
-    flatMap(c => c.syntaxTree)
+    filter((c) => !!c),
+    flatMap((c) => c.syntaxTree)
   );
 
   /**
    * The block language that is configured on the resource.
    */
-  readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
-    flatMap(c => c.blockLanguageId)
-  );
+  readonly resourceBlockLanguageId: Observable<
+    string
+  > = this.currentResource.pipe(flatMap((c) => c.blockLanguageId));
 
   readonly blockLanguageGrammar = this.currentResource.pipe(
-    flatMap(r => r.blockLanguageId),
-    flatMap(id => this._blockLanguageData.getLocal(id, "request")),
-    flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
+    flatMap((r) => r.blockLanguageId),
+    flatMap((id) => this._blockLanguageData.getLocal(id, "request")),
+    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request"))
   );
 
   /**
@@ -90,34 +98,37 @@ export class CurrentCodeResourceService {
     this.currentTree,
     this._projectService.activeProject,
     this.blockLanguageGrammar
-  )
-    .pipe(
-      map(
-        ([tree, project, grammar]) => {
-          if (tree) {
-            const validator = this._resourceReferences.getValidator(
-              this.peekResource.emittedLanguageIdPeek, grammar.id
-            );
-            return (validator.validateFromRoot(tree, project.additionalValidationContext));
-          } else {
-            return (ValidationResult.EMPTY);
-          }
-        }),
-      tap(r => {
-        console.log("CurrentCodeResourceService: Validation result", r)
-      })
-    );
+  ).pipe(
+    map(([tree, project, grammar]) => {
+      if (tree) {
+        const validator = this._resourceReferences.getValidator(
+          this.peekResource.emittedLanguageIdPeek,
+          grammar.id
+        );
+        return validator.validateFromRoot(
+          tree,
+          project.additionalValidationContext
+        );
+      } else {
+        return ValidationResult.EMPTY;
+      }
+    }),
+    tap((r) => {
+      console.log("CurrentCodeResourceService: Validation result", r);
+    })
+  );
 
   /**
    *
    */
-  readonly currentExecutionLocation: Observable<NodeLocation> = this._executionLocation;
+  readonly currentExecutionLocation: Observable<NodeLocation> = this
+    ._executionLocation;
 
   /**
    * The currently loaded resource
    */
   get peekResource() {
-    return (this._codeResource.value);
+    return this._codeResource.value;
   }
 
   /**

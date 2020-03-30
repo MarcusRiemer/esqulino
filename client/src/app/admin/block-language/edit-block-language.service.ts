@@ -1,23 +1,31 @@
-import { Injectable } from '@angular/core'
-import { ActivatedRoute, ParamMap } from '@angular/router'
-import { Title } from '@angular/platform-browser'
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Injectable } from "@angular/core";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Title } from "@angular/platform-browser";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { BehaviorSubject } from 'rxjs'
-import { switchMap, map, first, filter, flatMap } from 'rxjs/operators'
+import { BehaviorSubject } from "rxjs";
+import { switchMap, map, first, filter, flatMap } from "rxjs/operators";
 
-import { GrammarDataService, BlockLanguageDataService } from '../../shared/serverdata'
-import { BlockLanguageDescription } from '../../shared/block/block-language.description'
-import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
-import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
-import { GeneratorError } from '../../shared/block/generator/error.description'
-import { prettyPrintGrammar } from '../../shared/syntaxtree';
-import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description';
+import {
+  GrammarDataService,
+  BlockLanguageDataService,
+} from "../../shared/serverdata";
+import { BlockLanguageDescription } from "../../shared/block/block-language.description";
+import {
+  generateBlockLanguage,
+  validateGenerator,
+} from "../../shared/block/generator/generator";
+import { prettyPrintBlockLanguage } from "../../shared/block/prettyprint";
+import { GeneratorError } from "../../shared/block/generator/error.description";
+import { prettyPrintGrammar } from "../../shared/syntaxtree";
+import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 
 @Injectable()
 export class EditBlockLanguageService {
   // The block language that is beeing edited.
-  private _editedSubject = new BehaviorSubject<BlockLanguageDescription>(undefined);
+  private _editedSubject = new BehaviorSubject<BlockLanguageDescription>(
+    undefined
+  );
 
   // All off the current errors
   public generatorErrors: GeneratorError[] = [];
@@ -30,23 +38,28 @@ export class EditBlockLanguageService {
     private _grammarData: GrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private _title: Title,
+    private _title: Title
   ) {
     // Ensures that a block language that matches the URL is loaded.
     this._activatedRoute.paramMap
       .pipe(
-        map((params: ParamMap) => params.get('blockLanguageId')),
-        switchMap((id: string) => this._serverData.getSingle(id).pipe(first())),
-      ).subscribe(blockLanguage => {
+        map((params: ParamMap) => params.get("blockLanguageId")),
+        switchMap((id: string) => this._serverData.getSingle(id).pipe(first()))
+      )
+      .subscribe((blockLanguage) => {
         this._editedSubject.next(blockLanguage);
       });
 
     // Update the title of the page according to the current language
     this._editedSubject
-      .pipe(filter(bl => !!bl))
-      .subscribe(blockLanguage => {
-        this._title.setTitle(`BlockLang "${blockLanguage.name}" - Admin - BlattWerkzeug`)
-        this.prettyPrintedBlockLanguage = prettyPrintBlockLanguage(this.editedSubject);
+      .pipe(filter((bl) => !!bl))
+      .subscribe((blockLanguage) => {
+        this._title.setTitle(
+          `BlockLang "${blockLanguage.name}" - Admin - BlattWerkzeug`
+        );
+        this.prettyPrintedBlockLanguage = prettyPrintBlockLanguage(
+          this.editedSubject
+        );
       });
   }
 
@@ -54,21 +67,21 @@ export class EditBlockLanguageService {
    * The grammar that is the basis for this block language.
    */
   readonly baseGrammar = this._editedSubject.pipe(
-    flatMap(blockLang => this._grammarData.getSingle(blockLang.grammarId))
-  )
+    flatMap((blockLang) => this._grammarData.getSingle(blockLang.grammarId))
+  );
 
   /**
    * A human readable version of that grammar.
    */
   readonly baseGrammarPrettyPrinted = this.baseGrammar.pipe(
-    map(grammar => prettyPrintGrammar(grammar.name, grammar))
+    map((grammar) => prettyPrintGrammar(grammar.name, grammar))
   );
 
   /**
    * @return The currently edited block language
    */
   get editedSubject(): BlockLanguageDescription {
-    return (this._editedSubject.value);
+    return this._editedSubject.value;
   }
 
   /**
@@ -77,7 +90,9 @@ export class EditBlockLanguageService {
    *
    * @param change A callback function that is expected to change the block language.
    */
-  doUpdate(change: (bl: BlockLanguageDescription) => BlockLanguageDescription | void) {
+  doUpdate(
+    change: (bl: BlockLanguageDescription) => BlockLanguageDescription | void
+  ) {
     // Give the caller a chance to change the root reference
     let changedValue = change(this._editedSubject.value);
 
@@ -96,7 +111,8 @@ export class EditBlockLanguageService {
    */
   regenerate() {
     // Grab the instructions or assume default instructions
-    const instructions = this.editedSubject.localGeneratorInstructions || DEFAULT_GENERATOR;
+    const instructions =
+      this.editedSubject.localGeneratorInstructions || DEFAULT_GENERATOR;
 
     // Ensure the instructions are valid
     // TODO: Do actual validation again
@@ -108,35 +124,41 @@ export class EditBlockLanguageService {
       this._grammarData
         .getSingle(this.editedSubject.grammarId, true)
         .pipe(first())
-        .subscribe(g => {
+        .subscribe((g) => {
           try {
             this.generatorErrors.push(...validateGenerator(instructions));
           } catch (e) {
             this.generatorErrors.push({
               type: "Unexpected",
               message: "Could not validate block language",
-              exception: e
+              exception: e,
             });
           }
 
           if (this.generatorErrors.length === 0) {
-            this.doUpdate(blockLanguage => {
+            this.doUpdate((blockLanguage) => {
               // Try to generate the block language itself. If this fails something is
               // seriously wrong and we should probably do something smart about it.
               try {
-                const updated = generateBlockLanguage(blockLanguage, instructions, g);
-                this._snackBar.open(`Regenerated block language`, "", { duration: 3000 });
-                return (updated);
+                const updated = generateBlockLanguage(
+                  blockLanguage,
+                  instructions,
+                  g
+                );
+                this._snackBar.open(`Regenerated block language`, "", {
+                  duration: 3000,
+                });
+                return updated;
               } catch (e) {
                 // Pass on the error
                 this.generatorErrors.push({
                   type: "Unexpected",
                   message: "Could not generate block language",
-                  exception: e
+                  exception: e,
                 });
                 this._snackBar.open(`Could not regenerate block language`);
                 // But don't change the language
-                return (blockLanguage);
+                return blockLanguage;
               }
             });
           }
@@ -155,8 +177,8 @@ export class EditBlockLanguageService {
    * The data for the generator has been updated.
    */
   updateGeneratorData(json: any) {
-    this.doUpdate(blockLanguage => {
+    this.doUpdate((blockLanguage) => {
       blockLanguage.localGeneratorInstructions = json;
-    })
+    });
   }
 }

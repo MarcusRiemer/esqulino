@@ -1,14 +1,17 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { Observable, BehaviorSubject } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from "rxjs";
+import { first, map, tap } from "rxjs/operators";
 
-import { IdentifiableResourceDescription } from '../resource.description';
+import { IdentifiableResourceDescription } from "../resource.description";
 
-import { JsonApiListResponse, isJsonApiListResponse } from './json-api-response'
-import { CachedRequest, IndividualDescriptionCache } from './request-cache';
-import { objectOmit } from '../util';
+import {
+  JsonApiListResponse,
+  isJsonApiListResponse,
+} from "./json-api-response";
+import { CachedRequest, IndividualDescriptionCache } from "./request-cache";
+import { objectOmit } from "../util";
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -17,8 +20,8 @@ import { objectOmit } from '../util';
  */
 export abstract class DataService<
   TList extends IdentifiableResourceDescription,
-  TSingle extends IdentifiableResourceDescription> {
-
+  TSingle extends IdentifiableResourceDescription
+> {
   // These parameters are passed to every listing request
   private _listGetParams = new HttpParams();
 
@@ -33,9 +36,8 @@ export abstract class DataService<
     protected _http: HttpClient,
     private _snackBar: MatSnackBar,
     private _listUrl: string,
-    private _speakingName: string,
-  ) {
-  }
+    private _speakingName: string
+  ) {}
 
   /**
    * The cache of all descriptions that are available to the current user.
@@ -47,7 +49,7 @@ export abstract class DataService<
    */
   protected readonly _individualCache = new IndividualDescriptionCache<TSingle>(
     this._http,
-    id => this.resolveIndividualUrl(id)
+    (id) => this.resolveIndividualUrl(id)
   );
 
   /**
@@ -59,7 +61,7 @@ export abstract class DataService<
    * @return The total number of list items available.
    */
   get peekListTotalCount() {
-    return (this._listTotalCount.value);
+    return this._listTotalCount.value;
   }
 
   readonly listTotalCount = this._listTotalCount.asObservable();
@@ -73,19 +75,21 @@ export abstract class DataService<
   protected abstract resolveIndividualUrl(id: string): string;
 
   private createListRequest() {
-    return this._http.get<TList[] | JsonApiListResponse<TList>>(this._listUrl, {
-      params: this._listGetParams
-    }).pipe(
-      map(response => {
-        if (isJsonApiListResponse<TList>(response)) {
-          this._listTotalCount.next(response.meta.totalCount);
-          return (response.data);
-        } else {
-          this._listTotalCount.next(undefined);
-          return (response);
-        }
+    return this._http
+      .get<TList[] | JsonApiListResponse<TList>>(this._listUrl, {
+        params: this._listGetParams,
       })
-    );
+      .pipe(
+        map((response) => {
+          if (isJsonApiListResponse<TList>(response)) {
+            this._listTotalCount.next(response.meta.totalCount);
+            return response.data;
+          } else {
+            this._listTotalCount.next(undefined);
+            return response;
+          }
+        })
+      );
   }
 
   /**
@@ -94,7 +98,7 @@ export abstract class DataService<
    */
   private changeListParameters(newParams: HttpParams) {
     this._listGetParams = newParams;
-    this.listCache.refresh(this.createListRequest())
+    this.listCache.refresh(this.createListRequest());
   }
 
   /**
@@ -120,7 +124,10 @@ export abstract class DataService<
    */
   setListPagination(pageSize: number, currentPage: number) {
     this._listGetParams = this._listGetParams.set("limit", pageSize.toString());
-    this._listGetParams = this._listGetParams.set("offset", (pageSize * currentPage).toString());
+    this._listGetParams = this._listGetParams.set(
+      "offset",
+      (pageSize * currentPage).toString()
+    );
 
     this.changeListParameters(this._listGetParams);
   }
@@ -136,7 +143,7 @@ export abstract class DataService<
       this._individualCache.refreshDescription(id);
     }
 
-    return (this._individualCache.getDescription(id));
+    return this._individualCache.getDescription(id);
   }
 
   /**
@@ -145,28 +152,40 @@ export abstract class DataService<
    */
   updateSingle(desc: TSingle, showErrorFeedback = true): Promise<TSingle> {
     const toReturn = new Promise<TSingle>((resolve, reject) => {
-
       const descWithoutId = objectOmit("id", desc);
 
-      this._http.put<TSingle>(this.resolveIndividualUrl(desc.id), descWithoutId)
+      this._http
+        .put<TSingle>(this.resolveIndividualUrl(desc.id), descWithoutId)
         .pipe(first())
-        .subscribe(updatedDesc => {
-          console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
-          this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
-          this.listCache.refresh();
-          resolve(updatedDesc);
-        }, err => {
-          console.warn(`Update failed: ${this._speakingName} with ID "${desc.id}"`);
+        .subscribe(
+          (updatedDesc) => {
+            console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
+            this._snackBar.open(
+              `Updated ${this._speakingName} with ID "${desc.id}"`,
+              "",
+              { duration: 3000 }
+            );
+            this.listCache.refresh();
+            resolve(updatedDesc);
+          },
+          (err) => {
+            console.warn(
+              `Update failed: ${this._speakingName} with ID "${desc.id}"`
+            );
 
-          if (showErrorFeedback) {
-            this._snackBar.open(`Could not update ${this._speakingName} with ID "${desc.id}"`, "OK 😞");
-          } else {
-            reject(err);
+            if (showErrorFeedback) {
+              this._snackBar.open(
+                `Could not update ${this._speakingName} with ID "${desc.id}"`,
+                "OK 😞"
+              );
+            } else {
+              reject(err);
+            }
           }
-        });
+        );
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -177,26 +196,38 @@ export abstract class DataService<
    */
   deleteSingle(id: string, showErrorFeedback = true): Promise<void> {
     const toReturn = new Promise<void>((resolve, reject) => {
-
-      this._http.delete(this.resolveIndividualUrl(id))
+      this._http
+        .delete(this.resolveIndividualUrl(id))
         .pipe(first())
-        .subscribe(_ => {
-          console.log(`Deleted ${this._speakingName} with  "${id}"`);
-          this._snackBar.open(`Deleted ${this._speakingName} with ID "${id}"`, "", { duration: 3000 });
-          this.listCache.refresh();
+        .subscribe(
+          (_) => {
+            console.log(`Deleted ${this._speakingName} with  "${id}"`);
+            this._snackBar.open(
+              `Deleted ${this._speakingName} with ID "${id}"`,
+              "",
+              { duration: 3000 }
+            );
+            this.listCache.refresh();
 
-          resolve();
-        }, err => {
-          console.warn(`Delete failed: ${this._speakingName} with ID "${id}"`);
-          if (showErrorFeedback) {
-            this._snackBar.open(`Could not delete ${this._speakingName} with ID "${id}"`, "OK 😞");
-          } else {
-            reject(err);
+            resolve();
+          },
+          (err) => {
+            console.warn(
+              `Delete failed: ${this._speakingName} with ID "${id}"`
+            );
+            if (showErrorFeedback) {
+              this._snackBar.open(
+                `Could not delete ${this._speakingName} with ID "${id}"`,
+                "OK 😞"
+              );
+            } else {
+              reject(err);
+            }
           }
-        });
+        );
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -212,20 +243,19 @@ export abstract class DataService<
   ): TSingle | Promise<TSingle> {
     let toReturn = this._localCache[id];
     if (!toReturn && onMissing === "request") {
-      return (
-        this.getSingle(id).pipe(
+      return this.getSingle(id)
+        .pipe(
           // Without taking only the first item from `getSingle`, the promise
           // will never be fulfilled
           first(),
           // Store value as a side effect
-          tap(value => this.setLocal(value))
-        ).toPromise()
-      );
+          tap((value) => this.setLocal(value))
+        )
+        .toPromise();
     } else if (onMissing === "request") {
-      return (Promise.resolve(toReturn));
-    }
-    else {
-      return (toReturn);
+      return Promise.resolve(toReturn);
+    } else {
+      return toReturn;
     }
   }
 
@@ -233,7 +263,10 @@ export abstract class DataService<
    * @param res The resource to cache locally
    */
   setLocal(res: TSingle) {
-    console.log(`Cache "${this._speakingName}" - Item with id ${res.id} added: `, res);
+    console.log(
+      `Cache "${this._speakingName}" - Item with id ${res.id} added: `,
+      res
+    );
     this._localCache[res.id] = res;
   }
 }

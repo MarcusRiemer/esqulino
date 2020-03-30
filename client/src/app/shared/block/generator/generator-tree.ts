@@ -1,15 +1,20 @@
-import { generateSidebar } from './sidebar';
-import { TreeBlockLanguageGeneratorDescription } from './generator.description';
-import { defaultEditorComponents } from './generator-default';
+import { generateSidebar } from "./sidebar";
+import { TreeBlockLanguageGeneratorDescription } from "./generator.description";
+import { defaultEditorComponents } from "./generator-default";
 
-import { BlockLanguageDocument } from '../block-language.description';
-import { VisualBlockDescriptions, EditorBlockDescription } from '../block.description';
+import { BlockLanguageDocument } from "../block-language.description";
+import {
+  VisualBlockDescriptions,
+  EditorBlockDescription,
+} from "../block.description";
 
 import {
-  GrammarDocument, NodeConcreteTypeDescription, NodeAttributeDescription,
-  NodePropertyTypeDescription, NodeChildrenGroupDescription
-} from '../../syntaxtree';
-
+  GrammarDocument,
+  NodeConcreteTypeDescription,
+  NodeAttributeDescription,
+  NodePropertyTypeDescription,
+  NodeChildrenGroupDescription,
+} from "../../syntaxtree";
 
 /**
  * Takes a grammar description and a description how to transform it and
@@ -24,32 +29,36 @@ export function convertGrammarTreeInstructions(
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || defaultEditorComponents,
-    sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar)),
-    rootCssClasses: ["activate-indent", "activate-block-outline"]
+    sidebars: (d.staticSidebars || []).map((sidebar) =>
+      generateSidebar(g, sidebar)
+    ),
+    rootCssClasses: ["activate-indent", "activate-block-outline"],
   };
 
   // Create a visual representation for each concrete type
   const visualizedNodes: EditorBlockDescription[] = [];
 
-  Object.entries(g.types)
-    .forEach(([langName, types]) => {
-      const vis = Object.entries(types)
-        .filter(([_, typeDesc]) => typeDesc.type === "concrete")
-        .map(([name, typeDesc]): EditorBlockDescription => {
-          return ({
+  Object.entries(g.types).forEach(([langName, types]) => {
+    const vis = Object.entries(types)
+      .filter(([_, typeDesc]) => typeDesc.type === "concrete")
+      .map(
+        ([name, typeDesc]): EditorBlockDescription => {
+          return {
             describedType: { languageName: langName, typeName: name },
             // typeDesc must be a concrete description here
-            visual: [visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription)]
-          });
-        });
+            visual: [
+              visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription),
+            ],
+          };
+        }
+      );
 
-      visualizedNodes.push(...vis);
-    })
-
+    visualizedNodes.push(...vis);
+  });
 
   toReturn.editorBlocks = visualizedNodes;
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -58,17 +67,28 @@ export function convertGrammarTreeInstructions(
 export function visualizeNode(
   d: TreeBlockLanguageGeneratorDescription,
   name: string,
-  t: NodeConcreteTypeDescription,
+  t: NodeConcreteTypeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
   const attributes = t.attributes
     // Ignore everything that is not expected
-    .filter(t => ["property", "sequence", "allowed", "parentheses", "choice"].includes(t.type))
-    .map(a => visualizeNodeAttributes(d, a));
-  const wrappedAttributes: VisualBlockDescriptions.EditorContainer[] = (attributes.length > 0)
-    ? [{ blockType: "container", cssClasses: ["indent", "vertical"], children: attributes }]
-    : []
+    .filter((t) =>
+      ["property", "sequence", "allowed", "parentheses", "choice"].includes(
+        t.type
+      )
+    )
+    .map((a) => visualizeNodeAttributes(d, a));
+  const wrappedAttributes: VisualBlockDescriptions.EditorContainer[] =
+    attributes.length > 0
+      ? [
+          {
+            blockType: "container",
+            cssClasses: ["indent", "vertical"],
+            children: attributes,
+          },
+        ]
+      : [];
 
-  return ({
+  return {
     blockType: "block",
     cssClasses: ["vertical"],
     children: [
@@ -78,11 +98,11 @@ export function visualizeNode(
         children: [
           { blockType: "constant", text: `node "${name}" {` },
           ...wrappedAttributes,
-          { blockType: "constant", text: "}" }
-        ]
-      }
-    ]
-  });
+          { blockType: "constant", text: "}" },
+        ],
+      },
+    ],
+  };
 }
 
 export function visualizeNodeAttributes(
@@ -104,14 +124,13 @@ export function visualizeChildGroup(
   _d: TreeBlockLanguageGeneratorDescription,
   t: NodeChildrenGroupDescription
 ): VisualBlockDescriptions.ConcreteBlock {
-
-  return ({
+  return {
     blockType: "container",
     cssClasses: ["vertical"],
     children: [
       {
         blockType: "constant",
-        text: `children ${t.type} "${t.name}" : [`
+        text: `children ${t.type} "${t.name}" : [`,
       },
       {
         blockType: "iterator",
@@ -119,30 +138,29 @@ export function visualizeChildGroup(
       },
       {
         blockType: "constant",
-        text: `]`
+        text: `]`,
       },
-    ]
-  });
+    ],
+  };
 }
 
 export function visualizeProperty(
   _d: TreeBlockLanguageGeneratorDescription,
   t: NodePropertyTypeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
-  return ({
+  return {
     blockType: "container",
     cssClasses: ["horizontal"],
-    children:
-      [
-        {
-          blockType: "constant",
-          text: `prop "${t.name}": `,
-          cssClasses: ["foobar-constant"],
-        },
-        {
-          blockType: "input",
-          property: t.name
-        }
-      ]
-  });
+    children: [
+      {
+        blockType: "constant",
+        text: `prop "${t.name}": `,
+        cssClasses: ["foobar-constant"],
+      },
+      {
+        blockType: "input",
+        property: t.name,
+      },
+    ],
+  };
 }

@@ -2,8 +2,8 @@
  * Used when refererring to types that are defined other languages.
  */
 export interface QualifiedTypeName {
-  typeName: string
-  languageName: string
+  typeName: string;
+  languageName: string;
 }
 
 /**
@@ -33,13 +33,13 @@ export interface NodeDescription {
    * The name of this not, this is used to lookup the name of a
    * corresponding type.
    */
-  name: string
+  name: string;
 
   /**
    * This is effectively a namespace, allowing identical
    * names for nodes in different languages.
    */
-  language: string
+  language: string;
 
   /**
    * Nodes may have children in various categories. This base class
@@ -49,7 +49,7 @@ export interface NodeDescription {
    */
   children?: {
     [childrenCategory: string]: NodeDescription[];
-  }
+  };
 
   /**
    * Nodes may have all kinds of properties that are specific to their
@@ -57,7 +57,7 @@ export interface NodeDescription {
    */
   properties?: {
     [propertyName: string]: string;
-  }
+  };
 }
 
 /**
@@ -67,16 +67,23 @@ export interface NodeDescription {
  * @param loc The location of the target node.
  * @return The description of the node in the given tree at the given location.
  */
-export function locateNode(root: NodeDescription, loc: NodeLocation): NodeDescription {
+export function locateNode(
+  root: NodeDescription,
+  loc: NodeLocation
+): NodeDescription {
   let current: NodeDescription = root;
   loc.forEach(([categoryName, childIndex], i) => {
     const children = current.children[categoryName];
-    if ((children && childIndex < children.length) && childIndex >= 0) {
+    if (children && childIndex < children.length && childIndex >= 0) {
       current = children[childIndex];
     } else {
-      throw new Error(`SyntaxTreeDescription: Could not locate step ${i} of ${JSON.stringify(loc)}`);
+      throw new Error(
+        `SyntaxTreeDescription: Could not locate step ${i} of ${JSON.stringify(
+          loc
+        )}`
+      );
     }
-  })
+  });
 
-  return (current);
+  return current;
 }

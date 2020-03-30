@@ -1,5 +1,5 @@
 /**
- * To sign up, an e-mail, username and password are required. 
+ * To sign up, an e-mail, username and password are required.
  * The data will be sent to the server.
  */
 export interface SignUpDescription {
@@ -32,9 +32,9 @@ export interface ChangePasswordDescription {
 export interface AuthDialogDataDescription {
   // determines which dialog content will be displayed
   type: "signIn" | "signUp";
-  // passing a message to the authDialog can be done by the message property 
+  // passing a message to the authDialog can be done by the message property
   message?: string;
-  // choose between style classes 
+  // choose between style classes
   // error: alert-danger, warning: alert-warning
-  message_type?: "error" | "warning"
+  message_type?: "error" | "warning";
 }

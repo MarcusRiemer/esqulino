@@ -1,27 +1,31 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpErrorResponse } from "@angular/common/http";
+import { TestBed } from "@angular/core/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Overlay } from '@angular/cdk/overlay';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Overlay } from "@angular/cdk/overlay";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { provideGrammarList, buildGrammar, GrammarOrder } from '../../editor/spec-util';
+import {
+  provideGrammarList,
+  buildGrammar,
+  GrammarOrder,
+} from "../../editor/spec-util";
 
-import { ResourceReferencesService } from '../resource-references.service';
-import { ResourceReferencesOnlineService } from '../resource-references-online.service';
+import { ResourceReferencesService } from "../resource-references.service";
+import { ResourceReferencesOnlineService } from "../resource-references-online.service";
 
-import { GrammarDataService } from './grammar-data.service';
-import { ServerApiService } from './serverapi.service';
-
+import { GrammarDataService } from "./grammar-data.service";
+import { ServerApiService } from "./serverapi.service";
 
 describe(`GrammarDataService`, () => {
   function instantiate() {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-      ],
+      imports: [HttpClientTestingModule],
       providers: [
         ServerApiService,
         GrammarDataService,
@@ -30,15 +34,14 @@ describe(`GrammarDataService`, () => {
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
-        }
+        },
       ],
-      declarations: [
-      ]
+      declarations: [],
     });
 
-    return ({
-      service: TestBed.inject(GrammarDataService)
-    });
+    return {
+      service: TestBed.inject(GrammarDataService),
+    };
   }
 
   it(`Can be instantiated`, async () => {
@@ -54,7 +57,9 @@ describe(`GrammarDataService`, () => {
     provideGrammarList([]);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
     expect(list).toEqual([]);
     expect(totalCount).toEqual(0);
@@ -64,16 +69,15 @@ describe(`GrammarDataService`, () => {
   it(`Listing dataset with two items (default order)`, async () => {
     const fixture = instantiate();
 
-    const expectedList = [
-      buildGrammar(),
-      buildGrammar(),
-    ]
+    const expectedList = [buildGrammar(), buildGrammar()];
 
     const pending = fixture.service.list.pipe(first()).toPromise();
     provideGrammarList(expectedList);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
     expect(list).toEqual(expectedList);
     expect(totalCount).toEqual(expectedList.length);
@@ -86,12 +90,12 @@ describe(`GrammarDataService`, () => {
     const expectedList = [
       buildGrammar({ name: "A" }),
       buildGrammar({ name: "B" }),
-    ]
+    ];
 
     const order: GrammarOrder = {
       direction: "asc",
       field: "name",
-    }
+    };
 
     fixture.service.setListOrdering(order.field, order.direction);
 
@@ -99,7 +103,9 @@ describe(`GrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
     expect(list).toEqual(expectedList);
     expect(totalCount).toEqual(expectedList.length);
@@ -112,12 +118,12 @@ describe(`GrammarDataService`, () => {
     const expectedList = [
       buildGrammar({ slug: "B" }),
       buildGrammar({ slug: "A" }),
-    ]
+    ];
 
     const order: GrammarOrder = {
       direction: "desc",
       field: "slug",
-    }
+    };
 
     fixture.service.setListOrdering(order.field, order.direction);
 
@@ -125,7 +131,9 @@ describe(`GrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
     expect(list).toEqual(expectedList);
     expect(totalCount).toEqual(expectedList.length);
@@ -145,7 +153,9 @@ describe(`GrammarDataService`, () => {
     provideGrammarList(expectedList);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
     expect(list).toEqual([]);
     expect(totalCount).toEqual(0);
@@ -158,15 +168,17 @@ describe(`GrammarDataService`, () => {
     const expectedList = [];
     const pagination = {
       limit: 5,
-      page: 2
-    }
+      page: 2,
+    };
 
     fixture.service.setListPagination(pagination.limit, pagination.page);
     const pending = fixture.service.list.pipe(first()).toPromise();
     provideGrammarList(expectedList, { pagination });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount.pipe(first()).toPromise();
+    const totalCount = await fixture.service.listTotalCount
+      .pipe(first())
+      .toPromise();
 
     expect(list).toEqual([]);
     expect(totalCount).toEqual(0);

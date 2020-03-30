@@ -1,37 +1,35 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { BlockLanguage } from '../../../shared/block';
-import { ResourceReferencesService } from '../../../shared/resource-references.service'
-import { convertGrammarTreeInstructions } from '../../../shared/block/generator/generator-tree';
-import { BlockLanguageDescription } from '../../../shared/block/block-language.description';
+import { BlockLanguage } from "../../../shared/block";
+import { ResourceReferencesService } from "../../../shared/resource-references.service";
+import { convertGrammarTreeInstructions } from "../../../shared/block/generator/generator-tree";
+import { BlockLanguageDescription } from "../../../shared/block/block-language.description";
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { DragService } from '../../drag.service';
-import { BlockDebugOptionsService } from '../../block-debug-options.service';
-import { ProjectService } from '../../project.service';
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { DragService } from "../../drag.service";
+import { BlockDebugOptionsService } from "../../block-debug-options.service";
+import { ProjectService } from "../../project.service";
 
 /**
  * Root of a block editor. Displays either the syntaxtree or a friendly message to
  * start programming.
  */
 @Component({
-  templateUrl: 'templates/block-root.html',
+  templateUrl: "templates/block-root.html",
 })
 export class BlockRootComponent {
   private _blockLanguageCache: { [id: string]: BlockLanguage } = {};
-
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _dragService: DragService,
     private _debugOptions: BlockDebugOptionsService,
     private _resourceReferences: ResourceReferencesService,
-    private _projectService: ProjectService,
-  ) {
-  }
+    private _projectService: ProjectService
+  ) {}
 
   /**
    * When something draggable enters the empty area a program may start with,
@@ -40,7 +38,7 @@ export class BlockRootComponent {
   public onPlaceholderDragEnter(evt: MouseEvent) {
     if (this._dragService.peekIsDragInProgress) {
       this._dragService.informDraggedOver(evt, [], undefined, {
-        allowExact: true
+        allowExact: true,
       });
     }
   }
@@ -51,7 +49,7 @@ export class BlockRootComponent {
   readonly currentResource$ = this._currentCodeResource.currentResource;
 
   readonly validationContext = this._projectService.activeProject.pipe(
-    map(p => p.additionalValidationContext)
+    map((p) => p.additionalValidationContext)
   );
 
   /**
@@ -62,13 +60,16 @@ export class BlockRootComponent {
     this._debugOptions.showInternalAst.value$
   ).pipe(
     map(([blockLangId, showInternalAst]) => {
-      const blockLang = this._resourceReferences.getBlockLanguage(blockLangId, "undefined");
+      const blockLang = this._resourceReferences.getBlockLanguage(
+        blockLangId,
+        "undefined"
+      );
       if (blockLang && showInternalAst) {
-        return (this.getTreeBlockLanguage(blockLang.grammarId));
+        return this.getTreeBlockLanguage(blockLang.grammarId);
       } else {
-        return (blockLang);
+        return blockLang;
       }
-    }),
+    })
   );
 
   /**
@@ -81,19 +82,29 @@ export class BlockRootComponent {
     // Was the block language for that grammar created already?
     if (!this._blockLanguageCache[grammarId]) {
       // Nope, we build it on the fly
-      console.log(`Generating AST block language for grammar with ID "${grammarId}"`);
+      console.log(
+        `Generating AST block language for grammar with ID "${grammarId}"`
+      );
 
-      const grammar = this._projectService.cachedProject.grammarDescriptions.find(g => g.id === grammarId);
-      const blockLangModel = convertGrammarTreeInstructions({ type: "tree" }, grammar);
-      const blockLangDesc: BlockLanguageDescription = Object.assign(blockLangModel, {
-        id: grammarId,
-        name: `Automatically generated from "${grammar.name}"`,
-        defaultProgrammingLanguageId: grammar.programmingLanguageId
-      });
+      const grammar = this._projectService.cachedProject.grammarDescriptions.find(
+        (g) => g.id === grammarId
+      );
+      const blockLangModel = convertGrammarTreeInstructions(
+        { type: "tree" },
+        grammar
+      );
+      const blockLangDesc: BlockLanguageDescription = Object.assign(
+        blockLangModel,
+        {
+          id: grammarId,
+          name: `Automatically generated from "${grammar.name}"`,
+          defaultProgrammingLanguageId: grammar.programmingLanguageId,
+        }
+      );
 
       this._blockLanguageCache[grammarId] = new BlockLanguage(blockLangDesc);
     }
 
-    return (this._blockLanguageCache[grammarId]);
+    return this._blockLanguageCache[grammarId];
   }
 }
