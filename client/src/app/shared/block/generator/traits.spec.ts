@@ -1,44 +1,48 @@
-import { ScopeTraitAdd, ReferenceableTraits } from './traits.description'
-import { TraitMap } from './traits'
-import { AllReferenceableTypeInstructions } from './instructions.description';
-
+import { ScopeTraitAdd, ReferenceableTraits } from "./traits.description";
+import { TraitMap } from "./traits";
+import { AllReferenceableTypeInstructions } from "./instructions.description";
 
 /**
  * Introduces a new trait that precisely sets `style.color`.
  */
 function traitColor(
-  { name = "keyword", color = "blue" }
-    : { name?: string, color?: string }
-    = { name: "keyword", color: "blue" }
+  { name = "keyword", color = "blue" }: { name?: string; color?: string } = {
+    name: "keyword",
+    color: "blue",
+  }
 ): ReferenceableTraits {
   const toReturn: ReferenceableTraits = {};
   toReturn[name] = {
-    "instructions": {
-      "style": {
-        "color": color
-      }
+    instructions: {
+      style: {
+        color: color,
+      },
     },
-    "applyMode": "deepMerge"
+    applyMode: "deepMerge",
   };
 
-  return (toReturn);
-};
+  return toReturn;
+}
 
 function scope_g1t1(
-  { traitName = "keyword", attr = ["a1"] }
-    : { traitName?: string, attr?: string[] }
-    = { traitName: "keyword", attr: ["a1"] }
+  {
+    traitName = "keyword",
+    attr = ["a1"],
+  }: { traitName?: string; attr?: string[] } = {
+    traitName: "keyword",
+    attr: ["a1"],
+  }
 ): ScopeTraitAdd[] {
-  return ([
+  return [
     {
       traits: [traitName],
       attributes: {
-        "g1": {
-          "t1": attr
-        }
-      }
-    }
-  ]);
+        g1: {
+          t1: attr,
+        },
+      },
+    },
+  ];
 }
 
 describe("Traits", () => {
@@ -48,13 +52,13 @@ describe("Traits", () => {
     m.addScopes(scope_g1t1({}));
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "attributes": {
-            "a1": {}
-          }
-        }
-      }
+      g1: {
+        t1: {
+          attributes: {
+            a1: {},
+          },
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);
@@ -90,17 +94,17 @@ describe("Traits", () => {
     m.addScopes(scope_g1t1({ attr: ["a1"], traitName: "k2" }));
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
+      g1: {
+        t1: {
           attributes: {
-            "a1": {
-              "style": {
-                "color": "fuchsia"
-              }
-            }
-          }
-        }
-      }
+            a1: {
+              style: {
+                color: "fuchsia",
+              },
+            },
+          },
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);
@@ -114,14 +118,14 @@ describe("Traits", () => {
     m.addScopes(scope_g1t1({ attr: ["a1", "a2"] }));
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "attributes": {
-            "a1": {},
-            "a2": {}
-          }
-        }
-      }
+      g1: {
+        t1: {
+          attributes: {
+            a1: {},
+            a2: {},
+          },
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);
@@ -151,7 +155,7 @@ describe("Traits", () => {
     m.addScopes(scope_g1t1({ attr: ["a1", "a2"] }));
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {}
+      g1: {},
     };
 
     const res = m.applyTraits(instructions);
@@ -167,11 +171,11 @@ describe("Traits", () => {
     m.addScopes(scope_g1t1({ attr: ["a1", "a2"] }));
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "attributes": {}
-        }
-      }
+      g1: {
+        t1: {
+          attributes: {},
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);
@@ -185,8 +189,8 @@ describe("Traits", () => {
     const toAdd: ScopeTraitAdd = {
       traits: ["keyword"],
       blocks: {
-        "g1": { "t1": [0] }
-      }
+        g1: { t1: [0] },
+      },
     };
 
     const m = new TraitMap();
@@ -194,19 +198,19 @@ describe("Traits", () => {
     m.addScopes([toAdd]);
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "blocks": [{ "style": { "width": "20px" } }]
-        }
-      }
+      g1: {
+        t1: {
+          blocks: [{ style: { width: "20px" } }],
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);
 
     expect(res).not.toEqual(instructions);
     expect(res["g1"]["t1"].blocks[0].style).toEqual({
-      "color": "blue",
-      "width": "20px"
+      color: "blue",
+      width: "20px",
     });
   });
 
@@ -214,8 +218,8 @@ describe("Traits", () => {
     const toAdd: ScopeTraitAdd = {
       traits: ["keyword"],
       blocks: {
-        "g1": { "t1": [0] }
-      }
+        g1: { t1: [0] },
+      },
     };
 
     const m = new TraitMap();
@@ -223,11 +227,11 @@ describe("Traits", () => {
     m.addScopes([toAdd]);
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "attributes": {}
-        }
-      }
+      g1: {
+        t1: {
+          attributes: {},
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);
@@ -240,10 +244,10 @@ describe("Traits", () => {
     const toAdd: ScopeTraitAdd = {
       traits: ["keyword"],
       blocks: {
-        "g1": {
-          "t1": [1]
-        }
-      }
+        g1: {
+          t1: [1],
+        },
+      },
     };
 
     const m = new TraitMap();
@@ -251,11 +255,11 @@ describe("Traits", () => {
     m.addScopes([toAdd]);
 
     const instructions: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "attributes": {}
-        }
-      }
+      g1: {
+        t1: {
+          attributes: {},
+        },
+      },
     };
 
     const res = m.applyTraits(instructions);

@@ -3,23 +3,22 @@
     <h4>Bilder hochladen</h4>
     <p>Hier kannst du neue Bilder hochladen</p>
   </div>
-  <form (submit)="onUploadSubmit($event)"
-        class="card-body"
-        method="POST">
+  <form (submit)="onUploadSubmit($event)" class="card-body" method="POST">
     <div class="form-group row">
-      <label class="col-2 col-form-label"
-             for="image-name">
+      <label class="col-2 col-form-label" for="image-name">
         Name des Bildes
       </label>
       <div class="col-10">
-        <input type="text"
-               class="form-control"
-               id="image-name"
-               name="image-name"
-               aria-describedby="image-help">
-        <small id="image-help"
-               class="form-text text-muted">
-          Dieser Name wird z.B. Leuten angezeigt, die das Bild nicht sehen können.
+        <input
+          type="text"
+          class="form-control"
+          id="image-name"
+          name="image-name"
+          aria-describedby="image-help"
+        />
+        <small id="image-help" class="form-text text-muted">
+          Dieser Name wird z.B. Leuten angezeigt, die das Bild nicht sehen
+          können.
         </small>
       </div>
     </div>
@@ -28,11 +27,13 @@
         Name des Urhebers
       </label>
       <div class="col-10">
-        <input type="text"
-               class="form-control"
-               id="author-name"
-               name="author-name"
-               aria-describedby="author-name-help">
+        <input
+          type="text"
+          class="form-control"
+          id="author-name"
+          name="author-name"
+          aria-describedby="author-name-help"
+        />
         <small id="author-name-help" class="form-text text-muted">
           Wird als Urheber beim Anzeigen des Bildes angezeigt
         </small>
@@ -43,13 +44,16 @@
         URL des Urhebers
       </label>
       <div class="col-10">
-        <input type="text"
-               class="form-control"
-               id="author-url"
-               name="author-url"
-               aria-describedby="author-url-help">
+        <input
+          type="text"
+          class="form-control"
+          id="author-url"
+          name="author-url"
+          aria-describedby="author-url-help"
+        />
         <small id="author-url-help" class="form-text text-muted">
-          Wird als Link zur Webseite des Urhebers beim Anzeigen der Bildquellen verwendet
+          Wird als Link zur Webseite des Urhebers beim Anzeigen der Bildquellen
+          verwendet
         </small>
       </div>
     </div>
@@ -58,11 +62,13 @@
         Name der Lizenz
       </label>
       <div class="col-10">
-        <input type="text"
-               class="form-control"
-               id="licence-name"
-               name="licence-name"
-               aria-describedby="author-url-help">
+        <input
+          type="text"
+          class="form-control"
+          id="licence-name"
+          name="licence-name"
+          aria-describedby="author-url-help"
+        />
         <small id="licence-name-help" class="form-text text-muted">
           Die Lizenz unter der das Bild steht
         </small>
@@ -73,35 +79,36 @@
         URL der Lizenz
       </label>
       <div class="col-10">
-        <input type="text"
-               class="form-control"
-               id="licence-url"
-               name="licence-url"
-               aria-describedby="licence-url-help">
+        <input
+          type="text"
+          class="form-control"
+          id="licence-url"
+          name="licence-url"
+          aria-describedby="licence-url-help"
+        />
         <small id="licence-url-help" class="form-text text-muted">
           Die URL zum Text der Lizenz
         </small>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-2 col-form-label"
-             for="image-file">
+      <label class="col-2 col-form-label" for="image-file">
         Bilddatei
       </label>
       <div class="col-10">
-        <input type="file"
-               class="form-control-file"
-               id="image-file"
-               name="image-file"
-               aria-describedby="file-help">
-        <small id="file-help"
-               class="form-text text-muted">
+        <input
+          type="file"
+          class="form-control-file"
+          id="image-file"
+          name="image-file"
+          aria-describedby="file-help"
+        />
+        <small id="file-help" class="form-text text-muted">
           Diese Datei wird von deinem Rechner hochgeladen.
         </small>
       </div>
     </div>
-    <button type="submit"
-            class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">
       Bild hochladen
     </button>
   </form>

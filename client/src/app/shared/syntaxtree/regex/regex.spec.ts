@@ -1,12 +1,12 @@
-import { CodeGenerator } from '../codegenerator'
-import { Node, NodeDescription } from '../syntaxtree'
-import { Validator } from '../validator'
-import { ErrorCodes } from '../validation-result'
+import { CodeGenerator } from "../codegenerator";
+import { Node, NodeDescription } from "../syntaxtree";
+import { Validator } from "../validator";
+import { ErrorCodes } from "../validation-result";
 
-import { NODE_CONVERTER } from './regex.codegenerator'
-import { GRAMMAR_DESCRIPTION } from './regex.grammar'
+import { NODE_CONVERTER } from "./regex.codegenerator";
+import { GRAMMAR_DESCRIPTION } from "./regex.grammar";
 
-describe('Language: RegEx', () => {
+describe("Language: RegEx", () => {
   it("Invalid: Empty RegEx", () => {
     const astDesc: NodeDescription = {
       language: "regex",
@@ -27,24 +27,24 @@ describe('Language: RegEx', () => {
       language: "regex",
       name: "root",
       children: {
-        "expressions": [
+        expressions: [
           {
             language: "regex",
             name: "expr",
             children: {
-              "singleExpression": [
+              singleExpression: [
                 {
                   language: "regex",
                   name: "constant",
                   properties: {
-                    "value": "a"
-                  }
+                    value: "a",
+                  },
                 },
-              ]
-            }
+              ],
+            },
           },
-        ]
-      }
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -58,46 +58,45 @@ describe('Language: RegEx', () => {
     expect(emitted).toEqual("a");
   });
 
-
   it('RegEx: "(a)"', () => {
     const astDesc: NodeDescription = {
       language: "regex",
       name: "root",
       children: {
-        "expressions": [
+        expressions: [
           {
             language: "regex",
             name: "expr",
             children: {
-              "singleExpression": [
+              singleExpression: [
                 {
                   language: "regex",
                   name: "alternative",
                   children: {
-                    "expressions": [
+                    expressions: [
                       {
                         language: "regex",
                         name: "expr",
                         children: {
-                          "singleExpression": [
+                          singleExpression: [
                             {
                               language: "regex",
                               name: "constant",
                               properties: {
-                                "value": "a"
-                              }
+                                value: "a",
+                              },
                             },
-                          ]
-                        }
+                          ],
+                        },
                       },
-                    ]
-                  }
+                    ],
+                  },
                 },
-              ]
-            }
+              ],
+            },
           },
-        ]
-      }
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -117,86 +116,86 @@ describe('Language: RegEx', () => {
       language: "regex",
       name: "root",
       children: {
-        "expressions": [
+        expressions: [
           {
             language: "regex",
             name: "expr",
             children: {
-              "singleExpression": [
+              singleExpression: [
                 {
                   language: "regex",
                   name: "alternative",
                   children: {
-                    "expressions": [
+                    expressions: [
                       {
                         language: "regex",
                         name: "expr",
                         children: {
-                          "singleExpression": [
+                          singleExpression: [
                             {
                               language: "regex",
                               name: "constant",
                               properties: {
-                                "value": "a"
-                              }
+                                value: "a",
+                              },
                             },
-                          ]
-                        }
+                          ],
+                        },
                       },
                       {
                         language: "regex",
                         name: "expr",
                         children: {
-                          "singleExpression": [
+                          singleExpression: [
                             {
                               language: "regex",
                               name: "alternative",
                               children: {
-                                "expressions": [
+                                expressions: [
                                   {
                                     language: "regex",
                                     name: "expr",
                                     children: {
-                                      "singleExpression": [
+                                      singleExpression: [
                                         {
                                           language: "regex",
                                           name: "constant",
                                           properties: {
-                                            "value": "b"
-                                          }
+                                            value: "b",
+                                          },
                                         },
-                                      ]
-                                    }
+                                      ],
+                                    },
                                   },
                                   {
                                     language: "regex",
                                     name: "expr",
                                     children: {
-                                      "singleExpression": [
+                                      singleExpression: [
                                         {
                                           language: "regex",
                                           name: "constant",
                                           properties: {
-                                            "value": "c"
-                                          }
+                                            value: "c",
+                                          },
                                         },
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
                             },
-                          ]
-                        }
-                      }
-                    ]
-                  }
+                          ],
+                        },
+                      },
+                    ],
+                  },
                 },
-              ]
-            }
+              ],
+            },
           },
-        ]
-      }
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -216,85 +215,85 @@ describe('Language: RegEx', () => {
       language: "regex",
       name: "root",
       children: {
-        "expressions": [
+        expressions: [
           {
             language: "regex",
             name: "expr",
             children: {
-              "singleExpression": [
+              singleExpression: [
                 {
                   language: "regex",
                   name: "constant",
                   properties: {
-                    "value": "a"
-                  }
+                    value: "a",
+                  },
                 },
-              ]
-            }
+              ],
+            },
           },
           {
             language: "regex",
             name: "expr",
             children: {
-              "singleExpression": [
+              singleExpression: [
                 {
                   language: "regex",
                   name: "alternative",
                   children: {
-                    "expressions": [
+                    expressions: [
                       {
                         language: "regex",
                         name: "expr",
                         children: {
-                          "singleExpression": [
+                          singleExpression: [
                             {
                               language: "regex",
                               name: "constant",
                               properties: {
-                                "value": "b"
-                              }
+                                value: "b",
+                              },
                             },
-                          ]
-                        }
+                          ],
+                        },
                       },
                       {
                         language: "regex",
                         name: "expr",
                         children: {
-                          "singleExpression": [
+                          singleExpression: [
                             {
                               language: "regex",
                               name: "constant",
                               properties: {
-                                "value": "c"
-                              }
+                                value: "c",
+                              },
                             },
-                          ]
-                        }
-                      }
-                    ]
-                  }
+                          ],
+                        },
+                      },
+                    ],
+                  },
                 },
-              ]
-            }
+              ],
+            },
           },
           {
             language: "regex",
             name: "expr",
             children: {
-              "singleExpression": [
+              singleExpression: [
                 {
                   language: "regex",
                   name: "constant",
                   properties: {
-                    "value": "d"
-                  }
+                    value: "d",
+                  },
                 },
-              ]
-            }
-          }
-        ]
-      }
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);

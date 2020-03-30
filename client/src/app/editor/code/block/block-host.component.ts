@@ -1,20 +1,19 @@
-import { Component, Input, HostBinding, OnChanges } from '@angular/core';
+import { Component, Input, HostBinding, OnChanges } from "@angular/core";
 
-import { Node, CodeResource } from '../../../shared/syntaxtree';
-import { BlockLanguage } from '../../../shared/block';
+import { Node, CodeResource } from "../../../shared/syntaxtree";
+import { BlockLanguage } from "../../../shared/block";
 
-import { RenderedCodeResourceService } from './rendered-coderesource.service';
+import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 
 /**
  * Renders all editor blocks that are mandated by the given node.
  */
 @Component({
-  templateUrl: 'templates/block-host.html',
+  templateUrl: "templates/block-host.html",
   selector: `editor-block-host`,
-  providers: [RenderedCodeResourceService]
+  providers: [RenderedCodeResourceService],
 })
 export class BlockHostComponent implements OnChanges {
-
   @Input()
   codeResource: CodeResource;
 
@@ -40,15 +39,15 @@ export class BlockHostComponent implements OnChanges {
   @Input()
   validationContext: any = undefined;
 
-  @HostBinding('class')
+  @HostBinding("class")
   get hostCssClasses() {
     const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
-    return (usedBlockLanguage.rootCssClasses.join(" "));
+    return usedBlockLanguage.rootCssClasses.join(" ");
   }
 
   constructor(
     private _renderedCodeResourceService: RenderedCodeResourceService
-  ) { }
+  ) {}
 
   ngOnChanges() {
     this._renderedCodeResourceService._updateRenderData(
@@ -56,16 +55,17 @@ export class BlockHostComponent implements OnChanges {
       this.blockLanguage,
       this.readOnly,
       this.validationContext || {}
-    )
+    );
   }
 
-  readonly renderDataAvailable$ = this._renderedCodeResourceService.dataAvailable$;
+  readonly renderDataAvailable$ = this._renderedCodeResourceService
+    .dataAvailable$;
 
   /**
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
     const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
-    return (usedBlockLanguage.getEditorBlock(this.node.qualifiedName));
+    return usedBlockLanguage.getEditorBlock(this.node.qualifiedName);
   }
 }

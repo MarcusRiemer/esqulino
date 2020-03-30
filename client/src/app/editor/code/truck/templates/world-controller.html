@@ -2,16 +2,40 @@
   <div class="col-6">
     <div class="input-group d-flex pr-1">
       <div class="input-group-prepend">
-        <div class="input-group-text">Welt wählen: </div>
+        <div class="input-group-text">Welt wählen:</div>
       </div>
-      <truck-world-selector #worldSelector class="flex-grow-1"></truck-world-selector>
+      <truck-world-selector
+        #worldSelector
+        class="flex-grow-1"
+      ></truck-world-selector>
     </div>
   </div>
   <div class="col-6">
     <div class="btn-group btn-group-sm d-flex pl-1" role="group">
-      <button class="btn btn-success flex-grow-1" [disabled]="!world || (blocked | async)" (click)="runCode()"><i class="fa fa-play"></i>&nbsp;Ausführen</button>
-      <button class="btn btn-danger btn-full-disable flex-grow-1" [disabled]="!world || !(blocked | async)" (click)="pauseCode()"><i class="fa fa-pause"></i>&nbsp;Anhalten</button>
-      <button class="btn btn-success btn-full-disable flex-grow-1" [disabled]="!world || (blocked | async) || !(paused | async)" (click)="resumeCode()"><i class="fa fa-play"></i>&nbsp;Fortsetzen</button>
+      <button
+        class="btn btn-success flex-grow-1"
+        [disabled]="!world || (blocked | async)"
+        (click)="runCode()"
+      >
+        <i class="fa fa-play"></i>
+        &nbsp;Ausführen
+      </button>
+      <button
+        class="btn btn-danger btn-full-disable flex-grow-1"
+        [disabled]="!world || !(blocked | async)"
+        (click)="pauseCode()"
+      >
+        <i class="fa fa-pause"></i>
+        &nbsp;Anhalten
+      </button>
+      <button
+        class="btn btn-success btn-full-disable flex-grow-1"
+        [disabled]="!world || (blocked | async) || !(paused | async)"
+        (click)="resumeCode()"
+      >
+        <i class="fa fa-play"></i>
+        &nbsp;Fortsetzen
+      </button>
     </div>
   </div>
 </div>
@@ -20,25 +44,44 @@
   <div class="col-6">
     <div class="row">
       <div class="col">
-          Befehle: 
-          <span *ngIf="world && (blocked | async); then loadingBlock; else stepBlock"></span>
+        Befehle:
+        <span
+          *ngIf="world && (blocked | async); then loadingBlock; else stepBlock"
+        ></span>
       </div>
       <div class="col">
-          Zeit: 
-          <span *ngIf="world && (blocked | async); then loadingBlock; else timeBlock"></span>
+        Zeit:
+        <span
+          *ngIf="world && (blocked | async); then loadingBlock; else timeBlock"
+        ></span>
       </div>
       <div class="col text-success">
-          <div *ngIf="world && world.solved">
-            <i class="fa fa-check-square-o"></i>&nbsp;Gelöst
-          </div>
+        <div *ngIf="world && world.solved">
+          <i class="fa fa-check-square-o"></i>
+          &nbsp;Gelöst
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-6">
     <div class="btn-group btn-group-sm d-flex pl-1" role="group">
-      <button class="btn btn-outline-primary flex-grow-1" [disabled]="!world || (blocked | async)" (click)="undo()"><i class="fa fa-undo"></i> Schritt zurück</button>
-      <button class="btn btn-outline-primary flex-grow-1" [disabled]="!world || (blocked | async)" (click)="reset()"><i class="fa fa-ban"></i> Zurücksetzen</button>
+      <button
+        class="btn btn-outline-primary flex-grow-1"
+        [disabled]="!world || (blocked | async)"
+        (click)="undo()"
+      >
+        <i class="fa fa-undo"></i>
+        Schritt zurück
+      </button>
+      <button
+        class="btn btn-outline-primary flex-grow-1"
+        [disabled]="!world || (blocked | async)"
+        (click)="reset()"
+      >
+        <i class="fa fa-ban"></i>
+        Zurücksetzen
+      </button>
     </div>
   </div>
 </div>
@@ -46,17 +89,61 @@
 <div class="row mt-3">
   <div class="col-12">
     <div class="btn-group btn-group-sm d-flex" role="group">
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="goForward()">Vorwärts Fahren</button>
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="turnRight()">Blinker Rechts</button>
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="turnLeft()">Blinker Links</button>
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="noTurn()">Blinker Aus</button>
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="load()">Aufladen</button>
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="unload()">Abladen</button>
-      <button class="btn btn-outline-primary w-100" [disabled]="!world || (blocked | async)" (click)="wait()">Warten</button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="goForward()"
+      >
+        Vorwärts Fahren
+      </button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="turnRight()"
+      >
+        Blinker Rechts
+      </button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="turnLeft()"
+      >
+        Blinker Links
+      </button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="noTurn()"
+      >
+        Blinker Aus
+      </button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="load()"
+      >
+        Aufladen
+      </button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="unload()"
+      >
+        Abladen
+      </button>
+      <button
+        class="btn btn-outline-primary w-100"
+        [disabled]="!world || (blocked | async)"
+        (click)="wait()"
+      >
+        Warten
+      </button>
     </div>
   </div>
 </div>
 
-<ng-template #loadingBlock><i class="fa fa-spinner fa-pulse fa-fw"></i></ng-template>
+<ng-template #loadingBlock>
+  <i class="fa fa-spinner fa-pulse fa-fw"></i>
+</ng-template>
 <ng-template #stepBlock>{{ world ? world.step : '' }}</ng-template>
 <ng-template #timeBlock>{{ world ? world.timeStep : '' }}</ng-template>

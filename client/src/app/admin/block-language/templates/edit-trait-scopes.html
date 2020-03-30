@@ -1,3 +1,5 @@
-<edit-single-trait-scope *ngFor="let scope of availableScopes"
-                         [scope]="scope"></edit-single-trait-scope>
+<edit-single-trait-scope
+  *ngFor="let scope of availableScopes"
+  [scope]="scope"
+></edit-single-trait-scope>
 <button (click)="addEmptyScope()">Add empty scope</button>

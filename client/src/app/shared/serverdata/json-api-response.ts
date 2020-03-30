@@ -6,9 +6,11 @@ export interface JsonApiListResponse<TListItem> {
   data: TListItem[];
   meta: {
     totalCount: number;
-  }
+  };
 }
 
-export function isJsonApiListResponse<T>(obj: any): obj is JsonApiListResponse<T> {
-  return (obj && obj.data);
+export function isJsonApiListResponse<T>(
+  obj: any
+): obj is JsonApiListResponse<T> {
+  return obj && obj.data;
 }

@@ -10,25 +10,29 @@
       </a>
     </ng-container>
   </app-requires-javascript>
-  
+
   <!-- "Back" button to main page -->
-  <a mat-button
-     [routerLink]="'/about'">
-    <img src="/vendor/logos/blattwerkzeug-logo.svg"
-         height="20px"
-         title="BlattWerkzeug">
-    <img src="/vendor/logos/blattwerkzeug-caption.svg"
-         height="20px"
-         title="BlattWerkzeug">
+  <a mat-button [routerLink]="'/about'">
+    <img
+      src="/vendor/logos/blattwerkzeug-logo.svg"
+      height="20px"
+      title="BlattWerkzeug"
+    />
+    <img
+      src="/vendor/logos/blattwerkzeug-caption.svg"
+      height="20px"
+      title="BlattWerkzeug"
+    />
   </a>
 
   <!-- Static content at the beginning of this toolbar -->
   <ng-content select="[position=start]"></ng-content>
 
   <!-- Things the user might do here -->
-  <ng-container *ngFor="let toolbarItem of (toolbarItems$ | async)"
-                [cdkPortalOutlet]="toolbarItem">
-  </ng-container>
+  <ng-container
+    *ngFor="let toolbarItem of (toolbarItems$ | async)"
+    [cdkPortalOutlet]="toolbarItem"
+  ></ng-container>
 
   <!-- Filling out the space in the middle -->
   <span class="fill-space"></span>

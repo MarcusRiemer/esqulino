@@ -1,30 +1,39 @@
-
 <div class="row">
   <div class="col-md-2">
-    <select class="custom-select"  name="language" [(ngModel)]="language">
-      <option *ngFor="let item of languages" [value]="item.token">{{ item.token | uppercase }}</option>
+    <select class="custom-select" name="language" [(ngModel)]="language">
+      <option *ngFor="let item of languages" [value]="item.token">
+        {{ item.token | uppercase }}
+      </option>
     </select>
   </div>
-  <div *ngIf="isNeedAnObject"
-        [class]="isTranslationTextarea ? 'col-md-3' : 'col-md-2'">
-    <button (click)="addObject()"
-            class="btn btn-block btn-primary">
+  <div
+    *ngIf="isNeedAnObject"
+    [class]="isTranslationTextarea ? 'col-md-3' : 'col-md-2'"
+  >
+    <button (click)="addObject()" class="btn btn-block btn-primary">
       {{ placeholder }} für "{{ language }}" hinzufügen
     </button>
   </div>
   <div *ngIf="control === 'input'" class="col-md-6">
-    <input *ngIf="isCurrentLanguageAvailable"
-            type="text" name="edited-input"
-            [value]="currentString[language] || ''"
-            class="form-control"
-            [placeholder]="placeholder"
-            [(ngModel)]="editingString[language]">
+    <input
+      *ngIf="isCurrentLanguageAvailable"
+      type="text"
+      name="edited-input"
+      [value]="currentString[language] || ''"
+      class="form-control"
+      [placeholder]="placeholder"
+      [(ngModel)]="editingString[language]"
+    />
   </div>
-  <div *ngIf="isCurrentLanguageAvailable"
-        [class]="isTranslationTextarea ? 'col-md-2' : 'col-md-1'">
-    <button *ngIf="isCurrentLanguageAvailable"
-            (click)="deleteLanguage()"
-            class="btn btn-block btn-danger">
+  <div
+    *ngIf="isCurrentLanguageAvailable"
+    [class]="isTranslationTextarea ? 'col-md-2' : 'col-md-1'"
+  >
+    <button
+      *ngIf="isCurrentLanguageAvailable"
+      (click)="deleteLanguage()"
+      class="btn btn-block btn-danger"
+    >
       Löschen
     </button>
   </div>
@@ -33,14 +42,16 @@
 <div *ngIf="control === 'textarea'" class="row">
   <div class="col-md-12">
     <div class="form-group">
-      <textarea *ngIf="isCurrentLanguageAvailable"
+      <textarea
+        *ngIf="isCurrentLanguageAvailable"
         class="form-control"
         name="edited-text"
         id="edit-text"
         [value]="currentString[language] || ''"
-        rows="10" [placeholder]="placeholder"
-        [(ngModel)]="editingString[language]">
-      </textarea>
+        rows="10"
+        [placeholder]="placeholder"
+        [(ngModel)]="editingString[language]"
+      ></textarea>
     </div>
   </div>
 </div>

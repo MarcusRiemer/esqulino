@@ -4,29 +4,32 @@
       Name:
     </div>
     <div class="col-sm-6">
-      <input [(ngModel)]="currentResource.name"
-             class="form-control">
+      <input [(ngModel)]="currentResource.name" class="form-control" />
     </div>
     <div class="col-sm-6">
       Generierte Sprache:
     </div>
     <div class="col-sm-6">
-      <language-emitted-selector [codeResource]="currentResource">
-      </language-emitted-selector>
+      <language-emitted-selector
+        [codeResource]="currentResource"
+      ></language-emitted-selector>
     </div>
     <div class="col-sm-6">
       Blocksprache:
     </div>
     <div class="col-sm-6">
-      <language-model-selector [codeResource]="currentResource">
-      </language-model-selector>
+      <language-model-selector
+        [codeResource]="currentResource"
+      ></language-model-selector>
     </div>
     <div class="col-sm-12">
       <label>
         Nur lesen:
-        <input type="checkbox"
-               [(ngModel)]="readOnly"
-               style="vertical-align: middle;">
+        <input
+          type="checkbox"
+          [(ngModel)]="readOnly"
+          style="vertical-align: middle;"
+        />
       </label>
     </div>
   </div>

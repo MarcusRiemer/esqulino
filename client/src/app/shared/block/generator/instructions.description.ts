@@ -1,5 +1,5 @@
-import { VisualBlockDescriptions } from '../block.description'
-import { ParameterReferenceable } from './parameters.description';
+import { VisualBlockDescriptions } from "../block.description";
+import { ParameterReferenceable } from "./parameters.description";
 
 // Alias to shorten some typing
 type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
@@ -28,7 +28,7 @@ export interface Instructions {
   emptyDropTarget: boolean;
   // Some properties are not meant to be edited.
   propReadOnly: boolean;
-};
+}
 
 /**
  * Instructions where instead of a value a reference may occur. These
@@ -41,12 +41,19 @@ export type ReferenceableInstructions = ParameterReferenceable<Instructions>;
 /**
  * Instructions that are useful on an iterating visual.
  */
-export type IteratorInstructions = Readonly<Pick<Instructions, "between" | "style" | "emptyDropTarget">>;
+export type IteratorInstructions = Readonly<
+  Pick<Instructions, "between" | "style" | "emptyDropTarget">
+>;
 
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "style" | "onDrop" | "generateErrorIndicator">>;
+export type BlockInstructions = Readonly<
+  Pick<
+    Instructions,
+    "attributeMapping" | "style" | "onDrop" | "generateErrorIndicator"
+  >
+>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -56,7 +63,9 @@ export type TerminalInstructions = Readonly<Pick<Instructions, "style">>;
 /**
  * Instructions that are useful on a property.
  */
-export type PropertyInstructions = Readonly<Pick<Instructions, "style" | "propReadOnly">>;
+export type PropertyInstructions = Readonly<
+  Pick<Instructions, "style" | "propReadOnly">
+>;
 
 /**
  * Default options for the various types of blocks
@@ -65,28 +74,28 @@ export module DefaultInstructions {
   export const iteratorInstructions: IteratorInstructions = {
     between: undefined,
     style: {},
-    emptyDropTarget: false
-  }
+    emptyDropTarget: false,
+  };
 
   export const blockInstructions: BlockInstructions = {
     attributeMapping: "grammar",
     style: {},
     onDrop: VisualBlockDescriptions.DefaultDropTargetProperties,
     generateErrorIndicator: "start",
-  }
+  };
 
   export const terminalInstructions: TerminalInstructions = {
     style: {
-      "display": "inline-flex"
+      display: "inline-flex",
     },
-  }
+  };
 
   export const propertyInstructions: PropertyInstructions = {
     propReadOnly: false,
     style: {
-      "display": "inline-flex"
-    }
-  }
+      display: "inline-flex",
+    },
+  };
 }
 
 /**
@@ -97,24 +106,28 @@ export module DefaultInstructions {
 export interface InternalTypeInstructionsDescription<
   TAttr extends ReferenceableInstructions,
   TBlock extends ParameterReferenceable<BlockInstructions>
-  > {
+> {
   blocks?: Partial<TBlock>[];
   attributes?: {
-    [scope: string]: Partial<TAttr>
-  }
-};
+    [scope: string]: Partial<TAttr>;
+  };
+}
 
 /**
  * Fully resolved type instructions.
  */
 export type TypeInstructionsDescription = InternalTypeInstructionsDescription<
-  Instructions, BlockInstructions>;
+  Instructions,
+  BlockInstructions
+>;
 
 /**
  * Type instructions that may contain references.
  */
-export type ReferenceableTypeInstructionsDescription =
-  InternalTypeInstructionsDescription<ReferenceableInstructions, ParameterReferenceable<BlockInstructions>>;
+export type ReferenceableTypeInstructionsDescription = InternalTypeInstructionsDescription<
+  ReferenceableInstructions,
+  ParameterReferenceable<BlockInstructions>
+>;
 
 /**
  * Supplementary generation instructions for all types. In this variant
@@ -123,9 +136,9 @@ export type ReferenceableTypeInstructionsDescription =
  */
 export type AllTypeInstructions = {
   [language: string]: {
-    [type: string]: TypeInstructionsDescription
-  }
-}
+    [type: string]: TypeInstructionsDescription;
+  };
+};
 
 /**
  * Supplementary generation instructions for all types. In this variant
@@ -134,6 +147,6 @@ export type AllTypeInstructions = {
  */
 export type AllReferenceableTypeInstructions = {
   [language: string]: {
-    [type: string]: ReferenceableTypeInstructionsDescription
-  }
-}
+    [type: string]: ReferenceableTypeInstructionsDescription;
+  };
+};

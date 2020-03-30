@@ -1,24 +1,23 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
-import { ActivatedRoute, ParamMap, Router } from '@angular/router'
-import { HttpClient } from '@angular/common/http'
-import { Title } from '@angular/platform-browser'
+import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { Title } from "@angular/platform-browser";
 
-import { from } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators'
+import { from } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 
-import { ToolbarService } from '../shared/toolbar.service'
-import { CachedRequest, GrammarDataService } from '../shared/serverdata'
-import { ServerApiService } from '../shared/serverdata/serverapi.service'
-import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
-import { GrammarDescription, QualifiedTypeName } from '../shared/syntaxtree'
-import { BlockLanguageListDescription } from '../shared/block/block-language.description'
-import { getAllTypes } from '../shared/syntaxtree/grammar-util'
+import { ToolbarService } from "../shared/toolbar.service";
+import { CachedRequest, GrammarDataService } from "../shared/serverdata";
+import { ServerApiService } from "../shared/serverdata/serverapi.service";
+import { prettyPrintGrammar } from "../shared/syntaxtree/prettyprint";
+import { GrammarDescription, QualifiedTypeName } from "../shared/syntaxtree";
+import { BlockLanguageListDescription } from "../shared/block/block-language.description";
+import { getAllTypes } from "../shared/syntaxtree/grammar-util";
 
 @Component({
-  templateUrl: 'templates/edit-grammar.html'
+  templateUrl: "templates/edit-grammar.html",
 })
 export class EditGrammarComponent implements OnInit {
-
   @ViewChild("toolbarButtons", { static: true })
   toolbarButtons: TemplateRef<any>;
 
@@ -40,33 +39,42 @@ export class EditGrammarComponent implements OnInit {
     private _grammarData: GrammarDataService,
     private _title: Title,
     private _toolbarService: ToolbarService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     // Grab the first grammar from the server or the local cache. The grammar must not
     // be updated if re-requested from the server by someone else.
-    this._activatedRoute.paramMap.pipe(
-      map((params: ParamMap) => params.get('grammarId')),
-      switchMap((id: string) => from(this._grammarData.getLocal(id, "request"))),
-    ).subscribe(g => {
-      this.grammar = g;
-      this.availableTypes = getAllTypes(this.grammar);
-      this.grammarRoot = g.root;
-      this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
+    this._activatedRoute.paramMap
+      .pipe(
+        map((params: ParamMap) => params.get("grammarId")),
+        switchMap((id: string) =>
+          from(this._grammarData.getLocal(id, "request"))
+        )
+      )
+      .subscribe((g) => {
+        this.grammar = g;
+        this.availableTypes = getAllTypes(this.grammar);
+        this.grammarRoot = g.root;
+        this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
 
-      // We want a local copy of the resource that is being edited available "globally"
-      this._grammarData.setLocal(g);
-    });
+        // We want a local copy of the resource that is being edited available "globally"
+        this._grammarData.setLocal(g);
+      });
 
     // Always grab fresh related block languages
-    this._activatedRoute.paramMap.pipe(
-      map((params: ParamMap) => params.get('grammarId')),
-    ).subscribe(id => {
-      const relatedUrl = this._serverApi.individualGrammarRelatedBlockLanguagesUrl(id);
-      const request = this._http.get<BlockLanguageListDescription[]>(relatedUrl);
-      this.relatedBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(request);
-    });
+    this._activatedRoute.paramMap
+      .pipe(map((params: ParamMap) => params.get("grammarId")))
+      .subscribe((id) => {
+        const relatedUrl = this._serverApi.individualGrammarRelatedBlockLanguagesUrl(
+          id
+        );
+        const request = this._http.get<BlockLanguageListDescription[]>(
+          relatedUrl
+        );
+        this.relatedBlockLanguages = new CachedRequest<
+          BlockLanguageListDescription[]
+        >(request);
+      });
 
     // Setup the toolbar buttons
     this._toolbarService.addItem(this.toolbarButtons);
@@ -80,7 +88,7 @@ export class EditGrammarComponent implements OnInit {
   }
 
   get grammarRoot() {
-    return (this.grammar.root);
+    return this.grammar.root;
   }
 
   /**
@@ -88,11 +96,13 @@ export class EditGrammarComponent implements OnInit {
    * This allows ngModel to pre-select the correct value.
    */
   set grammarRoot(t: QualifiedTypeName) {
-    this.grammar.root = this.availableTypes.find(a => a.languageName === t.languageName && a.typeName === t.typeName);
+    this.grammar.root = this.availableTypes.find(
+      (a) => a.languageName === t.languageName && a.typeName === t.typeName
+    );
   }
 
   get grammarTypes() {
-    return (this.grammar.types);
+    return this.grammar.types;
   }
 
   /**
@@ -117,9 +127,9 @@ export class EditGrammarComponent implements OnInit {
    */
   get prettyPrintedGrammar() {
     try {
-      return (prettyPrintGrammar(this.grammar.name, this.grammar));
+      return prettyPrintGrammar(this.grammar.name, this.grammar);
     } catch (e) {
-      return (e.message);
+      return e.message;
     }
   }
 }

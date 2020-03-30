@@ -1,7 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { switchMap, tap, shareReplay, scan, map, filter, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from "rxjs";
+import {
+  switchMap,
+  tap,
+  shareReplay,
+  scan,
+  map,
+  filter,
+  catchError,
+} from "rxjs/operators";
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -56,9 +64,7 @@ export class CachedRequest<T> {
   // this this cache unless explicitly cleared.
   private _error = new BehaviorSubject<any>(undefined);
 
-  constructor(
-    private _sourceObservable: Observable<T>
-  ) { }
+  constructor(private _sourceObservable: Observable<T>) {}
 
   /**
    * Retrieve the current value. This triggers a request if no current value
@@ -66,16 +72,16 @@ export class CachedRequest<T> {
    */
   readonly value: Observable<T> = this._trigger.pipe(
     // Ensure that no new request is started if a previous request caused an error
-    filter(_ => !this._error.value),
+    filter((_) => !this._error.value),
     // Hand over to the wrapped observable
-    switchMap(_ => this._sourceObservable),
+    switchMap((_) => this._sourceObservable),
     // Log that the request has been fulfilled
-    tap(_ => this.changeRequestCount(-1)),
+    tap((_) => this.changeRequestCount(-1)),
     // Treat errors as non existant values (for the moment)
-    catchError(e => {
+    catchError((e) => {
       console.error(`Error in cached request`, e);
       this._error.next(e);
-      return (of(undefined));
+      return of(undefined);
     }),
     // Ensure that the request is properly cached
     shareReplay(1)
@@ -86,15 +92,13 @@ export class CachedRequest<T> {
    */
   readonly inProgress = this._inProgress.pipe(
     scan((count, current) => count + current, 0),
-    map(count => count > 0)
+    map((count) => count > 0)
   );
 
   /**
    * Indicates whether there is an error
    */
-  readonly hasError = this._error.pipe(
-    map(err => !!err)
-  );
+  readonly hasError = this._error.pipe(map((err) => !!err));
 
   /**
    * Unconditionally triggers a new request.
@@ -123,19 +127,20 @@ export class IndividualDescriptionCache<T> {
 
   public constructor(
     private http: HttpClient,
-    private idCallback: (id: string) => string,
-  ) {
-  }
+    private idCallback: (id: string) => string
+  ) {}
 
   /**
    * Request an object with a specific ID.
    */
   public getDescription(id: string): Observable<T> {
     if (!this.cache[id]) {
-      this.cache[id] = new CachedRequest<T>(this.http.get<T>(this.idCallback(id)))
+      this.cache[id] = new CachedRequest<T>(
+        this.http.get<T>(this.idCallback(id))
+      );
     }
 
-    return (this.cache[id].value);
+    return this.cache[id].value;
   }
 
   /**

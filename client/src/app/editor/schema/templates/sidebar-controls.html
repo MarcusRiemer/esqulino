@@ -1,34 +1,40 @@
 <div class="card schema-sidebar">
   <div class="card-body">
     <div class="stack">
-	    <span *ngFor="let type of availableColumnTypes"
-            class="badge badge-secondary item">
+      <span
+        *ngFor="let type of availableColumnTypes"
+        class="badge badge-secondary item"
+      >
         <span class="fa fa-columns" aria-hidden="true"></span>
         {{ type }}
       </span>
     </div>
   </div>
   <div class="card-body">
-	  <span class="badge badge-pill badge-primary item">
+    <span class="badge badge-pill badge-primary item">
       <span class="fa fa-key" aria-hidden="true"></span>
     </span>
-	  <span class="badge badge-pill badge-secondary item">
+    <span class="badge badge-pill badge-secondary item">
       Not Null
     </span>
   </div>
 
-  <div *ngFor="let tab of (project | async)?.schema.tables"
-       class="card-body">
+  <div *ngFor="let tab of (project | async)?.schema.tables" class="card-body">
     <h4>
-	    <span class="badge badge-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
-	    <div>
-	      <h5>
-		    <span *ngFor="let column of tab.columns"
-                  class="badge badge-pill badge-info">
-              {{column.name}}
-            </span>
-	      </h5>
-	    </div>
+      <span class="badge badge-success">
+        <span class="fa fa-table" aria-hidden="true"></span>
+        {{tab.name}}
+      </span>
+      <div>
+        <h5>
+          <span
+            *ngFor="let column of tab.columns"
+            class="badge badge-pill badge-info"
+          >
+            {{column.name}}
+          </span>
+        </h5>
+      </div>
     </h4>
   </div>
 </div>

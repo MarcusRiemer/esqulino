@@ -1,8 +1,9 @@
-import * as Desc from './parameters.description'
+import * as Desc from "./parameters.description";
+import { ParameterMap, allReferences } from "./parameters";
 import {
-  ParameterMap, allReferences
-} from './parameters'
-import { AllReferenceableTypeInstructions, AllTypeInstructions } from './instructions.description';
+  AllReferenceableTypeInstructions,
+  AllTypeInstructions,
+} from "./instructions.description";
 
 describe("BlockLanguage GeneratorInstructions allReferences()", () => {
   it("Empty object", () => {
@@ -22,26 +23,29 @@ describe("BlockLanguage GeneratorInstructions allReferences()", () => {
   });
 
   it("Nested", () => {
-    const ref1 = { "$ref": "foo" };
-    const ref2 = { "$ref": "bar" };
+    const ref1 = { $ref: "foo" };
+    const ref2 = { $ref: "bar" };
 
-    expect(Array.from(allReferences({ a: ref1, b: { c: ref2 } }))).toEqual([ref1, ref2]);
+    expect(Array.from(allReferences({ a: ref1, b: { c: ref2 } }))).toEqual([
+      ref1,
+      ref2,
+    ]);
   });
 
   it("Actual instructions", () => {
     const inst: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
+      g1: {
+        t1: {
           attributes: {
-            "a1": {
-              between: { "$ref": "nonexistant" }
-            }
-          }
-        }
-      }
+            a1: {
+              between: { $ref: "nonexistant" },
+            },
+          },
+        },
+      },
     };
 
-    expect(Array.from(allReferences(inst))).toEqual([{ "$ref": "nonexistant" }]);
+    expect(Array.from(allReferences(inst))).toEqual([{ $ref: "nonexistant" }]);
   });
 });
 
@@ -54,13 +58,13 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("Adding matching parameter and value", () => {
     const m = new ParameterMap();
     m.addParameters({
-      "foo": {
-        "type": { "type": "string" }
-      }
+      foo: {
+        type: { type: "string" },
+      },
     });
 
     m.addValues({
-      "foo": "matchingString"
+      foo: "matchingString",
     });
 
     expect(m.validate({})).toEqual([]);
@@ -70,23 +74,23 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("Adding only an (unsatisfied) parameter", () => {
     const m = new ParameterMap();
     m.addParameters({
-      "foo": {
-        "type": { "type": "string" }
-      }
+      foo: {
+        type: { type: "string" },
+      },
     });
 
     expect(m.validate({})).toEqual([
-      { "type": "ParameterMissingValue", "name": "foo" }
+      { type: "ParameterMissingValue", name: "foo" },
     ]);
   });
 
   it("Adding only an (unsatisfied) parameter with a default value", () => {
     const m = new ParameterMap();
     m.addParameters({
-      "foo": {
-        "type": { "type": "string" },
-        "defaultValue": "default"
-      }
+      foo: {
+        type: { type: "string" },
+        defaultValue: "default",
+      },
     });
 
     expect(m.validate({})).toEqual([]);
@@ -96,26 +100,25 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("Adding matching parameter (with ignored default) and value", () => {
     const m = new ParameterMap();
     m.addParameters({
-      "foo": {
-        "type": { "type": "string" },
-        "defaultValue": "irrelevant"
-      }
+      foo: {
+        type: { type: "string" },
+        defaultValue: "irrelevant",
+      },
     });
 
     m.addValues({
-      "foo": "matchingString"
+      foo: "matchingString",
     });
 
     expect(m.validate({})).toEqual([]);
     expect(m.getValue("foo")).toEqual("matchingString");
   });
 
-
   it("Adding a parameter twice", () => {
     const p: Desc.ParameterDeclarations = {
-      "foo": {
-        "type": { "type": "string" }
-      }
+      foo: {
+        type: { type: "string" },
+      },
     };
     const m = new ParameterMap();
     m.addParameters(p);
@@ -126,11 +129,11 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("Adding only an (unwanted) parameter", () => {
     const m = new ParameterMap();
     m.addValues({
-      "foo": "unwantedString"
+      foo: "unwantedString",
     });
 
     expect(m.validate({})).toEqual([
-      { "type": "ValueForUnknownParameter", "name": "foo" }
+      { type: "ValueForUnknownParameter", name: "foo" },
     ]);
     expect(m.getValue("foo")).toEqual("unwantedString");
   });
@@ -138,19 +141,19 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("Reference to an unknown parameter", () => {
     const m = new ParameterMap();
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
+      g1: {
+        t1: {
           attributes: {
-            "a1": {
-              between: { "$ref": "nonexistant" }
-            }
-          }
-        }
-      }
-    }
+            a1: {
+              between: { $ref: "nonexistant" },
+            },
+          },
+        },
+      },
+    };
 
     expect(m.validate(i)).toEqual([
-      { "type": "ReferenceToUnknownParameter", "name": "nonexistant" }
+      { type: "ReferenceToUnknownParameter", name: "nonexistant" },
     ]);
   });
 
@@ -164,7 +167,7 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
 
   it("resolves instructions with only grammar (noop)", () => {
     const m = new ParameterMap();
-    const i: AllReferenceableTypeInstructions = { "g": {} };
+    const i: AllReferenceableTypeInstructions = { g: {} };
 
     const r = m.resolve(i);
     expect(r).toEqual(i as AllTypeInstructions);
@@ -173,11 +176,11 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("resolves single block instructions without attributes (noop)", () => {
     const m = new ParameterMap();
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          attributes: {}
-        }
-      }
+      g1: {
+        t1: {
+          attributes: {},
+        },
+      },
     };
 
     const r = m.resolve(i);
@@ -187,17 +190,16 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("resolves single block instructions with value attributes (noop)", () => {
     const m = new ParameterMap();
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
+      g1: {
+        t1: {
           attributes: {
-            "a1": {
-              "between": ",",
-              "onDrop": {
-              }
-            }
-          }
-        }
-      }
+            a1: {
+              between: ",",
+              onDrop: {},
+            },
+          },
+        },
+      },
     };
 
     const r = m.resolve(i);
@@ -207,38 +209,40 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("resolves single block instructions with a reference attribute", () => {
     const m = new ParameterMap();
     m.addParameters({
-      "myBetween": {
-        type: { "type": "string" }
-      }
+      myBetween: {
+        type: { type: "string" },
+      },
     });
     m.addValues({
-      "myBetween": "parameterValue"
+      myBetween: "parameterValue",
     });
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
+      g1: {
+        t1: {
           attributes: {
-            "a1": {
-              "between": { "$ref": "myBetween" }
-            }
-          }
-        }
-      }
+            a1: {
+              between: { $ref: "myBetween" },
+            },
+          },
+        },
+      },
     };
 
     const r = m.resolve(i);
-    expect(r["g1"]["t1"]["attributes"]["a1"]["between"]).toEqual("parameterValue");
+    expect(r["g1"]["t1"]["attributes"]["a1"]["between"]).toEqual(
+      "parameterValue"
+    );
   });
 
   it("resolves multi block instructions without blocks (noop)", () => {
     const m = new ParameterMap();
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
+      g1: {
+        t1: {
           blocks: [],
-          attributes: {}
-        }
-      }
+          attributes: {},
+        },
+      },
     };
 
     const r = m.resolve(i);
@@ -248,15 +252,12 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("resolves multi block instructions with two blocks (noop)", () => {
     const m = new ParameterMap();
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          blocks: [
-            {},
-            {}
-          ],
-          attributes: {}
-        }
-      }
+      g1: {
+        t1: {
+          blocks: [{}, {}],
+          attributes: {},
+        },
+      },
     };
 
     const r = m.resolve(i);
@@ -266,45 +267,44 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("resolve-result does not hav any shared references", () => {
     const m = new ParameterMap();
     m.addParameters({
-      "between": {
-        "type": { "type": "string" },
-        "defaultValue": ","
+      between: {
+        type: { type: "string" },
+        defaultValue: ",",
       },
-      "color": {
-        "type": { "type": "string" },
-        "defaultValue": "green"
-      }
+      color: {
+        type: { type: "string" },
+        defaultValue: "green",
+      },
     });
     const i: AllReferenceableTypeInstructions = {
-      "g1": {
-        "t1": {
-          "attributes": {
-            "t1_a1": {
-              "between": { "$ref": "between" },
-              "style": {
-                "color": { "$ref": "color" }
-              }
-            }
+      g1: {
+        t1: {
+          attributes: {
+            t1_a1: {
+              between: { $ref: "between" },
+              style: {
+                color: { $ref: "color" },
+              },
+            },
           },
-          "blocks": [
-            {},
-            {}
-          ]
+          blocks: [{}, {}],
         },
-        "t2": {
-          "attributes": {
-            "a1": {
-              "between": { "$ref": "between" },
-              "style": {
-                "color": { "$ref": "color" }
-              }
-            }
-          }
-        }
-      }
+        t2: {
+          attributes: {
+            a1: {
+              between: { $ref: "between" },
+              style: {
+                color: { $ref: "color" },
+              },
+            },
+          },
+        },
+      },
     };
 
-    const iCopy: AllReferenceableTypeInstructions = JSON.parse(JSON.stringify(i));
+    const iCopy: AllReferenceableTypeInstructions = JSON.parse(
+      JSON.stringify(i)
+    );
 
     const res = m.resolve(i);
     expect(i).toEqual(iCopy);

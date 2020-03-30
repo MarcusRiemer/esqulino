@@ -23,7 +23,7 @@ export interface ApiVersion {
    * If versions differ, any implementing the API is free to specify
    * version ranges it works with.
    */
-  apiVersion: ApiVersionToken
+  apiVersion: ApiVersionToken;
 }
 
 /**
@@ -41,7 +41,8 @@ export interface IdentifiableResourceDescription {
 /**
  * The minimum set of properties any project related resources needs.
  */
-export interface ProjectResourceDescription extends IdentifiableResourceDescription {
+export interface ProjectResourceDescription
+  extends IdentifiableResourceDescription {
   /**
    * The user-chosen name of this resource. This property is free to change.
    */

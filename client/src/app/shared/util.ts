@@ -1,4 +1,4 @@
-import { NodeLocation } from './syntaxtree';
+import { NodeLocation } from "./syntaxtree";
 
 /**
  * Any mapping from String -> String
@@ -14,7 +14,7 @@ export type KeyValuePairs = { [paramKey: string]: string };
  * @return True, if the given name could be used.
  */
 export function isValidResourceName(name: string): boolean {
-  return (name && /^[a-zA-Z]+(\w|-)*$/.test(name));
+  return name && /^[a-zA-Z]+(\w|-)*$/.test(name);
 }
 
 /**
@@ -37,7 +37,9 @@ export function assertValidResourceName(name: string): void {
  * @return True, if the given id could be used.
  */
 export function isValidResourceId(id: string): boolean {
-  return (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    id
+  );
 }
 
 /**
@@ -49,11 +51,11 @@ export function encodeUriParameters(params: KeyValuePairs) {
   // join all of those together with '&'. This should then be
   // a valid URL.
   const toReturn = Object.entries(params)
-    .map(kv => [encodeURIComponent(kv[0]), encodeURIComponent(kv[1])])
-    .map(kv => `${kv[0]}=${kv[1]}`)
-    .join("&")
+    .map((kv) => [encodeURIComponent(kv[0]), encodeURIComponent(kv[1])])
+    .map((kv) => `${kv[0]}=${kv[1]}`)
+    .join("&");
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -64,10 +66,11 @@ export function encodeUriParameters(params: KeyValuePairs) {
  */
 export function fieldCompare<T>(property: keyof T, reverse = false) {
   const sortOrder = reverse ? -1 : 1;
-  return function(a: T, b: T) {
-    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+  return function (a: T, b: T) {
+    var result =
+      a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
     return result * sortOrder;
-  }
+  };
 }
 
 /**
@@ -76,41 +79,43 @@ export function fieldCompare<T>(property: keyof T, reverse = false) {
  */
 export function arrayEqual(lhs: any[], rhs: any[]) {
   if (!(lhs instanceof Array) || !(rhs instanceof Array)) {
-    return (false);
+    return false;
   }
 
   // compare lengths - can save a lot of time
   if (lhs.length != rhs.length) {
-    return (false);
+    return false;
   }
 
   for (var i = 0, l = lhs.length; i < l; i++) {
     // Check if we have nested arrays
     if (lhs[i] instanceof Array && rhs[i] instanceof Array) {
       // recurse into the nested arrays
-      if (!arrayEqual(lhs[i], rhs[i]))
-        return (false);
+      if (!arrayEqual(lhs[i], rhs[i])) return false;
     }
     // Warning - two different object instances will never be equal: {x:20} !== {x:20}
     // In this case this is desireable, but there may be situations where that is not
     // the case.
     else if (lhs[i] !== rhs[i]) {
-      return (false);
+      return false;
     }
   }
 
   // No counter proof found, these arrays must be equal
-  return (true);
+  return true;
 }
 
 /**
  * Checks whether the prefix in question is actually a prefix of the full path.
  */
-export function locationIsOnPath(prefix: NodeLocation, full: NodeLocation): boolean {
+export function locationIsOnPath(
+  prefix: NodeLocation,
+  full: NodeLocation
+): boolean {
   if (full.length >= prefix.length) {
-    return (prefix.every((step, i) => arrayEqual(step, full[i])));
+    return prefix.every((step, i) => arrayEqual(step, full[i]));
   } else {
-    return (false);
+    return false;
   }
 }
 
@@ -121,5 +126,5 @@ export function objectOmit<K extends keyof T, T>(omit: K, obj: T): Omit<T, K> {
   const deepCopy = JSON.parse(JSON.stringify(obj));
   delete deepCopy[omit];
 
-  return (deepCopy);
+  return deepCopy;
 }

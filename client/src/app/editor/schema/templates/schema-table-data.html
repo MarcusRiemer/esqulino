@@ -1,16 +1,17 @@
-<div *ngIf="tableData"
-     class="card card-body">
+<div *ngIf="tableData" class="card card-body">
   <div class="schema-table-header">
     <!-- These badges are deliberatly spaced out -->
     <h3 ngPreserveWhitespaces>
-      Tabelle <code>{{table.name}}</code>
-      <span class="badge"
-            [class.badge-warning]="!(rowCount > 0)"
-            [class.badge-info]="rowCount > 0">
+      Tabelle
+      <code>{{table.name}}</code>
+      <span
+        class="badge"
+        [class.badge-warning]="!(rowCount > 0)"
+        [class.badge-info]="rowCount > 0"
+      >
         {{ rowCount }} Zeilen
       </span>
-      <span *ngIf="!isChild && (rowCount > 0)"
-            class="badge badge-primary">
+      <span *ngIf="!isChild && (rowCount > 0)" class="badge badge-primary">
         Seite {{currentSite}} von {{sitesOfRows}}
       </span>
     </h3>
@@ -19,17 +20,22 @@
         <!--Button to show previous amount table entrys-->
         <div class="input-group-prepend">
           <button (click)="prevRowSite()" class="btn btn-outline-secondary">
-	    <span class="fa fa-arrow-left" aria-hidden="true"></span>
+            <span class="fa fa-arrow-left" aria-hidden="true"></span>
           </button>
         </div>
         <!--Select to chose the amount of entrys to show-->
         <select [(ngModel)]="showAmount" class="custom-select">
-	  <option *ngFor="let amount of availableRowAmounts" value="{{ amount }}">{{ amount }}</option>
+          <option
+            *ngFor="let amount of availableRowAmounts"
+            value="{{ amount }}"
+          >
+            {{ amount }}
+          </option>
         </select>
         <!--Button to show next amount table entrys-->
         <div class="input-group-append">
           <button (click)="nextRowSite()" class="btn btn-outline-secondary">
-	    <span class="fa fa-arrow-right" aria-hidden="true"></span>
+            <span class="fa fa-arrow-right" aria-hidden="true"></span>
           </button>
         </div>
       </div>
@@ -37,25 +43,31 @@
   </div>
   <!--Table of table entrys-->
   <div class="table-responsive">
-    <table class="table table-striped table-sm table-hover"
-           [ngClass]="{'table-condensed' : isChild}">
+    <table
+      class="table table-striped table-sm table-hover"
+      [ngClass]="{'table-condensed' : isChild}"
+    >
       <!--Header with every column name in the table-->
       <thead>
         <tr>
-	  <th *ngFor="let column of table.columns; let i = index"
-              [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}">
-	    {{ column.name }}
-	  </th>
+          <th
+            *ngFor="let column of table.columns; let i = index"
+            [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}"
+          >
+            {{ column.name }}
+          </th>
         </tr>
       </thead>
       <!--Table body, with every entry-->
       <tbody>
         <!--expected 2d array with tabledata[row][column]-->
         <tr *ngFor="let row of tableData; let i = index">
-	  <td *ngFor="let column of table.columns; let j = index"
-              [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}">
-	    {{ row[column.index] }}
-	  </td>
+          <td
+            *ngFor="let column of table.columns; let j = index"
+            [ngClass]="{'table-success': column.stateName == 'new', 'table-danger': column.stateName == 'deleted', 'table-warning': column.stateName == 'changed'}"
+          >
+            {{ row[column.index] }}
+          </td>
         </tr>
       </tbody>
     </table>

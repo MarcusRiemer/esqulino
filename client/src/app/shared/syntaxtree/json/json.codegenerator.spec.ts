@@ -1,7 +1,7 @@
-import { CodeGenerator } from '../codegenerator'
-import { Node, NodeDescription } from '../syntaxtree'
+import { CodeGenerator } from "../codegenerator";
+import { Node, NodeDescription } from "../syntaxtree";
 
-import { NODE_CONVERTER } from './json.codegenerator'
+import { NODE_CONVERTER } from "./json.codegenerator";
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -10,7 +10,10 @@ import { NODE_CONVERTER } from './json.codegenerator'
  * to `require` are relative to the file the function is defined in.
  * So for the moment this function is copy and pasted into some spec files :(
  */
-export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) {
+export function verifyFiles<T>(
+  fileName: string,
+  transform: (obj: T) => string
+) {
   const input = require(`./spec/${fileName}.json`);
   let expected = require(`raw-loader!./spec/${fileName}.txt`).default as string;
 
@@ -28,11 +31,11 @@ function emitTree(astDesc: NodeDescription) {
   const ast = new Node(astDesc, undefined);
   const codeGen = new CodeGenerator(NODE_CONVERTER);
 
-  return (codeGen.emit(ast));
+  return codeGen.emit(ast);
 }
 
-describe('Language: JSON (Codegen)', () => {
-  it('01: null', () => {
+describe("Language: JSON (Codegen)", () => {
+  it("01: null", () => {
     verifyFiles("01-null", emitTree);
   });
 
@@ -40,19 +43,19 @@ describe('Language: JSON (Codegen)', () => {
     verifyFiles("02-string", emitTree);
   });
 
-  it('03: 123', () => {
+  it("03: 123", () => {
     verifyFiles("03-number", emitTree);
   });
 
-  it('04: true', () => {
+  it("04: true", () => {
     verifyFiles("04-boolean", emitTree);
   });
 
-  it('05: []', () => {
+  it("05: []", () => {
     verifyFiles("05-array-empty", emitTree);
   });
 
-  it('06: [null]', () => {
+  it("06: [null]", () => {
     verifyFiles("06-array-null", emitTree);
   });
 
@@ -60,7 +63,7 @@ describe('Language: JSON (Codegen)', () => {
     verifyFiles("07-array-null-string", emitTree);
   });
 
-  it('08: {}', () => {
+  it("08: {}", () => {
     verifyFiles("08-object-empty", emitTree);
   });
 
@@ -80,7 +83,7 @@ describe('Language: JSON (Codegen)', () => {
     verifyFiles("12-object-nested-object", emitTree);
   });
 
-  it('13: [{}]', () => {
+  it("13: [{}]", () => {
     verifyFiles("13-array-empty-object", emitTree);
   });
 });

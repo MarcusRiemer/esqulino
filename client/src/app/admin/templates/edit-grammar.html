@@ -1,51 +1,51 @@
 <ng-template cdkPortal #toolbarButtons>
-  <button (click)="onSave()"
-          mat-button>
+  <button (click)="onSave()" mat-button>
     <span class="fa fa-floppy-o" aria-hidden="t"></span>
     Speichern
   </button>
 
-  <button (click)="onDelete()"
-          mat-button
-          class="btn btn-outline-danger btn-sm">
+  <button (click)="onDelete()" mat-button class="btn btn-outline-danger btn-sm">
     <span class="fa fa-trash-o" aria-hidden="true"></span>
     Löschen
   </button>
-  <a routerLink="gallery"
-     mat-button>
+  <a routerLink="gallery" mat-button>
     <span class="fa fa-file-code-o" aria-hidden="true"></span>
     Code-Gallery
   </a>
 </ng-template>
 
 <form *ngIf="grammar">
-  <h2>Grammatik <q>{{ grammar.name }}</q></h2>
+  <h2>
+    Grammatik
+    <q>{{ grammar.name }}</q>
+  </h2>
 
   <!-- Editable user defined name of the grammar -->
   <div class="form-group row">
-    <label for="grammar-name"
-           class="col-sm-2 col-form-label">Name</label>
+    <label for="grammar-name" class="col-sm-2 col-form-label">Name</label>
     <div class="col-sm-10">
-      <input id="grammar-name"
-             class="form-control"
-             name="name"
-             [(ngModel)]="grammar.name">
+      <input
+        id="grammar-name"
+        class="form-control"
+        name="name"
+        [(ngModel)]="grammar.name"
+      />
     </div>
   </div>
 
   <!-- The type that should be trated as the root -->
   <div class="form-group row">
-    <label for="grammar-root"
-           class="col-sm-2 col-form-label">Wurzel</label>
+    <label for="grammar-root" class="col-sm-2 col-form-label">Wurzel</label>
     <div class="col-sm-10">
-      <select id="grammar-root"
-              class="custom-select"
-              required
-              name="grammar-root"
-              [(ngModel)]="grammar.root">
+      <select
+        id="grammar-root"
+        class="custom-select"
+        required
+        name="grammar-root"
+        [(ngModel)]="grammar.root"
+      >
         <option [ngValue]="undefined">-- Wurzeltyp wählen --</option>
-        <option *ngFor="let type of availableTypes;"
-                [ngValue]="type">
+        <option *ngFor="let type of availableTypes;" [ngValue]="type">
           {{ type.languageName }}.{{ type.typeName }}
         </option>
       </select>
@@ -57,10 +57,14 @@
     <div class="col-sm-2">Related Block Languages</div>
     <div class="col-sm-10">
       <ul class="list-inline">
-        <li *ngFor="let related of relatedBlockLanguages?.value | async"
-            class="list-inline-item">
-          <a [routerLink]="['/admin/block-language', related.id]"
-             class="badge badge-light">
+        <li
+          *ngFor="let related of relatedBlockLanguages?.value | async"
+          class="list-inline-item"
+        >
+          <a
+            [routerLink]="['/admin/block-language', related.id]"
+            class="badge badge-light"
+          >
             {{ related.name }}
           </a>
         </li>
@@ -74,13 +78,13 @@
     <div class="col-xl-6">
       <div class="form-group row">
         <div class="col-sm-2">
-          <label for="grammar-model"
-                 class="col-form-label">Types</label>
+          <label for="grammar-model" class="col-form-label">Types</label>
         </div>
         <div class="col-sm-10">
-          <json-editor [(jsonValue)]="grammarTypes"
-                       class="full-height">
-          </json-editor>
+          <json-editor
+            [(jsonValue)]="grammarTypes"
+            class="full-height"
+          ></json-editor>
         </div>
       </div>
     </div>
@@ -88,14 +92,17 @@
     <!-- Pretty printed grammar (not editable) -->
     <div class="col-xl-6">
       <div class="form-group row">
-        <label for="grammar-pretty"
-               class="col-form-label col-sm-2">Pretty Printed</label>
+        <label for="grammar-pretty" class="col-form-label col-sm-2">
+          Pretty Printed
+        </label>
         <div class="col-sm-10">
-          <textarea id="grammar-pretty"
-                    readonly
-                    class="form-control full-height"
-                    rows="20"
-                    [textContent]="prettyPrintedGrammar"></textarea>
+          <textarea
+            id="grammar-pretty"
+            readonly
+            class="form-control full-height"
+            rows="20"
+            [textContent]="prettyPrintedGrammar"
+          ></textarea>
         </div>
       </div>
     </div>

@@ -1,25 +1,29 @@
-import { Component } from '@angular/core';
-import { ComponentPortal } from '@angular/cdk/portal';
+import { Component } from "@angular/core";
+import { ComponentPortal } from "@angular/cdk/portal";
 
-import { map, flatMap, tap } from 'rxjs/operators'
+import { map, flatMap, tap } from "rxjs/operators";
 
-import { ResourceReferencesService } from '../../shared/resource-references.service'
+import { ResourceReferencesService } from "../../shared/resource-references.service";
 
-import { CurrentCodeResourceService } from '../current-coderesource.service';
+import { CurrentCodeResourceService } from "../current-coderesource.service";
 
-import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
-import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
-import { UserFunctionsSidebarComponent } from './truck/user-functions-sidebar.component'
-import { DefinedTypesSidebarComponent } from './meta/defined-types.sidebar.component'
+import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
+import { DatabaseSchemaSidebarComponent } from "./query/database-schema-sidebar.component";
+import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
+import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 /**
  * Maps ids of sidebar components to their actual components.
  */
 function resolvePortalComponentId(id: string): any {
   switch (id) {
-    case "fixedBlocks": return (CodeSidebarFixedBlocksComponent);
-    case "databaseSchema": return (DatabaseSchemaSidebarComponent);
-    case "truckProgramUserFunctions": return (UserFunctionsSidebarComponent);
-    case "metaDefinedTypes": return (DefinedTypesSidebarComponent);
+    case "fixedBlocks":
+      return CodeSidebarFixedBlocksComponent;
+    case "databaseSchema":
+      return DatabaseSchemaSidebarComponent;
+    case "truckProgramUserFunctions":
+      return UserFunctionsSidebarComponent;
+    case "metaDefinedTypes":
+      return DefinedTypesSidebarComponent;
   }
 }
 
@@ -29,41 +33,47 @@ function resolvePortalComponentId(id: string): any {
  * dropped if they are meant to be deleted.
  */
 @Component({
-  templateUrl: 'templates/sidebar.html',
-  selector: "tree-sidebar"
+  templateUrl: "templates/sidebar.html",
+  selector: "tree-sidebar",
 })
 export class CodeSidebarComponent {
   /**
    * This ID is used to register this sidebar with the sidebar loader
    */
-  public static get SIDEBAR_IDENTIFIER() { return "tree" };
+  public static get SIDEBAR_IDENTIFIER() {
+    return "tree";
+  }
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
-    private _resourceReferences: ResourceReferencesService,
-  ) {
-
-  }
+    private _resourceReferences: ResourceReferencesService
+  ) {}
 
   readonly hasBlockLanguage = this._currentCodeResource.currentResource.pipe(
-    flatMap(c => c.blockLanguageId),
-    flatMap(id => this._resourceReferences.ensureResources([{ type: "blockLanguage", id }])),
+    flatMap((c) => c.blockLanguageId),
+    flatMap((id) =>
+      this._resourceReferences.ensureResources([{ type: "blockLanguage", id }])
+    )
   );
 
   /**
    * The block language that is currently in use.
    */
   readonly currentBlockLanguage = this._currentCodeResource.currentResource.pipe(
-    flatMap(res => res.blockLanguage)
+    flatMap((res) => res.blockLanguage)
   );
 
   /**
    * The actual sidebars that need to be spawned for the current language.
    */
   readonly portalInstances = this.currentBlockLanguage.pipe(
-    tap(b => console.log("Code Sidebar Component: BlockLanguage", b)),
-    map(blockLanguage => blockLanguage.sidebars.map(s => {
-      return (new ComponentPortal(resolvePortalComponentId(s.portalComponentTypeId)));
-    }))
+    tap((b) => console.log("Code Sidebar Component: BlockLanguage", b)),
+    map((blockLanguage) =>
+      blockLanguage.sidebars.map((s) => {
+        return new ComponentPortal(
+          resolvePortalComponentId(s.portalComponentTypeId)
+        );
+      })
+    )
   );
 }

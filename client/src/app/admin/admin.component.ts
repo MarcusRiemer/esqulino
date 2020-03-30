@@ -1,8 +1,7 @@
+import { Component } from "@angular/core";
 
-import { Component } from '@angular/core'
-
-import { NavItem } from '../shared/nav-interfaces';
-import { SideNavService } from '../shared/side-nav.service';
+import { NavItem } from "../shared/nav-interfaces";
+import { SideNavService } from "../shared/side-nav.service";
 
 export const adminItems: NavItem[] = [
   {
@@ -42,7 +41,7 @@ export const adminItems: NavItem[] = [
     icon: "newspaper-o",
   },
   {
-    type: "fill"
+    type: "fill",
   },
   {
     type: "external",
@@ -51,7 +50,7 @@ export const adminItems: NavItem[] = [
       en: "Manual 🇬🇧",
     },
     url: "http://manual.blattwerkzeug.de/",
-    icon: "book"
+    icon: "book",
   },
 ];
 
@@ -59,10 +58,10 @@ export const adminItems: NavItem[] = [
  * Hosts general menus and layout.
  */
 @Component({
-  templateUrl: 'templates/admin.html'
+  templateUrl: "templates/admin.html",
 })
 export class AdminComponent {
-  constructor(private _sideNavService: SideNavService) { }
+  constructor(private _sideNavService: SideNavService) {}
 
   /**
    * All items that need to be shown in the general navigation

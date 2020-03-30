@@ -1,11 +1,17 @@
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse,
+} from "@angular/common/http";
+import { Injectable, Injector } from "@angular/core";
 
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
-import { isUnexpectedLogoutDescription } from './error.description';
-import { UserService } from './auth/user.service';
+import { isUnexpectedLogoutDescription } from "./error.description";
+import { UserService } from "./auth/user.service";
 
 /**
  * In theory every single request that requires a login may fail. As encoding
@@ -14,16 +20,19 @@ import { UserService } from './auth/user.service';
  */
 @Injectable()
 export class UnexpectedLogoutInterceptor implements HttpInterceptor {
-  constructor(
-    private _injector: Injector
-  ) {
-  }
+  constructor(private _injector: Injector) {}
 
-  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  public intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      tap(res => {
+      tap((res) => {
         // Only specific errors may log out the user
-        if (res instanceof HttpErrorResponse && isUnexpectedLogoutDescription(res.error)) {
+        if (
+          res instanceof HttpErrorResponse &&
+          isUnexpectedLogoutDescription(res.error)
+        ) {
           // The user service imports the Angular HTTP service, which leads to
           // a circular reference when using this service in a HTTPInterceptor.
           // The proper solution would probably separate the global user state
@@ -37,6 +46,6 @@ export class UnexpectedLogoutInterceptor implements HttpInterceptor {
           userService.onUnexpectedLogout(res.error.newUser);
         }
       })
-    )
+    );
   }
 }

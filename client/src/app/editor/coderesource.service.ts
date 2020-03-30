@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import { Observable } from 'rxjs';
-import { catchError, delay, map, tap, shareReplay } from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { catchError, delay, map, tap, shareReplay } from "rxjs/operators";
 
-import { ServerApiService } from '../shared'
-import { CodeResource } from '../shared/syntaxtree'
-import { CodeResourceDescription, CodeResourceRequestUpdateDescription } from '../shared/syntaxtree/coderesource.description';
-import { Project } from '../shared/project'
+import { ServerApiService } from "../shared";
+import { CodeResource } from "../shared/syntaxtree";
+import {
+  CodeResourceDescription,
+  CodeResourceRequestUpdateDescription,
+} from "../shared/syntaxtree/coderesource.description";
+import { Project } from "../shared/project";
 
 @Injectable({ providedIn: "root" })
 export class CodeResourceService {
@@ -15,34 +18,33 @@ export class CodeResourceService {
    * @param _http Used to do HTTP requests
    * @param _server Used to figure out paths for HTTP requests
    */
-  constructor(
-    private _http: HttpClient,
-    private _server: ServerApiService,
-  ) {
-  }
+  constructor(private _http: HttpClient, private _server: ServerApiService) {}
 
   /**
    * Asks the server to create a new block resource.
    */
-  createCodeResource(project: Project, name: string, blockLanguageId: string, programmingLanguageId: string) {
+  createCodeResource(
+    project: Project,
+    name: string,
+    blockLanguageId: string,
+    programmingLanguageId: string
+  ) {
     const url = this._server.getCodeResourceBaseUrl(project.slug);
 
     const body = {
-      "name": name,
-      "programmingLanguageId": programmingLanguageId,
-      "blockLanguageId": blockLanguageId
-    }
+      name: name,
+      programmingLanguageId: programmingLanguageId,
+      blockLanguageId: blockLanguageId,
+    };
 
-    const toReturn = this._http.post<CodeResourceDescription>(url, body)
-      .pipe(
-        catchError(this.handleError),
-        delay(250),
-        map(res => new CodeResource(res, project.resourceReferences)),
-        shareReplay(1)
-      );
+    const toReturn = this._http.post<CodeResourceDescription>(url, body).pipe(
+      catchError(this.handleError),
+      delay(250),
+      map((res) => new CodeResource(res, project.resourceReferences)),
+      shareReplay(1)
+    );
 
-
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -51,15 +53,14 @@ export class CodeResourceService {
   cloneCodeResource(project: Project, resource: CodeResource) {
     const url = this._server.getCodeResourceCloneUrl(project.slug, resource.id);
 
-    const toReturn = this._http.post<CodeResourceDescription>(url, "")
-      .pipe(
-        catchError(this.handleError),
-        delay(250),
-        map(res => new CodeResource(res, project.resourceReferences)),
-        shareReplay(1)
-      );
+    const toReturn = this._http.post<CodeResourceDescription>(url, "").pipe(
+      catchError(this.handleError),
+      delay(250),
+      map((res) => new CodeResource(res, project.resourceReferences)),
+      shareReplay(1)
+    );
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -80,17 +81,16 @@ export class CodeResourceService {
     }
 
     const request: CodeResourceRequestUpdateDescription = {
-      resource: requestModel
-    }
+      resource: requestModel,
+    };
 
-    const toReturn = this._http.put(url, request)
-      .pipe(
-        catchError(this.handleError),
-        delay(250),
-        tap(_ => resource.markSaved())
-      );
+    const toReturn = this._http.put(url, request).pipe(
+      catchError(this.handleError),
+      delay(250),
+      tap((_) => resource.markSaved())
+    );
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -99,13 +99,11 @@ export class CodeResourceService {
   deleteCodeResource(project: Project, resource: CodeResource) {
     const url = this._server.getCodeResourceUrl(project.slug, resource.id);
 
-    const toReturn = this._http.delete<void>(url)
-      .pipe(
-        catchError(this.handleError),
-        delay(250)
-      );
+    const toReturn = this._http
+      .delete<void>(url)
+      .pipe(catchError(this.handleError), delay(250));
 
-    return (toReturn);
+    return toReturn;
   }
 
   private handleError(error: Response) {

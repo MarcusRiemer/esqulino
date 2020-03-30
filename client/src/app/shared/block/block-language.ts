@@ -1,14 +1,23 @@
-import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
+import {
+  Tree,
+  NodeDescription,
+  Language,
+  QualifiedTypeName,
+  typenameEquals,
+} from "../syntaxtree";
 
-import { FixedBlocksSidebar } from './sidebar-blocks'
-import { Sidebar } from './sidebar'
-import { BlockLanguageDescription, EditorComponentDescription } from './block-language.description'
-import { EditorBlockDescription } from './block.description'
-import * as Forward from './block-language.forward'
+import { FixedBlocksSidebar } from "./sidebar-blocks";
+import { Sidebar } from "./sidebar";
+import {
+  BlockLanguageDescription,
+  EditorComponentDescription,
+} from "./block-language.description";
+import { EditorBlockDescription } from "./block.description";
+import * as Forward from "./block-language.forward";
 
-import { DatabaseSchemaSidebar } from './sql/database-schema-sidebar'
-import { ProgramUserFunctionsSidebar } from './truck/program-user-functions-sidebar'
-import { MetaDefinedTypesSidebar } from './meta/meta-defined-types-sidebar';
+import { DatabaseSchemaSidebar } from "./sql/database-schema-sidebar";
+import { ProgramUserFunctionsSidebar } from "./truck/program-user-functions-sidebar";
+import { MetaDefinedTypesSidebar } from "./meta/meta-defined-types-sidebar";
 
 /**
  * Augments an existing language with additional information on how to
@@ -35,13 +44,18 @@ export class BlockLanguage implements Forward.BlockLanguage {
     this._editorComponents = desc.editorComponents;
     this._rootCssClasses = desc.rootCssClasses || [];
 
-    this._sidebars = desc.sidebars.map(sidebarDesc => {
+    this._sidebars = desc.sidebars.map((sidebarDesc) => {
       switch (sidebarDesc.type) {
-        case "fixedBlocks": return new FixedBlocksSidebar(this, sidebarDesc);
-        case "databaseSchema": return new DatabaseSchemaSidebar();
-        case "truckProgramUserFunctions": return new ProgramUserFunctionsSidebar();
-        case "metaDefinedTypes": return new MetaDefinedTypesSidebar();
-        default: throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
+        case "fixedBlocks":
+          return new FixedBlocksSidebar(this, sidebarDesc);
+        case "databaseSchema":
+          return new DatabaseSchemaSidebar();
+        case "truckProgramUserFunctions":
+          return new ProgramUserFunctionsSidebar();
+        case "metaDefinedTypes":
+          return new MetaDefinedTypesSidebar();
+        default:
+          throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
       }
     });
   }
@@ -50,63 +64,63 @@ export class BlockLanguage implements Forward.BlockLanguage {
    * @return The unique id of this block language
    */
   get id() {
-    return (this._id);
+    return this._id;
   }
 
   /**
    * @return The unique, but readable slug of this block language.
    */
   get slug() {
-    return (this._slug);
+    return this._slug;
   }
 
   /**
    * @return The user friendly name of this block language
    */
   get name() {
-    return (this._name);
+    return this._name;
   }
 
   /**
    * @return The grammar that must be used to validate the visualized syntaxtree.
    */
   get grammarId() {
-    return (this._grammarId);
+    return this._grammarId;
   }
 
   /**
    * @return The ID of the default programming language.
    */
   get defaultProgrammingLanguageId() {
-    return (this._defaultProgrammingLanguageId);
+    return this._defaultProgrammingLanguageId;
   }
 
   /**
    * @return The editor components this block language demands.
    */
   get editorComponents(): ReadonlyArray<EditorComponentDescription> {
-    return (this._editorComponents);
+    return this._editorComponents;
   }
 
   /**
    * @return All sidebars that are defined for this block language.
    */
   get sidebars(): ReadonlyArray<Sidebar> {
-    return (this._sidebars);
+    return this._sidebars;
   }
 
   /**
    * @return True if this block language makes use of multiple sidebars.
    */
   get hasMultipleSidebars() {
-    return (this.sidebars.length > 1);
+    return this.sidebars.length > 1;
   }
 
   /**
    * @return The css classes that should be applied at the root
    */
   get rootCssClasses() {
-    return (this._rootCssClasses);
+    return this._rootCssClasses;
   }
 
   /**
@@ -118,50 +132,58 @@ export class BlockLanguage implements Forward.BlockLanguage {
     // equality check so for the moment we will hope that our n
     // stays small enough.
     const missing = language.availableTypes
-      .filter(t => !this._editorBlocks.some(b => t.matchesType(b.describedType)))
-      .map(t => t.qualifiedName);
+      .filter(
+        (t) => !this._editorBlocks.some((b) => t.matchesType(b.describedType))
+      )
+      .map((t) => t.qualifiedName);
 
-    return (missing);
+    return missing;
   }
 
   /**
    * @return True, if the given tree can be rendered
    */
   canRenderTree(tree: Tree): boolean {
-    const types = Array.from(tree.typesPresent)
-      .map(type => JSON.parse(type) as QualifiedTypeName);
+    const types = Array.from(tree.typesPresent).map(
+      (type) => JSON.parse(type) as QualifiedTypeName
+    );
 
-    return (types.every(type => this.hasEditorBlock(type)));
+    return types.every((type) => this.hasEditorBlock(type));
   }
 
   /**
    * @return True, if a editor block is present for the given type
    */
   hasEditorBlock(t: QualifiedTypeName) {
-    return (!!this._editorBlocks.find(b => typenameEquals(b.describedType, t)));
+    return !!this._editorBlocks.find((b) => typenameEquals(b.describedType, t));
   }
 
   /**
    * @return The editor block that may be used to represent the given type.
    */
   getEditorBlock(t: QualifiedTypeName) {
-    const toReturn = this._editorBlocks.find(b => typenameEquals(b.describedType, t));
+    const toReturn = this._editorBlocks.find((b) =>
+      typenameEquals(b.describedType, t)
+    );
     if (!toReturn) {
       throw new Error(`No known editor for ${JSON.stringify(t)}`);
     }
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
    * Implements the "best effort" guess to construct a node from nothing
    * but a type.
    */
-  constructDefaultNode(language: Language, typeName: QualifiedTypeName): NodeDescription {
+  constructDefaultNode(
+    language: Language,
+    typeName: QualifiedTypeName
+  ): NodeDescription {
     // Construct the barebones description
     const toReturn: NodeDescription = {
       language: typeName.languageName,
-      name: typeName.typeName
+      name: typeName.typeName,
     };
 
     // Get hold of the type that is about to be instanciated.
@@ -171,12 +193,12 @@ export class BlockLanguage implements Forward.BlockLanguage {
     const reqCat = t.allowedChildrenCategoryNames;
     if (reqCat.length > 0) {
       toReturn.children = {};
-      reqCat.forEach(c => {
+      reqCat.forEach((c) => {
         toReturn.children[c] = [];
       });
     }
 
     // Are there any properties that could be added preemptively?
-    return (toReturn);
+    return toReturn;
   }
 }

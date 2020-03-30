@@ -1,17 +1,24 @@
-import { Component, ViewChild, TemplateRef, AfterViewInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Component,
+  ViewChild,
+  TemplateRef,
+  AfterViewInit,
+} from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 
-import { GrammarDataService, BlockLanguageDataService } from '../../shared/serverdata'
-import { ToolbarService } from '../../shared/toolbar.service'
+import {
+  GrammarDataService,
+  BlockLanguageDataService,
+} from "../../shared/serverdata";
+import { ToolbarService } from "../../shared/toolbar.service";
 
-import { EditBlockLanguageService } from './edit-block-language.service'
+import { EditBlockLanguageService } from "./edit-block-language.service";
 
 @Component({
-  templateUrl: 'templates/edit-block-language.html',
-  providers: [EditBlockLanguageService]
+  templateUrl: "templates/edit-block-language.html",
+  providers: [EditBlockLanguageService],
 })
 export class EditBlockLanguageComponent implements AfterViewInit {
-
   @ViewChild("toolbarButtons")
   toolbarButtons: TemplateRef<any>;
 
@@ -22,8 +29,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
     private _blockLanguageData: BlockLanguageDataService,
     private _current: EditBlockLanguageService,
     private _toolbarService: ToolbarService
-  ) {
-  }
+  ) {}
 
   /**
    * All grammars that may be selected for the edited block language.
@@ -40,28 +46,28 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   }
 
   get baseGrammarId() {
-    return (this.editedSubject.grammarId);
+    return this.editedSubject.grammarId;
   }
 
   set baseGrammarId(id: string) {
-    this._current.doUpdate(bl => {
+    this._current.doUpdate((bl) => {
       bl.grammarId = id;
     });
   }
 
   // The block language that is currently beeing edited.
   get editedSubject() {
-    return (this._current.editedSubject);
+    return this._current.editedSubject;
   }
 
   // All errors that occured during generation
   get generatorErrors() {
-    return (this._current.generatorErrors);
+    return this._current.generatorErrors;
   }
 
   // The pretty printed version of the block language
   get prettyPrintedBlockLanguage() {
-    return (this._current.prettyPrintedBlockLanguage);
+    return this._current.prettyPrintedBlockLanguage;
   }
 
   /**
@@ -72,7 +78,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
       return;
     }
 
-    this._current.doUpdate(bl => {
+    this._current.doUpdate((bl) => {
       if (!bl.rootCssClasses) {
         bl.rootCssClasses = [];
       }
@@ -88,8 +94,8 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * The user wants to remove a certain root css clas
    */
   onRemoveCssRootClass(className: string) {
-    this._current.doUpdate(bl => {
-      bl.rootCssClasses = bl.rootCssClasses.filter(c => c !== className);
+    this._current.doUpdate((bl) => {
+      bl.rootCssClasses = bl.rootCssClasses.filter((c) => c !== className);
     });
   }
 
@@ -128,11 +134,11 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   static RootCssClass = class {
     constructor(
       readonly name: string,
-      private readonly _parent: EditBlockLanguageComponent,
-    ) { }
+      private readonly _parent: EditBlockLanguageComponent
+    ) {}
 
     get checked() {
-      return (this._parent.editedSubject?.rootCssClasses?.includes(this.name));
+      return this._parent.editedSubject?.rootCssClasses?.includes(this.name);
     }
 
     set checked(v: boolean) {
@@ -142,10 +148,10 @@ export class EditBlockLanguageComponent implements AfterViewInit {
         this._parent.onRemoveCssRootClass(this.name);
       }
     }
-  }
+  };
 
   readonly availableCssRootClasses = [
     new EditBlockLanguageComponent.RootCssClass("activate-block-outline", this),
     new EditBlockLanguageComponent.RootCssClass("activate-keyword", this),
-  ]
+  ];
 }

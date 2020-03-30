@@ -1,13 +1,13 @@
-import { Injectable, Type } from '@angular/core'
+import { Injectable, Type } from "@angular/core";
 
-import { Observable, ReplaySubject } from 'rxjs'
+import { Observable, ReplaySubject } from "rxjs";
 
 /**
  * Allows to register a sidebar component
  */
 export interface SidebarType {
-  typeId: string,
-  componentType: Type<any>
+  typeId: string;
+  componentType: Type<any>;
 }
 
 /**
@@ -17,7 +17,6 @@ export interface SidebarType {
  */
 @Injectable({ providedIn: "root" })
 export class RegistrationService {
-
   // These types are waiting to be registered
   private _sidebarTypes: ReplaySubject<SidebarType>;
 
@@ -39,7 +38,6 @@ export class RegistrationService {
    *         were registered.
    */
   get sidebarTypes(): Observable<SidebarType> {
-    return (this._sidebarTypes);
+    return this._sidebarTypes;
   }
-
 }

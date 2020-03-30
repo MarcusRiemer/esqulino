@@ -1,4 +1,4 @@
-import { Restricted } from './bool-mini-expression.description'
+import { Restricted } from "./bool-mini-expression.description";
 
 /**
  * Evaluates boolean expressions in a (more or less) compact JSON-notation.
@@ -16,7 +16,7 @@ export function evalExpression<T extends string>(
   }
 
   if (Restricted.isValue(expr)) {
-    return (expr.$value);
+    return expr.$value;
   } else if (Restricted.isVariable(expr)) {
     // Variables may need to be evaluated when they are encountered
     // for the first time.
@@ -27,13 +27,13 @@ export function evalExpression<T extends string>(
       vars[expr.$var] = val;
     }
 
-    return (!!val);
+    return !!val;
   } else if (Restricted.isNot(expr)) {
-    return (!evalExpression(expr.$not, vars));
+    return !evalExpression(expr.$not, vars);
   } else if (Restricted.isAnd(expr)) {
-    return (expr.$every.every(value => evalExpression(value, vars)));
+    return expr.$every.every((value) => evalExpression(value, vars));
   } else if (Restricted.isOr(expr)) {
-    return (expr.$some.some(value => evalExpression(value, vars)));
+    return expr.$some.some((value) => evalExpression(value, vars));
   } else {
     throw new Error(`Unknow Expression: ${JSON.stringify(expr)}`);
   }

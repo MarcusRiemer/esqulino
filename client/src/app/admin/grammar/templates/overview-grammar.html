@@ -1,5 +1,8 @@
 <h2>
-  <span *ngIf="(availableGrammars.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
+  <span
+    *ngIf="(availableGrammars.inProgress | async)"
+    class="fa fa-refresh fa-spin fa-fw"
+  ></span>
   Grammatiken
 </h2>
 <table class="table table-sm">
@@ -16,9 +19,11 @@
     <td><code>{{ grammar.slug | defaultValue }}</code></td>
     <td><code>{{ grammar.id }}</code></td>
     <td>
-      <button (click)="deleteGrammar(grammar.id)"
-              type="button"
-              class="btn btn-outline-danger btn-sm">
+      <button
+        (click)="deleteGrammar(grammar.id)"
+        type="button"
+        class="btn btn-outline-danger btn-sm"
+      >
         <span class="fa fa-trash-o" aria-hidden="true"></span>
       </button>
     </td>

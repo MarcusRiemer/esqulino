@@ -1,9 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { ResourceReferencesService, RequiredResource } from './resource-references.service';
-import { LanguageService } from './language.service';
-import { BlockLanguageDataService, GrammarDataService } from './serverdata';
-import { BlockLanguage } from './block';
+import {
+  ResourceReferencesService,
+  RequiredResource,
+} from "./resource-references.service";
+import { LanguageService } from "./language.service";
+import { BlockLanguageDataService, GrammarDataService } from "./serverdata";
+import { BlockLanguage } from "./block";
 
 /**
  * Provides access to the most recent state of all resources that are available through
@@ -16,9 +19,9 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
   constructor(
     private _languageService: LanguageService,
     private _blockLanguageData: BlockLanguageDataService,
-    private _grammarLanguageData: GrammarDataService,
+    private _grammarLanguageData: GrammarDataService
   ) {
-    super()
+    super();
   }
 
   getBlockLanguage(id: string, onMissing: "undefined" | "throw") {
@@ -26,9 +29,11 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
       const desc = this._blockLanguageData.getLocal(id, "undefined");
       if (!desc) {
         if (onMissing === "throw") {
-          throw new Error(`Could not construct block language "${id}" on the fly`);
+          throw new Error(
+            `Could not construct block language "${id}" on the fly`
+          );
         } else {
-          return (undefined);
+          return undefined;
         }
       }
 
@@ -36,7 +41,7 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
       this._blockLanguages[desc.id] = blockLanguage;
     }
 
-    return (this._blockLanguages[id]);
+    return this._blockLanguages[id];
   }
 
   getGrammarDescription(id: string, onMissing: "undefined" | "throw") {
@@ -44,7 +49,7 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     if (!g && onMissing === "throw") {
       throw new Error(`Could not retriebe grammar "${id}" on the fly`);
     } else {
-      return (g);
+      return g;
     }
   }
 
@@ -54,16 +59,18 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
 
   async ensureResources(req: RequiredResource[] | RequiredResource) {
     req = this.wrapRequired(req);
-    const requests: Promise<any>[] = req.map(r => {
+    const requests: Promise<any>[] = req.map((r) => {
       switch (r.type) {
-        case "blockLanguage": return this._blockLanguageData.getLocal(r.id, "request");
-        case "grammar": return this._grammarLanguageData.getLocal(r.id, "request");
-        case "blockLanguageGrammar": return this.ensureBlockLanguageGrammar(r.id);
+        case "blockLanguage":
+          return this._blockLanguageData.getLocal(r.id, "request");
+        case "grammar":
+          return this._grammarLanguageData.getLocal(r.id, "request");
+        case "blockLanguageGrammar":
+          return this.ensureBlockLanguageGrammar(r.id);
       }
     });
 
-
     const toReturn = await Promise.all(requests);
-    return toReturn.every(v => !!v);
+    return toReturn.every((v) => !!v);
   }
 }

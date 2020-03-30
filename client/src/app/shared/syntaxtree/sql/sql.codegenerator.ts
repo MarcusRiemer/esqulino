@@ -1,19 +1,32 @@
-import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from '../codegenerator'
-import { Node } from '../syntaxtree'
+import {
+  NodeConverterRegistration,
+  CodeGeneratorProcess,
+  OutputSeparator,
+} from "../codegenerator";
+import { Node } from "../syntaxtree";
 
 /**
  * Helper function to generate all SQL components of a node
  */
 function generateComponents(node: Node, process: CodeGeneratorProcess<{}>) {
-  const componentNames = ["insert", "select", "update", "delete", "from", "where", "groupBy", "orderBy"];
+  const componentNames = [
+    "insert",
+    "select",
+    "update",
+    "delete",
+    "from",
+    "where",
+    "groupBy",
+    "orderBy",
+  ];
   const components = componentNames
-    .map(n => node.children[n])
-    .filter(c => !!c)
-    .map(c => c[0])
-    .filter(c => !!c)
+    .map((n) => node.children[n])
+    .filter((c) => !!c)
+    .map((c) => c[0])
+    .filter((c) => !!c);
 
-  components.forEach(n => {
-    process.generateNode(n)
+  components.forEach((n) => {
+    process.generateNode(n);
     process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);
   });
 }
@@ -25,74 +38,74 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "sql",
-      typeName: "columnName"
+      typeName: "columnName",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const columnName = node.properties["columnName"];
         const refTableName = node.properties["refTableName"];
 
         if (refTableName) {
-          process.addConvertedFragment(`${refTableName}.${columnName}`, node)
+          process.addConvertedFragment(`${refTableName}.${columnName}`, node);
         } else {
-          process.addConvertedFragment(columnName, node)
+          process.addConvertedFragment(columnName, node);
         }
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "constant"
+      typeName: "constant",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const value = node.properties["value"];
         if (isNaN(parseFloat(value))) {
           // The value is not a number, put in in quotes
-          process.addConvertedFragment(`'${value}'`, node)
+          process.addConvertedFragment(`'${value}'`, node);
         } else {
           // The value is a number, it does not need quotes
           process.addConvertedFragment(value, node);
         }
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "parameter"
+      typeName: "parameter",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const name = node.properties["name"];
         process.addConvertedFragment(`:${name}`, node);
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "starOperator"
+      typeName: "starOperator",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment("*", node)
-      }
-    }
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment("*", node);
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "functionCall"
+      typeName: "functionCall",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties["name"], node);
         process.addConvertedFragment("(", node);
 
         const distinct = node.getChildrenInCategory("distinct");
-        distinct.forEach(d => {
+        distinct.forEach((d) => {
           process.generateNode(d);
         });
 
@@ -106,76 +119,84 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         args.forEach((a, idx, arr) => {
           process.generateNode(a);
           if (idx != arr.length - 1) {
-            process.addConvertedFragment(', ', node);
+            process.addConvertedFragment(", ", node);
           }
         });
         process.addConvertedFragment(")", node);
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "relationalOperator"
+      typeName: "relationalOperator",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        const operator = node.properties["operator"]
-        process.addConvertedFragment(operator, node)
-      }
-    }
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        const operator = node.properties["operator"];
+        process.addConvertedFragment(operator, node);
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "binaryExpression"
+      typeName: "binaryExpression",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        node.getChildrenInCategory("lhs").forEach(c => process.generateNode(c))
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        node
+          .getChildrenInCategory("lhs")
+          .forEach((c) => process.generateNode(c));
         process.addConvertedFragment(" ", node);
-        node.getChildrenInCategory("operator").forEach(c => process.generateNode(c))
+        node
+          .getChildrenInCategory("operator")
+          .forEach((c) => process.generateNode(c));
         process.addConvertedFragment(" ", node);
-        node.getChildrenInCategory("rhs").forEach(c => process.generateNode(c))
-      }
-    }
+        node
+          .getChildrenInCategory("rhs")
+          .forEach((c) => process.generateNode(c));
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "parentheses"
+      typeName: "parentheses",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment("(", node);
-        node.getChildrenInCategory("expression").forEach(c => process.generateNode(c))
+        node
+          .getChildrenInCategory("expression")
+          .forEach((c) => process.generateNode(c));
         process.addConvertedFragment(")", node);
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "expression"
+      typeName: "expression",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const expr = node.getChildrenInCategory("expression");
-        expr.forEach(e => process.generateNode(e));
-      }
-    }
+        expr.forEach((e) => process.generateNode(e));
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "select"
+      typeName: "select",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(`SELECT `, node)
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`SELECT `, node);
 
         const distinct = node.getChildrenInCategory("distinct");
-        distinct.forEach(d => {
+        distinct.forEach((d) => {
           process.generateNode(d);
         });
 
@@ -189,196 +210,201 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         columns.forEach((c, idx, arr) => {
           process.generateNode(c);
           if (idx != arr.length - 1) {
-            process.addConvertedFragment(', ', node);
+            process.addConvertedFragment(", ", node);
           }
         });
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "distinct"
+      typeName: "distinct",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment("DISTINCT", node)
-      }
-    }
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment("DISTINCT", node);
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "tableIntroduction"
+      typeName: "tableIntroduction",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const name = node.properties["name"];
         const alias = node.properties["alias"];
         if (alias) {
-          process.addConvertedFragment(`${name} ${alias}`, node)
+          process.addConvertedFragment(`${name} ${alias}`, node);
         } else {
-          process.addConvertedFragment(name, node)
+          process.addConvertedFragment(name, node);
         }
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "crossJoin"
+      typeName: "crossJoin",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`JOIN `, node);
-        node.getChildrenInCategory("table").forEach(c => process.generateNode(c))
-      }
-    }
+        node
+          .getChildrenInCategory("table")
+          .forEach((c) => process.generateNode(c));
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "innerJoinOn"
+      typeName: "innerJoinOn",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(`INNER JOIN `, node)
-        node.getChildrenInCategory("table").forEach(c => process.generateNode(c))
-        process.addConvertedFragment(` ON `, node)
-        node.getChildrenInCategory("on").forEach(c => process.generateNode(c))
-      }
-    }
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`INNER JOIN `, node);
+        node
+          .getChildrenInCategory("table")
+          .forEach((c) => process.generateNode(c));
+        process.addConvertedFragment(` ON `, node);
+        node
+          .getChildrenInCategory("on")
+          .forEach((c) => process.generateNode(c));
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "innerJoinUsing"
+      typeName: "innerJoinUsing",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        const tableIntro = node.children['table'][0];
-        const usingExpr = node.children['using'][0];
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        const tableIntro = node.children["table"][0];
+        const usingExpr = node.children["using"][0];
 
-        process.addConvertedFragment(`INNER JOIN `, node)
+        process.addConvertedFragment(`INNER JOIN `, node);
         process.generateNode(tableIntro);
-        process.addConvertedFragment(` USING `, node)
+        process.addConvertedFragment(` USING `, node);
         process.generateNode(usingExpr);
 
-        return ([]);
-      }
-    }
+        return [];
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "from"
+      typeName: "from",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(`FROM `, node)
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`FROM `, node);
 
         node.getChildrenInCategory("tables").forEach((c, idx, arr) => {
           process.generateNode(c);
           if (idx != arr.length - 1) {
-            process.addConvertedFragment(', ', node);
+            process.addConvertedFragment(", ", node);
           }
         });
 
-
         node.getChildrenInCategory("joins").forEach((c) => {
-          process.addConvertedFragment('\n\t', node);
+          process.addConvertedFragment("\n\t", node);
           process.generateNode(c);
         });
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "where"
+      typeName: "where",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        const expressions = node.children['expressions'];
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        const expressions = node.children["expressions"];
         const head = expressions[0];
         const tail = expressions.slice(1);
 
-        process.addConvertedFragment(`WHERE `, node)
+        process.addConvertedFragment(`WHERE `, node);
         if (head) {
           process.generateNode(head);
         }
 
         tail.forEach((c) => {
-          process.addConvertedFragment('\n\t', node);
+          process.addConvertedFragment("\n\t", node);
           process.generateNode(c);
         });
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "whereAdditional"
+      typeName: "whereAdditional",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        const op = node.properties['operator'];
-        const expr = node.children['expression'][0];
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        const op = node.properties["operator"];
+        const expr = node.children["expression"][0];
 
-        process.addConvertedFragment(op.toUpperCase() + ' ', node);
+        process.addConvertedFragment(op.toUpperCase() + " ", node);
         if (expr) {
           process.generateNode(expr);
         }
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "groupBy"
+      typeName: "groupBy",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(`GROUP BY `, node)
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`GROUP BY `, node);
 
         node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
           process.generateNode(c);
           if (idx != arr.length - 1) {
-            process.addConvertedFragment(', ', node);
+            process.addConvertedFragment(", ", node);
           }
         });
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "orderBy"
+      typeName: "orderBy",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(`ORDER BY `, node)
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`ORDER BY `, node);
 
         node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
           process.generateNode(c);
           if (idx != arr.length - 1) {
-            process.addConvertedFragment(', ', node);
+            process.addConvertedFragment(", ", node);
           }
         });
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "sortOrder"
+      typeName: "sortOrder",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.generateNode(node.getChildrenInCategory("expression")[0]);
-        process.addConvertedFragment(" " + node.properties.order, node)
-      }
-    }
+        process.addConvertedFragment(" " + node.properties.order, node);
+      },
+    },
   },
   {
     type: {
@@ -386,16 +412,16 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "querySelect",
     },
     converter: {
-      init: generateComponents
-    }
+      init: generateComponents,
+    },
   },
   {
     type: {
       languageName: "sql",
-      typeName: "queryDelete"
+      typeName: "queryDelete",
     },
     converter: {
-      init: generateComponents
-    }
-  }
+      init: generateComponents,
+    },
+  },
 ];

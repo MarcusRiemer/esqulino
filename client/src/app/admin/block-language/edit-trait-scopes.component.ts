@@ -1,26 +1,27 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input } from "@angular/core";
 
-import { BlockLanguageDescription } from '../../shared/block/block-language.description'
-import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description'
+import { BlockLanguageDescription } from "../../shared/block/block-language.description";
+import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 
 /**
  * Allows editing the scope of all traits that are available on a specific block
  * language.
  */
 @Component({
-  templateUrl: 'templates/edit-trait-scopes.html',
-  selector: 'edit-trait-scopes'
+  templateUrl: "templates/edit-trait-scopes.html",
+  selector: "edit-trait-scopes",
 })
 export class EditTraitScopesComponent {
   @Input() blockLanguage: BlockLanguageDescription;
 
   get availableScopes() {
-    const instructions = this.blockLanguage && this.blockLanguage.localGeneratorInstructions;
+    const instructions =
+      this.blockLanguage && this.blockLanguage.localGeneratorInstructions;
 
     if (instructions && instructions.type === "manual") {
-      return (instructions.traitScopes);
+      return instructions.traitScopes;
     } else {
-      return ([]);
+      return [];
     }
   }
 
@@ -30,12 +31,13 @@ export class EditTraitScopesComponent {
    */
   addEmptyScope() {
     if (this.blockLanguage) {
-      const instructions = this.blockLanguage.localGeneratorInstructions || DEFAULT_GENERATOR;
+      const instructions =
+        this.blockLanguage.localGeneratorInstructions || DEFAULT_GENERATOR;
       if (instructions.type === "manual" && !instructions.traitScopes) {
         instructions.traitScopes = [];
 
         instructions.traitScopes.push({
-          traits: []
+          traits: [],
         });
       }
     }

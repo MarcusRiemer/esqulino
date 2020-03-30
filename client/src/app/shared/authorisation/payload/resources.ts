@@ -1,28 +1,27 @@
-import { BasePerformData } from './base';
-import { MayPerformRequestDescription } from '../../may-perform.description';
-
+import { BasePerformData } from "./base";
+import { MayPerformRequestDescription } from "../../may-perform.description";
 
 export class ResourcesData extends BasePerformData {
   public update(resourceId: string): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: this.resourceType,
       resourceId: resourceId,
-      policyAction: "update"
-    })
+      policyAction: "update",
+    };
   }
 
   public create(): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: this.resourceType,
-      policyAction: "create"
-    })
+      policyAction: "create",
+    };
   }
 
   public delete(resourceId: string): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: this.resourceType,
       resourceId: resourceId,
-      policyAction: "destroy"
-    })
+      policyAction: "destroy",
+    };
   }
 }

@@ -1,22 +1,21 @@
-import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { first, switchMap, shareReplay } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { first, switchMap, shareReplay } from "rxjs/operators";
+import { of } from "rxjs";
 
-import { EditorToolbarService } from '../toolbar.service';
-import { SidebarService } from '../sidebar.service';
-import { ProjectService } from '../project.service';
-import { CodeResourceService } from '../coderesource.service';
+import { EditorToolbarService } from "../toolbar.service";
+import { SidebarService } from "../sidebar.service";
+import { ProjectService } from "../project.service";
+import { CodeResourceService } from "../coderesource.service";
 
 /**
  * Host-component for the front-page.
  */
 @Component({
-  templateUrl: 'templates/create-code-resource.html',
+  templateUrl: "templates/create-code-resource.html",
 })
 export class CreateCodeResourceComponent {
-
   public resourceName: string;
   public blockLanguageId: string;
 
@@ -26,8 +25,8 @@ export class CreateCodeResourceComponent {
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
     private _router: Router,
-    private _route: ActivatedRoute,
-  ) { }
+    private _route: ActivatedRoute
+  ) {}
 
   /**
    * Ensures that all sidebars and toolbars are hidden away.
@@ -39,12 +38,10 @@ export class CreateCodeResourceComponent {
     this._sidebarService.hideSidebar();
 
     // Possibly pre-select the first block language
-    this.availableBlockLanguages$.pipe(
-      first()
-    ).subscribe(b => {
+    this.availableBlockLanguages$.pipe(first()).subscribe((b) => {
       if (b.length > 0) {
         this.blockLanguageId = b[0].id;
-      };
+      }
     });
   }
 
@@ -52,7 +49,7 @@ export class CreateCodeResourceComponent {
    * @return The BlockLanguages that are available for creation.
    */
   readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
-    switchMap(p => of(p.projectBlockLanguages))
+    switchMap((p) => of(p.projectBlockLanguages))
   );
 
   /**
@@ -62,13 +59,16 @@ export class CreateCodeResourceComponent {
     const p = this._projectService.cachedProject;
     const b = p.getBlockLanguage(this.blockLanguageId);
 
-    const toReturn = this._codeResourceService.createCodeResource(
-      p, this.resourceName, this.blockLanguageId, b.defaultProgrammingLanguageId
-    ).pipe(
-      first()
-    );
+    const toReturn = this._codeResourceService
+      .createCodeResource(
+        p,
+        this.resourceName,
+        this.blockLanguageId,
+        b.defaultProgrammingLanguageId
+      )
+      .pipe(first());
 
-    toReturn.subscribe(res => {
+    toReturn.subscribe((res) => {
       p.addCodeResource(res);
 
       this._router.navigate([res.id], { relativeTo: this._route.parent });

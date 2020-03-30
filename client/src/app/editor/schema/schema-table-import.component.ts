@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { ActivatedRoute } from "@angular/router";
 
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import * as Parser from '../../shared/csv-parser';
-import { Table } from '../../shared/schema';
-import { ServerApiService } from '../../shared';
-import { ResponseTabularInsertDescription } from '../../shared/schema/schema.description';
+import * as Parser from "../../shared/csv-parser";
+import { Table } from "../../shared/schema";
+import { ServerApiService } from "../../shared";
+import { ResponseTabularInsertDescription } from "../../shared/schema/schema.description";
 
-import { ProjectService } from '../project.service';
-import { EditorToolbarService } from '../toolbar.service';
+import { ProjectService } from "../project.service";
+import { EditorToolbarService } from "../toolbar.service";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
 /**
  * Wizard-like UI to import CSV data into a table.
  */
 @Component({
-  templateUrl: 'templates/schema-table-import.html',
+  templateUrl: "templates/schema-table-import.html",
 })
 export class SchemaTableImportComponent implements OnInit {
   // file object as a string
@@ -60,9 +60,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   uploadError: any = "";
 
-
   /* ----- Initializations ----- */
-
 
   // used for dependency injection
   constructor(
@@ -71,9 +69,8 @@ export class SchemaTableImportComponent implements OnInit {
     private _serverApi: ServerApiService,
     private _http: HttpClient,
     private _route: ActivatedRoute,
-    private _snackbar: MatSnackBar,
-  ) {
-  }
+    private _snackbar: MatSnackBar
+  ) {}
 
   // used for inits
   ngOnInit() {
@@ -91,19 +88,21 @@ export class SchemaTableImportComponent implements OnInit {
     this.selectedHeaderIndex = [];
 
     this.currentDelimiters = [];
-    this.toggleDelimiter(',');
+    this.toggleDelimiter(",");
 
     // Get tables for schema
-    this.schemaTables = this._projectService.cachedProject.schema['tables'];
+    this.schemaTables = this._projectService.cachedProject.schema["tables"];
 
     // Init first table
     this.selectedTable = this.schemaTables[0];
-    this.selectedTableName = this.selectedTable['name'];
+    this.selectedTableName = this.selectedTable["name"];
 
     // Extract table and col names of the schema
-    this.tableNames = this.schemaTables.map(table => table['name']);
+    this.tableNames = this.schemaTables.map((table) => table["name"]);
     this.colNamesForTables = [];
-    this.schemaTables.forEach(table => { this.colNamesForTables.push(this.extractColNames(table)) });
+    this.schemaTables.forEach((table) => {
+      this.colNamesForTables.push(this.extractColNames(table));
+    });
   }
 
   /* ----- Helper Function ----- */
@@ -111,7 +110,7 @@ export class SchemaTableImportComponent implements OnInit {
   // returns an array that contains
   // only the column names of a given table
   extractColNames(table: Table): string[] {
-    return table['columns'].map(col => col['name']);
+    return table["columns"].map((col) => col["name"]);
   }
 
   /* ----- Component behaviour ----- */
@@ -120,9 +119,14 @@ export class SchemaTableImportComponent implements OnInit {
   // and handles button enabling table is selected
   changeTable(name: string) {
     // Filter the wanted table by the name from ngModel in select
-    this.selectedTable = (this.schemaTables.filter(table => name === table['name']))[0];
+    this.selectedTable = this.schemaTables.filter(
+      (table) => name === table["name"]
+    )[0];
     // Select the matching headline col for each table col or empty
-    this.selectedHeaderIndex = Parser.getMatchingCols(this.extractColNames(this.selectedTable), this.csvHeader);
+    this.selectedHeaderIndex = Parser.getMatchingCols(
+      this.extractColNames(this.selectedTable),
+      this.csvHeader
+    );
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
@@ -136,7 +140,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   // returns true if no mapping value is selected (for button disabling)
   noMappingValueSelected(values: number[]): boolean {
-    return values.filter(index => index !== -1).length === 0;
+    return values.filter((index) => index !== -1).length === 0;
   }
 
   // returns true if the col index (of the csv parse result) is currently selected for mapping
@@ -155,17 +159,26 @@ export class SchemaTableImportComponent implements OnInit {
     const projectId = this._projectService.cachedProject.id;
     const schemaName = this._route.snapshot.paramMap.get("schemaName");
     const tableName = this.selectedTableName;
-    const url = this._serverApi.uploadTabularData(projectId, schemaName, tableName);
-
-    this._http.post(url, uploadData).pipe(
-      first()
-    ).subscribe(
-      (res: ResponseTabularInsertDescription) =>
-        this._snackbar.open(`Tabelle "${tableName}": ${res.numInsertedRows} Zeilen eingefügt, ${res.numTotalRows} Zeilen insgesamt.`, null, {
-          duration: 5000
-        }),
-      err => alert(JSON.stringify(err))
+    const url = this._serverApi.uploadTabularData(
+      projectId,
+      schemaName,
+      tableName
     );
+
+    this._http
+      .post(url, uploadData)
+      .pipe(first())
+      .subscribe(
+        (res: ResponseTabularInsertDescription) =>
+          this._snackbar.open(
+            `Tabelle "${tableName}": ${res.numInsertedRows} Zeilen eingefügt, ${res.numTotalRows} Zeilen insgesamt.`,
+            null,
+            {
+              duration: 5000,
+            }
+          ),
+        (err) => alert(JSON.stringify(err))
+      );
   }
 
   // needed for defining independent own headlines
@@ -197,7 +210,10 @@ export class SchemaTableImportComponent implements OnInit {
       this.disableSelection = false;
     }
     // reset selected mapping values and enable / disable import button
-    this.selectedHeaderIndex = Parser.getMatchingCols(this.extractColNames(this.selectedTable), this.csvHeader);
+    this.selectedHeaderIndex = Parser.getMatchingCols(
+      this.extractColNames(this.selectedTable),
+      this.csvHeader
+    );
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
@@ -205,10 +221,12 @@ export class SchemaTableImportComponent implements OnInit {
   // and restart the parse process
   toggleDelimiter(delimiter: string) {
     if (this.currentDelimiters.includes(delimiter)) {
-      this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
+      this.currentDelimiters.splice(
+        this.currentDelimiters.indexOf(delimiter),
+        1
+      );
     } else {
       this.currentDelimiters.push(delimiter);
-
     }
     if (this.fileData) {
       this.parseProcess();
@@ -217,22 +235,22 @@ export class SchemaTableImportComponent implements OnInit {
 
   // add or remove semicolon delimiter
   toggleSemicolon() {
-    this.toggleDelimiter(';');
+    this.toggleDelimiter(";");
   }
 
   // add or remove comma delimiter
   toggleComma() {
-    this.toggleDelimiter(',');
+    this.toggleDelimiter(",");
   }
 
   // add or remove space delimiter
   toggleSpace() {
-    this.toggleDelimiter(' ');
+    this.toggleDelimiter(" ");
   }
 
   // add or remove tab delimiter
   toggleTab() {
-    this.toggleDelimiter('  ');
+    this.toggleDelimiter("  ");
   }
 
   // restart the parse process after markers changed
@@ -257,7 +275,6 @@ export class SchemaTableImportComponent implements OnInit {
       // Wait until the File is read
       this.fileData = await this.readUploadedFileAsText(file);
       this.parseProcess();
-
     } catch (e) {
       console.warn(e.message);
     }
@@ -277,27 +294,35 @@ export class SchemaTableImportComponent implements OnInit {
         resolve(temporaryFileReader.result);
       };
       temporaryFileReader.readAsText(inputFile);
-
     });
-  };
+  }
 
   // parse process when file is read or delimiters or markers have changed
   parseProcess() {
-    this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
+    this.parse = Parser.convertCSVStringToArray(
+      this.fileData,
+      this.currentDelimiters,
+      this.textMarker
+    );
 
-    if (this.parse.type === 'parseResult') {
+    if (this.parse.type === "parseResult") {
       this.csvHeader = (<Parser.CsvParseResult>this.parse).header;
       this.csvTable = (<Parser.CsvParseResult>this.parse).table;
 
       this.disableHeadlineSelection = false;
 
-      this.selectedTableName = Parser.getMostSuitableTableName(this.csvHeader, this.tableNames, this.colNamesForTables);
-      this.selectedTable = this.schemaTables.filter(table => table['name'] === this.selectedTableName)[0];
+      this.selectedTableName = Parser.getMostSuitableTableName(
+        this.csvHeader,
+        this.tableNames,
+        this.colNamesForTables
+      );
+      this.selectedTable = this.schemaTables.filter(
+        (table) => table["name"] === this.selectedTableName
+      )[0];
 
       // use change table function for selected Header Index and disable Button status
       this.changeTable(this.selectedTableName);
-    }
-    else if (this.parse.type === 'parseError') {
+    } else if (this.parse.type === "parseError") {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
       this.disableHeadlineSelection = true;
     }

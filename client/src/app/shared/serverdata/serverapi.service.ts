@@ -1,18 +1,24 @@
-import { Injectable, PLATFORM_ID, Inject, Optional, LOCALE_ID } from '@angular/core'
-import { isPlatformServer } from '@angular/common'
+import {
+  Injectable,
+  PLATFORM_ID,
+  Inject,
+  Optional,
+  LOCALE_ID,
+} from "@angular/core";
+import { isPlatformServer } from "@angular/common";
 
-import { environment } from '../../../environments/environment'
+import { environment } from "../../../environments/environment";
 
-import { ServerApi } from './serverapi'
+import { ServerApi } from "./serverapi";
 
 /**
  * Inserts the given language string into the URL.
  */
 function insertLanguageSubdomain(url: string, lang: string) {
   if (url.includes("://")) {
-    return (url.replace("://", "://" + lang + "."));
+    return url.replace("://", "://" + lang + ".");
   } else {
-    return (lang + "." + url);
+    return lang + "." + url;
   }
 }
 
@@ -30,13 +36,12 @@ function insertLanguageSubdomain(url: string, lang: string) {
  */
 @Injectable()
 export class ServerApiService extends ServerApi {
-
   public constructor(
     @Inject(PLATFORM_ID)
     @Optional()
     platformId: Object,
     @Inject(LOCALE_ID)
-    readonly localeId: string,
+    readonly localeId: string
   ) {
     super(
       isPlatformServer(platformId)

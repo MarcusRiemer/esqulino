@@ -1,0 +1,7 @@
+# More is just too much
+tabWidth: 2
+
+# The Angular compiler strips whitespaces anyway, so there is no need
+# in having the formatter produce extra careful output instead of
+# properly readable output.
+htmlWhitespaceSensitivity: ignore

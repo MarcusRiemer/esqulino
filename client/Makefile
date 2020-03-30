@@ -42,6 +42,14 @@ dist: client-compile cli-compile universal-compile
 
 dist-dev: client-compile cli-compile universal-compile
 
+# Run the currently configured formatting toolset
+format-code:
+	npx prettier --write "src/**/*.{html,ts}"
+
+# Verify that the coding style is sound
+verify-code:
+	npx prettier --check "src/**/*.{html,ts}"
+
 ##################################
 # Revision tracking file
 ##################################
@@ -150,4 +158,4 @@ msg-pre-clean-deps :
 msg-pre-install-deps :
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Installing dependencies ..."; $(TPUT_BIN) sgr0
 
-.PHONY : all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills src/environments/version.ts
+.PHONY : all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills format-code src/environments/version.ts

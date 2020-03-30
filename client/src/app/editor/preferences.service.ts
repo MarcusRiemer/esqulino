@@ -1,14 +1,14 @@
-import { Observable, BehaviorSubject, of } from 'rxjs'
+import { Observable, BehaviorSubject, of } from "rxjs";
 
-import { Injectable } from '@angular/core'
+import { Injectable } from "@angular/core";
 
 /**
  * The order the sidepanes should appear in.
  */
 export interface PaneOrder {
-  navbar: number,
-  sidebar: number,
-  content: number
+  navbar: number;
+  sidebar: number;
+  content: number;
 }
 
 /**
@@ -17,7 +17,6 @@ export interface PaneOrder {
  */
 @Injectable({ providedIn: "root" })
 export class PreferencesService {
-
   // The side is normally not visible on mobile devices
   private _showSideNav = new BehaviorSubject(true);
 
@@ -38,6 +37,6 @@ export class PreferencesService {
    * @return Whether developer debug information should be visible.
    */
   get showJsonModel(): Observable<boolean> {
-    return (of(false));
+    return of(false);
   }
 }

@@ -1,29 +1,38 @@
-import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { TestBed } from "@angular/core/testing";
+import { Router } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Overlay } from '@angular/cdk/overlay';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Overlay } from "@angular/cdk/overlay";
 
-import { specLoadEmptyProject, buildBlockLanguage } from '../../editor/spec-util';
+import {
+  specLoadEmptyProject,
+  buildBlockLanguage,
+} from "../../editor/spec-util";
 
-import { ResourceReferencesService } from '../../shared/resource-references.service';
-import { ResourceReferencesOnlineService } from '../../shared/resource-references-online.service';
+import { ResourceReferencesService } from "../../shared/resource-references.service";
+import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 
-import { ServerApiService, LanguageService } from '../../shared';
-import { BlockLanguageDataService, GrammarDataService } from '../../shared/serverdata';
-import { CodeResourceDescription } from '../../shared/syntaxtree';
-import { EmptyComponent } from '../../shared/empty.component';
+import { ServerApiService, LanguageService } from "../../shared";
+import {
+  BlockLanguageDataService,
+  GrammarDataService,
+} from "../../shared/serverdata";
+import { CodeResourceDescription } from "../../shared/syntaxtree";
+import { EmptyComponent } from "../../shared/empty.component";
 
-import { EditorToolbarService } from '../toolbar.service';
-import { SidebarService } from '../sidebar.service';
-import { ProjectService } from '../project.service';
-import { CodeResourceService } from '../coderesource.service';
-import { RegistrationService } from '../registration.service';
+import { EditorToolbarService } from "../toolbar.service";
+import { SidebarService } from "../sidebar.service";
+import { ProjectService } from "../project.service";
+import { CodeResourceService } from "../coderesource.service";
+import { RegistrationService } from "../registration.service";
 
-import { CreateCodeResourceComponent } from './create-code-resource.component';
+import { CreateCodeResourceComponent } from "./create-code-resource.component";
 
 describe(`CreateCodeResourceComponent`, () => {
   async function createComponent() {
@@ -31,7 +40,7 @@ describe(`CreateCodeResourceComponent`, () => {
       imports: [
         FormsModule,
         RouterTestingModule.withRoutes([
-          { path: ":id", component: EmptyComponent }
+          { path: ":id", component: EmptyComponent },
         ]),
         HttpClientTestingModule,
       ],
@@ -50,24 +59,21 @@ describe(`CreateCodeResourceComponent`, () => {
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
-        }
+        },
       ],
-      declarations: [
-        CreateCodeResourceComponent,
-        EmptyComponent
-      ]
-    })
-      .compileComponents();
+      declarations: [CreateCodeResourceComponent, EmptyComponent],
+    }).compileComponents();
 
     let fixture = TestBed.createComponent(CreateCodeResourceComponent);
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
-    return ({
-      fixture, component,
+    return {
+      fixture,
+      component,
       element: fixture.nativeElement as HTMLElement,
-      projectService: TestBed.get(ProjectService) as ProjectService
-    });
+      projectService: TestBed.get(ProjectService) as ProjectService,
+    };
   }
 
   it(`Has empty inputs without data`, async () => {
@@ -88,9 +94,9 @@ describe(`CreateCodeResourceComponent`, () => {
           sidebars: [],
           editorBlocks: [],
           editorComponents: [],
-          defaultProgrammingLanguageId: "spec"
-        }
-      ]
+          defaultProgrammingLanguageId: "spec",
+        },
+      ],
     });
 
     t.fixture.detectChanges();
@@ -100,13 +106,13 @@ describe(`CreateCodeResourceComponent`, () => {
 
   it(`Shows the first availabe block language as default`, async () => {
     let t = await createComponent();
-    const b = buildBlockLanguage()
+    const b = buildBlockLanguage();
 
     specLoadEmptyProject(t.projectService, {
       blockLanguages: [
         b,
-        buildBlockLanguage() // Two languages available
-      ]
+        buildBlockLanguage(), // Two languages available
+      ],
     });
 
     t.fixture.detectChanges();
@@ -116,8 +122,10 @@ describe(`CreateCodeResourceComponent`, () => {
 
   it(`Creating a new resource results in a HTTP request and a redirect`, async () => {
     const t = await createComponent();
-    const b = buildBlockLanguage()
-    const p = await specLoadEmptyProject(t.projectService, { blockLanguages: [b] });
+    const b = buildBlockLanguage();
+    const p = await specLoadEmptyProject(t.projectService, {
+      blockLanguages: [b],
+    });
     const r: CodeResourceDescription = {
       id: "a292fae1-aad7-4cfe-9646-6210a6814eab",
       name: "Test",
@@ -128,7 +136,9 @@ describe(`CreateCodeResourceComponent`, () => {
       updatedAt: "",
     };
 
-    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const httpTestingController: HttpTestingController = TestBed.get(
+      HttpTestingController
+    );
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
     // Setup a name and call the creation method
@@ -136,7 +146,8 @@ describe(`CreateCodeResourceComponent`, () => {
     const created = t.component.createCodeResource();
 
     // Mimic a succesful response
-    httpTestingController.expectOne(serverApi.getCodeResourceBaseUrl(p.id))
+    httpTestingController
+      .expectOne(serverApi.getCodeResourceBaseUrl(p.id))
       .flush(r);
 
     // Ensure the creation has actually happened
@@ -149,4 +160,4 @@ describe(`CreateCodeResourceComponent`, () => {
     const router: Router = TestBed.get(Router);
     expect(router.url).toEqual("/" + r.id);
   });
-})
+});

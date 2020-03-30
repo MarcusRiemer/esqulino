@@ -1,17 +1,24 @@
-<h1 i18n="Headline example projects@@headlineExampleProjects">Projektvorlagen für Einsteiger</h1>
+<h1 i18n="Headline example projects@@headlineExampleProjects">
+  Projektvorlagen für Einsteiger
+</h1>
 <p i18n="Example project explanation@@explanationExampleProjects">
-  Die auf dieser Seite vorgestellten Projekte eignen sich, um erste Schritte mit Datenbanken oder der Entwicklung von Webseiten zu machen.
+  Die auf dieser Seite vorgestellten Projekte eignen sich, um erste Schritte mit
+  Datenbanken oder der Entwicklung von Webseiten zu machen.
 </p>
 
 <mat-card class="alert-warning mb-3" role="alert">
-  <p i18n="Some functionality is currently deactivated@@deactivatedWebFunctions">
-    <strong>Die Web-Funktionalität ist aktuell leider deaktiviert 😕</strong> Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten, aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
+  <p
+    i18n="Some functionality is currently deactivated@@deactivatedWebFunctions"
+  >
+    <strong>Die Web-Funktionalität ist aktuell leider deaktiviert 😕</strong>
+    Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten,
+    aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
   </p>
 </mat-card>
 
-<div id="available-projects"
-     class="card-columns">
-  <project-list-item *ngFor="let project of projects | async"
-                     [project]="project">
-  </project-list-item>
+<div id="available-projects" class="card-columns">
+  <project-list-item
+    *ngFor="let project of projects | async"
+    [project]="project"
+  ></project-list-item>
 </div>

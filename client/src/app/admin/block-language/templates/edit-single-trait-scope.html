@@ -1,19 +1,28 @@
 <!-- The traits that should be applied by this scope -->
 <mat-form-field class="full-width-chip-list" appearance="fill">
   <mat-label>Angewendete Merkmale</mat-label>
-  <mat-hint>Die obigen Merkmale werden den unten angegebenen Attributen und Blöcke hinzugefügt.</mat-hint>
+  <mat-hint>
+    Die obigen Merkmale werden den unten angegebenen Attributen und Blöcke
+    hinzugefügt.
+  </mat-hint>
   <mat-chip-list #chipListTraits>
-    <mat-chip *ngFor="let traitName of scope?.traits"
-              (removed)="removeTrait(traitName)">
+    <mat-chip
+      *ngFor="let traitName of scope?.traits"
+      (removed)="removeTrait(traitName)"
+    >
       {{ traitName }}
       <span matChipRemove class="fa fa-minus-circle" aria-hidden="true"></span>
     </mat-chip>
-    <input [formControl]="formControlTraitName"
-           [matChipInputFor]="chipListTraits"
-           [matAutocomplete]="autoTraits">
+    <input
+      [formControl]="formControlTraitName"
+      [matChipInputFor]="chipListTraits"
+      [matAutocomplete]="autoTraits"
+    />
   </mat-chip-list>
-  <mat-autocomplete #autoTraits="matAutocomplete"
-                    (optionSelected)="selectedTrait($event)">
+  <mat-autocomplete
+    #autoTraits="matAutocomplete"
+    (optionSelected)="selectedTrait($event)"
+  >
     <mat-option *ngFor="let traitName of autocompleteTrait" [value]="traitName">
       {{ traitName }}
     </mat-option>
@@ -24,19 +33,31 @@
 <mat-form-field class="full-width-chip-list" appearance="fill">
   <mat-label>Ziel-Attribute</mat-label>
   <mat-chip-list #chipListAttributeTargets>
-    <mat-chip *ngFor="let target of attributeTargetList"
-              (removed)="removeTargetAttribute(target)">
+    <mat-chip
+      *ngFor="let target of attributeTargetList"
+      (removed)="removeTargetAttribute(target)"
+    >
       {{ target.grammar }}.{{ target.type }}.{{ target.attribute }}
       <span matChipRemove class="fa fa-minus-circle" aria-hidden="true"></span>
     </mat-chip>
-    <input [formControl]="formControlAttribute"
-           [matChipInputFor]="chipListAttributeTargets"
-           [matAutocomplete]="autoAttributes">
+    <input
+      [formControl]="formControlAttribute"
+      [matChipInputFor]="chipListAttributeTargets"
+      [matAutocomplete]="autoAttributes"
+    />
   </mat-chip-list>
-  <mat-autocomplete #autoAttributes="matAutocomplete"
-                    (optionSelected)="selectedAttribute($event)">
-    <mat-option *ngFor="let attribute of filteredAvailableAttributes | async" [value]="attribute">
-      {{ attribute.languageName }}.{{ attribute.typeName }}.{{ attribute.name }} (<code>{{ attribute.type }}</code>)
+  <mat-autocomplete
+    #autoAttributes="matAutocomplete"
+    (optionSelected)="selectedAttribute($event)"
+  >
+    <mat-option
+      *ngFor="let attribute of filteredAvailableAttributes | async"
+      [value]="attribute"
+    >
+      {{ attribute.languageName }}.{{ attribute.typeName }}.{{ attribute.name }}
+      (
+      <code>{{ attribute.type }}</code>
+      )
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
@@ -45,18 +66,27 @@
 <mat-form-field class="full-width-chip-list" appearance="fill">
   <mat-label>Ziel-Blöcke</mat-label>
   <mat-chip-list #chipListBlockTargets>
-    <mat-chip *ngFor="let block of blockTargetList"
-              (removed)="removeTargetBlock(block)">
+    <mat-chip
+      *ngFor="let block of blockTargetList"
+      (removed)="removeTargetBlock(block)"
+    >
       {{ block.grammar }}.{{ block.type }}[{{ block.index }}]
       <span matChipRemove class="fa fa-minus-circle" aria-hidden="true"></span>
     </mat-chip>
-    <input [formControl]="formControlBlock"
-           [matChipInputFor]="chipListBlockTargets"
-           [matAutocomplete]="autoBlocks">
+    <input
+      [formControl]="formControlBlock"
+      [matChipInputFor]="chipListBlockTargets"
+      [matAutocomplete]="autoBlocks"
+    />
   </mat-chip-list>
-  <mat-autocomplete #autoBlocks="matAutocomplete"
-                    (optionSelected)="selectedBlock($event)">
-    <mat-option *ngFor="let block of filteredAvailableBlocks | async" [value]="block">
+  <mat-autocomplete
+    #autoBlocks="matAutocomplete"
+    (optionSelected)="selectedBlock($event)"
+  >
+    <mat-option
+      *ngFor="let block of filteredAvailableBlocks | async"
+      [value]="block"
+    >
       {{ block.grammar }}.{{ block.type }}[{{ block.index }}]
     </mat-option>
   </mat-autocomplete>

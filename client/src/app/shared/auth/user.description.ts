@@ -1,4 +1,3 @@
-
 /**
  * is used to change the username
  */
@@ -45,11 +44,11 @@ export type UserPasswordDescription = {
   password: string;
   confirmedPassword: string;
   token: string;
-}
+};
 
 /**
  *
  */
 export function isUserResponse(obj: any): obj is UserDescription {
-  return typeof obj === "object" && 'userId' in obj;
+  return typeof obj === "object" && "userId" in obj;
 }

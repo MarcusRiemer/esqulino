@@ -1,56 +1,43 @@
-<h4 mat-dialog-title
-  class="add-email-dialog-title">
-
+<h4 mat-dialog-title class="add-email-dialog-title">
   Hinzufügen einer E-Mail
 </h4>
 
-<div mat-dialog-content
-  class="add-email-dialog-content">
-
+<div mat-dialog-content class="add-email-dialog-content">
   <label>
     Füge eine neue E-Mail deinem Konto hinzu.
-    <validate-input
-      icon="envelope-o"
-      [(value)]="newEmailData.email">
-
-      <input #inputRef      
+    <validate-input icon="envelope-o" [(value)]="newEmailData.email">
+      <input
+        #inputRef
         type="email"
         class="form-control"
-        placeholder="Insert a new e-mail">
+        placeholder="Insert a new e-mail"
+      />
     </validate-input>
   </label>
 
   <ng-container *ngIf="!existsPasswordIdentity(identities.providers)">
-    <validate-input 
-      icon="key"
-      [(value)]="newEmailData.password">
-
-      <input #inputRef
+    <validate-input icon="key" [(value)]="newEmailData.password">
+      <input
+        #inputRef
         type="password"
         class="form-control"
-        placeholder="Password">
+        placeholder="Password"
+      />
     </validate-input>
 
-    <validate-input
-        icon="key"
-        [(value)]="passwordConfirmation">
-
-      <input #inputRef
+    <validate-input icon="key" [(value)]="passwordConfirmation">
+      <input
+        #inputRef
         type="password"
         class="form-control"
-        placeholder="Confirm password">
+        placeholder="Confirm password"
+      />
     </validate-input>
   </ng-container>
 </div>
 
-<div mat-dialog-actions
-  class="add-email-dialog-actions">
-
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onAddEmail()">
-
+<div mat-dialog-actions class="add-email-dialog-actions">
+  <button mat-raised-button color="primary" (click)="onAddEmail()">
     Hinzufügen
   </button>
 </div>

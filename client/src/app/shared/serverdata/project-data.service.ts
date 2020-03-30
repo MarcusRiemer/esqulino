@@ -1,18 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { ProjectDescription, ProjectListDescription } from '../project.description';
+import {
+  ProjectDescription,
+  ProjectListDescription,
+} from "../project.description";
 
-import { ServerApiService } from './serverapi.service';
-import { DataService } from './data-service';
+import { ServerApiService } from "./serverapi.service";
+import { DataService } from "./data-service";
 
 /**
  * Convenient and cached access to server side project descriptions.
  */
 @Injectable()
-export class ProjectDataService extends DataService<ProjectListDescription, ProjectDescription> {
-
+export class ProjectDataService extends DataService<
+  ProjectListDescription,
+  ProjectDescription
+> {
   public constructor(
     private _serverApi: ServerApiService,
     snackBar: MatSnackBar,
@@ -22,6 +27,6 @@ export class ProjectDataService extends DataService<ProjectListDescription, Proj
   }
 
   protected resolveIndividualUrl(id: string): string {
-    return (this._serverApi.getProjectUrl(id));
+    return this._serverApi.getProjectUrl(id);
   }
 }

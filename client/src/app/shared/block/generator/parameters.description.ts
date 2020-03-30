@@ -1,17 +1,20 @@
 export interface ParameterTypeString {
-  "type": "string"
+  type: "string";
 }
 
 export interface ParameterTypeColor {
-  "type": "color"
+  type: "color";
 }
 
 export interface ParameterBoolean {
-  "type": "boolean"
+  type: "boolean";
 }
 
 // Defines the possible types for parameters
-export type ParameterType = ParameterTypeString | ParameterBoolean | ParameterTypeColor
+export type ParameterType =
+  | ParameterTypeString
+  | ParameterBoolean
+  | ParameterTypeColor;
 
 // Definition of a single parameter
 export interface ParameterDeclaration {
@@ -27,12 +30,12 @@ export interface ParameterDeclarations {
 // Resolves a value at runtime. The value must be the name of a parameter
 // that has been formally introduced before.
 export interface ParameterReference {
-  $ref: string
+  $ref: string;
 }
 
 // Checks for the "$ref" property
 export function isParameterReference(obj: any): obj is ParameterReference {
-  return (typeof (obj) === "object" && "$ref" in obj);
+  return typeof obj === "object" && "$ref" in obj;
 }
 
 // All types that are considered primitive in Javascript.
@@ -45,9 +48,9 @@ type PrimitiveType = string | number | boolean | undefined | null;
 // an actual value later.
 export type ParameterReferenceable<T> = {
   [P in keyof T]: T[P] extends PrimitiveType
-  ? (T[P] | ParameterReference)
-  : T[P] | ParameterReferenceable<T[P]>
-}
+    ? T[P] | ParameterReference
+    : T[P] | ParameterReferenceable<T[P]>;
+};
 
 // A value that is available under a certain name.
 export type ParameterValue = string | boolean;

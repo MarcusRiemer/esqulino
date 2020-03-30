@@ -1,15 +1,15 @@
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { ProjectResource } from '../resource';
-import { ResourceReferencesService } from '../resource-references.service';
+import { ProjectResource } from "../resource";
+import { ResourceReferencesService } from "../resource-references.service";
 
-import { CodeResourceDescription } from './coderesource.description';
-import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
-import { embraceNode } from './drop-embrace';
-import { BlockLanguage } from '../block/block-language';
+import { CodeResourceDescription } from "./coderesource.description";
+import { Tree, NodeDescription, NodeLocation } from "./syntaxtree";
+import { embraceNode } from "./drop-embrace";
+import { BlockLanguage } from "../block/block-language";
 
-export * from './coderesource.description'
+export * from "./coderesource.description";
 
 /**
  * A resource that is described by a syntaxtree.
@@ -24,7 +24,6 @@ export * from './coderesource.description'
  * be reflected in the code resource.
  */
 export class CodeResource extends ProjectResource {
-
   private _tree = new BehaviorSubject<Tree>(new Tree(undefined));
 
   private _emittedLanguageId = new BehaviorSubject<string>(undefined);
@@ -46,43 +45,48 @@ export class CodeResource extends ProjectResource {
    * @return The ID of the language this resource uses.
    */
   get emittedLanguageIdPeek() {
-    return (this._emittedLanguageId.value);
+    return this._emittedLanguageId.value;
   }
 
   /**
    * @return An observable value of the language this id uses.
    */
   get emittedLanguageId(): Observable<string> {
-    return (this._emittedLanguageId);
+    return this._emittedLanguageId;
   }
 
   /**
    * @return A snapshot of the language that is currently in use.
    */
   get emittedLanguagePeek() {
-    return (this.resourceReferences.getCoreProgrammingLanguage(this.emittedLanguageIdPeek));
+    return this.resourceReferences.getCoreProgrammingLanguage(
+      this.emittedLanguageIdPeek
+    );
   }
 
   get validatorPeek() {
-    return (this.resourceReferences.getValidator(this.emittedLanguageIdPeek, this.blockLanguagePeek.grammarId));
+    return this.resourceReferences.getValidator(
+      this.emittedLanguageIdPeek,
+      this.blockLanguagePeek.grammarId
+    );
   }
 
   /**
    * @return The language that is currently in use
    */
   get emittedLanguage() {
-    return (this._emittedLanguageId.pipe(
-      map(l => this.resourceReferences.getCoreProgrammingLanguage(l))
-    ));
+    return this._emittedLanguageId.pipe(
+      map((l) => this.resourceReferences.getCoreProgrammingLanguage(l))
+    );
   }
 
   /**
    * @return The language that is currently in use
    */
   get blockLanguage(): Observable<BlockLanguage> {
-    return (this._blockLanguageId.pipe(
-      map(l => this.resourceReferences.getBlockLanguage(l, "throw")),
-    ));
+    return this._blockLanguageId.pipe(
+      map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
+    );
   }
 
   /**
@@ -98,18 +102,21 @@ export class CodeResource extends ProjectResource {
    * @return An observable value of the language this id uses.
    */
   get blockLanguageId(): Observable<string> {
-    return (this._blockLanguageId);
+    return this._blockLanguageId;
   }
 
   /**
    * @return The ID of the language this resource uses.
    */
   get blockLanguageIdPeek() {
-    return (this._blockLanguageId.value);
+    return this._blockLanguageId.value;
   }
 
   get blockLanguagePeek() {
-    return (this.resourceReferences.getBlockLanguage(this.blockLanguageIdPeek, "undefined"));
+    return this.resourceReferences.getBlockLanguage(
+      this.blockLanguageIdPeek,
+      "undefined"
+    );
   }
 
   /**
@@ -124,14 +131,14 @@ export class CodeResource extends ProjectResource {
    * @return A peek at the tree that describes the code of this resource.
    */
   get syntaxTreePeek(): Tree {
-    return (this._tree.value);
+    return this._tree.value;
   }
 
   /**
    * @return The tree that describes the code of this resource.
    */
   get syntaxTree(): Observable<Tree> {
-    return (this._tree);
+    return this._tree;
   }
 
   /**
@@ -169,9 +176,14 @@ export class CodeResource extends ProjectResource {
    *       entirely.
    */
   embraceNode(loc: NodeLocation, desc: NodeDescription[]) {
-    console.log(`Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`, desc);
+    console.log(
+      `Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`,
+      desc
+    );
 
-    this.replaceSyntaxTree(embraceNode(this.validatorPeek, this.syntaxTreePeek, loc, desc));
+    this.replaceSyntaxTree(
+      embraceNode(this.validatorPeek, this.syntaxTreePeek, loc, desc)
+    );
   }
 
   /**
@@ -218,9 +230,13 @@ export class CodeResource extends ProjectResource {
    * @param newKey The new name of the property.
    */
   renameProperty(loc: NodeLocation, key: string, newKey: string) {
-    console.log(`Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`);
+    console.log(
+      `Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`
+    );
 
-    this.replaceSyntaxTree(this.syntaxTreePeek.renameProperty(loc, key, newKey));
+    this.replaceSyntaxTree(
+      this.syntaxTreePeek.renameProperty(loc, key, newKey)
+    );
   }
 
   /**
@@ -250,32 +266,33 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The latest generated code for this resource.
    */
-  readonly generatedCode = combineLatest(this.syntaxTree, this.emittedLanguage)
-    .pipe(
-      map(([tree, lang]) => {
-        if (tree && !tree.isEmpty && lang) {
-          try {
-            return (lang.emitTree(tree));
-          } catch (e) {
-            return (e.toString());
-          }
-        } else {
-          return ("");
+  readonly generatedCode = combineLatest(
+    this.syntaxTree,
+    this.emittedLanguage
+  ).pipe(
+    map(([tree, lang]) => {
+      if (tree && !tree.isEmpty && lang) {
+        try {
+          return lang.emitTree(tree);
+        } catch (e) {
+          return e.toString();
         }
-      })
-    );
+      } else {
+        return "";
+      }
+    })
+  );
 
   /**
    * @return Serialized description of this code resource.
    */
   toModel(): CodeResourceDescription {
-    return ({
+    return {
       id: this.id,
       name: this.name,
       ast: this.syntaxTreePeek.toModel(),
       programmingLanguageId: this.emittedLanguageIdPeek,
       blockLanguageId: this.blockLanguageIdPeek,
-    });
+    };
   }
-
 }

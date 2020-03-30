@@ -1,41 +1,43 @@
-import { MayPerformRequestDescription } from './../../may-perform.description';
-import { BasePerformData } from './base';
+import { MayPerformRequestDescription } from "./../../may-perform.description";
+import { BasePerformData } from "./base";
 
 export class SettingsPerformData extends BasePerformData {
-  constructor() { super(); }
-  
+  constructor() {
+    super();
+  }
+
   public changeUsername(): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: "User",
-      policyAction: "change_username"
-    })
+      policyAction: "change_username",
+    };
   }
 
   public changePrimaryEmail(): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: "User",
-      policyAction: "send_change_email"
-    })
+      policyAction: "send_change_email",
+    };
   }
 
   public changePassword(): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: "PasswordIdentity",
-      policyAction: "change_password"
-    })
+      policyAction: "change_password",
+    };
   }
 
   public listProviders(): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: "Identity",
-      policyAction: "list"
-    })
+      policyAction: "list",
+    };
   }
 
   public linkedIdentities(): MayPerformRequestDescription {
-    return ({
+    return {
       resourceType: "Identity",
-      policyAction: "show"
-    })
+      policyAction: "show",
+    };
   }
 }

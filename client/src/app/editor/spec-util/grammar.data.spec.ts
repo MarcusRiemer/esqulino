@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from "@angular/core/testing";
+import { HttpTestingController } from "@angular/common/http/testing";
 
 import { GrammarDescription, GrammarListDescription } from "../../shared/";
-import { generateUUIDv4 } from '../../shared/util-browser';
-import { ServerApiService, GrammarDataService } from '../../shared/serverdata';
-import { JsonApiListResponse } from '../../shared/serverdata/json-api-response';
+import { generateUUIDv4 } from "../../shared/util-browser";
+import { ServerApiService, GrammarDataService } from "../../shared/serverdata";
+import { JsonApiListResponse } from "../../shared/serverdata/json-api-response";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -12,12 +12,12 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   programmingLanguageId: "spec",
   root: { languageName: "spec", typeName: "root" },
   types: {
-    "spec": {
-      "root": {
-        type: "concrete"
-      }
-    }
-  }
+    spec: {
+      root: {
+        type: "concrete",
+      },
+    },
+  },
 });
 
 /**
@@ -27,7 +27,9 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
 export const buildGrammar = (
   override?: Partial<GrammarDescription>
 ): GrammarDescription => {
-  return (Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id: generateUUIDv4() }));
+  return Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, {
+    id: generateUUIDv4(),
+  });
 };
 
 /**
@@ -42,15 +44,16 @@ export const ensureLocalGrammarRequest = (
 
   const toReturn = GrammarData.getLocal(response.id, "request");
 
-  httpTestingController.expectOne(serverApi.individualGrammarUrl(response.id))
+  httpTestingController
+    .expectOne(serverApi.individualGrammarUrl(response.id))
     .flush(response);
 
-  return (toReturn);
-}
+  return toReturn;
+};
 
 export interface GrammarOrder {
-  field: keyof GrammarListDescription,
-  direction: "asc" | "desc"
+  field: keyof GrammarListDescription;
+  direction: "asc" | "desc";
 }
 
 /**
@@ -60,11 +63,11 @@ export interface GrammarOrder {
 export const provideGrammarList = (
   items: GrammarDescription[],
   options?: {
-    order?: GrammarOrder,
+    order?: GrammarOrder;
     pagination?: {
-      limit: number,
-      page: number,
-    }
+      limit: number;
+      page: number;
+    };
   }
 ) => {
   const httpTestingController = TestBed.inject(HttpTestingController);
@@ -73,8 +76,8 @@ export const provideGrammarList = (
   const response: JsonApiListResponse<GrammarDescription> = {
     data: items,
     meta: {
-      totalCount: items.length
-    }
+      totalCount: items.length,
+    },
   };
 
   let reqUrl = serverApi.getGrammarListUrl();
@@ -93,6 +96,5 @@ export const provideGrammarList = (
     }
   }
 
-  httpTestingController.expectOne(reqUrl)
-    .flush(response);
-}
+  httpTestingController.expectOne(reqUrl).flush(response);
+};

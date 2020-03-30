@@ -1,5 +1,5 @@
-import { ProjectFullDescription } from './project'
-import { BlockLanguageDescription } from './block/block-language.description'
+import { ProjectFullDescription } from "./project";
+import { BlockLanguageDescription } from "./block/block-language.description";
 
 /**
  * Return a valid description of an empty project. Individual parts of
@@ -8,7 +8,9 @@ import { BlockLanguageDescription } from './block/block-language.description'
  * @param override A partial project that overrides the default description.
  * @return A schematically correct description of a project.
  */
-export function emptyProject(override: Partial<ProjectFullDescription>): ProjectFullDescription {
+export function emptyProject(
+  override: Partial<ProjectFullDescription>
+): ProjectFullDescription {
   const defaultDescription: ProjectFullDescription = {
     id: "test",
     slug: "test",
@@ -25,7 +27,7 @@ export function emptyProject(override: Partial<ProjectFullDescription>): Project
     sources: [],
   };
 
-  return (Object.assign(defaultDescription, override));
+  return Object.assign(defaultDescription, override);
 }
 
 /**
@@ -35,7 +37,9 @@ export function emptyProject(override: Partial<ProjectFullDescription>): Project
  * @param override A partial project that overrides the default description.
  * @return A schematically correct description of a project.
  */
-export function emptyBlockLanguage(override: Partial<BlockLanguageDescription>): BlockLanguageDescription {
+export function emptyBlockLanguage(
+  override: Partial<BlockLanguageDescription>
+): BlockLanguageDescription {
   const defaultDescription: BlockLanguageDescription = {
     id: "test",
     slug: "test",
@@ -48,5 +52,5 @@ export function emptyBlockLanguage(override: Partial<BlockLanguageDescription>):
     updatedAt: "",
   };
 
-  return (Object.assign(defaultDescription, override));
+  return Object.assign(defaultDescription, override);
 }

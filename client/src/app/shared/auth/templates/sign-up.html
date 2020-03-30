@@ -1,60 +1,55 @@
 <div class="flex-column authentication align-items-center">
-  <validate-input
-    icon="envelope-o"
-    [(value)]="signUpData.email">
-
-    <input #inputRef
+  <validate-input icon="envelope-o" [(value)]="signUpData.email">
+    <input
+      #inputRef
       type="email"
       class="form-control"
       placeholder="E-Mail"
-      required>
+      required
+    />
   </validate-input>
 
-  <validate-input
-    icon="user"
-    [(value)]="signUpData.username">
-
-    <input #inputRef 
+  <validate-input icon="user" [(value)]="signUpData.username">
+    <input
+      #inputRef
       type="text"
       class="form-control"
       placeholder="Username"
-      required>
+      required
+    />
   </validate-input>
 
-  <validate-input
-    [(value)]="signUpData.password">
-
-    <input #inputRef 
+  <validate-input [(value)]="signUpData.password">
+    <input
+      #inputRef
       type="password"
       class="form-control"
       placeholder="Password"
-      required>
+      required
+    />
   </validate-input>
 
   <validate-input
     error="Needs a length of min. 5"
-    [(value)]="confirmedPassword">
-
-    <input #inputRef 
+    [(value)]="confirmedPassword"
+  >
+    <input
+      #inputRef
       type="password"
       class="form-control"
       placeholder="Confirm password"
-      required>
+      required
+    />
   </validate-input>
-
 
   <div class="row resend-activation-link-text">
     <div>
-      Aktivierungsmail nicht erhalten? <a (click)="onSendVerifyLink()">Klicke hier</a>
+      Aktivierungsmail nicht erhalten?
+      <a (click)="onSendVerifyLink()">Klicke hier</a>
     </div>
-
   </div>
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onSignUp()">
-
+  <button mat-raised-button color="primary" (click)="onSignUp()">
     Registrieren
   </button>
 </div>

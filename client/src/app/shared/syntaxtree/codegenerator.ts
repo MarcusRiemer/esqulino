@@ -1,11 +1,11 @@
-import { Node, Tree, QualifiedTypeName } from './syntaxtree'
+import { Node, Tree, QualifiedTypeName } from "./syntaxtree";
 
 export enum OutputSeparator {
   NONE,
   SPACE_BEFORE,
   SPACE_AFTER,
   NEW_LINE_BEFORE,
-  NEW_LINE_AFTER
+  NEW_LINE_AFTER,
 }
 
 /**
@@ -16,7 +16,7 @@ interface GeneratedNode {
   depth: number;
   compilation: string;
   node: Node;
-  sep: OutputSeparator
+  sep: OutputSeparator;
 }
 
 /**
@@ -26,28 +26,28 @@ export class CodeGeneratorProcess<TState extends {}> {
   private _generated: GeneratedNode[] = [];
   private _currentDepth: number = 0;
 
-  constructor(
-    private _generator: CodeGenerator,
-    private _state?: TState
-  ) {
-  }
+  constructor(private _generator: CodeGenerator, private _state?: TState) {}
 
   /**
    * @return The user defined state
    */
   get state(): TState {
-    return (this._state);
+    return this._state;
   }
 
   /**
    * Adds some compiled node to the current result.
    */
-  addConvertedFragment(compilation: string, node: Node, sep = OutputSeparator.NONE) {
+  addConvertedFragment(
+    compilation: string,
+    node: Node,
+    sep = OutputSeparator.NONE
+  ) {
     this._generated.push({
       depth: this._currentDepth,
       compilation: compilation,
       node: node,
-      sep: sep
+      sep: sep,
     });
   }
 
@@ -90,10 +90,14 @@ export class CodeGeneratorProcess<TState extends {}> {
       let finalSep = gen.sep;
 
       // Are these first or last elements with irrelevant separators?
-      const firstBefore = gen == first
-        && (gen.sep == OutputSeparator.NEW_LINE_BEFORE || gen.sep == OutputSeparator.SPACE_BEFORE);
-      const lastAfter = gen == last
-        && (gen.sep == OutputSeparator.NEW_LINE_AFTER || gen.sep == OutputSeparator.SPACE_AFTER)
+      const firstBefore =
+        gen == first &&
+        (gen.sep == OutputSeparator.NEW_LINE_BEFORE ||
+          gen.sep == OutputSeparator.SPACE_BEFORE);
+      const lastAfter =
+        gen == last &&
+        (gen.sep == OutputSeparator.NEW_LINE_AFTER ||
+          gen.sep == OutputSeparator.SPACE_AFTER);
       if (firstBefore || lastAfter) {
         finalSep = OutputSeparator.NONE;
       }
@@ -102,9 +106,13 @@ export class CodeGeneratorProcess<TState extends {}> {
       if (i > 0 && finalSep != OutputSeparator.NONE) {
         let prevSep = this._generated[i - 1].sep;
         // Would this loead to two newlines?
-        const doubleNewline = prevSep == OutputSeparator.NEW_LINE_AFTER && finalSep == OutputSeparator.NEW_LINE_BEFORE;
+        const doubleNewline =
+          prevSep == OutputSeparator.NEW_LINE_AFTER &&
+          finalSep == OutputSeparator.NEW_LINE_BEFORE;
         // Or to two spaces?
-        const doubleSpace = prevSep == OutputSeparator.SPACE_AFTER && finalSep == OutputSeparator.SPACE_BEFORE;
+        const doubleSpace =
+          prevSep == OutputSeparator.SPACE_AFTER &&
+          finalSep == OutputSeparator.SPACE_BEFORE;
 
         // In that case we disregard this separator
         if (doubleNewline || doubleSpace) {
@@ -114,34 +122,35 @@ export class CodeGeneratorProcess<TState extends {}> {
 
       // Applying the separator and possibly indentation (for newlines)
       switch (finalSep) {
-        case OutputSeparator.NEW_LINE_BEFORE: return "\n" + gen.compilation;
-        case OutputSeparator.NEW_LINE_AFTER: return gen.compilation + "\n";
-        case OutputSeparator.SPACE_BEFORE: return " " + gen.compilation;
-        case OutputSeparator.SPACE_AFTER: return gen.compilation + " ";
-        case OutputSeparator.NONE: return gen.compilation;
-      }
-    }
-
-    const INDENT = '  '; // The string that is used to indent stuff
-    const indent = (fragment: string, i: number, all: string[]) => {
-      if (fragment.startsWith("\n")) {
-        // Insert indentation characters after newline
-        return ("\n" + INDENT.repeat(this._generated[i].depth) + fragment.substring(1));
-      }
-      else if (fragment.endsWith("\n") && (i + 1 < all.length)) {
-        // Insert indentation characters for the next element after newline
-        return (fragment + INDENT.repeat(this._generated[i + 1].depth));
-      } else {
-        return (fragment);
+        case OutputSeparator.NEW_LINE_BEFORE:
+          return "\n" + gen.compilation;
+        case OutputSeparator.NEW_LINE_AFTER:
+          return gen.compilation + "\n";
+        case OutputSeparator.SPACE_BEFORE:
+          return " " + gen.compilation;
+        case OutputSeparator.SPACE_AFTER:
+          return gen.compilation + " ";
+        case OutputSeparator.NONE:
+          return gen.compilation;
       }
     };
 
-    return (
-      this._generated
-        .map(sepChar)
-        .map(indent)
-        .join("")
-    );
+    const INDENT = "  "; // The string that is used to indent stuff
+    const indent = (fragment: string, i: number, all: string[]) => {
+      if (fragment.startsWith("\n")) {
+        // Insert indentation characters after newline
+        return (
+          "\n" + INDENT.repeat(this._generated[i].depth) + fragment.substring(1)
+        );
+      } else if (fragment.endsWith("\n") && i + 1 < all.length) {
+        // Insert indentation characters for the next element after newline
+        return fragment + INDENT.repeat(this._generated[i + 1].depth);
+      } else {
+        return fragment;
+      }
+    };
+
+    return this._generated.map(sepChar).map(indent).join("");
   }
 }
 
@@ -171,29 +180,27 @@ export interface NodeConverter<T extends {}> {
    * init-function.
    */
   finish?: (node: Node, process: CodeGeneratorProcess<T>) => void;
-
 }
 
 /**
  * Used to register a NodeConverter for a certain type.
  */
 export interface NodeConverterRegistration {
-  converter: NodeConverter<any>,
-  type: QualifiedTypeName
+  converter: NodeConverter<any>;
+  type: QualifiedTypeName;
 }
 
 /**
  * Registers callbacks per language per type.
  */
 type RegisteredCallbacks = {
-  [langName: string]: { [typeName: string]: NodeConverter<any> }
+  [langName: string]: { [typeName: string]: NodeConverter<any> };
 };
 
 /**
  * Transforms an AST into its compiled string representation.
  */
 export class CodeGenerator {
-
   private _callbacks: RegisteredCallbacks = {};
   private _state?: any;
 
@@ -201,7 +208,7 @@ export class CodeGenerator {
     // Merge all the given states into a single object
     this._state = Object.assign({}, ...state);
 
-    converters.forEach(c => this.registerConverter(c.type, c.converter));
+    converters.forEach((c) => this.registerConverter(c.type, c.converter));
   }
 
   /**
@@ -209,9 +216,14 @@ export class CodeGenerator {
    * duplicate converters are not allowed, so it is not possible
    * to unintentionally overwrite already registered convertes.
    */
-  private registerConverter(t: QualifiedTypeName, converter: NodeConverter<any>) {
+  private registerConverter(
+    t: QualifiedTypeName,
+    converter: NodeConverter<any>
+  ) {
     if (this.hasConverter(t)) {
-      throw new Error(`There is already a converter for "${t.languageName}.${t.typeName}"`);
+      throw new Error(
+        `There is already a converter for "${t.languageName}.${t.typeName}"`
+      );
     } else {
       if (!this._callbacks[t.languageName]) {
         this._callbacks[t.languageName] = {};
@@ -237,7 +249,7 @@ export class CodeGenerator {
       const process = new CodeGeneratorProcess(this, stateCopy);
       process.generateNode(rootNode);
 
-      return (process.emit());
+      return process.emit();
     } else {
       throw new Error("Attempted to generate code for empty tree");
     }
@@ -247,7 +259,10 @@ export class CodeGenerator {
    * @return True if there is a converter for the given type.
    */
   hasConverter(t: QualifiedTypeName) {
-    return !!(this._callbacks[t.languageName] && this._callbacks[t.languageName][t.typeName]);
+    return !!(
+      this._callbacks[t.languageName] &&
+      this._callbacks[t.languageName][t.typeName]
+    );
   }
 
   /**
@@ -255,14 +270,21 @@ export class CodeGenerator {
    */
   getConverter(t: QualifiedTypeName) {
     if (!this._callbacks[t.languageName]) {
-      throw new Error(`Language "${t.languageName}" is unknown to CodeGenerator, available languages are: [${Object.keys(this._callbacks).join(", ")}]`);
+      throw new Error(
+        `Language "${
+          t.languageName
+        }" is unknown to CodeGenerator, available languages are: [${Object.keys(
+          this._callbacks
+        ).join(", ")}]`
+      );
     }
 
     if (!this._callbacks[t.languageName][t.typeName]) {
-      throw new Error(`Type "${t.languageName}.${t.typeName}" is unknown to CodeGenerator`);
+      throw new Error(
+        `Type "${t.languageName}.${t.typeName}" is unknown to CodeGenerator`
+      );
     }
 
-    return (this._callbacks[t.languageName][t.typeName]);
+    return this._callbacks[t.languageName][t.typeName];
   }
-
 }

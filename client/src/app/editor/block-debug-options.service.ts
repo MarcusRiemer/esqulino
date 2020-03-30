@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
 
 class ObservableValue<T> {
   private _value = new BehaviorSubject<T>(undefined);
@@ -10,8 +10,12 @@ class ObservableValue<T> {
 
   readonly value$: Observable<T> = this._value;
 
-  get value() { return (this._value.value); }
-  set value(v: T) { this._value.next(v) }
+  get value() {
+    return this._value.value;
+  }
+  set value(v: T) {
+    this._value.next(v);
+  }
 }
 
 @Injectable()

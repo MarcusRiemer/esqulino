@@ -2,30 +2,39 @@
   <h3>Neue Grammatik</h3>
   <!-- Editable name of the grammar -->
   <div class="form-group row">
-    <label for="grammar-name"
-           class="col-sm-2 col-form-label">Name</label>
+    <label for="grammar-name" class="col-sm-2 col-form-label">Name</label>
     <div class="col-sm-10">
-      <input id="grammar-name"
-             name="name"
-             class="form-control"
-             required
-             [(ngModel)]="grammar.name">
+      <input
+        id="grammar-name"
+        name="name"
+        class="form-control"
+        required
+        [(ngModel)]="grammar.name"
+      />
     </div>
   </div>
 
   <!-- The default programming language that should be associated with this grammar -->
   <div class="form-group row">
-    <label for="grammar-programming-language-id"
-           class="col-sm-2 col-form-label">Programmiersprache</label>
+    <label
+      for="grammar-programming-language-id"
+      class="col-sm-2 col-form-label"
+    >
+      Programmiersprache
+    </label>
     <div class="col-sm-10">
-      <select id="grammar-programming-language-id"
-              name="programming_language_id"
-              class="custom-select"
-              required
-              [(ngModel)]="grammar.programmingLanguageId">
+      <select
+        id="grammar-programming-language-id"
+        name="programming_language_id"
+        class="custom-select"
+        required
+        [(ngModel)]="grammar.programmingLanguageId"
+      >
         <option value="">-- Programmiersprache Wählen --</option>
-        <option *ngFor="let progLang of availableProgrammingLanguages"
-                [value]="progLang.id">
+        <option
+          *ngFor="let progLang of availableProgrammingLanguages"
+          [value]="progLang.id"
+        >
           {{ progLang.name }}
         </option>
       </select>
@@ -33,9 +42,7 @@
   </div>
 
   <!-- Submitting -->
-  <button (click)="submitForm()"
-          type="submit"
-          class="btn btn-primary">
+  <button (click)="submitForm()" type="submit" class="btn btn-primary">
     Neue Grammatik Anlegen
   </button>
 </form>

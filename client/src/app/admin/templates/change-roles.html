@@ -1,20 +1,15 @@
 <label>
   Benutzerrollen übernehmen
-  <validate-input
-    icon="user"
-    [(value)]="userId">
-
-    <input #inputRef
+  <validate-input icon="user" [(value)]="userId">
+    <input
+      #inputRef
       type="text"
       class="form-control"
-      placeholder="Benutzer-ID">
+      placeholder="Benutzer-ID"
+    />
   </validate-input>
 </label>
 
-<button
-  mat-raised-button
-  color="primary"
-  (click)="changeRoles()">
-
+<button mat-raised-button color="primary" (click)="changeRoles()">
   Benutzerrollen übernehmen
 </button>

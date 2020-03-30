@@ -1,23 +1,41 @@
 <h2 i18n="example videos headline@@exampleVideosHeadline">Beispielvideos</h2>
 
 <div class="alert alert-danger" role="alert">
-  <strong i18n="example videos alert@@exampleVideosAlert">Diese Videos sind kein Lehrmaterial!</strong>
-  <ng-container i18n="example videos alert description@@exampleVideosAlertDescription">Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen.</ng-container>
+  <strong i18n="example videos alert@@exampleVideosAlert">
+    Diese Videos sind kein Lehrmaterial!
+  </strong>
+  <ng-container
+    i18n="example videos alert description@@exampleVideosAlertDescription"
+  >
+    Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten"
+    Eindruck von dieser Software bieten und möglichst neugierig machen.
+  </ng-container>
   <ng-container i18n="example videos alert contact@@exampleVideosAlertContact">
     Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte
-  </ng-container> <a [routerLink]="['/about/imprint']" i18n="example videos alert contact email link text@@exampleVideosAlertContactEmailLink">per Mail direkt an Marcus Riemer</a>.
+  </ng-container>
+  <a
+    [routerLink]="['/about/imprint']"
+    i18n="example videos alert contact email link text@@exampleVideosAlertContactEmailLink"
+  >
+    per Mail direkt an Marcus Riemer
+  </a>
+  .
 </div>
 
-<div *ngFor="let video of videos | async"
-     class="card">
+<div *ngFor="let video of videos | async" class="card">
   <div class="card-body">
     <h4 class="card-title">{{ video.title }}</h4>
     <p class="card-text">{{ video.description }}</p>
   </div>
-  <video src="{{ video.mp4Url }}"
-         poster="{{ video.stillImageUrl }}"
-         class="card-img-top img-fluid"
-         controls>
-    Sorry, anscheinend kann Ihr Browser das Video nicht abspielen :( Sie können das Video aber auch <a href="{{ video.mp4Url }}">herunterladen</a> und in einem Videoprogramm ansehen.
+  <video
+    src="{{ video.mp4Url }}"
+    poster="{{ video.stillImageUrl }}"
+    class="card-img-top img-fluid"
+    controls
+  >
+    Sorry, anscheinend kann Ihr Browser das Video nicht abspielen :( Sie können
+    das Video aber auch
+    <a href="{{ video.mp4Url }}">herunterladen</a>
+    und in einem Videoprogramm ansehen.
   </video>
 </div>

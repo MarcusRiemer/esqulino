@@ -1,5 +1,8 @@
-import { SidebarDescription, EditorBlockDescription } from './block.description'
-import { BlockLanguageGeneratorDocument } from './generator/generator.description';
+import {
+  SidebarDescription,
+  EditorBlockDescription,
+} from "./block.description";
+import { BlockLanguageGeneratorDocument } from "./generator/generator.description";
 
 /**
  * Augments a language with information about the UI layer. This definition is
@@ -11,9 +14,9 @@ import { BlockLanguageGeneratorDocument } from './generator/generator.descriptio
  * * Definitions of the actual blocks.
  * * Possibly language specific editor components.
  */
-export interface BlockLanguageDescription extends BlockLanguageDocument, BlockLanguageListDescription {
-
-}
+export interface BlockLanguageDescription
+  extends BlockLanguageDocument,
+    BlockLanguageListDescription {}
 
 /**
  * Superficial information about a block language, usually used when loads of
@@ -67,77 +70,86 @@ export interface BlockLanguageListDescription {
  * Every component may define the following properties
  */
 export interface EditorComponentBaseDescription {
-  columnClasses?: string[]
+  columnClasses?: string[];
 }
 
 /**
  * Displays the actual block editor
  */
-export interface CodeResourceSettingsComponentDescription extends EditorComponentBaseDescription {
-  componentType: "code-resource-settings"
+export interface CodeResourceSettingsComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "code-resource-settings";
 }
 
 /**
  * Displays the actual block editor
  */
-export interface BlockRootComponentDescription extends EditorComponentBaseDescription {
-  componentType: "block-root"
+export interface BlockRootComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "block-root";
 }
 
 /**
  * Displays debug information about an ongoing drag process
  */
-export interface DropDebugComponentDescription extends EditorComponentBaseDescription {
-  componentType: "drop-debug"
+export interface DropDebugComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "drop-debug";
 }
 
 /**
  * Displays (limited) results of SQL-queries
  */
-export interface QueryPreviewComponentDescription extends EditorComponentBaseDescription {
-  componentType: "query-preview"
+export interface QueryPreviewComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "query-preview";
 }
 
 /**
  * Displays validation results
  */
-export interface ValidatorComponentDescription extends EditorComponentBaseDescription {
-  componentType: "validator"
+export interface ValidatorComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "validator";
 }
 
 /**
  * Displays the compiled program
  */
-export interface CodeGeneratorComponentDescription extends EditorComponentBaseDescription {
-  componentType: "generated-code"
+export interface CodeGeneratorComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "generated-code";
 }
 
 /**
  * Displays a truck world
  */
-export interface TruckWorldComponentDescription extends EditorComponentBaseDescription {
-  componentType: "truck-world"
+export interface TruckWorldComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "truck-world";
 }
 
 /**
  * Displays a truck controller
  */
-export interface TruckControllerComponentDescription extends EditorComponentBaseDescription {
-  componentType: "truck-controller"
+export interface TruckControllerComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "truck-controller";
 }
 
 /**
  * Displays a trucks sensors
  */
-export interface TruckSensorsComponentDescription extends EditorComponentBaseDescription {
-  componentType: "truck-sensors"
+export interface TruckSensorsComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "truck-sensors";
 }
 
 /**
  * Any component that could be displayed in the actual editor view.
  */
 export type EditorComponentDescription =
-  CodeResourceSettingsComponentDescription
+  | CodeResourceSettingsComponentDescription
   | BlockRootComponentDescription
   | QueryPreviewComponentDescription
   | ValidatorComponentDescription
@@ -181,11 +193,13 @@ export interface BlockLanguageDocument {
 /**
  * The server hands out additional information that is only used for display purposes.
  */
-export interface BlockLanguageListResponseDescription extends BlockLanguageListDescription {
-  generated: boolean
+export interface BlockLanguageListResponseDescription
+  extends BlockLanguageListDescription {
+  generated: boolean;
 }
 
-
-export function isBlockLanguageDescription(obj: any): obj is BlockLanguageDescription {
-  return ("id" in obj && "name" in obj && "defaultProgrammingLanguageId" in obj);
+export function isBlockLanguageDescription(
+  obj: any
+): obj is BlockLanguageDescription {
+  return "id" in obj && "name" in obj && "defaultProgrammingLanguageId" in obj;
 }

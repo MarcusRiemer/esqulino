@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { Angulartics2 } from 'angulartics2';
+import { Angulartics2 } from "angulartics2";
 
 export enum TrackCategory {
-  BlockEditor = "blockEditor"
+  BlockEditor = "blockEditor",
 }
 
 export interface TrackEvent {
@@ -18,10 +18,7 @@ export interface TrackEvent {
  */
 @Injectable()
 export class AnalyticsService {
-
-  constructor(private _tracking: Angulartics2) {
-
-  }
+  constructor(private _tracking: Angulartics2) {}
 
   /**
    * Tracks a specific event that has just happened.
@@ -32,8 +29,8 @@ export class AnalyticsService {
       properties: {
         category: evt.category,
         name: evt.name,
-        value: evt.value
-      }
+        value: evt.value,
+      },
     });
   }
 }

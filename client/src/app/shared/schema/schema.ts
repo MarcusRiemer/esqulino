@@ -1,5 +1,5 @@
-import { TableDescription } from './schema.description'
-import { Table } from './table'
+import { TableDescription } from "./schema.description";
+import { Table } from "./table";
 
 /**
  * A database schema against which a query could be tested. All get methods
@@ -15,8 +15,9 @@ export class Schema {
   private _tables: Table[];
 
   constructor(tables: TableDescription[]) {
-    this._tables = tables
-      .map(val => new Table(val, val.columns, val.foreign_keys))
+    this._tables = tables.map(
+      (val) => new Table(val, val.columns, val.foreign_keys)
+    );
   }
 
   /**
@@ -24,20 +25,20 @@ export class Schema {
    *         `undefined` if the table does not exist.
    */
   getTable(name: string, throwOnError = false) {
-    const toReturn = this._tables.find(t => t.name == name);
+    const toReturn = this._tables.find((t) => t.name == name);
 
     if (!toReturn && throwOnError) {
       throw new Error(`Can't find table ${name}`);
     }
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
    * @return True, if a table with that name exists.
    */
   hasTable(name: string) {
-    return (!!this._tables.find(t => t.name == name));
+    return !!this._tables.find((t) => t.name == name);
   }
 
   /**
@@ -47,17 +48,21 @@ export class Schema {
    * @return All known type information about the requested column.
    */
   getColumnByIndex(tableName: string, columnIndex: number) {
-    const table = this._tables.find(t => t.name == tableName);
+    const table = this._tables.find((t) => t.name == tableName);
 
     if (!table) {
-      throw new Error(`Can't even find table ${tableName} for column #${columnIndex}`);
+      throw new Error(
+        `Can't even find table ${tableName} for column #${columnIndex}`
+      );
     }
 
     if (columnIndex > table.columns.length) {
-      throw new Error(`Table ${tableName} has no column #${columnIndex}, maximum is ${table.columns.length}`);
+      throw new Error(
+        `Table ${tableName} has no column #${columnIndex}, maximum is ${table.columns.length}`
+      );
     }
 
-    return (table.columns[columnIndex]);
+    return table.columns[columnIndex];
   }
 
   /**
@@ -66,19 +71,21 @@ export class Schema {
    * @return All known type information about the requested column.
    */
   getColumn(tableName: string, columnName: string) {
-    const table = this._tables.find(t => t.name == tableName);
+    const table = this._tables.find((t) => t.name == tableName);
 
     if (!table) {
-      throw new Error(`Can't even find table ${tableName} for ${tableName}.${columnName}`);
+      throw new Error(
+        `Can't even find table ${tableName} for ${tableName}.${columnName}`
+      );
     }
 
-    const column = table.columns.find(c => c.name == columnName);
+    const column = table.columns.find((c) => c.name == columnName);
 
     if (!column) {
       throw new Error(`Can't find column ${columnName} in table ${tableName}`);
     }
 
-    return (column);
+    return column;
   }
 
   /**
@@ -86,22 +93,22 @@ export class Schema {
    *         table.
    */
   hasColumn(tableName: string, columnName: string) {
-    const table = this._tables.find(t => t.name == tableName);
+    const table = this._tables.find((t) => t.name == tableName);
 
-    return (table && table.columns.find(c => c.name == columnName));
+    return table && table.columns.find((c) => c.name == columnName);
   }
 
   /**
    * @return Schemas for all available tables.
    */
   get tables() {
-    return (this._tables.filter(t => !t.system_table));
+    return this._tables.filter((t) => !t.system_table);
   }
 
   /**
    * @return True, if there are no tables in the schema.
    */
   get isEmpty() {
-    return (this._tables.length === 0);
+    return this._tables.length === 0;
   }
 }
