@@ -1,4 +1,4 @@
-import * as readline from "readline";
+import * as readline from "readline"
 import * as process from "process";
 import { URL } from "url";
 
