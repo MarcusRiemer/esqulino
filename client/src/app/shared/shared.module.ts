@@ -51,7 +51,6 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
-import { TableCellComponent } from './table/table-cell.component';
 
 
 import {
@@ -148,7 +147,6 @@ const materialModules = [
     MayPerformComponent,
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
-    TableCellComponent,
     PaginatorTableComponent
   ],
   exports: [
@@ -185,7 +183,6 @@ const materialModules = [
     ProviderShowComponent,
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
-    TableCellComponent,
     PaginatorTableComponent
   ],
   entryComponents: [
