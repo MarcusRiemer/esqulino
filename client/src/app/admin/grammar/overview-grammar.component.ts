@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { SortDirection } from "@angular/material/sort/sort-direction";
+import { MatSort } from "@angular/material/sort";
 
 import { GrammarListDescription } from "../../shared/syntaxtree";
 import {
@@ -7,7 +8,6 @@ import {
   MutateGrammarService,
 } from "../../shared/serverdata";
 import { PaginationEvent } from "../../shared/table/paginator-table.component";
-import { MatSort } from "@angular/material/sort";
 
 @Component({
   selector: "grammar-overview-selector",
@@ -19,7 +19,7 @@ export class OverviewGrammarComponent implements AfterViewInit {
   @ViewChild(MatSort)
   _sort: MatSort;
 
-  resultsLength$ = this._list.listTotalCount;
+  readonly resultsLength$ = this._list.listTotalCount;
   readonly availableGrammars$ = this._list.list;
   readonly inProgress = this._list.listCache.inProgress;
 
@@ -28,9 +28,7 @@ export class OverviewGrammarComponent implements AfterViewInit {
     private _mutate: MutateGrammarService
   ) {}
 
-  ngAfterViewInit() {
-    this.onChangeSort(this._sort.active, this._sort.direction, false);
-  }
+  ngAfterViewInit() {}
 
   public deleteGrammar(id: string) {
     this._mutate.deleteSingle(id);

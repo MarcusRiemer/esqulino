@@ -8,19 +8,26 @@ import {
 } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { first } from "rxjs/operators";
 
-import { ServerApiService, ToolbarService } from "../../shared";
+import {
+  ServerApiService,
+  ToolbarService,
+  LanguageService,
+} from "../../shared";
 import {
   ListGrammarDataService,
   MutateGrammarService,
 } from "../../shared/serverdata";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
+import { PaginatorTableComponent } from "../../shared/table/paginator-table.component";
 import { provideGrammarList, buildGrammar } from "../../editor/spec-util";
 
 import { OverviewGrammarComponent } from "./overview-grammar.component";
+import { CreateGrammarComponent } from "./create-grammar.component";
 
 describe("OverviewGrammarComponent", () => {
   async function createComponent() {
@@ -29,6 +36,7 @@ describe("OverviewGrammarComponent", () => {
         FormsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
+        MatPaginatorModule,
         MatTableModule,
         PortalModule,
         HttpClientTestingModule,
@@ -39,8 +47,14 @@ describe("OverviewGrammarComponent", () => {
         ServerApiService,
         ListGrammarDataService,
         MutateGrammarService,
+        LanguageService,
       ],
-      declarations: [OverviewGrammarComponent, DefaultValuePipe],
+      declarations: [
+        CreateGrammarComponent,
+        OverviewGrammarComponent,
+        DefaultValuePipe,
+        PaginatorTableComponent,
+      ],
     }).compileComponents();
 
     let fixture = TestBed.createComponent(OverviewGrammarComponent);
@@ -112,7 +126,7 @@ describe("OverviewGrammarComponent", () => {
     const i1 = buildGrammar({ name: "B1" });
     provideGrammarList([i1]);
 
-    const initialData = await t.component.availableGrammars
+    const initialData = await t.component.availableGrammars$
       .pipe(first())
       .toPromise();
     expect(initialData).toEqual([i1]);
@@ -120,7 +134,7 @@ describe("OverviewGrammarComponent", () => {
     t.component.onRefresh();
     provideGrammarList([]);
 
-    const refreshedData = await t.component.availableGrammars
+    const refreshedData = await t.component.availableGrammars$
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);
@@ -152,7 +166,7 @@ describe("OverviewGrammarComponent", () => {
 
     provideGrammarList([]);
 
-    const refreshedData = await t.component.availableGrammars
+    const refreshedData = await t.component.availableGrammars$
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);

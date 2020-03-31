@@ -58,7 +58,8 @@
     "karma-junit-reporter": "2.0.1",
     "tslint": "6.1.0",
     "typescript": "3.8.3",
-    "webpack-cli": "3.3.11"
+    "webpack-cli": "3.3.11",
+    "prettier": "^2.0.2"
   },
   "scripts": {
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
