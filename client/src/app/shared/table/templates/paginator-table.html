@@ -1,11 +1,4 @@
-<table class="full-width"
-       mat-table matSort
-       [dataSource]="availableGrammars$ | async"
-       (matSortChange)="onChangeSort()">
 <ng-content></ng-content>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
 <mat-paginator #paginator
                (page)="onChangePagination()"
                [length]="resultsLength$ | async"

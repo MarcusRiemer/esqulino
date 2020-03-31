@@ -1,12 +1,10 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {SortDirection} from "@angular/material/sort/sort-direction";
 
 import {GrammarListDescription} from '../../shared/syntaxtree';
 import {ListGrammarDataService, MutateGrammarService} from '../../shared/serverdata';
-
-import {SortDirection} from "@angular/material/sort/sort-direction";
-import {MatPaginator} from "@angular/material/paginator";
+import {PaginationEvent} from "../../shared/table/paginator-table.component";
 import {MatSort} from "@angular/material/sort";
-import {PaginationEvent, SortEvent} from "../../shared/table/paginator-table.component";
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -14,7 +12,11 @@ import {PaginationEvent, SortEvent} from "../../shared/table/paginator-table.com
   providers: [ListGrammarDataService]
 })
 
-export class OverviewGrammarComponent {
+export class OverviewGrammarComponent implements AfterViewInit {
+
+  // Angular Material UI to sort by different columns
+  @ViewChild(MatSort)
+  _sort: MatSort;
 
   resultsLength$ = this._list.listTotalCount;
   readonly availableGrammars$ = this._list.list
@@ -24,6 +26,10 @@ export class OverviewGrammarComponent {
     private _list: ListGrammarDataService,
     private _mutate: MutateGrammarService,
   ) {
+  }
+
+  ngAfterViewInit() {
+    this.onChangeSort(this._sort.active,this._sort.direction,false);
   }
 
   public deleteGrammar(id: string) {
@@ -46,10 +52,6 @@ export class OverviewGrammarComponent {
    */
   onChangePagination(pageSize: number, pageIndex: number) {
     this._list.setListPagination(pageSize, pageIndex, true);
-  }
-
-  onSortEvent(event: SortEvent) {
-    this.onChangeSort(event.active,event.direction);
   }
 
   /**
