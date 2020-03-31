@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { Subject } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Subject } from "rxjs";
+import { first } from "rxjs/operators";
 
-import { IdentifiableResourceDescription } from '../resource.description';
-import { objectOmit } from '../util';
+import { IdentifiableResourceDescription } from "../resource.description";
+import { objectOmit } from "../util";
 
-import { ResolveIndividualUrl } from './url-resolve';
+import { ResolveIndividualUrl } from "./url-resolve";
 
 export class MutateData<TSingle extends IdentifiableResourceDescription> {
   public constructor(
@@ -15,10 +15,8 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
     protected _http: HttpClient,
     private _snackBar: MatSnackBar,
     private _idResolver: ResolveIndividualUrl,
-    private _speakingName: string,
-  ) {
-  }
-
+    private _speakingName: string
+  ) {}
 
   private readonly _listInvalidated = new Subject<void>();
 
@@ -30,30 +28,42 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
    */
   updateSingle(desc: TSingle, showErrorFeedback = true): Promise<TSingle> {
     const toReturn = new Promise<TSingle>((resolve, reject) => {
-
       const descWithoutId = objectOmit("id", desc);
 
-      this._http.put<TSingle>(this._idResolver(desc.id), descWithoutId)
+      this._http
+        .put<TSingle>(this._idResolver(desc.id), descWithoutId)
         .pipe(first())
-        .subscribe(updatedDesc => {
-          console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
-          this._snackBar.open(`Updated ${this._speakingName} with ID "${desc.id}"`, "", { duration: 3000 });
+        .subscribe(
+          (updatedDesc) => {
+            console.log(`Updated ${this._speakingName} with ID "${desc.id}"`);
+            this._snackBar.open(
+              `Updated ${this._speakingName} with ID "${desc.id}"`,
+              "",
+              { duration: 3000 }
+            );
 
-          this._listInvalidated.next();
+            this._listInvalidated.next();
 
-          resolve(updatedDesc);
-        }, err => {
-          console.warn(`Update failed: ${this._speakingName} with ID "${desc.id}"`);
+            resolve(updatedDesc);
+          },
+          (err) => {
+            console.warn(
+              `Update failed: ${this._speakingName} with ID "${desc.id}"`
+            );
 
-          if (showErrorFeedback) {
-            this._snackBar.open(`Could not update ${this._speakingName} with ID "${desc.id}"`, "OK 😞");
-          } else {
-            reject(err);
+            if (showErrorFeedback) {
+              this._snackBar.open(
+                `Could not update ${this._speakingName} with ID "${desc.id}"`,
+                "OK 😞"
+              );
+            } else {
+              reject(err);
+            }
           }
-        });
+        );
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -64,26 +74,38 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
    */
   deleteSingle(id: string, showErrorFeedback = true): Promise<void> {
     const toReturn = new Promise<void>((resolve, reject) => {
-
-      this._http.delete(this._idResolver(id))
+      this._http
+        .delete(this._idResolver(id))
         .pipe(first())
-        .subscribe(_ => {
-          console.log(`Deleted ${this._speakingName} with  "${id}"`);
-          this._snackBar.open(`Deleted ${this._speakingName} with ID "${id}"`, "", { duration: 3000 });
+        .subscribe(
+          (_) => {
+            console.log(`Deleted ${this._speakingName} with  "${id}"`);
+            this._snackBar.open(
+              `Deleted ${this._speakingName} with ID "${id}"`,
+              "",
+              { duration: 3000 }
+            );
 
-          this._listInvalidated.next();
+            this._listInvalidated.next();
 
-          resolve();
-        }, err => {
-          console.warn(`Delete failed: ${this._speakingName} with ID "${id}"`);
-          if (showErrorFeedback) {
-            this._snackBar.open(`Could not delete ${this._speakingName} with ID "${id}"`, "OK 😞");
-          } else {
-            reject(err);
+            resolve();
+          },
+          (err) => {
+            console.warn(
+              `Delete failed: ${this._speakingName} with ID "${id}"`
+            );
+            if (showErrorFeedback) {
+              this._snackBar.open(
+                `Could not delete ${this._speakingName} with ID "${id}"`,
+                "OK 😞"
+              );
+            } else {
+              reject(err);
+            }
           }
-        });
+        );
     });
 
-    return (toReturn);
+    return toReturn;
   }
 }

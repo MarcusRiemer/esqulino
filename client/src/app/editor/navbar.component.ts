@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input } from "@angular/core";
 
-import { Project } from './project.service'
+import { Project } from "./project.service";
 
 @Component({
-  templateUrl: 'templates/navbar.html',
-  selector: 'editor-navbar'
+  templateUrl: "templates/navbar.html",
+  selector: "editor-navbar",
 })
 export class NavbarComponent {
   /**
@@ -17,7 +17,7 @@ export class NavbarComponent {
    */
   get currentDatabaseName() {
     if (this.project) {
-      return (this.project.currentDatabaseName);
+      return this.project.currentDatabaseName;
     }
   }
 }

@@ -1,25 +1,26 @@
-import * as Schema from './grammar.description'
-import * as AST from './syntaxtree'
-import { Validator } from './validator'
-import { ErrorCodes } from './validation-result'
-import { singleLanguageGrammar } from './grammar.spec-util';
+import * as Schema from "./grammar.description";
+import * as AST from "./syntaxtree";
+import { Validator } from "./validator";
+import { ErrorCodes } from "./validation-result";
+import { singleLanguageGrammar } from "./grammar.spec-util";
 
-describe('Grammar :: Parentheses', () => {
-
+describe("Grammar :: Parentheses", () => {
   const mkParenTree = (typeNames: string[]): AST.NodeDescription => {
-    return ({
+    return {
       language: "spec",
       name: "root",
       children: {
-        "g1": typeNames.map(t => { return ({ language: "spec", name: t }) })
-      }
-    });
-  }
+        g1: typeNames.map((t) => {
+          return { language: "spec", name: t };
+        }),
+      },
+    };
+  };
 
   describe(`Sequence`, () => {
     describe(`g1 ::= ()`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -28,32 +29,36 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "sequence",
-                nodeTypes: []
-              }
-            }
-          ]
+                nodeTypes: [],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
-        }
+        t1: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.ParenthesesEmptyTypes]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.ParenthesesEmptyTypes,
+        ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.ParenthesesEmptyTypes]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.ParenthesesEmptyTypes,
+        ]);
       });
     });
 
     describe(`g ::= (t1)`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -62,45 +67,51 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "sequence",
-                nodeTypes: ["t1"]
-              }
-            }
-          ]
+                nodeTypes: ["t1"],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
+        t1: {
+          type: "concrete",
         },
-        "invalid": {
-          type: "concrete"
-        }
+        invalid: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMinOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
+        ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
 
       it(`Children: [invalid]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
       });
 
       it(`Children: [t1, t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMaxOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
     });
 
     describe(`g ::= (t1 t2)`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -109,77 +120,90 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "sequence",
-                nodeTypes: ["t1", "t2"]
-              }
-            }
-          ]
+                nodeTypes: ["t1", "t2"],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
+        t1: {
+          type: "concrete",
         },
-        "t2": {
-          type: "concrete"
+        t2: {
+          type: "concrete",
         },
-        "invalid": {
-          type: "concrete"
-        }
+        invalid: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMinOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
+        ]);
       });
 
       it(`Children: [invalid]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
 
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.MissingChild
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.MissingChild,
         ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.MissingChild]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.MissingChild,
+        ]);
       });
 
       it(`Children: [t2]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t2"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.MissingChild
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.MissingChild,
         ]);
       });
 
       it(`Children: [t1, t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
       });
 
       it(`Children: [t1, t2]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
 
       it(`Children: [t1, t2, t1]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual(
-          [ErrorCodes.MissingChild, ErrorCodes.InvalidMaxOccurences]
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t1", "t2", "t1"]))
         );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.MissingChild,
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
 
       it(`Children: [t1, t2, t1, t2]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2", "t1", "t2"])));
-        expect(res.errors.map(e => e.code)).toEqual(
-          [ErrorCodes.InvalidMaxOccurences]
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t1", "t2", "t1", "t2"]))
         );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
     });
 
     describe(`g ::= (t1 t2?)`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -188,65 +212,74 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "sequence",
-                nodeTypes: [
-                  "t1",
-                  { nodeType: "t2", occurs: "?" }
-                ]
-              }
-            }
-          ]
+                nodeTypes: ["t1", { nodeType: "t2", occurs: "?" }],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
+        t1: {
+          type: "concrete",
         },
-        "t2": {
-          type: "concrete"
+        t2: {
+          type: "concrete",
         },
-        "invalid": {
-          type: "concrete"
-        }
+        invalid: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMinOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
+        ]);
       });
 
       it(`Children: [invalid]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
 
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
         ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
 
       it(`Children: [t2]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t2"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
         ]);
       });
 
       it(`Children: [t1, t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMaxOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
 
       it(`Children: [t1, t2, t1]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMaxOccurences]);
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t1", "t2", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
 
       it(`Children: [t1, t2, t1, t1]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2", "t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMaxOccurences]);
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t1", "t2", "t1", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
     });
   });
@@ -254,7 +287,7 @@ describe('Grammar :: Parentheses', () => {
   describe("Allowed", () => {
     describe(`g ::= (t1)`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -263,57 +296,70 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "allowed",
-                nodeTypes: ["t1"]
-              }
-            }
-          ]
+                nodeTypes: ["t1"],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
+        t1: {
+          type: "concrete",
         },
-        "invalid": {
-          type: "concrete"
-        }
+        invalid: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMinOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
+        ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
 
       it(`Children: [invalid]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.InvalidMinOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [invalid, t1]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["invalid", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
       });
 
       it(`Children: [t1, invalid]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.IllegalChildType]);
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["invalid", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
       });
 
       it(`Children: [t1, t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMaxOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+        ]);
       });
     });
 
     describe(`g ::= (t1 & t2)`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -322,73 +368,84 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "allowed",
-                nodeTypes: ["t1", "t2"]
-              }
-            }
-          ]
+                nodeTypes: ["t1", "t2"],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
+        t1: {
+          type: "concrete",
         },
-        "t2": {
-          type: "concrete"
+        t2: {
+          type: "concrete",
         },
-        "invalid": {
-          type: "concrete"
-        }
+        invalid: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.InvalidMinOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.InvalidMinOccurences]);
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
+        ]);
       });
 
       it(`Children: [invalid]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.InvalidMinOccurences, ErrorCodes.InvalidMinOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.InvalidMinOccurences,
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [invalid, t1]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.InvalidMinOccurences
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["invalid", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [t1, invalid]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.InvalidMinOccurences
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["invalid", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [t1, t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.InvalidMaxOccurences, ErrorCodes.InvalidMinOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [t1, t2]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
     });
 
     describe(`g ::= (t1 & t2?)`, () => {
       const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
-        "root": {
+        root: {
           type: "concrete",
           attributes: [
             {
@@ -397,70 +454,72 @@ describe('Grammar :: Parentheses', () => {
               cardinality: "1",
               group: {
                 type: "allowed",
-                nodeTypes: [
-                  "t1",
-                  { nodeType: "t2", occurs: "?" }
-                ]
-              }
-            }
-          ]
+                nodeTypes: ["t1", { nodeType: "t2", occurs: "?" }],
+              },
+            },
+          ],
         },
-        "t1": {
-          type: "concrete"
+        t1: {
+          type: "concrete",
         },
-        "t2": {
-          type: "concrete"
+        t2: {
+          type: "concrete",
         },
-        "invalid": {
-          type: "concrete"
-        }
+        invalid: {
+          type: "concrete",
+        },
       });
 
       const v = new Validator([g]);
 
       it(`Children: []`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.InvalidMinOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
 
       it(`Children: [invalid]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType, ErrorCodes.InvalidMinOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+          ErrorCodes.InvalidMinOccurences,
         ]);
       });
 
       it(`Children: [invalid, t1]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["invalid", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
         ]);
       });
 
       it(`Children: [t1, invalid]`, () => {
-        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.IllegalChildType
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["invalid", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
         ]);
       });
 
       it(`Children: [t1, t1]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
-        expect(res.errors.map(e => e.code)).toEqual([
-          ErrorCodes.InvalidMaxOccurences
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.InvalidMaxOccurences,
         ]);
       });
 
       it(`Children: [t1, t2]`, () => {
         const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t2"])));
-        expect(res.errors.map(e => e.code)).toEqual([]);
+        expect(res.errors.map((e) => e.code)).toEqual([]);
       });
     });
   });

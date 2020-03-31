@@ -1,26 +1,26 @@
-import { ColumnDescription } from './schema.description'
+import { ColumnDescription } from "./schema.description";
 
 /**
- * Enum to set the status of a column 
+ * Enum to set the status of a column
  */
 export enum ColumnStatus {
   new = 1,
   changed = 2,
   deleted = 3,
-  unchanged = 4
+  unchanged = 4,
 }
 
 /**
  * Class to implement a column of a table
  */
 export class Column {
-  index: number
-  name: string
-  type: string
-  not_null: boolean
-  dflt_value?: string
-  primary: boolean
-  state: ColumnStatus
+  index: number;
+  name: string;
+  type: string;
+  not_null: boolean;
+  dflt_value?: string;
+  primary: boolean;
+  state: ColumnStatus;
 
   constructor(desc: ColumnDescription, state: ColumnStatus) {
     this.index = desc.index;
@@ -37,15 +37,15 @@ export class Column {
    */
   get stateName() {
     if (this.state == ColumnStatus.changed) {
-      return ("changed");
+      return "changed";
     } else if (this.state == ColumnStatus.unchanged) {
-      return ("unchanged");
+      return "unchanged";
     } else if (this.state == ColumnStatus.new) {
-      return ("new");
+      return "new";
     } else if (this.state == ColumnStatus.deleted) {
-      return ("deleted");
+      return "deleted";
     }
-    return ("undefined");
+    return "undefined";
   }
 
   toModel(): ColumnDescription {
@@ -55,7 +55,7 @@ export class Column {
       primary: this.primary,
       type: this.type,
       not_null: this.not_null,
-      dflt_value: this.dflt_value
-    }
+      dflt_value: this.dflt_value,
+    };
   }
 }

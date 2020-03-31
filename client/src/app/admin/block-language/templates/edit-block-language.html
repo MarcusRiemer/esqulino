@@ -1,56 +1,68 @@
 <ng-template cdkPortal #toolbarButtons>
-  <button (click)="onSave()"
-          mat-button>
+  <button (click)="onSave()" mat-button>
     <span class="fa fa-floppy-o" aria-hidden="t"></span>
     Speichern
   </button>
 
-  <button (click)="onDelete()"
-          mat-button
-          class="btn btn-outline-danger btn-sm">
+  <button (click)="onDelete()" mat-button class="btn btn-outline-danger btn-sm">
     <span class="fa fa-trash-o" aria-hidden="true"></span>
     Löschen
   </button>
 
-  <button (click)="onRegenerate()"
-          [disabled]="!editedSubject?.localGeneratorInstructions"
-          mat-button>
+  <button
+    (click)="onRegenerate()"
+    [disabled]="!editedSubject?.localGeneratorInstructions"
+    mat-button
+  >
     <span class="fa fa-cogs" aria-hidden="true"></span>
     Blocksprache Regenerieren
   </button>
 </ng-template>
 
 <form *ngIf="editedSubject">
-  <h2>Block Sprache <q>{{ editedSubject.name }}</q></h2>
+  <h2>
+    Block Sprache
+    <q>{{ editedSubject.name }}</q>
+  </h2>
 
   <!-- Editable name of the blockLanguage -->
   <div class="form-group row">
-    <label for="block-language-name"
-           class="col-sm-2 col-form-label">Name</label>
+    <label for="block-language-name" class="col-sm-2 col-form-label">
+      Name
+    </label>
     <div class="col-sm-10">
-      <input id="block-language-name"
-             class="form-control"
-             name="name"
-             [(ngModel)]="editedSubject.name">
+      <input
+        id="block-language-name"
+        class="form-control"
+        name="name"
+        [(ngModel)]="editedSubject.name"
+      />
     </div>
   </div>
 
   <!-- The grammar this block language uses -->
   <div class="form-group row">
-    <label for="block-language-grammar-id"
-           class="col-sm-2 col-form-label">Grammatik</label>
+    <label for="block-language-grammar-id" class="col-sm-2 col-form-label">
+      Grammatik
+    </label>
     <div class="col-sm-10">
-      <select id="block-language-grammar-id"
-              name="grammar_id"
-              class="custom-select"
-              required
-              [(ngModel)]="baseGrammarId">
-        <option *ngFor="let grammar of availableGrammars | async"
-                [value]="grammar.id">
+      <select
+        id="block-language-grammar-id"
+        name="grammar_id"
+        class="custom-select"
+        required
+        [(ngModel)]="baseGrammarId"
+      >
+        <option
+          *ngFor="let grammar of availableGrammars | async"
+          [value]="grammar.id"
+        >
           {{ grammar.name }}
         </option>
       </select>
-      <a [routerLink]="['/admin/grammar/', editedSubject.grammarId]">Grammatik editieren</a>
+      <a [routerLink]="['/admin/grammar/', editedSubject.grammarId]">
+        Grammatik editieren
+      </a>
     </div>
   </div>
 
@@ -59,15 +71,18 @@
     <div class="col-sm-2 col-form-label">Wurzel CSS Klassen</div>
     <div class="col-sm-10 col-form-label">
       <div class="form-inline">
-        <div *ngFor="let cssClass of availableCssRootClasses"
-             class="form-check mr-sm-2">
-          <input type="checkbox"
-                 name="css-root-{{ cssClass.name }}"
-                 id="css-root-{{ cssClass.name }}"
-                 class="form-check-input"
-                 [(ngModel)]="cssClass.checked">
-          <label class="form-check-label"
-                 for="css-root-{{ cssClass.name }}">
+        <div
+          *ngFor="let cssClass of availableCssRootClasses"
+          class="form-check mr-sm-2"
+        >
+          <input
+            type="checkbox"
+            name="css-root-{{ cssClass.name }}"
+            id="css-root-{{ cssClass.name }}"
+            class="form-check-input"
+            [(ngModel)]="cssClass.checked"
+          />
+          <label class="form-check-label" for="css-root-{{ cssClass.name }}">
             <code>{{ cssClass.name }}</code>
           </label>
         </div>
@@ -79,7 +94,9 @@
   <div class="row">
     <label class="col-sm-2 col-form-label">Parameter</label>
     <div class="col-sm-10">
-      <edit-actual-parameters [blockLanguage]="editedSubject"></edit-actual-parameters>
+      <edit-actual-parameters
+        [blockLanguage]="editedSubject"
+      ></edit-actual-parameters>
     </div>
   </div>
 
@@ -93,7 +110,9 @@
 
   <!-- Show up any errors that might be there -->
   <div class="row">
-    <label class="col-sm-2 col-form-label">{{ generatorErrors.length }} Fehler</label>
+    <label class="col-sm-2 col-form-label">
+      {{ generatorErrors.length }} Fehler
+    </label>
     <div class="col-sm-10">
       <error-list [errors]="generatorErrors"></error-list>
     </div>
@@ -103,14 +122,16 @@
     <div class="col-xl-6">
       <div class="form-group row">
         <div class="col-sm-2">
-          <label for="block-language-sidebar"
-                 class="col-form-label">Generator-Anweisungen</label>
+          <label for="block-language-sidebar" class="col-form-label">
+            Generator-Anweisungen
+          </label>
         </div>
         <div class="col-sm-10">
-          <json-editor [jsonValue]="editedSubject.localGeneratorInstructions"
-                       (jsonValueChange)="onGeneratorDataUpdate($event)"
-                       class="full-height">
-          </json-editor>
+          <json-editor
+            [jsonValue]="editedSubject.localGeneratorInstructions"
+            (jsonValueChange)="onGeneratorDataUpdate($event)"
+            class="full-height"
+          ></json-editor>
         </div>
       </div>
     </div>
@@ -118,15 +139,19 @@
       <mat-tab-group dynamicHeight>
         <mat-tab label="Base Grammar">
           <!-- Pretty printed base grammar -->
-          <textarea readonly
-                    class="form-control full-height"
-                    [value]="prettyPrintedGrammar | async"></textarea>
+          <textarea
+            readonly
+            class="form-control full-height"
+            [value]="prettyPrintedGrammar | async"
+          ></textarea>
         </mat-tab>
         <mat-tab label="Generated Block Language">
           <!-- Pretty printed blockLanguage -->
-          <textarea readonly
-                    class="form-control full-height"
-                    [value]="prettyPrintedBlockLanguage"></textarea>
+          <textarea
+            readonly
+            class="form-control full-height"
+            [value]="prettyPrintedBlockLanguage"
+          ></textarea>
         </mat-tab>
       </mat-tab-group>
     </div>

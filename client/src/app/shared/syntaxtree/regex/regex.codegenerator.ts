@@ -1,5 +1,8 @@
-import { NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
-import { Node } from '../syntaxtree'
+import {
+  NodeConverterRegistration,
+  CodeGeneratorProcess,
+} from "../codegenerator";
+import { Node } from "../syntaxtree";
 
 /**
  * Converts a RegEx-AST to a properly indented stringified representation.
@@ -8,22 +11,22 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "regex",
-      typeName: "constant"
+      typeName: "constant",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         // TODO: Escaping
         process.addConvertedFragment(node.properties["value"], node);
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "regex",
-      typeName: "alternative"
+      typeName: "alternative",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment("(", node);
 
         const alternatives = node.children["expressions"];
@@ -35,30 +38,30 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         });
 
         process.addConvertedFragment(")", node);
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "regex",
-      typeName: "expr"
+      typeName: "expr",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.generateNode(node.children["singleExpression"][0]);
-      }
-    }
+      },
+    },
   },
   {
     type: {
       languageName: "regex",
-      typeName: "root"
+      typeName: "root",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const expressions = node.children["expressions"];
-        expressions.forEach(expr => process.generateNode(expr));
-      }
-    }
-  }
-]
+        expressions.forEach((expr) => process.generateNode(expr));
+      },
+    },
+  },
+];

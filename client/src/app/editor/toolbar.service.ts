@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'
-import { Observable, Subject } from 'rxjs'
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
 
-import { MayPerformRequestDescription } from './../shared/may-perform.description';
+import { MayPerformRequestDescription } from "./../shared/may-perform.description";
 
 /**
  * Used to subscribe to click events.
@@ -41,32 +41,32 @@ export class ToolbarItem {
    * @return True, if this is a native item.
    */
   get isNative() {
-    return (this._native);
+    return this._native;
   }
 
   /**
    * @return The keyboard shortcut this item listens to
    */
   get key() {
-    return (this._key);
+    return this._key;
   }
 
   /**
    * @return The ID that is associated with this item
    */
   get id() {
-    return (this._id);
+    return this._id;
   }
 
   /**
    * @return The name of the icon that should be used
    */
   get icon() {
-    return (this._icon);
+    return this._icon;
   }
 
   get caption() {
-    return (this._caption);
+    return this._caption;
   }
 
   set caption(value: string) {
@@ -88,11 +88,11 @@ export class ToolbarItem {
    * @return True, if a reaction to this is in progress
    */
   get isInProgress() {
-    return (this._inProgress);
+    return this._inProgress;
   }
 
   get performDesc() {
-    return (this._mayPerform);
+    return this._mayPerform;
   }
 
   /**
@@ -106,7 +106,7 @@ export class ToolbarItem {
    * Allows reacting to clicks.
    */
   get onClick(): ClickHandler {
-    return (this._onClick);
+    return this._onClick;
   }
 }
 
@@ -125,10 +125,10 @@ export class EditorToolbarService {
   constructor() {
     // Globally registering keypresses
     if (window) {
-      window.addEventListener("keydown", evt => {
+      window.addEventListener("keydown", (evt) => {
         // Possibly intercept control keys
         if (evt.ctrlKey) {
-          let item = this._items.find(i => i.key == evt.key);
+          let item = this._items.find((i) => i.key == evt.key);
           if (item) {
             evt.preventDefault();
             item.fire();
@@ -147,26 +147,32 @@ export class EditorToolbarService {
    *
    * @return The click handler for the new button
    */
-  addButton(id: string, caption: string, icon: string, key: string, performDesc: MayPerformRequestDescription = undefined): ToolbarItem {
+  addButton(
+    id: string,
+    caption: string,
+    icon: string,
+    key: string,
+    performDesc: MayPerformRequestDescription = undefined
+  ): ToolbarItem {
     // Create a new non-native icon
     let item = new ToolbarItem(id, caption, icon, key, false, performDesc);
 
     // Show the item on the toolbar
     this._items.push(item);
 
-    return (item);
+    return item;
   }
 
   /**
    * Removes something that has been added before.
    */
   removeItem(id: string): boolean {
-    const index = this._items.findIndex(item => item.id == id);
+    const index = this._items.findIndex((item) => item.id == id);
     if (index >= 0) {
       this._items.splice(index, 1);
-      return (true);
+      return true;
     } else {
-      return (false);
+      return false;
     }
   }
 
@@ -175,7 +181,13 @@ export class EditorToolbarService {
    * the state of any known button.
    */
   resetItems() {
-    this._saveItem = new ToolbarItem("save", "Speichern", "floppy-o", "s", true);
+    this._saveItem = new ToolbarItem(
+      "save",
+      "Speichern",
+      "floppy-o",
+      "s",
+      true
+    );
     this._items = [this._saveItem];
   }
 
@@ -183,7 +195,7 @@ export class EditorToolbarService {
    * @return True, if the saving button is currently enabled.
    */
   get savingEnabled() {
-    return (this._items.indexOf(this._saveItem) >= 0);
+    return this._items.indexOf(this._saveItem) >= 0;
   }
 
   /**
@@ -206,13 +218,13 @@ export class EditorToolbarService {
    * @return All items that should be displayed on the toolbar.
    */
   get items() {
-    return (this._items);
+    return this._items;
   }
 
   /**
    * @return The save item, that may always be present on the toolbar.
    */
   get saveItem(): ToolbarItem {
-    return (this._saveItem);
+    return this._saveItem;
   }
 }

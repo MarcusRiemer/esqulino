@@ -1,9 +1,10 @@
-import { ScopeTraitAdd, ReferenceableTraits } from './traits.description'
+import { ScopeTraitAdd, ReferenceableTraits } from "./traits.description";
 import {
-  AllReferenceableTypeInstructions, ReferenceableInstructions
-} from './instructions.description';
-import { mergeTypeInstructions } from './merge';
-import { deepAssign } from './merge-util';
+  AllReferenceableTypeInstructions,
+  ReferenceableInstructions,
+} from "./instructions.description";
+import { mergeTypeInstructions } from "./merge";
+import { deepAssign } from "./merge-util";
 
 /**
  * Collects traits which may be assigned to instructions.
@@ -34,7 +35,7 @@ export class TraitMap {
    */
   public applyTraits(instructions: AllReferenceableTypeInstructions) {
     const traitsOnly = this.applyTraitsImpl({});
-    return (mergeTypeInstructions(traitsOnly, instructions));
+    return mergeTypeInstructions(traitsOnly, instructions);
   }
 
   /**
@@ -45,17 +46,20 @@ export class TraitMap {
   public applyTraitsImpl(givenInstructions: AllReferenceableTypeInstructions) {
     givenInstructions = JSON.parse(JSON.stringify(givenInstructions)); // Don't mutate the input
 
-    this._knownScopes.forEach(scope => {
+    this._knownScopes.forEach((scope) => {
       // Apply rules in this scope to all specified attributes
       Object.entries(scope.attributes || {}).forEach(([grammarName, types]) => {
         Object.entries(types || {}).forEach(([typeName, attributeNames]) => {
-          (attributeNames || []).forEach(attributeName => {
+          (attributeNames || []).forEach((attributeName) => {
             // Now we know which instructions we should manipulate
             const attributeInstructions = this.generatingInstructionAccess(
-              givenInstructions, grammarName, typeName, attributeName
+              givenInstructions,
+              grammarName,
+              typeName,
+              attributeName
             );
             // Apply all traits that have been given
-            (scope.traits || []).forEach(trait => {
+            (scope.traits || []).forEach((trait) => {
               this.applyTrait(trait, attributeInstructions);
             });
           });
@@ -64,13 +68,16 @@ export class TraitMap {
       // Apply rules in this scope to all specified blocks
       Object.entries(scope.blocks || {}).forEach(([grammarName, types]) => {
         Object.entries(types || {}).forEach(([typeName, blockIndices]) => {
-          (blockIndices || []).forEach(blockIndex => {
+          (blockIndices || []).forEach((blockIndex) => {
             // Now we know which blocks we should manipulate
             const blockInstructions = this.generatingBlockAccess(
-              givenInstructions, grammarName, typeName, blockIndex
+              givenInstructions,
+              grammarName,
+              typeName,
+              blockIndex
             );
             // Apply all traits that have been given
-            (scope.traits || []).forEach(trait => {
+            (scope.traits || []).forEach((trait) => {
               this.applyTrait(trait, blockInstructions);
             });
           });
@@ -78,14 +85,19 @@ export class TraitMap {
       });
     });
 
-    return (givenInstructions);
+    return givenInstructions;
   }
 
   /**
    * Retrieves the instructions for the specified attribute. If no instructions for that
    * attribute exist yet they are created on the fly.
    */
-  private generatingInstructionAccess(obj: AllReferenceableTypeInstructions, g: string, t: string, a: string) {
+  private generatingInstructionAccess(
+    obj: AllReferenceableTypeInstructions,
+    g: string,
+    t: string,
+    a: string
+  ) {
     // No grammar? No problem!
     if (!(g in obj)) {
       obj[g] = {};
@@ -107,14 +119,19 @@ export class TraitMap {
     }
 
     // And now we can be sure that each of this levels has a valid value ...
-    return (obj[g][t].attributes[a]);
+    return obj[g][t].attributes[a];
   }
 
   /**
    * Retrieves the instructions for the specified bklock. If no instructions for that
    * block exist yet they are created on the fly.
    */
-  private generatingBlockAccess(obj: AllReferenceableTypeInstructions, g: string, t: string, b: number) {
+  private generatingBlockAccess(
+    obj: AllReferenceableTypeInstructions,
+    g: string,
+    t: string,
+    b: number
+  ) {
     // No grammar? No problem!
     if (!(g in obj)) {
       obj[g] = {};
@@ -136,13 +153,16 @@ export class TraitMap {
     }
 
     // And now we can be sure that each of this levels has a valid value ...
-    return (obj[g][t].blocks[b]);
+    return obj[g][t].blocks[b];
   }
 
   /**
    * Applies the instructions of the trait with the given name to the given instructions.
    */
-  private applyTrait(traitName: string, instructions: Partial<ReferenceableInstructions>) {
+  private applyTrait(
+    traitName: string,
+    instructions: Partial<ReferenceableInstructions>
+  ) {
     const traitInstructions = this._knownTraits[traitName];
     if (traitInstructions) {
       switch (traitInstructions.applyMode) {
@@ -151,12 +171,16 @@ export class TraitMap {
           break;
         case "replace":
           // Delete everything and then use a shallow merge (no break)
-          Object.keys(instructions).forEach(prop => delete instructions[prop]);
+          Object.keys(instructions).forEach(
+            (prop) => delete instructions[prop]
+          );
         case "shallowMerge":
           this.shallowMerge(instructions, traitInstructions);
           break;
         default:
-          throw new Error(`Unknown "applyMode" for trait: "${traitInstructions.applyMode}"`);
+          throw new Error(
+            `Unknown "applyMode" for trait: "${traitInstructions.applyMode}"`
+          );
       }
     } else {
       throw new Error(`Unknown trait "${traitName}"`);

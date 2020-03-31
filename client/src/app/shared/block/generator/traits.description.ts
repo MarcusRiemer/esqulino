@@ -1,4 +1,7 @@
-import { Instructions, ReferenceableInstructions } from './instructions.description';
+import {
+  Instructions,
+  ReferenceableInstructions,
+} from "./instructions.description";
 
 // Allows traits to be added from afar
 export interface ScopeTraitAdd {
@@ -7,15 +10,15 @@ export interface ScopeTraitAdd {
   // The attributes these traits should be added to
   attributes?: {
     [grammar: string]: {
-      [type: string]: string[]
-    }
-  }
+      [type: string]: string[];
+    };
+  };
   // The blocks these traits should be added to
   blocks?: {
     [grammar: string]: {
-      [type: string]: number[]
-    }
-  }
+      [type: string]: number[];
+    };
+  };
 }
 
 /**
@@ -23,11 +26,11 @@ export interface ScopeTraitAdd {
  */
 interface InternalTrait<T extends ReferenceableInstructions> {
   instructions: Partial<T>;
-  applyMode: "shallowMerge" | "deepMerge" | "replace"
+  applyMode: "shallowMerge" | "deepMerge" | "replace";
 }
 
 interface InternalTraits<T extends ReferenceableInstructions> {
-  [name: string]: InternalTrait<T>
+  [name: string]: InternalTrait<T>;
 }
 
 export type ResolvedTrait = InternalTrait<Instructions>;
@@ -35,5 +38,3 @@ export type ResolvedTraits = InternalTraits<Instructions>;
 
 export type ReferenceableTrait = InternalTrait<ReferenceableInstructions>;
 export type ReferenceableTraits = InternalTraits<ReferenceableInstructions>;
-
-

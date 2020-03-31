@@ -1,8 +1,12 @@
-import { NodeLocation, NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
-import { Validator } from './validator';
-import { Tree } from './syntaxtree';
-import { InsertDropLocation } from './drop.description';
-import { _cardinalityAllowsInsertion } from './drop-util';
+import {
+  NodeLocation,
+  NodeDescription,
+  QualifiedTypeName,
+} from "./syntaxtree.description";
+import { Validator } from "./validator";
+import { Tree } from "./syntaxtree";
+import { InsertDropLocation } from "./drop.description";
+import { _cardinalityAllowsInsertion } from "./drop-util";
 
 /**
  * Walks up the tree to find valid places in any of the existing
@@ -22,8 +26,11 @@ export function insertAtAnyParent(
   const toReturn: InsertDropLocation[] = [];
 
   // Check each candidate that could be appended somewhere ...
-  candidates.forEach(candidate => {
-    const fillType: QualifiedTypeName = { languageName: candidate.language, typeName: candidate.name };
+  candidates.forEach((candidate) => {
+    const fillType: QualifiedTypeName = {
+      languageName: candidate.language,
+      typeName: candidate.name,
+    };
     let stepsUp = 0; // Number of steps made towards the root
 
     // ... against each node up to the root
@@ -44,16 +51,27 @@ export function insertAtAnyParent(
       // Find out which categories could be theoretically used for
       // the given type
       const nodeValidator = validator.getType(currNode.qualifiedName);
-      const insertionCategories = nodeValidator.allowedChildrenCategoryNames
-        .filter(existingCategory => nodeValidator.allowsChildType(fillType, existingCategory));
+      const insertionCategories = nodeValidator.allowedChildrenCategoryNames.filter(
+        (existingCategory) =>
+          nodeValidator.allowsChildType(fillType, existingCategory)
+      );
 
       // Find out which location indices could be used for the given type
-      insertionCategories.forEach(categoryName => {
-        const theoreticalIndices = currNode.getChildrenInCategory(categoryName).length;
+      insertionCategories.forEach((categoryName) => {
+        const theoreticalIndices = currNode.getChildrenInCategory(categoryName)
+          .length;
 
         // <= because insertions may also occur *after* an existing element
         for (let i = 0; i <= theoreticalIndices; ++i) {
-          if (_cardinalityAllowsInsertion(validator, currNode, candidate, categoryName, i)) {
+          if (
+            _cardinalityAllowsInsertion(
+              validator,
+              currNode,
+              candidate,
+              categoryName,
+              i
+            )
+          ) {
             // Slicing needs to be omitted of stepsUp is 0, because [1,2,3].slice(0, 0)
             // returns an empty array.
             const pathBefore = stepsUp !== 0 ? loc.slice(0, -stepsUp) : loc;
@@ -61,7 +79,7 @@ export function insertAtAnyParent(
               location: [...pathBefore, [categoryName, i]],
               operation: "insert",
               algorithm: "allowAnyParent",
-              nodeDescription: candidate
+              nodeDescription: candidate,
             });
           }
         }
@@ -73,7 +91,7 @@ export function insertAtAnyParent(
     }
   });
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -107,20 +125,28 @@ export function appendAtParent(
     return (
       candidates
         // Type must be allowed in general
-        .filter(c => nodeValidator.allowsChildType({ languageName: c.language, typeName: c.name }, cat))
+        .filter((c) =>
+          nodeValidator.allowsChildType(
+            { languageName: c.language, typeName: c.name },
+            cat
+          )
+        )
         // Cardinality may not be violated
-        .filter(c => _cardinalityAllowsInsertion(validator, parentNode, c, cat, index))
-        .map((c): InsertDropLocation => {
-          return ({
-            operation: "insert",
-            algorithm: "allowAnyParent",
-            location: [...parentPath, [cat, index]],
-            nodeDescription: c
-          });
-        })
+        .filter((c) =>
+          _cardinalityAllowsInsertion(validator, parentNode, c, cat, index)
+        )
+        .map(
+          (c): InsertDropLocation => {
+            return {
+              operation: "insert",
+              algorithm: "allowAnyParent",
+              location: [...parentPath, [cat, index]],
+              nodeDescription: c,
+            };
+          }
+        )
     );
   } else {
-    return ([]);
+    return [];
   }
-
 }

@@ -1,4 +1,4 @@
-import * as Schema from '../grammar.description'
+import * as Schema from "../grammar.description";
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "3889526b-3b6a-4e54-8b29-95b3526f8c5a",
@@ -6,54 +6,54 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "imp",
   root: { languageName: "imp", typeName: "program" },
   types: {
-    "imp": {
-      "program": {
+    imp: {
+      program: {
         type: "concrete",
         attributes: [
           {
             name: "statements",
             type: "sequence",
-            nodeTypes: ["statement"]
-          }
+            nodeTypes: ["statement"],
+          },
         ],
       },
 
-      "statement": {
+      statement: {
         type: "concrete",
         attributes: [
           {
             name: "children",
             type: "allowed",
-            nodeTypes: ["statementAssign"]
-          }
-        ]
+            nodeTypes: ["statementAssign"],
+          },
+        ],
       },
 
-      "statementAssign": {
+      statementAssign: {
         type: "concrete",
         attributes: [
           {
             name: "children",
             type: "sequence",
-            nodeTypes: ["variable"]
-          }
-        ]
+            nodeTypes: ["variable"],
+          },
+        ],
       },
 
-      "variable": {
+      variable: {
         type: "concrete",
         attributes: [
           {
             name: "name",
             type: "property",
-            base: "string"
-          }
+            base: "string",
+          },
         ],
       },
 
-      "expression": {
+      expression: {
         type: "concrete",
-      }
+      },
     },
-  }
-}
+  },
+};

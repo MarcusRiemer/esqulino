@@ -1,35 +1,35 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {SortDirection} from "@angular/material/sort/sort-direction";
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { SortDirection } from "@angular/material/sort/sort-direction";
 
-import {GrammarListDescription} from '../../shared/syntaxtree';
-import {ListGrammarDataService, MutateGrammarService} from '../../shared/serverdata';
-import {PaginationEvent} from "../../shared/table/paginator-table.component";
-import {MatSort} from "@angular/material/sort";
+import { GrammarListDescription } from "../../shared/syntaxtree";
+import {
+  ListGrammarDataService,
+  MutateGrammarService,
+} from "../../shared/serverdata";
+import { PaginationEvent } from "../../shared/table/paginator-table.component";
+import { MatSort } from "@angular/material/sort";
 
 @Component({
-  selector: 'grammar-overview-selector',
-  templateUrl: './templates/overview-grammar.html',
-  providers: [ListGrammarDataService]
+  selector: "grammar-overview-selector",
+  templateUrl: "./templates/overview-grammar.html",
+  providers: [ListGrammarDataService],
 })
-
 export class OverviewGrammarComponent implements AfterViewInit {
-
   // Angular Material UI to sort by different columns
   @ViewChild(MatSort)
   _sort: MatSort;
 
   resultsLength$ = this._list.listTotalCount;
-  readonly availableGrammars$ = this._list.list
+  readonly availableGrammars$ = this._list.list;
   readonly inProgress = this._list.listCache.inProgress;
 
   constructor(
     private _list: ListGrammarDataService,
-    private _mutate: MutateGrammarService,
-  ) {
-  }
+    private _mutate: MutateGrammarService
+  ) {}
 
   ngAfterViewInit() {
-    this.onChangeSort(this._sort.active,this._sort.direction,false);
+    this.onChangeSort(this._sort.active, this._sort.direction, false);
   }
 
   public deleteGrammar(id: string) {
@@ -61,5 +61,10 @@ export class OverviewGrammarComponent implements AfterViewInit {
     this._list.setListOrdering(active, direction, refresh);
   }
 
-  displayedColumns: (keyof (GrammarListDescription) | "actions")[] = ["name", "slug", "id", "actions"];
+  displayedColumns: (keyof GrammarListDescription | "actions")[] = [
+    "name",
+    "slug",
+    "id",
+    "actions",
+  ];
 }

@@ -1,11 +1,13 @@
-import { Component, Optional, OnInit, OnDestroy } from '@angular/core';
+import { Component, Optional, OnInit, OnDestroy } from "@angular/core";
 
-import { Angulartics2Piwik } from 'angulartics2/piwik';
-import { UserService } from './shared/auth/user.service';
-import { Subscription } from 'rxjs';
+import { Angulartics2Piwik } from "angulartics2/piwik";
+import { UserService } from "./shared/auth/user.service";
+import { Subscription } from "rxjs";
 @Component({
-  selector: 'sql-scratch',
-  template: `<router-outlet></router-outlet>`
+  selector: "sql-scratch",
+  template: `
+    <router-outlet></router-outlet>
+  `,
 })
 export class SqlScratchComponent implements OnInit {
   // The piwik service needs to be required somewhere at least once,
@@ -20,13 +22,13 @@ export class SqlScratchComponent implements OnInit {
     }
   }
 
-
   ngOnInit(): void {
-    this._userService.userData$
-      .subscribe(val => console.log("Subscription: ", val))
+    this._userService.userData$.subscribe((val) =>
+      console.log("Subscription: ", val)
+    );
 
-    this._userService.unexpectedLogout$
-      .subscribe(_ => this._userService.loggedOutDialog())
+    this._userService.unexpectedLogout$.subscribe((_) =>
+      this._userService.loggedOutDialog()
+    );
   }
-
 }

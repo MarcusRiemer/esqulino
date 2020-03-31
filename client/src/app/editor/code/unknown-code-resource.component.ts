@@ -1,17 +1,15 @@
-import { Component } from '@angular/core'
-import { ActivatedRoute } from '@angular/router';
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
-import { map } from 'rxjs/operators';
+import { map } from "rxjs/operators";
 
 @Component({
-  templateUrl: 'templates/unknown-code-resource.html',
+  templateUrl: "templates/unknown-code-resource.html",
 })
 export class UnknownCodeResourceComponent {
-  constructor(
-    private _activatedRoute: ActivatedRoute
-  ) { }
+  constructor(private _activatedRoute: ActivatedRoute) {}
 
   readonly resourceId = this._activatedRoute.params.pipe(
-    map(params => params["resourceId"])
-  )
+    map((params) => params["resourceId"])
+  );
 }

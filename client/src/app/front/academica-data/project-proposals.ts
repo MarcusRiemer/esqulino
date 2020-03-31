@@ -86,7 +86,7 @@ export const ProjectProposals: ProjectProposal[] = [
         Dem Anwender werden eine Reihe von beispielhaften Eingaben samt erwartetem Ergebnis vorgegeben. Mittels
         des generierten Block-Editors soll er dazu einen Ausdruck bauen, der alle Testfälle erfüllt.
       </p>`,
-    tools: "BlattWerkzeug-Sprachdefinitionen, TypeScript mit Angular"
+    tools: "BlattWerkzeug-Sprachdefinitionen, TypeScript mit Angular",
   },
   {
     id: "community-functions",
@@ -122,7 +122,8 @@ export const ProjectProposals: ProjectProposal[] = [
         statischen Daten vom Lehrer aktualisiert werden müssen.
       </p>`,
 
-    tools: "Eigene Konzeption und Recherche, TypeScript mit Angular, Ruby mit Rails",
+    tools:
+      "Eigene Konzeption und Recherche, TypeScript mit Angular, Ruby mit Rails",
   },
   {
     id: "visual-database-editor",

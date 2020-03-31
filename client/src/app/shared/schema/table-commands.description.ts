@@ -1,4 +1,4 @@
-import { ForeignKeyDescription } from './schema.description'
+import { ForeignKeyDescription } from "./schema.description";
 
 /**
  * "Over-the-wire" format to describe a command. This is interpreted
@@ -6,7 +6,7 @@ import { ForeignKeyDescription } from './schema.description'
  */
 export interface CommandDescription {
   type: string;
-  index: number,
+  index: number;
   columnIndex: number;
 }
 
@@ -17,11 +17,18 @@ export interface CommandDescription {
  * types part of the schema, this explicit mention of all sub-types
  * is used.
  */
-export type ConcreteCommand = AddColumnDescription | DeleteColumnDescription |
-  SwitchColumnDescription | RenameColumnDescription | ChangeColumnNotNullDescription |
-  ChangeColumnPrimaryKeyDescription | ChangeColumnStandardValueDescription |
-  ChangeColumnTypeDescription | ChangeTableNameDescription | AddForeignKeyDescription |
-  RemoveForeignKeyDescription;
+export type ConcreteCommand =
+  | AddColumnDescription
+  | DeleteColumnDescription
+  | SwitchColumnDescription
+  | RenameColumnDescription
+  | ChangeColumnNotNullDescription
+  | ChangeColumnPrimaryKeyDescription
+  | ChangeColumnStandardValueDescription
+  | ChangeColumnTypeDescription
+  | ChangeTableNameDescription
+  | AddForeignKeyDescription
+  | RemoveForeignKeyDescription;
 /**
  * A complete request to alter a schema.
  */
@@ -62,7 +69,8 @@ export interface ChangeColumnNotNullDescription extends CommandDescription {
   type: "changeColumnNotNull";
 }
 
-export interface ChangeColumnStandardValueDescription extends CommandDescription {
+export interface ChangeColumnStandardValueDescription
+  extends CommandDescription {
   type: "changeColumnStandardValue";
   oldValue: string;
   newValue: string;
@@ -83,4 +91,3 @@ export interface RemoveForeignKeyDescription extends CommandDescription {
   type: "removeForeignKey";
   foreignKeyToRemove: ForeignKeyDescription;
 }
-

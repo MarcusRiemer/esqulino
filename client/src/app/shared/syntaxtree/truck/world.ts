@@ -1,10 +1,10 @@
-import { WorldDescription } from './world.description';
-import { BehaviorSubject } from 'rxjs';
+import { WorldDescription } from "./world.description";
+import { BehaviorSubject } from "rxjs";
 
-import { NodeLocation } from '../syntaxtree.description';
+import { NodeLocation } from "../syntaxtree.description";
 
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
-const GeneratorFunction = Object.getPrototypeOf(function*() { }).constructor;
+const GeneratorFunction = Object.getPrototypeOf(function* () {}).constructor;
 
 /**
  * A callback that is meant to be triggered when the execution of the program
@@ -50,7 +50,9 @@ export class World {
       // Check for roads
       if (curTile.hasOpeningInDirection(state.truck.facingDirectionAfterMove)) {
         // Check if traffic light is green
-        const trafficLight = curTile.trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
+        const trafficLight = curTile.trafficLight(
+          DirectionUtil.opposite(state.truck.facingDirection)
+        );
         if (trafficLight == null || trafficLight.isGreen(this.timeStep)) {
           state.truck.move();
           state.time = 1;
@@ -58,8 +60,14 @@ export class World {
         }
         throw new RedLightViolationError();
         // Curves can also be taken without set turn signal
-      } else if (this.smartForward && curTile.isCurve() && state.truck.turning === TurnDirection.Straight) {
-        state.truck.move(curTile.curveTurnDirection(state.truck.facingDirection));
+      } else if (
+        this.smartForward &&
+        curTile.isCurve() &&
+        state.truck.turning === TurnDirection.Straight
+      ) {
+        state.truck.move(
+          curTile.curveTurnDirection(state.truck.facingDirection)
+        );
         state.time = 1;
         return state;
       }
@@ -140,13 +148,17 @@ export class World {
   readonly sensors = {
     // Is the traffic light in front of the truck red?
     [Sensor.lightIsRed]: (state: WorldState): boolean => {
-      const trafficLight = state.getTile(state.truck.position).trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
+      const trafficLight = state
+        .getTile(state.truck.position)
+        .trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
       return trafficLight != null && trafficLight.isRed(this.timeStep);
     },
 
     // Is the traffic light in front of the truck green?
     [Sensor.lightIsGreen]: (state: WorldState): boolean => {
-      const trafficLight = state.getTile(state.truck.position).trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
+      const trafficLight = state
+        .getTile(state.truck.position)
+        .trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
       return trafficLight != null && trafficLight.isGreen(this.timeStep);
     },
 
@@ -161,30 +173,36 @@ export class World {
     [Sensor.canTurnLeft]: (state: WorldState): boolean => {
       return state
         .getTile(state.truck.position)
-        .hasOpeningInDirection(DirectionUtil.turn(state.truck.facingDirection, TurnDirection.Left));
+        .hasOpeningInDirection(
+          DirectionUtil.turn(state.truck.facingDirection, TurnDirection.Left)
+        );
     },
 
     // Can the truck turn right?
     [Sensor.canTurnRight]: (state: WorldState): boolean => {
       return state
         .getTile(state.truck.position)
-        .hasOpeningInDirection(DirectionUtil.turn(state.truck.facingDirection, TurnDirection.Right));
+        .hasOpeningInDirection(
+          DirectionUtil.turn(state.truck.facingDirection, TurnDirection.Right)
+        );
     },
 
     // Can the truck load here?
     [Sensor.canLoad]: (state: WorldState): boolean => {
-      return state.truck.freightItems === 0 // Doesn't have anything loaded
-        && state.getTile(state.truck.position).freightItems > 0; // Item on tile
+      return (
+        state.truck.freightItems === 0 && // Doesn't have anything loaded
+        state.getTile(state.truck.position).freightItems > 0
+      ); // Item on tile
     },
 
     // Can the truck unload here?
     [Sensor.canUnload]: (state: WorldState): boolean => {
       const tile = state.getTile(state.truck.position);
-      return state.truck.freightItems > 0 // Is freight loaded?
-        && (
-          state.truck.freightItem() === tile.freightTarget // Can be unloaded on target?
-          || (tile.freightItems === 0 && tile.freightTarget == null) // Can be unloaded on empty field?
-        )
+      return (
+        state.truck.freightItems > 0 && // Is freight loaded?
+        (state.truck.freightItem() === tile.freightTarget || // Can be unloaded on target?
+          (tile.freightItems === 0 && tile.freightTarget == null)) // Can be unloaded on empty field?
+      );
     },
 
     // Is the Truck on a target?
@@ -209,11 +227,14 @@ export class World {
     const truck = new Truck(
       new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
       DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing)),
-      desc.trucks[0].freight.map((f) => ({
-        'Red': Freight.Red,
-        'Green': Freight.Green,
-        'Blue': Freight.Blue
-      }[f]))
+      desc.trucks[0].freight.map(
+        (f) =>
+          ({
+            Red: Freight.Red,
+            Green: Freight.Green,
+            Blue: Freight.Blue,
+          }[f])
+      )
     );
 
     const tiles = desc.tiles.map((tile) => {
@@ -233,37 +254,45 @@ export class World {
 
       // Freight
       if (tile.freight) {
-        freight = tile.freight.map((f) => ({
-          'Red': Freight.Red,
-          'Green': Freight.Green,
-          'Blue': Freight.Blue
-        }[f]));
+        freight = tile.freight.map(
+          (f) =>
+            ({
+              Red: Freight.Red,
+              Green: Freight.Green,
+              Blue: Freight.Blue,
+            }[f])
+        );
       }
 
       // Freight target
       if (tile.freightTarget) {
         freightTarget = {
-          'Red': Freight.Red,
-          'Green': Freight.Green,
-          'Blue': Freight.Blue
+          Red: Freight.Red,
+          Green: Freight.Green,
+          Blue: Freight.Blue,
         }[tile.freightTarget];
       }
 
       // Traffic lights
       if (tile.trafficLights) {
-        tile.trafficLights.forEach(t => {
-          trafficLights[{
-            'N': 0,
-            'E': 1,
-            'S': 2,
-            'W': 3
-          }[t.opening]] = new TrafficLight(t.redPhase, t.greenPhase, t.startPhase);
+        tile.trafficLights.forEach((t) => {
+          trafficLights[
+            {
+              N: 0,
+              E: 1,
+              S: 2,
+              W: 3,
+            }[t.opening]
+          ] = new TrafficLight(t.redPhase, t.greenPhase, t.startPhase);
         });
       }
 
       return new Tile(
         new Position(tile.position.x, tile.position.y, this),
-        openings, freight, freightTarget, trafficLights
+        openings,
+        freight,
+        freightTarget,
+        trafficLights
       );
     });
 
@@ -337,9 +366,7 @@ export class World {
       setTimeout(
         () => resolve(),
         Math.max(
-          state != null
-            ? state.time * this.animationSpeed
-            : 0,
+          state != null ? state.time * this.animationSpeed : 0,
           1 // always pause for at least a very short time to avoid busy waiting
         )
       );
@@ -425,42 +452,66 @@ export class World {
    * this-context.
    * @param code Code to be executed.
    */
-  async runCode(code: string, progressCallback: ExecutionProgessCallback = (_) => { }) {
+  async runCode(
+    code: string,
+    progressCallback: ExecutionProgessCallback = (_) => {}
+  ) {
     var self = this;
     this.commandInProgress.next(true);
     this.codeShouldPause.next(false);
     progressCallback(undefined);
 
     try {
-      const f = new GeneratorFunction('truck', code);
+      const f = new GeneratorFunction("truck", code);
 
-      this._currentGenerator = f.call({}, {
-        goForward: function*() { yield self._commandAsync(Command.goForward); },
-        turnLeft: function*() { yield self._commandAsync(Command.turnLeft); },
-        turnRight: function*() { yield self._commandAsync(Command.turnRight); },
-        noTurn: function*() { yield self._commandAsync(Command.noTurn); },
-        load: function*() { yield self._commandAsync(Command.load); },
-        unload: function*() { yield self._commandAsync(Command.unload); },
-        wait: function*() { yield self._commandAsync(Command.wait); },
-        pause: function*() { yield self._commandAsync(Command.pause); },
-        doNothing: function*() { yield self._commandAsync(Command.doNothing); },
+      this._currentGenerator = f.call(
+        {},
+        {
+          goForward: function* () {
+            yield self._commandAsync(Command.goForward);
+          },
+          turnLeft: function* () {
+            yield self._commandAsync(Command.turnLeft);
+          },
+          turnRight: function* () {
+            yield self._commandAsync(Command.turnRight);
+          },
+          noTurn: function* () {
+            yield self._commandAsync(Command.noTurn);
+          },
+          load: function* () {
+            yield self._commandAsync(Command.load);
+          },
+          unload: function* () {
+            yield self._commandAsync(Command.unload);
+          },
+          wait: function* () {
+            yield self._commandAsync(Command.wait);
+          },
+          pause: function* () {
+            yield self._commandAsync(Command.pause);
+          },
+          doNothing: function* () {
+            yield self._commandAsync(Command.doNothing);
+          },
 
-        lightIsRed: () => this.sensor(Sensor.lightIsRed),
-        lightIsGreen: () => this.sensor(Sensor.lightIsGreen),
-        canGoStraight: () => this.sensor(Sensor.canGoStraight),
-        canTurnLeft: () => this.sensor(Sensor.canTurnLeft),
-        canTurnRight: () => this.sensor(Sensor.canTurnRight),
-        canLoad: () => this.sensor(Sensor.canLoad),
-        canUnload: () => this.sensor(Sensor.canUnload),
-        isOnTarget: () => this.sensor(Sensor.isOnTarget),
-        isSolved: () => this.sensor(Sensor.isSolved),
+          lightIsRed: () => this.sensor(Sensor.lightIsRed),
+          lightIsGreen: () => this.sensor(Sensor.lightIsGreen),
+          canGoStraight: () => this.sensor(Sensor.canGoStraight),
+          canTurnLeft: () => this.sensor(Sensor.canTurnLeft),
+          canTurnRight: () => this.sensor(Sensor.canTurnRight),
+          canLoad: () => this.sensor(Sensor.canLoad),
+          canUnload: () => this.sensor(Sensor.canUnload),
+          isOnTarget: () => this.sensor(Sensor.isOnTarget),
+          isSolved: () => this.sensor(Sensor.isSolved),
 
-        _progress: progressCallback
-      });
+          _progress: progressCallback,
+        }
+      );
 
       await this._resumeCode();
     } catch (error) {
-      if (typeof error.msg !== 'undefined') {
+      if (typeof error.msg !== "undefined") {
         // Forward the "nice" errors
         throw error;
       } else {
@@ -484,7 +535,7 @@ export class World {
     try {
       await this._resumeCode();
     } catch (error) {
-      if (typeof error.msg !== 'undefined') {
+      if (typeof error.msg !== "undefined") {
         // Forward the "nice" errors
         throw error;
       } else {
@@ -503,7 +554,10 @@ export class World {
   private async _resumeCode() {
     if (this._currentGenerator) {
       let result: IteratorResult<any>;
-      while (!this.codeShouldPause.value && !(result = this._currentGenerator.next()).done) {
+      while (
+        !this.codeShouldPause.value &&
+        !(result = this._currentGenerator.next()).done
+      ) {
         await result.value;
       }
     }
@@ -544,7 +598,13 @@ export class WorldState {
    * @param time Time steps that are sheduled for the execution of this step.
    * @param prev Previous state.
    */
-  constructor(step: number, tiles: Tile[], truck: Truck, time: number = 0, prev: WorldState = null) {
+  constructor(
+    step: number,
+    tiles: Tile[],
+    truck: Truck,
+    time: number = 0,
+    prev: WorldState = null
+  ) {
     this.step = step;
     this.time = time;
     this.tiles = tiles;
@@ -557,7 +617,9 @@ export class WorldState {
    * @return time steps.
    */
   get timeStep(): number {
-    if (this.prev === null) { return this.time; }
+    if (this.prev === null) {
+      return this.time;
+    }
     return this.time + this.prev.timeStep;
   }
 
@@ -576,7 +638,10 @@ export class WorldState {
    *         otherwise false.
    */
   get solved(): boolean {
-    return this.truck.freightItems === 0 && !this.tiles.some((t) => t.freightItems > 0);
+    return (
+      this.truck.freightItems === 0 &&
+      !this.tiles.some((t) => t.freightItems > 0)
+    );
   }
 
   /**
@@ -616,7 +681,12 @@ export class Truck {
    * @param facing Current direction of travel of the truck.
    * @param freight Freight.
    */
-  constructor(position: Position, facing: number, freight: Array<Freight> = [], turning: TurnDirection = TurnDirection.Straight) {
+  constructor(
+    position: Position,
+    facing: number,
+    freight: Array<Freight> = [],
+    turning: TurnDirection = TurnDirection.Straight
+  ) {
     this.position = position;
     this.facing = facing;
     this.freight = freight;
@@ -676,9 +746,15 @@ export class Truck {
    */
   get facingDirection(): Direction {
     const f = this.facing;
-    if (f % 4 === 1 || f % 4 === -3) { return Direction.East; }
-    if (f % 4 === 2 || f % 4 === -2) { return Direction.South; }
-    if (f % 4 === 3 || f % 4 === -1) { return Direction.West; }
+    if (f % 4 === 1 || f % 4 === -3) {
+      return Direction.East;
+    }
+    if (f % 4 === 2 || f % 4 === -2) {
+      return Direction.South;
+    }
+    if (f % 4 === 3 || f % 4 === -1) {
+      return Direction.West;
+    }
     return Direction.North;
   }
 
@@ -711,7 +787,9 @@ export class Truck {
 
   move(turnDirection: TurnDirection = null) {
     // Overwrite turning direction
-    if (turnDirection != null) { this.turning = turnDirection; }
+    if (turnDirection != null) {
+      this.turning = turnDirection;
+    }
 
     // New direction of travel and position
     this.position = this.positionAfterMove;
@@ -776,9 +854,13 @@ export class Tile {
    * @param freightTarget Freight target.
    * @param trafficLights Traffic lights.
    */
-  constructor(position: Position, openings: TileOpening,
-    freight: Array<Freight> = [], freightTarget: Freight = null,
-    trafficLights: Array<TrafficLight> = []) {
+  constructor(
+    position: Position,
+    openings: TileOpening,
+    freight: Array<Freight> = [],
+    freightTarget: Freight = null,
+    trafficLights: Array<TrafficLight> = []
+  ) {
     this.position = position;
     this.openings = openings;
     this.freight = freight;
@@ -809,10 +891,12 @@ export class Tile {
    * @return True, if the tile is a curve, otherwise false.
    */
   isCurve(): boolean {
-    return this.openings === (TileOpening.North | TileOpening.East)
-      || this.openings === (TileOpening.East | TileOpening.South)
-      || this.openings === (TileOpening.South | TileOpening.West)
-      || this.openings === (TileOpening.North | TileOpening.West);
+    return (
+      this.openings === (TileOpening.North | TileOpening.East) ||
+      this.openings === (TileOpening.East | TileOpening.South) ||
+      this.openings === (TileOpening.South | TileOpening.West) ||
+      this.openings === (TileOpening.North | TileOpening.West)
+    );
   }
 
   /**
@@ -821,7 +905,9 @@ export class Tile {
    * @return Turn direction, undefined if tile is not a curve.
    */
   curveTurnDirection(direction: Direction): TurnDirection {
-    return this.hasOpeningInDirection(DirectionUtil.turn(direction, TurnDirection.Left))
+    return this.hasOpeningInDirection(
+      DirectionUtil.turn(direction, TurnDirection.Left)
+    )
       ? TurnDirection.Left
       : TurnDirection.Right;
   }
@@ -869,7 +955,9 @@ export class Tile {
    * @return Color of the freight or target.
    */
   freightColor(n: number = 0): string {
-    if (this.freightTarget) { return this.freightTarget; }
+    if (this.freightTarget) {
+      return this.freightTarget;
+    }
     return this.freightItem(n);
   }
 
@@ -881,9 +969,7 @@ export class Tile {
    */
   trafficLight(direction: Direction) {
     const n = DirectionUtil.toNumber(direction);
-    return this.trafficLights.length > n
-      ? this.trafficLights[n]
-      : null;
+    return this.trafficLights.length > n ? this.trafficLights[n] : null;
   }
 
   /**
@@ -896,7 +982,7 @@ export class Tile {
       this.openings,
       this.freight.slice(0),
       this.freightTarget,
-      this.trafficLights.map((t) => t ? t.clone() : t)
+      this.trafficLights.map((t) => (t ? t.clone() : t))
     );
   }
 }
@@ -932,7 +1018,9 @@ export class TrafficLight {
    * @return True if the traffic light is red, otherwise false.
    */
   isRed(step: number): boolean {
-    return (step + this.initial) % (this.redPhase + this.greenPhase) < this.redPhase;
+    return (
+      (step + this.initial) % (this.redPhase + this.greenPhase) < this.redPhase
+    );
   }
 
   /**
@@ -949,11 +1037,7 @@ export class TrafficLight {
    * @return Copy of the traffic light.
    */
   clone(): TrafficLight {
-    return new TrafficLight(
-      this.redPhase,
-      this.greenPhase,
-      this.initial
-    );
+    return new TrafficLight(this.redPhase, this.greenPhase, this.initial);
   }
 }
 
@@ -966,17 +1050,14 @@ export class Size {
    * @param width Width.
    * @param height Height.
    */
-  constructor(public width: number, public height: number) { }
+  constructor(public width: number, public height: number) {}
 
   /**
    * Creates a copy of the size.
    * @return Copy of the size.
    */
   clone(): Size {
-    return new Size(
-      this.width,
-      this.height
-    );
+    return new Size(this.width, this.height);
   }
 }
 
@@ -990,7 +1071,7 @@ export class Position {
    * @param y Y-position.
    * @param welt World to which the position refers.
    */
-  constructor(public x: number, public y: number, readonly world: World) { }
+  constructor(public x: number, public y: number, readonly world: World) {}
 
   /**
    * Width of the associated world.
@@ -1011,11 +1092,7 @@ export class Position {
    * @return Copy of the position.
    */
   clone(): Position {
-    return new Position(
-      this.x,
-      this.y,
-      this.world
-    );
+    return new Position(this.x, this.y, this.world);
   }
 }
 
@@ -1024,13 +1101,13 @@ export class Position {
  */
 export enum Freight {
   /** Red. */
-  Red = 'red',
+  Red = "red",
 
   /** Green. */
-  Green = 'green',
+  Green = "green",
 
   /** Blue. */
-  Blue = 'blue',
+  Blue = "blue",
 }
 
 /**
@@ -1064,16 +1141,16 @@ export enum TileOpening {
  */
 export enum Direction {
   /** North. */
-  North = 'North',
+  North = "North",
 
   /** East. */
-  East = 'East',
+  East = "East",
 
   /** South. */
-  South = 'South',
+  South = "South",
 
   /** West. */
-  West = 'West',
+  West = "West",
 }
 
 /**
@@ -1103,7 +1180,7 @@ export class DirectionUtil {
       [Direction.North]: TileOpening.North,
       [Direction.East]: TileOpening.East,
       [Direction.South]: TileOpening.South,
-      [Direction.West]: TileOpening.West
+      [Direction.West]: TileOpening.West,
     }[direction];
   }
 
@@ -1117,7 +1194,7 @@ export class DirectionUtil {
       [Direction.North]: 0,
       [Direction.East]: 1,
       [Direction.South]: 2,
-      [Direction.West]: 3
+      [Direction.West]: 3,
     }[direction];
   }
 
@@ -1127,8 +1204,13 @@ export class DirectionUtil {
    * @param turnDirection Turning direction.
    * @return New direction.
    */
-  public static turn(direction: Direction, turnDirection: TurnDirection): Direction {
-    if (turnDirection === TurnDirection.Straight) { return direction; }
+  public static turn(
+    direction: Direction,
+    turnDirection: TurnDirection
+  ): Direction {
+    if (turnDirection === TurnDirection.Straight) {
+      return direction;
+    }
     return {
       [TurnDirection.Left]: {
         [Direction.North]: Direction.West,
@@ -1141,7 +1223,7 @@ export class DirectionUtil {
         [Direction.East]: Direction.South,
         [Direction.South]: Direction.West,
         [Direction.West]: Direction.North,
-      }
+      },
     }[turnDirection][direction];
   }
 
@@ -1152,10 +1234,10 @@ export class DirectionUtil {
    */
   public static fromChar(c: string): Direction {
     return {
-      'N': Direction.North,
-      'E': Direction.East,
-      'S': Direction.South,
-      'W': Direction.West,
+      N: Direction.North,
+      E: Direction.East,
+      S: Direction.South,
+      W: Direction.West,
     }[c];
   }
 }
@@ -1237,25 +1319,25 @@ export enum Sensor {
 /** General Exception. */
 export class TruckError extends Error {
   readonly expected: boolean = false;
-  readonly msg: string = '';
+  readonly msg: string = "";
 }
 
 /** Exception while trying to leave the paved road. */
 export class StrayedOffTheRoadError extends TruckError {
-  readonly msg: string = 'Dein Lastwagen wäre fast von der Straße abgekommen!';
+  readonly msg: string = "Dein Lastwagen wäre fast von der Straße abgekommen!";
 }
 
 /** Exception while crossing a red traffic light. */
 export class RedLightViolationError extends TruckError {
-  readonly msg: string = 'Du hättest fast eine Rote Ampel übersehen!';
+  readonly msg: string = "Du hättest fast eine Rote Ampel übersehen!";
 }
 
 /** Exception while loading. */
 export class LoadingError extends TruckError {
-  readonly msg: string = 'Hier kannst du nichts laden!';
+  readonly msg: string = "Hier kannst du nichts laden!";
 }
 
 /** Exception while unloading. */
 export class UnloadingError extends TruckError {
-  readonly msg: string = 'Hier kannst du nichts abladen!';
+  readonly msg: string = "Hier kannst du nichts abladen!";
 }

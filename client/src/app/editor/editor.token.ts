@@ -1,4 +1,4 @@
-import { InjectionToken } from '@angular/core'
+import { InjectionToken } from "@angular/core";
 
 /**
  * This token is used to give widget-editing components access to

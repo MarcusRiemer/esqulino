@@ -1,15 +1,18 @@
-import { Component } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
-import { IndividualBlockLanguageDataService, ListBlockLanguageDataService } from '../../shared/serverdata'
-import { PerformDataService } from '../../shared/authorisation/perform-data.service';
+import {
+  IndividualBlockLanguageDataService,
+  ListBlockLanguageDataService,
+} from "../../shared/serverdata";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
-import { ProjectService, Project } from '../project.service'
-import { SidebarService } from '../sidebar.service'
-import { EditorToolbarService } from '../toolbar.service'
+import { ProjectService, Project } from "../project.service";
+import { SidebarService } from "../sidebar.service";
+import { EditorToolbarService } from "../toolbar.service";
 
 @Component({
-  templateUrl: 'templates/settings.html'
+  templateUrl: "templates/settings.html",
 })
 export class SettingsComponent {
   /**
@@ -33,8 +36,7 @@ export class SettingsComponent {
     private _individualBlockLanguageData: IndividualBlockLanguageDataService,
     private _listBlockLanguageData: ListBlockLanguageDataService,
     private _performData: PerformDataService
-  ) {
-  }
+  ) {}
 
   /**
    * Load the project to access the schema
@@ -47,31 +49,40 @@ export class SettingsComponent {
     this._toolbarService.resetItems();
 
     // Ensure we are always subscribed to the active project
-    let subRef = this._projectService.activeProject
-      .subscribe(res => {
-        this.project = res
-        // Needs permission for saving
-        this._toolbarService.saveItem.performDesc = this._performData.project.update(res.id)
-      });
+    let subRef = this._projectService.activeProject.subscribe((res) => {
+      this.project = res;
+      // Needs permission for saving
+      this._toolbarService.saveItem.performDesc = this._performData.project.update(
+        res.id
+      );
+    });
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the save button
     this._toolbarService.savingEnabled = true;
     let saveItem = this._toolbarService.saveItem;
-    subRef = saveItem.onClick.subscribe(_ => {
+    subRef = saveItem.onClick.subscribe((_) => {
       saveItem.isInProgress = true;
-      this._projectService.storeProjectDescription(this.project)
-        .subscribe(_ => saveItem.isInProgress = false);
+      this._projectService
+        .storeProjectDescription(this.project)
+        .subscribe((_) => (saveItem.isInProgress = false));
     });
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the delete button
-    let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d", this._performData.project.delete(this.project.id));
-    subRef = btnDelete.onClick.subscribe(_ => {
+    let btnDelete = this._toolbarService.addButton(
+      "delete",
+      "Löschen",
+      "trash",
+      "d",
+      this._performData.project.delete(this.project.id)
+    );
+    subRef = btnDelete.onClick.subscribe((_) => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
-        this._projectService.deleteProject(this.project.slug)
-          .subscribe(res => {
+        this._projectService
+          .deleteProject(this.project.slug)
+          .subscribe((res) => {
             // Go back to title after deleting
             if (res) {
               this._router.navigateByUrl("/");
@@ -86,7 +97,7 @@ export class SettingsComponent {
    * Free up subscriptions
    */
   ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];
   }
 
@@ -94,7 +105,7 @@ export class SettingsComponent {
    * @return All block languages that could currently be used.
    */
   get availableBlockLanguages() {
-    return (this._listBlockLanguageData.list);
+    return this._listBlockLanguageData.list;
   }
 
   /**
@@ -118,6 +129,6 @@ export class SettingsComponent {
    * Retrieves the name of the given block language
    */
   resolveBlockLanguageName(blockLanguageId: string) {
-    return (this._individualBlockLanguageData.getSingle(blockLanguageId));
+    return this._individualBlockLanguageData.getSingle(blockLanguageId);
   }
 }

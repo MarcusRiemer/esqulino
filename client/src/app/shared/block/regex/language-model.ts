@@ -1,5 +1,5 @@
-import { BlockLanguageDescription } from '../block-language.description'
-import { VisualBlockDescriptions } from '../block.description'
+import { BlockLanguageDescription } from "../block-language.description";
+import { VisualBlockDescriptions } from "../block.description";
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "9e529caa-aa86-48eb-9a12-83889377195e",
@@ -20,8 +20,8 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "regex",
                 name: "root",
                 children: {
-                  "expressions": []
-                }
+                  expressions: [],
+                },
               },
               displayName: "Regulärer Ausdruck",
             },
@@ -30,16 +30,16 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "regex",
                 name: "expr",
                 children: {
-                  "singleExpression": [
+                  singleExpression: [
                     {
                       language: "regex",
                       name: "constant",
                       properties: {
-                        value: "a"
-                      }
-                    }
-                  ]
-                }
+                        value: "a",
+                      },
+                    },
+                  ],
+                },
               },
               displayName: "Konstante 'a'",
             },
@@ -48,16 +48,16 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "regex",
                 name: "expr",
                 children: {
-                  "singleExpression": [
+                  singleExpression: [
                     {
                       language: "regex",
                       name: "constant",
                       properties: {
-                        value: "b"
-                      }
-                    }
-                  ]
-                }
+                        value: "b",
+                      },
+                    },
+                  ],
+                },
               },
               displayName: "Konstante 'b'",
             },
@@ -66,16 +66,16 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "regex",
                 name: "expr",
                 children: {
-                  "singleExpression": [
+                  singleExpression: [
                     {
                       language: "regex",
                       name: "constant",
                       properties: {
-                        value: "c"
-                      }
-                    }
-                  ]
-                }
+                        value: "c",
+                      },
+                    },
+                  ],
+                },
               },
               displayName: "Konstante 'c'",
             },
@@ -84,12 +84,12 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "regex",
                 name: "expr",
                 children: {
-                  "singleExpression": [
+                  singleExpression: [
                     {
                       language: "regex",
                       name: "alternative",
                       children: {
-                        "expressions": [
+                        expressions: [
                           {
                             language: "regex",
                             name: "expr",
@@ -97,25 +97,25 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                           {
                             language: "regex",
                             name: "expr",
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
               },
-              displayName: "Alternative"
-            }
-          ]
-        }
-      ]
-    }
+              displayName: "Alternative",
+            },
+          ],
+        },
+      ],
+    },
   ],
   editorBlocks: [
     {
       describedType: {
         languageName: "regex",
-        typeName: "root"
+        typeName: "root",
       },
       visual: [
         {
@@ -124,21 +124,21 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           children: [
             {
               blockType: "constant",
-              text: "RegEx: "
+              text: "RegEx: ",
             } as VisualBlockDescriptions.EditorConstant,
             {
               blockType: "iterator",
               childGroupName: "expressions",
               direction: "horizontal",
             } as VisualBlockDescriptions.EditorIterator,
-          ]
-        } as VisualBlockDescriptions.EditorBlock
-      ]
+          ],
+        } as VisualBlockDescriptions.EditorBlock,
+      ],
     },
     {
       describedType: {
         languageName: "regex",
-        typeName: "constant"
+        typeName: "constant",
       },
       visual: [
         {
@@ -147,16 +147,16 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           children: [
             {
               blockType: "interpolated",
-              property: "value"
+              property: "value",
             } as VisualBlockDescriptions.EditorInterpolated,
-          ]
-        } as VisualBlockDescriptions.EditorBlock
-      ]
+          ],
+        } as VisualBlockDescriptions.EditorBlock,
+      ],
     },
     {
       describedType: {
         languageName: "regex",
-        typeName: "alternative"
+        typeName: "alternative",
       },
       visual: [
         {
@@ -165,13 +165,13 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                visibility: { $var: "ifLegalChild" }
+                visibility: { $var: "ifLegalChild" },
               },
               children: [
                 {
                   blockType: "constant",
-                  text: "("
-                }
+                  text: "(",
+                },
               ],
             },
             {
@@ -181,36 +181,36 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 {
                   blockType: "dropTarget",
                   dropTarget: {
-                    visibility: { $var: "ifLegalChild" }
+                    visibility: { $var: "ifLegalChild" },
                   },
                   children: [
                     {
                       blockType: "constant",
-                      text: "|"
-                    }
+                      text: "|",
+                    },
                   ],
                 },
-              ]
+              ],
             },
             {
               blockType: "constant",
-              text: ")"
+              text: ")",
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "regex",
-        typeName: "expr"
+        typeName: "expr",
       },
       visual: [
         {
           blockType: "iterator",
           childGroupName: "singleExpression",
         },
-      ]
-    }
-  ]
-}
+      ],
+    },
+  ],
+};

@@ -1,7 +1,8 @@
 <ng-content></ng-content>
-<mat-paginator #paginator
-               (page)="onChangePagination()"
-               [length]="resultsLength$ | async"
-               [pageSize]="25"
-               [pageSizeOptions]="[5,25,100]">
-</mat-paginator>
+<mat-paginator
+  #paginator
+  (page)="onChangePagination()"
+  [length]="resultsLength$ | async"
+  [pageSize]="25"
+  [pageSizeOptions]="[5,25,100]"
+></mat-paginator>

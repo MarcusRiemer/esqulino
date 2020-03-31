@@ -1,15 +1,27 @@
-import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, delay, first, filter, tap, map, share } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from "rxjs";
+import {
+  catchError,
+  delay,
+  first,
+  filter,
+  tap,
+  map,
+  share,
+} from "rxjs/operators";
 
-import { ServerApiService } from '../shared/serverdata/serverapi.service'
-import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
-import { ResourceReferencesService } from '../shared/resource-references.service';
-import { isValidId } from '../shared/util';
+import { ServerApiService } from "../shared/serverdata/serverapi.service";
+import {
+  Project,
+  ProjectDescription,
+  ProjectFullDescription,
+} from "../shared/project";
+import { ResourceReferencesService } from "../shared/resource-references.service";
+import { isValidId } from "../shared/util";
 
-export { Project, ProjectFullDescription }
+export { Project, ProjectFullDescription };
 
 /**
  * Wraps access to a single project, which is deemed to be "active"
@@ -17,7 +29,6 @@ export { Project, ProjectFullDescription }
  */
 @Injectable({ providedIn: "root" })
 export class ProjectService {
-
   /**
    * If a HTTP request is in progress, this is it.
    */
@@ -61,47 +72,54 @@ export class ProjectService {
   async setActiveProject(slugOrId: string, forceRefresh: boolean) {
     // Projects shouldn't change while other requests are in progress
     if (this._httpRequest) {
-      throw { "err": "HTTP request in progress" };
+      throw { err: "HTTP request in progress" };
     }
 
     // Clear out the reference to the current project if we are loading
     // a new project or must reload by sheer force.
     const currentProject = this._subject.getValue();
-    if (forceRefresh || (currentProject && !currentProject.hasSlugOrId(slugOrId))) {
+    if (
+      forceRefresh ||
+      (currentProject && !currentProject.hasSlugOrId(slugOrId))
+    ) {
       this.forgetCurrentProject();
     }
 
     // Build the HTTP-request
     const url = this._server.getProjectUrl(slugOrId);
-    this._httpRequest = this._http.get<ProjectFullDescription>(url)
-      .pipe(
-        first(),
-        map(res => new Project(res, this._resourceReferences)),
-        share() // Ensure that the request is not executed multiple times
-      );
+    this._httpRequest = this._http.get<ProjectFullDescription>(url).pipe(
+      first(),
+      map((res) => new Project(res, this._resourceReferences)),
+      share() // Ensure that the request is not executed multiple times
+    );
 
     // And execute it by subscribing to it.
-    this._httpRequest
-      .subscribe(res => {
+    this._httpRequest.subscribe(
+      (res) => {
         // There is a new project, Inform subscribers
-        console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
+        console.log(
+          `Project Service: HTTP request for specific project ("${url}") finished`
+        );
         this._subject.next(res);
 
-        this._httpRequest = undefined
+        this._httpRequest = undefined;
       },
-        (error: Response) => {
-          // Something has gone wrong, pass the error on to the subscribers
-          // of the project and hope they know what to do about it.
-          console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
-          this._subject.error(error);
+      (error: Response) => {
+        // Something has gone wrong, pass the error on to the subscribers
+        // of the project and hope they know what to do about it.
+        console.log(
+          `Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`
+        );
+        this._subject.error(error);
 
-          // Reset the internal to be as blank as possible
-          this._subject.next(undefined);
-          this._httpRequest = undefined;
-        })
+        // Reset the internal to be as blank as possible
+        this._subject.next(undefined);
+        this._httpRequest = undefined;
+      }
+    );
 
     // Others may also be interested in the result
-    return (this._httpRequest.toPromise());
+    return this._httpRequest.toPromise();
   }
 
   /**
@@ -109,8 +127,7 @@ export class ProjectService {
    * project.
    */
   get activeProject(): Observable<Project> {
-    return (this._subject
-      .pipe(filter(v => !!v)));
+    return this._subject.pipe(filter((v) => !!v));
   }
 
   /**
@@ -119,7 +136,7 @@ export class ProjectService {
    * @return The project that is currently shared to all subscribers.
    */
   get cachedProject(): Project {
-    return (this._subject.getValue())
+    return this._subject.getValue();
   }
 
   /**
@@ -132,15 +149,14 @@ export class ProjectService {
     const desc = proj.toUpdateRequest();
     const url = this._server.getProjectUrl(proj.slug);
 
-    const toReturn = this._http.put<ProjectDescription>(url, desc)
-      .pipe(
-        catchError(this.passThroughError),
-        delay(250),
-        tap(desc => proj.updateDescription(desc)),
-        tap(_ => proj.markSaved())
-      );
+    const toReturn = this._http.put<ProjectDescription>(url, desc).pipe(
+      catchError(this.passThroughError),
+      delay(250),
+      tap((desc) => proj.updateDescription(desc)),
+      tap((_) => proj.markSaved())
+    );
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**

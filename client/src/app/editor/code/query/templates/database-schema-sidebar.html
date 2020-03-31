@@ -1,18 +1,21 @@
-<h5>Datenbank <code>{{ databaseName }}</code></h5>
+<h5>
+  Datenbank
+  <code>{{ databaseName }}</code>
+</h5>
 <div class="schema-tables">
-  <details *ngFor="let table of possibleTables;"
-           class="ast">
+  <details *ngFor="let table of possibleTables;" class="ast">
     <summary class="block rounded">
-      <span (dragstart)="startTableDrag($event, table)"
-            draggable="true">
+      <span (dragstart)="startTableDrag($event, table)" draggable="true">
         {{ table.name }}
       </span>
     </summary>
     <ul class="ast">
-      <li *ngFor="let tableColumn of table.columns;"
-          (dragstart)="startColumnDrag($event, table, tableColumn)"
-          draggable="true"
-          class="block rounded">
+      <li
+        *ngFor="let tableColumn of table.columns;"
+        (dragstart)="startColumnDrag($event, table, tableColumn)"
+        draggable="true"
+        class="block rounded"
+      >
         {{ tableColumn.name }}
       </li>
     </ul>

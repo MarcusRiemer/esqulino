@@ -1,19 +1,24 @@
 import * as Desc from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-type-util.description";
-import { getQualifiedTypes } from './grammar-util';
+import { getQualifiedTypes } from "./grammar-util";
 
 /**
  * Calculates the self contained, full description for a certain node type.
  */
 export function fullNodeDescription(
-  grammar: Desc.GrammarDocument, typeName: QualifiedTypeName
+  grammar: Desc.GrammarDocument,
+  typeName: QualifiedTypeName
 ): FullNodeConcreteTypeDescription;
 export function fullNodeDescription(
-  grammar: Desc.GrammarDocument, typeName: string, languageName: string
-): FullNodeConcreteTypeDescription
+  grammar: Desc.GrammarDocument,
+  typeName: string,
+  languageName: string
+): FullNodeConcreteTypeDescription;
 export function fullNodeDescription(
-  grammar: Desc.GrammarDocument, typeName: string | QualifiedTypeName, languageName?: string
+  grammar: Desc.GrammarDocument,
+  typeName: string | QualifiedTypeName,
+  languageName?: string
 ): FullNodeConcreteTypeDescription {
   if (typeof typeName === "object") {
     languageName = typeName.languageName;
@@ -34,27 +39,29 @@ export function fullNodeDescription(
     throw new Error(`Type "${typeName}" is not a concrete type`);
   }
 
-  return ({
+  return {
     type: actualType.type,
     attributes: actualType.attributes,
     languageName: languageName,
-    typeName: typeName
-  });
+    typeName: typeName,
+  };
 }
 
 /**
  * @return A fully qualified typename, even if the input was a reference.
  */
-export const ensureTypename = (ref: Desc.TypeReference | Desc.ChildCardinalityDescription, grammarName: string): QualifiedTypeName => {
+export const ensureTypename = (
+  ref: Desc.TypeReference | Desc.ChildCardinalityDescription,
+  grammarName: string
+): QualifiedTypeName => {
   if (Desc.isQualifiedTypeName(ref)) {
-    return (ref);
+    return ref;
   } else if (Desc.isChildCardinalityDescription(ref)) {
-    return (ensureTypename(ref.nodeType, grammarName));
+    return ensureTypename(ref.nodeType, grammarName);
   } else {
     return { languageName: grammarName, typeName: ref };
   }
 };
-
 
 export type OrderedTypes = QualifiedTypeName[];
 
@@ -62,7 +69,7 @@ export type OrderedTypes = QualifiedTypeName[];
  *
  */
 export function stableQualifiedTypename(n: QualifiedTypeName): string {
-  return (n.languageName + "." + n.typeName);
+  return n.languageName + "." + n.typeName;
 }
 
 /**
@@ -75,39 +82,42 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
     // No root available? We just return the order that we got
     const toReturn: OrderedTypes = [];
     Object.entries(g.types).forEach(([langName, types]) => {
-      Object.keys(types).forEach(typeName => {
+      Object.keys(types).forEach((typeName) => {
         toReturn.push({ languageName: langName, typeName: typeName });
       });
     });
 
-    return (toReturn);
+    return toReturn;
   } else {
     const usedTypes = new Set<string>();
     const order: OrderedTypes = [];
 
     // Forward declaration
-    let recurseType: ((curr: QualifiedTypeName) => void) = undefined;
+    let recurseType: (curr: QualifiedTypeName) => void = undefined;
 
-    const handleAttribute = (a: Desc.NodeAttributeDescription, currLanguageName: string) => {
+    const handleAttribute = (
+      a: Desc.NodeAttributeDescription,
+      currLanguageName: string
+    ) => {
       switch (a.type) {
         case "allowed":
         case "sequence":
-          a.nodeTypes.forEach(t => {
+          a.nodeTypes.forEach((t) => {
             recurseType(ensureTypename(t, currLanguageName));
           });
           break;
         case "choice":
-          a.choices.forEach(t => {
+          a.choices.forEach((t) => {
             recurseType(ensureTypename(t, currLanguageName));
           });
           break;
         case "container":
-          a.children.forEach(t => {
+          a.children.forEach((t) => {
             handleAttribute(t, currLanguageName);
           });
           break;
       }
-    }
+    };
 
     // Recursively walk through all types that are mentioned
     recurseType = (curr: QualifiedTypeName) => {
@@ -123,15 +133,19 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
           switch (def.type) {
             // For concrete types: Add all types mentioned in childgroups
             case "concrete":
-              (def.attributes || []).forEach(a => handleAttribute(a, curr.languageName));
+              (def.attributes || []).forEach((a) =>
+                handleAttribute(a, curr.languageName)
+              );
               break;
             case "oneOf":
-              (def.oneOf || []).forEach(t => recurseType(ensureTypename(t, curr.languageName)));
+              (def.oneOf || []).forEach((t) =>
+                recurseType(ensureTypename(t, curr.languageName))
+              );
               break;
           }
         }
       }
-    }
+    };
 
     recurseType(g.root);
 
@@ -139,10 +153,14 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
     const unreferenced = getQualifiedTypes(g)
       // OUCH! Order of keys is important here, if "typeName" is mentioned first
       // the resulting string also has that key and value mentioned first
-      .map((t): QualifiedTypeName => { return ({ languageName: t.languageName, typeName: t.typeName }) })
-      .filter(t => !usedTypes.has(stableQualifiedTypename(t)));
+      .map(
+        (t): QualifiedTypeName => {
+          return { languageName: t.languageName, typeName: t.typeName };
+        }
+      )
+      .filter((t) => !usedTypes.has(stableQualifiedTypename(t)));
     order.push(...unreferenced);
 
-    return (order);
+    return order;
   }
 }

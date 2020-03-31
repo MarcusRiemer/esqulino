@@ -1,25 +1,35 @@
-<div *ngIf="!isSynchronised"
-     class="alert alert-danger" role="alert">
-  <p>Die Generator-Anweisungen wurden außerhalb des <code>JSON</code>-Editors durch die Oberfläche verändert. Jede Synchronisation führt zum Datenverlust, wie soll der Konflikt behoben werden?</p>
+<div *ngIf="!isSynchronised" class="alert alert-danger" role="alert">
+  <p>
+    Die Generator-Anweisungen wurden außerhalb des
+    <code>JSON</code>
+    -Editors durch die Oberfläche verändert. Jede Synchronisation führt zum
+    Datenverlust, wie soll der Konflikt behoben werden?
+  </p>
   <div class="row">
     <div class="col-6">
-      <button (click)="onUiOverwriteEditor()"
-              class="btn btn-warning btn-block"
-              style="white-space: normal;">
+      <button
+        (click)="onUiOverwriteEditor()"
+        class="btn btn-warning btn-block"
+        style="white-space: normal;"
+      >
         JSON-Editor mit UI überschreiben
       </button>
     </div>
     <div class="col-6">
-      <button (click)="onEditorOverwriteUi()"
-              class="btn btn-warning btn-block"
-              style="white-space: normal;">
+      <button
+        (click)="onEditorOverwriteUi()"
+        class="btn btn-warning btn-block"
+        style="white-space: normal;"
+      >
         UI mit JSON-Editor überschreiben
       </button>
     </div>
   </div>
 </div>
-<ace-editor [text]="jsonString"
-            (textChanged)="onTextChanged($event)"
-            class="full-height"
-            theme="sqlserver"
-            mode="json"></ace-editor>
+<ace-editor
+  [text]="jsonString"
+  (textChanged)="onTextChanged($event)"
+  class="full-height"
+  theme="sqlserver"
+  mode="json"
+></ace-editor>

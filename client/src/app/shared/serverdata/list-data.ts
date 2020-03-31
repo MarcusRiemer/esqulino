@@ -1,12 +1,15 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from "@angular/common/http";
 
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { IdentifiableResourceDescription } from '../resource.description';
+import { IdentifiableResourceDescription } from "../resource.description";
 
-import { JsonApiListResponse, isJsonApiListResponse } from './json-api-response'
-import { CachedRequest } from './request-cache';
+import {
+  JsonApiListResponse,
+  isJsonApiListResponse,
+} from "./json-api-response";
+import { CachedRequest } from "./request-cache";
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -14,18 +17,18 @@ import { CachedRequest } from './request-cache';
  * persisted across multiple components.
  */
 export class ListData<TList extends IdentifiableResourceDescription> {
-
   public constructor(
     // Deriving classes may need to make HTTP requests of their own
     protected _http: HttpClient,
-    private _listUrl: string,
-  ) {
-  }
+    private _listUrl: string
+  ) {}
 
   // These parameters are passed to every listing request
   private _listGetParams = new HttpParams();
 
-  private readonly _listTotalCount = new BehaviorSubject<number | undefined>(undefined);
+  private readonly _listTotalCount = new BehaviorSubject<number | undefined>(
+    undefined
+  );
 
   /**
    * The cache of all descriptions that are available to the current user.
@@ -41,25 +44,27 @@ export class ListData<TList extends IdentifiableResourceDescription> {
    * @return The total number of list items available.
    */
   get peekListTotalCount() {
-    return (this._listTotalCount.value)
-  };
+    return this._listTotalCount.value;
+  }
 
   readonly listTotalCount = this._listTotalCount.asObservable();
 
   private createListRequest() {
-    return this._http.get<TList[] | JsonApiListResponse<TList>>(this._listUrl, {
-      params: this._listGetParams
-    }).pipe(
-      map(response => {
-        if (isJsonApiListResponse<TList>(response)) {
-          this._listTotalCount.next(response.meta.totalCount);
-          return (response.data);
-        } else {
-          this._listTotalCount.next(undefined);
-          return (response);
-        }
+    return this._http
+      .get<TList[] | JsonApiListResponse<TList>>(this._listUrl, {
+        params: this._listGetParams,
       })
-    );
+      .pipe(
+        map((response) => {
+          if (isJsonApiListResponse<TList>(response)) {
+            this._listTotalCount.next(response.meta.totalCount);
+            return response.data;
+          } else {
+            this._listTotalCount.next(undefined);
+            return response;
+          }
+        })
+      );
   }
 
   /**
@@ -84,14 +89,17 @@ export class ListData<TList extends IdentifiableResourceDescription> {
    * Set the ordering parameters that should be used for all subsequent
    * listing requests.
    */
-  setListOrdering(columnName: keyof TList, order: "asc" | "desc" | "", refresh: boolean = true) {
-    let newParams = (order === "")
-      ? this._listGetParams
-        .delete("orderDirection")
-        .delete("orderField")
-      : this._listGetParams
-        .set("orderDirection", order)
-        .set("orderField", columnName.toString());
+  setListOrdering(
+    columnName: keyof TList,
+    order: "asc" | "desc" | "",
+    refresh: boolean = true
+  ) {
+    let newParams =
+      order === ""
+        ? this._listGetParams.delete("orderDirection").delete("orderField")
+        : this._listGetParams
+            .set("orderDirection", order)
+            .set("orderField", columnName.toString());
 
     this.changeListParameters(newParams, refresh);
   }
@@ -99,7 +107,11 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   /**
    * Set the limits that should be used for all subsequent listing requests.
    */
-  setListPagination(pageSize: number, currentPage: number, refresh: boolean = true) {
+  setListPagination(
+    pageSize: number,
+    currentPage: number,
+    refresh: boolean = true
+  ) {
     const newParams = this._listGetParams
       .set("limit", pageSize.toString())
       .set("offset", (pageSize * currentPage).toString());

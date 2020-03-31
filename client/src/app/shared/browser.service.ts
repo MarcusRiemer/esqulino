@@ -1,30 +1,29 @@
-import { Injectable, Inject, Optional, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common'
-import { Platform } from '@angular/cdk/platform';
+import { Injectable, Inject, Optional, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { Platform } from "@angular/cdk/platform";
 
-import { Observable, ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, ReplaySubject } from "rxjs";
+import { map } from "rxjs/operators";
 
-import * as Sentry from '@sentry/browser';
+import * as Sentry from "@sentry/browser";
 
 /** The meaningful modes of the sidebar */
 export type SidebarMode = "over" | "side";
 
 /** Bootstrap device sizes */
 export const DEVICE_MIN_WIDTH = {
-  "xs": 0,
-  "sm": 576,
-  "md": 768,
-  "lg": 992,
-  "xl": 1200
-}
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+};
 
 /**
  * Different aspects of the browser that is currently visiting the app.
  */
 @Injectable()
 export class BrowserService {
-
   /**
    * Components that rely on this state may spawn any time. We therefore
    * need to keep the last computed state (which is immediatly set in the
@@ -46,13 +45,14 @@ export class BrowserService {
         const mq = window.matchMedia(`(min-width: ${DEVICE_MIN_WIDTH.md}px)`);
         this._isMobile.next(!mq.matches);
 
-        mq.addEventListener("change", (evt) => this._isMobile.next(!evt.matches));
-      }
-      // In that case we default to the user agent check
-      catch (error) {
+        mq.addEventListener("change", (evt) =>
+          this._isMobile.next(!evt.matches)
+        );
+      } catch (error) {
+        // In that case we default to the user agent check
         this._isMobile.next(this.isPlatformMobile);
 
-        Sentry.configureScope(s => {
+        Sentry.configureScope((s) => {
           s.setLevel(Sentry.Severity.Info);
           s.setTag("mobile-detection", "true");
 
@@ -70,7 +70,7 @@ export class BrowserService {
    * Uses the user agent as fallback for mobile detection
    */
   private get isPlatformMobile() {
-    return (this._platform.IOS || this._platform.ANDROID);
+    return this._platform.IOS || this._platform.ANDROID;
   }
 
   /**
@@ -83,6 +83,6 @@ export class BrowserService {
    * Best applicable mode for the sidebar: Should slide "over" the content on mobile.
    */
   readonly sidebarMode$: Observable<SidebarMode> = this.isMobile$.pipe(
-    map(isMobile => isMobile ? "over" : "side")
+    map((isMobile) => (isMobile ? "over" : "side"))
   );
 }

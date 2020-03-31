@@ -1,7 +1,7 @@
-import { Sidebar } from '../sidebar'
+import { Sidebar } from "../sidebar";
 
 export class DatabaseSchemaSidebar implements Sidebar {
   get portalComponentTypeId() {
-    return ("databaseSchema");
+    return "databaseSchema";
   }
 }

@@ -1,20 +1,19 @@
-import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Component, OnInit, Inject, LOCALE_ID } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 
-import { environment } from '../../environments/environment'
+import { environment } from "../../environments/environment";
 
 /**
  * Host-component for the front-page.
  */
 @Component({
-  templateUrl: 'templates/version.html',
+  templateUrl: "templates/version.html",
 })
 export class VersionComponent implements OnInit {
-
   constructor(
     private _title: Title,
     @Inject(LOCALE_ID) private readonly _localeId: string
-  ) { }
+  ) {}
 
   ngOnInit() {
     this._title.setTitle("BlattWerkzeug");

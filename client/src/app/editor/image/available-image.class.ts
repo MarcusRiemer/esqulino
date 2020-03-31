@@ -1,9 +1,12 @@
-import { Project } from '../project.service'
+import { Project } from "../project.service";
 
-import { ProjectResource, ProjectResourceDescription } from '../../shared/resource'
-import { CURRENT_API_VERSION } from '../../shared/resource.description'
+import {
+  ProjectResource,
+  ProjectResourceDescription,
+} from "../../shared/resource";
+import { CURRENT_API_VERSION } from "../../shared/resource.description";
 
-import { ServerApiService } from '../../shared/'
+import { ServerApiService } from "../../shared/";
 
 export interface AvailableImageDescription extends ProjectResourceDescription {
   "author-name": string;
@@ -13,10 +16,10 @@ export interface AvailableImageDescription extends ProjectResourceDescription {
 }
 
 export class AvailableImage extends ProjectResource {
-  private _authorName: string
-  private _authorUrl: string
-  private _licenceName: string
-  private _licenceUrl: string
+  private _authorName: string;
+  private _authorUrl: string;
+  private _licenceName: string;
+  private _licenceUrl: string;
 
   constructor(
     private _serverApi: ServerApiService,
@@ -32,11 +35,11 @@ export class AvailableImage extends ProjectResource {
   }
 
   get url() {
-    return (this._serverApi.getImageUrl(this._project.slug, this.id));
+    return this._serverApi.getImageUrl(this._project.slug, this.id);
   }
 
   get authorUrl() {
-    return (this._authorUrl);
+    return this._authorUrl;
   }
 
   set authorUrl(val: string) {
@@ -44,7 +47,7 @@ export class AvailableImage extends ProjectResource {
   }
 
   get authorName() {
-    return (this._authorName);
+    return this._authorName;
   }
 
   set authorName(val: string) {
@@ -52,7 +55,7 @@ export class AvailableImage extends ProjectResource {
   }
 
   get licenceName() {
-    return (this._licenceName);
+    return this._licenceName;
   }
 
   set licenceName(val: string) {
@@ -60,7 +63,7 @@ export class AvailableImage extends ProjectResource {
   }
 
   get licenceUrl() {
-    return (this._licenceUrl);
+    return this._licenceUrl;
   }
 
   set licenceUrl(val: string) {
@@ -68,17 +71,17 @@ export class AvailableImage extends ProjectResource {
   }
 
   toModel(): AvailableImageDescription {
-    return ({
-      'apiVersion': CURRENT_API_VERSION,
+    return {
+      apiVersion: CURRENT_API_VERSION,
 
-      'id': this.id,
-      'name': this.name,
+      id: this.id,
+      name: this.name,
 
-      'author-name': this.authorName,
-      'author-url': this.authorUrl,
+      "author-name": this.authorName,
+      "author-url": this.authorUrl,
 
-      'licence-name': this.licenceName,
-      'licence-url': this.licenceUrl
-    } as AvailableImageDescription);
+      "licence-name": this.licenceName,
+      "licence-url": this.licenceUrl,
+    } as AvailableImageDescription;
   }
 }

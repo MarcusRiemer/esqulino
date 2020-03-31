@@ -1,24 +1,32 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from "@angular/common/http";
 
-import { Observable, of } from 'rxjs'
-import { catchError, delay, map } from 'rxjs/operators';
+import { Observable, of } from "rxjs";
+import { catchError, delay, map } from "rxjs/operators";
 
 import {
-  ArbitraryQueryRequestDescription, QueryParamsDescription, QueryResponseDescription
-} from '../../../shared/syntaxtree/sql/query.description';
-import { ServerApiService, DatabaseQueryErrorDescription } from '../../../shared';
-import { CodeResource } from '../../../shared/syntaxtree';
-import { ProjectService } from '../../project.service';
+  ArbitraryQueryRequestDescription,
+  QueryParamsDescription,
+  QueryResponseDescription,
+} from "../../../shared/syntaxtree/sql/query.description";
+import {
+  ServerApiService,
+  DatabaseQueryErrorDescription,
+} from "../../../shared";
+import { CodeResource } from "../../../shared/syntaxtree";
+import { ProjectService } from "../../project.service";
 
-export { QueryParamsDescription }
+export { QueryParamsDescription };
 
 /**
  * A nicely wrapped result of a query.
  */
 export class QueryResultRows {
-  constructor(private readonly _desc: QueryResponseDescription) {
-  }
+  constructor(private readonly _desc: QueryResponseDescription) {}
 
   // The columns for the current result set
   readonly columns = this._desc.columns;
@@ -39,22 +47,21 @@ export class QueryResultRows {
    * @return True, if the result is only a partial result.
    */
   get isPartial() {
-    return (this.unknownTotal || this._desc.totalCount > this.subsetRowCount);
+    return this.unknownTotal || this._desc.totalCount > this.subsetRowCount;
   }
 }
 
 export class QueryResultError {
-  constructor(public readonly data: DatabaseQueryErrorDescription) { }
+  constructor(public readonly data: DatabaseQueryErrorDescription) {}
 }
 
 export type QueryResult = QueryResultRows | QueryResultError;
-
 
 /**
  * Allows interaction with the query specific operations
  * of the server.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class QueryService {
   /**
    * @param _http Used to do HTTP requests
@@ -64,8 +71,7 @@ export class QueryService {
     private _http: HttpClient,
     private _server: ServerApiService,
     private _projectService: ProjectService
-  ) {
-  }
+  ) {}
 
   /**
    * Sends the AST of the given resource to the server in order to execute
@@ -75,28 +81,32 @@ export class QueryService {
    * @param params The parameters to run this query.
    */
   runArbitraryQuery(sqlResource: CodeResource, params: QueryParamsDescription) {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let headers = new HttpHeaders({ "Content-Type": "application/json" });
 
-    const url = this._server.getRunQueryUrl(this._projectService.cachedProject.slug);
+    const url = this._server.getRunQueryUrl(
+      this._projectService.cachedProject.slug
+    );
 
     const body: ArbitraryQueryRequestDescription = {
       ast: sqlResource.syntaxTreePeek.toModel(),
-      params: params
+      params: params,
     };
 
-    const toReturn: Observable<QueryResult> =
-      this._http.post<QueryResponseDescription>(url, JSON.stringify(body), {
-        headers: headers
+    const toReturn: Observable<QueryResult> = this._http
+      .post<QueryResponseDescription>(url, JSON.stringify(body), {
+        headers: headers,
       })
-        .pipe(
-          catchError((error: HttpErrorResponse) => {
-            const errorData = error.error as DatabaseQueryErrorDescription;
-            return (of(new QueryResultError(errorData)));
-          }),
-          delay(500),
-          map(res => res instanceof QueryResultError ? res : new QueryResultRows(res))
-        );
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const errorData = error.error as DatabaseQueryErrorDescription;
+          return of(new QueryResultError(errorData));
+        }),
+        delay(500),
+        map((res) =>
+          res instanceof QueryResultError ? res : new QueryResultRows(res)
+        )
+      );
 
-    return (toReturn);
+    return toReturn;
   }
 }

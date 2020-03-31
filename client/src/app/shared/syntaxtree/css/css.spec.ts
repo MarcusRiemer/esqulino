@@ -1,10 +1,10 @@
-import { CodeGenerator } from '../codegenerator'
-import { Node, NodeDescription, Tree } from '../syntaxtree'
-import { Validator } from '../validator'
-import { printableError } from '../validation-result'
+import { CodeGenerator } from "../codegenerator";
+import { Node, NodeDescription, Tree } from "../syntaxtree";
+import { Validator } from "../validator";
+import { printableError } from "../validation-result";
 
-import { GRAMMAR_DESCRIPTION } from './css.grammar'
-import { NODE_CONVERTER } from './css.codegenerator'
+import { GRAMMAR_DESCRIPTION } from "./css.grammar";
+import { NODE_CONVERTER } from "./css.codegenerator";
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -28,7 +28,7 @@ function emitTree(astDesc: NodeDescription) {
   const ast = new Node(astDesc, undefined);
   const codeGen = new CodeGenerator(NODE_CONVERTER);
 
-  return (codeGen.emit(ast));
+  return codeGen.emit(ast);
 }
 
 function validate(fileName: string, isValid: boolean) {
@@ -38,9 +38,12 @@ function validate(fileName: string, isValid: boolean) {
   const validator = new Validator([GRAMMAR_DESCRIPTION]);
   const result = validator.validateFromRoot(ast);
 
-  expect(result.errors.map(e => printableError(e))).toEqual([], `${fileName} should be ${isValid ? 'valid' : 'invalid'}`);
+  expect(result.errors.map((e) => printableError(e))).toEqual(
+    [],
+    `${fileName} should be ${isValid ? "valid" : "invalid"}`
+  );
 
-  return (result);
+  return result;
 }
 
 /**

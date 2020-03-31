@@ -1,24 +1,11 @@
-
-
-
 <p>
   Keine Bestätigungs Email erhalten? Kein Problem!
 </p>
 
-<validate-input
-  icon="envelope-o"
-  [(value)]="userEmail.email">
-
-  <input #inputRef 
-    type="email"
-    class="form-control"
-    placeholder="E-Mail">
+<validate-input icon="envelope-o" [(value)]="userEmail.email">
+  <input #inputRef type="email" class="form-control" placeholder="E-Mail" />
 </validate-input>
 
-<button
-  mat-raised-button
-  color="primary"
-  (click)="onSendVerifyEmail()">
-
+<button mat-raised-button color="primary" (click)="onSendVerifyEmail()">
   Sende Verifizierungsmail
 </button>

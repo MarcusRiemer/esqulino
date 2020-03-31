@@ -1,10 +1,13 @@
-import { CodeGenerator } from '../codegenerator'
-import { Tree, Node, NodeDescription } from '../syntaxtree'
-import { Validator } from '../validator'
-import { printableError } from '../validation-result'
+import { CodeGenerator } from "../codegenerator";
+import { Tree, Node, NodeDescription } from "../syntaxtree";
+import { Validator } from "../validator";
+import { printableError } from "../validation-result";
 
-import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
-import { GRAMMAR_DESCRIPTION } from './dxml.grammar'
+import {
+  NODE_CONVERTER_ERUBY,
+  NODE_CONVERTER_LIQUID,
+} from "./dxml.codegenerator";
+import { GRAMMAR_DESCRIPTION } from "./dxml.grammar";
 
 function parseDom(input: string) {
   const parser = new DOMParser();
@@ -19,9 +22,8 @@ function parseDom(input: string) {
   const errors = dom.getElementsByTagName("parsererror");
   expect(errors.length).toEqual(0, "Number of errors in document");
 
-  return (dom);
+  return dom;
 }
-
 
 describe("Language: Dynamic XML (eruby & liquid)", () => {
   it(`<root></root>`, () => {
@@ -31,8 +33,8 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
-      }
+        name: "root",
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -45,7 +47,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     expect(result).toEqual(`<root></root>`);
 
     const dom = parseDom(result);
-    expect(dom.documentElement.localName).toEqual(astDesc.properties['name']);
+    expect(dom.documentElement.localName).toEqual(astDesc.properties["name"]);
   });
 
   it(`<root key="value"></root>`, () => {
@@ -55,29 +57,29 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "attributes": [
+        attributes: [
           {
             language: "dxml",
             name: "attribute",
             children: {
-              "value": [
+              value: [
                 {
                   language: "dxml",
                   name: "text",
                   properties: {
-                    "value": "value"
-                  }
-                }
-              ]
+                    value: "value",
+                  },
+                },
+              ],
             },
             properties: {
-              name: "key"
-            }
-          }
-        ]
+              name: "key",
+            },
+          },
+        ],
       },
     };
 
@@ -92,8 +94,10 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
 
     const dom = parseDom(result);
     const root = dom.documentElement;
-    expect(root.localName).toEqual(astDesc.properties['name']);
-    expect(root.attributes[0].localName).toEqual(astDesc.children['attributes'][0].properties['name']);
+    expect(root.localName).toEqual(astDesc.properties["name"]);
+    expect(root.attributes[0].localName).toEqual(
+      astDesc.children["attributes"][0].properties["name"]
+    );
   });
 
   it(`<root key="<%= varName %>"></root>`, () => {
@@ -103,38 +107,38 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "attributes": [
+        attributes: [
           {
             language: "dxml",
             name: "attribute",
             children: {
-              "value": [
+              value: [
                 {
                   language: "dxml",
                   name: "interpolate",
                   children: {
-                    "expr": [
+                    expr: [
                       {
                         language: "dxml",
                         name: "exprVar",
                         properties: {
-                          "name": "varName"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
+                          name: "varName",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
             },
             properties: {
-              name: "key"
-            }
-          }
-        ]
-      }
+              name: "key",
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Tree(astDesc);
@@ -162,45 +166,45 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "attributes": [
+        attributes: [
           {
             language: "dxml",
             name: "attribute",
             children: {
-              "value": [
+              value: [
                 {
                   language: "dxml",
                   name: "text",
                   properties: {
-                    "value": "const-"
-                  }
+                    value: "const-",
+                  },
                 },
                 {
                   language: "dxml",
                   name: "interpolate",
                   children: {
-                    "expr": [
+                    expr: [
                       {
                         language: "dxml",
                         name: "exprVar",
                         properties: {
-                          "name": "varName"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
+                          name: "varName",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
             },
             properties: {
-              name: "key"
-            }
-          }
-        ]
-      }
+              name: "key",
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Tree(astDesc);
@@ -227,19 +231,19 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "elements": [
+        elements: [
           {
             language: "dxml",
             name: "text",
             properties: {
-              "value": "Root-Text"
-            }
-          }
-        ]
-      }
+              value: "Root-Text",
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -252,7 +256,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     expect(result).toEqual(`<root>\n  Root-Text\n</root>`);
 
     const dom = parseDom(result);
-    expect(dom.documentElement.localName).toEqual(astDesc.properties['name']);
+    expect(dom.documentElement.localName).toEqual(astDesc.properties["name"]);
     expect(dom.documentElement.textContent).toEqual("\n  Root-Text\n");
   });
 
@@ -263,27 +267,27 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "elements": [
+        elements: [
           {
             language: "dxml",
             name: "interpolate",
             children: {
-              "expr": [
+              expr: [
                 {
                   language: "dxml",
                   name: "exprVar",
                   properties: {
-                    "name": "var_name"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+                    name: "var_name",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -303,7 +307,6 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     }
   });
 
-
   it(`<root><% if var_name %>Root-Text<% end %></root>`, () => {
     const v = new Validator([GRAMMAR_DESCRIPTION]);
 
@@ -311,36 +314,36 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "elements": [
+        elements: [
           {
             language: "dxml",
             name: "if",
             children: {
-              "condition": [
+              condition: [
                 {
                   language: "dxml",
                   name: "exprVar",
                   properties: {
-                    "name": "var_name"
-                  }
-                }
+                    name: "var_name",
+                  },
+                },
               ],
-              "body": [
+              body: [
                 {
                   language: "dxml",
                   name: "text",
                   properties: {
-                    "value": "Root-Text"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+                    value: "Root-Text",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Node(astDesc, undefined);
@@ -351,12 +354,16 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n  <% if var_name %>\n  Root-Text\n  <% end %>\n</root>`);
+      expect(result).toEqual(
+        `<root>\n  <% if var_name %>\n  Root-Text\n  <% end %>\n</root>`
+      );
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n  {% if var_name %}\n  Root-Text\n  {% end %}\n</root>`);
+      expect(result).toEqual(
+        `<root>\n  {% if var_name %}\n  Root-Text\n  {% end %}\n</root>`
+      );
     }
   });
 
@@ -367,43 +374,43 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "elements": [
+        elements: [
           {
             language: "dxml",
             name: "if",
             children: {
-              "condition": [
+              condition: [
                 {
                   language: "dxml",
                   name: "exprVar",
                   properties: {
-                    "name": "var_name"
-                  }
-                }
+                    name: "var_name",
+                  },
+                },
               ],
-              "body": [
+              body: [
                 {
                   language: "dxml",
                   name: "element",
                   properties: {
-                    "name": "c1"
+                    name: "c1",
                   },
                 },
                 {
                   language: "dxml",
                   name: "element",
                   properties: {
-                    "name": "c2"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+                    name: "c2",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Tree(astDesc);
@@ -414,12 +421,16 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n  <% if var_name %>\n  <c1></c1>\n  <c2></c2>\n  <% end %>\n</root>`);
+      expect(result).toEqual(
+        `<root>\n  <% if var_name %>\n  <c1></c1>\n  <c2></c2>\n  <% end %>\n</root>`
+      );
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n  {% if var_name %}\n  <c1></c1>\n  <c2></c2>\n  {% end %}\n</root>`);
+      expect(result).toEqual(
+        `<root>\n  {% if var_name %}\n  <c1></c1>\n  <c2></c2>\n  {% end %}\n</root>`
+      );
     }
   });
 
@@ -430,53 +441,53 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
       language: "dxml",
       name: "element",
       properties: {
-        "name": "root"
+        name: "root",
       },
       children: {
-        "elements": [
+        elements: [
           {
             language: "dxml",
             name: "if",
             children: {
-              "condition": [
+              condition: [
                 {
                   language: "dxml",
                   name: "exprBinary",
                   children: {
-                    "lhs": [
+                    lhs: [
                       {
                         language: "dxml",
                         name: "exprVar",
                         properties: {
-                          "name": "var_name"
-                        }
+                          name: "var_name",
+                        },
                       },
                     ],
-                    "operator": [
+                    operator: [
                       {
                         language: "dxml",
                         name: "binaryOperator",
                         properties: {
-                          "operator": "=="
-                        }
-                      }
+                          operator: "==",
+                        },
+                      },
                     ],
-                    "rhs": [
+                    rhs: [
                       {
                         language: "dxml",
                         name: "exprVar",
                         properties: {
-                          "name": "var_name"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+                          name: "var_name",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const ast = new Tree(astDesc);
@@ -487,12 +498,16 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n  <% if var_name == var_name %>\n  <% end %>\n</root>`);
+      expect(result).toEqual(
+        `<root>\n  <% if var_name == var_name %>\n  <% end %>\n</root>`
+      );
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n  {% if var_name == var_name %}\n  {% end %}\n</root>`);
+      expect(result).toEqual(
+        `<root>\n  {% if var_name == var_name %}\n  {% end %}\n</root>`
+      );
     }
   });
 });

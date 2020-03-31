@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from "@angular/core/testing";
+import { HttpTestingController } from "@angular/common/http/testing";
 
-import { JsonApiListResponse } from '../../shared/serverdata/json-api-response';
+import { JsonApiListResponse } from "../../shared/serverdata/json-api-response";
 
 export interface ListOrder<T> {
-  field: keyof T
-  direction: "asc" | "desc"
+  field: keyof T;
+  direction: "asc" | "desc";
 }
 
 /**
@@ -16,11 +16,11 @@ export function provideListResponse<T>(
   items: T[],
   reqUrl: string,
   options?: {
-    order?: ListOrder<T>,
+    order?: ListOrder<T>;
     pagination?: {
-      limit: number,
-      page: number,
-    }
+      limit: number;
+      page: number;
+    };
   }
 ) {
   const httpTestingController = TestBed.inject(HttpTestingController);
@@ -28,8 +28,8 @@ export function provideListResponse<T>(
   const response: JsonApiListResponse<T> = {
     data: items,
     meta: {
-      totalCount: items.length
-    }
+      totalCount: items.length,
+    },
   };
 
   if (options) {
@@ -48,6 +48,5 @@ export function provideListResponse<T>(
     }
   }
 
-  httpTestingController.expectOne(reqUrl)
-    .flush(response);
+  httpTestingController.expectOne(reqUrl).flush(response);
 }

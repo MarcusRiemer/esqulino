@@ -3,8 +3,8 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
-import { EnvironmentDescription } from './environment.description'
-import * as VERSION from './version'
+import { EnvironmentDescription } from "./environment.description";
+import * as VERSION from "./version";
 
 export const environment: EnvironmentDescription = {
   production: false,
@@ -13,18 +13,18 @@ export const environment: EnvironmentDescription = {
   loginEnabled: true,
   piwik: {
     host: "https://piwik.blattwerkzeug.de",
-    id: 2
+    id: 2,
   },
   sentry: {
     dsn: "https://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
-    active: false
+    active: false,
   },
   version: {
     hash: VERSION.GIT_REVISION,
-    date: VERSION.BUILD_DATE
+    date: VERSION.BUILD_DATE,
   },
   availableLanguages: [
-    { token: 'de', name: 'Deutsch' },
-    { token: 'en', name: 'English' },
-  ]
+    { token: "de", name: "Deutsch" },
+    { token: "en", name: "English" },
+  ],
 };

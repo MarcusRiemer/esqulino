@@ -1,6 +1,6 @@
-import { ProjectResourceDescription } from '../resource.description'
+import { ProjectResourceDescription } from "../resource.description";
 
-import { NodeDescription } from './syntaxtree.description'
+import { NodeDescription } from "./syntaxtree.description";
 
 /**
  * A resource that is described by a syntaxtree.
@@ -21,7 +21,7 @@ export interface CodeResourceDescription extends ProjectResourceDescription {
  * and may explicitly set the ast to `null` which will delete it.
  */
 export interface CodeResourceRequestUpdateDescription {
-  resource: Partial<
-    Omit<CodeResourceDescription, "id" | "createdAt" | "updatedAt">
-  > | { ast?: null }
+  resource:
+    | Partial<Omit<CodeResourceDescription, "id" | "createdAt" | "updatedAt">>
+    | { ast?: null };
 }

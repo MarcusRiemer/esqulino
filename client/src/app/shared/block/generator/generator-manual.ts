@@ -1,17 +1,23 @@
-import { NodeConcreteTypeDescription, GrammarDocument } from "../../syntaxtree/grammar.description";
+import {
+  NodeConcreteTypeDescription,
+  GrammarDocument,
+} from "../../syntaxtree/grammar.description";
 
 import { BlockLanguageDocument } from "../block-language.description";
 import { EditorBlockDescription } from "../block.description";
 
-import { GeneratorError } from './error.description'
+import { GeneratorError } from "./error.description";
 import { ManualBlockLanguageGeneratorDescription } from "./generator.description";
 import { TraitMap } from "./traits";
 import { ParameterMap } from "./parameters";
 import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
-import { generateSidebar } from './sidebar'
-import { defaultEditorComponents } from './generator-default';
-import { getQualifiedTypes, ensureGrammarAttributeNames } from '../../syntaxtree/grammar-util';
+import { generateSidebar } from "./sidebar";
+import { defaultEditorComponents } from "./generator-default";
+import {
+  getQualifiedTypes,
+  ensureGrammarAttributeNames,
+} from "../../syntaxtree/grammar-util";
 
 /**
  * Ensures that there should be no errors during generation.
@@ -33,7 +39,7 @@ export function validateManualGenerator(
   parameters.addValues(d.parameterValues || {});
   toReturn.push(...parameters.validate(traitTypeInstructions));
 
-  return (toReturn);
+  return toReturn;
 }
 
 /**
@@ -49,7 +55,9 @@ export function convertGrammarManualInstructions(
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || defaultEditorComponents,
-    sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
+    sidebars: (d.staticSidebars || []).map((sidebar) =>
+      generateSidebar(g, sidebar)
+    ),
   };
 
   // If the grammar designer has decided to not name some things: This step still
@@ -58,8 +66,9 @@ export function convertGrammarManualInstructions(
 
   // The blocks of the editor are based on the concrete types of the grammar,
   // "oneOf" types are not of interest here because they can never be nodes.
-  const concreteTypes = getQualifiedTypes(strictlyNamedGrammar)
-    .filter(t => t.type !== "oneOf");
+  const concreteTypes = getQualifiedTypes(strictlyNamedGrammar).filter(
+    (t) => t.type !== "oneOf"
+  );
 
   // Apply traits
   const traitMap = new TraitMap();
@@ -81,15 +90,17 @@ export function convertGrammarManualInstructions(
   const instructions = new GeneratorInstructions(resolvedTypeInstructions);
 
   // Look over every type that exists and see how it should be created
-  toReturn.editorBlocks = concreteTypes.map((t): EditorBlockDescription => {
-    return ({
-      describedType: { languageName: t.languageName, typeName: t.typeName },
-      visual: mapType(
-        t as NodeConcreteTypeDescription,
-        instructions.typeInstructions(t.languageName, t.typeName)
-      )
-    });
-  });
+  toReturn.editorBlocks = concreteTypes.map(
+    (t): EditorBlockDescription => {
+      return {
+        describedType: { languageName: t.languageName, typeName: t.typeName },
+        visual: mapType(
+          t as NodeConcreteTypeDescription,
+          instructions.typeInstructions(t.languageName, t.typeName)
+        ),
+      };
+    }
+  );
 
-  return (toReturn);
+  return toReturn;
 }

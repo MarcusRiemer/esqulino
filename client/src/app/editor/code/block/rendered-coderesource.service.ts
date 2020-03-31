@@ -1,12 +1,26 @@
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy } from "@angular/core";
 
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, distinctUntilChanged, flatMap, map, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from "rxjs";
+import {
+  filter,
+  distinctUntilChanged,
+  flatMap,
+  map,
+  shareReplay,
+} from "rxjs/operators";
 
-import { CodeResource, Validator, ValidationResult, Tree } from '../../../shared';
-import { BlockLanguage } from '../../../shared/block';
-import { ResourceReferencesService, RequiredResource } from '../../../shared/resource-references.service'
-import { IndividualGrammarDataService } from '../../../shared/serverdata';
+import {
+  CodeResource,
+  Validator,
+  ValidationResult,
+  Tree,
+} from "../../../shared";
+import { BlockLanguage } from "../../../shared/block";
+import {
+  ResourceReferencesService,
+  RequiredResource,
+} from "../../../shared/resource-references.service";
+import { IndividualGrammarDataService } from "../../../shared/serverdata";
 
 /**
  * This service is provided at the root component that is used to render a coderesource.
@@ -19,10 +33,11 @@ import { IndividualGrammarDataService } from '../../../shared/serverdata';
  */
 @Injectable()
 export class RenderedCodeResourceService implements OnDestroy {
-
   private readonly _codeResource = new BehaviorSubject<CodeResource>(undefined);
 
-  private readonly _blockLanguage = new BehaviorSubject<BlockLanguage>(undefined);
+  private readonly _blockLanguage = new BehaviorSubject<BlockLanguage>(
+    undefined
+  );
 
   private readonly _readOnly = new BehaviorSubject<boolean>(undefined);
 
@@ -43,7 +58,7 @@ export class RenderedCodeResourceService implements OnDestroy {
 
   constructor(
     private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService,
+    private _grammarData: IndividualGrammarDataService
   ) {
     const subValidator = this.validator$.subscribe(this._validator);
     const subTree = this.syntaxTree$.subscribe(this._syntaxTree);
@@ -54,38 +69,38 @@ export class RenderedCodeResourceService implements OnDestroy {
   ngOnDestroy() {
     // Better safe than sorry: Avoiding circular references that might occur from
     // a unreleased subscription.
-    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions.forEach((s) => s.unsubscribe());
     this._subscriptions = [];
   }
 
   readonly codeResource$ = this._codeResource.pipe(
-    filter(c => !!c),
+    filter((c) => !!c),
     distinctUntilChanged()
   );
 
   readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
-    flatMap(c => c.syntaxTree)
+    flatMap((c) => c.syntaxTree)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(
-    filter(c => !!c),
+    filter((c) => !!c),
     distinctUntilChanged()
   );
 
   readonly readOnly$ = this._readOnly.pipe(
     // `false` is well ... falsy
-    filter(c => typeof c === "undefined"),
+    filter((c) => typeof c === "undefined"),
     distinctUntilChanged()
   );
 
   readonly validationContext$ = this._validationContext.pipe(
-    filter(c => !!c),
+    filter((c) => !!c),
     distinctUntilChanged()
-  )
+  );
 
   private readonly _blockLanguageGrammar$ = this.blockLanguage$.pipe(
-    flatMap(b => this._grammarData.getLocal(b.grammarId, "request")),
-  )
+    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request"))
+  );
 
   /**
    * @return The validator that should be used based on the current block language.
@@ -94,9 +109,10 @@ export class RenderedCodeResourceService implements OnDestroy {
     this._blockLanguageGrammar$,
     this.codeResource$
   ).pipe(
-    map(([g, c]) => this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)),
+    map(([g, c]) =>
+      this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)
+    )
   );
-
 
   /**
    * @return True, if everything is ready to be rendered
@@ -111,7 +127,9 @@ export class RenderedCodeResourceService implements OnDestroy {
   ).pipe(
     filter(([available, ..._]) => available),
     distinctUntilChanged(),
-    map(([_, v, t, vc]) => t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY),
+    map(([_, v, t, vc]) =>
+      t ? v.validateFromRoot(t, vc) : ValidationResult.EMPTY
+    ),
     shareReplay(1)
   );
 
@@ -139,16 +157,21 @@ export class RenderedCodeResourceService implements OnDestroy {
     codeResource: CodeResource,
     blockLanguage: BlockLanguage,
     readOnly: boolean,
-    validationContext: any,
+    validationContext: any
   ) {
     const newBlockLang = blockLanguage || codeResource.blockLanguagePeek;
     const requiredResources: RequiredResource[] = [
       { type: "grammar", id: newBlockLang.grammarId },
     ];
 
-    const fetchRequired = !this._resourceReferences.hasResources(requiredResources);
+    const fetchRequired = !this._resourceReferences.hasResources(
+      requiredResources
+    );
 
-    console.log(`Preparing to render syntaxtree of code resource: `, codeResource);
+    console.log(
+      `Preparing to render syntaxtree of code resource: `,
+      codeResource
+    );
     console.log(`Required resources:`, requiredResources);
     console.log(`Requires fetch:`, fetchRequired);
 
@@ -156,8 +179,9 @@ export class RenderedCodeResourceService implements OnDestroy {
     // it later.
     if (fetchRequired) {
       this._resourcesFetched.next(false);
-      this._resourceReferences.ensureResources(requiredResources)
-        .then(res => this._resourcesFetched.next(res))
+      this._resourceReferences
+        .ensureResources(requiredResources)
+        .then((res) => this._resourcesFetched.next(res));
     } else {
       this._resourcesFetched.next(true);
     }

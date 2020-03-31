@@ -1,7 +1,7 @@
-import { Injectable, EventEmitter } from '@angular/core'
+import { Injectable, EventEmitter } from "@angular/core";
 
-import { BehaviorSubject, Observable } from 'rxjs'
-import { first } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from "rxjs";
+import { first } from "rxjs/operators";
 
 /**
  * Controls the visual state of the trash icon.
@@ -22,9 +22,7 @@ export class TrashService {
 
     if (callback) {
       this._onDrop = new EventEmitter<any>();
-      this._onDrop
-        .pipe(first())
-        .subscribe(callback);
+      this._onDrop.pipe(first()).subscribe(callback);
     }
   }
 
@@ -54,6 +52,6 @@ export class TrashService {
    * @return An observable that indicates whether the trash would be shown.
    */
   get isTrashShown(): Observable<boolean> {
-    return (this._showTrash);
+    return this._showTrash;
   }
 }

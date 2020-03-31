@@ -1,11 +1,10 @@
 <div class="card card-body mb-3 text-nowrap">
-
   <!-- File Import -->
   <h5 class="mb-3">Datei Import</h5>
 
   <div class="form-group">
     <label for="fileInput">CSV Datei:&nbsp;</label>
-    <input type="file" id="fileInput" (change)="changeListener($event)">
+    <input type="file" id="fileInput" (change)="changeListener($event)" />
   </div>
 
   <hr />
@@ -14,19 +13,40 @@
   <h5 class="mb-3">Trennsymbole</h5>
   <div class="delimiter row">
     <div class="form-group col">
-      <input type="checkbox" id="comma" (change)="toggleComma()" [disabled]="disableSelection" checked/>
+      <input
+        type="checkbox"
+        id="comma"
+        (change)="toggleComma()"
+        [disabled]="disableSelection"
+        checked
+      />
       <label for="comma">&nbsp;Komma</label>
     </div>
     <div class="form-group col">
-      <input type="checkbox" id="semicolon" (change)="toggleSemicolon()" [disabled]="disableSelection"/>
+      <input
+        type="checkbox"
+        id="semicolon"
+        (change)="toggleSemicolon()"
+        [disabled]="disableSelection"
+      />
       <label for="semicolon">&nbsp;Semikolon</label>
     </div>
     <div class="form-group col">
-      <input type="checkbox" id="space" (change)="toggleSpace()" [disabled]="disableSelection"/>
+      <input
+        type="checkbox"
+        id="space"
+        (change)="toggleSpace()"
+        [disabled]="disableSelection"
+      />
       <label for="space">&nbsp;Leerzeichen</label>
     </div>
     <div class="form-group col">
-      <input type="checkbox" id="tab" (change)="toggleTab()" [disabled]="disableSelection"/>
+      <input
+        type="checkbox"
+        id="tab"
+        (change)="toggleTab()"
+        [disabled]="disableSelection"
+      />
       <label for="tab">&nbsp;Tabstopp</label>
     </div>
   </div>
@@ -37,13 +57,27 @@
   <h5 class="mb-3">Text Markierung</h5>
   <div class="marker row">
     <div class="form-group col">
-      <input id="double-quotes" type="radio" value='"' name="text-marker"
-             [(ngModel)]="textMarker" (change)="changeMarker()" [disabled]="disableSelection"/>
+      <input
+        id="double-quotes"
+        type="radio"
+        value='"'
+        name="text-marker"
+        [(ngModel)]="textMarker"
+        (change)="changeMarker()"
+        [disabled]="disableSelection"
+      />
       <label for="double-quotes">&nbsp;"</label>
     </div>
     <div class="form-group col">
-      <input id="single-quotes" type="radio" value="'" name="text-marker"
-             [(ngModel)]="textMarker" (change)="changeMarker()" [disabled]="disableSelection"/>
+      <input
+        id="single-quotes"
+        type="radio"
+        value="'"
+        name="text-marker"
+        [(ngModel)]="textMarker"
+        (change)="changeMarker()"
+        [disabled]="disableSelection"
+      />
       <label for="single-quotes">&nbsp;'</label>
     </div>
   </div>
@@ -54,18 +88,49 @@
   <h5 class="mb-3">Spaltenüberschriften Verwendung</h5>
   <div class="headline row">
     <div class="form-group col">
-      <input id="use-file-headline" type="radio" value="file" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableHeadlineSelection"/>
-      <label for="use-file-headline">&nbsp;Verwende erste Zeile als Spaltenüberschriften</label>
+      <input
+        id="use-file-headline"
+        type="radio"
+        value="file"
+        name="headline-usage"
+        [(ngModel)]="headlineUsage"
+        (change)="toggleHeadlineUsage()"
+        [disabled]="disableHeadlineSelection"
+      />
+      <label for="use-file-headline">
+        &nbsp;Verwende erste Zeile als Spaltenüberschriften
+      </label>
     </div>
     <div class="form-group col">
-      <input id="use-own-headline" type="radio" value="own" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableHeadlineSelection"/>
-      <label for="use-own-headline">&nbsp;Definiere eigene Spaltenüberschriften</label>
+      <input
+        id="use-own-headline"
+        type="radio"
+        value="own"
+        name="headline-usage"
+        [(ngModel)]="headlineUsage"
+        (change)="toggleHeadlineUsage()"
+        [disabled]="disableHeadlineSelection"
+      />
+      <label for="use-own-headline">
+        &nbsp;Definiere eigene Spaltenüberschriften
+      </label>
     </div>
   </div>
   <div id="show-headline-fields" *ngIf="this.headlineUsage=='own'">
-    <div class="form-group row" *ngFor="let headline of csvHeader; let i = index; trackBy:trackByFn">
-      <label class="col-sm-auto" for="headline{{i}}">Spaltenüberschrift {{i+1}}:&nbsp;</label>
-      <input class="col" type="text" id="headline{{i}}" [(ngModel)]="csvHeader[i]" [disabled]="disableHeadlineSelection"/>
+    <div
+      class="form-group row"
+      *ngFor="let headline of csvHeader; let i = index; trackBy:trackByFn"
+    >
+      <label class="col-sm-auto" for="headline{{i}}">
+        Spaltenüberschrift {{i+1}}:&nbsp;
+      </label>
+      <input
+        class="col"
+        type="text"
+        id="headline{{i}}"
+        [(ngModel)]="csvHeader[i]"
+        [disabled]="disableHeadlineSelection"
+      />
     </div>
   </div>
 
@@ -110,20 +175,37 @@
       <!-- Choose Table to import to -->
       <div class="table-selection">
         <label class="p-0" for="select-table">Tabelle auswählen</label>
-        <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable(selectedTableName)">
-          <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
+        <select
+          id="select-table"
+          class="form-control"
+          [(ngModel)]="selectedTableName"
+          (change)="changeTable(selectedTableName)"
+        >
+          <option *ngFor="let table of schemaTables" value="{{table.name}}">
+            {{ table.name }}
+          </option>
         </select>
       </div>
 
       <br />
 
       <!-- Mapping for the selected table -->
-      <div class="mapping row mt-3" *ngFor="let tableCol of selectedTable['columns']; let i = index">
+      <div
+        class="mapping row mt-3"
+        *ngFor="let tableCol of selectedTable['columns']; let i = index"
+      >
         <div class="col-md-6 col-lg-4">
-          <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeaderIndex[i]" (change)="changeColumn(i)">
+          <select
+            id="header-selection"
+            class="form-control h-100"
+            [(ngModel)]="selectedHeaderIndex[i]"
+            (change)="changeColumn(i)"
+          >
             <option value="-1"></option>
-            <option *ngFor="let headerCol of csvHeader; let j = index"
-                    value="{{ j }}">
+            <option
+              *ngFor="let headerCol of csvHeader; let j = index"
+              value="{{ j }}"
+            >
               {{ headerCol }}
             </option>
           </select>
@@ -138,17 +220,24 @@
             <i class="fa fa-ban"></i>
           </span>
         </div>
-        <div class="col-md-5 col-lg-3 d-flex align-items-center" id="table-{{ tableCol }}">&nbsp;{{ tableCol.name }}</div>
+        <div
+          class="col-md-5 col-lg-3 d-flex align-items-center"
+          id="table-{{ tableCol }}"
+        >
+          &nbsp;{{ tableCol.name }}
+        </div>
       </div>
 
       <br />
 
       <!-- Save Button -->
       <div class="save-button">
-        <button type="button"
-                class="btn btn-success"
-                (click)="importTable()"
-                [disabled]="disableButton">
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="importTable()"
+          [disabled]="disableButton"
+        >
           Daten importieren
         </button>
       </div>
@@ -157,17 +246,31 @@
     <!-- Error -->
     <div class="errors" *ngIf="parse.type === 'parseError'">
       <h5 class="mb-3">Beim Parsen sind folgende Fehler aufgetreten:</h5>
-      <div class="error card text-white bg-danger mb-3" *ngFor="let error of errors">
+      <div
+        class="error card text-white bg-danger mb-3"
+        *ngFor="let error of errors"
+      >
         <div class="card-header">Line: {{ error.line }}</div>
         <div class="card-body">
           <h5 class="card-title">Information: {{ error.data.information }}</h5>
           <div class="card-text">
-            <div class="wrongColumnCount" *ngIf="error.data.type === 'wrongColumnCount'">
-              Count: {{ error.data.count }} <br/>
-              Expected: {{ error.data.expected }} <br/><br/>
+            <div
+              class="wrongColumnCount"
+              *ngIf="error.data.type === 'wrongColumnCount'"
+            >
+              Count: {{ error.data.count }}
+              <br />
+              Expected: {{ error.data.expected }}
+              <br />
+              <br />
             </div>
-            <div class="markerNotClosed" *ngIf="error.data.type === 'markerNotClosed'">
-              Fragment: {{ error.data.fragment }} <br/><br/>
+            <div
+              class="markerNotClosed"
+              *ngIf="error.data.type === 'markerNotClosed'"
+            >
+              Fragment: {{ error.data.fragment }}
+              <br />
+              <br />
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
-import { BlockLanguageDescription } from '../block-language.description'
+import { BlockLanguageDescription } from "../block-language.description";
 import {
-  SidebarBlockDescription, VisualBlockDescriptions
-} from '../block.description'
+  SidebarBlockDescription,
+  VisualBlockDescriptions,
+} from "../block.description";
 
 const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
   {
@@ -9,46 +10,46 @@ const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "element",
       children: {
-        "elements": [
+        elements: [
           {
             language: "dxml",
             name: "text",
             properties: {
-              "value": "before ..."
-            }
+              value: "before ...",
+            },
           },
           {
             language: "dxml",
             name: "element",
             children: {},
             properties: {
-              "name": "child"
-            }
+              name: "child",
+            },
           },
           {
             language: "dxml",
             name: "text",
             properties: {
-              "value": "after ..."
-            }
+              value: "after ...",
+            },
           },
         ],
-        "attributes": [
+        attributes: [
           {
             language: "dxml",
             name: "attribute",
             children: {
-              "value": []
+              value: [],
             },
             properties: {
-              "name": "att1"
-            }
-          }
+              name: "att1",
+            },
+          },
         ],
       },
       properties: {
-        "name": "parent"
-      }
+        name: "parent",
+      },
     },
     displayName: "Element: ~~Complex~~",
   },
@@ -57,12 +58,12 @@ const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "element",
       children: {
-        "elements": [],
-        "attributes": [],
+        elements: [],
+        attributes: [],
       },
       properties: {
-        "name": "e1"
-      }
+        name: "e1",
+      },
     },
     displayName: "Element: e1",
   },
@@ -71,12 +72,12 @@ const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "element",
       children: {
-        "elements": [],
-        "attributes": [],
+        elements: [],
+        attributes: [],
       },
       properties: {
-        "name": "e2"
-      }
+        name: "e2",
+      },
     },
     displayName: "Element: e2",
   },
@@ -85,13 +86,11 @@ const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "attribute",
       children: {
-        "value": [
-
-        ]
+        value: [],
       },
       properties: {
-        "name": "a1",
-      }
+        name: "a1",
+      },
     },
     displayName: "Attribut: a1",
   },
@@ -100,13 +99,11 @@ const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "attribute",
       children: {
-        "value": [
-
-        ]
+        value: [],
       },
       properties: {
-        "name": "a2",
-      }
+        name: "a2",
+      },
     },
     displayName: "Attribut: a2",
   },
@@ -115,8 +112,8 @@ const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "text",
       properties: {
-        "value": "Neuer Text",
-      }
+        value: "Neuer Text",
+      },
     },
     displayName: "Text",
   },
@@ -128,24 +125,24 @@ const SIDEBAR_BLOCKS_DYNAMIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "interpolate",
       children: {
-        "expr": [
+        expr: [
           {
             language: "dxml",
             name: "expr",
             children: {
-              "concreteExpr": [
+              concreteExpr: [
                 {
                   language: "dxml",
                   name: "exprVar",
                   properties: {
-                    "name": "var_a"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+                    name: "var_a",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     },
     displayName: "<%= var_a %>",
   },
@@ -154,8 +151,8 @@ const SIDEBAR_BLOCKS_DYNAMIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "exprVar",
       properties: {
-        "name": "var_a"
-      }
+        name: "var_a",
+      },
     },
     displayName: "Variable a",
   },
@@ -164,8 +161,8 @@ const SIDEBAR_BLOCKS_DYNAMIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "exprVar",
       properties: {
-        "name": "var_b"
-      }
+        name: "var_b",
+      },
     },
     displayName: "Variable b",
   },
@@ -174,27 +171,27 @@ const SIDEBAR_BLOCKS_DYNAMIC: SidebarBlockDescription[] = [
       language: "dxml",
       name: "if",
       children: {
-        "condition": [
+        condition: [
           {
             language: "dxml",
             name: "expr",
             children: {
-              "concreteExpr": []
-            }
-          }
+              concreteExpr: [],
+            },
+          },
         ],
-        "body": []
+        body: [],
       },
     },
     displayName: "<% if %>",
   },
-]
+];
 
 const EDITOR_BLOCKS = [
   {
     describedType: {
       languageName: "dxml",
-      typeName: "element"
+      typeName: "element",
     },
     visual: [
       {
@@ -203,23 +200,23 @@ const EDITOR_BLOCKS = [
         dropTarget: {
           children: {
             category: "elements",
-            order: "insertFirst"
-          }
+            order: "insertFirst",
+          },
         },
         children: [
           {
             blockType: "constant",
             text: "<",
             style: {
-              color: "blue"
-            }
+              color: "blue",
+            },
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "input",
             property: "name",
             style: {
-              color: "#ad0000"
-            }
+              color: "#ad0000",
+            },
           } as VisualBlockDescriptions.EditorInput,
           {
             blockType: "iterator",
@@ -232,14 +229,14 @@ const EDITOR_BLOCKS = [
             dropTarget: {
               children: {
                 category: "attributes",
-                order: "insertLast"
+                order: "insertLast",
               },
-              visibility: { $var: "ifLegalChild" }
+              visibility: { $var: "ifLegalChild" },
             },
             children: [
               {
                 blockType: "constant",
-                text: "+Attribute"
+                text: "+Attribute",
               } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
@@ -251,22 +248,22 @@ const EDITOR_BLOCKS = [
             blockType: "constant",
             text: ">",
             style: {
-              color: "blue"
-            }
+              color: "blue",
+            },
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "dropTarget",
             dropTarget: {
               children: {
                 category: "elements",
-                order: "insertFirst"
+                order: "insertFirst",
               },
-              visibility: { $var: "ifLegalChild" }
+              visibility: { $var: "ifLegalChild" },
             },
             children: [
               {
                 blockType: "constant",
-                text: "+Kind"
+                text: "+Kind",
               } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
@@ -274,7 +271,7 @@ const EDITOR_BLOCKS = [
               marginLeft: "10px",
             },
           } as VisualBlockDescriptions.EditorDropTarget,
-        ]
+        ],
       } as VisualBlockDescriptions.EditorBlock,
       {
         blockType: "iterator",
@@ -292,26 +289,26 @@ const EDITOR_BLOCKS = [
             blockType: "constant",
             text: "</",
             style: {
-              color: "blue"
-            }
+              color: "blue",
+            },
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "interpolated",
             property: "name",
             style: {
-              color: "#ad0000"
-            }
+              color: "#ad0000",
+            },
           } as VisualBlockDescriptions.EditorInterpolated,
           {
             blockType: "constant",
             text: ">",
             style: {
-              color: "blue"
-            }
+              color: "blue",
+            },
           } as VisualBlockDescriptions.EditorConstant,
-        ]
-      } as VisualBlockDescriptions.EditorBlock
-    ]
+        ],
+      } as VisualBlockDescriptions.EditorBlock,
+    ],
   },
   {
     describedType: {
@@ -330,38 +327,40 @@ const EDITOR_BLOCKS = [
             blockType: "input",
             property: "name",
             style: {
-              color: "#ef4040"
-            }
+              color: "#ef4040",
+            },
           } as VisualBlockDescriptions.EditorInput,
           {
             blockType: "constant",
-            text: "="
+            text: "=",
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "constant",
-            text: "\""
+            text: '"',
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "dropTarget",
             dropTarget: {
               children: {
                 category: "value",
-                order: "insertFirst"
+                order: "insertFirst",
               },
-              visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
+              visibility: {
+                $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }],
+              },
             },
             children: [
               {
                 blockType: "constant",
                 text: "❓",
                 style: {
-                  "paddingLeft": "10px",
-                  "paddingRight": "10px",
-                  "border": "2px solid red",
-                  "color": "darkred",
-                  "backgroundColor": "orange",
-                  "borderRadius": "500px",
-                  "cursor": "default",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  border: "2px solid red",
+                  color: "darkred",
+                  backgroundColor: "orange",
+                  borderRadius: "500px",
+                  cursor: "default",
                 },
               } as VisualBlockDescriptions.EditorConstant,
             ],
@@ -372,16 +371,16 @@ const EDITOR_BLOCKS = [
             childGroupName: "value",
             direction: "horizontal",
             style: {
-              color: "blue"
-            }
+              color: "blue",
+            },
           } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "constant",
-            text: "\""
+            text: '"',
           } as VisualBlockDescriptions.EditorConstant,
-        ]
-      } as VisualBlockDescriptions.EditorBlock
-    ]
+        ],
+      } as VisualBlockDescriptions.EditorBlock,
+    ],
   },
   {
     describedType: {
@@ -395,11 +394,11 @@ const EDITOR_BLOCKS = [
         children: [
           {
             blockType: "input",
-            property: "value"
+            property: "value",
           } as VisualBlockDescriptions.EditorInput,
-        ]
-      } as VisualBlockDescriptions.EditorBlock
-    ]
+        ],
+      } as VisualBlockDescriptions.EditorBlock,
+    ],
   },
   {
     describedType: {
@@ -413,7 +412,7 @@ const EDITOR_BLOCKS = [
         children: [
           {
             blockType: "constant",
-            text: "{{"
+            text: "{{",
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "iterator",
@@ -422,11 +421,11 @@ const EDITOR_BLOCKS = [
           } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "constant",
-            text: "}}"
+            text: "}}",
           } as VisualBlockDescriptions.EditorConstant,
-        ]
-      } as VisualBlockDescriptions.EditorBlock
-    ]
+        ],
+      } as VisualBlockDescriptions.EditorBlock,
+    ],
   },
   {
     describedType: {
@@ -439,7 +438,7 @@ const EDITOR_BLOCKS = [
         childGroupName: "concreteExpr",
         direction: "horizontal",
       } as VisualBlockDescriptions.EditorIterator,
-    ]
+    ],
   },
   {
     describedType: {
@@ -453,13 +452,13 @@ const EDITOR_BLOCKS = [
         children: [
           {
             blockType: "interpolated",
-            property: "name"
+            property: "name",
           } as VisualBlockDescriptions.EditorInterpolated,
-        ]
-      } as VisualBlockDescriptions.EditorBlock
-    ]
+        ],
+      } as VisualBlockDescriptions.EditorBlock,
+    ],
   },
-]
+];
 
 export const BLOCK_LANGUAGE_STATIC: BlockLanguageDescription = {
   id: "84ece7cd-8824-4310-a1db-917c29c904c9",
@@ -474,13 +473,13 @@ export const BLOCK_LANGUAGE_STATIC: BlockLanguageDescription = {
         {
           categoryCaption: "Kern",
           blocks: SIDEBAR_BLOCKS_BASIC,
-        }
-      ]
-    }
+        },
+      ],
+    },
   ],
   editorComponents: [],
-  editorBlocks: EDITOR_BLOCKS
-}
+  editorBlocks: EDITOR_BLOCKS,
+};
 
 export const BLOCK_LANGUAGE_DYNAMIC: BlockLanguageDescription = {
   id: "c851d3be-3129-4fb3-ae37-99f40bce3dd0",
@@ -499,11 +498,10 @@ export const BLOCK_LANGUAGE_DYNAMIC: BlockLanguageDescription = {
         {
           categoryCaption: "Steuerung",
           blocks: SIDEBAR_BLOCKS_DYNAMIC,
-        }
-      ]
-    }
+        },
+      ],
+    },
   ],
   editorComponents: [],
-  editorBlocks: EDITOR_BLOCKS
-}
-
+  editorBlocks: EDITOR_BLOCKS,
+};

@@ -1,45 +1,48 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
-import { Subscription } from 'rxjs'
-import { first, filter, finalize, flatMap, map } from 'rxjs/operators';
+import { Subscription } from "rxjs";
+import { first, filter, finalize, flatMap, map } from "rxjs/operators";
 
-import { DatabaseQueryErrorDescription } from '../../../shared';
-import { Tree } from '../../../shared/syntaxtree';
+import { DatabaseQueryErrorDescription } from "../../../shared";
+import { Tree } from "../../../shared/syntaxtree";
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { EditorToolbarService, ToolbarItem } from '../../toolbar.service';
-import { ProjectService } from '../../project.service';
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
+import { ProjectService } from "../../project.service";
 
-import { QueryService, QueryResultRows, QueryParamsDescription } from './query.service'
+import {
+  QueryService,
+  QueryResultRows,
+  QueryParamsDescription,
+} from "./query.service";
 
 /**
  * Extracts the names of required query parameters out of a syntaxtree.
  */
 function extractQueryParameterNames(tree: Tree) {
-  const names = tree.getNodesOfType({ languageName: "sql", typeName: "parameter" })
-    .map(n => n.properties['name']);
+  const names = tree
+    .getNodesOfType({ languageName: "sql", typeName: "parameter" })
+    .map((n) => n.properties["name"]);
 
   // Apparently this is what `Array.uniq` looks like in Javascript
-  return (Array.from(new Set(names)));
+  return Array.from(new Set(names));
 }
 
 /**
  * Shows the results of a compiled SQL query.
  */
 @Component({
-  templateUrl: 'templates/query-preview.html',
+  templateUrl: "templates/query-preview.html",
 })
 export class QueryPreviewComponent implements OnInit, OnDestroy {
-
   // This key is used to access the query parameters stored in local storage
   private static readonly LOCAL_STORAGE_PARAMS_KEY = "queryParameters";
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _toolbarService: EditorToolbarService,
-    private _queryService: QueryService,
-  ) {
-  }
+    private _queryService: QueryService
+  ) {}
 
   public result: QueryResultRows;
   public error: DatabaseQueryErrorDescription;
@@ -51,15 +54,15 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
 
   // A code resource that is guaranteed to be a SQL query
-  private _currentQuery = this._currentCodeResource.currentResource
-    .pipe(filter(c => c.emittedLanguageIdPeek == "sql"));
+  private _currentQuery = this._currentCodeResource.currentResource.pipe(
+    filter((c) => c.emittedLanguageIdPeek == "sql")
+  );
 
   // All parameters that are part of the current tree
-  readonly queryParameterNames = this._currentQuery
-    .pipe(
-      flatMap(c => c.syntaxTree),
-      map(extractQueryParameterNames)
-    );
+  readonly queryParameterNames = this._currentQuery.pipe(
+    flatMap((c) => c.syntaxTree),
+    map(extractQueryParameterNames)
+  );
 
   /**
    * Register the "run"-button and automatic query execution.
@@ -69,38 +72,47 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
     this.queryParameters = this.loadQueryParameters();
 
     // The "run" button
-    this._btnRun = this._toolbarService.addButton("run", "Ausführen", "play", "r");
-    this._btnRun.onClick.subscribe(_ => {
+    this._btnRun = this._toolbarService.addButton(
+      "run",
+      "Ausführen",
+      "play",
+      "r"
+    );
+    this._btnRun.onClick.subscribe((_) => {
       // Visual feedback that the query is in progress
       this.queryInProgress = true;
       // Store query parameters after every execution
       this.persistQueryParameters();
 
-      this._queryService.runArbitraryQuery(this._currentCodeResource.peekResource, this.requiredQueryParameters)
+      this._queryService
+        .runArbitraryQuery(
+          this._currentCodeResource.peekResource,
+          this.requiredQueryParameters
+        )
         .pipe(
           first(),
-          finalize(() => this.queryInProgress = false)
+          finalize(() => (this.queryInProgress = false))
         )
-        .subscribe(
-          res => {
-            if (res instanceof QueryResultRows) {
-              // Succesful query, store it and remove the error
-              this.result = res;
-              this.error = undefined;
-            } else {
-              this.result = undefined;
-              this.error = res.data;
-            }
-          });
+        .subscribe((res) => {
+          if (res instanceof QueryResultRows) {
+            // Succesful query, store it and remove the error
+            this.result = res;
+            this.error = undefined;
+          } else {
+            this.result = undefined;
+            this.error = res.data;
+          }
+        });
     });
 
     // Fire the query every time the ast changes into a valid tree.
-    const subValidation = this._currentCodeResource.validationResult
-      .subscribe(res => {
+    const subValidation = this._currentCodeResource.validationResult.subscribe(
+      (res) => {
         if (res.isValid) {
           this._btnRun.fire();
         }
-      });
+      }
+    );
 
     this._subscriptions.push(subValidation);
   }
@@ -120,15 +132,16 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
    */
   private loadQueryParameters(): QueryParamsDescription {
     if (window.localStorage) {
-      const stored = window.localStorage.getItem(QueryPreviewComponent.LOCAL_STORAGE_PARAMS_KEY);
+      const stored = window.localStorage.getItem(
+        QueryPreviewComponent.LOCAL_STORAGE_PARAMS_KEY
+      );
       try {
-        return (JSON.parse(stored) || {});
+        return JSON.parse(stored) || {};
       } catch (e) {
-        return ({});
+        return {};
       }
-
     } else {
-      return ({});
+      return {};
     }
   }
 
@@ -155,20 +168,22 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
    */
   get requiredQueryParameters() {
     const toReturn: QueryParamsDescription = {};
-    const names = extractQueryParameterNames(this._currentCodeResource.peekResource.syntaxTreePeek);
+    const names = extractQueryParameterNames(
+      this._currentCodeResource.peekResource.syntaxTreePeek
+    );
 
-    names.forEach(name => {
-      toReturn[name] = this.queryParameters[name]
+    names.forEach((name) => {
+      toReturn[name] = this.queryParameters[name];
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
    * @return True, if a query is currently in progress.
    */
   get queryInProgress() {
-    return (this._btnRun.isInProgress);
+    return this._btnRun.isInProgress;
   }
 
   /**
@@ -184,7 +199,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._toolbarService.removeItem(this._btnRun.id);
 
-    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions.forEach((s) => s.unsubscribe());
     this._subscriptions = [];
   }
 }

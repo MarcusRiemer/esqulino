@@ -3,9 +3,7 @@
  * fewer nested types as "infinity" and is used to represent the indentation of
  * strings.
  */
-export interface NestedString extends Array<NestedString | string> {
-
-}
+export interface NestedString extends Array<NestedString | string> {}
 
 /**
  * "Flattens" the given arbitrarily nested strings to a single string. The resulting
@@ -18,23 +16,28 @@ export interface NestedString extends Array<NestedString | string> {
  *               will probably be one or multiple spaces for most usecases.
  * @param n The nested string
  */
-export function recursiveJoin(sep: string, indent: string, n: NestedString): string {
-  const impl = (sep: string, n: NestedString | string, depth: number): string => {
-    if (typeof n === 'undefined') {
-      return ("");
-    }
-    else if (typeof n === 'string') {
-      return (indent.repeat(depth) + n);
+export function recursiveJoin(
+  sep: string,
+  indent: string,
+  n: NestedString
+): string {
+  const impl = (
+    sep: string,
+    n: NestedString | string,
+    depth: number
+  ): string => {
+    if (typeof n === "undefined") {
+      return "";
+    } else if (typeof n === "string") {
+      return indent.repeat(depth) + n;
     } else {
-      return (
-        n
-          .filter(v => !!v) // Don't do anything with undefined values
-          .map(v => impl(sep, v, depth + 1))
-          .join(sep)
-      );
+      return n
+        .filter((v) => !!v) // Don't do anything with undefined values
+        .map((v) => impl(sep, v, depth + 1))
+        .join(sep);
     }
   };
 
   // Run the recursive implementation
-  return (impl(sep, n, -1));
+  return impl(sep, n, -1);
 }

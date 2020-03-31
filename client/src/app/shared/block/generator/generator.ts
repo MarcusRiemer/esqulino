@@ -1,13 +1,17 @@
 import { GrammarDocument } from "../../syntaxtree/grammar.description";
 
 import {
-  BlockLanguageListDescription, BlockLanguageDescription
+  BlockLanguageListDescription,
+  BlockLanguageDescription,
 } from "../block-language.description";
 
-import { GeneratorError } from './error.description'
+import { GeneratorError } from "./error.description";
 import { BlockLanguageGeneratorDocument } from "./generator.description";
-import { validateManualGenerator, convertGrammarManualInstructions } from './generator-manual';
-import { convertGrammarTreeInstructions } from './generator-tree';
+import {
+  validateManualGenerator,
+  convertGrammarManualInstructions,
+} from "./generator-manual";
+import { convertGrammarTreeInstructions } from "./generator-tree";
 
 /**
  * Ensures that there should be no errors during generation.
@@ -16,11 +20,15 @@ export function validateGenerator(
   d: BlockLanguageGeneratorDocument
 ): GeneratorError[] {
   switch (d.type) {
-    case "manual": return (validateManualGenerator(d));
-    case "tree": return ([]);
+    case "manual":
+      return validateManualGenerator(d);
+    case "tree":
+      return [];
     default: {
-      throw new Error(`validateGenerator(): Unknown BlockLanguageGenerator "${d!.type}"`)
-    };
+      throw new Error(
+        `validateGenerator(): Unknown BlockLanguageGenerator "${d!.type}"`
+      );
+    }
   }
 }
 
@@ -35,16 +43,21 @@ export function generateBlockLanguage(
 ): BlockLanguageDescription {
   const runGenerator = () => {
     switch (d.type) {
-      case "manual": return (convertGrammarManualInstructions(d, g));
-      case "tree": return (convertGrammarTreeInstructions(d, g));
-      default: throw new Error(`generateBlockLanguage(): Unknown BlockLanguageGenerator "${d!.type}"`);
+      case "manual":
+        return convertGrammarManualInstructions(d, g);
+      case "tree":
+        return convertGrammarTreeInstructions(d, g);
+      default:
+        throw new Error(
+          `generateBlockLanguage(): Unknown BlockLanguageGenerator "${d!.type}"`
+        );
     }
-  }
+  };
 
   const generated = runGenerator();
   const toReturn = Object.assign({}, l, generated);
 
   console.log(`Generated block language using "${d.type}" generator`);
 
-  return (toReturn);
+  return toReturn;
 }

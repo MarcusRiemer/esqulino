@@ -1,25 +1,34 @@
 <!-- A nice message if the database is empty -->
-<database-empty [project]="project">
-</database-empty>
+<database-empty [project]="project"></database-empty>
 
 <ng-container *ngIf="!isEmpty">
   <div class="card mb-3">
     <div class="card-body">
-      <h4 class="card-title">Schema-Übersicht für Datenbank "{{ schemaName | async }}"</h4>
-      <p>Diese graphische Übersicht ist hilfreich, um die Beziehungen der Tabellen besser verstehen zu können.</p>
-      <div *ngIf="project"
-           class="db-schema-display"
-           [innerHtml]="visualSchemaDom | async">
-      </div>
+      <h4 class="card-title">
+        Schema-Übersicht für Datenbank "{{ schemaName | async }}"
+      </h4>
+      <p>
+        Diese graphische Übersicht ist hilfreich, um die Beziehungen der
+        Tabellen besser verstehen zu können.
+      </p>
+      <div
+        *ngIf="project"
+        class="db-schema-display"
+        [innerHtml]="visualSchemaDom | async"
+      ></div>
     </div>
   </div>
 
   <div class="card card-body">
     <h4 class="card-title">Tabellen</h4>
-    <p>In dieser Übersicht findest du detaillierte Informationen zu jeder Tabelle.</p>
-    <sql-table *ngFor="let table of project?.schema.tables"
-			   [table]="table"
-			   [readOnly]="false">
-    </sql-table>
+    <p>
+      In dieser Übersicht findest du detaillierte Informationen zu jeder
+      Tabelle.
+    </p>
+    <sql-table
+      *ngFor="let table of project?.schema.tables"
+      [table]="table"
+      [readOnly]="false"
+    ></sql-table>
   </div>
 </ng-container>

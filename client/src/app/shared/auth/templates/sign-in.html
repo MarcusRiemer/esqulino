@@ -1,24 +1,22 @@
 <div class="flex-column authentication align-items-center">
-  <validate-input
-    icon="envelope-o"
-    [(value)]="signInData.email">
-
-    <input #inputRef
+  <validate-input icon="envelope-o" [(value)]="signInData.email">
+    <input
+      #inputRef
       type="email"
       class="form-control"
       placeholder="E-Mail"
-      required>
+      required
+    />
   </validate-input>
-  
-  <validate-input
-    icon="key"
-    [(value)]="signInData.password">
 
-    <input #inputRef 
+  <validate-input icon="key" [(value)]="signInData.password">
+    <input
+      #inputRef
       type="password"
       class="form-control"
       placeholder="Password"
-      required>
+      required
+    />
   </validate-input>
 
   <div class="row reset-password-link-text">
@@ -30,11 +28,7 @@
     </div>
   </div>
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onSignIn()">
-
+  <button mat-raised-button color="primary" (click)="onSignIn()">
     Anmelden
   </button>
 </div>

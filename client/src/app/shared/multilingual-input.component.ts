@@ -1,53 +1,63 @@
-import { ActivatedRoute } from '@angular/router';
-import { Component, Input, LOCALE_ID, Inject, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import {
+  Component,
+  Input,
+  LOCALE_ID,
+  Inject,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 
-import { locales } from './change-language.component'
-import { MultilingualString } from './multilingual-string.description';
+import { locales } from "./change-language.component";
+import { MultilingualString } from "./multilingual-string.description";
 
 @Component({
-  selector: 'multilingual-input',
-  templateUrl: './templates/multilingual-input.html'
+  selector: "multilingual-input",
+  templateUrl: "./templates/multilingual-input.html",
 })
 export class MultiLingualInputComponent {
   @Input() editingString: MultilingualString;
-  @Input() control: string = 'input';
+  @Input() control: string = "input";
   @Input() language: string = this.localeId;
-  @Input() placeholder: string = '';
+  @Input() placeholder: string = "";
 
   @Output() editingStringChange = new EventEmitter<MultilingualString>();
 
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
     private _activeRoute: ActivatedRoute
-  ) { }
+  ) {}
 
   public readonly languages = locales;
 
   /**
    * Users may specify a mode via the URL
    */
-  public readonly mode = this._activeRoute.snapshot.queryParamMap.get('mode') || 'single'
+  public readonly mode =
+    this._activeRoute.snapshot.queryParamMap.get("mode") || "single";
 
   public get currentString() {
-    return (this.editingString)
+    return this.editingString;
   }
 
   /**
    * Is there an Object with the selected language
    */
   public get isCurrentLanguageAvailable() {
-    return (this.currentString && this.currentString[this.language] != undefined)
+    return this.currentString && this.currentString[this.language] != undefined;
   }
 
   public get isTranslationTextarea() {
-    return (this.mode === 'translation' && this.control === 'textarea')
+    return this.mode === "translation" && this.control === "textarea";
   }
 
   /**
    * Check if there is an Object needed
    */
   public get isNeedAnObject() {
-    return (!this.currentString || this.currentString[this.language] == undefined)
+    return (
+      !this.currentString || this.currentString[this.language] == undefined
+    );
   }
 
   public set currentString(val: MultilingualString) {
@@ -60,11 +70,10 @@ export class MultiLingualInputComponent {
    * and add an empty string to the current language
    */
   public addObject(): void {
-    if (!this.currentString)
-      this.currentString = {};
+    if (!this.currentString) this.currentString = {};
 
     let newString = this.currentString;
-    newString[this.language] = '';
+    newString[this.language] = "";
 
     this.currentString = newString;
   }
@@ -73,6 +82,6 @@ export class MultiLingualInputComponent {
    * Deletes an entry of an object with the current language
    */
   public deleteLanguage(): void {
-    delete this.currentString[this.language]
+    delete this.currentString[this.language];
   }
 }

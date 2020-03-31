@@ -3,128 +3,158 @@
     Projekteinstellungen
   </h4>
   <div class="card-body">
-    In diesem Abschnitt kannst du Einstellungen vornehmen, die das gesamte Projekt betreffen.
+    In diesem Abschnitt kannst du Einstellungen vornehmen, die das gesamte
+    Projekt betreffen.
   </div>
-  <div *ngIf="project"
-       class="card-body">
+  <div *ngIf="project" class="card-body">
     <div class="form-group row">
-      <label for="project-id"
-             class="col-sm-2 form-control-label">
+      <label for="project-id" class="col-sm-2 form-control-label">
         ID
       </label>
       <div class="col-sm-10">
-        <input [ngModel]="project.id"
-               name="project-id"
-               class="form-control"
-               id="project-id"
-               readonly="true">
-        <small class="text-muted">Diese ID ist einzigartig für dein Projekt und kann nicht verändert werden. Wenn ein Fehler auftritt, gibst du bitte diese ID mit an.</small>
+        <input
+          [ngModel]="project.id"
+          name="project-id"
+          class="form-control"
+          id="project-id"
+          readonly="true"
+        />
+        <small class="text-muted">
+          Diese ID ist einzigartig für dein Projekt und kann nicht verändert
+          werden. Wenn ein Fehler auftritt, gibst du bitte diese ID mit an.
+        </small>
       </div>
     </div>
     <div class="form-group row">
-      <label for="project-slug"
-             class="col-sm-2 form-control-label">
+      <label for="project-slug" class="col-sm-2 form-control-label">
         Slug
       </label>
       <div class="col-sm-10">
-        <input [ngModel]="project.slug"
-               name="project-slug"
-               class="form-control"
-               id="project-slug"
-               readonly="true">
-        <small class="text-muted">Diese Bezeichnung für dein Projekt wird in <code>URL</code>s verwendet.</small>
+        <input
+          [ngModel]="project.slug"
+          name="project-slug"
+          class="form-control"
+          id="project-slug"
+          readonly="true"
+        />
+        <small class="text-muted">
+          Diese Bezeichnung für dein Projekt wird in
+          <code>URL</code>
+          s verwendet.
+        </small>
       </div>
     </div>
     <div class="form-group row">
-      <label for="project-name"
-             class="col-sm-2 form-control-label">
+      <label for="project-name" class="col-sm-2 form-control-label">
         Name
       </label>
       <div class="col-sm-10">
-        <input [(ngModel)]="project.name"
-               name="project-name"
-               class="form-control"
-               id="project-name"
-               placeholder="Name des Projekts"
-               required>
-        <small class="text-muted">Dieser Name beschreibt, was sich hinter deinem Projekt verbirgt.</small>
+        <input
+          [(ngModel)]="project.name"
+          name="project-name"
+          class="form-control"
+          id="project-name"
+          placeholder="Name des Projekts"
+          required
+        />
+        <small class="text-muted">
+          Dieser Name beschreibt, was sich hinter deinem Projekt verbirgt.
+        </small>
       </div>
     </div>
     <div class="form-group row">
-      <label for="project-description"
-             class="col-sm-2 form-control-label">
+      <label for="project-description" class="col-sm-2 form-control-label">
         Beschreibung
       </label>
       <div class="col-sm-10">
-        <textarea [(ngModel)]="project.description"
-                  name="project-description"
-                  class="form-control"
-                  id="project-description"
-                  placeholder="Beschreibung des Projekts"
-                  rows="3"
-                  required>
-        </textarea>
+        <textarea
+          [(ngModel)]="project.description"
+          name="project-description"
+          class="form-control"
+          id="project-description"
+          placeholder="Beschreibung des Projekts"
+          rows="3"
+          required
+        ></textarea>
 
-        <small class="text-muted">Beschreibe dein Projekt mit ein paar kurzen Sätzen. Erläutere dabei welche Probleme du damit löst oder welche Dinge du erklären möchtest.</small>
+        <small class="text-muted">
+          Beschreibe dein Projekt mit ein paar kurzen Sätzen. Erläutere dabei
+          welche Probleme du damit löst oder welche Dinge du erklären möchtest.
+        </small>
       </div>
     </div>
 
     <!-- Selecting the currently active database -->
-    <div *ngIf="project?.availableDatabaseNames.length > 1"
-         class="form-group row">
-      <label for="project-index-page"
-             class="col-sm-2 form-control-label">
+    <div
+      *ngIf="project?.availableDatabaseNames.length > 1"
+      class="form-group row"
+    >
+      <label for="project-index-page" class="col-sm-2 form-control-label">
         Aktuelle Datenbank
       </label>
       <div class="col-sm-10">
-        <select [(ngModel)]="project.currentDatabaseName"
-                id="project-index-page"
-                class="form-control custom-select">
-          <option *ngFor="let db of project.availableDatabaseNames"
-                  [value]="db">
+        <select
+          [(ngModel)]="project.currentDatabaseName"
+          id="project-index-page"
+          class="form-control custom-select"
+        >
+          <option
+            *ngFor="let db of project.availableDatabaseNames"
+            [value]="db"
+          >
             {{db}}
           </option>
         </select>
 
         <small class="text-muted">
-          Diese Datenbank wird von deinem Projekt gerade verwendet. Um sie zu ändern, musst du das Projekt speichern und die Seite neu laden.
+          Diese Datenbank wird von deinem Projekt gerade verwendet. Um sie zu
+          ändern, musst du das Projekt speichern und die Seite neu laden.
         </small>
       </div>
     </div>
 
     <!-- Selecting a project Image -->
     <div class="form-group row">
-      <label for="project-image"
-             class="col-sm-2 form-control-label">
+      <label for="project-image" class="col-sm-2 form-control-label">
         Projektbild
       </label>
       <div class="col-sm-10">
-        <image-selector [project]="project" [(projectImageId)]="project.projectImageId"></image-selector>
+        <image-selector
+          [project]="project"
+          [(projectImageId)]="project.projectImageId"
+        ></image-selector>
       </div>
     </div>
   </div>
 </div>
 
-<div class="card mb-3"
-     id="used-block-languages">
+<div class="card mb-3" id="used-block-languages">
   <h4 class="card-header">
     Genutzte Programmiersprachen
   </h4>
   <div class="card-body">
-    <p>In einem Projekt können viele unterschiedliche Blocksprachen zum Einsatz kommen.</p>
+    <p>
+      In einem Projekt können viele unterschiedliche Blocksprachen zum Einsatz
+      kommen.
+    </p>
 
     <!-- Allows to add new block languages -->
     <form class="form-inline">
-      <label class="mr-sm-2" for="block-language-select">Neue Blocksprache</label>
-      <select class="custom-select mr-sm-2"
-              #selectedBlockLanguage>
-        <option *ngFor="let blockLanguage of availableBlockLanguages | async"
-                [value]="blockLanguage.id">
+      <label class="mr-sm-2" for="block-language-select">
+        Neue Blocksprache
+      </label>
+      <select class="custom-select mr-sm-2" #selectedBlockLanguage>
+        <option
+          *ngFor="let blockLanguage of availableBlockLanguages | async"
+          [value]="blockLanguage.id"
+        >
           {{ blockLanguage.name }}
         </option>
       </select>
-      <button (click)="addUsedBlockLanguage(selectedBlockLanguage.value)"
-              class="btn btn-primary">
+      <button
+        (click)="addUsedBlockLanguage(selectedBlockLanguage.value)"
+        class="btn btn-primary"
+      >
         <span class="fa fa-link fa-fw" aria-hidden="true"></span>
         Verwenden
       </button>
@@ -133,12 +163,18 @@
 
   <!-- Lists all used block languages -->
   <ul class="list-group list-group-flush">
-    <li *ngFor="let used of project.usesBlockLanguages;"
-        class="list-group-item">
-      <h5 class="card-title">{{ (resolveBlockLanguageName(used.blockLanguageId) | async)?.name }}</h5>
-      <button *ngIf="used.id"
-              (click)="removeUsedBlockLanguage(used.id)"
-              class="btn btn-danger">
+    <li
+      *ngFor="let used of project.usesBlockLanguages;"
+      class="list-group-item"
+    >
+      <h5 class="card-title">
+        {{ (resolveBlockLanguageName(used.blockLanguageId) | async)?.name }}
+      </h5>
+      <button
+        *ngIf="used.id"
+        (click)="removeUsedBlockLanguage(used.id)"
+        class="btn btn-danger"
+      >
         <span class="fa fa-chain-broken fa-fw" aria-hidden="true"></span>
         Sprache entfernen
       </button>
@@ -146,22 +182,21 @@
   </ul>
 </div>
 
-<div *ngIf="project.hasSources"
-     class="card mb-3"
-     id="sources">
+<div *ngIf="project.hasSources" class="card mb-3" id="sources">
   <h4 class="card-header">
     Quellen
   </h4>
   <div class="card-body">
-    In diesem Abschnitt solltest du kenntlich machen, auf welchen Werken dein Projekt basiert und welche Personen daran mitgearbeitet haben.
+    In diesem Abschnitt solltest du kenntlich machen, auf welchen Werken dein
+    Projekt basiert und welche Personen daran mitgearbeitet haben.
   </div>
 
   <ul class="list-group list-group-flush">
-    <li *ngFor="let source of project.sources"
-        class="list-group-item">
+    <li *ngFor="let source of project.sources" class="list-group-item">
       <div class="row">
         <div class="col-sm-2">
-          <source-icon [source]="source"></source-icon> Datenquelle
+          <source-icon [source]="source"></source-icon>
+          Datenquelle
         </div>
         <div class="col-sm-2">
           <a [href]="source.url">{{ source.title }}</a>
