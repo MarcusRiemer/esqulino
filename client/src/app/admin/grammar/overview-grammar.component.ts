@@ -4,8 +4,9 @@ import {GrammarListDescription} from '../../shared/syntaxtree';
 import {ListGrammarDataService, MutateGrammarService} from '../../shared/serverdata';
 
 import {SortDirection} from "@angular/material/sort/sort-direction";
-import {MatTableComponent, PaginationEvent, SortEvent} from "../../shared/table/mat-table.component";
-import {PageEvent} from "@angular/material/paginator";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {PaginationEvent} from "../../shared/table/paginator-table.component";
 
 @Component({
   selector: 'grammar-overview-selector',
@@ -15,8 +16,14 @@ import {PageEvent} from "@angular/material/paginator";
 
 export class OverviewGrammarComponent {
 
-  @ViewChild('app-table')
-  _table: MatTableComponent<GrammarListDescription>
+  // Angular Material UI to paginate
+  @ViewChild(MatPaginator,{ static: false })
+  _paginator : MatPaginator
+
+  // Angular Material UI to sort by different columns
+  @ViewChild(MatSort,{ static: false })
+  _sort:MatSort
+
 
   resultsLength$ = this._list.listTotalCount;
   readonly availableGrammars$ = this._list.list
@@ -51,10 +58,6 @@ export class OverviewGrammarComponent {
     this._list.setListPagination(pageSize, pageIndex, true);
   }
 
-  onSortEvent(event: SortEvent) {
-    this.onChangeSort(event.active, event.direction);
-  }
-
   /**
    * User has requested different sorting options
    */
@@ -63,6 +66,4 @@ export class OverviewGrammarComponent {
   }
 
   displayedColumns: (keyof (GrammarListDescription) | "actions")[] = ["name", "slug", "id", "actions"];
-  displayAsLink = ["name"];
-  displayAsCode = ["slug", "id"]
 }

@@ -51,7 +51,8 @@ import { LoginWrapperComponent } from './auth/login-wrapper.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { ProviderShowComponent } from './provider-show.component';
 import { EmptyComponent } from './empty.component';
-import { MatTableComponent } from './table/mat-table.component';
+import { TableCellComponent } from './table/table-cell.component';
+
 
 import {
   ListGrammarDataService, IndividualGrammarDataService,
@@ -81,6 +82,7 @@ import { UnexpectedLogoutInterceptor } from './unexpected-logout.interceptor';
 import { UserService } from './auth/user.service';
 import { ResourceReferencesService } from './resource-references.service';
 import { ResourceReferencesOnlineService } from './resource-references-online.service';
+import {PaginatorTableComponent} from "./table/paginator-table.component";
 
 const dataServices = [
   ListGrammarDataService, IndividualGrammarDataService, MutateGrammarService,
@@ -146,7 +148,8 @@ const materialModules = [
     MayPerformComponent,
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
-    MatTableComponent
+    TableCellComponent,
+    PaginatorTableComponent
   ],
   exports: [
     CommonModule,
@@ -182,7 +185,8 @@ const materialModules = [
     ProviderShowComponent,
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
-    MatTableComponent
+    TableCellComponent,
+    PaginatorTableComponent
   ],
   entryComponents: [
     AuthDialogComponent,
