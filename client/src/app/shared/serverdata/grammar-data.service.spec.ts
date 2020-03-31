@@ -57,7 +57,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList([]);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 
@@ -77,7 +77,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 
@@ -109,7 +109,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 
@@ -141,7 +141,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 
@@ -173,7 +173,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { order });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 
@@ -199,7 +199,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList);
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 
@@ -224,7 +224,7 @@ describe(`ListGrammarDataService`, () => {
     provideGrammarList(expectedList, { pagination });
 
     const list = await pending;
-    const totalCount = await fixture.service.listTotalCount
+    const totalCount = await fixture.service.listTotalCount$
       .pipe(first())
       .toPromise();
 

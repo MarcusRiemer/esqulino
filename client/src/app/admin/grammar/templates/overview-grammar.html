@@ -1,4 +1,4 @@
-<app-table-paginator (pageEvent)="onPageEvent($event)">
+<app-table-paginator [listData]="grammars">
   <table
     class="full-width"
     mat-table
@@ -30,7 +30,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktionen</th>
       <td mat-cell *matCellDef="let grammar">
         <button
-          (click)="deleteGrammar(grammar.id)"
+          (click)="onDeleteGrammar(grammar.id)"
           data-spec="delete"
           type="button"
           class="btn btn-outline-danger btn-sm"

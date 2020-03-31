@@ -47,7 +47,7 @@ export class ListData<TList extends IdentifiableResourceDescription> {
     return this._listTotalCount.value;
   }
 
-  readonly listTotalCount = this._listTotalCount.asObservable();
+  readonly listTotalCount$ = this._listTotalCount.asObservable();
 
   private createListRequest() {
     return this._http

@@ -14,49 +14,36 @@ import { PaginationEvent } from "../../shared/table/paginator-table.component";
   templateUrl: "./templates/overview-grammar.html",
   providers: [ListGrammarDataService],
 })
-export class OverviewGrammarComponent implements AfterViewInit {
+export class OverviewGrammarComponent {
   // Angular Material UI to sort by different columns
   @ViewChild(MatSort)
   _sort: MatSort;
 
-  readonly resultsLength$ = this._list.listTotalCount;
-  readonly availableGrammars$ = this._list.list;
-  readonly inProgress = this._list.listCache.inProgress;
+  readonly resultsLength$ = this.grammars.listTotalCount$;
+  readonly availableGrammars$ = this.grammars.list;
+  readonly inProgress = this.grammars.listCache.inProgress;
 
   constructor(
-    private _list: ListGrammarDataService,
+    readonly grammars: ListGrammarDataService,
     private _mutate: MutateGrammarService
   ) {}
 
-  ngAfterViewInit() {}
-
-  public deleteGrammar(id: string) {
-    this._mutate.deleteSingle(id);
+  async onDeleteGrammar(id: string) {
+    await this._mutate.deleteSingle(id);
   }
 
   /**
    * User wants to see a refreshed dataset.
    */
   onRefresh() {
-    this._list.listCache.refresh();
-  }
-
-  onPageEvent(event: PaginationEvent) {
-    this.onChangePagination(event.pageSize, event.pageIndex);
-  }
-
-  /**
-   * User has requested a different chunk of data
-   */
-  onChangePagination(pageSize: number, pageIndex: number) {
-    this._list.setListPagination(pageSize, pageIndex, true);
+    this.grammars.listCache.refresh();
   }
 
   /**
    * User has requested different sorting options
    */
   onChangeSort(active: any, direction: SortDirection, refresh: boolean = true) {
-    this._list.setListOrdering(active, direction, refresh);
+    this.grammars.setListOrdering(active, direction, refresh);
   }
 
   displayedColumns: (keyof GrammarListDescription | "actions")[] = [

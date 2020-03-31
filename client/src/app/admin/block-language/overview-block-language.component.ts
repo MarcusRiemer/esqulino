@@ -50,7 +50,7 @@ export class OverviewBlockLanguageComponent implements OnInit, AfterViewInit {
     }, 100);
   }
 
-  resultsLength$ = this._list.listTotalCount;
+  resultsLength$ = this._list.listTotalCount$;
   readonly availableBlockLanguages = this._list.list;
   readonly inProgress = this._list.listCache.inProgress;
 

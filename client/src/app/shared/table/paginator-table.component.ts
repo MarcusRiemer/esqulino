@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -10,6 +9,8 @@ import { MatPaginator } from "@angular/material/paginator";
 
 import { Observable } from "rxjs";
 
+import { ListData } from "../serverdata";
+
 export interface PaginationEvent {
   pageSize: number;
   pageIndex: number;
@@ -19,29 +20,24 @@ export interface PaginationEvent {
   selector: "app-table-paginator",
   templateUrl: "./templates/paginator-table.html",
 })
-export class PaginatorTableComponent implements AfterViewInit {
+export class PaginatorTableComponent {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator, { static: false })
   _paginator: MatPaginator;
 
   @Input()
-  resultsLength$: Observable<number>;
-
-  @Output()
-  pageEvent: EventEmitter<PaginationEvent> = new EventEmitter<
-    PaginationEvent
-  >();
+  listData: ListData<any> = undefined;
 
   constructor() {}
 
-  ngAfterViewInit() {
-    this.onChangePagination();
+  get resultsLength$() {
+    return this.listData.listTotalCount$;
   }
 
   onChangePagination() {
-    this.pageEvent.emit({
-      pageSize: this._paginator.pageSize,
-      pageIndex: this._paginator.pageIndex,
-    });
+    this.listData.setListPagination(
+      this._paginator.pageSize,
+      this._paginator.pageIndex
+    );
   }
 }

@@ -36,7 +36,7 @@ export class OverviewProjectComponent implements AfterViewInit {
   }
 
   readonly availableProjects = this._list.list;
-  readonly resultsLength$ = this._list.listTotalCount;
+  readonly resultsLength$ = this._list.listTotalCount$;
 
   /**
    * User has requested a different chunk of data
