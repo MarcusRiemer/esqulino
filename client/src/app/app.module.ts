@@ -4,6 +4,15 @@ import { BrowserModule, Title } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Router, NavigationEnd } from "@angular/router";
 
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+
 import { Angulartics2Module } from "angulartics2";
 
 import { filter } from "rxjs/operators";
@@ -61,6 +70,17 @@ if (environment.sentry && environment.sentry.active) {
   Sentry.init(options);
 }
 
+const materialModules = [
+  MatAutocompleteModule,
+  MatChipsModule,
+  MatFormFieldModule,
+  ReactiveFormsModule,
+  MatCheckboxModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+];
+
 @NgModule({
   imports: [
     // Angular Core, universal rendering enabled
@@ -78,6 +98,7 @@ if (environment.sentry && environment.sentry.active) {
     EditorModule,
     UserModule,
     routing,
+    ...materialModules,
   ],
   declarations: [SqlScratchComponent],
   providers: [
@@ -88,7 +109,7 @@ if (environment.sentry && environment.sentry.active) {
     NaturalLanguagesService,
   ],
   bootstrap: [SqlScratchComponent],
-  exports: [SharedAppModule],
+  exports: [SharedAppModule,    ...materialModules,],
 })
 export class AppModule {
   constructor(

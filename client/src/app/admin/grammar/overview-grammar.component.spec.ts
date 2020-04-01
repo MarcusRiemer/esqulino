@@ -9,6 +9,7 @@ import {
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { first } from "rxjs/operators";
@@ -37,6 +38,7 @@ describe("OverviewGrammarComponent", () => {
         NoopAnimationsModule,
         MatSnackBarModule,
         MatPaginatorModule,
+        MatSortModule,
         MatTableModule,
         PortalModule,
         HttpClientTestingModule,

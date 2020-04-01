@@ -5,7 +5,6 @@ import {
   ContentChildren,
   QueryList,
   AfterContentInit,
-  ContentChild,
   OnDestroy,
   AfterViewInit,
 } from "@angular/core";
@@ -26,9 +25,6 @@ export interface PaginationEvent {
   templateUrl: "./templates/paginator-table.html",
 })
 export class PaginatorTableComponent implements AfterContentInit, AfterViewInit, OnDestroy {
-  // Angular Material UI to sort by different columns
-  @ContentChild(MatSort)
-  _sort: MatSort;
 
   // Angular Material UI to paginate
   @ViewChild(MatPaginator, { static: false })
@@ -49,6 +45,9 @@ export class PaginatorTableComponent implements AfterContentInit, AfterViewInit,
   // The columns that should be rendered
   @Input()
   activeColumns: string[] = [];
+
+  @Input()
+  _sort:MatSort;
 
   private _subscriptions: Subscription[] = [];
 
