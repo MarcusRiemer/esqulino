@@ -98,14 +98,26 @@ const dataServices = [
 ];
 
 const materialModules = [
-  MatToolbarModule, MatButtonModule, MatMenuModule,
-  MatTooltipModule, MatSnackBarModule, MatTabsModule,
-  MatSidenavModule, MatListModule, MatCardModule, MatDatepickerModule,
-  MatNativeDateModule, MatInputModule, MatFormFieldModule,
-  MatCheckboxModule, MatProgressSpinnerModule, MatDialogModule,
-  MatSortModule, MatPaginatorModule, MatTableModule
-]
-
+  MatToolbarModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatTooltipModule,
+  MatSnackBarModule,
+  MatTabsModule,
+  MatSidenavModule,
+  MatListModule,
+  MatCardModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatInputModule,
+  MatFormFieldModule,
+  MatCheckboxModule,
+  MatProgressSpinnerModule,
+  MatDialogModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatTableModule,
+];
 
 /**
  * Bundles facilities that are used all over the app, no matter
