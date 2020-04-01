@@ -56,7 +56,7 @@ RSpec.describe Seed::GrammarSeed do
         Seed::GrammarSeed.new(gOrig.id).start_store
 
         gOrig.destroy!
-        gLoad = Seed::GrammarSeed.new(gOrig).start_load
+        gLoad = Seed::GrammarSeed.new(gOrig.id).start_load
         gLoadData = Grammar.find_by(id: gOrig.id)
 
         expect(identifying_attributes(gOrig)).to eq identifying_attributes(gLoadData)
