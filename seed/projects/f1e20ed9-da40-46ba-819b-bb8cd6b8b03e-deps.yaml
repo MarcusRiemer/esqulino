@@ -6,8 +6,8 @@
   - 6c585cdd-cd7e-4998-8861-311ea10a156f
   - *1
 - - "../seed/code_resources"
-  - 22332f6e-a67a-4e05-b826-5d348f460a27
+  - 30fc0d98-f517-4d05-bf95-dbf2bbf9f8b8
   - &2 !ruby/class 'Seed::CodeResourceSeed'
 - - "../seed/code_resources"
-  - 30fc0d98-f517-4d05-bf95-dbf2bbf9f8b8
+  - 22332f6e-a67a-4e05-b826-5d348f460a27
   - *2

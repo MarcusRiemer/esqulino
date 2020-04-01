@@ -31,48 +31,56 @@ concise_attributes:
     "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
     "json"}}]}, "language": "MetaGrammar", "properties": {"typeName": "value", "languageName":
     "json"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
-    "No payload, just null"}}, {"name": "concreteNode", "language": "MetaGrammar",
-    "properties": {"typeName": "null", "languageName": "json"}}, {"name": "comment",
-    "language": "MetaGrammar", "properties": {"text": "Exactly `true` or `false` (not
-    quoted)"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
-    "language": "MetaGrammar", "properties": {"base": "boolean", "name": "value"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "boolean", "languageName":
+    "No payload, just null"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "null"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "null", "languageName":
     "json"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
-    "A string, rendered in double quotes, may not contain newlines"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "string", "languageName": "json"}}, {"name": "comment", "language":
-    "MetaGrammar", "properties": {"text": "A number in technically all sorts of notations"}},
-    {"name": "comment", "language": "MetaGrammar", "properties": {"text": "Wrongfully
-    expressed as integer due technical limitations"}}, {"name": "concreteNode", "children":
+    "Exactly `true` or `false` (not quoted)"}}, {"name": "concreteNode", "children":
     {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "integer", "name": "value"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "number", "languageName": "json"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "value", "languageName":
-    "json"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "values"}}]}, "language": "MetaGrammar", "properties": {"typeName": "array", "languageName":
+    {"base": "boolean", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "boolean", "languageName": "json"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "A string, rendered in double quotes, may
+    not contain newlines"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "\""}}, {"name":
+    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
+    "value"}}, {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol":
+    "\""}}]}, "language": "MetaGrammar", "properties": {"typeName": "string", "languageName":
     "json"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
-    "Keys are always strings, values are arbitrary"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "string", "languageName":
+    "A number in technically all sorts of notations"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Wrongfully expressed as integer due technical
+    limitations"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "property", "language": "MetaGrammar", "properties": {"base": "integer", "name":
+    "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
+    "json"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "["}}, {"name": "children",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "value", "languageName": "json"}}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "values"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "]"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "array", "languageName": "json"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Keys are always strings, values are arbitrary"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "children", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "string", "languageName": "json"}}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "key"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": ":"}}, {"name": "children", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "value", "languageName": "json"}}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "key-value", "languageName": "json"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "{"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "key-value", "languageName":
     "json"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "key"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "value", "languageName":
-    "json"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "key-value",
-    "languageName": "json"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "key-value", "languageName": "json"}}]},
-    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "values"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "object", "languageName":
+    "values"}}, {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol":
+    "}"}}]}, "language": "MetaGrammar", "properties": {"typeName": "object", "languageName":
     "json"}}]}, "language": "MetaGrammar", "properties": {"name": "json"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-03-26 16:02:12.779984000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-03-26 20:12:41.180068000 Z
+  value_before_type_cast: 2020-04-01 15:58:55.373233000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -88,7 +96,12 @@ concise_attributes:
         "json": {
           "null": {
             "type": "concrete",
-            "attributes": []
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "null"
+              }
+            ]
           },
           "boolean": {
             "type": "concrete",
@@ -104,9 +117,17 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
+                "type": "terminal",
+                "symbol": "\""
+              },
+              {
                 "type": "property",
                 "base": "string",
                 "name": "value"
+              },
+              {
+                "type": "terminal",
+                "symbol": "\""
               }
             ]
           },
@@ -124,6 +145,10 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
+                "type": "terminal",
+                "symbol": "["
+              },
+              {
                 "type": "sequence",
                 "name": "values",
                 "nodeTypes": [
@@ -132,6 +157,10 @@ concise_attributes:
                     "typeName": "value"
                   }
                 ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "]"
               }
             ]
           },
@@ -149,6 +178,10 @@ concise_attributes:
                 ]
               },
               {
+                "type": "terminal",
+                "symbol": ":"
+              },
+              {
                 "type": "sequence",
                 "name": "value",
                 "nodeTypes": [
@@ -164,6 +197,10 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
+                "type": "terminal",
+                "symbol": "{"
+              },
+              {
                 "type": "sequence",
                 "name": "values",
                 "nodeTypes": [
@@ -172,6 +209,10 @@ concise_attributes:
                     "typeName": "key-value"
                   }
                 ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "}"
               }
             ]
           }
