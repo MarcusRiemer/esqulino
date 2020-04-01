@@ -1,8 +1,4 @@
-<table
-    class="full-width"
-    mat-table
-    [dataSource]="listData.list | async"
->
+<table class="full-width" mat-table [dataSource]="listData.list | async">
   <ng-content></ng-content>
   <tr mat-header-row *matHeaderRowDef="activeColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: activeColumns;"></tr>

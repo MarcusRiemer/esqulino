@@ -1,65 +1,28 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
+import { Component, ViewChild } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
-
-import { Observable } from "rxjs";
 
 import { AdminListProjectDataService } from "../../shared/serverdata";
 import { ProjectListDescription } from "../../shared/project.description";
-import { StringUnion } from "../../shared/string-union";
-
-const ProjectListItemKey = StringUnion("id", "slug", "name");
-type ProjectListItemKey = typeof ProjectListItemKey.type;
 
 /**
  *
  */
 @Component({
   templateUrl: "./templates/overview-project.html",
+  providers: [AdminListProjectDataService],
 })
-export class OverviewProjectComponent implements AfterViewInit {
-  // Angular Material UI to paginate
-  @ViewChild(MatPaginator)
-  _paginator: MatPaginator;
-
+export class OverviewProjectComponent {
   // Angular Material UI to sort by different columns
-  @ViewChild(MatSort)
-  _sort: MatSort;
+  @ViewChild(MatSort, { static: true })
+  sort: MatSort;
 
-  constructor(private _list: AdminListProjectDataService) {}
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.onChangeSort(false);
-      this.onChangePagination();
-    }, 100);
-  }
-
-  readonly availableProjects = this._list.list;
-  readonly resultsLength$ = this._list.listTotalCount$;
+  constructor(readonly projects: AdminListProjectDataService) {}
 
   /**
-   * User has requested a different chunk of data
+   * User wants to see a refreshed dataset.
    */
-  onChangePagination(refresh: boolean = true) {
-    this._list.setListPagination(
-      this._paginator.pageSize,
-      this._paginator.pageIndex,
-      refresh
-    );
-  }
-
-  /**
-   * User has requested different sorting options
-   */
-  onChangeSort(refresh: boolean = true) {
-    if (ProjectListItemKey.guard(this._sort.active)) {
-      this._list.setListOrdering(
-        this._sort.active,
-        this._sort.direction,
-        refresh
-      );
-    }
+  onRefresh() {
+    this.projects.listCache.refresh();
   }
 
   displayedColumns: (keyof ProjectListDescription)[] = ["name", "slug", "id"];

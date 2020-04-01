@@ -5,12 +5,11 @@
   </button>
 </ng-template>
 
-<table
-  class="full-width"
-  mat-table
+<app-table-paginator
+  [listData]="blockLanguages"
+  [activeColumns]="displayedColumns"
+  [_sort]="sort"
   matSort
-  [dataSource]="availableBlockLanguages"
-  (matSortChange)="onChangeSort()"
 >
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -67,15 +66,7 @@
       </button>
     </td>
   </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-<mat-paginator
-  (page)="onChangePagination()"
-  [length]="resultsLength$ | async"
-  [pageSize]="25"
-  [pageSizeOptions]="[5,25,100]"
-></mat-paginator>
+</app-table-paginator>
 
 <!-- Classes hack in some visual spacing between creation forms -->
 <create-block-language class="mb-5 d-block"></create-block-language>

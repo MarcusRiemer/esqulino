@@ -84,14 +84,14 @@ describe("OverviewGrammarComponent", () => {
   it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
-    const initialLoading = await t.component.inProgress
+    const initialLoading = await t.component.grammars.listCache.inProgress
       .pipe(first())
       .toPromise();
     expect(initialLoading).toBe(true);
 
     provideGrammarList([]);
 
-    const afterResponse = await t.component.inProgress
+    const afterResponse = await t.component.grammars.listCache.inProgress
       .pipe(first())
       .toPromise();
     expect(afterResponse).toBe(false);
@@ -128,7 +128,7 @@ describe("OverviewGrammarComponent", () => {
     const i1 = buildGrammar({ name: "B1" });
     provideGrammarList([i1]);
 
-    const initialData = await t.component.availableGrammars$
+    const initialData = await t.component.grammars.list
       .pipe(first())
       .toPromise();
     expect(initialData).toEqual([i1]);
@@ -136,7 +136,7 @@ describe("OverviewGrammarComponent", () => {
     t.component.onRefresh();
     provideGrammarList([]);
 
-    const refreshedData = await t.component.availableGrammars$
+    const refreshedData = await t.component.grammars.list
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);
@@ -168,7 +168,7 @@ describe("OverviewGrammarComponent", () => {
 
     provideGrammarList([]);
 
-    const refreshedData = await t.component.availableGrammars$
+    const refreshedData = await t.component.grammars.list
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);
