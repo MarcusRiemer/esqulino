@@ -13,7 +13,7 @@ class ProjectsController < ApplicationController
   # Lists all projects that exist in the system (if the user is an admin)
   def index_admin
     authorize Project, :list_all?
-    render json: pagination_response(Project.all,options:{})
+    render json: pagination_response(Project,Project.all,options:{})
   end
 
   # Retrieves all information about a single project. This is the only
