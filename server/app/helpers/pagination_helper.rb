@@ -1,10 +1,11 @@
 module PaginationHelper
       # Pagination for any query that will be displayed in a listing
-  def pagination_response(query,options:{})
-    order_key = list_params.fetch("order_field", "name")
-    order_dir = list_params.fetch("order_direction", "asc")
+  def pagination_response(model, query,options:{})
 
-    if (not Project.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
+    order_key = list_params.stringify_keys.fetch("order_field", "name")
+    order_dir = list_params.stringify_keys.fetch("order_direction", "asc")
+
+    if (not model.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
       raise EsqulinoError::InvalidOrder.new(order_key, order_dir)
     end
 
