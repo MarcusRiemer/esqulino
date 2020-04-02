@@ -22,6 +22,9 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
 
 import { AnalyticsService } from "./analytics.service";
 import { BrowserService } from "./browser.service";
@@ -50,11 +53,17 @@ import { ProviderShowComponent } from "./provider-show.component";
 import { EmptyComponent } from "./empty.component";
 
 import {
-  GrammarDataService,
-  BlockLanguageDataService,
+  ListGrammarDataService,
+  IndividualGrammarDataService,
+  ListBlockLanguageDataService,
+  IndividualBlockLanguageDataService,
   ProjectDataService,
-  AdminProjectDataService,
+  IndividualProjectDataService,
+  AdminListProjectDataService,
+  MutateGrammarService,
+  MutateBlockLanguageService,
 } from "./serverdata";
+
 import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
 import { ProviderButtonComponent } from "./auth/provider-button.component";
 import { SignInComponent } from "./auth/sign-in.component";
@@ -74,8 +83,19 @@ import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
 import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
 import { ResourceReferencesOnlineService } from "./resource-references-online.service";
+import { PaginatorTableComponent } from "./table/paginator-table.component";
 
-const dataServices = [GrammarDataService, BlockLanguageDataService];
+const dataServices = [
+  ListGrammarDataService,
+  IndividualGrammarDataService,
+  MutateGrammarService,
+  ListBlockLanguageDataService,
+  IndividualBlockLanguageDataService,
+  MutateBlockLanguageService,
+  ProjectDataService,
+  IndividualProjectDataService,
+  AdminListProjectDataService,
+];
 
 const materialModules = [
   MatToolbarModule,
@@ -94,6 +114,9 @@ const materialModules = [
   MatCheckboxModule,
   MatProgressSpinnerModule,
   MatDialogModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatTableModule,
 ];
 
 /**
@@ -144,6 +167,7 @@ const materialModules = [
     MayPerformComponent,
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
+    PaginatorTableComponent,
   ],
   exports: [
     CommonModule,
@@ -179,6 +203,7 @@ const materialModules = [
     ProviderShowComponent,
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
+    PaginatorTableComponent,
   ],
   entryComponents: [
     AuthDialogComponent,
@@ -196,8 +221,6 @@ export class SharedAppModule {
         BrowserService,
         FlashService,
         ServerApiService,
-        ProjectDataService,
-        AdminProjectDataService,
         VideoService,
         LanguageService,
         ToolbarService,

@@ -1,20 +1,31 @@
 import { Component, ViewChild, TemplateRef, OnInit } from "@angular/core";
+import { MatSort } from "@angular/material/sort";
 
 import { ToolbarService } from "../../shared";
-import { BlockLanguageDataService } from "../../shared/serverdata";
+import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
+import {
+  ListBlockLanguageDataService,
+  MutateBlockLanguageService,
+} from "../../shared/serverdata";
 
 /**
  * Shows All block languages that are known to the server.
  */
 @Component({
   templateUrl: "./templates/overview-block-language.html",
+  providers: [ListBlockLanguageDataService],
 })
 export class OverviewBlockLanguageComponent implements OnInit {
+  // Angular Material UI to sort by different columns
+  @ViewChild(MatSort, { static: true })
+  sort: MatSort;
+
   @ViewChild("toolbarItems", { static: true })
   toolbarItems: TemplateRef<any>;
 
   constructor(
-    private _serverData: BlockLanguageDataService,
+    readonly blockLanguages: ListBlockLanguageDataService,
+    private _mutate: MutateBlockLanguageService,
     private _toolbarService: ToolbarService
   ) {}
 
@@ -22,11 +33,21 @@ export class OverviewBlockLanguageComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarItems);
   }
 
-  public get availableBlockLanguages() {
-    return this._serverData.listCache;
+  async deleteBlockLanguage(id: string) {
+    await this._mutate.deleteSingle(id);
   }
 
-  public deleteBlockLanguage(id: string) {
-    this._serverData.deleteBlockLanguage(id);
+  /**
+   * User wants to see a refreshed dataset.
+   */
+  onRefresh() {
+    this.blockLanguages.listCache.refresh();
   }
+
+  displayedColumns: (
+    | keyof BlockLanguageListDescription
+    | "generator"
+    | "actions"
+    | "grammar"
+  )[] = ["name", "slug", "id", "grammar", "actions", "generator"];
 }

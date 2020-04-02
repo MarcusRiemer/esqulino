@@ -7,7 +7,6 @@ import {
   flatMap,
   map,
   shareReplay,
-  tap,
 } from "rxjs/operators";
 
 import {
@@ -21,7 +20,7 @@ import {
   ResourceReferencesService,
   RequiredResource,
 } from "../../../shared/resource-references.service";
-import { GrammarDataService } from "../../../shared/serverdata";
+import { IndividualGrammarDataService } from "../../../shared/serverdata";
 
 /**
  * This service is provided at the root component that is used to render a coderesource.
@@ -59,7 +58,7 @@ export class RenderedCodeResourceService implements OnDestroy {
 
   constructor(
     private _resourceReferences: ResourceReferencesService,
-    private _grammarData: GrammarDataService
+    private _grammarData: IndividualGrammarDataService
   ) {
     const subValidator = this.validator$.subscribe(this._validator);
     const subTree = this.syntaxTree$.subscribe(this._syntaxTree);

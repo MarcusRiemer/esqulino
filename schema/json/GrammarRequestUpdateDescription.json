@@ -43,35 +43,54 @@
       "type": "object"
     },
     "GrammarRequestUpdateDescription": {
-      "additionalProperties": false,
-      "description": "A request to update a grammar.",
-      "properties": {
-        "foreignTypes": {
-          "$ref": "#/definitions/NamedLanguages"
-        },
-        "includedGrammars": {
-          "items": {
-            "type": "string"
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "foreignTypes": {
+              "$ref": "#/definitions/NamedLanguages"
+            },
+            "generatedFromId": {
+              "type": "string"
+            },
+            "includedGrammars": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "name": {
+              "type": "string"
+            },
+            "programmingLanguageId": {
+              "type": "string"
+            },
+            "root": {
+              "$ref": "#/definitions/QualifiedTypeName"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "types": {
+              "$ref": "#/definitions/NamedLanguages"
+            }
           },
-          "type": "array"
+          "type": "object"
         },
-        "name": {
-          "type": "string"
-        },
-        "programmingLanguageId": {
-          "type": "string"
-        },
-        "root": {
-          "$ref": "#/definitions/QualifiedTypeName"
-        },
-        "slug": {
-          "type": "string"
-        },
-        "types": {
-          "$ref": "#/definitions/NamedLanguages"
+        {
+          "additionalProperties": false,
+          "properties": {
+            "generatedFromId": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "generatedFromId"
+          ],
+          "type": "object"
         }
-      },
-      "type": "object"
+      ],
+      "description": "A request to update a grammar."
     },
     "LengthRestrictionDescription": {
       "additionalProperties": false,

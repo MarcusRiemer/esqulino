@@ -50,6 +50,35 @@ RSpec.describe "CodeResource request", :type => :request do
   end
 
   describe "CREATE" do
+    it "properly fails on missing projects (slug)" do
+      resource = FactoryBot.build(:code_resource)
+
+      post "/api/project/invalid/code_resources/",
+           :headers => json_headers,
+           :params => {
+             "name" => resource.name,
+             "blockLanguageId" => resource.block_language_id,
+             "programmingLanguageId" => resource.programming_language_id,
+           }.to_json
+
+      expect(response.status).to eq(404)
+    end
+
+    it "properly fails on missing projects (uuid)" do
+      resource = FactoryBot.create(:code_resource)
+
+      # Use the ID of the resource as ID of the project
+      post "/api/project/#{resource.id}/code_resources/",
+           :headers => json_headers,
+           :params => {
+             "name" => resource.name,
+             "blockLanguageId" => resource.block_language_id,
+             "programmingLanguageId" => resource.programming_language_id,
+           }.to_json
+
+      expect(response.status).to eq(404)
+    end
+
     it "works with default factory bot object" do
       resource = FactoryBot.build(:code_resource)
 

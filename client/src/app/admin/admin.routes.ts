@@ -2,8 +2,8 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { AdminComponent, adminItems } from "./admin.component";
 import { AdminOverviewComponent } from "./admin-overview.component";
-import { EditGrammarComponent } from "./edit-grammar.component";
 import { EditBlockLanguageComponent } from "./block-language/edit-block-language.component";
+import { EditGrammarComponent } from "./grammar/edit-grammar.component";
 import { OverviewGrammarComponent } from "./grammar/overview-grammar.component";
 import { OverviewBlockLanguageComponent } from "./block-language/overview-block-language.component";
 import { NavSiteComponent } from "../shared/nav-page.component";

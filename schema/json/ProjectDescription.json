@@ -561,6 +561,9 @@
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },
+        "generatedFromId": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },

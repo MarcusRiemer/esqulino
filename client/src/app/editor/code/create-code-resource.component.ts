@@ -55,25 +55,23 @@ export class CreateCodeResourceComponent {
   /**
    * Actually creates the CodeResource
    */
-  createCodeResource() {
+  async createCodeResource() {
     const p = this._projectService.cachedProject;
     const b = p.getBlockLanguage(this.blockLanguageId);
 
-    const toReturn = this._codeResourceService
+    const res = await this._codeResourceService
       .createCodeResource(
         p,
         this.resourceName,
         this.blockLanguageId,
         b.defaultProgrammingLanguageId
       )
-      .pipe(first());
+      .pipe(first())
+      .toPromise();
 
-    toReturn.subscribe((res) => {
-      p.addCodeResource(res);
+    p.addCodeResource(res);
+    this._router.navigate([res.id], { relativeTo: this._route.parent });
 
-      this._router.navigate([res.id], { relativeTo: this._route.parent });
-    });
-
-    return toReturn.toPromise();
+    return res;
   }
 }

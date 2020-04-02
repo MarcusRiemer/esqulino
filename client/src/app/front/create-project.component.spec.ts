@@ -56,10 +56,8 @@ describe("CreateProjectComponent", () => {
   it(`Creates a project with valid name and slug`, async () => {
     const c = await createComponent();
 
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
 
     c.component.params.name = "Name des Projekts";
     c.component.params.slug = "name-des-projekts";

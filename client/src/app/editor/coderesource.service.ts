@@ -29,7 +29,7 @@ export class CodeResourceService {
     blockLanguageId: string,
     programmingLanguageId: string
   ) {
-    const url = this._server.getCodeResourceBaseUrl(project.slug);
+    const url = this._server.getCodeResourceBaseUrl(project.id);
 
     const body = {
       name: name,

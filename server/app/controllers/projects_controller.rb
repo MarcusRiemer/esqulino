@@ -3,16 +3,17 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
   include UserHelper
+  include PaginationHelper
 
   # Lists all public projects
   def index
-    render json: index_pagination_response(Project.only_public)
+    render json: pagination_response(Project,Project.only_public,options:{})
   end
 
   # Lists all projects that exist in the system (if the user is an admin)
   def index_admin
     authorize Project, :list_all?
-    render json: index_pagination_response(Project.all)
+    render json: pagination_response(Project,Project.all,options:{})
   end
 
   # Retrieves all information about a single project. This is the only
@@ -80,28 +81,6 @@ class ProjectsController < ApplicationController
 
   private
 
-  # Pagination for any query that lists projects
-  def index_pagination_response(query)
-    order_key = project_list_params.fetch("order_field", "name")
-    order_dir = project_list_params.fetch("order_direction", "asc")
-
-    if (not Project.has_attribute? order_key or not ["asc", "desc"].include? order_dir)
-      raise EsqulinoError::InvalidOrder.new(order_key, order_dir)
-    end
-
-    paginated_query = query
-              .order({ order_key => order_dir})
-              .limit(project_list_params.fetch("limit", 100))
-              .offset(project_list_params.fetch("offset", 0))
-
-    return {
-      data: paginated_query.map{|p| p.to_list_api_response},
-      meta: {
-        totalCount: query.count
-      }
-    }
-  end
-
   # These attributes are mandatory when a project is created
   def project_creation_params
     to_return = params.permit(:name, :slug)
@@ -115,12 +94,6 @@ class ProjectsController < ApplicationController
   # These attributes may be changed once a project has been created
   def project_update_params
     params.permit(:name, :description, :indexPageId, :preview)
-      .transform_keys { |k| k.underscore }
-  end
-
-  # These attributes
-  def project_list_params
-    params.permit(:limit, :offset, :orderField, :orderDirection)
       .transform_keys { |k| k.underscore }
   end
 

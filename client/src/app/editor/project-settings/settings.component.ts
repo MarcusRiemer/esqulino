@@ -1,7 +1,10 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { BlockLanguageDataService } from "../../shared/serverdata";
+import {
+  IndividualBlockLanguageDataService,
+  ListBlockLanguageDataService,
+} from "../../shared/serverdata";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 import { ProjectService, Project } from "../project.service";
@@ -30,7 +33,8 @@ export class SettingsComponent {
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router,
-    private _serverData: BlockLanguageDataService,
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _listBlockLanguageData: ListBlockLanguageDataService,
     private _performData: PerformDataService
   ) {}
 
@@ -101,7 +105,7 @@ export class SettingsComponent {
    * @return All block languages that could currently be used.
    */
   get availableBlockLanguages() {
-    return this._serverData.list;
+    return this._listBlockLanguageData.list;
   }
 
   /**
@@ -125,6 +129,6 @@ export class SettingsComponent {
    * Retrieves the name of the given block language
    */
   resolveBlockLanguageName(blockLanguageId: string) {
-    return this._serverData.getSingle(blockLanguageId);
+    return this._individualBlockLanguageData.getSingle(blockLanguageId);
   }
 }

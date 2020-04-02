@@ -14,8 +14,8 @@ import {
   CodeResource,
 } from "../../../shared";
 import {
-  BlockLanguageDataService,
-  GrammarDataService,
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
   ServerApiService,
 } from "../../../shared/serverdata";
 
@@ -33,8 +33,8 @@ describe("BlockRenderInputComponent", () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
       providers: [
-        BlockLanguageDataService,
-        GrammarDataService,
+        IndividualBlockLanguageDataService,
+        IndividualGrammarDataService,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,

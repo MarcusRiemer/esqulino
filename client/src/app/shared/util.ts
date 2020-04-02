@@ -29,14 +29,13 @@ export function assertValidResourceName(name: string): void {
 }
 
 /**
- * Determines whether the given identifier can be used as a
- * resource ID in esqulino.
+ * Determines whether the given identifier can be used as a ID.
  *
  * @param id The id to test.
  *
  * @return True, if the given id could be used.
  */
-export function isValidResourceId(id: string): boolean {
+export function isValidId(id: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     id
   );

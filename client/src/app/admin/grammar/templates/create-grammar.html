@@ -6,6 +6,7 @@
     <div class="col-sm-10">
       <input
         id="grammar-name"
+        data-spec="nameInput"
         name="name"
         class="form-control"
         required
@@ -25,6 +26,7 @@
     <div class="col-sm-10">
       <select
         id="grammar-programming-language-id"
+        data-spec="programmingLanguageSelect"
         name="programming_language_id"
         class="custom-select"
         required
@@ -42,7 +44,12 @@
   </div>
 
   <!-- Submitting -->
-  <button (click)="submitForm()" type="submit" class="btn btn-primary">
+  <button
+    (click)="submitForm()"
+    data-spec="submit"
+    type="submit"
+    class="btn btn-primary"
+  >
     Neue Grammatik Anlegen
   </button>
 </form>

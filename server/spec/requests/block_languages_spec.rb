@@ -8,7 +8,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       get "/api/block_languages"
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).length).to eq 0
+      expect(JSON.parse(response.body)['data'].length).to eq 0
     end
 
     it 'lists a single block language' do
@@ -18,8 +18,82 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)
-      expect(json_data.length).to eq 1
-      expect(json_data[0]).to validate_against "BlockLanguageListResponseDescription"
+    
+      expect(json_data['data'].length).to eq 1
+      expect(json_data).to validate_against "BlockLanguageListResponseDescription"
+    end
+
+    it 'limit' do
+      FactoryBot.create(:block_language)
+      FactoryBot.create(:block_language)
+      FactoryBot.create(:block_language)
+
+      get "/api/block_languages?limit=1"
+      expect(JSON.parse(response.body)['data'].length).to eq 1
+
+      get "/api/block_languages?limit=2"
+      expect(JSON.parse(response.body)['data'].length).to eq 2
+
+      get "/api/block_languages?limit=3"
+      expect(JSON.parse(response.body)['data'].length).to eq 3
+
+      get "/api/block_languages?limit=4"
+      expect(JSON.parse(response.body)['data'].length).to eq 3
+    end
+
+    describe 'order by' do
+      before do
+        FactoryBot.create(:block_language, name: 'cccc', slug: 'cccc')
+        FactoryBot.create(:block_language, name: 'aaaa', slug: 'aaaa')
+        FactoryBot.create(:block_language, name: 'bbbb', slug: 'bbbb')
+      end
+
+      it 'nonexistant column' do
+        get "/api/block_languages?orderField=nonexistant"
+
+        expect(response.status).to eq 400
+      end
+
+      it 'slug' do
+        get "/api/block_languages?orderField=slug"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+
+      it 'slug invalid direction' do
+        get "/api/block_languages?orderField=slug&orderDirection=north"
+
+        expect(response.status).to eq 400
+      end
+
+      it 'slug desc' do
+        get "/api/block_languages?orderField=slug&orderDirection=desc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+      end
+
+      it 'slug asc' do
+        get "/api/block_languages?orderField=slug&orderDirection=asc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
+
+      it 'name desc' do
+        get "/api/block_languages?orderField=name&orderDirection=desc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
+      end
+
+      it 'name asc' do
+        get "/api/block_languages?orderField=name&orderDirection=asc"
+        json_data = JSON.parse(response.body)['data']
+
+        expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
+      end
     end
   end
 
@@ -126,7 +200,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(200)
 
       expect(json_data).to validate_against "BlockLanguageDescription"
-      expect(json_data.except("id")).to eq block_lang_model
+      expect(json_data.except("id", "createdAt", "updatedAt")).to eq block_lang_model
     end
 
     describe 'PUT /api/block_languages/:id' do

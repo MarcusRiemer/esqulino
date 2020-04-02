@@ -136,7 +136,7 @@ class Project < ApplicationRecord
 
   # Hands out just enough data about this project to allow a nice listing of available
   # projects in the client.
-  def to_list_api_response
+  def to_list_api_response(options:{})
     to_json_api_response
   end
 

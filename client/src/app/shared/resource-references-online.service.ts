@@ -5,7 +5,10 @@ import {
   RequiredResource,
 } from "./resource-references.service";
 import { LanguageService } from "./language.service";
-import { BlockLanguageDataService, GrammarDataService } from "./serverdata";
+import {
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
+} from "./serverdata";
 import { BlockLanguage } from "./block";
 
 /**
@@ -18,15 +21,15 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
 
   constructor(
     private _languageService: LanguageService,
-    private _blockLanguageData: BlockLanguageDataService,
-    private _grammarLanguageData: GrammarDataService
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _individualGrammarData: IndividualGrammarDataService
   ) {
     super();
   }
 
   getBlockLanguage(id: string, onMissing: "undefined" | "throw") {
     if (!this._blockLanguages[id]) {
-      const desc = this._blockLanguageData.getLocal(id, "undefined");
+      const desc = this._individualBlockLanguageData.getLocal(id, "undefined");
       if (!desc) {
         if (onMissing === "throw") {
           throw new Error(
@@ -45,7 +48,7 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
   }
 
   getGrammarDescription(id: string, onMissing: "undefined" | "throw") {
-    const g = this._grammarLanguageData.getLocal(id, "undefined");
+    const g = this._individualGrammarData.getLocal(id, "undefined");
     if (!g && onMissing === "throw") {
       throw new Error(`Could not retriebe grammar "${id}" on the fly`);
     } else {
@@ -62,9 +65,9 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     const requests: Promise<any>[] = req.map((r) => {
       switch (r.type) {
         case "blockLanguage":
-          return this._blockLanguageData.getLocal(r.id, "request");
+          return this._individualBlockLanguageData.getLocal(r.id, "request");
         case "grammar":
-          return this._grammarLanguageData.getLocal(r.id, "request");
+          return this._individualGrammarData.getLocal(r.id, "request");
         case "blockLanguageGrammar":
           return this.ensureBlockLanguageGrammar(r.id);
       }

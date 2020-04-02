@@ -7,8 +7,8 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 
 import {
-  GrammarDataService,
-  BlockLanguageDataService,
+  ListGrammarDataService,
+  MutateBlockLanguageService,
 } from "../../shared/serverdata";
 import { ToolbarService } from "../../shared/toolbar.service";
 
@@ -25,8 +25,8 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _grammarData: GrammarDataService,
-    private _blockLanguageData: BlockLanguageDataService,
+    private _grammarData: ListGrammarDataService,
+    private _mutateBlockLanguageData: MutateBlockLanguageService,
     private _current: EditBlockLanguageService,
     private _toolbarService: ToolbarService
   ) {}
@@ -117,7 +117,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._blockLanguageData.deleteSingle(this.editedSubject.id);
+    await this._mutateBlockLanguageData.deleteSingle(this.editedSubject.id);
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 

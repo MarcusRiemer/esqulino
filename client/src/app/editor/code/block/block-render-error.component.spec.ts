@@ -5,8 +5,8 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { first } from "rxjs/operators";
 
 import {
-  BlockLanguageDataService,
-  GrammarDataService,
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
   ServerApiService,
 } from "../../../shared/serverdata";
 
@@ -40,9 +40,9 @@ describe(`BlockRenderErrorComponent`, () => {
     await TestBed.configureTestingModule({
       imports: [MatSnackBarModule, HttpClientTestingModule],
       providers: [
-        BlockLanguageDataService,
+        IndividualBlockLanguageDataService,
         DragService,
-        GrammarDataService,
+        IndividualGrammarDataService,
         LanguageService,
         ServerApiService,
         RenderedCodeResourceService,

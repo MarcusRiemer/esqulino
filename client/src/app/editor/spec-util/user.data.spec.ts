@@ -15,10 +15,8 @@ const DEFAULT_EMPTY_USER: UserDescription = {
 export const specSignInUser = (
   override?: Partial<UserDescription>
 ): UserDescription => {
-  const httpTestingController: HttpTestingController = TestBed.get(
-    HttpTestingController
-  );
-  const serverApi: ServerApiService = TestBed.get(ServerApiService);
+  const httpTestingController = TestBed.inject(HttpTestingController);
+  const serverApi = TestBed.inject(ServerApiService);
 
   const p = Object.assign(
     { userId: generateUUIDv4() },

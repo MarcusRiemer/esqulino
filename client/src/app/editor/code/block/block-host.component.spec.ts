@@ -17,8 +17,8 @@ import {
   CodeResource,
 } from "../../../shared";
 import {
-  BlockLanguageDataService,
-  GrammarDataService,
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
   ServerApiService,
 } from "../../../shared/serverdata";
 import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
@@ -47,9 +47,9 @@ describe("BlockHostComponent", () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
       providers: [
-        BlockLanguageDataService,
+        IndividualBlockLanguageDataService,
         DragService,
-        GrammarDataService,
+        IndividualGrammarDataService,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,
@@ -186,7 +186,7 @@ describe("BlockHostComponent", () => {
     expect(c.element.innerText).toEqual("constant");
   });
 
-  it(`Single terminal`, async () => {
+  it(`Single interpolated`, async () => {
     const treeDesc: NodeDescription = {
       language: "spec",
       name: "interpolated",

@@ -6,7 +6,7 @@ import { Observable } from "rxjs";
 import { map, switchMap, first, combineLatest } from "rxjs/operators";
 
 import { EditorComponentDescription } from "../../../shared/block/block-language.description";
-import { BlockLanguageDataService } from "../../../shared/serverdata";
+import { IndividualBlockLanguageDataService } from "../../../shared/serverdata";
 
 import { EditorToolbarService } from "../../toolbar.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
@@ -47,7 +47,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
-    private _blockLanguageData: BlockLanguageDataService
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService
   ) {}
 
   ngOnInit(): void {
@@ -142,7 +142,9 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   readonly editorComponentDescriptions = this.currentResource.pipe(
     switchMap((c) => c.blockLanguageId),
-    switchMap((id) => this._blockLanguageData.getLocal(id, "request")),
+    switchMap((id) =>
+      this._individualBlockLanguageData.getLocal(id, "request")
+    ),
     combineLatest(
       this._debugOptions.showDropDebug.value$,
       this._debugOptions.showLanguageSelector.value$

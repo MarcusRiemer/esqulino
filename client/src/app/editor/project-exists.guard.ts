@@ -27,12 +27,15 @@ export class ProjectExistsGuard implements CanActivate {
     private _flashService: FlashService
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
-    const projectSlug = route.params["projectId"];
-    console.log(`ProjectExistsGuard: "${projectSlug}" => ???`);
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
+  ): Promise<boolean> {
+    const projectSlugOrId = route.params["projectId"];
+    console.log(`ProjectExistsGuard: "${projectSlugOrId}" => ???`);
 
     // Possibly trigger loading the project
-    this._projectService.setActiveProject(projectSlug, false);
+    await this._projectService.setActiveProject(projectSlugOrId, false);
 
     // And check whether it actually exists
     const toReturn = this._projectService.activeProject.pipe(
@@ -47,7 +50,7 @@ export class ProjectExistsGuard implements CanActivate {
         }
 
         this._flashService.addMessage({
-          caption: `Project with slug "${projectSlug}" couldn't be loaded!`,
+          caption: `Project with slug "${projectSlugOrId}" couldn't be loaded!`,
           text: message,
           type: "danger",
         });
@@ -58,10 +61,10 @@ export class ProjectExistsGuard implements CanActivate {
       }),
       map((project) => !!project),
       tap((res) =>
-        console.log(`ProjectExistsGuard: "${projectSlug}" => ${res}`)
+        console.log(`ProjectExistsGuard: "${projectSlugOrId}" => ${res}`)
       )
     );
 
-    return toReturn;
+    return toReturn.toPromise();
   }
 }

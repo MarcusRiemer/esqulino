@@ -1,36 +1,44 @@
 <ng-template cdkPortal #toolbarItems>
-  <button (click)="availableBlockLanguages.refresh()" mat-button>
+  <button (click)="onRefresh()" mat-button>
     <span class="fa fa-refresh fa-fw"></span>
     Refresh
   </button>
 </ng-template>
-
-<h2>
-  <span
-    *ngIf="(availableBlockLanguages.inProgress | async)"
-    class="fa fa-refresh fa-spin fa-fw"
-  ></span>
-  Blocksprachen
-</h2>
-
-<table class="table table-sm">
-  <tr>
-    <th>Name</th>
-    <th>Slug</th>
-    <th>ID</th>
-    <th>Grammatik</th>
-    <th>Generator</th>
-    <th>Aktionen</th>
-  </tr>
-  <!-- Each row represents a block language -->
-  <tr *ngFor="let blockLanguage of availableBlockLanguages.value | async">
-    <td>
-      <a [routerLink]="[blockLanguage.id]">{{ blockLanguage.name }}</a>
+<app-table-paginator
+  [listData]="blockLanguages"
+  [activeColumns]="displayedColumns"
+  [sort]="sort"
+  matSort
+>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let blockLanguage">
+      <a [routerLink]="[blockLanguage.id]">
+        {{ blockLanguage.name }}
+      </a>
     </td>
-    <td><code>{{ blockLanguage.slug | defaultValue }}</code></td>
-    <td><code>{{ blockLanguage.id }}</code></td>
-    <td><link-grammar [grammarId]="blockLanguage.grammarId"></link-grammar></td>
-    <td>
+  </ng-container>
+  <ng-container matColumnDef="slug">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Slug</th>
+    <td mat-cell *matCellDef="let blockLanguage">
+      <code>{{ blockLanguage.slug | defaultValue }}</code>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+    <td mat-cell *matCellDef="let blockLanguage">
+      <code>{{ blockLanguage.id }}</code>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="grammar">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Grammatik</th>
+    <td mat-cell *matCellDef="let blockLanguage">
+      <link-grammar [grammarId]="blockLanguage.grammarId"></link-grammar>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="generator">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Generator</th>
+    <td mat-cell *matCellDef="let blockLanguage">
       <ng-container *ngIf="blockLanguage.generated; else manual;">
         ✔
       </ng-container>
@@ -38,16 +46,20 @@
         ✗
       </ng-template>
     </td>
-    <td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+    <td mat-cell *matCellDef="let blockLanguage">
       <button
         (click)="deleteBlockLanguage(blockLanguage.id)"
+        data-spec="delete"
         type="button"
         class="btn btn-outline-danger btn-sm"
       >
         <span class="fa fa-trash-o" aria-hidden="true"></span>
       </button>
     </td>
-  </tr>
-</table>
+  </ng-container>
+</app-table-paginator>
 <!-- Classes hack in some visual spacing between creation forms -->
 <create-block-language class="mb-5 d-block"></create-block-language>

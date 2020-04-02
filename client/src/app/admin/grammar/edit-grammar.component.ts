@@ -6,13 +6,17 @@ import { Title } from "@angular/platform-browser";
 import { from } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 
-import { ToolbarService } from "../shared/toolbar.service";
-import { CachedRequest, GrammarDataService } from "../shared/serverdata";
-import { ServerApiService } from "../shared/serverdata/serverapi.service";
-import { prettyPrintGrammar } from "../shared/syntaxtree/prettyprint";
-import { GrammarDescription, QualifiedTypeName } from "../shared/syntaxtree";
-import { BlockLanguageListDescription } from "../shared/block/block-language.description";
-import { getAllTypes } from "../shared/syntaxtree/grammar-util";
+import { ToolbarService } from "../../shared/toolbar.service";
+import {
+  CachedRequest,
+  IndividualGrammarDataService,
+  MutateGrammarService,
+} from "../../shared/serverdata";
+import { ServerApiService } from "../../shared/serverdata/serverapi.service";
+import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
+import { GrammarDescription, QualifiedTypeName } from "../../shared/syntaxtree";
+import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
+import { getAllTypes } from "../../shared/syntaxtree/grammar-util";
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
@@ -36,7 +40,8 @@ export class EditGrammarComponent implements OnInit {
     private _router: Router,
     private _http: HttpClient,
     private _serverApi: ServerApiService,
-    private _grammarData: GrammarDataService,
+    private _individualGrammarData: IndividualGrammarDataService,
+    private _mutateGrammarData: MutateGrammarService,
     private _title: Title,
     private _toolbarService: ToolbarService
   ) {}
@@ -48,7 +53,7 @@ export class EditGrammarComponent implements OnInit {
       .pipe(
         map((params: ParamMap) => params.get("grammarId")),
         switchMap((id: string) =>
-          from(this._grammarData.getLocal(id, "request"))
+          from(this._individualGrammarData.getLocal(id, "request"))
         )
       )
       .subscribe((g) => {
@@ -58,7 +63,7 @@ export class EditGrammarComponent implements OnInit {
         this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
 
         // We want a local copy of the resource that is being edited available "globally"
-        this._grammarData.setLocal(g);
+        this._individualGrammarData.setLocal(g);
       });
 
     // Always grab fresh related block languages
@@ -84,7 +89,7 @@ export class EditGrammarComponent implements OnInit {
    * User has decided to save.
    */
   onSave() {
-    this._grammarData.updateSingle(this.grammar);
+    this._mutateGrammarData.updateSingle(this.grammar);
   }
 
   get grammarRoot() {
@@ -118,7 +123,7 @@ export class EditGrammarComponent implements OnInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._grammarData.deleteSingle(this.grammar.id);
+    await this._mutateGrammarData.deleteSingle(this.grammar.id);
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 

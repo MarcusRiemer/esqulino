@@ -1,0 +1,54 @@
+{
+  "$ref": "#/definitions/BlockLanguageListItemDescription",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BlockLanguageListItemDescription": {
+      "additionalProperties": false,
+      "description": "The server hands out additional information that is only used for display purposes.",
+      "properties": {
+        "blockLanguageGeneratorId": {
+          "description": "The ID of the block language that may have been used to generate this\nblock language.",
+          "type": "string"
+        },
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
+        },
+        "defaultProgrammingLanguageId": {
+          "description": "The programming language this block language uses by default.",
+          "type": "string"
+        },
+        "generated": {
+          "type": "boolean"
+        },
+        "grammarId": {
+          "description": "The grammar that this block language may visualize.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The internal ID of this language model.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name that should be displayed to the user.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "A unique (but possibly empty) id. If this is undefined the language has\nno builtin counterpart on the client.",
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "defaultProgrammingLanguageId",
+        "generated",
+        "id",
+        "name"
+      ],
+      "type": "object"
+    }
+  }
+}

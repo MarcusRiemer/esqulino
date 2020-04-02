@@ -11,8 +11,8 @@ import {
   ValidationResult,
 } from "../shared/syntaxtree";
 import {
-  BlockLanguageDataService,
-  GrammarDataService,
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
 } from "../shared/serverdata";
 
 import { ProjectService } from "./project.service";
@@ -35,8 +35,8 @@ export class CurrentCodeResourceService {
   constructor(
     private _projectService: ProjectService,
     private _resourceReferences: ResourceReferencesService,
-    private _blockLanguageData: BlockLanguageDataService,
-    private _grammarData: GrammarDataService
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _individualGrammarData: IndividualGrammarDataService
   ) {}
 
   /**
@@ -87,8 +87,8 @@ export class CurrentCodeResourceService {
 
   readonly blockLanguageGrammar = this.currentResource.pipe(
     flatMap((r) => r.blockLanguageId),
-    flatMap((id) => this._blockLanguageData.getLocal(id, "request")),
-    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request"))
+    flatMap((id) => this._individualBlockLanguageData.getLocal(id, "request")),
+    flatMap((b) => this._individualGrammarData.getLocal(b.grammarId, "request"))
   );
 
   /**

@@ -25,7 +25,9 @@ class ApplicationRecord < ActiveRecord::Base
 
     # Update the created_at and updated_at fields
     ["created_at", "updated_at"].each do |k|
-      to_return[k] = to_return[k].to_s
+      if to_return.key?(k)
+        to_return[k] = to_return[k].to_s
+      end
     end
 
     # All keys should be in "camelCase"

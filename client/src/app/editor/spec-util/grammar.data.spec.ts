@@ -3,8 +3,12 @@ import { HttpTestingController } from "@angular/common/http/testing";
 
 import { GrammarDescription, GrammarListDescription } from "../../shared/";
 import { generateUUIDv4 } from "../../shared/util-browser";
-import { ServerApiService, GrammarDataService } from "../../shared/serverdata";
+import {
+  ServerApiService,
+  IndividualGrammarDataService,
+} from "../../shared/serverdata";
 import { JsonApiListResponse } from "../../shared/serverdata/json-api-response";
+import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -27,9 +31,8 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
 export const buildGrammar = (
   override?: Partial<GrammarDescription>
 ): GrammarDescription => {
-  return Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, {
-    id: generateUUIDv4(),
-  });
+  const id = override?.id ?? generateUUIDv4();
+  return Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id });
 };
 
 /**
@@ -40,9 +43,9 @@ export const ensureLocalGrammarRequest = (
 ): Promise<GrammarDescription> => {
   const httpTestingController = TestBed.inject(HttpTestingController);
   const serverApi = TestBed.inject(ServerApiService);
-  const GrammarData = TestBed.inject(GrammarDataService);
+  const grammarData = TestBed.inject(IndividualGrammarDataService);
 
-  const toReturn = GrammarData.getLocal(response.id, "request");
+  const toReturn = grammarData.getLocal(response.id, "request");
 
   httpTestingController
     .expectOne(serverApi.individualGrammarUrl(response.id))
@@ -51,10 +54,7 @@ export const ensureLocalGrammarRequest = (
   return toReturn;
 };
 
-export interface GrammarOrder {
-  field: keyof GrammarListDescription;
-  direction: "asc" | "desc";
-}
+export type GrammarOrder = ListOrder<GrammarListDescription>;
 
 /**
  * Expects a request for the given list of grammars. If a ordered dataset
@@ -70,31 +70,8 @@ export const provideGrammarList = (
     };
   }
 ) => {
-  const httpTestingController = TestBed.inject(HttpTestingController);
   const serverApi = TestBed.inject(ServerApiService);
-
-  const response: JsonApiListResponse<GrammarDescription> = {
-    data: items,
-    meta: {
-      totalCount: items.length,
-    },
-  };
-
   let reqUrl = serverApi.getGrammarListUrl();
-  if (options) {
-    reqUrl += "?";
 
-    const order = options.order;
-    if (order) {
-      reqUrl += `orderDirection=${order.direction}&orderField=${order.field}`;
-    }
-
-    const pagination = options.pagination;
-    if (pagination) {
-      const offset = pagination.limit * pagination.page;
-      reqUrl += `limit=${pagination.limit}&offset=${offset}`;
-    }
-  }
-
-  httpTestingController.expectOne(reqUrl).flush(response);
+  return provideListResponse(items, reqUrl, options);
 };

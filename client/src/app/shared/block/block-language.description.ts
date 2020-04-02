@@ -4,6 +4,8 @@ import {
 } from "./block.description";
 import { BlockLanguageGeneratorDocument } from "./generator/generator.description";
 
+import { JsonApiListResponse } from "../serverdata/json-api-response";
+
 /**
  * Augments a language with information about the UI layer. This definition is
  * used by the editors, especially the block editor, to show customized editors
@@ -193,10 +195,14 @@ export interface BlockLanguageDocument {
 /**
  * The server hands out additional information that is only used for display purposes.
  */
-export interface BlockLanguageListResponseDescription
+export interface BlockLanguageListItemDescription
   extends BlockLanguageListDescription {
   generated: boolean;
 }
+
+export type BlockLanguageListResponseDescription = JsonApiListResponse<
+  BlockLanguageListItemDescription
+>;
 
 export function isBlockLanguageDescription(
   obj: any

@@ -21,7 +21,6 @@ import { adminRouting } from "./admin.routes";
 
 import { AdminComponent } from "./admin.component";
 import { AdminOverviewComponent } from "./admin-overview.component";
-import { EditGrammarComponent } from "./edit-grammar.component";
 import { LinkGrammarComponent } from "./link-grammar.component";
 import { JsonEditor } from "./json-editor.component";
 import { JsonSchemaValidationService } from "./json-schema-validation.service";
@@ -36,8 +35,10 @@ import { ErrorListComponent } from "./block-language/error-list.component";
 import { OverviewBlockLanguageComponent } from "./block-language/overview-block-language.component";
 
 import { CreateGrammarComponent } from "./grammar/create-grammar.component";
+import { EditGrammarComponent } from "./grammar/edit-grammar.component";
 import { OverviewGrammarComponent } from "./grammar/overview-grammar.component";
 import { GalleryGrammarComponent } from "./grammar/gallery-grammar.component";
+import { MetaCodeResourceSelectComponent } from "./grammar/meta-code-resource-select.component";
 
 import { OverviewProjectComponent } from "./project/overview-project.component";
 
@@ -91,6 +92,7 @@ const materialModules = [
     AdminNewsEditComponent,
     ChangeRoles,
     GalleryGrammarComponent,
+    MetaCodeResourceSelectComponent,
   ],
   providers: [JsonSchemaValidationService],
   exports: [],

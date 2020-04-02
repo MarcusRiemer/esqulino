@@ -20,8 +20,8 @@ import { ResourceReferencesOnlineService } from "../../shared/resource-reference
 
 import { ServerApiService, LanguageService } from "../../shared";
 import {
-  BlockLanguageDataService,
-  GrammarDataService,
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
 } from "../../shared/serverdata";
 import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
@@ -52,8 +52,8 @@ describe(`CreateCodeResourceComponent`, () => {
         SidebarService,
         ProjectService,
         CodeResourceService,
-        BlockLanguageDataService,
-        GrammarDataService,
+        IndividualBlockLanguageDataService,
+        IndividualGrammarDataService,
         MatSnackBar,
         Overlay,
         {
@@ -72,7 +72,9 @@ describe(`CreateCodeResourceComponent`, () => {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
-      projectService: TestBed.get(ProjectService) as ProjectService,
+      projectService: TestBed.inject(ProjectService),
+      httpTesting: TestBed.inject(HttpTestingController),
+      serverApi: TestBed.inject(ServerApiService),
     };
   }
 
@@ -136,19 +138,12 @@ describe(`CreateCodeResourceComponent`, () => {
       updatedAt: "",
     };
 
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
-
     // Setup a name and call the creation method
     t.component.resourceName = r.name;
     const created = t.component.createCodeResource();
 
-    // Mimic a succesful response
-    httpTestingController
-      .expectOne(serverApi.getCodeResourceBaseUrl(p.id))
-      .flush(r);
+    // Mimic a successful response
+    t.httpTesting.expectOne(t.serverApi.getCodeResourceBaseUrl(p.id)).flush(r);
 
     // Ensure the creation has actually happened
     await created;
@@ -157,7 +152,7 @@ describe(`CreateCodeResourceComponent`, () => {
     expect(p.codeResources).not.toEqual([]);
     expect(p.codeResources[0].name).toEqual(r.name);
 
-    const router: Router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     expect(router.url).toEqual("/" + r.id);
   });
 });

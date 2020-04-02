@@ -1,11 +1,12 @@
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   include UserHelper
+  include PaginationHelper
   include JsonSchemaHelper
 
   # List all existing grammars
   def index
-    render :json => Grammar.scope_list.map{|g| g.to_list_api_response}
+    render :json => pagination_response(Grammar,Grammar.scope_list,options:{})
   end
 
   # Find a single grammar
@@ -41,9 +42,15 @@ class GrammarsController < ApplicationController
     grammar.assign_attributes basic_params
     grammar.model = model_params
 
-    if grammar.save
+    # Possibly update the code resource that this grammar is based on
+    if params.key? "generatedFromId"
+      grammar.generated_from_id = params.fetch("generatedFromId", nil)
+    end
+
+    begin
+      grammar.save!
       render status: 204
-    else
+    rescue ActiveRecord::InvalidForeignKey, ActiveRecord::RecordInvalid
       render json: { 'errors' => grammar.errors.as_json }, :status => 400
     end
   end
@@ -64,7 +71,7 @@ class GrammarsController < ApplicationController
   def related_block_languages
     render :json => BlockLanguage.scope_list
                       .where(grammar_id: id_params[:id])
-                      .map{|b| b.to_list_api_response}
+                      .map{|b| b.to_list_api_response(options:{include_list_calculations: false})}
   end
 
   # List all code resources that depend on a single grammar
@@ -77,7 +84,6 @@ class GrammarsController < ApplicationController
              .code_resources
              .map { |c| c.to_full_api_response }
   end
-
 
   private
 

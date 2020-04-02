@@ -3,9 +3,14 @@ import { HttpTestingController } from "@angular/common/http/testing";
 
 import { ProjectService } from "../project.service";
 
-import { ProjectFullDescription, Project } from "../../shared/project";
+import {
+  ProjectFullDescription,
+  Project,
+  ProjectDescription,
+} from "../../shared/project";
 import { ServerApiService } from "../../shared";
 import { generateUUIDv4 } from "../../shared/util-browser";
+import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
@@ -21,6 +26,17 @@ const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   codeResources: [],
 };
 
+/**
+ * Generates a valid grammar description with a unique ID, that uses
+ * the given data (if provided) and uses default data
+ */
+export const buildProject = (
+  override?: Partial<ProjectDescription>
+): ProjectDescription => {
+  const id = override?.id ?? generateUUIDv4();
+  return Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
+};
+
 export const specLoadEmptyProject = (
   projectService: ProjectService,
   override?: Partial<ProjectFullDescription>
@@ -30,17 +46,34 @@ export const specLoadEmptyProject = (
   );
   const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
-  const p = Object.assign(
-    { id: generateUUIDv4() },
-    DEFAULT_EMPTY_PROJECT,
-    override || {}
-  );
+  const id = override?.id ?? generateUUIDv4();
+  const p = Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
 
-  const toReturn = projectService
-    .setActiveProject(DEFAULT_EMPTY_PROJECT.id, true)
-    .toPromise();
+  const toReturn = projectService.setActiveProject(p.id, true);
 
   httpTestingController.expectOne(serverApi.getProjectUrl(p.id)).flush(p);
 
   return toReturn;
+};
+
+export type ProjectOrder = ListOrder<ProjectDescription>;
+
+/**
+ * Expects a request for the given list of grammars. If a ordered dataset
+ * is requested, the `items` param must be already ordered accordingly.
+ */
+export const provideProjectList = (
+  items: ProjectDescription[],
+  options?: {
+    order?: ProjectOrder;
+    pagination?: {
+      limit: number;
+      page: number;
+    };
+  }
+) => {
+  const serverApi = TestBed.inject(ServerApiService);
+  let reqUrl = serverApi.getAdminProjectListUrl();
+
+  return provideListResponse(items, reqUrl, options);
 };

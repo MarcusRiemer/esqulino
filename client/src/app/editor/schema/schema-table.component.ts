@@ -97,14 +97,12 @@ export class SchemaTableComponent {
   /**
    * Function to drop a Table;
    */
-  deleteTable() {
-    this._schemaService
-      .deleteTable(this._project, this.table)
-      .pipe(first())
-      .subscribe(
-        (res) => res,
-        (error) => this.showError(error)
-      );
+  async deleteTable() {
+    try {
+      await this._schemaService.deleteTable(this._project, this.table);
+    } catch (error) {
+      this.showError(error);
+    }
   }
 
   /**

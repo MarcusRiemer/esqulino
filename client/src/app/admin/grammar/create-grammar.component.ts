@@ -2,7 +2,10 @@ import { Component } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
-import { ServerApiService, GrammarDataService } from "../../shared/serverdata";
+import {
+  ServerApiService,
+  ListGrammarDataService,
+} from "../../shared/serverdata";
 import { GrammarDescription } from "../../shared/syntaxtree";
 import { LanguageService } from "../../shared/language.service";
 
@@ -25,7 +28,7 @@ export class CreateGrammarComponent {
   };
 
   constructor(
-    private _serverData: GrammarDataService,
+    private _serverData: ListGrammarDataService,
     private _serverApi: ServerApiService,
     private _languageService: LanguageService,
     private _http: HttpClient,

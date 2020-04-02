@@ -14,6 +14,7 @@ import { CodeResource, GrammarDescription } from "./syntaxtree";
 import { BlockLanguage } from "../shared/block";
 import { DatabaseSchemaAdditionalContext } from "./syntaxtree/sql/sql.validator";
 import { ResourceReferencesService } from "./resource-references.service";
+import { isValidId } from "./util";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -125,6 +126,14 @@ export class Project implements Saveable {
    */
   get id() {
     return this._id;
+  }
+
+  hasSlugOrId(slugOrId: string) {
+    if (isValidId(slugOrId)) {
+      return this.id == slugOrId;
+    } else {
+      return this.slug == slugOrId;
+    }
   }
 
   /**

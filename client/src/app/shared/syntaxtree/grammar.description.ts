@@ -305,6 +305,9 @@ export interface GrammarListDescription {
 
   // The possible slug for URL usage
   slug?: string;
+
+  // The code resource that this grammar is generated from
+  generatedFromId?: string;
 }
 
 /**
@@ -348,11 +351,11 @@ export interface GrammarDescription
     GrammarListDescription {}
 
 /**
- * A request to update a grammar.
+ * A request to update a grammar. The "generateFromId" field may be null to explicitly unset it.
  */
-export type GrammarRequestUpdateDescription = Partial<
-  Omit<GrammarDescription, "id">
->;
+export type GrammarRequestUpdateDescription =
+  | Partial<Omit<GrammarDescription, "id">>
+  | { generatedFromId: null };
 
 /**
  * @return True if the given instance satisfies "QualifiedTypeName"

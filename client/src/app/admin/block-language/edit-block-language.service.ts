@@ -7,8 +7,9 @@ import { BehaviorSubject } from "rxjs";
 import { switchMap, map, first, filter, flatMap } from "rxjs/operators";
 
 import {
-  GrammarDataService,
-  BlockLanguageDataService,
+  IndividualGrammarDataService,
+  IndividualBlockLanguageDataService,
+  MutateBlockLanguageService,
 } from "../../shared/serverdata";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
@@ -34,8 +35,9 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _serverData: BlockLanguageDataService,
-    private _grammarData: GrammarDataService,
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _mutateBlockLanguageData: MutateBlockLanguageService,
+    private _individualGrammarData: IndividualGrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private _title: Title
@@ -44,7 +46,9 @@ export class EditBlockLanguageService {
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get("blockLanguageId")),
-        switchMap((id: string) => this._serverData.getSingle(id).pipe(first()))
+        switchMap((id: string) =>
+          this._individualBlockLanguageData.getSingle(id).pipe(first())
+        )
       )
       .subscribe((blockLanguage) => {
         this._editedSubject.next(blockLanguage);
@@ -67,7 +71,9 @@ export class EditBlockLanguageService {
    * The grammar that is the basis for this block language.
    */
   readonly baseGrammar = this._editedSubject.pipe(
-    flatMap((blockLang) => this._grammarData.getSingle(blockLang.grammarId))
+    flatMap((blockLang) =>
+      this._individualGrammarData.getSingle(blockLang.grammarId)
+    )
   );
 
   /**
@@ -121,7 +127,7 @@ export class EditBlockLanguageService {
     // And do something meaningful if they are
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
-      this._grammarData
+      this._individualGrammarData
         .getSingle(this.editedSubject.grammarId, true)
         .pipe(first())
         .subscribe((g) => {
@@ -170,7 +176,7 @@ export class EditBlockLanguageService {
    * Saves the current state of the block language
    */
   save() {
-    this._serverData.updateBlockLanguage(this.editedSubject);
+    this._mutateBlockLanguageData.updateSingle(this.editedSubject);
   }
 
   /**

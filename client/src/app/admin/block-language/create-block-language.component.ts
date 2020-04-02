@@ -10,8 +10,9 @@ import { generateBlockLanguage } from "../../shared/block/generator/generator";
 
 import {
   ServerApiService,
-  BlockLanguageDataService,
-  GrammarDataService,
+  ListBlockLanguageDataService,
+  IndividualGrammarDataService,
+  ListGrammarDataService,
 } from "../../shared/serverdata";
 
 /**
@@ -39,19 +40,15 @@ export class CreateBlockLanguageComponent {
   useSlug = false;
 
   constructor(
-    private _serverData: BlockLanguageDataService,
-    private _grammarData: GrammarDataService,
+    private _serverData: ListBlockLanguageDataService,
+    private _grammarData: IndividualGrammarDataService,
+    private _grammarList: ListGrammarDataService,
     private _serverApi: ServerApiService,
     private _http: HttpClient,
     private _router: Router
   ) {}
 
-  /**
-   * Grammars that may be used for creation
-   */
-  public get availableGrammars() {
-    return this._grammarData.list;
-  }
+  readonly availableGrammars = this._grammarList.list;
 
   /**
    * Attempts to create the specified block language

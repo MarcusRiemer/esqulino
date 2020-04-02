@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { BehaviorSubject, Observable } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
+import { tap, catchError, first } from "rxjs/operators";
 
 import { ServerApiService } from "../shared";
 
@@ -169,7 +169,7 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table to create inside the database
    */
-  saveNewTable(project: Project, table: Table): Observable<void> {
+  async saveNewTable(project: Project, table: Table): Promise<void> {
     const url = this._server.getCreateTableUrl(
       project.slug,
       project.currentDatabaseName
@@ -181,14 +181,15 @@ export class SchemaService {
         headers: { "Content-Type": "application/json" },
       })
       .pipe(
-        tap((_) => {
+        first(),
+        tap(async () => {
           this.incrementChangeCount();
-          this._projectService.setActiveProject(project.slug, true);
+          await this._projectService.setActiveProject(project.slug, true);
           this.clearCurrentlyEdited();
         }),
         catchError(this.handleError)
       );
-    return toReturn;
+    return toReturn.toPromise();
   }
 
   /**
@@ -196,11 +197,11 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table alter
    */
-  sendAlterTableCommands(
+  async sendAlterTableCommands(
     project: Project,
     tableName: string,
     commandHolder: TableCommandHolder
-  ): Observable<void> {
+  ): Promise<void> {
     const url = this._server.getTableAlterUrl(
       project.slug,
       project.currentDatabaseName,
@@ -214,14 +215,15 @@ export class SchemaService {
         headers: { "Content-Type": "application/json" },
       })
       .pipe(
+        first(),
         catchError(this.handleError),
-        tap((_) => {
+        tap(async () => {
           this.incrementChangeCount();
-          this._projectService.setActiveProject(project.slug, true);
+          await this._projectService.setActiveProject(project.slug, true);
           this.clearCurrentlyEdited();
         })
       );
-    return toReturn;
+    return toReturn.toPromise();
   }
 
   /**
@@ -229,7 +231,7 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table to delete
    */
-  deleteTable(project: Project, table: Table): Observable<void> {
+  async deleteTable(project: Project, table: Table): Promise<void> {
     const url = this._server.getDropTableUrl(
       project.slug,
       project.currentDatabaseName,
@@ -239,13 +241,14 @@ export class SchemaService {
     const toReturn = this._http
       .delete<void>(url, { headers: { "Content-Type": "application/json" } })
       .pipe(
-        tap((_) => {
+        first(),
+        tap(async () => {
           this.incrementChangeCount();
-          this._projectService.setActiveProject(project.slug, true);
+          await this._projectService.setActiveProject(project.slug, true);
         }),
         catchError(this.handleError)
       );
-    return toReturn;
+    return toReturn.toPromise();
   }
 
   /**
