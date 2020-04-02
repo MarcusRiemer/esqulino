@@ -27,12 +27,12 @@ export interface PaginationEvent {
 export class PaginatorTableComponent
   implements AfterContentInit, AfterViewInit, OnDestroy {
   // Angular Material UI to paginate
-  @ViewChild(MatPaginator, { static: false })
-  _paginator: MatPaginator;
+  @ViewChild(MatPaginator)
+  private _paginator: MatPaginator;
 
   // The table instance that register the column definitions
   @ViewChild(MatTable, { static: true })
-  table: MatTable<any>;
+  private _table: MatTable<any>;
 
   // The column definitions that are passed in via ng-content
   @ContentChildren(MatColumnDef)
@@ -47,7 +47,7 @@ export class PaginatorTableComponent
   activeColumns: string[] = [];
 
   @Input()
-  _sort: MatSort;
+  sort: MatSort;
 
   private _subscriptions: Subscription[] = [];
 
@@ -56,14 +56,14 @@ export class PaginatorTableComponent
   // Register the projected column definitions with the table renderer
   // Found at: https://stackoverflow.com/questions/53335929/
   ngAfterContentInit(): void {
-    this.columnDefs.forEach((columnDef) => this.table.addColumnDef(columnDef));
+    this.columnDefs.forEach((columnDef) => this._table.addColumnDef(columnDef));
   }
 
   ngAfterViewInit() {
     // Try to register the parents `sortChange` event. Inspired by
     // https://github.com/angular/components/issues/10446
-    const sub = this._sort.sortChange.subscribe(() => {
-      this.onChangeSort(this._sort.active, this._sort.direction);
+    const sub = this.sort.sortChange.subscribe(() => {
+      this.onChangeSort(this.sort.active, this.sort.direction);
     });
     this._subscriptions.push(sub);
   }
