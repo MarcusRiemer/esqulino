@@ -7,7 +7,7 @@ import {
   ServerApiService,
   IndividualGrammarDataService,
 } from "../../shared/serverdata";
-import { JsonApiListResponse } from "../../shared/serverdata/json-api-response";
+
 import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({

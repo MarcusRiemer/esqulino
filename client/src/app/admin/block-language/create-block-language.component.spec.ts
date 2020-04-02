@@ -14,18 +14,22 @@ import {
   LanguageService,
   ServerApiService,
   ToolbarService,
+  GrammarDescription,
 } from "../../shared";
 import {
   ListGrammarDataService,
+  ListBlockLanguageDataService,
+  MutateBlockLanguageService,
+  IndividualGrammarDataService,
   MutateGrammarService,
 } from "../../shared/serverdata";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
-import { buildGrammar } from "../../editor/spec-util";
 
-import { CreateGrammarComponent } from "./create-grammar.component";
+import { CreateBlockLanguageComponent } from "./create-block-language.component";
+import { buildGrammar, provideGrammarList } from "src/app/editor/spec-util";
 
-describe("CreateGrammarComponent", () => {
-  async function createComponent() {
+describe("CreateBlockLanguageComponent", () => {
+  async function createComponent(availableGrammars: GrammarDescription[] = []) {
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -41,14 +45,26 @@ describe("CreateGrammarComponent", () => {
         ServerApiService,
         LanguageService,
         ListGrammarDataService,
+        IndividualGrammarDataService,
         MutateGrammarService,
+        ListBlockLanguageDataService,
+        MutateBlockLanguageService,
       ],
-      declarations: [CreateGrammarComponent, DefaultValuePipe],
+      declarations: [CreateBlockLanguageComponent, DefaultValuePipe],
     }).compileComponents();
 
-    let fixture = TestBed.createComponent(CreateGrammarComponent);
+    let fixture = TestBed.createComponent(CreateBlockLanguageComponent);
     let component = fixture.componentInstance;
+
+    // Initial rendering to trigger requirement for grammar list
     fixture.detectChanges();
+    await fixture.whenRenderingDone();
+
+    provideGrammarList(availableGrammars);
+
+    // Render with grammar list
+    fixture.detectChanges();
+    await fixture.whenRenderingDone();
 
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
@@ -59,6 +75,7 @@ describe("CreateGrammarComponent", () => {
       element: fixture.nativeElement as HTMLElement,
       httpTesting,
       serverApi,
+      availableGrammars,
     };
   }
 
@@ -68,35 +85,53 @@ describe("CreateGrammarComponent", () => {
     expect(t.component).toBeDefined();
   });
 
-  it(`create Grammar`, async () => {
-    const t = await createComponent();
+  it(`shows the grammars that are available`, async () => {
+    const t = await createComponent([buildGrammar({ name: "G1" })]);
 
-    await t.fixture.whenRenderingDone();
+    const grammarIdSelect: HTMLSelectElement = t.element.querySelector(
+      "select[data-spec=grammarIdSelect]"
+    );
+
+    const grammarOption = grammarIdSelect.options.item(1);
+
+    expect(grammarOption.value).toEqual(t.availableGrammars[0].id);
+    expect(grammarOption.innerText).toEqual(t.availableGrammars[0].name);
+  });
+
+  xit(`create BlockLanguage without a slug`, async () => {
+    const t = await createComponent([buildGrammar({ name: "G1" })]);
 
     const nameInput: HTMLInputElement = t.element.querySelector(
       "input[data-spec=nameInput]"
     );
-    const plSelect: HTMLSelectElement = t.element.querySelector(
-      "select[data-spec=programmingLanguageSelect]"
-    );
-    const createButton: HTMLButtonElement = t.element.querySelector(
-      "button[data-spec=submit]"
+    const grammarIdSelect: HTMLSelectElement = t.element.querySelector(
+      "select[data-spec=grammarIdSelect]"
     );
 
     // simulate user entering a new name into the input box
     nameInput.value = "G1Test";
-    plSelect.value = plSelect.options[0].value;
+    grammarIdSelect.value = grammarIdSelect.options[1].value;
 
     // dispatch a DOM event so that Angular learns of input value change.
     // use newEvent utility function (not provided by Angular) for better browser compatibility
     nameInput.dispatchEvent(new Event("input"));
-    plSelect.dispatchEvent(new Event("change"));
-    createButton.click();
+    grammarIdSelect.dispatchEvent(new Event("change"));
 
     t.fixture.detectChanges();
 
+    const req = t.component.submitForm();
+
     t.httpTesting
-      .expectOne({ method: "POST", url: t.serverApi.createGrammarUrl() })
-      .flush("");
+      .expectOne(t.serverApi.individualGrammarUrl(t.availableGrammars[0].id))
+      .flush(t.availableGrammars[0]);
+
+    const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
+    t.httpTesting
+      .expectOne({ method: "POST", url: t.serverApi.createBlockLanguageUrl() })
+      .flush({ id: generatedId });
+
+    const res = await req;
+
+    expect(res.id).toEqual(generatedId);
   });
 });
