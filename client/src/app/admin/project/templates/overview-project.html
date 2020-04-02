@@ -1,13 +1,14 @@
-<table
-  class="full-width"
-  mat-table
+<app-table-paginator
+  [listData]="projects"
+  [activeColumns]="displayedColumns"
+  [sort]="sort"
   matSort
-  [dataSource]="availableProjects"
-  (matSortChange)="onChangeSort()"
 >
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let project">{{ project.id }}</td>
+    <td mat-cell *matCellDef="let project">
+      <code>{{ project.id }}</code>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="name">
@@ -21,16 +22,8 @@
 
   <ng-container matColumnDef="slug">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Slug</th>
-    <td mat-cell *matCellDef="let project">{{ project.slug }}</td>
+    <td mat-cell *matCellDef="let project">
+      <code>{{ project.slug }}</code>
+    </td>
   </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-
-<mat-paginator
-  (page)="onChangePagination()"
-  [length]="resultsLength$ | async"
-  [pageSize]="25"
-  [pageSizeOptions]="[5,25,100]"
-></mat-paginator>
+</app-table-paginator>

@@ -14,6 +14,7 @@ import {
  */
 @Component({
   templateUrl: "./templates/overview-block-language.html",
+  providers: [ListBlockLanguageDataService],
 })
 export class OverviewBlockLanguageComponent implements OnInit {
   // Angular Material UI to paginate
@@ -21,14 +22,14 @@ export class OverviewBlockLanguageComponent implements OnInit {
   _paginator: MatPaginator;
 
   // Angular Material UI to sort by different columns
-  @ViewChild(MatSort)
-  _sort: MatSort;
+  @ViewChild(MatSort, { static: true })
+  sort: MatSort;
 
   @ViewChild("toolbarItems", { static: true })
   toolbarItems: TemplateRef<any>;
 
   constructor(
-    private _list: ListBlockLanguageDataService,
+    readonly blockLanguages: ListBlockLanguageDataService,
     private _mutate: MutateBlockLanguageService,
     private _toolbarService: ToolbarService
   ) {}
@@ -37,36 +38,15 @@ export class OverviewBlockLanguageComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarItems);
   }
 
-  resultsLength$ = this._list.listTotalCount;
-  readonly availableBlockLanguages = this._list.list;
-  readonly inProgress = this._list.listCache.inProgress;
-
-  public deleteBlockLanguage(id: string) {
-    this._mutate.deleteSingle(id);
+  async deleteBlockLanguage(id: string) {
+    await this._mutate.deleteSingle(id);
   }
 
   /**
    * User wants to see a refreshed dataset.
    */
   onRefresh() {
-    this._list.listCache.refresh();
-  }
-
-  /**
-   * User has requested a different chunk of data
-   */
-  onChangePagination() {
-    this._list.setListPagination(
-      this._paginator.pageSize,
-      this._paginator.pageIndex
-    );
-  }
-
-  /**
-   * User has requested different sorting options
-   */
-  onChangeSort() {
-    this._list.setListOrdering(this._sort.active as any, this._sort.direction);
+    this.blockLanguages.listCache.refresh();
   }
 
   displayedColumns: (

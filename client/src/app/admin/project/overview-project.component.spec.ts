@@ -14,30 +14,28 @@ import { PortalModule } from "@angular/cdk/portal";
 
 import { first } from "rxjs/operators";
 
-import { ServerApiService, ToolbarService } from "../../shared";
 import {
-  ListBlockLanguageDataService,
-  MutateBlockLanguageService,
-} from "../../shared/serverdata";
+  ServerApiService,
+  ToolbarService,
+  LanguageService,
+} from "../../shared";
+import { AdminListProjectDataService } from "../../shared/serverdata";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
-import {
-  provideBlockLanguageList,
-  buildBlockLanguage,
-} from "../../editor/spec-util";
-
-import { OverviewBlockLanguageComponent } from "./overview-block-language.component";
 import { PaginatorTableComponent } from "../../shared/table/paginator-table.component";
+import { buildProject, provideProjectList } from "../../editor/spec-util";
 
-describe("OverviewBlockLanguageComponent", () => {
+import { OverviewProjectComponent } from "./overview-project.component";
+
+describe("OverviewProjectComponent", () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
-        MatTableModule,
         MatPaginatorModule,
         MatSortModule,
+        MatTableModule,
         PortalModule,
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([]),
@@ -45,17 +43,17 @@ describe("OverviewBlockLanguageComponent", () => {
       providers: [
         ToolbarService,
         ServerApiService,
-        ListBlockLanguageDataService,
-        MutateBlockLanguageService,
+        AdminListProjectDataService,
+        LanguageService,
       ],
       declarations: [
-        OverviewBlockLanguageComponent,
+        OverviewProjectComponent,
         DefaultValuePipe,
         PaginatorTableComponent,
       ],
     }).compileComponents();
 
-    let fixture = TestBed.createComponent(OverviewBlockLanguageComponent);
+    let fixture = TestBed.createComponent(OverviewProjectComponent);
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
@@ -80,14 +78,14 @@ describe("OverviewBlockLanguageComponent", () => {
   it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
-    const initialLoading = await t.component.blockLanguages.listCache.inProgress
+    const initialLoading = await t.component.projects.listCache.inProgress
       .pipe(first())
       .toPromise();
     expect(initialLoading).toBe(true);
 
-    provideBlockLanguageList([]);
+    provideProjectList([]);
 
-    const afterResponse = await t.component.blockLanguages.listCache.inProgress
+    const afterResponse = await t.component.projects.listCache.inProgress
       .pipe(first())
       .toPromise();
     expect(afterResponse).toBe(false);
@@ -96,7 +94,7 @@ describe("OverviewBlockLanguageComponent", () => {
   it(`Displays an empty list`, async () => {
     const t = await createComponent();
 
-    provideBlockLanguageList([]);
+    provideProjectList([]);
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
@@ -105,8 +103,8 @@ describe("OverviewBlockLanguageComponent", () => {
   it(`Displays a list with a single element`, async () => {
     const t = await createComponent();
 
-    const i1 = buildBlockLanguage({ name: "B1" });
-    provideBlockLanguageList([i1]);
+    const i1 = buildProject({ name: "G1" });
+    provideProjectList([i1]);
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
@@ -121,50 +119,18 @@ describe("OverviewBlockLanguageComponent", () => {
   it(`reloads data on refresh`, async () => {
     const t = await createComponent();
 
-    const i1 = buildBlockLanguage({ name: "B1" });
-    provideBlockLanguageList([i1]);
+    const i1 = buildProject({ name: "B1" });
+    provideProjectList([i1]);
 
-    const initialData = await t.component.blockLanguages.list
+    const initialData = await t.component.projects.list
       .pipe(first())
       .toPromise();
     expect(initialData).toEqual([i1]);
 
     t.component.onRefresh();
-    provideBlockLanguageList([]);
+    provideProjectList([]);
 
-    const refreshedData = await t.component.blockLanguages.list
-      .pipe(first())
-      .toPromise();
-    expect(refreshedData).toEqual([]);
-  });
-
-  it(`Triggers deletion`, async () => {
-    const t = await createComponent();
-
-    const i1 = buildBlockLanguage({ name: "B1" });
-    provideBlockLanguageList([i1]);
-
-    t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
-
-    const tableElement = t.element.querySelector("table");
-    const i1Row = tableElement.querySelector("tbody > tr");
-    const i1Delete = i1Row.querySelector(
-      "button[data-spec=delete]"
-    ) as HTMLButtonElement;
-
-    i1Delete.click();
-
-    t.httpTesting
-      .expectOne({
-        method: "DELETE",
-        url: t.serverApi.individualBlockLanguageUrl(i1.id),
-      })
-      .flush("");
-
-    provideBlockLanguageList([]);
-
-    const refreshedData = await t.component.blockLanguages.list
+    const refreshedData = await t.component.projects.list
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);

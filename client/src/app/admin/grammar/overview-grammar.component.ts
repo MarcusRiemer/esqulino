@@ -1,5 +1,4 @@
 import { Component, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
 import { GrammarListDescription } from "../../shared/syntaxtree";
@@ -11,43 +10,26 @@ import {
 @Component({
   selector: "grammar-overview-selector",
   templateUrl: "./templates/overview-grammar.html",
+  providers: [ListGrammarDataService],
 })
 export class OverviewGrammarComponent {
-  // Angular Material UI to paginate
-  @ViewChild(MatPaginator)
-  _paginator: MatPaginator;
-
-  // Angular Material UI to sort by different columns
-  @ViewChild(MatSort)
-  _sort: MatSort;
+  @ViewChild(MatSort, { static: true })
+  sort: MatSort;
 
   constructor(
-    private _list: ListGrammarDataService,
+    readonly grammars: ListGrammarDataService,
     private _mutate: MutateGrammarService
   ) {}
 
-  resultsLength$ = this._list.listTotalCount;
-  readonly availableGrammars = this._list.list;
-
-  public deleteGrammar(id: string) {
-    this._mutate.deleteSingle(id);
+  async onDeleteGrammar(id: string) {
+    await this._mutate.deleteSingle(id);
   }
 
   /**
-   * User has requested a different chunk of data
+   * User wants to see a refreshed dataset.
    */
-  onChangePagination() {
-    this._list.setListPagination(
-      this._paginator.pageSize,
-      this._paginator.pageIndex
-    );
-  }
-
-  /**
-   * User has requested different sorting options
-   */
-  onChangeSort() {
-    this._list.setListOrdering(this._sort.active as any, this._sort.direction);
+  onRefresh() {
+    this.grammars.listCache.refresh();
   }
 
   displayedColumns: (keyof GrammarListDescription | "actions")[] = [
