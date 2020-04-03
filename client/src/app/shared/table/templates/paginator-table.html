@@ -1,13 +1,13 @@
 <mat-progress-bar
   conditionalDisplay
-  [indicator]="this.listData.listCache.inProgress"
-  [initiator]="false"
+  [_indicator]="this.listData.listCache.inProgress"
+  [_initiator]="false"
   mode="indeterminate"
 ></mat-progress-bar>
 <table
   conditionalDisplay
-  [indicator]="this.listData.listCache.inProgress"
-  [initiator]="true"
+  [_indicator]="this.listData.listCache.inProgress"
+  [_initiator]="true"
   class="full-width"
   mat-table
   [dataSource]="listData.list | async"
