@@ -8,6 +8,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -57,6 +58,7 @@ const materialModules = [
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
+  MatProgressBarModule,
 ];
 
 @NgModule({
