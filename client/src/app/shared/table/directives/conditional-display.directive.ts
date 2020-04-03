@@ -13,14 +13,15 @@ import { Observable, Subscription } from "rxjs";
 export class ConditionalDisplayDirective implements OnDestroy, OnInit {
   // The hide class will be set for parent if value changes
   @Input()
-  indicator: Observable<boolean>;
+  private _indicator: Observable<boolean>;
 
-  // Parent element is shown if initiator matches the value of the indicator.
+  // Parent element is hidden if initiator matches the value of the indicator.
   @Input()
-  initiator: boolean;
+  private _initiator: boolean;
 
+  // Css class .hide is set to host element when _hide is true
   @HostBinding("class.hide")
-  hide: boolean;
+  private _hide: boolean;
 
   subs: Subscription[] = [];
 
@@ -28,8 +29,8 @@ export class ConditionalDisplayDirective implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.subs.push(
-      this.indicator.subscribe(
-        (condition) => (this.hide = condition === this.initiator)
+      this._indicator.subscribe(
+        (condition) => (this._hide = condition === this._initiator)
       )
     );
   }
