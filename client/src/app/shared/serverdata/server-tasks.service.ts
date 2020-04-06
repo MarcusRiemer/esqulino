@@ -1,29 +1,36 @@
 import { Injectable } from "@angular/core";
 
 import { Observable, BehaviorSubject, Subject, combineLatest, of } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, flatMap, first, shareReplay } from "rxjs/operators";
 
-export enum ServerTaskState {
-  PENDING,
-  SUCCESS,
-  FAILURE,
+export interface ServerTaskStateSuccess {
+  type: "success";
 }
 
+export interface ServerTaskStatePending {
+  type: "pending";
+}
+
+export interface ServerTaskStateFailure {
+  type: "failure";
+  message: string;
+}
+
+export type ServerTaskState =
+  | ServerTaskStateFailure
+  | ServerTaskStatePending
+  | ServerTaskStateSuccess;
+
 export interface ServerTask {
-  state$: Observable<ServerTaskState>;
+  readonly state$: Observable<ServerTaskState>;
 
-  // TODO: This shouldn't be part of the public API
-  state: ServerTaskState;
-
-  description: string;
+  readonly description: string;
 }
 
 export class ServerTaskManual implements ServerTask {
-  constructor(public description: string) {}
+  constructor(public readonly description: string) {}
 
-  private _state$ = new BehaviorSubject<ServerTaskState>(
-    ServerTaskState.PENDING
-  );
+  private _state$ = new BehaviorSubject<ServerTaskState>({ type: "pending" });
 
   readonly state$ = this._state$.asObservable();
   get state() {
@@ -31,15 +38,30 @@ export class ServerTaskManual implements ServerTask {
   }
 
   public succeeded() {
-    this._state$.next(ServerTaskState.SUCCESS);
+    this._state$.next({ type: "success" });
     this._state$.complete();
   }
 
-  public failed() {
-    this._state$.next(ServerTaskState.FAILURE);
+  public failed(message: string) {
+    this._state$.next({ type: "failure", message });
     this._state$.complete();
   }
 }
+
+// The internal representation of a task
+type InternalServerTask = {
+  orig: ServerTask;
+  state: ServerTaskState;
+};
+
+export type PendingServerTask = {
+  description: string;
+};
+
+export type FailedServerTask = {
+  description: string;
+  message: string;
+};
 
 @Injectable()
 export class ServerTasksService {
@@ -47,15 +69,36 @@ export class ServerTasksService {
 
   readonly allTasks$ = new BehaviorSubject<ServerTask[]>([]);
 
-  readonly pendingTasks$ = combineLatest(
+  private readonly _internalTasks$ = combineLatest(
     this._taskChangedEvent,
     this.allTasks$
   ).pipe(
     map(([_, tasks]) => tasks),
-    map((tasks) => tasks.filter((t) => t.state === ServerTaskState.PENDING))
+    flatMap(
+      async (tasks): Promise<InternalServerTask[]> => {
+        const promises = tasks.map((t) => t.state$.pipe(first()).toPromise());
+        const resolved = await Promise.all(promises);
+
+        return tasks.map((t, i) => ({
+          orig: t,
+          state: resolved[i],
+        }));
+      }
+    ),
+    shareReplay(1)
   );
 
-  // TODO: Finished Tasks
+  readonly pendingTasks$: Observable<
+    PendingServerTask[]
+  > = this._internalTasks$.pipe(
+    map((tasks) =>
+      tasks
+        .filter((t) => t.state.type === "pending")
+        .map((t) => ({ description: t.orig.description }))
+    )
+  );
+
+  readonly failedTasks$: Observable<FailedServerTask[]> = undefined;
 
   // TODO: hasAnyFinishedTask$, hasAnyErrorTask$
   readonly hasAnyFinishedTask$ = of(false);
@@ -65,13 +108,10 @@ export class ServerTasksService {
   addTask(task: ServerTask) {
     this.allTasks$.next(this.allTasks$.value.concat(task));
 
-    // Inform about new task that was queued
-    this._taskChangedEvent.next();
-
     // Inform when task is not pending anymore
     // TODO: How to unsubscribe
     task.state$.subscribe((state) => {
-      if (state !== ServerTaskState.PENDING) {
+      if (state.type !== "pending") {
         this._taskChangedEvent.next();
       }
     });
