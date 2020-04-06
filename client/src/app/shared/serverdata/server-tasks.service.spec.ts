@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { ServerTasksService, ServerTask } from "./server-tasks.service";
-import { first } from "rxjs/operators";
+import {first, take} from "rxjs/operators";
 import { of } from "rxjs";
 
 describe(`ServerTaskService`, () => {
@@ -45,7 +45,7 @@ describe(`ServerTaskService`, () => {
 
     expect(hasAnyFinishedTask).toEqual(false);
 
-    const hasAnyErrorTask = await t.service.hasAnyFinishedTask$
+    const hasAnyErrorTask = await t.service.hasAnyErrorTask$
       .pipe(first())
       .toPromise();
 

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { Observable, BehaviorSubject, Subject, of } from "rxjs";
+import {Observable, BehaviorSubject, Subject, of, ReplaySubject, ObservedValueOf, empty} from "rxjs";
 import {
   map,
   flatMap,
@@ -9,7 +9,7 @@ import {
   scan,
   defaultIfEmpty,
   tap,
-  shareReplay,
+  shareReplay, startWith,
 } from "rxjs/operators";
 
 /** The server has not yet responded to a task */
@@ -107,7 +107,7 @@ export type FailedServerTask = {
 
 @Injectable()
 export class ServerTasksService {
-  private readonly _newTaskEvent$ = new Subject<ServerTask>();
+  private readonly _newTaskEvent$ = new ReplaySubject<ServerTask>(1);
 
   private readonly _internalTasks$ = this._newTaskEvent$.pipe(
     tap((internal) => console.log("Before internal conversion: ", internal)),
@@ -131,9 +131,7 @@ export class ServerTasksService {
     filter((t) => t.state.type === "pending"),
     map((t) => ({ description: t.orig.description })),
     // Taken from: https://stackoverflow.com/questions/50452856/rxjs-buffer-observable-with-max-and-min-
-    scan((acc, cur) => [...acc, cur].slice(-10), []),
-    defaultIfEmpty([]),
-    shareReplay(1)
+    scan((acc, cur) => [...acc, cur].slice(-10), [])
   );
 
   readonly failedTasks$: Observable<FailedServerTask[]> = undefined;
