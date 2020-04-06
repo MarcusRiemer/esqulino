@@ -53,34 +53,40 @@ concise_attributes:
     "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
     "json"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "terminal",
     "language": "MetaGrammar", "properties": {"symbol": "["}}, {"name": "children",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "value", "languageName": "json"}}]}, "language": "MetaGrammar",
-    "properties": {"base": "sequence", "name": "values"}}, {"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "]"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "array", "languageName": "json"}}, {"name": "comment", "language":
-    "MetaGrammar", "properties": {"text": "Keys are always strings, values are arbitrary"}},
-    {"name": "concreteNode", "children": {"attributes": [{"name": "children", "children":
-    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "string", "languageName": "json"}}]}, "language": "MetaGrammar",
-    "properties": {"base": "sequence", "name": "key"}}, {"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": ":"}}, {"name": "children", "children":
-    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "value", "languageName": "json"}}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "value"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "key-value", "languageName": "json"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
-    {"symbol": "{"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "key-value", "languageName":
+    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "value", "languageName": "json"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "values"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "]"}}]}, "language": "MetaGrammar", "properties": {"typeName": "array",
+    "languageName": "json"}}, {"name": "comment", "language": "MetaGrammar", "properties":
+    {"text": "Keys are always strings, values are arbitrary"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "string",
+    "languageName": "json"}}]}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "key"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": ":"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "value", "languageName":
     "json"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
-    "values"}}, {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol":
-    "}"}}]}, "language": "MetaGrammar", "properties": {"typeName": "object", "languageName":
-    "json"}}]}, "language": "MetaGrammar", "properties": {"name": "json"}}'
+    "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "key-value",
+    "languageName": "json"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "{"}},
+    {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "key-value", "languageName": "json"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "values"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "}"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "object", "languageName": "json"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "json"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-03-26 16:02:12.779984000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-01 15:58:55.373233000 Z
+  value_before_type_cast: 2020-04-06 21:19:04.438688000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -92,8 +98,28 @@ concise_attributes:
   value_before_type_cast: |-
     {
       "types": {
-        "undefined": {},
         "json": {
+          "value": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "json",
+                "typeName": "null"
+              },
+              {
+                "languageName": "json",
+                "typeName": "object"
+              },
+              {
+                "languageName": "json",
+                "typeName": "string"
+              },
+              {
+                "languageName": "json",
+                "typeName": "number"
+              }
+            ]
+          },
           "null": {
             "type": "concrete",
             "attributes": [
@@ -153,8 +179,11 @@ concise_attributes:
                 "name": "values",
                 "nodeTypes": [
                   {
-                    "languageName": "json",
-                    "typeName": "value"
+                    "nodeType": {
+                      "languageName": "json",
+                      "typeName": "value"
+                    },
+                    "occurs": "*"
                   }
                 ]
               },
@@ -205,8 +234,11 @@ concise_attributes:
                 "name": "values",
                 "nodeTypes": [
                   {
-                    "languageName": "json",
-                    "typeName": "key-value"
+                    "nodeType": {
+                      "languageName": "json",
+                      "typeName": "key-value"
+                    },
+                    "occurs": "*"
                   }
                 ]
               },

@@ -26,10 +26,10 @@ concise_attributes:
     "orientation": "horizontal"}, {"name": "nodes", "type": "allowed", "nodeTypes":
     [{"occurs": "+", "nodeType": "node"}, {"occurs": "*", "nodeType": "comment"}]}],
     "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
-    "vertical"}]}, "nodeRef": {"type": "oneOf", "oneOf": ["nodeRefOne"]}, "typedef":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"tags":
-    ["space-after", "keyword"], "type": "terminal", "symbol": "typedef"}, {"base":
-    "string", "name": "languageName", "tags": ["double-quote"], "type": "property"},
+    "vertical"}]}, "nodeRef": {"type": "oneOf", "oneOf": ["nodeRefOne", "nodeRefCardinality"]},
+    "typedef": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol": "typedef"},
+    {"base": "string", "name": "languageName", "tags": ["double-quote"], "type": "property"},
     {"type": "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "tags":
     ["double-quote", "space-after"], "type": "property"}, {"tags": ["space-after"],
     "type": "terminal", "symbol": "::="}, {"name": "references", "type": "sequence",
@@ -52,23 +52,30 @@ concise_attributes:
     "oneOf": ["terminal", "property", "children"]}, "nodeRefOne": {"type": "concrete",
     "attributes": [{"type": "container", "children": [{"base": "string", "name": "languageName",
     "type": "property"}, {"type": "terminal", "symbol": "."}, {"base": "string", "name":
-    "typeName", "type": "property"}], "orientation": "horizontal"}]}, "concreteNode":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"type":
-    "container", "children": [{"tags": ["space-after", "keyword"], "type": "terminal",
-    "symbol": "node"}, {"base": "string", "name": "languageName", "tags": ["double-quote"],
-    "type": "property"}, {"type": "terminal", "symbol": "."}, {"base": "string", "name":
-    "typeName", "tags": ["double-quote", "space-after"], "type": "property"}, {"type":
-    "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"],
-    "type": "container", "children": [{"name": "attributes", "type": "allowed", "nodeTypes":
-    [{"occurs": "*", "nodeType": "attribute"}, {"occurs": "*", "nodeType": "comment"}]}],
-    "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
-    "vertical"}]}}}}'
+    "typeName", "type": "property"}], "orientation": "horizontal"}]}, "cardinality":
+    {"type": "oneOf", "oneOf": ["knownCardinality"]}, "concreteNode": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"type": "container", "children":
+    [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol": "node"}, {"base":
+    "string", "name": "languageName", "tags": ["double-quote"], "type": "property"},
+    {"type": "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "tags":
+    ["double-quote", "space-after"], "type": "property"}, {"type": "terminal", "symbol":
+    "{"}], "orientation": "horizontal"}, {"tags": ["indent"], "type": "container",
+    "children": [{"name": "attributes", "type": "allowed", "nodeTypes": [{"occurs":
+    "*", "nodeType": "attribute"}, {"occurs": "*", "nodeType": "comment"}]}], "orientation":
+    "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation": "vertical"}]},
+    "knownCardinality": {"type": "concrete", "attributes": [{"base": "string", "name":
+    "cardinality", "type": "property", "restrictions": [{"type": "enum", "value":
+    ["*", "?", "+"]}]}]}, "nodeRefCardinality": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "references", "type": "sequence",
+    "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name": "cardinality",
+    "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "cardinality"}]}],
+    "orientation": "horizontal"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-01 15:54:48.742702000 Z
+  value_before_type_cast: 2020-04-06 19:44:15.701556000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
