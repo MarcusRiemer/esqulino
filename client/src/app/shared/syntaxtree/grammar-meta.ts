@@ -11,7 +11,9 @@ import {
   GrammarDocument,
   NodeConcreteTypeDescription,
   NodeOneOfTypeDescription,
+  ChildCardinalityDescription,
 } from "./grammar.description";
+import { OccursDescription, OccursString } from "./occurs.description";
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   return {
@@ -37,6 +39,41 @@ export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
   return toReturn;
 }
 
+export function convertNodeRefOne(ref: Node): QualifiedTypeName {
+  if (!ref) {
+    throw new Error(`convertNodeRefOne called with falsy value: ${ref}`);
+  } else if (ref.typeName === "nodeRefOne") {
+    return {
+      languageName: ref.properties["languageName"],
+      typeName: ref.properties["typeName"],
+    };
+  } else {
+    throw new Error(
+      `convertNodeRefOne called with typeName: "${ref.typeName}"`
+    );
+  }
+}
+
+export function convertOccurs(ref: Node): OccursDescription {
+  if (!ref) {
+    throw new Error(`convertOccurs called with falsy value: ${ref}`);
+  }
+
+  switch (ref.typeName) {
+    case "knownCardinality":
+      return OccursString.check(ref.properties["cardinality"]);
+    default:
+      throw new Error(`convertOccurs called with typeName: "${ref.typeName}"`);
+  }
+}
+
+function convertNodeRefCardinality(ref: Node): ChildCardinalityDescription {
+  return {
+    nodeType: convertNodeRefOne(ref.getChildInCategory("references")),
+    occurs: convertOccurs(ref.getChildInCategory("cardinality")),
+  };
+}
+
 export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
   const toReturn: ReturnType<typeof convertChildren> = {
     type: attrNode.properties["base"] as any,
@@ -53,10 +90,11 @@ export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
       .map((ref) => {
         switch (ref.typeName) {
           case "nodeRefOne":
-            return {
-              languageName: ref.properties["languageName"],
-              typeName: ref.properties["typeName"],
-            };
+            return convertNodeRefOne(ref);
+          case "nodeRefCardinality":
+            return convertNodeRefCardinality(ref);
+          default:
+            throw new Error(`Unknown reference: "${ref.typeName}"`);
         }
       });
 
@@ -87,7 +125,10 @@ export function readAttributes(
   }
 }
 
-export function resolveReference(refNode: Node): QualifiedTypeName {
+/**
+ * Converts the given node to a type reference that has no cardinality.
+ */
+export function resolveSingularReference(refNode: Node): QualifiedTypeName {
   switch (refNode.typeName) {
     case "nodeRefOne":
       return {
@@ -165,7 +206,7 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
         case "typedef":
           const references = n
             .getChildrenInCategory("references")
-            .map(resolveReference);
+            .map(resolveSingularReference);
 
           const oneOfNode: NodeOneOfTypeDescription = {
             type: "oneOf",

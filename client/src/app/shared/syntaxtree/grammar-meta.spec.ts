@@ -3,7 +3,13 @@ import {
   NodeTerminalSymbolDescription,
   NodeTypesSequenceDescription,
 } from "./grammar.description";
-import { readFromNode, convertProperty, convertTerminal } from "./grammar-meta";
+import {
+  readFromNode,
+  convertProperty,
+  convertTerminal,
+  convertOccurs,
+  convertNodeRefOne,
+} from "./grammar-meta";
 import { Node } from "./syntaxtree";
 import { NodeDescription } from "./syntaxtree.description";
 
@@ -62,6 +68,105 @@ describe(`Convert AST => GrammarDescription`, () => {
       expect(convertTerminal(n)).toEqual({
         type: "terminal",
         symbol: "t",
+      });
+    });
+
+    describe(`convertOccurs`, () => {
+      const createKnownCardinality = (k: string) =>
+        new Node(
+          {
+            language: "MetaGrammar",
+            name: "knownCardinality",
+            properties: { cardinality: k },
+          },
+          undefined
+        );
+
+      it(`Node with "?"`, () => {
+        expect(convertOccurs(createKnownCardinality("?"))).toEqual("?");
+      });
+
+      it(`Node with "*"`, () => {
+        expect(convertOccurs(createKnownCardinality("*"))).toEqual("*");
+      });
+
+      it(`Node with "+"`, () => {
+        expect(convertOccurs(createKnownCardinality("+"))).toEqual("+");
+      });
+
+      it(`Node with "!" (Invalid)`, () => {
+        expect(() => convertOccurs(createKnownCardinality("!"))).toThrowError(
+          /\!/
+        );
+      });
+
+      it(`Node with undefined (Invalid)`, () => {
+        expect(() =>
+          convertOccurs(createKnownCardinality(undefined))
+        ).toThrowError(/undefined/);
+      });
+
+      it(`Undefined node`, () => {
+        expect(() => convertOccurs(undefined)).toThrowError(/convertOccurs/);
+      });
+
+      it(`mismatched node`, () => {
+        const n = new Node(
+          {
+            language: "MetaGrammar",
+            name: "unrelated",
+            properties: { cardinality: "*" },
+          },
+          undefined
+        );
+        expect(() => convertOccurs(n)).toThrowError(/convertOccurs/);
+      });
+    });
+
+    describe(`convertNodeRefOne`, () => {
+      const createNodeRefOne = (refLang: string, refName: string) => {
+        const desc: NodeDescription = {
+          language: "MetaGrammar",
+          name: "nodeRefOne",
+        };
+
+        if (refLang || refName) {
+          desc.properties = {};
+        }
+
+        if (refLang) {
+          desc.properties["languageName"] = refLang;
+        }
+
+        if (refName) {
+          desc.properties["typeName"] = refName;
+        }
+        return new Node(desc, undefined);
+      };
+
+      it(`Node with "a"."b"`, () => {
+        expect(convertNodeRefOne(createNodeRefOne("a", "b"))).toEqual({
+          languageName: "a",
+          typeName: "b",
+        });
+      });
+
+      it(`Undefined node`, () => {
+        expect(() => convertNodeRefOne(undefined)).toThrowError(
+          /convertNodeRefOne/
+        );
+      });
+
+      it(`mismatched node`, () => {
+        const n = new Node(
+          {
+            language: "MetaGrammar",
+            name: "unrelated",
+            properties: { cardinality: "*" },
+          },
+          undefined
+        );
+        expect(() => convertNodeRefOne(n)).toThrowError(/convertNodeRefOne/);
       });
     });
   });
@@ -548,6 +653,84 @@ describe(`Convert AST => GrammarDescription`, () => {
         type: "sequence",
         name: "seq",
         nodeTypes: [{ languageName: "l", typeName: "t" }],
+      };
+
+      expect(g).toEqual({
+        root: undefined,
+        types: {
+          l: { t: { type: "concrete", attributes: [seqDesc] } },
+        },
+      });
+    });
+
+    it(`Type with single sequence that references a single type with a specified cardinality`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "concreteNode",
+              properties: {
+                languageName: "l",
+                typeName: "t",
+              },
+              children: {
+                attributes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "children",
+                    properties: {
+                      base: "sequence",
+                      name: "seq",
+                    },
+                    children: {
+                      references: [
+                        {
+                          language: "MetaGrammar",
+                          name: "nodeRefCardinality",
+                          children: {
+                            references: [
+                              {
+                                language: "MetaGrammar",
+                                name: "nodeRefOne",
+                                properties: {
+                                  languageName: "l",
+                                  typeName: "t",
+                                },
+                              },
+                            ],
+                            cardinality: [
+                              {
+                                language: "MetaGrammar",
+                                name: "knownCardinality",
+                                properties: {
+                                  cardinality: "?",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      const seqDesc: NodeTypesSequenceDescription = {
+        type: "sequence",
+        name: "seq",
+        nodeTypes: [
+          {
+            occurs: "?",
+            nodeType: { languageName: "l", typeName: "t" },
+          },
+        ],
       };
 
       expect(g).toEqual({

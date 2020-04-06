@@ -1,3 +1,5 @@
+import { StringUnion } from "../string-union";
+
 /**
  * A verbos definition of minimum and maximum occurences.
  */
@@ -6,15 +8,14 @@ export interface OccursSpecificDescription {
   maxOccurs: number;
 }
 
+export const OccursString = StringUnion("1", "?", "+", "*");
+
+export type OccursString = typeof OccursString.type;
+
 /**
  * Describes limits for occurences.
  */
-export type OccursDescription =
-  | "1"
-  | "?"
-  | "+"
-  | "*"
-  | OccursSpecificDescription;
+export type OccursDescription = OccursString | OccursSpecificDescription;
 
 /**
  * @return True, if the given instance probably satisfies "ChildCardinalityDescription"
