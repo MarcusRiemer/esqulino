@@ -1,21 +1,12 @@
 import { Injectable } from "@angular/core";
 
-import {
-  Observable,
-  BehaviorSubject,
-  Subject,
-  of,
-  ReplaySubject,
-  ObservedValueOf,
-  empty,
-} from "rxjs";
+import { Observable, BehaviorSubject, Subject, of } from "rxjs";
 import {
   map,
   flatMap,
   first,
   filter,
   scan,
-  defaultIfEmpty,
   tap,
   shareReplay,
   startWith,
@@ -139,6 +130,19 @@ export class ServerTasksService {
     PendingServerTask[]
   > = this._internalTasks$.pipe(
     filter((t) => t.state.type === "pending"),
+    map((t) => ({ description: t.orig.description })),
+    // Taken from: https://stackoverflow.com/questions/50452856/rxjs-buffer-observable-with-max-and-min-
+    scan((acc, cur) => [...acc, cur].slice(-10), []),
+    startWith([]),
+    debounceTime(0),
+    shareReplay(1)
+  );
+
+  // TODO: Get rid of redundancy
+  readonly succeededTasks$: Observable<
+    PendingServerTask[]
+  > = this._internalTasks$.pipe(
+    filter((t) => t.state.type === "success"),
     map((t) => ({ description: t.orig.description })),
     // Taken from: https://stackoverflow.com/questions/50452856/rxjs-buffer-observable-with-max-and-min-
     scan((acc, cur) => [...acc, cur].slice(-10), []),

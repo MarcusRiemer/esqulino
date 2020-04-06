@@ -1,27 +1,30 @@
 import { TestBed } from "@angular/core/testing";
-import { ServerTasksService, ServerTask } from "./server-tasks.service";
+import { ServerTasksService, ServerTaskState } from "./server-tasks.service";
 import { first } from "rxjs/operators";
-import { of } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 
 describe(`ServerTaskService`, () => {
-  function mkTaskSuccess(description: string): ServerTask {
+  function mkTaskSuccess(description: string) {
     return {
       description,
-      state$: of({ type: "success" }),
+      state$: new BehaviorSubject<ServerTaskState>({ type: "success" }),
     };
   }
 
-  function mkTaskPending(description: string): ServerTask {
+  function mkTaskPending(description: string) {
     return {
       description,
-      state$: of({ type: "pending" }),
+      state$: new BehaviorSubject<ServerTaskState>({ type: "pending" }),
     };
   }
 
-  function mkTaskFailure(description: string, message: string): ServerTask {
+  function mkTaskFailure(description: string, message: string) {
     return {
       description,
-      state$: of({ type: "failure", message }),
+      state$: new BehaviorSubject<ServerTaskState>({
+        type: "failure",
+        message,
+      }),
     };
   }
 
@@ -37,13 +40,15 @@ describe(`ServerTaskService`, () => {
     };
   }
 
-  fdescribe("Task Lists", () => {
+  function firstPromise<T>(obs: Observable<T>) {
+    return obs.pipe(first()).toPromise();
+  }
+
+  describe("Task Lists", () => {
     it("No task enqueued", async () => {
       const t = instantiate();
 
-      const pendingTasks = await t.service.pendingTasks$
-        .pipe(first())
-        .toPromise();
+      const pendingTasks = await firstPromise(t.service.pendingTasks$);
 
       expect(pendingTasks).toEqual([]);
     });
@@ -53,9 +58,7 @@ describe(`ServerTaskService`, () => {
 
       t.service.addTask(mkTaskPending("t1"));
 
-      const pendingTasks = await t.service.pendingTasks$
-        .pipe(first())
-        .toPromise();
+      const pendingTasks = await firstPromise(t.service.pendingTasks$);
 
       expect(pendingTasks.map((t) => t.description)).toEqual(["t1"]);
     });
@@ -63,11 +66,33 @@ describe(`ServerTaskService`, () => {
     it("Single pending task enqueued (subscribe early)", async () => {
       const t = instantiate();
 
-      const p = t.service.pendingTasks$.pipe(first()).toPromise();
+      const p = firstPromise(t.service.pendingTasks$);
       t.service.addTask(mkTaskPending("t1"));
       const pendingTasks = await p;
 
       expect(pendingTasks.map((t) => t.description)).toEqual(["t1"]);
+    });
+
+    it("Single pending task later succeeds", async () => {
+      const t = instantiate();
+
+      const task = mkTaskPending("t1");
+      t.service.addTask(task);
+
+      // Pending first
+      const pending = await firstPromise(t.service.pendingTasks$);
+      expect(pending.map((t) => t.description)).toEqual(["t1"]);
+
+      // Changed to succeed
+      task.state$.next({ type: "success" });
+
+      // Now succeeded
+      const succeeded = await firstPromise(t.service.succeededTasks$);
+      expect(succeeded.map((t) => t.description)).toEqual(["t1"]);
+
+      // Nothing remains pending
+      const pendingLater = await firstPromise(t.service.pendingTasks$);
+      expect(pendingLater.map((t) => t.description)).toEqual([]);
     });
 
     it("Two pending tasks enqueued (subscribe late)", async () => {
@@ -78,9 +103,7 @@ describe(`ServerTaskService`, () => {
 
       console.log("Awaiting values");
 
-      const pendingTasks = await t.service.pendingTasks$
-        .pipe(first())
-        .toPromise();
+      const pendingTasks = await firstPromise(t.service.pendingTasks$);
 
       expect(pendingTasks.map((t) => t.description)).toEqual(["t1", "t2"]);
     });
@@ -88,7 +111,7 @@ describe(`ServerTaskService`, () => {
     it("Two pending tasks enqueued (subscribe early)", async () => {
       const t = instantiate();
 
-      const p = t.service.pendingTasks$.pipe(first()).toPromise();
+      const p = firstPromise(t.service.pendingTasks$);
       console.log("Subscribed values");
 
       t.service.addTask(mkTaskPending("t1"));
@@ -101,6 +124,29 @@ describe(`ServerTaskService`, () => {
       expect(pendingTasks.map((t) => t.description)).toEqual(["t1", "t2"]);
     });
 
+    it("Two pending tasks, first later succeeds", async () => {
+      const t = instantiate();
+
+      const task1 = mkTaskPending("t1");
+      t.service.addTask(task1);
+      t.service.addTask(mkTaskPending("t2"));
+
+      // Pending first
+      const pending = await firstPromise(t.service.pendingTasks$);
+      expect(pending.map((t) => t.description)).toEqual(["t1", "t2"]);
+
+      // Changed to succeed
+      task1.state$.next({ type: "success" });
+
+      // Now succeeded
+      const succeeded = await firstPromise(t.service.succeededTasks$);
+      expect(succeeded.map((t) => t.description)).toEqual(["t1"]);
+
+      // Other remains pending
+      const pendingLater = await firstPromise(t.service.pendingTasks$);
+      expect(pendingLater.map((t) => t.description)).toEqual(["t2"]);
+    });
+
     it("Three pending tasks enqueued (subscribe late)", async () => {
       const t = instantiate();
 
@@ -108,11 +154,7 @@ describe(`ServerTaskService`, () => {
       t.service.addTask(mkTaskPending("t2"));
       t.service.addTask(mkTaskPending("t3"));
 
-      console.log("Awaiting values");
-
-      const pendingTasks = await t.service.pendingTasks$
-        .pipe(first())
-        .toPromise();
+      const pendingTasks = await firstPromise(t.service.pendingTasks$);
 
       expect(pendingTasks.map((t) => t.description)).toEqual([
         "t1",
@@ -124,49 +166,45 @@ describe(`ServerTaskService`, () => {
     it("Three pending tasks enqueued (subscribe early)", async () => {
       const t = instantiate();
 
-      const p = t.service.pendingTasks$.pipe(first()).toPromise();
-      console.log("Subscribed values");
+      const p = firstPromise(t.service.pendingTasks$);
 
       t.service.addTask(mkTaskPending("t1"));
       t.service.addTask(mkTaskPending("t2"));
       t.service.addTask(mkTaskPending("t3"));
 
-      console.log("Awaiting values");
+      const pending = await p;
 
-      const pendingTasks = await p;
-
-      expect(pendingTasks.map((t) => t.description)).toEqual([
-        "t1",
-        "t2",
-        "t3",
-      ]);
+      expect(pending.map((t) => t.description)).toEqual(["t1", "t2", "t3"]);
     });
 
     it("Three pending tasks enqueued (subscribe early & later again)", async () => {
       const t = instantiate();
 
-      const p = t.service.pendingTasks$.pipe(first()).toPromise();
-      console.log("Subscribed values");
+      const p = firstPromise(t.service.pendingTasks$);
 
       t.service.addTask(mkTaskPending("t1"));
       t.service.addTask(mkTaskPending("t2"));
       t.service.addTask(mkTaskPending("t3"));
 
-      console.log("Awaiting values");
+      const pending = await p;
+      expect(pending.map((t) => t.description)).toEqual(["t1", "t2", "t3"]);
 
-      const pendingTasks = await p;
+      const again = await firstPromise(t.service.pendingTasks$);
+      expect(again.map((t) => t.description)).toEqual(["t1", "t2", "t3"]);
+    });
 
-      expect(pendingTasks.map((t) => t.description)).toEqual([
-        "t1",
-        "t2",
-        "t3",
-      ]);
+    it("Three pending tasks enqueued (subscribe late & later again)", async () => {
+      const t = instantiate();
 
-      const tasksAgain = await t.service.pendingTasks$
-        .pipe(first())
-        .toPromise();
+      t.service.addTask(mkTaskPending("t1"));
+      t.service.addTask(mkTaskPending("t2"));
+      t.service.addTask(mkTaskPending("t3"));
 
-      expect(tasksAgain.map((t) => t.description)).toEqual(["t1", "t2", "t3"]);
+      const pending = await firstPromise(t.service.pendingTasks$);
+      expect(pending.map((t) => t.description)).toEqual(["t1", "t2", "t3"]);
+
+      const again = await firstPromise(t.service.pendingTasks$);
+      expect(again.map((t) => t.description)).toEqual(["t1", "t2", "t3"]);
     });
   });
 
