@@ -91,6 +91,13 @@ describe("CreateGrammarComponent", () => {
     // use newEvent utility function (not provided by Angular) for better browser compatibility
     nameInput.dispatchEvent(new Event("input"));
     plSelect.dispatchEvent(new Event("change"));
+
+    t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
+
+    expect(t.component.grammar.name).toEqual("G1Test");
+    expect(t.component.grammar.programmingLanguageId).not.toBeUndefined();
+
     createButton.click();
 
     t.fixture.detectChanges();

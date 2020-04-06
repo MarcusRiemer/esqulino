@@ -101,7 +101,7 @@ describe("CreateBlockLanguageComponent", () => {
     const grammarOption = grammarIdSelect.options.item(1);
 
     expect(grammarOption.value).toEqual(t.availableGrammars[0].id);
-    expect(grammarOption.innerText).toEqual(t.availableGrammars[0].name);
+    expect(grammarOption.innerText.trim()).toEqual(t.availableGrammars[0].name);
   });
 
   it(`create BlockLanguage without a slug`, async () => {
