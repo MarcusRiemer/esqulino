@@ -1,32 +1,41 @@
 import { Injectable } from "@angular/core";
 
-import { Observable, BehaviorSubject, Subject, combineLatest, of } from "rxjs";
-import { map, flatMap, first, shareReplay } from "rxjs/operators";
+import { Observable, BehaviorSubject, Subject, of } from "rxjs";
+import { map, flatMap, first, bufferCount, filter } from "rxjs/operators";
 
-export interface ServerTaskStateSuccess {
-  type: "success";
-}
-
+/** The server has not yet responded to a task */
 export interface ServerTaskStatePending {
   type: "pending";
 }
 
+/** The task was executed on the server successfully */
+export interface ServerTaskStateSuccess {
+  type: "success";
+}
+
+/** A  task has failed, contains a message what went wrong */
 export interface ServerTaskStateFailure {
   type: "failure";
   message: string;
 }
 
+/** All possible state a task may have. */
 export type ServerTaskState =
   | ServerTaskStateFailure
   | ServerTaskStatePending
   | ServerTaskStateSuccess;
 
+/** Any operation that takes place on the server. */
 export interface ServerTask {
   readonly state$: Observable<ServerTaskState>;
 
   readonly description: string;
 }
 
+/**
+ * A server side operation that is explicitly managed by calling
+ * `succeeded` and `failed`.
+ */
 export class ServerTaskManual implements ServerTask {
   constructor(public readonly description: string) {}
 
@@ -65,37 +74,28 @@ export type FailedServerTask = {
 
 @Injectable()
 export class ServerTasksService {
-  private readonly _taskChangedEvent = new Subject<void>();
+  readonly allTasks$ = new Subject<ServerTask>();
 
-  readonly allTasks$ = new BehaviorSubject<ServerTask[]>([]);
-
-  private readonly _internalTasks$ = combineLatest(
-    this._taskChangedEvent,
-    this.allTasks$
-  ).pipe(
-    map(([_, tasks]) => tasks),
+  private readonly _internalTasks$ = this.allTasks$.pipe(
     flatMap(
-      async (tasks): Promise<InternalServerTask[]> => {
-        const promises = tasks.map((t) => t.state$.pipe(first()).toPromise());
-        const resolved = await Promise.all(promises);
+      async (t): Promise<InternalServerTask> => {
+        const promise = t.state$.pipe(first()).toPromise();
+        const resolved = await promise;
 
-        return tasks.map((t, i) => ({
+        return {
           orig: t,
-          state: resolved[i],
-        }));
+          state: resolved,
+        };
       }
-    ),
-    shareReplay(1)
+    )
   );
 
   readonly pendingTasks$: Observable<
     PendingServerTask[]
   > = this._internalTasks$.pipe(
-    map((tasks) =>
-      tasks
-        .filter((t) => t.state.type === "pending")
-        .map((t) => ({ description: t.orig.description }))
-    )
+    filter((t) => t.state.type === "pending"),
+    map((t) => ({ description: t.orig.description })),
+    bufferCount(10)
   );
 
   readonly failedTasks$: Observable<FailedServerTask[]> = undefined;
@@ -106,14 +106,6 @@ export class ServerTasksService {
   readonly hasAnyErrorTask$ = of(false);
 
   addTask(task: ServerTask) {
-    this.allTasks$.next(this.allTasks$.value.concat(task));
-
-    // Inform when task is not pending anymore
-    // TODO: How to unsubscribe
-    task.state$.subscribe((state) => {
-      if (state.type !== "pending") {
-        this._taskChangedEvent.next();
-      }
-    });
+    this.allTasks$.next(task);
   }
 }
