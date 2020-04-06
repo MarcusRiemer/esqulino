@@ -1,9 +1,30 @@
 import { TestBed } from "@angular/core/testing";
-import { ServerTasksService, ServerTaskState } from "./server-tasks.service";
+import { ServerTasksService, ServerTask } from "./server-tasks.service";
 import { first } from "rxjs/operators";
 import { of } from "rxjs";
 
 describe(`ServerTaskService`, () => {
+  function mkTaskSuccess(description: string): ServerTask {
+    return {
+      description,
+      state$: of({ type: "success" }),
+    };
+  }
+
+  function mkTaskPending(description: string): ServerTask {
+    return {
+      description,
+      state$: of({ type: "pending" }),
+    };
+  }
+
+  function mkTaskFailure(description: string, message: string): ServerTask {
+    return {
+      description,
+      state$: of({ type: "failure", message }),
+    };
+  }
+
   function instantiate() {
     TestBed.configureTestingModule({
       imports: [],
@@ -16,7 +37,7 @@ describe(`ServerTaskService`, () => {
     };
   }
 
-  it("is completely empty", async () => {
+  it("No task enqueued", async () => {
     const t = instantiate();
     const hasAnyFinishedTask = await t.service.hasAnyFinishedTask$
       .pipe(first())
@@ -29,16 +50,66 @@ describe(`ServerTaskService`, () => {
       .toPromise();
 
     expect(hasAnyErrorTask).toEqual(false);
+
+    const pendingTasks = await t.service.pendingTasks$
+      .pipe(first())
+      .toPromise();
+
+    expect(pendingTasks).toEqual([]);
   });
 
-  it("Single failed task enqueued", async () => {
+  it("Single pending task enqueued (subscribe late)", async () => {
     const t = instantiate();
 
-    t.service.addTask({
-      description: "foo",
-      state: ServerTaskState.FAILURE,
-      state$: of(ServerTaskState.FAILURE),
-    });
+    t.service.addTask(mkTaskPending("t1"));
+
+    const hasAnyFinishedTask = await t.service.hasAnyFinishedTask$
+      .pipe(first())
+      .toPromise();
+
+    expect(hasAnyFinishedTask).toEqual(false);
+
+    const hasAnyErrorTask = await t.service.hasAnyFinishedTask$
+      .pipe(first())
+      .toPromise();
+
+    expect(hasAnyErrorTask).toEqual(false);
+
+    const pendingTasks = await t.service.pendingTasks$
+      .pipe(first())
+      .toPromise();
+
+    expect(pendingTasks.length).toEqual(1);
+  });
+
+  it("Single pending task enqueued (subscribe early)", async () => {
+    const t = instantiate();
+
+    const p = t.service.pendingTasks$.pipe(first()).toPromise();
+
+    t.service.addTask(mkTaskPending("t1"));
+
+    const hasAnyFinishedTask = await t.service.hasAnyFinishedTask$
+      .pipe(first())
+      .toPromise();
+
+    expect(hasAnyFinishedTask).toEqual(false);
+
+    const hasAnyErrorTask = await t.service.hasAnyFinishedTask$
+      .pipe(first())
+      .toPromise();
+
+    expect(hasAnyErrorTask).toEqual(false);
+
+    const pendingTasks = await p;
+
+    expect(pendingTasks.length).toEqual(1);
+  });
+
+  xit("Single failed task enqueued", async () => {
+    const t = instantiate();
+
+    t.service.addTask(mkTaskFailure("t1", "e1"));
 
     const hasAnyFinishedTask = await t.service.hasAnyFinishedTask$
       .pipe(first())
@@ -53,14 +124,10 @@ describe(`ServerTaskService`, () => {
     expect(hasAnyErrorTask).toEqual(true);
   });
 
-  it("Single succeeded task enqueued", async () => {
+  xit("Single succeeded task enqueued", async () => {
     const t = instantiate();
 
-    t.service.addTask({
-      description: "foo",
-      state: ServerTaskState.SUCCESS,
-      state$: of(ServerTaskState.SUCCESS),
-    });
+    t.service.addTask(mkTaskSuccess("t1"));
 
     const hasAnyFinishedTask = await t.service.hasAnyFinishedTask$
       .pipe(first())

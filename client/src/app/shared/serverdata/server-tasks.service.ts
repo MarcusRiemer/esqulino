@@ -1,7 +1,16 @@
 import { Injectable } from "@angular/core";
 
 import { Observable, BehaviorSubject, Subject, of } from "rxjs";
-import { map, flatMap, first, bufferCount, filter } from "rxjs/operators";
+import {
+  map,
+  flatMap,
+  first,
+  filter,
+  scan,
+  defaultIfEmpty,
+  tap,
+  shareReplay,
+} from "rxjs/operators";
 
 /** The server has not yet responded to a task */
 export interface ServerTaskStatePending {
@@ -24,6 +33,9 @@ export type ServerTaskState =
   | ServerTaskStateFailure
   | ServerTaskStatePending
   | ServerTaskStateSuccess;
+
+/** Keys for all possible states */
+export type ServerTaskStateType = ServerTaskState["type"];
 
 /** Any operation that takes place on the server. */
 export interface ServerTask {
@@ -57,26 +69,48 @@ export class ServerTaskManual implements ServerTask {
   }
 }
 
-// The internal representation of a task
+/**
+ * The internal representation of a task.
+ * TODO: Timestamp? ID?
+ */
 type InternalServerTask = {
   orig: ServerTask;
   state: ServerTaskState;
 };
 
+/**
+ * Public representation of a task this pending.
+ */
 export type PendingServerTask = {
   description: string;
+  // TODO? startedAt: timeStamp (number)
 };
 
+/**
+ * Public representation of a task that has succeeded
+ */
+export type SucceededServerTask = {
+  description: string;
+  // TODO? startedAt: timeStamp (number)
+  // TODO? durationInMs: number
+};
+
+/**
+ * Public representation of a task that has failed
+ */
 export type FailedServerTask = {
   description: string;
+  // TODO? startedAt: timeStamp (number)
+  // TODO? durationInMs: number
   message: string;
 };
 
 @Injectable()
 export class ServerTasksService {
-  readonly allTasks$ = new Subject<ServerTask>();
+  private readonly _newTaskEvent$ = new Subject<ServerTask>();
 
-  private readonly _internalTasks$ = this.allTasks$.pipe(
+  private readonly _internalTasks$ = this._newTaskEvent$.pipe(
+    tap((internal) => console.log("Before internal conversion: ", internal)),
     flatMap(
       async (t): Promise<InternalServerTask> => {
         const promise = t.state$.pipe(first()).toPromise();
@@ -87,7 +121,8 @@ export class ServerTasksService {
           state: resolved,
         };
       }
-    )
+    ),
+    tap((internal) => console.log("Converted to internal: ", internal))
   );
 
   readonly pendingTasks$: Observable<
@@ -95,7 +130,10 @@ export class ServerTasksService {
   > = this._internalTasks$.pipe(
     filter((t) => t.state.type === "pending"),
     map((t) => ({ description: t.orig.description })),
-    bufferCount(10)
+    // Taken from: https://stackoverflow.com/questions/50452856/rxjs-buffer-observable-with-max-and-min-
+    scan((acc, cur) => [...acc, cur].slice(-10), []),
+    defaultIfEmpty([]),
+    shareReplay(1)
   );
 
   readonly failedTasks$: Observable<FailedServerTask[]> = undefined;
@@ -106,6 +144,7 @@ export class ServerTasksService {
   readonly hasAnyErrorTask$ = of(false);
 
   addTask(task: ServerTask) {
-    this.allTasks$.next(task);
+    this._newTaskEvent$.next(task);
+    console.log("Added task", task);
   }
 }
