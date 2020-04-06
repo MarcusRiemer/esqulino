@@ -85,7 +85,7 @@ export class CreateBlockLanguageComponent {
     const res = await req;
 
     this._serverData.listCache.refresh();
-    this._router.navigateByUrl(`/admin/block-language/${res.id}`);
+    await this._router.navigateByUrl(`/admin/block-language/${res.id}`);
 
     return res;
   }

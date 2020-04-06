@@ -9,6 +9,7 @@ import {
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { PortalModule } from "@angular/cdk/portal";
+import { Router } from "@angular/router";
 
 import {
   LanguageService,
@@ -24,21 +25,24 @@ import {
   MutateGrammarService,
 } from "../../shared/serverdata";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
+import { buildGrammar, provideGrammarList } from "../../editor/spec-util";
+import { EmptyComponent } from "../../shared/empty.component";
 
 import { CreateBlockLanguageComponent } from "./create-block-language.component";
-import { buildGrammar, provideGrammarList } from "src/app/editor/spec-util";
 
 describe("CreateBlockLanguageComponent", () => {
   async function createComponent(availableGrammars: GrammarDescription[] = []) {
     await TestBed.configureTestingModule({
       imports: [
+        RouterTestingModule.withRoutes([
+          { path: "admin/block-language/:id", component: EmptyComponent },
+        ]),
         FormsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
         MatTableModule,
         PortalModule,
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([]),
       ],
       providers: [
         ToolbarService,
@@ -68,6 +72,7 @@ describe("CreateBlockLanguageComponent", () => {
 
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
+    const router = TestBed.inject(Router);
 
     return {
       fixture,
@@ -76,6 +81,7 @@ describe("CreateBlockLanguageComponent", () => {
       httpTesting,
       serverApi,
       availableGrammars,
+      router,
     };
   }
 
@@ -98,7 +104,7 @@ describe("CreateBlockLanguageComponent", () => {
     expect(grammarOption.innerText).toEqual(t.availableGrammars[0].name);
   });
 
-  xit(`create BlockLanguage without a slug`, async () => {
+  it(`create BlockLanguage without a slug`, async () => {
     const t = await createComponent([buildGrammar({ name: "G1" })]);
 
     const nameInput: HTMLInputElement = t.element.querySelector(
@@ -125,6 +131,8 @@ describe("CreateBlockLanguageComponent", () => {
       .expectOne(t.serverApi.individualGrammarUrl(t.availableGrammars[0].id))
       .flush(t.availableGrammars[0]);
 
+    await t.fixture.whenStable();
+
     const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
     t.httpTesting
       .expectOne({ method: "POST", url: t.serverApi.createBlockLanguageUrl() })
@@ -133,5 +141,6 @@ describe("CreateBlockLanguageComponent", () => {
     const res = await req;
 
     expect(res.id).toEqual(generatedId);
+    expect(t.router.url).toEqual(`/admin/block-language/${res.id}`);
   });
 });
