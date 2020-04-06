@@ -100,6 +100,11 @@ describe("OverviewBlockLanguageComponent", () => {
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
+
+    const tableElement = t.element.querySelector("table");
+    const rows = tableElement.querySelectorAll("tbody > tr");
+
+    expect(rows.length).toEqual(0);
   });
 
   it(`Displays a list with a single element`, async () => {
