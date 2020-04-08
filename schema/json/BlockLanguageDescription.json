@@ -250,11 +250,11 @@
         "defaultNode": {
           "anyOf": [
             {
-              "$ref": "#/definitions/NodeDescription"
+              "$ref": "#/definitions/NodeTailoredDescription"
             },
             {
               "items": {
-                "$ref": "#/definitions/NodeDescription"
+                "$ref": "#/definitions/NodeTailoredDescription"
               },
               "type": "array"
             }
@@ -578,7 +578,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_"
                   }
                 ]
               }
@@ -630,7 +630,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_"
                   }
                 ]
               }
@@ -731,6 +731,76 @@
       ],
       "type": "object"
     },
+    "NodeDerivedPropertiesDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+                },
+                {
+                  "$ref": "#/definitions/NodeDescription"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/NodeDerivedProperty"
+              }
+            ]
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "language",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NodeDerivedProperty": {
+      "additionalProperties": false,
+      "properties": {
+        "loc": {
+          "$ref": "#/definitions/NodeLocation"
+        },
+        "propName": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "nodeDerivedProperty"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "loc",
+        "propName"
+      ],
+      "type": "object"
+    },
     "NodeDescription": {
       "additionalProperties": false,
       "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
@@ -766,6 +836,38 @@
         "language"
       ],
       "type": "object"
+    },
+    "NodeLocation": {
+      "description": "Contains the path to find a certain node in a syntax tree.\nThese paths currently always start from the root node.",
+      "items": {
+        "$ref": "#/definitions/NodeLocationStep"
+      },
+      "type": "array"
+    },
+    "NodeLocationStep": {
+      "description": "Determines the category and the index in that category\nof a node.",
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "NodeTailoredDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeDescription"
+        }
+      ],
+      "description": "A description of a node that has \"holes\" in it, which may be filled\nwith the help of an existing AST. Often used to fill in some data at\nthe beginning of a started drag."
     },
     "ParameterBoolean": {
       "additionalProperties": false,
@@ -827,7 +929,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
             }
           ]
         },
@@ -850,7 +952,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
             }
           ]
         },
@@ -900,7 +1002,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
             }
           ]
         },
@@ -923,7 +1025,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
             }
           ]
         },
@@ -973,7 +1075,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -986,7 +1088,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_": {
+    "ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -1185,7 +1287,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_"
                   }
                 ]
               }
@@ -1343,11 +1445,11 @@
         "defaultNode": {
           "anyOf": [
             {
-              "$ref": "#/definitions/NodeDescription"
+              "$ref": "#/definitions/NodeTailoredDescription"
             },
             {
               "items": {
-                "$ref": "#/definitions/NodeDescription"
+                "$ref": "#/definitions/NodeTailoredDescription"
               },
               "type": "array"
             }

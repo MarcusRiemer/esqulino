@@ -1,12 +1,65 @@
-import { NodeDescription } from "../syntaxtree";
+import { NodeDescription, Tree } from "../syntaxtree";
 
 import {
   FixedBlocksSidebarDescription,
   FixedBlocksSidebarCategoryDescription,
   SidebarBlockDescription,
+  NodeTailoredDescription,
+  isNodeDerivedPropertyDescription,
 } from "./block.description";
 import { BlockLanguage } from "./block-language.forward";
 import { Sidebar } from "./sidebar";
+
+export function tailorBlockDescription(
+  ast: Tree,
+  proposal: NodeTailoredDescription
+): NodeDescription {
+  const properties: NodeDescription["properties"] = {};
+  Object.entries(proposal.properties ?? []).forEach(([key, value]) => {
+    if (typeof value === "string") {
+      properties[key] = value;
+    } else if (isNodeDerivedPropertyDescription(value)) {
+      const node = ast.locateOrUndefined(value.loc);
+      if (!node) {
+        const path = JSON.stringify(value.loc);
+        throw new Error(`Unknown path ${path}`);
+      }
+      const prop = node.properties[value.propName];
+      if (typeof prop === "undefined") {
+        const path = JSON.stringify(value.loc);
+        const available = JSON.stringify(node.properties);
+        throw new Error(
+          `Node at ${path} has no property "${value.propName}", ` +
+            `available properties are: ${available}`
+        );
+      }
+
+      properties[key] = ast.locate(value.loc).properties[value.propName];
+    }
+  });
+
+  // Construct the returned object and add all attributes that actually
+  const toReturn: NodeDescription = {
+    language: proposal.language,
+    name: proposal.name,
+  };
+
+  if (proposal.children) {
+    const newChildren = {};
+
+    Object.entries(proposal.children).forEach(([catName, cat]) => {
+      newChildren[catName] = cat.map((n) => tailorBlockDescription(ast, n));
+    });
+
+    toReturn.children = newChildren;
+  }
+
+  if (Object.keys(properties).length > 0) {
+    toReturn.properties = properties;
+  }
+
+  return toReturn;
+}
 
 /**
  * This is how a certain type will be made availabe for the user
@@ -22,7 +75,7 @@ export class FixedSidebarBlock {
    * @return The node that should be created when this block
    *         needs to be instanciated.
    */
-  public readonly defaultNode: NodeDescription[];
+  public readonly defaultNode: NodeTailoredDescription[];
 
   constructor(desc: SidebarBlockDescription) {
     this.displayName = desc.displayName;
@@ -32,6 +85,10 @@ export class FixedSidebarBlock {
     } else {
       this.defaultNode = [desc.defaultNode];
     }
+  }
+
+  tailoredBlockDescription(ast: Tree) {
+    return this.defaultNode.map((b) => tailorBlockDescription(ast, b));
   }
 }
 

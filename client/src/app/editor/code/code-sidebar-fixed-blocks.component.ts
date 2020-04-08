@@ -23,7 +23,10 @@ export class CodeSidebarFixedBlocksComponent {
    */
   startDrag(evt: DragEvent, block: FixedSidebarBlock) {
     try {
-      this._dragService.dragStart(evt, block.defaultNode, {
+      const tailoredNode = block.tailoredBlockDescription(
+        this._codeResource.syntaxTreePeek
+      );
+      this._dragService.dragStart(evt, tailoredNode, {
         sidebarBlockDescription: block,
       });
     } catch (e) {
