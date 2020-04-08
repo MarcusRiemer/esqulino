@@ -1,10 +1,10 @@
-<details *ngFor="let sidebar of (fixedBlockSidebars | async)" class="ast" open>
+<details *ngFor="let sidebar of (fixedBlockSidebars$ | async)" class="ast" open>
   <summary>
     <h5>{{ sidebar.displayName }}</h5>
   </summary>
   <details *ngFor="let category of sidebar.categories" open>
     <summary>
-      <h6 *ngIf="category.showDisplayName">{{ category.displayName }}</h6>
+      <h6>{{ category.displayName }}</h6>
     </summary>
     <div
       *ngFor="let block of category.blocks"

@@ -31,14 +31,9 @@ export class CodeSidebarFixedBlocksComponent {
     }
   }
 
-  /**
-   * @return Relevant languages along with their available types
-   */
-  get currentLanguage() {
-    return this._codeResource.blockLanguage;
-  }
+  readonly currentBlockLanguage$ = this._codeResource.blockLanguage;
 
-  readonly fixedBlockSidebars = this._codeResource.blockLanguage.pipe(
+  readonly fixedBlockSidebars$ = this.currentBlockLanguage$.pipe(
     map((b) =>
       b.sidebars.filter((s) => s.portalComponentTypeId === "fixedBlocks")
     )

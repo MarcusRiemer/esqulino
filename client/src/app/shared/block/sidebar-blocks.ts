@@ -13,32 +13,25 @@ import { Sidebar } from "./sidebar";
  * in the sidebar.
  */
 export class FixedSidebarBlock {
-  private _description: SidebarBlockDescription;
-  private _defaultNode: NodeDescription[];
-
-  constructor(desc: SidebarBlockDescription) {
-    this._description = desc;
-
-    if (Array.isArray(this._description.defaultNode)) {
-      this._defaultNode = this._description.defaultNode;
-    } else {
-      this._defaultNode = [this._description.defaultNode];
-    }
-  }
+  /**
+   * The caption that is displayed for this block.
+   */
+  public readonly displayName: string;
 
   /**
    * @return The node that should be created when this block
    *         needs to be instanciated.
    */
-  get defaultNode(): NodeDescription[] {
-    return this._defaultNode;
-  }
+  public readonly defaultNode: NodeDescription[];
 
-  /**
-   * @return A friendly name that should be displayed to the user.
-   */
-  get displayName() {
-    return this._description.displayName;
+  constructor(desc: SidebarBlockDescription) {
+    this.displayName = desc.displayName;
+
+    if (Array.isArray(desc.defaultNode)) {
+      this.defaultNode = desc.defaultNode;
+    } else {
+      this.defaultNode = [desc.defaultNode];
+    }
   }
 }
 
@@ -46,40 +39,26 @@ export class FixedSidebarBlock {
  * Groups together blocks.
  */
 export interface BlocksSidebarCategory {
-  readonly blocks: FixedSidebarBlock[];
-  readonly showDisplayName: boolean;
+  readonly blocks: ReadonlyArray<FixedSidebarBlock>;
   readonly displayName: string;
 }
 
 export class FixedBlocksSidebarCategory implements BlocksSidebarCategory {
-  private _blocks: FixedSidebarBlock[] = [];
-  private _caption: string;
-  private _sidebar: FixedBlocksSidebar;
+  /**
+   * The caption that is displayed for this category.
+   */
+  public readonly displayName: string;
+
+  public readonly blocks: ReadonlyArray<FixedSidebarBlock>;
 
   constructor(
-    parent: FixedBlocksSidebar,
+    _parent: FixedBlocksSidebar,
     desc: FixedBlocksSidebarCategoryDescription
   ) {
-    this._sidebar = parent;
-    this._caption = desc.categoryCaption;
-    this._blocks = desc.blocks.map(
+    this.displayName = desc.categoryCaption;
+    this.blocks = desc.blocks.map(
       (blockDesc) => new FixedSidebarBlock(blockDesc)
     );
-  }
-
-  get blocks() {
-    return this._blocks;
-  }
-
-  /**
-   * If this is the only category inside the sidebar displaying its title might be noisy.
-   */
-  get showDisplayName() {
-    return this._sidebar.categories.length > 1;
-  }
-
-  get displayName() {
-    return this._caption;
   }
 }
 
@@ -91,25 +70,22 @@ export class FixedBlocksSidebarCategory implements BlocksSidebarCategory {
  * 3) Block
  */
 export class FixedBlocksSidebar implements Sidebar {
-  private _categories: BlocksSidebarCategory[] = [];
-  private _caption: string;
+  readonly portalComponentTypeId = "fixedBlocks";
+
+  /**
+   * The caption that is displayed for this sidebar.
+   */
+  public readonly displayName: string;
+
+  /**
+   * The categories the blocks are sorted in to
+   */
+  public readonly categories: ReadonlyArray<BlocksSidebarCategory>;
 
   constructor(_parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
-    this._caption = desc.caption;
-    this._categories = desc.categories.map((catDesc) => {
+    this.displayName = desc.caption;
+    this.categories = desc.categories.map((catDesc) => {
       return new FixedBlocksSidebarCategory(this, catDesc);
     });
-  }
-
-  get displayName() {
-    return this._caption;
-  }
-
-  get categories() {
-    return this._categories;
-  }
-
-  get portalComponentTypeId() {
-    return "fixedBlocks";
   }
 }
