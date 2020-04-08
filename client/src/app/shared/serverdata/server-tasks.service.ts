@@ -1,26 +1,27 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 
-import { Observable, BehaviorSubject, Subject, of } from "rxjs";
+import {Observable, BehaviorSubject, Subject, of, combineLatest} from "rxjs";
 import {
   map,
-  flatMap,
-  first,
-  filter,
   scan,
   tap,
   shareReplay,
   startWith,
   debounceTime,
+  switchMap,
 } from "rxjs/operators";
+import {generateUUIDv4} from "../util-browser";
 
 /** The server has not yet responded to a task */
 export interface ServerTaskStatePending {
   type: "pending";
+  message?: string;
 }
 
 /** The task was executed on the server successfully */
 export interface ServerTaskStateSuccess {
   type: "success";
+  message?: string;
 }
 
 /** A  task has failed, contains a message what went wrong */
@@ -40,8 +41,9 @@ export type ServerTaskStateType = ServerTaskState["type"];
 
 /** Any operation that takes place on the server. */
 export interface ServerTask {
+  readonly id: string;
+  readonly createdAt: number;
   readonly state$: Observable<ServerTaskState>;
-
   readonly description: string;
 }
 
@@ -50,22 +52,31 @@ export interface ServerTask {
  * `succeeded` and `failed`.
  */
 export class ServerTaskManual implements ServerTask {
-  constructor(public readonly description: string) {}
 
-  private _state$ = new BehaviorSubject<ServerTaskState>({ type: "pending" });
+  private _state$ = new BehaviorSubject<ServerTaskState>({type: "pending"});
 
-  readonly state$ = this._state$.asObservable();
+  readonly state$ = this._state$.asObservable().pipe(shareReplay(1));
+
+  readonly createdAt: number;
+
+  readonly id: string;
+
+  constructor(readonly description: string) {
+    this.id = generateUUIDv4();
+    this.createdAt = Date.now();
+  }
+
   get state() {
     return this._state$.value;
   }
 
   public succeeded() {
-    this._state$.next({ type: "success" });
+    this._state$.next({type: "success"});
     this._state$.complete();
   }
 
   public failed(message: string) {
-    this._state$.next({ type: "failure", message });
+    this._state$.next({type: "failure", message});
     this._state$.complete();
   }
 }
@@ -80,78 +91,60 @@ type InternalServerTask = {
 };
 
 /**
+ * Public representation of a task.
+ */
+type PublicServerTask = {
+  description: string;
+  message?: string;
+}
+
+/**
  * Public representation of a task this pending.
  */
 export type PendingServerTask = {
-  description: string;
   // TODO? startedAt: timeStamp (number)
-};
+} & PublicServerTask;
 
 /**
  * Public representation of a task that has succeeded
  */
 export type SucceededServerTask = {
-  description: string;
   // TODO? startedAt: timeStamp (number)
   // TODO? durationInMs: number
-};
+} & PublicServerTask;
 
 /**
  * Public representation of a task that has failed
  */
 export type FailedServerTask = {
-  description: string;
   // TODO? startedAt: timeStamp (number)
-  // TODO? durationInMs: number
-  message: string;
-};
+  // TODO?     durationInMs: number
+} & PublicServerTask;
 
 @Injectable()
 export class ServerTasksService {
-  private readonly _newTaskEvent$ = new Subject<ServerTask>();
 
-  private readonly _internalTasks$ = this._newTaskEvent$.pipe(
-    tap((internal) => console.log("Before internal conversion: ", internal)),
-    flatMap(
-      async (t): Promise<InternalServerTask> => {
-        const promise = t.state$.pipe(first()).toPromise();
-        const resolved = await promise;
+  private readonly _newTaskEvent$ = new Subject<ServerTaskManual>();
 
-        return {
-          orig: t,
-          state: resolved,
-        };
-      }
-    ),
-    tap((internal) => console.log("Converted to internal: ", internal))
-  );
-
-  readonly pendingTasks$: Observable<
-    PendingServerTask[]
-  > = this._internalTasks$.pipe(
-    filter((t) => t.state.type === "pending"),
-    map((t) => ({ description: t.orig.description })),
-    // Taken from: https://stackoverflow.com/questions/50452856/rxjs-buffer-observable-with-max-and-min-
+  private readonly _internalTasks$: Observable<ServerTaskManual[]> = this._newTaskEvent$.pipe(
     scan((acc, cur) => [...acc, cur].slice(-10), []),
     startWith([]),
     debounceTime(0),
-    shareReplay(1)
+    shareReplay(1),
+    tap((t) => t.forEach((task, i) => console.log("[" + i + "]: " + task.description + " is now a BufferedTask")))
   );
 
-  // TODO: Get rid of redundancy
-  readonly succeededTasks$: Observable<
-    PendingServerTask[]
-  > = this._internalTasks$.pipe(
-    filter((t) => t.state.type === "success"),
-    map((t) => ({ description: t.orig.description })),
-    // Taken from: https://stackoverflow.com/questions/50452856/rxjs-buffer-observable-with-max-and-min-
-    scan((acc, cur) => [...acc, cur].slice(-10), []),
-    startWith([]),
-    debounceTime(0),
-    shareReplay(1)
-  );
+  readonly pendingTasks$: Observable<PendingServerTask[]> = this.getTasks("pending", (t) => (
+    {description: t.description,}
+  ));
 
-  readonly failedTasks$: Observable<FailedServerTask[]> = undefined;
+  readonly succeededTasks$: Observable<SucceededServerTask[]> = this.getTasks("success", (t) => (
+    {description: t.description,}
+  ));
+
+  readonly failedTasks$: Observable<FailedServerTask[]> = this.getTasks("failure", (t) => (
+    {description: t.description, message: t.state.message}
+  ));
 
   // TODO: hasAnyFinishedTask$, hasAnyErrorTask$
   readonly hasAnyFinishedTask$ = of(false);
@@ -165,7 +158,41 @@ export class ServerTasksService {
     );
   }
 
-  addTask(task: ServerTask) {
+  private getTasks(state: ServerTaskStateType, cmap: Function): Observable<PublicServerTask[]> | Observable<[]> {
+    console.log("I Just subscribed to " + state);
+    return this._internalTasks$.pipe(
+      tap(tasks => console.log("getTasks: " + tasks.length)),
+      // https://stackoverflow.com/questions/41723541/rxjs-switchmap-not-emitting-value-if-the-input-observable-is-empty-array
+      switchMap(tasks =>  // switchMap to cancel last subscription on new tasks
+        // combine all task state observables, inner map into state and task
+        // https://stackoverflow.com/questions/56593091/use-combinelatest-with-an-array-of-observables
+      {
+        console.log("inside switchMap -> tasks: " + tasks.length);
+        if (tasks.length > 0) {
+          return combineLatest(tasks.map(t => {
+            console.log("inside combineLast -> task: " + t.description);
+            return t.state$.pipe(map(ts => {
+              console.log("deep inside combineLast -> task: " + t.description + " taskstate: " + ts.type);
+              return [ts, t]
+            }))
+          })).pipe(
+            // filter on task state and map into task / use map function
+            map(taskStates => taskStates
+              .filter(([ts, t]) =>
+                ts instanceof ServerTaskManual ? ts.state.type == state : ts.type === state
+              )
+              .map(([ts, t]) => cmap(t)))
+          )
+        } else {
+          console.log("in else!");
+          return of(tasks);
+        }
+      }),
+      tap(x => console.log("getTasks completed!"))
+    )
+  }
+
+  addTask(task: ServerTaskManual) {
     this._newTaskEvent$.next(task);
     console.log("Added task", task);
   }

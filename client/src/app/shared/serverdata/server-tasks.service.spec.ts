@@ -1,31 +1,24 @@
 import { TestBed } from "@angular/core/testing";
-import { ServerTasksService, ServerTaskState } from "./server-tasks.service";
+import {ServerTaskManual, ServerTasksService, ServerTaskState} from "./server-tasks.service";
 import { first } from "rxjs/operators";
 import { Observable, BehaviorSubject } from "rxjs";
+import {generateUUIDv4} from "../util-browser";
 
 describe(`ServerTaskService`, () => {
-  function mkTaskSuccess(description: string) {
-    return {
-      description,
-      state$: new BehaviorSubject<ServerTaskState>({ type: "success" }),
-    };
+  function mkTaskSuccess(description: string):ServerTaskManual {
+    const task = new ServerTaskManual(description);
+    task.succeeded();
+    return task;
   }
 
-  function mkTaskPending(description: string) {
-    return {
-      description,
-      state$: new BehaviorSubject<ServerTaskState>({ type: "pending" }),
-    };
+  function mkTaskPending(description: string):ServerTaskManual {
+    return new ServerTaskManual(description);
   }
 
-  function mkTaskFailure(description: string, message: string) {
-    return {
-      description,
-      state$: new BehaviorSubject<ServerTaskState>({
-        type: "failure",
-        message,
-      }),
-    };
+  function mkTaskFailure(description: string, message: string):ServerTaskManual {
+    const task = new ServerTaskManual(description);
+    task.failed(message);
+    return task;
   }
 
   function instantiate() {
@@ -83,12 +76,14 @@ describe(`ServerTaskService`, () => {
       const pending = await firstPromise(t.service.pendingTasks$);
       expect(pending.map((t) => t.description)).toEqual(["t1"]);
 
+      const succeeded = await firstPromise(t.service.succeededTasks$);
+      expect(succeeded.map((t) => t.description)).toEqual([]);
       // Changed to succeed
-      task.state$.next({ type: "success" });
+      task.succeeded();
 
       // Now succeeded
-      const succeeded = await firstPromise(t.service.succeededTasks$);
-      expect(succeeded.map((t) => t.description)).toEqual(["t1"]);
+      const succeededLater = await firstPromise(t.service.succeededTasks$);
+      expect(succeededLater.map((t) => t.description)).toEqual(["t1"]);
 
       // Nothing remains pending
       const pendingLater = await firstPromise(t.service.pendingTasks$);
@@ -136,7 +131,7 @@ describe(`ServerTaskService`, () => {
       expect(pending.map((t) => t.description)).toEqual(["t1", "t2"]);
 
       // Changed to succeed
-      task1.state$.next({ type: "success" });
+      task1.succeeded();
 
       // Now succeeded
       const succeeded = await firstPromise(t.service.succeededTasks$);
