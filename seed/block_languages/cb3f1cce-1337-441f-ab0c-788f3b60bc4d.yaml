@@ -150,10 +150,11 @@ concise_attributes:
     {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
     "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
     "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"style": {"display": "inline-flex"}, "property": "refTableName", "blockType":
-    "interpolated", "cssClasses": ["explicit-spaces"]}, {"text": ".", "style": {"display":
-    "inline-flex"}, "blockType": "constant"}, {"style": {"display": "inline-flex"},
-    "property": "columnName", "blockType": "interpolated", "cssClasses": ["explicit-spaces"]}],
+    {"children": [{"style": {"display": "inline-flex"}, "property": "refTableName",
+    "blockType": "interpolated", "cssClasses": ["explicit-spaces"]}, {"text": ".",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"style": {"display":
+    "inline-flex"}, "property": "columnName", "blockType": "interpolated", "cssClasses":
+    ["explicit-spaces"]}], "blockType": "container", "orientation": "horizontal"}],
     "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "columnName",
     "languageName": "sql"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
@@ -313,7 +314,7 @@ concise_attributes:
   value_before_type_cast: 2018-07-17 11:08:14.302566000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-10 19:43:16.193880000 Z
+  value_before_type_cast: 2020-04-10 20:40:59.738797000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
