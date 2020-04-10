@@ -16,26 +16,27 @@ concise_attributes:
     "symbol": "["}, {"name": "values", "type": "sequence", "nodeTypes": [{"occurs":
     "*", "nodeType": {"typeName": "value", "languageName": "json"}}]}, {"type": "terminal",
     "symbol": "]"}]}, "value": {"type": "oneOf", "oneOf": [{"typeName": "null", "languageName":
-    "json"}, {"typeName": "object", "languageName": "json"}, {"typeName": "string",
-    "languageName": "json"}, {"typeName": "number", "languageName": "json"}]}, "number":
-    {"type": "concrete", "attributes": [{"base": "integer", "name": "value", "type":
-    "property"}]}, "object": {"type": "concrete", "attributes": [{"type": "terminal",
-    "symbol": "{"}, {"name": "values", "type": "sequence", "nodeTypes": [{"occurs":
-    "*", "nodeType": {"typeName": "key-value", "languageName": "json"}}]}, {"type":
-    "terminal", "symbol": "}"}]}, "string": {"type": "concrete", "attributes": [{"type":
-    "terminal", "symbol": "\""}, {"base": "string", "name": "value", "type": "property"},
-    {"type": "terminal", "symbol": "\""}]}, "boolean": {"type": "concrete", "attributes":
-    [{"base": "boolean", "name": "value", "type": "property"}]}, "key-value": {"type":
-    "concrete", "attributes": [{"name": "key", "type": "sequence", "nodeTypes": [{"typeName":
-    "string", "languageName": "json"}]}, {"type": "terminal", "symbol": ":"}, {"name":
-    "value", "type": "sequence", "nodeTypes": [{"typeName": "value", "languageName":
-    "json"}]}]}}}}'
+    "json"}, {"typeName": "boolean", "languageName": "json"}, {"typeName": "string",
+    "languageName": "json"}, {"typeName": "number", "languageName": "json"}, {"typeName":
+    "array", "languageName": "json"}, {"typeName": "object", "languageName": "json"}]},
+    "number": {"type": "concrete", "attributes": [{"base": "integer", "name": "value",
+    "type": "property"}]}, "object": {"type": "concrete", "attributes": [{"type":
+    "terminal", "symbol": "{"}, {"name": "values", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "key-value", "languageName": "json"}}]},
+    {"type": "terminal", "symbol": "}"}]}, "string": {"type": "concrete", "attributes":
+    [{"type": "terminal", "symbol": "\""}, {"base": "string", "name": "value", "type":
+    "property"}, {"type": "terminal", "symbol": "\""}]}, "boolean": {"type": "concrete",
+    "attributes": [{"base": "boolean", "name": "value", "type": "property"}]}, "key-value":
+    {"type": "concrete", "attributes": [{"name": "key", "type": "sequence", "nodeTypes":
+    [{"typeName": "string", "languageName": "json"}]}, {"type": "terminal", "symbol":
+    ":"}, {"name": "value", "type": "sequence", "nodeTypes": [{"typeName": "value",
+    "languageName": "json"}]}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-03-26 16:03:09.682287000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-06 21:19:04.528263000 Z
+  value_before_type_cast: 2020-04-10 20:26:28.018799000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: json
