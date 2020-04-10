@@ -457,6 +457,85 @@ describe("Drop Parent", () => {
         .withContext(`Inserting at ${JSON.stringify(insertLocation)}`)
         .toEqual([]);
     });
+
+    it(`((<hole> AND <hole>) OR <hole>), insert <true>`, () => {
+      const inTreeDesc: NodeDescription = {
+        language: "expr",
+        name: "booleanBinary",
+        children: {
+          lhs: [
+            {
+              language: "expr",
+              name: "booleanBinary",
+              children: {
+                lhs: [],
+                rhs: [],
+              },
+              properties: {
+                operator: "AND",
+              },
+            },
+          ],
+          rhs: [],
+        },
+        properties: {
+          operator: "OR",
+        },
+      };
+
+      const candidateDesc: NodeDescription = {
+        language: "expr",
+        name: "booleanConstant",
+        properties: {
+          value: "true",
+        },
+      };
+
+      const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
+      const inTree = new Tree(inTreeDesc);
+
+      // Dropping on "AND"
+      expect(
+        insertAtAnyParent(validator, inTree, [["lhs", 0]], [candidateDesc])
+      ).toEqual([
+        {
+          location: [
+            ["lhs", 0],
+            ["lhs", 0],
+          ],
+          algorithm: "allowAnyParent",
+          operation: "insert",
+          nodeDescription: candidateDesc,
+        },
+        {
+          location: [
+            ["lhs", 0],
+            ["rhs", 0],
+          ],
+          algorithm: "allowAnyParent",
+          operation: "insert",
+          nodeDescription: candidateDesc,
+        },
+        {
+          location: [["rhs", 0]],
+          algorithm: "allowAnyParent",
+          operation: "insert",
+          nodeDescription: candidateDesc,
+        },
+      ]);
+
+      // Dropping on root "OR"
+      expect(insertAtAnyParent(validator, inTree, [], [candidateDesc])).toEqual(
+        [
+          {
+            location: [["rhs", 0]],
+            algorithm: "allowAnyParent",
+            operation: "insert",
+            nodeDescription: candidateDesc,
+          },
+        ]
+      );
+    });
   });
 
   describe(`appendAtParent`, () => {

@@ -10,6 +10,10 @@ import {
 import { BlockLanguage } from "./block-language.forward";
 import { Sidebar } from "./sidebar";
 
+/**
+ * Resolves all runtime derived values for a tailored node description. The
+ * resulting node is a static and may be inserted to a tree.
+ */
 export function tailorBlockDescription(
   ast: Tree,
   proposal: NodeTailoredDescription

@@ -3,6 +3,7 @@ import {
   Input,
   ChangeDetectorRef,
   HostListener,
+  HostBinding,
 } from "@angular/core";
 
 import { combineLatest, Observable } from "rxjs";
@@ -46,12 +47,24 @@ export class BlockRenderBlockComponent {
   /**
    * The node to be rendered
    */
-  @Input() public node: Node;
+  @Input()
+  public node: Node;
 
   /**
    * The visualisation parameters for this block.
    */
-  @Input() public visual: VisualBlockDescriptions.EditorBlock;
+  @Input()
+  public visual: VisualBlockDescriptions.EditorBlock;
+
+  @HostBinding("class.vertical")
+  public get hostCssVertical() {
+    return true;
+  }
+
+  @HostBinding("class.horizontal")
+  public get hostCssHorizontal() {
+    return false;
+  }
 
   constructor(
     private _dragService: DragService,
@@ -133,15 +146,17 @@ export class BlockRenderBlockComponent {
         this.node.location,
         dropLocationHint
       );
-      const explicitLocation = dropLocationHint !== "block";
+      const explicitAfterOrBefore = dropLocationHint !== "block";
 
+      // TODO: Find a meaningful approach if a drop is possible in the child AND after the
+      //       hovered element. With the commented out state this favors appending
       this._dragService.informDraggedOver(evt, shiftedLocation, this.node, {
         // Disabled because allowAnyParent inserts in front so defaulting to append seems smarter
         allowExact: false,
         allowAnyParent: true,
-        allowEmbrace: this.allowEmbrace && !explicitLocation,
+        allowEmbrace: this.allowEmbrace && !explicitAfterOrBefore,
         allowAppend: true,
-        allowReplace: explicitLocation,
+        allowReplace: !explicitAfterOrBefore,
       });
     }
   }
