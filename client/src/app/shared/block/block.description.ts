@@ -3,6 +3,8 @@ import {
   NodeDescription,
   NodeLocation,
 } from "../syntaxtree/syntaxtree.description";
+import { Orientation } from "../syntaxtree/grammar.description";
+
 import { Restricted } from "./bool-mini-expression.description";
 
 /**
@@ -60,6 +62,7 @@ export namespace VisualBlockDescriptions {
   export interface EditorContainer extends EditorBlockBase {
     blockType: "container";
     children?: ConcreteBlock[];
+    orientation: Orientation;
   }
 
   /**

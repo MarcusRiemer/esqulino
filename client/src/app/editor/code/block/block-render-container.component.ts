@@ -11,11 +11,12 @@ export class BlockRenderContainerComponent {
   @Input()
   public node: Node;
   @Input()
-  public visual: VisualBlockDescriptions.EditorBlockBase;
+  public visual: VisualBlockDescriptions.EditorContainer;
 
   @HostBinding("class")
   get cssClasses() {
-    return this.visual?.cssClasses.join(" ") ?? "";
+    const other = this.visual?.cssClasses ?? [];
+    return [this.orientation, ...other];
   }
 
   /**
@@ -30,5 +31,9 @@ export class BlockRenderContainerComponent {
     } else {
       return [];
     }
+  }
+
+  get orientation() {
+    return this.visual.orientation;
   }
 }

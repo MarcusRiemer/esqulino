@@ -55,7 +55,6 @@ concise_attributes:
   value_before_type_cast: |-
     {
       "types": {
-        "undefined": {},
         "xml": {
           "element": {
             "type": "concrete",

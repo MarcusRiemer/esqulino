@@ -82,7 +82,8 @@ export function visualizeNode(
       ? [
           {
             blockType: "container",
-            cssClasses: ["indent", "vertical"],
+            orientation: "vertical",
+            cssClasses: ["indent"],
             children: attributes,
           },
         ]
@@ -94,7 +95,7 @@ export function visualizeNode(
     children: [
       {
         blockType: "container",
-        cssClasses: ["vertical"],
+        orientation: "vertical",
         children: [
           { blockType: "constant", text: `node "${name}" {` },
           ...wrappedAttributes,
@@ -126,7 +127,7 @@ export function visualizeChildGroup(
 ): VisualBlockDescriptions.ConcreteBlock {
   return {
     blockType: "container",
-    cssClasses: ["vertical"],
+    orientation: "vertical",
     children: [
       {
         blockType: "constant",
@@ -150,7 +151,7 @@ export function visualizeProperty(
 ): VisualBlockDescriptions.ConcreteBlock {
   return {
     blockType: "container",
-    cssClasses: ["horizontal"],
+    orientation: "horizontal",
     children: [
       {
         blockType: "constant",

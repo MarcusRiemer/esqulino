@@ -1,8 +1,17 @@
 import { VisualBlockDescriptions } from "../block.description";
 
-function readableClass(b: VisualBlockDescriptions.ConcreteBlock) {
-  if (b.cssClasses && b.cssClasses.length > 0) {
-    return ` class="${b.cssClasses.join(" ")}"`;
+function readableClass(
+  b:
+    | VisualBlockDescriptions.EditorBlock
+    | VisualBlockDescriptions.EditorContainer
+) {
+  let printedClasses = b.cssClasses ?? [];
+  if (b.blockType === "container") {
+    printedClasses.push(b.orientation);
+  }
+
+  if (printedClasses.length > 0) {
+    return ` class="${printedClasses.join(" ")}"`;
   } else {
     return "";
   }

@@ -112,6 +112,15 @@ concise_attributes:
               }
             ]
           },
+          "selector": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "css",
+                "typeName": "simpleSelector"
+              }
+            ]
+          },
           "simpleSelector": {
             "type": "concrete",
             "attributes": [
@@ -119,6 +128,15 @@ concise_attributes:
                 "type": "property",
                 "base": "string",
                 "name": "elementName"
+              }
+            ]
+          },
+          "property": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "css",
+                "typeName": "propBackgroundColor"
               }
             ]
           },

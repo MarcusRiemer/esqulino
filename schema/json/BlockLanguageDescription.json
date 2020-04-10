@@ -869,6 +869,13 @@
       ],
       "description": "A description of a node that has \"holes\" in it, which may be filled\nwith the help of an existing AST. Often used to fill in some data at\nthe beginning of a started drag."
     },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
+    },
     "ParameterBoolean": {
       "additionalProperties": false,
       "properties": {
@@ -929,7 +936,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
             }
           ]
         },
@@ -952,7 +959,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
             }
           ]
         },
@@ -1002,7 +1009,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
             }
           ]
         },
@@ -1025,7 +1032,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
             }
           ]
         },
@@ -1075,7 +1082,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-315-536-1782179087-313-4837-1782179087-176-4837-1782179087-0-7940705825494_[]_": {
+    "ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1758,12 +1765,16 @@
           },
           "type": "array"
         },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         }
       },
       "required": [
-        "blockType"
+        "blockType",
+        "orientation"
       ],
       "type": "object"
     },

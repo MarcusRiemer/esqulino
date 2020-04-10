@@ -78,14 +78,16 @@ export interface NodeTerminalSymbolDescription {
   tags?: string[];
 }
 
+export type Orientation = "horizontal" | "vertical";
+
 /**
- *
+ * Groups together various nodes in a certain kind of layout.
  */
 export interface NodeVisualContainerDescription {
   type: "container";
   name?: string;
   tags?: string[];
-  orientation: "horizontal" | "vertical";
+  orientation: Orientation;
   children: NodeAttributeDescription[];
 }
 
