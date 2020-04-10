@@ -32,51 +32,52 @@ concise_attributes:
     {"base": "string", "name": "languageName", "tags": ["double-quote"], "type": "property"},
     {"type": "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "tags":
     ["double-quote", "space-after"], "type": "property"}, {"tags": ["space-after"],
-    "type": "terminal", "symbol": "::="}, {"name": "references", "type": "sequence",
-    "between": {"tags": ["space-around"], "type": "terminal", "symbol": "|"}, "nodeTypes":
-    [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]}, "children":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"tags":
-    ["space-after", "keyword"], "type": "terminal", "symbol": "children"}, {"base":
-    "string", "name": "base", "tags": ["space-after"], "type": "property", "restrictions":
-    [{"type": "enum", "value": ["sequence", "allowed"]}]}, {"base": "string", "name":
-    "name", "tags": ["space-after"], "type": "property"}, {"tags": ["space-after"],
-    "type": "terminal", "symbol": "::="}, {"name": "references", "type": "sequence",
-    "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}]},
-    "property": {"type": "concrete", "attributes": [{"type": "container", "children":
-    [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol": "prop"}, {"base":
-    "string", "name": "name", "tags": ["double-quote", "space-after"], "type": "property"},
-    {"base": "string", "name": "base", "type": "property", "restrictions": [{"type":
-    "enum", "value": ["integer", "string", "boolean"]}]}], "orientation": "horizontal"}]},
-    "terminal": {"type": "concrete", "attributes": [{"base": "string", "name": "symbol",
-    "tags": ["double-quote"], "type": "property"}]}, "attribute": {"type": "oneOf",
-    "oneOf": ["terminal", "property", "children", "container"]}, "container": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"type": "container",
+    "type": "terminal", "symbol": "::="}, {"tags": ["allow-wrap"], "type": "container",
+    "children": [{"name": "references", "type": "sequence", "between": {"tags": ["space-around"],
+    "type": "terminal", "symbol": "|"}, "nodeTypes": [{"occurs": "*", "nodeType":
+    "nodeRef"}]}], "orientation": "horizontal"}], "orientation": "horizontal"}]},
+    "children": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol": "children"},
+    {"base": "string", "name": "base", "tags": ["space-after"], "type": "property",
+    "restrictions": [{"type": "enum", "value": ["sequence", "allowed"]}]}, {"base":
+    "string", "name": "name", "tags": ["space-after"], "type": "property"}, {"tags":
+    ["space-after"], "type": "terminal", "symbol": "::="}, {"name": "references",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}], "orientation":
+    "horizontal"}]}, "property": {"type": "concrete", "attributes": [{"type": "container",
     "children": [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol":
-    "container"}, {"base": "string", "name": "direction", "tags": ["space-after"],
-    "type": "property", "restrictions": [{"type": "enum", "value": ["horizontal",
-    "vertical"]}]}, {"type": "terminal", "symbol": "{"}], "orientation": "horizontal"},
-    {"tags": ["indent"], "type": "container", "children": [{"name": "attributes",
-    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}, {"occurs":
-    "*", "nodeType": "comment"}]}], "orientation": "vertical"}, {"type": "terminal",
-    "symbol": "}"}], "orientation": "vertical"}]}, "nodeRefOne": {"type": "concrete",
-    "attributes": [{"type": "container", "children": [{"base": "string", "name": "languageName",
+    "prop"}, {"base": "string", "name": "name", "tags": ["double-quote", "space-after"],
+    "type": "property"}, {"base": "string", "name": "base", "type": "property", "restrictions":
+    [{"type": "enum", "value": ["integer", "string", "boolean"]}]}], "orientation":
+    "horizontal"}]}, "terminal": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "symbol", "tags": ["double-quote"], "type": "property"}]}, "attribute":
+    {"type": "oneOf", "oneOf": ["terminal", "property", "children", "container"]},
+    "container": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"type": "container", "children": [{"tags": ["space-after", "keyword"], "type":
+    "terminal", "symbol": "container"}, {"base": "string", "name": "direction", "tags":
+    ["space-after"], "type": "property", "restrictions": [{"type": "enum", "value":
+    ["horizontal", "vertical"]}]}, {"type": "terminal", "symbol": "{"}], "orientation":
+    "horizontal"}, {"tags": ["indent"], "type": "container", "children": [{"name":
+    "attributes", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"},
+    {"occurs": "*", "nodeType": "comment"}]}], "orientation": "vertical"}, {"type":
+    "terminal", "symbol": "}"}], "orientation": "vertical"}]}, "nodeRefOne": {"type":
+    "concrete", "attributes": [{"type": "container", "children": [{"base": "string",
+    "name": "languageName", "type": "property"}, {"type": "terminal", "symbol": "."},
+    {"base": "string", "name": "typeName", "type": "property"}], "orientation": "horizontal"}]},
+    "cardinality": {"type": "oneOf", "oneOf": ["knownCardinality"]}, "concreteNode":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"type":
+    "container", "children": [{"tags": ["space-after", "keyword"], "type": "terminal",
+    "symbol": "node"}, {"base": "string", "name": "languageName", "tags": ["double-quote"],
     "type": "property"}, {"type": "terminal", "symbol": "."}, {"base": "string", "name":
-    "typeName", "type": "property"}], "orientation": "horizontal"}]}, "cardinality":
-    {"type": "oneOf", "oneOf": ["knownCardinality"]}, "concreteNode": {"type": "concrete",
-    "attributes": [{"type": "container", "children": [{"type": "container", "children":
-    [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol": "node"}, {"base":
-    "string", "name": "languageName", "tags": ["double-quote"], "type": "property"},
-    {"type": "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "tags":
-    ["double-quote", "space-after"], "type": "property"}, {"type": "terminal", "symbol":
-    "{"}], "orientation": "horizontal"}, {"tags": ["indent"], "type": "container",
-    "children": [{"name": "attributes", "type": "allowed", "nodeTypes": [{"occurs":
-    "*", "nodeType": "attribute"}, {"occurs": "*", "nodeType": "comment"}]}], "orientation":
-    "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation": "vertical"}]},
-    "knownCardinality": {"type": "concrete", "attributes": [{"base": "string", "name":
-    "cardinality", "type": "property", "restrictions": [{"type": "enum", "value":
-    ["*", "?", "+"]}]}]}, "nodeRefCardinality": {"type": "concrete", "attributes":
-    [{"type": "container", "children": [{"name": "references", "type": "sequence",
-    "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name": "cardinality",
+    "typeName", "tags": ["double-quote", "space-after"], "type": "property"}, {"type":
+    "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"],
+    "type": "container", "children": [{"name": "attributes", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": "attribute"}, {"occurs": "*", "nodeType": "comment"}]}],
+    "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
+    "vertical"}]}, "knownCardinality": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "cardinality", "type": "property", "restrictions": [{"type":
+    "enum", "value": ["*", "?", "+"]}]}]}, "nodeRefCardinality": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "references", "type":
+    "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name": "cardinality",
     "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "cardinality"}]}],
     "orientation": "horizontal"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -84,7 +85,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-10 11:30:39.391575000 Z
+  value_before_type_cast: 2020-04-10 20:25:09.557389000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
