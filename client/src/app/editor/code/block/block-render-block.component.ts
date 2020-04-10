@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   HostListener,
   HostBinding,
+  Optional,
 } from "@angular/core";
 
 import { combineLatest, Observable } from "rxjs";
@@ -33,6 +34,7 @@ import { DragService } from "../../drag.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
+import { BlockRenderContainerComponent } from "./block-render-container.component";
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
 
@@ -58,19 +60,29 @@ export class BlockRenderBlockComponent {
 
   @HostBinding("class.vertical")
   public get hostCssVertical() {
-    return true;
+    if (this._parentContainer) {
+      return this._parentContainer.orientation === "vertical";
+    } else {
+      return true;
+    }
   }
 
   @HostBinding("class.horizontal")
   public get hostCssHorizontal() {
-    return false;
+    if (this._parentContainer) {
+      return this._parentContainer.orientation === "horizontal";
+    } else {
+      return false;
+    }
   }
 
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
     private _renderData: RenderedCodeResourceService,
-    private _changeDetector: ChangeDetectorRef
+    private _changeDetector: ChangeDetectorRef,
+    @Optional()
+    private _parentContainer: BlockRenderContainerComponent
   ) {}
 
   /**
