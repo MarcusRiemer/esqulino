@@ -103,14 +103,9 @@
   <!-- Render multiple visuals for the same node -->
   <editor-block-container
     *ngSwitchCase="'container'"
-    [ngClass]="visual.cssClasses"
-  >
-    <editor-block-render
-      *ngFor="let childVisual of childVisuals;"
-      [visual]="childVisual"
-      [node]="node"
-    ></editor-block-render>
-  </editor-block-container>
+    [node]="node"
+    [visual]="visual"
+  ></editor-block-container>
 
   <!-- Something is broken, display an error message -->
   <div *ngSwitchDefault>

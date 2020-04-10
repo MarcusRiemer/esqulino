@@ -1,8 +1,4 @@
-import {
-  NgModule,
-  ModuleWithProviders,
-  CUSTOM_ELEMENTS_SCHEMA,
-} from "@angular/core";
+import { NgModule, ModuleWithProviders } from "@angular/core";
 
 import { SharedAppModule } from "../../shared/shared.module";
 
@@ -45,7 +41,6 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     ...BLOCK_RENDER_COMPONENTS,
     BlockEditorComponent,
