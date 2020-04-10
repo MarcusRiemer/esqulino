@@ -49,7 +49,16 @@ concise_attributes:
     "enum", "value": ["integer", "string", "boolean"]}]}], "orientation": "horizontal"}]},
     "terminal": {"type": "concrete", "attributes": [{"base": "string", "name": "symbol",
     "tags": ["double-quote"], "type": "property"}]}, "attribute": {"type": "oneOf",
-    "oneOf": ["terminal", "property", "children"]}, "nodeRefOne": {"type": "concrete",
+    "oneOf": ["terminal", "property", "children", "container"]}, "container": {"type":
+    "concrete", "attributes": [{"type": "container", "children": [{"type": "container",
+    "children": [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol":
+    "container"}, {"base": "string", "name": "direction", "tags": ["space-after"],
+    "type": "property", "restrictions": [{"type": "enum", "value": ["horizontal",
+    "vertical"]}]}, {"type": "terminal", "symbol": "{"}], "orientation": "horizontal"},
+    {"tags": ["indent"], "type": "container", "children": [{"name": "attributes",
+    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}, {"occurs":
+    "*", "nodeType": "comment"}]}], "orientation": "vertical"}, {"type": "terminal",
+    "symbol": "}"}], "orientation": "vertical"}]}, "nodeRefOne": {"type": "concrete",
     "attributes": [{"type": "container", "children": [{"base": "string", "name": "languageName",
     "type": "property"}, {"type": "terminal", "symbol": "."}, {"base": "string", "name":
     "typeName", "type": "property"}], "orientation": "horizontal"}]}, "cardinality":
@@ -75,7 +84,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-06 19:44:15.701556000 Z
+  value_before_type_cast: 2020-04-10 11:30:39.391575000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
