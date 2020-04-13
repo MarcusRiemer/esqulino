@@ -1,0 +1,68 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3f483c35-b653-42dc-8dd0-6f9d57add0ae
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"Bessere Zielvorschau", "en"=>"Enhanced Target Preview"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: |-
+    "de"=>"Bisher brauchte es erstaunlich viel Übung (oder Inutuition) um neue Blöcke \"zwischen\" anderen Blöcken zu platzieren. Mit der neuen Zielvorschau ist das Vorgehen dafür aber nun etwas intuitiver. Egal ob die bestehenden Blöcke horizontal oder vertikal orientiert sind: Wenn man an den Rand eines bestehenden Blockes fährt, wird der neue Block entsprechend davor oder danach eingeordnet. Für `SQL` sieht diese Vorschau aus wie folgt:
+
+    <div class=\"video-centered\">
+    <video autoplay loop>
+      <source src=\"//files.blattwerkzeug.de/videos/20200411-sql-select-drop-preview.mp4\" type=\"video/mp4\">
+    </video>
+    </div>
+
+    <!-- SNIP -->
+
+    Natürlich funktioniert diese Vorschau für beliebige Programmiersprachen, nicht nur `SQL`. Und beim Ersetzen von bestehenden Blöcken bekommt man nun auch mehr Hilfestellung:
+
+    <div class=\"video-centered\">
+    <video autoplay loop>
+      <source src=\"//files.blattwerkzeug.de/videos/20200411-trucklino-program-drop-preview.mp4\" type=\"video/mp4\">
+    </video>
+
+    <video autoplay loop>
+      <source src=\"//files.blattwerkzeug.de/videos/20200411-trucklino-program-replace-preview.mp4\" type=\"video/mp4\">
+    </video>
+    </div>
+
+    ", "en"=>"Until now, it took a surprising amount of practice (or inutuition) to place new blocks \"between\" other blocks. But with the new target preview the procedure is now a bit more intuitive. No matter if the existing blocks are horizontally or vertically oriented: If you move to the edge of an existing block, the new block will be placed accordingly before or after it. For `SQL` this preview looks like this:
+
+    <div class=\"video-centered\">
+    <video autoplay loop>
+      <source src=\"//files.blattwerkzeug.de/videos/20200411-sql-select-drop-preview.mp4\" type=\"video/mp4\">
+    </video>
+    </div>
+
+    <!-- SNIP -->
+
+    Of course this preview works for any programming language, not only 'SQL'. And when replacing existing blocks you now get more help:
+
+    <div class=\"video-centered\">
+    <video autoplay loop>
+      <source src=\"//files.blattwerkzeug.de/videos/20200411-trucklino-program-drop-preview.mp4\" type=\"video/mp4\">
+    </video>
+
+    <video autoplay loop>
+      <source src=\"//files.blattwerkzeug.de/videos/20200411-trucklino-program-replace-preview.mp4\" type=\"video/mp4\">
+    </video>
+    </div>"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: 2020-04-13 00:00:00.000000000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-04-11 10:53:21.941663000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-04-13 12:21:28.592401000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
+new_record: false
+active_record_yaml_version: 2
