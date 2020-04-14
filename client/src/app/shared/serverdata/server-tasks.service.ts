@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 
-import { Observable, BehaviorSubject, of } from "rxjs";
-import { map, shareReplay, last } from "rxjs/operators";
-import { generateUUIDv4 } from "../util-browser";
+import {Observable, BehaviorSubject, of, combineLatest} from "rxjs";
+import {map, last, count} from "rxjs/operators";
 
 /** The server has not yet responded to a task */
 export interface ServerTaskStatePending {
@@ -33,44 +32,13 @@ export type ServerTaskStateType = ServerTaskState["type"];
 
 /** Any operation that takes place on the server. */
 export interface ServerTask {
-  readonly id: string; // TODO: Internal
-  readonly createdAt: number; // TODO: Internal
   readonly state$: Observable<ServerTaskState>;
   readonly description: string;
 }
 
-/**
- * A server side operation that is explicitly managed by calling
- * `succeeded` and `failed`.
- */
-// TODO: Own file `server-task-manual.ts`
-export class ServerTaskManual implements ServerTask {
-  private _state$ = new BehaviorSubject<ServerTaskState>({ type: "pending" });
-
-  readonly state$ = this._state$.asObservable();
-
+interface ServerTaskInfo {
+  readonly id: number;
   readonly createdAt: number;
-
-  readonly id: string;
-
-  constructor(readonly description: string) {
-    this.id = generateUUIDv4();
-    this.createdAt = Date.now();
-  }
-
-  get state() {
-    return this._state$.value;
-  }
-
-  public succeeded() {
-    this._state$.next({ type: "success" });
-    this._state$.complete();
-  }
-
-  public failed(message: string) {
-    this._state$.next({ type: "failure", message });
-    this._state$.complete();
-  }
 }
 
 /**
@@ -78,7 +46,7 @@ export class ServerTaskManual implements ServerTask {
  */
 export type PendingServerTask = {
   description: string;
-  // TODO? startedAt: timeStamp (number)
+  startedAt: number;
 };
 
 /**
@@ -86,8 +54,8 @@ export type PendingServerTask = {
  */
 export type SucceededServerTask = {
   description: string;
-  // TODO? startedAt: timeStamp (number)
-  // TODO? durationInMs: number
+  startedAt: number;
+  durationInMs: number;
 };
 
 /**
@@ -96,8 +64,8 @@ export type SucceededServerTask = {
 export type FailedServerTask = {
   description: string;
   message: string;
-  // TODO? startedAt: timeStamp (number)
-  // TODO? durationInMs: number
+  startedAt: number;
+  durationInMs: number;
 };
 
 /**
@@ -108,45 +76,48 @@ type PublicServerTask =
   | SucceededServerTask
   | FailedServerTask;
 
-// TODO: Use ServerTask in first field
-// TODO: Add other internal fields (Object?)
-type InternalTask = [ServerTaskManual, ServerTaskState];
+type InternalTask = [ServerTask, ServerTaskState, ServerTaskInfo];
 
 @Injectable()
 export class ServerTasksService {
-  // private readonly _newTaskEvent$ = new BehaviorSubject<ServerTaskManual>([]);
 
   private readonly _internalTasks$ = new BehaviorSubject<InternalTask[]>([]);
 
-  // TODO: Use this counter to give IDs to tasks
   private _idCounter = 0;
 
   private readonly _annotatedPublicTasks: Observable<
     [PublicServerTask, ServerTaskState][]
   > = this._internalTasks$.pipe(
     map((tasks) =>
-      tasks.map(([t, s]) => {
+      tasks.map(([t, s,c]) => {
         const convert = () => {
           switch (s.type) {
             case "pending":
+              return { description: t.description, startedAt: c.createdAt };
             case "success":
-              return { description: t.description };
+              console.log(t.description+" task took "+ (Date.now() - c.createdAt) +" milliseconds");
+              return {
+                description: t.description,
+                durationInMs: Date.now() - c.createdAt,
+                startedAt: c.createdAt,
+              };
             case "failure":
+              console.log(t.description+" task took "+ (Date.now() - c.createdAt) +" milliseconds");
               return {
                 description: t.description,
                 message: s.message,
+                durationInMs: Date.now() - c.createdAt,
+                startedAt: c.createdAt,
               };
           }
         };
-
         return [convert(), s];
       })
     )
   );
 
-  // TODO: Tests
-  readonly publicTasks$ = this._annotatedPublicTasks.pipe(
-    map((all) => all.map(([t]) => t))
+  readonly publicTasks$: Observable<PublicServerTask[]> = this._annotatedPublicTasks.pipe(
+    map((all) => all.map(([t,_]) => t))
   );
 
   readonly pendingTasks$: Observable<
@@ -163,48 +134,63 @@ export class ServerTasksService {
       (all) =>
         all.filter(([_, s]) => s.type === "failure") as [
           FailedServerTask,
-          ServerTaskState
+          ServerTaskState,
         ][]
     ),
     map((all) => all.map(([t]) => t))
   );
 
-  readonly succeededTasks$ = this.getTasks<SucceededServerTask>(
-    "success",
-    ([t]) => ({ description: t.description })
+  readonly succeededTasks$: Observable<
+    SucceededServerTask[]
+  > = this._annotatedPublicTasks.pipe(
+    map(
+      (all) =>
+        all.filter(([_, s]) => s.type === "success") as [
+          SucceededServerTask,
+          ServerTaskState,
+        ][]
+    ),
+    map((all) => all.map(([t]) => t))
   );
 
-  // TODO: hasAnyFinishedTask$, hasAnyErrorTask$
-  readonly hasAnyFinishedTask$ = of(false);
+  readonly hasAnyFinishedTask$:Observable<boolean> = combineLatest(this.succeededTasks$,this.failedTasks$)
+    .pipe(
+      map(([s,f],i)=>
+        s.length > 0 || f.length > 0
+));
 
-  readonly hasAnyErrorTask$ = of(false);
+  readonly hasAnySucceededTask$ = this.succeededTasks$
+    .pipe(
+      map((s)=>
+        s.length > 0
+      ));
 
-  private getTasks<T>(
-    target: ServerTaskStateType,
-    cmap: (i: InternalTask) => T
-  ): Observable<T[]> {
-    return this._internalTasks$.pipe(
-      map((l) => l.filter(([_, state]) => state.type === target)),
-      map((l) => l.map(cmap))
-    );
-  }
+  readonly hasAnyErrorTask$ = this.failedTasks$
+    .pipe(
+      map((f)=>
+        f.length > 0
+      ));
 
-  addTask(task: ServerTaskManual) {
+  addTask(task: ServerTask) {
+
+    const info:ServerTaskInfo = {
+      id: this._idCounter++,
+      createdAt: Date.now(),
+    }
     const initialState: ServerTaskStatePending = { type: "pending" };
-    const toEnqueue: InternalTask = [task, initialState];
+    const toEnqueue: InternalTask = [task, initialState,info];
     this._internalTasks$.next([...this._internalTasks$.value, toEnqueue]);
 
     task.state$.pipe(last()).subscribe((newState) => {
       const idx = this._internalTasks$.value.findIndex(
-        (v) => v[0].id === task.id
+        ([,,c]) => c.id === info.id
       );
-      console.log(`State of ${task.id} at idx ${idx} changed to`, newState);
+      console.log(`State of ${info.id} at idx ${idx} changed to`, newState);
 
-      this._internalTasks$.value[idx] = [task, newState];
+      this._internalTasks$.value[idx] = [task, newState,info];
 
       this._internalTasks$.next(this._internalTasks$.value);
     });
-
     console.log("Added task", task);
   }
 }
