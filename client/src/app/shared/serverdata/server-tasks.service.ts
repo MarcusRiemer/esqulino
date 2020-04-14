@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
-import {Observable, BehaviorSubject, of, combineLatest} from "rxjs";
-import {map, last, count} from "rxjs/operators";
+import { Observable, BehaviorSubject, combineLatest } from "rxjs";
+import { map, last } from "rxjs/operators";
 
 /** The server has not yet responded to a task */
 export interface ServerTaskStatePending {
@@ -80,7 +80,6 @@ type InternalTask = [ServerTask, ServerTaskState, ServerTaskInfo];
 
 @Injectable()
 export class ServerTasksService {
-
   private readonly _internalTasks$ = new BehaviorSubject<InternalTask[]>([]);
 
   private _idCounter = 0;
@@ -89,20 +88,18 @@ export class ServerTasksService {
     [PublicServerTask, ServerTaskState][]
   > = this._internalTasks$.pipe(
     map((tasks) =>
-      tasks.map(([t, s,c]) => {
+      tasks.map(([t, s, c]) => {
         const convert = () => {
           switch (s.type) {
             case "pending":
               return { description: t.description, startedAt: c.createdAt };
             case "success":
-              console.log(t.description+" task took "+ (Date.now() - c.createdAt) +" milliseconds");
               return {
                 description: t.description,
                 durationInMs: Date.now() - c.createdAt,
                 startedAt: c.createdAt,
               };
             case "failure":
-              console.log(t.description+" task took "+ (Date.now() - c.createdAt) +" milliseconds");
               return {
                 description: t.description,
                 message: s.message,
@@ -116,9 +113,9 @@ export class ServerTasksService {
     )
   );
 
-  readonly publicTasks$: Observable<PublicServerTask[]> = this._annotatedPublicTasks.pipe(
-    map((all) => all.map(([t,_]) => t))
-  );
+  readonly publicTasks$: Observable<
+    PublicServerTask[]
+  > = this._annotatedPublicTasks.pipe(map((all) => all.map(([t, _]) => t)));
 
   readonly pendingTasks$: Observable<
     PendingServerTask[]
@@ -134,7 +131,7 @@ export class ServerTasksService {
       (all) =>
         all.filter(([_, s]) => s.type === "failure") as [
           FailedServerTask,
-          ServerTaskState,
+          ServerTaskState
         ][]
     ),
     map((all) => all.map(([t]) => t))
@@ -147,50 +144,38 @@ export class ServerTasksService {
       (all) =>
         all.filter(([_, s]) => s.type === "success") as [
           SucceededServerTask,
-          ServerTaskState,
+          ServerTaskState
         ][]
     ),
     map((all) => all.map(([t]) => t))
   );
 
-  readonly hasAnyFinishedTask$:Observable<boolean> = combineLatest(this.succeededTasks$,this.failedTasks$)
-    .pipe(
-      map(([s,f],i)=>
-        s.length > 0 || f.length > 0
-));
+  readonly hasAnyFinishedTask$: Observable<boolean> = combineLatest(
+    this.succeededTasks$,
+    this.failedTasks$
+  ).pipe(map(([s, f], i) => s.length > 0 || f.length > 0));
 
-  readonly hasAnySucceededTask$ = this.succeededTasks$
-    .pipe(
-      map((s)=>
-        s.length > 0
-      ));
+  readonly hasAnySucceededTask$ = this.succeededTasks$.pipe(
+    map((s) => s.length > 0)
+  );
 
-  readonly hasAnyErrorTask$ = this.failedTasks$
-    .pipe(
-      map((f)=>
-        f.length > 0
-      ));
+  readonly hasAnyErrorTask$ = this.failedTasks$.pipe(map((f) => f.length > 0));
 
   addTask(task: ServerTask) {
-
-    const info:ServerTaskInfo = {
+    const info: ServerTaskInfo = {
       id: this._idCounter++,
       createdAt: Date.now(),
-    }
+    };
     const initialState: ServerTaskStatePending = { type: "pending" };
-    const toEnqueue: InternalTask = [task, initialState,info];
+    const toEnqueue: InternalTask = [task, initialState, info];
     this._internalTasks$.next([...this._internalTasks$.value, toEnqueue]);
 
     task.state$.pipe(last()).subscribe((newState) => {
       const idx = this._internalTasks$.value.findIndex(
-        ([,,c]) => c.id === info.id
+        ([, , c]) => c.id === info.id
       );
-      console.log(`State of ${info.id} at idx ${idx} changed to`, newState);
-
-      this._internalTasks$.value[idx] = [task, newState,info];
-
+      this._internalTasks$.value[idx] = [task, newState, info];
       this._internalTasks$.next(this._internalTasks$.value);
     });
-    console.log("Added task", task);
   }
 }

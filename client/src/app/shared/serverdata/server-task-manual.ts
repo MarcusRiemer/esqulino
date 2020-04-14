@@ -1,12 +1,13 @@
-import {BehaviorSubject, ReplaySubject} from "rxjs";
-import {generateUUIDv4} from "../util-browser";
-import {ServerTask, ServerTaskState} from "./server-tasks.service";
+import { ReplaySubject } from "rxjs";
+import { generateUUIDv4 } from "../util-browser";
+import { ServerTask, ServerTaskState } from "./server-tasks.service";
 
 /**
  * A server side operation that is explicitly managed by calling
  * `succeeded` and `failed`.
  */
 export class ServerTaskManual implements ServerTask {
+  // When state is completed before a subscription was made, a BehaviourSubject would cause errors.
   private _state$ = new ReplaySubject<ServerTaskState>(1);
 
   readonly state$ = this._state$.asObservable();
@@ -18,7 +19,7 @@ export class ServerTaskManual implements ServerTask {
   constructor(readonly description: string) {
     this.id = generateUUIDv4();
     this.createdAt = Date.now();
-    this._state$.next({type:"pending"});
+    this._state$.next({ type: "pending" });
   }
 
   get state() {
