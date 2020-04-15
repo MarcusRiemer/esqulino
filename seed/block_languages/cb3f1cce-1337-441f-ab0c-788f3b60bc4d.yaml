@@ -251,11 +251,11 @@ concise_attributes:
     "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
     "operator", "blockType": "input", "cssClasses": ["operator", "space-around"]}],
     "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "relationalOperator",
-    "languageName": "sql"}}], "rootCssClasses": [], "editorComponents": [{"componentType":
-    "block-root"}, {"columnClasses": ["col-lg-6"], "componentType": "validator"},
-    {"columnClasses": ["col-lg-6"], "componentType": "generated-code"}, {"componentType":
-    "query-preview"}], "localGeneratorInstructions": {"type": "manual", "traits":
-    {"readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
+    "languageName": "sql"}}], "rootCssClasses": ["activate-block-outline"], "editorComponents":
+    [{"componentType": "block-root"}, {"columnClasses": ["col-lg-6"], "componentType":
+    "validator"}, {"columnClasses": ["col-lg-6"], "componentType": "generated-code"},
+    {"componentType": "query-preview"}], "localGeneratorInstructions": {"type": "manual",
+    "traits": {"readOnlyProperty": {"applyMode": "deepMerge", "instructions": {"propReadOnly":
     true}}}, "traitScopes": [{"traits": ["readOnlyProperty"], "attributes": {"sql":
     {"sortOrder": ["order"], "columnName": ["refTableName", "columnName"], "functionCall":
     ["name"], "whereAdditional": ["operator"], "tableIntroduction": ["name"]}}}],
@@ -314,7 +314,7 @@ concise_attributes:
   value_before_type_cast: 2018-07-17 11:08:14.302566000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-10 20:40:59.738797000 Z
+  value_before_type_cast: 2020-04-11 10:37:08.684152000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
