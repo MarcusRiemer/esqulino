@@ -1,0 +1,62 @@
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    pointer-events: none;
+}
+
+.gu-hide {
+    left: -9999px !important;
+}
+
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.vis {
+    border: 1px solid black;
+    grid-column: 4;
+    font-size: 65%;
+    padding: 12px;
+}
+
+.vis thead {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.vis tr:hover {
+    background-color:#f5f5f5;
+}
+
+.vis td {
+    padding: 2px;
+}
+
+.tableEdit {
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    padding: none;
+    width: inherit;
+}
