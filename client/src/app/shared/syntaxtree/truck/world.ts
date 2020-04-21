@@ -569,6 +569,52 @@ export class World {
   pauseCode() {
     this.codeShouldPause.next(true);
   }
+
+  /**
+   * Get the tile openings between two positions.
+   * The tiles must be directly connectable, otherwise the result will be _undefined_.
+   * @param fromPos the first tile position
+   * @param toPos the second tile position
+   * @return an object with the corresponding openings for each tile, in order to make a working road.
+   */
+  static getRoadOpeningsBetween(
+    fromPos: Position,
+    toPos: Position
+  ): { from: TileOpening; to: TileOpening } | undefined {
+    const dX = toPos.x - fromPos.x;
+    const dY = toPos.y - fromPos.y;
+
+    if (dX == 0 && dY == 1) {
+      return {
+        // Up to Down
+        from: TileOpening.South,
+        to: TileOpening.North,
+      };
+    }
+    if (dX == 0 && dY == -1) {
+      return {
+        // Down to Up
+        from: TileOpening.North,
+        to: TileOpening.South,
+      };
+    }
+    if (dX == 1 && dY == 0) {
+      return {
+        // Left to Right
+        from: TileOpening.East,
+        to: TileOpening.West,
+      };
+    }
+    if (dX == -1 && dY == 0) {
+      return {
+        // Right to Left
+        from: TileOpening.West,
+        to: TileOpening.East,
+      };
+    }
+
+    return undefined;
+  }
 }
 
 /**
@@ -1069,7 +1115,7 @@ export class Position {
    * Initializes the position.
    * @param x X-position.
    * @param y Y-position.
-   * @param welt World to which the position refers.
+   * @param world World to which the position refers.
    */
   constructor(public x: number, public y: number, readonly world: World) {}
 
@@ -1093,6 +1139,38 @@ export class Position {
    */
   clone(): Position {
     return new Position(this.x, this.y, this.world);
+  }
+
+  /**
+   * Returns all positions of direct neighbors that can be reached by the current position.
+   * Directly means going north, east, south or west _NOT_ diagonal.
+   * When the current position is at the worldborder the result might contain less than 4 elements.
+   * @return An array of all direct neighbor positions
+   */
+  getDirectNeighbors(): Position[] {
+    const result: Position[] = [];
+
+    const north = new Position(this.x, this.y - 1, this.world);
+    if (north.y >= 0) {
+      result.push(north);
+    }
+
+    const east = new Position(this.x + 1, this.y, this.world);
+    if (east.x < east.width) {
+      result.push(east);
+    }
+
+    const south = new Position(this.x, this.y + 1, this.world);
+    if (south.y < south.height) {
+      result.push(south);
+    }
+
+    const west = new Position(this.x - 1, this.y, this.world);
+    if (west.x >= 0) {
+      result.push(west);
+    }
+
+    return result;
   }
 }
 

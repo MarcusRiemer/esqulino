@@ -148,6 +148,66 @@ describe("Shared: World", () => {
   });
 });
 
+describe("World.getRoadOpeningsBetween", () => {
+  let world: World;
+
+  beforeEach(() => {
+    world = new World(worldDescription);
+  });
+
+  it("opening to north", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 0, world),
+      new Position(0, 1, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.South,
+      to: TileOpening.North,
+    });
+  });
+
+  it("opening to east", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(1, 0, world),
+      new Position(0, 0, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.West,
+      to: TileOpening.East,
+    });
+  });
+
+  it("opening to south", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 1, world),
+      new Position(0, 0, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.North,
+      to: TileOpening.South,
+    });
+  });
+
+  it("opening to west", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 0, world),
+      new Position(1, 0, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.East,
+      to: TileOpening.West,
+    });
+  });
+
+  it("invalid position", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 0, world),
+      new Position(1, 1, world)
+    );
+    expect(openings).toBeUndefined();
+  });
+});
+
 /******************************************************************************
  * Truck
  ******************************************************************************/
@@ -364,16 +424,79 @@ describe("Shared: TrafficLight", () => {
  ******************************************************************************/
 describe("Shared: Position", () => {
   let world: World;
-  let position: Position;
 
   beforeEach(() => {
     world = new World(worldDescription);
-    position = new Position(0, 0, world);
   });
 
-  it("should have the right size", () => {
+  it("should inherit world size", () => {
+    const position = new Position(0, 0, world);
     expect(position.width).toEqual(5);
     expect(position.height).toEqual(5);
+  });
+});
+
+describe("Position.getDirectNeighbors", () => {
+  let world: World;
+
+  beforeEach(() => {
+    world = new World(worldDescription);
+  });
+
+  function containsPosition(array, expectedX, expectedY, expectedWorld) {
+    return array.some(
+      (pos) =>
+        pos.x === expectedX &&
+        pos.y === expectedY &&
+        pos.world === expectedWorld
+    );
+  }
+
+  it("middle of the world", () => {
+    const position = new Position(2, 2, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(4);
+
+    expect(containsPosition(neighbors, 2, 1, world)).toEqual(true);
+    expect(containsPosition(neighbors, 3, 2, world)).toEqual(true);
+    expect(containsPosition(neighbors, 2, 3, world)).toEqual(true);
+    expect(containsPosition(neighbors, 1, 2, world)).toEqual(true);
+  });
+
+  it("top left corner", () => {
+    const position = new Position(0, 0, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 0, 1, world)).toEqual(true);
+    expect(containsPosition(neighbors, 1, 0, world)).toEqual(true);
+  });
+
+  it("top right corner", () => {
+    const position = new Position(4, 0, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 3, 0, world)).toEqual(true);
+    expect(containsPosition(neighbors, 4, 1, world)).toEqual(true);
+  });
+
+  it("bottom left corner", () => {
+    const position = new Position(0, 4, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 0, 3, world)).toEqual(true);
+    expect(containsPosition(neighbors, 1, 4, world)).toEqual(true);
+  });
+
+  it("bottom right corner", () => {
+    const position = new Position(4, 4, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 4, 3, world)).toEqual(true);
+    expect(containsPosition(neighbors, 3, 4, world)).toEqual(true);
   });
 });
 
