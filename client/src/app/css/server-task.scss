@@ -1,4 +1,16 @@
-.server-task-container {
+#st-card {
+  position: relative;
+  height: 55vh;
+  min-width: 20em;
+}
+.st-card-content {
+  position: absolute;
+  max-height: 50vh;
+  overflow-y: auto;
+  width: 90%;
+}
+
+.st-container {
   display: grid;
   grid-template-columns: 90% 10%;
   grid-template-rows: 100%;
