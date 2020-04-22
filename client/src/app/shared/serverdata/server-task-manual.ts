@@ -1,5 +1,4 @@
 import { ReplaySubject } from "rxjs";
-import { generateUUIDv4 } from "../util-browser";
 import { ServerTask, ServerTaskState } from "./server-tasks.service";
 
 /**
@@ -7,23 +6,23 @@ import { ServerTask, ServerTaskState } from "./server-tasks.service";
  * `succeeded` and `failed`.
  */
 export class ServerTaskManual implements ServerTask {
+  /**
+   * fit("BehaviorSubject completed first, then subscripted", async()=>{
+   *  const bs = new BehaviorSubject("1");
+   *  bs.next("2");
+   *  bs.complete();
+   *  const valBs = await bs.pipe(take(1)).toPromise();
+   *  expect(valBs).toEqual("2");
+   * })
+   */
+  // https://medium.com/javascript-everyday/behaviorsubject-vs-replaysubject-1-beware-of-edge-cases-b361153d9ccf
   // When state is completed before a subscription was made, a BehaviourSubject would cause errors.
   private _state$ = new ReplaySubject<ServerTaskState>(1);
 
   readonly state$ = this._state$.asObservable();
 
-  readonly createdAt: number;
-
-  readonly id: string;
-
   constructor(readonly description: string) {
-    this.id = generateUUIDv4();
-    this.createdAt = Date.now();
     this._state$.next({ type: "pending" });
-  }
-
-  get state() {
-    return this._state$._getNow();
   }
 
   public succeeded() {

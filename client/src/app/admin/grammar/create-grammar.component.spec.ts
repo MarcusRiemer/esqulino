@@ -25,6 +25,7 @@ import { DefaultValuePipe } from "../../shared/default-value.pipe";
 import { provideGrammarList, buildGrammar } from "../../editor/spec-util";
 
 import { CreateGrammarComponent } from "./create-grammar.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 describe("CreateGrammarComponent", () => {
   async function createComponent() {
@@ -44,6 +45,7 @@ describe("CreateGrammarComponent", () => {
         LanguageService,
         ListGrammarDataService,
         MutateGrammarService,
+        ServerTasksService,
       ],
       declarations: [CreateGrammarComponent, DefaultValuePipe],
     }).compileComponents();

@@ -45,6 +45,7 @@ interface ServerTaskInfo {
  * Public representation of a task this pending.
  */
 export type PendingServerTask = {
+  type: ServerTaskStateType;
   description: string;
   startedAt: number;
 };
@@ -53,6 +54,7 @@ export type PendingServerTask = {
  * Public representation of a task that has succeeded
  */
 export type SucceededServerTask = {
+  type: ServerTaskStateType;
   description: string;
   startedAt: number;
   durationInMs: number;
@@ -62,6 +64,7 @@ export type SucceededServerTask = {
  * Public representation of a task that has failed
  */
 export type FailedServerTask = {
+  type: ServerTaskStateType;
   description: string;
   message: string;
   startedAt: number;
@@ -71,7 +74,7 @@ export type FailedServerTask = {
 /**
  * Public representation of a task.
  */
-type PublicServerTask =
+export type PublicServerTask =
   | PendingServerTask
   | SucceededServerTask
   | FailedServerTask;
@@ -92,12 +95,17 @@ export class ServerTasksService {
         const convert = () => {
           switch (s.type) {
             case "pending":
-              return { description: t.description, startedAt: c.createdAt };
+              return {
+                description: t.description,
+                startedAt: c.createdAt,
+                type: s.type,
+              };
             case "success":
               return {
                 description: t.description,
                 durationInMs: Date.now() - c.createdAt,
                 startedAt: c.createdAt,
+                type: s.type,
               };
             case "failure":
               return {
@@ -105,6 +113,7 @@ export class ServerTasksService {
                 message: s.message,
                 durationInMs: Date.now() - c.createdAt,
                 startedAt: c.createdAt,
+                type: s.type,
               };
           }
         };
@@ -150,6 +159,10 @@ export class ServerTasksService {
     map((all) => all.map(([t]) => t))
   );
 
+  readonly hasNoTasks$: Observable<boolean> = this.publicTasks$.pipe(
+    map((t) => t.length == 0)
+  );
+
   readonly hasAnyFinishedTask$: Observable<boolean> = combineLatest(
     this.succeededTasks$,
     this.failedTasks$
@@ -169,7 +182,6 @@ export class ServerTasksService {
     const initialState: ServerTaskStatePending = { type: "pending" };
     const toEnqueue: InternalTask = [task, initialState, info];
     this._internalTasks$.next([...this._internalTasks$.value, toEnqueue]);
-
     task.state$.pipe(last()).subscribe((newState) => {
       const idx = this._internalTasks$.value.findIndex(
         ([, , c]) => c.id === info.id

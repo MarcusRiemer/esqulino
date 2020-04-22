@@ -1,0 +1,29 @@
+<mat-card>
+  <p *ngIf="hasNoTasks() | async; else showList">There aren't any tasks yet!</p>
+  <ng-template #showList>
+    <mat-list>
+      <div *ngFor="let task of allTasks$ | async;last as isLast">
+        <mat-list-item>
+          <div [ngSwitch]="task.type">
+            <div *ngSwitchCase="'pending'">
+              <div class="server-task-container">
+                <p>{{task.description}}</p>
+                <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
+              </div>
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+            <div *ngSwitchCase="'success'" class="server-task-container">
+              <span>{{task.description}}</span>
+              <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
+            </div>
+            <div *ngSwitchCase="'failure'" class="server-task-container">
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
+            </div>
+          </div>
+        </mat-list-item>
+        <mat-divider *ngIf="!isLast"></mat-divider>
+      </div>
+    </mat-list>
+  </ng-template>
+</mat-card>

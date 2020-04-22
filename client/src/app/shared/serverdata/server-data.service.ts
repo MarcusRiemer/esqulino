@@ -47,11 +47,13 @@ export class ServerDataService {
   readonly newsListFrontpage = new CachedRequest<NewsFrontpageDescription[]>(
     this._http.get<NewsFrontpageDescription[]>(
       this._serverApi.getUserNewsListUrl()
-    )
+    ),
+    this._serverApi.getUserNewsListUrl()
   );
 
   readonly getAdminNewsList = new CachedRequest<NewsDescription[]>(
-    this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl())
+    this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl()),
+    this._serverApi.getAdminNewsListUrl()
   );
 
   readonly getAdminNewsSingle = new IndividualDescriptionCache<NewsDescription>(
@@ -64,19 +66,22 @@ export class ServerDataService {
   >(this._http, (id) => this._serverApi.getNewsSingle(id));
 
   readonly getUserData = new CachedRequest<UserDescription>(
-    this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
+    this._http.get<UserDescription>(this._serverApi.getUserDataUrl()),
+    this._serverApi.getUserDataUrl()
   );
 
   readonly getIdentities = new CachedRequest<ServerProviderDescription>(
     this._http.get<ServerProviderDescription>(
       this._serverApi.getUserIdentitiesUrl()
-    )
+    ),
+    this._serverApi.getUserIdentitiesUrl()
   );
 
   readonly getProviders = new CachedRequest<AvailableProvidersDescription[]>(
     this._http.get<AvailableProvidersDescription[]>(
       this._serverApi.getProvidersUrl()
-    )
+    ),
+    this._serverApi.getProvidersUrl()
   );
 
   /**

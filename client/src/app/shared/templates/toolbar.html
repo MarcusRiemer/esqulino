@@ -40,6 +40,8 @@
   <!-- Static contentent at the end of this toolbar -->
   <ng-content select="[position=end]"></ng-content>
 
+  <server-tasks></server-tasks>
+
   <!-- Possibly allowing the user to login -->
   <user-buttons *ngIf="loginEnabled || (isLoggedIn$ | async)"></user-buttons>
 

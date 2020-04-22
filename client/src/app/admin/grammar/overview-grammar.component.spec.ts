@@ -29,6 +29,7 @@ import { provideGrammarList, buildGrammar } from "../../editor/spec-util";
 
 import { OverviewGrammarComponent } from "./overview-grammar.component";
 import { CreateGrammarComponent } from "./create-grammar.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 describe("OverviewGrammarComponent", () => {
   async function createComponent() {
@@ -50,6 +51,7 @@ describe("OverviewGrammarComponent", () => {
         ListGrammarDataService,
         MutateGrammarService,
         LanguageService,
+        ServerTasksService,
       ],
       declarations: [
         CreateGrammarComponent,

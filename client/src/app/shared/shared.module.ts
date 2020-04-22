@@ -26,6 +26,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatIconModule } from "@angular/material/icon";
 
 import { AnalyticsService } from "./analytics.service";
 import { BrowserService } from "./browser.service";
@@ -63,6 +64,7 @@ import {
   AdminListProjectDataService,
   MutateGrammarService,
   MutateBlockLanguageService,
+  CachedRequest,
 } from "./serverdata";
 
 import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
@@ -86,6 +88,10 @@ import { ResourceReferencesService } from "./resource-references.service";
 import { ResourceReferencesOnlineService } from "./resource-references-online.service";
 import { PaginatorTableComponent } from "./table/paginator-table.component";
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
+import { ServerTasksComponent } from "./server-tasks.component";
+import { ServerTasksService } from "./serverdata/server-tasks.service";
+import { ServerTaskOverlayService } from "./server-tasks-overlay.service";
+import { ServerTasksOverlayComponent } from "./server-tasks-overlay.component";
 
 const dataServices = [
   ListGrammarDataService,
@@ -97,6 +103,7 @@ const dataServices = [
   ProjectDataService,
   IndividualProjectDataService,
   AdminListProjectDataService,
+  ServerTasksService,
 ];
 
 const materialModules = [
@@ -120,6 +127,7 @@ const materialModules = [
   MatPaginatorModule,
   MatTableModule,
   MatProgressBarModule,
+  MatIconModule,
 ];
 
 /**
@@ -172,6 +180,8 @@ const materialModules = [
     MessageDialogComponent,
     PaginatorTableComponent,
     ConditionalDisplayDirective,
+    ServerTasksComponent,
+    ServerTasksOverlayComponent,
   ],
   exports: [
     CommonModule,
@@ -208,11 +218,14 @@ const materialModules = [
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
+    ServerTasksComponent,
+    ServerTasksOverlayComponent,
   ],
   entryComponents: [
     AuthDialogComponent,
     ChangePasswordComponent,
     MessageDialogComponent,
+    ServerTasksOverlayComponent,
   ],
 })
 export class SharedAppModule {
@@ -235,6 +248,8 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
+        CachedRequest,
+        ServerTaskOverlayService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

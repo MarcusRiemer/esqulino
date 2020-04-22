@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { ServerTasksService } from "./server-tasks.service";
-import { first, take, timeout } from "rxjs/operators";
+import { first, take } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ServerTaskManual } from "./server-task-manual";
 
