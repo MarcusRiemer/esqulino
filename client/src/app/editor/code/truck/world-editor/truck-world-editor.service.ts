@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import {
   Position,
   TileOpening,
@@ -7,6 +7,8 @@ import {
 } from "../../../../shared/syntaxtree/truck/world";
 import { Subscription } from "rxjs";
 import { TruckWorldMouseService } from "../truck-world-mouse.service";
+import { CurrentCodeResourceService } from "../../../current-coderesource.service";
+import { worldDescriptionToNode } from "../../../../shared/syntaxtree/truck/world.description";
 
 @Injectable({ providedIn: "root" })
 export class TruckWorldEditorService implements OnDestroy {
@@ -17,7 +19,10 @@ export class TruckWorldEditorService implements OnDestroy {
 
   private _editorModeEnabled = false;
 
-  constructor(private _ngZone: NgZone, private _mouse: TruckWorldMouseService) {
+  constructor(
+    private _mouse: TruckWorldMouseService,
+    private _currentCodeResource: CurrentCodeResourceService
+  ) {
     this._subscriptions.push(
       this._mouse.leftMouseButtonDown.subscribe((isDown) => {
         if (!this._editorModeEnabled) {
@@ -73,8 +78,8 @@ export class TruckWorldEditorService implements OnDestroy {
         if (!pos) return;
 
         if (prevPos) {
-          pos.world.mutateState((state) =>
-            this.addRoadPart(state, prevPos, pos)
+          this.mutateWorldAndCode(pos.world, (s) =>
+            this.addRoadPart(s, prevPos, pos)
           );
         }
         prevPos = pos;
@@ -91,18 +96,16 @@ export class TruckWorldEditorService implements OnDestroy {
     state: WorldState,
     fromPos: Position,
     toPos: Position
-  ): WorldState {
+  ): void {
     const openings = World.getRoadOpeningsBetween(fromPos, toPos);
     if (!openings) {
       // We might have some incorrect positions.
       // This can occur if the client lags, and we get for example Pos(0,0) and then Pos(1,1)
-      return state;
+      return;
     }
 
     state.getTile(fromPos).openings |= openings.from;
     state.getTile(toPos).openings |= openings.to;
-
-    return state;
   }
 
   private startDestroyRoad(): void {
@@ -112,16 +115,7 @@ export class TruckWorldEditorService implements OnDestroy {
       (pos) => {
         if (!pos) return;
 
-        pos.world.mutateState((state) => {
-          state.getTile(pos).openings = TileOpening.None;
-          // After deleting the current tile, we also want to remove the connections that lead to this tile.
-          for (const neighborPos of pos.getDirectNeighbors()) {
-            const { to } = World.getRoadOpeningsBetween(pos, neighborPos);
-            state.getTile(neighborPos).openings &= ~to; // Remove this part from the neighbor
-          }
-
-          return state;
-        });
+        this.mutateWorldAndCode(pos.world, (s) => this.removeRoadPart(s, pos));
       }
     );
   }
@@ -129,5 +123,27 @@ export class TruckWorldEditorService implements OnDestroy {
   private stopDestroyRoad(): void {
     this._rightMouseDownPosUpdaterSubscription?.unsubscribe();
     this._rightMouseDownPosUpdaterSubscription = undefined;
+  }
+
+  private removeRoadPart(state: WorldState, pos: Position): void {
+    state.getTile(pos).openings = TileOpening.None;
+    // After deleting the current tile, we also want to remove the connections that lead to this tile.
+    for (const neighborPos of pos.getDirectNeighbors()) {
+      const { to } = World.getRoadOpeningsBetween(pos, neighborPos);
+      state.getTile(neighborPos).openings &= ~to; // Remove this part from the neighbor
+    }
+  }
+
+  private mutateWorldAndCode(
+    world: World,
+    modifier: (state: WorldState) => void
+  ): void {
+    world.mutateState((s) => {
+      modifier(s);
+      return s;
+    });
+    const newDescription = world.currentStateToDescription();
+    const newTree = worldDescriptionToNode(newDescription);
+    this._currentCodeResource.peekResource.replaceSyntaxTree(newTree);
   }
 }

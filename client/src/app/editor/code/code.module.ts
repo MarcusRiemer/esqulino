@@ -43,7 +43,7 @@ import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.co
 
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 import { TruckWorldMouseService } from "./truck/truck-world-mouse.service";
-import { TruckWorldEditorService } from "./truck/editor/truck-world-editor.service";
+import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor.service";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],

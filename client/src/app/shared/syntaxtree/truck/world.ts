@@ -1,6 +1,12 @@
-import { WorldDescription } from "./world.description";
+import {
+  WorldDescription,
+  WorldDirectionDescription,
+  WorldFreightColorDescription,
+  WorldTileDescription,
+  WorldTrafficLightDescription,
+  WorldTruckDescription,
+} from "./world.description";
 import { BehaviorSubject } from "rxjs";
-
 import { NodeLocation } from "../syntaxtree.description";
 
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
@@ -584,36 +590,104 @@ export class World {
     const dX = toPos.x - fromPos.x;
     const dY = toPos.y - fromPos.y;
 
+    let dir: Direction = undefined;
     if (dX == 0 && dY == 1) {
-      return {
-        // Up to Down
-        from: TileOpening.South,
-        to: TileOpening.North,
-      };
+      dir = Direction.South; // Up to Down
     }
     if (dX == 0 && dY == -1) {
-      return {
-        // Down to Up
-        from: TileOpening.North,
-        to: TileOpening.South,
-      };
+      dir = Direction.North; // Down to Up
     }
     if (dX == 1 && dY == 0) {
-      return {
-        // Left to Right
-        from: TileOpening.East,
-        to: TileOpening.West,
-      };
+      dir = Direction.East; // Left to Right
     }
     if (dX == -1 && dY == 0) {
+      dir = Direction.West; // Right to Left
+    }
+
+    if (dir) {
       return {
-        // Right to Left
-        from: TileOpening.West,
-        to: TileOpening.East,
+        from: DirectionUtil.toTileOpening(dir),
+        to: DirectionUtil.toTileOpening(DirectionUtil.opposite(dir)),
+      };
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * Converts the current state to a WorldDescription
+   * @return the world description
+   */
+  currentStateToDescription(): WorldDescription {
+    function toFreightColorDesc(
+      freight: Freight
+    ): WorldFreightColorDescription {
+      return {
+        [Freight.Red]: "Red",
+        [Freight.Green]: "Green",
+        [Freight.Blue]: "Blue",
+      }[freight] as WorldFreightColorDescription;
+    }
+
+    function toTruckDesc(state: WorldState): WorldTruckDescription {
+      const truck = state.truck;
+      return {
+        position: { x: truck.position.x, y: truck.position.y },
+        facing: DirectionUtil.toChar(truck.facingDirection),
+        freight: truck.freight.map(toFreightColorDesc),
       };
     }
 
-    return undefined;
+    function toTrafficLightDesc(
+      direction: Direction,
+      trafficLight: TrafficLight
+    ): WorldTrafficLightDescription {
+      return {
+        opening: DirectionUtil.toChar(direction),
+        redPhase: trafficLight.redPhase,
+        greenPhase: trafficLight.greenPhase,
+        startPhase: trafficLight.initial,
+      };
+    }
+
+    function toTrafficLightsDesc(
+      trafficLights: TrafficLight[]
+    ): WorldTrafficLightDescription[] {
+      const result: WorldTrafficLightDescription[] = [];
+      for (let i = 0; i < trafficLights.length; i++) {
+        const light = trafficLights[i];
+        if (!light) {
+          continue;
+        }
+        const direction = DirectionUtil.fromNumber(i);
+        result.push(toTrafficLightDesc(direction, light));
+      }
+      return result;
+    }
+
+    function toTileDesc(tile: Tile): WorldTileDescription {
+      return {
+        position: { x: tile.position.x, y: tile.position.y },
+        openings: DirectionUtil.openingToDirectionArray(tile.openings).map(
+          DirectionUtil.toChar
+        ),
+        freight: tile.freight.map(toFreightColorDesc),
+        freightTarget: tile.freightTarget
+          ? toFreightColorDesc(tile.freightTarget)
+          : undefined,
+        trafficLights: toTrafficLightsDesc(tile.trafficLights),
+      };
+    }
+
+    function toWorldDesc(worldSize: Size, state: WorldState): WorldDescription {
+      return {
+        size: { width: worldSize.width, height: worldSize.height },
+        trucks: [toTruckDesc(state)],
+        tiles: state.tiles.map(toTileDesc),
+      };
+    }
+
+    return toWorldDesc(this.size, this.state);
   }
 }
 
@@ -884,7 +958,7 @@ export class Tile {
    * Specifies which freight target is on the tile, null if none. There must be
    * no freight on a tile with a target.
    */
-  freightTarget: Freight;
+  freightTarget: Freight | null;
 
   /**
    * Traffic lights in the order north, east, south, west. Fill unused traffic
@@ -1013,7 +1087,7 @@ export class Tile {
    * @param direction Direction.
    * @return Traffic light if existing, otherwise null.
    */
-  trafficLight(direction: Direction) {
+  trafficLight(direction: Direction): TrafficLight | null {
     const n = DirectionUtil.toNumber(direction);
     return this.trafficLights.length > n ? this.trafficLights[n] : null;
   }
@@ -1263,9 +1337,10 @@ export class DirectionUtil {
   }
 
   /**
-   * Returns the corresponding number for a given direction (north = 0,
-   * continuing clockwise).
+   * Returns the corresponding number for a given direction.
+   * (north = 0, east = 1, south = 2, west = 3)
    * @param direction Direction.
+   * @return the corresponding number
    */
   public static toNumber(direction: Direction): number {
     return {
@@ -1274,6 +1349,18 @@ export class DirectionUtil {
       [Direction.South]: 2,
       [Direction.West]: 3,
     }[direction];
+  }
+
+  /**
+   * Returns the corresponding number for a given direction.
+   * (0 = north, 1 = east, 2 = south, 3 = west)
+   * @param number the directionNumber
+   * @return the corresponding direction
+   */
+  public static fromNumber(number: number): Direction {
+    return [Direction.North, Direction.East, Direction.South, Direction.West][
+      number
+    ];
   }
 
   /**
@@ -1310,13 +1397,42 @@ export class DirectionUtil {
    * @param c Direction as string (N, E, S, W).
    * @return Direction.
    */
-  public static fromChar(c: string): Direction {
+  public static fromChar(c: WorldDirectionDescription): Direction {
     return {
       N: Direction.North,
       E: Direction.East,
       S: Direction.South,
       W: Direction.West,
     }[c];
+  }
+
+  /**
+   * Converts a direction into a char
+   * @param d the direction
+   * @return The direction as a char (N, E, S, W)
+   */
+  public static toChar(d: Direction): WorldDirectionDescription {
+    return {
+      [Direction.North]: "N",
+      [Direction.East]: "E",
+      [Direction.South]: "S",
+      [Direction.West]: "W",
+    }[d] as WorldDirectionDescription;
+  }
+
+  /**
+   * Will split a TileOpening combined with ORs to its atomic direction parts
+   * e.g. (TileOpening.North | TileOpening.South) => [Direction.North, Direction.South]
+   * @param opening the combined opening
+   * @return an array of direction parts
+   */
+  public static openingToDirectionArray(opening: TileOpening): Direction[] {
+    const result = [];
+    if (opening & TileOpening.North) result.push(Direction.North);
+    if (opening & TileOpening.East) result.push(Direction.East);
+    if (opening & TileOpening.South) result.push(Direction.South);
+    if (opening & TileOpening.West) result.push(Direction.West);
+    return result;
   }
 }
 

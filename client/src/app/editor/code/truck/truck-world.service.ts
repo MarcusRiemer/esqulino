@@ -7,7 +7,7 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { World } from "../../../shared/syntaxtree/truck/world";
 import { readFromNode } from "../../../shared/syntaxtree/truck/world.description";
 import { ProjectService } from "../../project.service";
-import { TruckWorldEditorService } from "./editor/truck-world-editor.service";
+import { TruckWorldEditorService } from "./world-editor/truck-world-editor.service";
 
 /**
  * Keeps track of different states for Trucklino.
@@ -41,10 +41,7 @@ export class TruckWorldService {
     filter((worldId) => !!worldId),
     map((worldId) => {
       const currentProgram = this._currentCodeResource.peekResource;
-      if (
-        this._worlds[currentProgram.id] &&
-        this._worlds[currentProgram.id].id === worldId
-      ) {
+      if (this._worlds[currentProgram.id]?.id === worldId) {
         // An instance of the world for this program already exists
         return this._worlds[currentProgram.id].world;
       } else {

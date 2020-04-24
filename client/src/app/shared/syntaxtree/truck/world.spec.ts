@@ -1,18 +1,18 @@
 import {
-  World,
   Command,
   Direction,
-  StrayedOffTheRoadError,
-  LoadingError,
-  UnloadingError,
   DirectionUtil,
-  TileOpening,
-  TurnDirection,
-  Position,
-  TrafficLight,
-  Tile,
   Freight,
+  LoadingError,
+  Position,
+  StrayedOffTheRoadError,
+  Tile,
+  TileOpening,
+  TrafficLight,
   Truck,
+  TurnDirection,
+  UnloadingError,
+  World,
 } from "./world";
 import { WorldDescription } from "./world.description";
 
@@ -531,6 +531,108 @@ describe("Shared: DirectionUtil", () => {
     expect(DirectionUtil.toNumber(Direction.East)).toEqual(1);
     expect(DirectionUtil.toNumber(Direction.South)).toEqual(2);
     expect(DirectionUtil.toNumber(Direction.West)).toEqual(3);
+  });
+
+  it("should convert from number", () => {
+    expect(DirectionUtil.fromNumber(0)).toEqual(Direction.North);
+    expect(DirectionUtil.fromNumber(1)).toEqual(Direction.East);
+    expect(DirectionUtil.fromNumber(2)).toEqual(Direction.South);
+    expect(DirectionUtil.fromNumber(3)).toEqual(Direction.West);
+  });
+
+  it("should convert to chars", () => {
+    expect(DirectionUtil.toChar(Direction.North)).toEqual("N");
+    expect(DirectionUtil.toChar(Direction.East)).toEqual("E");
+    expect(DirectionUtil.toChar(Direction.South)).toEqual("S");
+    expect(DirectionUtil.toChar(Direction.West)).toEqual("W");
+  });
+
+  it("should convert from chars", () => {
+    expect(DirectionUtil.fromChar("N")).toEqual(Direction.North);
+    expect(DirectionUtil.fromChar("E")).toEqual(Direction.East);
+    expect(DirectionUtil.fromChar("S")).toEqual(Direction.South);
+    expect(DirectionUtil.fromChar("W")).toEqual(Direction.West);
+  });
+
+  it("should openings to its direction", () => {
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.None)).toEqual([]);
+
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.North)).toEqual([
+      Direction.North,
+    ]);
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.East)).toEqual([
+      Direction.East,
+    ]);
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.South)).toEqual([
+      Direction.South,
+    ]);
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.West)).toEqual([
+      Direction.West,
+    ]);
+
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.East
+      )
+    ).toEqual([Direction.North, Direction.East]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.South
+      )
+    ).toEqual([Direction.North, Direction.South]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.West
+      )
+    ).toEqual([Direction.North, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.East | TileOpening.South
+      )
+    ).toEqual([Direction.East, Direction.South]);
+    expect(
+      DirectionUtil.openingToDirectionArray(TileOpening.East | TileOpening.West)
+    ).toEqual([Direction.East, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.South | TileOpening.West
+      )
+    ).toEqual([Direction.South, Direction.West]);
+
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.East | TileOpening.South | TileOpening.West
+      )
+    ).toEqual([Direction.East, Direction.South, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.South | TileOpening.West
+      )
+    ).toEqual([Direction.North, Direction.South, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.East | TileOpening.West
+      )
+    ).toEqual([Direction.North, Direction.East, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.East | TileOpening.South
+      )
+    ).toEqual([Direction.North, Direction.East, Direction.South]);
+
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North |
+          TileOpening.East |
+          TileOpening.South |
+          TileOpening.West
+      )
+    ).toEqual([
+      Direction.North,
+      Direction.East,
+      Direction.South,
+      Direction.West,
+    ]);
   });
 
   it("shouldn't take turns", () => {
