@@ -6,7 +6,11 @@
   display: inline-block;
   max-height: 50vh;
   overflow-y: auto;
-  width: 90%;
+  width: 100%;
+}
+
+#st-card mat-divider {
+  position: relative;
 }
 
 .st-container {
