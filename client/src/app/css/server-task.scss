@@ -1,10 +1,9 @@
 #st-card {
-  position: relative;
-  height: 55vh;
+  max-height: 55vh;
   min-width: 20em;
 }
 .st-card-content {
-  position: absolute;
+  display: inline-block;
   max-height: 50vh;
   overflow-y: auto;
   width: 90%;
