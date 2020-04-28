@@ -5,9 +5,8 @@
     *ngSwitchCase="'constant'"
     [ngClass]="visual.cssClasses"
     [blockBase]="visual"
-  >
-    {{ asBlockConstant(visual).text }}
-  </span>
+    [textContent]="asBlockConstant(visual).text"
+  ></span>
   <!-- Show a value that is derived from the property of a node -->
   <span
     *ngSwitchCase="'interpolated'"
