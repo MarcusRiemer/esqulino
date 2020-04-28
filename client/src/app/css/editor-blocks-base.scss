@@ -84,7 +84,7 @@ editor-block-host {
     }
 
     // Mark something as a comment in a language
-    &.activate-keyword *.comment {
+    &.activate-comment *.comment {
         color: green;
     }
 }

@@ -120,13 +120,28 @@ export function visualizeNode(
 
   return {
     blockType: "block",
-    cssClasses: ["vertical"],
     children: [
       {
         blockType: "container",
         orientation: "vertical",
         children: [
-          { blockType: "constant", text: `node "${name}" {` },
+          {
+            blockType: "container",
+            orientation: "horizontal",
+            children: [
+              {
+                blockType: "constant",
+                text: `node`,
+                cssClasses: ["keyword", "space-after"],
+              },
+              {
+                blockType: "constant",
+                text: name,
+                cssClasses: ["double-quote", "space-after"],
+              },
+              { blockType: "constant", text: `{` },
+            ],
+          },
           ...wrappedAttributes,
           { blockType: "constant", text: "}" },
         ],
@@ -160,12 +175,30 @@ export function visualizeChildGroup(
     orientation: "vertical",
     children: [
       {
-        blockType: "constant",
-        text: `children ${t.type} "${t.name}" : [`,
+        blockType: "container",
+        orientation: "horizontal",
+        children: [
+          {
+            blockType: "constant",
+            text: `children`,
+            cssClasses: ["keyword", "space-after"],
+          },
+          {
+            blockType: "constant",
+            text: `${t.type} "${t.name}" : [`,
+          },
+        ],
       },
       {
-        blockType: "iterator",
-        childGroupName: t.name,
+        blockType: "container",
+        orientation: "vertical",
+        cssClasses: ["indent"],
+        children: [
+          {
+            blockType: "iterator",
+            childGroupName: t.name,
+          },
+        ],
       },
       {
         blockType: "constant",
@@ -190,7 +223,12 @@ export function visualizeProperty(
       },
       {
         blockType: "constant",
-        text: `"${t.name}":`,
+        text: t.name.trim(),
+        cssClasses: ["double-quote"],
+      },
+      {
+        blockType: "constant",
+        text: ":",
         cssClasses: ["space-after"],
       },
       {
