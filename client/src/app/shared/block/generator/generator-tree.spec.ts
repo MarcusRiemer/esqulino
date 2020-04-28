@@ -115,7 +115,7 @@ describe("Tree BlockLanguage Generator", () => {
 
       expect(r.editorBlocks).not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual)).toEqual(
-        `<block class="vertical"><container class="vertical">node "t1" {}</container></block>`
+        `<block><container class="vertical"><container class="horizontal">node "t1" {</container>}</container></block>`
       );
       expect(r.editorBlocks[0]).toEqual(
         jasmine.objectContaining({
@@ -142,7 +142,7 @@ describe("Tree BlockLanguage Generator", () => {
 
       expect(r.editorBlocks).not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual)).toEqual(
-        `<block class="vertical"><container class="vertical">node "t1" {<container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`
+        `<block><container class="vertical"><container class="horizontal">node "t1" {</container><container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`
       );
       expect(r.editorBlocks[0]).toEqual(
         jasmine.objectContaining({
@@ -174,7 +174,7 @@ describe("Tree BlockLanguage Generator", () => {
 
       expect(r.editorBlocks).not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual)).toEqual(
-        `<block class="vertical"><container class="vertical">node "t1" {<container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`
+        `<block><container class="vertical"><container class="horizontal">node "t1" {</container><container class="indent vertical"><container class="horizontal">prop "p1": </container></container>}</container></block>`
       );
       expect(r.editorBlocks[0]).toEqual(
         jasmine.objectContaining({
@@ -213,7 +213,7 @@ describe("Tree BlockLanguage Generator", () => {
 
       expect(r.editorBlocks).not.toEqual([]);
       expect(readableConstants(r.editorBlocks[0].visual)).toEqual(
-        `<block class="vertical"><container class="vertical">node "t1" {<container class="indent vertical"><container class="vertical">children parentheses "p1" : [<iterator childGroup="p1">]</container></container>}</container></block>`
+        `<block><container class="vertical"><container class="horizontal">node "t1" {</container><container class="indent vertical"><container class="vertical"><container class="horizontal">children parentheses "p1" : [</container><container class="indent vertical"><iterator childGroup="p1"></container>]</container></container>}</container></block>`
       );
       expect(r.editorBlocks[0]).toEqual(
         jasmine.objectContaining({

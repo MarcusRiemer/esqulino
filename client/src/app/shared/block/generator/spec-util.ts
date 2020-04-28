@@ -29,7 +29,29 @@ export function readableConstants(
   all.forEach((b) => {
     switch (b.blockType) {
       case "constant":
+        if (
+          b.cssClasses?.includes("space-before") ||
+          b.cssClasses?.includes("space-around")
+        ) {
+          toReturn += " ";
+        }
+
+        if (b.cssClasses?.includes("double-quote")) {
+          toReturn += '"';
+        }
+
         toReturn += b.text;
+
+        if (b.cssClasses?.includes("double-quote")) {
+          toReturn += '"';
+        }
+
+        if (
+          b.cssClasses?.includes("space-after") ||
+          b.cssClasses?.includes("space-around")
+        ) {
+          toReturn += " ";
+        }
         break;
       case "block":
       case "container":

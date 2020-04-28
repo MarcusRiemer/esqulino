@@ -213,11 +213,11 @@ describe(`Render Generated BlockLanguages`, () => {
 
       expect(c.element.innerText)
         .withContext("Root node must appear somewhere")
-        .toMatch(/node "r"/);
+        .toMatch(/noder/);
 
       expect(c.element.innerText)
         .withContext("Child node must appear somewhere")
-        .toMatch(/node "t1"/);
+        .toMatch(/nodet1/);
     });
 
     it(`Child missing`, async () => {
@@ -233,7 +233,7 @@ describe(`Render Generated BlockLanguages`, () => {
 
       expect(c.element.innerText)
         .withContext("Root node must appear somewhere")
-        .toMatch(/node "r"/);
+        .toMatch(/noder/);
     });
   });
 
@@ -284,11 +284,11 @@ describe(`Render Generated BlockLanguages`, () => {
 
       expect(c.element.innerText)
         .withContext("Root node must appear somewhere")
-        .toMatch(/node "r"/);
+        .toMatch(/noder/);
 
       expect(c.element.innerText)
         .withContext("Child node must appear somewhere")
-        .toMatch(/node "t1"/);
+        .toMatch(/nodet1/);
     });
 
     it(`Child missing`, async () => {
@@ -304,7 +304,7 @@ describe(`Render Generated BlockLanguages`, () => {
 
       expect(c.element.innerText)
         .withContext("Root node must appear somewhere")
-        .toMatch(/node "r"/);
+        .toMatch(/noder/);
     });
   });
 });
