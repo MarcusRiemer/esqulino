@@ -65,6 +65,8 @@ export class BlockHostComponent implements OnChanges {
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
+    // We can trust the rendered code service here, because it is updated
+    // by this very component.
     const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
     return usedBlockLanguage.getEditorBlock(this.node.qualifiedName);
   }

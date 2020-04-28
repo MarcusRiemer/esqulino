@@ -21,6 +21,7 @@ export const BLOCK_RENDER_COMPONENTS = [
 export {
   BlockRenderComponent,
   BlockRenderBlockComponent,
+  BlockRenderContainerComponent,
   BlockRenderDropTargetComponent,
   BlockRenderErrorComponent,
   BlockRenderInputComponent,

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
-import { Observable, combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable, combineLatest, of } from "rxjs";
+import { map, flatMap, switchMap } from "rxjs/operators";
 
 import { BlockLanguage } from "../../../shared/block";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
@@ -12,6 +12,10 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { DragService } from "../../drag.service";
 import { BlockDebugOptionsService } from "../../block-debug-options.service";
 import { ProjectService } from "../../project.service";
+import {
+  IndividualGrammarDataService,
+  IndividualBlockLanguageDataService,
+} from "src/app/shared/serverdata";
 
 /**
  * Root of a block editor. Displays either the syntaxtree or a friendly message to
@@ -21,14 +25,14 @@ import { ProjectService } from "../../project.service";
   templateUrl: "templates/block-root.html",
 })
 export class BlockRootComponent {
-  private _blockLanguageCache: { [id: string]: BlockLanguage } = {};
-
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _dragService: DragService,
     private _debugOptions: BlockDebugOptionsService,
     private _resourceReferences: ResourceReferencesService,
-    private _projectService: ProjectService
+    private _projectService: ProjectService,
+    private _grammarData: IndividualGrammarDataService,
+    private _blockLangData: IndividualBlockLanguageDataService
   ) {}
 
   /**
@@ -59,17 +63,24 @@ export class BlockRootComponent {
     this._currentCodeResource.resourceBlockLanguageId,
     this._debugOptions.showInternalAst.value$
   ).pipe(
-    map(([blockLangId, showInternalAst]) => {
+    map(async ([blockLangId, showInternalAst]) => {
       const blockLang = this._resourceReferences.getBlockLanguage(
         blockLangId,
         "undefined"
       );
-      if (blockLang && showInternalAst) {
+      if (!blockLang) {
+        throw new Error(
+          `BlockRootComponent could not resolve BlockLanguage with id "${blockLangId}"`
+        );
+      }
+      if (showInternalAst) {
         return this.getTreeBlockLanguage(blockLang.grammarId);
       } else {
         return blockLang;
       }
-    })
+    }),
+    // Unwrap Promise from previous step
+    switchMap((b) => b)
   );
 
   /**
@@ -78,33 +89,36 @@ export class BlockRootComponent {
    *
    * @param grammarId The grammar to base the block language on.
    */
-  private getTreeBlockLanguage(grammarId: string): BlockLanguage {
+  private async getTreeBlockLanguage(
+    grammarId: string
+  ): Promise<BlockLanguage> {
+    // If a block language exists for the given grammar ID: This language
+    // was automatically generated for that grammar.
+    let blockLangDesc = this._blockLangData.getLocal(grammarId, "undefined");
     // Was the block language for that grammar created already?
-    if (!this._blockLanguageCache[grammarId]) {
+    if (!blockLangDesc) {
       // Nope, we build it on the fly
       console.log(
         `Generating AST block language for grammar with ID "${grammarId}"`
       );
 
-      const grammar = this._projectService.cachedProject.grammarDescriptions.find(
-        (g) => g.id === grammarId
-      );
+      // There is a possibility that the grammar hasn't been loaded yet.
+      const grammar = await this._grammarData.getLocal(grammarId, "request");
       const blockLangModel = convertGrammarTreeInstructions(
         { type: "tree" },
         grammar
       );
-      const blockLangDesc: BlockLanguageDescription = Object.assign(
-        blockLangModel,
-        {
-          id: grammarId,
-          name: `Automatically generated from "${grammar.name}"`,
-          defaultProgrammingLanguageId: grammar.programmingLanguageId,
-        }
-      );
+      blockLangDesc = Object.assign(blockLangModel, {
+        id: grammarId,
+        grammarId: grammarId,
+        name: `Automatically generated from "${grammar.name}"`,
+        defaultProgrammingLanguageId: grammar.programmingLanguageId,
+      });
 
-      this._blockLanguageCache[grammarId] = new BlockLanguage(blockLangDesc);
+      // Make the block language available to the rendered trees
+      this._blockLangData.setLocal(blockLangDesc);
     }
 
-    return this._blockLanguageCache[grammarId];
+    return new BlockLanguage(blockLangDesc);
   }
 }

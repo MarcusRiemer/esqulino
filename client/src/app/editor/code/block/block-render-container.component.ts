@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from "@angular/core";
 
-import { Node } from "../../../shared/syntaxtree";
+import { Node, printableNodeDebug } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 
 @Component({
@@ -25,7 +25,8 @@ export class BlockRenderContainerComponent {
   get childVisuals() {
     if (VisualBlockDescriptions.isEditorContainer(this.visual)) {
       if (this.visual.children.some((v) => !v)) {
-        debugger;
+        const name = printableNodeDebug(this.node);
+        throw new Error(`Undefined child in container for node ${name}`);
       }
       return this.visual.children;
     } else {

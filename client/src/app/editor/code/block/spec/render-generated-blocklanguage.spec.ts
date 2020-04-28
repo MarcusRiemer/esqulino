@@ -1,0 +1,310 @@
+import { FormsModule } from "@angular/forms";
+import { TestBed } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+
+import { first } from "rxjs/operators";
+
+import { BlockLanguage } from "../../../../shared/block";
+import { FocusDirective } from "../../../../shared/focus-element.directive";
+import {
+  LanguageService,
+  NodeDescription,
+  Tree,
+  CodeResource,
+  GrammarDocument,
+} from "../../../../shared";
+import {
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
+  ServerApiService,
+} from "../../../../shared/serverdata";
+import { ResourceReferencesOnlineService } from "../../../../shared/resource-references-online.service";
+import { ResourceReferencesService } from "../../../../shared/resource-references.service";
+import { generateBlockLanguage } from "../../../../shared/block/generator/generator";
+import { BlockLanguageListDescription } from "../../../../shared/block/block-language.description";
+import {
+  AnalyticsService,
+  SpecAnalyticsService,
+} from "../../../../shared/analytics.service";
+
+import { DragService } from "../../../drag.service";
+import { TrashService } from "../../../trash.service";
+import {
+  ensureLocalBlockLanguageRequest,
+  buildBlockLanguage,
+  ensureLocalGrammarRequest,
+  buildGrammar,
+} from "../../../spec-util";
+import { CurrentCodeResourceService } from "../../../current-coderesource.service";
+
+import { RenderedCodeResourceService } from "../rendered-coderesource.service";
+import { BlockHostComponent } from "../block-host.component";
+import { BLOCK_RENDER_COMPONENTS } from "../index";
+
+describe(`Render Generated BlockLanguages`, () => {
+  async function createComponent(
+    nodeDesc: NodeDescription,
+    grammarDoc: GrammarDocument
+  ) {
+    await TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        MatSnackBarModule,
+        HttpClientTestingModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        IndividualBlockLanguageDataService,
+        DragService,
+        IndividualGrammarDataService,
+        LanguageService,
+        RenderedCodeResourceService,
+        CurrentCodeResourceService,
+        TrashService,
+        ServerApiService,
+        {
+          provide: ResourceReferencesService,
+          useClass: ResourceReferencesOnlineService,
+        },
+        {
+          provide: AnalyticsService,
+          useClass: SpecAnalyticsService,
+        },
+      ],
+      declarations: [...BLOCK_RENDER_COMPONENTS, FocusDirective],
+    }).compileComponents();
+
+    const grammarDesc = await ensureLocalGrammarRequest(
+      buildGrammar(grammarDoc)
+    );
+    const listBlockLanguage: BlockLanguageListDescription = buildBlockLanguage({
+      grammarId: grammarDesc.id,
+    });
+    const genBlockLanguage = generateBlockLanguage(
+      listBlockLanguage,
+      {
+        type: "tree",
+      },
+      grammarDoc
+    );
+
+    const blockLangDesc = await ensureLocalBlockLanguageRequest(
+      genBlockLanguage
+    );
+
+    let fixture = TestBed.createComponent(BlockHostComponent);
+    let component = fixture.componentInstance;
+
+    // The component instantiates the service for the particular subtree. I had a loooong
+    // search for nasty bugs because this basic assumption didn't hold, so I will leave
+    // the expectation enabled just as a warning to myself.
+    //
+    // The cast to "any" is a hack to remove the private-ness of the injected service.
+    const renderData = (component as any)
+      ._renderedCodeResourceService as RenderedCodeResourceService;
+    expect(renderData)
+      .withContext("Spec and component must share same service")
+      .toBe((component as any)._renderedCodeResourceService);
+
+    const blockLanguage = new BlockLanguage(blockLangDesc);
+
+    const codeResource = new CodeResource(
+      {
+        ast: nodeDesc,
+        name: "Spec",
+        id: "spec",
+        blockLanguageId: blockLanguage.id,
+        programmingLanguageId: blockLangDesc.defaultProgrammingLanguageId,
+      },
+      undefined
+    );
+
+    component.node = new Tree(nodeDesc).rootNode;
+    component.blockLanguage = blockLanguage;
+    component.codeResource = codeResource;
+
+    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    httpTestingController.verify();
+
+    const serviceRenderDataAvailable = await renderData.dataAvailable$
+      .pipe(first())
+      .toPromise();
+    const componentRenderDataAvailable = await component.renderDataAvailable$
+      .pipe(first())
+      .toPromise();
+
+    expect(componentRenderDataAvailable)
+      .withContext("Component render data must be available")
+      .toBe(true);
+    expect(serviceRenderDataAvailable)
+      .withContext("Service render data must be available")
+      .toBe(true);
+
+    expect(component.node)
+      .withContext("Component must have a valid node")
+      .not.toBeUndefined();
+    expect(component.codeResource)
+      .withContext("Component must have a valid code resource")
+      .not.toBeUndefined();
+    expect(component.blockLanguage)
+      .withContext("Component must have a valid block language")
+      .not.toBeUndefined();
+
+    await fixture.whenRenderingDone();
+
+    return {
+      fixture,
+      component,
+      componentRenderDataAvailable,
+      blockLanguage,
+      codeResource,
+      element: fixture.nativeElement as HTMLElement,
+    };
+  }
+
+  describe(`Grammar 0: Root with single required child`, () => {
+    const grammarDesc: GrammarDocument = {
+      types: {
+        l: {
+          r: {
+            type: "concrete",
+            attributes: [
+              {
+                type: "allowed",
+                name: "c",
+                nodeTypes: [{ languageName: "l", typeName: "t1" }],
+              },
+            ],
+          },
+          t1: {
+            type: "concrete",
+            attributes: [{ type: "terminal", symbol: "t1" }],
+          },
+        },
+      },
+      root: { languageName: "l", typeName: "r" },
+    };
+
+    it(`Child provided`, async () => {
+      const treeDesc: NodeDescription = {
+        language: "l",
+        name: "r",
+        children: {
+          c: [
+            {
+              language: "l",
+              name: "t1",
+            },
+          ],
+        },
+      };
+
+      const c = await createComponent(treeDesc, grammarDesc);
+
+      expect(c.element.innerText)
+        .withContext("Root node must appear somewhere")
+        .toMatch(/node "r"/);
+
+      expect(c.element.innerText)
+        .withContext("Child node must appear somewhere")
+        .toMatch(/node "t1"/);
+    });
+
+    it(`Child missing`, async () => {
+      const treeDesc: NodeDescription = {
+        language: "l",
+        name: "r",
+        children: {
+          c: [],
+        },
+      };
+
+      const c = await createComponent(treeDesc, grammarDesc);
+
+      expect(c.element.innerText)
+        .withContext("Root node must appear somewhere")
+        .toMatch(/node "r"/);
+    });
+  });
+
+  describe(`Grammar 0: Root with single required child in container`, () => {
+    const grammarDesc: GrammarDocument = {
+      types: {
+        l: {
+          r: {
+            type: "concrete",
+            attributes: [
+              {
+                type: "container",
+                orientation: "vertical",
+                children: [
+                  {
+                    type: "allowed",
+                    name: "c",
+                    nodeTypes: [{ languageName: "l", typeName: "t1" }],
+                  },
+                ],
+              },
+            ],
+          },
+          t1: {
+            type: "concrete",
+            attributes: [{ type: "terminal", symbol: "t1" }],
+          },
+        },
+      },
+      root: { languageName: "l", typeName: "r" },
+    };
+
+    it(`Child provided`, async () => {
+      const treeDesc: NodeDescription = {
+        language: "l",
+        name: "r",
+        children: {
+          c: [
+            {
+              language: "l",
+              name: "t1",
+            },
+          ],
+        },
+      };
+
+      const c = await createComponent(treeDesc, grammarDesc);
+
+      expect(c.element.innerText)
+        .withContext("Root node must appear somewhere")
+        .toMatch(/node "r"/);
+
+      expect(c.element.innerText)
+        .withContext("Child node must appear somewhere")
+        .toMatch(/node "t1"/);
+    });
+
+    it(`Child missing`, async () => {
+      const treeDesc: NodeDescription = {
+        language: "l",
+        name: "r",
+        children: {
+          c: [],
+        },
+      };
+
+      const c = await createComponent(treeDesc, grammarDesc);
+
+      expect(c.element.innerText)
+        .withContext("Root node must appear somewhere")
+        .toMatch(/node "r"/);
+    });
+  });
+});
