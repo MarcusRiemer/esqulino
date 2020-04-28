@@ -1,4 +1,4 @@
-<button mat-menu-item [matMenuTriggerFor]="menu">
+<button id="tasksMenu" mat-menu-item [matMenuTriggerFor]="menu">
   <span class="fa fa-fw fa-tasks"></span>
   Tasks
 </button>
@@ -8,29 +8,29 @@
       There aren't any tasks yet!
     </p>
     <ng-template #showList>
-      <md-content-card class="st-card-content">
-        <ul>
-          <li *ngFor="let task of allTasks$ | async">
-            <div [ngSwitch]="task.type">
-              <div *ngSwitchCase="'pending'" class="st-container st-pending">
-                <p>{{task.description}}</p>
-                <span>
-                  <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
-                </span>
-                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              </div>
-              <div *ngSwitchCase="'success'" class="st-container">
-                <p>{{task.description}}</p>
-                <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
-              </div>
-              <div *ngSwitchCase="'failure'" class="st-container">
-                <p>{{task.description}}</p>
-                <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
-              </div>
+      <ul>
+        <li *ngFor="let task of allTasks$ | async">
+          <div [ngSwitch]="task.type">
+            <div *ngSwitchCase="'pending'" class="st-container st-pending">
+              <i class="fa fa-fw fa-xs fa-upload" matListIcon></i>
+              <p>{{task.description}}</p>
+              <span>
+                <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
+              </span>
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             </div>
-          </li>
-        </ul>
-      </md-content-card>
+            <div *ngSwitchCase="'success'" class="st-container">
+              <i class="fa fa-fw fa-xs fa-download" matListIcon></i>
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
+            </div>
+            <div *ngSwitchCase="'failure'" class="st-container">
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
+            </div>
+          </div>
+        </li>
+      </ul>
     </ng-template>
   </div>
 </mat-menu>

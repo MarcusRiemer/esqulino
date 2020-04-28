@@ -1,29 +1,32 @@
-#mat-menu-panel-0 {
-  max-width: 20rem;
+.mat-menu-panel {
+  max-width: 20rem !important;
 }
+
 #st-card {
   max-height: 55vh;
   min-width: 20em;
   padding-left: 1rem;
   padding-right:1rem;
-}
-
-.st-card-content {
   display: inline-block;
-  max-height: 50vh;
   width: 100%;
   overflow-y:auto;
   overflow-x:hidden;
 }
 
+#st-card > p {
+  text-align: center;
+}
+
 .st-container {
   display: grid;
-  grid-template-columns: 90% 10%;
+  grid-template-columns: 10% 80% 10%;
   grid-template-rows: 100%;
 }
 
 div[ng-reflect-ng-switch] {
   width: 100%;
+  position: absolute;
+  top: 20%;
 }
 
 #st-card ul {
@@ -46,6 +49,6 @@ div[ng-reflect-ng-switch] {
   margin-bottom: 0.25rem;
 }
 #st-card li  i {
-  margin-top: 0.25rem;
+  margin-top: 0.45rem;
   margin-bottom: 0.25rem;
 }

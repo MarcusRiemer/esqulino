@@ -17,5 +17,4 @@ export class ServerTasksComponent {
   hasNoTasks(): Observable<boolean> {
     return this._serverTasks.hasNoTasks$;
   }
-  showTasks() {}
 }
