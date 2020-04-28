@@ -26,7 +26,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 
-import { AnalyticsService } from "./analytics.service";
+import { AnalyticsService, PiwikAnalyticsService } from "./analytics.service";
 import { BrowserService } from "./browser.service";
 import { DefaultValuePipe } from "./default-value.pipe";
 import { FlashMessageListComponent } from "./flash.component";
@@ -217,7 +217,10 @@ export class SharedAppModule {
       ngModule: SharedAppModule,
       providers: [
         UserService,
-        AnalyticsService,
+        {
+          provide: AnalyticsService,
+          useClass: PiwikAnalyticsService,
+        },
         BrowserService,
         FlashService,
         ServerApiService,
