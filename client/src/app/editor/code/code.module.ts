@@ -15,6 +15,7 @@ import { CodeSidebarComponent } from "./code.sidebar";
 import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
 import { ValidationComponent } from "./validation.component";
 import { UnknownCodeResourceComponent } from "./unknown-code-resource.component";
+import { DraggableBlockListComponent } from "./draggable-block-list.component";
 
 import { BLOCK_RENDER_COMPONENTS } from "./block/index";
 import { BlockRootComponent } from "./block/block-root.component";
@@ -50,6 +51,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     CreateCodeResourceComponent,
     DropDebugComponent,
     DatabaseSchemaSidebarComponent,
+    DraggableBlockListComponent,
     ValidationComponent,
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,

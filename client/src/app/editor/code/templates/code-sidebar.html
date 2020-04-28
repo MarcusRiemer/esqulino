@@ -1,9 +1,9 @@
-<ng-container *ngIf="hasBlockLanguage | async; else elseBlock">
+<ng-container *ngIf="hasBlockLanguage$ | async; else elseBlock">
   <!-- Showing all sidebars -->
   <ng-container
-    *ngIf="(portalInstances | async)?.length > 0; else noSidebarDefined"
+    *ngIf="(portalInstances$ | async)?.length > 0; else noSidebarDefined"
   >
-    <sidebar-item-host *ngFor="let portal of portalInstances | async">
+    <sidebar-item-host *ngFor="let portal of portalInstances$ | async">
       <ng-template [cdkPortalOutlet]="portal"></ng-template>
     </sidebar-item-host>
   </ng-container>
@@ -14,7 +14,7 @@
       <p>
         <strong>
           Die Blocksprache
-          <q>{{ (currentBlockLanguage | async).name }}</q>
+          <q>{{ (currentBlockLanguage$ | async).name }}</q>
           hat keine Seitenleiste definiert!
         </strong>
         Vermutlich ist das einfach ein Fehler des Sprachdesigners, auf jeden
@@ -25,13 +25,18 @@
         Du kennst dich mit den Interna von Blocksprachen aus? Dann kannst du
         versuchen den Fehler
         <a
-          [routerLink]="['/admin/block-language/',  (currentBlockLanguage | async).id]"
+          [routerLink]="['/admin/block-language/',  (currentBlockLanguage$ | async).id]"
         >
           im Admin-Editor zu beheben
         </a>
         .
       </p>
     </div>
+    <draggable-block-list
+        [blockSidebar]="fallbackSidebar$ | async"
+        [codeResource]="currentCodeResource$ | async"
+    >
+    </draggable-block-list>
   </ng-template>
 </ng-container>
 <ng-template #elseBlock>
