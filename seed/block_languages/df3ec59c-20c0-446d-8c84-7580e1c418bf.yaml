@@ -167,12 +167,12 @@ concise_attributes:
     false}, {"blockType": "iterator", "childGroupName": "cardinality", "emptyDropTarget":
     false}], "blockType": "container", "orientation": "horizontal"}], "blockType":
     "block", "dropTarget": {}}], "describedType": {"typeName": "nodeRefCardinality",
-    "languageName": "MetaGrammar"}}], "rootCssClasses": ["activate-keyword", "activate-block-outline"],
-    "editorComponents": [{"componentType": "block-root"}, {"componentType": "validator"},
-    {"componentType": "generated-code"}], "localGeneratorInstructions": {"type": "manual",
-    "traits": {"softHole": {"applyMode": "deepMerge", "instructions": {"emptyDropTarget":
-    true}}}, "traitScopes": [{"traits": ["softHole"], "attributes": {"MetaGrammar":
-    {"typedef": ["references"], "children": ["references"]}}}], "staticSidebars":
+    "languageName": "MetaGrammar"}}], "rootCssClasses": ["activate-keyword", "activate-block-outline",
+    "activate-comment"], "editorComponents": [{"componentType": "block-root"}, {"componentType":
+    "validator"}, {"componentType": "generated-code"}], "localGeneratorInstructions":
+    {"type": "manual", "traits": {"softHole": {"applyMode": "deepMerge", "instructions":
+    {"emptyDropTarget": true}}}, "traitScopes": [{"traits": ["softHole"], "attributes":
+    {"MetaGrammar": {"typedef": ["references"], "children": ["references"]}}}], "staticSidebars":
     [{"type": "fixedBlocks", "caption": "Meta", "categories": [{"blocks": [{"defaultNode":
     {"name": "grammar", "language": "MetaGrammar", "properties": {"name": "$lang"}},
     "displayName": "Leere Grammatik"}, {"defaultNode": {"name": "concreteNode", "language":
@@ -212,7 +212,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-10 20:25:22.788336000 Z
+  value_before_type_cast: 2020-04-28 20:03:45.582338000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
