@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+import { ElementRef, Injectable } from "@angular/core";
 import {
-  CloseScrollStrategy,
   ComponentType,
+  ConnectionPositionPair,
+  FlexibleConnectedPositionStrategy,
   Overlay,
   OverlayConfig,
 } from "@angular/cdk/overlay";
@@ -9,21 +10,32 @@ import { ComponentPortal } from "@angular/cdk/portal";
 
 @Injectable()
 export class ServerTaskOverlayService {
-  private _config = new OverlayConfig({
-    hasBackdrop: true,
-    backdropClass: "cdk-overlay-transparent-backdrop",
-  });
+  constructor(private _overlay: Overlay) {}
 
-  constructor(private overlay: Overlay) {}
-
-  open(comp: ComponentType<any>, event: MouseEvent) {
-    this._config.positionStrategy = this.overlay
+  open(comp: ComponentType<any>, connectedTo: ElementRef) {
+    const positionStrategy = this._overlay
       .position()
-      .global()
-      .left(event.clientX + "px")
-      .top(event.clientY + "px");
-    // Returns an OverlayRef (which is a PortalHost)
-    const overlayRef = this.overlay.create(this._config);
+      .flexibleConnectedTo(connectedTo)
+      .withPositions([
+        {
+          originX: "start",
+          originY: "bottom",
+          overlayX: "start",
+          overlayY: "top",
+        },
+        {
+          originX: "start",
+          originY: "bottom",
+          overlayX: "start",
+          overlayY: "bottom",
+        },
+      ]);
+
+    const overlayRef = this._overlay.create({
+      hasBackdrop: true,
+      positionStrategy,
+      scrollStrategy: this._overlay.scrollStrategies.reposition(),
+    });
 
     // Create ComponentPortal that can be attached to a PortalHost
     const filePreviewPortal = new ComponentPortal(comp);

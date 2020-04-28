@@ -2,30 +2,27 @@
   <p *ngIf="hasNoTasks() | async; else showList">There aren't any tasks yet!</p>
   <ng-template #showList>
     <md-content-card class="st-card-content">
-      <mat-list class="st-list">
-        <div *ngFor="let task of allTasks$ | async;last as isLast">
-          <mat-list-item>
-            <div [ngSwitch]="task.type">
-              <div *ngSwitchCase="'pending'">
-                <div class="st-container">
-                  <p>{{task.description}}</p>
-                  <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
-                </div>
-                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              </div>
-              <div *ngSwitchCase="'success'" class="st-container">
-                <span>{{task.description}}</span>
-                <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
-              </div>
-              <div *ngSwitchCase="'failure'" class="st-container">
-                <p>{{task.description}}</p>
-                <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
-              </div>
+      <ul>
+        <li *ngFor="let task of allTasks$ | async">
+          <div [ngSwitch]="task.type">
+            <div *ngSwitchCase="'pending'" class="st-container st-pending">
+              <p>{{task.description}}</p>
+              <span>
+                <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
+              </span>
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             </div>
-          </mat-list-item>
-          <mat-divider *ngIf="!isLast"></mat-divider>
-        </div>
-      </mat-list>
+            <div *ngSwitchCase="'success'" class="st-container">
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
+            </div>
+            <div *ngSwitchCase="'failure'" class="st-container">
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
+            </div>
+          </div>
+        </li>
+      </ul>
     </md-content-card>
   </ng-template>
 </mat-card>

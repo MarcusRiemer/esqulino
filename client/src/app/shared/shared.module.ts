@@ -91,7 +91,8 @@ import { ConditionalDisplayDirective } from "./table/directives/conditional-disp
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { ServerTaskOverlayService } from "./server-tasks-overlay.service";
-import { ServerTasksOverlayComponent } from "./server-tasks-overlay.component";
+import { ServerTasksListComponent } from "./server-tasks-list.component";
+import { OverlayModule } from "@angular/cdk/overlay";
 
 const dataServices = [
   ListGrammarDataService,
@@ -148,6 +149,7 @@ const materialModules = [
     PortalModule,
     ReactiveFormsModule,
     ...materialModules,
+    OverlayModule,
   ],
   declarations: [
     EmptyComponent,
@@ -181,7 +183,7 @@ const materialModules = [
     PaginatorTableComponent,
     ConditionalDisplayDirective,
     ServerTasksComponent,
-    ServerTasksOverlayComponent,
+    ServerTasksListComponent,
   ],
   exports: [
     CommonModule,
@@ -219,13 +221,13 @@ const materialModules = [
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
     ServerTasksComponent,
-    ServerTasksOverlayComponent,
+    ServerTasksListComponent,
   ],
   entryComponents: [
     AuthDialogComponent,
     ChangePasswordComponent,
     MessageDialogComponent,
-    ServerTasksOverlayComponent,
+    ServerTasksListComponent,
   ],
 })
 export class SharedAppModule {

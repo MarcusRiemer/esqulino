@@ -16,7 +16,7 @@ import { ToolbarService } from "./toolbar.service";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { Overlay } from "@angular/cdk/overlay";
 import { BehaviorSubject } from "rxjs";
-import { ServerTasksOverlayComponent } from "./server-tasks-overlay.component";
+import { ServerTasksListComponent } from "./server-tasks-list.component";
 import { take } from "rxjs/operators";
 
 describe(`Component: Server-tasks`, () => {
@@ -31,10 +31,10 @@ describe(`Component: Server-tasks`, () => {
         ToolbarService,
         Overlay,
       ],
-      declarations: [ServerTasksComponent, ServerTasksOverlayComponent],
+      declarations: [ServerTasksComponent, ServerTasksListComponent],
     }).compileComponents();
 
-    let fixture = TestBed.createComponent(ServerTasksOverlayComponent);
+    let fixture = TestBed.createComponent(ServerTasksListComponent);
     let component = fixture.componentInstance;
     fixture.detectChanges();
 

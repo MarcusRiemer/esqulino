@@ -16,7 +16,7 @@ import { ToolbarService } from "./toolbar.service";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { Overlay } from "@angular/cdk/overlay";
 import { BehaviorSubject } from "rxjs";
-import { ServerTasksOverlayComponent } from "./server-tasks-overlay.component";
+import { ServerTasksListComponent } from "./server-tasks-list.component";
 
 describe(`Component: Server-tasks`, () => {
   async function createComponent() {
@@ -30,7 +30,7 @@ describe(`Component: Server-tasks`, () => {
         ToolbarService,
         Overlay,
       ],
-      declarations: [ServerTasksComponent, ServerTasksOverlayComponent],
+      declarations: [ServerTasksComponent, ServerTasksListComponent],
     }).compileComponents();
 
     let fixture = TestBed.createComponent(ServerTasksComponent);
@@ -66,7 +66,7 @@ describe(`Component: Server-tasks`, () => {
 
     t.serverTaskService.addTask(task);
 
-    t.component.showTasks(new MouseEvent("t1", { clientX: 5, clientY: 5 }));
+    t.component.showTasks();
     // TODO: Complete test
   });
 });

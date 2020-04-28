@@ -2,15 +2,13 @@
   max-height: 55vh;
   min-width: 20em;
 }
+
 .st-card-content {
   display: inline-block;
   max-height: 50vh;
-  overflow-y: auto;
   width: 100%;
-}
-
-#st-card mat-divider {
-  position: relative;
+  overflow-y:auto;
+  overflow-x:hidden;
 }
 
 .st-container {
@@ -21,4 +19,28 @@
 
 div[ng-reflect-ng-switch] {
   width: 100%;
+}
+
+#st-card ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+.st-container p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#st-card li {
+  position: relative;
+  min-height: 2.5rem;
+}
+#st-card li  p {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+#st-card li  i {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
