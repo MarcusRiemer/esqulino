@@ -4,33 +4,31 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
+import { MatMenuModule } from "@angular/material/menu";
+import { Overlay } from "@angular/cdk/overlay";
 
 import { ServerDataService, ServerApiService } from "./serverdata";
 import {
   ServerTasksService,
   ServerTaskState,
 } from "./serverdata/server-tasks.service";
-
-import { ServerTaskOverlayService } from "./server-tasks-overlay.service";
 import { ToolbarService } from "./toolbar.service";
 import { ServerTasksComponent } from "./server-tasks.component";
-import { Overlay } from "@angular/cdk/overlay";
+
 import { BehaviorSubject } from "rxjs";
-import { ServerTasksListComponent } from "./server-tasks-list.component";
 
 describe(`Component: Server-tasks`, () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatMenuModule],
       providers: [
         ServerDataService,
         ServerApiService,
         ServerTasksService,
-        ServerTaskOverlayService,
         ToolbarService,
         Overlay,
       ],
-      declarations: [ServerTasksComponent, ServerTasksListComponent],
+      declarations: [ServerTasksComponent],
     }).compileComponents();
 
     let fixture = TestBed.createComponent(ServerTasksComponent);

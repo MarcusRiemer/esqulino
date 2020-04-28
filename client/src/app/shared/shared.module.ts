@@ -90,8 +90,6 @@ import { PaginatorTableComponent } from "./table/paginator-table.component";
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
-import { ServerTaskOverlayService } from "./server-tasks-overlay.service";
-import { ServerTasksListComponent } from "./server-tasks-list.component";
 import { OverlayModule } from "@angular/cdk/overlay";
 
 const dataServices = [
@@ -183,7 +181,6 @@ const materialModules = [
     PaginatorTableComponent,
     ConditionalDisplayDirective,
     ServerTasksComponent,
-    ServerTasksListComponent,
   ],
   exports: [
     CommonModule,
@@ -221,13 +218,11 @@ const materialModules = [
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
     ServerTasksComponent,
-    ServerTasksListComponent,
   ],
   entryComponents: [
     AuthDialogComponent,
     ChangePasswordComponent,
     MessageDialogComponent,
-    ServerTasksListComponent,
   ],
 })
 export class SharedAppModule {
@@ -251,7 +246,6 @@ export class SharedAppModule {
         PerformDataService,
         IsAdminGuard,
         CachedRequest,
-        ServerTaskOverlayService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
