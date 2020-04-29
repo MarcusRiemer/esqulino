@@ -59,7 +59,7 @@ describe(`Component: Server-tasks`, () => {
   });
   it("Overlay should be not displayed", async () => {
     const t = await createComponent();
-    const list = t.fixture.debugElement.queryAll(By.css("#st-card"));
+    const list = t.fixture.debugElement.queryAll(By.css(".mat-menu-panel"));
     expect(list).toEqual([]);
   });
   it("Overlay should be displayed", async () => {
@@ -67,11 +67,11 @@ describe(`Component: Server-tasks`, () => {
     t.fixture.debugElement
       .query(By.css("button"))
       .triggerEventHandler("click", null);
-    const list = t.fixture.debugElement.queryAll(By.css("#st-card"));
+    const list = t.fixture.debugElement.queryAll(By.css(".mat-menu-panel"));
     expect(list.length).toBeGreaterThanOrEqual(1);
   });
 
-  it(`Displays one pending tasks`, async () => {
+  it(`Displays one pending task`, async () => {
     const t = await createComponent();
     const task = {
       description: "t1",
@@ -83,9 +83,7 @@ describe(`Component: Server-tasks`, () => {
       expect(tl.map((t) => t.description)).toEqual(exp);
       if (tl.length > 0) {
         t.fixture.detectChanges();
-        const listItems = t.fixture.debugElement.queryAll(
-          By.css("#st-card li")
-        );
+        const listItems = t.fixture.debugElement.queryAll(By.css("ul > li"));
         expect(listItems.length).toEqual(1);
       }
     });
@@ -112,9 +110,7 @@ describe(`Component: Server-tasks`, () => {
       expect(tl.map((t) => t.description)).toEqual(exp);
       if (tl.length > 0) {
         t.fixture.detectChanges();
-        const listItems = t.fixture.debugElement.queryAll(
-          By.css("#st-card li")
-        );
+        const listItems = t.fixture.debugElement.queryAll(By.css("ul > li"));
         expect(listItems.length).toEqual(1);
       }
     });

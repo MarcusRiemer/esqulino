@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 
 @Component({
   selector: "server-tasks",
-  templateUrl: "./templates/server-tasks-button.html",
+  templateUrl: "./templates/server-tasks-menu.html",
 })
 export class ServerTasksComponent {
   constructor(private _serverTasks: ServerTasksService) {}

@@ -1,7 +1,3 @@
-.mat-menu-panel {
-  max-width: 20rem !important;
-}
-
 #st-card {
   max-height: 55vh;
   min-width: 20em;
@@ -52,3 +48,5 @@ div[ng-reflect-ng-switch] {
   margin-top: 0.45rem;
   margin-bottom: 0.25rem;
 }
+
+.st-panel {max-width: 20rem !important;}

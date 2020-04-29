@@ -2,7 +2,7 @@
   <span class="fa fa-fw fa-tasks"></span>
   Tasks
 </button>
-<mat-menu id="test" #menu="matMenu">
+<mat-menu class="st-panel" #menu="matMenu">
   <div id="st-card">
     <p *ngIf="hasNoTasks() | async; else showList">
       There aren't any tasks yet!
