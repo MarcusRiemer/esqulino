@@ -53,39 +53,40 @@ concise_attributes:
     {"type": "oneOf", "oneOf": ["terminal", "property", "children", "container"]},
     "container": {"type": "concrete", "attributes": [{"type": "container", "children":
     [{"type": "container", "children": [{"tags": ["space-after", "keyword"], "type":
-    "terminal", "symbol": "container"}, {"base": "string", "name": "direction", "tags":
-    ["space-after"], "type": "property", "restrictions": [{"type": "enum", "value":
-    ["horizontal", "vertical"]}]}, {"type": "terminal", "symbol": "{"}], "orientation":
-    "horizontal"}, {"tags": ["indent"], "type": "container", "children": [{"name":
-    "attributes", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"},
-    {"occurs": "*", "nodeType": "comment"}]}], "orientation": "vertical"}, {"type":
-    "terminal", "symbol": "}"}], "orientation": "vertical"}]}, "nodeRefOne": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"base": "string",
-    "name": "languageName", "type": "property"}, {"type": "terminal", "symbol": "."},
-    {"base": "string", "name": "typeName", "type": "property"}], "orientation": "horizontal"}]},
-    "cardinality": {"type": "oneOf", "oneOf": ["knownCardinality"]}, "concreteNode":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"type":
-    "container", "children": [{"tags": ["space-after", "keyword"], "type": "terminal",
-    "symbol": "node"}, {"base": "string", "name": "languageName", "tags": ["double-quote"],
-    "type": "property"}, {"type": "terminal", "symbol": "."}, {"base": "string", "name":
-    "typeName", "tags": ["double-quote", "space-after"], "type": "property"}, {"type":
-    "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"],
+    "terminal", "symbol": "container"}, {"name": "orientation", "tags": ["space-after"],
+    "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "orientation"}]},
+    {"type": "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"],
     "type": "container", "children": [{"name": "attributes", "type": "allowed", "nodeTypes":
     [{"occurs": "*", "nodeType": "attribute"}, {"occurs": "*", "nodeType": "comment"}]}],
     "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
-    "vertical"}]}, "knownCardinality": {"type": "concrete", "attributes": [{"base":
-    "string", "name": "cardinality", "type": "property", "restrictions": [{"type":
-    "enum", "value": ["*", "?", "+"]}]}]}, "nodeRefCardinality": {"type": "concrete",
-    "attributes": [{"type": "container", "children": [{"name": "references", "type":
-    "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name": "cardinality",
-    "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "cardinality"}]}],
-    "orientation": "horizontal"}]}}}}'
+    "vertical"}]}, "nodeRefOne": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"base": "string", "name": "languageName", "type": "property"}, {"type":
+    "terminal", "symbol": "."}, {"base": "string", "name": "typeName", "type": "property"}],
+    "orientation": "horizontal"}]}, "cardinality": {"type": "oneOf", "oneOf": ["knownCardinality"]},
+    "orientation": {"type": "concrete", "attributes": [{"base": "string", "name":
+    "direction", "type": "property", "restrictions": [{"type": "enum", "value": ["horizontal",
+    "vertical"]}]}]}, "concreteNode": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"type": "container", "children": [{"tags": ["space-after",
+    "keyword"], "type": "terminal", "symbol": "node"}, {"base": "string", "name":
+    "languageName", "tags": ["double-quote"], "type": "property"}, {"type": "terminal",
+    "symbol": "."}, {"base": "string", "name": "typeName", "tags": ["double-quote",
+    "space-after"], "type": "property"}, {"type": "terminal", "symbol": "{"}], "orientation":
+    "horizontal"}, {"tags": ["indent"], "type": "container", "children": [{"name":
+    "attributes", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"},
+    {"occurs": "*", "nodeType": "comment"}]}], "orientation": "vertical"}, {"type":
+    "terminal", "symbol": "}"}], "orientation": "vertical"}]}, "knownCardinality":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "cardinality",
+    "type": "property", "restrictions": [{"type": "enum", "value": ["*", "?", "+"]}]}]},
+    "nodeRefCardinality": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"name": "references", "type": "sequence", "nodeTypes": [{"occurs":
+    "1", "nodeType": "nodeRef"}]}, {"name": "cardinality", "type": "sequence", "nodeTypes":
+    [{"occurs": "1", "nodeType": "cardinality"}]}], "orientation": "horizontal"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-10 20:25:09.557389000 Z
+  value_before_type_cast: 2020-04-29 14:58:13.152763000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
