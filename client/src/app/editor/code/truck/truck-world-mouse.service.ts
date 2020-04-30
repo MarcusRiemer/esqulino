@@ -1,43 +1,35 @@
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { Position } from "../../../shared/syntaxtree/truck/world";
 
 export class TruckWorldMouseService {
-  private _leftMouseButtonDown = new BehaviorSubject<boolean>(false);
-  private _rightMouseDown = new BehaviorSubject<boolean>(false);
-  private _currentPosition = new BehaviorSubject<Position>(undefined);
+  private readonly _leftMouseButtonDown = new BehaviorSubject<boolean>(false);
+  private readonly _rightMouseDown = new BehaviorSubject<boolean>(false);
+  private readonly _currentPosition = new BehaviorSubject<Position>(undefined);
 
-  // Getter for Observables
-  public get leftMouseButtonDown(): Observable<boolean> {
-    return this._leftMouseButtonDown;
-  }
-
-  public get rightMouseButtonDown(): Observable<boolean> {
-    return this._rightMouseDown;
-  }
-
-  public get currentPosition(): Observable<Position | undefined> {
-    return this._currentPosition.pipe(
-      distinctUntilChanged(
-        (a, b) =>
-          // Technically we only check if the X/Y coordinates are the same, not if it's the same world
-          a && b && a.x == b.x && a.y == b.y
-      )
-    );
-  }
+  // Public Observables
+  public readonly leftMouseButtonDown = this._leftMouseButtonDown.asObservable();
+  public readonly rightMouseButtonDown = this._rightMouseDown.asObservable();
+  public readonly currentPosition = this._currentPosition.pipe(
+    distinctUntilChanged(
+      (a, b) =>
+        // Technically we only check if the X/Y coordinates are the same, not if it's the same world
+        a && b && a.x == b.x && a.y == b.y
+    )
+  );
 
   // Event handlers
-  public onLeftMouseButtonDown(): void {
+  public fireLeftMouseButtonDown(): void {
     this._leftMouseButtonDown.next(true);
   }
-  public onRightMouseButtonDown(): void {
+  public fireRightMouseButtonDown(): void {
     this._rightMouseDown.next(true);
   }
 
-  public onLeftMouseButtonUp(): void {
+  public fireLeftMouseButtonUp(): void {
     this._leftMouseButtonDown.next(false);
   }
-  public onRightMouseButtonUp(): void {
+  public fireRightMouseButtonUp(): void {
     this._rightMouseDown.next(false);
   }
 

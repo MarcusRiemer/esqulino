@@ -83,22 +83,22 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
   private addMouseListener(): void {
     const canvas = this._canvasRef.nativeElement as HTMLCanvasElement;
     this.addRemovableEventListener(canvas, "mouseleave", () => {
-      this._mouse.onLeftMouseButtonUp();
-      this._mouse.onRightMouseButtonUp();
+      this._mouse.fireLeftMouseButtonUp();
+      this._mouse.fireRightMouseButtonUp();
       this._mouse.updateCursorPos(undefined);
     });
     this.addRemovableEventListener(canvas, "mousedown", (ev) => {
       if (ev.button == MOUSE_BUTTON_LEFT) {
-        this._mouse.onLeftMouseButtonDown();
+        this._mouse.fireLeftMouseButtonDown();
       } else if (ev.button == MOUSE_BUTTON_RIGHT) {
-        this._mouse.onRightMouseButtonDown();
+        this._mouse.fireRightMouseButtonDown();
       }
     });
     this.addRemovableEventListener(canvas, "mouseup", (ev) => {
       if (ev.button == MOUSE_BUTTON_LEFT) {
-        this._mouse.onLeftMouseButtonUp();
+        this._mouse.fireLeftMouseButtonUp();
       } else if (ev.button == MOUSE_BUTTON_RIGHT) {
-        this._mouse.onRightMouseButtonUp();
+        this._mouse.fireRightMouseButtonUp();
       }
     });
     this.addRemovableEventListener(canvas, "mousemove", (ev) => {
