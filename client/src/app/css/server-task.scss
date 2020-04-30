@@ -7,7 +7,7 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-  
+
   &> p {
     text-align: center;
   }
@@ -18,26 +18,16 @@
     grid-template-rows: 90% 10%;
   }
 
-  div[ng-reflect-ng-switch] {
-    width: 100%;
-    position: absolute;
-    top: 20%;
+  .st-container p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-  }
-
-  mat-progress-bar {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-  .st-container p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
   }
 
   li {
@@ -53,6 +43,11 @@
    li i {
     margin-top: 0.45rem;
     margin-bottom: 0.25rem;
+  }
+
+  mat-progress-bar {
+    grid-column-start: 1;
+    grid-column-end: 3;
   }
 }
 //Forcing the mat-menu-panel to take a max-width greater than 280px

@@ -35,7 +35,10 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   /**
    * The cache of all descriptions that are available to the current user.
    */
-  readonly listCache = this.createCachedRequest();
+  readonly listCache = this._serverTask.createRequest<TList[]>(
+    this.createListRequest(),
+    "GET " + this._listUrl
+  );
 
   /**
    * An observable of all descriptions that are available to the current user.
@@ -50,15 +53,6 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   }
 
   readonly listTotalCount$ = this._listTotalCount.asObservable();
-
-  private createCachedRequest(): CachedRequest<TList[]> {
-    const cachedRequest = new CachedRequest<TList[]>(this.createListRequest());
-    this._serverTask.addTask({
-      state$: cachedRequest.state$,
-      description: "GET " + this._listUrl,
-    });
-    return cachedRequest;
-  }
 
   private createListRequest() {
     return this._http

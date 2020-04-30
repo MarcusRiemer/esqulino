@@ -10,24 +10,24 @@
     <ng-template #showList>
       <ul>
         <ng-container *ngFor="let task of allTasks$ | async">
-          <li [ngSwitch]="task.type">
-            <div *ngSwitchCase="'pending'" class="st-container st-pending">
+          <li [ngSwitch]="task.type" class="st-container">
+            <ng-container *ngSwitchCase="'pending'">
               <i class="fa fa-fw fa-xs fa-upload" matListIcon></i>
               <p>{{task.description}}</p>
               <span>
                 <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
               </span>
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            </div>
-            <div *ngSwitchCase="'success'" class="st-container">
+            </ng-container>
+            <ng-container *ngSwitchCase="'success'" class="st-container">
               <i class="fa fa-fw fa-xs fa-download" matListIcon></i>
               <p>{{task.description}}</p>
               <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
-            </div>
-            <div *ngSwitchCase="'failure'" class="st-container">
+            </ng-container>
+            <ng-container *ngSwitchCase="'failure'" class="st-container">
               <p>{{task.description}}</p>
               <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
-            </div>
+            </ng-container>
           </li>
         </ng-container>
       </ul>

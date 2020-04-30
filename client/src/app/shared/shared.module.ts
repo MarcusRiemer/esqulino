@@ -34,7 +34,7 @@ import { DefaultValuePipe } from "./default-value.pipe";
 import { FlashMessageListComponent } from "./flash.component";
 import { FlashService } from "./flash.service";
 import { LanguageService } from "./language.service";
-import { ServerApiService } from "./serverdata/serverapi.service";
+import { ServerApiService } from "./serverdata";
 import { VideoService } from "./video.service";
 import { ToolbarComponent } from "./toolbar.component";
 import { ToolbarService } from "./toolbar.service";
@@ -64,7 +64,6 @@ import {
   AdminListProjectDataService,
   MutateGrammarService,
   MutateBlockLanguageService,
-  CachedRequest,
 } from "./serverdata";
 
 import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
@@ -245,7 +244,6 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
-        CachedRequest,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

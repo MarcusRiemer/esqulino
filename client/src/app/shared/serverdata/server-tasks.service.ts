@@ -192,11 +192,12 @@ export class ServerTasksService {
     });
   }
 
-  createRequest<T>(obs: Observable<T>, description: string) {
+  createRequest<T>(obs: Observable<T>, description: string): CachedRequest<T> {
     const cachedRequest = new CachedRequest<T>(obs);
     this.addTask({
       state$: cachedRequest.state$,
       description: description,
     });
+    return cachedRequest;
   }
 }
