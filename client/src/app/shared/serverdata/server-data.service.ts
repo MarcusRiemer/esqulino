@@ -12,7 +12,7 @@ import { NewsDescription } from "../news.description";
 import { UserDescription } from "../auth/user.description";
 
 import { ServerApiService } from "./serverapi.service";
-import { IndividualDescriptionCache, CachedRequest } from "./request-cache";
+import { IndividualDescriptionCache } from "./request-cache";
 import {
   SignUpDescription,
   SignInDescription,

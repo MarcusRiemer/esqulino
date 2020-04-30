@@ -9,11 +9,9 @@ import {
   map,
   filter,
   catchError,
-  delay,
 } from "rxjs/operators";
 
 import { ServerTaskState } from "./server-tasks.service";
-import { Injectable } from "@angular/core";
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular

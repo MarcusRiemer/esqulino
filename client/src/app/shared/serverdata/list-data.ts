@@ -10,7 +10,6 @@ import {
   JsonApiListResponse,
   isJsonApiListResponse,
 } from "./json-api-response";
-import { CachedRequest } from "./request-cache";
 
 /**
  * Basic building block to access "typically" structured data from the server.
