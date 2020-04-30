@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 
 import { Observable, BehaviorSubject, combineLatest } from "rxjs";
 import { map, last } from "rxjs/operators";
+import { CachedRequest } from "./request-cache";
 
 /** The server has not yet responded to a task */
 export interface ServerTaskStatePending {
@@ -188,6 +189,14 @@ export class ServerTasksService {
       );
       this._internalTasks$.value[idx] = [task, newState, info];
       this._internalTasks$.next(this._internalTasks$.value);
+    });
+  }
+
+  createRequest<T>(obs: Observable<T>, description: string) {
+    const cachedRequest = new CachedRequest<T>(obs);
+    this.addTask({
+      state$: cachedRequest.state$,
+      description: description,
     });
   }
 }

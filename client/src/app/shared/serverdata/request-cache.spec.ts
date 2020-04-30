@@ -12,7 +12,7 @@ import { HttpClient } from "@angular/common/http";
 
 describe(`Request Cache`, () => {
   it(`Retrieves the correct value`, () => {
-    const c = new CachedRequest<number>(of(1), "");
+    const c = new CachedRequest<number>(of(1));
 
     c.value.subscribe((r) => expect(r).toBe(1));
     c.inProgress.subscribe((p) => expect(p).toBe(false));
@@ -22,7 +22,7 @@ describe(`Request Cache`, () => {
     const series = [1, 2, 3];
     const updateable = new BehaviorSubject(1);
 
-    const c = new CachedRequest<number>(updateable, "");
+    const c = new CachedRequest<number>(updateable);
     c.hasError.subscribe((err) => expect(err).toBe(false));
 
     // Should be always the next value of the series when updated
@@ -44,7 +44,7 @@ describe(`Request Cache`, () => {
       obs.complete();
     });
 
-    const c = new CachedRequest<number>(obs, "");
+    const c = new CachedRequest<number>(obs);
     c.hasError.subscribe((err) => expect(err).toBe(false));
 
     // Initial value is 1, subsequent values are ignored
@@ -63,7 +63,7 @@ describe(`Request Cache`, () => {
   it(`Observable that does not complete`, () => {
     const obs = Observable.create((_: Observer<number>) => {});
 
-    const c = new CachedRequest<number>(obs, "");
+    const c = new CachedRequest<number>(obs);
     c.hasError.subscribe((err) => expect(err).toBe(false));
 
     c.inProgress.subscribe((p) => expect(p).toBe(true));
@@ -81,7 +81,7 @@ describe(`Request Cache`, () => {
       }
     });
 
-    const c = new CachedRequest<number>(obs, "");
+    const c = new CachedRequest<number>(obs);
     c.hasError.subscribe((err) => expect(err).toBe(false));
 
     // First "request": Observable didnt do anything at all, so the request
@@ -108,7 +108,7 @@ describe(`Request Cache`, () => {
       obs.error("expected");
     });
 
-    const c = new CachedRequest<number>(obs, "");
+    const c = new CachedRequest<number>(obs);
 
     c.value.subscribe((v) => expect(v).toBe(undefined));
     c.inProgress
@@ -126,7 +126,7 @@ describe(`Request Cache`, () => {
     const httpClient = TestBed.inject(HttpClient);
 
     const obs = httpClient.get<string>("/test");
-    const c = new CachedRequest<string>(obs, "");
+    const c = new CachedRequest<string>(obs);
 
     let inProgress = await c.inProgress.pipe(first()).toPromise();
     expect(inProgress).withContext("Answer not yet given").toEqual(true);

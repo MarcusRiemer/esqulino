@@ -9,8 +9,8 @@
     </p>
     <ng-template #showList>
       <ul>
-        <li *ngFor="let task of allTasks$ | async">
-          <div [ngSwitch]="task.type">
+        <ng-container *ngFor="let task of allTasks$ | async">
+          <li [ngSwitch]="task.type">
             <div *ngSwitchCase="'pending'" class="st-container st-pending">
               <i class="fa fa-fw fa-xs fa-upload" matListIcon></i>
               <p>{{task.description}}</p>
@@ -28,8 +28,8 @@
               <p>{{task.description}}</p>
               <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
             </div>
-          </div>
-        </li>
+          </li>
+        </ng-container>
       </ul>
     </ng-template>
   </div>

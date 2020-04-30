@@ -52,13 +52,10 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   readonly listTotalCount$ = this._listTotalCount.asObservable();
 
   private createCachedRequest(): CachedRequest<TList[]> {
-    const cachedRequest = new CachedRequest<TList[]>(
-      this.createListRequest(),
-      this._listUrl
-    );
+    const cachedRequest = new CachedRequest<TList[]>(this.createListRequest());
     this._serverTask.addTask({
       state$: cachedRequest.state$,
-      description: "GET " + cachedRequest.description,
+      description: "GET " + this._listUrl,
     });
     return cachedRequest;
   }

@@ -1,5 +1,4 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, ReplaySubject, Observable, of } from "rxjs";
 import {
@@ -12,18 +11,18 @@ import {
   catchError,
 } from "rxjs/operators";
 
-import { ServerTask, ServerTaskState } from "./server-tasks.service";
+import { ServerTaskState } from "./server-tasks.service";
+import { Injectable } from "@angular/core";
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
  * HTTP request) and provides an option to explicitly refresh the value by re-subscribing
  * to the inital Observable.
  */
-@Injectable()
-export class CachedRequest<T> implements ServerTask {
-  state$ = new ReplaySubject<ServerTaskState>(1);
-
-  description: string;
+export class CachedRequest<T> {
+  // Required for tracking the state of a request. For each CachedRequest instance a ServerTask will be created and
+  // the state$ will be added to it.
+  readonly state$ = new ReplaySubject<ServerTaskState>(1);
 
   // Every new value triggers another request. The exact value
   // is not of interest, so a single valued type seems appropriate.
@@ -72,8 +71,7 @@ export class CachedRequest<T> implements ServerTask {
   // this this cache unless explicitly cleared.
   private _error = new BehaviorSubject<any>(undefined);
 
-  constructor(private _sourceObservable: Observable<T>, private _listUrl) {
-    this.description = _listUrl;
+  constructor(private _sourceObservable: Observable<T>) {
     this.state$.next({ type: "pending" });
   }
 
@@ -153,8 +151,7 @@ export class IndividualDescriptionCache<T> {
   public getDescription(id: string): Observable<T> {
     if (!this.cache[id]) {
       this.cache[id] = new CachedRequest<T>(
-        this.http.get<T>(this.idCallback(id)),
-        this.idCallback(id)
+        this.http.get<T>(this.idCallback(id))
       );
     }
 

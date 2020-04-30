@@ -78,7 +78,7 @@ export class EditGrammarComponent implements OnInit {
         );
         this.relatedBlockLanguages = new CachedRequest<
           BlockLanguageListDescription[]
-        >(request, relatedUrl);
+        >(request);
       });
 
     // Setup the toolbar buttons
