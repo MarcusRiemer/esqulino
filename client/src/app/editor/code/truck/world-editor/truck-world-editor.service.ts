@@ -10,7 +10,7 @@ import { TruckWorldMouseService } from "../truck-world-mouse.service";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
 import { worldDescriptionToNode } from "../../../../shared/syntaxtree/truck/world.description";
 
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class TruckWorldEditorService implements OnDestroy {
   private _subscriptions: Subscription[] = [];
 
