@@ -24,6 +24,8 @@ import {
   IndividualGrammarDataService,
   MutateGrammarService,
 } from "../../shared/serverdata";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
+
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
 import { buildGrammar, provideGrammarList } from "../../editor/spec-util";
 import { EmptyComponent } from "../../shared/empty.component";
@@ -53,6 +55,7 @@ describe("CreateBlockLanguageComponent", () => {
         MutateGrammarService,
         ListBlockLanguageDataService,
         MutateBlockLanguageService,
+        ServerTasksService,
       ],
       declarations: [CreateBlockLanguageComponent, DefaultValuePipe],
     }).compileComponents();
