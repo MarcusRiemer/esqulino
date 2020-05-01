@@ -9,6 +9,7 @@ import { NewsListComponent } from "./news-list.component";
 import { ServerDataService, ServerApiService } from "./serverdata";
 import { NewsFrontpageDescription } from "./news.description";
 import { generateUUIDv4 } from "./util-browser";
+import { ServerTasksService } from "./serverdata/server-tasks.service";
 
 describe(`Component: NewsList`, () => {
   async function createComponent(
@@ -21,6 +22,7 @@ describe(`Component: NewsList`, () => {
         { provide: LOCALE_ID, useValue: localeId },
         ServerDataService,
         ServerApiService,
+        ServerTasksService,
       ],
       declarations: [NewsListComponent],
     }).compileComponents();

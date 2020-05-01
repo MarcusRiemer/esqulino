@@ -1,4 +1,17 @@
-<table class="full-width" mat-table [dataSource]="listData.list | async">
+<mat-progress-bar
+  conditionalDisplay
+  [_indicator]="this.listData.listCache.inProgress"
+  [_initiator]="false"
+  mode="indeterminate"
+></mat-progress-bar>
+<table
+  conditionalDisplay
+  [_indicator]="this.listData.listCache.inProgress"
+  [_initiator]="true"
+  class="full-width"
+  mat-table
+  [dataSource]="listData.list | async"
+>
   <ng-content></ng-content>
   <tr mat-header-row *matHeaderRowDef="activeColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: activeColumns;"></tr>

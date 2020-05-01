@@ -25,6 +25,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatIconModule } from "@angular/material/icon";
 
 import { AnalyticsService } from "./analytics.service";
 import { BrowserService } from "./browser.service";
@@ -32,7 +34,7 @@ import { DefaultValuePipe } from "./default-value.pipe";
 import { FlashMessageListComponent } from "./flash.component";
 import { FlashService } from "./flash.service";
 import { LanguageService } from "./language.service";
-import { ServerApiService } from "./serverdata/serverapi.service";
+import { ServerApiService } from "./serverdata";
 import { VideoService } from "./video.service";
 import { ToolbarComponent } from "./toolbar.component";
 import { ToolbarService } from "./toolbar.service";
@@ -84,6 +86,10 @@ import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
 import { ResourceReferencesOnlineService } from "./resource-references-online.service";
 import { PaginatorTableComponent } from "./table/paginator-table.component";
+import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
+import { ServerTasksComponent } from "./server-tasks.component";
+import { ServerTasksService } from "./serverdata/server-tasks.service";
+import { OverlayModule } from "@angular/cdk/overlay";
 
 const dataServices = [
   ListGrammarDataService,
@@ -95,6 +101,7 @@ const dataServices = [
   ProjectDataService,
   IndividualProjectDataService,
   AdminListProjectDataService,
+  ServerTasksService,
 ];
 
 const materialModules = [
@@ -117,6 +124,8 @@ const materialModules = [
   MatSortModule,
   MatPaginatorModule,
   MatTableModule,
+  MatProgressBarModule,
+  MatIconModule,
 ];
 
 /**
@@ -137,6 +146,7 @@ const materialModules = [
     PortalModule,
     ReactiveFormsModule,
     ...materialModules,
+    OverlayModule,
   ],
   declarations: [
     EmptyComponent,
@@ -168,6 +178,8 @@ const materialModules = [
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
     PaginatorTableComponent,
+    ConditionalDisplayDirective,
+    ServerTasksComponent,
   ],
   exports: [
     CommonModule,
@@ -204,6 +216,7 @@ const materialModules = [
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
+    ServerTasksComponent,
   ],
   entryComponents: [
     AuthDialogComponent,
