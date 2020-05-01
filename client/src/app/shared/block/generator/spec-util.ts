@@ -1,8 +1,17 @@
 import { VisualBlockDescriptions } from "../block.description";
 
-function readableClass(b: VisualBlockDescriptions.ConcreteBlock) {
-  if (b.cssClasses && b.cssClasses.length > 0) {
-    return ` class="${b.cssClasses.join(" ")}"`;
+function readableClass(
+  b:
+    | VisualBlockDescriptions.EditorBlock
+    | VisualBlockDescriptions.EditorContainer
+) {
+  let printedClasses = b.cssClasses ?? [];
+  if (b.blockType === "container") {
+    printedClasses.push(b.orientation);
+  }
+
+  if (printedClasses.length > 0) {
+    return ` class="${printedClasses.join(" ")}"`;
   } else {
     return "";
   }
@@ -20,7 +29,29 @@ export function readableConstants(
   all.forEach((b) => {
     switch (b.blockType) {
       case "constant":
+        if (
+          b.cssClasses?.includes("space-before") ||
+          b.cssClasses?.includes("space-around")
+        ) {
+          toReturn += " ";
+        }
+
+        if (b.cssClasses?.includes("double-quote")) {
+          toReturn += '"';
+        }
+
         toReturn += b.text;
+
+        if (b.cssClasses?.includes("double-quote")) {
+          toReturn += '"';
+        }
+
+        if (
+          b.cssClasses?.includes("space-after") ||
+          b.cssClasses?.includes("space-around")
+        ) {
+          toReturn += " ";
+        }
         break;
       case "block":
       case "container":

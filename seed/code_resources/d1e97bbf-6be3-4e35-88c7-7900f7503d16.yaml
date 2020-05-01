@@ -42,6 +42,35 @@ concise_attributes:
   value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: '{"types":{"meta":{"grammar":{"type":"concrete","attributes":[]},"node":{"type":"concrete","attributes":[{"type":"property","base":"string","name":"languageName"},{"type":"property","base":"string","name":"typeName"}]}}},"root":{"languageName":"meta","typeName":"grammar"}}'
+  value_before_type_cast: |-
+    {
+      "types": {
+        "meta": {
+          "grammar": {
+            "type": "concrete",
+            "attributes": []
+          },
+          "node": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "languageName"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "typeName"
+              }
+            ]
+          }
+        }
+      },
+      "root": {
+        "languageName": "meta",
+        "typeName": "grammar"
+      }
+    }
 new_record: false
 active_record_yaml_version: 2

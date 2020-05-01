@@ -23,6 +23,15 @@ export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
 }
 
 /**
+ * @return Possibly helpful information about the node during debugging
+ */
+export function printableNodeDebug(n: Node) {
+  const name = n.qualifiedName;
+  const path = JSON.stringify(n.location);
+  return `"${name.languageName}.${name.typeName}" at ${path}`;
+}
+
+/**
  * @return True, if both locations are identical
  */
 export function locationEquals(lhs: NodeLocation, rhs: NodeLocation): boolean {

@@ -38,10 +38,23 @@ editor-block-host {
         }
     }
 
-    // Enquote something
+    // Enquote something, as this also sets the "content" property it
+    // may conflict with "space-before" and "space-after"
     .double-quote {
         &::after, &::before {
             content: "\"";
+        }
+
+        &.space-after{
+            &::after {
+                content: "\"\00a0 ";
+            }
+        }
+
+        &.space-before{
+            &::before {
+                content: "\00a0 \"";
+            }
         }
     }
 
@@ -65,8 +78,13 @@ editor-block-host {
         white-space: nowrap;
     }
 
-    // Mark something as a keyword a language
+    // Mark something as a keyword of a language
     &.activate-keyword span.keyword {
         color: blue;
+    }
+
+    // Mark something as a comment in a language
+    &.activate-comment *.comment {
+        color: green;
     }
 }

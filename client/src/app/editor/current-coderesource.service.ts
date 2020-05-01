@@ -44,25 +44,9 @@ export class CurrentCodeResourceService {
    *
    * @remarks This is meant to be updated in conjunction with the URL.
    */
-  _changeCurrentResource(codeResourceId: string) {
-    // Knowing when resources change is handy for debugging
-    console.log(`Current resource ID changed to: ${codeResourceId}`);
-
-    // Check whether the referenced resource exists
-    const resource = this._projectService.cachedProject.getCodeResourceById(
-      codeResourceId
-    );
-    if (resource) {
-      // Yes, we resolve the actual resource
-      console.log(`Set new resource "${resource.name}" (${codeResourceId})`);
-      this._codeResource.next(resource);
-      return resource;
-    } else {
-      // No, we inform everybody that there is no resource
-      console.error(`CodeResource ${codeResourceId} doesn't seem to exist`);
-      this._codeResource.next(undefined);
-      return undefined;
-    }
+  _changeCurrentResource(resource: CodeResource) {
+    console.log(`Set new resource: "${resource.name}" (${resource.id})`);
+    this._codeResource.next(resource);
   }
 
   /**

@@ -10,8 +10,6 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { PortalModule } from "@angular/cdk/portal";
 
-import { first } from "rxjs/operators";
-
 import {
   LanguageService,
   ServerApiService,
@@ -22,7 +20,7 @@ import {
   MutateGrammarService,
 } from "../../shared/serverdata";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
-import { provideGrammarList, buildGrammar } from "../../editor/spec-util";
+import { buildGrammar } from "../../editor/spec-util";
 
 import { CreateGrammarComponent } from "./create-grammar.component";
 import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
@@ -71,9 +69,9 @@ describe("CreateGrammarComponent", () => {
 
     expect(t.component).toBeDefined();
   });
-  it(`create grammar`, async () => {
+
+  it(`create Grammar`, async () => {
     const t = await createComponent();
-    const g1 = buildGrammar({ name: "G1Test", programmingLanguageId: "sql" });
 
     await t.fixture.whenRenderingDone();
 
@@ -95,6 +93,13 @@ describe("CreateGrammarComponent", () => {
     // use newEvent utility function (not provided by Angular) for better browser compatibility
     nameInput.dispatchEvent(new Event("input"));
     plSelect.dispatchEvent(new Event("change"));
+
+    t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
+
+    expect(t.component.grammar.name).toEqual("G1Test");
+    expect(t.component.grammar.programmingLanguageId).not.toBeUndefined();
+
     createButton.click();
 
     t.fixture.detectChanges();
@@ -102,6 +107,5 @@ describe("CreateGrammarComponent", () => {
     t.httpTesting
       .expectOne({ method: "POST", url: t.serverApi.createGrammarUrl() })
       .flush("");
-    // t.httpTesting.expectOne({method: "GET", url: "/admin/grammars/undefined"}).flush("");
   });
 });

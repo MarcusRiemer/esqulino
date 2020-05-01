@@ -28,7 +28,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatIconModule } from "@angular/material/icon";
 
-import { AnalyticsService } from "./analytics.service";
+import { AnalyticsService, PiwikAnalyticsService } from "./analytics.service";
 import { BrowserService } from "./browser.service";
 import { DefaultValuePipe } from "./default-value.pipe";
 import { FlashMessageListComponent } from "./flash.component";
@@ -230,7 +230,10 @@ export class SharedAppModule {
       ngModule: SharedAppModule,
       providers: [
         UserService,
-        AnalyticsService,
+        {
+          provide: AnalyticsService,
+          useClass: PiwikAnalyticsService,
+        },
         BrowserService,
         FlashService,
         ServerApiService,

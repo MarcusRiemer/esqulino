@@ -461,6 +461,13 @@ class ChildCardinality {
         typeDesc,
         parent.languageName
       );
+    } else if (Desc.isQualifiedTypeName(typeDesc)) {
+      // Qualified names are easy, because it is clear what they refer to
+      this._nodeType = new TypeReference(
+        parent.validator,
+        typeDesc.typeName,
+        typeDesc.languageName
+      );
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may refer to a different language
       if (typeof typeDesc.nodeType === "string") {
