@@ -7,15 +7,15 @@ import { BlockLanguage } from "../../../shared/block";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { convertGrammarTreeInstructions } from "../../../shared/block/generator/generator-tree";
 import { BlockLanguageDescription } from "../../../shared/block/block-language.description";
+import {
+  IndividualGrammarDataService,
+  IndividualBlockLanguageDataService,
+} from "../../../shared/serverdata";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { DragService } from "../../drag.service";
 import { BlockDebugOptionsService } from "../../block-debug-options.service";
 import { ProjectService } from "../../project.service";
-import {
-  IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-} from "src/app/shared/serverdata";
 
 /**
  * Root of a block editor. Displays either the syntaxtree or a friendly message to
