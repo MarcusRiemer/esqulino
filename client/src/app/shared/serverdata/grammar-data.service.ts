@@ -10,6 +10,7 @@ import { ServerApiService } from "./serverapi.service";
 import { ListData } from "./list-data";
 import { IndividualData } from "./individual-data";
 import { MutateData } from "./mutate-data";
+import { ServerTasksService } from "./server-tasks.service";
 
 const urlResolver = (serverApi: ServerApiService) => {
   return (id: string) => serverApi.individualGrammarUrl(id);
@@ -49,9 +50,10 @@ export class ListGrammarDataService extends ListData<GrammarListDescription>
   constructor(
     serverApi: ServerApiService,
     http: HttpClient,
-    mutateService: MutateGrammarService
+    mutateService: MutateGrammarService,
+    serverTaskService: ServerTasksService
   ) {
-    super(http, serverApi.getGrammarListUrl());
+    super(http, serverApi.getGrammarListUrl(), serverTaskService);
 
     const s = mutateService.listInvalidated.subscribe(() =>
       this.listCache.refresh()

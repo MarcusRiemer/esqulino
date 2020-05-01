@@ -37,6 +37,8 @@ import { TruckWorldService } from "./truck/truck-world.service";
 import { WorldControllerComponent } from "./truck/world-controller.component";
 import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
+import { TruckWorldMouseService } from "./truck/truck-world-mouse.service";
+import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor.service";
 
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 
@@ -94,6 +96,8 @@ export class CodeEditorModule {
         BlockDebugOptionsService,
         QueryService,
         TruckWorldService,
+        TruckWorldMouseService,
+        TruckWorldEditorService,
       ],
     };
   }
