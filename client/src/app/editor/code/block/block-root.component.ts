@@ -61,7 +61,7 @@ export class BlockRootComponent {
    */
   readonly currentBlockLanguage$: Observable<BlockLanguage> = combineLatest(
     this._currentCodeResource.resourceBlockLanguageId,
-    this._debugOptions.showInternalAst.value$
+    this._debugOptions.showEditableAst.value$
   ).pipe(
     map(async ([blockLangId, showInternalAst]) => {
       const blockLang = this._resourceReferences.getBlockLanguage(

@@ -5,6 +5,7 @@ import { EditorComponentDescription } from "../../shared/block/block-language.de
 
 import { ValidationComponent } from "./validation.component";
 import { CodeGeneratorComponent } from "./code-generator.component";
+import { JsonAstComponent } from "./json-ast.component";
 
 import { BlockRootComponent } from "./block/block-root.component";
 import { CodeResourceSettingsComponent } from "./block/code-resource-settings.component";
@@ -30,6 +31,8 @@ export class EditorComponentsService {
         return new ComponentPortal(BlockRootComponent);
       case "code-resource-settings":
         return new ComponentPortal(CodeResourceSettingsComponent);
+      case "json-ast":
+        return new ComponentPortal(JsonAstComponent);
       case "drop-debug":
         return new ComponentPortal(DropDebugComponent);
       case "query-preview":
