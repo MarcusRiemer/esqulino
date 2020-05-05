@@ -47,21 +47,26 @@
     </div>
   </form>
   <app-table-paginator
-          [listData]="news"
-          [activeColumns]="displayedColumns"
-          [sort]="sort"
-          matSort
+    [listData]="news"
+    [activeColumns]="displayedColumns"
+    [sort]="sort"
+    matSort
   >
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let news">
-          {{ news.id }}
-      </td>
-    </ng-container>
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Titel</th>
       <td mat-cell *matCellDef="let news">
-        <code>{{news.title ? news.title[selectedLanguage] || '' : ''}}</code>
+        <a
+          [routerLink]="['edit', news.id]"
+          [queryParams]="{ mode: selectedEditor, language: selectedLanguage }"
+        >
+          {{news.title ? news.title[selectedLanguage] || '' : ''}}
+        </a>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let news">
+        <code>{{ news.id }}</code>
       </td>
     </ng-container>
     <ng-container matColumnDef="availableIn">
@@ -79,13 +84,13 @@
     <ng-container matColumnDef="createdAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Erstellt am</th>
       <td mat-cell *matCellDef="let news">
-        {{news.createdAt}}
+        {{(parseUTCDate(news.createdAt) | date: 'dd.MM.yyyy HH:mm') || ''}}
       </td>
     </ng-container>
     <ng-container matColumnDef="updatedAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Geändert am</th>
       <td mat-cell *matCellDef="let news">
-        {{news.updatedAt}}
+        {{(parseUTCDate(news.updatedAt) | date: 'dd.MM.yyyy HH:mm') || ''}}
       </td>
     </ng-container>
   </app-table-paginator>

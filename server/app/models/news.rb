@@ -75,7 +75,7 @@ class News < ApplicationRecord
   end
 
   def to_list_api_response(options:{})
-    if options.key?(:full_api_response) and options[:full_api_response] then
+    if options.fetch(:full_api_response,false) then
       to_full_api_response
     end
     to_json_api_response

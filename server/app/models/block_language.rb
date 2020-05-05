@@ -45,7 +45,7 @@ class BlockLanguage < ApplicationRecord
   # @param options {include_list_calculations [boolean]}
   #   True, if certain calculated values should be part of the response
   def to_list_api_response(options:{})
-    unless options.key?(:include_list_calculations) and options[:include_list_calculations] then
+    unless options.fetch(:include_list_calculations,false) then
       return to_json_api_response
           .except("generated")
     end

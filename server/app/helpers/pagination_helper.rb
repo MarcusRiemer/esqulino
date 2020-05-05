@@ -28,6 +28,9 @@ module PaginationHelper
 
     # These attributes are used in all listings
     def list_params
+      # keys and values which are needed for pagination and sorting need to be transformed to underscore.
+      # when sorting for attributes consisting of 2 words, the value will arrive in camelCase.
+      # e.g. by transform_values updatedAt becomes updated_at, which should match a model Attribute.
         params.permit(:limit, :offset, :orderField, :orderDirection)
           .transform_keys { |k| k.underscore }.transform_values{ |v| v.underscore}
       end

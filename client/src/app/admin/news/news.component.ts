@@ -1,17 +1,17 @@
 import { map } from "rxjs/operators";
-import {Component, Inject, LOCALE_ID, ViewChild} from "@angular/core";
+import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 import { ServerDataService } from "../../shared";
 import { MultilingualString } from "../../shared/multilingual-string.description";
 import { locales } from "../../shared/change-language.component";
-import {ListGrammarDataService} from "../../shared/serverdata";
-import {NewsDescription} from "../../shared/news.description";
-import {MatSort} from "@angular/material/sort";
-import {AdminListNewsDataService} from "../../shared/serverdata/news-data.service";
+import { ListGrammarDataService } from "../../shared/serverdata";
+import { NewsDescription } from "../../shared/news.description";
+import { MatSort } from "@angular/material/sort";
+import { AdminListNewsDataService } from "../../shared/serverdata/news-data.service";
 @Component({
-  templateUrl: "./news.html",
+  templateUrl: "./templates/news.html",
 })
 export class AdminNewsListComponent {
   @ViewChild(MatSort, { static: true })
@@ -23,7 +23,7 @@ export class AdminNewsListComponent {
     private _router: Router,
     private _active: ActivatedRoute,
     private _performData: PerformDataService,
-    readonly news: AdminListNewsDataService,
+    readonly news: AdminListNewsDataService
   ) {}
 
   readonly languages = locales;
@@ -84,6 +84,11 @@ export class AdminNewsListComponent {
     this._router.navigate(["create"], { relativeTo: this._active });
   }
 
+  public parseUTCDate(date: string) {
+    let dateArr = date.split(" ");
+    return Date.parse(dateArr[0] + " " + dateArr[1]);
+  }
+
   displayedColumns: (keyof NewsDescription | "availableIn")[] = [
     "id",
     "title",
@@ -91,5 +96,5 @@ export class AdminNewsListComponent {
     "publishedFrom",
     "createdAt",
     "updatedAt",
-  ]
+  ];
 }

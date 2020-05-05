@@ -11,12 +11,11 @@ import { ListData } from "./list-data";
 import { IndividualData } from "./individual-data";
 import { MutateData } from "./mutate-data";
 import { ServerTasksService } from "./server-tasks.service";
-import {NewsDescription} from "../news.description";
+import { NewsDescription } from "../news.description";
 
 const urlResolver = (serverApi: ServerApiService) => {
   return (id: string) => serverApi.individualGrammarUrl(id);
 };
-
 
 /**
  * Cached access to lists of grammars.
@@ -32,6 +31,5 @@ export class AdminListNewsDataService extends ListData<NewsDescription> {
     serverTaskService: ServerTasksService
   ) {
     super(http, serverApi.getAdminNewsListUrl(), serverTaskService);
-    this.setListOrdering("title","asc",false);
   }
 }
