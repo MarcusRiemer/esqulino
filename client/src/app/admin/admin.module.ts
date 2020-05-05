@@ -47,7 +47,7 @@ import { OverviewProjectComponent } from "./project/overview-project.component";
 
 import { CodeResourceGalleryComponent } from "./code-resource-gallery.component";
 
-import { AdminNewsListComponent } from "./news.component";
+import { AdminNewsListComponent } from "./news/news.component";
 import { AdminNewsEditComponent } from "./edit-news.component";
 import { ChangeRoles } from "./change-roles.component";
 

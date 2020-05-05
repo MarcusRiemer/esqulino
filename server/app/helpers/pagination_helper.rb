@@ -29,7 +29,7 @@ module PaginationHelper
     # These attributes are used in all listings
     def list_params
         params.permit(:limit, :offset, :orderField, :orderDirection)
-          .transform_keys { |k| k.underscore }
+          .transform_keys { |k| k.underscore }.transform_values{ |v| v.underscore}
       end
 
 end

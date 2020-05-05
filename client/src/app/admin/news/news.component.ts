@@ -1,21 +1,29 @@
 import { map } from "rxjs/operators";
-import { Component, Inject, LOCALE_ID } from "@angular/core";
+import {Component, Inject, LOCALE_ID, ViewChild} from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { PerformDataService } from "./../shared/authorisation/perform-data.service";
-import { ServerDataService } from "../shared";
-import { MultilingualString } from "./../shared/multilingual-string.description";
-import { locales } from "../shared/change-language.component";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { ServerDataService } from "../../shared";
+import { MultilingualString } from "../../shared/multilingual-string.description";
+import { locales } from "../../shared/change-language.component";
+import {ListGrammarDataService} from "../../shared/serverdata";
+import {NewsDescription} from "../../shared/news.description";
+import {MatSort} from "@angular/material/sort";
+import {AdminListNewsDataService} from "../../shared/serverdata/news-data.service";
 @Component({
-  templateUrl: "./templates/news.html",
+  templateUrl: "./news.html",
 })
 export class AdminNewsListComponent {
+  @ViewChild(MatSort, { static: true })
+  sort: MatSort;
+
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
     private readonly _serverData: ServerDataService,
     private _router: Router,
     private _active: ActivatedRoute,
-    private _performData: PerformDataService
+    private _performData: PerformDataService,
+    readonly news: AdminListNewsDataService,
   ) {}
 
   readonly languages = locales;
@@ -75,4 +83,13 @@ export class AdminNewsListComponent {
   public createNews(): void {
     this._router.navigate(["create"], { relativeTo: this._active });
   }
+
+  displayedColumns: (keyof NewsDescription | "availableIn")[] = [
+    "id",
+    "title",
+    "availableIn",
+    "publishedFrom",
+    "createdAt",
+    "updatedAt",
+  ]
 }

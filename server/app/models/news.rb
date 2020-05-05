@@ -74,6 +74,13 @@ class News < ApplicationRecord
     to_json_api_response(compact: false)
   end
 
+  def to_list_api_response(options:{})
+    if options.key?(:full_api_response) and options[:full_api_response] then
+      to_full_api_response
+    end
+    to_json_api_response
+  end
+
   # Checks if the logged in user is the owner of this news
   def owner?(user)
     return user.eql? self.user
@@ -84,7 +91,7 @@ class News < ApplicationRecord
   def to_frontpage_api_response(text_length: :full, languages: nil)
 
     to_return = to_json_api_response
-                  .slice("id", "title", "text", "publishedFrom")
+                    .slice("id", "title", "text", "publishedFrom")
 
     if (to_return['text'])
       to_return['text'] = rendered_text(text_length: text_length, languages: languages)
