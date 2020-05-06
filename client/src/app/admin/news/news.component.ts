@@ -3,10 +3,8 @@ import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
-import { ServerDataService } from "../../shared";
 import { MultilingualString } from "../../shared/multilingual-string.description";
 import { locales } from "../../shared/change-language.component";
-import { ListGrammarDataService } from "../../shared/serverdata";
 import { NewsDescription } from "../../shared/news.description";
 import { MatSort } from "@angular/material/sort";
 import { AdminListNewsDataService } from "../../shared/serverdata/news-data.service";
@@ -19,7 +17,6 @@ export class AdminNewsListComponent {
 
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
-    private readonly _serverData: ServerDataService,
     private _router: Router,
     private _active: ActivatedRoute,
     private _performData: PerformDataService,
@@ -34,16 +31,14 @@ export class AdminNewsListComponent {
 
   readonly performCreateData = this._performData.news.create();
 
-  public adminNewsList = this._serverData.getAdminNewsList.value;
-  public searchList = this.adminNewsList;
+  public searchList = this.news.list;
   public selectedLanguage: string = this.localeId;
   public selectedEditor: string = "single";
   public searchFor: string = "";
 
   public change(): void {
-    this.searchList = this.adminNewsList;
     this.searchFor = this.searchFor.toLowerCase();
-    this.searchList = this.searchList.pipe(
+    this.searchList = this.news.list.pipe(
       map((item) =>
         item.filter(
           (entry) =>
