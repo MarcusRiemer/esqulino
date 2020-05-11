@@ -80,7 +80,8 @@ export interface NodeTerminalSymbolDescription {
 }
 
 export const Orientation = StringUnion("horizontal", "vertical");
-export type Orientation = typeof Orientation.type;
+// TODO: Using `typeof Orientation.type` crashes the JSON generator
+export type Orientation = "horizontal" | "vertical";
 
 /**
  * Groups together various nodes in a certain kind of layout.
