@@ -1,5 +1,6 @@
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { OccursDescription } from "./occurs.description";
+import { StringUnion } from "../string-union";
 
 /**
  * Types may either be concrete new type or an alias
@@ -78,7 +79,8 @@ export interface NodeTerminalSymbolDescription {
   tags?: string[];
 }
 
-export type Orientation = "horizontal" | "vertical";
+export const Orientation = StringUnion("horizontal", "vertical");
+export type Orientation = typeof Orientation.type;
 
 /**
  * Groups together various nodes in a certain kind of layout.

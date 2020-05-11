@@ -2,6 +2,7 @@ import {
   GrammarDocument,
   NodeTerminalSymbolDescription,
   NodeTypesSequenceDescription,
+  NodeVisualContainerDescription,
 } from "./grammar.description";
 import {
   readFromNode,
@@ -13,7 +14,7 @@ import {
 import { Node } from "./syntaxtree";
 import { NodeDescription } from "./syntaxtree.description";
 
-describe(`Convert AST => GrammarDescription`, () => {
+describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
   describe(`Utility Functions`, () => {
     it(`Property`, () => {
       const n = new Node(
@@ -603,6 +604,73 @@ describe(`Convert AST => GrammarDescription`, () => {
         root: undefined,
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },
+        },
+      });
+    });
+
+    it(`Type with single, empty sequence in container`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "concreteNode",
+              properties: {
+                languageName: "l",
+                typeName: "t",
+              },
+              children: {
+                attributes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "container",
+                    children: {
+                      orientation: [
+                        {
+                          language: "MetaGrammar",
+                          name: "orientation",
+                          properties: {
+                            orientation: "vertical",
+                          },
+                        },
+                      ],
+                      attributes: [
+                        {
+                          language: "MetaGrammar",
+                          name: "children",
+                          properties: {
+                            base: "sequence",
+                            name: "seq",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      const containerDesc: NodeVisualContainerDescription = {
+        type: "container",
+        children: [
+          {
+            type: "sequence",
+            name: "seq",
+            nodeTypes: [],
+          },
+        ],
+        orientation: "vertical",
+      };
+
+      expect(g).toEqual({
+        root: undefined,
+        types: {
+          l: { t: { type: "concrete", attributes: [containerDesc] } },
         },
       });
     });
