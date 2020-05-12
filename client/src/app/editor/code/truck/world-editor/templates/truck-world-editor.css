@@ -1,0 +1,107 @@
+.editor-tile-selection .card-deck {
+    margin: 0;
+}
+
+.editor-tile-selection .card-deck .card:first-child {
+    margin-left: 0;
+}
+
+.editor-tile-selection .card-deck .card:last-child {
+    margin-right: 0;
+}
+
+.editor-tile-selection .fa.fa-paint-brush {
+    color: white;
+}
+
+.editor-tile.editor-tile-road {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+}
+
+.editor-tile-selection {
+    --editor-tile-size: 7rem;
+    overflow-x: auto;
+}
+
+.editor-tile-selection > * {
+    min-width: 70rem;
+}
+
+.editor-tile-selected {
+    background-color: #7cbac7;
+    border-color: #17a2b8;
+    opacity: 1;
+}
+
+.editor-tile {
+    display: block;
+    height: var(--editor-tile-size);
+    width: var(--editor-tile-size);
+    background-repeat: no-repeat;
+}
+
+.editor-tile-3 {
+    --editor-tile-size: calc(7rem / 3);
+
+    display: block;
+    height: var(--editor-tile-size);
+    width: 7rem;
+    background-repeat: no-repeat;
+
+    /*The button default padding is 0.375rem */
+    margin: -0.261rem 0;
+}
+
+.editor-tile-road {
+    --image-count: 16;
+    background-image: url("/vendor/truck/tiles.svg");
+    background-size: calc(var(--editor-tile-size) * var(--image-count));
+    background-position-x: calc(var(--editor-tile-size) * -15);
+}
+
+.editor-tile-trafficlight {
+    --scale-factor: 5;
+    --image-count: 8;
+    background-image: url("/vendor/truck/trafficLight.svg");
+    background-size: calc(var(--editor-tile-size) * var(--image-count) * var(--scale-factor));
+    background-position-x: calc((var(--editor-tile-size) * -1 * var(--scale-factor)) + (var(--editor-tile-size) / -4));
+    background-position-y: calc((var(--editor-tile-size)) / (-1 * var(--image-count)));
+}
+
+.editor-tile-freight {
+    --scale-factor: 8;
+    --image-count: 6;
+    background-image: url("/vendor/truck/freight.svg");
+    background-size: calc(var(--editor-tile-size) * var(--image-count) * var(--scale-factor));
+    /* The hardcoded rem values are there to center the image */
+    background-position-x: calc(var(--editor-tile-size) * var(--scale-factor) * (var(--image-index) * -1) + (var(--scale-factor) * -0.7333rem));
+    background-position-y: calc(var(--scale-factor) * -1.0245rem);
+}
+
+.editor-tile-freight-red {
+    --image-index: 0;
+}
+.editor-tile-freight-green {
+    --image-index: 2;
+}
+.editor-tile-freight-blue {
+    --image-index: 4;
+}
+
+.editor-tile-freight-target-red {
+    --image-index: 1;
+}
+.editor-tile-freight-target-green {
+    --image-index: 3;
+}
+.editor-tile-freight-target-blue {
+    --image-index: 5;
+}
+
+.editor-tile-truck {
+    --image-count: 4;
+    background-image: url("/vendor/truck/truck.svg");
+    background-size: calc(var(--editor-tile-size) * var(--image-count));
+}
