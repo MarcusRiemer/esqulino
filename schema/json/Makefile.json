@@ -11,7 +11,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 # TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/ts-json-schema-generator/bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json CodeResourceRequestUpdateDescription.json GrammarDatabaseBlob.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json GrammarRequestUpdateDescription.json NewsDescription.json NewsFrontpageDescription.json NewsUpdateDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json CodeResourceRequestUpdateDescription.json GrammarDatabaseBlob.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json GrammarRequestUpdateDescription.json NewsDescription.json NewsFrontpageDescription.json NewsUpdateDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -20,8 +20,7 @@ JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDesc
 define CONVERT_COMMAND
 	@echo "Creating $(notdir $(basename $@)).json"
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) --no-type-check --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
-	sed -i -- 's/</_/g' "$@.tmp"
-	sed -i -- 's/>/_/g' "$@.tmp"
+	sed -i -r -- 's/%3E|%3C|<|>/_/g' "$@.tmp"
 	mv "$@.tmp" "$@"
 endef
 
@@ -122,4 +121,10 @@ ServerProviderDescription.json : $(SRC_PATH)/shared/auth/provider.description.ts
 	$(CONVERT_COMMAND)
 
 UnexpectedLogoutDescription.json : $(SRC_PATH)/shared/error.description.ts
+	$(CONVERT_COMMAND)
+
+NamedLanguages.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
+	$(CONVERT_COMMAND)
+
+QualifiedTypeName.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
 	$(CONVERT_COMMAND)
