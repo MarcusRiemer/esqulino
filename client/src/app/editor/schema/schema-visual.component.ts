@@ -75,16 +75,6 @@ export class SchemaVisualComponent implements OnInit {
     this._subscriptionRefs.push(subRef);
 	
 	this._toolbarService.savingEnabled = false;
-	let btnSave = this._toolbarService.addButton(
-      "save",
-      "Speichern",
-      "floppy-o",
-      "s"
-    );
-    subRef = btnSave.onClick.subscribe((_) => {
-      this.saveBtn();
-    });
-    this._subscriptionRefs.push(subRef);
 	
 
     // Button to switch to data import, only shown if there is
@@ -134,16 +124,6 @@ export class SchemaVisualComponent implements OnInit {
       this.project = res;
     });
     this._subscriptionRefs.push(subRef);
-  }
-  
-  async saveBtn() {
-    this.commandsHolder.prepareToSend();
-    await this._schemaService.sendAlterTableCommands(
-      this.project,
-      this._schemaService.getCurrentlyEditedTable().name,
-      this.commandsHolder
-    );
-    this._schemaService.clearCurrentlyEdited();
   }
   
   private get commandsHolder() {

@@ -85,10 +85,13 @@ export class SchemaTableVisualComponent {
       .subscribe(({ name, el, target, source, sibling, sourceModel, item }) => {
         let newIndex = sourceModel.indexOf(item);
 
+		this._schemaService.initCurrentlyEdit(
+		  this._project.schema.getTable(this.table.name)
+		);
         this.commandsHolder.do(
           new SwitchColumnOrder(this.table, item.index, newIndex)
         );
-        console.log(newIndex);
+        this.saveChanges();
       });
     this._subscriptionRefs.push(dragRef);
   }
@@ -108,13 +111,30 @@ export class SchemaTableVisualComponent {
 
   changedColumnName(index: number, newValue: string) {
     if (this._oldValue != newValue) {
+      this._schemaService.initCurrentlyEdit(
+        this._project.schema.getTable(this.table.name)
+      );
+	  
       this.commandsHolder.do(
         new RenameColumn(this.table, index, this._oldValue, newValue)
       );
       this._oldValue = "";
+	  
+	  this.saveChanges();
     }
   }
 
+  async saveChanges(){	  
+	  this.commandsHolder.prepareToSend();
+	  await this._schemaService.sendAlterTableCommands(
+		this._project,
+		this._schemaService.getCurrentlyEditedTable().name,
+		this.commandsHolder
+      );
+	  
+	  this._schemaService.clearCurrentlyEdited();
+  }
+  
   async deleteTable() {
     try {
       await this._schemaService.deleteTable(this._project, this.table);

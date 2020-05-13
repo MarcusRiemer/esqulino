@@ -3,7 +3,7 @@
     <h4 class="card-title">
       Schema-Übersicht für Datenbank "{{ schemaName | async }}"
     </h4>
-    <div class="wrapper">
+    <div class="db-schema-drag-drop">
       <sql-table-visual
         *ngFor="let table of project?.schema.tables"
         [table]="table"
