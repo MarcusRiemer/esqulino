@@ -1,35 +1,8 @@
-<<<<<<< HEAD
-import { NgModule, ModuleWithProviders } from '@angular/core'
-
-import { SharedEditorModule } from '../shared/shared.module'
-import { RegistrationService } from '../registration.service'
-import { SchemaService } from '../schema.service'
-
-import { SchemaHostComponent } from './host.component'
-import { SchemaRedirectComponent } from './schema-redirect.component'
-import { SchemaComponent } from './schema.component'
-import { SchemaUploadComponent } from './schema-upload.component'
-import { SchemaTableComponent } from './schema-table.component'
-import { SchemaTableCompositionComponent } from './schema-table-composition.component'
-import { SchemaTableEditorComponent } from './schema-table-editor.component'
-import { SchemaTableDataComponent } from './schema-table-data.component'
-import { SchemaTableImportComponent } from './schema-table-import.component'
-import { SchemaVisualComponent } from './schema-visual.component'
-import { SchemaTableVisualComponent } from './schema-table-visual.component'
-import { TableEditorSidebarStackComponent } from './table-editor-stack.sidebar'
-import { TableEditorSidebarControlsComponent } from './table-editor-controls.sidebar'
-import { DragulaModule } from 'ng2-dragula';
-
-@NgModule({
-  imports: [
-    SharedEditorModule,
-    DragulaModule.forRoot()
-  ],
-=======
 import { NgModule, ModuleWithProviders } from "@angular/core";
 
-import { EditorSharedComponentsModule } from "../shared-components/editor-shared-components.module";
+import { SharedAppModule } from "../../shared/shared.module";
 import { RegistrationService } from "../registration.service";
+import { SchemaService } from "../schema.service";
 
 import { SchemaHostComponent } from "./host.component";
 import { SchemaRedirectComponent } from "./schema-redirect.component";
@@ -40,12 +13,19 @@ import { SchemaTableCompositionComponent } from "./schema-table-composition.comp
 import { SchemaTableEditorComponent } from "./schema-table-editor.component";
 import { SchemaTableDataComponent } from "./schema-table-data.component";
 import { SchemaTableImportComponent } from "./schema-table-import.component";
+import { SchemaVisualComponent } from "./schema-visual.component";
+import { SchemaTableVisualComponent } from "./schema-table-visual.component";
 import { TableEditorSidebarStackComponent } from "./table-editor-stack.sidebar";
 import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sidebar";
+import { DragulaModule } from "ng2-dragula";
+import { EditorSharedComponentsModule } from "../shared-components/editor-shared-components.module";
 
 @NgModule({
-  imports: [EditorSharedComponentsModule],
->>>>>>> 387a98151c8a584d02613813c395d230cc203d2b
+  imports: [
+    SharedAppModule,
+    DragulaModule.forRoot(),
+    EditorSharedComponentsModule,
+  ],
   declarations: [
     SchemaHostComponent,
     SchemaRedirectComponent,

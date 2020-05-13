@@ -4,14 +4,8 @@ import { first } from "rxjs/operators";
 
 import { Table } from "../../shared/schema";
 
-<<<<<<< HEAD
-import { SchemaService } from '../schema.service'
-import { ProjectService, Project } from '../project.service'
-import { DragulaService } from 'ng2-dragula'
-=======
 import { SchemaService } from "../schema.service";
 import { ProjectService, Project } from "../project.service";
->>>>>>> 387a98151c8a584d02613813c395d230cc203d2b
 
 /**
  * Displays the schema for a list of tables.

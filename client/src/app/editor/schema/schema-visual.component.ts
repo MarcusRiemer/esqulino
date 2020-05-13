@@ -1,24 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router, ActivatedRoute } from '@angular/router'
-import { HttpClient } from '@angular/common/http'
+import { Component, OnInit } from "@angular/core";
+import { DomSanitizer } from "@angular/platform-browser";
+import { Router, ActivatedRoute } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
 
-import { map, flatMap, first, share } from 'rxjs/operators'
-import { zip } from 'rxjs'
+import { map, flatMap, first, share } from "rxjs/operators";
+import { zip } from "rxjs";
 
-import { ServerApiService } from '../../shared';
+import { ServerApiService } from "../../shared";
 
-import { ProjectService, Project } from '../project.service'
-import { SchemaService } from '../schema.service'
-import { SidebarService } from '../sidebar.service'
-import { ToolbarService } from '../toolbar.service'
-
+import { ProjectService, Project } from "../project.service";
+import { SchemaService } from "../schema.service";
+import { SidebarService } from "../sidebar.service";
+import { EditorToolbarService } from "../toolbar.service";
 
 @Component({
-  templateUrl: 'templates/schema-visual.html'
+  templateUrl: "templates/schema-visual.html",
 })
 export class SchemaVisualComponent implements OnInit {
-
   public project: Project;
 
   private _subscriptionRefs: any[] = [];
@@ -27,20 +25,19 @@ export class SchemaVisualComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private _http: HttpClient,
     private _projectService: ProjectService,
-    private _toolbarService: ToolbarService,
+    private _toolbarService: EditorToolbarService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _sidebarService: SidebarService,
     private _schemaService: SchemaService,
     private _serverApi: ServerApiService
-  ) {
-  }
+  ) {}
 
   /**
    * @return True, if this is an empty schema
    */
   get isEmpty() {
-    return (this.project && this.project.schema.isEmpty);
+    return this.project && this.project.schema.isEmpty;
   }
 
   /**
@@ -53,7 +50,7 @@ export class SchemaVisualComponent implements OnInit {
    * The name of the schema that is currently edited.
    */
   readonly schemaName = this._route.paramMap.pipe(
-    map(p => p.get("schemaName"))
+    map((p) => p.get("schemaName"))
   );
 
   /**
@@ -66,48 +63,95 @@ export class SchemaVisualComponent implements OnInit {
     this._toolbarService.savingEnabled = false;
 
     // Button to show the preview of the currently editing table
-    let btnCreate = this._toolbarService.addButton("createTable", "Neue Tabelle", "table", "n");
-    let subRef = btnCreate.onClick.subscribe(_ => {
+    let btnCreate = this._toolbarService.addButton(
+      "createTable",
+      "Neue Tabelle",
+      "table",
+      "n"
+    );
+    let subRef = btnCreate.onClick.subscribe((_) => {
       this._router.navigate(["./create"], { relativeTo: this._route });
-    })
+    });
     this._subscriptionRefs.push(subRef);
+	
+	this._toolbarService.savingEnabled = false;
+	let btnSave = this._toolbarService.addButton(
+      "save",
+      "Speichern",
+      "floppy-o",
+      "s"
+    );
+    subRef = btnSave.onClick.subscribe((_) => {
+      this.saveBtn();
+    });
+    this._subscriptionRefs.push(subRef);
+	
 
     // Button to switch to data import, only shown if there is
     // a table the data could be imported to
     if (!this.isEmpty) {
-      let btnImport = this._toolbarService.addButton("importTable", "Daten Importieren", "file-text", "i");
-      subRef = btnImport.onClick.subscribe(_ => {
+      let btnImport = this._toolbarService.addButton(
+        "importTable",
+        "Daten Importieren",
+        "file-text",
+        "i"
+      );
+      subRef = btnImport.onClick.subscribe((_) => {
         this._router.navigate(["./import"], { relativeTo: this._route });
-      })
+      });
       this._subscriptionRefs.push(subRef);
     }
 
     // Butto to switch to database import
-    let btnUpload = this._toolbarService.addButton("uploadDatabase", "Datenbank hochladen", "upload", "u");
-    subRef = btnUpload.onClick.subscribe(_ => {
+    let btnUpload = this._toolbarService.addButton(
+      "uploadDatabase",
+      "Datenbank hochladen",
+      "upload",
+      "u"
+    );
+    subRef = btnUpload.onClick.subscribe((_) => {
       this._router.navigate(["./upload"], { relativeTo: this._route });
-    })
+    });
     this._subscriptionRefs.push(subRef);
 
     // Butto to switch to database import
-    let btnDownload = this._toolbarService.addButton("downloadDatabase", "Datenbank herunterladen", "download", "d");
-    subRef = btnDownload.onClick.subscribe(_ => {
-      window.location.href = this._serverApi.downloadDatabase(this.project.id, this.project.currentDatabaseName);
-    })
+    let btnDownload = this._toolbarService.addButton(
+      "downloadDatabase",
+      "Datenbank herunterladen",
+      "download",
+      "d"
+    );
+    subRef = btnDownload.onClick.subscribe((_) => {
+      window.location.href = this._serverApi.downloadDatabase(
+        this.project.id,
+        this.project.currentDatabaseName
+      );
+    });
     this._subscriptionRefs.push(subRef);
-
 
     // Ensure that the active project is always available
-    subRef = this._projectService.activeProject
-      .subscribe(res => {
-        this.project = res
-      });
+    subRef = this._projectService.activeProject.subscribe((res) => {
+      this.project = res;
+    });
     this._subscriptionRefs.push(subRef);
   }
+  
+  async saveBtn() {
+    this.commandsHolder.prepareToSend();
+    await this._schemaService.sendAlterTableCommands(
+      this.project,
+      this._schemaService.getCurrentlyEditedTable().name,
+      this.commandsHolder
+    );
+    this._schemaService.clearCurrentlyEdited();
+  }
+  
+  private get commandsHolder() {
+	  return this._schemaService.getCurrentlyEditedStack();
+    }
 
   ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];
   }
-
 }

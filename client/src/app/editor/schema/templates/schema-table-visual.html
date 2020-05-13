@@ -1,31 +1,33 @@
 <div>
-<table class="vis">
-  <thead>
-    <tr>
-      {{ table.name }}
-    </tr>
-  </thead>
-  <tbody>
-    <div dragula="rows" [dragulaModel]="table.columns">
-      <tr *ngFor="let column of table.columns">
-        <td>
-          <span *ngIf="column.primary" class="fa fa-key" aria-hidden="true"></span>
-        </td>
-        <td>
-          <input class="tableEdit"
-                 (focus)="saveTempValue($event.target.value)"
-                 (blur)="changedColumnName(column.index, $event.target.value)"
-                 [(ngModel)]="column.name"/>
-        </td>
-        <td>{{ column.type }}</td>
-        <td><div *ngIf=column.not_null>NOT NULL</div></td>
-        <td>{{ column.dflt_value }}</td>
+  <table class="vis">
+    <thead>
+      <tr>
+        {{ table.name }}
       </tr>
-    </div>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <div [dragula]="table.name" [dragulaModel]="table.columns">
+        <tr *ngFor="let column of table.columns">
+          <td>
+            <span
+              *ngIf="column.primary"
+              class="fa fa-key"
+              aria-hidden="true"
+            ></span>
+          </td>
+          <td>
+            <input
+              class="tableEdit"
+              (focus)="saveTempValue($event.target.value)"
+              (blur)="changedColumnName(column.index, $event.target.value)"
+              [(ngModel)]="column.name"
+            />
+          </td>
+          <td>{{ column.type }}</td>
+          <td><div *ngIf="column.not_null">NOT NULL</div></td>
+          <td>{{ column.dflt_value }}</td>
+        </tr>
+      </div>
+    </tbody>
+  </table>
 </div>
-
-
-
-

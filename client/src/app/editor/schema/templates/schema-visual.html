@@ -1,11 +1,14 @@
 <ng-container>
   <div class="card card-body">
-    <h4 class="card-title">Schema-Übersicht für Datenbank "{{ schemaName | async }}"</h4>
+    <h4 class="card-title">
+      Schema-Übersicht für Datenbank "{{ schemaName | async }}"
+    </h4>
     <div class="wrapper">
-      <sql-table-visual *ngFor="let table of project?.schema.tables"
+      <sql-table-visual
+        *ngFor="let table of project?.schema.tables"
         [table]="table"
-        [readOnly]="false">
-      </sql-table-visual>
+        [readOnly]="false"
+      ></sql-table-visual>
     </div>
   </div>
 </ng-container>
