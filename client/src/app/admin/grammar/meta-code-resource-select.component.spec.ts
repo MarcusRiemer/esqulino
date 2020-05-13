@@ -9,12 +9,13 @@ import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.com
 
 import { ServerApiService } from "../../shared";
 import { MetaCodeResourceListDescription } from "./meta-code-resource.description";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 describe("MetaCodeResourceSelect", () => {
   async function createComponent(preSelectedId = undefined) {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, FormsModule],
-      providers: [ServerApiService],
+      providers: [ServerApiService, ServerTasksService],
       declarations: [MetaCodeResourceSelectComponent],
     }).compileComponents();
 

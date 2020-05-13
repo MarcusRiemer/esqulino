@@ -224,7 +224,8 @@ export function smartDropLocation(
   const toReturn: SmartDropLocation[] = [];
   const matches = new Set<SmartDropAlgorithmNames>();
 
-  // Runs the given algorith,
+  // Runs the given algorithm and tags the results with the algorithm
+  // that was used.
   const runAlgorithm = (name: SmartDropAlgorithmNames) => {
     const dropAlternatives = algorithms[name](validator, tree, loc, candidates);
     if (dropAlternatives.length > 0) {

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { first, switchMap, shareReplay } from "rxjs/operators";
+import { first, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 
 import { EditorToolbarService } from "../toolbar.service";

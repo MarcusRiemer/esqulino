@@ -115,20 +115,6 @@ export class BlockRenderComponent {
   }
 
   /**
-   * @return Some visuals that should render for the same node
-   */
-  get childVisuals() {
-    if (VisualBlockDescriptions.isEditorContainer(this.visual)) {
-      if (this.visual.children.some((v) => !v)) {
-        debugger;
-      }
-      return this.visual.children;
-    } else {
-      return [];
-    }
-  }
-
-  /**
    * @return The visual editor block that should be used to represent the given node.
    */
   iteratorGetEditorBlock(node: Node) {

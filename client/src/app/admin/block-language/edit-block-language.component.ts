@@ -153,5 +153,6 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   readonly availableCssRootClasses = [
     new EditBlockLanguageComponent.RootCssClass("activate-block-outline", this),
     new EditBlockLanguageComponent.RootCssClass("activate-keyword", this),
+    new EditBlockLanguageComponent.RootCssClass("activate-comment", this),
   ];
 }

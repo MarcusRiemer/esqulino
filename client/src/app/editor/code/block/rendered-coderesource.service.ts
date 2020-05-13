@@ -14,6 +14,7 @@ import {
   Validator,
   ValidationResult,
   Tree,
+  speakingResourceName,
 } from "../../../shared";
 import { BlockLanguage } from "../../../shared/block";
 import {
@@ -165,12 +166,12 @@ export class RenderedCodeResourceService implements OnDestroy {
     ];
 
     const fetchRequired = !this._resourceReferences.hasResources(
-      requiredResources
+      ...requiredResources
     );
 
     console.log(
-      `Preparing to render syntaxtree of code resource: `,
-      codeResource
+      `Preparing to render syntaxtree of code resource:`,
+      speakingResourceName(codeResource)
     );
     console.log(`Required resources:`, requiredResources);
     console.log(`Requires fetch:`, fetchRequired);
@@ -180,7 +181,7 @@ export class RenderedCodeResourceService implements OnDestroy {
     if (fetchRequired) {
       this._resourcesFetched.next(false);
       this._resourceReferences
-        .ensureResources(requiredResources)
+        .ensureResources(...requiredResources)
         .then((res) => this._resourcesFetched.next(res));
     } else {
       this._resourcesFetched.next(true);

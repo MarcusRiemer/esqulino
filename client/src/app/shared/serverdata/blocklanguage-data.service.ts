@@ -13,6 +13,7 @@ import { ServerApiService } from "./serverapi.service";
 import { ListData } from "./list-data";
 import { IndividualData } from "./individual-data";
 import { MutateData } from "./mutate-data";
+import { ServerTasksService } from "./server-tasks.service";
 
 const urlResolver = (serverApi: ServerApiService) => {
   return (id: string) => serverApi.individualBlockLanguageUrl(id);
@@ -49,9 +50,10 @@ export class ListBlockLanguageDataService
   public constructor(
     serverApi: ServerApiService,
     http: HttpClient,
-    mutateService: MutateBlockLanguageService
+    mutateService: MutateBlockLanguageService,
+    serverTaskService: ServerTasksService
   ) {
-    super(http, serverApi.getBlockLanguageListUrl());
+    super(http, serverApi.getBlockLanguageListUrl(), serverTaskService);
 
     const s = mutateService.listInvalidated.subscribe(() =>
       this.listCache.refresh()

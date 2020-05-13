@@ -1,18 +1,18 @@
 import {
-  World,
   Command,
   Direction,
-  StrayedOffTheRoadError,
-  LoadingError,
-  UnloadingError,
   DirectionUtil,
-  TileOpening,
-  TurnDirection,
-  Position,
-  TrafficLight,
-  Tile,
   Freight,
+  LoadingError,
+  Position,
+  StrayedOffTheRoadError,
+  Tile,
+  TileOpening,
+  TrafficLight,
   Truck,
+  TurnDirection,
+  UnloadingError,
+  World,
 } from "./world";
 import { WorldDescription } from "./world.description";
 
@@ -145,6 +145,66 @@ describe("Shared: World", () => {
     expect(world.getState(2).step).toEqual(2);
     expect(world.getState(3).step).toEqual(3);
     expect(world.getState(4).step).toEqual(4);
+  });
+});
+
+describe("World.getRoadOpeningsBetween", () => {
+  let world: World;
+
+  beforeEach(() => {
+    world = new World(worldDescription);
+  });
+
+  it("opening to north", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 0, world),
+      new Position(0, 1, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.South,
+      to: TileOpening.North,
+    });
+  });
+
+  it("opening to east", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(1, 0, world),
+      new Position(0, 0, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.West,
+      to: TileOpening.East,
+    });
+  });
+
+  it("opening to south", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 1, world),
+      new Position(0, 0, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.North,
+      to: TileOpening.South,
+    });
+  });
+
+  it("opening to west", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 0, world),
+      new Position(1, 0, world)
+    );
+    expect(openings).toEqual({
+      from: TileOpening.East,
+      to: TileOpening.West,
+    });
+  });
+
+  it("invalid position", () => {
+    const openings = World.getRoadOpeningsBetween(
+      new Position(0, 0, world),
+      new Position(1, 1, world)
+    );
+    expect(openings).toBeUndefined();
   });
 });
 
@@ -364,16 +424,79 @@ describe("Shared: TrafficLight", () => {
  ******************************************************************************/
 describe("Shared: Position", () => {
   let world: World;
-  let position: Position;
 
   beforeEach(() => {
     world = new World(worldDescription);
-    position = new Position(0, 0, world);
   });
 
-  it("should have the right size", () => {
+  it("should inherit world size", () => {
+    const position = new Position(0, 0, world);
     expect(position.width).toEqual(5);
     expect(position.height).toEqual(5);
+  });
+});
+
+describe("Position.getDirectNeighbors", () => {
+  let world: World;
+
+  beforeEach(() => {
+    world = new World(worldDescription);
+  });
+
+  function containsPosition(array, expectedX, expectedY, expectedWorld) {
+    return array.some(
+      (pos) =>
+        pos.x === expectedX &&
+        pos.y === expectedY &&
+        pos.world === expectedWorld
+    );
+  }
+
+  it("middle of the world", () => {
+    const position = new Position(2, 2, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(4);
+
+    expect(containsPosition(neighbors, 2, 1, world)).toEqual(true);
+    expect(containsPosition(neighbors, 3, 2, world)).toEqual(true);
+    expect(containsPosition(neighbors, 2, 3, world)).toEqual(true);
+    expect(containsPosition(neighbors, 1, 2, world)).toEqual(true);
+  });
+
+  it("top left corner", () => {
+    const position = new Position(0, 0, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 0, 1, world)).toEqual(true);
+    expect(containsPosition(neighbors, 1, 0, world)).toEqual(true);
+  });
+
+  it("top right corner", () => {
+    const position = new Position(4, 0, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 3, 0, world)).toEqual(true);
+    expect(containsPosition(neighbors, 4, 1, world)).toEqual(true);
+  });
+
+  it("bottom left corner", () => {
+    const position = new Position(0, 4, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 0, 3, world)).toEqual(true);
+    expect(containsPosition(neighbors, 1, 4, world)).toEqual(true);
+  });
+
+  it("bottom right corner", () => {
+    const position = new Position(4, 4, world);
+    const neighbors = position.getDirectNeighbors();
+    expect(neighbors.length).toEqual(2);
+
+    expect(containsPosition(neighbors, 4, 3, world)).toEqual(true);
+    expect(containsPosition(neighbors, 3, 4, world)).toEqual(true);
   });
 });
 
@@ -408,6 +531,108 @@ describe("Shared: DirectionUtil", () => {
     expect(DirectionUtil.toNumber(Direction.East)).toEqual(1);
     expect(DirectionUtil.toNumber(Direction.South)).toEqual(2);
     expect(DirectionUtil.toNumber(Direction.West)).toEqual(3);
+  });
+
+  it("should convert from number", () => {
+    expect(DirectionUtil.fromNumber(0)).toEqual(Direction.North);
+    expect(DirectionUtil.fromNumber(1)).toEqual(Direction.East);
+    expect(DirectionUtil.fromNumber(2)).toEqual(Direction.South);
+    expect(DirectionUtil.fromNumber(3)).toEqual(Direction.West);
+  });
+
+  it("should convert to chars", () => {
+    expect(DirectionUtil.toChar(Direction.North)).toEqual("N");
+    expect(DirectionUtil.toChar(Direction.East)).toEqual("E");
+    expect(DirectionUtil.toChar(Direction.South)).toEqual("S");
+    expect(DirectionUtil.toChar(Direction.West)).toEqual("W");
+  });
+
+  it("should convert from chars", () => {
+    expect(DirectionUtil.fromChar("N")).toEqual(Direction.North);
+    expect(DirectionUtil.fromChar("E")).toEqual(Direction.East);
+    expect(DirectionUtil.fromChar("S")).toEqual(Direction.South);
+    expect(DirectionUtil.fromChar("W")).toEqual(Direction.West);
+  });
+
+  it("should openings to its direction", () => {
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.None)).toEqual([]);
+
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.North)).toEqual([
+      Direction.North,
+    ]);
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.East)).toEqual([
+      Direction.East,
+    ]);
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.South)).toEqual([
+      Direction.South,
+    ]);
+    expect(DirectionUtil.openingToDirectionArray(TileOpening.West)).toEqual([
+      Direction.West,
+    ]);
+
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.East
+      )
+    ).toEqual([Direction.North, Direction.East]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.South
+      )
+    ).toEqual([Direction.North, Direction.South]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.West
+      )
+    ).toEqual([Direction.North, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.East | TileOpening.South
+      )
+    ).toEqual([Direction.East, Direction.South]);
+    expect(
+      DirectionUtil.openingToDirectionArray(TileOpening.East | TileOpening.West)
+    ).toEqual([Direction.East, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.South | TileOpening.West
+      )
+    ).toEqual([Direction.South, Direction.West]);
+
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.East | TileOpening.South | TileOpening.West
+      )
+    ).toEqual([Direction.East, Direction.South, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.South | TileOpening.West
+      )
+    ).toEqual([Direction.North, Direction.South, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.East | TileOpening.West
+      )
+    ).toEqual([Direction.North, Direction.East, Direction.West]);
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North | TileOpening.East | TileOpening.South
+      )
+    ).toEqual([Direction.North, Direction.East, Direction.South]);
+
+    expect(
+      DirectionUtil.openingToDirectionArray(
+        TileOpening.North |
+          TileOpening.East |
+          TileOpening.South |
+          TileOpening.West
+      )
+    ).toEqual([
+      Direction.North,
+      Direction.East,
+      Direction.South,
+      Direction.West,
+    ]);
   });
 
   it("shouldn't take turns", () => {

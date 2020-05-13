@@ -68,6 +68,124 @@ concise_attributes:
   value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: Generic Language without code generator
+  value_before_type_cast: |-
+    {
+      "types": {
+        "css": {
+          "document": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "rules",
+                "nodeTypes": [
+                  {
+                    "languageName": "css",
+                    "typeName": "rule"
+                  }
+                ]
+              }
+            ]
+          },
+          "rule": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "selector",
+                "nodeTypes": [
+                  {
+                    "languageName": "css",
+                    "typeName": "selector"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "properties",
+                "nodeTypes": [
+                  {
+                    "languageName": "css",
+                    "typeName": "property"
+                  }
+                ]
+              }
+            ]
+          },
+          "selector": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "css",
+                "typeName": "simpleSelector"
+              }
+            ]
+          },
+          "simpleSelector": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "elementName"
+              }
+            ]
+          },
+          "property": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "css",
+                "typeName": "propBackgroundColor"
+              }
+            ]
+          },
+          "valueColor": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          },
+          "valueLength": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "integer",
+                "name": "value"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "unit"
+              }
+            ]
+          },
+          "propBackgroundColor": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "value",
+                "nodeTypes": [
+                  {
+                    "languageName": "css",
+                    "typeName": "valueColor"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "root": {
+        "languageName": "css",
+        "typeName": "document"
+      }
+    }
 new_record: false
 active_record_yaml_version: 2

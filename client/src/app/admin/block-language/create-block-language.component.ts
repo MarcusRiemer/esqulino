@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
-import { first } from "rxjs/operators";
+import { first, tap } from "rxjs/operators";
 
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
@@ -53,43 +53,40 @@ export class CreateBlockLanguageComponent {
   /**
    * Attempts to create the specified block language
    */
-  public submitForm() {
+  async submitForm() {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
-    this._grammarData
+    const g = await this._grammarData
       .getSingle(this.blockLanguage.grammarId)
       .pipe(first())
-      .subscribe((g) => {
-        // Generate some default blocks
-        const toCreate = generateBlockLanguage(
-          this.blockLanguage,
-          DEFAULT_GENERATOR,
-          g
-        );
+      .toPromise();
 
-        // Default the default programming language to use the same value as
-        // the grammar.
-        toCreate.defaultProgrammingLanguageId = g.programmingLanguageId;
+    // Generate some default blocks
+    const toCreate = generateBlockLanguage(
+      this.blockLanguage,
+      DEFAULT_GENERATOR,
+      g
+    );
 
-        // Possibly forcefully remove a slug (instead of sending an empty string)
-        if (!this.useSlug) {
-          delete toCreate.slug;
-        }
+    // Default the default programming language to use the same value as
+    // the grammar.
+    toCreate.defaultProgrammingLanguageId = g.programmingLanguageId;
 
-        this._http
-          .post<{ id: string }>(
-            this._serverApi.createBlockLanguageUrl(),
-            toCreate
-          )
-          .subscribe(
-            (res) => {
-              this._serverData.listCache.refresh();
-              this._router.navigateByUrl(`/admin/block-language/${res.id}`);
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-      });
+    // Possibly forcefully remove a slug (instead of sending an empty string)
+    if (!this.useSlug) {
+      delete toCreate.slug;
+    }
+
+    const req = this._http
+      .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
+      .pipe(first())
+      .toPromise();
+
+    const res = await req;
+
+    this._serverData.listCache.refresh();
+    await this._router.navigateByUrl(`/admin/block-language/${res.id}`);
+
+    return res;
   }
 }

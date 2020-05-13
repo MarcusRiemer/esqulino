@@ -1,8 +1,4 @@
-import {
-  NgModule,
-  ModuleWithProviders,
-  CUSTOM_ELEMENTS_SCHEMA,
-} from "@angular/core";
+import { NgModule, ModuleWithProviders } from "@angular/core";
 
 import { SharedAppModule } from "../../shared/shared.module";
 
@@ -19,6 +15,7 @@ import { CodeSidebarComponent } from "./code.sidebar";
 import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
 import { ValidationComponent } from "./validation.component";
 import { UnknownCodeResourceComponent } from "./unknown-code-resource.component";
+import { DraggableBlockListComponent } from "./draggable-block-list.component";
 
 import { BLOCK_RENDER_COMPONENTS } from "./block/index";
 import { BlockRootComponent } from "./block/block-root.component";
@@ -40,12 +37,13 @@ import { TruckWorldService } from "./truck/truck-world.service";
 import { WorldControllerComponent } from "./truck/world-controller.component";
 import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
+import { TruckWorldMouseService } from "./truck/truck-world-mouse.service";
+import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor.service";
 
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     ...BLOCK_RENDER_COMPONENTS,
     BlockEditorComponent,
@@ -55,6 +53,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     CreateCodeResourceComponent,
     DropDebugComponent,
     DatabaseSchemaSidebarComponent,
+    DraggableBlockListComponent,
     ValidationComponent,
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
@@ -97,6 +96,8 @@ export class CodeEditorModule {
         BlockDebugOptionsService,
         QueryService,
         TruckWorldService,
+        TruckWorldMouseService,
+        TruckWorldEditorService,
       ],
     };
   }

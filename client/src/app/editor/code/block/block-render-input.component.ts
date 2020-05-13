@@ -87,7 +87,11 @@ export class BlockRenderInputComponent {
    * @return A representation of the value that is suited for "normal" display.
    */
   get currentDisplayValue() {
-    return this.currentValue.replace(/ /g, "␣");
+    if (this.visual.cssClasses?.includes("explicit-spaces")) {
+      return this.currentValue.replace(/ /g, "␣");
+    } else {
+      return this.currentValue;
+    }
   }
 
   /**

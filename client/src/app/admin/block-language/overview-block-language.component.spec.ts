@@ -27,6 +27,7 @@ import {
 
 import { OverviewBlockLanguageComponent } from "./overview-block-language.component";
 import { PaginatorTableComponent } from "../../shared/table/paginator-table.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 describe("OverviewBlockLanguageComponent", () => {
   async function createComponent() {
@@ -47,6 +48,7 @@ describe("OverviewBlockLanguageComponent", () => {
         ServerApiService,
         ListBlockLanguageDataService,
         MutateBlockLanguageService,
+        ServerTasksService,
       ],
       declarations: [
         OverviewBlockLanguageComponent,
@@ -100,6 +102,11 @@ describe("OverviewBlockLanguageComponent", () => {
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
+
+    const tableElement = t.element.querySelector("table");
+    const rows = tableElement.querySelectorAll("tbody > tr");
+
+    expect(rows.length).toEqual(0);
   });
 
   it(`Displays a list with a single element`, async () => {

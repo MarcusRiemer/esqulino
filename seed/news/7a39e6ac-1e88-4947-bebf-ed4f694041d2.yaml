@@ -1,0 +1,41 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 7a39e6ac-1e88-4947-bebf-ed4f694041d2
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"Ich beschreibe mich (fast) selbst ...", "en"=>"I
+    can (almost) describe myself ..."'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: |-
+    "de"=>"Für jede Programmiersprache ist der Moment des \"Self-Hostings\" ein essentieller: Er beschreibt den Zeitpunkt, zu welchem der Compiler in der eigenen Sprache geschrieben ist. Für BlattWerkzeug rückt dieser Moment langsam aber sicher in greifbare Nähe. Einen ersten Vorgeschmack auf die neuen Möglichkeiten bietet das [Meta JSON](/editor/meta-json/ast/22332f6e-a67a-4e05-b826-5d348f460a27/block)-Projekt, hier wird JSON als \"normale\" Blocksprache für eine neue Programmiersprache genutzt.
+
+    Noch sind diese Möglichkeiten leider nicht ganz ausgereift und darüber hinaus bedient sich der Editor auch noch ein wenig sperrig. Daher wird in der nächsten Wochen unter anderem an den folgenden Funktionen gearbeitet, die auch `SQL` und `Trucklino` zugute kommen:
+
+    <!-- SNIP -->
+
+    * Das \"Ummanteln\" von bestehenden Blöcken mit existierenden Blöcken ist ein sehr fummeliger Vorgang. Hier wird vermutlich auf der Grammatik-Ebene Abhilfe geschaffen werden müssen, um eine bessere Unterstützung zu Gewährleisten.
+    * Das Einfügen von Blöcken ober- oder unterhalb (bzw. rechts oder links) von bestehenden Blöcken ist gerade temporär deaktiviert und wird bald wieder aktiviert werden.", "en"=>"For every programming language, the moment of \"self-hosting\" is an essential one: It describes the moment when the compiler is written in its own language. For BlattWerkzeug, this moment is slowly but surely approaching. The [Meta JSON](/editor/meta-json/ast/22332f6e-a67a-4e05-b826-5d348f460a27/block)-Project offers a first taste of the new possibilities by describing JSON with a \"normal\" block language.
+
+    Unfortunately, these possibilities are not yet fully developed and additionally the editor is still a bit clumsy. Therefore we will work on the following functions among others in the next weeks, which will also benefit 'SQL' and 'Trucklino':
+
+    <!-- SNIP -->
+
+    * The \"wrapping\" of existing blocks with existing blocks is a very tricky process. This will probably have to be remedied at the grammar level to provide better support.
+    * Inserting blocks above or below (or right or left) existing blocks is currently temporarily disabled and will be enabled again soon."
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: 2020-04-06 00:00:00.000000000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-04-06 21:31:23.177771000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-04-06 21:43:58.970043000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
+new_record: false
+active_record_yaml_version: 2

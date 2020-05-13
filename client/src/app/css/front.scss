@@ -61,6 +61,15 @@
         object-fit: contain;
     }
 
+    /* News items */
+    .news {
+        .video-centered {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+    }
+
     /* Information about academical projects */
     .academia-item {
         margin-bottom: 1rem;

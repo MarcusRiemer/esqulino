@@ -32,7 +32,11 @@ export function convertGrammarTreeInstructions(
     sidebars: (d.staticSidebars || []).map((sidebar) =>
       generateSidebar(g, sidebar)
     ),
-    rootCssClasses: ["activate-indent", "activate-block-outline"],
+    rootCssClasses: [
+      "activate-indent",
+      "activate-block-outline",
+      "activate-keyword",
+    ],
   };
 
   // Create a visual representation for each concrete type
@@ -61,6 +65,36 @@ export function convertGrammarTreeInstructions(
   return toReturn;
 }
 
+const RELEVANT_ATTRIBUTES: ReadonlySet<string> = new Set([
+  "property",
+  "sequence",
+  "allowed",
+  "parentheses",
+  "choice",
+  "container",
+]);
+
+export function gatherAttributes(attributes: NodeAttributeDescription[]) {
+  const impl = (
+    attributes: NodeAttributeDescription[],
+    collect: NodeAttributeDescription[]
+  ) => {
+    attributes
+      .filter((a) => RELEVANT_ATTRIBUTES.has(a.type))
+      .forEach((a) => {
+        if (a.type === "container") {
+          impl(a.children, collect);
+        } else {
+          collect.push(a);
+        }
+      });
+
+    return collect;
+  };
+
+  return impl(attributes, []);
+}
+
 /**
  * Converts this whole node (and its attributes) to a JSON-inspired representation.
  */
@@ -69,20 +103,16 @@ export function visualizeNode(
   name: string,
   t: NodeConcreteTypeDescription
 ): VisualBlockDescriptions.ConcreteBlock {
-  const attributes = t.attributes
-    // Ignore everything that is not expected
-    .filter((t) =>
-      ["property", "sequence", "allowed", "parentheses", "choice"].includes(
-        t.type
-      )
-    )
-    .map((a) => visualizeNodeAttributes(d, a));
+  const attributes = gatherAttributes(t.attributes).map((a) =>
+    visualizeNodeAttributes(d, a)
+  );
   const wrappedAttributes: VisualBlockDescriptions.EditorContainer[] =
     attributes.length > 0
       ? [
           {
             blockType: "container",
-            cssClasses: ["indent", "vertical"],
+            orientation: "vertical",
+            cssClasses: ["indent"],
             children: attributes,
           },
         ]
@@ -90,13 +120,28 @@ export function visualizeNode(
 
   return {
     blockType: "block",
-    cssClasses: ["vertical"],
     children: [
       {
         blockType: "container",
-        cssClasses: ["vertical"],
+        orientation: "vertical",
         children: [
-          { blockType: "constant", text: `node "${name}" {` },
+          {
+            blockType: "container",
+            orientation: "horizontal",
+            children: [
+              {
+                blockType: "constant",
+                text: `node`,
+                cssClasses: ["keyword", "space-after"],
+              },
+              {
+                blockType: "constant",
+                text: name,
+                cssClasses: ["double-quote", "space-after"],
+              },
+              { blockType: "constant", text: `{` },
+            ],
+          },
           ...wrappedAttributes,
           { blockType: "constant", text: "}" },
         ],
@@ -117,6 +162,7 @@ export function visualizeNodeAttributes(
     case "parentheses":
     case "choice":
       return visualizeChildGroup(d, t);
+    case "container":
   }
 }
 
@@ -126,15 +172,33 @@ export function visualizeChildGroup(
 ): VisualBlockDescriptions.ConcreteBlock {
   return {
     blockType: "container",
-    cssClasses: ["vertical"],
+    orientation: "vertical",
     children: [
       {
-        blockType: "constant",
-        text: `children ${t.type} "${t.name}" : [`,
+        blockType: "container",
+        orientation: "horizontal",
+        children: [
+          {
+            blockType: "constant",
+            text: `children`,
+            cssClasses: ["keyword", "space-after"],
+          },
+          {
+            blockType: "constant",
+            text: `${t.type} "${t.name}" : [`,
+          },
+        ],
       },
       {
-        blockType: "iterator",
-        childGroupName: t.name,
+        blockType: "container",
+        orientation: "vertical",
+        cssClasses: ["indent"],
+        children: [
+          {
+            blockType: "iterator",
+            childGroupName: t.name,
+          },
+        ],
       },
       {
         blockType: "constant",
@@ -150,12 +214,22 @@ export function visualizeProperty(
 ): VisualBlockDescriptions.ConcreteBlock {
   return {
     blockType: "container",
-    cssClasses: ["horizontal"],
+    orientation: "horizontal",
     children: [
       {
         blockType: "constant",
-        text: `prop "${t.name}": `,
-        cssClasses: ["foobar-constant"],
+        text: `prop`,
+        cssClasses: ["keyword", "space-after"],
+      },
+      {
+        blockType: "constant",
+        text: t.name.trim(),
+        cssClasses: ["double-quote"],
+      },
+      {
+        blockType: "constant",
+        text: ":",
+        cssClasses: ["space-after"],
       },
       {
         blockType: "input",

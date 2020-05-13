@@ -106,7 +106,7 @@ export function relativeDropLocation(
     // Shallow copy
     const copy = [...loc];
 
-    // New last element, index may not be < 0
+    // New last element, index may not be too far ahead
     const shiftedLast: NodeLocationStep = [
       prevLast[0],
       Math.max(-1, prevLast[1] + shift),

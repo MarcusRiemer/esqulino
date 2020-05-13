@@ -27,7 +27,7 @@ function addTags(
   visual: VisualBlockDescriptions.ConcreteBlock
 ) {
   if (attr.tags?.length > 0) {
-    const prev = visual.cssClasses || [];
+    const prev = visual.cssClasses ?? [];
     visual.cssClasses = [...prev, ...attr.tags];
   }
 }
@@ -189,7 +189,7 @@ export function mapContainer(
   const toReturn: VisualBlockDescriptions.EditorContainer = {
     blockType: "container",
     children: [].concat(...mappedChildren),
-    cssClasses: [attr.orientation],
+    orientation: attr.orientation,
   };
 
   // Possibly add some class

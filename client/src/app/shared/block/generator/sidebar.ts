@@ -11,6 +11,7 @@ import {
   SidebarDescription,
   SidebarBlockDescription,
   FixedBlocksSidebarCategoryDescription,
+  FixedBlocksSidebarDescription,
 } from "../block.description";
 import {
   AnySidebarDescription,
@@ -19,6 +20,7 @@ import {
   AnySidebarCategoryDescription,
   ConstantBlocksSidebarCategoryDescription,
   MixedBlocksSidebarCategoryDescription,
+  GeneratedBlocksSidebarDescription,
 } from "./sidebar.description";
 
 // These values for "type" refer to a child group
@@ -173,6 +175,14 @@ export function generateSidebarCategory(
  * Takes the given sidebar and ensures that it only contains static
  * information.
  */
+export function generateSidebar(
+  grammar: GrammarDocument,
+  desc: GeneratedBlocksSidebarDescription
+): FixedBlocksSidebarDescription;
+export function generateSidebar(
+  grammar: GrammarDocument,
+  desc: AnySidebarDescription
+): SidebarDescription;
 export function generateSidebar(
   grammar: GrammarDocument,
   desc: AnySidebarDescription

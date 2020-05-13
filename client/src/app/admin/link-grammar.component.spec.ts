@@ -14,6 +14,7 @@ import {
 import { LinkGrammarComponent } from "./link-grammar.component";
 import { generateUUIDv4 } from "../shared/util-browser";
 import { buildGrammar, provideGrammarList } from "../editor/spec-util";
+import { ServerTasksService } from "../shared/serverdata/server-tasks.service";
 
 describe("LinkGrammarComponent", () => {
   async function createComponent(grammarId: string = undefined) {
@@ -27,6 +28,7 @@ describe("LinkGrammarComponent", () => {
         ServerApiService,
         ListGrammarDataService,
         MutateGrammarService,
+        ServerTasksService,
       ],
       declarations: [LinkGrammarComponent],
     }).compileComponents();

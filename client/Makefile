@@ -31,7 +31,6 @@ NG_PROD         ?= --prod
 # Targets that may be used in the `dist` target have some special flags
 DIST_FLAGS      ?= --no-progress
 
-
 all : dist
 
 clean : msg-pre-clean

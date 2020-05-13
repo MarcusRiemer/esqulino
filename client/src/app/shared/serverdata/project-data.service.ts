@@ -9,6 +9,8 @@ import {
 import { ServerApiService } from "./serverapi.service";
 import { ListData } from "./list-data";
 import { IndividualData } from "./individual-data";
+import { ServerTasksService } from "./server-tasks.service";
+import { MutateBlockLanguageService } from "./blocklanguage-data.service";
 
 @Injectable()
 export class IndividualProjectDataService extends IndividualData<
@@ -24,7 +26,11 @@ export class IndividualProjectDataService extends IndividualData<
  */
 @Injectable()
 export class ProjectDataService extends ListData<ProjectListDescription> {
-  public constructor(serverApi: ServerApiService, http: HttpClient) {
-    super(http, serverApi.getProjectListUrl());
+  public constructor(
+    serverApi: ServerApiService,
+    http: HttpClient,
+    serverTaskService: ServerTasksService
+  ) {
+    super(http, serverApi.getProjectListUrl(), serverTaskService);
   }
 }

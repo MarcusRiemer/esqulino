@@ -16,8 +16,6 @@ import {
   NodeLocation,
   ErrorCodes,
   ErrorMissingChild,
-  Tree,
-  Validator,
 } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 

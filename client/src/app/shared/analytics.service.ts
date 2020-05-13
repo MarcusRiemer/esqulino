@@ -14,11 +14,18 @@ export interface TrackEvent {
 }
 
 /**
- * Encapsulates tracking actions.
+ * Encapsulates all app-specific tracking actions that may occur during runtime.
+ * Easy things (such as changed pages) are dealt with automatically.
  */
+export abstract class AnalyticsService {
+  abstract trackEvent(evt: TrackEvent): void;
+}
+
 @Injectable()
-export class AnalyticsService {
-  constructor(private _tracking: Angulartics2) {}
+export class PiwikAnalyticsService extends AnalyticsService {
+  constructor(private _tracking: Angulartics2) {
+    super();
+  }
 
   /**
    * Tracks a specific event that has just happened.
@@ -32,5 +39,14 @@ export class AnalyticsService {
         value: evt.value,
       },
     });
+  }
+}
+
+@Injectable()
+export class SpecAnalyticsService {
+  readonly events: TrackEvent[] = [];
+
+  trackEvent(evt: TrackEvent) {
+    this.events.push(evt);
   }
 }

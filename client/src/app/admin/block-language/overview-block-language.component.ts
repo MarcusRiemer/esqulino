@@ -1,4 +1,5 @@
 import { Component, ViewChild, TemplateRef, OnInit } from "@angular/core";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
 import { ToolbarService } from "../../shared";
@@ -16,6 +17,10 @@ import {
   providers: [ListBlockLanguageDataService],
 })
 export class OverviewBlockLanguageComponent implements OnInit {
+  // Angular Material UI to paginate
+  @ViewChild(MatPaginator)
+  _paginator: MatPaginator;
+
   // Angular Material UI to sort by different columns
   @ViewChild(MatSort, { static: true })
   sort: MatSort;

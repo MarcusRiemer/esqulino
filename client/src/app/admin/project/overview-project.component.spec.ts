@@ -25,6 +25,7 @@ import { PaginatorTableComponent } from "../../shared/table/paginator-table.comp
 import { buildProject, provideProjectList } from "../../editor/spec-util";
 
 import { OverviewProjectComponent } from "./overview-project.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 describe("OverviewProjectComponent", () => {
   async function createComponent() {
@@ -45,6 +46,7 @@ describe("OverviewProjectComponent", () => {
         ServerApiService,
         AdminListProjectDataService,
         LanguageService,
+        ServerTasksService,
       ],
       declarations: [
         OverviewProjectComponent,
@@ -98,6 +100,11 @@ describe("OverviewProjectComponent", () => {
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
+
+    const tableElement = t.element.querySelector("table");
+    const rows = tableElement.querySelectorAll("tbody > tr");
+
+    expect(rows.length).toEqual(0);
   });
 
   it(`Displays a list with a single element`, async () => {

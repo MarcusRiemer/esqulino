@@ -62,10 +62,10 @@ export class PaginatorTableComponent
   ngAfterViewInit() {
     // Try to register the parents `sortChange` event. Inspired by
     // https://github.com/angular/components/issues/10446
-    const sub = this.sort.sortChange.subscribe(() => {
+    const sortSub = this.sort.sortChange.subscribe(() => {
       this.onChangeSort(this.sort.active, this.sort.direction);
     });
-    this._subscriptions.push(sub);
+    this._subscriptions.push(sortSub);
   }
 
   ngOnDestroy() {

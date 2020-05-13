@@ -78,25 +78,25 @@ concise_attributes:
     ["keyword"], "type": "property", "restrictions": [{"type": "enum", "value": ["AND",
     "OR"]}]}]}, "procedureDeclaration": {"type": "concrete", "attributes": [{"type":
     "container", "children": [{"tags": ["space-after", "keyword"], "type": "terminal",
-    "symbol": "function"}, {"base": "string", "name": "name", "type": "property"},
-    {"type": "terminal", "symbol": "("}, {"name": "arguments", "type": "sequence",
-    "nodeTypes": [{"occurs": "*", "nodeType": "procedureParameter"}]}, {"type": "terminal",
-    "symbol": ")"}, {"tags": ["space-before"], "type": "terminal", "symbol": "{"}],
-    "orientation": "horizontal"}, {"tags": ["indent"], "type": "container", "children":
-    [{"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    "statement"}]}], "orientation": "vertical"}, {"type": "container", "children":
-    [{"name": "bodyClose", "type": "terminal", "symbol": "}"}], "orientation": "horizontal"}]},
-    "booleanBinaryExpression": {"type": "concrete", "attributes": [{"type": "container",
-    "children": [{"name": "lhs", "type": "sequence", "nodeTypes": ["booleanExpression"]},
-    {"name": "operator", "tags": ["space-around"], "type": "sequence", "nodeTypes":
-    ["relationalOperator"]}, {"name": "rhs", "type": "sequence", "nodeTypes": ["booleanExpression"]}],
-    "orientation": "horizontal"}]}}}}'
+    "symbol": "function"}, {"base": "string", "name": "name", "tags": ["explicit-spaces"],
+    "type": "property"}, {"type": "terminal", "symbol": "("}, {"name": "arguments",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "procedureParameter"}]},
+    {"type": "terminal", "symbol": ")"}, {"tags": ["space-before"], "type": "terminal",
+    "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"], "type": "container",
+    "children": [{"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*",
+    "nodeType": "statement"}]}], "orientation": "vertical"}, {"type": "container",
+    "children": [{"name": "bodyClose", "type": "terminal", "symbol": "}"}], "orientation":
+    "horizontal"}]}, "booleanBinaryExpression": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "lhs", "type": "sequence", "nodeTypes":
+    ["booleanExpression"]}, {"name": "operator", "tags": ["space-around"], "type":
+    "sequence", "nodeTypes": ["relationalOperator"]}, {"name": "rhs", "type": "sequence",
+    "nodeTypes": ["booleanExpression"]}], "orientation": "horizontal"}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-12-19 11:24:42.996280000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-02-25 11:07:30.975680000 Z
+  value_before_type_cast: 2020-03-26 14:01:10.339257000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-lang

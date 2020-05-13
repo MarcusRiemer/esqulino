@@ -1,0 +1,36 @@
+<button id="tasksMenu" mat-menu-item [matMenuTriggerFor]="menu">
+  <span class="fa fa-fw fa-tasks"></span>
+  Tasks
+</button>
+<mat-menu class="st-panel" #menu="matMenu">
+  <div id="st-card">
+    <p *ngIf="hasNoTasks() | async; else showList">
+      There aren't any tasks yet!
+    </p>
+    <ng-template #showList>
+      <ul>
+        <ng-container *ngFor="let task of allTasks$ | async">
+          <li [ngSwitch]="task.type" class="st-container">
+            <ng-container *ngSwitchCase="'pending'">
+              <i class="fa fa-fw fa-xs fa-upload" matListIcon></i>
+              <p>{{task.description}}</p>
+              <span>
+                <i class="fa fa-fw fa-xs fa-cog fa-spin" matListIcon></i>
+              </span>
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </ng-container>
+            <ng-container *ngSwitchCase="'success'" class="st-container">
+              <i class="fa fa-fw fa-xs fa-download" matListIcon></i>
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-check" matListIcon></i>
+            </ng-container>
+            <ng-container *ngSwitchCase="'failure'" class="st-container">
+              <p>{{task.description}}</p>
+              <i class="fa fa-fw fa-xs fa-times" matListIcon></i>
+            </ng-container>
+          </li>
+        </ng-container>
+      </ul>
+    </ng-template>
+  </div>
+</mat-menu>

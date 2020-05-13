@@ -18,7 +18,7 @@ const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
   sidebars: [],
   editorBlocks: [],
   editorComponents: [],
-  defaultProgrammingLanguageId: "spec",
+  defaultProgrammingLanguageId: "generic",
 });
 
 /**

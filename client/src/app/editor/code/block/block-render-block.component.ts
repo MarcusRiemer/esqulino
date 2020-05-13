@@ -3,6 +3,8 @@ import {
   Input,
   ChangeDetectorRef,
   HostListener,
+  HostBinding,
+  Optional,
 } from "@angular/core";
 
 import { combineLatest, Observable } from "rxjs";
@@ -32,6 +34,7 @@ import { DragService } from "../../drag.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
+import { BlockRenderContainerComponent } from "./block-render-container.component";
 
 export type BackgroundState = "executed" | "replaced" | "neutral";
 
@@ -46,18 +49,40 @@ export class BlockRenderBlockComponent {
   /**
    * The node to be rendered
    */
-  @Input() public node: Node;
+  @Input()
+  public node: Node;
 
   /**
    * The visualisation parameters for this block.
    */
-  @Input() public visual: VisualBlockDescriptions.EditorBlock;
+  @Input()
+  public visual: VisualBlockDescriptions.EditorBlock;
+
+  @HostBinding("class.vertical")
+  public get hostCssVertical() {
+    if (this._parentContainer) {
+      return this._parentContainer.orientation === "vertical";
+    } else {
+      return true;
+    }
+  }
+
+  @HostBinding("class.horizontal")
+  public get hostCssHorizontal() {
+    if (this._parentContainer) {
+      return this._parentContainer.orientation === "horizontal";
+    } else {
+      return false;
+    }
+  }
 
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
     private _renderData: RenderedCodeResourceService,
-    private _changeDetector: ChangeDetectorRef
+    private _changeDetector: ChangeDetectorRef,
+    @Optional()
+    private _parentContainer: BlockRenderContainerComponent
   ) {}
 
   /**
@@ -133,15 +158,17 @@ export class BlockRenderBlockComponent {
         this.node.location,
         dropLocationHint
       );
-      const explicitLocation = dropLocationHint !== "block";
+      const explicitAfterOrBefore = dropLocationHint !== "block";
 
+      // TODO: Find a meaningful approach if a drop is possible in the child AND after the
+      //       hovered element. With the commented out state this favors appending
       this._dragService.informDraggedOver(evt, shiftedLocation, this.node, {
         // Disabled because allowAnyParent inserts in front so defaulting to append seems smarter
         allowExact: false,
         allowAnyParent: true,
-        allowEmbrace: this.allowEmbrace && !explicitLocation,
+        allowEmbrace: this.allowEmbrace && !explicitAfterOrBefore,
         allowAppend: true,
-        allowReplace: explicitLocation,
+        allowReplace: !explicitAfterOrBefore,
       });
     }
   }

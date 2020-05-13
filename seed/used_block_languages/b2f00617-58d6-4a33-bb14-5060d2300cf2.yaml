@@ -1,0 +1,20 @@
+--- !ruby/object:ProjectUsesBlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b2f00617-58d6-4a33-bb14-5060d2300cf2
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: c053efc7-12ce-44ac-833f-39e6ca24bf0d
+new_record: false
+active_record_yaml_version: 2

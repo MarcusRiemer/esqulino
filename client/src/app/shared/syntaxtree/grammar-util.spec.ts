@@ -17,6 +17,19 @@ import { singleLanguageGrammar } from "./grammar.spec-util";
 
 describe(`Grammar Utilities`, () => {
   describe(`Ensuring attribute names`, () => {
+    it(`Concrete type without attributes at all`, () => {
+      const g = singleLanguageGrammar("spec", "root", {
+        root: {
+          type: "concrete",
+        },
+      });
+
+      const named = ensureGrammarAttributeNames(g);
+      const root = named.types["spec"]["root"] as NodeConcreteTypeDescription;
+
+      expect(root.attributes).toBeUndefined();
+    });
+
     it(`Single terminal`, () => {
       const g = singleLanguageGrammar("spec", "root", {
         root: {
