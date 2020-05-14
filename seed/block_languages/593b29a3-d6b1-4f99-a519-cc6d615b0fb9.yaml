@@ -20,24 +20,9 @@ concise_attributes:
     "languageName": "json"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
     "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "[",
-    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
-    "childGroupName": "values", "emptyDropTarget": false}, {"text": "]", "style":
-    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "array", "languageName": "json"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
-    "value", "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "number", "languageName": "json"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "{", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
-    "iterator", "childGroupName": "values", "emptyDropTarget": false}, {"text": "}",
-    "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "object", "languageName": "json"}},
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "value", "blockType": "input"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "boolean", "languageName": "json"}},
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
@@ -50,23 +35,39 @@ concise_attributes:
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
     "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style":
     {"display": "inline-flex"}, "property": "value", "blockType": "input"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "boolean", "languageName":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "number", "languageName":
     "json"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
     solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName":
-    "key", "emptyDropTarget": false}, {"text": ":", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "value",
-    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "key-value", "languageName": "json"}}], "editorComponents": [{"componentType":
-    "block-root"}, {"componentType": "validator"}, {"componentType": "generated-code"}],
-    "localGeneratorInstructions": {"type": "manual"}}'
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "[", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}, {"children": [{"blockType": "iterator",
+    "childGroupName": "values", "emptyDropTarget": false}], "blockType": "container",
+    "orientation": "horizontal"}, {"text": "]", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "array", "languageName": "json"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"blockType": "iterator", "childGroupName": "key", "emptyDropTarget": false},
+    {"text": ":", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "iterator", "childGroupName": "value", "emptyDropTarget": false}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "key-value", "languageName":
+    "json"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "{", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator", "childGroupName":
+    "values", "emptyDropTarget": false}, {"text": "}", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "object", "languageName": "json"}}], "rootCssClasses": ["activate-block-outline"],
+    "editorComponents": [{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}], "localGeneratorInstructions": {"type": "manual"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-03-26 20:58:53.201139000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-04-10 19:43:10.867042000 Z
+  value_before_type_cast: 2020-05-14 13:58:40.309820000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json
