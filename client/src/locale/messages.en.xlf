@@ -267,7 +267,37 @@
         <target state="translated">Environment: </target>
         
         <note priority="1" from="description">dev environment used</note>
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">96</context></context-group></trans-unit><trans-unit id="unknownCodeResource" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">96</context></context-group></trans-unit><trans-unit id="road" datatype="html">
+        <source>Straße</source><target state="translated">Road</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit><trans-unit id="trafficLight" datatype="html">
+        <source>Ampel</source><target state="translated">Traffic Light</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      </trans-unit><trans-unit id="freight" datatype="html">
+        <source>Fracht</source><target state="translated">Freight</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit><trans-unit id="freightTarget" datatype="html">
+        <source>Fracht Ziel</source><target state="translated">Freight Target</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit><trans-unit id="truckStart" datatype="html">
+        <source>Lastwagen Start</source><target state="translated">Truck Start</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">184</context>
+        </context-group>
+      </trans-unit><trans-unit id="unknownCodeResource" datatype="html">
         <source>Unbekannte Code-Resource</source><target state="translated">Unknown Code Resource</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/code/templates/unknown-code-resource.html</context>
