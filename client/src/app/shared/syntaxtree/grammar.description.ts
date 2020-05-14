@@ -1,5 +1,6 @@
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { OccursDescription } from "./occurs.description";
+import { StringUnion } from "../string-union";
 
 /**
  * Types may either be concrete new type or an alias
@@ -78,6 +79,8 @@ export interface NodeTerminalSymbolDescription {
   tags?: string[];
 }
 
+export const Orientation = StringUnion("horizontal", "vertical");
+// TODO: Using `typeof Orientation.type` crashes the JSON generator
 export type Orientation = "horizontal" | "vertical";
 
 /**

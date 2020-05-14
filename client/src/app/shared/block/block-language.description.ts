@@ -76,7 +76,7 @@ export interface EditorComponentBaseDescription {
 }
 
 /**
- * Displays the actual block editor
+ * Displays the settings for a certain resource
  */
 export interface CodeResourceSettingsComponentDescription
   extends EditorComponentBaseDescription {
@@ -89,6 +89,14 @@ export interface CodeResourceSettingsComponentDescription
 export interface BlockRootComponentDescription
   extends EditorComponentBaseDescription {
   componentType: "block-root";
+}
+
+/**
+ * Displays a readonly JSON version of the AST
+ */
+export interface JsonAstComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "json-ast";
 }
 
 /**
@@ -159,7 +167,8 @@ export type EditorComponentDescription =
   | TruckWorldComponentDescription
   | TruckControllerComponentDescription
   | TruckSensorsComponentDescription
-  | DropDebugComponentDescription;
+  | DropDebugComponentDescription
+  | JsonAstComponentDescription;
 
 /**
  * The data about a language model that is stored in the database

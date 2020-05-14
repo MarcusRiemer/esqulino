@@ -148,7 +148,8 @@
         {
           "$ref": "#/definitions/TreeBlockLanguageGeneratorDescription"
         }
-      ]
+      ],
+      "description": "All possible instructions to generate a block language."
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,
@@ -196,7 +197,7 @@
     },
     "CodeResourceSettingsComponentDescription": {
       "additionalProperties": false,
-      "description": "Displays the actual block editor",
+      "description": "Displays the settings for a certain resource",
       "properties": {
         "columnClasses": {
           "items": {
@@ -367,6 +368,9 @@
         },
         {
           "$ref": "#/definitions/DropDebugComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/JsonAstComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -578,7 +582,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
                   }
                 ]
               }
@@ -630,7 +634,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
                   }
                 ]
               }
@@ -640,6 +644,28 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "JsonAstComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a readonly JSON version of the AST",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "json-ast"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
       "type": "object"
     },
     "ManualBlockLanguageGeneratorDescription": {
@@ -936,7 +962,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -959,7 +985,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1009,7 +1035,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1032,7 +1058,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1075,14 +1101,14 @@
               "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression|undefined)_"
+              "$ref": "#/definitions/ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression%7Cundefined)_"
             }
           ]
         }
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-689-765-1285740649-286-1492-1285740649-192-1492-1285740649-0-2139_def-alias-1782179087-381-602-1782179087-379-4933-1782179087-242-4933-1782179087-0-8036705825494_[]_": {
+    "ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1095,7 +1121,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_": {
+    "ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -1294,7 +1320,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-804-836-1002692191-757-837-1002692191-475-1197-1002692191-0-4368_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
                   }
                 ]
               }
@@ -1311,7 +1337,7 @@
       "type": "object"
     },
     "ReferenceableTypeInstructionsDescription": {
-      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions%2CParameterReferenceable_BlockInstructions__",
       "description": "Type instructions that may contain references."
     },
     "Restricted.Expression_VisualBlockDescriptions.VisibilityVars_": {
@@ -1493,6 +1519,7 @@
     },
     "TreeBlockLanguageGeneratorDescription": {
       "additionalProperties": false,
+      "description": "Visualizes a block language by showing the tree structure. This is not\nvery user friendly but probably useful to debug.",
       "properties": {
         "editorComponents": {
           "items": {

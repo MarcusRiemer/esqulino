@@ -12,6 +12,8 @@ import {
   NodeConcreteTypeDescription,
   NodeOneOfTypeDescription,
   ChildCardinalityDescription,
+  NodeVisualContainerDescription,
+  Orientation,
 } from "./grammar.description";
 import { OccursDescription, OccursString } from "./occurs.description";
 
@@ -104,6 +106,24 @@ export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
   return toReturn;
 }
 
+export function convertContainer(
+  attrNode: Node
+): NodeVisualContainerDescription {
+  const orientationNode = attrNode.getChildInCategory("orientation");
+
+  const toReturn: NodeVisualContainerDescription = {
+    type: "container",
+    orientation: Orientation.check(orientationNode.properties["orientation"]),
+    children: [],
+  };
+
+  attrNode.getChildrenInCategory("attributes").forEach((subAttrNode) => {
+    readAttributes(subAttrNode, toReturn.children);
+  });
+
+  return toReturn;
+}
+
 /**
  * Converts the given node into a description that is appended to the given
  * target list.
@@ -121,6 +141,9 @@ export function readAttributes(
       break;
     case "children":
       target.push(convertChildren(attrNode));
+      break;
+    case "container":
+      target.push(convertContainer(attrNode));
       break;
   }
 }

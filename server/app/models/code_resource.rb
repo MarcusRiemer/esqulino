@@ -99,14 +99,16 @@ class CodeResource < ApplicationRecord
 
   # Regenerates other resources that depend on this code resource.
   #
-  # @return [Array<Grammar|CodeResource>] All dependants that have been regenerated
-  def regenerate_immediate_dependants!
+  # @return [Array<Grammar|CodeResource|BlockLanguage>] All dependants that have been regenerated
+  def regenerate_immediate_dependants!(ide_service: IdeService.instance)
     changed_dependants = []
 
     self.immediate_dependants.each do |i|
-      i.regenerate_from_code_resource!
-      i.save!
+      changed_for_i = i.regenerate_from_code_resource!(ide_service)
+      changed_dependants.concat changed_for_i
     end
+
+    return changed_dependants
   end
 
   # Computes a hash that may be sent back to the client

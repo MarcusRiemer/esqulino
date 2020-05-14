@@ -21,9 +21,14 @@ class ObservableValue<T> {
 @Injectable()
 export class BlockDebugOptionsService {
   /**
-   * Should the internal AST be rendered (instead of the "normal" block language)
+   * Should the editable AST be rendered (instead of the "normal" block language)
    */
-  readonly showInternalAst = new ObservableValue<boolean>(false);
+  readonly showEditableAst = new ObservableValue<boolean>(false);
+
+  /**
+   * Should the JSON AST be rendered?
+   */
+  readonly showJsonAst = new ObservableValue<boolean>(false);
 
   /**
    * Options to change languages for code resources.

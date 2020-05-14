@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/GrammarDocument",
+  "$ref": "#/definitions/NamedLanguages",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "ChildCardinalityDescription": {
@@ -40,28 +40,6 @@
         "type",
         "value"
       ],
-      "type": "object"
-    },
-    "GrammarDocument": {
-      "additionalProperties": false,
-      "description": "The technical aspects of a grammar that are used for actual validation\nor generation.",
-      "properties": {
-        "foreignTypes": {
-          "$ref": "#/definitions/NamedLanguages"
-        },
-        "includedGrammars": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "root": {
-          "$ref": "#/definitions/QualifiedTypeName"
-        },
-        "types": {
-          "$ref": "#/definitions/NamedLanguages"
-        }
-      },
       "type": "object"
     },
     "LengthRestrictionDescription": {

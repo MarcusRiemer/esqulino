@@ -26,6 +26,25 @@ RSpec.describe "IDE Service" do
       expect(service.emit_code(tree_desc, "sql")).to eq "*"
     end
 
+    it "emits generated block languages" do
+      service = OneShotExecIdeService.new(config: exec_configuration)
+
+      grammar = create(:grammar)
+      block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
+
+      expect(service.emit_generated_blocks(block_language).keys).to(
+        contain_exactly("editorBlocks", "editorComponents", "sidebars", "rootCssClasses")
+      )
+    end
+
+    it "skips block generation in case of missing instructions" do
+      service = OneShotExecIdeService.new(config: exec_configuration)
+
+      block_language = create(:block_language)
+
+      expect(service.emit_generated_blocks(block_language)).to eq nil
+    end
+
     it "throws errors on incorrect requests" do
       service = OneShotExecIdeService.new(config: exec_configuration)
 
@@ -45,6 +64,17 @@ RSpec.describe "IDE Service" do
       req = { "type" => "ping" }
 
       expect(service.execute_request(req)).to eq req.to_json
+    end
+
+    it "always returns valid (but empty) generated blocks" do
+      service = MockIdeService.new()
+
+      grammar = create(:grammar)
+      block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
+
+      expect(service.emit_generated_blocks(block_language).keys).to(
+        contain_exactly("editorBlocks", "editorComponents", "sidebars", "rootCssClasses")
+      )
     end
   end
 
@@ -66,7 +96,6 @@ RSpec.describe "IDE Service" do
       )
       expect(service.class).to be OneShotExecIdeService
     end
-
 
     it "missing modes are an error" do
       expect { IdeService.instantiate(service_config: { }) }.to raise_exception IdeServiceError
