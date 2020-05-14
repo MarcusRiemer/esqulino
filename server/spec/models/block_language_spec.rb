@@ -44,7 +44,7 @@ RSpec.describe BlockLanguage do
     it "works for empty languages" do
       block_language = FactoryBot.build(:block_language, id: SecureRandom.uuid)
       api_response = block_language.to_full_api_response
-      
+
       expect(api_response).to validate_against "BlockLanguageDescription"
       expect(api_response['id']).to eq block_language.id
       expect(api_response['name']).to eq block_language.name
@@ -84,6 +84,32 @@ RSpec.describe BlockLanguage do
       expect(api_response).not_to have_key("generated")
     end
 
+  end
+
+  context "emit_generated_blocks!" do
+    it "Doesn't regenerate without generator instructions" do
+      block_language = create(:block_language)
+      expect(block_language.emit_generated_blocks!).to eq nil
+    end
+
+    it "Overwrites previous block data" do
+      block_language = create(:block_language, :auto_generated_blocks)
+
+      # Set some specific content for two of the fields
+      block_language.model['editorComponents'] = [{"componentType": "block-root"}]
+      block_language.model['rootCssClasses'] = ["spec"]
+
+      # The mock implementation of the IDE will only have empty outputs
+      # that must override the previous values
+      block_language.emit_generated_blocks!
+      expect(block_language.model).to eq({
+                                           "editorBlocks" => [],
+                                           "editorComponents" => [],
+                                           "sidebars" => [],
+                                           "rootCssClasses" => [],
+                                           "localGeneratorInstructions" => { "type" => "tree" }
+                                         })
+    end
   end
 
   it "can be valid" do

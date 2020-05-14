@@ -161,7 +161,8 @@
         {
           "$ref": "#/definitions/TreeBlockLanguageGeneratorDescription"
         }
-      ]
+      ],
+      "description": "All possible instructions to generate a block language."
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,
@@ -2576,6 +2577,7 @@
     },
     "TreeBlockLanguageGeneratorDescription": {
       "additionalProperties": false,
+      "description": "Visualizes a block language by showing the tree structure. This is not\nvery user friendly but probably useful to debug.",
       "properties": {
         "editorComponents": {
           "items": {

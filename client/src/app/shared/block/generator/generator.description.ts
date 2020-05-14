@@ -48,28 +48,21 @@ export interface ManualBlockLanguageGeneratorDescription
   traitScopes?: ScopeTraitAdd[];
 }
 
+/**
+ * Visualizes a block language by showing the tree structure. This is not
+ * very user friendly but probably useful to debug.
+ */
 export interface TreeBlockLanguageGeneratorDescription
   extends CoreBlockLanguageGeneratorDescription {
   type: "tree";
 }
 
+/**
+ * All possible instructions to generate a block language.
+ */
 export type BlockLanguageGeneratorDocument =
   | ManualBlockLanguageGeneratorDescription
   | TreeBlockLanguageGeneratorDescription;
-
-/**
- * "Superficial" attribues of a block language generator
- */
-export interface BlockLanguageGeneratorListDescription {
-  id: string;
-  name: string;
-}
-
-/**
- * Describes how a grammar might be converted to a block language
- */
-export type BlockLanguageGeneratorDescription = BlockLanguageGeneratorDocument &
-  BlockLanguageGeneratorListDescription;
 
 /**
  * No idea how parameters for generators will work in the future. In the meantime

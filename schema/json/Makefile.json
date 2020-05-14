@@ -11,7 +11,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 # TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/ts-json-schema-generator/bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json CodeResourceRequestUpdateDescription.json GrammarDatabaseBlob.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json GrammarRequestUpdateDescription.json NewsDescription.json NewsFrontpageDescription.json NewsUpdateDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json CodeResourceRequestUpdateDescription.json GrammarDatabaseBlob.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json GrammarRequestUpdateDescription.json NewsDescription.json NewsFrontpageDescription.json NewsUpdateDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -67,12 +67,6 @@ BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-langu
 	$(CONVERT_COMMAND)
 
 BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts
-	$(CONVERT_COMMAND)
-
-BlockLanguageGeneratorDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
-	$(CONVERT_COMMAND)
-
-BlockLanguageGeneratorListDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
 BlockLanguageGeneratorDocument.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
