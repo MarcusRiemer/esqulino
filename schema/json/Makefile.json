@@ -18,11 +18,10 @@ JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDesc
 ##################################
 
 define CONVERT_COMMAND
-	@echo "Creating $(notdir $(basename $@)).json"
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) --no-type-check --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
-	sed -i -- 's/</_/g' "$@.tmp"
-	sed -i -- 's/>/_/g' "$@.tmp"
-	mv "$@.tmp" "$@"
+	@echo "Generating $(notdir $(basename $@)).json"
+	@$(TYPESCRIPT_JSON_SCHEMA_BIN) --no-type-check --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
+	@sed -i -r -- 's/%3E|%3C|<|>/_/g' "$@.tmp"
+	@mv "$@.tmp" "$@"
 endef
 
 ArbitraryQueryRequestDescription.json : $(SRC_PATH)/shared/syntaxtree/sql/query.description.ts
