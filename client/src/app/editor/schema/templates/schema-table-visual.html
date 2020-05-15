@@ -23,7 +23,20 @@
               [(ngModel)]="column.name"
             />
           </td>
-          <td>{{ column.type }}</td>
+          <td>
+			<select
+				class="tableEdit"
+				[(ngModel)]="column.type"
+				(focus)="saveTempValue($event.target.value)"
+				(change)="changedColumnType(column.index, $event.target.value)"
+			  >
+				<option value="integer">integer</option>
+				<option value="string">string</option>
+				<option value="boolean">boolean</option>
+				<option value="float">float</option>
+				<option value="url">url</option>
+			  </select>
+		  </td>
           <td><div *ngIf="column.not_null">NOT NULL</div></td>
           <td>{{ column.dflt_value }}</td>
         </tr>

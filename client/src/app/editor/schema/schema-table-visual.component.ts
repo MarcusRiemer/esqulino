@@ -123,6 +123,21 @@ export class SchemaTableVisualComponent {
 	  this.saveChanges();
     }
   }
+  
+  changedColumnType(index: number, newValue: string) {
+    if (this._oldValue != newValue) {
+      this._schemaService.initCurrentlyEdit(
+        this._project.schema.getTable(this.table.name)
+      );
+	  
+      this.commandsHolder.do(
+        new ChangeColumnType(this.table, index, this._oldValue, newValue)
+      );
+      this._oldValue = "";
+	  
+	  this.saveChanges();
+    }
+  }
 
   async saveChanges(){	  
 	  this.commandsHolder.prepareToSend();
