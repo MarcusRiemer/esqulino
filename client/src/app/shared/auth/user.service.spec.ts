@@ -15,6 +15,7 @@ import { ServerProviderDescription } from "./provider.description";
 
 import { ServerDataService } from "../serverdata/server-data.service";
 import { ServerApiService } from "../serverdata/serverapi.service";
+import { ServerTasksService } from "../serverdata/server-tasks.service";
 
 function mkUserResponse(displayName: string): UserDescription {
   return {
@@ -62,6 +63,7 @@ describe(`UserService`, () => {
         ServerApiService,
         MatSnackBar,
         UserService,
+        ServerTasksService,
       ],
       declarations: [],
     });

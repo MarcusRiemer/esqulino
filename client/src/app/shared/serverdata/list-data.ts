@@ -4,12 +4,12 @@ import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
 import { IdentifiableResourceDescription } from "../resource.description";
+import { ServerTasksService } from "./server-tasks.service";
 
 import {
   JsonApiListResponse,
   isJsonApiListResponse,
 } from "./json-api-response";
-import { CachedRequest } from "./request-cache";
 
 /**
  * Basic building block to access "typically" structured data from the server.
@@ -20,7 +20,8 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   public constructor(
     // Deriving classes may need to make HTTP requests of their own
     protected _http: HttpClient,
-    private _listUrl: string
+    private _listUrl: string,
+    private _serverTask: ServerTasksService
   ) {}
 
   // These parameters are passed to every listing request
@@ -33,7 +34,10 @@ export class ListData<TList extends IdentifiableResourceDescription> {
   /**
    * The cache of all descriptions that are available to the current user.
    */
-  readonly listCache = new CachedRequest<TList[]>(this.createListRequest());
+  readonly listCache = this._serverTask.createRequest<TList[]>(
+    this.createListRequest(),
+    "GET " + this._listUrl
+  );
 
   /**
    * An observable of all descriptions that are available to the current user.

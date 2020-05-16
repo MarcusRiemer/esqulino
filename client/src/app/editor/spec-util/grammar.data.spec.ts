@@ -7,13 +7,13 @@ import {
   ServerApiService,
   IndividualGrammarDataService,
 } from "../../shared/serverdata";
-import { JsonApiListResponse } from "../../shared/serverdata/json-api-response";
+
 import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
   name: "Empty Spec Grammar",
-  programmingLanguageId: "spec",
+  programmingLanguageId: "generic",
   root: { languageName: "spec", typeName: "root" },
   types: {
     spec: {

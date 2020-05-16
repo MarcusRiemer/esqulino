@@ -52,7 +52,7 @@ class Image
     if self.exists? then
       path
     else
-      raise UnknownImageError.new(@project.id, @image_id)
+      raise EsqulinoError::UnknownImage.new(@project.id, @image_id)
     end
   end
 
@@ -60,7 +60,7 @@ class Image
     if self.exists? then
       FileUtils.mv(file, path)
     else
-      raise UnknownImageError.new(project_id, @image_id)
+      raise EsqulinoError::UnknownImage.new(project_id, @image_id)
     end
   end
 
@@ -74,7 +74,7 @@ class Image
       # Delete the file for the image
       File.delete(path)
     else
-      raise UnknownImageError.new(@project_id, @image_id)
+      raise EsqulinoError::UnknownImage.new(@project_id, @image_id)
     end
   end
 
@@ -100,7 +100,7 @@ class Image
     begin
       @metadata = File.file?(image_json) ? JSON.parse(File.read(image_json)).fetch(@image_id) : Hash.new
     rescue KeyError
-      raise UnknownImageError.new(project.id, @image_id)
+      raise EsqulinoError::UnknownImage.new(project.id, @image_id)
     end
   end
 

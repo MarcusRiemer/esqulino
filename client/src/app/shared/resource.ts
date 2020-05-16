@@ -7,6 +7,7 @@ import {
   ApiVersionToken,
   ProjectResourceDescription,
   CURRENT_API_VERSION,
+  IdentifiableResourceDescription,
 } from "./resource.description";
 import { ResourceReferencesService } from "./resource-references.service";
 
@@ -18,6 +19,15 @@ export {
   Invalidateable,
   Saveable,
 };
+
+export function speakingResourceName(res: IdentifiableResourceDescription) {
+  const name = res["name"];
+  if (name) {
+    return `"${name}" (${res.id})`;
+  } else {
+    return res.id;
+  }
+}
 
 /**
  * Any kind of resource for the esqulino project. Resources

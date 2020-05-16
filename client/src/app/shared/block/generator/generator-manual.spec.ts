@@ -77,7 +77,42 @@ describe("Manual BlockLanguage Generator", () => {
         0
       ) as VisualBlockDescriptions.EditorContainer;
       expect(c.blockType).toEqual("container");
-      expect(c.cssClasses).toEqual(["horizontal"]);
+      expect(c.orientation).toEqual("horizontal");
+      expect(c.children.length).toEqual(1);
+    });
+
+    it("Grammar with unnamed container that has custom tags", () => {
+      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+        t1: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              children: [{ type: "terminal", symbol: "t" }],
+              orientation: "horizontal",
+              tags: ["foo"],
+            },
+          ],
+        },
+      });
+
+      const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
+        editorComponents: [],
+      };
+
+      const r = convertGrammarManualInstructions(generator, grammar);
+
+      expect(r.editorBlocks.length).toEqual(1);
+
+      const c = expectMappedAttribute(
+        r,
+        0,
+        0
+      ) as VisualBlockDescriptions.EditorContainer;
+      expect(c.blockType).toEqual("container");
+      expect(c.orientation).toEqual("horizontal");
+      expect(c.cssClasses).toEqual(["foo"]);
       expect(c.children.length).toEqual(1);
     });
 
@@ -118,7 +153,7 @@ describe("Manual BlockLanguage Generator", () => {
         0
       ) as VisualBlockDescriptions.EditorContainer;
       expect(c1.blockType).toEqual("container");
-      expect(c1.cssClasses).toEqual(["horizontal"]);
+      expect(c1.orientation).toEqual("horizontal");
       expect(c1.children.length).toEqual(2);
       expect(c1.children[0].blockType).toEqual("constant");
 
@@ -128,7 +163,7 @@ describe("Manual BlockLanguage Generator", () => {
         1
       ) as VisualBlockDescriptions.EditorContainer;
       expect(c2.blockType).toEqual("container");
-      expect(c2.cssClasses).toEqual(["vertical"]);
+      expect(c2.orientation).toEqual("vertical");
       expect(c2.children.length).toEqual(1);
       expect(c2.children[0].blockType).toEqual("input");
     });

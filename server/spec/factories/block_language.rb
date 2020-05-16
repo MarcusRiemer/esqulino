@@ -7,6 +7,7 @@ FactoryBot.define do
          editorBlocks: [],
          sidebars: [],
          editorComponents: [],
+         rootCssClasses: [],
        })
     }
     association :default_programming_language, factory: :programming_language
@@ -18,6 +19,7 @@ FactoryBot.define do
            editorBlocks: [],
            sidebars: [],
            editorComponents: [],
+           rootCssClasses: [],
            localGeneratorInstructions: {
              type: "tree"
            }

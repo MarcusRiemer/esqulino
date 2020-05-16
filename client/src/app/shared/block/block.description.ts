@@ -1,7 +1,10 @@
 import {
   QualifiedTypeName,
   NodeDescription,
+  NodeLocation,
 } from "../syntaxtree/syntaxtree.description";
+import { Orientation } from "../syntaxtree/grammar.description";
+
 import { Restricted } from "./bool-mini-expression.description";
 
 /**
@@ -59,6 +62,7 @@ export namespace VisualBlockDescriptions {
   export interface EditorContainer extends EditorBlockBase {
     blockType: "container";
     children?: ConcreteBlock[];
+    orientation: Orientation;
   }
 
   /**
@@ -167,6 +171,40 @@ export namespace VisualBlockDescriptions {
   }
 }
 
+export interface NodeDerivedProperty {
+  type: "nodeDerivedProperty";
+  loc: NodeLocation;
+  propName: string;
+}
+
+export type NodeDerivedPropertiesDescription = {
+  children?: {
+    [childrenCategory: string]: (
+      | NodeDerivedPropertiesDescription
+      | NodeDescription
+    )[];
+  };
+
+  properties?: {
+    [propertyName: string]: string | NodeDerivedProperty;
+  };
+} & Omit<NodeDescription, "properties" | "children">;
+
+export function isNodeDerivedPropertyDescription(
+  obj: any
+): obj is NodeDerivedProperty {
+  return typeof obj === "object" && obj.type === "nodeDerivedProperty";
+}
+
+/**
+ * A description of a node that has "holes" in it, which may be filled
+ * with the help of an existing AST. Often used to fill in some data at
+ * the beginning of a started drag.
+ */
+export type NodeTailoredDescription =
+  | NodeDerivedPropertiesDescription
+  | NodeDescription;
+
 /**
  * Describes how the available types should be represented in the sidebar.
  * It is perfectly fine to have multiple sidebar descriptions for the
@@ -183,7 +221,7 @@ export interface SidebarBlockDescription {
    * is needed. This happens e.g. when the user starts dragging this
    * block from the sidebar.
    */
-  defaultNode: NodeDescription | NodeDescription[];
+  defaultNode: NodeTailoredDescription | NodeTailoredDescription[];
 }
 
 /**

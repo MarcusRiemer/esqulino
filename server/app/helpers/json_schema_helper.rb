@@ -6,11 +6,29 @@ module JsonSchemaHelper
   #
   # @param object [Hash] Any JSON-compatible structure
   # @param schema_name [string] The name of the schema
+  # @return [Hash] Array of errors that occurred during validation
   def json_schema_validate(schema_name, document)
     schema = @@json_schema_storage.get_schema schema_name
 
     schemer = JSONSchemer.schema(schema)
     schemer.validate(document).to_a
+  end
+
+  # Validates the given object against the schema with the given name
+  #
+  # @param object [Hash] Any JSON-compatible structure
+  # @param schema_name [string] The name of the schema
+  #
+  # @return The original document (if valid), otherwise an exception is raised
+  def ensure_valid_document(schema_name, document)
+    # Making sure it validates against the requested schema
+    result = self.json_schema_validate(schema_name, document)
+
+    if result.length > 0
+      raise EsqulinoError::InvalidSchema.new(schema_name, result)
+    else
+      return document
+    end
   end
 
   # Ensures that the given body of a request matches the given schema
@@ -22,15 +40,12 @@ module JsonSchemaHelper
     # Loading the actual body
     body = JSON.parse(body_string)
 
-    # Making sure it fits against a schema
-    result = self.json_schema_validate(schema_name, body)
+    ensure_valid_document(schema_name, body)
 
-    if result.length > 0 then
-      raise EsqulinoError::InvalidSchema.new(schema_name, result)
-    else
-      # All keys should be in "snake_case"
-      return body.transform_keys { |k| k.underscore }
-    end
+    # In the case of a request: All keys of the top level document
+    # should be in "snake_case" as they might be immediately mapped
+    # to a model.
+    return body.transform_keys { |k| k.underscore }
   end
 
   # Returns the path the given schema would be found under

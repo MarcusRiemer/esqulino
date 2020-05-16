@@ -12,10 +12,12 @@ import { EditorToolbarService } from "../../toolbar.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { DragService } from "../../drag.service";
 import { CodeResourceService } from "../../coderesource.service";
-import { EditorComponentsService } from "../editor-components.service";
-
 import { BlockDebugOptionsService } from "../../block-debug-options.service";
 import { ProjectService } from "../../project.service";
+import { SidebarService } from "../../sidebar.service";
+
+import { CodeSidebarComponent } from "../code.sidebar";
+import { EditorComponentsService } from "../editor-components.service";
 
 interface PlacedEditorComponent {
   portal: ComponentPortal<{}>;
@@ -47,7 +49,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService
+    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
+    private _sidebarService: SidebarService
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +102,16 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
           this._router.navigate([clone.id], { relativeTo: this._route.parent });
         });
     });
+
+    // Keep the sidebar updated
+    const sub = this._currentCodeResource.currentResource.subscribe((c) => {
+      this._sidebarService.showSingleSidebar(
+        CodeSidebarComponent.SIDEBAR_IDENTIFIER,
+        c
+      );
+    });
+
+    this._subscriptionRefs.push(sub);
   }
 
   /**
@@ -147,20 +160,26 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     ),
     combineLatest(
       this._debugOptions.showDropDebug.value$,
+      this._debugOptions.showJsonAst.value$,
       this._debugOptions.showLanguageSelector.value$
     ),
-    map(([blockLanguage, showDropDebug, showLanguageSelector]) => {
+    map(([blockLanguage, showDropDebug, showJsonAst, showLanguageSelector]) => {
       // Take all of the default block languages
       const toReturn = [...blockLanguage.editorComponents];
 
-      // Possibly inject the debug component
-      if (showDropDebug) {
+      // Possibly inject something after the block editor
+      if (showDropDebug || showJsonAst) {
         const blockEditorIndex = toReturn.findIndex(
           (c) => c.componentType === "block-root"
         );
-        if (blockEditorIndex >= 0) {
+        if (showDropDebug && blockEditorIndex >= 0) {
           toReturn.splice(blockEditorIndex + 1, 0, {
             componentType: "drop-debug",
+          });
+        }
+        if (showJsonAst && blockEditorIndex >= 0) {
+          toReturn.splice(blockEditorIndex + 1, 0, {
+            componentType: "json-ast",
           });
         }
       }

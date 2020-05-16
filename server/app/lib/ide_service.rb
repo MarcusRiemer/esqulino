@@ -8,6 +8,8 @@ end
 # Common functionality for all IDE operations, no matter whether
 # they are routed through the "exec" or the "systemd" supervisor.
 class BaseIdeService
+  include JsonSchemaHelper
+
   # Emits the source code for the given tree in the given language.
   #
   # @param tree_description [Hash]
@@ -22,13 +24,44 @@ class BaseIdeService
   def emit_code(tree_description, language_id)
     if (tree_description)
       execute_request({
-                        "type" => "emitTree",
-                        "model" => tree_description,
+                        "type" => "emitCode",
+                        "ast" => tree_description,
                         "languageId" => language_id
                       })
     else
       nil
     end
+  end
+
+  # Emits the block visualization instructions for the given block
+  # language.
+  def emit_generated_blocks(block_language)
+    generator_description = block_language.model['localGeneratorInstructions']
+    if (generator_description)
+      ensure_valid_document(
+        "BlockLanguageGeneratorDocument",
+        generator_description
+      )
+
+      grammar_description = ensure_valid_document(
+        "GrammarDocument",
+        block_language.grammar.document
+      )
+      block_language_description = ensure_valid_document(
+        "BlockLanguageListDescription",
+        block_language.to_list_api_response
+      )
+
+      execute_request({
+                        "type" => "emitGeneratedBlocks",
+                        "block_language" => block_language_description,
+                        "generator" => generator_description,
+                        "grammar" => grammar_description
+                      })
+    else
+      nil
+    end
+
   end
 
   # Checks whether the IDE-service is available
@@ -152,6 +185,20 @@ end
 class MockIdeService < BaseIdeService
   def execute_request(request)
     request.to_json
+  end
+
+  def emit_generated_blocks(block_language)
+    result = super
+    if not result.nil?
+      return ({
+                "editorBlocks" => [],
+                "editorComponents" => [],
+                "sidebars" => [],
+                "rootCssClasses" => []
+              })
+    else
+      return nil
+    end
   end
 
   # Mocking implementation can't fail

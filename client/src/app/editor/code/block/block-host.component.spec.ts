@@ -33,11 +33,8 @@ import {
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
-import { BlockRenderInputComponent } from "./block-render-input.component";
-import { BlockBaseDirective } from "./block-base.directive";
 import { BlockHostComponent } from "./block-host.component";
-import { BlockRenderBlockComponent } from "./block-render-block.component";
-import { BlockRenderComponent } from "./block-render.component";
+import { BLOCK_RENDER_COMPONENTS } from "./index";
 
 describe("BlockHostComponent", () => {
   async function createComponent(
@@ -58,14 +55,7 @@ describe("BlockHostComponent", () => {
           useClass: ResourceReferencesOnlineService,
         },
       ],
-      declarations: [
-        BlockRenderComponent,
-        BlockRenderInputComponent,
-        BlockRenderBlockComponent,
-        BlockHostComponent,
-        BlockBaseDirective,
-        FocusDirective,
-      ],
+      declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
     const grammarDesc = await ensureLocalGrammarRequest(buildGrammar({}));

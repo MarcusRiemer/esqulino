@@ -203,7 +203,7 @@ export function ensureGrammarAttributeNames(
 
   Object.values(copy.types).forEach((n) => {
     Object.values(n).forEach((t) => {
-      if (t.type === "concrete") {
+      if (t.type === "concrete" && t.attributes) {
         impl(t.attributes, []);
       }
     });

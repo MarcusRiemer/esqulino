@@ -12,7 +12,7 @@ import { NewsDescription } from "../news.description";
 import { UserDescription } from "../auth/user.description";
 
 import { ServerApiService } from "./serverapi.service";
-import { IndividualDescriptionCache, CachedRequest } from "./request-cache";
+import { IndividualDescriptionCache } from "./request-cache";
 import {
   SignUpDescription,
   SignInDescription,
@@ -33,6 +33,7 @@ import {
   MayPerformRequestDescription,
   MayPerformResponseDescription,
 } from "./../may-perform.description";
+import { ServerTasksService } from "./server-tasks.service";
 
 /**
  * Convenient and cached access to server side descriptions.
@@ -41,17 +42,24 @@ import {
 export class ServerDataService {
   public constructor(
     private _serverApi: ServerApiService,
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _serverTasks: ServerTasksService
   ) {}
 
-  readonly newsListFrontpage = new CachedRequest<NewsFrontpageDescription[]>(
+  readonly newsListFrontpage = this._serverTasks.createRequest<
+    NewsFrontpageDescription[]
+  >(
     this._http.get<NewsFrontpageDescription[]>(
       this._serverApi.getUserNewsListUrl()
-    )
+    ),
+    "GET " + this._serverApi.getUserNewsListUrl()
   );
 
-  readonly getAdminNewsList = new CachedRequest<NewsDescription[]>(
-    this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl())
+  readonly getAdminNewsList = this._serverTasks.createRequest<
+    NewsDescription[]
+  >(
+    this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl()),
+    "GET " + this._serverApi.getAdminNewsListUrl()
   );
 
   readonly getAdminNewsSingle = new IndividualDescriptionCache<NewsDescription>(
@@ -63,20 +71,27 @@ export class ServerDataService {
     NewsFrontpageDescription
   >(this._http, (id) => this._serverApi.getNewsSingle(id));
 
-  readonly getUserData = new CachedRequest<UserDescription>(
-    this._http.get<UserDescription>(this._serverApi.getUserDataUrl())
+  readonly getUserData = this._serverTasks.createRequest<UserDescription>(
+    this._http.get<UserDescription>(this._serverApi.getUserDataUrl()),
+    "GET " + this._serverApi.getUserDataUrl()
   );
 
-  readonly getIdentities = new CachedRequest<ServerProviderDescription>(
+  readonly getIdentities = this._serverTasks.createRequest<
+    ServerProviderDescription
+  >(
     this._http.get<ServerProviderDescription>(
       this._serverApi.getUserIdentitiesUrl()
-    )
+    ),
+    "GET " + this._serverApi.getUserIdentitiesUrl()
   );
 
-  readonly getProviders = new CachedRequest<AvailableProvidersDescription[]>(
+  readonly getProviders = this._serverTasks.createRequest<
+    AvailableProvidersDescription[]
+  >(
     this._http.get<AvailableProvidersDescription[]>(
       this._serverApi.getProvidersUrl()
-    )
+    ),
+    "GET " + this._serverApi.getProvidersUrl()
   );
 
   /**

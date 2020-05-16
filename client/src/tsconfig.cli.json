@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
+    "downlevelIteration": true,
     "target": "ES5",
     "lib": [
       "ES2017",

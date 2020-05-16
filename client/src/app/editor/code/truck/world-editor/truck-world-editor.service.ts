@@ -13,7 +13,7 @@ import {
   WorldFreightColorDescription,
 } from "../../../../shared/syntaxtree/truck/world.description";
 
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class TruckWorldEditorService implements OnDestroy {
   private _subscriptions: Subscription[] = [];
 

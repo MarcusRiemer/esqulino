@@ -22,6 +22,7 @@ import {
 } from "./grammar-data.service";
 import { ServerApiService } from "./serverapi.service";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { ServerTasksService } from "./server-tasks.service";
 
 describe(`ListGrammarDataService`, () => {
   function instantiate() {
@@ -31,6 +32,7 @@ describe(`ListGrammarDataService`, () => {
         ServerApiService,
         ListGrammarDataService,
         MutateGrammarService,
+        ServerTasksService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
@@ -248,6 +250,7 @@ describe(`MutateGrammarDataService`, () => {
         ServerApiService,
         ListGrammarDataService,
         MutateGrammarService,
+        ServerTasksService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
@@ -261,6 +264,7 @@ describe(`MutateGrammarDataService`, () => {
       mutate: TestBed.inject(MutateGrammarService),
       httpTesting: TestBed.inject(HttpTestingController),
       serverApi: TestBed.inject(ServerApiService),
+      serverTask: TestBed.inject(ServerTasksService),
     };
   }
 

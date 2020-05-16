@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 
 import { IdentifiableResourceDescription } from "../resource.description";
+import { speakingResourceName } from "../resource";
 
 import { IndividualDescriptionCache } from "./request-cache";
 import { ResolveIndividualUrl } from "./url-resolve";
@@ -57,18 +58,21 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
     onMissing: "request" | "undefined" = "undefined"
   ): TSingle | Promise<TSingle> {
     let toReturn = this._localCache[id];
-    if (!toReturn && onMissing === "request") {
-      return this.getSingle(id)
-        .pipe(
-          // Without taking only the first item from `getSingle`, the promise
-          // will never be fulfilled
-          first(),
-          // Store value as a side effect
-          tap((value) => this.setLocal(value))
-        )
-        .toPromise();
-    } else if (onMissing === "request") {
-      return Promise.resolve(toReturn);
+    if (onMissing === "request") {
+      // We must return a promise, but can it be fulfilled right away?
+      if (toReturn) {
+        return Promise.resolve(toReturn);
+      } else {
+        return this.getSingle(id)
+          .pipe(
+            // Without taking only the first item from `getSingle`, the promise
+            // will never be fulfilled
+            first(),
+            // Store value as a side effect
+            tap((value) => this.setLocal(value))
+          )
+          .toPromise();
+      }
     } else {
       return toReturn;
     }
@@ -79,8 +83,7 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
    */
   setLocal(res: TSingle) {
     console.log(
-      `Cache "${this._speakingName}" - Item with id ${res.id} added: `,
-      res
+      `Cache "${this._speakingName}" - Item ${speakingResourceName(res)} added`
     );
     this._localCache[res.id] = res;
   }

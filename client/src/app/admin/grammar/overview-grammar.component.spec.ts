@@ -29,6 +29,7 @@ import { provideGrammarList, buildGrammar } from "../../editor/spec-util";
 
 import { OverviewGrammarComponent } from "./overview-grammar.component";
 import { CreateGrammarComponent } from "./create-grammar.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 describe("OverviewGrammarComponent", () => {
   async function createComponent() {
@@ -50,6 +51,7 @@ describe("OverviewGrammarComponent", () => {
         ListGrammarDataService,
         MutateGrammarService,
         LanguageService,
+        ServerTasksService,
       ],
       declarations: [
         CreateGrammarComponent,
@@ -104,6 +106,11 @@ describe("OverviewGrammarComponent", () => {
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
+
+    const tableElement = t.element.querySelector("table");
+    const rows = tableElement.querySelectorAll("tbody > tr");
+
+    expect(rows.length).toEqual(0);
   });
 
   it(`Displays a list with a single element`, async () => {

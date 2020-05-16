@@ -1,44 +1,98 @@
-import { NodeDescription } from "../syntaxtree";
+import { NodeDescription, Tree } from "../syntaxtree";
 
 import {
   FixedBlocksSidebarDescription,
   FixedBlocksSidebarCategoryDescription,
   SidebarBlockDescription,
+  NodeTailoredDescription,
+  isNodeDerivedPropertyDescription,
 } from "./block.description";
 import { BlockLanguage } from "./block-language.forward";
 import { Sidebar } from "./sidebar";
+
+/**
+ * Resolves all runtime derived values for a tailored node description. The
+ * resulting node is a static and may be inserted to a tree.
+ */
+export function tailorBlockDescription(
+  ast: Tree,
+  proposal: NodeTailoredDescription
+): NodeDescription {
+  const properties: NodeDescription["properties"] = {};
+  Object.entries(proposal.properties ?? []).forEach(([key, value]) => {
+    if (typeof value === "string") {
+      properties[key] = value;
+    } else if (isNodeDerivedPropertyDescription(value)) {
+      const node = ast.locateOrUndefined(value.loc);
+      if (!node) {
+        const path = JSON.stringify(value.loc);
+        throw new Error(`Unknown path ${path}`);
+      }
+      const prop = node.properties[value.propName];
+      if (typeof prop === "undefined") {
+        const path = JSON.stringify(value.loc);
+        const available = JSON.stringify(node.properties);
+        throw new Error(
+          `Node at ${path} has no property "${value.propName}", ` +
+            `available properties are: ${available}`
+        );
+      }
+
+      properties[key] = ast.locate(value.loc).properties[value.propName];
+    }
+  });
+
+  // Construct the returned object and add all attributes that actually
+  const toReturn: NodeDescription = {
+    language: proposal.language,
+    name: proposal.name,
+  };
+
+  if (proposal.children) {
+    const newChildren = {};
+
+    Object.entries(proposal.children).forEach(([catName, cat]) => {
+      newChildren[catName] = cat.map((n) => tailorBlockDescription(ast, n));
+    });
+
+    toReturn.children = newChildren;
+  }
+
+  if (Object.keys(properties).length > 0) {
+    toReturn.properties = properties;
+  }
+
+  return toReturn;
+}
 
 /**
  * This is how a certain type will be made availabe for the user
  * in the sidebar.
  */
 export class FixedSidebarBlock {
-  private _description: SidebarBlockDescription;
-  private _defaultNode: NodeDescription[];
-
-  constructor(desc: SidebarBlockDescription) {
-    this._description = desc;
-
-    if (Array.isArray(this._description.defaultNode)) {
-      this._defaultNode = this._description.defaultNode;
-    } else {
-      this._defaultNode = [this._description.defaultNode];
-    }
-  }
+  /**
+   * The caption that is displayed for this block.
+   */
+  public readonly displayName: string;
 
   /**
    * @return The node that should be created when this block
    *         needs to be instanciated.
    */
-  get defaultNode(): NodeDescription[] {
-    return this._defaultNode;
+  public readonly defaultNode: NodeTailoredDescription[];
+
+  constructor(desc: SidebarBlockDescription) {
+    this.displayName = desc.displayName;
+
+    if (Array.isArray(desc.defaultNode)) {
+      this.defaultNode = desc.defaultNode;
+    } else {
+      this.defaultNode = [desc.defaultNode];
+    }
   }
 
-  /**
-   * @return A friendly name that should be displayed to the user.
-   */
-  get displayName() {
-    return this._description.displayName;
+  tailoredBlockDescription(ast: Tree) {
+    return this.defaultNode.map((b) => tailorBlockDescription(ast, b));
   }
 }
 
@@ -46,40 +100,26 @@ export class FixedSidebarBlock {
  * Groups together blocks.
  */
 export interface BlocksSidebarCategory {
-  readonly blocks: FixedSidebarBlock[];
-  readonly showDisplayName: boolean;
+  readonly blocks: ReadonlyArray<FixedSidebarBlock>;
   readonly displayName: string;
 }
 
 export class FixedBlocksSidebarCategory implements BlocksSidebarCategory {
-  private _blocks: FixedSidebarBlock[] = [];
-  private _caption: string;
-  private _sidebar: FixedBlocksSidebar;
+  /**
+   * The caption that is displayed for this category.
+   */
+  public readonly displayName: string;
+
+  public readonly blocks: ReadonlyArray<FixedSidebarBlock>;
 
   constructor(
-    parent: FixedBlocksSidebar,
+    _parent: FixedBlocksSidebar,
     desc: FixedBlocksSidebarCategoryDescription
   ) {
-    this._sidebar = parent;
-    this._caption = desc.categoryCaption;
-    this._blocks = desc.blocks.map(
+    this.displayName = desc.categoryCaption;
+    this.blocks = desc.blocks.map(
       (blockDesc) => new FixedSidebarBlock(blockDesc)
     );
-  }
-
-  get blocks() {
-    return this._blocks;
-  }
-
-  /**
-   * If this is the only category inside the sidebar displaying its title might be noisy.
-   */
-  get showDisplayName() {
-    return this._sidebar.categories.length > 1;
-  }
-
-  get displayName() {
-    return this._caption;
   }
 }
 
@@ -91,25 +131,22 @@ export class FixedBlocksSidebarCategory implements BlocksSidebarCategory {
  * 3) Block
  */
 export class FixedBlocksSidebar implements Sidebar {
-  private _categories: BlocksSidebarCategory[] = [];
-  private _caption: string;
+  readonly portalComponentTypeId = "fixedBlocks";
+
+  /**
+   * The caption that is displayed for this sidebar.
+   */
+  public readonly displayName: string;
+
+  /**
+   * The categories the blocks are sorted in to
+   */
+  public readonly categories: ReadonlyArray<BlocksSidebarCategory>;
 
   constructor(_parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
-    this._caption = desc.caption;
-    this._categories = desc.categories.map((catDesc) => {
+    this.displayName = desc.caption;
+    this.categories = desc.categories.map((catDesc) => {
       return new FixedBlocksSidebarCategory(this, catDesc);
     });
-  }
-
-  get displayName() {
-    return this._caption;
-  }
-
-  get categories() {
-    return this._categories;
-  }
-
-  get portalComponentTypeId() {
-    return "fixedBlocks";
   }
 }

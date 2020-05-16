@@ -29,12 +29,46 @@ class BlockLanguage < ApplicationRecord
            "(model->'localGeneratorInstructions') IS NOT NULL AS generated")
   }
 
+
+  # Uses the associated grammar and the generator instructions to re-generate
+  # the visual blocks for this language.
+  #
+  # @param ide_service [IdeService] A connection to the ide service
+  #        that may be used to generate the source code.
+  #
+  # @raise [IdeServiceError] If anything goes wrong during generation.
+  def emit_generated_blocks!(ide_service = IdeService.instance)
+    regenerated = ide_service.emit_generated_blocks(self)
+    if regenerated
+      model_attributes = regenerated.slice(
+        "rootCssClasses",
+        "sidebars",
+        "editorBlocks",
+        "editorComponents",
+      )
+      self.model = self.model.merge model_attributes
+      return model_attributes
+    else
+      return nil
+    end
+  end
+
+  # Takes the current state of the backing grammar and regenerates
+  # the generated blocks.
+  #
+  # @param ide_service [IdeService] A connection to the ide service
+  #        that may be used to generate the source code.
+  #
+  # @raise [IdeServiceError] If anything goes wrong during generation.
+  def regenerate_from_grammar!(ide_service = IdeService.instance)
+    not emit_generated_blocks!(ide_service).nil?
+  end
+
   # Computes a hash that may be sent back to the client if it requires
   # full access to the block language. This usually happens when the
   # client is working with the editor.
   def to_full_api_response
     to_list_api_response
-      .except("model")
       .merge(self.model)
   end
 
@@ -45,11 +79,13 @@ class BlockLanguage < ApplicationRecord
   # @param options {include_list_calculations [boolean]}
   #   True, if certain calculated values should be part of the response
   def to_list_api_response(options:{})
-    unless options.key?(:include_list_calculations) and options[:include_list_calculations] then
-      return to_json_api_response
-          .except("generated")
+    response = self.to_json_api_response
+                 .except "model"
+    if options.fetch(:include_list_calculations, false)
+      return response
+    else
+      return response.except("generated")
     end
-    to_json_api_response
   end
 
 end

@@ -8,16 +8,21 @@ import { Tree } from "./app/shared/syntaxtree/syntaxtree";
 
 import { ServerApi } from "./app/shared/serverdata/serverapi";
 
-import { prettyPrintGrammar } from "./app/shared/syntaxtree/prettyprint";
+import { AvailableLanguages } from "./app/shared/syntaxtree/";
+import {
+  graphvizSyntaxTree,
+  prettyPrintGrammar,
+} from "./app/shared/syntaxtree/prettyprint";
+import { NodeDescription } from "./app/shared/syntaxtree/syntaxtree.description";
 import { GrammarDescription } from "./app/shared/syntaxtree/grammar.description";
 
-import { AvailableLanguages } from "./app/shared/syntaxtree/";
-
-import { BlockLanguageDescription } from "./app/shared/block/block-language.description";
+import {
+  BlockLanguageDescription,
+  BlockLanguageListDescription,
+} from "./app/shared/block/block-language.description";
 import { prettyPrintBlockLanguage } from "./app/shared/block/prettyprint";
-
-import { graphvizSyntaxTree } from "./app/shared/syntaxtree/prettyprint";
-import { NodeDescription } from "./app/shared/syntaxtree/syntaxtree.description";
+import { BlockLanguageGeneratorDocument } from "./app/shared/block/generator/generator.description";
+import { generateBlockLanguage } from "./app/shared/block/generator/generator";
 
 /**
  * Can be used to test whether the IDE-service is actually available.
@@ -53,10 +58,20 @@ interface GraphvizSyntaxTreeCommand {
 /**
  * Prints the compiled version of the given syntaxtree.
  */
-interface EmitSyntaxTreeCommand {
-  type: "emitTree";
-  model: NodeDescription;
+interface EmitCodeCommand {
+  type: "emitCode";
+  ast: NodeDescription;
   languageId: string;
+}
+
+/**
+ * Prints the compiled version of the given syntaxtree.
+ */
+interface EmitGeneratedBlocksCommand {
+  type: "emitGeneratedBlocks";
+  blockLanguage: BlockLanguageListDescription;
+  generator: BlockLanguageGeneratorDocument;
+  grammar: GrammarDescription;
 }
 
 /**
@@ -72,7 +87,8 @@ type Command =
   | PrintBlockLanguageCommand
   | AvailableProgrammingLanguagesCommand
   | GraphvizSyntaxTreeCommand
-  | EmitSyntaxTreeCommand;
+  | EmitCodeCommand
+  | EmitGeneratedBlocksCommand;
 
 // Knows all URLs that are avaiable to the API
 const serverApi: ServerApi = new ServerApi("http://localhost:9292/api");
@@ -104,42 +120,72 @@ async function findBlockLanguage(slug: string) {
   return httpRequest<BlockLanguageDescription>(url, "GET");
 }
 
+class BufferedStdoutError {
+  constructor(public buffer: any[], public error: Error) {}
+}
+
 /**
- * Executes the given command
+ * Executes the given function with a swapped out console.log object. If nothing
+ * goes wrong the buffered output is discarded, if something goes wrong it
+ * is made part of the thrown exception.
  */
-async function executeCommand(command: Command): Promise<string | any[]> {
-  switch (command.type) {
-    case "ping":
-      return "pong";
-    case "printGrammar":
-      const g = await findGrammar(command.programmingLanguageId);
-      return prettyPrintGrammar(command.programmingLanguageId, g);
-    case "printBlockLanguage": {
-      const l = await findBlockLanguage(command.blockLanguageId);
-      return prettyPrintBlockLanguage(l);
-    }
-    case "graphvizTree":
-      return graphvizSyntaxTree(command.model);
-    case "emitTree": {
-      if (command.languageId !== "generic") {
-        const l = findLanguage(command.languageId);
-        const t = new Tree(command.model);
-        return l.emitTree(t);
-      } else {
-        return "Generic Language without code generator";
-      }
-    }
+export async function saveLogOutput(f: () => Promise<Object | string>) {
+  const oldRef = console.log;
+  const buffer = [];
+
+  try {
+    console.log = function () {
+      buffer.push(arguments);
+    };
+    return await f();
+  } catch (exception) {
+    throw new BufferedStdoutError(buffer, exception);
+  } finally {
+    console.log = oldRef;
   }
 }
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false,
-});
+/**
+ * Executes the given command
+ */
+async function executeCommand(command: Command): Promise<Object | string> {
+  const result = saveLogOutput(async () => {
+    switch (command.type) {
+      case "ping":
+        return "pong";
+      case "printGrammar":
+        const g = await findGrammar(command.programmingLanguageId);
+        return prettyPrintGrammar(command.programmingLanguageId, g);
+      case "printBlockLanguage": {
+        const l = await findBlockLanguage(command.blockLanguageId);
+        return prettyPrintBlockLanguage(l);
+      }
+      case "graphvizTree":
+        return graphvizSyntaxTree(command.model);
+      case "emitCode": {
+        if (command.languageId !== "generic") {
+          const l = findLanguage(command.languageId);
+          const t = new Tree(command.ast);
+          return l.emitTree(t);
+        } else {
+          return "Generic Language without code generator";
+        }
+      }
+      case "emitGeneratedBlocks": {
+        return generateBlockLanguage(
+          command.blockLanguage,
+          command.generator,
+          command.grammar
+        );
+      }
+    }
+  });
+
+  return result;
+}
 
 // Each given line is expected to be a self contained JSON object.
-rl.on("line", function (line) {
+export function handleLine(line: string) {
   try {
     const command = JSON.parse(line) as Command;
     let result = executeCommand(command);
@@ -148,20 +194,16 @@ rl.on("line", function (line) {
     if (result !== undefined) {
       Promise.resolve(result)
         .then((res) => {
-          // One or multiple results?
-          if (typeof res === "string") {
-            // Exactly on, so no trailing newline please
-            console.log(JSON.stringify(res));
-          } else {
-            // Multiple results
-            console.log(`Finished ${res.length} operations`);
-            res.forEach((v, i) => {
-              console.log(`Operation ${i + 1}: ${JSON.stringify(v)}`);
-            });
-          }
+          console.log(JSON.stringify(res));
         })
-        .catch((err) => {
+        .catch((err: unknown | BufferedStdoutError) => {
           console.error(`Error during operation "${command.type}"`);
+          if (err instanceof BufferedStdoutError) {
+            console.error(
+              `Log output of failed operation: `,
+              JSON.stringify(err.buffer)
+            );
+          }
           console.error(err);
         });
     } else {
@@ -171,4 +213,12 @@ rl.on("line", function (line) {
     console.error("Invalid command");
     console.error(e);
   }
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false,
 });
+
+rl.on("line", handleLine);

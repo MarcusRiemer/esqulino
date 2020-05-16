@@ -461,6 +461,13 @@ class ChildCardinality {
         typeDesc,
         parent.languageName
       );
+    } else if (Desc.isQualifiedTypeName(typeDesc)) {
+      // Qualified names are easy, because it is clear what they refer to
+      this._nodeType = new TypeReference(
+        parent.validator,
+        typeDesc.typeName,
+        typeDesc.languageName
+      );
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may refer to a different language
       if (typeof typeDesc.nodeType === "string") {
@@ -1087,19 +1094,20 @@ export class NodePropertyIntegerValidator extends NodePropertyValidator {
     this._restrictions = desc.restrictions;
   }
 
-  validValue(value: string): boolean {
+  validValue(value: unknown): value is number {
     // The typescript type system forbids other values then strings, but
     // they occasionally happen anyway.
     return typeof value === "string" && /^-?[0-9]+$/.test(value);
   }
 
-  validate(node: AST.Node, value: string, context: ValidationContext): void {
+  validate(node: AST.Node, value: unknown, context: ValidationContext): void {
     if (!this.validValue(value)) {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
         condition: `"${value}" must be a string that looks like an integer`,
       });
     } else {
-      this._restrictions.forEach((r) => {
+      // Check the valid value for possible restrictions
+      this._restrictions?.forEach((r) => {
         switch (r.type) {
           case "minInclusive":
             if (+value < r.value) {

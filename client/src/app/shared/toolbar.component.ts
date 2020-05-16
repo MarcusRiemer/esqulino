@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ContentChild,
-  ElementRef,
-} from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 
 import { SideNavService } from "./side-nav.service";
 import { ToolbarService } from "./toolbar.service";
