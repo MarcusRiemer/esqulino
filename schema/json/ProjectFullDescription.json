@@ -467,6 +467,9 @@
           "$ref": "#/definitions/TruckSensorsComponentDescription"
         },
         {
+          "$ref": "#/definitions/TruckWorldEditorMenuComponentDescription"
+        },
+        {
           "$ref": "#/definitions/DropDebugComponentDescription"
         },
         {
@@ -2682,6 +2685,28 @@
         "componentType": {
           "enum": [
             "truck-world"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckWorldEditorMenuComponentDescription": {
+      "additionalProperties": false,
+      "description": "The world settings and tile selector for truck worlds",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "truck-world-editor"
           ],
           "type": "string"
         }
