@@ -1,0 +1,152 @@
+%! Author = Yannick Schröder
+%! Date = 13.05.20
+
+%************************************************
+% Grundlagen
+%************************************************
+\chapter{Einleitung}
+\label{sec:requirements}
+
+Ziel dieser Arbeit ist die Evaluierung von Verfahren, welche eine sichere, effiziente und leichte Nutzung der Kommunikationsschnittstellen 
+zwischen Client, Server und Datenbank ermöglichen soll und wenn möglich die Integration eines dieser Verfahren
+in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe \ref{sec:requirements:existing}), 
+In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die Anforderungen an die Nutzung der Kommunikationsschnittstellen näher beschrieben.
+
+%************************************************
+% Status Quo
+%************************************************
+\chapter{Status Quo}
+\label{sec:requirements:existing}
+
+Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt,
+die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Edi\-toren,
+für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}.
+Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt. 
+%Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
+
+\section{Aufbau}
+
+\subsection{Server}
+
+Der Server ist auf Basis von Ruby mit Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten. 
+Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}. 
+%Die für diese Arbeit entwickelte Software baut jedoch lediglich auf dem Client von BlattWerkzeug auf und hat mit der serverseitigen Anwendung keine direkten Berührungspunkte.
+
+\subsection{Client}
+
+Der Client wurde als eine Single-Page Application mit rein clientseitiger Visualisierung aufgebaut, 
+die lediglich für den Zugriff auf serverseitige Resourcen  (Datenbank, gespeicherte Ressourcen,gerenderte Seiten) Roundtrips zum Server nutzt~\cite[94-95]{riemer2016}. 
+Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in TypeScript, der damalig neusten Angular Version. 
+Zum aktuellen Zeitpunkt wird allerdings auf die Angular Version 9.1.0 gesetzt.
+
+\subsection{Datenbanksystem} 
+
+Für die Wahl des einzusetzenden Datenbanksystems wurde sich beim Entwicklungsstart, auf Grund der Kriterien "Kostenlose Verfügbarkeit", 
+"Einfacher Betrieb", "Einfache Backups", "Tools zur Modellierung" und "Externe Tools zur Entwicklung von SQL-Abfragen"
+ für eine SQLite Datenbank entschieden~\cite[99-100]{riemer2016}. Im November 2017 ist dann der Grundstein gelegt worden, 
+ um den Server mit einer PostgreSQL Datenbank zu verbinden~\cite{riemerPostgresCommit}, da diese es unter anderem ermöglicht JSON Objekte direkt zu speichern,
+ ohne diese in Text Datentypen konvertieren zu müssen.
+
+
+\chapter{Allgemeine Problemstellung}
+
+\section{SQL Datenbank mit JSON Blobs}
+Blocklanguages benötigen hstore Felder. Mehrsprachigkeit erfordert aufteilung eines Datenbank feldes in mehrere.
+
+\section{Darstellungsvielfalt}
+\subsection{Nutzerbereich}
+Kacheldarstellung auf der Landingpage benötigt weniger Informationen als geliefert werden.
+\subsection{Adminbereich}
+Tabellen Übersicht benötigt weniger Daten. Editierung benötigt alle Daten.
+%Mehrere Requests für einen View
+
+\section{End-to-end Typsicherheit}
+Erfordert applikationsübergreifende Typdefinitionen. 
+\subsection{JSON Schema Validator für Datenbankfelder}
+/models/json schema validator
+\subsection{JSON Schema Validator für Requests}
+grammars controller update
+\subsection{JSON Schema Validator für Responses}
+Rspec
+\subsection{JSON Schema Erzeugung aus Typescript Interfaces}
+Aktuell werden Clientseitig JSON Schema Dateien mithilfe von Typescript Interfaces und einem ellenlangen Makefile generiert.
+
+\chapter{Zwischenfazit}
+\section{Vorteile des bisherigen Ansatzes}
+\section{Nachteile des bisherigen Ansatzes}
+\subsection{Auswahl von Attributen}
+\subsection{Request und Response Typen}
+\subsection{JSON Schema Generierung per Makefile}
+Ein Interface pro Anfrage und Antwort erstellen. Pro Interface Eintrag in Makefile.
+
+\chapter{Anforderungsanalyse}
+
+\section{Typsicherheit}
+Typsicherheit muss auf dem Client, wie auf dem Server und in der Datenbank gewährleistet sein. Schreibt ein Programmierer einen neuen Request an den Server,
+muss zur Kompilierung auffallen, sollte dieser nach Datenfeldern fragen, die es nicht gibt.
+
+\section{Typdefinition - Server}
+Typschema Definition.
+\subsection{Datenbankschema}
+Muss mit dem Schema übereinstimmen. Möglichkeit der Generierung höchstwahrscheinlich nicht gegeben.
+\subsection{JSON Blob Validierung}
+Hierbei werden CLientseitige Typdefinitionen benötigt. Möglicher einbau in das serverseitige Schema?
+
+\section{Typdefinition - Client}
+\subsection{Codegenerierung}
+In diesem Kapitel möchte ich darauf eingehen, dass die Generierung von Clientseitigen Typescript Interfaces z.B. eine Anforderung darstellt, 
+da es sich andernfalls kaum vom derzeitigen Lösungsansatz unterscheiden wird. 
+
+
+\section{Synchronisation der Typdefinitionen}
+Zu jedem Zeitpunkt müssen alle Datentypen, ob Server, Client oder Datenbank synchron zu einander sein oder per resolvern umgewandelt werden.
+
+\section{Darstellungsflexibilität}
+Nicht mehr Daten als benötigt.
+\subsection{Pagination}
+Auslieferung von reduzierter Mengen an Daten.
+
+\section{Performance}
+Nur ein Request pro Seitenaufruf. Bsp news overview. Effiziente Datenbankqueries.
+
+\section{Skalierbarkeit}
+
+\section{Sonderanforderungen}
+\subsection{Schlüsselkonvention - Camelcase/Snakecase}
+Angular Client zu Ruby Server kämpfen mit verschiedenen Konvetionen.
+\subsection{Mehrsprachigkeit}
+Mehrere Sprachen müssen abbildbar sein und in Datenbank gespeichert werden.
+\section{Balanced Scorecard}
+Bewertung der Anforderungen.
+\chapter{Roundtrip Verfahren}
+
+\section{Fast JSON API}
+\subsection{Graphiti}
+https://www.graphiti.dev/guides/
+\section{GraphQL}
+\subsection{Schema-first}
+GraphQL Schema in SDL geschrieben. Resolvers für übersetzung zu anderen sprachen etc.
+\subsection{Modularisierung}
+feature brands?
+Eine Datei pro Typ?
+Eine große schema Datei?
+\subsection{Codeverdoppelung}
+Bei der Pagination.
+\subsection{Code-first}
+Nutzung von gapqhl-ruby
+https://github.com/rmosolgo/graphql-ruby
+\section{Optimierung der bestehenden Lösung - make or buy}
+Narrow-Funktion um nur einen Request pro Seitenaufruf ermöglichen zu können. JSON Api Konzept wird dabei teilweise genutzt.
+\section{Zusätzliche Verfahren}
+\subsection{Deepr}
+Gibt es nur in Javascript.
+https://github.com/deeprjs/deepr
+\chapter{Handlungsempfehlung}
+
+\chapter{Implementierung}
+
+\chapter{Fazit}
+\section{Erreichte Ziele}
+\section{Nicht erreichte Ziele}
+\section{Ausblick}
+Server Round Trip mit TCP messen nicht mit ICMP. Tracer middleware

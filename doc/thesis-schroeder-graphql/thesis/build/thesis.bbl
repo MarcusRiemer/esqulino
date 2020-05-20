@@ -1,0 +1,85 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{anyt/global//global/global}
+  \entry{riemerPostgresCommit}{thesis}{}
+    \name{author}{1}{}{%
+      {{hash=RM}{%
+         family={Riemer},
+         familyi={R\bibinitperiod},
+         given={Markus},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RM1}
+    \strng{fullhash}{RM1}
+    \field{labelnamesource}{author}
+    \field{labelalpha}{Rie13}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \verb{url}
+    \verb https://github.com/MarcusRiemer/esqulino/commit/cc6112e0c8fa69d7d51
+    \verb 85363df1518b7e668837e
+    \endverb
+    \field{type}{Github Commit}
+    \field{day}{03}
+    \field{month}{11}
+    \field{year}{2013}
+    \field{urlday}{15}
+    \field{urlmonth}{05}
+    \field{urlyear}{2020}
+  \endentry
+
+  \entry{riemer2016}{thesis}{}
+    \name{author}{1}{}{%
+      {{hash=RM}{%
+         family={Riemer},
+         familyi={R\bibinitperiod},
+         given={Markus},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RM1}
+    \strng{fullhash}{RM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelalpha}{Rie16}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{title}{{{BlattWerkzeug}} - {{Eine}} Datenzentrierte
+  {{Entwicklungsumgebung}} Für Den {{Schulunterricht}}}
+    \verb{url}
+    \verb http://files.blattwerkzeug.de/theses/marcus-riemer-thesis-blattwerk
+    \verb zeug.pdf
+    \endverb
+    \list{location}{1}{%
+      {{Wedel}}%
+    }
+    \list{institution}{1}{%
+      {{Fachhohschule Wedel}}%
+    }
+    \field{type}{Master-Thesis}
+    \field{day}{31}
+    \field{month}{10}
+    \field{year}{2016}
+    \field{urlday}{23}
+    \field{urlmonth}{09}
+    \field{urlyear}{2018}
+  \endentry
+\enddatalist
+\endinput
