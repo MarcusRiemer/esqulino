@@ -157,6 +157,26 @@ export class SchemaTableVisualComponent {
       this.showError(error);
     }
   }
+  
+  ChangeColumnPrimaryKeyStatus(row: number) {
+    this._schemaService.initCurrentlyEdit(
+      this._project.schema.getTable(this.table.name)
+    );
+	
+    this.commandsHolder.do(new ChangeColumnPrimaryKey(this.table, row));
+	
+	this.saveChanges();
+  }
+
+  ChangeColumnNotNullStatus(row: number) {
+    this._schemaService.initCurrentlyEdit(
+      this._project.schema.getTable(this.table.name)
+    );
+	
+    this.commandsHolder.do(new ChangeColumnNotNull(this.table, row));
+	
+	this.saveChanges();
+  }
 
   showError(error: any) {
     window.alert(
