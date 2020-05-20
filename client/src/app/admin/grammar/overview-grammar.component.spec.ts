@@ -1,177 +1,183 @@
-import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
-import { PortalModule } from '@angular/cdk/portal';
+import { FormsModule } from "@angular/forms";
+import { RouterTestingModule } from "@angular/router/testing";
+import { TestBed } from "@angular/core/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { PortalModule } from "@angular/cdk/portal";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { ServerApiService, ToolbarService } from '../../shared';
-import { ListGrammarDataService, MutateGrammarService } from '../../shared/serverdata';
-import { DefaultValuePipe } from '../../shared/default-value.pipe';
-import { provideGrammarList, buildGrammar } from '../../editor/spec-util';
+import {
+  ServerApiService,
+  ToolbarService,
+  LanguageService,
+} from "../../shared";
+import {
+  ListGrammarDataService,
+  MutateGrammarService,
+} from "../../shared/serverdata";
+import { DefaultValuePipe } from "../../shared/default-value.pipe";
+import { PaginatorTableComponent } from "../../shared/table/paginator-table.component";
+import { provideGrammarList, buildGrammar } from "../../editor/spec-util";
 
-import { OverviewGrammarComponent } from './overview-grammar.component';
-import {CreateGrammarComponent} from "./create-grammar.component";
+import { OverviewGrammarComponent } from "./overview-grammar.component";
+import { CreateGrammarComponent } from "./create-grammar.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
-describe('OverviewBlockLanguageComponent', () => {
-    async function createComponent() {
-        await TestBed.configureTestingModule({
-            imports: [
-                FormsModule,
-                NoopAnimationsModule,
-                MatSnackBarModule,
-                MatTableModule,
-                PortalModule,
-                HttpClientTestingModule,
-                RouterTestingModule.withRoutes([]),
-            ],
-            providers: [
-                ToolbarService,
-                ServerApiService,
-                ListGrammarDataService,
-                MutateGrammarService
-            ],
-            declarations: [
-                OverviewGrammarComponent,
-                DefaultValuePipe
-            ]
-        })
-            .compileComponents();
+describe("OverviewGrammarComponent", () => {
+  async function createComponent() {
+    await TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        NoopAnimationsModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatTableModule,
+        PortalModule,
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      providers: [
+        ToolbarService,
+        ServerApiService,
+        ListGrammarDataService,
+        MutateGrammarService,
+        LanguageService,
+        ServerTasksService,
+      ],
+      declarations: [
+        CreateGrammarComponent,
+        OverviewGrammarComponent,
+        DefaultValuePipe,
+        PaginatorTableComponent,
+      ],
+    }).compileComponents();
 
-        let fixture = TestBed.createComponent(OverviewGrammarComponent);
-        let component = fixture.componentInstance;
-        fixture.detectChanges();
+    let fixture = TestBed.createComponent(OverviewGrammarComponent);
+    let component = fixture.componentInstance;
+    fixture.detectChanges();
 
-        const httpTesting = TestBed.inject(HttpTestingController);
-        const serverApi = TestBed.inject(ServerApiService);
+    const httpTesting = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
 
-        return ({
-            fixture,
-            component,
-            element: fixture.nativeElement as HTMLElement,
-            httpTesting,
-            serverApi,
-        });
-    }
+    return {
+      fixture,
+      component,
+      element: fixture.nativeElement as HTMLElement,
+      httpTesting,
+      serverApi,
+    };
+  }
 
-    it(`can be instantiated`, async () => {
-        const t = await createComponent();
+  it(`can be instantiated`, async () => {
+    const t = await createComponent();
 
-        expect(t.component).toBeDefined();
-    });
+    expect(t.component).toBeDefined();
+  });
 
-    it(`Displays a loading indicator (or not)`, async () => {
-        const t = await createComponent();
+  it(`Displays a loading indicator (or not)`, async () => {
+    const t = await createComponent();
 
-        const initialLoading = await t.component.inProgress.pipe(first()).toPromise();
-        expect(initialLoading).toBe(true);
+    const initialLoading = await t.component.grammars.listCache.inProgress
+      .pipe(first())
+      .toPromise();
+    expect(initialLoading).toBe(true);
 
-        provideGrammarList([]);
+    provideGrammarList([]);
 
-        const afterResponse = await t.component.inProgress.pipe(first()).toPromise();
-        expect(afterResponse).toBe(false);
-    });
+    const afterResponse = await t.component.grammars.listCache.inProgress
+      .pipe(first())
+      .toPromise();
+    expect(afterResponse).toBe(false);
+  });
 
-    it(`Displays an empty list`, async () => {
-        const t = await createComponent();
+  it(`Displays an empty list`, async () => {
+    const t = await createComponent();
 
-        provideGrammarList([]);
+    provideGrammarList([]);
 
-        t.fixture.detectChanges();
-        await t.fixture.whenRenderingDone();
-    });
+    t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
 
-    it(`Displays a list with a single element`, async () => {
-        const t = await createComponent();
+    const tableElement = t.element.querySelector("table");
+    const rows = tableElement.querySelectorAll("tbody > tr");
 
-        const i1 = buildGrammar({ name: "G1" });
-        provideGrammarList([i1]);
+    expect(rows.length).toEqual(0);
+  });
 
-        t.fixture.detectChanges();
-        await t.fixture.whenRenderingDone();
+  it(`Displays a list with a single element`, async () => {
+    const t = await createComponent();
 
-        const tableElement = t.element.querySelector("table");
-        const i1Row = tableElement.querySelector("tbody > tr");
+    const i1 = buildGrammar({ name: "G1" });
+    provideGrammarList([i1]);
 
-        expect(i1Row.textContent).toMatch(i1.name);
-        expect(i1Row.textContent).toMatch(i1.id);
-    });
+    t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
 
-    it(`reloads data on refresh`, async () => {
-        const t = await createComponent();
+    const tableElement = t.element.querySelector("table");
+    const i1Row = tableElement.querySelector("tbody > tr");
 
-        const i1 = buildGrammar({ name: "B1" });
-        provideGrammarList([i1]);
+    expect(i1Row.textContent).toMatch(i1.name);
+    expect(i1Row.textContent).toMatch(i1.id);
+  });
 
-        const initialData = await t.component.availableGrammars.pipe(first()).toPromise();
-        expect(initialData).toEqual([i1]);
+  it(`reloads data on refresh`, async () => {
+    const t = await createComponent();
 
-        t.component.onRefresh();
-        provideGrammarList([]);
+    const i1 = buildGrammar({ name: "B1" });
+    provideGrammarList([i1]);
 
-        const refreshedData = await t.component.availableGrammars.pipe(first()).toPromise();
-        expect(refreshedData).toEqual([]);
-    });
+    const initialData = await t.component.grammars.list
+      .pipe(first())
+      .toPromise();
+    expect(initialData).toEqual([i1]);
 
-    it(`Triggers deletion`, async () => {
-        const t = await createComponent();
+    t.component.onRefresh();
+    provideGrammarList([]);
 
-        const i1 = buildGrammar({ name: "B1" });
-        provideGrammarList([i1]);
+    const refreshedData = await t.component.grammars.list
+      .pipe(first())
+      .toPromise();
+    expect(refreshedData).toEqual([]);
+  });
 
-        t.fixture.detectChanges();
-        await t.fixture.whenRenderingDone();
+  it(`Triggers deletion`, async () => {
+    const t = await createComponent();
 
-        const tableElement = t.element.querySelector("table");
-        const i1Row = tableElement.querySelector("tbody > tr");
-        const i1Delete = i1Row.querySelector("button[data-spec=delete]") as HTMLButtonElement;
+    const i1 = buildGrammar({ name: "B1" });
+    provideGrammarList([i1]);
 
-        i1Delete.click();
+    t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
 
-        t.httpTesting.expectOne({ method: "DELETE", url: t.serverApi.individualGrammarUrl(i1.id) })
-            .flush("");
+    const tableElement = t.element.querySelector("table");
+    const i1Row = tableElement.querySelector("tbody > tr");
+    const i1Delete = i1Row.querySelector(
+      "button[data-spec=delete]"
+    ) as HTMLButtonElement;
 
-        provideGrammarList([]);
+    i1Delete.click();
 
-        const refreshedData = await t.component.availableGrammars.pipe(first()).toPromise();
-        expect(refreshedData).toEqual([]);
-    });
+    t.httpTesting
+      .expectOne({
+        method: "DELETE",
+        url: t.serverApi.individualGrammarUrl(i1.id),
+      })
+      .flush("");
 
-    /*it(`create grammar`, async () => {
-        const t = await createComponent();
-        const g1 = buildGrammar({ name: "G1Test", programmingLanguageId: "sql" });
+    provideGrammarList([]);
 
-        provideGrammarList([]);
-
-        t.fixture.detectChanges();
-        await t.fixture.whenRenderingDone();
-
-        const nameInput: HTMLInputElement = t.element.querySelector('input[id=grammar-name]');
-        const plSelect: HTMLSelectElement = t.element.querySelector('select[id=grammar-programming-language-id]');
-        const createButton = t.element.querySelector("button[type=submit]") as HTMLButtonElement;
-
-        // simulate user entering a new name into the input box
-        nameInput.value = 'G1Test';
-        plSelect.value = plSelect.options[0].value;
-
-        // dispatch a DOM event so that Angular learns of input value change.
-        // use newEvent utility function (not provided by Angular) for better browser compatibility
-        nameInput.dispatchEvent(new Event('input'));
-        plSelect.dispatchEvent(new Event('change'));
-
-        t.fixture.detectChanges();
-
-        createButton.click();
-
-        t.httpTesting.expectOne({method: "POST", url: t.serverApi.createGrammarUrl()}).flush("");
-
-        provideGrammarList([g1]);
-
-        const refreshedData = await t.component.availableGrammars.pipe(first()).toPromise();
-        expect(refreshedData).toEqual([g1]);
-    });*/
+    const refreshedData = await t.component.grammars.list
+      .pipe(first())
+      .toPromise();
+    expect(refreshedData).toEqual([]);
+  });
 });

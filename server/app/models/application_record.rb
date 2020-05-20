@@ -65,4 +65,13 @@ class ApplicationRecord < ActiveRecord::Base
       return self.id
     end
   end
+
+  # Called from e.g. pagination helper with ["fr", "de", "en"]
+  # TODO: Ensure the resulting object can't be saved by accident, this would delete
+  #       the languages that were narrowed down
+  def narrow_to_language(lang_priority)
+    # Narrow all fields of the current model where the **class** knows that the
+    # corresponding field is an hstore
+
+  end
 end

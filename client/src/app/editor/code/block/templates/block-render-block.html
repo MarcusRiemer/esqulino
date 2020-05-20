@@ -1,18 +1,17 @@
-<span *ngIf="isCurrentlyExecuted$ | async"
-      class="fa fa-cog fa-spin fa-fw"></span>
+<span
+  *ngIf="isCurrentlyExecuted$ | async"
+  class="fa fa-cog fa-spin fa-fw"
+></span>
 
 <!-- Render all components of this block -->
-<editor-block-render *ngFor="let childVisualBlock of visual.children"
-                     [visual]="childVisualBlock"
-                     [node]="node">
-</editor-block-render>
+<editor-block-render
+  *ngFor="let childVisualBlock of visual.children"
+  [visual]="childVisualBlock"
+  [node]="node"
+></editor-block-render>
 
 <ng-container *ngIf="showRelativeDropLocations | async">
-  <div (mouseover)="onMouseEnter($event, 'begin')"
-       class="begin-drop">
-  </div>
+  <div (mouseover)="onMouseOver($event, 'begin')" class="begin-drop"></div>
 
-  <div (mouseover)="onMouseEnter($event, 'end')"
-       class="end-drop">
-  </div>
+  <div (mouseover)="onMouseOver($event, 'end')" class="end-drop"></div>
 </ng-container>

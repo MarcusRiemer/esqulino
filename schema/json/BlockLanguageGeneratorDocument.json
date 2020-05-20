@@ -1,0 +1,1576 @@
+{
+  "$ref": "#/definitions/BlockLanguageGeneratorDocument",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AllReferenceableTypeInstructions": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "$ref": "#/definitions/ReferenceableTypeInstructionsDescription"
+        },
+        "type": "object"
+      },
+      "description": "Supplementary generation instructions for all types. In this variant\nthere may be references to exact values instead of the exact values\nthemselves.",
+      "type": "object"
+    },
+    "AnySidebarBlockDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConstantSidebarBlockDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedSidebarBlockDescription"
+        }
+      ]
+    },
+    "AnySidebarCategoryDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConstantBlocksSidebarCategoryDescription"
+        },
+        {
+          "$ref": "#/definitions/MixedBlocksSidebarCategoryDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedBlocksSidebarCategoryDescription"
+        }
+      ]
+    },
+    "AnySidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedBlocksSidebarDescription"
+        }
+      ]
+    },
+    "AttributeMappingOrder": {
+      "anyOf": [
+        {
+          "enum": [
+            "grammar"
+          ],
+          "type": "string"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "BlockLanguageGeneratorDocument": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ManualBlockLanguageGeneratorDescription"
+        },
+        {
+          "$ref": "#/definitions/TreeBlockLanguageGeneratorDescription"
+        }
+      ],
+      "description": "All possible instructions to generate a block language."
+    },
+    "BlockRootComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the actual block editor",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "block-root"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "CodeGeneratorComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the compiled program",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "generated-code"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "CodeResourceSettingsComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the settings for a certain resource",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "code-resource-settings"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ConstantBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category that is defined statically",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "blocks",
+        "categoryCaption",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ConstantSidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "A block that is given statically",
+      "properties": {
+        "defaultNode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeTailoredDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeTailoredDescription"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "defaultNode",
+        "displayName",
+        "type"
+      ],
+      "type": "object"
+    },
+    "DatabaseSchemaSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "databaseSchema"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "DropDebugComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays debug information about an ongoing drag process",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "drop-debug"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "EditorComponentDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/CodeResourceSettingsComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/BlockRootComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/QueryPreviewComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ValidatorComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/CodeGeneratorComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckWorldComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckControllerComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckSensorsComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/DropDebugComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/JsonAstComponentDescription"
+        }
+      ],
+      "description": "Any component that could be displayed in the actual editor view."
+    },
+    "FixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "Defines which blocks to show in a certain category.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
+    "FixedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "Defines the overall look of a sidebar. It at least sorts available blocks\ninto categories.",
+      "properties": {
+        "caption": {
+          "description": "The name that should be displayed to the user.",
+          "type": "string"
+        },
+        "categories": {
+          "description": "The actual blocks are categorized into categories.",
+          "items": {
+            "$ref": "#/definitions/FixedBlocksSidebarCategoryDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "fixedBlocks"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "caption",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "GeneratedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category that uses only generated blocks. This allows for a syntax\nthat is a little more compact.",
+      "properties": {
+        "categoryCaption": {
+          "type": "string"
+        },
+        "grammar": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "type": {
+          "enum": [
+            "generated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "categoryCaption",
+        "grammar"
+      ],
+      "type": "object"
+    },
+    "GeneratedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "A sidebar description that may use partly generated blocks and partly\nconstant categories.",
+      "properties": {
+        "caption": {
+          "type": "string"
+        },
+        "categories": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarCategoryDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "generatedBlocks"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "caption",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "GeneratedSidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "A block that has its block generated.",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "nodeType": {
+          "$ref": "#/definitions/QualifiedTypeName"
+        },
+        "type": {
+          "enum": [
+            "generated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "nodeType"
+      ],
+      "type": "object"
+    },
+    "InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__": {
+      "additionalProperties": false,
+      "description": "Instructions on how to generate a single block for a type. This type\nis not intended to be used directly, please use `TypeInstructionsDescription`\nor `ReferenceableTypeInstructionsDescription` instead.",
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "properties": {
+              "attributeMapping": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AttributeMappingOrder"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
+                  }
+                ]
+              },
+              "between": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "emptyDropTarget": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "generateErrorIndicator": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/Position"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "onDrop": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
+                  }
+                ]
+              },
+              "propReadOnly": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "style": {
+                "anyOf": [
+                  {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "blocks": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "attributeMapping": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AttributeMappingOrder"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
+                  }
+                ]
+              },
+              "generateErrorIndicator": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/Position"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "onDrop": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
+                  }
+                ]
+              },
+              "style": {
+                "anyOf": [
+                  {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "JsonAstComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a readonly JSON version of the AST",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "json-ast"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ManualBlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "description": "A very manual approach to block language generation. Uses specific type\ninstructions and traits to",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "traitScopes": {
+          "items": {
+            "$ref": "#/definitions/ScopeTraitAdd"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "$ref": "#/definitions/ReferenceableTraits"
+        },
+        "type": {
+          "enum": [
+            "manual"
+          ],
+          "type": "string"
+        },
+        "typeInstructions": {
+          "$ref": "#/definitions/AllReferenceableTypeInstructions"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "MetaDefinedTypeSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "metaDefinedTypes"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "MixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category description that may use partly generated blocks and\npartly constant blocks.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "mixed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
+    "NodeDerivedPropertiesDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+                },
+                {
+                  "$ref": "#/definitions/NodeDescription"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/NodeDerivedProperty"
+              }
+            ]
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "language",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NodeDerivedProperty": {
+      "additionalProperties": false,
+      "properties": {
+        "loc": {
+          "$ref": "#/definitions/NodeLocation"
+        },
+        "propName": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "nodeDerivedProperty"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "loc",
+        "propName"
+      ],
+      "type": "object"
+    },
+    "NodeDescription": {
+      "additionalProperties": false,
+      "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            "type": "array"
+          },
+          "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "language"
+      ],
+      "type": "object"
+    },
+    "NodeLocation": {
+      "description": "Contains the path to find a certain node in a syntax tree.\nThese paths currently always start from the root node.",
+      "items": {
+        "$ref": "#/definitions/NodeLocationStep"
+      },
+      "type": "array"
+    },
+    "NodeLocationStep": {
+      "description": "Determines the category and the index in that category\nof a node.",
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "NodeTailoredDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeDescription"
+        }
+      ],
+      "description": "A description of a node that has \"holes\" in it, which may be filled\nwith the help of an existing AST. Often used to fill in some data at\nthe beginning of a started drag."
+    },
+    "ParameterBoolean": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "boolean"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultValue": {
+          "$ref": "#/definitions/ParameterValue"
+        },
+        "type": {
+          "$ref": "#/definitions/ParameterType"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterDeclarations": {
+      "additionalProperties": {
+        "$ref": "#/definitions/ParameterDeclaration"
+      },
+      "type": "object"
+    },
+    "ParameterReference": {
+      "additionalProperties": false,
+      "properties": {
+        "$ref": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "$ref"
+      ],
+      "type": "object"
+    },
+    "ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression|undefined)_": {
+      "additionalProperties": false,
+      "properties": {
+        "$every": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+              },
+              "type": "array"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+            }
+          ]
+        },
+        "$not": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__"
+            }
+          ]
+        },
+        "$some": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+              },
+              "type": "array"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+            }
+          ]
+        },
+        "$value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/ParameterReference"
+            }
+          ]
+        },
+        "$var": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
+            },
+            {
+              "$ref": "#/definitions/ParameterReference"
+            }
+          ]
+        }
+      },
+      "required": [
+        "$value",
+        "$var",
+        "$every",
+        "$some",
+        "$not"
+      ],
+      "type": "object"
+    },
+    "ParameterReferenceable_AttributeMappingOrder_": {
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__": {
+      "additionalProperties": false,
+      "properties": {
+        "$every": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+              },
+              "type": "array"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+            }
+          ]
+        },
+        "$not": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__"
+            }
+          ]
+        },
+        "$some": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+              },
+              "type": "array"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+            }
+          ]
+        },
+        "$value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/ParameterReference"
+            }
+          ]
+        },
+        "$var": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
+            },
+            {
+              "$ref": "#/definitions/ParameterReference"
+            }
+          ]
+        }
+      },
+      "required": [
+        "$value",
+        "$var",
+        "$every",
+        "$some",
+        "$not"
+      ],
+      "type": "object"
+    },
+    "ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_": {
+      "additionalProperties": false,
+      "properties": {
+        "visibility": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
+            },
+            {
+              "$ref": "#/definitions/ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression%7Cundefined)_"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_[]_": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          {
+            "$ref": "#/definitions/ParameterReferenceable_Restricted.Expression_VisualBlockDescriptions.VisibilityVars__"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "$ref": "#/definitions/ParameterReference"
+          }
+        ]
+      },
+      "type": "object"
+    },
+    "ParameterType": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ParameterTypeString"
+        },
+        {
+          "$ref": "#/definitions/ParameterBoolean"
+        },
+        {
+          "$ref": "#/definitions/ParameterTypeColor"
+        }
+      ]
+    },
+    "ParameterTypeColor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "color"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterTypeString": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "string"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterValue": {
+      "type": [
+        "string",
+        "boolean"
+      ]
+    },
+    "ParameterValues": {
+      "additionalProperties": {
+        "$ref": "#/definitions/ParameterValue"
+      },
+      "type": "object"
+    },
+    "Position": {
+      "enum": [
+        "start",
+        "end",
+        "none"
+      ],
+      "type": "string"
+    },
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
+      ],
+      "type": "object"
+    },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays (limited) results of SQL-queries",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ReferenceableTraits": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "applyMode": {
+            "enum": [
+              "shallowMerge",
+              "deepMerge",
+              "replace"
+            ],
+            "type": "string"
+          },
+          "instructions": {
+            "additionalProperties": false,
+            "properties": {
+              "attributeMapping": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AttributeMappingOrder"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_AttributeMappingOrder_"
+                  }
+                ]
+              },
+              "between": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "emptyDropTarget": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "generateErrorIndicator": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/Position"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "onDrop": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_VisualBlockDescriptions.DropTargetProperties_"
+                  }
+                ]
+              },
+              "propReadOnly": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "style": {
+                "anyOf": [
+                  {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "instructions",
+          "applyMode"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "ReferenceableTypeInstructionsDescription": {
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions%2CParameterReferenceable_BlockInstructions__",
+      "description": "Type instructions that may contain references."
+    },
+    "Restricted.Expression_VisualBlockDescriptions.VisibilityVars_": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Restricted.Value"
+        },
+        {
+          "$ref": "#/definitions/Restricted.Variable_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.Operation_VisualBlockDescriptions.VisibilityVars_"
+        }
+      ]
+    },
+    "Restricted.Operation_VisualBlockDescriptions.VisibilityVars_": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Restricted.OperationEvery_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.OperationSome_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.OperationNot_VisualBlockDescriptions.VisibilityVars_"
+        }
+      ]
+    },
+    "Restricted.OperationEvery_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$every": {
+          "items": {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "$every"
+      ],
+      "type": "object"
+    },
+    "Restricted.OperationNot_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$not": {
+          "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+        }
+      },
+      "required": [
+        "$not"
+      ],
+      "type": "object"
+    },
+    "Restricted.OperationSome_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$some": {
+          "items": {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "$some"
+      ],
+      "type": "object"
+    },
+    "Restricted.Value": {
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "$value"
+      ],
+      "type": "object"
+    },
+    "Restricted.Variable_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$var": {
+          "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
+        }
+      },
+      "required": [
+        "$var"
+      ],
+      "type": "object"
+    },
+    "ScopeTraitAdd": {
+      "additionalProperties": false,
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "blocks": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "traits": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "traits"
+      ],
+      "type": "object"
+    },
+    "SidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
+      "properties": {
+        "defaultNode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeTailoredDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeTailoredDescription"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
+        }
+      },
+      "required": [
+        "displayName",
+        "defaultNode"
+      ],
+      "type": "object"
+    },
+    "SidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FixedBlocksSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckProgramUserFunctionsSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/MetaDefinedTypeSidebarDescription"
+        }
+      ],
+      "description": "All possible sidebar types"
+    },
+    "TreeBlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "description": "Visualizes a block language by showing the tree structure. This is not\nvery user friendly but probably useful to debug.",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "tree"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "TruckControllerComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck controller",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "truck-controller"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckProgramUserFunctionsSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "truckProgramUserFunctions"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "TruckSensorsComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a trucks sensors",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "truck-sensors"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckWorldComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck world",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "truck-world"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ValidatorComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays validation results",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "validator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.DropTargetProperties": {
+      "additionalProperties": false,
+      "description": "These properties are required to specify drop targets.",
+      "properties": {
+        "visibility": {
+          "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
+        }
+      },
+      "type": "object"
+    },
+    "VisualBlockDescriptions.VisibilityExpression": {
+      "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_",
+      "description": "This expression is evaluated to determine whether a drop target should be shown."
+    },
+    "VisualBlockDescriptions.VisibilityVars": {
+      "description": "These variables are available when evaluating drop target visibility.",
+      "enum": [
+        "ifAnyDrag",
+        "ifLegalDrag",
+        "ifLegalChild",
+        "ifEmpty",
+        "ifChildrenRequired"
+      ],
+      "type": "string"
+    }
+  }
+}

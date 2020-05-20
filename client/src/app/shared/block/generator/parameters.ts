@@ -1,10 +1,17 @@
-import * as Desc from './parameters.description'
-import { isParameterReference, ParameterReference } from './parameters.description';
+import * as Desc from "./parameters.description";
 import {
-  AllTypeInstructions, Instructions, AllReferenceableTypeInstructions,
-  ReferenceableInstructions, TypeInstructionsDescription, ReferenceableTypeInstructionsDescription
-} from './instructions.description';
-import { GeneratorError } from './error.description';
+  isParameterReference,
+  ParameterReference,
+} from "./parameters.description";
+import {
+  AllTypeInstructions,
+  Instructions,
+  AllReferenceableTypeInstructions,
+  ReferenceableInstructions,
+  TypeInstructionsDescription,
+  ReferenceableTypeInstructionsDescription,
+} from "./instructions.description";
+import { GeneratorError } from "./error.description";
 
 // Function with this signature may be used
 export type ValidationFunction = (
@@ -13,24 +20,24 @@ export type ValidationFunction = (
 ) => boolean;
 
 export const ValidatorFunctions: { [name: string]: ValidationFunction } = {
-  "string": (_expectedType, _value) => {
-    return (true);
+  string: (_expectedType, _value) => {
+    return true;
   },
-  "boolean": (_expectedType, _value) => {
-    return (true);
-  }
-}
+  boolean: (_expectedType, _value) => {
+    return true;
+  },
+};
 
 /**
  * Finds all references in the given object and its children.
  */
-export function* allReferences(values: any): Iterable<ParameterReference> {
+export function* allReferences(values: unknown): Iterable<ParameterReference> {
   if (typeof values === "object" && !!values) {
     if (isParameterReference(values)) {
       yield values;
     } else {
       for (let sub of Object.values(values)) {
-        yield* allReferences(sub)
+        yield* allReferences(sub);
       }
     }
   }
@@ -57,7 +64,11 @@ export class ParameterMap {
       if (existing) {
         // TODO: Instead of throwing an error directly one could possibly check
         // whether the re-declaration actually differs.
-        throw new Error(`Parameter "${name}" has been declared before: ${JSON.stringify(existing)}`);
+        throw new Error(
+          `Parameter "${name}" has been declared before: ${JSON.stringify(
+            existing
+          )}`
+        );
       } else {
         // Newly introduced, lets store a copy of it
         this._knownParameters[name] = Object.assign({}, param);
@@ -85,7 +96,7 @@ export class ParameterMap {
         // No, that is a problem
         toReturn.push({
           type: "ParameterMissingValue",
-          name: name
+          name: name,
         });
       } else {
         // Yes, lets see whether it is valid
@@ -99,23 +110,23 @@ export class ParameterMap {
       if (!this._knownParameters[name]) {
         toReturn.push({
           type: "ValueForUnknownParameter",
-          name: name
+          name: name,
         });
       }
     });
 
     // Check every value that should be resolved
-    Array.from(allReferences(instructions)).forEach(ref => {
+    Array.from(allReferences(instructions)).forEach((ref) => {
       ref;
       if (!(ref.$ref in this._knownParameters)) {
         toReturn.push({
           type: "ReferenceToUnknownParameter",
-          name: ref.$ref
+          name: ref.$ref,
         });
       }
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -129,12 +140,13 @@ export class ParameterMap {
       const currentGrammar = {};
       toReturn[grammarName] = currentGrammar;
       Object.entries(types).forEach(([typeName, typeInstructions]) => {
-        currentGrammar[typeName] = this.resolveTypeInstructions(typeInstructions);
+        currentGrammar[typeName] = this.resolveTypeInstructions(
+          typeInstructions
+        );
       });
     });
 
-
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -146,36 +158,40 @@ export class ParameterMap {
     const singleBlock: TypeInstructionsDescription = {};
 
     if (referenceable.attributes) {
-      singleBlock.attributes = this.mapAttributes(referenceable.attributes)
+      singleBlock.attributes = this.mapAttributes(referenceable.attributes);
     }
 
     if (referenceable.blocks) {
-      singleBlock.blocks = referenceable.blocks.map(b => this.resolveInstructions(b));
+      singleBlock.blocks = referenceable.blocks.map((b) =>
+        this.resolveInstructions(b)
+      );
     }
 
-    return (singleBlock);
+    return singleBlock;
   }
 
   /**
    * Mapping the attributes that are present.
    */
-  private mapAttributes(
-    referenceable: { [type: string]: Partial<ReferenceableInstructions> }
-  ): { [type: string]: Partial<Instructions> } {
+  private mapAttributes(referenceable: {
+    [type: string]: Partial<ReferenceableInstructions>;
+  }): { [type: string]: Partial<Instructions> } {
     const toReturn: { [type: string]: Partial<Instructions> } = {};
 
     Object.entries(referenceable).forEach(([attributeName, instructions]) => {
       toReturn[attributeName] = this.resolveInstructions(instructions);
     });
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
    * This is the only function that actually does something interesting.
    * If the given instructions contain any references, these are resolved.
    */
-  private resolveInstructions(referenceable: Partial<ReferenceableInstructions>): Partial<Instructions> {
+  private resolveInstructions(
+    referenceable: Partial<ReferenceableInstructions>
+  ): Partial<Instructions> {
     const toReturn: Partial<Instructions> = {};
     Object.entries(referenceable).forEach(([name, value]) => {
       if (isParameterReference(value)) {
@@ -200,7 +216,7 @@ export class ParameterMap {
       });
     }
 
-    return (toReturn);
+    return toReturn;
   }
 
   /**
@@ -210,12 +226,15 @@ export class ParameterMap {
     let toReturn = undefined;
     if (name in this._currentValues) {
       toReturn = this._currentValues[name];
-    } else if (this._knownParameters[name] && "defaultValue" in this._knownParameters[name]) {
+    } else if (
+      this._knownParameters[name] &&
+      "defaultValue" in this._knownParameters[name]
+    ) {
       toReturn = this._knownParameters[name].defaultValue;
     } else {
       throw new Error(`Value "${name}" not known in paramMap`);
     }
 
-    return (toReturn);
+    return toReturn;
   }
 }

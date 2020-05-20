@@ -97,7 +97,7 @@ RSpec.describe Grammar, type: :model do
       ide_service = IdeService.instantiate(allow_mock: false)
       did_change = grammar.regenerate_from_code_resource!(ide_service)
 
-      expect(did_change).to eq true
+      expect(did_change).to eq [grammar]
       expect(grammar.model).to eq ({
                                      "root" => { "languageName" => "lang", "typeName" => "root" },
                                      "types" => {
@@ -117,8 +117,8 @@ RSpec.describe Grammar, type: :model do
 
       ide_service = IdeService.instantiate(allow_mock: false)
 
-      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq true
-      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq false
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq [grammar]
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq []
     end
   end
 end

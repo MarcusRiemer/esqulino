@@ -1,19 +1,32 @@
-import { BehaviorSubject, Subject, Observable } from 'rxjs'
+import { BehaviorSubject, Subject, Observable } from "rxjs";
+
+import { Invalidateable, Saveable, SaveStateEvent } from "./interfaces";
 
 import {
-  Invalidateable, Saveable, SaveStateEvent
-} from './interfaces'
-
-import {
-  ApiVersion, ApiVersionToken, ProjectResourceDescription,
-  CURRENT_API_VERSION
-} from './resource.description'
-import { ResourceReferencesService } from './resource-references.service';
+  ApiVersion,
+  ApiVersionToken,
+  ProjectResourceDescription,
+  CURRENT_API_VERSION,
+  IdentifiableResourceDescription,
+} from "./resource.description";
+import { ResourceReferencesService } from "./resource-references.service";
 
 export {
   ProjectResourceDescription,
-  ApiVersion, ApiVersionToken, CURRENT_API_VERSION,
-  Invalidateable, Saveable
+  ApiVersion,
+  ApiVersionToken,
+  CURRENT_API_VERSION,
+  Invalidateable,
+  Saveable,
+};
+
+export function speakingResourceName(res: IdentifiableResourceDescription) {
+  const name = res["name"];
+  if (name) {
+    return `"${name}" (${res.id})`;
+  } else {
+    return res.id;
+  }
 }
 
 /**
@@ -33,9 +46,11 @@ export abstract class ProjectResource implements Saveable {
   private _invalidateEvent = new Subject<ProjectResource>();
 
   // Fired when the save-state has changed
-  private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<ProjectResource>>({
+  private _saveStateChangedEvent = new BehaviorSubject<
+    SaveStateEvent<ProjectResource>
+  >({
     resource: this,
-    saveRequired: this._saveRequired
+    saveRequired: this._saveRequired,
   });
 
   constructor(
@@ -55,7 +70,7 @@ export abstract class ProjectResource implements Saveable {
    * @return The name the user has given to this page
    */
   get name() {
-    return (this._name);
+    return this._name;
   }
 
   /**
@@ -70,7 +85,7 @@ export abstract class ProjectResource implements Saveable {
    * @return The unique id for this page
    */
   get id() {
-    return (this._id);
+    return this._id;
   }
 
   /**
@@ -99,7 +114,7 @@ export abstract class ProjectResource implements Saveable {
   private fireCurrentSaveState() {
     this._saveStateChangedEvent.next({
       resource: this,
-      saveRequired: this._saveRequired
+      saveRequired: this._saveRequired,
     });
   }
 
@@ -107,7 +122,7 @@ export abstract class ProjectResource implements Saveable {
    * Allows subscription to state-changes for the save event.
    */
   get saveStateChanged(): Observable<SaveStateEvent<ProjectResource>> {
-    return (this._saveStateChangedEvent);
+    return this._saveStateChangedEvent;
   }
 
   /**
@@ -122,14 +137,13 @@ export abstract class ProjectResource implements Saveable {
    *         to its visual representation.
    */
   get invalidateEvent(): Observable<ProjectResource> {
-    return (this._invalidateEvent);
+    return this._invalidateEvent;
   }
 
   /**
    * @return True, if this instance has changes that should be saved.
    */
   get isSavingRequired() {
-    return (this._saveRequired);
+    return this._saveRequired;
   }
-
 }

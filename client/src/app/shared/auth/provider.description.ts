@@ -18,10 +18,10 @@ export interface ProviderDescription {
   changes: {
     // TODO-TOM: should be renamed
     primary: string | null;
-  }
+  };
 }
 /**
- * The description will be used for the exchange 
+ * The description will be used for the exchange
  * of a primary e-mail and is send by an http request.
  */
 export interface ChangePrimaryEmailDescription {
@@ -29,7 +29,7 @@ export interface ChangePrimaryEmailDescription {
 }
 
 /**
- * The information for the representation 
+ * The information for the representation
  * of a provider-button.
  */
 export interface AvailableProvidersDescription {

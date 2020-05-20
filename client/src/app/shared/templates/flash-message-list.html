@@ -1,10 +1,10 @@
-<div *ngFor="let msg of messages; let i = index;"
-     class="alert alert-{{msg.type}}">
-  <button (click)="onClose(i)"
-          type="button"
-          class="close"
-          aria-label="Close">
+<div
+  *ngFor="let msg of messages; let i = index;"
+  class="alert alert-{{msg.type}}"
+>
+  <button (click)="onClose(i)" type="button" class="close" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
-  <strong>{{ msg.caption }}</strong> {{ msg.text }}
+  <strong>{{ msg.caption }}</strong>
+  {{ msg.text }}
 </div>

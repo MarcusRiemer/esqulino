@@ -1,4 +1,4 @@
-import { BlockLanguageDescription } from '../block-language.description'
+import { BlockLanguageDescription } from "../block-language.description";
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "af3a4b65-738c-4563-9632-2c65d3da6762",
@@ -10,34 +10,34 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
     {
       describedType: {
         languageName: "css",
-        typeName: "document"
+        typeName: "document",
       },
       visual: [
         {
           blockType: "block",
           dropTarget: {
-            visibility: { $var: "ifLegalChild" }
+            visibility: { $var: "ifLegalChild" },
           },
           children: [
             {
               blockType: "constant",
               text: "/* CSS Dokument */",
               style: {
-                color: "#006400"
-              }
+                color: "#006400",
+              },
             },
             {
               blockType: "iterator",
               childGroupName: "rules",
             },
-          ]
+          ],
         },
-      ]
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "rule"
+        typeName: "rule",
       },
       visual: [
         {
@@ -46,20 +46,22 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
+                visibility: {
+                  $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }],
+                },
               },
               children: [
                 {
                   blockType: "constant",
                   text: "❓",
                   style: {
-                    "paddingLeft": "10px",
-                    "paddingRight": "10px",
-                    "border": "2px solid red",
-                    "color": "darkred",
-                    "backgroundColor": "orange",
-                    "borderRadius": "500px",
-                    "cursor": "default",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    border: "2px solid red",
+                    color: "darkred",
+                    backgroundColor: "orange",
+                    borderRadius: "500px",
+                    cursor: "default",
                   },
                 },
               ],
@@ -72,50 +74,52 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "constant",
               text: "{",
               style: {
-                "marginLeft": "1ch"
-              }
+                marginLeft: "1ch",
+              },
             },
-          ]
+          ],
         },
         {
           blockType: "dropTarget",
           dropTarget: {
-            visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
+            visibility: {
+              $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }],
+            },
           },
           children: [
             {
               blockType: "constant",
               text: "❓",
               style: {
-                "marginLeft": "2ch",
-                "paddingLeft": "10px",
-                "paddingRight": "10px",
-                "border": "2px solid red",
-                "color": "darkred",
-                "backgroundColor": "orange",
-                "borderRadius": "500px",
-                "cursor": "default",
+                marginLeft: "2ch",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                border: "2px solid red",
+                color: "darkred",
+                backgroundColor: "orange",
+                borderRadius: "500px",
+                cursor: "default",
               },
             },
-          ]
+          ],
         },
         {
           blockType: "iterator",
           childGroupName: "declarations",
           style: {
-            "marginLeft": "2ch"
-          }
+            marginLeft: "2ch",
+          },
         },
         {
           blockType: "constant",
           text: "}",
         },
-      ]
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "selectorType"
+        typeName: "selectorType",
       },
       visual: [
         {
@@ -124,15 +128,15 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "input",
               property: "value",
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "selectorClass"
+        typeName: "selectorClass",
       },
       visual: [
         {
@@ -140,20 +144,20 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           children: [
             {
               blockType: "constant",
-              text: "."
+              text: ".",
             },
             {
               blockType: "input",
               property: "value",
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "selectorId"
+        typeName: "selectorId",
       },
       visual: [
         {
@@ -166,15 +170,15 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "input",
               property: "value",
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "declaration"
+        typeName: "declaration",
       },
       visual: [
         {
@@ -183,20 +187,22 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
+                visibility: {
+                  $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }],
+                },
               },
               children: [
                 {
                   blockType: "constant",
                   text: "❓",
                   style: {
-                    "paddingLeft": "10px",
-                    "paddingRight": "10px",
-                    "border": "2px solid red",
-                    "color": "darkred",
-                    "backgroundColor": "orange",
-                    "borderRadius": "500px",
-                    "cursor": "default",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    border: "2px solid red",
+                    color: "darkred",
+                    backgroundColor: "orange",
+                    borderRadius: "500px",
+                    cursor: "default",
                   },
                 },
               ],
@@ -209,26 +215,28 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "constant",
               text: ":",
               style: {
-                "marginRight": "1ch"
-              }
+                marginRight: "1ch",
+              },
             },
             {
               blockType: "dropTarget",
               dropTarget: {
-                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
+                visibility: {
+                  $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }],
+                },
               },
               children: [
                 {
                   blockType: "constant",
                   text: "❓",
                   style: {
-                    "paddingLeft": "10px",
-                    "paddingRight": "10px",
-                    "border": "2px solid red",
-                    "color": "darkred",
-                    "backgroundColor": "orange",
-                    "borderRadius": "500px",
-                    "cursor": "default",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    border: "2px solid red",
+                    color: "darkred",
+                    backgroundColor: "orange",
+                    borderRadius: "500px",
+                    cursor: "default",
                   },
                 },
               ],
@@ -239,16 +247,16 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             },
             {
               blockType: "constant",
-              text: ";"
+              text: ";",
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "exprColor"
+        typeName: "exprColor",
       },
       visual: [
         {
@@ -257,15 +265,15 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "input",
               property: "value",
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "exprAny"
+        typeName: "exprAny",
       },
       visual: [
         {
@@ -274,15 +282,15 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "input",
               property: "value",
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
     {
       describedType: {
         languageName: "css",
-        typeName: "propertyName"
+        typeName: "propertyName",
       },
       visual: [
         {
@@ -291,11 +299,11 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "input",
               property: "name",
-            }
-          ]
-        }
-      ]
-    }
+            },
+          ],
+        },
+      ],
+    },
   ],
   sidebars: [
     {
@@ -311,9 +319,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "document",
                 children: {
-                  "rules": []
-                }
-              }
+                  rules: [],
+                },
+              },
             },
             {
               displayName: "Regel",
@@ -321,10 +329,10 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "rule",
                 children: {
-                  "selectors": [],
-                  "declarations": [],
-                }
-              }
+                  selectors: [],
+                  declarations: [],
+                },
+              },
             },
             {
               displayName: "<eigenschaft>: <wert>",
@@ -332,12 +340,12 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "declaration",
                 children: {
-                  "name": [],
-                  "value": []
-                }
-              }
+                  name: [],
+                  value: [],
+                },
+              },
             },
-          ]
+          ],
         },
         {
           categoryCaption: "Selektoren",
@@ -348,9 +356,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "selectorType",
                 properties: {
-                  "value": "h1"
-                }
-              }
+                  value: "h1",
+                },
+              },
             },
             {
               displayName: "h2",
@@ -358,11 +366,11 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "selectorType",
                 properties: {
-                  "value": "h2"
-                }
-              }
+                  value: "h2",
+                },
+              },
             },
-          ]
+          ],
         },
         {
           categoryCaption: "Eigenschaften",
@@ -373,9 +381,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "propertyName",
                 properties: {
-                  "name": "backgroundColor"
-                }
-              }
+                  name: "backgroundColor",
+                },
+              },
             },
             {
               displayName: "color",
@@ -383,11 +391,11 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "propertyName",
                 properties: {
-                  "name": "color"
-                }
-              }
+                  name: "color",
+                },
+              },
             },
-          ]
+          ],
         },
         {
           categoryCaption: "Werte",
@@ -398,9 +406,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "exprAny",
                 properties: {
-                  "value": "any"
-                }
-              }
+                  value: "any",
+                },
+              },
             },
             {
               displayName: "color: red",
@@ -408,9 +416,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "exprColor",
                 properties: {
-                  "value": "red"
-                }
-              }
+                  value: "red",
+                },
+              },
             },
             {
               displayName: "color: green",
@@ -418,9 +426,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "exprColor",
                 properties: {
-                  "value": "green"
-                }
-              }
+                  value: "green",
+                },
+              },
             },
             {
               displayName: "color: blue",
@@ -428,13 +436,13 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 language: "css",
                 name: "exprColor",
                 properties: {
-                  "value": "blue"
-                }
-              }
+                  value: "blue",
+                },
+              },
             },
-          ]
-        }
-      ]
-    }
-  ]
-}
+          ],
+        },
+      ],
+    },
+  ],
+};

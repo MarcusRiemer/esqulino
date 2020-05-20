@@ -1,4 +1,4 @@
-import { NodeDescription } from '../syntaxtree.description';
+import { NodeDescription } from "../syntaxtree.description";
 
 /**
  * Parameters for queries (for the moment) may be primitive values.

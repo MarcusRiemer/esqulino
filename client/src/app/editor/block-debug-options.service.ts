@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
 
 class ObservableValue<T> {
   private _value = new BehaviorSubject<T>(undefined);
@@ -10,16 +10,25 @@ class ObservableValue<T> {
 
   readonly value$: Observable<T> = this._value;
 
-  get value() { return (this._value.value); }
-  set value(v: T) { this._value.next(v) }
+  get value() {
+    return this._value.value;
+  }
+  set value(v: T) {
+    this._value.next(v);
+  }
 }
 
 @Injectable()
 export class BlockDebugOptionsService {
   /**
-   * Should the internal AST be rendered (instead of the "normal" block language)
+   * Should the editable AST be rendered (instead of the "normal" block language)
    */
-  readonly showInternalAst = new ObservableValue<boolean>(false);
+  readonly showEditableAst = new ObservableValue<boolean>(false);
+
+  /**
+   * Should the JSON AST be rendered?
+   */
+  readonly showJsonAst = new ObservableValue<boolean>(false);
 
   /**
    * Options to change languages for code resources.

@@ -1,16 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
-import { Node } from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions } from '../../../shared/block';
+import { Node } from "../../../shared/syntaxtree";
+import { VisualBlockDescriptions } from "../../../shared/block";
 
-import { RenderedCodeResourceService } from './rendered-coderesource.service';
+import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 
 /**
  * Allows editing of atomic values. These are cached inside this component
  * before beeing applied to the node.
  */
 @Component({
-  templateUrl: 'templates/block-render-input.html',
+  templateUrl: "templates/block-render-input.html",
   selector: `editor-block-render-input`,
 })
 export class BlockRenderInputComponent {
@@ -22,9 +22,7 @@ export class BlockRenderInputComponent {
    */
   public editedValue: string;
 
-  constructor(
-    private _renderData: RenderedCodeResourceService,
-  ) { }
+  constructor(private _renderData: RenderedCodeResourceService) {}
 
   /**
    * True, if this block is currently beeing edited.
@@ -44,7 +42,7 @@ export class BlockRenderInputComponent {
   onDragStart(evt: DragEvent) {
     evt.stopPropagation();
     evt.preventDefault();
-    return (false);
+    return false;
   }
 
   /**
@@ -75,28 +73,32 @@ export class BlockRenderInputComponent {
    */
   get hasValue() {
     const val = this.currentValue;
-    return (!(val === undefined || val === null || val === ""));
+    return !(val === undefined || val === null || val === "");
   }
 
   /**
    * @return The value of the property in the tree.
    */
   get currentValue() {
-    return (this.node.properties[this.visual.property]);
+    return this.node.properties[this.visual.property];
   }
 
   /**
    * @return A representation of the value that is suited for "normal" display.
    */
   get currentDisplayValue() {
-    return this.currentValue.replace(/ /g, "␣");
+    if (this.visual.cssClasses?.includes("explicit-spaces")) {
+      return this.currentValue.replace(/ /g, "␣");
+    } else {
+      return this.currentValue;
+    }
   }
 
   /**
    * @return True, if the block is currently in edit mode
    */
   get currentlyEditing() {
-    return (this._currentlyEditing);
+    return this._currentlyEditing;
   }
 
   set currentlyEditing(value: boolean) {
@@ -114,7 +116,7 @@ export class BlockRenderInputComponent {
    */
   get inputSize() {
     const value = this.editedValue || "";
-    return (Math.max(1, value.length));
+    return Math.max(1, value.length);
   }
 
   /**
@@ -139,7 +141,11 @@ export class BlockRenderInputComponent {
    */
   setEditedProperty(newValue: string) {
     if (newValue != this.currentValue) {
-      this._renderData.codeResource.setProperty(this.node.location, this.visual.property, newValue);
+      this._renderData.codeResource.setProperty(
+        this.node.location,
+        this.visual.property,
+        newValue
+      );
     }
   }
 }

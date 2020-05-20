@@ -1,8 +1,8 @@
-import * as AST from '../syntaxtree';
-import * as Schema from './grammar.description';
-import { Validator } from './validator';
-import { ErrorCodes } from './validation-result';
-import { smartDropLocation } from './drop';
+import * as AST from "../syntaxtree";
+import * as Schema from "./grammar.description";
+import { Validator } from "./validator";
+import { ErrorCodes } from "./validation-result";
+import { smartDropLocation } from "./drop";
 
 /**
  * This grammar is close to the "real" grammar used for SQL (which is stored
@@ -15,560 +15,513 @@ export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "sql",
   root: { languageName: "sql", typeName: "query" },
   types: {
-    "sql": {
-      "from": {
-        "type": "concrete",
-        "attributes": [
+    sql: {
+      from: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "FROM"
+            name: "keyword",
+            type: "terminal",
+            symbol: "FROM",
           },
           {
-            "name": "tables",
-            "type": "sequence",
-            "between": {
-              "name": "columnSeparator",
-              "type": "terminal",
-              "symbol": ","
+            name: "tables",
+            type: "sequence",
+            between: {
+              name: "columnSeparator",
+              type: "terminal",
+              symbol: ",",
             },
-            "nodeTypes": [
+            nodeTypes: [
               {
-                "occurs": "+",
-                "nodeType": "tableIntroduction"
-              }
-            ]
+                occurs: "+",
+                nodeType: "tableIntroduction",
+              },
+            ],
           },
           {
-            "name": "joins",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "joins",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "*",
-                "nodeType": "join"
-              }
-            ]
-          }
-        ]
+                occurs: "*",
+                nodeType: "join",
+              },
+            ],
+          },
+        ],
       },
-      "join": {
-        "type": "oneOf",
-        "oneOf": [
-          "crossJoin",
-          "innerJoinUsing",
-          "innerJoinOn"
-        ]
+      join: {
+        type: "oneOf",
+        oneOf: ["crossJoin", "innerJoinUsing", "innerJoinOn"],
       },
-      "query": {
-        "type": "oneOf",
-        "oneOf": [
-          "querySelect",
-          "queryDelete"
-        ]
+      query: {
+        type: "oneOf",
+        oneOf: ["querySelect", "queryDelete"],
       },
-      "where": {
-        "type": "concrete",
-        "attributes": [
+      where: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "WHERE"
+            name: "keyword",
+            type: "terminal",
+            symbol: "WHERE",
           },
           {
-            "name": "expressions",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "expressions",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "1",
-                "nodeType": {
-                  "typeName": "expression",
-                  "languageName": "sql"
-                }
+                occurs: "1",
+                nodeType: {
+                  typeName: "expression",
+                  languageName: "sql",
+                },
               },
               {
-                "occurs": "*",
-                "nodeType": {
-                  "typeName": "whereAdditional",
-                  "languageName": "sql"
-                }
-              }
-            ]
-          }
-        ]
+                occurs: "*",
+                nodeType: {
+                  typeName: "whereAdditional",
+                  languageName: "sql",
+                },
+              },
+            ],
+          },
+        ],
       },
-      "delete": {
-        "type": "concrete",
-        "attributes": [
+      delete: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "DELETE"
-          }
-        ]
+            name: "keyword",
+            type: "terminal",
+            symbol: "DELETE",
+          },
+        ],
       },
-      "select": {
-        "type": "concrete",
-        "attributes": [
+      select: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "SELECT"
+            name: "keyword",
+            type: "terminal",
+            symbol: "SELECT",
           },
           {
-            "base": "boolean",
-            "name": "distinct",
-            "type": "property",
-            "isOptional": true
+            base: "boolean",
+            name: "distinct",
+            type: "property",
+            isOptional: true,
           },
           {
-            "name": "columns",
-            "type": "allowed",
-            "between": {
-              "name": "columnSeparator",
-              "type": "terminal",
-              "symbol": ","
+            name: "columns",
+            type: "allowed",
+            between: {
+              name: "columnSeparator",
+              type: "terminal",
+              symbol: ",",
             },
-            "nodeTypes": [
+            nodeTypes: [
               {
-                "occurs": "*",
-                "nodeType": "expression"
+                occurs: "*",
+                nodeType: "expression",
               },
               {
-                "occurs": "?",
-                "nodeType": "starOperator"
-              }
-            ]
-          }
-        ]
+                occurs: "?",
+                nodeType: "starOperator",
+              },
+            ],
+          },
+        ],
       },
-      "groupBy": {
-        "type": "concrete",
-        "attributes": [
+      groupBy: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "GROUP BY"
+            name: "keyword",
+            type: "terminal",
+            symbol: "GROUP BY",
           },
           {
-            "name": "expressions",
-            "type": "allowed",
-            "between": {
-              "name": "columnSeparator",
-              "type": "terminal",
-              "symbol": ","
+            name: "expressions",
+            type: "allowed",
+            between: {
+              name: "columnSeparator",
+              type: "terminal",
+              symbol: ",",
             },
-            "nodeTypes": [
+            nodeTypes: [
               {
-                "occurs": "+",
-                "nodeType": {
-                  "typeName": "expression",
-                  "languageName": "sql"
-                }
-              }
-            ]
-          }
-        ]
+                occurs: "+",
+                nodeType: {
+                  typeName: "expression",
+                  languageName: "sql",
+                },
+              },
+            ],
+          },
+        ],
       },
-      "orderBy": {
-        "type": "concrete",
-        "attributes": [
+      orderBy: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "ORDER BY"
+            name: "keyword",
+            type: "terminal",
+            symbol: "ORDER BY",
           },
           {
-            "name": "expressions",
-            "type": "allowed",
-            "between": {
-              "name": "columnSeparator",
-              "type": "terminal",
-              "symbol": ","
+            name: "expressions",
+            type: "allowed",
+            between: {
+              name: "columnSeparator",
+              type: "terminal",
+              symbol: ",",
             },
-            "nodeTypes": [
+            nodeTypes: [
               {
-                "occurs": "+",
-                "nodeType": {
-                  "typeName": "expression",
-                  "languageName": "sql"
-                }
-              }
-            ]
-          }
-        ]
+                occurs: "+",
+                nodeType: {
+                  typeName: "expression",
+                  languageName: "sql",
+                },
+              },
+            ],
+          },
+        ],
       },
-      "constant": {
-        "type": "concrete",
-        "attributes": [
+      constant: {
+        type: "concrete",
+        attributes: [
           {
-            "base": "string",
-            "name": "value",
-            "type": "property"
-          }
-        ]
+            base: "string",
+            name: "value",
+            type: "property",
+          },
+        ],
       },
-      "crossJoin": {
-        "type": "concrete",
-        "attributes": [
+      crossJoin: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "table",
-            "type": "sequence",
-            "nodeTypes": [
-              "tableIntroduction"
-            ]
-          }
-        ]
+            name: "table",
+            type: "sequence",
+            nodeTypes: ["tableIntroduction"],
+          },
+        ],
       },
-      "parameter": {
-        "type": "concrete",
-        "attributes": [
+      parameter: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "colon",
-            "type": "terminal",
-            "symbol": ":"
+            name: "colon",
+            type: "terminal",
+            symbol: ":",
           },
           {
-            "base": "string",
-            "name": "name",
-            "type": "property"
-          }
-        ]
+            base: "string",
+            name: "name",
+            type: "property",
+          },
+        ],
       },
-      "columnName": {
-        "type": "concrete",
-        "attributes": [
+      columnName: {
+        type: "concrete",
+        attributes: [
           {
-            "base": "string",
-            "name": "refTableName",
-            "type": "property"
+            base: "string",
+            name: "refTableName",
+            type: "property",
           },
           {
-            "name": "dot",
-            "type": "terminal",
-            "symbol": "."
+            name: "dot",
+            type: "terminal",
+            symbol: ".",
           },
           {
-            "base": "string",
-            "name": "columnName",
-            "type": "property"
-          }
-        ]
+            base: "string",
+            name: "columnName",
+            type: "property",
+          },
+        ],
       },
-      "expression": {
-        "type": "oneOf",
-        "oneOf": [
+      expression: {
+        type: "oneOf",
+        oneOf: [
           "columnName",
           "binaryExpression",
           "constant",
           "parameter",
           "functionCall",
-          "parentheses"
-        ]
+          "parentheses",
+        ],
       },
-      "innerJoinOn": {
-        "type": "concrete",
-        "attributes": [
+      innerJoinOn: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "INNER JOIN"
+            name: "keyword",
+            type: "terminal",
+            symbol: "INNER JOIN",
           },
           {
-            "name": "table",
-            "type": "sequence",
-            "nodeTypes": [
-              "tableIntroduction"
-            ]
+            name: "table",
+            type: "sequence",
+            nodeTypes: ["tableIntroduction"],
           },
           {
-            "name": "keywordOn",
-            "type": "terminal",
-            "symbol": "ON"
+            name: "keywordOn",
+            type: "terminal",
+            symbol: "ON",
           },
           {
-            "name": "on",
-            "type": "sequence",
-            "nodeTypes": [
-              "expression"
-            ]
-          }
-        ]
+            name: "on",
+            type: "sequence",
+            nodeTypes: ["expression"],
+          },
+        ],
       },
-      "parentheses": {
-        "type": "concrete",
-        "attributes": [
+      parentheses: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "parenOpen",
-            "type": "terminal",
-            "symbol": "("
+            name: "parenOpen",
+            type: "terminal",
+            symbol: "(",
           },
           {
-            "name": "expression",
-            "type": "sequence",
-            "nodeTypes": [
-              "expression"
-            ]
+            name: "expression",
+            type: "sequence",
+            nodeTypes: ["expression"],
           },
           {
-            "name": "parenClose",
-            "type": "terminal",
-            "symbol": ")"
-          }
-        ]
+            name: "parenClose",
+            type: "terminal",
+            symbol: ")",
+          },
+        ],
       },
-      "queryDelete": {
-        "type": "concrete",
-        "attributes": [
+      queryDelete: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "delete",
-            "type": "sequence",
-            "nodeTypes": [
-              "delete"
-            ]
+            name: "delete",
+            type: "sequence",
+            nodeTypes: ["delete"],
           },
           {
-            "name": "from",
-            "type": "sequence",
-            "nodeTypes": [
-              "from"
-            ]
+            name: "from",
+            type: "sequence",
+            nodeTypes: ["from"],
           },
           {
-            "name": "where",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "where",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "?",
-                "nodeType": "where"
-              }
-            ]
-          }
-        ]
+                occurs: "?",
+                nodeType: "where",
+              },
+            ],
+          },
+        ],
       },
-      "querySelect": {
-        "type": "concrete",
-        "attributes": [
+      querySelect: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "select",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "select",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "1",
-                "nodeType": "select"
-              }
-            ]
+                occurs: "1",
+                nodeType: "select",
+              },
+            ],
           },
           {
-            "name": "from",
-            "type": "sequence",
-            "nodeTypes": [
-              "from"
-            ]
+            name: "from",
+            type: "sequence",
+            nodeTypes: ["from"],
           },
           {
-            "name": "where",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "where",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "?",
-                "nodeType": "where"
-              }
-            ]
+                occurs: "?",
+                nodeType: "where",
+              },
+            ],
           },
           {
-            "name": "groupBy",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "groupBy",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "?",
-                "nodeType": "groupBy"
-              }
-            ]
+                occurs: "?",
+                nodeType: "groupBy",
+              },
+            ],
           },
           {
-            "name": "orderBy",
-            "type": "sequence",
-            "nodeTypes": [
+            name: "orderBy",
+            type: "sequence",
+            nodeTypes: [
               {
-                "occurs": "?",
-                "nodeType": "orderBy"
-              }
-            ]
-          }
-        ]
+                occurs: "?",
+                nodeType: "orderBy",
+              },
+            ],
+          },
+        ],
       },
-      "functionCall": {
-        "type": "concrete",
-        "attributes": [
+      functionCall: {
+        type: "concrete",
+        attributes: [
           {
-            "base": "string",
-            "name": "name",
-            "type": "property"
+            base: "string",
+            name: "name",
+            type: "property",
           },
           {
-            "name": "paren-open",
-            "type": "terminal",
-            "symbol": "("
+            name: "paren-open",
+            type: "terminal",
+            symbol: "(",
           },
           {
-            "name": "arguments",
-            "type": "sequence",
-            "between": {
-              "name": "param-separator",
-              "type": "terminal",
-              "symbol": ","
+            name: "arguments",
+            type: "sequence",
+            between: {
+              name: "param-separator",
+              type: "terminal",
+              symbol: ",",
             },
-            "nodeTypes": [
+            nodeTypes: [
               {
-                "occurs": "*",
-                "nodeType": "expression"
-              }
-            ]
+                occurs: "*",
+                nodeType: "expression",
+              },
+            ],
           },
           {
-            "name": "paren-close",
-            "type": "terminal",
-            "symbol": ")"
-          }
-        ]
+            name: "paren-close",
+            type: "terminal",
+            symbol: ")",
+          },
+        ],
       },
-      "starOperator": {
-        "type": "concrete",
-        "attributes": [
+      starOperator: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "star",
-            "type": "terminal",
-            "symbol": "*"
-          }
-        ]
+            name: "star",
+            type: "terminal",
+            symbol: "*",
+          },
+        ],
       },
-      "innerJoinUsing": {
-        "type": "concrete",
-        "attributes": [
+      innerJoinUsing: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "keyword",
-            "type": "terminal",
-            "symbol": "INNER JOIN"
+            name: "keyword",
+            type: "terminal",
+            symbol: "INNER JOIN",
           },
           {
-            "name": "table",
-            "type": "sequence",
-            "nodeTypes": [
-              "tableIntroduction"
-            ]
+            name: "table",
+            type: "sequence",
+            nodeTypes: ["tableIntroduction"],
           },
           {
-            "name": "keywordUsing",
-            "type": "terminal",
-            "symbol": "USING"
+            name: "keywordUsing",
+            type: "terminal",
+            symbol: "USING",
           },
           {
-            "name": "using",
-            "type": "sequence",
-            "nodeTypes": [
-              "expression"
-            ]
-          }
-        ]
+            name: "using",
+            type: "sequence",
+            nodeTypes: ["expression"],
+          },
+        ],
       },
-      "whereAdditional": {
-        "type": "concrete",
-        "attributes": [
+      whereAdditional: {
+        type: "concrete",
+        attributes: [
           {
-            "base": "string",
-            "name": "operator",
-            "type": "property",
-            "restrictions": [
+            base: "string",
+            name: "operator",
+            type: "property",
+            restrictions: [
               {
-                "type": "enum",
-                "value": [
-                  "and",
-                  "or"
-                ]
-              }
-            ]
+                type: "enum",
+                value: ["and", "or"],
+              },
+            ],
           },
           {
-            "name": "expression",
-            "type": "sequence",
-            "nodeTypes": [
-              "expression"
-            ]
-          }
-        ]
+            name: "expression",
+            type: "sequence",
+            nodeTypes: ["expression"],
+          },
+        ],
       },
-      "binaryExpression": {
-        "type": "concrete",
-        "attributes": [
+      binaryExpression: {
+        type: "concrete",
+        attributes: [
           {
-            "name": "lhs",
-            "type": "sequence",
-            "nodeTypes": [
-              "expression"
-            ]
+            name: "lhs",
+            type: "sequence",
+            nodeTypes: ["expression"],
           },
           {
-            "name": "operator",
-            "type": "sequence",
-            "nodeTypes": [
-              "relationalOperator"
-            ]
+            name: "operator",
+            type: "sequence",
+            nodeTypes: ["relationalOperator"],
           },
           {
-            "name": "rhs",
-            "type": "sequence",
-            "nodeTypes": [
-              "expression"
-            ]
-          }
-        ]
+            name: "rhs",
+            type: "sequence",
+            nodeTypes: ["expression"],
+          },
+        ],
       },
-      "tableIntroduction": {
-        "type": "concrete",
-        "attributes": [
+      tableIntroduction: {
+        type: "concrete",
+        attributes: [
           {
-            "base": "string",
-            "name": "name",
-            "type": "property"
+            base: "string",
+            name: "name",
+            type: "property",
           },
           {
-            "base": "string",
-            "name": "alias",
-            "type": "property",
-            "isOptional": true
-          }
-        ]
+            base: "string",
+            name: "alias",
+            type: "property",
+            isOptional: true,
+          },
+        ],
       },
-      "relationalOperator": {
-        "type": "concrete",
-        "attributes": [
+      relationalOperator: {
+        type: "concrete",
+        attributes: [
           {
-            "base": "string",
-            "name": "operator",
-            "type": "property",
-            "restrictions": [
+            base: "string",
+            name: "operator",
+            type: "property",
+            restrictions: [
               {
-                "type": "enum",
-                "value": [
-                  "<",
-                  "<=",
-                  "=",
-                  "<>",
-                  ">=",
-                  ">",
-                  "LIKE",
-                  "NOT LIKE"
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                type: "enum",
+                value: ["<", "<=", "=", "<>", ">=", ">", "LIKE", "NOT LIKE"],
+              },
+            ],
+          },
+        ],
+      },
     },
-  }
-}
-
-
+  },
+};
 
 describe("Complex Spec Grammar: SQL", () => {
   describe("Validation", () => {
@@ -595,38 +548,38 @@ describe("Complex Spec Grammar: SQL", () => {
         language: "sql",
         name: "querySelect",
         children: {
-          "select": [
+          select: [
             {
               language: "sql",
               name: "select",
               children: {
-                "columns": [
+                columns: [
                   {
                     language: "sql",
-                    name: "starOperator"
-                  }
-                ]
-              }
-            }
+                    name: "starOperator",
+                  },
+                ],
+              },
+            },
           ],
-          "from": [
+          from: [
             {
               language: "sql",
               name: "from",
               children: {
-                "tables": [
+                tables: [
                   {
                     language: "sql",
                     name: "tableIntroduction",
                     properties: {
-                      "name": "foo"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      name: "foo",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       };
 
       const ast = new AST.Node(astDesc, undefined);
@@ -642,55 +595,55 @@ describe("Complex Spec Grammar: SQL", () => {
         language: "sql",
         name: "querySelect",
         children: {
-          "select": [
+          select: [
             {
               language: "sql",
               name: "select",
               children: {
-                "columns": [
+                columns: [
                   {
                     language: "sql",
-                    name: "starOperator"
-                  }
-                ]
-              }
+                    name: "starOperator",
+                  },
+                ],
+              },
             },
           ],
-          "from": [
+          from: [
             {
               language: "sql",
               name: "from",
               children: {
-                "tables": [
+                tables: [
                   {
                     language: "sql",
                     name: "tableIntroduction",
                     properties: {
-                      "name": "foo"
-                    }
+                      name: "foo",
+                    },
                   },
                 ],
-                "joins": [
+                joins: [
                   {
                     language: "sql",
                     name: "crossJoin",
                     children: {
-                      "table": [
+                      table: [
                         {
-                          "language": "sql",
-                          "name": "tableIntroduction",
+                          language: "sql",
+                          name: "tableIntroduction",
                           properties: {
-                            "name": "bar"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                            name: "bar",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       };
 
       const ast = new AST.Node(astDesc, undefined);
@@ -706,100 +659,100 @@ describe("Complex Spec Grammar: SQL", () => {
         language: "sql",
         name: "querySelect",
         children: {
-          "select": [
+          select: [
             {
               language: "sql",
               name: "select",
               children: {
-                "columns": [
+                columns: [
                   {
                     language: "sql",
-                    name: "starOperator"
-                  }
-                ]
-              }
+                    name: "starOperator",
+                  },
+                ],
+              },
             },
           ],
-          "from": [
+          from: [
             {
               language: "sql",
               name: "from",
               children: {
-                "tables": [
+                tables: [
                   {
                     language: "sql",
                     name: "tableIntroduction",
                     properties: {
-                      "name": "foo"
-                    }
+                      name: "foo",
+                    },
                   },
                 ],
-                "joins": [
+                joins: [
                   {
                     language: "sql",
                     name: "crossJoin",
                     children: {
-                      "table": [
+                      table: [
                         {
-                          "language": "sql",
-                          "name": "tableIntroduction",
+                          language: "sql",
+                          name: "tableIntroduction",
                           properties: {
-                            "name": "bar"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
+                            name: "bar",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
             },
           ],
-          "where": [
+          where: [
             {
               language: "sql",
               name: "where",
               children: {
-                "expressions": [
+                expressions: [
                   {
                     language: "sql",
                     name: "binaryExpression",
                     children: {
-                      "lhs": [
+                      lhs: [
                         {
                           language: "sql",
                           name: "columnName",
                           properties: {
-                            "columnName": "id",
-                            "refTableName": "foo"
-                          }
+                            columnName: "id",
+                            refTableName: "foo",
+                          },
                         },
                       ],
-                      "operator": [
+                      operator: [
                         {
                           language: "sql",
                           name: "relationalOperator",
                           properties: {
-                            "operator": "="
-                          }
+                            operator: "=",
+                          },
                         },
                       ],
-                      "rhs": [
+                      rhs: [
                         {
                           language: "sql",
                           name: "columnName",
                           properties: {
-                            "columnName": "id",
-                            "refTableName": "bar"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                            columnName: "id",
+                            refTableName: "bar",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       };
 
       const ast = new AST.Node(astDesc, undefined);
@@ -815,145 +768,145 @@ describe("Complex Spec Grammar: SQL", () => {
         language: "sql",
         name: "querySelect",
         children: {
-          "select": [
+          select: [
             {
               language: "sql",
               name: "select",
               children: {
-                "columns": [
+                columns: [
                   {
                     language: "sql",
-                    name: "starOperator"
-                  }
-                ]
-              }
+                    name: "starOperator",
+                  },
+                ],
+              },
             },
           ],
-          "from": [
+          from: [
             {
               language: "sql",
               name: "from",
               children: {
-                "tables": [
+                tables: [
                   {
                     language: "sql",
                     name: "tableIntroduction",
                     properties: {
-                      "name": "foo"
-                    }
+                      name: "foo",
+                    },
                   },
                 ],
-                "joins": [
+                joins: [
                   {
                     language: "sql",
                     name: "crossJoin",
                     children: {
-                      "table": [
+                      table: [
                         {
-                          "language": "sql",
-                          "name": "tableIntroduction",
+                          language: "sql",
+                          name: "tableIntroduction",
                           properties: {
-                            "name": "bar"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
+                            name: "bar",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
           ],
-          "where": [
+          where: [
             {
               language: "sql",
               name: "where",
               children: {
-                "expressions": [
+                expressions: [
                   {
                     language: "sql",
                     name: "binaryExpression",
                     children: {
-                      "lhs": [
+                      lhs: [
                         {
                           language: "sql",
                           name: "columnName",
                           properties: {
-                            "columnName": "id",
-                            "refTableName": "foo"
-                          }
+                            columnName: "id",
+                            refTableName: "foo",
+                          },
                         },
                       ],
-                      "operator": [
+                      operator: [
                         {
                           language: "sql",
                           name: "relationalOperator",
                           properties: {
-                            "operator": "="
-                          }
+                            operator: "=",
+                          },
                         },
                       ],
-                      "rhs": [
+                      rhs: [
                         {
                           language: "sql",
                           name: "columnName",
                           properties: {
-                            "columnName": "id",
-                            "refTableName": "bar"
-                          }
-                        }
-                      ]
-                    }
+                            columnName: "id",
+                            refTableName: "bar",
+                          },
+                        },
+                      ],
+                    },
                   },
                   {
                     language: "sql",
                     name: "whereAdditional",
                     children: {
-                      "expression": [
+                      expression: [
                         {
                           language: "sql",
                           name: "binaryExpression",
                           children: {
-                            "lhs": [
+                            lhs: [
                               {
                                 language: "sql",
                                 name: "columnName",
                                 properties: {
-                                  "columnName": "id",
-                                  "refTableName": "foo"
-                                }
+                                  columnName: "id",
+                                  refTableName: "foo",
+                                },
                               },
                             ],
-                            "operator": [
+                            operator: [
                               {
                                 language: "sql",
                                 name: "relationalOperator",
                                 properties: {
-                                  "operator": "="
-                                }
+                                  operator: "=",
+                                },
                               },
                             ],
-                            "rhs": [
+                            rhs: [
                               {
                                 language: "sql",
                                 name: "constant",
                                 properties: {
-                                  "value": "2",
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
+                                  value: "2",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
                     },
                     properties: {
-                      "operator": "and"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+                      operator: "and",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       };
 
       const ast = new AST.Node(astDesc, undefined);
@@ -963,34 +916,37 @@ describe("Complex Spec Grammar: SQL", () => {
     });
   });
 
-  it('Error: Two SELECT nodes in QUERY_SELECT, but no FROM', () => {
+  it("Error: Two SELECT nodes in QUERY_SELECT, but no FROM", () => {
     const astDesc: AST.NodeDescription = {
-      "name": "querySelect",
-      "language": "sql",
-      "children": {
-        "select": [
+      name: "querySelect",
+      language: "sql",
+      children: {
+        select: [
           {
-            "name": "select",
-            "language": "sql",
+            name: "select",
+            language: "sql",
             children: {
-              "columns": [{ language: "sql", name: "starOperator" }]
-            }
+              columns: [{ language: "sql", name: "starOperator" }],
+            },
           },
           {
-            "name": "select",
-            "language": "sql",
+            name: "select",
+            language: "sql",
             children: {
-              "columns": [{ language: "sql", name: "starOperator" }]
-            }
-          }
-        ]
-      }
+              columns: [{ language: "sql", name: "starOperator" }],
+            },
+          },
+        ],
+      },
     };
 
     const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
     const res = v.validateFromRoot(new AST.Tree(astDesc));
 
-    expect(res.errors.map(e => e.code)).toEqual([ErrorCodes.SuperflousChild, ErrorCodes.MissingChild]);
+    expect(res.errors.map((e) => e.code)).toEqual([
+      ErrorCodes.SuperflousChild,
+      ErrorCodes.MissingChild,
+    ]);
   });
 
   it('Smartly drops a "pure" SELECT on a partial Query', () => {
@@ -998,102 +954,123 @@ describe("Complex Spec Grammar: SQL", () => {
       language: "sql",
       name: "querySelect",
       children: {
-        "from": [
+        from: [
           {
             language: "sql",
             name: "from",
             children: {
-              "tables": [
+              tables: [
                 {
                   language: "sql",
                   name: "tableIntroduction",
                   properties: {
-                    "name": "foo"
-                  }
+                    name: "foo",
+                  },
                 },
               ],
-              "joins": [
+              joins: [
                 {
                   language: "sql",
                   name: "crossJoin",
                   children: {
-                    "table": [
+                    table: [
                       {
-                        "language": "sql",
-                        "name": "tableIntroduction",
+                        language: "sql",
+                        name: "tableIntroduction",
                         properties: {
-                          "name": "bar"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+                          name: "bar",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const dropCandidates: AST.NodeDescription[] = [
       {
-        "name": "querySelect",
-        "children": {
-          "from": [
+        name: "querySelect",
+        children: {
+          from: [
             {
-              "name": "from",
-              "language": "sql"
-            }
+              name: "from",
+              language: "sql",
+            },
           ],
-          "where": [],
-          "select": [
+          where: [],
+          select: [
             {
-              "name": "select",
-              "language": "sql"
-            }
+              name: "select",
+              language: "sql",
+            },
           ],
-          "groupBy": []
+          groupBy: [],
         },
-        "language": "sql"
+        language: "sql",
       },
       {
-        "name": "select",
-        "language": "sql"
-      }
+        name: "select",
+        language: "sql",
+      },
     ];
 
     const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
     const ast = new AST.Tree(astDesc);
 
-    expect(smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates))
+    expect(
+      smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates)
+    )
       .withContext(`Inserting at root`)
       .toEqual([
         {
           operation: "insert",
           algorithm: "allowAnyParent",
           location: [["select", 0]],
-          nodeDescription: dropCandidates[1]
-        }
+          nodeDescription: dropCandidates[1],
+        },
       ]);
-    expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0]], dropCandidates))
+    expect(
+      smartDropLocation(
+        { allowAnyParent: true },
+        v,
+        ast,
+        [["select", 0]],
+        dropCandidates
+      )
+    )
       .withContext(`Inserting at SELECT`)
       .toEqual([
         {
           operation: "insert",
           algorithm: "allowAnyParent",
           location: [["select", 0]],
-          nodeDescription: dropCandidates[1]
-        }
+          nodeDescription: dropCandidates[1],
+        },
       ]);
-    expect(smartDropLocation({ allowAnyParent: true }, v, ast, [["select", 0], ["columns", 0]], dropCandidates))
+    expect(
+      smartDropLocation(
+        { allowAnyParent: true },
+        v,
+        ast,
+        [
+          ["select", 0],
+          ["columns", 0],
+        ],
+        dropCandidates
+      )
+    )
       .withContext(`Inserting at first column of SELECT`)
       .toEqual([
         {
           operation: "insert",
           algorithm: "allowAnyParent",
           location: [["select", 0]],
-          nodeDescription: dropCandidates[1]
-        }
+          nodeDescription: dropCandidates[1],
+        },
       ]);
   });
 });

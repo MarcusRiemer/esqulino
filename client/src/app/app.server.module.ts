@@ -1,18 +1,15 @@
-import { NgModule } from '@angular/core';
-import { ServerModule } from '@angular/platform-server';
+import { NgModule } from "@angular/core";
+import { ServerModule } from "@angular/platform-server";
 
-import { AppModule } from './app.module'
-import { SqlScratchComponent } from './app.component';
+import { AppModule } from "./app.module";
+import { SqlScratchComponent } from "./app.component";
 
-import registerLanguages from './locale-registration';
+import registerLanguages from "./locale-registration";
 
-registerLanguages()
+registerLanguages();
 
 @NgModule({
-  imports: [
-    AppModule,
-    ServerModule
-],
-  bootstrap: [SqlScratchComponent]
+  imports: [AppModule, ServerModule],
+  bootstrap: [SqlScratchComponent],
 })
-export class AppServerModule { }
+export class AppServerModule {}

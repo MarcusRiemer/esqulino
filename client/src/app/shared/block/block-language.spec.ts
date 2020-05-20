@@ -1,8 +1,16 @@
-import { Tree, LanguageDefinition, Language, NodeTypeDescription } from '../syntaxtree';
+import {
+  Tree,
+  LanguageDefinition,
+  Language,
+  NodeTypeDescription,
+} from "../syntaxtree";
 
-import { BlockLanguageDescription, isBlockLanguageDescription } from './block-language.description'
-import { BlockLanguage } from './block-language'
-import { VisualBlockDescriptions } from './block.description'
+import {
+  BlockLanguageDescription,
+  isBlockLanguageDescription,
+} from "./block-language.description";
+import { BlockLanguage } from "./block-language";
+import { VisualBlockDescriptions } from "./block.description";
 
 const langEmptyBlocks: LanguageDefinition = {
   id: "emptyBlocks",
@@ -11,8 +19,8 @@ const langEmptyBlocks: LanguageDefinition = {
   validators: [
     {
       types: {
-        "emptyBlocks": {
-          "root": {
+        emptyBlocks: {
+          root: {
             attributes: [
               {
                 name: "cat_a",
@@ -20,20 +28,20 @@ const langEmptyBlocks: LanguageDefinition = {
                 nodeTypes: [
                   {
                     nodeType: "a",
-                    occurs: "+"
-                  }
-                ]
-              }
-            ]
+                    occurs: "+",
+                  },
+                ],
+              },
+            ],
           } as NodeTypeDescription,
-          "a": {} as NodeTypeDescription,
-          "z": {} as NodeTypeDescription
+          a: {} as NodeTypeDescription,
+          z: {} as NodeTypeDescription,
         },
       },
-      root: { languageName: "emptyBlocks", typeName: "root" }
-    }
-  ]
-}
+      root: { languageName: "emptyBlocks", typeName: "root" },
+    },
+  ],
+};
 
 const langModelEmptyBlocks: BlockLanguageDescription = {
   id: "emptyblocks",
@@ -55,24 +63,24 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
                 language: "emptyBlocks",
                 name: "root",
                 children: {
-                  "cat_a": []
-                }
-              }
+                  cat_a: [],
+                },
+              },
             },
             {
               displayName: "Empty a",
               defaultNode: {
                 language: "emptyBlocks",
-                name: "a"
-              }
-            }
-          ]
-        }
-      ]
+                name: "a",
+              },
+            },
+          ],
+        },
+      ],
     },
     {
-      type: "databaseSchema"
-    }
+      type: "databaseSchema",
+    },
   ],
   editorBlocks: [
     {
@@ -83,9 +91,9 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
       visual: [
         {
           blockType: "constant",
-          text: "root"
-        } as VisualBlockDescriptions.EditorConstant
-      ]
+          text: "root",
+        } as VisualBlockDescriptions.EditorConstant,
+      ],
     },
     {
       describedType: {
@@ -95,12 +103,12 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
       visual: [
         {
           blockType: "constant",
-          text: "a"
-        } as VisualBlockDescriptions.EditorConstant
-      ]
-    }
-  ]
-}
+          text: "a",
+        } as VisualBlockDescriptions.EditorConstant,
+      ],
+    },
+  ],
+};
 
 describe("Block Language", () => {
   it("identifies objects correctly", () => {
@@ -114,24 +122,33 @@ describe("Block Language", () => {
     expect(lm.id).toEqual(langModelEmptyBlocks.id);
     expect(lm.slug).toEqual(langModelEmptyBlocks.slug);
     expect(lm.name).toEqual(langModelEmptyBlocks.name);
-    expect(lm.defaultProgrammingLanguageId).toEqual(langModelEmptyBlocks.defaultProgrammingLanguageId);
+    expect(lm.defaultProgrammingLanguageId).toEqual(
+      langModelEmptyBlocks.defaultProgrammingLanguageId
+    );
 
     const missingEditorBlocks = lm.getMissingEditorBlocks(l);
     expect(missingEditorBlocks.length).toEqual(1);
-    expect(missingEditorBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
+    expect(missingEditorBlocks[0]).toEqual({
+      languageName: "emptyBlocks",
+      typeName: "z",
+    });
 
     expect(lm.sidebars.length).toEqual(2);
     expect(lm.hasMultipleSidebars).toBeTruthy();
 
-    expect(lm.getEditorBlock({ languageName: "emptyBlocks", typeName: "a" })).toBeTruthy();
-    expect(() => { lm.getEditorBlock({ languageName: "x", typeName: "x" }) }).toThrowError();
+    expect(
+      lm.getEditorBlock({ languageName: "emptyBlocks", typeName: "a" })
+    ).toBeTruthy();
+    expect(() => {
+      lm.getEditorBlock({ languageName: "x", typeName: "x" });
+    }).toThrowError();
   });
 
   it("Rejects to render a tree with only unknown types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
     const t = new Tree({
       language: "l",
-      name: "n1"
+      name: "n1",
     });
 
     expect(lm.canRenderTree(t)).toBe(false);
@@ -143,10 +160,8 @@ describe("Block Language", () => {
       language: "emptyBlocks",
       name: "root",
       children: {
-        "bla": [
-          { language: "l", name: "n1" }
-        ]
-      }
+        bla: [{ language: "l", name: "n1" }],
+      },
     });
 
     expect(lm.canRenderTree(t)).toBe(false);
@@ -158,11 +173,11 @@ describe("Block Language", () => {
       language: "emptyBlocks",
       name: "root",
       children: {
-        "bla": [
+        bla: [
           { language: "emptyBlocks", name: "a" },
           { language: "emptyBlocks", name: "a" },
-        ]
-      }
+        ],
+      },
     });
 
     expect(lm.canRenderTree(t)).toBe(true);

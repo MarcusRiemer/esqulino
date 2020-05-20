@@ -1,5 +1,5 @@
-import { EnvironmentDescription } from './environment.description'
-import * as VERSION from './version'
+import { EnvironmentDescription } from "./environment.description";
+import * as VERSION from "./version";
 
 export const environment: EnvironmentDescription = {
   production: true,
@@ -8,19 +8,19 @@ export const environment: EnvironmentDescription = {
   loginEnabled: false,
   piwik: {
     host: "https://piwik.blattwerkzeug.de",
-    id: 1
+    id: 1,
   },
   sentry: {
-    dsn: "https://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
+    dsn: "https://e64499f04f2c44bb8167cfb43a1928b3@sentry.blattwerkzeug.de/2",
     active: true,
-    showDialogue: true
+    showDialogue: true,
   },
   version: {
     hash: VERSION.GIT_REVISION,
-    date: VERSION.BUILD_DATE
+    date: VERSION.BUILD_DATE,
   },
   availableLanguages: [
-    { token: 'de', name: 'Deutsch' },
-    { token: 'en', name: 'English' },
-  ]
+    { token: "de", name: "Deutsch" },
+    { token: "en", name: "English" },
+  ],
 };

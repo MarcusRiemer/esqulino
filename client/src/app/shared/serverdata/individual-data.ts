@@ -1,12 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from "@angular/common/http";
 
-import { Observable } from 'rxjs';
-import { first, tap } from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { first, tap } from "rxjs/operators";
 
-import { IdentifiableResourceDescription } from '../resource.description';
+import { IdentifiableResourceDescription } from "../resource.description";
+import { speakingResourceName } from "../resource";
 
-import { IndividualDescriptionCache } from './request-cache';
-import { ResolveIndividualUrl } from './url-resolve';
+import { IndividualDescriptionCache } from "./request-cache";
+import { ResolveIndividualUrl } from "./url-resolve";
 
 /**
  * Access individual resources from a server.
@@ -16,8 +17,8 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
     // Deriving classes may need to make HTTP requests of their own
     protected _http: HttpClient,
     private _idResolver: ResolveIndividualUrl,
-    private _speakingName: string,
-  ) { }
+    private _speakingName: string
+  ) {}
 
   // Backing field for local cache, (obviously) not persisted between browser
   // sessions
@@ -27,7 +28,8 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
    * The individually cached resources.
    */
   protected readonly _individualCache = new IndividualDescriptionCache<TSingle>(
-    this._http, this._idResolver
+    this._http,
+    this._idResolver
   );
 
   /**
@@ -41,14 +43,14 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
       this._individualCache.refreshDescription(id);
     }
 
-    return (this._individualCache.getDescription(id));
+    return this._individualCache.getDescription(id);
   }
 
   /**
- * @param id The ID of the item to retrieve from cache
- * @param onMissing What to do if the item does not exist: Issue a request or return `undefined`
- * @return A locally cached version of the given resource
- */
+   * @param id The ID of the item to retrieve from cache
+   * @param onMissing What to do if the item does not exist: Issue a request or return `undefined`
+   * @return A locally cached version of the given resource
+   */
   getLocal(id: string, onMissing: "undefined"): TSingle;
   getLocal(id: string, onMissing: "request"): Promise<TSingle>;
   getLocal(
@@ -56,21 +58,23 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
     onMissing: "request" | "undefined" = "undefined"
   ): TSingle | Promise<TSingle> {
     let toReturn = this._localCache[id];
-    if (!toReturn && onMissing === "request") {
-      return (
-        this.getSingle(id).pipe(
-          // Without taking only the first item from `getSingle`, the promise
-          // will never be fulfilled
-          first(),
-          // Store value as a side effect
-          tap(value => this.setLocal(value))
-        ).toPromise()
-      );
-    } else if (onMissing === "request") {
-      return (Promise.resolve(toReturn));
-    }
-    else {
-      return (toReturn);
+    if (onMissing === "request") {
+      // We must return a promise, but can it be fulfilled right away?
+      if (toReturn) {
+        return Promise.resolve(toReturn);
+      } else {
+        return this.getSingle(id)
+          .pipe(
+            // Without taking only the first item from `getSingle`, the promise
+            // will never be fulfilled
+            first(),
+            // Store value as a side effect
+            tap((value) => this.setLocal(value))
+          )
+          .toPromise();
+      }
+    } else {
+      return toReturn;
     }
   }
 
@@ -78,7 +82,9 @@ export class IndividualData<TSingle extends IdentifiableResourceDescription> {
    * @param res The resource to cache locally
    */
   setLocal(res: TSingle) {
-    console.log(`Cache "${this._speakingName}" - Item with id ${res.id} added: `, res);
+    console.log(
+      `Cache "${this._speakingName}" - Item ${speakingResourceName(res)} added`
+    );
     this._localCache[res.id] = res;
   }
 }

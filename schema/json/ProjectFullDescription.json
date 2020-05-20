@@ -161,7 +161,8 @@
         {
           "$ref": "#/definitions/TreeBlockLanguageGeneratorDescription"
         }
-      ]
+      ],
+      "description": "All possible instructions to generate a block language."
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,
@@ -264,7 +265,7 @@
     },
     "CodeResourceSettingsComponentDescription": {
       "additionalProperties": false,
-      "description": "Displays the actual block editor",
+      "description": "Displays the settings for a certain resource",
       "properties": {
         "columnClasses": {
           "items": {
@@ -350,11 +351,11 @@
         "defaultNode": {
           "anyOf": [
             {
-              "$ref": "#/definitions/NodeDescription"
+              "$ref": "#/definitions/NodeTailoredDescription"
             },
             {
               "items": {
-                "$ref": "#/definitions/NodeDescription"
+                "$ref": "#/definitions/NodeTailoredDescription"
               },
               "type": "array"
             }
@@ -467,6 +468,9 @@
         },
         {
           "$ref": "#/definitions/DropDebugComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/JsonAstComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -776,7 +780,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
                   }
                 ]
               }
@@ -828,7 +832,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
                   }
                 ]
               }
@@ -838,6 +842,28 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "JsonAstComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a readonly JSON version of the AST",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "json-ast"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
       "type": "object"
     },
     "LengthRestrictionDescription": {
@@ -1099,6 +1125,76 @@
       ],
       "type": "object"
     },
+    "NodeDerivedPropertiesDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+                },
+                {
+                  "$ref": "#/definitions/NodeDescription"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/NodeDerivedProperty"
+              }
+            ]
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "language",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NodeDerivedProperty": {
+      "additionalProperties": false,
+      "properties": {
+        "loc": {
+          "$ref": "#/definitions/NodeLocation"
+        },
+        "propName": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "nodeDerivedProperty"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "loc",
+        "propName"
+      ],
+      "type": "object"
+    },
     "NodeDescription": {
       "additionalProperties": false,
       "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
@@ -1145,6 +1241,27 @@
         }
       ],
       "description": "The restrictions that are applicable to integers"
+    },
+    "NodeLocation": {
+      "description": "Contains the path to find a certain node in a syntax tree.\nThese paths currently always start from the root node.",
+      "items": {
+        "$ref": "#/definitions/NodeLocationStep"
+      },
+      "type": "array"
+    },
+    "NodeLocationStep": {
+      "description": "Determines the category and the index in that category\nof a node.",
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
     },
     "NodeOneOfTypeDescription": {
       "additionalProperties": false,
@@ -1322,6 +1439,17 @@
         }
       ],
       "description": "The restrictions that are applicable to strings"
+    },
+    "NodeTailoredDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeDescription"
+        }
+      ],
+      "description": "A description of a node that has \"holes\" in it, which may be filled\nwith the help of an existing AST. Often used to fill in some data at\nthe beginning of a started drag."
     },
     "NodeTerminalSymbolDescription": {
       "additionalProperties": false,
@@ -1538,6 +1666,7 @@
     },
     "NodeVisualContainerDescription": {
       "additionalProperties": false,
+      "description": "Groups together various nodes in a certain kind of layout.",
       "properties": {
         "children": {
           "items": {
@@ -1549,11 +1678,7 @@
           "type": "string"
         },
         "orientation": {
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/Orientation"
         },
         "tags": {
           "items": {
@@ -1578,28 +1703,7 @@
     "OccursDescription": {
       "anyOf": [
         {
-          "enum": [
-            "1"
-          ],
-          "type": "string"
-        },
-        {
-          "enum": [
-            "?"
-          ],
-          "type": "string"
-        },
-        {
-          "enum": [
-            "+"
-          ],
-          "type": "string"
-        },
-        {
-          "enum": [
-            "*"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/OccursString"
         },
         {
           "$ref": "#/definitions/OccursSpecificDescription"
@@ -1623,6 +1727,22 @@
         "maxOccurs"
       ],
       "type": "object"
+    },
+    "OccursString": {
+      "enum": [
+        "1",
+        "?",
+        "+",
+        "*"
+      ],
+      "type": "string"
+    },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
     },
     "ParameterBoolean": {
       "additionalProperties": false,
@@ -1684,7 +1804,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1707,7 +1827,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1757,7 +1877,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1780,7 +1900,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
             }
           ]
         },
@@ -1823,14 +1943,14 @@
               "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression|undefined)_"
+              "$ref": "#/definitions/ParameterReferenceable_(VisualBlockDescriptions.VisibilityExpression%7Cundefined)_"
             }
           ]
         }
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-1285740649-683-759-1285740649-287-1488-1285740649-193-1488-1285740649-0-2134_def-alias-1782179087-292-496-1782179087-290-4751-1782179087-153-4751-1782179087-0-6949705825494_[]_": {
+    "ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1843,7 +1963,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_": {
+    "ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -2207,7 +2327,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1002692191-803-835-1002692191-756-836-1002692191-474-1196-1002692191-0-4328_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
                   }
                 ]
               }
@@ -2224,7 +2344,7 @@
       "type": "object"
     },
     "ReferenceableTypeInstructionsDescription": {
-      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions%2CParameterReferenceable_BlockInstructions__",
       "description": "Type instructions that may contain references."
     },
     "RegularExpressionRestrictionDescription": {
@@ -2385,11 +2505,11 @@
         "defaultNode": {
           "anyOf": [
             {
-              "$ref": "#/definitions/NodeDescription"
+              "$ref": "#/definitions/NodeTailoredDescription"
             },
             {
               "items": {
-                "$ref": "#/definitions/NodeDescription"
+                "$ref": "#/definitions/NodeTailoredDescription"
               },
               "type": "array"
             }
@@ -2457,6 +2577,7 @@
     },
     "TreeBlockLanguageGeneratorDescription": {
       "additionalProperties": false,
+      "description": "Visualizes a block language by showing the tree structure. This is not\nvery user friendly but probably useful to debug.",
       "properties": {
         "editorComponents": {
           "items": {
@@ -2740,12 +2861,16 @@
           },
           "type": "array"
         },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         }
       },
       "required": [
-        "blockType"
+        "blockType",
+        "orientation"
       ],
       "type": "object"
     },

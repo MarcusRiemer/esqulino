@@ -179,12 +179,60 @@ RSpec.describe CodeResource, type: :model do
       expect(changed).to eq []
     end
 
-    it "with a single grammar" do
+    it "with a single grammar that isn't used for a block language" do
       related = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: related)
 
-      changed = related.regenerate_immediate_dependants!
-      expect(changed).to eq [grammar]
+      changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
+      expect(changed).to match_array [grammar]
+    end
+
+    it "with a single grammar that affects a block language" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+      block_language = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)
+
+      changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
+      expect(changed).to match_array [grammar, block_language]
+    end
+
+    it "with a single grammar that affects a block language that can't be regenerated" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+      block_language = FactoryBot.create(:block_language, grammar: grammar)
+
+      changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
+      expect(changed).to match_array [grammar]
+    end
+
+    it "with a single grammar that affects two block languages (both not regeneratable)" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+      b1 = FactoryBot.create(:block_language, grammar: grammar)
+      b2 = FactoryBot.create(:block_language, grammar: grammar)
+
+      changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
+      expect(changed).to match_array [grammar]
+    end
+
+    it "with a single grammar that affects two block languages (both regeneratable)" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+      b1 = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)
+      b2 = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)
+
+      changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
+      expect(changed).to match_array [grammar, b1, b2]
+    end
+
+    it "with a single grammar that affects two block languages (mixed)" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+      b1 = FactoryBot.create(:block_language, grammar: grammar)
+      b2 = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)
+
+      changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
+      expect(changed).to match_array [grammar, b2]
     end
   end
 

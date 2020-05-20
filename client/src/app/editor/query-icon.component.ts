@@ -1,17 +1,17 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input } from "@angular/core";
 
 // TODO CLEANUP: Use actual query class
-type Query = any
+type Query = any;
 
 /**
  * Renders a matching icon for a query.
  */
 @Component({
-  template: '<span class="fa {{ iconForQuery(query) }} fa-fw"></span><ng-template [ngIf]="showName">{{ query?.name }}</ng-template>',
-  selector: 'query-icon'
+  template:
+    '<span class="fa {{ iconForQuery(query) }} fa-fw"></span><ng-template [ngIf]="showName">{{ query?.name }}</ng-template>',
+  selector: "query-icon",
 })
 export class QueryIconComponent {
-
   @Input() query: Query;
 
   @Input() showName = true;
@@ -25,23 +25,23 @@ export class QueryIconComponent {
    */
   iconForQuery(query: Query) {
     if (query.delete) {
-      return ("fa-ban");
+      return "fa-ban";
     } else if (query.insert) {
-      return ("fa-plus-circle");
+      return "fa-plus-circle";
     } else if (query.update) {
-      return ("fa-pencil");
+      return "fa-pencil";
     } else if (query.select) {
       if (!this.detailSelect) {
-        return ("fa-search");
+        return "fa-search";
       } else {
         if (query.singleRow) {
-          return ("fa-ellipsis-h");
+          return "fa-ellipsis-h";
         } else {
-          return ("fa-table");
+          return "fa-table";
         }
       }
     } else {
-      return ("fa-bug");
+      return "fa-bug";
     }
   }
 }

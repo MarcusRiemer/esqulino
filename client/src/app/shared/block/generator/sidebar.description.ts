@@ -1,27 +1,29 @@
-import * as Constant from '../block.description'
-import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
+import * as Constant from "../block.description";
+import { QualifiedTypeName } from "../../syntaxtree/syntaxtree.description";
 
 /**
  * A block that is given statically
  */
-export interface ConstantSidebarBlockDescription extends Constant.SidebarBlockDescription {
-  type: "constant"
+export interface ConstantSidebarBlockDescription
+  extends Constant.SidebarBlockDescription {
+  type: "constant";
 }
 
 /**
  * A block that has its block generated.
  */
 export interface GeneratedSidebarBlockDescription {
-  type: "generated",
-  nodeType: QualifiedTypeName,
-  displayName?: string
+  type: "generated";
+  nodeType: QualifiedTypeName;
+  displayName?: string;
 }
 
 /**
  * A category that is defined statically
  */
-export interface ConstantBlocksSidebarCategoryDescription extends Constant.FixedBlocksSidebarCategoryDescription {
-  type: "constant"
+export interface ConstantBlocksSidebarCategoryDescription
+  extends Constant.FixedBlocksSidebarCategoryDescription {
+  type: "constant";
 }
 
 /**
@@ -39,11 +41,11 @@ export interface MixedBlocksSidebarCategoryDescription {
  * that is a little more compact.
  */
 export interface GeneratedBlocksSidebarCategoryDescription {
-  type: "generated",
+  type: "generated";
   categoryCaption: string;
   grammar: {
-    [grammarName: string]: string[]
-  }
+    [grammarName: string]: string[];
+  };
 }
 
 /**
@@ -51,19 +53,18 @@ export interface GeneratedBlocksSidebarCategoryDescription {
  * constant categories.
  */
 export interface GeneratedBlocksSidebarDescription {
-  type: "generatedBlocks"
+  type: "generatedBlocks";
   caption: string;
-  categories: AnySidebarCategoryDescription[]
+  categories: AnySidebarCategoryDescription[];
 }
 
-
 export type AnySidebarBlockDescription =
-  ConstantSidebarBlockDescription | GeneratedSidebarBlockDescription;
+  | ConstantSidebarBlockDescription
+  | GeneratedSidebarBlockDescription;
 export type AnySidebarCategoryDescription =
-  ConstantBlocksSidebarCategoryDescription
+  | ConstantBlocksSidebarCategoryDescription
   | MixedBlocksSidebarCategoryDescription
   | GeneratedBlocksSidebarCategoryDescription;
 export type AnySidebarDescription =
-  Constant.SidebarDescription | GeneratedBlocksSidebarDescription;
-
-
+  | Constant.SidebarDescription
+  | GeneratedBlocksSidebarDescription;

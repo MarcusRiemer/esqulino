@@ -1,8 +1,7 @@
 <h4 class="card-title">Validierung</h4>
 <span *ngIf="!codeResource">Bug: Missing Code Resource</span>
 <ng-container *ngIf="(result$ | async) as result;">
-  <table *ngIf="!result.isValid"
-         class="table">
+  <table *ngIf="!result.isValid" class="table">
     <thead>
       <tr>
         <th>Ort</th>
@@ -13,7 +12,8 @@
     <tr *ngFor="let error of result.errors">
       <td>
         <ng-container *ngIf="error.node">
-          {{ error.node.typeName }} <code>{{ error.node.location | json }}</code>
+          {{ error.node.typeName }}
+          <code>{{ error.node.location | json }}</code>
         </ng-container>
       </td>
       <td>{{ error.code }}</td>

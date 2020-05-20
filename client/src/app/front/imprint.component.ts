@@ -1,8 +1,6 @@
-import { Component } from '@angular/core'
+import { Component } from "@angular/core";
 
 @Component({
-  templateUrl: 'templates/imprint.html',
+  templateUrl: "templates/imprint.html",
 })
-export class ImprintComponent {
-
-}
+export class ImprintComponent {}

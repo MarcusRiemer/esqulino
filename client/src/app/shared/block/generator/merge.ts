@@ -1,11 +1,11 @@
-import { AllReferenceableTypeInstructions } from './instructions.description'
-import { deepAssign } from './merge-util'
+import { AllReferenceableTypeInstructions } from "./instructions.description";
+import { deepAssign } from "./merge-util";
 
 /**
  * A "best effort" approach to merge two different sets of type
  * instructions. The `additional` instructions take precedence
  * over the `target` and only objects are properly merged.
- * 
+ *
  * This is easy if the types in the values of either side are identical.
  * But if this is not the case: Every value that is not an object (yes,
  * arrays are not objects) simply "wins" over an object on in `target`
@@ -21,5 +21,5 @@ export function mergeTypeInstructions(
   target = JSON.parse(JSON.stringify(target));
   additional = JSON.parse(JSON.stringify(additional));
 
-  return (deepAssign(target, additional));
+  return deepAssign(target, additional);
 }

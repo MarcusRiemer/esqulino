@@ -1,0 +1,278 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 22332f6e-a67a-4e05-b826-5d348f460a27
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 Grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "value", "languageName":
+    "json"}}], "nodes": [{"name": "comment", "language": "MetaGrammar", "properties":
+    {"text": "All things that denote a value in JSON"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Used as root, in arrays and as values for
+    objects"}}, {"name": "typedef", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "null", "languageName":
+    "json"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "boolean", "languageName": "json"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "string", "languageName": "json"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
+    "json"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "array", "languageName": "json"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "object", "languageName": "json"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "value", "languageName": "json"}}, {"name": "comment",
+    "language": "MetaGrammar", "properties": {"text": "No payload, just null"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "null"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "null", "languageName": "json"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Exactly `true` or `false` (not quoted)"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "boolean", "name": "value"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "boolean", "languageName": "json"}},
+    {"name": "comment", "language": "MetaGrammar", "properties": {"text": "A string,
+    rendered in double quotes, may not contain newlines"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "\""}}, {"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "\""}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "string", "languageName": "json"}}, {"name": "comment", "language": "MetaGrammar",
+    "properties": {"text": "A number in technically all sorts of notations"}}, {"name":
+    "comment", "language": "MetaGrammar", "properties": {"text": "Wrongfully expressed
+    as integer due technical limitations"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "integer", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "number", "languageName": "json"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "["}}, {"name": "container", "children": {"attributes": [{"name": "children",
+    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "value", "languageName": "json"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "values"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}, {"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "]"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "array", "languageName": "json"}}, {"name":
+    "comment", "language": "MetaGrammar", "properties": {"text": "Keys are always
+    strings, values are arbitrary"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "string", "languageName": "json"}}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "key"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ":"}},
+    {"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "value", "languageName": "json"}}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "value"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "key-value", "languageName":
+    "json"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "{"}}, {"name": "children",
+    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "key-value", "languageName": "json"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "values"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "}"}}]}, "language": "MetaGrammar", "properties": {"typeName": "object",
+    "languageName": "json"}}]}, "language": "MetaGrammar", "properties": {"name":
+    "json"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-03-26 16:02:12.779984000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-05-14 13:58:40.092033000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "json": {
+          "value": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "json",
+                "typeName": "null"
+              },
+              {
+                "languageName": "json",
+                "typeName": "boolean"
+              },
+              {
+                "languageName": "json",
+                "typeName": "string"
+              },
+              {
+                "languageName": "json",
+                "typeName": "number"
+              },
+              {
+                "languageName": "json",
+                "typeName": "array"
+              },
+              {
+                "languageName": "json",
+                "typeName": "object"
+              }
+            ]
+          },
+          "null": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "null"
+              }
+            ]
+          },
+          "boolean": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "boolean",
+                "name": "value"
+              }
+            ]
+          },
+          "string": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "\""
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              },
+              {
+                "type": "terminal",
+                "symbol": "\""
+              }
+            ]
+          },
+          "number": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "integer",
+                "name": "value"
+              }
+            ]
+          },
+          "array": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "["
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "values",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "json",
+                          "typeName": "value"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "]"
+              }
+            ]
+          },
+          "key-value": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "key",
+                "nodeTypes": [
+                  {
+                    "languageName": "json",
+                    "typeName": "string"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": ":"
+              },
+              {
+                "type": "sequence",
+                "name": "value",
+                "nodeTypes": [
+                  {
+                    "languageName": "json",
+                    "typeName": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          "object": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "{"
+              },
+              {
+                "type": "sequence",
+                "name": "values",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "json",
+                      "typeName": "key-value"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "}"
+              }
+            ]
+          }
+        }
+      },
+      "root": {
+        "languageName": "json",
+        "typeName": "value"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

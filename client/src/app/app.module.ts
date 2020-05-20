@@ -7,37 +7,38 @@ import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-import { Angulartics2Module } from 'angulartics2';
 
-import { filter } from 'rxjs/operators';
+import { Angulartics2Module } from "angulartics2";
 
-import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
+import { filter } from "rxjs/operators";
 
-import { environment } from '../environments/environment';
+import * as Sentry from "@sentry/browser";
+import * as Integrations from "@sentry/integrations";
 
-import { SharedAppModule } from './shared/shared.module';
-import { FrontModule } from './front/front.module';
-import { EditorModule } from './editor/editor.module';
+import { environment } from "../environments/environment";
 
-import { SqlScratchComponent } from './app.component';
-import { routing } from './app.routes';
+import { SharedAppModule } from "./shared/shared.module";
+import { FrontModule } from "./front/front.module";
+import { EditorModule } from "./editor/editor.module";
 
-import { NotifyErrorHandler, isApplicationCrashed } from './error-handler';
-import { NaturalLanguagesService } from './natural-languages.service';
-import { LinkService } from './link.service';
+import { SqlScratchComponent } from "./app.component";
+import { routing } from "./app.routes";
 
-import registerLanguages from './locale-registration';
-import { UserModule } from './user/user.module';
+import { NotifyErrorHandler, isApplicationCrashed } from "./error-handler";
+import { NaturalLanguagesService } from "./natural-languages.service";
+import { LinkService } from "./link.service";
+
+import registerLanguages from "./locale-registration";
+import { UserModule } from "./user/user.module";
 
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
 if (typeof window !== "undefined") {
-  var _paq = (typeof (window as any)._paq === "undefined") ? [] : _paq;
+  var _paq = typeof (window as any)._paq === "undefined" ? [] : _paq;
   (window as any)._paq = _paq;
 }
 
-registerLanguages()
+registerLanguages();
 
 // Configure Sentry error reporting (if enabled)
 if (environment.sentry && environment.sentry.active) {
@@ -45,18 +46,16 @@ if (environment.sentry && environment.sentry.active) {
     dsn: environment.sentry.dsn,
     environment: environment.production ? "production" : "development",
     release: environment.version.hash,
-    integrations: [
-      new Integrations.Angular()
-    ]
+    integrations: [new Integrations.Angular()],
   };
 
   // Possibly also show a helpful dialogue
   if (environment.sentry.showDialogue) {
-    options.beforeSend = event => {
+    options.beforeSend = (event) => {
       // Ensure that only the first dialog is ever shown.
       if (!isApplicationCrashed()) {
         Sentry.showReportDialog({
-          dsn: options.dsn
+          dsn: options.dsn,
         });
       }
       return event;
@@ -70,7 +69,7 @@ if (environment.sentry && environment.sentry.active) {
   imports: [
     // Angular Core, universal rendering enabled
     BrowserModule.withServerTransition({
-      appId: 'scratch-sql'
+      appId: "scratch-sql",
     }),
     BrowserAnimationsModule,
 
@@ -86,9 +85,7 @@ if (environment.sentry && environment.sentry.active) {
     ApolloModule,
     HttpLinkModule
   ],
-  declarations: [
-    SqlScratchComponent,
-  ],
+  declarations: [SqlScratchComponent],
   providers: [
     { provide: ErrorHandler, useClass: NotifyErrorHandler },
     Title,
@@ -108,18 +105,14 @@ if (environment.sentry && environment.sentry.active) {
       deps: [HttpLink]
     }
   ],
-  bootstrap: [
-    SqlScratchComponent
-  ],
-  exports: [
-    SharedAppModule,
-  ]
+  bootstrap: [SqlScratchComponent],
+  exports: [SharedAppModule],
 })
 export class AppModule {
   constructor(
     @Inject(PLATFORM_ID) platformId: string,
     private readonly _router: Router,
-    private readonly _naturalLanguagesService: NaturalLanguagesService,
+    private readonly _naturalLanguagesService: NaturalLanguagesService
   ) {
     // Calling service methods that need to be called exactly once
     this.setupTracking(platformId);
@@ -130,11 +123,11 @@ export class AppModule {
     this._naturalLanguagesService.updateRootLangAttribute();
 
     // Ensure that the alternate languages are always mentioned in the <head>
-    this._router.events.pipe(
-      filter(evt => evt instanceof NavigationEnd)
-    ).subscribe(_ => {
-      this._naturalLanguagesService.updateAlternateUrls()
-    });
+    this._router.events
+      .pipe(filter((evt) => evt instanceof NavigationEnd))
+      .subscribe((_) => {
+        this._naturalLanguagesService.updateAlternateUrls();
+      });
   }
 
   private setupTracking(platformId: string) {
@@ -142,19 +135,21 @@ export class AppModule {
     const piwikConf = environment.piwik;
     if (piwikConf && isPlatformBrowser(platformId)) {
       // Basic tracking settings
-      _paq.push(['setTrackerUrl', piwikConf.host + '/piwik.php']);
-      _paq.push(['setSiteId', piwikConf.id]);
+      _paq.push(["setTrackerUrl", piwikConf.host + "/piwik.php"]);
+      _paq.push(["setSiteId", piwikConf.id]);
 
       // Loading piwik.js
-      const g = document.createElement('script')
-      const s = document.getElementsByTagName('script')[0];
-      g.type = 'text/javascript';
+      const g = document.createElement("script");
+      const s = document.getElementsByTagName("script")[0];
+      g.type = "text/javascript";
       g.async = true;
       g.defer = true;
-      g.src = piwikConf.host + '/piwik.js';
+      g.src = piwikConf.host + "/piwik.js";
       s.parentNode.insertBefore(g, s);
 
-      console.log(`Piwik Tracking initialized for ID ${piwikConf.id} at "${piwikConf.host}"`);
+      console.log(
+        `Piwik Tracking initialized for ID ${piwikConf.id} at "${piwikConf.host}"`
+      );
     }
   }
 }

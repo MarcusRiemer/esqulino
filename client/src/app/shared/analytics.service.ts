@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { Angulartics2 } from 'angulartics2';
+import { Angulartics2 } from "angulartics2";
 
 export enum TrackCategory {
-  BlockEditor = "blockEditor"
+  BlockEditor = "blockEditor",
 }
 
 export interface TrackEvent {
@@ -14,13 +14,17 @@ export interface TrackEvent {
 }
 
 /**
- * Encapsulates tracking actions.
+ * Encapsulates all app-specific tracking actions that may occur during runtime.
+ * Easy things (such as changed pages) are dealt with automatically.
  */
+export abstract class AnalyticsService {
+  abstract trackEvent(evt: TrackEvent): void;
+}
+
 @Injectable()
-export class AnalyticsService {
-
+export class PiwikAnalyticsService extends AnalyticsService {
   constructor(private _tracking: Angulartics2) {
-
+    super();
   }
 
   /**
@@ -32,8 +36,17 @@ export class AnalyticsService {
       properties: {
         category: evt.category,
         name: evt.name,
-        value: evt.value
-      }
+        value: evt.value,
+      },
     });
+  }
+}
+
+@Injectable()
+export class SpecAnalyticsService {
+  readonly events: TrackEvent[] = [];
+
+  trackEvent(evt: TrackEvent) {
+    this.events.push(evt);
   }
 }

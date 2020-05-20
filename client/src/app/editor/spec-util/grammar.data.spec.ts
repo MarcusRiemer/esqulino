@@ -1,24 +1,27 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from "@angular/core/testing";
+import { HttpTestingController } from "@angular/common/http/testing";
 
 import { GrammarDescription, GrammarListDescription } from "../../shared/";
-import { generateUUIDv4 } from '../../shared/util-browser';
-import { ServerApiService, IndividualGrammarDataService } from '../../shared/serverdata';
-import { JsonApiListResponse } from '../../shared/serverdata/json-api-response';
-import { ListOrder, provideListResponse } from './list.data.spec';
+import { generateUUIDv4 } from "../../shared/util-browser";
+import {
+  ServerApiService,
+  IndividualGrammarDataService,
+} from "../../shared/serverdata";
+
+import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
   name: "Empty Spec Grammar",
-  programmingLanguageId: "spec",
+  programmingLanguageId: "generic",
   root: { languageName: "spec", typeName: "root" },
   types: {
-    "spec": {
-      "root": {
-        type: "concrete"
-      }
-    }
-  }
+    spec: {
+      root: {
+        type: "concrete",
+      },
+    },
+  },
 });
 
 /**
@@ -29,7 +32,7 @@ export const buildGrammar = (
   override?: Partial<GrammarDescription>
 ): GrammarDescription => {
   const id = override?.id ?? generateUUIDv4();
-  return (Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id }));
+  return Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id });
 };
 
 /**
@@ -44,13 +47,14 @@ export const ensureLocalGrammarRequest = (
 
   const toReturn = grammarData.getLocal(response.id, "request");
 
-  httpTestingController.expectOne(serverApi.individualGrammarUrl(response.id))
+  httpTestingController
+    .expectOne(serverApi.individualGrammarUrl(response.id))
     .flush(response);
 
-  return (toReturn);
-}
+  return toReturn;
+};
 
-export type GrammarOrder = ListOrder<GrammarListDescription>
+export type GrammarOrder = ListOrder<GrammarListDescription>;
 
 /**
  * Expects a request for the given list of grammars. If a ordered dataset
@@ -59,15 +63,15 @@ export type GrammarOrder = ListOrder<GrammarListDescription>
 export const provideGrammarList = (
   items: GrammarDescription[],
   options?: {
-    order?: GrammarOrder,
+    order?: GrammarOrder;
     pagination?: {
-      limit: number,
-      page: number,
-    }
+      limit: number;
+      page: number;
+    };
   }
 ) => {
   const serverApi = TestBed.inject(ServerApiService);
   let reqUrl = serverApi.getGrammarListUrl();
 
-  return (provideListResponse(items, reqUrl, options));
-}
+  return provideListResponse(items, reqUrl, options);
+};

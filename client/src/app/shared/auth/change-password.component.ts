@@ -1,16 +1,14 @@
-import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { Component } from "@angular/core";
+import { map } from "rxjs/operators";
 
-import { UserService } from './user.service';
-import { ChangePasswordDescription } from './auth-description';
+import { UserService } from "./user.service";
+import { ChangePasswordDescription } from "./auth-description";
 @Component({
   selector: "change-password",
-  templateUrl: "./templates/change-password.html"
+  templateUrl: "./templates/change-password.html",
 })
 export class ChangePasswordComponent {
-  constructor(
-    private _userService: UserService
-  ) { }
+  constructor(private _userService: UserService) {}
 
   /**
    * The confirmation of the new password
@@ -22,7 +20,7 @@ export class ChangePasswordComponent {
    */
   public newPasswordData: ChangePasswordDescription = {
     currentPassword: undefined,
-    newPassword: undefined
+    newPassword: undefined,
   };
 
   /**
@@ -30,8 +28,8 @@ export class ChangePasswordComponent {
    * Is the condition for displaying change-password.html
    */
   public hasPasswordIdentity = this._userService.providers$.pipe(
-    map(a => a.some(v => v.type === "PasswordIdentity" && v.confirmed))
-  )
+    map((a) => a.some((v) => v.type === "PasswordIdentity" && v.confirmed))
+  );
 
   /**
    * The verification of an identically specified password
@@ -48,9 +46,7 @@ export class ChangePasswordComponent {
    */
   public onChangePassword(): void {
     if (this.isPasswordEqual()) {
-      this._userService
-        .changePassword$(this.newPasswordData)
-        .subscribe()
-    } else alert("Die eigegebenen Passwörter sind nicht identisch.")
+      this._userService.changePassword$(this.newPasswordData).subscribe();
+    } else alert("Die eigegebenen Passwörter sind nicht identisch.");
   }
 }

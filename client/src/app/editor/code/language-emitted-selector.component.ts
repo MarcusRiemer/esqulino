@@ -1,36 +1,32 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
-import { CodeResource } from '../../shared/syntaxtree';
-import { LanguageService } from '../../shared/language.service';
+import { CodeResource } from "../../shared/syntaxtree";
+import { LanguageService } from "../../shared/language.service";
 
 /**
  * Provides a convenient way to select languages.
  */
 @Component({
-  templateUrl: 'templates/language-selector.html',
-  selector: 'language-emitted-selector'
+  templateUrl: "templates/language-selector.html",
+  selector: "language-emitted-selector",
 })
 export class LanguageEmittedSelectorComponent {
-
   @Input() codeResource: CodeResource;
 
-  constructor(
-    private _languageService: LanguageService,
-  ) {
-  }
+  constructor(private _languageService: LanguageService) {}
 
   /**
    * @return All available language models
    */
   get availableLanguages() {
-    return (this._languageService.availableLanguages);
+    return this._languageService.availableLanguages;
   }
 
   /**
    * @return The ID of the currently selected language
    */
   get selectedLanguageId() {
-    return (this.codeResource.emittedLanguageIdPeek);
+    return this.codeResource.emittedLanguageIdPeek;
   }
 
   /**
@@ -39,5 +35,4 @@ export class LanguageEmittedSelectorComponent {
   set selectedLanguageId(id: string) {
     this.codeResource.setEmittedLanguageId(id);
   }
-
 }

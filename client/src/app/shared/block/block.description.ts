@@ -1,17 +1,26 @@
-import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.description'
-import { Restricted } from './bool-mini-expression.description'
+import {
+  QualifiedTypeName,
+  NodeDescription,
+  NodeLocation,
+} from "../syntaxtree/syntaxtree.description";
+import { Orientation } from "../syntaxtree/grammar.description";
+
+import { Restricted } from "./bool-mini-expression.description";
 
 /**
  * Groups together all available options to describe a block in the
  * drag & drop UI.
  */
 export namespace VisualBlockDescriptions {
-
   /**
    * These variables are available when evaluating drop target visibility.
    */
   export type VisibilityVars =
-    "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "ifChildrenRequired";
+    | "ifAnyDrag"
+    | "ifLegalDrag"
+    | "ifLegalChild"
+    | "ifEmpty"
+    | "ifChildrenRequired";
 
   /**
    * This expression is evaluated to determine whether a drop target should be shown.
@@ -51,8 +60,9 @@ export namespace VisualBlockDescriptions {
    * An element that exists merely for layout purposes, think "div" or "span"
    */
   export interface EditorContainer extends EditorBlockBase {
-    blockType: "container"
+    blockType: "container";
     children?: ConcreteBlock[];
+    orientation: Orientation;
   }
 
   /**
@@ -129,25 +139,71 @@ export namespace VisualBlockDescriptions {
     excludedErrors?: string[];
   }
 
-  export type ConcreteBlock = EditorContainer | EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
+  export type ConcreteBlock =
+    | EditorContainer
+    | EditorBlock
+    | EditorDropTarget
+    | EditorIterator
+    | EditorConstant
+    | EditorInterpolated
+    | EditorInput
+    | EditorErrorIndicator;
 
-  export const DefaultDropTargetProperties: DropTargetProperties = {}
+  export const DefaultDropTargetProperties: DropTargetProperties = {};
 
   // Type guard for EditorIterator
-  export function isEditorIterator(obj?: EditorBlockBase): obj is EditorIterator {
-    return (obj && obj.blockType === "iterator");
+  export function isEditorIterator(
+    obj?: EditorBlockBase
+  ): obj is EditorIterator {
+    return obj && obj.blockType === "iterator";
   }
 
   // Type guard for EditorBlock
   export function isEditorBlock(obj?: EditorBlockBase): obj is EditorBlock {
-    return (obj && obj.blockType === "block");
+    return obj && obj.blockType === "block";
   }
 
   // Type guard for EditorContainer
-  export function isEditorContainer(obj?: EditorBlockBase): obj is EditorContainer {
-    return (obj && obj.blockType === "container");
+  export function isEditorContainer(
+    obj?: EditorBlockBase
+  ): obj is EditorContainer {
+    return obj && obj.blockType === "container";
   }
 }
+
+export interface NodeDerivedProperty {
+  type: "nodeDerivedProperty";
+  loc: NodeLocation;
+  propName: string;
+}
+
+export type NodeDerivedPropertiesDescription = {
+  children?: {
+    [childrenCategory: string]: (
+      | NodeDerivedPropertiesDescription
+      | NodeDescription
+    )[];
+  };
+
+  properties?: {
+    [propertyName: string]: string | NodeDerivedProperty;
+  };
+} & Omit<NodeDescription, "properties" | "children">;
+
+export function isNodeDerivedPropertyDescription(
+  obj: any
+): obj is NodeDerivedProperty {
+  return typeof obj === "object" && obj.type === "nodeDerivedProperty";
+}
+
+/**
+ * A description of a node that has "holes" in it, which may be filled
+ * with the help of an existing AST. Often used to fill in some data at
+ * the beginning of a started drag.
+ */
+export type NodeTailoredDescription =
+  | NodeDerivedPropertiesDescription
+  | NodeDescription;
 
 /**
  * Describes how the available types should be represented in the sidebar.
@@ -165,7 +221,7 @@ export interface SidebarBlockDescription {
    * is needed. This happens e.g. when the user starts dragging this
    * block from the sidebar.
    */
-  defaultNode: NodeDescription | NodeDescription[];
+  defaultNode: NodeTailoredDescription | NodeTailoredDescription[];
 }
 
 /**
@@ -184,44 +240,45 @@ export interface FixedBlocksSidebarDescription {
   /**
    * Unique identification for this type.
    */
-  type: "fixedBlocks"
+  type: "fixedBlocks";
 
   /**
    * The name that should be displayed to the user.
    */
-  caption: string
+  caption: string;
 
   /**
    * The actual blocks are categorized into categories.
    */
-  categories: FixedBlocksSidebarCategoryDescription[]
+  categories: FixedBlocksSidebarCategoryDescription[];
 }
 
 export interface DatabaseSchemaSidebarDescription {
   /**
    * Unique identification for this type.
    */
-  type: "databaseSchema"
+  type: "databaseSchema";
 }
 
 export interface TruckProgramUserFunctionsSidebarDescription {
   /**
    * Unique identification for this type.
    */
-  type: "truckProgramUserFunctions"
+  type: "truckProgramUserFunctions";
 }
 
 export interface MetaDefinedTypeSidebarDescription {
   /**
    * Unique identification for this type.
    */
-  type: "metaDefinedTypes"
+  type: "metaDefinedTypes";
 }
 
 /**
  * All possible sidebar types
  */
-export type SidebarDescription = FixedBlocksSidebarDescription
+export type SidebarDescription =
+  | FixedBlocksSidebarDescription
   | DatabaseSchemaSidebarDescription
   | TruckProgramUserFunctionsSidebarDescription
   | MetaDefinedTypeSidebarDescription;

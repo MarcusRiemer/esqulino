@@ -1,92 +1,79 @@
 <ng-template cdkPortal #toolbarItems>
-
-  <may-perform
-    [payload]="performDeleteData">
-
-    <button *ngIf="!isCreatingNews"
-            (click)="onDelete()"
-            mat-button>
-      <span class="fa fa-trash"></span>&nbsp;
+  <may-perform [payload]="performDeleteData">
+    <button *ngIf="!isCreatingNews" (click)="onDelete()" mat-button>
+      <span class="fa fa-trash"></span>
+      &nbsp;
       <span i18n="@@deleteNews">News Löschen</span>
     </button>
   </may-perform>
 
-  <may-perform
-    [payload]="performUpdateData">
-
-    <button *ngIf="!isCreatingNews"
-        (click)="onUpdate('redirect')"
-        mat-button>
-    <span class="fa fa-pencil"></span>&nbsp;
-    <span i18n="@@saveNewsAndBack">Aktualisieren</span>
+  <may-perform [payload]="performUpdateData">
+    <button *ngIf="!isCreatingNews" (click)="onUpdate('redirect')" mat-button>
+      <span class="fa fa-pencil"></span>
+      &nbsp;
+      <span i18n="@@saveNewsAndBack">Aktualisieren</span>
     </button>
-    <button *ngIf="!isCreatingNews"
-        (click)="onUpdate()"
-        mat-button>
-    <span class="fa fa-pencil"></span>&nbsp;
-    <span i18n="@@saveNewsAndStay">Aktualisieren (bleiben)</span>
+    <button *ngIf="!isCreatingNews" (click)="onUpdate()" mat-button>
+      <span class="fa fa-pencil"></span>
+      &nbsp;
+      <span i18n="@@saveNewsAndStay">Aktualisieren (bleiben)</span>
     </button>
   </may-perform>
- 
-  <may-perform
-    [payload]="performCreateData">
 
-    <button *ngIf="isCreatingNews"
-      (click)="onCreate()"
-      mat-button>
-    
-      <span class="fa fa-plus-circle"></span>&nbsp;
+  <may-perform [payload]="performCreateData">
+    <button *ngIf="isCreatingNews" (click)="onCreate()" mat-button>
+      <span class="fa fa-plus-circle"></span>
+      &nbsp;
       <span i18n="@@createNews">Neue News speichern</span>
     </button>
   </may-perform>
- 
-  <select [(ngModel)]="queryParamsMode"
-          name="editor"
-          required>
-    <option *ngFor="let item of editors" [value]="item.name">{{item.description}}</option>
+
+  <select [(ngModel)]="queryParamsMode" name="editor" required>
+    <option *ngFor="let item of editors" [value]="item.name">
+      {{item.description}}
+    </option>
   </select>
 </ng-template>
 
 <form ngNativeValidate>
   <!-- Possibly still waiting for the data from the server  -->
-  <div *ngIf="newsData"
-       id="edit-news">
+  <div *ngIf="newsData" id="edit-news">
     <!-- single mode -->
     <ng-container class="single" *ngIf="queryParamsMode == 'single'">
       <h1 i18n="@@newsTitle">Titel</h1>
       <multilingual-input
-          [(editingString)]="newsData.title"
-          [language]="queryParamsLanguage"
-          [control]="'input'"
-          [placeholder]="'Titel'">
-      </multilingual-input>
+        [(editingString)]="newsData.title"
+        [language]="queryParamsLanguage"
+        [control]="'input'"
+        [placeholder]="'Titel'"
+      ></multilingual-input>
       <h1 i18n="@@newsText">Text</h1>
       <multilingual-input
-          [(editingString)]="newsData.text"
-          [language]="queryParamsLanguage"
-          [control]="'textarea'"
-          [placeholder]="'Informationen'">
-      </multilingual-input>
+        [(editingString)]="newsData.text"
+        [language]="queryParamsLanguage"
+        [control]="'textarea'"
+        [placeholder]="'Informationen'"
+      ></multilingual-input>
     </ng-container>
 
     <!-- translation mode -->
     <ng-container *ngIf="queryParamsMode == 'translation'">
       <h1 i18n="@@newsTitle">Titel</h1>
       <multilingual-editor
-          [(original)]="newsData.title"
-          [(translated)]="newsData.title"
-          [language]="queryParamsLanguage"
-          [control]="'input'"
-          [placeholder]="'Titel'">
-      </multilingual-editor>
+        [(original)]="newsData.title"
+        [(translated)]="newsData.title"
+        [language]="queryParamsLanguage"
+        [control]="'input'"
+        [placeholder]="'Titel'"
+      ></multilingual-editor>
       <h1 i18n="@@newsText">Text</h1>
       <multilingual-editor
-          [(original)]="newsData.text"
-          [(translated)]="newsData.text"
-          [language]="queryParamsLanguage"
-          [control]="'textarea'"
-          [placeholder]="'Informationen'">
-      </multilingual-editor>
+        [(original)]="newsData.text"
+        [(translated)]="newsData.text"
+        [language]="queryParamsLanguage"
+        [control]="'textarea'"
+        [placeholder]="'Informationen'"
+      ></multilingual-editor>
     </ng-container>
 
     <div class="input-group">
@@ -95,10 +82,12 @@
           Veröffentlichen am
         </div>
       </div>
-      <input name="date-picker"
-             type="date"
-             class="form-control"
-             [(ngModel)]="newsData.publishedFrom">
+      <input
+        name="date-picker"
+        type="date"
+        class="form-control"
+        [(ngModel)]="newsData.publishedFrom"
+      />
     </div>
   </div>
 </form>

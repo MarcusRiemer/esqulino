@@ -1,7 +1,15 @@
-import { World, TileOpening, WorldState, Tile, Truck, TurnDirection, Direction } from '../../../shared/syntaxtree/truck/world';
-import { BehaviorSubject } from 'rxjs';
+import {
+  World,
+  TileOpening,
+  WorldState,
+  Tile,
+  Truck,
+  TurnDirection,
+  Direction,
+} from "../../../shared/syntaxtree/truck/world";
+import { BehaviorSubject } from "rxjs";
 
-export type RenderingDimensions = { width: number, height: number };
+export type RenderingDimensions = { width: number; height: number };
 
 /**
  * Renderer.
@@ -10,21 +18,40 @@ export class Renderer {
   /** True until the animation is stopped. */
   private running: boolean;
 
+  /** The handle of the current pending rendering request. Might be undefined. */
+  private currentAnimationRequest?: number;
+
   /** Renderer for the world to be drawn. */
   private worldRenderer: WorldRenderer;
 
   /** Rendering context. */
-  private ctx: RenderingContext;
+  private readonly ctx: RenderingContext;
+
+  /** The dimension of the rendering context (parent object). Gets updated every frame. */
+  private readonly dimensions: RenderingDimensions;
 
   /**
    * Initializes the renderer.
    * @param world World to be drawn.
-   * @param ctx Canvas 2d context.
-   * @param d Width & height of the canvas.
+   * @param canvasElement Canvas element.
    */
-  constructor(world: World, ctx: CanvasRenderingContext2D, d: BehaviorSubject<RenderingDimensions>) {
+  constructor(world: World, private readonly canvasElement: HTMLCanvasElement) {
+    // Setup the dimension calculation
+    this.dimensions = {
+      height: 0,
+      width: 0,
+    };
+    const nativeRenderingContext = this.canvasElement.getContext("2d", {
+      alpha: false,
+    });
+
     this.running = true;
-    this.ctx = new RenderingContext(ctx, d, world);
+
+    this.ctx = new RenderingContext(
+      nativeRenderingContext,
+      this.dimensions,
+      world
+    );
 
     this.worldRenderer = new WorldRenderer(this.ctx.world, this);
   }
@@ -34,6 +61,16 @@ export class Renderer {
    */
   stop() {
     this.running = false;
+    if (this.currentAnimationRequest != undefined) {
+      cancelAnimationFrame(this.currentAnimationRequest);
+    }
+  }
+
+  /**
+   * Returns the current with of the parent that hosts the rendering canvas.
+   */
+  private get parentWidthPeek() {
+    return this.canvasElement.parentElement.offsetWidth;
   }
 
   /**
@@ -41,20 +78,46 @@ export class Renderer {
    * @param timestamp Timestamp.
    */
   render(timestamp: DOMHighResTimeStamp = null) {
-    if (!this.running) { return; }
+    this.currentAnimationRequest = undefined;
+    if (!this.running) {
+      return;
+    }
 
     // Set timestamp
     this.ctx.timestamp(timestamp);
 
+    // The dimensions are updated every frame in order to resize the canvas even
+    // if another neighbor element has changed his size.
+    // Adding a window size listener is insufficient and other mechanisms
+    // to detect size-changes are not supported everywhere.
+
+    // The canvas will always have size of it's parent's width as a square.
+    const currentDimension = this.parentWidthPeek;
+    this.dimensions.width = currentDimension;
+    this.dimensions.height = currentDimension;
+
+    // Since resizing the canvas is expensive and will reset a
+    // lot of internal variables inside the native context,
+    // we only want to resize if it's necessary.
+    if (
+      this.canvasElement.width != this.dimensions.width ||
+      this.canvasElement.height != this.dimensions.height
+    ) {
+      this.canvasElement.width = this.dimensions.width;
+      this.canvasElement.height = this.dimensions.height;
+    }
+
     // Clear canvas
-    this.ctx.ctx.fillStyle = '#FFFFFF';
+    this.ctx.ctx.fillStyle = "#FFFFFF";
     this.ctx.ctx.fillRect(0, 0, this.ctx.width, this.ctx.height);
 
     // Draw world
     this.worldRenderer.draw(this.ctx);
 
-    // Again
-    requestAnimationFrame((ts: DOMHighResTimeStamp) => this.render(ts));
+    // Requeue next request
+    this.currentAnimationRequest = requestAnimationFrame(
+      (ts: DOMHighResTimeStamp) => this.render(ts)
+    );
   }
 }
 
@@ -74,14 +137,14 @@ class RenderingContext {
   /**
    * Initializes the rendering context.
    * @param ctx Canvas 2d context.
-   * @param width Width of the canvas.
-   * @param height Height of the canvas.
+   * @param dimensions The dimensions of the rendering context.
    * @param world World.
    */
   constructor(
-    readonly ctx: CanvasRenderingContext2D,
-    private readonly dimensions: BehaviorSubject<RenderingDimensions>,
-    readonly world: World) {
+    public readonly ctx: CanvasRenderingContext2D,
+    private readonly dimensions: RenderingDimensions,
+    public readonly world: World
+  ) {
     this.ctx = ctx;
     this.world = world;
 
@@ -94,14 +157,14 @@ class RenderingContext {
    * Current target width to render.
    */
   get width() {
-    return (this.dimensions.value.width);
+    return this.dimensions.width;
   }
 
   /**
    * Current target width to render.
    */
   get height() {
-    return (this.dimensions.value.height);
+    return this.dimensions.height;
   }
 
   /**
@@ -128,7 +191,7 @@ class RenderingContext {
     this.ctx.translate(x, y);
 
     // Turn
-    this.ctx.rotate(angle * Math.PI / 180);
+    this.ctx.rotate((angle * Math.PI) / 180);
 
     // Draw
     f();
@@ -222,7 +285,9 @@ class WorldRenderer implements ObjectRenderer {
       this.stateRenderer.update(this.world.state, true);
     } else {
       while (this.stateRenderer.state.step < this.world.state.step) {
-        this.stateRenderer.update(this.world.getState(this.stateRenderer.state.step + 1));
+        this.stateRenderer.update(
+          this.world.getState(this.stateRenderer.state.step + 1)
+        );
       }
     }
     this.stateRenderer.draw(ctx);
@@ -322,9 +387,21 @@ class TileRenderer implements ObjectRenderer {
     this.prevTile = null;
 
     // Preload Sprites
-    this.tileSprite = SpriteFactory.getSprite('/vendor/truck/tiles.svg', 64, 64);
-    this.trafficLightSprite = SpriteFactory.getSprite('/vendor/truck/trafficLight.svg', 10, 10);
-    this.freightSprite = SpriteFactory.getSprite('/vendor/truck/freight.svg', 10, 10);
+    this.tileSprite = SpriteFactory.getSprite(
+      "/vendor/truck/tiles.svg",
+      64,
+      64
+    );
+    this.trafficLightSprite = SpriteFactory.getSprite(
+      "/vendor/truck/trafficLight.svg",
+      10,
+      10
+    );
+    this.freightSprite = SpriteFactory.getSprite(
+      "/vendor/truck/freight.svg",
+      10,
+      10
+    );
   }
 
   /**
@@ -336,16 +413,24 @@ class TileRenderer implements ObjectRenderer {
     const tileWidth = ctx.width / this.tile.position.width;
     const tileHeight = ctx.height / this.tile.position.height;
 
-    if (this.startAnimation === null) { this.startAnimation = ctx.currentFrame; }
-    const t = (ctx.currentFrame - this.startAnimation) / (this.parent.state.time * ctx.animationSpeed);
+    if (this.startAnimation === null) {
+      this.startAnimation = ctx.currentFrame;
+    }
+    const t =
+      (ctx.currentFrame - this.startAnimation) /
+      (this.parent.state.time * ctx.animationSpeed);
 
     // Calculate the freight alpha value
-    const freightAlpha = t < 1 && this.prevTile && this.prevTile.freightItems !== this.tile.freightItems
-      ? t
-      : 1;
+    const freightAlpha =
+      t < 1 &&
+      this.prevTile &&
+      this.prevTile.freightItems !== this.tile.freightItems
+        ? t
+        : 1;
 
     this.tileSprite.draw(
-      ctx, this.tileSpriteNumber,
+      ctx,
+      this.tileSpriteNumber,
       tileWidth * this.tile.position.x - this.overlap,
       tileWidth * this.tile.position.y - this.overlap,
       tileWidth + this.overlap * 2,
@@ -356,9 +441,17 @@ class TileRenderer implements ObjectRenderer {
     this.tile.trafficLights.forEach((tl, i) => {
       if (tl != null) {
         // Switch traffic light on half of the step
-        const isGreen = tl.isGreen(Math.max(0, t < 0.5 ? this.parent.state.timeStep - 1 : this.parent.state.timeStep));
+        const isGreen = tl.isGreen(
+          Math.max(
+            0,
+            t < 0.5
+              ? this.parent.state.timeStep - 1
+              : this.parent.state.timeStep
+          )
+        );
         this.trafficLightSprite.draw(
-          ctx, i * 2 + (isGreen ? 1 : 0),
+          ctx,
+          i * 2 + (isGreen ? 1 : 0),
           tileWidth * this.tile.position.x - this.overlap,
           tileWidth * this.tile.position.y - this.overlap,
           tileWidth + this.overlap * 2,
@@ -369,40 +462,37 @@ class TileRenderer implements ObjectRenderer {
 
     // Draw old freight
     if (this.prevTile && this.prevTile.freightItems > 0 && freightAlpha < 1) {
-      ctx.alpha(
-        1 - freightAlpha,
-        () => {
-          this.freightSprite.draw(
-            ctx, this.freightSpriteNumber(this.prevTile),
-            tileWidth * this.tile.position.x - this.overlap,
-            tileWidth * this.tile.position.y - this.overlap,
-            tileWidth + this.overlap * 2,
-            tileHeight + this.overlap * 2
-          );
-        }
-      );
+      ctx.alpha(1 - freightAlpha, () => {
+        this.freightSprite.draw(
+          ctx,
+          this.freightSpriteNumber(this.prevTile),
+          tileWidth * this.tile.position.x - this.overlap,
+          tileWidth * this.tile.position.y - this.overlap,
+          tileWidth + this.overlap * 2,
+          tileHeight + this.overlap * 2
+        );
+      });
     }
 
     // Draw new freight
     if (this.tile.freightItems > 0) {
-      ctx.alpha(
-        freightAlpha,
-        () => {
-          this.freightSprite.draw(
-            ctx, this.freightSpriteNumber(this.tile),
-            tileWidth * this.tile.position.x - this.overlap,
-            tileWidth * this.tile.position.y - this.overlap,
-            tileWidth + this.overlap * 2,
-            tileHeight + this.overlap * 2
-          );
-        }
-      );
+      ctx.alpha(freightAlpha, () => {
+        this.freightSprite.draw(
+          ctx,
+          this.freightSpriteNumber(this.tile),
+          tileWidth * this.tile.position.x - this.overlap,
+          tileWidth * this.tile.position.y - this.overlap,
+          tileWidth + this.overlap * 2,
+          tileHeight + this.overlap * 2
+        );
+      });
     }
 
     // Draw targets
     if (this.tile.freightTarget != null) {
       this.freightSprite.draw(
-        ctx, this.freightTargetSpriteNumber,
+        ctx,
+        this.freightTargetSpriteNumber,
         tileWidth * this.tile.position.x - this.overlap,
         tileWidth * this.tile.position.y - this.overlap,
         tileWidth + this.overlap * 2,
@@ -411,8 +501,10 @@ class TileRenderer implements ObjectRenderer {
     }
 
     // Possibly draw a "truck is here"-marker
-    if (this.tile.position.x === this.parent.state.truck.position.x
-      && this.tile.position.y === this.parent.state.truck.position.y) {
+    if (
+      this.tile.position.x === this.parent.state.truck.position.x &&
+      this.tile.position.y === this.parent.state.truck.position.y
+    ) {
       // ctx.ctx.strokeStyle = `hsl(${this.parent.state.time}, 100, 50)`;
       ctx.ctx.strokeStyle = "blue";
       ctx.ctx.strokeRect(
@@ -461,7 +553,10 @@ class TileRenderer implements ObjectRenderer {
       [TileOpening.North | TileOpening.South | TileOpening.West]: 13,
       [TileOpening.North | TileOpening.East | TileOpening.West]: 14,
 
-      [TileOpening.North | TileOpening.East | TileOpening.South | TileOpening.West]: 15,
+      [TileOpening.North |
+      TileOpening.East |
+      TileOpening.South |
+      TileOpening.West]: 15,
     }[this.tile.openings];
   }
 
@@ -473,9 +568,9 @@ class TileRenderer implements ObjectRenderer {
    */
   private freightSpriteNumber(tile: Tile): number {
     return {
-      'red': 0,
-      'green': 2,
-      'blue': 4,
+      red: 0,
+      green: 2,
+      blue: 4,
     }[tile.freightColor()];
   }
 
@@ -486,9 +581,9 @@ class TileRenderer implements ObjectRenderer {
    */
   private get freightTargetSpriteNumber(): number {
     return {
-      'red': 1,
-      'green': 3,
-      'blue': 5,
+      red: 1,
+      green: 3,
+      blue: 5,
     }[this.tile.freightColor()];
   }
 }
@@ -531,8 +626,16 @@ class TruckRenderer implements ObjectRenderer {
     this.startAnimation = null;
 
     // Sprites vorladen
-    this.truckSprite = SpriteFactory.getSprite('/vendor/truck/truck.svg', 10, 10);
-    this.turnSignalSprite = SpriteFactory.getSprite('/vendor/truck/turnSignal.svg', 10, 10);
+    this.truckSprite = SpriteFactory.getSprite(
+      "/vendor/truck/truck.svg",
+      10,
+      10
+    );
+    this.turnSignalSprite = SpriteFactory.getSprite(
+      "/vendor/truck/turnSignal.svg",
+      10,
+      10
+    );
   }
 
   /**
@@ -541,18 +644,30 @@ class TruckRenderer implements ObjectRenderer {
    * @param tileHeight Height of a tile.
    * @param truck Truck.
    */
-  private calculateTruckPosition(tileWidth: number, tileHeight: number, truck: Truck) {
+  private calculateTruckPosition(
+    tileWidth: number,
+    tileHeight: number,
+    truck: Truck
+  ) {
     let truckPositionX = tileWidth * truck.position.x + tileWidth / 2;
     let truckPositionY = tileHeight * truck.position.y + tileHeight / 2;
 
-    if (truck.facingDirection === Direction.North) { truckPositionY += tileHeight / 2; }
-    if (truck.facingDirection === Direction.East) { truckPositionX -= tileWidth / 2; }
-    if (truck.facingDirection === Direction.South) { truckPositionY -= tileHeight / 2; }
-    if (truck.facingDirection === Direction.West) { truckPositionX += tileWidth / 2; }
+    if (truck.facingDirection === Direction.North) {
+      truckPositionY += tileHeight / 2;
+    }
+    if (truck.facingDirection === Direction.East) {
+      truckPositionX -= tileWidth / 2;
+    }
+    if (truck.facingDirection === Direction.South) {
+      truckPositionY -= tileHeight / 2;
+    }
+    if (truck.facingDirection === Direction.West) {
+      truckPositionX += tileWidth / 2;
+    }
 
     return {
       x: truckPositionX,
-      y: truckPositionY
+      y: truckPositionY,
     };
   }
 
@@ -561,7 +676,7 @@ class TruckRenderer implements ObjectRenderer {
    * @param truck Truck.
    */
   private calculateTruckAngle(truck: Truck) {
-    return (truck.facing) * 90;
+    return truck.facing * 90;
   }
 
   /**
@@ -578,7 +693,11 @@ class TruckRenderer implements ObjectRenderer {
     const truckHeight = tileHeight / 3;
 
     // Calculate the position of the truck
-    let truckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.truck);
+    let truckPosition = this.calculateTruckPosition(
+      tileWidth,
+      tileHeight,
+      this.truck
+    );
     let truckAngle = this.calculateTruckAngle(this.truck);
     let turnSignalSpriteNumber = this.turnSignalSpriteNumber(this.truck);
 
@@ -586,33 +705,47 @@ class TruckRenderer implements ObjectRenderer {
     let truckAlpha = 1;
 
     if (this.prevTruck) {
-      if (this.startAnimation === null) { this.startAnimation = ctx.currentFrame; }
+      if (this.startAnimation === null) {
+        this.startAnimation = ctx.currentFrame;
+      }
 
-      const t = (ctx.currentFrame - this.startAnimation) / (this.parent.state.time * ctx.animationSpeed);
+      const t =
+        (ctx.currentFrame - this.startAnimation) /
+        (this.parent.state.time * ctx.animationSpeed);
 
       // Interpolate if animation is not finished yet and truck has changed its
       // position between states
-      if (t <= 1 && (this.truck.position !== this.prevTruck.position || this.truck.facing !== this.prevTruck.facing)) {
+      if (
+        t <= 1 &&
+        (this.truck.position !== this.prevTruck.position ||
+          this.truck.facing !== this.prevTruck.facing)
+      ) {
         // Calculate position of previous truck
-        const prevTruckPosition = this.calculateTruckPosition(tileWidth, tileHeight, this.prevTruck);
+        const prevTruckPosition = this.calculateTruckPosition(
+          tileWidth,
+          tileHeight,
+          this.prevTruck
+        );
         const prevTruckAngle = this.calculateTruckAngle(this.prevTruck);
 
         if (this.truck.facing !== this.prevTruck.facing) {
           const p0 = prevTruckPosition;
           const p1 = {
             x: tileWidth * this.prevTruck.position.x + tileWidth / 2,
-            y: tileHeight * this.prevTruck.position.y + tileHeight / 2
+            y: tileHeight * this.prevTruck.position.y + tileHeight / 2,
           };
           const p2 = truckPosition;
           // De Casteljau
           truckPosition = {
             x: (1 - t) * (1 - t) * p0.x + 2 * t * (1 - t) * p1.x + t * t * p2.x,
-            y: (1 - t) * (1 - t) * p0.y + 2 * t * (1 - t) * p1.y + t * t * p2.y
+            y: (1 - t) * (1 - t) * p0.y + 2 * t * (1 - t) * p1.y + t * t * p2.y,
           };
         } else {
           // Interpolate position
-          truckPosition.x = prevTruckPosition.x + (truckPosition.x - prevTruckPosition.x) * t;
-          truckPosition.y = prevTruckPosition.y + (truckPosition.y - prevTruckPosition.y) * t;
+          truckPosition.x =
+            prevTruckPosition.x + (truckPosition.x - prevTruckPosition.x) * t;
+          truckPosition.y =
+            prevTruckPosition.y + (truckPosition.y - prevTruckPosition.y) * t;
         }
 
         // Interpolate angle
@@ -624,7 +757,10 @@ class TruckRenderer implements ObjectRenderer {
         }
       }
 
-      if (t <= 1 && this.truck.freightColor() !== this.prevTruck.freightColor()) {
+      if (
+        t <= 1 &&
+        this.truck.freightColor() !== this.prevTruck.freightColor()
+      ) {
         truckAlpha = t;
       }
     }
@@ -636,52 +772,45 @@ class TruckRenderer implements ObjectRenderer {
       return Math.min(1, Math.max(0, Math.cos(tn * 2 * Math.PI) + 0.5));
     })(ctx.timeSinceStart);
 
-    ctx.rotate(
-      truckPosition.x, truckPosition.y,
-      truckAngle,
-      () => {
-        // Turn signal
-        ctx.alpha(
-          turnSignalAlpha,
-          () => {
-            this.turnSignalSprite.draw(
-              ctx, turnSignalSpriteNumber,
-              -(truckWidth / 2),
-              -(truckHeight / 2),
-              truckWidth, truckHeight
-            );
-          }
+    ctx.rotate(truckPosition.x, truckPosition.y, truckAngle, () => {
+      // Turn signal
+      ctx.alpha(turnSignalAlpha, () => {
+        this.turnSignalSprite.draw(
+          ctx,
+          turnSignalSpriteNumber,
+          -(truckWidth / 2),
+          -(truckHeight / 2),
+          truckWidth,
+          truckHeight
         );
+      });
 
-        // Old truck
-        if (truckAlpha < 1) {
-          ctx.alpha(
-            1 - truckAlpha,
-            () => {
-              this.truckSprite.draw(
-                ctx, this.truckSpriteNumber(this.prevTruck),
-                -(truckWidth / 2),
-                -(truckHeight / 2),
-                truckWidth, truckHeight
-              );
-            }
+      // Old truck
+      if (truckAlpha < 1) {
+        ctx.alpha(1 - truckAlpha, () => {
+          this.truckSprite.draw(
+            ctx,
+            this.truckSpriteNumber(this.prevTruck),
+            -(truckWidth / 2),
+            -(truckHeight / 2),
+            truckWidth,
+            truckHeight
           );
-        }
-
-        // New truck
-        ctx.alpha(
-          truckAlpha,
-          () => {
-            this.truckSprite.draw(
-              ctx, this.truckSpriteNumber(this.truck),
-              -(truckWidth / 2),
-              -(truckHeight / 2),
-              truckWidth, truckHeight
-            );
-          }
-        );
+        });
       }
-    );
+
+      // New truck
+      ctx.alpha(truckAlpha, () => {
+        this.truckSprite.draw(
+          ctx,
+          this.truckSpriteNumber(this.truck),
+          -(truckWidth / 2),
+          -(truckHeight / 2),
+          truckWidth,
+          truckHeight
+        );
+      });
+    });
   }
 
   /**
@@ -701,7 +830,9 @@ class TruckRenderer implements ObjectRenderer {
    * @return Number of the tile in the sprite.
    */
   private truckSpriteNumber(truck: Truck): number {
-    if (truck.freightColor() == null) { return 0; }
+    if (truck.freightColor() == null) {
+      return 0;
+    }
     return {
       red: 1,
       green: 2,
@@ -785,7 +916,14 @@ class Sprite {
    * @param width Width in which to draw.
    * @param height Height in which to draw.
    */
-  draw(ctx: RenderingContext, number: number, x: number, y: number, width: number, height: number) {
+  draw(
+    ctx: RenderingContext,
+    number: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
     ctx.ctx.drawImage(
       this.image,
       this.width * number,

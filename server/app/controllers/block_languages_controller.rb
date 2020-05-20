@@ -4,7 +4,7 @@ class BlockLanguagesController < ApplicationController
   # List all existing block languages and embed additional information
   # that is relevant when listing
   def index
-    render :json => pagination_response(BlockLanguage.scope_list,options:{include_list_calculations:true})
+    render :json => pagination_response(BlockLanguage,BlockLanguage.scope_list,options:{include_list_calculations:true})
   end
 
   # Find a single block language by ID or by slug

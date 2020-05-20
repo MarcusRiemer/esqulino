@@ -1,7 +1,8 @@
 <ng-container *ngIf="grammar$ | async as grammar">
   <h1>Gallery for {{ grammar.name }}</h1>
 
-  <code-resource-gallery [toRender]="codeResources$ | async"
-                         [blockLanguage]="blockLanguage$ | async">
-  </code-resource-gallery>
+  <code-resource-gallery
+    [toRender]="codeResources$ | async"
+    [blockLanguage]="blockLanguage$ | async"
+  ></code-resource-gallery>
 </ng-container>

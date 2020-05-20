@@ -1,95 +1,69 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { Subscription, Observable, fromEvent, BehaviorSubject } from 'rxjs';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  NgZone,
+} from "@angular/core";
+import { Subscription } from "rxjs";
 
-import { TruckWorldService } from './truck-world.service'
-import { Renderer, RenderingDimensions } from './renderer';
-import { map, startWith, shareReplay } from 'rxjs/operators';
+import { TruckWorldService } from "./truck-world.service";
+import { Renderer } from "./renderer";
+import { TruckWorldMouseService } from "./truck-world-mouse.service";
+import { Position, World } from "../../../shared/syntaxtree/truck/world";
+
+const MOUSE_BUTTON_LEFT = 0;
+const MOUSE_BUTTON_RIGHT = 2;
 
 @Component({
-  templateUrl: 'templates/world-render.html',
+  templateUrl: "templates/world-render.html",
 })
 export class WorldRenderComponent implements OnInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) _canvasRef: ElementRef;
+  @ViewChild("canvas", { static: true }) _canvasRef: ElementRef;
 
   private _renderer: Renderer;
   private _subscriptions: Subscription[] = [];
-  readonly currentWorld = this._truckWorld.currentWorld;
+
+  // Holds an array of functions that will remove event listeners
+  private _eventListenerRemovers: Function[] = [];
+
+  // Will be needed to calculate the tile position
+  private _currentWorld: World;
 
   constructor(
+    private _mouse: TruckWorldMouseService,
     private _truckWorld: TruckWorldService,
     private _ngZone: NgZone
-  ) {
-  }
-
-  /**
-   * The current value of the parent that hosts the rendering canvas.
-   */
-  get parentWidthPeek() {
-    const domCanvas: HTMLCanvasElement = this._canvasRef.nativeElement;
-    return (domCanvas.parentElement.offsetWidth);
-  }
-
-  /**
-   * Always up to date value of the desired width for the canvas. Must be initialized
-   * in ngOnInit because the ElementRef to the canvas is not available earlier.
-   */
-  public parentWidth: Observable<number>;
-
-  /**
-   * Dimensions that should be used during rendering. Must be initialized
-   * in ngOnInit because the ElementRef to the canvas is not available earlier.
-   */
-  public renderingDimensions: BehaviorSubject<RenderingDimensions>;
+  ) {}
 
   ngOnInit(): void {
-    // Listen to changes to the size of the window
-    this.parentWidth = fromEvent(window, 'resize').pipe(
-      map((_: UIEvent) => this.parentWidthPeek),
-      startWith(this.parentWidthPeek),
-      shareReplay(1)
-    );
+    const worldSubscription = this._truckWorld.currentWorld.subscribe(
+      (world) => {
+        this._currentWorld = world;
 
-    // Setup the dimension calculation
-    this.renderingDimensions = new BehaviorSubject<RenderingDimensions>({
-      height: this.parentWidthPeek,
-      width: this.parentWidthPeek
-    });
+        // If there's already a renderer, stop it
+        if (this._renderer) {
+          this._renderer.stop();
+        }
 
-    // And actually react to changing dimensions
-    const parentWidthSubscription = this.parentWidth.subscribe(width => {
-      this.emitCurrentDimensions();
-    });
-    this._subscriptions.push(parentWidthSubscription);
+        // Initialize renderer with canvas context
+        this._renderer = new Renderer(
+          world,
+          this._canvasRef.nativeElement as HTMLCanvasElement
+        );
 
-    // Get canvas context
-    const ctx: CanvasRenderingContext2D = this._canvasRef.nativeElement.getContext('2d');
+        this.addMouseListener();
 
-    const worldSubscription = this._truckWorld.currentWorld.subscribe(world => {
-      // If there's already a renderer, stop it
-      if (this._renderer) {
-        this._renderer.stop();
+        // Calling the `render` function outside of the Angular zone, as it calls
+        // itself recursively over and over again and should not make any changes to
+        // the state of the world.
+        this._ngZone.runOutsideAngular(() => {
+          this._renderer.render();
+        });
       }
-
-      // Initialize renderer with canvas context
-      this._renderer = new Renderer(world, ctx, this.renderingDimensions);
-
-      // Calling the `render` function outside of the Angular zone, as it calls
-      // itself recursively over and over again and should not make any changes to
-      // the state of the world.
-      this._ngZone.runOutsideAngular(() => {
-        this.emitCurrentDimensions(); // TODO: This re-calculation should not be necessary
-        this._renderer.render();
-      });
-    });
+    );
     this._subscriptions.push(worldSubscription);
-  }
-
-  private emitCurrentDimensions() {
-    const width = this.parentWidthPeek;
-    this.renderingDimensions.next({
-      height: width,
-      width: width
-    });
   }
 
   ngOnDestroy(): void {
@@ -97,10 +71,76 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
       this._renderer.stop();
     }
 
-    this._subscriptions.forEach(s => {
+    this._subscriptions.forEach((s) => {
       s.unsubscribe();
     });
 
     this._subscriptions = [];
+
+    this.removeMouseListener();
+  }
+
+  private addMouseListener(): void {
+    const canvas = this._canvasRef.nativeElement as HTMLCanvasElement;
+    this.addRemovableEventListener(canvas, "mouseleave", () => {
+      this._mouse.fireLeftMouseButtonUp();
+      this._mouse.fireRightMouseButtonUp();
+      this._mouse.updateCursorPos(undefined);
+    });
+    this.addRemovableEventListener(canvas, "mousedown", (ev) => {
+      if (ev.button == MOUSE_BUTTON_LEFT) {
+        this._mouse.fireLeftMouseButtonDown();
+      } else if (ev.button == MOUSE_BUTTON_RIGHT) {
+        this._mouse.fireRightMouseButtonDown();
+      }
+    });
+    this.addRemovableEventListener(canvas, "mouseup", (ev) => {
+      if (ev.button == MOUSE_BUTTON_LEFT) {
+        this._mouse.fireLeftMouseButtonUp();
+      } else if (ev.button == MOUSE_BUTTON_RIGHT) {
+        this._mouse.fireRightMouseButtonUp();
+      }
+    });
+    this.addRemovableEventListener(canvas, "mousemove", (ev) => {
+      if (!this._currentWorld) {
+        return; // We need a world in order to
+      }
+      // Bounding box of the canvas
+      const bb = canvas.getBoundingClientRect();
+
+      // rel{x,y} float value from 0 to 1
+      const relX = (ev.clientX - bb.left) / (bb.right - bb.left);
+      const relY = (ev.clientY - bb.top) / (bb.bottom - bb.top);
+
+      // tile{x,y} integer value from 0 to (this._currentWorld.size.{width,height} - 1)
+      const tileX = Math.floor(relX * this._currentWorld.size.width);
+      const tileY = Math.floor(relY * this._currentWorld.size.height);
+
+      this._mouse.updateCursorPos(
+        new Position(tileX, tileY, this._currentWorld)
+      );
+    });
+    this.addRemovableEventListener(canvas, "contextmenu", (ev) => {
+      ev.preventDefault(); // Disable right click context menu
+    });
+  }
+
+  private removeMouseListener(): void {
+    // Call all removers (removeEventListener)
+    for (const remover of this._eventListenerRemovers) {
+      remover();
+    }
+    this._eventListenerRemovers = [];
+  }
+
+  private addRemovableEventListener<K extends keyof HTMLElementEventMap>(
+    element: HTMLElement,
+    type: K,
+    listener: (ev: HTMLElementEventMap[K]) => void
+  ): void {
+    this._eventListenerRemovers.push(() => {
+      element.removeEventListener(type, listener);
+    });
+    element.addEventListener(type, listener);
   }
 }

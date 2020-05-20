@@ -1,8 +1,10 @@
-import * as Util from './util'
+import * as Util from "./util";
 
-describe('Utility: encodeUriParameters', () => {
+describe("Utility: encodeUriParameters", () => {
   it('{ "a key" : "a value" } => "a%20key=a%20value"', () => {
-    expect(Util.encodeUriParameters({ "a key": "a value" })).toEqual("a%20key=a%20value");
+    expect(Util.encodeUriParameters({ "a key": "a value" })).toEqual(
+      "a%20key=a%20value"
+    );
   });
 
   it('{ } => ""', () => {
@@ -10,30 +12,40 @@ describe('Utility: encodeUriParameters', () => {
   });
 });
 
-describe('Utility: isValidResourceId', () => {
-  it('identifies valid IDs', () => {
-    expect(Util.isValidId("00000000-1111-2222-3333-444444444444")).toEqual(true);
-    expect(Util.isValidId("AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE")).toEqual(true);
-    expect(Util.isValidId("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")).toEqual(true);
+describe("Utility: isValidResourceId", () => {
+  it("identifies valid IDs", () => {
+    expect(Util.isValidId("00000000-1111-2222-3333-444444444444")).toEqual(
+      true
+    );
+    expect(Util.isValidId("AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE")).toEqual(
+      true
+    );
+    expect(Util.isValidId("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")).toEqual(
+      true
+    );
 
-    expect(Util.isValidId("4f1f31c8-4ea3-42bd-9ba3-76a4c1d459b0")).toEqual(true);
-    expect(Util.isValidId("4F1F31C8-4EA3-42BD-9BA3-76A4C1D459B0")).toEqual(true);
+    expect(Util.isValidId("4f1f31c8-4ea3-42bd-9ba3-76a4c1d459b0")).toEqual(
+      true
+    );
+    expect(Util.isValidId("4F1F31C8-4EA3-42BD-9BA3-76A4C1D459B0")).toEqual(
+      true
+    );
   });
 
-  it('identifies invalid IDs', () => {
+  it("identifies invalid IDs", () => {
     expect(Util.isValidId("00000000111122223333444444444444")).toEqual(false);
     expect(Util.isValidId("AAAAAAAABBBBCCCCDDDDEEEEEEEEEEEE")).toEqual(false);
   });
 });
 
-describe('Utility: arrayEqual', () => {
-  it('with empty arrays', () => {
+describe("Utility: arrayEqual", () => {
+  it("with empty arrays", () => {
     expect(Util.arrayEqual([], [])).toBeTruthy();
     expect(Util.arrayEqual([1], [])).toBeFalsy();
     expect(Util.arrayEqual([], [1])).toBeFalsy();
   });
 
-  it('with non arrays', () => {
+  it("with non arrays", () => {
     expect(Util.arrayEqual([], undefined)).toBeFalsy();
     expect(Util.arrayEqual([], null)).toBeFalsy();
     expect(Util.arrayEqual([], "" as any)).toBeFalsy();
@@ -45,7 +57,7 @@ describe('Utility: arrayEqual', () => {
     expect(Util.arrayEqual(1 as any, [])).toBeFalsy();
   });
 
-  it('Flat arrays', () => {
+  it("Flat arrays", () => {
     expect(Util.arrayEqual([1, 2], [1, 2])).toBeTruthy();
     expect(Util.arrayEqual([2, 1], [2, 1])).toBeTruthy();
 
@@ -54,29 +66,29 @@ describe('Utility: arrayEqual', () => {
 
     expect(Util.arrayEqual([2, 2, 2], [2, 2])).toBeFalsy();
     expect(Util.arrayEqual([2, 2], [2, 2, 2])).toBeFalsy();
-  })
-
-  it('Different datatypes', () => {
-    expect(Util.arrayEqual(['1', '2'], [1, 2])).toBeFalsy();
-    expect(Util.arrayEqual(['2', '1'], [2, 1])).toBeFalsy();
   });
 
-  it('Nested arrays', () => {
+  it("Different datatypes", () => {
+    expect(Util.arrayEqual(["1", "2"], [1, 2])).toBeFalsy();
+    expect(Util.arrayEqual(["2", "1"], [2, 1])).toBeFalsy();
+  });
+
+  it("Nested arrays", () => {
     expect(Util.arrayEqual([[1, 2]], [[1, 2]])).toBeTruthy();
     expect(Util.arrayEqual([[2, 1]], [[2, 1]])).toBeTruthy();
 
     expect(Util.arrayEqual([[2, 1]], [[]])).toBeFalsy();
     expect(Util.arrayEqual([[2, 1]], [])).toBeFalsy();
-  })
+  });
 
-  it('Same Object', () => {
+  it("Same Object", () => {
     const obj = { x: 0, y: 1 };
     expect(Util.arrayEqual([obj], [obj])).toBeTruthy();
     expect(Util.arrayEqual([[obj]], [[obj]])).toBeTruthy();
     expect(Util.arrayEqual([[obj], obj], [[obj], obj])).toBeTruthy();
   });
 
-  it('Identical, but different Object', () => {
+  it("Identical, but different Object", () => {
     const lhs = { x: 0, y: 1 };
     const rhs = { x: 0, y: 1 };
     expect(Util.arrayEqual([lhs], [rhs])).toBeFalsy();
@@ -99,11 +111,30 @@ describe("locationIsOnPath", () => {
   });
 
   it(`[["a", 0]] is on [["a", 0], ["a", 0]]`, () => {
-    expect(Util.locationIsOnPath([["a", 0]], [["a", 0], ["a", 0]])).toBe(true);
+    expect(
+      Util.locationIsOnPath(
+        [["a", 0]],
+        [
+          ["a", 0],
+          ["a", 0],
+        ]
+      )
+    ).toBe(true);
   });
 
   it(`[["a", 0], ["a", 0]] is on [["a", 0], ["a", 0]]`, () => {
-    expect(Util.locationIsOnPath([["a", 0], ["a", 0]], [["a", 0], ["a", 0]])).toBe(true);
+    expect(
+      Util.locationIsOnPath(
+        [
+          ["a", 0],
+          ["a", 0],
+        ],
+        [
+          ["a", 0],
+          ["a", 0],
+        ]
+      )
+    ).toBe(true);
   });
 
   it(`[["b", 0]] is not on [["a", 0]]`, () => {
@@ -111,7 +142,18 @@ describe("locationIsOnPath", () => {
   });
 
   it(`[["a", 0], ["b", 0]] is not on [["a", 0], ["a", 0]]`, () => {
-    expect(Util.locationIsOnPath([["a", 0], ["b", 0]], [["a", 0], ["a", 0]])).toBe(false);
+    expect(
+      Util.locationIsOnPath(
+        [
+          ["a", 0],
+          ["b", 0],
+        ],
+        [
+          ["a", 0],
+          ["a", 0],
+        ]
+      )
+    ).toBe(false);
   });
 });
 

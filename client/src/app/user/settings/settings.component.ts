@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
-import { SideNavService } from '../../shared/side-nav.service';
-import { NavItem } from '../../shared/nav-interfaces';
+import { SideNavService } from "../../shared/side-nav.service";
+import { NavItem } from "../../shared/nav-interfaces";
 
 export const userSettings: NavItem[] = [
   {
@@ -14,7 +14,7 @@ export const userSettings: NavItem[] = [
     icon: "user",
   },
   {
-    type: "fill"
+    type: "fill",
   },
   {
     type: "external",
@@ -23,22 +23,20 @@ export const userSettings: NavItem[] = [
       en: "Manual 🇬🇧",
     },
     url: "http://manual.blattwerkzeug.de/",
-    icon: "book"
+    icon: "book",
   },
 ];
 
 @Component({
-  templateUrl: './components/templates/settings-index.html'
+  templateUrl: "./components/templates/settings-index.html",
 })
 export class UserSettingsComponent implements OnInit {
-  constructor(
-    private _sideNav: SideNavService
-  ) { }
+  constructor(private _sideNav: SideNavService) {}
 
   /**
    * Reloads the side-nav
    */
   ngOnInit(): void {
-    this._sideNav.newSideNav(userSettings)
+    this._sideNav.newSideNav(userSettings);
   }
 }

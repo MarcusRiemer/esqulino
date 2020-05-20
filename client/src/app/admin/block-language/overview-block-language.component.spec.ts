@@ -1,22 +1,35 @@
-import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
-import { PortalModule } from '@angular/cdk/portal';
+import { FormsModule } from "@angular/forms";
+import { RouterTestingModule } from "@angular/router/testing";
+import { TestBed } from "@angular/core/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { PortalModule } from "@angular/cdk/portal";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { ServerApiService, ToolbarService } from '../../shared';
-import { ListBlockLanguageDataService, MutateBlockLanguageService } from '../../shared/serverdata';
-import { DefaultValuePipe } from '../../shared/default-value.pipe';
-import { provideBlockLanguageList, buildBlockLanguage } from '../../editor/spec-util';
+import { ServerApiService, ToolbarService } from "../../shared";
+import {
+  ListBlockLanguageDataService,
+  MutateBlockLanguageService,
+} from "../../shared/serverdata";
+import { DefaultValuePipe } from "../../shared/default-value.pipe";
+import {
+  provideBlockLanguageList,
+  buildBlockLanguage,
+} from "../../editor/spec-util";
 
-import { OverviewBlockLanguageComponent } from './overview-block-language.component';
+import { OverviewBlockLanguageComponent } from "./overview-block-language.component";
+import { PaginatorTableComponent } from "../../shared/table/paginator-table.component";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
-describe('OverviewBlockLanguageComponent', () => {
+describe("OverviewBlockLanguageComponent", () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
@@ -24,6 +37,8 @@ describe('OverviewBlockLanguageComponent', () => {
         NoopAnimationsModule,
         MatSnackBarModule,
         MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
         PortalModule,
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([]),
@@ -32,14 +47,15 @@ describe('OverviewBlockLanguageComponent', () => {
         ToolbarService,
         ServerApiService,
         ListBlockLanguageDataService,
-        MutateBlockLanguageService
+        MutateBlockLanguageService,
+        ServerTasksService,
       ],
       declarations: [
         OverviewBlockLanguageComponent,
-        DefaultValuePipe
-      ]
-    })
-      .compileComponents();
+        DefaultValuePipe,
+        PaginatorTableComponent,
+      ],
+    }).compileComponents();
 
     let fixture = TestBed.createComponent(OverviewBlockLanguageComponent);
     let component = fixture.componentInstance;
@@ -48,13 +64,13 @@ describe('OverviewBlockLanguageComponent', () => {
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
 
-    return ({
+    return {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
       httpTesting,
       serverApi,
-    });
+    };
   }
 
   it(`can be instantiated`, async () => {
@@ -66,12 +82,16 @@ describe('OverviewBlockLanguageComponent', () => {
   it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
-    const initialLoading = await t.component.inProgress.pipe(first()).toPromise();
+    const initialLoading = await t.component.blockLanguages.listCache.inProgress
+      .pipe(first())
+      .toPromise();
     expect(initialLoading).toBe(true);
 
     provideBlockLanguageList([]);
 
-    const afterResponse = await t.component.inProgress.pipe(first()).toPromise();
+    const afterResponse = await t.component.blockLanguages.listCache.inProgress
+      .pipe(first())
+      .toPromise();
     expect(afterResponse).toBe(false);
   });
 
@@ -82,6 +102,11 @@ describe('OverviewBlockLanguageComponent', () => {
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
+
+    const tableElement = t.element.querySelector("table");
+    const rows = tableElement.querySelectorAll("tbody > tr");
+
+    expect(rows.length).toEqual(0);
   });
 
   it(`Displays a list with a single element`, async () => {
@@ -106,13 +131,17 @@ describe('OverviewBlockLanguageComponent', () => {
     const i1 = buildBlockLanguage({ name: "B1" });
     provideBlockLanguageList([i1]);
 
-    const initialData = await t.component.availableBlockLanguages.pipe(first()).toPromise();
+    const initialData = await t.component.blockLanguages.list
+      .pipe(first())
+      .toPromise();
     expect(initialData).toEqual([i1]);
 
     t.component.onRefresh();
     provideBlockLanguageList([]);
 
-    const refreshedData = await t.component.availableBlockLanguages.pipe(first()).toPromise();
+    const refreshedData = await t.component.blockLanguages.list
+      .pipe(first())
+      .toPromise();
     expect(refreshedData).toEqual([]);
   });
 
@@ -127,16 +156,24 @@ describe('OverviewBlockLanguageComponent', () => {
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");
-    const i1Delete = i1Row.querySelector("button[data-spec=delete]") as HTMLButtonElement;
+    const i1Delete = i1Row.querySelector(
+      "button[data-spec=delete]"
+    ) as HTMLButtonElement;
 
     i1Delete.click();
 
-    t.httpTesting.expectOne({ method: "DELETE", url: t.serverApi.individualBlockLanguageUrl(i1.id) })
+    t.httpTesting
+      .expectOne({
+        method: "DELETE",
+        url: t.serverApi.individualBlockLanguageUrl(i1.id),
+      })
       .flush("");
 
     provideBlockLanguageList([]);
 
-    const refreshedData = await t.component.availableBlockLanguages.pipe(first()).toPromise();
+    const refreshedData = await t.component.blockLanguages.list
+      .pipe(first())
+      .toPromise();
     expect(refreshedData).toEqual([]);
   });
 });

@@ -1,9 +1,12 @@
-import { EditorComponentDescription } from '../block-language.description'
+import { EditorComponentDescription } from "../block-language.description";
 
-import { AnySidebarDescription } from './sidebar.description'
-import { AllReferenceableTypeInstructions } from './instructions.description'
-import { ParameterDeclarations, ParameterValues } from './parameters.description'
-import { ReferenceableTraits, ScopeTraitAdd } from './traits.description'
+import { AnySidebarDescription } from "./sidebar.description";
+import { AllReferenceableTypeInstructions } from "./instructions.description";
+import {
+  ParameterDeclarations,
+  ParameterValues,
+} from "./parameters.description";
+import { ReferenceableTraits, ScopeTraitAdd } from "./traits.description";
 
 /**
  * Generator aspects that are probably part of every generation strategy.
@@ -30,9 +33,10 @@ export interface CoreBlockLanguageGeneratorDescription {
  * A very manual approach to block language generation. Uses specific type
  * instructions and traits to
  */
-export interface ManualBlockLanguageGeneratorDescription extends CoreBlockLanguageGeneratorDescription {
+export interface ManualBlockLanguageGeneratorDescription
+  extends CoreBlockLanguageGeneratorDescription {
   // Discriminator value for this strategy
-  type: "manual"
+  type: "manual";
 
   // Define how to generate blocks for the mentioned types
   typeInstructions?: AllReferenceableTypeInstructions;
@@ -44,27 +48,21 @@ export interface ManualBlockLanguageGeneratorDescription extends CoreBlockLangua
   traitScopes?: ScopeTraitAdd[];
 }
 
-export interface TreeBlockLanguageGeneratorDescription extends CoreBlockLanguageGeneratorDescription {
-  type: "tree"
-}
-
-export type BlockLanguageGeneratorDocument
-  = ManualBlockLanguageGeneratorDescription
-  | TreeBlockLanguageGeneratorDescription
-
 /**
- * "Superficial" attribues of a block language generator
+ * Visualizes a block language by showing the tree structure. This is not
+ * very user friendly but probably useful to debug.
  */
-export interface BlockLanguageGeneratorListDescription {
-  id: string;
-  name: string;
+export interface TreeBlockLanguageGeneratorDescription
+  extends CoreBlockLanguageGeneratorDescription {
+  type: "tree";
 }
 
 /**
- * Describes how a grammar might be converted to a block language
+ * All possible instructions to generate a block language.
  */
-export type BlockLanguageGeneratorDescription
-  = BlockLanguageGeneratorDocument & BlockLanguageGeneratorListDescription
+export type BlockLanguageGeneratorDocument =
+  | ManualBlockLanguageGeneratorDescription
+  | TreeBlockLanguageGeneratorDescription;
 
 /**
  * No idea how parameters for generators will work in the future. In the meantime
@@ -73,5 +71,5 @@ export type BlockLanguageGeneratorDescription
 export const DEFAULT_GENERATOR: BlockLanguageGeneratorDocument = {
   type: "manual",
   editorComponents: [],
-  typeInstructions: {}
+  typeInstructions: {},
 };

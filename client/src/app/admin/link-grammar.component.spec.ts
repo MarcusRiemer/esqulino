@@ -1,15 +1,22 @@
-import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
-import { TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterTestingModule } from '@angular/router/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { RouterTestingModule } from "@angular/router/testing";
 
-import { ServerApiService } from '../shared';
-import { ListGrammarDataService, MutateGrammarService } from '../shared/serverdata';
-import { LinkGrammarComponent } from './link-grammar.component';
-import { generateUUIDv4 } from '../shared/util-browser';
-import { buildGrammar, provideGrammarList } from '../editor/spec-util';
+import { ServerApiService } from "../shared";
+import {
+  ListGrammarDataService,
+  MutateGrammarService,
+} from "../shared/serverdata";
+import { LinkGrammarComponent } from "./link-grammar.component";
+import { generateUUIDv4 } from "../shared/util-browser";
+import { buildGrammar, provideGrammarList } from "../editor/spec-util";
+import { ServerTasksService } from "../shared/serverdata/server-tasks.service";
 
-describe('LinkGrammarComponent', () => {
+describe("LinkGrammarComponent", () => {
   async function createComponent(grammarId: string = undefined) {
     await TestBed.configureTestingModule({
       imports: [
@@ -21,12 +28,10 @@ describe('LinkGrammarComponent', () => {
         ServerApiService,
         ListGrammarDataService,
         MutateGrammarService,
+        ServerTasksService,
       ],
-      declarations: [
-        LinkGrammarComponent
-      ]
-    })
-      .compileComponents();
+      declarations: [LinkGrammarComponent],
+    }).compileComponents();
 
     let fixture = TestBed.createComponent(LinkGrammarComponent);
     let component = fixture.componentInstance;
@@ -38,13 +43,13 @@ describe('LinkGrammarComponent', () => {
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
 
-    return ({
+    return {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
       httpTesting,
       serverApi,
-    });
+    };
   }
 
   it(`Can be instantiated`, async () => {

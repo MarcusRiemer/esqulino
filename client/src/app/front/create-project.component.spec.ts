@@ -1,43 +1,47 @@
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing'
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
+import { RouterTestingModule } from "@angular/router/testing";
+import { TestBed } from "@angular/core/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { MatCardModule } from "@angular/material/card";
 
-import { CreateProjectComponent } from './create-project.component';
+import { CreateProjectComponent } from "./create-project.component";
 
-import { JavascriptRequiredComponent } from '../shared/javascript-required.component';
-import { ServerApiService } from '../shared';
-import { EmptyComponent } from '../shared/empty.component';
+import { JavascriptRequiredComponent } from "../shared/javascript-required.component";
+import { ServerApiService } from "../shared";
+import { EmptyComponent } from "../shared/empty.component";
 
-describe('CreateProjectComponent', () => {
+describe("CreateProjectComponent", () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([
-          { path: "editor/:id", component: EmptyComponent }
+          { path: "editor/:id", component: EmptyComponent },
         ]),
         FormsModule,
         HttpClientTestingModule,
-        MatCardModule
+        MatCardModule,
       ],
-      providers: [
-        ServerApiService
-      ],
+      providers: [ServerApiService],
       declarations: [
         CreateProjectComponent,
         JavascriptRequiredComponent,
-        EmptyComponent
-      ]
-    })
-      .compileComponents();
+        EmptyComponent,
+      ],
+    }).compileComponents();
 
     let fixture = TestBed.createComponent(CreateProjectComponent);
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
-    return ({ fixture, component, element: fixture.nativeElement as HTMLElement });
+    return {
+      fixture,
+      component,
+      element: fixture.nativeElement as HTMLElement,
+    };
   }
 
   it(`Can be instantiated`, async () => {
@@ -63,13 +67,14 @@ describe('CreateProjectComponent', () => {
     expect(c.component.inProgress).toEqual(true);
 
     const serverResponse = { id: "bdcb9a69-cadc-4ffb-9c95-077e81fc7aae" };
-    httpTestingController.expectOne(serverApi.createProjectUrl())
+    httpTestingController
+      .expectOne(serverApi.createProjectUrl())
       .flush(serverResponse);
 
     const result = await request;
 
     expect(c.component.inProgress).toEqual(false);
-    expect(result).toEqual(serverResponse)
+    expect(result).toEqual(serverResponse);
 
     const router: Router = TestBed.get(Router);
     expect(router.url).toEqual("/editor/" + result.id);
@@ -78,15 +83,20 @@ describe('CreateProjectComponent', () => {
   it(`Displays errors`, async () => {
     const c = await createComponent();
 
-    const httpTestingController: HttpTestingController = TestBed.get(HttpTestingController);
+    const httpTestingController: HttpTestingController = TestBed.get(
+      HttpTestingController
+    );
     const serverApi: ServerApiService = TestBed.get(ServerApiService);
 
     const request = c.component.createProject();
 
     expect(c.component.inProgress).toEqual(true);
 
-    const serverResponse = { errors: ["name may not be empty", "slug may not be empty"] };
-    httpTestingController.expectOne(serverApi.createProjectUrl())
+    const serverResponse = {
+      errors: ["name may not be empty", "slug may not be empty"],
+    };
+    httpTestingController
+      .expectOne(serverApi.createProjectUrl())
       .flush(serverResponse, { status: 400, statusText: "Invalid Request" });
 
     await request;

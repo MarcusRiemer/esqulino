@@ -1,4 +1,4 @@
-import { EditorBlockDescription } from './block.description'
+import { EditorBlockDescription } from "./block.description";
 
 /**
  * Controls how a certain block should be represented in the drag &
@@ -15,10 +15,10 @@ export class EditorBlock {
    * The type this block can be used to represent.
    */
   get qualifiedName() {
-    return (this._description.describedType);
+    return this._description.describedType;
   }
 
   get visualDescription() {
-    return (this._description.visual || { blockType: "error" });
+    return this._description.visual || { blockType: "error" };
   }
 }

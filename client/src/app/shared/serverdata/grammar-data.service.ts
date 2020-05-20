@@ -1,6 +1,6 @@
-import { Injectable, OnDestroy, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Injectable, OnDestroy, Optional } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import {Mutation, Query} from "apollo-angular";
 import gql from 'graphql-tag';
@@ -11,26 +11,26 @@ import { map } from 'rxjs/operators';
 import { GrammarDescription, GrammarListDescription,GrammarListGraphQlResponse } from '../syntaxtree';
 import { fieldCompare } from '../util'
 
-import { ServerApiService } from './serverapi.service';
-import { ListData } from './list-data';
-import { IndividualData } from './individual-data';
-import { MutateData } from './mutate-data';
+import { ServerApiService } from "./serverapi.service";
+import { ListData } from "./list-data";
+import { IndividualData } from "./individual-data";
+import { MutateData } from "./mutate-data";
+import { ServerTasksService } from "./server-tasks.service";
 
 const urlResolver = (serverApi: ServerApiService) => {
-  return ((id: string) => serverApi.individualGrammarUrl(id))
-}
+  return (id: string) => serverApi.individualGrammarUrl(id);
+};
 
 
 /**
  * Cached access to individual grammars
  */
 @Injectable()
-export class IndividualGrammarDataService extends IndividualData<GrammarDescription> {
-  constructor(
-    serverApi: ServerApiService,
-    http: HttpClient,
-  ) {
-    super(http, urlResolver(serverApi), "Grammar")
+export class IndividualGrammarDataService extends IndividualData<
+  GrammarDescription
+> {
+  constructor(serverApi: ServerApiService, http: HttpClient) {
+    super(http, urlResolver(serverApi), "Grammar");
   }
 }
 
@@ -39,9 +39,9 @@ export class MutateGrammarService extends MutateData<GrammarDescription> {
   public constructor(
     http: HttpClient,
     snackBar: MatSnackBar,
-    serverApi: ServerApiService,
+    serverApi: ServerApiService
   ) {
-    super(http, snackBar, urlResolver(serverApi), "Grammar")
+    super(http, snackBar, urlResolver(serverApi), "Grammar");
   }
 }
 
@@ -49,24 +49,29 @@ export class MutateGrammarService extends MutateData<GrammarDescription> {
  * Cached access to lists of grammars.
  */
 @Injectable()
-export class ListGrammarDataService extends ListData<GrammarListDescription> implements OnDestroy {
+export class ListGrammarDataService extends ListData<GrammarListDescription>
+  implements OnDestroy {
   private _subscriptions: Subscription[] = [];
 
   constructor(
     serverApi: ServerApiService,
     http: HttpClient,
     mutateService: MutateGrammarService,
+    serverTaskService: ServerTasksService
   ) {
-    super(http, serverApi.getGrammarListUrl());
+    super(http, serverApi.getGrammarListUrl(), serverTaskService);
 
-    const s = mutateService.listInvalidated.subscribe(() => this.listCache.refresh());
+    const s = mutateService.listInvalidated.subscribe(() =>
+      this.listCache.refresh()
+    );
     this._subscriptions = [s];
   }
 
   ngOnDestroy() {
-    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions.forEach((s) => s.unsubscribe());
     this._subscriptions = [];
   }
+<<<<<<< HEAD
 
   /**
    * Grammars in stable sort order.
@@ -110,3 +115,6 @@ export class GrammarListMutateQL extends Mutation {
     }
   `;
 }
+=======
+}
+>>>>>>> origin

@@ -1,19 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import { ProjectDescription, ProjectListDescription } from '../project.description';
+import {
+  ProjectDescription,
+  ProjectListDescription,
+} from "../project.description";
 
-import { ServerApiService } from './serverapi.service';
-import { ListData } from './list-data';
-import { IndividualData } from './individual-data';
+import { ServerApiService } from "./serverapi.service";
+import { ListData } from "./list-data";
+import { IndividualData } from "./individual-data";
+import { ServerTasksService } from "./server-tasks.service";
+import { MutateBlockLanguageService } from "./blocklanguage-data.service";
 
 @Injectable()
-export class IndividualProjectDataService extends IndividualData<ProjectDescription> {
-  constructor(
-    serverApi: ServerApiService,
-    http: HttpClient,
-  ) {
-    super(http, (id) => serverApi.getProjectUrl(id), "Project")
+export class IndividualProjectDataService extends IndividualData<
+  ProjectDescription
+> {
+  constructor(serverApi: ServerApiService, http: HttpClient) {
+    super(http, (id) => serverApi.getProjectUrl(id), "Project");
   }
 }
 
@@ -22,11 +26,11 @@ export class IndividualProjectDataService extends IndividualData<ProjectDescript
  */
 @Injectable()
 export class ProjectDataService extends ListData<ProjectListDescription> {
-
   public constructor(
     serverApi: ServerApiService,
-    http: HttpClient
+    http: HttpClient,
+    serverTaskService: ServerTasksService
   ) {
-    super(http, serverApi.getProjectListUrl());
+    super(http, serverApi.getProjectListUrl(), serverTaskService);
   }
 }

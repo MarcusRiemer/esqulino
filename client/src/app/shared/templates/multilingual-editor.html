@@ -1,26 +1,25 @@
-
 <ng-container *ngIf="control == 'input'">
   <multilingual-input
     [(editingString)]="original"
     [control]="control"
-    [placeholder]="placeholder">
-  </multilingual-input>
+    [placeholder]="placeholder"
+  ></multilingual-input>
 
   <multilingual-input
-    [(editingString)]="translated" 
-    [language]="language" 
-    [control]="control" 
-    [placeholder]="placeholder">
-  </multilingual-input>
+    [(editingString)]="translated"
+    [language]="language"
+    [control]="control"
+    [placeholder]="placeholder"
+  ></multilingual-input>
 </ng-container>
 
 <div class="row" *ngIf="control == 'textarea'">
   <div class="col-md-6">
-    <multilingual-input 
-      [(editingString)]="original" 
-      [control]="control" 
-      [placeholder]="placeholder">
-    </multilingual-input>
+    <multilingual-input
+      [(editingString)]="original"
+      [control]="control"
+      [placeholder]="placeholder"
+    ></multilingual-input>
   </div>
 
   <div class="col-md-6">
@@ -28,7 +27,7 @@
       [(editingString)]="translated"
       [language]="language"
       [control]="control"
-      [placeholder]="placeholder">
-    </multilingual-input>
+      [placeholder]="placeholder"
+    ></multilingual-input>
   </div>
 </div>

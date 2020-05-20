@@ -40,7 +40,8 @@ class CodeResourcesController < ApplicationController
       # Do the actual update of the code resource
       if resource.update(update_params)
         # Do updates on dependant resources
-        resource.regenerate_immediate_dependants!
+        affected = resource.regenerate_immediate_dependants!
+        affected.each { |a| a.save! }
 
         render :json => resource, :status => 200
       else

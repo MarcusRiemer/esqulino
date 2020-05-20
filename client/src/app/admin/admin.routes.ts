@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule } from "@angular/router";
 
 import { AdminComponent, adminItems } from './admin.component'
 import { AdminOverviewComponent } from './admin-overview.component'
@@ -15,22 +15,22 @@ import {OverviewGrammarGraphQLComponent} from "./grammar/overview-grammar-graphq
 
 export const adminRoutes: Routes = [
   {
-    path: '',
+    path: "",
     component: AdminComponent,
     children: [
       {
-        path: '',
+        path: "",
         component: AdminOverviewComponent,
-        pathMatch: 'full'
+        pathMatch: "full",
       },
       {
-        path: 'nav',
+        path: "nav",
         component: NavSiteComponent,
-        data: { items: adminItems }
+        data: { items: adminItems },
       },
       {
-        path: 'grammar',
-        component: OverviewGrammarComponent
+        path: "grammar",
+        component: OverviewGrammarComponent,
       },
       {
         path: 'grammar-graphql',
@@ -41,35 +41,35 @@ export const adminRoutes: Routes = [
         component: EditGrammarComponent
       },
       {
-        path: 'grammar/:grammarId/gallery',
-        component: GalleryGrammarComponent
+        path: "grammar/:grammarId/gallery",
+        component: GalleryGrammarComponent,
       },
       {
-        path: 'block-language',
-        component: OverviewBlockLanguageComponent
+        path: "block-language",
+        component: OverviewBlockLanguageComponent,
       },
       {
-        path: 'block-language/:blockLanguageId',
-        component: EditBlockLanguageComponent
+        path: "block-language/:blockLanguageId",
+        component: EditBlockLanguageComponent,
       },
       {
-        path: 'project',
-        component: OverviewProjectComponent
+        path: "project",
+        component: OverviewProjectComponent,
       },
       {
-        path: 'news',
-        component: AdminNewsListComponent
+        path: "news",
+        component: AdminNewsListComponent,
       },
       {
-        path: 'news/edit/:newsId',
-        component: AdminNewsEditComponent
+        path: "news/edit/:newsId",
+        component: AdminNewsEditComponent,
       },
       {
-        path: 'news/create',
-        component: AdminNewsEditComponent
-      }
-    ]
-  }
+        path: "news/create",
+        component: AdminNewsEditComponent,
+      },
+    ],
+  },
 ];
 
 export const adminRouting = RouterModule.forChild(adminRoutes);

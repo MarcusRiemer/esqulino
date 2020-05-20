@@ -1,8 +1,8 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule } from "@angular/router";
 
-import { ImageListComponent } from './image-list.component'
-import { ImageUploadComponent } from './image-upload.component'
-import { ImageEditComponent } from './image-edit.component'
+import { ImageListComponent } from "./image-list.component";
+import { ImageUploadComponent } from "./image-upload.component";
+import { ImageEditComponent } from "./image-edit.component";
 
 export const imageEditorRoutes: Routes = [
   {
@@ -16,7 +16,7 @@ export const imageEditorRoutes: Routes = [
   {
     path: ":imageId/edit",
     component: ImageEditComponent,
-  }
-]
+  },
+];
 
 export const imageEditorRouting = RouterModule.forChild(imageEditorRoutes);

@@ -1,19 +1,25 @@
 import {
-  Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges
-} from '@angular/core';
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core";
 
 // Pre-load relevant ace themes and modes
-import 'brace/theme/sqlserver'
-import 'brace/mode/json'
+import "brace/theme/sqlserver";
+import "brace/mode/json";
 
-import 'brace/ext/searchbox'
+import "brace/ext/searchbox";
 
 /**
  * Allows more or less comfortable editing of JSON data
  */
 @Component({
-  templateUrl: 'templates/json-editor.html',
-  selector: 'json-editor'
+  templateUrl: "templates/json-editor.html",
+  selector: "json-editor",
 })
 export class JsonEditor implements OnInit, OnChanges {
   @Input() jsonValue: any;
@@ -72,7 +78,8 @@ export class JsonEditor implements OnInit, OnChanges {
   onEditorOverwriteUi() {
     try {
       // JSON.parse("") or JSON.parse(undefined) results in an exception
-      this.jsonValue = this._currentText !== "" ? JSON.parse(this._currentText) : undefined;
+      this.jsonValue =
+        this._currentText !== "" ? JSON.parse(this._currentText) : undefined;
       this.jsonValueChange.emit(this.jsonValue);
       this.checkSynchronisation();
     } catch {

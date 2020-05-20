@@ -15,44 +15,34 @@
 <div mat-dialog-content class="flex-column authentication">
   <div>
     <h1>
-      <ng-container *ngIf="isSignIn(); else headerRegister"
-                    i18n="@@authDialogHeaderSignIn">
+      <ng-container
+        *ngIf="isSignIn(); else headerRegister"
+        i18n="@@authDialogHeaderSignIn"
+      >
         Anmelden
       </ng-container>
-      <ng-template #headerRegister
-                   i18n="@@authDialogHeaderRegister">
+      <ng-template #headerRegister i18n="@@authDialogHeaderRegister">
         Registrieren
       </ng-template>
     </h1>
   </div>
-  <providers-all-buttons
-    (trigger)="showEmailContent()">
-
-  </providers-all-buttons>
+  <providers-all-buttons (trigger)="showEmailContent()"></providers-all-buttons>
 
   <ng-container *ngIf="emailContent">
-    <hr/>
+    <hr />
 
     <ng-container *ngIf="isSignIn()">
       <!-- Main content -->
-      <sign-in *ngIf="!secondContent"
-        (content)="changeContent()">
-      </sign-in>
+      <sign-in *ngIf="!secondContent" (content)="changeContent()"></sign-in>
       <!-- Second content -->
-      <request-reset-password
-        *ngIf="secondContent">
-      </request-reset-password>
+      <request-reset-password *ngIf="secondContent"></request-reset-password>
     </ng-container>
 
     <ng-container *ngIf="!isSignIn()">
       <!-- Main content -->
-      <sign-up *ngIf="!secondContent"
-        (content)="changeContent()">
-      </sign-up>
+      <sign-up *ngIf="!secondContent" (content)="changeContent()"></sign-up>
       <!-- Second content -->
-      <request-verify-email
-        *ngIf="secondContent">
-      </request-verify-email>
+      <request-verify-email *ngIf="secondContent"></request-verify-email>
     </ng-container>
   </ng-container>
 </div>

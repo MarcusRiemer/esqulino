@@ -12,6 +12,10 @@ class Grammar < ApplicationRecord
   # The JSON document needs to be a valid grammar
   validates :model, json_schema: 'GrammarDatabaseBlob'
 
+  # validates :types, json_schema: 'NamedLanguages'
+  # validates :foreign_types, json_schema: 'NamedLanguages'
+  # validates :root, json_schema: 'QualifiedTypeName'
+
   # The programming language that may define additional validation
   belongs_to :programming_language
 
@@ -29,6 +33,11 @@ class Grammar < ApplicationRecord
     select(:id, :slug, :name, :created_at, :updated_at, :programming_language_id)
   }
 
+  # The parts of this model that together validate against GrammarDocument
+  def document
+    self.model
+  end
+
   # Takes the current state of the backing code resource and assigns
   # the newly generated model.
   #
@@ -36,20 +45,35 @@ class Grammar < ApplicationRecord
   #        that may be used to generate the source code.
   #
   # @raise [IdeServiceError] If anything goes wrong during compilation.
+  #
+  # @return [Grammar|BlockLanguage] A list of affected grammars or block languages.
   def regenerate_from_code_resource!(ide_service = IdeService.instance)
     compiled = self.generated_from.emit_ast!(ide_service)
     grammar_document = JSON.parse(compiled)
     model_attributes = grammar_document.slice('types', 'foreignTypes', 'root')
 
+    affected = []
+
     # Can't use ActiveModel::Dirty because this relies on saves to the database
-    # as anchor points. In this method we want to know whether this concrete
-    # regenenaration changed something in practice.
+    # as anchor points. It will therefore not tell us whether the two hashes
+    # are equal or not, but if the hash in the model has been written to.
+    #
+    # In this method we want to know whether this concrete regenenaration changed
+    # something in practice. Otherwise we might kick off loads of unnecessary
+    # processing for block languages and that might be costly.
     if (not self.model.eql? model_attributes)
       self.model = model_attributes
-      return (true)
-    else
-      return (false)
+      affected << self
+
+      # Possibly update block languages
+      self.block_languages.each do |b|
+        if b.regenerate_from_grammar!
+          affected << b
+        end
+      end
     end
+
+    return affected
   end
 
   # Computes a hash that may be sent back to the client if it requires

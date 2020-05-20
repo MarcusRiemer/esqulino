@@ -1,28 +1,53 @@
-<h1 i18n="scientific work headline@@scientificWorkHeadline">Wissenschaftliche Arbeiten</h1>
+<h1 i18n="scientific work headline@@scientificWorkHeadline">
+  Wissenschaftliche Arbeiten
+</h1>
 <p i18n="scientific work description@@scientificWorkDescription">
-  Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von <a href="http://www.fh-wedel.de/mitarbeiter/mri/esqulino">Marcus Riemer (Fachhochschule Wedel)</a> unter der Betreuung von <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">Dr. Frank Huch (CAU Kiel)</a>. Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten im Kontext dieses Projektes entwickelt.
+  Diese Seite bündelt die wissenschaftlichen Arbeiten, die im Rahmen dieses
+  Projektes entstanden sind. Am Anfang stand dabei die Master-Thesis von
+  <a href="http://www.fh-wedel.de/mitarbeiter/mri/esqulino">
+    Marcus Riemer (Fachhochschule Wedel)
+  </a>
+  unter der Betreuung von
+  <a href="http://www-ps.informatik.uni-kiel.de/~fhu/">
+    Dr. Frank Huch (CAU Kiel)
+  </a>
+  . Darüber hinaus haben Studierende beider Hochschulen ihre Abschlussarbeiten
+  im Kontext dieses Projektes entwickelt.
 </p>
 
-<mat-card *ngFor="let thesis of theses | async"
-          class="academia-item">
+<mat-card *ngFor="let thesis of theses | async" class="academia-item">
   <mat-card-title class="card-title">{{ thesis.title }}</mat-card-title>
-  <mat-card-subtitle class="card-subtitle mb-2 text-muted">{{ thesis.subtitle }}</mat-card-subtitle>
+  <mat-card-subtitle class="card-subtitle mb-2 text-muted">
+    {{ thesis.subtitle }}
+  </mat-card-subtitle>
   <mat-card-content>
     <h3>
       <ng-container *ngIf="thesis.publicationType">
         {{ thesis.publicationType }}
-        <ng-container i18n="academia publication type connector@@academiaThesisPublicationTypeConnector">von</ng-container>
+        <ng-container
+          i18n="academia publication type connector@@academiaThesisPublicationTypeConnector"
+        >
+          von
+        </ng-container>
       </ng-container>
       {{ thesis.author.name }}
-      <ng-container i18n="academia thesis date prefix@@academiaThesisDatePrefix">am</ng-container> {{ thesis.date | date: 'd. MMMM y' }}
+      <ng-container
+        i18n="academia thesis date prefix@@academiaThesisDatePrefix"
+      >
+        am
+      </ng-container>
+      {{ thesis.date | date: 'd. MMMM y' }}
     </h3>
     <div [innerHTML]="thesis.abstract"></div>
   </mat-card-content>
   <mat-card-actions>
-    <a mat-button
-       [href]="thesis.url">
+    <a mat-button [href]="thesis.url">
       <span class="fa fa-download" aria-hidden="true"></span>
-      <ng-container i18n="academia thesis download link text@@academiaThesisDownloadLinkText">Download</ng-container>
+      <ng-container
+        i18n="academia thesis download link text@@academiaThesisDownloadLinkText"
+      >
+        Download
+      </ng-container>
     </a>
   </mat-card-actions>
 </mat-card>

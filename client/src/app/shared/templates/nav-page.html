@@ -1,26 +1,34 @@
 <ng-container *ngFor="let nav of (navItemData | async)">
   <ng-container [ngSwitch]="nav.type">
-  <!-- Rendering internal links -->
-  <a *ngSwitchCase="'link'"
-    mat-list-item
-    [routerLink]="nav.route"
-    routerLinkActive="router-link-active"
-    [routerLinkActiveOptions]="{exact: true}">
-  <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
-  {{nav.text[locale]}}
-  </a>
-  <!-- Rendering external links -->
-  <a *ngSwitchCase="'external'"
-    mat-list-item
-    [href]="nav.url" >
-  <span *ngIf="nav.icon" class="fa fa-fw fa-{{ nav.icon }}" aria-hidden="true"></span>
-  {{nav.text[locale]}}
-  </a>
-  <!-- Rendering Dividers -->
-  <mat-divider *ngSwitchCase="'divider'"></mat-divider>
-  <!-- Rendering Headers -->
-  <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text[locale] }}</h3>
-  <!-- Rendering fillers -->
-  <div *ngSwitchCase="'fill'" class="fill"></div>
+    <!-- Rendering internal links -->
+    <a
+      *ngSwitchCase="'link'"
+      mat-list-item
+      [routerLink]="nav.route"
+      routerLinkActive="router-link-active"
+      [routerLinkActiveOptions]="{exact: true}"
+    >
+      <span
+        *ngIf="nav.icon"
+        class="fa fa-fw fa-{{ nav.icon }}"
+        aria-hidden="true"
+      ></span>
+      {{nav.text[locale]}}
+    </a>
+    <!-- Rendering external links -->
+    <a *ngSwitchCase="'external'" mat-list-item [href]="nav.url">
+      <span
+        *ngIf="nav.icon"
+        class="fa fa-fw fa-{{ nav.icon }}"
+        aria-hidden="true"
+      ></span>
+      {{nav.text[locale]}}
+    </a>
+    <!-- Rendering Dividers -->
+    <mat-divider *ngSwitchCase="'divider'"></mat-divider>
+    <!-- Rendering Headers -->
+    <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text[locale] }}</h3>
+    <!-- Rendering fillers -->
+    <div *ngSwitchCase="'fill'" class="fill"></div>
   </ng-container>
 </ng-container>

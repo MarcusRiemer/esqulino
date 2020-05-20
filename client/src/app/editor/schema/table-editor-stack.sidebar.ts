@@ -1,27 +1,27 @@
-import { Component } from '@angular/core'
+import { Component } from "@angular/core";
 
-import { SchemaService } from '../schema.service'
+import { SchemaService } from "../schema.service";
 
 /**
  * Shows the stack of operations in the sidebar.
  */
 @Component({
-  templateUrl: 'templates/sidebar-stack.html',
-  selector: "schema-editor-table-sidebar-stack"
+  templateUrl: "templates/sidebar-stack.html",
+  selector: "schema-editor-table-sidebar-stack",
 })
 export class TableEditorSidebarStackComponent {
-  public static get SIDEBAR_IDENTIFIER() { return "schema-table-editor" };
-
-  public constructor(private _schemaService: SchemaService) {
-
+  public static get SIDEBAR_IDENTIFIER() {
+    return "schema-table-editor";
   }
 
+  public constructor(private _schemaService: SchemaService) {}
+
   public get commandsHolder() {
-    return (this._schemaService.getCurrentlyEditedStack());
+    return this._schemaService.getCurrentlyEditedStack();
   }
 
   public get isStackAvailable() {
-    return (this._schemaService.getCurrentlyEdited());
+    return this._schemaService.getCurrentlyEdited();
   }
 
   /**

@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { BehaviorSubject } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { BehaviorSubject } from "rxjs";
+import { map, filter } from "rxjs/operators";
 
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
-import { World } from '../../../shared/syntaxtree/truck/world';
-import { readFromNode } from '../../../shared/syntaxtree/truck/world.description';
-import { ProjectService } from '../../project.service';
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { World } from "../../../shared/syntaxtree/truck/world";
+import { readFromNode } from "../../../shared/syntaxtree/truck/world.description";
+import { ProjectService } from "../../project.service";
+import { TruckWorldEditorService } from "./world-editor/truck-world-editor.service";
 
 /**
  * Keeps track of different states for Trucklino.
@@ -14,18 +15,21 @@ import { ProjectService } from '../../project.service';
 @Injectable()
 export class TruckWorldService {
   private readonly _worldIds: { [id: string]: string } = {};
-  private readonly _worlds: { [id: string]: { id: string, world: World } } = {};
+  private readonly _worlds: { [id: string]: { id: string; world: World } } = {};
   private readonly _currentWorldId = new BehaviorSubject<string>(undefined);
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _projectService: ProjectService,
+    private _worldEditor: TruckWorldEditorService
   ) {
-    this._currentCodeResource.currentResource.subscribe(currentProgram => {
-      if (currentProgram.emittedLanguageIdPeek === 'truck-world') {
+    this._currentCodeResource.currentResource.subscribe((currentProgram) => {
+      _worldEditor.disableEditorMode();
+      if (currentProgram.emittedLanguageIdPeek === "truck-world") {
         // Current program is a world
         this._worldIds[currentProgram.id] = currentProgram.id;
         this._currentWorldId.next(currentProgram.id);
+        _worldEditor.enableEditorMode();
       } else if (this._worldIds[currentProgram.id]) {
         // Current program is a program and already has a world set
         this._currentWorldId.next(this._worldIds[currentProgram.id]);
@@ -33,30 +37,31 @@ export class TruckWorldService {
     });
   }
 
-  readonly currentWorld = this._currentWorldId
-    .pipe(
-      filter(worldId => !!worldId),
-      map(worldId => {
-        const currentProgram = this._currentCodeResource.peekResource;
-        if (this._worlds[currentProgram.id] && this._worlds[currentProgram.id].id === worldId) {
-          // An instance of the world for this program already exists
+  readonly currentWorld = this._currentWorldId.pipe(
+    filter((worldId) => !!worldId),
+    map((worldId) => {
+      const currentProgram = this._currentCodeResource.peekResource;
+      if (this._worlds[currentProgram.id]?.id === worldId) {
+        // An instance of the world for this program already exists
+        return this._worlds[currentProgram.id].world;
+      } else {
+        // Create a new instance of the world for this program
+        try {
+          const worldTree = this._projectService.cachedProject
+            .getCodeResourceById(worldId)
+            .syntaxTreePeek.toModel();
+          this._worlds[currentProgram.id] = {
+            id: worldId,
+            world: new World(readFromNode(worldTree)),
+          };
           return this._worlds[currentProgram.id].world;
-        } else {
-          // Create a new instance of the world for this program
-          try {
-            const worldTree = this._projectService.cachedProject.getCodeResourceById(worldId).syntaxTreePeek.toModel();
-            this._worlds[currentProgram.id] = {
-              id: worldId,
-              world: new World(readFromNode(worldTree))
-            };
-            return this._worlds[currentProgram.id].world;
-          } catch (error) {
-            return null;
-          }
+        } catch (error) {
+          return null;
         }
-      }),
-      filter(world => !!world)
-    );
+      }
+    }),
+    filter((world) => !!world)
+  );
 
   setNewWorld(id: string) {
     if (id) {

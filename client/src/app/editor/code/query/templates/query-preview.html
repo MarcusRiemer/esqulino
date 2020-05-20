@@ -3,12 +3,10 @@
     <span *ngIf="queryInProgress" class="fa fa-refresh fa-spin fa-fw"></span>
     Ergebnisvorschau
     <ng-container *ngIf="result">
-      <span *ngIf="result.isPartial"
-            class="float-right badge badge-warning">
+      <span *ngIf="result.isPartial" class="float-right badge badge-warning">
         {{ result.subsetRowCount }} von {{ result.totalRowCount }} Zeilen
       </span>
-      <span *ngIf="!result.isPartial"
-            class="float-right badge badge-success">
+      <span *ngIf="!result.isPartial" class="float-right badge badge-success">
         {{ result.subsetRowCount }} Zeilen
       </span>
     </ng-container>
@@ -16,23 +14,26 @@
 
   <!-- If the query has parameters, these need to be filled in -->
   <ng-container *ngIf="(queryParameterNames | async); let queryParameterNames;">
-    <div *ngFor="let name of queryParameterNames"
-         class="input-group mb-2 mr-sm-2">
+    <div
+      *ngFor="let name of queryParameterNames"
+      class="input-group mb-2 mr-sm-2"
+    >
       <div class="input-group-prepend">
         <span class="input-group-text">{{ name }}</span>
       </div>
-      <input [(ngModel)]="queryParameters[name]"
-             (blur)="onInputBlur"
-             (keyup)="onInputKeyUp($event)"
-             placeholder="Wert einsetzen ..."
-             type="text"
-             class="form-control">
+      <input
+        [(ngModel)]="queryParameters[name]"
+        (blur)="onInputBlur"
+        (keyup)="onInputKeyUp($event)"
+        placeholder="Wert einsetzen ..."
+        type="text"
+        class="form-control"
+      />
     </div>
   </ng-container>
 
   <div class="table-responsive-sm">
-    <table *ngIf="result"
-           class="table">
+    <table *ngIf="result" class="table">
       <thead>
         <tr>
           <th *ngFor="let column of result.columns">{{ column }}</th>
@@ -48,6 +49,5 @@
     </table>
   </div>
 
-  <pre *ngIf="error"
-       [innerText]="error | json"></pre>
+  <pre *ngIf="error" [innerText]="error | json"></pre>
 </div>

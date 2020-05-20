@@ -1,4 +1,4 @@
-import { GrammarDescription } from './grammar.description';
+import { GrammarDescription } from "./grammar.description";
 
 /**
  * This grammar describes a mini expression language for boolean values
@@ -11,60 +11,60 @@ export const GRAMMAR_BOOLEAN_DESCRIPTION: GrammarDescription = {
   slug: "test-expr",
   root: { languageName: "expr", typeName: "booleanExpression" },
   types: {
-    "expr": {
-      "booleanExpression": {
+    expr: {
+      booleanExpression: {
         type: "oneOf",
-        oneOf: ["booleanBinary", "booleanConstant", "negate", "parentheses"]
+        oneOf: ["booleanBinary", "booleanConstant", "negate", "parentheses"],
       },
-      "booleanConstant": {
+      booleanConstant: {
         type: "concrete",
         attributes: [
           {
             type: "property",
             name: "value",
-            base: "boolean"
-          }
-        ]
+            base: "boolean",
+          },
+        ],
       },
-      "negate": {
+      negate: {
         type: "concrete",
         attributes: [
           {
             type: "allowed",
             name: "expr",
-            nodeTypes: ["booleanExpression"]
-          }
-        ]
+            nodeTypes: ["booleanExpression"],
+          },
+        ],
       },
-      "parentheses": {
+      parentheses: {
         type: "concrete",
         attributes: [
           {
             type: "allowed",
             name: "expr",
-            nodeTypes: ["booleanExpression"]
-          }
-        ]
+            nodeTypes: ["booleanExpression"],
+          },
+        ],
       },
-      "booleanBinary": {
+      booleanBinary: {
         type: "concrete",
         attributes: [
           {
             type: "allowed",
             name: "lhs",
-            nodeTypes: ["booleanExpression"]
+            nodeTypes: ["booleanExpression"],
           },
           {
             type: "allowed",
             name: "rhs",
-            nodeTypes: ["booleanExpression"]
-          }
-        ]
+            nodeTypes: ["booleanExpression"],
+          },
+        ],
       },
-      "noMatch": {
+      noMatch: {
         type: "concrete",
-        attributes: []
-      }
-    }
-  }
+        attributes: [],
+      },
+    },
+  },
 };

@@ -1,39 +1,48 @@
-import { FormsModule } from '@angular/forms';
-import { TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { FormsModule } from "@angular/forms";
+import { TestBed } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
 
-import { first } from 'rxjs/operators';
+import { first } from "rxjs/operators";
 
-import { BlockLanguage, EditorBlockDescription } from '../../../shared/block';
-import { FocusDirective } from '../../../shared/focus-element.directive';
-import { LanguageService, NodeDescription, Tree, CodeResource } from '../../../shared';
-import { IndividualBlockLanguageDataService, IndividualGrammarDataService, ServerApiService } from '../../../shared/serverdata';
-import { ResourceReferencesOnlineService } from '../../../shared/resource-references-online.service';
-import { ResourceReferencesService } from '../../../shared/resource-references.service';
+import { BlockLanguage, EditorBlockDescription } from "../../../shared/block";
+import { FocusDirective } from "../../../shared/focus-element.directive";
+import {
+  LanguageService,
+  NodeDescription,
+  Tree,
+  CodeResource,
+} from "../../../shared";
+import {
+  IndividualBlockLanguageDataService,
+  IndividualGrammarDataService,
+  ServerApiService,
+} from "../../../shared/serverdata";
+import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
+import { ResourceReferencesService } from "../../../shared/resource-references.service";
 
-import { DragService } from '../../drag.service';
-import { ensureLocalBlockLanguageRequest, buildBlockLanguage, ensureLocalGrammarRequest, buildGrammar } from '../../spec-util';
+import { DragService } from "../../drag.service";
+import {
+  ensureLocalBlockLanguageRequest,
+  buildBlockLanguage,
+  ensureLocalGrammarRequest,
+  buildGrammar,
+} from "../../spec-util";
 
-import { RenderedCodeResourceService } from './rendered-coderesource.service';
-import { BlockRenderInputComponent } from './block-render-input.component';
-import { BlockBaseDirective } from './block-base.directive';
-import { BlockHostComponent } from './block-host.component';
-import { BlockRenderBlockComponent } from './block-render-block.component';
-import { BlockRenderComponent } from './block-render.component';
+import { RenderedCodeResourceService } from "./rendered-coderesource.service";
+import { BlockHostComponent } from "./block-host.component";
+import { BLOCK_RENDER_COMPONENTS } from "./index";
 
-
-describe('BlockHostComponent', () => {
+describe("BlockHostComponent", () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     editorBlocks: EditorBlockDescription[]
   ) {
     await TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        MatSnackBarModule,
-        HttpClientTestingModule
-      ],
+      imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
       providers: [
         IndividualBlockLanguageDataService,
         DragService,
@@ -44,27 +53,17 @@ describe('BlockHostComponent', () => {
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
-        }
+        },
       ],
-      declarations: [
-        BlockRenderComponent,
-        BlockRenderInputComponent,
-        BlockRenderBlockComponent,
-        BlockHostComponent,
-        BlockBaseDirective,
-        FocusDirective
-      ]
-    })
-      .compileComponents();
+      declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
+    }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(
-      buildGrammar({})
-    )
+    const grammarDesc = await ensureLocalGrammarRequest(buildGrammar({}));
 
     const blockLangDesc = await ensureLocalBlockLanguageRequest(
       buildBlockLanguage({
         editorBlocks,
-        grammarId: grammarDesc.id
+        grammarId: grammarDesc.id,
       })
     );
 
@@ -76,31 +75,30 @@ describe('BlockHostComponent', () => {
     // the expectation enabled just as a warning to myself.
     //
     // The cast to "any" is a hack to remove the private-ness of the injected service.
-    const renderData = (component as any)._renderedCodeResourceService as RenderedCodeResourceService;
+    const renderData = (component as any)
+      ._renderedCodeResourceService as RenderedCodeResourceService;
     expect(renderData)
       .withContext("Spec and component must share same service")
       .toBe((component as any)._renderedCodeResourceService);
 
     const blockLanguage = new BlockLanguage(blockLangDesc);
 
-    const codeResource = new CodeResource({
-      ast: nodeDesc,
-      name: "Spec",
-      id: "spec",
-      blockLanguageId: blockLanguage.id,
-      programmingLanguageId: blockLangDesc.defaultProgrammingLanguageId
-    }, undefined);
+    const codeResource = new CodeResource(
+      {
+        ast: nodeDesc,
+        name: "Spec",
+        id: "spec",
+        blockLanguageId: blockLanguage.id,
+        programmingLanguageId: blockLangDesc.defaultProgrammingLanguageId,
+      },
+      undefined
+    );
 
     component.node = new Tree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 
-    renderData._updateRenderData(
-      codeResource,
-      blockLanguage,
-      false,
-      {}
-    )
+    renderData._updateRenderData(codeResource, blockLanguage, false, {});
 
     fixture.detectChanges();
     await fixture.whenStable();
@@ -108,8 +106,12 @@ describe('BlockHostComponent', () => {
     const httpTestingController = TestBed.inject(HttpTestingController);
     httpTestingController.verify();
 
-    const serviceRenderDataAvailable = await renderData.dataAvailable$.pipe(first()).toPromise();
-    const componentRenderDataAvailable = await component.renderDataAvailable$.pipe(first()).toPromise();
+    const serviceRenderDataAvailable = await renderData.dataAvailable$
+      .pipe(first())
+      .toPromise();
+    const componentRenderDataAvailable = await component.renderDataAvailable$
+      .pipe(first())
+      .toPromise();
 
     expect(componentRenderDataAvailable)
       .withContext("Component render data must be available")
@@ -128,12 +130,12 @@ describe('BlockHostComponent', () => {
       .withContext("Component must have a valid block language")
       .not.toBeUndefined();
 
-    return ({
+    return {
       fixture,
       component,
       componentRenderDataAvailable,
-      element: fixture.nativeElement as HTMLElement
-    });
+      element: fixture.nativeElement as HTMLElement,
+    };
   }
 
   it(`Single input`, async () => {
@@ -141,15 +143,15 @@ describe('BlockHostComponent', () => {
       language: "spec",
       name: "input",
       properties: {
-        text: "original"
-      }
+        text: "original",
+      },
     };
 
     const editorBlocks: EditorBlockDescription[] = [
       {
         describedType: { languageName: "spec", typeName: "input" },
-        visual: [{ blockType: "input", property: "text" }]
-      }
+        visual: [{ blockType: "input", property: "text" }],
+      },
     ];
 
     const c = await createComponent(treeDesc, editorBlocks);
@@ -159,15 +161,15 @@ describe('BlockHostComponent', () => {
   it(`Single terminal`, async () => {
     const treeDesc: NodeDescription = {
       language: "spec",
-      name: "constant"
+      name: "constant",
     };
 
     const editorBlocks: EditorBlockDescription[] = [
       {
         describedType: { languageName: "spec", typeName: "constant" },
-        visual: [{ blockType: "constant", text: "constant" }]
-      }
-    ]
+        visual: [{ blockType: "constant", text: "constant" }],
+      },
+    ];
 
     const c = await createComponent(treeDesc, editorBlocks);
 
@@ -179,16 +181,16 @@ describe('BlockHostComponent', () => {
       language: "spec",
       name: "interpolated",
       properties: {
-        "text": "interpolated"
-      }
+        text: "interpolated",
+      },
     };
 
     const editorBlocks: EditorBlockDescription[] = [
       {
         describedType: { languageName: "spec", typeName: "interpolated" },
-        visual: [{ blockType: "interpolated", property: "text" }]
-      }
-    ]
+        visual: [{ blockType: "interpolated", property: "text" }],
+      },
+    ];
 
     const c = await createComponent(treeDesc, editorBlocks);
 

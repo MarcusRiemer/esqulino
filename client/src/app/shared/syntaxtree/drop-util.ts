@@ -1,15 +1,18 @@
-import { NodeLocation, NodeDescription, NodeLocationStep } from "./syntaxtree.description";
-import { Validator } from './validator';
-import { Node } from './syntaxtree';
-import { ErrorCodes } from './validation-result';
-
+import {
+  NodeLocation,
+  NodeDescription,
+  NodeLocationStep,
+} from "./syntaxtree.description";
+import { Validator } from "./validator";
+import { Node } from "./syntaxtree";
+import { ErrorCodes } from "./validation-result";
 
 // These errors signal cardinality errors that would be triggered
 // by inserting a new node.
 const CARDINALITY_ERRORS: string[] = [
   ErrorCodes.InvalidMaxOccurences, // Suddenly too many nodes on "allowed"
   ErrorCodes.SuperflousChild, // Suddenly too many nodes on "sequence"
-]
+];
 
 /**
  * Determines whether something could be inserted at the given place
@@ -20,15 +23,23 @@ export function _cardinalityAllowsInsertion(
   node: Node,
   candidate: NodeDescription,
   categoryName: string,
-  index: number,
+  index: number
 ): boolean {
-  const candidateType = { languageName: candidate.language, typeName: candidate.name };
+  const candidateType = {
+    languageName: candidate.language,
+    typeName: candidate.name,
+  };
 
   // Is the insertion generally possible?
-  if (validator.isKnownType(node.languageName, node.typeName)
-    && validator.getType(node).allowsChildType(candidateType, categoryName)) {
+  if (
+    validator.isKnownType(node.languageName, node.typeName) &&
+    validator.getType(node).allowsChildType(candidateType, categoryName)
+  ) {
     // Build a new tree with the proposed insertion
-    const insertionLocation: NodeLocation = [...node.location, [categoryName, index]];
+    const insertionLocation: NodeLocation = [
+      ...node.location,
+      [categoryName, index],
+    ];
     const modifiedTree = node.tree.insertNode(insertionLocation, candidate);
 
     // Validate it and check the errors at the parenting node
@@ -40,29 +51,30 @@ export function _cardinalityAllowsInsertion(
     return (
       errors
         // Only look at errors in our category
-        .filter(err => err.data.category === categoryName)
-        .every(err => !CARDINALITY_ERRORS.includes(err.code))
+        .filter((err) => err.data.category === categoryName)
+        .every((err) => !CARDINALITY_ERRORS.includes(err.code))
     );
   } else {
-    return (false);
+    return false;
   }
 }
 
 /**
  * @return True, if the node is in a hole with no place for other nodes.
  */
-export function nodeIsInSingularHole(
-  validator: Validator,
-  node: Node
-) {
+export function nodeIsInSingularHole(validator: Validator, node: Node) {
   if (node.nodeParent) {
     const parent = node.nodeParent;
     const parentType = validator.getType(parent.languageName, parent.typeName);
-    const parentCardinality = parentType.validCardinality(node.nodeParentCategory);
-    return (parentCardinality.maxOccurs === 1 && parentCardinality.minOccurs === 1);
+    const parentCardinality = parentType.validCardinality(
+      node.nodeParentCategory
+    );
+    return (
+      parentCardinality.maxOccurs === 1 && parentCardinality.minOccurs === 1
+    );
   } else {
     // There may only be a single root
-    return (true);
+    return true;
   }
 }
 
@@ -74,13 +86,16 @@ export type RelativeDropLocation = "block" | "begin" | "end";
 /**
  * Calculates a possibly shifted drop location relative to the given location.
  */
-export function relativeDropLocation(loc: NodeLocation, relative: RelativeDropLocation) {
+export function relativeDropLocation(
+  loc: NodeLocation,
+  relative: RelativeDropLocation
+) {
   const relativeToShift = (relative: RelativeDropLocation) => {
     switch (relative) {
       case "begin":
-        return (-1);
+        return -1;
       default:
-        return (0);
+        return 0;
     }
   };
 
@@ -91,13 +106,16 @@ export function relativeDropLocation(loc: NodeLocation, relative: RelativeDropLo
     // Shallow copy
     const copy = [...loc];
 
-    // New last element, index may not be < 0
-    const shiftedLast: NodeLocationStep = [prevLast[0], Math.max(-1, prevLast[1] + shift)];
+    // New last element, index may not be too far ahead
+    const shiftedLast: NodeLocationStep = [
+      prevLast[0],
+      Math.max(-1, prevLast[1] + shift),
+    ];
     copy[copy.length - 1] = shiftedLast;
 
     // Shallow copy with changed last element, other elements are still shared
-    return (copy);
+    return copy;
   } else {
-    return (loc);
+    return loc;
   }
 }
