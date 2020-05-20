@@ -90,7 +90,7 @@
           <button
             type="button"
             class="btn btn-light"
-            (click)="selectFight('Red')"
+            (click)="selectFreight('Red')"
             [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Red'"
             [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Red'"
           >
@@ -101,7 +101,7 @@
           <button
             type="button"
             class="btn btn-light"
-            (click)="selectFight('Green')"
+            (click)="selectFreight('Green')"
             [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Green'"
             [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Green'"
           >
@@ -112,7 +112,7 @@
           <button
             type="button"
             class="btn btn-light"
-            (click)="selectFight('Blue')"
+            (click)="selectFreight('Blue')"
             [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Blue'"
             [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Blue'"
           >
@@ -132,7 +132,7 @@
           <button
             type="button"
             class="btn btn-light"
-            (click)="selectFightTarget('Red')"
+            (click)="selectFreightTarget('Red')"
             [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Red'"
             [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Red'"
           >
@@ -143,7 +143,7 @@
           <button
             type="button"
             class="btn btn-light"
-            (click)="selectFightTarget('Green')"
+            (click)="selectFreightTarget('Green')"
             [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Green'"
             [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Green'"
           >
@@ -154,7 +154,7 @@
           <button
             type="button"
             class="btn btn-light"
-            (click)="selectFightTarget('Blue')"
+            (click)="selectFreightTarget('Blue')"
             [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Blue'"
             [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Blue'"
           >

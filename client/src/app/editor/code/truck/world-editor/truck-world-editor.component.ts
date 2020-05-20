@@ -84,11 +84,11 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectFight(color: TruckFreightTileFeatureOptions) {
+  public selectFreight(color: TruckFreightTileFeatureOptions) {
     this._editor.selectTileFeature(TruckTileFeatureType.Freight, color);
   }
 
-  public selectFightTarget(color: TruckFreightTileFeatureOptions) {
+  public selectFreightTarget(color: TruckFreightTileFeatureOptions) {
     this._editor.selectTileFeature(TruckTileFeatureType.FreightTarget, color);
   }
 
