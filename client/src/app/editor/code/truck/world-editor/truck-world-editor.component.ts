@@ -11,7 +11,6 @@ import {
 
 @Component({
   templateUrl: "templates/truck-world-editor.html",
-  styleUrls: ["templates/truck-world-editor.css"],
 })
 export class TruckWorldEditorComponent implements OnInit, OnDestroy {
   public tileFeatureType = TruckTileFeatureType;
