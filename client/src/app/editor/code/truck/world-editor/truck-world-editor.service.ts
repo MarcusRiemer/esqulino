@@ -195,7 +195,7 @@ export class TruckWorldEditorService implements OnDestroy {
    * Reverts the last change
    */
   public undo(): void {
-    // TODO
+    this._world.undo();
   }
 
   /**
