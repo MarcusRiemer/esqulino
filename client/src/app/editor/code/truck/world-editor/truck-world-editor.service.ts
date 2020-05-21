@@ -129,16 +129,23 @@ export class TruckWorldEditorService implements OnDestroy {
     state: WorldState,
     fromPos: Position,
     toPos: Position
-  ): void {
+  ): boolean {
     const openings = World.getRoadOpeningsBetween(fromPos, toPos);
     if (!openings) {
       // We might have some incorrect positions.
       // This can occur if the client lags, and we get for example Pos(0,0) and then Pos(1,1)
-      return;
+      return false;
     }
 
-    state.getTile(fromPos).openings |= openings.from;
-    state.getTile(toPos).openings |= openings.to;
+    const fromTile = state.getTile(fromPos);
+    const toTile = state.getTile(toPos);
+    if ((fromTile.openings & openings.from) && (toTile.openings | openings.to)) {
+      return false; // This opening was already connected
+    }
+
+    fromTile.openings |= openings.from;
+    toTile.openings |= openings.to;
+    return true;
   }
 
   private startDestroyRoad(): void {
@@ -158,13 +165,25 @@ export class TruckWorldEditorService implements OnDestroy {
     this._rightMouseDownPosUpdaterSubscription = undefined;
   }
 
-  private removeRoadPart(state: WorldState, pos: Position): void {
+  /**
+   * Removes all connections of a road // TODO Also remove all other tile features
+   * @param state the state that should be modified
+   * @param pos the position
+   * @return true if a change occurred
+   */
+  private removeRoadPart(state: WorldState, pos: Position): boolean {
     state.getTile(pos).openings = TileOpening.None;
+    let modifiedOneTile = false;
     // After deleting the current tile, we also want to remove the connections that lead to this tile.
     for (const neighborPos of pos.getDirectNeighbors()) {
       const { to } = World.getRoadOpeningsBetween(pos, neighborPos);
-      state.getTile(neighborPos).openings &= ~to; // Remove this part from the neighbor
+      const tile = state.getTile(neighborPos);
+      if (tile.openings & to) {
+        modifiedOneTile = true;
+      }
+      tile.openings &= ~to; // Remove this part from the neighbor
     }
+    return modifiedOneTile;
   }
 
   public resizeWorld(x: number, y: number): void {
@@ -216,11 +235,11 @@ export class TruckWorldEditorService implements OnDestroy {
    * Mutates the world state with a given function
    * And also replaces the syntax tree
    * @param world thr world that should be mutated
-   * @param modifier state modifier function
+   * @param modifier state modifier function. (Must return true in order to apply changes)
    */
   private mutateWorldAndCode(
     world: World,
-    modifier: (state: WorldState) => void
+    modifier: (state: WorldState) => boolean
   ): void {
     this.mutateWorld(world, modifier);
     const newDescription = world.currentStateToDescription();
@@ -232,16 +251,20 @@ export class TruckWorldEditorService implements OnDestroy {
    * Mutates the world state with a given function
    * (Useful for functions that should not change the syntax tree, like blueprints)
    * @param world thr world that should be mutated
-   * @param modifier state modifier function
+   * @param modifier state modifier function. (Must return true in order to apply changes)
    */
   private mutateWorld(
     world: World,
-    modifier: (state: WorldState) => void
+    modifier: (state: WorldState) => boolean
   ): void {
+    let result = false;
     world.mutateState((s) => {
-      modifier(s);
+      result = modifier(s);
       return s;
     });
+    if (!result) {
+      world.undo(); // The change was not valid. Undo it immediately.
+    }
   }
 }
 
