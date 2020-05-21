@@ -12,6 +12,7 @@ import {
   worldDescriptionToNode,
   WorldFreightColorDescription,
 } from "../../../../shared/syntaxtree/truck/world.description";
+import { TruckWorldService } from "../truck-world.service";
 
 @Injectable()
 export class TruckWorldEditorService implements OnDestroy {
@@ -19,6 +20,7 @@ export class TruckWorldEditorService implements OnDestroy {
 
   private _leftMouseDownPosUpdaterSubscription?: Subscription;
   private _rightMouseDownPosUpdaterSubscription?: Subscription;
+  private _world?: World;
 
   private _editorModeEnabled = false;
 
@@ -32,8 +34,23 @@ export class TruckWorldEditorService implements OnDestroy {
 
   constructor(
     private _mouse: TruckWorldMouseService,
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
+    worldService: TruckWorldService
   ) {
+    this._subscriptions.push(
+      worldService.currentWorld.subscribe((world) => {
+        this._world = world;
+      })
+    );
+
+    this._currentCodeResource.currentResource.subscribe((currentProgram) => {
+      if (currentProgram.emittedLanguageIdPeek === "truck-world") {
+        this.enableEditorMode();
+      } else if (this._editorModeEnabled) {
+        this.disableEditorMode();
+      }
+    });
+
     this._subscriptions.push(
       this._mouse.leftMouseButtonDown.subscribe((isDown) => {
         if (isDown && this._editorModeEnabled) {
