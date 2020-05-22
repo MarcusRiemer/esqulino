@@ -139,7 +139,7 @@ export class TruckWorldEditorService implements OnDestroy {
 
     const fromTile = state.getTile(fromPos);
     const toTile = state.getTile(toPos);
-    if ((fromTile.openings & openings.from) && (toTile.openings | openings.to)) {
+    if (fromTile.openings & openings.from && toTile.openings & openings.to) {
       return false; // This opening was already connected
     }
 
@@ -257,14 +257,10 @@ export class TruckWorldEditorService implements OnDestroy {
     world: World,
     modifier: (state: WorldState) => boolean
   ): void {
-    let result = false;
     world.mutateState((s) => {
-      result = modifier(s);
-      return s;
+      // If the modifier returns true, the change was valid
+      return modifier(s) ? s : null;
     });
-    if (!result) {
-      world.undo(); // The change was not valid. Undo it immediately.
-    }
   }
 }
 

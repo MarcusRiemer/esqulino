@@ -348,7 +348,7 @@ export class World {
    *          if necessary and returns it.
    * @return Changed state.
    */
-  mutateState(f: (state: WorldState) => WorldState): WorldState {
+  mutateState(f: (state: WorldState) => WorldState | null): WorldState {
     const state = f(this.state.clone());
     if (state != null) {
       state.prev = this.state;
