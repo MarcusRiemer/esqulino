@@ -73,9 +73,8 @@ export class SchemaVisualComponent implements OnInit {
       this._router.navigate(["./create"], { relativeTo: this._route });
     });
     this._subscriptionRefs.push(subRef);
-	
-	this._toolbarService.savingEnabled = false;
-	
+
+    this._toolbarService.savingEnabled = false;
 
     // Button to switch to data import, only shown if there is
     // a table the data could be imported to
@@ -125,10 +124,10 @@ export class SchemaVisualComponent implements OnInit {
     });
     this._subscriptionRefs.push(subRef);
   }
-  
+
   private get commandsHolder() {
-	  return this._schemaService.getCurrentlyEditedStack();
-    }
+    return this._schemaService.getCurrentlyEditedStack();
+  }
 
   ngOnDestroy() {
     this._subscriptionRefs.forEach((ref) => ref.unsubscribe());

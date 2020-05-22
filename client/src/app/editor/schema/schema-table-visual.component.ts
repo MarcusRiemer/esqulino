@@ -52,8 +52,7 @@ export class SchemaTableVisualComponent {
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
     private dragulaService: DragulaService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     let subRef = this._projectService.activeProject.subscribe((res) => {
@@ -79,15 +78,15 @@ export class SchemaTableVisualComponent {
       );
     });
     this._subscriptionRefs.push(projref);
-	
-	let dragRef = this.dragulaService
+
+    let dragRef = this.dragulaService
       .dropModel(this.table.name)
       .subscribe(({ name, el, target, source, sibling, sourceModel, item }) => {
         let newIndex = sourceModel.indexOf(item);
 
-		this._schemaService.initCurrentlyEdit(
-		  this._project.schema.getTable(this.table.name)
-		);
+        this._schemaService.initCurrentlyEdit(
+          this._project.schema.getTable(this.table.name)
+        );
         this.commandsHolder.do(
           new SwitchColumnOrder(this.table, item.index, newIndex)
         );
@@ -114,42 +113,42 @@ export class SchemaTableVisualComponent {
       this._schemaService.initCurrentlyEdit(
         this._project.schema.getTable(this.table.name)
       );
-	  
+
       this.commandsHolder.do(
         new RenameColumn(this.table, index, this._oldValue, newValue)
       );
       this._oldValue = "";
-	  
-	  this.saveChanges();
+
+      this.saveChanges();
     }
   }
-  
+
   changedColumnType(index: number, newValue: string) {
     if (this._oldValue != newValue) {
       this._schemaService.initCurrentlyEdit(
         this._project.schema.getTable(this.table.name)
       );
-	  
+
       this.commandsHolder.do(
         new ChangeColumnType(this.table, index, this._oldValue, newValue)
       );
       this._oldValue = "";
-	  
-	  this.saveChanges();
+
+      this.saveChanges();
     }
   }
 
-  async saveChanges(){	  
-	  this.commandsHolder.prepareToSend();
-	  await this._schemaService.sendAlterTableCommands(
-		this._project,
-		this._schemaService.getCurrentlyEditedTable().name,
-		this.commandsHolder
-      );
-	  
-	  this._schemaService.clearCurrentlyEdited();
+  async saveChanges() {
+    this.commandsHolder.prepareToSend();
+    await this._schemaService.sendAlterTableCommands(
+      this._project,
+      this._schemaService.getCurrentlyEditedTable().name,
+      this.commandsHolder
+    );
+
+    this._schemaService.clearCurrentlyEdited();
   }
-  
+
   async deleteTable() {
     try {
       await this._schemaService.deleteTable(this._project, this.table);
@@ -157,25 +156,25 @@ export class SchemaTableVisualComponent {
       this.showError(error);
     }
   }
-  
+
   ChangeColumnPrimaryKeyStatus(row: number) {
     this._schemaService.initCurrentlyEdit(
       this._project.schema.getTable(this.table.name)
     );
-	
+
     this.commandsHolder.do(new ChangeColumnPrimaryKey(this.table, row));
-	
-	this.saveChanges();
+
+    this.saveChanges();
   }
 
   ChangeColumnNotNullStatus(row: number) {
     this._schemaService.initCurrentlyEdit(
       this._project.schema.getTable(this.table.name)
     );
-	
+
     this.commandsHolder.do(new ChangeColumnNotNull(this.table, row));
-	
-	this.saveChanges();
+
+    this.saveChanges();
   }
 
   showError(error: any) {
