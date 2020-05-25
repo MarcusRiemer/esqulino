@@ -6,13 +6,15 @@ import { GrammarListDescription} from '../../shared/syntaxtree';
 import { ListGrammarDataService, MutateGrammarService, GrammarListRequestQL } from '../../shared/serverdata';
 
 import {first, map} from "rxjs/operators";
+import {Observable} from "rxjs";
+
 @Component({
     selector: 'grammar-overview-selector',
     templateUrl: './templates/overview-grammar-graphql.html'
 })
 
 export class OverviewGrammarGraphQLComponent implements OnInit {
-    availableGrammars: GrammarListDescription[];
+    availableGrammars: Observable<GrammarListDescription[]>;
     resultsLength:number;
 
     // Angular Material UI to paginate

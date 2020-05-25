@@ -71,7 +71,6 @@ export class ListGrammarDataService extends ListData<GrammarListDescription>
     this._subscriptions.forEach((s) => s.unsubscribe());
     this._subscriptions = [];
   }
-<<<<<<< HEAD
 
   /**
    * Grammars in stable sort order.
@@ -115,6 +114,3 @@ export class GrammarListMutateQL extends Mutation {
     }
   `;
 }
-=======
-}
->>>>>>> origin
