@@ -156,6 +156,14 @@ export interface TruckSensorsComponentDescription
 }
 
 /**
+ * The world settings and tile selector for truck worlds
+ */
+export interface TruckWorldEditorMenuComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "truck-world-editor";
+}
+
+/**
  * Any component that could be displayed in the actual editor view.
  */
 export type EditorComponentDescription =
@@ -167,6 +175,7 @@ export type EditorComponentDescription =
   | TruckWorldComponentDescription
   | TruckControllerComponentDescription
   | TruckSensorsComponentDescription
+  | TruckWorldEditorMenuComponentDescription
   | DropDebugComponentDescription
   | JsonAstComponentDescription;
 

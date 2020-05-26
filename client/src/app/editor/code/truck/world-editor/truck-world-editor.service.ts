@@ -5,10 +5,13 @@ import {
   World,
   WorldState,
 } from "../../../../shared/syntaxtree/truck/world";
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { TruckWorldMouseService } from "../truck-world-mouse.service";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
-import { worldDescriptionToNode } from "../../../../shared/syntaxtree/truck/world.description";
+import {
+  worldDescriptionToNode,
+  WorldFreightColorDescription,
+} from "../../../../shared/syntaxtree/truck/world.description";
 
 @Injectable()
 export class TruckWorldEditorService implements OnDestroy {
@@ -19,17 +22,26 @@ export class TruckWorldEditorService implements OnDestroy {
 
   private _editorModeEnabled = false;
 
+  private _feature = new BehaviorSubject<TruckFeature<any>>({
+    feature: TruckTileFeatureType.Road,
+    options: null,
+  });
+
+  // Public Observable
+  public readonly feature = this._feature.asObservable();
+
   constructor(
     private _mouse: TruckWorldMouseService,
     private _currentCodeResource: CurrentCodeResourceService
   ) {
     this._subscriptions.push(
       this._mouse.leftMouseButtonDown.subscribe((isDown) => {
-        if (!this._editorModeEnabled) {
-          return;
-        }
-        if (isDown) {
-          this.startDrawRoad();
+        if (isDown && this._editorModeEnabled) {
+          switch (this._feature.getValue().feature) {
+            case TruckTileFeatureType.Road:
+              this.startDrawRoad();
+              break;
+          }
         } else {
           this.stopDrawRoad();
         }
@@ -37,10 +49,11 @@ export class TruckWorldEditorService implements OnDestroy {
     );
     this._subscriptions.push(
       this._mouse.rightMouseButtonDown.subscribe((isDown) => {
-        if (!this._editorModeEnabled) {
-          return;
-        }
-        if (isDown) {
+        if (
+          isDown &&
+          this._editorModeEnabled &&
+          this._feature.getValue().feature === TruckTileFeatureType.Road
+        ) {
           this.startDestroyRoad();
         } else {
           this.stopDestroyRoad();
@@ -69,6 +82,9 @@ export class TruckWorldEditorService implements OnDestroy {
     this.stopDestroyRoad();
   }
 
+  /*
+   * Road
+   */
   private startDrawRoad() {
     this.stopDrawRoad();
 
@@ -134,7 +150,74 @@ export class TruckWorldEditorService implements OnDestroy {
     }
   }
 
+  public resizeWorld(x: number, y: number): void {
+    // TODO
+    console.log("Would resize world to ", x, y);
+  }
+
+  /*
+   * General functions
+   */
+
+  /**
+   * Selects a feature
+   * @param feature the feature
+   * @param options the options of this feature
+   */
+  public selectTileFeature<F extends keyof TileFeatureTypeToOptions>(
+    feature: F,
+    options: TileFeatureTypeToOptions[F]
+  ): void {
+    this._feature.next({
+      feature,
+      options,
+    });
+  }
+
+  /**
+   * Reverts the last change
+   */
+  public undo(): void {
+    // TODO
+  }
+
+  /**
+   * Reset all changes that were made
+   */
+  public resetChanges(): void {
+    // TODO
+  }
+
+  /**
+   * Overrides the current world with an empty 5x5 one
+   */
+  public resetEverything(): void {
+    // TODO
+  }
+
+  /**
+   * Mutates the world state with a given function
+   * And also replaces the syntax tree
+   * @param world thr world that should be mutated
+   * @param modifier state modifier function
+   */
   private mutateWorldAndCode(
+    world: World,
+    modifier: (state: WorldState) => void
+  ): void {
+    this.mutateWorld(world, modifier);
+    const newDescription = world.currentStateToDescription();
+    const newTree = worldDescriptionToNode(newDescription);
+    this._currentCodeResource.peekResource.replaceSyntaxTree(newTree);
+  }
+
+  /**
+   * Mutates the world state with a given function
+   * (Useful for functions that should not change the syntax tree, like blueprints)
+   * @param world thr world that should be mutated
+   * @param modifier state modifier function
+   */
+  private mutateWorld(
     world: World,
     modifier: (state: WorldState) => void
   ): void {
@@ -142,8 +225,43 @@ export class TruckWorldEditorService implements OnDestroy {
       modifier(s);
       return s;
     });
-    const newDescription = world.currentStateToDescription();
-    const newTree = worldDescriptionToNode(newDescription);
-    this._currentCodeResource.peekResource.replaceSyntaxTree(newTree);
   }
+}
+
+/**
+ * Stores a feature with the options of this feature
+ */
+export interface TruckFeature<F extends keyof TileFeatureTypeToOptions> {
+  feature: F;
+  options: TileFeatureTypeToOptions[F];
+}
+
+/**
+ * All possible feature types that can be applied to the world
+ */
+export enum TruckTileFeatureType {
+  Road,
+  TrafficLight,
+  Freight,
+  FreightTarget,
+  TruckSpawn,
+}
+
+/**
+ * The options of features
+ */
+interface TileFeatureTypeToOptions {
+  [TruckTileFeatureType.Road]: void;
+  [TruckTileFeatureType.TrafficLight]: TruckTrafficLightTileFeatureOptions;
+  [TruckTileFeatureType.Freight]: TruckFreightTileFeatureOptions;
+  [TruckTileFeatureType.FreightTarget]: TruckFreightTileFeatureOptions;
+  [TruckTileFeatureType.TruckSpawn]: void;
+}
+
+export type TruckFreightTileFeatureOptions = WorldFreightColorDescription;
+
+export interface TruckTrafficLightTileFeatureOptions {
+  redPhase: number;
+  greenPhase: number;
+  startPhase: number;
 }
