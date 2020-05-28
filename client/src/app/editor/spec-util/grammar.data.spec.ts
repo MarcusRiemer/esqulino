@@ -15,6 +15,7 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   name: "Empty Spec Grammar",
   programmingLanguageId: "generic",
   root: { languageName: "spec", typeName: "root" },
+  foreignTypes: {},
   types: {
     spec: {
       root: {

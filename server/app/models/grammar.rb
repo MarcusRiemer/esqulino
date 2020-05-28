@@ -9,12 +9,10 @@ class Grammar < ApplicationRecord
                              message: "Starts with a letter, allows letters, digits and -" },
             allow_nil: true
 
-  # The JSON document needs to be a valid grammar
-  validates :model, json_schema: 'GrammarDatabaseBlob'
-
-  # validates :types, json_schema: 'NamedLanguages'
-  # validates :foreign_types, json_schema: 'NamedLanguages'
-  # validates :root, json_schema: 'QualifiedTypeName'
+  # The JSON documents needs to be a valid grammar
+  validates :types, json_schema: 'NamedLanguages'
+  validates :foreign_types, json_schema: 'NamedLanguages'
+  validates :root, json_schema: 'QualifiedTypeName', allow_nil: true
 
   # The programming language that may define additional validation
   belongs_to :programming_language
@@ -35,7 +33,9 @@ class Grammar < ApplicationRecord
 
   # The parts of this model that together validate against GrammarDocument
   def document
-    self.model
+    attributes
+      .slice("types", "foreign_types", "root")
+      .compact
   end
 
   # Takes the current state of the backing code resource and assigns
@@ -50,8 +50,12 @@ class Grammar < ApplicationRecord
   def regenerate_from_code_resource!(ide_service = IdeService.instance)
     compiled = self.generated_from.emit_ast!(ide_service)
     grammar_document = JSON.parse(compiled)
-    model_attributes = grammar_document.slice('types', 'foreignTypes', 'root')
+    regenerated_attributes = grammar_document
+                               .slice('types', 'foreignTypes', 'root')
+                               .transform_keys { |k| k.underscore }
 
+
+    # All other entities that are affected by this regeneration
     affected = []
 
     # Can't use ActiveModel::Dirty because this relies on saves to the database
@@ -61,8 +65,8 @@ class Grammar < ApplicationRecord
     # In this method we want to know whether this concrete regenenaration changed
     # something in practice. Otherwise we might kick off loads of unnecessary
     # processing for block languages and that might be costly.
-    if (not self.model.eql? model_attributes)
-      self.model = model_attributes
+    if (not self.document.eql? regenerated_attributes)
+      self.assign_attributes regenerated_attributes
       affected << self
 
       # Possibly update block languages
@@ -79,8 +83,8 @@ class Grammar < ApplicationRecord
   # Computes a hash that may be sent back to the client if it requires
   # full access to grammar.
   def to_full_api_response
-    to_list_api_response
-      .merge(self.model)
+    to_json_api_response
+      .except("model", "createdAt", "updatedAt")
   end
 
   # Computes a hash that may be sent back to the client if only superficial

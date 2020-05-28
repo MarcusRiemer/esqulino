@@ -14,6 +14,7 @@ export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
   name: "sql",
   programmingLanguageId: "sql",
   root: { languageName: "sql", typeName: "query" },
+  foreignTypes: {},
   types: {
     sql: {
       from: {

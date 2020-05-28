@@ -34,11 +34,37 @@ concise_attributes:
   value_before_type_cast: 2019-08-23 09:29:51.024269000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-08-23 20:05:10.915060000 Z
+  value_before_type_cast: 2020-05-27 18:14:34.475525000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: generated_from_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"prop": {"boolean": {"type": "concrete", "attributes":
+    [{"base": "boolean", "name": "b", "type": "property"}]}, "integer": {"type": "concrete",
+    "attributes": [{"base": "integer", "name": "i", "type": "property", "restrictions":
+    []}, {"base": "integer", "name": "fiveOrMore", "type": "property", "restrictions":
+    [{"type": "minInclusive", "value": 5}]}, {"base": "integer", "name": "fiveOrLess",
+    "type": "property", "restrictions": [{"type": "maxInclusive", "value": 5}]}, {"base":
+    "integer", "name": "zeroToFive", "type": "property", "restrictions": [{"type":
+    "maxInclusive", "value": 5}, {"type": "minInclusive", "value": 0}]}]}}, "allowed":
+    {"Text": {"type": "concrete"}, "Figure": {"type": "concrete"}, "Document": {"type":
+    "concrete", "attributes": [{"name": "Children", "type": "allowed", "nodeTypes":
+    [{"occurs": "+", "nodeType": {"typeName": "Text", "languageName": "allowed"}},
+    {"occurs": "?", "nodeType": {"typeName": "Figure", "languageName": "allowed"}},
+    {"occurs": "*", "nodeType": {"typeName": "Reference", "languageName": "allowed"}}]}]},
+    "Reference": {"type": "concrete"}}, "sequence": {"A": {"type": "concrete"}, "B":
+    {"type": "concrete"}, "root": {"type": "concrete", "attributes": [{"name": "Children",
+    "type": "sequence", "nodeTypes": [{"typeName": "B", "languageName": "sequence"},
+    {"typeName": "A", "languageName": "sequence"}, {"typeName": "B", "languageName":
+    "sequence"}]}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Document", "languageName": "allowed"}'
 new_record: false
 active_record_yaml_version: 2

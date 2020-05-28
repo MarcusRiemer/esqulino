@@ -58,11 +58,61 @@ concise_attributes:
   value_before_type_cast: 2018-12-19 11:24:22.059637000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-07-12 11:20:24.235429000 Z
+  value_before_type_cast: 2020-05-27 18:14:34.453130000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-world
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: generated_from_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"truck_world": {"road": {"type": "concrete", "attributes":
+    [{"name": "road_open", "type": "terminal", "symbol": "Road {"}, {"name": "prop_position",
+    "type": "terminal", "symbol": "position:"}, {"name": "position", "type": "sequence",
+    "nodeTypes": ["vec2"]}, {"name": "openings", "type": "sequence", "nodeTypes":
+    [{"occurs": {"maxOccurs": 4, "minOccurs": 0}, "nodeType": "direction"}]}, {"name":
+    "trafficLights", "type": "sequence", "nodeTypes": [{"occurs": {"maxOccurs": 4,
+    "minOccurs": 0}, "nodeType": "trafficLight"}]}, {"name": "unloading_bay", "type":
+    "sequence", "nodeTypes": [{"occurs": {"maxOccurs": 1, "minOccurs": 0}, "nodeType":
+    "unloading_bay"}]}, {"name": "freight", "type": "sequence", "nodeTypes": [{"occurs":
+    "*", "nodeType": "freight"}]}, {"name": "road_close", "type": "terminal", "symbol":
+    "}"}]}, "vec2": {"type": "concrete", "attributes": [{"name": "vec_open", "type":
+    "terminal", "symbol": "Vec2 {"}, {"name": "prop_x", "type": "terminal", "symbol":
+    "x:"}, {"base": "integer", "name": "x", "type": "property", "restrictions": [{"type":
+    "minInclusive", "value": 0}]}, {"name": "sep_x", "type": "terminal", "symbol":
+    ", "}, {"name": "prop_y", "type": "terminal", "symbol": "y:"}, {"base": "integer",
+    "name": "y", "type": "property", "restrictions": [{"type": "minInclusive", "value":
+    0}]}, {"name": "vec_close", "type": "terminal", "symbol": "}"}]}, "truck": {"type":
+    "concrete", "attributes": [{"name": "truck_open", "type": "terminal", "symbol":
+    "Truck {"}, {"name": "prop_position", "type": "terminal", "symbol": "position:"},
+    {"name": "position", "type": "sequence", "nodeTypes": ["vec2"]}, {"name": "sep_position",
+    "type": "terminal", "symbol": ", "}, {"name": "prop_orientation", "type": "terminal",
+    "symbol": "orientation:"}, {"name": "orientation", "type": "sequence", "nodeTypes":
+    ["direction"]}, {"name": "freight", "type": "sequence", "nodeTypes": [{"occurs":
+    "*", "nodeType": "freight"}]}, {"name": "truck_close", "type": "terminal", "symbol":
+    "}"}]}, "world": {"type": "concrete", "attributes": [{"name": "seq_size", "type":
+    "terminal", "symbol": "size:"}, {"name": "size", "type": "sequence", "nodeTypes":
+    ["vec2"]}, {"name": "seq_trucks", "type": "terminal", "symbol": "trucks:"}, {"name":
+    "trucks", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "truck"}]},
+    {"name": "seq_roads", "type": "terminal", "symbol": "roads:"}, {"name": "roads",
+    "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "road"}]}]}, "freight":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "colour", "type":
+    "property", "restrictions": [{"type": "enum", "value": ["Red", "Green", "Blue"]}]}]},
+    "direction": {"type": "concrete", "attributes": [{"base": "string", "name": "direction",
+    "type": "property", "restrictions": [{"type": "enum", "value": ["N", "E", "S",
+    "W"]}]}]}, "trafficLight": {"type": "concrete", "attributes": [{"name": "side",
+    "type": "sequence", "nodeTypes": ["direction"]}, {"base": "integer", "name": "redPhase",
+    "type": "property", "restrictions": [{"type": "minInclusive", "value": 0}]}, {"base":
+    "integer", "name": "greenPhase", "type": "property", "restrictions": [{"type":
+    "minInclusive", "value": 0}]}, {"base": "integer", "name": "initialPhase", "type":
+    "property", "restrictions": [{"type": "minInclusive", "value": 0}]}]}, "unloading_bay":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "colour", "type":
+    "property", "restrictions": [{"type": "enum", "value": ["Red", "Green", "Blue"]}]}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "world", "languageName": "truck_world"}'
 new_record: false
 active_record_yaml_version: 2

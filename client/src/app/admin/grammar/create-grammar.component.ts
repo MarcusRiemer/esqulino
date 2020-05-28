@@ -25,6 +25,7 @@ export class CreateGrammarComponent {
     programmingLanguageId: "",
     root: { languageName: "", typeName: "" },
     types: {},
+    foreignTypes: {},
   };
 
   constructor(

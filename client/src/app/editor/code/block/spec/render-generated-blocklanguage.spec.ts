@@ -174,6 +174,7 @@ describe(`Render Generated BlockLanguages`, () => {
 
   describe(`Grammar 0: Root with single required child`, () => {
     const grammarDesc: GrammarDocument = {
+      foreignTypes: {},
       types: {
         l: {
           r: {
@@ -239,6 +240,7 @@ describe(`Render Generated BlockLanguages`, () => {
 
   describe(`Grammar 0: Root with single required child in container`, () => {
     const grammarDesc: GrammarDocument = {
+      foreignTypes: {},
       types: {
         l: {
           r: {

@@ -38,6 +38,7 @@ const langEmptyBlocks: LanguageDefinition = {
           z: {} as NodeTypeDescription,
         },
       },
+      foreignTypes: {},
       root: { languageName: "emptyBlocks", typeName: "root" },
     },
   ],
