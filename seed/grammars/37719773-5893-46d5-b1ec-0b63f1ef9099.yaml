@@ -36,11 +36,38 @@ concise_attributes:
   value_before_type_cast: 2018-05-15 18:48:24.782086000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-07-12 11:20:24.239925000 Z
+  value_before_type_cast: 2020-05-27 18:14:34.457485000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: css
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: generated_from_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"css": {"rule": {"type": "concrete", "attributes": [{"name":
+    "selectors", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "selector"}]},
+    {"name": "rule-open", "type": "terminal", "symbol": "{"}, {"name": "declarations",
+    "type": "allowed", "nodeTypes": [{"occurs": "+", "nodeType": "declaration"}]},
+    {"name": "rule-close", "type": "terminal", "symbol": "}"}]}, "exprAny": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "value", "type": "property"}]},
+    "document": {"type": "concrete", "attributes": [{"name": "rules", "type": "allowed",
+    "nodeTypes": [{"occurs": "+", "nodeType": "rule"}]}]}, "selector": {"type": "oneOf",
+    "oneOf": ["selectorType", "selectorClass", "selectorId", "selectorUniversal"]},
+    "exprColor": {"type": "concrete", "attributes": [{"base": "string", "name": "value",
+    "type": "property"}]}, "selectorId": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "value", "type": "property"}]}, "declaration": {"type": "concrete",
+    "attributes": [{"name": "name", "type": "choice", "choices": ["propertyName"]},
+    {"name": "colon", "type": "terminal", "symbol": ":"}, {"name": "value", "type":
+    "choice", "choices": ["exprColor", "exprAny"]}]}, "propertyName": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "name", "type": "property"}]}, "selectorType":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "value", "type":
+    "property"}]}, "selectorClass": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "value", "type": "property"}]}, "selectorUniversal": {"type": "concrete"}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "document", "languageName": "css"}'
 new_record: false
 active_record_yaml_version: 2

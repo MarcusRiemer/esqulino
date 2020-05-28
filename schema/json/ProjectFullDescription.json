@@ -700,9 +700,11 @@
         }
       },
       "required": [
+        "foreignTypes",
         "id",
         "name",
-        "programmingLanguageId"
+        "programmingLanguageId",
+        "types"
       ],
       "type": "object"
     },

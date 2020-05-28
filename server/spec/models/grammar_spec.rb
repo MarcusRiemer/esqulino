@@ -39,26 +39,43 @@ RSpec.describe Grammar, type: :model do
     end
   end
 
-  context "model" do
-    it "rejects missing model" do
-      res = FactoryBot.build(:grammar, model: nil)
-
-      res.validate
-      expect(res.errors["model"]).not_to be_empty
+  context "document" do
+    it "Empty" do
+      res = FactoryBot.build(:grammar, root: nil, types: nil, foreign_types: nil)
+      expect(res.document).to eq Hash.new
     end
 
-    it "factory created: Empty" do
-      res = FactoryBot.build(:grammar)
-
-      res.validate
-      expect(res.errors["model"]).to be_empty
+    it "root" do
+      root = { "languageName" => "l", "typeName" => "t"}
+      res = FactoryBot.build(
+        :grammar,
+        root: root,
+        types: nil,
+        foreign_types: nil
+      )
+      expect(res.document).to eq({"root" => root})
     end
 
-    it "factory created: Empty" do
-      res = FactoryBot.build(:grammar, :model_single_type)
+    it "root and types" do
+      root = { "languageName" => "l", "typeName" => "t"}
+      res = FactoryBot.build(
+        :grammar,
+        root: root,
+        types: Hash.new,
+        foreign_types: nil
+      )
+      expect(res.document).to eq({"root" => root, "types" => Hash.new})
+    end
 
-      res.validate
-      expect(res.errors["model"]).to be_empty
+    it "root, types and foreign_types" do
+      root = { "languageName" => "l", "typeName" => "t"}
+      res = FactoryBot.build(
+        :grammar,
+        root: root,
+        types: Hash.new,
+        foreign_types: Hash.new
+      )
+      expect(res.document).to eq({"root" => root, "types" => Hash.new, "foreign_types" => Hash.new})
     end
   end
 
@@ -92,23 +109,22 @@ RSpec.describe Grammar, type: :model do
       resource = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: resource)
 
-      expect(grammar.model).to eq Hash.new
+      expect(grammar.types).to eq Hash.new
+      expect(grammar.root).to be_nil
 
       ide_service = IdeService.instantiate(allow_mock: false)
       did_change = grammar.regenerate_from_code_resource!(ide_service)
 
       expect(did_change).to eq [grammar]
-      expect(grammar.model).to eq ({
-                                     "root" => { "languageName" => "lang", "typeName" => "root" },
-                                     "types" => {
-                                       "lang" => {
-                                         "root" => {
-                                           "type" => "concrete",
-                                           "attributes" => []
-                                         }
-                                       }
-                                     }
-                                   })
+      expect(grammar.root).to eq({ "languageName" => "lang", "typeName" => "root" })
+      expect(grammar.types).to eq({
+                                    "lang" => {
+                                      "root" => {
+                                        "type" => "concrete",
+                                        "attributes" => []
+                                      }
+                                    }
+                                  })
     end
 
     it "regenerates only once" do

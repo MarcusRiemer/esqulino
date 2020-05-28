@@ -44,11 +44,46 @@ concise_attributes:
   value_before_type_cast: 2018-05-15 18:48:12.004676000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-07-12 11:20:24.251053000 Z
+  value_before_type_cast: 2020-05-27 18:14:34.448723000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: generated_from_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"dxml": {"if": {"type": "concrete", "attributes": [{"name":
+    "condition", "type": "allowed", "nodeTypes": ["expr"]}, {"name": "body", "type":
+    "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "element"}, {"occurs": "*",
+    "nodeType": "text"}, {"occurs": "*", "nodeType": "interpolate"}, {"occurs": "*",
+    "nodeType": "if"}]}]}, "expr": {"type": "oneOf", "oneOf": ["exprVar", "exprConst",
+    "exprBinary"]}, "text": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "value", "type": "property"}]}, "element": {"type": "concrete", "attributes":
+    [{"name": "tag-open-begin", "type": "terminal", "symbol": "<"}, {"base": "string",
+    "name": "name", "type": "property"}, {"name": "attributes", "type": "allowed",
+    "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}]}, {"name": "tag-open-end",
+    "type": "terminal", "symbol": ">"}, {"name": "elements", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": "element"}, {"occurs": "*", "nodeType": "text"},
+    {"occurs": "*", "nodeType": "interpolate"}, {"occurs": "*", "nodeType": "if"}]},
+    {"name": "tag-close", "type": "terminal", "symbol": "<ende/>"}]}, "exprVar": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"}]},
+    "attribute": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
+    "type": "property"}, {"name": "equals", "type": "terminal", "symbol": "="}, {"name":
+    "quot-begin", "type": "terminal", "symbol": "\""}, {"name": "value", "type": "allowed",
+    "nodeTypes": [{"occurs": "*", "nodeType": "text"}, {"occurs": "*", "nodeType":
+    "interpolate"}]}, {"name": "quot-end", "type": "terminal", "symbol": "\""}]},
+    "exprConst": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
+    "type": "property"}]}, "exprBinary": {"type": "concrete", "attributes": [{"name":
+    "lhs", "type": "allowed", "nodeTypes": ["expr"]}, {"name": "operator", "type":
+    "allowed", "nodeTypes": ["binaryOperator"]}, {"name": "rhs", "type": "allowed",
+    "nodeTypes": ["expr"]}]}, "interpolate": {"type": "concrete", "attributes": [{"name":
+    "expr", "type": "allowed", "nodeTypes": ["expr"]}]}, "binaryOperator": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "operator", "type": "property"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "element", "languageName": "dxml"}'
 new_record: false
 active_record_yaml_version: 2
