@@ -2,6 +2,10 @@
 # Currently every project is assumed to be somewhat web-centric
 # (using databases and HTML), but this is not set in stone.
 class Project < ApplicationRecord
+  # In progress: Multilingual migration
+  self.ignored_columns = ['name_single',  'description_single']
+
+  # The owner if this project
   belongs_to :user
   # Source citations for projects
   has_many :project_sources, :dependent => :destroy

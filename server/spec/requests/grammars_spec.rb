@@ -241,27 +241,23 @@ RSpec.describe GrammarsController, type: :request do
       expect(original.root).not_to eq refreshed.root
     end
 
-    it 'Update with invalid model' do
+    it 'Update with invalid root type' do
       original = FactoryBot.create(:grammar, :model_single_type)
 
       params_update = FactoryBot
                         .attributes_for(:grammar,
                                         name: "Updated empty",
-                                        model: { "foo" => "bar" })
+                                        root: { "foo" => "bar" })
                         .transform_keys { |k| k.to_s.camelize(:lower) }
-
-      # Make the model part of the root object
-      params_update_req = params_update.merge(params_update["model"])
-      params_update_req.delete("model")
 
       put "/api/grammars/#{original.id}",
           :headers => json_headers,
-          :params => params_update_req.to_json
+          :params => params_update.to_json
 
       expect(response.status).to eq(400)
       refreshed = Grammar.find(original.id)
       expect(original.name).to eq refreshed.name
-      expect(original.model).to eq refreshed.model
+      expect(original.root).to eq refreshed.root
     end
 
     it 'Update attempting to change the ID' do
