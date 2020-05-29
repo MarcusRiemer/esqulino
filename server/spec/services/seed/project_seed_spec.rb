@@ -4,7 +4,7 @@ require "fileutils"    # To ease file comparision
 
 RSpec.describe Seed::ProjectSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino[:seed][:data_dir] }
-  let(:project) { FactoryBot.create(:project, name: "Test Proejct") }
+  let(:project) { FactoryBot.create(:project, name: {"en" =>"Test Project"} ) }
   let(:payload) { project }
 
   let!(:subject) { described_class.new(payload) }
@@ -38,7 +38,7 @@ RSpec.describe Seed::ProjectSeed do
 
     context "store, destorys and loads" do
       it "an empty project (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig).start_store
 
         pOrig.destroy!
@@ -50,7 +50,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "an empty project by id (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig.id).start_store
 
         pOrig.destroy!
@@ -61,7 +61,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "an empty project by filepath (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
 
         Seed::ProjectSeed.new(pOrig.id).start_store
 
@@ -95,7 +95,7 @@ RSpec.describe Seed::ProjectSeed do
         # something via slug returns a different instance.
         #
         # We avoid this by using unique slugs in exactly these tests.
-        pOrig = FactoryBot.create(:project, name: "Test", slug: "a" + SecureRandom.hex)
+        pOrig = FactoryBot.create(:project, slug: "a" + SecureRandom.hex)
 
         Seed::ProjectSeed.new(pOrig).start_store
 
@@ -107,7 +107,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "a project with a single code resource (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         cOrig = FactoryBot.create(:code_resource, project: pOrig)
 
         Seed::ProjectSeed.new(pOrig).start_store
@@ -124,7 +124,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "a project with a single project source (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         sOrig = FactoryBot.create(:project_source, project: pOrig)
 
         Seed::ProjectSeed.new(pOrig).start_store
@@ -141,7 +141,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "a project with a single database (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)
 
         Seed::ProjectSeed.new(pOrig).start_store
@@ -169,10 +169,10 @@ RSpec.describe Seed::ProjectSeed do
 
     context "stores and reloads" do
       it "an empty project (UPDATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig).start_store
         # Making a change after storing
-        pOrig.update_column("name", "changed")
+        pOrig.update_column("name", {"de" => "changed" })
 
         pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
@@ -182,7 +182,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "a project with a single project source (CREATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         sOrig = FactoryBot.create(:project_source, project: pOrig)
 
         Seed::ProjectSeed.new(pOrig).start_store
@@ -200,7 +200,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "a project with a single database (UPDATE)" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)
 
         Seed::ProjectSeed.new(pOrig).start_store
@@ -245,7 +245,7 @@ RSpec.describe Seed::ProjectSeed do
       end
 
       it "fails to load a project with a code resource with an unavailable block language" do
-        pOrig = FactoryBot.create(:project, name: "Test")
+        pOrig = FactoryBot.create(:project)
         cOrig = FactoryBot.create(:code_resource, project: pOrig)
         bOrig = cOrig.block_language
 

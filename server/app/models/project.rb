@@ -33,7 +33,8 @@ class Project < ApplicationRecord
   belongs_to :default_database, :class_name => "ProjectDatabase", optional: true
 
   # Name may not be empty
-  validates :name, presence: true
+  validates :name, valid_languages: []
+  validates :name, multilang_string_present: []
 
   # Some special projects may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true

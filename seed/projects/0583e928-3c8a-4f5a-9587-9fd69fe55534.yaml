@@ -8,10 +8,7 @@ concise_attributes:
   value_before_type_cast: pokemon
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Pokémon Vorstellung
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Zeige deinen Freunden, welche Pokémon du gefangen hast!
+  value_before_type_cast: '"de"=>"Pokémon Vorstellung"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -25,12 +22,16 @@ concise_attributes:
   value_before_type_cast: 2018-02-26 10:13:30.534056000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:21:58.459437000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.221280000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: bdd01223-0d02-42a0-ac88-fa34150258ae
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Zeige deinen Freunden, welche Pokémon du gefangen
+    hast!"'
 new_record: false
 active_record_yaml_version: 2

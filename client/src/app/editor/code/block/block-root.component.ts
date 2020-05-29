@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 
-import { Observable, combineLatest, of } from "rxjs";
-import { map, flatMap, switchMap } from "rxjs/operators";
+import { Observable, combineLatest } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 
 import { BlockLanguage } from "../../../shared/block";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { convertGrammarTreeInstructions } from "../../../shared/block/generator/generator-tree";
-import { BlockLanguageDescription } from "../../../shared/block/block-language.description";
 import {
   IndividualGrammarDataService,
   IndividualBlockLanguageDataService,

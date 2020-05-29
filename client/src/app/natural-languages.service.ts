@@ -3,6 +3,7 @@ import { Location, DOCUMENT } from "@angular/common";
 
 import { LinkService } from "./link.service";
 import { environment } from "../environments/environment";
+import { MultiLangString } from "./shared/multilingual-string.description";
 
 /**
  * Available natural languages and their URLs
@@ -17,6 +18,8 @@ export class NaturalLanguagesService {
     @Inject(LOCALE_ID)
     private readonly _localeId: string
   ) {}
+
+  public readonly availableLanguages = environment.availableLanguages;
 
   updateRootLangAttribute() {
     const htmlElement = this.document.querySelector("html");
@@ -48,11 +51,32 @@ export class NaturalLanguagesService {
   /**
    * @return The current URL for the given language token.
    */
-  public urlForLanguage(langToken: string, protocol: "//" | "https://" = "//") {
+  urlForLanguage(langToken: string, protocol: "//" | "https://" = "//") {
     const host =
       langToken == "de"
         ? environment.canonicalHost
         : langToken + "." + environment.canonicalHost;
     return protocol + host + this.currentPath;
+  }
+
+  resolveString(value: MultiLangString): string {
+    const presentLanguages = Object.keys(value);
+
+    // Match of current language?
+    if (presentLanguages.includes(this._localeId)) {
+      return value[this._localeId];
+    }
+
+    // Try configured languages
+    const configLanguages = this.availableLanguages;
+    for (let i = 0; i < configLanguages.length; ++i) {
+      const currToken = configLanguages[i].token;
+      if (presentLanguages.includes(currToken)) {
+        return value[currToken];
+      }
+    }
+
+    // Select first language that is present
+    return value[presentLanguages[0]];
   }
 }

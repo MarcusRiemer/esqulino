@@ -1,7 +1,5 @@
 import { Component } from "@angular/core";
 
-import { tap } from "rxjs/operators";
-
 import { CurrentCodeResourceService } from "../current-coderesource.service";
 
 /**

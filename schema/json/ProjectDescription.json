@@ -957,6 +957,12 @@
       ],
       "type": "object"
     },
+    "MultiLangString": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
     "NamedLanguages": {
       "additionalProperties": {
         "$ref": "#/definitions/NamedTypes"
@@ -1964,7 +1970,7 @@
           "type": "string"
         },
         "description": {
-          "type": "string"
+          "$ref": "#/definitions/MultiLangString"
         },
         "grammars": {
           "items": {
@@ -2022,9 +2028,9 @@
       "type": "object"
     },
     "ProjectName": {
+      "$ref": "#/definitions/MultiLangString",
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$",
-      "type": "string"
+      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$"
     },
     "ProjectSlug": {
       "description": "The url-friendly name of the project. May only contain characters that do not\nmean any trouble in URLs.",

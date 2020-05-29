@@ -9,19 +9,19 @@ import {
 } from "@angular/core";
 
 import { locales } from "./change-language.component";
-import { MultilingualString } from "./multilingual-string.description";
+import { MultiLangString } from "./multilingual-string.description";
 
 @Component({
   selector: "multilingual-input",
   templateUrl: "./templates/multilingual-input.html",
 })
 export class MultiLingualInputComponent {
-  @Input() editingString: MultilingualString;
+  @Input() editingString: MultiLangString;
   @Input() control: string = "input";
   @Input() language: string = this.localeId;
   @Input() placeholder: string = "";
 
-  @Output() editingStringChange = new EventEmitter<MultilingualString>();
+  @Output() editingStringChange = new EventEmitter<MultiLangString>();
 
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
@@ -60,7 +60,7 @@ export class MultiLingualInputComponent {
     );
   }
 
-  public set currentString(val: MultilingualString) {
+  public set currentString(val: MultiLangString) {
     this.editingString = val;
     this.editingStringChange.emit(this.editingString);
   }
