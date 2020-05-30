@@ -7,6 +7,7 @@ import { flatMap, map } from "rxjs/operators";
 import {
   FixedBlocksSidebar,
   FixedBlocksSidebarDescription,
+  SidebarDescription,
 } from "../../shared/block";
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
@@ -21,7 +22,7 @@ import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.co
 /**
  * Maps ids of sidebar components to their actual components.
  */
-function resolvePortalComponentId(id: string): any {
+function resolvePortalComponentId(id: SidebarDescription["type"]): any {
   switch (id) {
     case "fixedBlocks":
       return CodeSidebarFixedBlocksComponent;
