@@ -215,17 +215,19 @@ export class TruckWorldEditorService implements OnDestroy {
    */
   public undo(): void {
     this._world.undo();
+    this.updateCodeResource(this._world);
   }
 
   /**
    * Reset all changes that were made
    */
   public resetChanges(): void {
-    // TODO
+    this._world.reset();
+    this.updateCodeResource(this._world);
   }
 
   /**
-   * Overrides the current world with an empty 5x5 one
+   * Overrides the current world with an empty one (size will stay the same)
    */
   public resetEverything(): void {
     // TODO
@@ -242,9 +244,7 @@ export class TruckWorldEditorService implements OnDestroy {
     modifier: (state: WorldState) => boolean
   ): void {
     this.mutateWorld(world, modifier);
-    const newDescription = world.currentStateToDescription();
-    const newTree = worldDescriptionToNode(newDescription);
-    this._currentCodeResource.peekResource.replaceSyntaxTree(newTree);
+    this.updateCodeResource(world);
   }
 
   /**
@@ -261,6 +261,12 @@ export class TruckWorldEditorService implements OnDestroy {
       // If the modifier returns true, the change was valid
       return modifier(s) ? s : null;
     });
+  }
+
+  private updateCodeResource(world: World) {
+    const newDescription = world.currentStateToDescription();
+    const newTree = worldDescriptionToNode(newDescription);
+    this._currentCodeResource.peekResource.replaceSyntaxTree(newTree);
   }
 }
 
