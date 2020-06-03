@@ -6,6 +6,20 @@ import { environment } from "../environments/environment";
 import { MultiLangString } from "./shared/multilingual-string.description";
 
 /**
+ * @return The unicode string that represents a flag for the given locale
+ */
+export function localeToFlag(locale: string): string {
+  switch (locale) {
+    case "de":
+      return "🇩🇪";
+    case "en":
+      return "🇬🇧";
+    default:
+      return "🏳";
+  }
+}
+
+/**
  * Available natural languages and their URLs
  */
 @Injectable()
@@ -59,12 +73,15 @@ export class NaturalLanguagesService {
     return protocol + host + this.currentPath;
   }
 
-  resolveString(value: MultiLangString): string {
+  /**
+   * Attempts to find the best matching locale id for the given string.
+   */
+  resolveLocaleId(value: MultiLangString): string {
     const presentLanguages = Object.keys(value);
 
     // Match of current language?
     if (presentLanguages.includes(this._localeId)) {
-      return value[this._localeId];
+      return this._localeId;
     }
 
     // Try configured languages
@@ -72,11 +89,18 @@ export class NaturalLanguagesService {
     for (let i = 0; i < configLanguages.length; ++i) {
       const currToken = configLanguages[i].token;
       if (presentLanguages.includes(currToken)) {
-        return value[currToken];
+        return currToken;
       }
     }
 
     // Select first language that is present
-    return value[presentLanguages[0]];
+    return presentLanguages[0];
+  }
+
+  /**
+   * Attempts to find the best matching value of the given string.
+   */
+  resolveString(value: MultiLangString): string {
+    return value[this.resolveLocaleId(value)];
   }
 }
