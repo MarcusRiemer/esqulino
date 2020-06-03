@@ -167,6 +167,21 @@ export class SchemaTableVisualComponent {
     this.saveChanges();
   }
 
+  changedTableName(newValue: string) {
+    if (this._oldValue != newValue) {
+      this._schemaService.initCurrentlyEdit(
+        this._project.schema.getTable(this.table.name)
+      );
+
+      this.commandsHolder.do(
+        new ChangeTableName(this.table, this._oldValue, newValue)
+      );
+      this._oldValue = "";
+
+      this.saveChanges();
+    }
+  }
+
   ChangeColumnNotNullStatus(row: number) {
     this._schemaService.initCurrentlyEdit(
       this._project.schema.getTable(this.table.name)

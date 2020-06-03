@@ -39,16 +39,7 @@ export class SchemaVisualComponent implements OnInit {
   get isEmpty() {
     return this.project && this.project.schema.isEmpty;
   }
-
-  /**
-   * @return A number that is unique for each state of the database
-   *         over the course of the current session.
-   */
-  readonly schemaRevision = this._schemaService.changeCount;
-
-  /**
-   * The name of the schema that is currently edited.
-   */
+  
   readonly schemaName = this._route.paramMap.pipe(
     map((p) => p.get("schemaName"))
   );

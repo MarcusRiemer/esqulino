@@ -2,7 +2,12 @@
   <table class="vis">
     <thead>
       <tr>
-        {{ table.name }}
+        <input
+          class="tableName"
+          (focus)="saveTempValue($event.target.value)"
+          (blur)="changedTableName($event.target.value)"
+          [(ngModel)]="table.name"
+        />
       </tr>
     </thead>
     <tbody>
