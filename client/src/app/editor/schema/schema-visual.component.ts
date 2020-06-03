@@ -37,7 +37,7 @@ export class SchemaVisualComponent implements OnInit {
   get isEmpty() {
     return this.project && this.project.schema.isEmpty;
   }
-  
+
   readonly schemaName = this._route.paramMap.pipe(
     map((p) => p.get("schemaName"))
   );

@@ -49,7 +49,7 @@ export class SchemaTableVisualComponent {
   dbErrorCode: number = -1;
 
   public rowList = {};
-  
+
   public xPos = 0;
   public yPos = 0;
 
@@ -60,7 +60,7 @@ export class SchemaTableVisualComponent {
     private _toolbarService: EditorToolbarService,
     private _route: ActivatedRoute,
     private dragulaService: DragulaService
-  ) {}  
+  ) {}
 
   readonly schemaRevision = this._schemaService.changeCount;
 
@@ -114,14 +114,18 @@ export class SchemaTableVisualComponent {
         this.saveChanges();
       });
     this._subscriptionRefs.push(dragRef);
-	
-	let schemaUrl = this.visualSchemaUrl.subscribe((url) => {
-		let visualSchemaText = this._http.get(url, { responseType: 'text' });
-		let schemaRef = visualSchemaText.subscribe(
-			(data) => { this.parseSchemaText(data); },
-			(error) => { console.log(error); }
-		  );
-	});
+
+    let schemaUrl = this.visualSchemaUrl.subscribe((url) => {
+      let visualSchemaText = this._http.get(url, { responseType: "text" });
+      let schemaRef = visualSchemaText.subscribe(
+        (data) => {
+          this.parseSchemaText(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    });
   }
 
   ngOnDestroy() {
@@ -220,20 +224,22 @@ export class SchemaTableVisualComponent {
 
     this.saveChanges();
   }
-  
-  private parseSchemaText(text: string){
-	  let nodes = text.split('<g id="node');
-	  
-	  for(var i = 1; i < nodes.length; i++){
-		  if (this.table.name == nodes[i].split('<title>')[1].split('</title>')[0]) {
-			  let points = nodes[i].split('fill="none" stroke="#000000" points="')[1];
-			  let positions = points.split(' ')[1].split(',');
-			  console.log(positions);
-			  
-			  this.xPos = +positions[0];
-			  this.yPos = +positions[1];
-		  }
-	  }
+
+  private parseSchemaText(text: string) {
+    let nodes = text.split('<g id="node');
+
+    for (var i = 1; i < nodes.length; i++) {
+      if (
+        this.table.name == nodes[i].split("<title>")[1].split("</title>")[0]
+      ) {
+        let points = nodes[i].split('fill="none" stroke="#000000" points="')[1];
+        let positions = points.split(" ")[1].split(",");
+        console.log(positions);
+
+        this.xPos = +positions[0];
+        this.yPos = +positions[1];
+      }
+    }
   }
 
   showError(error: any) {
