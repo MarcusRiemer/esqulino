@@ -1,6 +1,9 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
 
-import { first } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
+import { zip } from "rxjs";
 
 import { Table, ColumnStatus } from "../../shared/schema";
 
@@ -46,13 +49,31 @@ export class SchemaTableVisualComponent {
   dbErrorCode: number = -1;
 
   public rowList = {};
+  
+  public xPos = 0;
+  public yPos = 0;
 
   constructor(
+    private _http: HttpClient,
     private _schemaService: SchemaService,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
+    private _route: ActivatedRoute,
     private dragulaService: DragulaService
-  ) {}
+  ) {}  
+
+  readonly schemaRevision = this._schemaService.changeCount;
+
+  readonly schemaName = this._route.paramMap.pipe(
+    map((p) => p.get("schemaName"))
+  );
+
+  readonly visualSchemaUrl = zip(this.schemaRevision, this.schemaName).pipe(
+    map(
+      ([rev, name]) =>
+        `/api/project/${this._project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
+    )
+  );
 
   ngOnInit() {
     let subRef = this._projectService.activeProject.subscribe((res) => {
@@ -93,6 +114,14 @@ export class SchemaTableVisualComponent {
         this.saveChanges();
       });
     this._subscriptionRefs.push(dragRef);
+	
+	let schemaUrl = this.visualSchemaUrl.subscribe((url) => {
+		let visualSchemaText = this._http.get(url, { responseType: 'text' });
+		let schemaRef = visualSchemaText.subscribe(
+			(data) => { this.parseSchemaText(data); },
+			(error) => { console.log(error); }
+		  );
+	});
   }
 
   ngOnDestroy() {
@@ -190,6 +219,21 @@ export class SchemaTableVisualComponent {
     this.commandsHolder.do(new ChangeColumnNotNull(this.table, row));
 
     this.saveChanges();
+  }
+  
+  private parseSchemaText(text: string){
+	  let nodes = text.split('<g id="node');
+	  
+	  for(var i = 1; i < nodes.length; i++){
+		  if (this.table.name == nodes[i].split('<title>')[1].split('</title>')[0]) {
+			  let points = nodes[i].split('fill="none" stroke="#000000" points="')[1];
+			  let positions = points.split(' ')[1].split(',');
+			  console.log(positions);
+			  
+			  this.xPos = +positions[0];
+			  this.yPos = +positions[1];
+		  }
+	  }
   }
 
   showError(error: any) {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router, ActivatedRoute } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 
 import { map, flatMap, first, share } from "rxjs/operators";
 import { zip } from "rxjs";
@@ -23,7 +22,6 @@ export class SchemaVisualComponent implements OnInit {
 
   constructor(
     private _sanitizer: DomSanitizer,
-    private _http: HttpClient,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
     private _router: Router,

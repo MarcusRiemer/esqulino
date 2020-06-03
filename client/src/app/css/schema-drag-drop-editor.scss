@@ -1,12 +1,7 @@
 .db-schema-drag-drop {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 10px;
-    grid-auto-rows: minmax(100px, auto);
 
 	.vis {
 		border: 1px solid black;
-		grid-column: 4;
 		font-size: 65%;
 		padding: 12px;
 	}
