@@ -101,6 +101,7 @@ group :development, :test do
   gem 'pry', '~> 0.13'
   gem 'pry-byebug'
   gem 'webmock'
+  gem "rails-erd"
 end
 
 group :development do

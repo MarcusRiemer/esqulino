@@ -1,7 +1,7 @@
 class Mutations::CreateGrammarMutation < Mutations::BaseMutation
   argument :name, String, required: true
   argument :slug, String, required: false
-  argument :model, Types::Json, required: true
+  argument :model, GraphQL::Types::JSON, required: true
   argument :programmingLanguageId,  ID, required: true
   argument :generatedFromId, ID, required: false
   argument :blockLanguageIds, [ID], required: false
