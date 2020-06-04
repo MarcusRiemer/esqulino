@@ -60,7 +60,7 @@
       ></editor-block-render>
 
       <!-- Possibly render something in between the nodes. -->
-      <ng-container *ngIf="!lastChild; else lastDrop;">
+      <ng-container *ngIf="!lastChild">
         <editor-block-render
           *ngFor="let sepBlock of iteratorSeparatorBlocks"
           [visual]="sepBlock"
@@ -90,8 +90,6 @@
       [node]="node"
       [visual]="visual"
       [ngClass]="visual.cssClasses"
-      class="{{ visual.direction }}"
-      [class.read-only]="readOnly"
       [class.being-replaced]="(currentBlock.isBeingReplaced | async)"
       draggable="true"
     ></editor-block-render-block>

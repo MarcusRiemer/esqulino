@@ -527,9 +527,6 @@ export const AdminListProjectsDocument = gql`
       slug
       codeResources {
         totalCount
-          nodes {
-              id
-          }
       }
     }
     totalCount
@@ -548,4 +545,5 @@ export const AdminListProjectsDocument = gql`
   })
   export class AdminListProjectsGQL extends Apollo.Query<AdminListProjectsQuery, AdminListProjectsQueryVariables> {
     document = AdminListProjectsDocument;
+    
   }

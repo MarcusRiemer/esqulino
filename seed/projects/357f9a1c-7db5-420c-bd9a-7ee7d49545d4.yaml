@@ -8,12 +8,7 @@ concise_attributes:
   value_before_type_cast: events
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Ereignisse
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen
-    Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen
-    Spiele gelebt?
+  value_before_type_cast: '"de"=>"Ereignisse", "en"=>"Events"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
@@ -28,12 +23,18 @@ concise_attributes:
   value_before_type_cast: 2018-02-20 20:48:21.693124000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:22:01.967283000 Z
+  value_before_type_cast: 2020-05-29 17:51:27.678611000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Historische Ereignisse & Personen mit ihren jeweiligen
+    zeitlichen Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten
+    olympischen Spiele gelebt?", "en"=>"Historical events & persons with their respective
+    dates. Which scientist actually lived at the time of the first Olympic Games?"'
 new_record: false
 active_record_yaml_version: 2

@@ -9,9 +9,19 @@ concise_attributes:
   name: name
   value_before_type_cast: Meta Grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: model
-  value_before_type_cast: '{"root": {"typeName": "grammar", "languageName": "MetaGrammar"},
-    "types": {"MetaGrammar": {"node": {"type": "oneOf", "oneOf": ["concreteNode",
+  name: created_at
+  value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-05-27 18:14:34.421299000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"MetaGrammar": {"node": {"type": "oneOf", "oneOf": ["concreteNode",
     "typedef"]}, "comment": {"type": "concrete", "attributes": [{"tags": ["comment"],
     "type": "container", "children": [{"tags": ["space-after"], "type": "terminal",
     "symbol": "//"}, {"base": "string", "name": "text", "type": "property"}], "orientation":
@@ -80,17 +90,12 @@ concise_attributes:
     "nodeRefCardinality": {"type": "concrete", "attributes": [{"type": "container",
     "children": [{"name": "references", "type": "sequence", "nodeTypes": [{"occurs":
     "1", "nodeType": "nodeRef"}]}, {"name": "cardinality", "type": "sequence", "nodeTypes":
-    [{"occurs": "1", "nodeType": "cardinality"}]}], "orientation": "horizontal"}]}}}}'
+    [{"occurs": "1", "nodeType": "cardinality"}]}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: created_at
-  value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
+  name: foreign_types
+  value_before_type_cast: "{}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: updated_at
-  value_before_type_cast: 2020-05-06 10:01:54.262719000 Z
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: programming_language_id
-  value_before_type_cast: meta-grammar
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: generated_from_id
+  name: root
+  value_before_type_cast: '{"typeName": "grammar", "languageName": "MetaGrammar"}'
 new_record: false
 active_record_yaml_version: 2

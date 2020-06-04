@@ -32,7 +32,7 @@ export class OverviewProjectComponent implements OnInit{
   constructor(readonly projectsService: AdminListProjectsGQL) {}
 
   //response observer makes only one subscription possible
-  // evtl. watch nutzen!
+  // TODO: evtl. watch nutzen!
   private _queryObserver:BehaviorSubject<Observable<ApolloQueryResult<AdminListProjectsQuery>>> = new BehaviorSubject(EMPTY);
   //response which can be subscribed once
   private _response: Observable<ApolloQueryResult<AdminListProjectsQuery>>;
@@ -43,7 +43,7 @@ export class OverviewProjectComponent implements OnInit{
   readonly projects$ = this._response.pipe(map(result => result.data.projects.nodes));
 
   //loading indicator for conditionalDisplay directive
-  readonly progress = new BehaviorSubject<boolean>(true);
+  readonly progress$ = new BehaviorSubject<boolean>(true);
 
   //Mat-Paginator Info
   totalCount$ = this._response.pipe(map(result => result.data.projects.totalCount));
@@ -58,7 +58,7 @@ export class OverviewProjectComponent implements OnInit{
     ));
     this._response = this._queryObserver.pipe(switchAll());
     this._response.subscribe(result => {
-      this.progress.next(result.loading);
+      this.progress$.next(result.loading);
       this._pageInfo = result.data.projects.pageInfo;
     });
   }
@@ -67,7 +67,7 @@ export class OverviewProjectComponent implements OnInit{
   onChangePagination() {
     //PageSize Change
     let variables;
-    this.progress.next(true);
+    this.progress$.next(true);
     if(this.pageSize != this._paginator.pageSize){
       variables = {first:this._paginator.pageSize}
     }

@@ -397,6 +397,9 @@
           "$ref": "#/definitions/TruckSensorsComponentDescription"
         },
         {
+          "$ref": "#/definitions/TruckWorldEditorMenuComponentDescription"
+        },
+        {
           "$ref": "#/definitions/DropDebugComponentDescription"
         },
         {
@@ -594,9 +597,11 @@
         }
       },
       "required": [
+        "foreignTypes",
         "id",
         "name",
-        "programmingLanguageId"
+        "programmingLanguageId",
+        "types"
       ],
       "type": "object"
     },
@@ -950,6 +955,12 @@
         "categoryCaption",
         "blocks"
       ],
+      "type": "object"
+    },
+    "MultiLangString": {
+      "additionalProperties": {
+        "type": "string"
+      },
       "type": "object"
     },
     "NamedLanguages": {
@@ -1959,7 +1970,7 @@
           "type": "string"
         },
         "description": {
-          "type": "string"
+          "$ref": "#/definitions/MultiLangString"
         },
         "grammars": {
           "items": {
@@ -2017,9 +2028,9 @@
       "type": "object"
     },
     "ProjectName": {
+      "$ref": "#/definitions/MultiLangString",
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$",
-      "type": "string"
+      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$"
     },
     "ProjectSlug": {
       "description": "The url-friendly name of the project. May only contain characters that do not\nmean any trouble in URLs.",
@@ -2534,6 +2545,28 @@
         "componentType": {
           "enum": [
             "truck-world"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckWorldEditorMenuComponentDescription": {
+      "additionalProperties": false,
+      "description": "The world settings and tile selector for truck worlds",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "truck-world-editor"
           ],
           "type": "string"
         }

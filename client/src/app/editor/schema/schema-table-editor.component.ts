@@ -1,8 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { first } from "rxjs/operators";
-
 import { Table, ColumnStatus } from "../../shared/schema";
 import {
   AddNewColumn,

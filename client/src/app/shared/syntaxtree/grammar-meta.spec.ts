@@ -181,6 +181,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {},
       });
     });
@@ -202,6 +203,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: { languageName: "l", typeName: "t" },
+        foreignTypes: {},
         types: {},
       });
     });
@@ -225,6 +227,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {},
       });
     });
@@ -260,6 +263,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: { l: { t: { type: "concrete", attributes: [] } } },
       });
     });
@@ -378,6 +382,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [] } },
         },
@@ -424,6 +429,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: {
             t: {
@@ -472,6 +478,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l1: { t: { type: "concrete", attributes: [] } },
           l2: { t: { type: "concrete", attributes: [] } },
@@ -515,6 +522,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [terminalDesc] } },
         },
@@ -557,6 +565,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [terminalDesc] } },
         },
@@ -602,6 +611,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },
         },
@@ -669,6 +679,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [containerDesc] } },
         },
@@ -725,6 +736,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },
         },
@@ -803,6 +815,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },
         },

@@ -50,13 +50,13 @@ RSpec.describe Project do
 
   context "to_full_api_response" do
     it "without resources" do
-      api_response = FactoryBot.create(:project, name: "Test").to_full_api_response
+      api_response = FactoryBot.create(:project, name: {"de" => "Test"}).to_full_api_response
 
       expect(api_response).to validate_against "ProjectFullDescription"
     end
 
     it "with resources that use the same block language" do
-      proj = FactoryBot.create(:project, name: "Test Project")
+      proj = FactoryBot.create(:project, name: {"de" => "Test"})
       b = FactoryBot.create(:block_language, name: "Test Blocklang")
       proj.block_languages << b
 
@@ -72,13 +72,13 @@ RSpec.describe Project do
 
   context "to_project_api_response" do
     it "empty project" do
-      api_response = FactoryBot.create(:project, name: "Test").to_project_api_response
+      api_response = FactoryBot.create(:project, name: {"de" => "Test"}).to_project_api_response
 
       expect(api_response).to validate_against "ProjectDescription"
     end
 
     it "project with source and used block language" do
-      proj = FactoryBot.create(:project, name: "Test")
+      proj = FactoryBot.create(:project, name: {"de" => "Test"})
       proj.project_sources << FactoryBot.create(:project_source, project: proj)
 
       b = FactoryBot.create(:block_language, name: "Test Blocklang")
@@ -92,7 +92,7 @@ RSpec.describe Project do
     end
 
     it "doesn't list grammars or block languages multiple times" do
-      proj = FactoryBot.create(:project, name: "Test")
+      proj = FactoryBot.create(:project, name: {"de" => "Test"})
 
       g = FactoryBot.create(:grammar)
 
@@ -128,7 +128,7 @@ RSpec.describe Project do
     res = FactoryBot.create(:project, slug: "sluggy")
     readable = res.readable_identification
     expect(readable).to include res.id
-    expect(readable).to include res.name
+    expect(readable).to include res.name.inspect
     expect(readable).to include res.slug
   end
 end

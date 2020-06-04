@@ -56,6 +56,10 @@
           "$ref": "#/definitions/NamedLanguages"
         }
       },
+      "required": [
+        "types",
+        "foreignTypes"
+      ],
       "type": "object"
     },
     "LengthRestrictionDescription": {

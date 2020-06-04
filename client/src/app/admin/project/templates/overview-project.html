@@ -1,12 +1,12 @@
 <mat-progress-bar
         conditionalDisplay
-        [_indicator]="this.progress"
+        [_indicator]="this.progress$"
         [_initiator]="false"
         mode="indeterminate"
 ></mat-progress-bar>
 <table
         conditionalDisplay
-        [_indicator]="this.progress"
+        [_indicator]="this.progress$"
         [_initiator]="true"
         class="full-width"
         mat-table
@@ -23,7 +23,7 @@
     <th mat-header-cell *matHeaderCellDef >Name</th>
     <td mat-cell *matCellDef="let project">
       <a [routerLink]="['/', 'editor', project.slug]">
-        {{ project.name }}
+        {{ project.name | currentLanguage }}
       </a>
     </td>
   </ng-container>

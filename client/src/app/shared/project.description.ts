@@ -1,3 +1,5 @@
+import { MultiLangString } from "./multilingual-string.description";
+
 import { TableDescription } from "./schema/schema.description";
 import { GrammarDescription } from "./syntaxtree/grammar.description";
 import { CodeResourceDescription } from "./syntaxtree/coderesource.description";
@@ -15,7 +17,7 @@ export type ProjectSlug = string;
  * characters.
  * @pattern ^[a-zA-Z0-9 \-_\?äöüÄÖÜß:]{4,}$
  */
-export type ProjectName = string;
+export type ProjectName = MultiLangString;
 
 /**
  * The name of a user for a specific project.
@@ -83,7 +85,7 @@ export interface ProjectListDescription {
   slug?: ProjectSlug;
   name: ProjectName;
   public?: boolean;
-  description: string;
+  description: MultiLangString;
   preview?: string;
   indexPageId?: string;
   createdAt?: string;
@@ -131,7 +133,7 @@ export type ProjectUpdateUsedBlockLanguage =
  */
 export interface ProjectUpdateDescription {
   name?: ProjectName;
-  description?: string;
+  description?: MultiLangString;
   activeDatabase?: string;
   preview?: string;
   indexPageId?: string;

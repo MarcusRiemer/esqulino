@@ -16,6 +16,7 @@ import { QueryPreviewComponent } from "./query/query-preview.component";
 import { WorldRenderComponent } from "./truck/world-render.component";
 import { WorldControllerComponent } from "./truck/world-controller.component";
 import { WorldSensorsComponent } from "./truck/world-sensors.component";
+import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
 
 /**
  * Allows registration of available editor components and hands them
@@ -47,6 +48,8 @@ export class EditorComponentsService {
         return new ComponentPortal(WorldControllerComponent);
       case "truck-sensors":
         return new ComponentPortal(WorldSensorsComponent);
+      case "truck-world-editor":
+        return new ComponentPortal(TruckWorldEditorComponent);
     }
   }
 }

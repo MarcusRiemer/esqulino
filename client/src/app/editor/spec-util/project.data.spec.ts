@@ -20,8 +20,8 @@ const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   availableDatabases: {},
   sources: [],
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
-  name: "Project",
-  description: "Default Empty Project",
+  name: { en: "Project" },
+  description: { en: "Default Empty Project" },
   schema: [],
   codeResources: [],
 };

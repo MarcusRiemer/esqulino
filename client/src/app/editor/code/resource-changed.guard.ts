@@ -10,7 +10,6 @@ import { ResourceReferencesService } from "../../shared/resource-references.serv
 
 import { CurrentCodeResourceService } from "../current-coderesource.service";
 
-import { SidebarService } from "../sidebar.service";
 import { ProjectService } from "../project.service";
 
 /**

@@ -40,6 +40,7 @@ import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
 import { TruckWorldMouseService } from "./truck/truck-world-mouse.service";
 import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor.service";
+import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
 
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 
@@ -65,6 +66,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     WorldControllerComponent,
     WorldSensorsComponent,
     WorldSelectorComponent,
+    TruckWorldEditorComponent,
     UserFunctionsSidebarComponent,
     UnknownCodeResourceComponent,
     DefinedTypesSidebarComponent,
@@ -83,6 +85,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     WorldRenderComponent,
     WorldControllerComponent,
     WorldSensorsComponent,
+    TruckWorldEditorComponent,
     UserFunctionsSidebarComponent,
     DefinedTypesSidebarComponent,
   ],

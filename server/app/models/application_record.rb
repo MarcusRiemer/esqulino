@@ -51,7 +51,7 @@ class ApplicationRecord < ActiveRecord::Base
 
     printed_name = "<no name>"
     if (has_name and not name.nil?)
-      printed_name = "\"" + name + "\""
+      printed_name = name.inspect
     end
 
     if (has_name and has_slug)

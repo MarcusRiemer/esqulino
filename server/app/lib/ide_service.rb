@@ -45,7 +45,7 @@ class BaseIdeService
 
       grammar_description = ensure_valid_document(
         "GrammarDocument",
-        block_language.grammar.document
+        block_language.grammar.document.transform_keys { |k| k.camelize(:lower) }
       )
       block_language_description = ensure_valid_document(
         "BlockLanguageListDescription",

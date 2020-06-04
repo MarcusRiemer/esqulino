@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "regex",
   programmingLanguageId: "regex",
   root: { languageName: "regex", typeName: "root" },
+  foreignTypes: {},
   types: {
     regex: {
       constant: {
