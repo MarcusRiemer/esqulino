@@ -9,21 +9,21 @@ import {
   OnChanges,
 } from "@angular/core";
 
-import { MultilingualString } from "./multilingual-string.description";
+import { MultiLangString } from "./multilingual-string.description";
 
 @Component({
   selector: "multilingual-editor",
   templateUrl: "./templates/multilingual-editor.html",
 })
 export class MultiLingualEditorComponent implements OnChanges {
-  @Input() original: MultilingualString;
-  @Input() translated: MultilingualString;
+  @Input() original: MultiLangString;
+  @Input() translated: MultiLangString;
   @Input() control: string = "input";
   @Input() language: string = this.localeID;
   @Input() placeholder: string = "";
 
-  @Output() originalChange = new EventEmitter<MultilingualString>();
-  @Output() translatedChange = new EventEmitter<MultilingualString>();
+  @Output() originalChange = new EventEmitter<MultiLangString>();
+  @Output() translatedChange = new EventEmitter<MultiLangString>();
 
   constructor(@Inject(LOCALE_ID) readonly localeID: string) {}
 

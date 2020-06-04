@@ -10,6 +10,7 @@ export const GRAMMAR_BOOLEAN_DESCRIPTION: GrammarDescription = {
   programmingLanguageId: "test",
   slug: "test-expr",
   root: { languageName: "expr", typeName: "booleanExpression" },
+  foreignTypes: {},
   types: {
     expr: {
       booleanExpression: {

@@ -8,11 +8,7 @@ concise_attributes:
   value_before_type_cast: drei-fragezeichen
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Drei Fragezeichen
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Datensammlung zu den Büchern und Hörspielen der drei Detektive
-    aus Rocky Beach.
+  value_before_type_cast: '"de"=>"Drei Fragezeichen", "en"=>"Three Investigators"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
@@ -26,12 +22,17 @@ concise_attributes:
   value_before_type_cast: 2019-10-04 11:48:47.323288000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-10-11 11:37:51.686594000 Z
+  value_before_type_cast: 2020-05-29 17:54:33.192344000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 2440b7b7-d2f9-44e1-9103-43af30c04caf
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000001
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Datensammlung zu den Büchern und Hörspielen der
+    drei Detektive aus Rocky Beach.", "en"=>"Data collection on the books and radio
+    plays of the three detectives from Rocky Beach."'
 new_record: false
 active_record_yaml_version: 2

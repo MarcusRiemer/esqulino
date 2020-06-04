@@ -93,6 +93,13 @@ export class BlockRenderComponent {
   }
 
   /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockBlock(block: VisualBlockDescriptions.EditorBlockBase) {
+    return block as VisualBlockDescriptions.EditorBlock;
+  }
+
+  /**
    * @return The blocks that should be rendered between iterated blocks
    */
   get iteratorSeparatorBlocks() {

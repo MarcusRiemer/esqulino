@@ -172,8 +172,8 @@ RSpec.describe GrammarsController, type: :request do
       g = Grammar.find(json_data['id'])
       expect(g.name).to eq "Spec Grammar"
       expect(g.slug).to eq "spec"
-      expect(g.model["root"]).to eq({ "languageName" => "spec", "typeName" => "root"})
-      expect(g.model["types"]["spec"]["root"]).to eq({ "type" => "concrete", "attributes" => [] })
+      expect(g.root).to eq({ "languageName" => "spec", "typeName" => "root"})
+      expect(g.types["spec"]["root"]).to eq({ "type" => "concrete", "attributes" => [] })
 
       expect(response.status).to eq(200)
     end
@@ -219,54 +219,45 @@ RSpec.describe GrammarsController, type: :request do
 
       orig_grammar.reload
       expect(orig_grammar.name).to eq upda_grammar['name']
-      expect(orig_grammar.model["types"]).to eq Hash.new
-      expect(orig_grammar.model["root"]).to eq ({ "languageName" => "spec", "typeName" => "root" })
+      expect(orig_grammar.types).to eq Hash.new
+      expect(orig_grammar.root).to eq ({ "languageName" => "spec", "typeName" => "root" })
     end
 
-    it 'Update with empty model' do
+    it 'Update with empty root node' do
       original = FactoryBot.create(:grammar, :model_single_type)
 
-      params_update = FactoryBot
-                        .attributes_for(:grammar,
-                                        name: "Updated empty",
-                                        model: Hash.new)
-                        .transform_keys { |k| k.to_s.camelize(:lower) }
-
-      # Make the model part of the root object
-      params_update_req = params_update.merge(params_update["model"])
-      params_update_req.delete("model")
+      params_update = { "root" => nil }
 
       put "/api/grammars/#{original.id}",
           :headers => json_headers,
-          :params => params_update_req.to_json
+          :params => params_update.to_json
 
-      expect(response.status).to eq(204)
+      if (not response.body.blank?) then
+        json_data = JSON.parse(response.body)
+        expect(json_data.fetch('errors', [])).to eq []
+      end
+
       refreshed = Grammar.find(original.id)
-      expect(original.name).not_to eq refreshed.name
-      expect(original.model).not_to eq refreshed.model
+      expect(original.root).not_to eq refreshed.root
     end
 
-    it 'Update with invalid model' do
+    it 'Update with invalid root type' do
       original = FactoryBot.create(:grammar, :model_single_type)
 
       params_update = FactoryBot
                         .attributes_for(:grammar,
                                         name: "Updated empty",
-                                        model: { "foo" => "bar" })
+                                        root: { "foo" => "bar" })
                         .transform_keys { |k| k.to_s.camelize(:lower) }
-
-      # Make the model part of the root object
-      params_update_req = params_update.merge(params_update["model"])
-      params_update_req.delete("model")
 
       put "/api/grammars/#{original.id}",
           :headers => json_headers,
-          :params => params_update_req.to_json
+          :params => params_update.to_json
 
       expect(response.status).to eq(400)
       refreshed = Grammar.find(original.id)
       expect(original.name).to eq refreshed.name
-      expect(original.model).to eq refreshed.model
+      expect(original.root).to eq refreshed.root
     end
 
     it 'Update attempting to change the ID' do

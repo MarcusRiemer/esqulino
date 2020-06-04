@@ -62,6 +62,10 @@
           "$ref": "#/definitions/NamedLanguages"
         }
       },
+      "required": [
+        "foreignTypes",
+        "types"
+      ],
       "type": "object"
     },
     "LengthRestrictionDescription": {
@@ -637,6 +641,7 @@
     },
     "NodeVisualContainerDescription": {
       "additionalProperties": false,
+      "description": "Groups together various nodes in a certain kind of layout.",
       "properties": {
         "children": {
           "items": {
@@ -648,11 +653,7 @@
           "type": "string"
         },
         "orientation": {
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/Orientation"
         },
         "tags": {
           "items": {
@@ -677,28 +678,7 @@
     "OccursDescription": {
       "anyOf": [
         {
-          "enum": [
-            "1"
-          ],
-          "type": "string"
-        },
-        {
-          "enum": [
-            "?"
-          ],
-          "type": "string"
-        },
-        {
-          "enum": [
-            "+"
-          ],
-          "type": "string"
-        },
-        {
-          "enum": [
-            "*"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/OccursString"
         },
         {
           "$ref": "#/definitions/OccursSpecificDescription"
@@ -722,6 +702,22 @@
         "maxOccurs"
       ],
       "type": "object"
+    },
+    "OccursString": {
+      "enum": [
+        "1",
+        "?",
+        "+",
+        "*"
+      ],
+      "type": "string"
+    },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
     },
     "QualifiedTypeName": {
       "additionalProperties": false,

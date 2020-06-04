@@ -1863,6 +1863,130 @@ describe("Grammar Validation", () => {
     );
   });
 
+  describe(`Container-related`, () => {
+    describe(`Property in container`, () => {
+      const g = singleLanguageGrammar("g", "r", {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "property",
+              base: "integer",
+              name: "i1",
+            },
+          ],
+        },
+      });
+
+      const v = new Validator([g]);
+
+      it(`Tree missing property`, () => {
+        const astDesc: AST.NodeDescription = {
+          language: "g",
+          name: "r",
+        };
+
+        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.MissingProperty,
+        ]);
+      });
+
+      it(`Tree with property`, () => {
+        const astDesc: AST.NodeDescription = {
+          language: "g",
+          name: "r",
+          properties: {
+            i1: "0",
+          },
+        };
+
+        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+    });
+
+    describe(`Childgroup in container`, () => {
+      const g = singleLanguageGrammar("g", "r", {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              children: [
+                {
+                  type: "sequence",
+                  name: "c",
+                  nodeTypes: ["t1"],
+                },
+              ],
+            },
+          ],
+        },
+        t1: {
+          type: "concrete",
+        },
+      });
+
+      const v = new Validator([g]);
+
+      it(`Tree missing childgroup`, () => {
+        const astDesc: AST.NodeDescription = {
+          language: "g",
+          name: "r",
+        };
+
+        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.MissingChild,
+        ]);
+      });
+
+      it(`Tree with correct childgroup`, () => {
+        const astDesc: AST.NodeDescription = {
+          language: "g",
+          name: "r",
+          children: {
+            c: [
+              {
+                language: "g",
+                name: "t1",
+              },
+            ],
+          },
+        };
+
+        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+
+      it(`Tree with overful childgroup`, () => {
+        const astDesc: AST.NodeDescription = {
+          language: "g",
+          name: "r",
+          children: {
+            c: [
+              {
+                language: "g",
+                name: "t1",
+              },
+              {
+                language: "g",
+                name: "t1",
+              },
+            ],
+          },
+        };
+
+        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.SuperflousChild,
+        ]);
+      });
+    });
+  });
+
   describe(`Name-related`, () => {
     it(`Name clash: Property name "foo" defined twice`, () => {
       const g = singleLanguageGrammar("spec", "root", {

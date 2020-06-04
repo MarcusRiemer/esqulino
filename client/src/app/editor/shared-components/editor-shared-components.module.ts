@@ -4,10 +4,17 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
 import { DatabaseEmptyComponent } from "./database-empty.component";
+import { SidebarItemHost } from "./sidebar-item-host.component";
 
 @NgModule({
   imports: [CommonModule, FormsModule, RouterModule],
-  declarations: [DatabaseEmptyComponent],
-  exports: [CommonModule, FormsModule, RouterModule, DatabaseEmptyComponent],
+  declarations: [DatabaseEmptyComponent, SidebarItemHost],
+  exports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    DatabaseEmptyComponent,
+    SidebarItemHost,
+  ],
 })
 export class EditorSharedComponentsModule {}

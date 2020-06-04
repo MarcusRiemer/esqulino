@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "css",
   programmingLanguageId: "css",
   root: { languageName: "css", typeName: "document" },
+  foreignTypes: {},
   types: {
     css: {
       document: {

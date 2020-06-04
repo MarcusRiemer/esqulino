@@ -3,25 +3,26 @@ FactoryBot.define do
     name { "Spec Grammar" }
     sequence (:slug) { |n| "grammar-#{n}" }
     association :programming_language
-    model { Hash.new }
+    types { Hash.new }
+    foreign_types { Hash.new }
 
     # A grammar that has a single type that is the root
     trait :model_single_type do
-      model {
-        ({
-           "types" => {
-             "spec" => {
-               "root" => {
-                 "type" => "concrete",
-                 "attributes" => []
-               }
-             }
-           },
-           "root" => {
-             "languageName" => "spec",
-             "typeName" => "root"
-           }
-         })
+      types {
+        {
+          "spec" => {
+            "root" => {
+              "type" => "concrete",
+              "attributes" => []
+            }
+          }
+        }
+      }
+      root {
+        {
+          "languageName" => "spec",
+          "typeName" => "root"
+        }
       }
     end
 

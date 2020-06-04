@@ -1,21 +1,10 @@
 import { Component, Inject, LOCALE_ID } from "@angular/core";
 
 import { environment } from "./../../environments/environment";
-import { NaturalLanguagesService } from "../natural-languages.service";
-
-/**
- * @return The unicode string that represents a flag for the given locale
- */
-function localeToFlag(locale: string): string {
-  switch (locale) {
-    case "de":
-      return "🇩🇪";
-    case "en":
-      return "🇬🇧";
-    default:
-      return "🏳";
-  }
-}
+import {
+  NaturalLanguagesService,
+  localeToFlag,
+} from "../natural-languages.service";
 
 export const locales = environment.availableLanguages.map((l) => {
   return Object.assign({}, l, { flag: localeToFlag(l.token) });

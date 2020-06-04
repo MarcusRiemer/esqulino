@@ -2,7 +2,7 @@
   "$ref": "#/definitions/NewsUpdateDescription",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "MultilingualString": {
+    "MultiLangString": {
       "additionalProperties": {
         "type": "string"
       },
@@ -19,11 +19,11 @@
           ]
         },
         "text": {
-          "$ref": "#/definitions/MultilingualString",
+          "$ref": "#/definitions/MultiLangString",
           "description": "Internal Markdown version of the text"
         },
         "title": {
-          "$ref": "#/definitions/MultilingualString"
+          "$ref": "#/definitions/MultiLangString"
         },
         "userId": {
           "type": "string"

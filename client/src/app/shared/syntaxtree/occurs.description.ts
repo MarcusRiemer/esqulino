@@ -9,8 +9,8 @@ export interface OccursSpecificDescription {
 }
 
 export const OccursString = StringUnion("1", "?", "+", "*");
-
-export type OccursString = typeof OccursString.type;
+// TODO: Using `typeof OccursString.type` crashes the JSON generator
+export type OccursString = "1" | "?" | "+" | "*";
 
 /**
  * Describes limits for occurences.

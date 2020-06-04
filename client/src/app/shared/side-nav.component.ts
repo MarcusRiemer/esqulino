@@ -4,9 +4,6 @@ import {
   LOCALE_ID,
   Input,
   ViewChild,
-  OnInit,
-  AfterViewChecked,
-  AfterViewInit,
   OnDestroy,
 } from "@angular/core";
 import { BrowserService } from "./browser.service";

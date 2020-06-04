@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_27_081721) do
+ActiveRecord::Schema.define(version: 2020_05_29_045910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -47,11 +47,14 @@ ActiveRecord::Schema.define(version: 2020_02_27_081721) do
   create_table "grammars", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "slug"
-    t.jsonb "model", null: false
+    t.jsonb "model"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "programming_language_id"
     t.uuid "generated_from_id"
+    t.jsonb "types", default: {}
+    t.jsonb "foreign_types", default: {}
+    t.jsonb "root"
     t.index ["generated_from_id"], name: "index_grammars_on_generated_from_id"
     t.index ["programming_language_id"], name: "index_grammars_on_programming_language_id"
     t.index ["slug"], name: "index_grammars_on_slug", unique: true
@@ -120,8 +123,8 @@ ActiveRecord::Schema.define(version: 2020_02_27_081721) do
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.text "description"
+    t.string "name_single"
+    t.text "description_single"
     t.boolean "public", default: false, null: false
     t.uuid "preview"
     t.uuid "index_page_id"
@@ -130,6 +133,8 @@ ActiveRecord::Schema.define(version: 2020_02_27_081721) do
     t.string "slug"
     t.uuid "default_database_id"
     t.uuid "user_id"
+    t.hstore "name", default: {}, null: false
+    t.hstore "description", default: {}, null: false
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"

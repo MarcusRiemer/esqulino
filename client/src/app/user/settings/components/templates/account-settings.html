@@ -18,7 +18,7 @@
   <may-perform [payload]="performData.availableProviders">
     <provider-linking
       *ngIf="(identities | async) as identities"
-      (trigger)="onTrigger()"
+      (trigger)="onTrigger(identities)"
     ></provider-linking>
   </may-perform>
 </div>

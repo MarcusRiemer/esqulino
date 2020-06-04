@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-9">
+    <div class="btn-group btn-group-sm d-flex pl-1" role="group">
+      <button class="btn btn-outline-primary flex-grow-1" (click)="undo()">
+        <i class="fa fa-undo"></i>
+        Schritt zurück
+      </button>
+      <button
+        class="btn btn-outline-primary flex-grow-1"
+        (click)="resetChanges()"
+      >
+        <i class="fa fa-ban"></i>
+        Änderungen zurücksetzten
+      </button>
+      <button
+        class="btn btn-outline-primary flex-grow-1"
+        (click)="resetEverything()"
+      >
+        <i class="fa fa-trash"></i>
+        Alles löschen
+      </button>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="form-group row">
+      <label for="world-size-x" class="col-2 col-form-label">X</label>
+      <div class="col-10">
+        <input
+          class="form-control"
+          id="world-size-x"
+          type="number"
+          min="1"
+          max="25"
+          [(ngModel)]="sizeX"
+        />
+      </div>
+      <label for="world-size-y" class="col-2 col-form-label">Y</label>
+      <div class="col-10">
+        <input
+          class="form-control"
+          id="world-size-y"
+          type="number"
+          min="1"
+          max="25"
+          [(ngModel)]="sizeY"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row editor-tile-selection">
+  <div class="col-12 card-deck text-center">
+    <div class="card">
+      <div class="card-header">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="selectRoad()"
+          [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Road"
+          [disabled]="(feature$ | async).feature == tileFeatureType.Road"
+        >
+          <span class="editor-tile editor-tile-road">
+            <span class="fa fa-paint-brush"></span>
+          </span>
+        </button>
+      </div>
+      <div class="card-body">
+        <span class="card-text">Straße</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="selectTrafficLight()"
+          [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.TrafficLight"
+          [disabled]="(feature$ | async).feature == tileFeatureType.TrafficLight"
+        >
+          <span class="editor-tile editor-tile-trafficlight"></span>
+        </button>
+      </div>
+      <div class="card-body">
+        <span class="text-center">Ampel</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="btn-group-vertical" role="group" aria-label="First group">
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="selectFreight('Red')"
+            [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Red'"
+            [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Red'"
+          >
+            <span
+              class="editor-tile-3 editor-tile-freight editor-tile-freight-red"
+            ></span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="selectFreight('Green')"
+            [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Green'"
+            [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Green'"
+          >
+            <span
+              class="editor-tile-3 editor-tile-freight editor-tile-freight-green"
+            ></span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="selectFreight('Blue')"
+            [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Blue'"
+            [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Blue'"
+          >
+            <span
+              class="editor-tile-3 editor-tile-freight editor-tile-freight-blue"
+            ></span>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-text">Fracht</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="btn-group-vertical" role="group" aria-label="First group">
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="selectFreightTarget('Red')"
+            [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Red'"
+            [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Red'"
+          >
+            <span
+              class="editor-tile-3 editor-tile-freight editor-tile-freight-target-red"
+            ></span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="selectFreightTarget('Green')"
+            [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Green'"
+            [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Green'"
+          >
+            <span
+              class="editor-tile-3 editor-tile-freight editor-tile-freight-target-green"
+            ></span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="selectFreightTarget('Blue')"
+            [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Blue'"
+            [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Blue'"
+          >
+            <span
+              class="editor-tile-3 editor-tile-freight editor-tile-freight-target-blue"
+            ></span>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-text">Fracht Ziel</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="selectTruckSpawn()"
+          [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.TruckSpawn"
+          [disabled]="(feature$ | async).feature == tileFeatureType.TruckSpawn"
+        >
+          <span class="editor-tile editor-tile-truck"></span>
+        </button>
+      </div>
+      <div class="card-body">
+        <span class="card-text">Lastwagen Start</span>
+      </div>
+    </div>
+  </div>
+</div>

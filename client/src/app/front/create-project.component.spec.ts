@@ -2,6 +2,7 @@ import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 import { TestBed } from "@angular/core/testing";
+import { LOCALE_ID } from "@angular/core";
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -15,7 +16,7 @@ import { ServerApiService } from "../shared";
 import { EmptyComponent } from "../shared/empty.component";
 
 describe("CreateProjectComponent", () => {
-  async function createComponent() {
+  async function createComponent(localeId: string = "de") {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([
@@ -25,7 +26,7 @@ describe("CreateProjectComponent", () => {
         HttpClientTestingModule,
         MatCardModule,
       ],
-      providers: [ServerApiService],
+      providers: [{ provide: LOCALE_ID, useValue: localeId }, ServerApiService],
       declarations: [
         CreateProjectComponent,
         JavascriptRequiredComponent,
@@ -41,6 +42,7 @@ describe("CreateProjectComponent", () => {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
+      localeId,
     };
   }
 
@@ -59,7 +61,7 @@ describe("CreateProjectComponent", () => {
     const httpTestingController = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
 
-    c.component.params.name = "Name des Projekts";
+    c.component.params.name = { de: "Name des Projekts" };
     c.component.params.slug = "name-des-projekts";
 
     const request = c.component.createProject();

@@ -10,7 +10,6 @@ import { ServerApiService } from "./serverapi.service";
 import { ListData } from "./list-data";
 import { IndividualData } from "./individual-data";
 import { ServerTasksService } from "./server-tasks.service";
-import { MutateBlockLanguageService } from "./blocklanguage-data.service";
 
 @Injectable()
 export class IndividualProjectDataService extends IndividualData<

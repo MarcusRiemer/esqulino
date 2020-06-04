@@ -8,10 +8,7 @@ concise_attributes:
   value_before_type_cast: olympic
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Olympia
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Statistiken zu olympischen Sommerspielen
+  value_before_type_cast: '"de"=>"Olympia", "en"=>"Olympic Summergames"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
@@ -25,12 +22,16 @@ concise_attributes:
   value_before_type_cast: 2018-02-26 10:35:11.345867000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:22:01.817985000 Z
+  value_before_type_cast: 2020-05-29 17:59:16.486318000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Statistiken zu olympischen Sommerspielen", "en"=>"Statistics
+    on Olympic Summer Games"'
 new_record: false
 active_record_yaml_version: 2

@@ -30,6 +30,16 @@ export interface EnvironmentDescription {
     date: string;
   };
 
+  /**
+   * Languages that are available for the client and (possibly) also
+   * for the database.
+   *
+   * The order this languages appear in defines the order in which lookups
+   * are made for missing languages. So if a multi lingual string has values
+   * for "de" and "en" but the current language is "fr", the value that
+   * comes first in this configuration should be displayed, possibly
+   * alongside a little warning.
+   */
   availableLanguages: {
     token: string;
     name: string;

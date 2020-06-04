@@ -28,8 +28,8 @@ export function convertGrammarTreeInstructions(
   // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
-    editorComponents: d.editorComponents || defaultEditorComponents,
-    sidebars: (d.staticSidebars || []).map((sidebar) =>
+    editorComponents: d.editorComponents ?? defaultEditorComponents,
+    sidebars: (d.staticSidebars ?? []).map((sidebar) =>
       generateSidebar(g, sidebar)
     ),
     rootCssClasses: [
@@ -42,7 +42,7 @@ export function convertGrammarTreeInstructions(
   // Create a visual representation for each concrete type
   const visualizedNodes: EditorBlockDescription[] = [];
 
-  Object.entries(g.types).forEach(([langName, types]) => {
+  Object.entries(g.types ?? {}).forEach(([langName, types]) => {
     const vis = Object.entries(types)
       .filter(([_, typeDesc]) => typeDesc.type === "concrete")
       .map(

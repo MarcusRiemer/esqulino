@@ -15,6 +15,7 @@ import { BlockLanguage } from "../shared/block";
 import { DatabaseSchemaAdditionalContext } from "./syntaxtree/sql/sql.validator";
 import { ResourceReferencesService } from "./resource-references.service";
 import { isValidId } from "./util";
+import { MultiLangString } from "./multilingual-string.description";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -43,8 +44,8 @@ export class Project implements Saveable {
   public schema: Schema;
 
   private _id: string;
-  private _name: string;
-  private _description: string;
+  private _name: MultiLangString;
+  private _description: MultiLangString;
 
   private _currentDatabase: string;
   private _availableDatabases: { [id: string]: AvailableDatabaseDescription };
@@ -215,7 +216,7 @@ export class Project implements Saveable {
   /**
    * @param value The name of this project.
    */
-  set name(value: string) {
+  set name(value: MultiLangString) {
     this._name = value;
     this.markSaveRequired();
   }
@@ -230,7 +231,7 @@ export class Project implements Saveable {
   /**
    * @param value The description of this project.
    */
-  set description(value: string) {
+  set description(value: MultiLangString) {
     this._description = value;
     this.markSaveRequired();
   }

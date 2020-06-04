@@ -13,7 +13,7 @@
       &nbsp;
       <span i18n="@@saveNewsAndBack">Aktualisieren</span>
     </button>
-    <button *ngIf="!isCreatingNews" (click)="onUpdate()" mat-button>
+    <button *ngIf="!isCreatingNews" (click)="onUpdate('stay')" mat-button>
       <span class="fa fa-pencil"></span>
       &nbsp;
       <span i18n="@@saveNewsAndStay">Aktualisieren (bleiben)</span>

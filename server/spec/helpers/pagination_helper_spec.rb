@@ -12,11 +12,11 @@ RSpec.describe PaginationHelper, type: :helper do
     end
     it "works fine with a valid key" do
       allow(helper).to receive(:list_params).and_return(order_field:"name")
-      expect{helper.pagination_response(Grammar,Grammar.scope_list,options: {})}.not_to raise_error(EsqulinoError::InvalidOrder)
+      expect{helper.pagination_response(Grammar,Grammar.scope_list,options: {})}.not_to raise_error()
     end
-    it "throws exception when using invalid order directions" do
+    it "works fine when using valid order & direction" do
       allow(helper).to receive(:list_params).and_return(order_direction:"asc",order_field:"name")
-      expect{helper.pagination_response(Grammar,Grammar.scope_list,options: {})}.not_to raise_error(EsqulinoError::InvalidOrder)
+      expect{helper.pagination_response(Grammar,Grammar.scope_list,options: {})}.not_to raise_error()
     end
   end
   describe "Project#pagination_response" do
@@ -30,11 +30,11 @@ RSpec.describe PaginationHelper, type: :helper do
     end
     it "works fine with a valid key" do
       allow(helper).to receive(:list_params).and_return(order_field:"name")
-      expect{helper.pagination_response(Project,Project.all,options: {})}.not_to raise_error(EsqulinoError::InvalidOrder)
+      expect{helper.pagination_response(Project,Project.all,options: {})}.not_to raise_error()
     end
-    it "throws exception when using invalid order directions" do
+    it "works fine when using valid order & direction" do
       allow(helper).to receive(:list_params).and_return(order_direction:"asc",order_field:"name")
-      expect{helper.pagination_response(Project,Project.all,options: {})}.not_to raise_error(EsqulinoError::InvalidOrder)
+      expect{helper.pagination_response(Project,Project.all,options: {})}.not_to raise_error()
     end
   end
   describe "BlockLanguage#pagination_response" do
@@ -48,11 +48,11 @@ RSpec.describe PaginationHelper, type: :helper do
     end
     it "works fine with a valid key" do
       allow(helper).to receive(:list_params).and_return(order_field:"name")
-      expect{helper.pagination_response(BlockLanguage,BlockLanguage.scope_list,options: {})}.not_to raise_error(EsqulinoError::InvalidOrder)
+      expect{helper.pagination_response(BlockLanguage,BlockLanguage.scope_list,options: {})}.not_to raise_error()
     end
-    it "throws exception when using invalid order directions" do
+    it "works fine when using valid order & direction" do
       allow(helper).to receive(:list_params).and_return(order_direction:"asc",order_field:"name")
-      expect{helper.pagination_response(BlockLanguage,BlockLanguage.scope_list,options: {})}.not_to raise_error(EsqulinoError::InvalidOrder)
+      expect{helper.pagination_response(BlockLanguage,BlockLanguage.scope_list,options: {})}.not_to raise_error()
     end
   end
 end

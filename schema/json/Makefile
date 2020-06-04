@@ -2,6 +2,8 @@
 SRC_PATH = $(realpath ../../client/src/app)
 SRC_PROJECT = $(realpath ../../client/src/tsconfig.app.json)
 
+GIT_LS_CHANGED_FILES = git ls-files --modified $(JSON_SCHEMA_FILES)
+
 include Makefile.json
 
 # Generating all schemas
@@ -20,6 +22,11 @@ clean-deps : msg-pre-clean-deps
 clean : msg-pre-clean
 	rm -f $(JSON_SCHEMA_FILES)
 
+# Ensures that no files have been modified after running the generator again
+verify-cached-schemas :
+	@make -j -B all
+	@test -z "`$(GIT_LS_CHANGED_FILES)`" || (echo "There are modified schema files"; $(GIT_LS_CHANGED_FILES); exit 1) >&2
+
 ##################################
 # Messaging targets
 ##################################
@@ -32,6 +39,6 @@ msg-pre-clean :
 msg-pre-schema :
 	-@$(TPUT_BIN) setaf 2; echo "## Schema : Re-Generating out-of-date schemas ..."; $(TPUT_BIN) sgr0
 
-.PHONY : all clean install-deps msg-pre-schema
+.PHONY : all clean install-deps msg-pre-schema verify-cached-schemas
 
 include ../../Makefile.common

@@ -31,7 +31,7 @@ export const ValidatorFunctions: { [name: string]: ValidationFunction } = {
 /**
  * Finds all references in the given object and its children.
  */
-export function* allReferences(values: any): Iterable<ParameterReference> {
+export function* allReferences(values: unknown): Iterable<ParameterReference> {
   if (typeof values === "object" && !!values) {
     if (isParameterReference(values)) {
       yield values;

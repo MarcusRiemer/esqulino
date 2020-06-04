@@ -16,7 +16,6 @@ import { NavbarComponent } from "./navbar.component";
 import { SidebarLoaderComponent } from "./sidebar-loader.component";
 import { SettingsComponent } from "./project-settings/settings.component";
 import { QueryIconComponent } from "./query-icon.component";
-import { SidebarItemHost } from "./sidebar-item-host.component";
 import { TrashComponent } from "./trash.component";
 import { TrashService } from "./trash.service";
 import { ContenteditableModel } from "./contenteditable-model.directive";
@@ -44,7 +43,6 @@ import { EditorToolbarService } from "./toolbar.service";
     SidebarLoaderComponent,
     SettingsComponent,
     QueryIconComponent,
-    SidebarItemHost,
     ContenteditableModel,
     TrashComponent,
     SourceIconComponent,
@@ -62,7 +60,6 @@ import { EditorToolbarService } from "./toolbar.service";
     SchemaEditorModule,
 
     QueryIconComponent,
-    SidebarItemHost,
     TrashComponent,
     ContenteditableModel,
     SourceIconComponent,

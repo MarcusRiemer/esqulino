@@ -49,6 +49,7 @@ class ProjectsController < ApplicationController
   def update
     begin
       authorize current_project
+
       current_project.update project_update_params # Simple properties
       current_project.update project_used_block_languages_params # Used block languages
 
@@ -83,7 +84,7 @@ class ProjectsController < ApplicationController
 
   # These attributes are mandatory when a project is created
   def project_creation_params
-    to_return = params.permit(:name, :slug)
+    to_return = params.permit(:slug, name: {})
       .transform_keys { |k| k.underscore }
 
     to_return["user"] = current_user
@@ -93,7 +94,7 @@ class ProjectsController < ApplicationController
 
   # These attributes may be changed once a project has been created
   def project_update_params
-    params.permit(:name, :description, :indexPageId, :preview)
+    params.permit(:indexPageId, :preview, name: {}, description: {})
       .transform_keys { |k| k.underscore }
   end
 

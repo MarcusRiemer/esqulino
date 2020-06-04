@@ -13,4 +13,9 @@ class ApplicationMailer < ActionMailer::Base
   def project_site_url
     Rails.configuration.sqlino[:project_domains][0]
   end
+
+  # The locale that is used to send the mail
+  def locale
+    "en"
+  end
 end

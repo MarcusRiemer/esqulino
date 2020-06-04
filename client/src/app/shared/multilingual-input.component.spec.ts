@@ -1,10 +1,10 @@
+import { LOCALE_ID } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 
 import { MultiLingualInputComponent } from "./multilingual-input.component";
-import { LOCALE_ID } from "@angular/core";
-import { MultilingualString } from "./multilingual-string.description";
+import { MultiLangString } from "./multilingual-string.description";
 
 describe("Component: MultilingualInput", () => {
   async function createComponent(localeId: string) {
@@ -31,7 +31,7 @@ describe("Component: MultilingualInput", () => {
   it("testing the input control", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = {};
+    const mulString: MultiLangString = {};
 
     c.component.editingString = mulString;
     c.component.control = "input";
@@ -49,7 +49,7 @@ describe("Component: MultilingualInput", () => {
   it("testing the textarea control", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = {};
+    const mulString: MultiLangString = {};
 
     c.component.editingString = mulString;
     c.component.control = "textarea";
@@ -67,7 +67,7 @@ describe("Component: MultilingualInput", () => {
   it("testing the textarea control without language", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = {};
+    const mulString: MultiLangString = {};
 
     c.component.editingString = mulString;
     c.component.control = "textarea";
@@ -84,7 +84,7 @@ describe("Component: MultilingualInput", () => {
   it("testing the component without control", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = { de: "Test" };
+    const mulString: MultiLangString = { de: "Test" };
 
     c.component.editingString = mulString;
     c.component.placeholder = "Informationen";
@@ -113,7 +113,7 @@ describe("Component: MultilingualInput", () => {
   it("deleting a language", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = { de: "Test" };
+    const mulString: MultiLangString = { de: "Test" };
 
     c.component.editingString = mulString;
     c.component.placeholder = "Informationen";

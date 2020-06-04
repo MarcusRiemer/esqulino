@@ -8,9 +8,7 @@ concise_attributes:
   value_before_type_cast: Test
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Test
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
+  value_before_type_cast: '"de"=>"Test"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -23,12 +21,15 @@ concise_attributes:
   value_before_type_cast: 2019-06-04 14:48:12.659782000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-06-04 14:50:33.822525000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.252967000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b8c133b2-eda7-4664-ae9a-dac928b20dd5
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: ''
 new_record: false
 active_record_yaml_version: 2

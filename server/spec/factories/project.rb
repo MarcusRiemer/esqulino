@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :project do
-    sequence(:name) { |n| "Spec Project #{n}"}
+    sequence(:name) { |n| {"en" => "Spec Project #{n}"} }
     sequence(:slug) { |n| "project-#{n}" }
-    description { "Generated on the fly, used for tests" }
+    description { {"en" => "Generated on the fly, used for tests" } }
     index_page_id { nil }
     public { false }
     association :user

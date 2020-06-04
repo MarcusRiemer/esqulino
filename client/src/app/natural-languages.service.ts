@@ -3,6 +3,21 @@ import { Location, DOCUMENT } from "@angular/common";
 
 import { LinkService } from "./link.service";
 import { environment } from "../environments/environment";
+import { MultiLangString } from "./shared/multilingual-string.description";
+
+/**
+ * @return The unicode string that represents a flag for the given locale
+ */
+export function localeToFlag(locale: string): string {
+  switch (locale) {
+    case "de":
+      return "🇩🇪";
+    case "en":
+      return "🇬🇧";
+    default:
+      return "🏳";
+  }
+}
 
 /**
  * Available natural languages and their URLs
@@ -17,6 +32,8 @@ export class NaturalLanguagesService {
     @Inject(LOCALE_ID)
     private readonly _localeId: string
   ) {}
+
+  public readonly availableLanguages = environment.availableLanguages;
 
   updateRootLangAttribute() {
     const htmlElement = this.document.querySelector("html");
@@ -48,11 +65,42 @@ export class NaturalLanguagesService {
   /**
    * @return The current URL for the given language token.
    */
-  public urlForLanguage(langToken: string, protocol: "//" | "https://" = "//") {
+  urlForLanguage(langToken: string, protocol: "//" | "https://" = "//") {
     const host =
       langToken == "de"
         ? environment.canonicalHost
         : langToken + "." + environment.canonicalHost;
     return protocol + host + this.currentPath;
+  }
+
+  /**
+   * Attempts to find the best matching locale id for the given string.
+   */
+  resolveLocaleId(value: MultiLangString): string {
+    const presentLanguages = Object.keys(value);
+
+    // Match of current language?
+    if (presentLanguages.includes(this._localeId)) {
+      return this._localeId;
+    }
+
+    // Try configured languages
+    const configLanguages = this.availableLanguages;
+    for (let i = 0; i < configLanguages.length; ++i) {
+      const currToken = configLanguages[i].token;
+      if (presentLanguages.includes(currToken)) {
+        return currToken;
+      }
+    }
+
+    // Select first language that is present
+    return presentLanguages[0];
+  }
+
+  /**
+   * Attempts to find the best matching value of the given string.
+   */
+  resolveString(value: MultiLangString): string {
+    return value[this.resolveLocaleId(value)];
   }
 }

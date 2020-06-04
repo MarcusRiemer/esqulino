@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 
 import { delay, map, tap } from "rxjs/operators";
+import { combineLatest } from "rxjs";
 
 import { BrowserService } from "../shared/browser.service";
+import { NaturalLanguagesService } from "../natural-languages.service";
 
 import { ProjectService, Project } from "./project.service";
 import { SidebarService } from "./sidebar.service";
 import { PreferencesService } from "./preferences.service";
-import { combineLatest } from "rxjs";
 
 @Component({
   templateUrl: "templates/index.html",
@@ -29,10 +30,11 @@ export class EditorComponent implements OnInit, OnDestroy {
    */
   constructor(
     private readonly _projectService: ProjectService,
-    private readonly _sidebarService: SidebarService,
     private readonly _preferences: PreferencesService,
     private readonly _title: Title,
-    private readonly _browser: BrowserService
+    private readonly _browser: BrowserService,
+    private readonly _naturalLanguages: NaturalLanguagesService,
+    private readonly _sidebarService: SidebarService
   ) {}
 
   readonly sidebarMode$ = this._browser.sidebarMode$;
@@ -46,7 +48,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     // Subscribe to the current project
     let subRef = this._projectService.activeProject.subscribe((res) => {
       this._project = res;
-      this._title.setTitle(`${res.name} - BlattWerkzeug`);
+      const name = this._naturalLanguages.resolveString(res.name);
+      this._title.setTitle(`${name} - BlattWerkzeug`);
     });
     this._subscriptions.push(subRef);
   }

@@ -6,11 +6,13 @@
     alt="Preview Image"
   />
   <div class="card-img-overlay">
-    <h2 class="card-title">{{ project.name }}</h2>
+    <h2 class="card-title">{{ project.name | currentLanguage }}</h2>
   </div>
   <div class="card-body">
-    <h2 *ngIf="!hasImage" class="card-title">{{ project.name }}</h2>
-    <p class="card-text">{{ project.description }}</p>
+    <h2 *ngIf="!hasImage" class="card-title">
+      {{ project.name | currentLanguage }}
+    </h2>
+    <p class="card-text">{{ project.description | currentLanguage }}</p>
     <a
       [routerLink]="['/editor/', project.slug]"
       class="btn btn-info btn-block btn-edit-project"

@@ -128,7 +128,7 @@ export class AdminNewsEditComponent implements OnInit {
    *
    * @param option May be "redirect" to redirect the user back to the overview page
    */
-  public onUpdate(option: string): void {
+  public onUpdate(option: "redirect" | "stay"): void {
     this._serverService.updateNews(this._newsId, this.newsData).subscribe(
       (_) => {
         if (option == "redirect") this._router.navigate(["admin/news"]);

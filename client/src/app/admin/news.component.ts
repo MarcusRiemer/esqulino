@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 import { PerformDataService } from "./../shared/authorisation/perform-data.service";
 import { ServerDataService } from "../shared";
-import { MultilingualString } from "./../shared/multilingual-string.description";
+import { MultiLangString } from "./../shared/multilingual-string.description";
 import { locales } from "../shared/change-language.component";
 @Component({
   templateUrl: "./templates/news.html",
@@ -63,7 +63,7 @@ export class AdminNewsListComponent {
   /**
    * @param text the text of the current news
    */
-  public getLanguagesFlags(text: MultilingualString): String[] {
+  public getLanguagesFlags(text: MultiLangString): String[] {
     let toReturn = [];
     locales.forEach((val) => {
       if (text[val.token] !== undefined) toReturn.push(val.flag);

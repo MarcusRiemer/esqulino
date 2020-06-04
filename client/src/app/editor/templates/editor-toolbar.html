@@ -34,11 +34,18 @@
     </button>
     <mat-menu #naturalLang="matMenu">
       <mat-checkbox
-        [(ngModel)]="debugOptions.showInternalAst.value"
+        [(ngModel)]="debugOptions.showEditableAst.value"
         class="mat-menu-item"
         color="warn"
       >
-        Show Internal AST
+        Show Editable AST
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="debugOptions.showJsonAst.value"
+        class="mat-menu-item"
+        color="warn"
+      >
+        Show JSON AST
       </mat-checkbox>
       <mat-checkbox
         [(ngModel)]="debugOptions.showLanguageSelector.value"

@@ -8,7 +8,6 @@ import { Tree } from "../../../shared/syntaxtree";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
-import { ProjectService } from "../../project.service";
 
 import {
   QueryService,

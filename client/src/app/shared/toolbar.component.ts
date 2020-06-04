@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 
-import { SideNavService } from "./side-nav.service";
 import { ToolbarService } from "./toolbar.service";
 
 import { environment } from "../../environments/environment";
@@ -20,7 +19,6 @@ export class ToolbarComponent {
 
   constructor(
     private _toolbarService: ToolbarService,
-    private _sideNavService: SideNavService,
     private _userService: UserService
   ) {}
 

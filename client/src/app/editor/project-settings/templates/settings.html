@@ -49,14 +49,11 @@
         Name
       </label>
       <div class="col-sm-10">
-        <input
-          [(ngModel)]="project.name"
-          name="project-name"
-          class="form-control"
-          id="project-name"
-          placeholder="Name des Projekts"
-          required
-        />
+        <multilingual-input
+          [(editingString)]="project.name"
+          [control]="'input'"
+          [placeholder]="'Name'"
+        ></multilingual-input>
         <small class="text-muted">
           Dieser Name beschreibt, was sich hinter deinem Projekt verbirgt.
         </small>
@@ -67,16 +64,11 @@
         Beschreibung
       </label>
       <div class="col-sm-10">
-        <textarea
-          [(ngModel)]="project.description"
-          name="project-description"
-          class="form-control"
-          id="project-description"
-          placeholder="Beschreibung des Projekts"
-          rows="3"
-          required
-        ></textarea>
-
+        <multilingual-input
+          [(editingString)]="project.description"
+          [control]="'textarea'"
+          [placeholder]="'Beschreibung'"
+        ></multilingual-input>
         <small class="text-muted">
           Beschreibe dein Projekt mit ein paar kurzen Sätzen. Erläutere dabei
           welche Probleme du damit löst oder welche Dinge du erklären möchtest.

@@ -354,6 +354,7 @@ describe(`Grammar Utilities`, () => {
     ) => {
       const g: GrammarDocument = {
         root: undefined,
+        foreignTypes: {},
         types: {},
       };
 
@@ -468,6 +469,7 @@ describe(`Grammar Utilities`, () => {
     it(`No languages`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {},
       };
 
@@ -477,6 +479,7 @@ describe(`Grammar Utilities`, () => {
     it(`Empty language`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {},
         },
@@ -488,6 +491,7 @@ describe(`Grammar Utilities`, () => {
     it(`Single language`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {
@@ -505,6 +509,7 @@ describe(`Grammar Utilities`, () => {
     it(`Two languages`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g1: {
             t1: { type: "concrete" },
@@ -526,6 +531,7 @@ describe(`Grammar Utilities`, () => {
     it(`g.t1`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {
@@ -543,6 +549,7 @@ describe(`Grammar Utilities`, () => {
     it(`g.t1, g.t2`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {
@@ -564,6 +571,7 @@ describe(`Grammar Utilities`, () => {
     it(`g.t1, h.t1`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {
@@ -587,6 +595,7 @@ describe(`Grammar Utilities`, () => {
     it(`Omit typedef`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {
@@ -609,6 +618,7 @@ describe(`Grammar Utilities`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
         types: undefined,
+        foreignTypes: {},
       };
 
       expect(getConcreteTypes(g)).toEqual([]);
@@ -618,6 +628,7 @@ describe(`Grammar Utilities`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
         types: {},
+        foreignTypes: {},
       };
 
       expect(getConcreteTypes(g)).toEqual([]);
@@ -629,6 +640,7 @@ describe(`Grammar Utilities`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
         types: {},
+        foreignTypes: {},
       };
 
       expect(getFullQualifiedAttributes(g)).toEqual([]);
@@ -637,6 +649,7 @@ describe(`Grammar Utilities`, () => {
     it(`Single language`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {
@@ -661,6 +674,7 @@ describe(`Grammar Utilities`, () => {
     it(`Two languages`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g1: {
             t1: {
@@ -698,6 +712,7 @@ describe(`Grammar Utilities`, () => {
     it(`Container with attributes`, () => {
       const g: GrammarDocument = {
         root: { languageName: "g", typeName: "t1" },
+        foreignTypes: {},
         types: {
           g: {
             t1: {

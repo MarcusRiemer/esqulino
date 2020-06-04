@@ -5,7 +5,6 @@ import { Observable, combineLatest } from "rxjs";
 import { flatMap, map } from "rxjs/operators";
 
 import {
-  SidebarDescription,
   FixedBlocksSidebar,
   FixedBlocksSidebarDescription,
 } from "../../shared/block";

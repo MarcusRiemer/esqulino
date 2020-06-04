@@ -14,6 +14,7 @@ export function singleLanguageGrammar(
   const toReturn: GrammarDocument = {
     root: { languageName: langName, typeName: rootType },
     types: {},
+    foreignTypes: {},
   };
 
   // Types can't be assigned in the expression above because
@@ -30,6 +31,7 @@ export function multiLanguageGrammar(
 ): GrammarDocument {
   return {
     types: languages,
+    foreignTypes: {},
     root: rootType,
   };
 }

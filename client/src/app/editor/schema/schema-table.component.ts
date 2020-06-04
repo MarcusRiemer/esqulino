@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { first } from "rxjs/operators";
-
 import { Table } from "../../shared/schema";
 
 import { SchemaService } from "../schema.service";

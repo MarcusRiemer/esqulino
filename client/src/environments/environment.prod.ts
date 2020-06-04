@@ -11,7 +11,7 @@ export const environment: EnvironmentDescription = {
     id: 1,
   },
   sentry: {
-    dsn: "https://c5c678d48ca2423199899208a6f3f70b@sentry.blattwerkzeug.de/3",
+    dsn: "https://e64499f04f2c44bb8167cfb43a1928b3@sentry.blattwerkzeug.de/2",
     active: true,
     showDialogue: true,
   },

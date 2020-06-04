@@ -24,8 +24,8 @@ class GrammarsController < ApplicationController
 
   # Creates a new grammar
   def create
-    grammar = Grammar.new(basic_params)
-    grammar.model = model_params
+    creation_attributes = ensure_request("GrammarRequestUpdateDescription", request.body.read)
+    grammar = Grammar.new(creation_attributes)
 
     if grammar.save
       render :json => { 'id' => grammar.id }
@@ -36,15 +36,19 @@ class GrammarsController < ApplicationController
 
   # Updates an existing grammar
   def update
-    ensure_request("GrammarRequestUpdateDescription", request.body.read)
+    updated_attributes = ensure_request("GrammarRequestUpdateDescription", request.body.read)
 
     grammar = Grammar.find(id_params['id'])
-    grammar.assign_attributes basic_params
-    grammar.model = model_params
+    grammar.assign_attributes updated_attributes
 
     # Possibly update the code resource that this grammar is based on
     if params.key? "generatedFromId"
       grammar.generated_from_id = params.fetch("generatedFromId", nil)
+    end
+
+    # Possibly update the root node
+    if params.key? "root"
+      grammar.root = params.fetch("root", nil)
     end
 
     begin
@@ -94,19 +98,11 @@ class GrammarsController < ApplicationController
   end
 
 
-  # These parameters are "normal" table attributes
-  def basic_params
-    params
-      .permit([:name, :technicalName, :slug, :programmingLanguageId])
-      .transform_keys { |k| k.underscore }
-  end
-
-  # These parameters need to be put in the json-blob
+  # All parameters that make up the model
   def model_params
-    # Allowing an array of arbitrary objects seems to be unsupported
-    # by the strong parameters API :(
     params
-      .to_unsafe_hash.slice(:types, :root)
+      .transform_keys { |k| k.underscore }
+      .to_unsafe_hash
   end
 
 end

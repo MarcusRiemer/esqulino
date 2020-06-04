@@ -1,9 +1,8 @@
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { Component, Output, EventEmitter } from "@angular/core";
 
 import { SignInDescription } from "./auth-description";
 import { UserService } from "./user.service";
-import { Roles } from "../authorisation/roles.enum";
+
 @Component({
   selector: "sign-in",
   templateUrl: "./templates/sign-in.html",
@@ -12,10 +11,7 @@ export class SignInComponent {
   // Is responsible for showing the secondary content
   @Output() content = new EventEmitter();
 
-  constructor(
-    private _userService: UserService,
-    private _snackBar: MatSnackBar
-  ) {}
+  constructor(private _userService: UserService) {}
 
   /**
    * E-mail and password are required for sign-in

@@ -8,11 +8,7 @@ concise_attributes:
   value_before_type_cast: db-sequence
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 'Test: Sequence DB'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Dieses Projekt wird für automatische Tests benutzt und hat
-    keine inhaltliche  Bedeutung.
+  value_before_type_cast: '"de"=>"Test: Sequence DB"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -26,12 +22,16 @@ concise_attributes:
   value_before_type_cast: 2018-02-20 20:48:21.717254000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:22:02.922923000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.255392000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Dieses Projekt wird für automatische Tests benutzt
+    und hat keine inhaltliche  Bedeutung."'
 new_record: false
 active_record_yaml_version: 2

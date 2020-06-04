@@ -9,12 +9,24 @@ concise_attributes:
   name: name
   value_before_type_cast: Meta JSON
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: model
-  value_before_type_cast: '{"root": {"typeName": "value", "languageName": "json"},
-    "types": {"json": {"null": {"type": "concrete", "attributes": [{"type": "terminal",
-    "symbol": "null"}]}, "array": {"type": "concrete", "attributes": [{"type": "terminal",
-    "symbol": "["}, {"name": "values", "type": "sequence", "nodeTypes": [{"occurs":
-    "*", "nodeType": {"typeName": "value", "languageName": "json"}}]}, {"type": "terminal",
+  name: created_at
+  value_before_type_cast: 2020-03-26 16:03:09.682287000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-05-27 18:14:34.460251000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 22332f6e-a67a-4e05-b826-5d348f460a27
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"json": {"null": {"type": "concrete", "attributes": [{"type":
+    "terminal", "symbol": "null"}]}, "array": {"type": "concrete", "attributes": [{"type":
+    "terminal", "symbol": "["}, {"type": "container", "children": [{"name": "values",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "value",
+    "languageName": "json"}}]}], "orientation": "horizontal"}, {"type": "terminal",
     "symbol": "]"}]}, "value": {"type": "oneOf", "oneOf": [{"typeName": "null", "languageName":
     "json"}, {"typeName": "boolean", "languageName": "json"}, {"typeName": "string",
     "languageName": "json"}, {"typeName": "number", "languageName": "json"}, {"typeName":
@@ -30,18 +42,12 @@ concise_attributes:
     {"type": "concrete", "attributes": [{"name": "key", "type": "sequence", "nodeTypes":
     [{"typeName": "string", "languageName": "json"}]}, {"type": "terminal", "symbol":
     ":"}, {"name": "value", "type": "sequence", "nodeTypes": [{"typeName": "value",
-    "languageName": "json"}]}]}}}}'
+    "languageName": "json"}]}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: created_at
-  value_before_type_cast: 2020-03-26 16:03:09.682287000 Z
+  name: foreign_types
+  value_before_type_cast: "{}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: updated_at
-  value_before_type_cast: 2020-04-10 20:26:28.018799000 Z
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: programming_language_id
-  value_before_type_cast: json
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: generated_from_id
-  value_before_type_cast: 22332f6e-a67a-4e05-b826-5d348f460a27
+  name: root
+  value_before_type_cast: '{"typeName": "value", "languageName": "json"}'
 new_record: false
 active_record_yaml_version: 2

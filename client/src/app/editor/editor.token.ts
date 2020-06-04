@@ -13,9 +13,3 @@ export const SIDEBAR_MODEL_TOKEN = new InjectionToken("sidebar.model");
  * required to close a sidebar.
  */
 export const SIDEBAR_ID_TOKEN = new InjectionToken("sidebar.id");
-
-/**
- * This token is used to give widget components access to the model
- * they should display.
- */
-export const WIDGET_MODEL_TOKEN = new InjectionToken("widget.model");

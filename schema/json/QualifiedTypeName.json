@@ -1,0 +1,23 @@
+{
+  "$ref": "#/definitions/QualifiedTypeName",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
+      ],
+      "type": "object"
+    }
+  }
+}

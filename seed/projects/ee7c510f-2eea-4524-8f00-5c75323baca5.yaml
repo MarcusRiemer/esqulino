@@ -8,9 +8,7 @@ concise_attributes:
   value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Meta Grammar
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
+  value_before_type_cast: '"de"=>"Meta Grammar"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -23,11 +21,14 @@ concise_attributes:
   value_before_type_cast: 2019-11-12 09:53:15.066356000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-11-12 09:53:15.066356000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.235918000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000001
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: ''
 new_record: false
 active_record_yaml_version: 2

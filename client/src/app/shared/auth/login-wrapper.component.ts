@@ -1,5 +1,4 @@
-import { Component, OnInit } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Component } from "@angular/core";
 
 import { UserService } from "./user.service";
 @Component({

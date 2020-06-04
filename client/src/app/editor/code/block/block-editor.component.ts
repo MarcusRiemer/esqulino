@@ -160,20 +160,26 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     ),
     combineLatest(
       this._debugOptions.showDropDebug.value$,
+      this._debugOptions.showJsonAst.value$,
       this._debugOptions.showLanguageSelector.value$
     ),
-    map(([blockLanguage, showDropDebug, showLanguageSelector]) => {
+    map(([blockLanguage, showDropDebug, showJsonAst, showLanguageSelector]) => {
       // Take all of the default block languages
       const toReturn = [...blockLanguage.editorComponents];
 
-      // Possibly inject the debug component
-      if (showDropDebug) {
+      // Possibly inject something after the block editor
+      if (showDropDebug || showJsonAst) {
         const blockEditorIndex = toReturn.findIndex(
           (c) => c.componentType === "block-root"
         );
-        if (blockEditorIndex >= 0) {
+        if (showDropDebug && blockEditorIndex >= 0) {
           toReturn.splice(blockEditorIndex + 1, 0, {
             componentType: "drop-debug",
+          });
+        }
+        if (showJsonAst && blockEditorIndex >= 0) {
+          toReturn.splice(blockEditorIndex + 1, 0, {
+            componentType: "json-ast",
           });
         }
       }

@@ -96,12 +96,10 @@ RSpec.describe 'Rake Model Validation' do
 
       # Invalid, there should never be a node type "invalid", so this will trigger
       # the schema validation
-      p = FactoryBot.build(:grammar, model: {
-                             "types" => {
-                               "spec" => {
-                                 "root" => {
-                                   "type" => "invalid"
-                                 }
+      p = FactoryBot.build(:grammar, types: {
+                             "spec" => {
+                               "root" => {
+                                 "type" => "invalid"
                                }
                              }
                            })

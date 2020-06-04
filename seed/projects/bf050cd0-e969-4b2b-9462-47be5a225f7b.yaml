@@ -8,12 +8,7 @@ concise_attributes:
   value_before_type_cast: pokedex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Pokédex
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Welche Attacke kann von den meisten Pokémon gelernt werden?
-    Gibt es mehr Wasser oder mehr "normale" Pokémon? Und wie heißt eigentlich "Taubsi"
-    auf Französisch?
+  value_before_type_cast: '"de"=>"Pokédex"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
@@ -27,12 +22,19 @@ concise_attributes:
   value_before_type_cast: 2019-08-10 11:06:11.638562000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-08-10 12:15:26.159257000 Z
+  value_before_type_cast: 2020-05-29 18:00:26.730615000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 3fdf9b83-08a3-4792-96a8-d18cce420985
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Welche Attacke kann von den meisten Pokémon gelernt
+    werden? Gibt es mehr Wasser oder mehr \"normale\" Pokémon? Und wie heißt eigentlich
+    \"Taubsi\" auf Französisch?", "en"=>"What attack can be learned from most Pokémon?
+    Are there more water or more \"normal\" Pokémon? And how do you actually call
+    \"Pidgey\" in French?"'
 new_record: false
 active_record_yaml_version: 2

@@ -1,7 +1,6 @@
 import { TemplateRef } from "@angular/core";
 import { Component, AfterViewInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { UserService } from "../shared/auth/user.service";
@@ -18,8 +17,7 @@ export class ResetPasswordComponent implements AfterViewInit {
     private _dialog: MatDialog,
     private _router: Router,
     private _activeRoute: ActivatedRoute,
-    private _userService: UserService,
-    private _snackBar: MatSnackBar
+    private _userService: UserService
   ) {}
 
   public resetPasswordData: UserPasswordDescription = {

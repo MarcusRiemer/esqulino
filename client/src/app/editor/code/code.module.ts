@@ -16,6 +16,7 @@ import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.com
 import { ValidationComponent } from "./validation.component";
 import { UnknownCodeResourceComponent } from "./unknown-code-resource.component";
 import { DraggableBlockListComponent } from "./draggable-block-list.component";
+import { JsonAstComponent } from "./json-ast.component";
 
 import { BLOCK_RENDER_COMPONENTS } from "./block/index";
 import { BlockRootComponent } from "./block/block-root.component";
@@ -39,6 +40,7 @@ import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
 import { TruckWorldMouseService } from "./truck/truck-world-mouse.service";
 import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor.service";
+import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
 
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 
@@ -64,9 +66,11 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     WorldControllerComponent,
     WorldSensorsComponent,
     WorldSelectorComponent,
+    TruckWorldEditorComponent,
     UserFunctionsSidebarComponent,
     UnknownCodeResourceComponent,
     DefinedTypesSidebarComponent,
+    JsonAstComponent,
   ],
   entryComponents: [
     BlockRootComponent,
@@ -81,6 +85,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     WorldRenderComponent,
     WorldControllerComponent,
     WorldSensorsComponent,
+    TruckWorldEditorComponent,
     UserFunctionsSidebarComponent,
     DefinedTypesSidebarComponent,
   ],

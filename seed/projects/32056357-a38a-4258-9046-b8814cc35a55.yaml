@@ -8,11 +8,7 @@ concise_attributes:
   value_before_type_cast: blog
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Blog
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Dein Blog, deine Regeln! Schreibe über Themen die dir am
-    Herzen liegen und tausche dich in den Kommentaren mit deinen Lesern aus.
+  value_before_type_cast: '"de"=>"Blog", "en"=>"Blog"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
@@ -27,12 +23,18 @@ concise_attributes:
   value_before_type_cast: 2018-02-20 20:48:21.690301000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:21:58.271449000 Z
+  value_before_type_cast: 2020-05-29 17:53:43.689671000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: ca22b86c-b1a6-4420-a91a-c222110bb0e1
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Dein Blog, deine Regeln! Schreibe über Themen die
+    dir am Herzen liegen und tausche dich in den Kommentaren mit deinen Lesern aus.",
+    "en"=>"Your blog, your rules! Write about topics that are close to your heart
+    and share your comments with your readers."'
 new_record: false
 active_record_yaml_version: 2

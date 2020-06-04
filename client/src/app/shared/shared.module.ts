@@ -46,6 +46,7 @@ import { NewsListComponent } from "./news-list.component";
 import { NewsDetailsComponent } from "./news-details.component";
 import { MultiLingualInputComponent } from "./multilingual-input.component";
 import { MultiLingualEditorComponent } from "./multilingual-editor.component";
+import { CurrentLanguagePipe } from "./current-language.pipe";
 import { FocusDirective } from "./focus-element.directive";
 import { UserButtonsComponent } from "./auth/user-buttons.component";
 import { AuthDialogComponent } from "./auth/auth-dialog.component";
@@ -151,6 +152,7 @@ const materialModules = [
   declarations: [
     EmptyComponent,
     DefaultValuePipe,
+    CurrentLanguagePipe,
     FlashMessageListComponent,
     ToolbarComponent,
     ChangeLanguageComponent,
@@ -192,6 +194,7 @@ const materialModules = [
     ToolbarComponent,
     FlashMessageListComponent,
     DefaultValuePipe,
+    CurrentLanguagePipe,
     ChangeLanguageComponent,
     JavascriptRequiredComponent,
     SideNavComponent,
