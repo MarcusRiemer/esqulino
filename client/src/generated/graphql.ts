@@ -527,6 +527,9 @@ export const AdminListProjectsDocument = gql`
       slug
       codeResources {
         totalCount
+          nodes {
+              id
+          }
       }
     }
     totalCount

@@ -10,7 +10,7 @@ import {
   Project
 } from "../../../generated/graphql";
 import {MatPaginator, } from "@angular/material/paginator";
-import {switchAll} from "rxjs/operators";
+import {map, switchAll} from "rxjs/operators";
 import {BehaviorSubject, EMPTY, Observable, } from "rxjs";
 import {ApolloQueryResult} from "apollo-client";
 
@@ -32,6 +32,7 @@ export class OverviewProjectComponent implements OnInit{
   constructor(readonly projectsService: AdminListProjectsGQL) {}
 
   //response observer makes only one subscription possible
+  // evtl. watch nutzen!
   private _queryObserver:BehaviorSubject<Observable<ApolloQueryResult<AdminListProjectsQuery>>> = new BehaviorSubject(EMPTY);
   //response which can be subscribed once
   private _response: Observable<ApolloQueryResult<AdminListProjectsQuery>>;
@@ -39,13 +40,13 @@ export class OverviewProjectComponent implements OnInit{
   private _pageInfo:PageInfo;
 
   //projects list (data type looks horrible)
-  projects:Maybe<Array<Maybe<{ __typename?: "Project" } & Pick<Project, "id" | "name" | "slug"> & { codeResources?: Maybe<{ __typename?: "CodeResourceConnection" } & Pick<CodeResourceConnection, "totalCount">> }>>>;
+  readonly projects$ = this._response.pipe(map(result => result.data.projects.nodes));
 
   //loading indicator for conditionalDisplay directive
   readonly progress = new BehaviorSubject<boolean>(true);
 
   //Mat-Paginator Info
-  totalCount: number;
+  totalCount$ = this._response.pipe(map(result => result.data.projects.totalCount));
   pageSize: number = 25;
   pageIndex: number = 0;
 
@@ -59,10 +60,9 @@ export class OverviewProjectComponent implements OnInit{
     this._response.subscribe(result => {
       this.progress.next(result.loading);
       this._pageInfo = result.data.projects.pageInfo;
-      this.projects = result.data.projects.nodes;
-      this.totalCount = result.data.projects.totalCount;
     });
   }
+
 
   onChangePagination() {
     //PageSize Change
