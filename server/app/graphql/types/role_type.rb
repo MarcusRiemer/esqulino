@@ -1,5 +1,5 @@
 module Types
-  class Types::RoleType < GraphQL::Schema::Object
+  class Types::RoleType < Types::BaseObject
     field :users, [Types::UserType], null:true
     field :name, String, null:true
     field :resourceId, String, null:true

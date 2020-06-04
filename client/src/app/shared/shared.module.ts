@@ -217,6 +217,7 @@ const materialModules = [
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
     ServerTasksComponent,
+    ConditionalDisplayDirective,
   ],
   entryComponents: [
     AuthDialogComponent,

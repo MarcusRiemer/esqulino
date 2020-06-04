@@ -80,7 +80,7 @@ export interface ProjectSourceDescription {
  */
 export interface ProjectListDescription {
   id: string;
-  slug: ProjectSlug;
+  slug?: ProjectSlug;
   name: ProjectName;
   public?: boolean;
   description: string;

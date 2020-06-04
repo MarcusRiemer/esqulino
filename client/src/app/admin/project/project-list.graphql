@@ -1,0 +1,19 @@
+query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$public:Boolean) {
+    projects(first:$first,after:$after,before:$before,last:$last,public:$public) {
+        nodes{
+            id
+            name
+            slug
+            codeResources{
+                totalCount
+            }
+        }
+        totalCount
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}

@@ -1,13 +1,14 @@
 module Types
   class QueryType < Types::BaseObject
-    field :programmingLanguages, [Types::ProgrammingLanguageType], null: false
-    field :blockLanguages, [Types::BlockLanguageType], null: false
-    field :grammars, [Types::GrammarType],null:false
-    field :codeResources, [Types::CodeResourceType],null:false
-    field :news, [Types::NewsType],null:false
-    field :projectDatabases, [Types::ProjectDatabaseType],null:false
-    field :projectSources, [Types::ProjectSourceType],null:false
-    field :projects, [Types::ProjectType],null:false do
+
+    field :programmingLanguages, Types::ProgrammingLanguageType.connection_type, null: false
+    field :blockLanguages, Types::BlockLanguageType.connection_type, null: false
+    field :grammars, Types::GrammarType.connection_type,null:false
+    field :codeResources, Types::CodeResourceType.connection_type,null:false
+    field :news, Types::NewsType.connection_type,null:false
+    field :projectDatabases, Types::ProjectDatabaseType.connection_type,null:false
+    field :projectSources, Types::ProjectSourceType.connection_type,null:false
+    field :projects, Types::ProjectType.connection_type,null:false do
       argument :public, Boolean, required:false
     end
 
@@ -43,7 +44,7 @@ module Types
       if public
         Project.where(public:true)
       else
-        Project.all
+        Project.full
       end
     end
 

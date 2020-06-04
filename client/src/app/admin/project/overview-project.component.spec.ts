@@ -12,6 +12,11 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { PortalModule } from "@angular/cdk/portal";
 
+import {
+  ApolloTestingModule,
+  ApolloTestingController,
+} from 'apollo-angular/testing';
+
 import { first } from "rxjs/operators";
 
 import {
@@ -26,11 +31,13 @@ import { buildProject, provideProjectList } from "../../editor/spec-util";
 
 import { OverviewProjectComponent } from "./overview-project.component";
 import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
+import {AdminListProjectsDocument} from "../../../generated/graphql";
 
 describe("OverviewProjectComponent", () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
+        ApolloTestingModule,
         FormsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
@@ -57,19 +64,24 @@ describe("OverviewProjectComponent", () => {
 
     let fixture = TestBed.createComponent(OverviewProjectComponent);
     let component = fixture.componentInstance;
+
     fixture.detectChanges();
 
+    const controller = TestBed.inject(ApolloTestingController);
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
+
 
     return {
       fixture,
       component,
+      controller,
       element: fixture.nativeElement as HTMLElement,
       httpTesting,
       serverApi,
     };
   }
+
 
   it(`can be instantiated`, async () => {
     const t = await createComponent();
@@ -77,17 +89,41 @@ describe("OverviewProjectComponent", () => {
     expect(t.component).toBeDefined();
   });
 
-  it(`Displays a loading indicator (or not)`, async () => {
+  fit(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
-    const initialLoading = await t.component.projects.listCache.inProgress
+    const initialLoading = await t.component.progress
       .pipe(first())
       .toPromise();
     expect(initialLoading).toBe(true);
+    t.component.projectsService.fetch().subscribe(response => {
+      expect(response.data.projects.totalCount).toEqual(1);
+    });
 
-    provideProjectList([]);
+    const op = t.controller.expectOne(AdminListProjectsDocument);
+    op.flush({
+      data: {
+        projects: {
+          nodes: {
+            id: 0,
+            name: 'test',
+            slug: 'test',
+            codeResources: {
+              totalCount: 10
+            }
+          },
+          totalCount: 1,
+          pageInfo: {
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: "NQ",
+            endCursor: "NQ"
+          }
+        },
+      },
+    });
 
-    const afterResponse = await t.component.projects.listCache.inProgress
+    const afterResponse = await t.component.progress
       .pipe(first())
       .toPromise();
     expect(afterResponse).toBe(false);
@@ -123,13 +159,13 @@ describe("OverviewProjectComponent", () => {
     expect(i1Row.textContent).toMatch(i1.id);
   });
 
-  it(`reloads data on refresh`, async () => {
+  /*it(`reloads data on refresh`, async () => {
     const t = await createComponent();
 
     const i1 = buildProject({ name: "B1" });
     provideProjectList([i1]);
 
-    const initialData = await t.component.projects.list
+    const initialData = await t.component.projects
       .pipe(first())
       .toPromise();
     expect(initialData).toEqual([i1]);
@@ -137,9 +173,9 @@ describe("OverviewProjectComponent", () => {
     t.component.onRefresh();
     provideProjectList([]);
 
-    const refreshedData = await t.component.projects.list
+    const refreshedData = await t.component.projects
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);
-  });
+  });*/
 });
