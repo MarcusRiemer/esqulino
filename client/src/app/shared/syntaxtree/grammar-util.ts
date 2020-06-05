@@ -13,6 +13,7 @@ import {
   resolveOccurs,
   OccursSpecificDescription,
 } from "./occurs";
+import { allPresentTypes } from "./grammar-type-util";
 
 /**
  * Takes any kind of reference and returns the number of occurences this reference
@@ -66,7 +67,9 @@ export function getQualifiedTypes(
 ): QualifiedNodeTypeDescription[] {
   const toReturn: QualifiedNodeTypeDescription[] = [];
 
-  Object.entries(g.types || {}).forEach(([langName, types]) => {
+  const allTypes = allPresentTypes(g);
+
+  Object.entries(allTypes).forEach(([langName, types]) => {
     Object.entries(types).forEach(([typeName, t]) => {
       toReturn.push(
         Object.assign({}, t, {
@@ -143,7 +146,9 @@ function collectTypes(
     return [];
   }
 
-  Object.entries(g.types || {}).forEach(([languageName, types]) => {
+  const allTypes = allPresentTypes(g);
+
+  Object.entries(allTypes).forEach(([languageName, types]) => {
     Object.entries(types).forEach(([typeName, type]) => {
       if (pred(type)) {
         toReturn.push({

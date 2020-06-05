@@ -9,6 +9,7 @@ import {
 } from "./grammar.spec-util";
 import { getQualifiedTypes } from "./grammar-util";
 import { NodeDescription } from "./syntaxtree.description";
+import { GrammarDocument } from "./grammar.description";
 
 /**
  * Describes a language where each document would be the equivalent
@@ -1863,6 +1864,62 @@ describe("Grammar Validation", () => {
     );
   });
 
+  describe(`Root omitted`, () => {
+    it(`No types present at all`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: {},
+      };
+
+      const v = new Validator([g]);
+
+      const ast = new AST.Tree({ language: "l", name: "t" });
+      const res = v.validateFromRoot(ast);
+      expect(res.errors.map((e) => e.code)).toEqual([
+        ErrorCodes.UnknownRootLanguage,
+      ]);
+    });
+
+    it(`Relevant language present`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l: {},
+        },
+        foreignTypes: {},
+      };
+
+      const v = new Validator([g]);
+
+      const ast = new AST.Tree({ language: "l", name: "t" });
+      const res = v.validateFromRoot(ast);
+      expect(res.errors.map((e) => e.code)).toEqual([
+        ErrorCodes.UnspecifiedRoot,
+      ]);
+    });
+
+    it(`Relevant type present`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l: {
+            t: {
+              type: "concrete",
+              attributes: [],
+            },
+          },
+        },
+        foreignTypes: {},
+      };
+
+      const v = new Validator([g]);
+
+      const ast = new AST.Tree({ language: "l", name: "t" });
+      const res = v.validateFromRoot(ast);
+      expect(res.errors.map((e) => e.code)).toEqual([
+        ErrorCodes.UnspecifiedRoot,
+      ]);
+    });
+  });
+
   describe(`Container-related`, () => {
     describe(`Property in container`, () => {
       const g = singleLanguageGrammar("g", "r", {
@@ -2028,6 +2085,93 @@ describe("Grammar Validation", () => {
       });
 
       expect(() => new Validator([g])).not.toThrow();
+    });
+  });
+
+  describe(`foreignTypes related`, () => {
+    it(`Single language, one type only foreign`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l: {
+            t2: {
+              type: "concrete",
+              attributes: [],
+            },
+            t3: {
+              type: "concrete",
+              attributes: [],
+            },
+          },
+        },
+
+        foreignTypes: {
+          l: {
+            t1: {
+              type: "concrete",
+              attributes: [],
+            },
+            t2: {
+              type: "concrete",
+              attributes: [],
+            },
+          },
+        },
+      };
+
+      const v = new Validator([g]);
+
+      expect(v.isKnownLanguage("l")).withContext("g known").toBe(true);
+
+      expect(v.isKnownType("l", "t1")).withContext("l.t1 known").toBe(true);
+      expect(v.isKnownType("l", "t2")).withContext("l.t2 known").toBe(true);
+      expect(v.isKnownType("l", "t3")).withContext("l.t3 known").toBe(true);
+    });
+
+    it(`Second language, only in foreign`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l1: {
+            t1: {
+              type: "concrete",
+              attributes: [],
+            },
+            t2: {
+              type: "concrete",
+              attributes: [],
+            },
+          },
+        },
+
+        foreignTypes: {
+          l2: {
+            t1: {
+              type: "concrete",
+              attributes: [],
+            },
+            t2: {
+              type: "concrete",
+              attributes: [],
+            },
+          },
+        },
+      };
+
+      const v = new Validator([g]);
+
+      expect(v.isKnownLanguage("l1")).withContext("l1 known").toBe(true);
+      expect(v.isKnownLanguage("l2")).withContext("l2 known").toBe(true);
+
+      expect(v.isKnownType("l1", "t1")).withContext("l1.t1 known").toBe(true);
+      expect(v.isKnownType("l1", "t2")).withContext("l1.t2 known").toBe(true);
+      expect(v.isKnownType("l1", "t3"))
+        .withContext("l1.t3 unknown")
+        .toBe(false);
+
+      expect(v.isKnownType("l2", "t1")).withContext("l2.t1 known").toBe(true);
+      expect(v.isKnownType("l2", "t2")).withContext("l2.t2 known").toBe(true);
+      expect(v.isKnownType("l2", "t3"))
+        .withContext("l2.t3 unknown")
+        .toBe(false);
     });
   });
 

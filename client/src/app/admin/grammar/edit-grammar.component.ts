@@ -101,9 +101,13 @@ export class EditGrammarComponent implements OnInit {
    * This allows ngModel to pre-select the correct value.
    */
   set grammarRoot(t: QualifiedTypeName) {
-    this.grammar.root = this.availableTypes.find(
-      (a) => a.languageName === t.languageName && a.typeName === t.typeName
-    );
+    if (!!t) {
+      this.grammar.root = this.availableTypes.find(
+        (a) => a.languageName === t.languageName && a.typeName === t.typeName
+      );
+    } else {
+      this.grammar.root = undefined;
+    }
   }
 
   get grammarTypes() {

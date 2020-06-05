@@ -1,5 +1,12 @@
-import { GrammarDocument } from "./grammar.description";
-import { orderTypes, ensureTypename } from "./grammar-type-util";
+import {
+  GrammarDocument,
+  NodeConcreteTypeDescription,
+} from "./grammar.description";
+import {
+  orderTypes,
+  ensureTypename,
+  allPresentTypes,
+} from "./grammar-type-util";
 import { singleLanguageGrammar } from "./grammar.spec-util";
 
 describe(`Grammar Type Utilities`, () => {
@@ -275,6 +282,71 @@ describe(`Grammar Type Utilities`, () => {
       ]);
     });
 
+    it(`Root is foreign type`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: {
+          l: {
+            root: { type: "concrete", attributes: [] },
+          },
+        },
+        root: { languageName: "l", typeName: "root" },
+      };
+
+      const r = orderTypes(g);
+      expect(r).toEqual([{ languageName: "l", typeName: "root" }]);
+    });
+
+    it(`Root is foreign type, references local type`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l: {
+            t1: { type: "concrete", attributes: [] },
+          },
+        },
+        foreignTypes: {
+          l: {
+            root: {
+              type: "concrete",
+              attributes: [{ type: "sequence", name: "n", nodeTypes: ["t1"] }],
+            },
+          },
+        },
+        root: { languageName: "l", typeName: "root" },
+      };
+
+      const r = orderTypes(g);
+      expect(r).toEqual([
+        { languageName: "l", typeName: "root" },
+        { languageName: "l", typeName: "t1" },
+      ]);
+    });
+
+    it(`Root is local type, references foreign type`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l: {
+            root: {
+              type: "concrete",
+              attributes: [{ type: "sequence", name: "n", nodeTypes: ["t1"] }],
+            },
+          },
+        },
+        foreignTypes: {
+          l: {
+            t1: { type: "concrete", attributes: [] },
+          },
+        },
+        root: { languageName: "l", typeName: "root" },
+      };
+
+      const r = orderTypes(g);
+      expect(r).toEqual([
+        { languageName: "l", typeName: "root" },
+        { languageName: "l", typeName: "t1" },
+      ]);
+    });
+
     it(`Visual containers`, () => {
       const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
         a1_3: { type: "concrete", attributes: [] },
@@ -361,6 +433,135 @@ describe(`Grammar Type Utilities`, () => {
         { languageName: "foo", typeName: "a1_2_1" },
         { languageName: "foo", typeName: "a1_3" },
       ]);
+    });
+  });
+
+  describe(`allPresentTypes`, () => {
+    const typeEmpty: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [],
+    };
+
+    const typeTerminalA: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        {
+          type: "terminal",
+          symbol: "a",
+        },
+      ],
+    };
+
+    it(`No types at all`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: {},
+      };
+
+      expect(allPresentTypes(g)).toEqual({});
+    });
+
+    it(`Empty local language`, () => {
+      const g: GrammarDocument = {
+        types: { l: {} },
+        foreignTypes: {},
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: {} });
+    });
+
+    it(`Empty foreign language`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: { l: {} },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: {} });
+    });
+
+    it(`Identical empty foreign and local language`, () => {
+      const g: GrammarDocument = {
+        types: { l: {} },
+        foreignTypes: { l: {} },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: {} });
+    });
+
+    it(`Different empty foreign and local language`, () => {
+      const g: GrammarDocument = {
+        types: { l1: {} },
+        foreignTypes: { l2: {} },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l1: {}, l2: {} });
+    });
+
+    it(`Local language with single type`, () => {
+      const g: GrammarDocument = {
+        types: { l: { t: typeEmpty } },
+        foreignTypes: {},
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+    });
+
+    it(`Foreign language with single type`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: { l: { t: typeEmpty } },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+    });
+
+    it(`Local and foreign language with identical single type`, () => {
+      const g: GrammarDocument = {
+        types: { l: { t: typeEmpty } },
+        foreignTypes: { l: { t: typeEmpty } },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+    });
+
+    it(`Local precedence: Termninal a`, () => {
+      const g: GrammarDocument = {
+        types: { l: { t: typeTerminalA } },
+        foreignTypes: { l: { t: typeEmpty } },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: { t: typeTerminalA } });
+    });
+
+    it(`Local precedence: Empty`, () => {
+      const g: GrammarDocument = {
+        types: { l: { t: typeEmpty } },
+        foreignTypes: { l: { t: typeTerminalA } },
+      };
+
+      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+    });
+
+    it(`Local precedence: Termninal a, additional local`, () => {
+      const g: GrammarDocument = {
+        types: { l: { t1: typeTerminalA, t2: typeTerminalA } },
+        foreignTypes: { l: { t1: typeEmpty } },
+      };
+
+      expect(allPresentTypes(g)).toEqual({
+        l: { t1: typeTerminalA, t2: typeTerminalA },
+      });
+    });
+
+    it(`Local precedence: Termninal a, additional foreign`, () => {
+      const g: GrammarDocument = {
+        types: { l: { t1: typeTerminalA } },
+        foreignTypes: { l: { t1: typeEmpty, t2: typeTerminalA } },
+      };
+
+      expect(allPresentTypes(g)).toEqual({
+        l: { t1: typeTerminalA, t2: typeTerminalA },
+      });
     });
   });
 });

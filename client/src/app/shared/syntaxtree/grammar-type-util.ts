@@ -78,10 +78,15 @@ export function stableQualifiedTypename(n: QualifiedTypeName): string {
 export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
   // Is there a root to work with
   const rootLang = g.root && g.types[g.root.languageName];
+
+  // Ordering should work over all types in the document, not
+  // just the local types
+  const allTypes = allPresentTypes(g);
+
   if (!rootLang || !rootLang[g.root.typeName]) {
     // No root available? We just return the order that we got
     const toReturn: OrderedTypes = [];
-    Object.entries(g.types).forEach(([langName, types]) => {
+    Object.entries(allTypes).forEach(([langName, types]) => {
       Object.keys(types).forEach((typeName) => {
         toReturn.push({ languageName: langName, typeName: typeName });
       });
@@ -127,7 +132,7 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
         order.push(curr);
 
         // Different types need to be treated differently
-        const types = g.types[curr.languageName];
+        const types = allTypes[curr.languageName];
         if (types && types[curr.typeName]) {
           const def = types[curr.typeName];
           switch (def.type) {
@@ -163,4 +168,23 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
 
     return order;
   }
+}
+
+export function allPresentTypes(g: Desc.GrammarDocument): Desc.NamedLanguages {
+  const allLangKeys = new Set([
+    ...Object.keys(g.types ?? []),
+    ...Object.keys(g.foreignTypes ?? []),
+  ]);
+
+  const toReturn: Desc.NamedLanguages = {};
+
+  allLangKeys.forEach((lang) => {
+    toReturn[lang] = Object.assign(
+      {},
+      g.foreignTypes[lang] ?? {},
+      g.types[lang] ?? {}
+    );
+  });
+
+  return toReturn;
 }

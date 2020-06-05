@@ -5,6 +5,7 @@ import {
   getConcreteTypes,
   ensureGrammarAttributeNames,
   getQualifiedTypes,
+  getAllTypes,
 } from "./grammar-util";
 import {
   NodeTypeDescription,
@@ -16,6 +17,39 @@ import {
 import { singleLanguageGrammar } from "./grammar.spec-util";
 
 describe(`Grammar Utilities`, () => {
+  describe(`getAllTypes()`, () => {
+    it(`Empty`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: {},
+      };
+
+      expect(getAllTypes(g)).toEqual([]);
+    });
+
+    it(`Local only`, () => {
+      const g: GrammarDocument = {
+        types: {
+          l: { t: { type: "concrete" } },
+        },
+        foreignTypes: {},
+      };
+
+      expect(getAllTypes(g)).toEqual([{ languageName: "l", typeName: "t" }]);
+    });
+
+    it(`Foreign only`, () => {
+      const g: GrammarDocument = {
+        types: {},
+        foreignTypes: {
+          l: { t: { type: "concrete" } },
+        },
+      };
+
+      expect(getAllTypes(g)).toEqual([{ languageName: "l", typeName: "t" }]);
+    });
+  });
+
   describe(`Ensuring attribute names`, () => {
     it(`Concrete type without attributes at all`, () => {
       const g = singleLanguageGrammar("spec", "root", {
