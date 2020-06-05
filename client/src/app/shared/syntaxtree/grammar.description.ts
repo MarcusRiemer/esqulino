@@ -312,6 +312,9 @@ export interface GrammarListDescription {
 
   // The code resource that this grammar is generated from
   generatedFromId?: string;
+
+  // The grammar that this grammar possibly extends
+  extendsId?: string;
 }
 
 /**
@@ -342,10 +345,7 @@ export interface GrammarDatabaseBlob {
  * The technical aspects of a grammar that are used for actual validation
  * or generation.
  */
-export interface GrammarDocument extends GrammarDatabaseBlob {
-  // These grammars are included in this grammar
-  includedGrammars?: string[];
-}
+export interface GrammarDocument extends GrammarDatabaseBlob {}
 
 /**
  * A whole grammar with all user-facing documentation.

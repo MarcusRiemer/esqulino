@@ -49,12 +49,6 @@
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },
-        "includedGrammars": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
         "root": {
           "$ref": "#/definitions/QualifiedTypeName"
         },

@@ -127,6 +127,15 @@ export class EditGrammarComponent implements OnInit {
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 
+  async onRegenerateForeignTypes() {
+    const updated = await this._mutateGrammarData.regenerateForeignTypes(
+      this.grammar.id
+    );
+
+    this._individualGrammarData.setLocal(updated);
+    this.grammar = updated;
+  }
+
   /**
    * The compiled version of the grammar
    */
