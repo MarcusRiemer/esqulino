@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_29_045910) do
+ActiveRecord::Schema.define(version: 2020_06_05_131621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 2020_05_29_045910) do
     t.jsonb "types", default: {}
     t.jsonb "foreign_types", default: {}
     t.jsonb "root"
+    t.uuid "extends_id"
+    t.index ["extends_id"], name: "index_grammars_on_extends_id"
     t.index ["generated_from_id"], name: "index_grammars_on_generated_from_id"
     t.index ["programming_language_id"], name: "index_grammars_on_programming_language_id"
     t.index ["slug"], name: "index_grammars_on_slug", unique: true
@@ -169,6 +171,7 @@ ActiveRecord::Schema.define(version: 2020_05_29_045910) do
   add_foreign_key "code_resources", "programming_languages"
   add_foreign_key "code_resources", "projects"
   add_foreign_key "grammars", "code_resources", column: "generated_from_id"
+  add_foreign_key "grammars", "grammars", column: "extends_id"
   add_foreign_key "grammars", "programming_languages"
   add_foreign_key "identities", "users"
   add_foreign_key "log_entries", "users"

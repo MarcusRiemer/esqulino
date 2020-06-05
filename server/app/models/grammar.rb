@@ -20,8 +20,11 @@ class Grammar < ApplicationRecord
   # The programming language that may define additional validation
   belongs_to :programming_language
 
-  # A grammar may be based on a meta grammar code resource
+  # The types of grammar may be based on a meta grammar code resource
   belongs_to :generated_from, class_name: 'CodeResource', optional: true
+
+  # A grammar may extend another grammar
+  belongs_to :extends, class_name: 'Grammar', optional: true
 
   # Many block languages may be based on a single grammar
   has_many :block_languages
@@ -39,6 +42,17 @@ class Grammar < ApplicationRecord
     attributes
       .slice("types", "foreign_types", "root")
       .compact
+  end
+
+  # All types that are defined in this grammar, with locally defined types
+  # taking precedence over foreign types.
+  def all_types
+    # This merge must be over exactly two levels: Languages must not be
+    # overwritten directly, but merged. But the types inside a language
+    # must **not** be merged.
+    foreign_types.merge(types) do |key, foreign, local|
+      foreign.merge(local)
+    end
   end
 
   # Takes the current state of the backing code resource and assigns
@@ -84,6 +98,14 @@ class Grammar < ApplicationRecord
     end
 
     return affected
+  end
+
+  # Pulls possibly newer types from the grammar that this grammar extends. Does
+  # nothing if this grammar doesn't extend another grammar.
+  def regenerate_foreign_types!
+    if self.extends
+      self.foreign_types = self.extends.all_types
+    end
   end
 
   # Computes a hash that may be sent back to the client if it requires

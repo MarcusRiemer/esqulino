@@ -79,6 +79,193 @@ RSpec.describe Grammar, type: :model do
     end
   end
 
+  context "types" do
+    let(:type_empty) {
+      {
+        "type" => "concrete",
+        "attributes" => []
+      }
+    }
+
+    let(:type_terminal_a) {
+      {
+        "type" => "concrete",
+        "attributes" => [
+          {
+            "type" => "terminal",
+            "symbol" => "a"
+          }
+        ]
+      }
+    }
+
+    context "all_types" do
+      it "no types at all" do
+        g = FactoryBot.build(:grammar)
+        expect(g.all_types).to eq({})
+      end
+
+      it "Empty local language" do
+        g = FactoryBot.build(:grammar, types: { "l" => {} })
+        expect(g.all_types).to eq({"l" => {}})
+      end
+
+      it "Empty foreign language" do
+        g = FactoryBot.build(:grammar, foreign_types: { "l" => {} })
+        expect(g.all_types).to eq({"l" => {}})
+      end
+
+      it "Identical empty foreign and local language" do
+        g = FactoryBot.build(:grammar, types: { "l" => {} }, foreign_types: { "l" => {} })
+        expect(g.all_types).to eq({"l" => {}})
+      end
+
+      it "Different empty foreign and local language" do
+        g = FactoryBot.build(:grammar, types: { "l1" => {} }, foreign_types: { "l2" => {} })
+        expect(g.all_types).to eq({"l1" => {}, "l2" => {}})
+      end
+
+      it "Local language with single type" do
+        g = FactoryBot.build(:grammar, types: {
+                               "l" => {
+                                 "t" => type_empty
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+      end
+
+      it "Foreign language with single type" do
+        g = FactoryBot.build(:grammar, foreign_types: {
+                               "l" => {
+                                 "t" => type_empty
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+      end
+
+      it "Local and foreign language with identical single type" do
+        g = FactoryBot.build(:grammar,
+                             types: {
+                               "l" => {
+                                 "t" => type_empty
+                               }
+                             },
+                             foreign_types: {
+                               "l" => {
+                                 "t" => type_empty
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+      end
+
+      it "Local precedence: Termninal a" do
+        g = FactoryBot.build(:grammar,
+                             types: {
+                               "l" => {
+                                 "t" => type_terminal_a
+                               }
+                             },
+                             foreign_types: {
+                               "l" => {
+                                 "t" => type_empty
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t" => type_terminal_a } })
+      end
+
+      it "Local precedence: Empty" do
+        g = FactoryBot.build(:grammar,
+                             types: {
+                               "l" => {
+                                 "t" => type_empty
+                               }
+                             },
+                             foreign_types: {
+                               "l" => {
+                                 "t" => type_terminal_a
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+      end
+
+      it "Local precedence: Termninal a, additional local" do
+        g = FactoryBot.build(:grammar,
+                             types: {
+                               "l" => {
+                                 "t1" => type_terminal_a,
+                                 "t2" => type_terminal_a
+                               }
+                             },
+                             foreign_types: {
+                               "l" => {
+                                 "t1" => type_empty
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t1" => type_terminal_a, "t2" => type_terminal_a } })
+      end
+
+      it "Local precedence: Termninal a, additional foreign" do
+        g = FactoryBot.build(:grammar,
+                             types: {
+                               "l" => {
+                                 "t1" => type_terminal_a,
+                               }
+                             },
+                             foreign_types: {
+                               "l" => {
+                                 "t1" => type_empty,
+                                 "t2" => type_terminal_a
+                               }
+                             })
+
+        expect(g.all_types).to eq({"l" => {"t1" => type_terminal_a, "t2" => type_terminal_a } })
+      end
+    end
+
+    context "regenerate_foreign_types!" do
+      it "doesn't extend anything" do
+        g = FactoryBot.build(:grammar)
+
+        g.regenerate_foreign_types!
+
+        expect(g.foreign_types).to eq({})
+      end
+
+      it "The base grammar has no types" do
+        b = FactoryBot.create(:grammar)
+        e = FactoryBot.build(:grammar, extends: b)
+
+        e.regenerate_foreign_types!
+
+        expect(e.foreign_types).to eq({})
+      end
+
+      it "The extended grammar has a local type" do
+        b = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
+        e = FactoryBot.build(:grammar, extends: b)
+
+        e.regenerate_foreign_types!
+
+        expect(e.foreign_types).to eq({ "l" => { "t" => type_empty } })
+      end
+
+      it "The extended grammar has a foreign type" do
+        b = FactoryBot.create(:grammar, foreign_types: { "l" => { "t" => type_empty } })
+        e = FactoryBot.build(:grammar, extends: b)
+
+        e.regenerate_foreign_types!
+
+        expect(e.foreign_types).to eq({ "l" => { "t" => type_empty } })
+      end
+    end
+  end
+
   context "based on CodeResource" do
     it "may exist without a associated code resource" do
       res = FactoryBot.build(:grammar, generated_from: nil)
