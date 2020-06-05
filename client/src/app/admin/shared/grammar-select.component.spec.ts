@@ -40,6 +40,7 @@ describe("GrammarSelect", () => {
     let component = fixture.componentInstance;
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
+    const grammarList = TestBed.inject(ListGrammarDataService);
 
     if (preSelectedId) {
       component.selectedId = preSelectedId;
@@ -61,6 +62,7 @@ describe("GrammarSelect", () => {
       component,
       httpTesting,
       serverApi,
+      grammarList,
       element: fixture.nativeElement as HTMLElement,
     };
   }
@@ -69,11 +71,7 @@ describe("GrammarSelect", () => {
     const dut = await createComponent();
     expect(dut.component).toBeDefined();
 
-    const select = dut.element.querySelector("select");
-    const options = Array.from(select.options);
-
-    // Default option has no value
-    expect(options.map((o) => o.value)).toEqual([""]);
+    expect(dut.component.selectedId).toBeUndefined();
   });
 
   it(`Displays all available grammars`, async () => {
@@ -86,7 +84,6 @@ describe("GrammarSelect", () => {
     const select = dut.element.querySelector("select");
     const options = Array.from(select.options).slice(1);
     expect(options.map((o) => o.text)).toEqual([g1.name, g2.name]);
-    expect(options.map((o) => o.value)).toEqual([g1.id, g2.id]);
   });
 
   it(`Pre-select a grammar`, async () => {
@@ -99,19 +96,45 @@ describe("GrammarSelect", () => {
     expect(dut.component.selectedId).toEqual(g2.id);
   });
 
+  it(`Data Change: Selection stable with new data`, async () => {
+    const [g1, g2, g3] = [
+      buildGrammar({ name: "g1" }),
+      buildGrammar({ name: "g2" }),
+      buildGrammar({ name: "g3" }),
+    ];
+    const dut = await createComponent([g1, g2], g2.id);
+
+    const selectedIndex = dut.element.querySelector("select").selectedIndex;
+    expect(dut.component.selectedId).toEqual(g2.id);
+
+    const select = dut.element.querySelector("select");
+    const options = Array.from(select.options).slice(1);
+    expect(options.map((o) => o.text)).toEqual([g1.name, g2.name]);
+
+    dut.grammarList.listCache.refresh();
+    provideGrammarList([g1, g2, g3]);
+    dut.fixture.detectChanges();
+    await dut.fixture.whenRenderingDone();
+
+    expect(dut.component.selectedId).toEqual(g2.id);
+    expect(dut.element.querySelector("select").selectedIndex).toEqual(
+      selectedIndex
+    );
+  });
+
   it(`Data change: Updates selection to a different grammar`, async () => {
     const [g1, g2] = [
       buildGrammar({ name: "g1" }),
       buildGrammar({ name: "g2" }),
     ];
     const dut = await createComponent([g1, g2]);
-    expect(dut.element.querySelector("select").value).toEqual("");
+    expect(dut.element.querySelector("select").value).toContain("undefined");
 
     dut.component.selectedId = g1.id;
     dut.fixture.detectChanges();
     await dut.fixture.whenRenderingDone();
 
-    expect(dut.element.querySelector("select").value).toEqual(g1.id);
+    expect(dut.element.querySelector("select").value).toContain(g1.id);
   });
 
   it(`Click: Updates selection to a different grammar`, async () => {

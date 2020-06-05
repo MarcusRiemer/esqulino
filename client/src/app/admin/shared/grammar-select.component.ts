@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 
 import { ListGrammarDataService } from "../../shared/serverdata";
+import { first, tap } from "rxjs/operators";
 
 /**
  * Allows the selection of a single meta code resource (or none).
@@ -18,7 +19,9 @@ export class GrammarSelectComponent {
   /**
    * The code resources that are available.
    */
-  readonly grammars$ = this._list.list;
+  readonly grammars$ = this._list.list.pipe(
+    tap((l) => console.log("New Grammars to select", l))
+  );
 
   private _selectedId: string;
 
