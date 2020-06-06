@@ -7,7 +7,7 @@ import {
   multiLanguageGrammar,
   comparableErrors,
 } from "./grammar.spec-util";
-import { getQualifiedTypes } from "./grammar-util";
+import { getQualifiedTypes } from "./grammar-type-util";
 import { NodeDescription } from "./syntaxtree.description";
 import { GrammarDocument } from "./grammar.description";
 

@@ -17,7 +17,7 @@ import { defaultEditorComponents } from "./generator-default";
 import {
   getQualifiedTypes,
   ensureGrammarAttributeNames,
-} from "../../syntaxtree/grammar-util";
+} from "../../syntaxtree/grammar-type-util";
 
 /**
  * Ensures that there should be no errors during generation.

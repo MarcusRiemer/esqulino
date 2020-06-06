@@ -16,7 +16,7 @@ import {
   FullNodeAttributeDescription,
   getFullQualifiedAttributes,
   getConcreteTypes,
-} from "../../shared/syntaxtree/grammar-util";
+} from "../../shared/syntaxtree/grammar-type-util";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
 

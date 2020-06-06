@@ -2,7 +2,7 @@ import {
   GrammarDocument,
   NodeAttributeDescription,
 } from "./grammar.description";
-import { getFullQualifiedAttributes } from "./grammar-util";
+import { getFullQualifiedAttributes } from "./grammar-type-util";
 
 // All type literals that are used for visuals only
 const VISUAL_TYPES: Set<NodeAttributeDescription["type"]> = new Set([

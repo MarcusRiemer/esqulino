@@ -6,7 +6,6 @@ import {
   RequiredResource,
 } from "./resource-references.service";
 import { GrammarDescription } from "./syntaxtree";
-import { LanguageService } from "./language.service";
 import { BlockLanguageDescription } from "./block/block-language.description";
 
 /**

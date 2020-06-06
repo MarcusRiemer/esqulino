@@ -56,4 +56,5 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       },
     },
   },
+  foreignTypes: {},
 };
