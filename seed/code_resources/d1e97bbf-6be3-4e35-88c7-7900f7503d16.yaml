@@ -67,6 +67,7 @@ concise_attributes:
           }
         }
       },
+      "foreignTypes": {},
       "root": {
         "languageName": "meta",
         "typeName": "grammar"
