@@ -21,7 +21,7 @@ export class ConditionalDisplayDirective implements OnDestroy, OnInit {
 
   // Css class .hide is set to host element when _hide is true
   @HostBinding("class.hide")
-  private _hide: boolean;
+  public _hide: boolean;
 
   subs: Subscription[] = [];
 
