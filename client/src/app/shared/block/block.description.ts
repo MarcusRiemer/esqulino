@@ -274,6 +274,13 @@ export interface MetaDefinedTypeSidebarDescription {
   type: "metaDefinedTypes";
 }
 
+export interface TruckWorldTilesSidebarDescription {
+  /**
+   * Unique identification for this type.
+   */
+  type: "truckWorldTiles";
+}
+
 /**
  * All possible sidebar types
  */
@@ -281,7 +288,8 @@ export type SidebarDescription =
   | FixedBlocksSidebarDescription
   | DatabaseSchemaSidebarDescription
   | TruckProgramUserFunctionsSidebarDescription
-  | MetaDefinedTypeSidebarDescription;
+  | MetaDefinedTypeSidebarDescription
+  | TruckWorldTilesSidebarDescription;
 
 /**
  * Describes how certain nodes in the syntaxtree should be presented
