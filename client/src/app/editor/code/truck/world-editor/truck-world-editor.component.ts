@@ -13,13 +13,9 @@ import {
   templateUrl: "templates/truck-world-editor.html",
 })
 export class TruckWorldEditorComponent implements OnInit, OnDestroy {
-  public tileFeatureType = TruckTileFeatureType;
-
   private _subscriptions: Subscription[] = [];
 
   private _currentWorld?: World;
-
-  public feature$ = this._editor.feature;
 
   constructor(
     private _truckWorld: TruckWorldService,
@@ -71,27 +67,4 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
     this._editor.resetEverything();
   }
 
-  public selectRoad() {
-    this._editor.selectTileFeature(TruckTileFeatureType.Road, null);
-  }
-
-  public selectTrafficLight() {
-    this._editor.selectTileFeature(TruckTileFeatureType.TrafficLight, {
-      greenPhase: 2,
-      redPhase: 2,
-      startPhase: 0,
-    });
-  }
-
-  public selectFreight(color: TruckFreightTileFeatureOptions) {
-    this._editor.selectTileFeature(TruckTileFeatureType.Freight, color);
-  }
-
-  public selectFreightTarget(color: TruckFreightTileFeatureOptions) {
-    this._editor.selectTileFeature(TruckTileFeatureType.FreightTarget, color);
-  }
-
-  public selectTruckSpawn() {
-    this._editor.selectTileFeature(TruckTileFeatureType.TruckSpawn, null);
-  }
 }

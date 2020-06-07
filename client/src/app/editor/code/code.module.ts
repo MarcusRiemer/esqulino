@@ -43,6 +43,7 @@ import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor
 import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
 
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
+import {TruckWorldTilesSidebarComponent} from "./truck/world-editor/truck-world-tiles-sidebar.component";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
@@ -67,6 +68,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
     WorldSensorsComponent,
     WorldSelectorComponent,
     TruckWorldEditorComponent,
+    TruckWorldTilesSidebarComponent,
     UserFunctionsSidebarComponent,
     UnknownCodeResourceComponent,
     DefinedTypesSidebarComponent,

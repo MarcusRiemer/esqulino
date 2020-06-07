@@ -279,6 +279,9 @@ export interface TruckWorldTilesSidebarDescription {
    * Unique identification for this type.
    */
   type: "truckWorldTiles";
+
+  // TODO Create tile description and do something like this:
+  // tiles: [{"type": "freightTarget", "options": {"color": "red"}}]
 }
 
 /**
