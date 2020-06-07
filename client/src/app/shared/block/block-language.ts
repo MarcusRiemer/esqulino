@@ -18,7 +18,7 @@ import * as Forward from "./block-language.forward";
 import { DatabaseSchemaSidebar } from "./sql/database-schema-sidebar";
 import { ProgramUserFunctionsSidebar } from "./truck/program-user-functions-sidebar";
 import { MetaDefinedTypesSidebar } from "./meta/meta-defined-types-sidebar";
-import {TruckWorldTilesSidebar} from "./truck/truck-world-tiles-sidebar";
+import { TruckWorldTilesSidebar } from "./truck/truck-world-tiles-sidebar";
 
 /**
  * Augments an existing language with additional information on how to

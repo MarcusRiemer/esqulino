@@ -66,5 +66,4 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
   public resetEverything(): void {
     this._editor.resetEverything();
   }
-
 }

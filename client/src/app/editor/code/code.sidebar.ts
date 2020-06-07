@@ -18,7 +18,7 @@ import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.com
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 import { DatabaseSchemaSidebarComponent } from "./query/database-schema-sidebar.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
-import {TruckWorldTilesSidebarComponent} from "./truck/world-editor/truck-world-tiles-sidebar.component";
+import { TruckWorldTilesSidebarComponent } from "./truck/world-editor/truck-world-tiles-sidebar.component";
 
 /**
  * Maps ids of sidebar components to their actual components.
