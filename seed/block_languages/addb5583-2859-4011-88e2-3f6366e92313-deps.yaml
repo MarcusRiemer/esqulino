@@ -1,0 +1,4 @@
+---
+- - "../seed/grammars"
+  - 4a934d6d-1703-4ef9-9933-3d833f938490
+  - !ruby/class 'Seed::GrammarSeed'
