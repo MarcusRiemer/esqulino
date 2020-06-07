@@ -29,7 +29,7 @@
           </label>
           <div class="col-sm-10">
             <input
-              [(ngModel)]="params.name"
+              [(ngModel)]="localizedName"
               [class.form-control-danger]="name.errors && (name.dirty || name.touched)"
               [class.form-control-success]="name.valid"
               [pattern]="regExpName"

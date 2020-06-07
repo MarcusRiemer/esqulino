@@ -1,4 +1,4 @@
-import { MultilingualString } from "./multilingual-string.description";
+import { MultiLangString } from "./multilingual-string.description";
 
 /**
  * News as it is displayed on the frontpage. The text may or may not
@@ -6,9 +6,9 @@ import { MultilingualString } from "./multilingual-string.description";
  */
 export interface NewsFrontpageDescription {
   id: string;
-  title: MultilingualString;
+  title: MultiLangString;
   /** Rendered HTML version of the text */
-  text: MultilingualString;
+  text: MultiLangString;
   publishedFrom: string;
 }
 
@@ -17,9 +17,9 @@ export interface NewsFrontpageDescription {
  */
 export interface NewsDescription {
   id: string;
-  title: MultilingualString;
+  title: MultiLangString;
   /** Internal Markdown version of the text */
-  text: MultilingualString;
+  text: MultiLangString;
   publishedFrom: string | null;
   createdAt: string;
   updatedAt: string;
@@ -34,9 +34,9 @@ export interface NewsDescription {
  */
 // export type NewsUpdateDescription = Pick<NewsDescription, "title" | "text" | "publishedFrom">;
 export interface NewsUpdateDescription {
-  title: MultilingualString;
+  title: MultiLangString;
   /** Internal Markdown version of the text */
-  text: MultilingualString;
+  text: MultiLangString;
   publishedFrom: string | null;
   userId?: string;
 }

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, LOCALE_ID, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
@@ -11,6 +11,7 @@ import {
   ProjectCreationResponse,
 } from "../shared/project.description";
 import { ServerApiService } from "../shared";
+import { MultiLangString } from "../shared/multilingual-string.description";
 
 @Component({
   templateUrl: "templates/create-project.html",
@@ -19,6 +20,8 @@ export class CreateProjectComponent {
   private _currentRequest: Observable<ProjectCreationResponse>;
 
   private _currentError: any;
+
+  public localizedName = "";
 
   /**
    * The definition that will be sent to the server.
@@ -31,7 +34,9 @@ export class CreateProjectComponent {
   public constructor(
     private _http: HttpClient,
     private _serverApi: ServerApiService,
-    private _router: Router
+    private _router: Router,
+    @Inject(LOCALE_ID)
+    private readonly _localeId: string
   ) {}
 
   // Defines how a valid slug could look like
@@ -54,6 +59,11 @@ export class CreateProjectComponent {
   async createProject() {
     if (!this._currentRequest) {
       this._currentError = undefined;
+
+      const localizedName: MultiLangString = {};
+      localizedName[this._localeId] = this.localizedName;
+
+      this.params.name = localizedName;
 
       this._currentRequest = this._http
         .post<ProjectCreationResponse>(

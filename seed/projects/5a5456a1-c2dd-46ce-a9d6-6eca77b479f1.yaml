@@ -8,11 +8,7 @@ concise_attributes:
   value_before_type_cast: trucklino-legacy
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Trucklino
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Eine Welt voller Waren und ein einsamer Truck der sie an
-    den Bestimmungsort bringen muss. Und dein Programm muss sagen wie das geht!
+  value_before_type_cast: '"de"=>"Trucklino"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -26,11 +22,15 @@ concise_attributes:
   value_before_type_cast: 2018-12-20 14:29:04.862138000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:22:00.018375000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.231128000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Eine Welt voller Waren und ein einsamer Truck der
+    sie an den Bestimmungsort bringen muss. Und dein Programm muss sagen wie das geht!"'
 new_record: false
 active_record_yaml_version: 2

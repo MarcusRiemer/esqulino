@@ -9,27 +9,6 @@ concise_attributes:
   name: name
   value_before_type_cast: Documentation Examples
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: model
-  value_before_type_cast: '{"root": {"typeName": "Document", "languageName": "allowed"},
-    "types": {"prop": {"boolean": {"type": "concrete", "attributes": [{"base": "boolean",
-    "name": "b", "type": "property"}]}, "integer": {"type": "concrete", "attributes":
-    [{"base": "integer", "name": "i", "type": "property", "restrictions": []}, {"base":
-    "integer", "name": "fiveOrMore", "type": "property", "restrictions": [{"type":
-    "minInclusive", "value": 5}]}, {"base": "integer", "name": "fiveOrLess", "type":
-    "property", "restrictions": [{"type": "maxInclusive", "value": 5}]}, {"base":
-    "integer", "name": "zeroToFive", "type": "property", "restrictions": [{"type":
-    "maxInclusive", "value": 5}, {"type": "minInclusive", "value": 0}]}]}}, "allowed":
-    {"Text": {"type": "concrete"}, "Figure": {"type": "concrete"}, "Document": {"type":
-    "concrete", "attributes": [{"name": "Children", "type": "allowed", "nodeTypes":
-    [{"occurs": "+", "nodeType": {"typeName": "Text", "languageName": "allowed"}},
-    {"occurs": "?", "nodeType": {"typeName": "Figure", "languageName": "allowed"}},
-    {"occurs": "*", "nodeType": {"typeName": "Reference", "languageName": "allowed"}}]}]},
-    "Reference": {"type": "concrete"}}, "sequence": {"A": {"type": "concrete"}, "B":
-    {"type": "concrete"}, "root": {"type": "concrete", "attributes": [{"name": "Children",
-    "type": "sequence", "nodeTypes": [{"typeName": "B", "languageName": "sequence"},
-    {"typeName": "A", "languageName": "sequence"}, {"typeName": "B", "languageName":
-    "sequence"}]}]}}}}'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-08-23 09:29:51.024269000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase

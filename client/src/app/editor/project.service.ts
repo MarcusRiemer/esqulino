@@ -19,7 +19,6 @@ import {
   ProjectFullDescription,
 } from "../shared/project";
 import { ResourceReferencesService } from "../shared/resource-references.service";
-import { isValidId } from "../shared/util";
 
 export { Project, ProjectFullDescription };
 

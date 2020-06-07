@@ -8,10 +8,7 @@ concise_attributes:
   value_before_type_cast: webtest
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 'Test: Web'
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Gehen Sie weiter, hier gibt es nichts zu sehen ...
+  value_before_type_cast: '"de"=>"Test: Web"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -25,11 +22,14 @@ concise_attributes:
   value_before_type_cast: 2018-02-25 19:13:02.563495000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-05-21 14:22:01.833874000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.240643000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Gehen Sie weiter, hier gibt es nichts zu sehen ..."'
 new_record: false
 active_record_yaml_version: 2
