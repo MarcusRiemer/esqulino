@@ -1668,7 +1668,7 @@ describe("Grammar Validation", () => {
 
     expect(v.isKnownLanguage("mini-sql")).toBeTruthy();
 
-    const allTypes = getQualifiedTypes(langMiniSql);
+    const allTypes = getQualifiedTypes(langMiniSql.types);
     allTypes.forEach((t) => {
       expect(v.isKnownType(t.languageName, t.typeName)).toBe(true);
     });
@@ -1677,7 +1677,7 @@ describe("Grammar Validation", () => {
   it("Mini-HTML: registers types", () => {
     const v = new Validator([langMiniHtml]);
 
-    const allTypes = getQualifiedTypes(langMiniHtml);
+    const allTypes = getQualifiedTypes(langMiniHtml.types);
     allTypes.forEach((t) => {
       expect(v.isKnownType(t.languageName, t.typeName)).toBe(true);
     });

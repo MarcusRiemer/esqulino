@@ -15,6 +15,7 @@ import {
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
 } from "../../syntaxtree";
+import { allPresentTypes } from "../../syntaxtree/grammar-type-util";
 
 /**
  * Takes a grammar description and a description how to transform it and
@@ -24,13 +25,15 @@ export function convertGrammarTreeInstructions(
   d: TreeBlockLanguageGeneratorDescription,
   g: GrammarDocument
 ): BlockLanguageDocument {
+  const allTypes = allPresentTypes(g);
+
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents ?? defaultEditorComponents,
     sidebars: (d.staticSidebars ?? []).map((sidebar) =>
-      generateSidebar(g, sidebar)
+      generateSidebar(allTypes, sidebar)
     ),
     rootCssClasses: [
       "activate-indent",
@@ -42,7 +45,7 @@ export function convertGrammarTreeInstructions(
   // Create a visual representation for each concrete type
   const visualizedNodes: EditorBlockDescription[] = [];
 
-  Object.entries(g.types ?? {}).forEach(([langName, types]) => {
+  Object.entries(allTypes ?? {}).forEach(([langName, types]) => {
     const vis = Object.entries(types)
       .filter(([_, typeDesc]) => typeDesc.type === "concrete")
       .map(

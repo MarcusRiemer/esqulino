@@ -15,12 +15,12 @@ export function ensureAttributeName(
 }
 
 /**
- * Constructs a new grammar where attributes in the given grammar are guarenteed to be named.
+ * Constructs a new set of languages where attributes in the given languages are guarenteed to be named.
  */
 export function ensureGrammarAttributeNames(
-  desc: Desc.GrammarDocument
-): Desc.GrammarDocument {
-  const copy: Desc.GrammarDocument = JSON.parse(JSON.stringify(desc));
+  languages: Desc.NamedLanguages
+): Desc.NamedLanguages {
+  const copy: Desc.NamedLanguages = JSON.parse(JSON.stringify(languages));
 
   const impl = (
     attributes: Desc.NodeAttributeDescription[],
@@ -35,7 +35,7 @@ export function ensureGrammarAttributeNames(
     });
   };
 
-  Object.values(copy.types).forEach((n) => {
+  Object.values(copy).forEach((n) => {
     Object.values(n).forEach((t) => {
       if (t.type === "concrete" && t.attributes) {
         impl(t.attributes, []);
@@ -59,10 +59,10 @@ export type FullNodeAttributeDescription = Desc.NodeAttributeDescription & {
  * @return All attributes of the given grammar in the form of a handy list.
  */
 export function getFullQualifiedAttributes(
-  g: Desc.GrammarDocument
+  languages: Desc.NamedLanguages
 ): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
-  const namedGrammar = ensureGrammarAttributeNames(g);
+  const namedLanguages = ensureGrammarAttributeNames(languages);
 
   const recurseAttribute = (
     t: QualifiedNodeTypeDescription,
@@ -80,7 +80,7 @@ export function getFullQualifiedAttributes(
     }
   };
 
-  getQualifiedTypes(namedGrammar).forEach((t) => {
+  getQualifiedTypes(namedLanguages).forEach((t) => {
     if (Desc.isNodeConcreteTypeDescription(t)) {
       (t.attributes || []).forEach((attribute) => {
         recurseAttribute(t, attribute);
@@ -100,18 +100,16 @@ type NodeTypeDescriptionPredicate = (t: Desc.NodeTypeDescription) => boolean;
  * @return Names of all types in the given grammar in the form of a handy list
  */
 function collectTypes(
-  g: Desc.GrammarDocument,
+  languages: Desc.NamedLanguages,
   pred: NodeTypeDescriptionPredicate
 ): QualifiedTypeName[] {
   const toReturn: QualifiedTypeName[] = [];
 
-  if (!g) {
+  if (!languages) {
     return [];
   }
 
-  const allTypes = allPresentTypes(g);
-
-  Object.entries(allTypes).forEach(([languageName, types]) => {
+  Object.entries(languages).forEach(([languageName, types]) => {
     Object.entries(types).forEach(([typeName, type]) => {
       if (pred(type)) {
         toReturn.push({
@@ -128,15 +126,19 @@ function collectTypes(
 /**
  * @return Names of all types in the given grammar in the form of a handy list
  */
-export function getAllTypes(g: Desc.GrammarDocument): QualifiedTypeName[] {
-  return collectTypes(g, (_) => true);
+export function getTypeList(
+  languages: Desc.NamedLanguages
+): QualifiedTypeName[] {
+  return collectTypes(languages, (_) => true);
 }
 
 /**
  * @return Names of all concrete types in the given grammar in the form of a handy list
  */
-export function getConcreteTypes(g: Desc.GrammarDocument): QualifiedTypeName[] {
-  return collectTypes(g, Desc.isNodeConcreteTypeDescription);
+export function getConcreteTypes(
+  languages: Desc.NamedLanguages
+): QualifiedTypeName[] {
+  return collectTypes(languages, Desc.isNodeConcreteTypeDescription);
 }
 
 /**
@@ -152,13 +154,11 @@ export type QualifiedNodeTypeDescription = Desc.NodeTypeDescription & {
  * @return All attributes of the given grammar in the form of a handy list.
  */
 export function getQualifiedTypes(
-  g: Desc.GrammarDocument
+  languages: Desc.NamedLanguages
 ): QualifiedNodeTypeDescription[] {
   const toReturn: QualifiedNodeTypeDescription[] = [];
 
-  const allTypes = allPresentTypes(g);
-
-  Object.entries(allTypes).forEach(([langName, types]) => {
+  Object.entries(languages).forEach(([langName, types]) => {
     Object.entries(types).forEach(([typeName, t]) => {
       toReturn.push(
         Object.assign({}, t, {
@@ -176,16 +176,16 @@ export function getQualifiedTypes(
  * Calculates the self contained, full description for a certain node type.
  */
 export function fullNodeDescription(
-  grammar: Desc.GrammarDocument,
+  languages: Desc.NamedLanguages,
   typeName: QualifiedTypeName
 ): FullNodeConcreteTypeDescription;
 export function fullNodeDescription(
-  grammar: Desc.GrammarDocument,
+  languages: Desc.NamedLanguages,
   typeName: string,
   languageName: string
 ): FullNodeConcreteTypeDescription;
 export function fullNodeDescription(
-  grammar: Desc.GrammarDocument,
+  languages: Desc.NamedLanguages,
   typeName: string | QualifiedTypeName,
   languageName?: string
 ): FullNodeConcreteTypeDescription {
@@ -194,7 +194,7 @@ export function fullNodeDescription(
     typeName = typeName.typeName;
   }
 
-  const actualLang = grammar.types[languageName];
+  const actualLang = languages[languageName];
   if (!actualLang) {
     throw new Error(`Language "${languageName}" does not exist on grammar`);
   }
@@ -324,7 +324,7 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
     recurseType(g.root);
 
     // Add all unreferenced types
-    const unreferenced = getQualifiedTypes(g)
+    const unreferenced = getQualifiedTypes(allTypes)
       // OUCH! Order of keys is important here, if "typeName" is mentioned first
       // the resulting string also has that key and value mentioned first
       .map(

@@ -17,6 +17,7 @@ import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.com
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 import { DatabaseSchemaSidebarComponent } from "./query/database-schema-sidebar.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
+import { allPresentTypes } from "src/app/shared/syntaxtree/grammar-type-util";
 
 /**
  * Maps ids of sidebar components to their actual components.
@@ -83,7 +84,8 @@ export class CodeSidebarComponent {
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};
-      Object.entries(g.types).forEach(([name, types]) => {
+      const allTypes = allPresentTypes(g);
+      Object.entries(allTypes).forEach(([name, types]) => {
         toGenerate[name] = [];
         Object.entries(types).forEach(([typeName, desc]) => {
           if (desc.type === "concrete") {
@@ -91,7 +93,7 @@ export class CodeSidebarComponent {
           }
         });
       });
-      return generateSidebar(g, {
+      return generateSidebar(allTypes, {
         type: "generatedBlocks",
         caption: "Auto Generated",
         categories: [

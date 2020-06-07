@@ -1,6 +1,3 @@
-import { GrammarDocument } from "../../syntaxtree";
-import { singleLanguageGrammar } from "../../syntaxtree/grammar.spec-util";
-
 import { generateDefaultNode, generateSidebar } from "./sidebar";
 import { AnySidebarDescription } from "./sidebar.description";
 import { SidebarDescription } from "../block.description";
@@ -87,21 +84,17 @@ describe("Sidebar Default Node Generator", () => {
   });
 
   it(`Sidebar generation passes fixed sidebars through`, () => {
-    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {});
-
     const sidebar: AnySidebarDescription = {
       type: "fixedBlocks",
       caption: "Fixed",
       categories: [],
     };
 
-    const res = generateSidebar(grammar, sidebar);
+    const res = generateSidebar({}, sidebar);
     expect(res).toEqual(sidebar);
   });
 
   it(`Sidebar generation passes fixed sidebar categories through`, () => {
-    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {});
-
     const sidebar: AnySidebarDescription = {
       type: "generatedBlocks",
       caption: "Fixed",
@@ -125,13 +118,11 @@ describe("Sidebar Default Node Generator", () => {
       ],
     };
 
-    const res = generateSidebar(grammar, sidebar);
+    const res = generateSidebar({ g1: {} }, sidebar);
     expect(res).toEqual(exp);
   });
 
   it(`Sidebar generation passes fixed blocks through`, () => {
-    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {});
-
     const sidebar: AnySidebarDescription = {
       type: "generatedBlocks",
       caption: "Fixed",
@@ -172,15 +163,11 @@ describe("Sidebar Default Node Generator", () => {
       ],
     };
 
-    const res = generateSidebar(grammar, sidebar);
+    const res = generateSidebar({ g1: {} }, sidebar);
     expect(res).toEqual(exp);
   });
 
   it(`Sidebar generation creates a mixture of fixed and generated blocks`, () => {
-    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {
-      t1: { type: "concrete" },
-    });
-
     const sidebar: AnySidebarDescription = {
       type: "generatedBlocks",
       caption: "Generated Sidebar",
@@ -220,15 +207,11 @@ describe("Sidebar Default Node Generator", () => {
       ],
     };
 
-    const res = generateSidebar(grammar, sidebar);
+    const res = generateSidebar({ g1: { t1: { type: "concrete" } } }, sidebar);
     expect(res).toEqual(exp);
   });
 
   it(`Sidebar generation for purely generated categories`, () => {
-    const grammar: GrammarDocument = singleLanguageGrammar("g1", "foo", {
-      t1: { type: "concrete" },
-    });
-
     const sidebar: AnySidebarDescription = {
       type: "generatedBlocks",
       caption: "Generated Sidebar",
@@ -256,7 +239,7 @@ describe("Sidebar Default Node Generator", () => {
       ],
     };
 
-    const res = generateSidebar(grammar, sidebar);
+    const res = generateSidebar({ g1: { t1: { type: "concrete" } } }, sidebar);
     expect(res).toEqual(exp);
   });
 });

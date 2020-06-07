@@ -17,6 +17,7 @@ import { defaultEditorComponents } from "./generator-default";
 import {
   getQualifiedTypes,
   ensureGrammarAttributeNames,
+  allPresentTypes,
 } from "../../syntaxtree/grammar-type-util";
 
 /**
@@ -50,25 +51,27 @@ export function convertGrammarManualInstructions(
   d: ManualBlockLanguageGeneratorDescription,
   g: GrammarDocument
 ): BlockLanguageDocument {
+  const allTypes = allPresentTypes(g);
+
+  // If the grammar designer has decided to not name some things: This step still
+  // relies on unique names so they have to be generated
+  const strictlyNamedTypes = ensureGrammarAttributeNames(allTypes);
+
+  // The blocks of the editor are based on the concrete types of the grammar,
+  // "oneOf" types are not of interest here because they can never be nodes.
+  const concreteTypes = getQualifiedTypes(strictlyNamedTypes).filter(
+    (t) => t.type !== "oneOf"
+  );
+
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || defaultEditorComponents,
     sidebars: (d.staticSidebars || []).map((sidebar) =>
-      generateSidebar(g, sidebar)
+      generateSidebar(strictlyNamedTypes, sidebar)
     ),
   };
-
-  // If the grammar designer has decided to not name some things: This step still
-  // relies on unique names so they have to be generated
-  const strictlyNamedGrammar = ensureGrammarAttributeNames(g);
-
-  // The blocks of the editor are based on the concrete types of the grammar,
-  // "oneOf" types are not of interest here because they can never be nodes.
-  const concreteTypes = getQualifiedTypes(strictlyNamedGrammar).filter(
-    (t) => t.type !== "oneOf"
-  );
 
   // Apply traits
   const traitMap = new TraitMap();

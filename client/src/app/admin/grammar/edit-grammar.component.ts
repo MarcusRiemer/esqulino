@@ -16,7 +16,10 @@ import { ServerApiService } from "../../shared/serverdata/serverapi.service";
 import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
 import { GrammarDescription, QualifiedTypeName } from "../../shared/syntaxtree";
 import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
-import { getAllTypes } from "../../shared/syntaxtree/grammar-type-util";
+import {
+  getTypeList,
+  allPresentTypes,
+} from "../../shared/syntaxtree/grammar-type-util";
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
@@ -58,7 +61,7 @@ export class EditGrammarComponent implements OnInit {
       )
       .subscribe((g) => {
         this.grammar = g;
-        this.availableTypes = getAllTypes(this.grammar);
+        this.availableTypes = getTypeList(allPresentTypes(this.grammar));
         this.grammarRoot = g.root;
         this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
 
@@ -119,7 +122,7 @@ export class EditGrammarComponent implements OnInit {
    */
   set grammarTypes(types) {
     this.grammar.types = types;
-    this.availableTypes = getAllTypes(this.grammar);
+    this.availableTypes = getTypeList(allPresentTypes(this.grammar));
     this.grammarRoot = this.grammar.root;
   }
 
