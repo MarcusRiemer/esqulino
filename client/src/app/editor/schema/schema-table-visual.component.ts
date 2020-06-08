@@ -52,6 +52,7 @@ export class SchemaTableVisualComponent {
 
   public xPos = 0;
   public yPos = 0;
+  public width = 0;
 
   constructor(
     private _http: HttpClient,
@@ -71,7 +72,7 @@ export class SchemaTableVisualComponent {
   readonly visualSchemaUrl = zip(this.schemaRevision, this.schemaName).pipe(
     map(
       ([rev, name]) =>
-        `/api/project/${this._project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
+        `/api/project/${this._project.slug}/db/${name}/visual_schema?format=json&revision=${rev}`
     )
   );
 
@@ -116,10 +117,11 @@ export class SchemaTableVisualComponent {
     this._subscriptionRefs.push(dragRef);
 
     let schemaUrl = this.visualSchemaUrl.subscribe((url) => {
-      let visualSchemaText = this._http.get(url, { responseType: "text" });
+      let visualSchemaText = this._http.get(url, { responseType: "json" });
       let schemaRef = visualSchemaText.subscribe(
         (data) => {
           this.parseSchemaText(data);
+		  console.log(data);
         },
         (error) => {
           console.log(error);
@@ -224,20 +226,21 @@ export class SchemaTableVisualComponent {
 
     this.saveChanges();
   }
-
-  private parseSchemaText(text: string) {
-    let nodes = text.split('<g id="node');
+  
+  private parseSchemaText(text: any) {
+    let nodes = text.objects;
 
     for (var i = 1; i < nodes.length; i++) {
       if (
-        this.table.name == nodes[i].split("<title>")[1].split("</title>")[0]
+        this.table.name == nodes[i].name
       ) {
-        let points = nodes[i].split('fill="none" stroke="#000000" points="')[1];
-        let positions = points.split(" ")[1].split(",");
+        let points = nodes[i].pos;
+        let positions = points.split(",");
         console.log(positions);
 
         this.xPos = +positions[0];
         this.yPos = +positions[1];
+		this.width = nodes[i].width;
       }
     }
   }

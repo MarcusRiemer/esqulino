@@ -1,5 +1,5 @@
-<div>
-  <table class="vis" [ngStyle]="{'left': xPos, 'top' : yPos}">
+<div [ngStyle]="{'position': 'absolute', 'left': xPos + 'px', 'top': yPos + 'px', width: width + 'px'}">
+  <table class="vis">
     <thead>
       <tr>
         <input
