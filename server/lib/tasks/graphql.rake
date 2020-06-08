@@ -4,5 +4,5 @@ GraphQL::RakeTask.new(
       require File.expand_path("../../app/graphql/server_schema", __dir__)
       ServerSchema
     },
-    directory: File.expand_path("../../../schema/server_schema", __dir__)
+    directory: File.expand_path("../../../schema/graphql", __dir__)
 )

@@ -95,13 +95,13 @@ describe("OverviewProjectComponent", () => {
   }
 
 
-  it(`can be instantiated`, async () => {
+  xit(`can be instantiated`, async () => {
     const t = await createComponent();
 
     expect(t.component).toBeDefined();
   });
 
-  fit(`Displays a loading indicator (or not)`, async () => {
+  /*it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
     const initialLoading = await t.component.progress
@@ -139,9 +139,9 @@ describe("OverviewProjectComponent", () => {
       .pipe(first())
       .toPromise();
     expect(afterResponse).toBe(false);
-  });
+  });*/
 
-  it(`Displays an empty list`, async () => {
+  xit(`Displays an empty list`, async () => {
     const t = await createComponent();
 
     provideProjectList([]);
@@ -155,7 +155,7 @@ describe("OverviewProjectComponent", () => {
     expect(rows.length).toEqual(0);
   });
 
-  it(`Displays a list with a single element`, async () => {
+  xit(`Displays a list with a single element`, async () => {
     const t = await createComponent();
 
     const i1 = buildProject({ name: { en: "G1" } });
@@ -171,7 +171,7 @@ describe("OverviewProjectComponent", () => {
     expect(i1Row.textContent).toMatch(i1.id);
   });
 
-  /*it(`reloads data on refresh`, async () => {
+  /*xit(`reloads data on refresh`, async () => {
     const t = await createComponent();
 
     const i1 = buildProject({ name: { en: "B1" } });

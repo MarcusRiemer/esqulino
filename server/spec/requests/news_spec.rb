@@ -144,7 +144,7 @@ RSpec.describe NewsController, type: :request do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
       set_access_token(n.user)
       get "/api/news/admin/#{n.id}"
-      byebug
+
       json_data = JSON.parse(response.body)
 
       aggregate_failures "frontpage detail response" do
