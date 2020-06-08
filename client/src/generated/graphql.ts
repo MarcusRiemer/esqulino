@@ -286,7 +286,7 @@ export type Project = {
   grammars?: Maybe<Array<Grammar>>;
   id: Scalars['ID'];
   indexPageId?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+  name: LanguageString;
   preview?: Maybe<Scalars['String']>;
   projectSources?: Maybe<Array<ProjectSource>>;
   public?: Maybe<Scalars['Boolean']>;
@@ -506,8 +506,11 @@ export type AdminListProjectsQuery = (
     & Pick<ProjectConnection, 'totalCount'>
     & { nodes?: Maybe<Array<Maybe<(
       { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'name' | 'slug'>
-      & { codeResources?: Maybe<(
+      & Pick<Project, 'id' | 'slug'>
+      & { name: (
+        { __typename?: 'LanguageString' }
+        & Pick<LanguageString, 'de' | 'en'>
+      ), codeResources?: Maybe<(
         { __typename?: 'CodeResourceConnection' }
         & Pick<CodeResourceConnection, 'totalCount'>
       )> }
@@ -523,7 +526,10 @@ export const AdminListProjectsDocument = gql`
   projects(first: $first, after: $after, before: $before, last: $last, public: $public) {
     nodes {
       id
-      name
+      name {
+        de
+        en
+      }
       slug
       codeResources {
         totalCount

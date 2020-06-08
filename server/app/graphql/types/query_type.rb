@@ -1,5 +1,5 @@
 module Types
-  class QueryType < Types::BaseObject
+  class QueryType < GraphQL::Schema::Object
 
     field :programmingLanguages, Types::ProgrammingLanguageType.connection_type, null: false
     field :blockLanguages, Types::BlockLanguageType.connection_type, null: false

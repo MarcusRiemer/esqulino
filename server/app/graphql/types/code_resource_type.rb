@@ -1,5 +1,4 @@
 module Types
-
   class Types::CodeResourceType < Types::BaseObject
     field :name, String, null:false
     field :ast, Types::NodeDescription, null:true

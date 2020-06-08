@@ -80,7 +80,7 @@ export class NaturalLanguagesService {
     const presentLanguages = Object.keys(value);
 
     // Match of current language?
-    if (presentLanguages.includes(this._localeId)) {
+    if (presentLanguages.includes(this._localeId) && value[this._localeId] != null) {
       return this._localeId;
     }
 
@@ -88,7 +88,7 @@ export class NaturalLanguagesService {
     const configLanguages = this.availableLanguages;
     for (let i = 0; i < configLanguages.length; ++i) {
       const currToken = configLanguages[i].token;
-      if (presentLanguages.includes(currToken)) {
+      if (presentLanguages.includes(currToken) && value[currToken] != null) {
         return currToken;
       }
     }

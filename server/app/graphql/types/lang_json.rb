@@ -4,7 +4,7 @@ class Types::LangJson < Types::BaseScalar
   end
 
   def self.coerce_input(value,context)
-    if Validators::GraphqlValidator.json?(value)
+    if Validators::GraphqlValidator.is_parsable_json?(value)
       value = JSON.parse(value)
     end
     Validators::Languages.validate!(value)

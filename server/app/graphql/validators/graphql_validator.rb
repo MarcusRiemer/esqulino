@@ -5,13 +5,14 @@ module Validators
       raise GraphQL::ExecutionError, "You must provide a value for #{attribute}"
     end
 
-    def self.json?(*json_arr)
+    def self.is_parsable_json?(*json_arr)
       json_arr.each do |obj|
-        JSON.parse(obj)
-      rescue JSON::ParserError => e
+        !!JSON.parse(obj)
+      rescue
         return false
       end
       return true
     end
+
   end
 end

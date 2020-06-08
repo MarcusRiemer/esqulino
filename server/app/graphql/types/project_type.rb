@@ -1,6 +1,7 @@
 module Types
   class Types::ProjectType < Types::BaseObject
-    field :name, String, null:false
+
+    field :name, Types::LanguageStringType, null:false
     field :description, String, null:false
     field :public, Boolean,null:true
     field :preview, String, null:true

@@ -2,7 +2,10 @@ query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$publi
     projects(first:$first,after:$after,before:$before,last:$last,public:$public) {
         nodes{
             id
-            name
+            name {
+                de
+                en
+            }
             slug
             codeResources{
                 totalCount

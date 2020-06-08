@@ -87,6 +87,8 @@ import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
 import { ResourceReferencesOnlineService } from "./resource-references-online.service";
 import { PaginatorTableComponent } from "./table/paginator-table.component";
+import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.component";
+
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
@@ -180,6 +182,7 @@ const materialModules = [
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
     PaginatorTableComponent,
+    PaginatorTableGraphqlComponent,
     ConditionalDisplayDirective,
     ServerTasksComponent,
   ],
@@ -219,6 +222,7 @@ const materialModules = [
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
+    PaginatorTableGraphqlComponent,
     ServerTasksComponent,
     ConditionalDisplayDirective,
   ],
