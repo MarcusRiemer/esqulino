@@ -17,42 +17,198 @@ In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die A
 %************************************************
 \chapter{Grundlagen}
 \label{sec:requirements:existing}
+%Nicht spezifisch auf Blattwerzeuge werden!! Kleines Beispiel ist erlaubt (Begriff Blattwerzeug wird nicht erwähnt).
+
+%Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
+\section{GraphQL}
+%Serverseitigen Rendern arbeiten mit SQL
+%Clientseitiges Rendern kein SQL möglich -> Begründung
+%Graphql als Lösung für dieses Mismatch/Problem
+%Alternative wäre REST API mit 1 Route pro Query
+
+\section{Ausgewählte Details des Typescript Typsystems}
+% Definition eines Schemas mit Typescript Interfaces, Bsp. Project Tabelle
+% pick operator / exclude operator
+
+\section{JSON Schema}
+% kurz halten
+% Äquivalenz: typescript Interface und JSON.schema
+
+\section{Postgres jsonb und hstore Typen}
+% Postgres wird benutzt als Dokumenten Datenbank in bezug auf jsonb und hstore
+
+\chapter{Anforderungsanalyse}
+\section{Aktuelles System}
 
 Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt,
 die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Edi\-toren,
 für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}.
-Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt. 
-%Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
-\section{REST API}
-\section{Server Roundtrip Verfahren}
-\section{Aufbau}
+Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt.
 
-\subsection{Server}
-
-Der Server ist auf Basis von Ruby mit Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten. 
-Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}. 
+%Server:
+Der Server ist auf Basis von Ruby mit Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten.
+Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}.
 %Die für diese Arbeit entwickelte Software baut jedoch lediglich auf dem Client von BlattWerkzeug auf und hat mit der serverseitigen Anwendung keine direkten Berührungspunkte.
 
-\subsection{Client}
-
-Der Client wurde als eine Single-Page Application mit rein clientseitiger Visualisierung aufgebaut, 
-die lediglich für den Zugriff auf serverseitige Resourcen  (Datenbank, gespeicherte Ressourcen,gerenderte Seiten) Roundtrips zum Server nutzt~\cite[94-95]{riemer2016}. 
-Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in TypeScript, der damalig neusten Angular Version. 
+%Client:
+Der Client wurde als eine Single-Page Application mit rein clientseitiger Visualisierung aufgebaut,
+die lediglich für den Zugriff auf serverseitige Resourcen  (Datenbank, gespeicherte Ressourcen,gerenderte Seiten) Roundtrips zum Server nutzt~\cite[94-95]{riemer2016}.
+Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in TypeScript, der damalig neusten Angular Version.
 Zum aktuellen Zeitpunkt wird allerdings auf die Angular Version 9.1.0 gesetzt.
 
-\subsection{Datenbanksystem} 
+%Datenbanksystem
 
-Für die Wahl des einzusetzenden Datenbanksystems wurde sich beim Entwicklungsstart, auf Grund der Kriterien "Kostenlose Verfügbarkeit", 
+Für die Wahl des einzusetzenden Datenbanksystems wurde sich beim Entwicklungsstart, auf Grund der Kriterien "Kostenlose Verfügbarkeit",
 "Einfacher Betrieb", "Einfache Backups", "Tools zur Modellierung" und "Externe Tools zur Entwicklung von SQL-Abfragen"
- für eine SQLite Datenbank entschieden~\cite[99-100]{riemer2016}. Im November 2017 ist dann der Grundstein gelegt worden, 
- um den Server mit einer PostgreSQL Datenbank zu verbinden~\cite{riemerPostgresCommit}, da diese es unter anderem ermöglicht JSON Objekte direkt zu speichern,
- ohne diese in Text Datentypen konvertieren zu müssen.
+für eine SQLite Datenbank entschieden~\cite[99-100]{riemer2016}. Im November 2017 ist dann der Grundstein gelegt worden,
+um den Server mit einer PostgreSQL Datenbank zu verbinden~\cite{riemerPostgresCommit}, da diese es unter anderem ermöglicht JSON Objekte direkt zu speichern,
+ohne diese in Text Datentypen konvertieren zu müssen.
+\section{Praxisbeispiel}
 
+I
+\subsection{1. Anlegen des Typescript Interfaces}
 
-\section{Allgemeine Problemstellung}
+\begin{lstlisting}
+export interface CodeResourceDescription extends ProjectResourceDescription {
+ // The tree that describes the code of this resource.
+ ast?: NodeDescription;
 
-\subsection{SQL Datenbank mit JSON Blobs}
-Blocklanguages benötigen hstore Felder. Mehrsprachigkeit erfordert aufteilung eines Datenbank feldes in mehrere.
+ // The actual programming language this resource uses.
+ programmingLanguageId: string;
+
+ // The block language this resource uses
+ blockLanguageId: string;
+}
+
+export interface ProjectResourceDescription
+extends IdentifiableResourceDescription {
+ // The user-chosen name of this resource. This property is free to change.
+ name: string;
+
+ // Date & time this resource was created
+ createdAt?: string;
+
+ // Date & time this resource was updated the last time
+ updatedAt?: string;
+}
+\end{lstlisting}
+% Bsp. CodeResource
+% List Interface/Response Interface
+% Dokument Interface
+\subsection{2. Generierung der JSON Schema Definitionen}
+\begin{lstlisting}
+JSON_SCHEMA_FILES = CodeResourceDescription.json
+
+define CONVERT_COMMAND
+ @echo "Creating $(notdir $(basename $@)).json"
+ $(TYPESCRIPT_JSON_SCHEMA_BIN) --no-type-check --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
+ sed -i -- 's/</_/g' "$@.tmp"
+ sed -i -- 's/>/_/g' "$@.tmp"
+ mv "$@.tmp" "$@"
+endef
+
+CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
+$(CONVERT_COMMAND)
+\end{lstlisting}
+
+% Makefile
+\subsection{3. Anlegen des Models in Rails}
+
+\begin{lstlisting}
+class CreateCodeResources < ActiveRecord::Migration[5.1]
+ def change
+  create_table :code_resources, id: :uuid do |t|
+  t.string :name, null: false
+  t.json :ast, null: true
+  t.references :project, type: :uuid
+
+  t.timestamps
+  end
+ end
+end
+\end{lstlisting}
+
+\begin{lstlisting}
+class CodeResource < ApplicationRecord
+ # Each resource belongs to a single project ...
+ belongs_to :project
+ # ... uses exactly one block language ...
+ belongs_to :block_language
+ # ... and compiles to exactly one programming language.
+ belongs_to :programming_language
+
+ # May be the basis for generated grammars
+ has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+end
+\end{lstlisting}
+% Datenbankmigration
+\subsection{4. Anlegen eines Controllers in Rails}
+\begin{lstlisting}
+resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
+post 'code_resources/:code_resource_id/clone', controller:  'code_resources', action: 'clone'
+\end{lstlisting}
+\begin{lstlisting}
+class CodeResourcesController < ApplicationController
+
+include JsonSchemaHelper
+
+# All available code resources for a certain programming language
+def index_by_programming_language
+ render json: CodeResource
+ .list_by_programming_language(params[:programming_language_id])
+end
+
+# Create a new resource that is part of a specific project
+def create
+ project_id = params[:project_id]
+ proj = Project.find_by_slug_or_id! project_id
+
+ res = proj.code_resources.new(code_resource_create_params)
+ if res.save
+  render :json => res.to_full_api_response, :status => 200
+ else
+  render :json => { 'errors' => res.errors }, :status => 400
+ end
+end
+
+# Updates a specific resource. As other models in the database may
+# depend on this specific resource, they may be updated as well.
+def update
+ # See what the new data looks like
+ request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
+ update_params = request_data
+ .dig("resource")
+ .transform_keys { |k| k.underscore }
+
+ resource = CodeResource.find(params[:code_resource_id])
+
+ ApplicationRecord.transaction do
+ # Do the actual update of the code resource
+  if resource.update(update_params)
+   # Do updates on dependant resources
+   resource.regenerate_immediate_dependants!
+   render :json => resource, :status => 200
+  else
+   render :json => { 'errors' => resource.errors }, :status => 400
+  end
+ end
+end
+ \end{lstlisting}
+% Controller
+% Für jede Sicht (z.B. Admin/Frontend) eine Route und Controller Funktion.
+\subsection{5. DataServices auf dem Client}
+\subsection{6. Komponenten auf dem Client}
+% + template
+\subsection{7. Neue Sicht}
+% 1. + 2. + 4.(Route + Funktion) + 5. + 6.
+% Graphql: 5. (Wird generiert) + 6.
+\subsection{Automatische Generierung von JSON Schema Definitionen}
+% Anhand von Beispiel: Übersicht über alle
+
+\section{Anforderungen}
+
+\subsection{Mehrsprachigkeit}
+% Felder in mehreren Sprachen
 
 \subsection{Darstellungsvielfalt}
 Nutzerbereich:
@@ -62,7 +218,7 @@ Tabellen Übersicht benötigt weniger Daten. Editierung benötigt alle Daten.
 %Mehrere Requests für einen View
 
 \subsection{End-to-end Typsicherheit}
-Erfordert applikationsübergreifende Typdefinitionen. 
+Erfordert applikationsübergreifende Typdefinitionen.
 JSON Schema Validator für Datenbankfelder:
 /models/json schema validator
 JSON Schema Validator für Requests:
@@ -72,8 +228,6 @@ Rspec
 JSON Schema Erzeugung aus Typescript Interfaces:
 Aktuell werden Clientseitig JSON Schema Dateien mithilfe von Typescript Interfaces und einem ellenlangen Makefile generiert.
 
-
-\chapter{Anforderungsanalyse}
 \section{Vorteile des bisherigen Ansatzes}
 \section{Nachteile des bisherigen Ansatzes}
 \subsection{Auswahl von Attributen}
