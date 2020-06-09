@@ -20,11 +20,8 @@ export class CurrentLanguagePipe implements PipeTransform {
   ) {}
 
   transform(value: MultiLangString) {
-    console.log("value is: "+value);
     const bestLocale = this._naturalLanguages.resolveLocaleId(value);
     let toReturn = this._naturalLanguages.resolveString(value);
-    console.log("bestLocale is: "+bestLocale);
-    console.log("toReturn is: "+toReturn);
     if (bestLocale == this._localeId) {
       return toReturn;
     } else {

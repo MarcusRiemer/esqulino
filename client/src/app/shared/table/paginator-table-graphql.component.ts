@@ -8,7 +8,7 @@ import {
   OnDestroy,
   AfterViewInit,
 } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import { SortDirection, MatSort } from "@angular/material/sort";
 import { MatTable, MatColumnDef } from "@angular/material/table";
 
@@ -46,11 +46,6 @@ export interface GraphQLQueryComponent<
   >;
 }
 
-export interface PaginationEvent {
-  pageSize: number;
-  pageIndex: number;
-}
-
 @Component({
   selector: "app-table-paginator-graphql",
   templateUrl: "./templates/paginator-table-graphql.html",
@@ -72,15 +67,12 @@ export class PaginatorTableGraphqlComponent
   @Input()
   queryData: GraphQLQueryData<{__typename: String,}, unknown, string, string>;
 
-  // mat-pagination info
-  pageIndex: number = 0;
-
   private _subscriptions: Subscription[] = [];
 
   //response which can be subscribed once
   private _response$: Observable<ApolloQueryResult<any>>;
   //projects list (data type looks horrible)
-  data$: Observable<{pageInfo:PageInfo}>;
+  data$: Observable<{pageInfo:PageInfo,totalCount:number,nodes:any[]}>;
 
   listData$: Observable<any>;
   //loading indicator for conditionalDisplay directive
@@ -88,16 +80,17 @@ export class PaginatorTableGraphqlComponent
   //Mat-Paginator Info
   totalCount$: Observable<number>;
 
+  private _pageSize:number;
+
   constructor() {}
 
   ngOnInit(): void {
     this._response$ = this.queryData.query.valueChanges;
-    this.data$ = this._response$.pipe(map((result) => result.data));
-    this.listData$ = this.data$.pipe(map(queryDocument => queryDocument[this.queryData.dataKey].nodes));
-    this.progress$ = this._response$.pipe(map((result) => result.loading));
-    this.totalCount$ = this._response$.pipe(
-      map((result) => result.data[this.queryData.dataKey].totalCount)
-    );
+    this.progress$ = this._response$.pipe(map(responseDocument => responseDocument.loading));
+    this.data$ = this._response$.pipe(map(responseDocument => responseDocument.data[this.queryData.dataKey]));
+    this.totalCount$ = this.data$.pipe(map(data => data.totalCount));
+    this.listData$ = this.data$.pipe(map(data => data.nodes));
+    this._pageSize = this.queryData.pageSize;
   }
 
   // Register the projected column definitions with the table renderer
@@ -120,33 +113,30 @@ export class PaginatorTableGraphqlComponent
     this._subscriptions = [];
   }
 
-  async onChangePagination() {
+  onChangePagination($event:PageEvent) {
     //PageSize Change
-    let variables;
-    if (this.queryData.pageSize != this._paginator.pageSize) {
-      variables = { first: this._paginator.pageSize };
+    const pageInfo:PageInfo = this.queryData.query.currentResult().data[this.queryData.dataKey].pageInfo;
+    if (this._pageSize != $event.pageSize) {
+      this._pageSize = $event.pageSize;
+      this.queryData.query.setVariables({ first: $event.pageSize });
     }
     //Next Page
     else if (
-      this.pageIndex < this._paginator.pageIndex &&
-      this.pageInfo.hasNextPage
+      $event.previousPageIndex <  $event.pageIndex &&
+      pageInfo.hasNextPage
     ) {
-      variables = {
-        first: this._paginator.pageSize,
-        after: this.pageInfo.endCursor,
-      };
+      this.queryData.query.setVariables({
+        first: $event.pageSize,
+        after: pageInfo.endCursor,
+      });
     }
     //Previous Page
     else {
-      variables = {
-        last: this._paginator.pageSize,
-        before: this.pageInfo.startCursor,
-      };
+      this.queryData.query.setVariables({
+        last: $event.pageSize,
+        before: pageInfo.startCursor,
+      });
     }
-    //refetches with new variables
-    await this.queryData.query.setVariables(variables);
-    this.queryData.pageSize = this._paginator.pageSize;
-    this.pageIndex = this._paginator.pageIndex;
   }
 
   /**

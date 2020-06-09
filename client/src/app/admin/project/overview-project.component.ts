@@ -60,8 +60,6 @@ export class OverviewProjectComponent
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
-  abc = this.query.valueChanges;
-  cde = this.abc.pipe(map(result => result.data.projects.totalCount));
   readonly displayedColumns: ColumnName[] = ["name", "slug", "id"];
 
   get queryData() {
