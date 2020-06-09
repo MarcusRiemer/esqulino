@@ -15,7 +15,7 @@ In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die A
 %************************************************
 % Status Quo
 %************************************************
-\chapter{Status Quo}
+\chapter{Grundlagen}
 \label{sec:requirements:existing}
 
 Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt,
@@ -23,7 +23,8 @@ die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gest�
 für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}.
 Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt. 
 %Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
-
+\section{REST API}
+\section{Server Roundtrip Verfahren}
 \section{Aufbau}
 
 \subsection{Server}
@@ -48,30 +49,31 @@ Für die Wahl des einzusetzenden Datenbanksystems wurde sich beim Entwicklungsst
  ohne diese in Text Datentypen konvertieren zu müssen.
 
 
-\chapter{Allgemeine Problemstellung}
+\section{Allgemeine Problemstellung}
 
-\section{SQL Datenbank mit JSON Blobs}
+\subsection{SQL Datenbank mit JSON Blobs}
 Blocklanguages benötigen hstore Felder. Mehrsprachigkeit erfordert aufteilung eines Datenbank feldes in mehrere.
 
-\section{Darstellungsvielfalt}
-\subsection{Nutzerbereich}
+\subsection{Darstellungsvielfalt}
+Nutzerbereich:
 Kacheldarstellung auf der Landingpage benötigt weniger Informationen als geliefert werden.
-\subsection{Adminbereich}
+Adminbereich:
 Tabellen Übersicht benötigt weniger Daten. Editierung benötigt alle Daten.
 %Mehrere Requests für einen View
 
-\section{End-to-end Typsicherheit}
+\subsection{End-to-end Typsicherheit}
 Erfordert applikationsübergreifende Typdefinitionen. 
-\subsection{JSON Schema Validator für Datenbankfelder}
+JSON Schema Validator für Datenbankfelder:
 /models/json schema validator
-\subsection{JSON Schema Validator für Requests}
+JSON Schema Validator für Requests:
 grammars controller update
-\subsection{JSON Schema Validator für Responses}
+JSON Schema Validator für Responses:
 Rspec
-\subsection{JSON Schema Erzeugung aus Typescript Interfaces}
+JSON Schema Erzeugung aus Typescript Interfaces:
 Aktuell werden Clientseitig JSON Schema Dateien mithilfe von Typescript Interfaces und einem ellenlangen Makefile generiert.
 
-\chapter{Zwischenfazit}
+
+\chapter{Anforderungsanalyse}
 \section{Vorteile des bisherigen Ansatzes}
 \section{Nachteile des bisherigen Ansatzes}
 \subsection{Auswahl von Attributen}
@@ -79,14 +81,13 @@ Aktuell werden Clientseitig JSON Schema Dateien mithilfe von Typescript Interfac
 \subsection{JSON Schema Generierung per Makefile}
 Ein Interface pro Anfrage und Antwort erstellen. Pro Interface Eintrag in Makefile.
 
-\chapter{Anforderungsanalyse}
-
 \section{Typsicherheit}
 Typsicherheit muss auf dem Client, wie auf dem Server und in der Datenbank gewährleistet sein. Schreibt ein Programmierer einen neuen Request an den Server,
 muss zur Kompilierung auffallen, sollte dieser nach Datenfeldern fragen, die es nicht gibt.
 
 \section{Typdefinition - Server}
 Typschema Definition.
+
 \subsection{Datenbankschema}
 Muss mit dem Schema übereinstimmen. Möglichkeit der Generierung höchstwahrscheinlich nicht gegeben.
 \subsection{JSON Blob Validierung}
@@ -105,6 +106,7 @@ Zu jedem Zeitpunkt müssen alle Datentypen, ob Server, Client oder Datenbank syn
 Nicht mehr Daten als benötigt.
 \subsection{Pagination}
 Auslieferung von reduzierter Mengen an Daten.
+\subsection{Mehrsprachigkeit}
 
 \section{Performance}
 Nur ein Request pro Seitenaufruf. Bsp news overview. Effiziente Datenbankqueries.
@@ -116,13 +118,14 @@ Nur ein Request pro Seitenaufruf. Bsp news overview. Effiziente Datenbankqueries
 Angular Client zu Ruby Server kämpfen mit verschiedenen Konvetionen.
 \subsection{Mehrsprachigkeit}
 Mehrere Sprachen müssen abbildbar sein und in Datenbank gespeichert werden.
-\section{Balanced Scorecard}
-Bewertung der Anforderungen.
-\chapter{Roundtrip Verfahren}
+\section{Balanced Scorecard Kriterien}
+balanced Scoreboard gewichtung der kriterien und formulierung
+\chapter{Evaluation von Server Roundtrip Verfahren}
 
 \section{Fast JSON API}
 \subsection{Graphiti}
 https://www.graphiti.dev/guides/
+\subsection{JSON API Scorecard}
 \section{GraphQL}
 \subsection{Schema-first}
 GraphQL Schema in SDL geschrieben. Resolvers für übersetzung zu anderen sprachen etc.
@@ -135,14 +138,15 @@ Bei der Pagination.
 \subsection{Code-first}
 Nutzung von gapqhl-ruby
 https://github.com/rmosolgo/graphql-ruby
+\subsection{GraphQL Scorecard}
 \section{Optimierung der bestehenden Lösung - make or buy}
 Narrow-Funktion um nur einen Request pro Seitenaufruf ermöglichen zu können. JSON Api Konzept wird dabei teilweise genutzt.
 \section{Zusätzliche Verfahren}
 \subsection{Deepr}
 Gibt es nur in Javascript.
 https://github.com/deeprjs/deepr
-\chapter{Handlungsempfehlung}
-
+\subsection{Deepr Scorecard}
+\section{Balanced Scorecard}
 \chapter{Implementierung}
 
 \chapter{Fazit}
