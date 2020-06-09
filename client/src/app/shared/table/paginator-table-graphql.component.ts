@@ -13,11 +13,38 @@ import { SortDirection, MatSort } from "@angular/material/sort";
 import { MatTable, MatColumnDef } from "@angular/material/table";
 
 import { ListData } from "../serverdata";
-import {BehaviorSubject, EMPTY, Observable, Subscription} from "rxjs";
-import {QueryRef} from "apollo-angular";
-import {PageInfo} from "../../../generated/graphql";
-import {map} from "rxjs/operators";
-import {ApolloQueryResult} from "apollo-client";
+import { BehaviorSubject, EMPTY, Observable, Subscription } from "rxjs";
+import { QueryRef } from "apollo-angular";
+import { PageInfo } from "../../../generated/graphql";
+import { map } from "rxjs/operators";
+import { ApolloQueryResult } from "apollo-client";
+
+export interface GraphQLQueryData<
+  QueryItem,
+  QueryVariables,
+  DataKey,
+  ColumnName
+> {
+  query: QueryRef<QueryItem, QueryVariables>;
+  dataKey: DataKey;
+  displayColumns: ColumnName[];
+  pageSize: number;
+  sort: MatSort;
+}
+
+export interface GraphQLQueryComponent<
+  QueryItem,
+  QueryVariables,
+  DataKey,
+  ColumnName
+> {
+  readonly queryData: GraphQLQueryData<
+    QueryItem,
+    QueryVariables,
+    DataKey,
+    ColumnName
+  >;
+}
 
 export interface PaginationEvent {
   pageSize: number;
@@ -43,11 +70,11 @@ export class PaginatorTableGraphqlComponent
   columnDefs: QueryList<MatColumnDef>;
 
   @Input()
-  dataKey:string;
+  dataKey: string;
 
   // The list that should be rendered
   @Input()
-  query:QueryRef<any>;
+  query: QueryRef<any>;
 
   // The columns that should be rendered
   @Input()
@@ -59,30 +86,39 @@ export class PaginatorTableGraphqlComponent
   @Input()
   pageSize: number;
 
+  @Input()
+  queryData: GraphQLQueryData<unknown, unknown, string, string>;
+
   // mat-pagination info
   pageIndex: number = 0;
 
   private _subscriptions: Subscription[] = [];
 
   //response which can be subscribed once
-  private _response$:Observable<ApolloQueryResult<any>>;
+  private _response$: Observable<ApolloQueryResult<any>>;
   //projects list (data type looks horrible)
-   data$:Observable<any>;
+  data$: Observable<any>;
   //loading indicator for conditionalDisplay directive
-   progress$:Observable<boolean>;
+  progress$: Observable<boolean>;
   //Mat-Paginator Info
-   totalCount$: Observable<number>;
+  totalCount$: Observable<number>;
   //Information for relay pagination
-   pageInfo:PageInfo;
+  pageInfo: PageInfo;
 
   constructor() {}
 
-  ngOnInit():void {
-  this._response$ = this.query.valueChanges;
-  this.data$ = this._response$.pipe(map(result => result.data[this.dataKey].nodes));
-  this.progress$= this._response$.pipe(map(result => result.loading));
-  this.totalCount$ = this._response$.pipe(map(result => result.data[this.dataKey].totalCount));
-  const pageSub = this._response$.subscribe(result => this.pageInfo = result.data[this.dataKey].pageInfo);
+  ngOnInit(): void {
+    this._response$ = this.query.valueChanges;
+    this.data$ = this._response$.pipe(
+      map((result) => result.data[this.dataKey].nodes)
+    );
+    this.progress$ = this._response$.pipe(map((result) => result.loading));
+    this.totalCount$ = this._response$.pipe(
+      map((result) => result.data[this.dataKey].totalCount)
+    );
+    const pageSub = this._response$.subscribe(
+      (result) => (this.pageInfo = result.data[this.dataKey].pageInfo)
+    );
     this._subscriptions.push(pageSub);
   }
 
@@ -109,17 +145,25 @@ export class PaginatorTableGraphqlComponent
   onChangePagination() {
     //PageSize Change
     let variables;
-    if(this.pageSize != this._paginator.pageSize){
-      variables = {first:this._paginator.pageSize}
+    if (this.pageSize != this._paginator.pageSize) {
+      variables = { first: this._paginator.pageSize };
     }
     //Next Page
-    else if(this.pageIndex < this._paginator.pageIndex
-      && this.pageInfo.hasNextPage){
-      variables = {first: this._paginator.pageSize, after: this.pageInfo.endCursor}
+    else if (
+      this.pageIndex < this._paginator.pageIndex &&
+      this.pageInfo.hasNextPage
+    ) {
+      variables = {
+        first: this._paginator.pageSize,
+        after: this.pageInfo.endCursor,
+      };
     }
     //Previous Page
     else {
-      variables = {last: this._paginator.pageSize, before: this.pageInfo.startCursor}
+      variables = {
+        last: this._paginator.pageSize,
+        before: this.pageInfo.startCursor,
+      };
     }
     //refetches with new variables
     this.query.setVariables(variables);

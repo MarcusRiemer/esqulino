@@ -1,11 +1,23 @@
-import {Component, ViewChild} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
 
-import { ProjectListDescription } from "../../shared/project.description";
+import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
 import {
-  AdminListProjectsGQL
+  AdminListProjectsGQL,
+  AdminListProjectsQuery,
+  AdminListProjectsQueryVariables,
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
+
+type Query = ReturnType<AdminListProjectsGQL["watch"]>;
+
+type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;
+
+// TODO: Resolve this from the Query type above, requires unpacking
+//       a type argument to Observable
+type ListItem = AdminListProjectsQuery[DataKey]["nodes"][0];
+
+type ColumnName = keyof ListItem;
 
 /**
  *
@@ -13,7 +25,14 @@ import { MatPaginator } from "@angular/material/paginator";
 @Component({
   templateUrl: "./templates/overview-project.html",
 })
-export class OverviewProjectComponent{
+export class OverviewProjectComponent
+  implements
+    GraphQLQueryComponent<
+      AdminListProjectsQuery,
+      AdminListProjectsQueryVariables,
+      DataKey,
+      ColumnName
+    > {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;
@@ -24,14 +43,31 @@ export class OverviewProjectComponent{
 
   constructor(readonly projectsService: AdminListProjectsGQL) {}
 
+  typed(doc: any): ListItem {
+    return doc as ListItem;
+  }
+
+  readonly dataKey: DataKey = "projects";
+
   // mat-pagination info
   pageSize: number = 25;
 
   //Query Object which can be used to refetch data
   //fetchPolicy must be network-only, to get a clean pagination
-  readonly _query = this.projectsService.watch(
-    { first:this.pageSize },
-    { notifyOnNetworkStatusChange: true, fetchPolicy:"network-only" });
+  readonly query = this.projectsService.watch(
+    { first: this.pageSize },
+    { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+  );
 
-  readonly displayedColumns: (keyof ProjectListDescription)[] = ["name", "slug", "id"];
+  readonly displayedColumns: ColumnName[] = ["name", "slug", "id"];
+
+  get queryData() {
+    return {
+      query: this.query,
+      dataKey: this.dataKey,
+      displayColumns: this.displayedColumns,
+      pageSize: this.pageSize,
+      sort: this.sort,
+    };
+  }
 }
