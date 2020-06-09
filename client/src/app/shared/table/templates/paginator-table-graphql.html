@@ -10,11 +10,11 @@
         [_indicator]="progress$"
         class="full-width"
         mat-table
-        [dataSource]="data$ | async"
+        [dataSource]="listData$ | async"
 >
     <ng-content></ng-content>
-    <tr mat-header-row *matHeaderRowDef="activeColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: activeColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="queryData.displayColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: queryData.displayColumns;"></tr>
 </table>
 <mat-paginator
     #paginator

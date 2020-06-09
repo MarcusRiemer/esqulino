@@ -8,6 +8,7 @@ import {
   AdminListProjectsQueryVariables,
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
+import {map} from "rxjs/operators";
 
 type Query = ReturnType<AdminListProjectsGQL["watch"]>;
 
@@ -59,6 +60,8 @@ export class OverviewProjectComponent
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
+  abc = this.query.valueChanges;
+  cde = this.abc.pipe(map(result => result.data.projects.totalCount));
   readonly displayedColumns: ColumnName[] = ["name", "slug", "id"];
 
   get queryData() {

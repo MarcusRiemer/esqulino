@@ -70,24 +70,7 @@ export class PaginatorTableGraphqlComponent
   columnDefs: QueryList<MatColumnDef>;
 
   @Input()
-  dataKey: string;
-
-  // The list that should be rendered
-  @Input()
-  query: QueryRef<any>;
-
-  // The columns that should be rendered
-  @Input()
-  activeColumns: string[] = [];
-
-  @Input()
-  sort: MatSort;
-
-  @Input()
-  pageSize: number;
-
-  @Input()
-  queryData: GraphQLQueryData<unknown, unknown, string, string>;
+  queryData: GraphQLQueryData<{__typename: String,}, unknown, string, string>;
 
   // mat-pagination info
   pageIndex: number = 0;
@@ -97,29 +80,24 @@ export class PaginatorTableGraphqlComponent
   //response which can be subscribed once
   private _response$: Observable<ApolloQueryResult<any>>;
   //projects list (data type looks horrible)
-  data$: Observable<any>;
+  data$: Observable<{pageInfo:PageInfo}>;
+
+  listData$: Observable<any>;
   //loading indicator for conditionalDisplay directive
   progress$: Observable<boolean>;
   //Mat-Paginator Info
   totalCount$: Observable<number>;
-  //Information for relay pagination
-  pageInfo: PageInfo;
 
   constructor() {}
 
   ngOnInit(): void {
-    this._response$ = this.query.valueChanges;
-    this.data$ = this._response$.pipe(
-      map((result) => result.data[this.dataKey].nodes)
-    );
+    this._response$ = this.queryData.query.valueChanges;
+    this.data$ = this._response$.pipe(map((result) => result.data));
+    this.listData$ = this.data$.pipe(map(queryDocument => queryDocument[this.queryData.dataKey].nodes));
     this.progress$ = this._response$.pipe(map((result) => result.loading));
     this.totalCount$ = this._response$.pipe(
-      map((result) => result.data[this.dataKey].totalCount)
+      map((result) => result.data[this.queryData.dataKey].totalCount)
     );
-    const pageSub = this._response$.subscribe(
-      (result) => (this.pageInfo = result.data[this.dataKey].pageInfo)
-    );
-    this._subscriptions.push(pageSub);
   }
 
   // Register the projected column definitions with the table renderer
@@ -131,8 +109,8 @@ export class PaginatorTableGraphqlComponent
   ngAfterViewInit() {
     // Try to register the parents `sortChange` event. Inspired by
     // https://github.com/angular/components/issues/10446
-    const sortSub = this.sort.sortChange.subscribe(() => {
-      this.onChangeSort(this.sort.active, this.sort.direction);
+    const sortSub = this.queryData.sort.sortChange.subscribe(() => {
+      this.onChangeSort(this.queryData.sort.active, this.queryData.sort.direction);
     });
     this._subscriptions.push(sortSub);
   }
@@ -142,10 +120,10 @@ export class PaginatorTableGraphqlComponent
     this._subscriptions = [];
   }
 
-  onChangePagination() {
+  async onChangePagination() {
     //PageSize Change
     let variables;
-    if (this.pageSize != this._paginator.pageSize) {
+    if (this.queryData.pageSize != this._paginator.pageSize) {
       variables = { first: this._paginator.pageSize };
     }
     //Next Page
@@ -166,8 +144,8 @@ export class PaginatorTableGraphqlComponent
       };
     }
     //refetches with new variables
-    this.query.setVariables(variables);
-    this.pageSize = this._paginator.pageSize;
+    await this.queryData.query.setVariables(variables);
+    this.queryData.pageSize = this._paginator.pageSize;
     this.pageIndex = this._paginator.pageIndex;
   }
 
