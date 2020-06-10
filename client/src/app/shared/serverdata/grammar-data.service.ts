@@ -2,14 +2,18 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import {Mutation, Query} from "apollo-angular";
-import gql from 'graphql-tag';
+import { Mutation, Query } from "apollo-angular";
+import gql from "graphql-tag";
 
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { GrammarDescription, GrammarListDescription,GrammarListGraphQlResponse } from '../syntaxtree';
-import { fieldCompare } from '../util'
+import {
+  GrammarDescription,
+  GrammarListDescription,
+  GrammarListGraphQlResponse,
+} from "../syntaxtree";
+import { fieldCompare } from "../util";
 
 import { ServerApiService } from "./serverapi.service";
 import { ListData } from "./list-data";
@@ -20,7 +24,6 @@ import { ServerTasksService } from "./server-tasks.service";
 const urlResolver = (serverApi: ServerApiService) => {
   return (id: string) => serverApi.individualGrammarUrl(id);
 };
-
 
 /**
  * Cached access to individual grammars
@@ -78,7 +81,7 @@ export class ListGrammarDataService extends ListData<GrammarListDescription>
    * @return All grammars that are known on the server and available for the current user.
    */
   readonly list = this.listCache.value.pipe(
-    map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
+    map((list) => list.sort(fieldCompare<GrammarListDescription>("name")))
   );
 }
 
@@ -86,23 +89,23 @@ export class ListGrammarDataService extends ListData<GrammarListDescription>
  * Graphql Query for lists of grammars.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class GrammarListRequestQL extends Query<GrammarListGraphQlResponse> {
   document = gql`
-           {
-            grammars {
-                id
-                name
-                slug
-                programmingLanguageId
-            }
-          }
-        `;
+    {
+      grammars {
+        id
+        name
+        slug
+        programmingLanguageId
+      }
+    }
+  `;
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class GrammarListMutateQL extends Mutation {
   document = gql`

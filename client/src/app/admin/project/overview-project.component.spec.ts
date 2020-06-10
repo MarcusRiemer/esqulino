@@ -16,7 +16,7 @@ import { PortalModule } from "@angular/cdk/portal";
 import {
   ApolloTestingModule,
   ApolloTestingController,
-} from 'apollo-angular/testing';
+} from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
 
@@ -35,10 +35,12 @@ import { CurrentLanguagePipe } from "../../shared/current-language.pipe";
 import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 import { buildProject, provideProjectList } from "../../editor/spec-util";
-import {AdminListProjectsDocument, AdminListProjectsGQL} from "../../../generated/graphql";
+import {
+  AdminListProjectsDocument,
+  AdminListProjectsGQL,
+} from "../../../generated/graphql";
 
 import { OverviewProjectComponent } from "./overview-project.component";
-
 
 describe("OverviewProjectComponent", () => {
   async function createComponent(localeId: string = "en") {
@@ -83,7 +85,6 @@ describe("OverviewProjectComponent", () => {
     const httpTesting = TestBed.inject(HttpTestingController);
     const serverApi = TestBed.inject(ServerApiService);
 
-
     return {
       fixture,
       component,
@@ -93,7 +94,6 @@ describe("OverviewProjectComponent", () => {
       serverApi,
     };
   }
-
 
   xit(`can be instantiated`, async () => {
     const t = await createComponent();

@@ -80,7 +80,10 @@ export class NaturalLanguagesService {
     const presentLanguages = Object.keys(value);
 
     // Match of current language?
-    if (presentLanguages.includes(this._localeId) && value[this._localeId] != null) {
+    if (
+      presentLanguages.includes(this._localeId) &&
+      value[this._localeId] != null
+    ) {
       return this._localeId;
     }
 

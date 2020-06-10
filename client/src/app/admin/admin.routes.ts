@@ -1,17 +1,17 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { AdminComponent, adminItems } from './admin.component'
-import { AdminOverviewComponent } from './admin-overview.component'
-import { EditBlockLanguageComponent } from './block-language/edit-block-language.component'
-import { EditGrammarComponent } from './grammar/edit-grammar.component'
-import { OverviewGrammarComponent } from './grammar/overview-grammar.component'
-import { OverviewBlockLanguageComponent } from './block-language/overview-block-language.component'
-import { NavSiteComponent } from '../shared/nav-page.component'
-import { AdminNewsListComponent } from './news.component'
-import { AdminNewsEditComponent } from './edit-news.component'
-import { OverviewProjectComponent } from './project/overview-project.component'
-import { GalleryGrammarComponent } from './grammar/gallery-grammar.component'
-import {OverviewGrammarGraphQLComponent} from "./grammar/overview-grammar-graphql.component";
+import { AdminComponent, adminItems } from "./admin.component";
+import { AdminOverviewComponent } from "./admin-overview.component";
+import { EditBlockLanguageComponent } from "./block-language/edit-block-language.component";
+import { EditGrammarComponent } from "./grammar/edit-grammar.component";
+import { OverviewGrammarComponent } from "./grammar/overview-grammar.component";
+import { OverviewBlockLanguageComponent } from "./block-language/overview-block-language.component";
+import { NavSiteComponent } from "../shared/nav-page.component";
+import { AdminNewsListComponent } from "./news.component";
+import { AdminNewsEditComponent } from "./edit-news.component";
+import { OverviewProjectComponent } from "./project/overview-project.component";
+import { GalleryGrammarComponent } from "./grammar/gallery-grammar.component";
+import { OverviewGrammarGraphQLComponent } from "./grammar/overview-grammar-graphql.component";
 
 export const adminRoutes: Routes = [
   {
@@ -33,12 +33,12 @@ export const adminRoutes: Routes = [
         component: OverviewGrammarComponent,
       },
       {
-        path: 'grammar-graphql',
-        component: OverviewGrammarGraphQLComponent
+        path: "grammar-graphql",
+        component: OverviewGrammarGraphQLComponent,
       },
       {
-        path: 'grammar/:grammarId',
-        component: EditGrammarComponent
+        path: "grammar/:grammarId",
+        component: EditGrammarComponent,
       },
       {
         path: "grammar/:grammarId/gallery",

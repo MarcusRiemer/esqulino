@@ -8,8 +8,8 @@ import {
   AdminListProjectsQueryVariables,
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
-import {map} from "rxjs/operators";
 
+// TODO: Should be beautified and used
 type Query = ReturnType<AdminListProjectsGQL["watch"]>;
 
 type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;

@@ -2139,7 +2139,6 @@
         "name",
         "projectUsesBlockLanguages",
         "schema",
-        "slug",
         "sources"
       ],
       "type": "object"

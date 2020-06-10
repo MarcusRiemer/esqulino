@@ -1,7 +1,4 @@
-<app-table-paginator-graphql
-  [queryData]="queryData"
-  matSort
->
+<app-table-paginator-graphql [queryData]="queryData" matSort>
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
     <td mat-cell *matCellDef="let project">
@@ -22,6 +19,4 @@
       <code>{{ typed(project).slug }}</code>
     </td>
   </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </app-table-paginator-graphql>

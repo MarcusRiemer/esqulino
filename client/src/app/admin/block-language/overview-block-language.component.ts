@@ -38,7 +38,6 @@ export class OverviewBlockLanguageComponent implements OnInit {
     this._toolbarService.addItem(this.toolbarItems);
   }
 
-
   async deleteBlockLanguage(id: string) {
     await this._mutate.deleteSingle(id);
   }

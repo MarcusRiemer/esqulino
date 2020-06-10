@@ -2022,7 +2022,6 @@
         "id",
         "name",
         "projectUsesBlockLanguages",
-        "slug",
         "sources"
       ],
       "type": "object"

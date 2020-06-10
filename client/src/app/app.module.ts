@@ -1,12 +1,11 @@
-import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { BrowserModule, Title } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Router, NavigationEnd } from '@angular/router';
+import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { BrowserModule, Title } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { Router, NavigationEnd } from "@angular/router";
 import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
-
 
 import { Angulartics2Module } from "angulartics2";
 
@@ -83,7 +82,7 @@ if (environment.sentry && environment.sentry.active) {
     UserModule,
     routing,
     ApolloModule,
-    HttpLinkModule
+    HttpLinkModule,
   ],
   declarations: [SqlScratchComponent],
   providers: [
@@ -98,12 +97,12 @@ if (environment.sentry && environment.sentry.active) {
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: "/graphql"
-          })
-        }
+            uri: "/graphql",
+          }),
+        };
       },
-      deps: [HttpLink]
-    }
+      deps: [HttpLink],
+    },
   ],
   bootstrap: [SqlScratchComponent],
   exports: [SharedAppModule],

@@ -294,7 +294,6 @@ export type NodeChildrenGroupDescription =
   | NodeTypesChoiceDescription
   | NodeTypesParenthesesDescription;
 
-
 /**
  * Listing data about grammars
  */
@@ -318,8 +317,8 @@ export interface GrammarListDescription {
 /**
  * Response when requesting listing data about grammars via graphql
  */
-export interface  GrammarListGraphQlResponse {
-  grammars: (GrammarListDescription)[] | null
+export interface GrammarListGraphQlResponse {
+  grammars: GrammarListDescription[] | null;
 }
 
 /**

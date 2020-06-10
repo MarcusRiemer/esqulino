@@ -129,6 +129,13 @@ src/locale/messages.en.xlf : src/locale/messages.xlf
 update-xlf : src/locale/messages.en.xlf
 
 ##################################
+# GraphQL Client Generation
+##################################
+
+generate-graphql-client:
+	npm run graphql-codegen
+
+##################################
 # Dependencies
 ##################################
 

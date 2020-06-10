@@ -59,8 +59,12 @@ reset-live-data: delete-live-data load-live-data
 
 # Helpful during development: Continously watches for changes in the project
 # and re-runs tests that are affected by code changes
-test-watch :
+test-watch:
 	bundle exec guard --plugin=RSpec
+
+
+generate-graphql-schema:
+	bin/rake graphql:schema:json --trace
 
 .PHONY : install-deps run run-dev test clean-deps
 
