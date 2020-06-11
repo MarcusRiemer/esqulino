@@ -1,5 +1,5 @@
 overwrite: true
-schema: "../schema/server_schema/schema.json"
+schema: "../schema/graphql/schema.json"
 documents: "**/*.graphql"
 generates:
   src/generated/graphql.ts:

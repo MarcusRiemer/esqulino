@@ -18,7 +18,7 @@ type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;
 //       a type argument to Observable
 type ListItem = AdminListProjectsQuery[DataKey]["nodes"][0];
 
-type ColumnName = keyof ListItem;
+type ColumnName = keyof ListItem | "totalCount";
 
 /**
  *
@@ -60,7 +60,12 @@ export class OverviewProjectComponent
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
-  readonly displayedColumns: ColumnName[] = ["name", "slug", "id"];
+  readonly displayedColumns: ColumnName[] = [
+    "name",
+    "slug",
+    "totalCount",
+    "id",
+  ];
 
   get queryData() {
     return {

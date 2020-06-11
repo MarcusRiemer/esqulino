@@ -8,7 +8,7 @@ module Types
     field :programmingLanguageId,  String,null:true
     field :programmingLanguage, Types::ProgrammingLanguageType,null:true
     field :generatedFrom, Types::CodeResourceType, null:true
-    field :blockLanguages, [Types::BlockLanguageType], null:true
-    field :codeResources, [Types::CodeResourceType], null:true
+    field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
+    field :codeResources, Types::CodeResourceType.connection_type, null:true
   end
 end

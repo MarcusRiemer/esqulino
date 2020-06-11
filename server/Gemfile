@@ -57,6 +57,9 @@ gem "rest-client"
 # Used to build a strongly-typed API
 gem 'graphql'
 
+# Used to modularize graphql queries
+gem 'search_object_graphql'
+
 ############################
 # Rails dependencies
 ###########################

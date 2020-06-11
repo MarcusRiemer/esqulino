@@ -1,5 +1,5 @@
-query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$public:Boolean) {
-    projects(first:$first,after:$after,before:$before,last:$last,public:$public) {
+query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$public:Boolean,$order:ProjectOrder) {
+    projects(first:$first,after:$after,before:$before,last:$last,public:$public,order:$order) {
         nodes{
             id
             name {

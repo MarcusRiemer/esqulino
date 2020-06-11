@@ -156,6 +156,9 @@ export class PaginatorTableGraphqlComponent
     direction: SortDirection,
     refresh: boolean = true
   ) {
-    //this.listData.setListOrdering(active, direction, refresh);
+    /* this.queryData.query.setVariables({
+      last: $event.pageSize,
+      before: pageInfo.startCursor,
+    });*/
   }
 }
