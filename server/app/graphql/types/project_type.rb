@@ -23,7 +23,7 @@ module Types
       value 'slug'
     end
 
-    class MultiLanguageFieldEnum < Types::BaseEnum
+    class ProjectMultiLanguageFieldEnum < Types::BaseEnum
       graphql_name 'ProjectMultiLanguageFieldEnum'
       value "name"
       value "description"

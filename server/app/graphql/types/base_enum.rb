@@ -17,9 +17,5 @@ module Types
       value 'asc'
       value 'desc'
     end
-
   end
-
-
-
 end

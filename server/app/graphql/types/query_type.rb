@@ -37,10 +37,7 @@ module Types
     end
 
     def projects(input:nil)
-      byebug
-      Resolvers::ProjectsResolver::new(input)
+      Resolvers::ProjectsResolver::new(**input).scope
     end
-
-
   end
 end
