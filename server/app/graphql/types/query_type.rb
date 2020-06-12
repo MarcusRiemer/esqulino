@@ -8,7 +8,9 @@ module Types
     field :news, Types::NewsType.connection_type,null:false
     field :projectDatabases, Types::ProjectDatabaseType.connection_type,null:false
     field :projectSources, Types::ProjectSourceType.connection_type,null:false
-    field :projects, resolver: Resolvers::ProjectsResolver
+    field :projects, Types::ProjectType.connection_type, null: false do
+      argument :input, Types::ProjectType::ProjectInputType,required: false
+    end
 
     def programming_languages
       ProgrammingLanguage.all
@@ -32,6 +34,11 @@ module Types
 
     def project_sources
       ProjectSource.all
+    end
+
+    def projects(input:nil)
+      byebug
+      Resolvers::ProjectsResolver::new(input)
     end
 
 

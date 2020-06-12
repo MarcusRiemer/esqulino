@@ -12,7 +12,7 @@ module Resolvers
 
     class GrammarOrderType < Types::BaseInputObject
       argument :orderField, OrderFieldEnum, required: false
-      argument :orderDirection, BaseResolver::OrderDirectionEnum, required: false
+      argument :orderDirection, Types::BaseEnum::OrderDirectionEnum, required: false
     end
 
     scope { Grammar.all }

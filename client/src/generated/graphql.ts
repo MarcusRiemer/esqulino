@@ -199,10 +199,15 @@ export type Identity = {
   user: User;
 };
 
+export enum LanguageEnum {
+  De = "de",
+  En = "en",
+}
+
 export type LanguageString = {
   __typename?: "LanguageString";
-  de?: Maybe<Scalars["String"]>;
-  en?: Maybe<Scalars["String"]>;
+  de: Scalars["String"];
+  en: Scalars["String"];
 };
 
 export type Mutation = {
@@ -253,8 +258,8 @@ export type NewsEdge = {
 };
 
 export enum OrderDirectionEnum {
-  Asc = "ASC",
-  Desc = "DESC",
+  Asc = "asc",
+  Desc = "desc",
 }
 
 /** Information about pagination in a connection. */
@@ -403,6 +408,13 @@ export type ProjectEdge = {
   node?: Maybe<Project>;
 };
 
+export type ProjectFilterField = {
+  id?: Maybe<Scalars["String"]>;
+  name?: Maybe<Scalars["String"]>;
+  slug?: Maybe<Scalars["String"]>;
+  public?: Maybe<Scalars["Boolean"]>;
+};
+
 export type ProjectOrder = {
   orderField?: Maybe<ProjectOrderFieldEnum>;
   orderDirection?: Maybe<OrderDirectionEnum>;
@@ -514,11 +526,9 @@ export type QueryProjectSourcesArgs = {
 };
 
 export type QueryProjectsArgs = {
-  id?: Maybe<Scalars["String"]>;
-  name?: Maybe<Scalars["String"]>;
-  slug?: Maybe<Scalars["String"]>;
-  public?: Maybe<Scalars["Boolean"]>;
+  filter?: Maybe<ProjectFilterField>;
   order?: Maybe<ProjectOrder>;
+  languages?: Maybe<Array<LanguageEnum>>;
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   first?: Maybe<Scalars["Int"]>;
@@ -554,7 +564,6 @@ export type AdminListProjectsQueryVariables = {
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   last?: Maybe<Scalars["Int"]>;
-  public?: Maybe<Scalars["Boolean"]>;
   order?: Maybe<ProjectOrder>;
 };
 
@@ -596,7 +605,6 @@ export const AdminListProjectsDocument = gql`
     $after: String
     $before: String
     $last: Int
-    $public: Boolean
     $order: ProjectOrder
   ) {
     projects(
@@ -604,7 +612,6 @@ export const AdminListProjectsDocument = gql`
       after: $after
       before: $before
       last: $last
-      public: $public
       order: $order
     ) {
       nodes {

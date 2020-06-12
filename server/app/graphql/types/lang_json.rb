@@ -1,5 +1,6 @@
 class Types::LangJson < Types::BaseScalar
   def self.coerce_result(value,context)
+    byebug
     value
   end
 
