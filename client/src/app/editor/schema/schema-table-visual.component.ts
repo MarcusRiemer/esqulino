@@ -27,6 +27,8 @@ import { EditorToolbarService } from "../toolbar.service";
 import { DragulaService } from "ng2-dragula";
 import { FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
 
+
+
 @Component({
   templateUrl: "templates/schema-table-visual.html",
   selector: "sql-table-visual",
