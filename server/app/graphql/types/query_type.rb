@@ -3,13 +3,15 @@ module Types
 
     field :programmingLanguages, Types::ProgrammingLanguageType.connection_type, null: false
     field :blockLanguages, Types::BlockLanguageType.connection_type, null: false
-    field :grammars, resolver: Resolvers::GrammarsResolver
+    field :grammars, Types::GrammarType.connection_type, null: false do
+      argument :input, Types::GrammarType::InputType, required: false
+    end
     field :codeResources, Types::CodeResourceType.connection_type,null:false
     field :news, Types::NewsType.connection_type,null:false
     field :projectDatabases, Types::ProjectDatabaseType.connection_type,null:false
     field :projectSources, Types::ProjectSourceType.connection_type,null:false
     field :projects, Types::ProjectType.connection_type, null: false do
-      argument :input, Types::ProjectType::ProjectInputType,required: false
+      argument :input, Types::ProjectType::InputType, required: false
     end
 
     def programming_languages
@@ -38,6 +40,10 @@ module Types
 
     def projects(input:nil)
       Resolvers::ProjectsResolver::new(**input).scope
+    end
+
+    def grammars(input:nil)
+      Resolvers::GrammarsResolver::new(**input).scope
     end
   end
 end

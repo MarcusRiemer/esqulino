@@ -14,7 +14,7 @@ RSpec.fdescribe Resolvers::ProjectsResolver do
     expect(res.scope).to eq([p1, p2])
   end
 
-  it "Loads all projects ordered by NAME ASC" do
+  it "Loads all projects ordered by multilingual NAME ASC" do
     p1 = FactoryBot.create(:project, slug: "number-1")
     p2 = FactoryBot.create(:project, slug: "number-2")
     p3 = FactoryBot.create(:project, slug: "number-3")
@@ -26,14 +26,56 @@ RSpec.fdescribe Resolvers::ProjectsResolver do
     expect(res.scope).to eq([p1, p2, p3])
   end
 
-  it "Loads all projects ordered by NAME DESC" do
+  it "Loads all projects ordered by scalar SLUG DESC" do
+    p1 = FactoryBot.create(:project, slug: "number-1")
+    p2 = FactoryBot.create(:project, slug: "number-2")
+    p3 = FactoryBot.create(:project, slug: "number-3")
+    res = Resolvers::ProjectsResolver.new(
+      languages: ["de", "en"],
+      order: { orderField: "slug", orderDirection: "desc" }
+    )
+    expect(res.scope).to eq([p3, p2, p1])
+  end
+  it "Loads all projects ordered by scalar SLUG ASC" do
     p1 = FactoryBot.create(:project, slug: "number-1")
     p2 = FactoryBot.create(:project, slug: "number-2")
     p3 = FactoryBot.create(:project, slug: "number-3")
 
     res = Resolvers::ProjectsResolver.new(
-      languages: ["de", "en"],
-      order: { orderField: "name", orderDirection: "DESC" }
+        languages: ["de", "en"],
+        order: { orderField: "slug",  orderDirection: "asc" }
+    )
+    expect(res.scope).to eq([p1, p2, p3])
+  end
+  it "Loads all projects ordered by scalar SLUG ASC per default when no orderDirection given" do
+    p3 = FactoryBot.create(:project, slug: "number-3")
+    p1 = FactoryBot.create(:project, slug: "number-1")
+    p2 = FactoryBot.create(:project, slug: "number-2")
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        order: { orderField: "slug" }
+    )
+    expect(res.scope).to eq([p1, p2, p3])
+  end
+  it "Loads all projects ordered by scalar NAME ASC per default when no orderField given" do
+    p3 = FactoryBot.create(:project, name:{de:"hallo-3"})
+    p1 = FactoryBot.create(:project, name:{de:"hallo-1"})
+    p2 = FactoryBot.create(:project, name:{de:"hallo-2"})
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        order: { orderDirection: "asc" }
+    )
+    expect(res.scope).to eq([p1, p2, p3])
+  end
+  it "Loads all projects ordered by multilingual NAME DESC" do
+    p1 = FactoryBot.create(:project, slug: "number-1")
+    p2 = FactoryBot.create(:project, slug: "number-2")
+    p3 = FactoryBot.create(:project, slug: "number-3")
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        order: { orderField: "name", orderDirection: "desc" }
     )
     expect(res.scope).to eq([p3, p2, p1])
   end
@@ -44,4 +86,81 @@ RSpec.fdescribe Resolvers::ProjectsResolver do
     expect(res.multilingual_columns).to eq(["name", "description"])
     expect(res.scalar_columns).to include("id", "public", "preview")
   end
+
+  it "Loads one project, filtered by scalar column" do
+    p = FactoryBot.create(:project, slug: "number-1")
+    FactoryBot.create(:project, slug: "number-2")
+    FactoryBot.create(:project, slug: "number-3")
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        filter: {slug: "number-1"}
+    )
+    expect(res.scope).to eq([p])
+  end
+
+  it "Loads one project, filtered by multilingual column" do
+    p = FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
+    FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
+    FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        filter: {name: "hello-1"}
+    )
+    expect(res.scope).to eq([p])
+  end
+
+  it "Load empty array by filtering all projects by scalar column (has to match exactly)" do
+    FactoryBot.create(:project, slug: "number-1")
+    FactoryBot.create(:project, slug: "number-2")
+    FactoryBot.create(:project, slug: "number-3")
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        filter: {slug: "number"}
+    )
+    expect(res.scope).to eq([])
+  end
+
+  it "Load empty array by filtering all projects by multilingual column (has to match exactly)" do
+    FactoryBot.create(:project, name: { de: "hallo-1", en:"hello-1"})
+    FactoryBot.create(:project, name: { de: "hallo-2", en:"hello-2"})
+    FactoryBot.create(:project, name: { de: "hallo-3", en:"hello-3"})
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de", "en"],
+        filter: {name: "hallo"}
+    )
+    expect(res.scope).to eq([])
+  end
+
+  it "Load empty array filtered by english column, but selecting german language first" do
+    FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
+    FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
+    FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["de"],
+        filter: {name: "hello-2"}
+    )
+    expect(res.scope).to eq([])
+  end
+
+  it "Has empty field if requesting not provided language" do
+    FactoryBot.create(:project, name: {de: "hallo-1"})
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["en"]
+    )
+    expect(res.scope.first.name).to eq({})
+  end
+
+  it "Loads all available languages if no language is requested in the query" do
+    FactoryBot.create(:project, name: {de: "hallo-1",en:"hello-1"})
+
+    res = Resolvers::ProjectsResolver.new()
+    expect(res.scope.first.name).to eq({de: "hallo-1",en:"hello-1"}.stringify_keys)
+  end
+
 end

@@ -8,5 +8,19 @@ module Types
     field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
     field :grammar, Types::GrammarType, null:true
     field :codeResources, [Types::CodeResourceType], null:true
+
+
+    class OrderFieldEnum < Types::BaseEnum
+      graphql_name 'BlockLanguageOrderFieldEnum'
+      #Order Fields
+      value 'name'
+      value 'slug'
+      value 'grammar'
+    end
+
+    class BlockLanguageOrderType < Types::BaseInputObject
+      argument :orderField, OrderFieldEnum, required: false
+      argument :orderDirection, Types::BaseEnum::OrderDirectionEnum, required: false
+    end
   end
 end

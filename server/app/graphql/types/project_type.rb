@@ -23,27 +23,30 @@ module Types
       value 'slug'
     end
 
-    class ProjectMultiLanguageFieldEnum < Types::BaseEnum
-      graphql_name 'ProjectMultiLanguageFieldEnum'
-      value "name"
-      value "description"
-    end
-
-    class ProjectOrderType < Types::BaseInputObject
+    class OrderType < Types::BaseInputObject
+      graphql_name 'ProjectOrderType'
       argument :orderField, OrderFieldEnum, required: false
       argument :orderDirection, Types::BaseEnum::OrderDirectionEnum, required: false
     end
 
-    class ProjectFilterFieldType < Types::BaseInputObject
+    class MultilingualColumnsEnum < Types::BaseEnum
+      graphql_name 'ProjectMultilingualColumnsEnum'
+      value "name"
+      value "description"
+    end
+
+    class FilterFieldType < Types::BaseInputObject
+      graphql_name 'ProjectFilterFieldType'
       argument :id, type: String, required: false
       argument :name, type: String, required: false
       argument :slug, type: String, required: false
       argument :public, type: Boolean, required: false
     end
 
-    class ProjectInputType < Types::BaseInputObject
-      argument :order, ProjectOrderType, required: false
-      argument :filter, ProjectFilterFieldType, required: false
+    class InputType < Types::BaseInputObject
+      graphql_name 'ProjectInputType'
+      argument :order, OrderType, required: false
+      argument :filter, FilterFieldType, required: false
       argument :languages, [Types::BaseEnum::LanguageEnum], required: false
     end
   end

@@ -1,12 +1,15 @@
-require 'search_object'
-require 'search_object/plugin/graphql'
 
 module Resolvers
   class BaseResolver
-    include SearchObject.module(:graphql)
 
     def escape_search_term(term)
       "%#{term.gsub(/\s+/, '%')}%"
+    end
+
+
+
+    def to_single_quotes_array(arr)
+      arr.to_s.gsub(/["]/,'\'')
     end
   end
 end
