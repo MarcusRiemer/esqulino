@@ -163,4 +163,21 @@ RSpec.describe Resolvers::ProjectsResolver do
     expect(res.scope.first.name).to eq({de: "hallo-1",en:"hello-1"}.stringify_keys)
   end
 
+  it "Order multilingual fields with coalesce" do
+    p1 = FactoryBot.create(:project, name: {de: "Trucklino",en:"Trucklino"})
+    p2 = FactoryBot.create(:project, name: {de: "Drei Fragezeichen",en:"Three Investigators"})
+    p3 = FactoryBot.create(:project, name: {de: "Test: Web"})
+
+    res1 = Resolvers::ProjectsResolver.new(
+        order: {orderField:"name",orderDirection:"asc"},
+        languages:["de","en"]
+    )
+
+    res2 = Resolvers::ProjectsResolver.new(
+        order: {orderField:"name",orderDirection:"asc"},
+        languages:["en","de"]
+    )
+    expect(res1.scope).to eq([p2,p3,p1])
+    expect(res2.scope).to eq([p3,p2,p1])
+  end
 end

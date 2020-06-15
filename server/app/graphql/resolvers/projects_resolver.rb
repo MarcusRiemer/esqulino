@@ -5,9 +5,9 @@ module Resolvers
 
     def initialize(filter:nil,order:nil,languages:nil)
       scope = select_scalar_fields()
-      scope = select_languages(scope,languages)
+      scope, languages = select_languages(scope,languages)
       scope = apply_filter(scope,filter,languages)
-      @scope = apply_order(scope,order)
+      @scope = apply_order(scope,order,languages)
     end
 
     def select_scalar_fields
@@ -19,7 +19,7 @@ module Resolvers
       Types::ProjectType::MultilingualColumnsEnum.enum_values.each do |lang_field|
         scope = scope.select("SLICE(#{lang_field}, ARRAY#{to_single_quotes_array(languages)}) AS #{lang_field}")
       end
-      scope
+      [scope, languages]
     end
 
     def apply_filter(scope, value, languages)
@@ -34,13 +34,15 @@ module Resolvers
       end
       scope
     end
-
-    def apply_order(scope,value)
+    def apply_order(scope,value,languages)
       if value
         order_key = value.to_h.stringify_keys.fetch("orderField","name")
         order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
         if is_multilingual_column? order_key
-          scope = scope.order "%%#{order_key}::hstore #{order_dir}"
+          # Use languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
+          # Using gsub to add comma as delimiter
+          coalesce = languages.inject(""){|acc,val| acc + "#{order_key}->'#{val}'"}.gsub(/'#{order_key}/,"', #{order_key}")
+          scope = scope.order "COALESCE(#{coalesce}) #{order_dir}"
         else
           scope = scope.order "#{order_key} #{order_dir}"
         end
