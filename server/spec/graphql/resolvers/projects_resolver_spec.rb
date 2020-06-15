@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.fdescribe Resolvers::ProjectsResolver do
+RSpec.describe Resolvers::ProjectsResolver do
   it "can be instantiated" do
     res = Resolvers::ProjectsResolver.new
     expect(res).not_to be_nil

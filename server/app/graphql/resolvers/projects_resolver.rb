@@ -7,7 +7,7 @@ module Resolvers
       scope = select_scalar_fields()
       scope = select_languages(scope,languages)
       scope = apply_filter(scope,filter,languages)
-      @scope = apply_order(scope,order,languages)
+      @scope = apply_order(scope,order)
     end
 
     def select_scalar_fields
@@ -23,8 +23,10 @@ module Resolvers
     end
 
     def apply_filter(scope, value, languages)
+      # When filtering via pattern matching
+      # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
       value.to_h.each do |filter_key,filter_value|
-        if is_multilingual_column? filter_key.to_s
+        if is_multilingual_column? filter_key
           scope = scope.where("'#{filter_value}' ILIKE ANY (#{filter_key} -> ARRAY#{to_single_quotes_array(languages)})")
         else
           scope = scope.where "#{filter_key} LIKE ?", filter_value
@@ -33,7 +35,7 @@ module Resolvers
       scope
     end
 
-    def apply_order(scope,value, languages)
+    def apply_order(scope,value)
       if value
         order_key = value.to_h.stringify_keys.fetch("orderField","name")
         order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
@@ -57,7 +59,7 @@ module Resolvers
     end
 
     def is_multilingual_column?(name)
-      self.multilingual_columns.include? name
+      self.multilingual_columns.include? name.to_s
     end
 
   end
