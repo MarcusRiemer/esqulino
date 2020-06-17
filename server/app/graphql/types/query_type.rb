@@ -39,11 +39,19 @@ module Types
     end
 
     def projects(input:nil)
-      Resolvers::ProjectsResolver::new(**input).scope
+      if input
+        Resolvers::ProjectsResolver::new(**input).scope
+      else
+        Resolvers::ProjectsResolver::new.scope
+      end
     end
 
     def grammars(input:nil)
-      Resolvers::GrammarsResolver::new(**input).scope
+      if input
+        Resolvers::GrammarsResolver::new(**input).scope
+      else
+        Resolvers::GrammarsResolver::new.scope
+      end
     end
   end
 end
