@@ -65,7 +65,6 @@ um den Server mit einer PostgreSQL Datenbank zu verbinden~\cite{riemerPostgresCo
 ohne diese in Text Datentypen konvertieren zu müssen.
 \section{Praxisbeispiel}
 
-I
 \subsection{1. Anlegen des Typescript Interfaces}
 
 \begin{lstlisting}
@@ -92,9 +91,9 @@ extends IdentifiableResourceDescription {
  updatedAt?: string;
 }
 \end{lstlisting}
-% Bsp. CodeResource
-% List Interface/Response Interface
-% Dokument Interface
+Bsp. CodeResource
+List Interface/Response Interface
+Dokument Interface
 \subsection{2. Generierung der JSON Schema Definitionen}
 \begin{lstlisting}
 JSON_SCHEMA_FILES = CodeResourceDescription.json
@@ -111,7 +110,7 @@ CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.descri
 $(CONVERT_COMMAND)
 \end{lstlisting}
 
-% Makefile
+Makefile
 \subsection{3. Anlegen des Models in Rails}
 
 \begin{lstlisting}
@@ -141,7 +140,7 @@ class CodeResource < ApplicationRecord
  has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
 end
 \end{lstlisting}
-% Datenbankmigration
+Datenbankmigration
 \subsection{4. Anlegen eines Controllers in Rails}
 \begin{lstlisting}
 resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
@@ -150,72 +149,49 @@ post 'code_resources/:code_resource_id/clone', controller:  'code_resources', ac
 \begin{lstlisting}
 class CodeResourcesController < ApplicationController
 
-include JsonSchemaHelper
+ include JsonSchemaHelper
 
-# All available code resources for a certain programming language
-def index_by_programming_language
- render json: CodeResource
- .list_by_programming_language(params[:programming_language_id])
-end
-
-# Create a new resource that is part of a specific project
-def create
- project_id = params[:project_id]
- proj = Project.find_by_slug_or_id! project_id
-
- res = proj.code_resources.new(code_resource_create_params)
- if res.save
-  render :json => res.to_full_api_response, :status => 200
- else
-  render :json => { 'errors' => res.errors }, :status => 400
+ # All available code resources for a certain programming language
+ def index_by_programming_language
+  render json: CodeResource
+  .list_by_programming_language(params[:programming_language_id])
  end
-end
 
-# Updates a specific resource. As other models in the database may
-# depend on this specific resource, they may be updated as well.
-def update
- # See what the new data looks like
- request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
- update_params = request_data
- .dig("resource")
- .transform_keys { |k| k.underscore }
+ # Create a new resource that is part of a specific project
+ def create
+  project_id = params[:project_id]
+  proj = Project.find_by_slug_or_id! project_id
 
- resource = CodeResource.find(params[:code_resource_id])
-
- ApplicationRecord.transaction do
- # Do the actual update of the code resource
-  if resource.update(update_params)
-   # Do updates on dependant resources
-   resource.regenerate_immediate_dependants!
-   render :json => resource, :status => 200
+  res = proj.code_resources.new(code_resource_create_params)
+  if res.save
+   render :json => res.to_full_api_response, :status => 200
   else
-   render :json => { 'errors' => resource.errors }, :status => 400
+   render :json => { 'errors' => res.errors }, :status => 400
   end
  end
 end
  \end{lstlisting}
-% Controller
-% Für jede Sicht (z.B. Admin/Frontend) eine Route und Controller Funktion.
+Für jede Sicht (z.B. Admin/Frontend) eine Route und Controller Funktion.
 \subsection{5. DataServices auf dem Client}
 \subsection{6. Komponenten auf dem Client}
-% + template
+template
 \subsection{7. Neue Sicht}
-% 1. + 2. + 4.(Route + Funktion) + 5. + 6.
-% Graphql: 5. (Wird generiert) + 6.
-\subsection{Automatische Generierung von JSON Schema Definitionen}
-% Anhand von Beispiel: Übersicht über alle
+1. + 2. + 4.(Route + Funktion) + 5. + 6.
+Graphql: 5. (Wird generiert) + 6.
+\subsection{8. Automatische Generierung von JSON Schema Definitionen}
+Anhand von Beispiel: Übersicht über alle
 
 \section{Anforderungen}
 
 \subsection{Mehrsprachigkeit}
-% Felder in mehreren Sprachen
+Felder in mehreren Sprachen
 
 \subsection{Darstellungsvielfalt}
 Nutzerbereich:
 Kacheldarstellung auf der Landingpage benötigt weniger Informationen als geliefert werden.
 Adminbereich:
 Tabellen Übersicht benötigt weniger Daten. Editierung benötigt alle Daten.
-%Mehrere Requests für einen View
+Mehrere Requests für einen View
 
 \subsection{End-to-end Typsicherheit}
 Erfordert applikationsübergreifende Typdefinitionen.
