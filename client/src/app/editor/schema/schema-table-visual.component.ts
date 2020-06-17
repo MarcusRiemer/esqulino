@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostBinding,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
@@ -26,8 +32,6 @@ import { ProjectService, Project } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
 import { DragulaService } from "ng2-dragula";
 import { FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
-
-
 
 @Component({
   templateUrl: "templates/schema-table-visual.html",
@@ -64,6 +68,19 @@ export class SchemaTableVisualComponent {
     private _route: ActivatedRoute,
     private dragulaService: DragulaService
   ) {}
+
+  @HostBinding("style.position")
+  position: string = "absolute";
+
+  @HostBinding("style.left.px")
+  get left(): number {
+    return this.xPos;
+  }
+
+  @HostBinding("style.top.px")
+  get top(): number {
+    return this.yPos;
+  }
 
   readonly schemaRevision = this._schemaService.changeCount;
 
@@ -123,7 +140,7 @@ export class SchemaTableVisualComponent {
       let schemaRef = visualSchemaText.subscribe(
         (data) => {
           this.parseSchemaText(data);
-		  console.log(data);
+          console.log(data);
         },
         (error) => {
           console.log(error);
@@ -228,21 +245,19 @@ export class SchemaTableVisualComponent {
 
     this.saveChanges();
   }
-  
+
   private parseSchemaText(text: any) {
     let nodes = text.objects;
 
     for (var i = 1; i < nodes.length; i++) {
-      if (
-        this.table.name == nodes[i].name
-      ) {
+      if (this.table.name == nodes[i].name) {
         let points = nodes[i].pos;
         let positions = points.split(",");
         console.log(positions);
 
         this.xPos = +positions[0];
         this.yPos = +positions[1];
-		this.width = nodes[i].width;
+        this.width = nodes[i].width;
       }
     }
   }
