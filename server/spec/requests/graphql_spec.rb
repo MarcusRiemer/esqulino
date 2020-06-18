@@ -210,6 +210,22 @@ RSpec.describe GraphqlController, type: :request do
       expect(nodes_data['description']['en']).to eq("Greeting")
       expect(nodes_data['description']['de']).to eq("Begruessung")
     end
+    it 'Projects: Requesting column which doesnt exist in the model and expect to return this value' do
+      p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
+      FactoryBot.create(:code_resource, project_id: p.id)
+      FactoryBot.create(:code_resource, project_id: p.id)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query:"{projects{nodes {codeResourceCount}}}"
+           }.to_json
+
+
+      nodes_data =  JSON.parse(response.body)['data']['projects']['nodes'].first
+      expect(response).to have_http_status(200)
+      expect(nodes_data['codeResourceCount']).to eq(2)
+    end
+
   end
 end
 

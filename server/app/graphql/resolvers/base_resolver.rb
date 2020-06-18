@@ -2,10 +2,10 @@
 module Resolvers
   class BaseResolver
 
-    def initialize(model_class,context,scope:,filter:nil,order:nil,languages:nil)
+    def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil)
       @model_class = model_class
       @context = context
-      @languages = Types::BaseEnum::LanguageEnum.enum_values if languages.nil?
+      @languages = languages.nil? ? Types::BaseEnum::LanguageEnum.enum_values : languages
       scope = select_relevant_fields(scope)
       scope = apply_filter(scope,filter)
       @scope = apply_order(scope,order)
@@ -27,6 +27,7 @@ module Resolvers
       # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
       value.to_h.each do |filter_key,filter_value|
         if is_multilingual_column? filter_key
+
           scope = scope.where("'#{filter_value}' ILIKE ANY (#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
         else
           scope = scope.where "#{filter_key} LIKE ?", filter_value
@@ -52,6 +53,9 @@ module Resolvers
     end
 
     def include_related(graphql_query)
+      # .includes might be the wrong function because it only makes possible to use
+      # .size so the number will be determined by iterating the array not in sql
+      #  https://jacopretorius.net/2017/05/dealing-with-n1-queries-in-rails.html
       #TODO: find out which related objects are queried for and should be included
     end
 
@@ -63,9 +67,15 @@ module Resolvers
       arr.to_s.gsub(/["]/,'\'')
     end
 
-    #list the requested columns except additional columns which doesnt exist in the Model like (projects codeResourceCount)
+    # list the requested columns except additional columns which doesnt exist in the Model like (projects codeResourceCount)
+    # also add foreign key columns (columns which ends with _id) to keep relations.
+    # if no columns are requested select all
     def relevant_columns
-      @model_class.attribute_names & requested_columns
+      if requested_columns.empty?
+        @model_class.attribute_names
+      else
+        @model_class.attribute_names & requested_columns | @model_class.attribute_names.filter {|f| f.end_with?("_id")}
+      end
     end
 
     def multilingual_columns
@@ -92,13 +102,19 @@ module Resolvers
       #   Seems to be the root of the field selection of a query.
       #   Contains all queried connection fields like nodes, edges, pageInfo, totalCount
       #   Also contains the provided arguments like first,last,after,before,input.
-      # .selections: Access to Array<Nodes::Field>
+      # nodes.selections: Access to Array<Nodes::Field>
       #   Contains als requested nodes like id, slug, name, [...]
-      @context.query.lookahead.ast_nodes[0].selections[0].children.find {|c| c.name == "nodes"}.selections.map {|s| s.name}
+      if  @context.nil?
+        []
+      else
+        projects_query = @context.query.lookahead.ast_nodes[0].selections[0]
+        nodes = projects_query.children.find {|c| c.name == "nodes"}
+        nodes.selections.map {|s| s.name.underscore}
+      end
     end
 
     def is_multilingual_column?(name)
-      @model_class.columns_hash[name].type == :hstore
+      @model_class.columns_hash[name.to_s].type == :hstore
     end
   end
 end
