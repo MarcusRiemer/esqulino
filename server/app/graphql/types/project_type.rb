@@ -12,9 +12,16 @@ module Types
     field :defaultDatabase, Types::ProjectDatabaseType,null:true
     field :user, Types::UserType,null:true
     field :codeResources, Types::CodeResourceType.connection_type, null:true
+    field :codeResourceCount, Integer, null:true
     field :projectSources, Types::ProjectSourceType.connection_type, null:true
     field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
     field :grammars, Types::GrammarType.connection_type,null:true
+
+
+    def code_resource_count
+      # code_resource_count defined in projects_resolver.rb
+      object.code_resource_count
+    end
 
     class OrderFieldEnum < Types::BaseEnum
       graphql_name 'ProjectOrderFieldEnum'

@@ -40,9 +40,9 @@ module Types
 
     def projects(input:nil)
       if input
-        Resolvers::ProjectsResolver::new(**input).scope
+        Resolvers::ProjectsResolver::new(context:@context,**input).scope
       else
-        Resolvers::ProjectsResolver::new.scope
+        Resolvers::ProjectsResolver::new(context:@context).scope
       end
     end
 
