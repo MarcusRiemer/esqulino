@@ -17,7 +17,6 @@ module Types
     field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
     field :grammars, Types::GrammarType.connection_type,null:true
 
-
     def code_resource_count
       # code_resource_count defined in projects_resolver.rb
       object.code_resource_count

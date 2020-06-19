@@ -154,7 +154,7 @@ RSpec.describe GraphqlController, type: :request do
       expect(response_data.has_key? "errors").to be true
     end
 
-    it 'Projects: Requesting all connection type fields' do
+    it 'Projects: Requesting all pagination connection type fields' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       post "/graphql",
            headers: json_headers,
@@ -162,22 +162,23 @@ RSpec.describe GraphqlController, type: :request do
                query:"{projects{nodes{name}edges{cursor node{name}}pageInfo{endCursor hasNextPage hasPreviousPage startCursor}totalCount}}"
            }.to_json
 
-      response_data =  JSON.parse(response.body)['data']['projects']
+      response_data =  JSON.parse(response.body)
+      projects_data = response_data['data']['projects']
 
       expect(response).to have_http_status(200)
       expect(response_data.has_key? "errors").to be false
-      expect(response_data.has_key? "nodes").to be true
-      expect(response_data['nodes'][0].has_key? "name").to be true
-      expect(response_data.has_key? "edges").to be true
-      expect(response_data['edges'][0].has_key? "cursor").to be true
-      expect(response_data['edges'][0].has_key? "node").to be true
-      expect(response_data['edges'][0]['node'].has_key? "name").to be true
-      expect(response_data.has_key? "pageInfo").to be true
-      expect(response_data['pageInfo'].has_key? "endCursor").to be true
-      expect(response_data['pageInfo'].has_key? "hasNextPage").to be true
-      expect(response_data['pageInfo'].has_key? "hasPreviousPage").to be true
-      expect(response_data['pageInfo'].has_key? "startCursor").to be true
-      expect(response_data.has_key? "totalCount").to be true
+      expect(projects_data.has_key? "nodes").to be true
+      expect(projects_data['nodes'][0].has_key? "name").to be true
+      expect(projects_data.has_key? "edges").to be true
+      expect(projects_data['edges'][0].has_key? "cursor").to be true
+      expect(projects_data['edges'][0].has_key? "node").to be true
+      expect(projects_data['edges'][0]['node'].has_key? "name").to be true
+      expect(projects_data.has_key? "pageInfo").to be true
+      expect(projects_data['pageInfo'].has_key? "endCursor").to be true
+      expect(projects_data['pageInfo'].has_key? "hasNextPage").to be true
+      expect(projects_data['pageInfo'].has_key? "hasPreviousPage").to be true
+      expect(projects_data['pageInfo'].has_key? "startCursor").to be true
+      expect(projects_data.has_key? "totalCount").to be true
     end
 
     it 'Projects: Requesting all columns of projects model and  not to return error' do
@@ -188,7 +189,7 @@ RSpec.describe GraphqlController, type: :request do
                query:"{projects{nodes{name blockLanguages{nodes{id}}codeResources{nodes{id}}createdAt defaultDatabase{id}description grammars{nodes {id}}id indexPageId name preview projectSources{nodes{id}}public slug updatedAt user{id}}}}"
            }.to_json
 
-      response_data =  JSON.parse(response.body)
+      response_data =  JSON.parse(response.body)['data']['projects']
 
       expect(response).to have_http_status(200)
       expect(response_data.has_key? "errors").to be false
@@ -210,7 +211,7 @@ RSpec.describe GraphqlController, type: :request do
       expect(nodes_data['description']['en']).to eq("Greeting")
       expect(nodes_data['description']['de']).to eq("Begruessung")
     end
-    it 'Projects: Requesting column which doesnt exist in the model and expect to return this value' do
+    it 'Projects: Requesting additional column which doesnt exist in any model and expect to return its value' do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
       FactoryBot.create(:code_resource, project_id: p.id)
       FactoryBot.create(:code_resource, project_id: p.id)
@@ -220,12 +221,42 @@ RSpec.describe GraphqlController, type: :request do
                query:"{projects{nodes {codeResourceCount}}}"
            }.to_json
 
-
       nodes_data =  JSON.parse(response.body)['data']['projects']['nodes'].first
       expect(response).to have_http_status(200)
       expect(nodes_data['codeResourceCount']).to eq(2)
     end
 
+    it 'Projects: Requesting code_resource relation' do
+      p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
+      FactoryBot.create(:code_resource, name: "test1", project_id: p.id)
+      FactoryBot.create(:code_resource, name: "test2", project_id: p.id)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query:"{projects {nodes{codeResources{nodes{name} totalCount}codeResourceCount}}}"
+           }.to_json
+
+      nodes_data =  JSON.parse(response.body)['data']['projects']['nodes'].first
+      code_resource_data = nodes_data['codeResources']['nodes']
+      expect(response).to have_http_status(200)
+      expect(nodes_data['codeResourceCount']).to eq(2)
+      expect(code_resource_data.map {|c| c['name']}).to eq(["test1","test2"])
+      expect(nodes_data['codeResources']['totalCount']).to eq(2)
+    end
+
+    it 'Projects: Requesting code_resource relation without having code_resources' do
+      FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query:"{projects {nodes{codeResources{nodes{name} totalCount}codeResourceCount}}}"
+           }.to_json
+
+      nodes_data =  JSON.parse(response.body)['data']['projects']['nodes'].first
+      expect(response).to have_http_status(200)
+      expect(nodes_data['codeResourceCount']).to eq(0)
+      expect(nodes_data['codeResources']['totalCount']).to eq(0)
+    end
   end
 end
 

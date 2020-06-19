@@ -6,10 +6,11 @@ module Resolvers
     def initialize(context:nil,filter:nil,order:nil,languages:nil)
       # query context instance of GraphQL::Query::Context
       scope = Project
+
       if requested_fields(context).include?("code_resource_count")
         # code_resource_count will be used for field resolving in project_type.rb
         # Used to solve n+1 query problem
-        scope = Project.left_joins(:code_resources).select('COUNT(*) AS code_resource_count').group('projects.id')
+        scope = Project.left_joins(:code_resources).select('COUNT(code_resources) AS code_resource_count').group('projects.id')
       end
       super(Project,context:context,scope:scope,filter:filter,order:order,languages:languages)
     end
@@ -32,6 +33,7 @@ module Resolvers
       #   Also contains the provided arguments like first,last,after,before,input.
       # nodes.selections: Access to Array<Nodes::Field>
       #   Contains als requested nodes like id, slug, name, [...]
+      # context should never be nil, unless in tests
       if context.nil?
         []
       else

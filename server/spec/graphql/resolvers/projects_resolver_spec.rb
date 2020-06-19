@@ -160,7 +160,7 @@ RSpec.describe Resolvers::ProjectsResolver do
     expect(res.scope.first.name).to eq({})
   end
 
-  it "Only get languages which are requested" do
+  it "Get only languages which are requested in name column" do
     FactoryBot.create(:project, name: {de: "hallo",en:"hello"})
     FactoryBot.create(:project, name: {de: "hallo2"})
     FactoryBot.create(:project, name: {en:"hello3"})
@@ -174,6 +174,22 @@ RSpec.describe Resolvers::ProjectsResolver do
     )
     expect(res.scope.map { |p| p.name}).to eq([{"en"=>"hello"}, {}, {"en"=>"hello3"}, {"en"=>"hello4"}])
     expect(res2.scope.map { |p| p.name}).to eq([{"de"=>"hallo"}, {"de"=>"hallo2"}, {}, {}])
+  end
+
+  it "Get only languages which are requested in description column" do
+    FactoryBot.create(:project, description: {de: "hallo",en:"hello"})
+    FactoryBot.create(:project, description: {de: "hallo2"})
+    FactoryBot.create(:project, description: {en:"hello3"})
+    FactoryBot.create(:project, description: {en:"hello4"})
+
+    res = Resolvers::ProjectsResolver.new(
+        languages: ["en"]
+    )
+    res2 = Resolvers::ProjectsResolver.new(
+        languages: ["de"]
+    )
+    expect(res.scope.map { |p| p.description}).to eq([{"en"=>"hello"}, {}, {"en"=>"hello3"}, {"en"=>"hello4"}])
+    expect(res2.scope.map { |p| p.description}).to eq([{"de"=>"hallo"}, {"de"=>"hallo2"}, {}, {}])
   end
 
   it "Throws exception when creating project with not provided language keys" do

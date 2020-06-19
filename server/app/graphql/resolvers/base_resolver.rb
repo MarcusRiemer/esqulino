@@ -27,8 +27,7 @@ module Resolvers
       # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
       value.to_h.each do |filter_key,filter_value|
         if is_multilingual_column? filter_key
-
-          scope = scope.where("'#{filter_value}' ILIKE ANY (#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
+          scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
         else
           scope = scope.where "#{filter_key} LIKE ?", filter_value
         end
@@ -43,7 +42,7 @@ module Resolvers
         if is_multilingual_column? order_key
           # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
           # Using gsub to add comma as delimiter
-          coalesce = @languages.map{|l| "#{order_key}->'#{l}'"}.join(',')
+          coalesce = @languages.map{|l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
           scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
         else
           scope = scope.order "#{order_key} #{order_dir}"
@@ -74,7 +73,7 @@ module Resolvers
       if requested_columns.empty?
         @model_class.attribute_names
       else
-        @model_class.attribute_names & requested_columns | @model_class.attribute_names.filter {|f| f.end_with?("_id")}
+        @model_class.attribute_names & requested_columns | @model_class.attribute_names.filter {|f| f.end_with?("_id")} | ["id"]
       end
     end
 
@@ -104,6 +103,7 @@ module Resolvers
       #   Also contains the provided arguments like first,last,after,before,input.
       # nodes.selections: Access to Array<Nodes::Field>
       #   Contains als requested nodes like id, slug, name, [...]
+      # context should never be nil, unless in tests
       if  @context.nil?
         []
       else
