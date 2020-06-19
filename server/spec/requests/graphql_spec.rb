@@ -257,6 +257,21 @@ RSpec.describe GraphqlController, type: :request do
       expect(nodes_data['codeResourceCount']).to eq(0)
       expect(nodes_data['codeResources']['totalCount']).to eq(0)
     end
+    it 'Projects: Requesting code_resource_count and projects totalCount, so projects totalCount (in connection) has to deal with AcitveRecord::Relation' do
+      p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
+      FactoryBot.create(:code_resource, name: "test1", project_id: p.id)
+      FactoryBot.create(:code_resource, name: "test2", project_id: p.id)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query:"{projects {nodes{codeResourceCount}totalCount}}"
+           }.to_json
+
+      projects_data =  JSON.parse(response.body)['data']['projects']
+      expect(response).to have_http_status(200)
+      expect(projects_data['nodes'][0]['codeResourceCount']).to eq(2)
+      expect(projects_data['totalCount']).to eq(1)
+    end
   end
 end
 

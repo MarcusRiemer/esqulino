@@ -32,7 +32,7 @@ module Resolvers
       #   Contains all queried connection fields like nodes, edges, pageInfo, totalCount
       #   Also contains the provided arguments like first,last,after,before,input.
       # nodes.selections: Access to Array<Nodes::Field>
-      #   Contains als requested nodes like id, slug, name, [...]
+      #   Contains all requested nodes like id, slug, name, [...]
       # context should never be nil, unless in tests
       if context.nil?
         []
