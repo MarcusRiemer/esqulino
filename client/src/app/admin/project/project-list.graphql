@@ -4,9 +4,7 @@ query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$input
             id
             name
             slug
-            codeResources{
-                totalCount
-            }
+            codeResourceCount
         }
         totalCount
         pageInfo {

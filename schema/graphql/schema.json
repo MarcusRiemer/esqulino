@@ -2451,6 +2451,20 @@
               "deprecationReason": null
             },
             {
+              "name": "codeResourceCount",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "codeResources",
               "description": null,
               "args": [
