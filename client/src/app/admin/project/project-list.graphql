@@ -1,11 +1,8 @@
-query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$order:ProjectOrder) {
-    projects(first:$first,after:$after,before:$before,last:$last,order:$order) {
+query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$input:ProjectInputType) {
+    projects(first:$first,after:$after,before:$before,last:$last,input:$input) {
         nodes{
             id
-            name {
-                de
-                en
-            }
+            name
             slug
             codeResources{
                 totalCount

@@ -122,9 +122,7 @@ export class PaginatorTableGraphqlComponent
 
   onChangePagination($event: PageEvent) {
     //PageSize Change
-    const pageInfo: PageInfo = this.queryData.query.currentResult().data[
-      this.queryData.dataKey
-    ].pageInfo;
+    const pageInfo: PageInfo = this.getPageInfo();
     if (this._pageSize != $event.pageSize) {
       this._pageSize = $event.pageSize;
       this.queryData.query.setVariables({ first: $event.pageSize });
@@ -151,14 +149,19 @@ export class PaginatorTableGraphqlComponent
   /**
    * User has requested different sorting options
    */
-  onChangeSort(
-    active: string,
-    direction: SortDirection,
-    refresh: boolean = true
-  ) {
-    /* this.queryData.query.setVariables({
-      last: $event.pageSize,
-      before: pageInfo.startCursor,
-    });*/
+  onChangeSort(active: string, direction: SortDirection) {
+    const pageInfo: PageInfo = this.getPageInfo();
+    if (direction != "") {
+      this.queryData.query.setVariables({
+        first: this._pageSize,
+        after: btoa((+atob(pageInfo.startCursor) - 1).toString()),
+        input: { order: { orderField: active, orderDirection: direction } },
+      });
+    }
+  }
+
+  getPageInfo(): PageInfo {
+    return this.queryData.query.currentResult().data[this.queryData.dataKey]
+      .pageInfo;
   }
 }

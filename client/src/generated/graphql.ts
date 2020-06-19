@@ -13,6 +13,7 @@ export type Scalars = {
   Datetime: any;
   /** Represents untyped JSON */
   JSON: any;
+  LangJson: any;
   /** An ISO 8601-encoded datetime */
   ISO8601DateTime: any;
 };
@@ -177,15 +178,27 @@ export type GrammarEdge = {
   node?: Maybe<Grammar>;
 };
 
-export type GrammarOrder = {
-  orderField?: Maybe<GrammarOrderFieldEnum>;
-  orderDirection?: Maybe<OrderDirectionEnum>;
+export type GrammarFilterFieldType = {
+  id?: Maybe<Scalars["String"]>;
+  name?: Maybe<Scalars["String"]>;
+  slug?: Maybe<Scalars["String"]>;
+};
+
+export type GrammarInputType = {
+  order?: Maybe<GrammarOrderType>;
+  filter?: Maybe<GrammarFilterFieldType>;
+  languages?: Maybe<Array<LanguageEnum>>;
 };
 
 export enum GrammarOrderFieldEnum {
   Name = "name",
   Slug = "slug",
 }
+
+export type GrammarOrderType = {
+  orderField?: Maybe<GrammarOrderFieldEnum>;
+  orderDirection?: Maybe<OrderDirectionEnum>;
+};
 
 export type Identity = {
   __typename?: "Identity";
@@ -307,12 +320,12 @@ export type Project = {
   blockLanguages?: Maybe<BlockLanguageConnection>;
   codeResources?: Maybe<CodeResourceConnection>;
   createdAt?: Maybe<Scalars["Datetime"]>;
-  defaultDatabase?: Maybe<ProjectDatabaseConnection>;
-  description: Scalars["String"];
+  defaultDatabase?: Maybe<ProjectDatabase>;
+  description: Scalars["LangJson"];
   grammars?: Maybe<GrammarConnection>;
   id: Scalars["ID"];
   indexPageId?: Maybe<Scalars["String"]>;
-  name: LanguageString;
+  name: Scalars["LangJson"];
   preview?: Maybe<Scalars["String"]>;
   projectSources?: Maybe<ProjectSourceConnection>;
   public?: Maybe<Scalars["Boolean"]>;
@@ -329,13 +342,6 @@ export type ProjectBlockLanguagesArgs = {
 };
 
 export type ProjectCodeResourcesArgs = {
-  after?: Maybe<Scalars["String"]>;
-  before?: Maybe<Scalars["String"]>;
-  first?: Maybe<Scalars["Int"]>;
-  last?: Maybe<Scalars["Int"]>;
-};
-
-export type ProjectDefaultDatabaseArgs = {
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   first?: Maybe<Scalars["Int"]>;
@@ -408,22 +414,28 @@ export type ProjectEdge = {
   node?: Maybe<Project>;
 };
 
-export type ProjectFilterField = {
+export type ProjectFilterFieldType = {
   id?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
   slug?: Maybe<Scalars["String"]>;
   public?: Maybe<Scalars["Boolean"]>;
 };
 
-export type ProjectOrder = {
-  orderField?: Maybe<ProjectOrderFieldEnum>;
-  orderDirection?: Maybe<OrderDirectionEnum>;
+export type ProjectInputType = {
+  order?: Maybe<ProjectOrderType>;
+  filter?: Maybe<ProjectFilterFieldType>;
+  languages?: Maybe<Array<LanguageEnum>>;
 };
 
 export enum ProjectOrderFieldEnum {
   Name = "name",
   Slug = "slug",
 }
+
+export type ProjectOrderType = {
+  orderField?: Maybe<ProjectOrderFieldEnum>;
+  orderDirection?: Maybe<OrderDirectionEnum>;
+};
 
 export type ProjectSource = {
   __typename?: "ProjectSource";
@@ -462,14 +474,12 @@ export type Query = {
   __typename?: "Query";
   blockLanguages: BlockLanguageConnection;
   codeResources: CodeResourceConnection;
-  /** Lists Grammars */
-  grammars?: Maybe<GrammarConnection>;
+  grammars: GrammarConnection;
   news: NewsConnection;
   programmingLanguages: ProgrammingLanguageConnection;
   projectDatabases: ProjectDatabaseConnection;
   projectSources: ProjectSourceConnection;
-  /** Lists projects */
-  projects?: Maybe<ProjectConnection>;
+  projects: ProjectConnection;
 };
 
 export type QueryBlockLanguagesArgs = {
@@ -487,14 +497,11 @@ export type QueryCodeResourcesArgs = {
 };
 
 export type QueryGrammarsArgs = {
-  id?: Maybe<Scalars["String"]>;
-  name?: Maybe<Scalars["String"]>;
-  slug?: Maybe<Scalars["String"]>;
-  order?: Maybe<GrammarOrder>;
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
+  input?: Maybe<GrammarInputType>;
 };
 
 export type QueryNewsArgs = {
@@ -526,13 +533,11 @@ export type QueryProjectSourcesArgs = {
 };
 
 export type QueryProjectsArgs = {
-  filter?: Maybe<ProjectFilterField>;
-  order?: Maybe<ProjectOrder>;
-  languages?: Maybe<Array<LanguageEnum>>;
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
+  input?: Maybe<ProjectInputType>;
 };
 
 export type Role = {
@@ -564,39 +569,36 @@ export type AdminListProjectsQueryVariables = {
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   last?: Maybe<Scalars["Int"]>;
-  order?: Maybe<ProjectOrder>;
+  input?: Maybe<ProjectInputType>;
 };
 
 export type AdminListProjectsQuery = { __typename?: "Query" } & {
-  projects?: Maybe<
-    { __typename?: "ProjectConnection" } & Pick<
-      ProjectConnection,
-      "totalCount"
-    > & {
-        nodes?: Maybe<
-          Array<
-            Maybe<
-              { __typename?: "Project" } & Pick<Project, "id" | "slug"> & {
-                  name: { __typename?: "LanguageString" } & Pick<
-                    LanguageString,
-                    "de" | "en"
-                  >;
-                  codeResources?: Maybe<
-                    { __typename?: "CodeResourceConnection" } & Pick<
-                      CodeResourceConnection,
-                      "totalCount"
-                    >
-                  >;
-                }
-            >
+  projects: { __typename?: "ProjectConnection" } & Pick<
+    ProjectConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "Project" } & Pick<
+              Project,
+              "id" | "name" | "slug"
+            > & {
+                codeResources?: Maybe<
+                  { __typename?: "CodeResourceConnection" } & Pick<
+                    CodeResourceConnection,
+                    "totalCount"
+                  >
+                >;
+              }
           >
-        >;
-        pageInfo: { __typename?: "PageInfo" } & Pick<
-          PageInfo,
-          "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
-        >;
-      }
-  >;
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
 };
 
 export const AdminListProjectsDocument = gql`
@@ -605,21 +607,18 @@ export const AdminListProjectsDocument = gql`
     $after: String
     $before: String
     $last: Int
-    $order: ProjectOrder
+    $input: ProjectInputType
   ) {
     projects(
       first: $first
       after: $after
       before: $before
       last: $last
-      order: $order
+      input: $input
     ) {
       nodes {
         id
-        name {
-          de
-          en
-        }
+        name
         slug
         codeResources {
           totalCount

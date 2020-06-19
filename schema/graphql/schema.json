@@ -1352,27 +1352,86 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "GrammarOrder",
+          "name": "GrammarFilterFieldType",
           "description": null,
           "fields": null,
           "inputFields": [
             {
-              "name": "orderField",
+              "name": "id",
               "description": null,
               "type": {
-                "kind": "ENUM",
-                "name": "GrammarOrderFieldEnum",
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "orderDirection",
+              "name": "name",
               "description": null,
               "type": {
-                "kind": "ENUM",
-                "name": "OrderDirectionEnum",
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "slug",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "GrammarInputType",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "order",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GrammarOrderType",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "filter",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GrammarFilterFieldType",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "languages",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "LanguageEnum",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             }
@@ -1402,6 +1461,37 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "GrammarOrderType",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "orderField",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "GrammarOrderFieldEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "orderDirection",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "OrderDirectionEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -1579,6 +1669,16 @@
           "kind": "SCALAR",
           "name": "JSON",
           "description": "Represents untyped JSON",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "LangJson",
+          "description": null,
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -2421,50 +2521,11 @@
               "name": "defaultDatabase",
               "description": null,
               "args": [
-                {
-                  "name": "after",
-                  "description": "Returns the elements in the list that come after the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Returns the elements in the list that come before the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "Returns the first _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "Returns the last _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
+
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "ProjectDatabaseConnection",
+                "name": "ProjectDatabase",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -2481,7 +2542,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "LangJson",
                   "ofType": null
                 }
               },
@@ -2583,8 +2644,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "LanguageString",
+                  "kind": "SCALAR",
+                  "name": "LangJson",
                   "ofType": null
                 }
               },
@@ -3093,7 +3154,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "ProjectFilterField",
+          "name": "ProjectFilterFieldType",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -3144,27 +3205,45 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "ProjectOrder",
+          "name": "ProjectInputType",
           "description": null,
           "fields": null,
           "inputFields": [
             {
-              "name": "orderField",
+              "name": "order",
               "description": null,
               "type": {
-                "kind": "ENUM",
-                "name": "ProjectOrderFieldEnum",
+                "kind": "INPUT_OBJECT",
+                "name": "ProjectOrderType",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "orderDirection",
+              "name": "filter",
               "description": null,
               "type": {
-                "kind": "ENUM",
-                "name": "OrderDirectionEnum",
+                "kind": "INPUT_OBJECT",
+                "name": "ProjectFilterFieldType",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "languages",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "LanguageEnum",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             }
@@ -3194,6 +3273,37 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ProjectOrderType",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "orderField",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "ProjectOrderFieldEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "orderDirection",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "OrderDirectionEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -3596,48 +3706,8 @@
             },
             {
               "name": "grammars",
-              "description": "Lists Grammars",
+              "description": null,
               "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "name",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "slug",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "GrammarOrder",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
                 {
                   "name": "after",
                   "description": "Returns the elements in the list that come after the specified cursor.",
@@ -3677,12 +3747,26 @@
                     "ofType": null
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GrammarInputType",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "GrammarConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "GrammarConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3917,46 +4001,8 @@
             },
             {
               "name": "projects",
-              "description": "Lists projects",
+              "description": null,
               "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ProjectFilterField",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ProjectOrder",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "languages",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "LanguageEnum",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
                 {
                   "name": "after",
                   "description": "Returns the elements in the list that come after the specified cursor.",
@@ -3996,12 +4042,26 @@
                     "ofType": null
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ProjectInputType",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "ProjectConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ProjectConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -4142,16 +4202,6 @@
           "interfaces": [
 
           ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "String",
-          "description": "Represents textual data as UTF-8 character sequences. This type is most often used by GraphQL to represent free-form human-readable text.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
