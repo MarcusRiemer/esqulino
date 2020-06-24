@@ -1,4 +1,4 @@
-class Types::NodeDescription < Types::BaseScalar
+class Types::Scalar::NodeDescription < Types::Base::BaseScalar
   def self.coerce_input(value, _context)
     if Validators::GraphqlValidator.is_parsable_json?(value)
       value = JSON.parse(value)

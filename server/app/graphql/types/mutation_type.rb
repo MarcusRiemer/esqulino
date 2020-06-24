@@ -1,6 +1,8 @@
 module Types
-  class MutationType < Types::BaseObject
-    field :create_grammar, mutation: Mutations::CreateGrammarMutation
+  class MutationType < Types::Base::BaseObject
+    field :create_grammar, mutation: Mutations::Grammar::CreateGrammarMutation
+    field :update_grammar, mutation: Mutations::Grammar::UpdateGrammarMutation
+    field :destroy_grammar, mutation: Mutations::Grammar::DestroyGrammarMutation
     field :create_news, mutation: Mutations::CreateNewsMutation
   end
 end

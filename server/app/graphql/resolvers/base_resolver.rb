@@ -5,7 +5,7 @@ module Resolvers
     def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil)
       @model_class = model_class
       @context = context
-      @languages = languages.nil? ? Types::BaseEnum::LanguageEnum.enum_values : languages
+      @languages = languages.nil? ? Types::Base::BaseEnum::LanguageEnum.enum_values : languages
       scope = select_relevant_fields(scope)
       scope = apply_filter(scope,filter)
       @scope = apply_order(scope,order)
@@ -26,27 +26,27 @@ module Resolvers
       # When filtering via pattern (substring) matching
       # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
       value.to_h.each do |filter_key,filter_value|
-        if is_multilingual_column? filter_key
+        if filter_key.to_s == "id"
+          scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
+        elsif is_multilingual_column? filter_key
           scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
         else
-          scope = scope.where "#{filter_key} LIKE ?", filter_value
+          scope = scope.where "#{@model_class.table_name}.#{filter_key} LIKE ?", filter_value
         end
       end
       scope
     end
 
     def apply_order(scope,value)
-      if value
-        order_key = value.to_h.stringify_keys.fetch("orderField",default_order_field)
-        order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
-        if is_multilingual_column? order_key
-          # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
-          # Using gsub to add comma as delimiter
-          coalesce = @languages.map{|l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
-          scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
-        else
-          scope = scope.order "#{order_key} #{order_dir}"
-        end
+      order_key = value.to_h.stringify_keys.fetch("orderField",default_order_field)
+      order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
+      if is_multilingual_column? order_key
+        # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
+        # Using gsub to add comma as delimiter
+        coalesce = @languages.map{|l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
+        scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
+      else
+        scope = scope.order "#{@model_class.table_name}.#{order_key} #{order_dir}"
       end
       scope
     end
@@ -63,17 +63,17 @@ module Resolvers
     end
 
     def to_single_quotes_array(arr)
-      arr.to_s.gsub(/["]/,'\'')
+      "[#{arr.map{|e| "'#{e}'"}.join(", ")}]"
     end
 
     # list the requested columns except additional columns which doesnt exist in the Model like (projects codeResourceCount)
-    # also add foreign key columns (columns which ends with _id) to keep relations.
+    # also add primary key and foreign key columns (columns which ends with _id) to keep relations.
     # if no columns are requested select all
     def relevant_columns
-      if requested_columns.empty?
+      if requested_columns(@context).empty?
         @model_class.attribute_names
       else
-        @model_class.attribute_names & requested_columns | @model_class.attribute_names.filter {|f| f.end_with?("_id")} | ["id"]
+        @model_class.attribute_names & requested_columns(@context) | @model_class.attribute_names.filter {|f| f.end_with?("_id")} | ["id"]
       end
     end
 
@@ -89,7 +89,7 @@ module Resolvers
       end
     end
 
-    def requested_columns
+    def requested_columns(context)
       # .query: Access GraphQL::Query instance
       # .lookahead: Access Class: GraphQL::Execution::Lookahead instance
       #   Lookahead creates a uniform interface to inspect the forthcoming selections.
@@ -104,12 +104,12 @@ module Resolvers
       # nodes.selections: Access to Array<Nodes::Field>
       #   Contains all requested nodes like id, slug, name, [...]
       # context should never be nil, unless in tests
-      if  @context.nil?
+      if  context.nil?
         []
       else
-        projects_query = @context.query.lookahead.ast_nodes[0].selections[0]
-        nodes = projects_query.children.find {|c| c.name == "nodes"}
-        nodes.selections.map {|s| s.name.underscore}
+        model_query = context.query.lookahead.ast_nodes[0].selections[0]
+        nodes = model_query.children.find {|c| c.name == "nodes"}
+        nodes.nil? ? [] : nodes.selections.map {|s| s.name.underscore}
       end
     end
 

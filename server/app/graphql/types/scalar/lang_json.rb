@@ -1,4 +1,4 @@
-class Types::LangJson < Types::BaseScalar
+class Types::Scalar::LangJson < Types::Base::BaseScalar
   def self.coerce_result(value,context)
     value
   end

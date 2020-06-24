@@ -1,6 +1,6 @@
 class Mutations::CreateCodeResourceMutation < Mutations::BaseMutation
   argument :name, String, required: true
-  argument :ast, Types::NodeDescription, required: false
+  argument :ast, Types::Scalar::NodeDescription, required: false
   argument :project, Types::ProjectType, required: true
   argument :blockLanguage, Types::BlockLanguageType,required:true
   argument :programmingLanguage, Types::ProgrammingLanguageType,required:true

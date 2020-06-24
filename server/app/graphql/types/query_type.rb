@@ -2,7 +2,9 @@ module Types
   class QueryType < GraphQL::Schema::Object
 
     field :programmingLanguages, Types::ProgrammingLanguageType.connection_type, null: false
-    field :blockLanguages, Types::BlockLanguageType.connection_type, null: false
+    field :blockLanguages, Types::BlockLanguageType.connection_type, null: false do
+      argument :input, Types::BlockLanguageType::InputType,required:false
+    end
     field :grammars, Types::GrammarType.connection_type, null: false do
       argument :input, Types::GrammarType::InputType, required: false
     end
@@ -18,8 +20,12 @@ module Types
       ProgrammingLanguage.all
     end
 
-    def block_languages
-      BlockLanguage.all
+    def block_languages(input:nil)
+      if input
+        Resolvers::BlockLanguageResolver::new(context:@context,**input).scope
+      else
+        Resolvers::BlockLanguageResolver::new(context:@context).scope
+      end
     end
 
     def code_resources

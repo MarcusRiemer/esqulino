@@ -1,7 +1,7 @@
 class Mutations::CreateNewsMutation < Mutations::BaseMutation
   argument :title, GraphQL::Types::JSON, required:true
   argument :text, GraphQL::Types::JSON, required:true
-  argument :publishedFrom, Types::Datetime, required:false
+  argument :publishedFrom, Types::Scalar::Datetime, required:false
 
   field :news, Types::NewsType, null:true
   field :errors, [String], null: false

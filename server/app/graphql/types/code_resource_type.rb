@@ -1,10 +1,10 @@
 module Types
-  class Types::CodeResourceType < Types::BaseObject
+  class Types::CodeResourceType < Types::Base::BaseObject
     field :name, String, null:false
-    field :ast, Types::NodeDescription, null:true
+    field :ast, Types::Scalar::NodeDescription, null:true
     field :project, Types::ProjectType,null:false
-    field :createdAt, Types::Datetime, null:true
-    field :updatedAt, Types::Datetime, null:true
+    field :createdAt, Types::Scalar::Datetime, null:true
+    field :updatedAt, Types::Scalar::Datetime, null:true
     field :blockLanguage, Types::BlockLanguageType,null:false
     field :programmingLanguage, Types::ProgrammingLanguageType,null:false
     field :compiled, String, null:true
