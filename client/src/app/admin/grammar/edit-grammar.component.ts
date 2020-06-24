@@ -1,35 +1,44 @@
-import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import { Title } from "@angular/platform-browser";
 
-import { from } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 
 import { ToolbarService } from "../../shared/toolbar.service";
-import {
-  CachedRequest,
-  IndividualGrammarDataService,
-  MutateGrammarService,
-} from "../../shared/serverdata";
-import { ServerApiService } from "../../shared/serverdata/serverapi.service";
 import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
-import { GrammarDescription, QualifiedTypeName } from "../../shared/syntaxtree";
-import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
+import { QualifiedTypeName } from "../../shared/syntaxtree";
 import { getAllTypes } from "../../shared/syntaxtree/grammar-util";
+import {
+  AdminEditGrammarGQL,
+  AdminEditGrammarQuery,
+  BlockLanguage,
+  DestroyGrammarMutationGQL,
+  UpdateGrammarMutationGQL
+} from "../../../generated/graphql";
+import {Subscription} from "rxjs";
+
+type Query = ReturnType<AdminEditGrammarGQL["watch"]>;
+
+type DataKey = Exclude<keyof AdminEditGrammarQuery, "__typename">;
+
+// TODO: Resolve this from the Query type above, requires unpacking
+//       a type argument to Observable
+type ListItem = AdminEditGrammarQuery[DataKey]["nodes"][0];
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
 })
-export class EditGrammarComponent implements OnInit {
+export class EditGrammarComponent implements OnInit, OnDestroy {
   @ViewChild("toolbarButtons", { static: true })
   toolbarButtons: TemplateRef<any>;
 
   // The grammar that is beeing edited
-  grammar: GrammarDescription;
+  grammar: ListItem;
+
+  subscriptions: Subscription[] = [];
 
   // Block languages that are related to this grammar
-  relatedBlockLanguages: CachedRequest<BlockLanguageListDescription[]>;
+  relatedBlockLanguages: (Pick<BlockLanguage, "id" | "name">)[];
 
   // All types that are available as root. These may not be regenerated
   // on the fly because [ngValue] uses the identity of the objects to compare them.
@@ -38,12 +47,11 @@ export class EditGrammarComponent implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _http: HttpClient,
-    private _serverApi: ServerApiService,
-    private _individualGrammarData: IndividualGrammarDataService,
-    private _mutateGrammarData: MutateGrammarService,
     private _title: Title,
-    private _toolbarService: ToolbarService
+    private _toolbarService: ToolbarService,
+    private _updateMutation: UpdateGrammarMutationGQL,
+    private _destroyMutation: DestroyGrammarMutationGQL,
+    private _grammarsService: AdminEditGrammarGQL,
   ) {}
 
   ngOnInit() {
@@ -53,43 +61,37 @@ export class EditGrammarComponent implements OnInit {
       .pipe(
         map((params: ParamMap) => params.get("grammarId")),
         switchMap((id: string) =>
-          from(this._individualGrammarData.getLocal(id, "request"))
+          this._grammarsService.watch({id}).valueChanges
         )
       )
       .subscribe((g) => {
-        this.grammar = g;
+        this.grammar = g.data.grammars.nodes[0];
         this.availableTypes = getAllTypes(this.grammar);
-        this.grammarRoot = g.root;
-        this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
-
-        // We want a local copy of the resource that is being edited available "globally"
-        this._individualGrammarData.setLocal(g);
+        this.grammarRoot = this.grammar.root;
+        this._title.setTitle(`Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`);
+        this.relatedBlockLanguages = this.grammar.blockLanguages.nodes;
+        if (this.grammar.generatedFromId === null) {
+          this.grammar.generatedFromId =  undefined;
+        }
       });
-
-    // Always grab fresh related block languages
-    this._activatedRoute.paramMap
-      .pipe(map((params: ParamMap) => params.get("grammarId")))
-      .subscribe((id) => {
-        const relatedUrl = this._serverApi.individualGrammarRelatedBlockLanguagesUrl(
-          id
-        );
-        const request = this._http.get<BlockLanguageListDescription[]>(
-          relatedUrl
-        );
-        this.relatedBlockLanguages = new CachedRequest<
-          BlockLanguageListDescription[]
-        >(request);
-      });
-
     // Setup the toolbar buttons
     this._toolbarService.addItem(this.toolbarButtons);
+  }
+
+  ngOnDestroy(): void {
+    for (let sub of this.subscriptions) {
+      if (sub && sub.unsubscribe) {
+        sub.unsubscribe();
+      }
+    }
   }
 
   /**
    * User has decided to save.
    */
   onSave() {
-    this._mutateGrammarData.updateSingle(this.grammar);
+    const mutationSubscription = this._updateMutation.mutate(this.grammar).subscribe();
+    this.subscriptions = [...this.subscriptions, mutationSubscription];
   }
 
   get grammarRoot() {
@@ -123,7 +125,7 @@ export class EditGrammarComponent implements OnInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._mutateGrammarData.deleteSingle(this.grammar.id);
+    await this._destroyMutation.mutate({id:this.grammar.id}).toPromise();
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 

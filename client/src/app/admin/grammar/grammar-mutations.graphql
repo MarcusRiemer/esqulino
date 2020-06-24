@@ -1,0 +1,22 @@
+mutation CreateGrammarMutation($name:String!,$slug:String,$types:JSON!,$foreignTypes:JSON!,$root:JSON!,$programmingLanguageId:ID!) {
+    createGrammar(input:{name:$name,slug:$slug, types:$types,foreignTypes:$foreignTypes,root:$root,programmingLanguageId:$programmingLanguageId}) {
+        grammar {
+            id
+        }
+        errors
+    }
+}
+mutation UpdateGrammarMutation($id:ID!,$name:String!,$slug:String,$types:JSON!,$foreignTypes:JSON!,$root:JSON,$programmingLanguageId:ID!,$generatedFromId:ID,$blockLanguageIds:[ID!]) {
+    updateGrammar(input:{id:$id,name:$name,slug:$slug, types:$types,foreignTypes:$foreignTypes,root:$root,programmingLanguageId:$programmingLanguageId,generatedFromId:$generatedFromId,blockLanguageIds:$blockLanguageIds}) {
+        grammar {
+            id
+        }
+        errors
+    }
+}
+mutation DestroyGrammarMutation($id: ID!) {
+    destroyGrammar(input: {id: $id}) {
+        errors
+    }
+}
+

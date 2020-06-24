@@ -1,0 +1,36 @@
+query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input:GrammarInputType) {
+    grammars(first:$first,after:$after,before:$before,last:$last,input:$input) {
+        nodes{
+            id
+            name
+            slug
+        }
+        totalCount
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}
+query AdminEditGrammar($id: ID!) {
+    grammars(input: {filter: {id: $id}}) {
+        nodes {
+            id
+            name
+            programmingLanguageId
+            slug
+            generatedFromId
+            foreignTypes
+            root
+            types
+            blockLanguages {
+                nodes {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}

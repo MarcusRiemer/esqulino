@@ -6,8 +6,8 @@ import {
   ServerApiService,
   ListGrammarDataService,
 } from "../../shared/serverdata";
-import { GrammarDescription } from "../../shared/syntaxtree";
 import { LanguageService } from "../../shared/language.service";
+import {CreateGrammarMutationGQL, CreateGrammarMutationMutationVariables} from "../../../generated/graphql";
 
 /**
  * A comprehensive way to create new grammars
@@ -18,8 +18,7 @@ import { LanguageService } from "../../shared/language.service";
 })
 export class CreateGrammarComponent {
   // Synced with form
-  grammar: GrammarDescription = {
-    id: undefined,
+  grammar: CreateGrammarMutationMutationVariables = {
     name: "",
     slug: undefined,
     programmingLanguageId: "",
@@ -33,8 +32,10 @@ export class CreateGrammarComponent {
     private _serverApi: ServerApiService,
     private _languageService: LanguageService,
     private _http: HttpClient,
-    private _router: Router
+    private _router: Router,
+    private _mutation: CreateGrammarMutationGQL,
   ) {}
+
 
   readonly availableProgrammingLanguages = this._languageService
     .availableLanguages;
@@ -43,23 +44,20 @@ export class CreateGrammarComponent {
    * Attempts to create the specified block language
    */
   public submitForm() {
-    const toCreate: GrammarDescription = JSON.parse(
+    const toCreate: CreateGrammarMutationMutationVariables = JSON.parse(
       JSON.stringify(this.grammar)
     );
     if (!toCreate.slug) {
       delete toCreate.slug;
     }
 
-    this._http
-      .post<{ id: string }>(this._serverApi.createGrammarUrl(), this.grammar)
-      .subscribe(
-        (res) => {
-          this._serverData.listCache.refresh();
-          this._router.navigateByUrl(`/admin/grammar/${res.id}`);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+    this._mutation.mutate(this.grammar).subscribe(
+      (res) => {
+        this._router.navigateByUrl(`/admin/grammar/${res.data.createGrammar.grammar.id}`);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }
