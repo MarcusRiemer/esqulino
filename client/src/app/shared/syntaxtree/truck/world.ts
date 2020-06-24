@@ -674,6 +674,7 @@ export class WorldState {
   /**
    * Initializes a new state of the world.
    * @param step Step for this state.
+   * @param size The size of the world.
    * @param tiles Tiles from left to right and top to bottom.
    * @param truck Truck.
    * @param time Time steps that are sheduled for the execution of this step.
@@ -712,6 +713,9 @@ export class WorldState {
    * @return Tile at the passed position.
    */
   getTile(pos: Position): Tile {
+    if (pos.x >= this.size.width) {
+      return undefined; // Out of range
+    }
     return this.tiles[pos.y * this.size.width + pos.x];
   }
 
@@ -780,16 +784,37 @@ export class WorldState {
    * Will resize the current world state.
    * Newly created tiles will be empty.
    * Truncated tiles will be removed.
-   * @param newWidth the new width of the world
-   * @param newHeight the new height of the world
+   * @param newSize the new width and height of the world
    * @return true if a change has occurred
    */
-  public resize(newWidth: number, newHeight: number): boolean {
-    if (this.size.width === newWidth && this.size.height === newHeight) {
+  public resize(newSize: number): boolean {
+    if (this.size.width === newSize && this.size.height === newSize) {
       return false; // No change
     }
+    const isShrinking = newSize < this.size.width || newSize < this.size.height;
 
-    console.log("TODO: Would resize world to ", newWidth, newHeight);
+    const newTileArray: Tile[] = [];
+    for (let y = 0; y < newSize; y++) {
+      for (let x = 0; x < newSize; x++) {
+        const pos = new Position(x, y);
+        const currentTile = this.getTile(pos);
+        if (isShrinking) {
+          // We dont have to have a straight road into the world border
+          if (pos.x === newSize - 1) {
+            currentTile.resetDirection(Direction.East);
+          }
+          if (pos.y === newSize - 1) {
+            currentTile.resetDirection(Direction.South);
+          }
+        }
+        newTileArray.push(currentTile || new Tile(pos, TileOpening.None));
+      }
+    }
+
+    this.tiles = newTileArray;
+    this.size = new Size(newSize, newSize);
+
+    return true;
   }
 
   /**
@@ -1283,6 +1308,10 @@ export class Size {
    */
   clone(): Size {
     return new Size(this.width, this.height);
+  }
+
+  public isEqual(other: Size): boolean {
+    return this.width == other.width && this.height == other.height;
   }
 }
 

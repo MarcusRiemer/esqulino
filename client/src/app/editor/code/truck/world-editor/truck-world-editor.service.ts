@@ -142,8 +142,10 @@ export class TruckWorldEditorService implements OnDestroy {
     this._rightMouseDownPosUpdaterSubscription = undefined;
   }
 
-  public resizeWorld(x: number, y: number): void {
-    this.mutateWorldAndCode(this._world, (s) => s.resize(x, y));
+  public resizeWorld(newSize: number): void {
+    if (newSize >= 2 && newSize <= 15) {
+      this.mutateWorldAndCode(this._world, (s) => s.resize(newSize));
+    }
   }
 
   /*

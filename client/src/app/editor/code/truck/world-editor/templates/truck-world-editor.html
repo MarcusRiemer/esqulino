@@ -23,26 +23,15 @@
   </div>
   <div class="col-3">
     <div class="form-group row">
-      <label for="world-size-x" class="col-2 col-form-label">X</label>
-      <div class="col-10">
+      <label for="world-size" class="col-3 col-form-label">Size</label>
+      <div class="col-9">
         <input
           class="form-control"
-          id="world-size-x"
+          id="world-size"
           type="number"
-          min="1"
-          max="25"
-          [(ngModel)]="sizeX"
-        />
-      </div>
-      <label for="world-size-y" class="col-2 col-form-label">Y</label>
-      <div class="col-10">
-        <input
-          class="form-control"
-          id="world-size-y"
-          type="number"
-          min="1"
-          max="25"
-          [(ngModel)]="sizeY"
+          min="2"
+          max="15"
+          [(ngModel)]="size"
         />
       </div>
     </div>

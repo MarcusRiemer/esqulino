@@ -5,6 +5,7 @@ import {
   Freight,
   LoadingError,
   Position,
+  Size,
   StrayedOffTheRoadError,
   Tile,
   TileOpening,
@@ -425,16 +426,39 @@ describe("Shared: TrafficLight", () => {
  * Position
  ******************************************************************************/
 describe("Shared: Position", () => {
-  let world: World;
-
-  beforeEach(() => {
-    world = new World(worldDescription);
-  });
-
   it("should save coordinates", () => {
     const position = new Position(1, 20);
     expect(position.x).toEqual(1);
     expect(position.y).toEqual(20);
+  });
+});
+
+/******************************************************************************
+ * Size
+ ******************************************************************************/
+describe("Shared: Size", () => {
+  it("should save width and height", () => {
+    const position = new Size(11, 17);
+    expect(position.width).toEqual(11);
+    expect(position.height).toEqual(17);
+  });
+  it("should be equal", () => {
+    const positionA = new Size(11, 17);
+    const positionB = new Size(11, 17);
+    expect(positionA.isEqual(positionB)).toBeTrue();
+    expect(positionB.isEqual(positionA)).toBeTrue();
+  });
+  it("should be not equal X", () => {
+    const positionA = new Size(11, 17);
+    const positionB = new Size(10, 17);
+    expect(positionA.isEqual(positionB)).toBeFalse();
+    expect(positionB.isEqual(positionA)).toBeFalse();
+  });
+  it("should be equal Y", () => {
+    const positionA = new Size(11, 17);
+    const positionB = new Size(11, 16);
+    expect(positionA.isEqual(positionB)).toBeFalse();
+    expect(positionB.isEqual(positionA)).toBeFalse();
   });
 });
 

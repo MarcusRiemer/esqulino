@@ -6,6 +6,7 @@ import {
   Truck,
   TurnDirection,
   Direction,
+  Size,
 } from "../../../shared/syntaxtree/truck/world";
 
 export type RenderingDimensions = { width: number; height: number };
@@ -297,6 +298,8 @@ class WorldRenderer implements ObjectRenderer {
  * ObjectRenderer for a world state.
  */
 class WorldStateRenderer implements ObjectRenderer {
+  lastSize: Size;
+
   /** World state to be drawn. */
   state: WorldState;
 
@@ -318,8 +321,8 @@ class WorldStateRenderer implements ObjectRenderer {
     this.state = state;
     this.parent = parent;
 
-    // Preload TileRenderer
-    this.tileRenderers = this.state.tiles.map((t) => new TileRenderer(t, this));
+    this.lastSize = this.state.size.clone();
+    this.rebuildTileRenderers();
 
     // Preload TruckRenderer
     this.truckRenderer = new TruckRenderer(this.state.truck, this);
@@ -342,8 +345,19 @@ class WorldStateRenderer implements ObjectRenderer {
   update(state: WorldState, undo: boolean = false) {
     this.state = state;
 
-    this.tileRenderers.forEach((t, k) => t.update(state.tiles[k], undo));
+    if (!this.state.size.isEqual(this.lastSize)) {
+      this.lastSize = this.state.size.clone();
+      this.rebuildTileRenderers();
+    } else {
+      this.tileRenderers.forEach((t, k) => t.update(state.tiles[k], undo));
+    }
+
     this.truckRenderer.update(state.truck, undo);
+  }
+
+  private rebuildTileRenderers(): void {
+    // Preload TileRenderer
+    this.tileRenderers = this.state.tiles.map((t) => new TileRenderer(t, this));
   }
 }
 

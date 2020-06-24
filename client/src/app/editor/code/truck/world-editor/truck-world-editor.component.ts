@@ -39,20 +39,12 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
     this._subscriptions = [];
   }
 
-  public get sizeX(): number {
+  public get size(): number {
     return this._currentWorld?.state.size.width;
   }
 
-  public set sizeX(value: number) {
-    this._editor.resizeWorld(value, this.sizeY);
-  }
-
-  public get sizeY(): number {
-    return this._currentWorld?.state.size.height;
-  }
-
-  public set sizeY(value: number) {
-    this._editor.resizeWorld(this.sizeX, value);
+  public set size(value: number) {
+    this._editor.resizeWorld(Number(value));
   }
 
   public undo(): void {
