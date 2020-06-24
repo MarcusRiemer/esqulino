@@ -112,7 +112,7 @@ export class TruckWorldEditorService implements OnDestroy {
 
         if (prevPos) {
           this.mutateWorldAndCode(this._world, (s) =>
-              s.connectTilesWithRoad(prevPos, pos)
+            s.connectTilesWithRoad(prevPos, pos)
           );
         }
         prevPos = pos;
@@ -132,9 +132,7 @@ export class TruckWorldEditorService implements OnDestroy {
       (pos) => {
         if (!pos) return;
 
-        this.mutateWorldAndCode(this._world, (s) =>
-            s.resetTile(pos)
-        );
+        this.mutateWorldAndCode(this._world, (s) => s.resetTile(pos));
       }
     );
   }
@@ -145,9 +143,7 @@ export class TruckWorldEditorService implements OnDestroy {
   }
 
   public resizeWorld(x: number, y: number): void {
-    this.mutateWorldAndCode(this._world, (s) =>
-      s.resize(x, y)
-    );
+    this.mutateWorldAndCode(this._world, (s) => s.resize(x, y));
   }
 
   /*

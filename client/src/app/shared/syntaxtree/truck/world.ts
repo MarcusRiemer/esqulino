@@ -815,7 +815,10 @@ export class WorldState {
     let modifiedAtLeastOneTile = false;
     // After deleting the current tile, we also want to remove the connections that lead to this tile.
     for (const neighborPos of this.getDirectNeighbors(center)) {
-      const deletedDirection = DirectionUtil.getDirectionToPos(center, neighborPos);
+      const deletedDirection = DirectionUtil.getDirectionToPos(
+        center,
+        neighborPos
+      );
       const tile = this.getTile(neighborPos);
       if (tile.resetDirection(DirectionUtil.opposite(deletedDirection))) {
         modifiedAtLeastOneTile = true;
@@ -842,7 +845,9 @@ export class WorldState {
     const toTile = this.getTile(toPos);
 
     const fromOpening = DirectionUtil.toTileOpening(direction);
-    const toOpening = DirectionUtil.toTileOpening(DirectionUtil.opposite(direction));
+    const toOpening = DirectionUtil.toTileOpening(
+      DirectionUtil.opposite(direction)
+    );
 
     if (fromTile.openings & fromOpening && toTile.openings & toOpening) {
       return false; // This opening was already connected
@@ -1186,7 +1191,7 @@ export class Tile {
       return false;
     }
     this.openings = TileOpening.None;
-    this.trafficLights = this.trafficLights.map(tl => null);
+    this.trafficLights = this.trafficLights.map((tl) => null);
     this.freightTarget = null;
     this.freight = [];
     return true;
@@ -1496,8 +1501,8 @@ export class DirectionUtil {
    * @return the direction
    */
   static getDirectionToPos(
-      fromPos: Position,
-      toPos: Position
+    fromPos: Position,
+    toPos: Position
   ): Direction | undefined {
     const dX = toPos.x - fromPos.x;
     const dY = toPos.y - fromPos.y;
