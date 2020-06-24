@@ -111,7 +111,7 @@ export class TruckWorldEditorService implements OnDestroy {
         if (!pos) return;
 
         if (prevPos) {
-          this.mutateWorldAndCode(pos.world, (s) =>
+          this.mutateWorldAndCode(this._world, (s) =>
             this.addRoadPart(s, prevPos, pos)
           );
         }
@@ -155,7 +155,7 @@ export class TruckWorldEditorService implements OnDestroy {
       (pos) => {
         if (!pos) return;
 
-        this.mutateWorldAndCode(pos.world, (s) => this.removeRoadPart(s, pos));
+        this.mutateWorldAndCode(this._world, (s) => this.removeRoadPart(s, pos));
       }
     );
   }
@@ -175,7 +175,7 @@ export class TruckWorldEditorService implements OnDestroy {
     state.getTile(pos).openings = TileOpening.None;
     let modifiedOneTile = false;
     // After deleting the current tile, we also want to remove the connections that lead to this tile.
-    for (const neighborPos of pos.getDirectNeighbors()) {
+    for (const neighborPos of state.getDirectNeighbors(pos)) {
       const { to } = World.getRoadOpeningsBetween(pos, neighborPos);
       const tile = state.getTile(neighborPos);
       if (tile.openings & to) {

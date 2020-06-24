@@ -7,7 +7,6 @@ import {
   TurnDirection,
   Direction,
 } from "../../../shared/syntaxtree/truck/world";
-import { BehaviorSubject } from "rxjs";
 
 export type RenderingDimensions = { width: number; height: number };
 
@@ -410,8 +409,8 @@ class TileRenderer implements ObjectRenderer {
    */
   draw(ctx: RenderingContext) {
     // Calculate the height and width of the tile
-    const tileWidth = ctx.width / this.tile.position.width;
-    const tileHeight = ctx.height / this.tile.position.height;
+    const tileWidth = ctx.width / this.parent.state.size.width;
+    const tileHeight = ctx.height / this.parent.state.size.height;
 
     if (this.startAnimation === null) {
       this.startAnimation = ctx.currentFrame;
@@ -685,8 +684,8 @@ class TruckRenderer implements ObjectRenderer {
    */
   draw(ctx: RenderingContext) {
     // Calculate the height and width of the tile
-    const tileWidth = ctx.width / this.truck.position.width;
-    const tileHeight = ctx.height / this.truck.position.height;
+    const tileWidth = ctx.width / this.parent.state.size.width;
+    const tileHeight = ctx.height / this.parent.state.size.height;
 
     // Calculate the height and width of the truck
     const truckWidth = tileWidth / 3;

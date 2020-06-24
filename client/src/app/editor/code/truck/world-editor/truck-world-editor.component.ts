@@ -40,7 +40,7 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
   }
 
   public get sizeX(): number {
-    return this._currentWorld?.size.width;
+    return this._currentWorld?.state.size.width;
   }
 
   public set sizeX(value: number) {
@@ -48,7 +48,7 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
   }
 
   public get sizeY(): number {
-    return this._currentWorld?.size.height;
+    return this._currentWorld?.state.size.height;
   }
 
   public set sizeY(value: number) {

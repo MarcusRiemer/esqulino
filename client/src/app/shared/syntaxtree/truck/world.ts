@@ -27,9 +27,6 @@ export class World {
   /** States of the world, where the first state is always the most recent. */
   states: Array<WorldState>;
 
-  /** Size of the world. */
-  size: Size;
-
   /** Duration of a step in milliseconds. */
   animationSpeed = 1000;
 
@@ -228,10 +225,8 @@ export class World {
    * @param desc Description of the world.
    */
   constructor(desc: WorldDescription) {
-    this.size = new Size(desc.size.width, desc.size.height);
-
     const truck = new Truck(
-      new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
+      new Position(desc.trucks[0].position.x, desc.trucks[0].position.y),
       DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing)),
       desc.trucks[0].freight.map(
         (f) =>
@@ -294,7 +289,7 @@ export class World {
       }
 
       return new Tile(
-        new Position(tile.position.x, tile.position.y, this),
+        new Position(tile.position.x, tile.position.y),
         openings,
         freight,
         freightTarget,
@@ -302,7 +297,8 @@ export class World {
       );
     });
 
-    this.states = [new WorldState(0, tiles, truck, 0)];
+    const size = new Size(desc.size.width, desc.size.height);
+    this.states = [new WorldState(0, size, tiles, truck, 0)];
   }
 
   /**
@@ -679,15 +675,15 @@ export class World {
       };
     }
 
-    function toWorldDesc(worldSize: Size, state: WorldState): WorldDescription {
+    function toWorldDesc(state: WorldState): WorldDescription {
       return {
-        size: { width: worldSize.width, height: worldSize.height },
+        size: { width: state.size.width, height: state.size.height },
         trucks: [toTruckDesc(state)],
         tiles: state.tiles.map(toTileDesc),
       };
     }
 
-    return toWorldDesc(this.size, this.state);
+    return toWorldDesc(this.state);
   }
 }
 
@@ -700,6 +696,9 @@ export class WorldState {
 
   /** Time steps that are sheduled for the execution of this step.  */
   time: number;
+
+  /** Size of the world. */
+  size: Size;
 
   /** Tiles from left to right and top to bottom. */
   tiles: Array<Tile>;
@@ -720,6 +719,7 @@ export class WorldState {
    */
   constructor(
     step: number,
+    size: Size,
     tiles: Tile[],
     truck: Truck,
     time: number = 0,
@@ -727,6 +727,7 @@ export class WorldState {
   ) {
     this.step = step;
     this.time = time;
+    this.size = size;
     this.tiles = tiles;
     this.truck = truck;
     this.prev = prev;
@@ -749,7 +750,7 @@ export class WorldState {
    * @return Tile at the passed position.
    */
   getTile(pos: Position): Tile {
-    return this.tiles[pos.y * pos.width + pos.x];
+    return this.tiles[pos.y * this.size.width + pos.x];
   }
 
   /**
@@ -765,12 +766,46 @@ export class WorldState {
   }
 
   /**
+   * Returns all positions of direct neighbors that can be reached by the current position.
+   * Directly means going north, east, south or west _NOT_ diagonal.
+   * When the center position is at the worldborder the result might contain less than 4 elements.
+   * @param center The center position
+   * @return An array of all direct neighbor positions
+   */
+  public getDirectNeighbors(center: Position): Position[] {
+    const result: Position[] = [];
+
+    const north = new Position(center.x, center.y - 1);
+    if (north.y >= 0) {
+      result.push(north);
+    }
+
+    const east = new Position(center.x + 1, center.y);
+    if (east.x < this.size.width) {
+      result.push(east);
+    }
+
+    const south = new Position(center.x, center.y + 1);
+    if (south.y < this.size.height) {
+      result.push(south);
+    }
+
+    const west = new Position(center.x - 1, center.y);
+    if (west.x >= 0) {
+      result.push(west);
+    }
+
+    return result;
+  }
+
+  /**
    * Creates a copy of the state.
    * @return Copy of the state.
    */
   clone(): WorldState {
     return new WorldState(
       this.step,
+      this.size.clone(),
       this.tiles.map((t) => t.clone()),
       this.truck.clone(),
       this.time,
@@ -1182,69 +1217,22 @@ export class Size {
 }
 
 /**
- * 2D position with reference to the world.
+ * 2D position.
  */
 export class Position {
   /**
    * Initializes the position.
    * @param x X-position.
    * @param y Y-position.
-   * @param world World to which the position refers.
    */
-  constructor(public x: number, public y: number, readonly world: World) {}
-
-  /**
-   * Width of the associated world.
-   */
-  get width() {
-    return this.world.size.width;
-  }
-
-  /**
-   * Height of the associated world.
-   */
-  get height() {
-    return this.world.size.height;
-  }
+  constructor(public x: number, public y: number) {}
 
   /**
    * Creates a copy of the position.
    * @return Copy of the position.
    */
   clone(): Position {
-    return new Position(this.x, this.y, this.world);
-  }
-
-  /**
-   * Returns all positions of direct neighbors that can be reached by the current position.
-   * Directly means going north, east, south or west _NOT_ diagonal.
-   * When the current position is at the worldborder the result might contain less than 4 elements.
-   * @return An array of all direct neighbor positions
-   */
-  getDirectNeighbors(): Position[] {
-    const result: Position[] = [];
-
-    const north = new Position(this.x, this.y - 1, this.world);
-    if (north.y >= 0) {
-      result.push(north);
-    }
-
-    const east = new Position(this.x + 1, this.y, this.world);
-    if (east.x < east.width) {
-      result.push(east);
-    }
-
-    const south = new Position(this.x, this.y + 1, this.world);
-    if (south.y < south.height) {
-      result.push(south);
-    }
-
-    const west = new Position(this.x - 1, this.y, this.world);
-    if (west.x >= 0) {
-      result.push(west);
-    }
-
-    return result;
+    return new Position(this.x, this.y);
   }
 }
 

@@ -113,11 +113,11 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
       const relY = (ev.clientY - bb.top) / (bb.bottom - bb.top);
 
       // tile{x,y} integer value from 0 to (this._currentWorld.size.{width,height} - 1)
-      const tileX = Math.floor(relX * this._currentWorld.size.width);
-      const tileY = Math.floor(relY * this._currentWorld.size.height);
+      const tileX = Math.floor(relX * this._currentWorld.state.size.width);
+      const tileY = Math.floor(relY * this._currentWorld.state.size.height);
 
       this._mouse.updateCursorPos(
-        new Position(tileX, tileY, this._currentWorld)
+        new Position(tileX, tileY)
       );
     });
     this.addRemovableEventListener(canvas, "contextmenu", (ev) => {
