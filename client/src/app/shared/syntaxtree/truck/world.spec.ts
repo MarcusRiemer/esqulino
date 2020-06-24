@@ -148,66 +148,6 @@ describe("Shared: World", () => {
   });
 });
 
-describe("World.getRoadOpeningsBetween", () => {
-  let world: World;
-
-  beforeEach(() => {
-    world = new World(worldDescription);
-  });
-
-  it("opening to north", () => {
-    const openings = World.getRoadOpeningsBetween(
-      new Position(0, 0),
-      new Position(0, 1)
-    );
-    expect(openings).toEqual({
-      from: TileOpening.South,
-      to: TileOpening.North,
-    });
-  });
-
-  it("opening to east", () => {
-    const openings = World.getRoadOpeningsBetween(
-      new Position(1, 0),
-      new Position(0, 0)
-    );
-    expect(openings).toEqual({
-      from: TileOpening.West,
-      to: TileOpening.East,
-    });
-  });
-
-  it("opening to south", () => {
-    const openings = World.getRoadOpeningsBetween(
-      new Position(0, 1),
-      new Position(0, 0)
-    );
-    expect(openings).toEqual({
-      from: TileOpening.North,
-      to: TileOpening.South,
-    });
-  });
-
-  it("opening to west", () => {
-    const openings = World.getRoadOpeningsBetween(
-      new Position(0, 0),
-      new Position(1, 0)
-    );
-    expect(openings).toEqual({
-      from: TileOpening.East,
-      to: TileOpening.West,
-    });
-  });
-
-  it("invalid position", () => {
-    const openings = World.getRoadOpeningsBetween(
-      new Position(0, 0),
-      new Position(1, 1)
-    );
-    expect(openings).toBeUndefined();
-  });
-});
-
 /******************************************************************************
  * WorldState
  ******************************************************************************/
@@ -681,5 +621,53 @@ describe("Shared: DirectionUtil", () => {
     expect(DirectionUtil.turn(Direction.West, TurnDirection.Right)).toEqual(
       Direction.North
     );
+  });
+});
+
+describe("DirectionUtil.getDirectionToPos", () => {
+  let world: World;
+
+  beforeEach(() => {
+    world = new World(worldDescription);
+  });
+
+  it("To North", () => {
+    const openings = DirectionUtil.getDirectionToPos(
+        new Position(0, 1),
+        new Position(0, 0)
+    );
+    expect(openings).toEqual(Direction.North);
+  });
+
+  it("To East", () => {
+    const openings = DirectionUtil.getDirectionToPos(
+        new Position(0, 0),
+        new Position(1, 0)
+    );
+    expect(openings).toEqual(Direction.East);
+  });
+
+  it("To South", () => {
+    const openings = DirectionUtil.getDirectionToPos(
+        new Position(0, 0),
+        new Position(0, 1)
+    );
+    expect(openings).toEqual(Direction.South);
+  });
+
+  it("To West", () => {
+    const openings = DirectionUtil.getDirectionToPos(
+        new Position(1, 0),
+        new Position(0, 0)
+    );
+    expect(openings).toEqual(Direction.West);
+  });
+
+  it("Invalid position", () => {
+    const openings = DirectionUtil.getDirectionToPos(
+        new Position(0, 0),
+        new Position(1, 1)
+    );
+    expect(openings).toBeUndefined();
   });
 });

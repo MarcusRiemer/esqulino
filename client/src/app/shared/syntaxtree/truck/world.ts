@@ -573,44 +573,6 @@ export class World {
   }
 
   /**
-   * Get the tile openings between two positions.
-   * The tiles must be directly connectable, otherwise the result will be _undefined_.
-   * @param fromPos the first tile position
-   * @param toPos the second tile position
-   * @return an object with the corresponding openings for each tile, in order to make a working road.
-   */
-  static getRoadOpeningsBetween(
-    fromPos: Position,
-    toPos: Position
-  ): { from: TileOpening; to: TileOpening } | undefined {
-    const dX = toPos.x - fromPos.x;
-    const dY = toPos.y - fromPos.y;
-
-    let dir: Direction = undefined;
-    if (dX == 0 && dY == 1) {
-      dir = Direction.South; // Up to Down
-    }
-    if (dX == 0 && dY == -1) {
-      dir = Direction.North; // Down to Up
-    }
-    if (dX == 1 && dY == 0) {
-      dir = Direction.East; // Left to Right
-    }
-    if (dX == -1 && dY == 0) {
-      dir = Direction.West; // Right to Left
-    }
-
-    if (dir) {
-      return {
-        from: DirectionUtil.toTileOpening(dir),
-        to: DirectionUtil.toTileOpening(DirectionUtil.opposite(dir)),
-      };
-    } else {
-      return undefined;
-    }
-  }
-
-  /**
    * Converts the current state to a WorldDescription
    * @return the world description
    */
@@ -811,6 +773,84 @@ export class WorldState {
       this.time,
       this.prev
     );
+  }
+
+  // Mutation functions
+  /**
+   * Will resize the current world state.
+   * Newly created tiles will be empty.
+   * Truncated tiles will be removed.
+   * @param newWidth the new width of the world
+   * @param newHeight the new height of the world
+   * @return true if a change has occurred
+   */
+  public resize(newWidth: number, newHeight: number): boolean {
+    if (this.size.width === newWidth && this.size.height === newHeight) {
+      return false; // No change
+    }
+
+    console.log("TODO: Would resize world to ", newWidth, newHeight);
+  }
+
+  /**
+   * Will reset a tile to an empty tile. (All openings and features will be removed)
+   * @param pos Position of the tile that should be resetted
+   * @return true if a tile was really changed
+   */
+  public resetTile(pos: Position): boolean {
+    const thisTile = this.getTile(pos);
+
+    let wasChanged = thisTile.reset();
+
+    // cutLooseOpenings will ensure that all other tiles have a nice corner
+    // If you want to have hard cuts in the world just comment out the following line
+    wasChanged = this.cutLooseOpenings(pos) || wasChanged;
+
+    // TODO: Find a way to delete the truck start point
+
+    return wasChanged;
+  }
+
+  private cutLooseOpenings(center: Position): boolean {
+    let modifiedAtLeastOneTile = false;
+    // After deleting the current tile, we also want to remove the connections that lead to this tile.
+    for (const neighborPos of this.getDirectNeighbors(center)) {
+      const deletedDirection = DirectionUtil.getDirectionToPos(center, neighborPos);
+      const tile = this.getTile(neighborPos);
+      if (tile.resetDirection(DirectionUtil.opposite(deletedDirection))) {
+        modifiedAtLeastOneTile = true;
+      }
+    }
+    return modifiedAtLeastOneTile;
+  }
+
+  /**
+   * The to position must be exactly one tile be away from the form pos
+   * @param fromPos the start
+   * @param toPos the end
+   * @return true if a change has occurred
+   */
+  public connectTilesWithRoad(fromPos: Position, toPos: Position): boolean {
+    const direction = DirectionUtil.getDirectionToPos(fromPos, toPos);
+    if (!direction) {
+      // We might have some incorrect positions.
+      // This can occur if the client lags, and we get for example Pos(0,0) and then Pos(1,1)
+      return false;
+    }
+
+    const fromTile = this.getTile(fromPos);
+    const toTile = this.getTile(toPos);
+
+    const fromOpening = DirectionUtil.toTileOpening(direction);
+    const toOpening = DirectionUtil.toTileOpening(DirectionUtil.opposite(direction));
+
+    if (fromTile.openings & fromOpening && toTile.openings & toOpening) {
+      return false; // This opening was already connected
+    }
+
+    fromTile.openings |= fromOpening;
+    toTile.openings |= toOpening;
+    return true;
   }
 }
 
@@ -1140,6 +1180,31 @@ export class Tile {
       this.trafficLights.map((t) => (t ? t.clone() : t))
     );
   }
+
+  public reset(): boolean {
+    if (this.openings === TileOpening.None) {
+      return false;
+    }
+    this.openings = TileOpening.None;
+    this.trafficLights = this.trafficLights.map(tl => null);
+    this.freightTarget = null;
+    this.freight = [];
+    return true;
+  }
+
+  public resetDirection(direction: Direction): boolean {
+    const opening = DirectionUtil.toTileOpening(direction);
+    if (!(this.openings & opening)) {
+      return false;
+    }
+    if (this.openings == opening) {
+      return this.reset();
+    }
+
+    this.openings &= ~opening;
+
+    this.trafficLights[DirectionUtil.toNumber(direction)] = null;
+  }
 }
 
 /**
@@ -1421,6 +1486,34 @@ export class DirectionUtil {
     if (opening & TileOpening.South) result.push(Direction.South);
     if (opening & TileOpening.West) result.push(Direction.West);
     return result;
+  }
+
+  /**
+   * Get the direction to navigate from on tile to another.
+   * The tiles must be directly connectable, otherwise the result will be _undefined_.
+   * @param fromPos the first tile position
+   * @param toPos the second tile position
+   * @return the direction
+   */
+  static getDirectionToPos(
+      fromPos: Position,
+      toPos: Position
+  ): Direction | undefined {
+    const dX = toPos.x - fromPos.x;
+    const dY = toPos.y - fromPos.y;
+
+    let dir: Direction = undefined;
+    if (dX == 0 && dY == 1) {
+      dir = Direction.South; // Up to Down
+    } else if (dX == 0 && dY == -1) {
+      dir = Direction.North; // Down to Up
+    } else if (dX == 1 && dY == 0) {
+      dir = Direction.East; // Left to Right
+    } else if (dX == -1 && dY == 0) {
+      dir = Direction.West; // Right to Left
+    }
+
+    return dir;
   }
 }
 

@@ -112,7 +112,7 @@ export class TruckWorldEditorService implements OnDestroy {
 
         if (prevPos) {
           this.mutateWorldAndCode(this._world, (s) =>
-            this.addRoadPart(s, prevPos, pos)
+              s.connectTilesWithRoad(prevPos, pos)
           );
         }
         prevPos = pos;
@@ -125,29 +125,6 @@ export class TruckWorldEditorService implements OnDestroy {
     this._leftMouseDownPosUpdaterSubscription = undefined;
   }
 
-  private addRoadPart(
-    state: WorldState,
-    fromPos: Position,
-    toPos: Position
-  ): boolean {
-    const openings = World.getRoadOpeningsBetween(fromPos, toPos);
-    if (!openings) {
-      // We might have some incorrect positions.
-      // This can occur if the client lags, and we get for example Pos(0,0) and then Pos(1,1)
-      return false;
-    }
-
-    const fromTile = state.getTile(fromPos);
-    const toTile = state.getTile(toPos);
-    if (fromTile.openings & openings.from && toTile.openings & openings.to) {
-      return false; // This opening was already connected
-    }
-
-    fromTile.openings |= openings.from;
-    toTile.openings |= openings.to;
-    return true;
-  }
-
   private startDestroyRoad(): void {
     this.stopDestroyRoad();
 
@@ -155,7 +132,9 @@ export class TruckWorldEditorService implements OnDestroy {
       (pos) => {
         if (!pos) return;
 
-        this.mutateWorldAndCode(this._world, (s) => this.removeRoadPart(s, pos));
+        this.mutateWorldAndCode(this._world, (s) =>
+            s.resetTile(pos)
+        );
       }
     );
   }
@@ -165,30 +144,10 @@ export class TruckWorldEditorService implements OnDestroy {
     this._rightMouseDownPosUpdaterSubscription = undefined;
   }
 
-  /**
-   * Removes all connections of a road // TODO Also remove all other tile features
-   * @param state the state that should be modified
-   * @param pos the position
-   * @return true if a change occurred
-   */
-  private removeRoadPart(state: WorldState, pos: Position): boolean {
-    state.getTile(pos).openings = TileOpening.None;
-    let modifiedOneTile = false;
-    // After deleting the current tile, we also want to remove the connections that lead to this tile.
-    for (const neighborPos of state.getDirectNeighbors(pos)) {
-      const { to } = World.getRoadOpeningsBetween(pos, neighborPos);
-      const tile = state.getTile(neighborPos);
-      if (tile.openings & to) {
-        modifiedOneTile = true;
-      }
-      tile.openings &= ~to; // Remove this part from the neighbor
-    }
-    return modifiedOneTile;
-  }
-
   public resizeWorld(x: number, y: number): void {
-    // TODO
-    console.log("Would resize world to ", x, y);
+    this.mutateWorldAndCode(this._world, (s) =>
+      s.resize(x, y)
+    );
   }
 
   /*
