@@ -129,8 +129,7 @@ export class PaginatorTableGraphqlComponent
     }
     //Next Page
     else if (
-      $event.previousPageIndex < $event.pageIndex &&
-      pageInfo.hasNextPage
+      $event.previousPageIndex < $event.pageIndex
     ) {
       this.queryData.query.setVariables({
         first: $event.pageSize,
@@ -154,7 +153,8 @@ export class PaginatorTableGraphqlComponent
     if (direction != "") {
       this.queryData.query.setVariables({
         first: this._pageSize,
-        after: btoa((+atob(pageInfo.startCursor) - 1).toString()),
+        //
+        // after: btoa((+atob(pageInfo.startCursor) - 1).toString()),
         input: { order: { orderField: active, orderDirection: direction } },
       });
     }

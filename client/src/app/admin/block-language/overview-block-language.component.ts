@@ -1,22 +1,39 @@
-import { Component, ViewChild, TemplateRef, OnInit } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
-import { ToolbarService } from "../../shared";
-import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
 import {
-  ListBlockLanguageDataService,
-  MutateBlockLanguageService,
-} from "../../shared/serverdata";
+  AdminListBlockLanguagesGQL,
+  AdminListBlockLanguagesQuery,
+  AdminListBlockLanguagesQueryVariables
+} from "../../../generated/graphql";
+import {GraphQLQueryComponent} from "../../shared/table/paginator-table-graphql.component";
+
+// TODO: Should be beautified and used
+type Query = ReturnType<AdminListBlockLanguagesGQL["watch"]>;
+
+type DataKey = Exclude<keyof AdminListBlockLanguagesQuery, "__typename">;
+
+// TODO: Resolve this from the Query type above, requires unpacking
+//       a type argument to Observable
+type ListItem = AdminListBlockLanguagesQuery[DataKey]["nodes"][0];
+
+type ColumnName = keyof ListItem;
 
 /**
- * Shows All block languages that are known to the server.
+ *
  */
 @Component({
   templateUrl: "./templates/overview-block-language.html",
-  providers: [ListBlockLanguageDataService],
 })
-export class OverviewBlockLanguageComponent implements OnInit {
+export class OverviewBlockLanguageComponent
+  implements
+    GraphQLQueryComponent<
+      AdminListBlockLanguagesQuery,
+      AdminListBlockLanguagesQueryVariables,
+      DataKey,
+      ColumnName
+      > {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;
@@ -25,34 +42,48 @@ export class OverviewBlockLanguageComponent implements OnInit {
   @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  @ViewChild("toolbarItems", { static: true })
-  toolbarItems: TemplateRef<any>;
+  constructor(readonly projectsService: AdminListBlockLanguagesGQL) {}
 
-  constructor(
-    readonly blockLanguages: ListBlockLanguageDataService,
-    private _mutate: MutateBlockLanguageService,
-    private _toolbarService: ToolbarService
-  ) {}
-
-  ngOnInit(): void {
-    this._toolbarService.addItem(this.toolbarItems);
+  typed(doc: any): ListItem {
+    return doc as ListItem;
   }
 
-  async deleteBlockLanguage(id: string) {
-    await this._mutate.deleteSingle(id);
+  readonly dataKey: DataKey = "blockLanguages";
+
+  // mat-pagination info
+  pageSize: number = 25;
+
+  //Query Object which can be used to refetch data
+  //fetchPolicy must be network-only, to get a clean pagination
+  readonly query = this.projectsService.watch(
+    { first: this.pageSize },
+    { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+  );
+
+  readonly displayedColumns: ColumnName[] = [
+    "name",
+    "slug",
+    "grammarId",
+    "generated",
+    "id",
+  ];
+  async onDeleteBlockLanguage(id: string) {
+    // delete mutation
   }
 
-  /**
-   * User wants to see a refreshed dataset.
-   */
   onRefresh() {
-    this.blockLanguages.listCache.refresh();
+
   }
 
-  displayedColumns: (
-    | keyof BlockLanguageListDescription
-    | "generator"
-    | "actions"
-    | "grammar"
-  )[] = ["name", "slug", "id", "grammar", "actions", "generator"];
+  get queryData() {
+    return {
+      query: this.query,
+      dataKey: this.dataKey,
+      displayColumns: this.displayedColumns,
+      pageSize: this.pageSize,
+      sort: this.sort,
+    };
+  }
+
+
 }
