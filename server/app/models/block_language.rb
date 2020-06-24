@@ -26,7 +26,7 @@ class BlockLanguage < ApplicationRecord
   scope :scope_list, -> {
     select(:id, :slug, :name, :default_programming_language_id,
            :grammar_id, :created_at, :updated_at,
-           "(model->'localGeneratorInstructions') IS NOT NULL AS generated")
+           "(block_languages.model->'localGeneratorInstructions') IS NOT NULL AS generated")
   }
 
 
