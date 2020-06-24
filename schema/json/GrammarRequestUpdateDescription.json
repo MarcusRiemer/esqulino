@@ -88,9 +88,21 @@
             "generatedFromId"
           ],
           "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "root": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "root"
+          ],
+          "type": "object"
         }
       ],
-      "description": "A request to update a grammar. The \"generateFromId\" field may be null to explicitly unset it."
+      "description": "A request to update a grammar. Some fields may be null to explicitly unset them."
     },
     "LengthRestrictionDescription": {
       "additionalProperties": false,

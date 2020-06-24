@@ -8,11 +8,7 @@ concise_attributes:
   value_before_type_cast: ltb
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Lustige Enzyklopädie
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: description
-  value_before_type_cast: Wie oft tritt Daniel Düsentrieb in den Lustigen Taschenbüchern
-    auf? Aus welchem Land stammen die meisten Geschichten? Was ist die längste Geschichte?
+  value_before_type_cast: '"de"=>"Lustige Enzyklopädie"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
@@ -26,12 +22,17 @@ concise_attributes:
   value_before_type_cast: 2019-06-18 18:48:39.568267000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-06-24 19:15:21.890562000 Z
+  value_before_type_cast: 2020-05-29 05:27:22.218433000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: acf04fe4-b478-4082-9cc6-735788e27302
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: '"de"=>"Wie oft tritt Daniel Düsentrieb in den Lustigen
+    Taschenbüchern auf? Aus welchem Land stammen die meisten Geschichten? Was ist
+    die längste Geschichte?"'
 new_record: false
 active_record_yaml_version: 2

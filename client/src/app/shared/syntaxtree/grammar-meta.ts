@@ -171,6 +171,7 @@ export function resolveSingularReference(refNode: Node): QualifiedTypeName {
 export function readFromNode(node: NodeDescription): GrammarDocument {
   const toReturn: ReturnType<typeof readFromNode> = {
     types: {},
+    foreignTypes: {},
     root: undefined,
   };
 

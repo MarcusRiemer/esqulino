@@ -9,13 +9,13 @@ RSpec.describe ProjectsController, type: :request do
     describe 'valid request' do
       it 'creates a project' do
         set_access_token(user)
-        post '/api/project', params: {"name" => "Some project", "slug" => "test" }
+        post '/api/project', params: {"name" => { "en" => "Some project" }, "slug" => "test" }
 
         expect(response.status).to eq(200)
         expect(response.media_type).to eq "application/json"
 
         created_project = Project.find_by(slug: "test")
-        expect(created_project.name).to eq "Some project"
+        expect(created_project.name).to eq({ "en" => "Some project" })
         expect(created_project.slug).to eq "test"
         expect(File.directory?(created_project.data_directory_path)).to eq true
 
@@ -24,7 +24,7 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'missing the slug' do
         set_access_token(user)
-        post '/api/project', params: { "name": "foof" }
+        post '/api/project', params: { "name": { "en" => "Some project" } }
         expect(response).to have_http_status(200)
 
         expect(Project.all.length).to eq 1
@@ -41,12 +41,12 @@ RSpec.describe ProjectsController, type: :request do
   end
 
   describe 'PUT /api/project/:project_id' do
-    let(:project) { create(:project, name: 'Test', slug: 'test') }
+    let(:project) { create(:project, name: { "en" => "Some project" }, slug: 'test') }
     let(:update_params) {
       {
         "apiVersion" => 4,
-        "name" => "Hello Test",
-        "description" => "This is a test proejct"
+        "name" => { "en" => "Hallo Test" },
+        "description" => { "en" => "This is a test proejct" }
       }
     }
 
@@ -74,7 +74,7 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'updates only the name' do
         put "/api/project/#{project.slug}",
-            params: { "apiVersion" => 4, "name" => "Only" }
+            params: { "apiVersion" => 4, "name" => { "en" => "Only" } }
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -83,13 +83,13 @@ RSpec.describe ProjectsController, type: :request do
 
         # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
-        expect(updated.name).to eq "Only"
+        expect(updated.name).to eq({ "en" => "Only" })
         expect(updated.description).to eq project.description
       end
 
       it 'updates only the description' do
         put "/api/project/#{project.slug}",
-            params: { "apiVersion" => 4, "description" => "Only" }
+            params: { "apiVersion" => 4, "description" => { "en" => "Only" } }
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
@@ -99,7 +99,7 @@ RSpec.describe ProjectsController, type: :request do
         # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq project.name
-        expect(updated.description).to eq "Only"
+        expect(updated.description).to eq({ "en" => "Only" })
       end
 
       it 'ignores unknown attributes' do
@@ -247,9 +247,9 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'order by' do
       before do
-        FactoryBot.create(:project, :public, name: 'cccc', slug: 'cccc')
-        FactoryBot.create(:project, :public, name: 'aaaa', slug: 'aaaa')
-        FactoryBot.create(:project, :public, name: 'bbbb', slug: 'bbbb')
+        FactoryBot.create(:project, :public, name: {"de" => 'cccc'}, slug: 'cccc')
+        FactoryBot.create(:project, :public, name: {"de" => 'aaaa'}, slug: 'aaaa')
+        FactoryBot.create(:project, :public, name: {"de" => 'bbbb'}, slug: 'bbbb')
       end
 
       it 'nonexistant column' do
@@ -289,14 +289,14 @@ RSpec.describe ProjectsController, type: :request do
         get "/api/project?orderField=name&orderDirection=desc"
         json_data = JSON.parse(response.body)['data']
 
-        expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
+        expect(json_data.map { |p| p['name'] }).to eq [{"de"=>"cccc"}, {"de"=>"bbbb"}, {"de"=>"aaaa"}]
       end
 
       it 'name asc' do
         get "/api/project?orderField=name&orderDirection=asc"
         json_data = JSON.parse(response.body)['data']
 
-        expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(json_data.map { |p| p['name'] }).to eq [{"de"=>"aaaa"}, {"de"=>"bbbb"}, {"de"=>"cccc"}]
       end
     end
   end
@@ -318,9 +318,9 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'admin user: properly paginated' do
-      FactoryBot.create(:project, :public, name: 'cccc', slug: 'cccc')
-      FactoryBot.create(:project, :public, name: 'aaaa', slug: 'aaaa')
-      FactoryBot.create(:project, :public, name: 'bbbb', slug: 'bbbb')
+      FactoryBot.create(:project, :public, name: {"de" => 'cccc'}, slug: 'cccc')
+      FactoryBot.create(:project, :public, name: {"de" => 'aaaa'}, slug: 'aaaa')
+      FactoryBot.create(:project, :public, name: {"de" => 'bbbb'}, slug: 'bbbb')
 
       user = create(:user, :admin)
       set_access_token(user)

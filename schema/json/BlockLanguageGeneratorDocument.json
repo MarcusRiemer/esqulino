@@ -857,7 +857,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8343705825494_%5B%5D_"
             }
           ]
         },
@@ -880,7 +880,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8343705825494_%5B%5D_"
             }
           ]
         },
@@ -930,7 +930,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8343705825494_%5B%5D_"
             }
           ]
         },
@@ -953,7 +953,7 @@
               "type": "array"
             },
             {
-              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_%5B%5D_"
+              "$ref": "#/definitions/ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8343705825494_%5B%5D_"
             }
           ]
         },
@@ -1003,7 +1003,7 @@
       },
       "type": "object"
     },
-    "ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8036705825494_[]_": {
+    "ParameterReferenceable_def-alias-872509593-689-765-872509593-286-1492-872509593-192-1492-872509593-0-2139_def-alias-66070721-381-602-66070721-379-4933-66070721-242-4933-66070721-0-8343705825494_[]_": {
       "items": {
         "anyOf": [
           {
@@ -1408,6 +1408,9 @@
         },
         {
           "$ref": "#/definitions/MetaDefinedTypeSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckWorldTilesSidebarDescription"
         }
       ],
       "description": "All possible sidebar types"
@@ -1547,6 +1550,22 @@
       },
       "required": [
         "componentType"
+      ],
+      "type": "object"
+    },
+    "TruckWorldTilesSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "truckWorldTiles"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
       ],
       "type": "object"
     },

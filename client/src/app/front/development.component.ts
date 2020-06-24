@@ -2,15 +2,15 @@ import { Component, Inject, LOCALE_ID } from "@angular/core";
 import { of } from "rxjs";
 
 import { ProjectProposals } from "./academica-data/project-proposals";
-import { MultiLangString } from "../shared/nav-interfaces";
+import { KnownLangString } from "../shared/multilingual-string.description";
 
 interface DevelopmentLink {
   icon: string;
-  title: MultiLangString;
+  title: KnownLangString;
   titleBadgeImage?: string;
-  subtitle: MultiLangString;
+  subtitle: KnownLangString;
   href: string;
-  content: MultiLangString;
+  content: KnownLangString;
 }
 
 // Online resources where development happens

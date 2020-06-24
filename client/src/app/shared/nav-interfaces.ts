@@ -1,17 +1,11 @@
-/**
- * A object of strings for multiple languages.
- */
-export interface MultiLangString {
-  de: string;
-  en: string;
-}
+import { KnownLangString } from "./multilingual-string.description";
 
 /**
  * A clickable internal link in the side navigation.
  */
 export interface NavLink {
   type: "link";
-  text: MultiLangString; // The text to display
+  text: KnownLangString; // The text to display
   route: string[];
   requireRoles?: string[];
   icon?: string;
@@ -23,7 +17,7 @@ export interface NavLink {
  */
 export interface NavLinkExternal {
   type: "external";
-  text: MultiLangString; // The text to display
+  text: KnownLangString; // The text to display
   url: string;
   icon?: string;
 }
@@ -47,7 +41,7 @@ export interface NavFill {
  */
 export interface NavHeader {
   type: "header";
-  text: MultiLangString;
+  text: KnownLangString;
   requireRoles?: string[];
 }
 

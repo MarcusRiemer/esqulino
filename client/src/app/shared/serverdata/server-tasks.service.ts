@@ -167,7 +167,7 @@ export class ServerTasksService {
   readonly hasAnyFinishedTask$: Observable<boolean> = combineLatest(
     this.succeededTasks$,
     this.failedTasks$
-  ).pipe(map(([s, f], i) => s.length > 0 || f.length > 0));
+  ).pipe(map(([s, f], _) => s.length > 0 || f.length > 0));
 
   readonly hasAnySucceededTask$ = this.succeededTasks$.pipe(
     map((s) => s.length > 0)

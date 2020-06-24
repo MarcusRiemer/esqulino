@@ -1,10 +1,10 @@
+import { LOCALE_ID, SimpleChange } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 
 import { MultiLingualInputComponent } from "./multilingual-input.component";
-import { LOCALE_ID, SimpleChange } from "@angular/core";
-import { MultilingualString } from "./multilingual-string.description";
+import { MultiLangString } from "./multilingual-string.description";
 import { MultiLingualEditorComponent } from "./multilingual-editor.component";
 
 describe("Component: MultiLingualEditor", () => {
@@ -32,7 +32,7 @@ describe("Component: MultiLingualEditor", () => {
   it("testing the input control", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = {};
+    const mulString: MultiLangString = {};
 
     c.component.original = mulString;
     c.component.translated = mulString;
@@ -47,7 +47,7 @@ describe("Component: MultiLingualEditor", () => {
   it("testing the textarea control", async () => {
     let c = await createComponent("de");
 
-    const mulString: MultilingualString = {};
+    const mulString: MultiLangString = {};
 
     c.component.original = mulString;
     c.component.translated = mulString;
@@ -62,8 +62,8 @@ describe("Component: MultiLingualEditor", () => {
   it("testing the output of the inputs", async () => {
     let c = await createComponent("de");
 
-    let newString: MultilingualString;
-    const mulString: MultilingualString = {};
+    let newString: MultiLangString;
+    const mulString: MultiLangString = {};
     const changed = { original: { de: "Test" }, translated: { en: "Test" } };
 
     c.component.original = mulString;
@@ -76,7 +76,7 @@ describe("Component: MultiLingualEditor", () => {
     //
 
     c.component.translatedChange.subscribe(
-      (value: MultilingualString) => (newString = value)
+      (value: MultiLangString) => (newString = value)
     );
 
     c.component.original = changed.original;

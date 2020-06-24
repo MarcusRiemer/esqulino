@@ -14,8 +14,8 @@ export function emptyProject(
   const defaultDescription: ProjectFullDescription = {
     id: "test",
     slug: "test",
-    name: "Test",
-    description: "Dynamically created for client side specs",
+    name: { en: "Test" },
+    description: { en: "Dynamically created for client side specs" },
     public: true,
     projectUsesBlockLanguages: [],
     activeDatabase: "default",

@@ -18,6 +18,7 @@ import * as Forward from "./block-language.forward";
 import { DatabaseSchemaSidebar } from "./sql/database-schema-sidebar";
 import { ProgramUserFunctionsSidebar } from "./truck/program-user-functions-sidebar";
 import { MetaDefinedTypesSidebar } from "./meta/meta-defined-types-sidebar";
+import { TruckWorldTilesSidebar } from "./truck/truck-world-tiles-sidebar";
 
 /**
  * Augments an existing language with additional information on how to
@@ -54,6 +55,8 @@ export class BlockLanguage implements Forward.BlockLanguage {
           return new ProgramUserFunctionsSidebar();
         case "metaDefinedTypes":
           return new MetaDefinedTypesSidebar();
+        case "truckWorldTiles":
+          return new TruckWorldTilesSidebar();
         default:
           throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
       }

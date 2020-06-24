@@ -3,7 +3,7 @@
     <h4>{{ resource.name }}</h4>
     <editor-block-host
       [codeResource]="resource"
-      [node]="(resource.syntaxTree | async).rootNode"
+      [node]="(resource.syntaxTree | async)?.rootNode"
       [blockLanguage]="blockLanguage"
       [readOnly]="true"
     ></editor-block-host>

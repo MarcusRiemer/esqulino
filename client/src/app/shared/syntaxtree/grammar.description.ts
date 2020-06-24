@@ -329,10 +329,10 @@ export type NamedLanguages = { [languageName: string]: NamedTypes };
  */
 export interface GrammarDatabaseBlob {
   // All types that are defined on this language
-  types?: NamedLanguages;
+  types: NamedLanguages;
 
   // All types that come from different languages
-  foreignTypes?: NamedLanguages;
+  foreignTypes: NamedLanguages;
 
   // The type that needs to be at the root of the language.
   root?: QualifiedTypeName;
@@ -355,11 +355,12 @@ export interface GrammarDescription
     GrammarListDescription {}
 
 /**
- * A request to update a grammar. The "generateFromId" field may be null to explicitly unset it.
+ * A request to update a grammar. Some fields may be null to explicitly unset them.
  */
 export type GrammarRequestUpdateDescription =
   | Partial<Omit<GrammarDescription, "id">>
-  | { generatedFromId: null };
+  | { generatedFromId: null }
+  | { root: null };
 
 /**
  * @return True if the given instance satisfies "QualifiedTypeName"

@@ -46,7 +46,7 @@ export class BlockRenderComponent {
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
   @HostBinding("class")
-  private _hostClassNodeType = "errLang errType";
+  public _hostClassNodeType = "errLang errType";
 
   constructor(private _renderData: RenderedCodeResourceService) {}
 
@@ -90,6 +90,13 @@ export class BlockRenderComponent {
    */
   asBlockContainer(block: VisualBlockDescriptions.EditorBlockBase) {
     return block as VisualBlockDescriptions.EditorContainer;
+  }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockBlock(block: VisualBlockDescriptions.EditorBlockBase) {
+    return block as VisualBlockDescriptions.EditorBlock;
   }
 
   /**
