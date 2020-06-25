@@ -668,9 +668,6 @@
       "additionalProperties": false,
       "description": "A whole grammar with all user-facing documentation.",
       "properties": {
-        "extendsId": {
-          "type": "string"
-        },
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },

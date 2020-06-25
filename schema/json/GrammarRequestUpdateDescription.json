@@ -47,9 +47,6 @@
         {
           "additionalProperties": false,
           "properties": {
-            "extendsId": {
-              "type": "string"
-            },
             "foreignTypes": {
               "$ref": "#/definitions/NamedLanguages"
             },

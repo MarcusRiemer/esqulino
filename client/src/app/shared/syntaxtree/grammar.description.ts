@@ -312,9 +312,6 @@ export interface GrammarListDescription {
 
   // The code resource that this grammar is generated from
   generatedFromId?: string;
-
-  // The grammar that this grammar possibly extends
-  extendsId?: string;
 }
 
 /**
