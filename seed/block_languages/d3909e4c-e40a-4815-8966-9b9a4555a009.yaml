@@ -10,84 +10,85 @@ concise_attributes:
   value_before_type_cast: Trucklino World
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
+  value_before_type_cast: '{"sidebars": [{"type": "truckWorldTiles"}], "editorBlocks":
+    [{"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "Road {", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"text": "position:", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "position",
+    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "openings",
+    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "trafficLights",
+    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "unloading_bay",
+    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "freight",
+    "emptyDropTarget": false}, {"text": "}", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "road", "languageName": "truck_world"}}, {"visual": [{"children":
     [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
     "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
     "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "Road {", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"text": "position:", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"blockType": "iterator", "childGroupName": "position", "emptyDropTarget": false},
-    {"blockType": "iterator", "childGroupName": "openings", "emptyDropTarget": false},
-    {"blockType": "iterator", "childGroupName": "trafficLights", "emptyDropTarget":
-    false}, {"blockType": "iterator", "childGroupName": "unloading_bay", "emptyDropTarget":
-    false}, {"blockType": "iterator", "childGroupName": "freight", "emptyDropTarget":
-    false}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "road",
+    {"text": "Vec2 {", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"text": "x:", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"style": {"display": "inline-flex"}, "property": "x", "blockType": "input"},
+    {"text": ", ", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"text": "y:", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"style": {"display": "inline-flex"}, "property": "y", "blockType": "input"},
+    {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "vec2",
     "languageName": "truck_world"}}, {"visual": [{"children": [{"style": {"color":
     "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
     "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text":
-    "Vec2 {", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text":
-    "x:", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"style":
-    {"display": "inline-flex"}, "property": "x", "blockType": "input"}, {"text": ",
-    ", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text": "y:",
-    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"style": {"display":
-    "inline-flex"}, "property": "y", "blockType": "input"}, {"text": "}", "style":
-    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "vec2", "languageName": "truck_world"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "Truck {", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"text": "position:", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "position",
-    "emptyDropTarget": false}, {"text": ", ", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"text": "orientation:", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "orientation",
-    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "freight",
-    "emptyDropTarget": false}, {"text": "}", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "truck", "languageName": "truck_world"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "size:", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"blockType": "iterator", "childGroupName": "size", "emptyDropTarget": false},
-    {"text": "trucks:", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"blockType": "iterator", "childGroupName": "trucks", "emptyDropTarget": false},
-    {"text": "roads:", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"blockType": "iterator", "childGroupName": "roads", "emptyDropTarget": false}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "world",
+    "Truck {", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text":
+    "position:", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "iterator", "childGroupName": "position", "emptyDropTarget": false}, {"text":
+    ", ", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text":
+    "orientation:", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"blockType": "iterator", "childGroupName": "orientation", "emptyDropTarget":
+    false}, {"blockType": "iterator", "childGroupName": "freight", "emptyDropTarget":
+    false}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "truck",
     "languageName": "truck_world"}}, {"visual": [{"children": [{"style": {"color":
     "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style":
-    {"display": "inline-flex"}, "property": "colour", "blockType": "input"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "freight", "languageName":
+    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text":
+    "size:", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "iterator", "childGroupName": "size", "emptyDropTarget": false}, {"text": "trucks:",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
+    "childGroupName": "trucks", "emptyDropTarget": false}, {"text": "roads:", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
+    "childGroupName": "roads", "emptyDropTarget": false}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "world", "languageName": "truck_world"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
+    "colour", "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "freight", "languageName": "truck_world"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"style": {"display": "inline-flex"}, "property": "direction", "blockType": "input"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "direction",
+    "languageName": "truck_world"}}, {"visual": [{"children": [{"style": {"color":
+    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
+    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
+    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType":
+    "iterator", "childGroupName": "side", "emptyDropTarget": false}, {"style": {"display":
+    "inline-flex"}, "property": "redPhase", "blockType": "input"}, {"style": {"display":
+    "inline-flex"}, "property": "greenPhase", "blockType": "input"}, {"style": {"display":
+    "inline-flex"}, "property": "initialPhase", "blockType": "input"}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "trafficLight", "languageName":
     "truck_world"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
     "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
     ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
-    "property": "direction", "blockType": "input"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "direction", "languageName": "truck_world"}},
-    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
-    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
-    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "side",
-    "emptyDropTarget": false}, {"style": {"display": "inline-flex"}, "property": "redPhase",
-    "blockType": "input"}, {"style": {"display": "inline-flex"}, "property": "greenPhase",
-    "blockType": "input"}, {"style": {"display": "inline-flex"}, "property": "initialPhase",
-    "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "trafficLight", "languageName": "truck_world"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"style": {"display": "inline-flex"}, "property": "colour", "blockType": "input"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "unloading_bay",
-    "languageName": "truck_world"}}], "editorComponents": [{"componentType": "truck-world-editor"},
-    {"columnClasses": ["col-lg-6"], "componentType": "truck-world"}, {"columnClasses":
-    ["col-lg-6"], "componentType": "generated-code"}], "localGeneratorInstructions":
-    {"type": "manual", "staticSidebars": [], "editorComponents": [{"componentType":
+    "property": "colour", "blockType": "input"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "unloading_bay", "languageName": "truck_world"}}],
+    "editorComponents": [{"componentType": "truck-world-editor"}, {"columnClasses":
+    ["col-lg-6"], "componentType": "truck-world"}, {"columnClasses": ["col-lg-6"],
+    "componentType": "generated-code"}], "localGeneratorInstructions": {"type": "manual",
+    "staticSidebars": [{"type": "truckWorldTiles"}], "editorComponents": [{"componentType":
     "truck-world-editor"}, {"columnClasses": ["col-lg-6"], "componentType": "truck-world"},
     {"columnClasses": ["col-lg-6"], "componentType": "generated-code"}], "typeInstructions":
     {"trucklino_world": {"world": {"blocks": [{"attributeMapping": ["seq_size", "size"]},
@@ -97,7 +98,7 @@ concise_attributes:
   value_before_type_cast: 2018-12-20 14:25:50.522385000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-05-12 21:30:10.476347000 Z
+  value_before_type_cast: 2020-06-07 14:31:27.515297000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-world
