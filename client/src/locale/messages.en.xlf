@@ -270,32 +270,32 @@
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/development.html</context><context context-type="linenumber">96</context></context-group></trans-unit><trans-unit id="road" datatype="html">
         <source>Straße</source><target state="translated">Road</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit><trans-unit id="trafficLight" datatype="html">
         <source>Ampel</source><target state="translated">Traffic Light</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit><trans-unit id="freight" datatype="html">
         <source>Fracht</source><target state="translated">Freight</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit><trans-unit id="freightTarget" datatype="html">
         <source>Fracht Ziel</source><target state="translated">Freight Target</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
-          <context context-type="linenumber">168</context>
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit><trans-unit id="truckStart" datatype="html">
         <source>Lastwagen Start</source><target state="translated">Truck Start</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit><trans-unit id="unknownCodeResource" datatype="html">
         <source>Unbekannte Code-Resource</source><target state="translated">Unknown Code Resource</target>
@@ -554,7 +554,7 @@
       <context-group purpose="location"><context context-type="sourcefile">app/front/templates/teacher.html</context><context context-type="linenumber">4</context></context-group></trans-unit><trans-unit id="edit" datatype="html">
         <source>Bearbeiten</source><target state="translated">Edit</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/project-list-item.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">app/front/templates/project-list-item.html</context><context context-type="linenumber">21</context></context-group></trans-unit>
       <trans-unit id="privacyHeadline" datatype="html">
         <source>Datenschutz</source>
         <target state="translated">Privacy</target>
