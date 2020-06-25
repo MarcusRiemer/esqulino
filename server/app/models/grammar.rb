@@ -23,14 +23,17 @@ class Grammar < ApplicationRecord
   # The types of grammar may be based on a meta grammar code resource
   belongs_to :generated_from, class_name: 'CodeResource', optional: true
 
-  # A grammar may extend another grammar
-  belongs_to :extends, class_name: 'Grammar', optional: true
-
   # Many block languages may be based on a single grammar
   has_many :block_languages
 
   # Many code resources may depend on a single grammar
   has_many :code_resources, through: :block_languages
+
+  # All references that use this grammar as an origin
+  has_many :grammar_reference_origins, class_name: 'GrammarReference', foreign_key: "origin_id"
+
+  # All grammars that are referenced by this grammar
+  has_many :referenced_grammars, through: :grammar_reference_origins, source: "target"
 
   # Grammar with properties that are relevant when listing
   scope :scope_list, lambda {
@@ -80,7 +83,8 @@ class Grammar < ApplicationRecord
 
     # Can't use ActiveModel::Dirty because this relies on saves to the database
     # as anchor points. It will therefore not tell us whether the two hashes
-    # are equal or not, but if the hash in the model has been written to.
+    # are equal or not, but if the hash in the model has been written to the database
+    # after a change has been made.
     #
     # In this method we want to know whether this concrete regenenaration changed
     # something in practice. Otherwise we might kick off loads of unnecessary
@@ -102,9 +106,15 @@ class Grammar < ApplicationRecord
 
   # Pulls possibly newer types from the grammar that this grammar extends. Does
   # nothing if this grammar doesn't extend another grammar.
-  def regenerate_foreign_types!
-    if self.extends
-      self.foreign_types = self.extends.all_types
+  def refresh_from_references!
+    include_types = self.grammar_reference_origins.filter do |ref|
+      ref.reference_type == "include_types"
+    end
+
+    if include_types.length == 1
+      self.foreign_types = include_types[0].target.all_types
+    elsif include_types.length > 1
+      raise EsqulinoError::Base.new("Including more than one other grammar not currently supported :(")
     end
   end
 

@@ -232,36 +232,39 @@ RSpec.describe Grammar, type: :model do
       it "doesn't extend anything" do
         g = FactoryBot.build(:grammar)
 
-        g.regenerate_foreign_types!
+        g.refresh_from_references!
 
         expect(g.foreign_types).to eq({})
       end
 
       it "The base grammar has no types" do
-        b = FactoryBot.create(:grammar)
-        e = FactoryBot.build(:grammar, extends: b)
+        origin = FactoryBot.create(:grammar)
+        target = FactoryBot.create(:grammar)
+        origin.grammar_reference_origins.create(target: target, reference_type: :include_types)
 
-        e.regenerate_foreign_types!
+        origin.refresh_from_references!
 
-        expect(e.foreign_types).to eq({})
+        expect(target.foreign_types).to eq({})
       end
 
       it "The extended grammar has a local type" do
-        b = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
-        e = FactoryBot.build(:grammar, extends: b)
+        origin = FactoryBot.create(:grammar)
+        target = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
+        origin.grammar_reference_origins.create(target: target, reference_type: :include_types)
 
-        e.regenerate_foreign_types!
+        origin.refresh_from_references!
 
-        expect(e.foreign_types).to eq({ "l" => { "t" => type_empty } })
+        expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "The extended grammar has a foreign type" do
-        b = FactoryBot.create(:grammar, foreign_types: { "l" => { "t" => type_empty } })
-        e = FactoryBot.build(:grammar, extends: b)
+        origin = FactoryBot.create(:grammar)
+        target = FactoryBot.create(:grammar, foreign_types: { "l" => { "t" => type_empty } })
+        origin.grammar_reference_origins.create(target: target, reference_type: "include_types")
 
-        e.regenerate_foreign_types!
+        origin.refresh_from_references!
 
-        expect(e.foreign_types).to eq({ "l" => { "t" => type_empty } })
+        expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
       end
     end
   end
@@ -322,6 +325,28 @@ RSpec.describe Grammar, type: :model do
 
       expect(grammar.regenerate_from_code_resource!(ide_service)).to eq [grammar]
       expect(grammar.regenerate_from_code_resource!(ide_service)).to eq []
+    end
+  end
+
+  context "references to other grammars" do
+    it "doesn't have any references at all" do
+      g = create(:grammar)
+
+      expect(g.grammar_reference_origins). to eq []
+      expect(g.referenced_grammars). to eq []
+    end
+
+    it "includes types of another grammar" do
+      origin = create(:grammar)
+      target = create(:grammar)
+
+      reference = create(:grammar_reference,
+                         origin: origin,
+                         target: target,
+                         reference_type: "include_types")
+
+      expect(origin.grammar_reference_origins).to eq [reference]
+      expect(origin.referenced_grammars).to eq [target]
     end
   end
 end
