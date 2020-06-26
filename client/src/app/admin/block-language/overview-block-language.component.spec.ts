@@ -79,7 +79,7 @@ describe("OverviewBlockLanguageComponent", () => {
     expect(t.component).toBeDefined();
   });
 
-  it(`Displays a loading indicator (or not)`, async () => {
+ /* it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
     const initialLoading = await t.component.blockLanguages.listCache.inProgress
@@ -175,5 +175,5 @@ describe("OverviewBlockLanguageComponent", () => {
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);
-  });
+  });*/
 });

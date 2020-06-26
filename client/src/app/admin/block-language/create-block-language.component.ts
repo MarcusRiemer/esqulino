@@ -2,18 +2,17 @@ import { Component } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
-import { first, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 import { generateBlockLanguage } from "../../shared/block/generator/generator";
 
 import {
-  ServerApiService,
-  ListBlockLanguageDataService,
-  IndividualGrammarDataService,
-  ListGrammarDataService,
-} from "../../shared/serverdata";
+  CreateBlockLanguageMutationGQL, GrammarDescriptionItemGQL,
+  SelectionListGrammarsGQL
+} from "../../../generated/graphql";
+
 
 /**
  * A comprehensive way to create new block languages
@@ -40,15 +39,14 @@ export class CreateBlockLanguageComponent {
   useSlug = false;
 
   constructor(
-    private _serverData: ListBlockLanguageDataService,
-    private _grammarData: IndividualGrammarDataService,
-    private _grammarList: ListGrammarDataService,
-    private _serverApi: ServerApiService,
-    private _http: HttpClient,
-    private _router: Router
+    private _router: Router,
+    private _mutation:CreateBlockLanguageMutationGQL,
+    private _grammarSelection:SelectionListGrammarsGQL,
+    private _grammarData: GrammarDescriptionItemGQL,
   ) {}
 
-  readonly availableGrammars = this._grammarList.list;
+  readonly availableGrammars = this._grammarSelection.watch().valueChanges
+    .pipe(map(response => response.data.grammars.nodes));
 
   /**
    * Attempts to create the specified block language
@@ -56,9 +54,8 @@ export class CreateBlockLanguageComponent {
   async submitForm() {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
-    const g = await this._grammarData
-      .getSingle(this.blockLanguage.grammarId)
-      .pipe(first())
+    const g = await this._grammarData.fetch({id: this.blockLanguage.grammarId})
+      .pipe(map(response => response.data.grammars.nodes[0]))
       .toPromise();
 
     // Generate some default blocks
@@ -77,14 +74,11 @@ export class CreateBlockLanguageComponent {
       delete toCreate.slug;
     }
 
-    const req = this._http
-      .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
-      .pipe(first())
+    const res = await this._mutation.mutate(toCreate)
+      .pipe(map(response => response.data.createBlockLanguage))
       .toPromise();
-
-    const res = await req;
-
-    this._serverData.listCache.refresh();
+    console.log("response arrived")
+    console.log(res)
     await this._router.navigateByUrl(`/admin/block-language/${res.id}`);
 
     return res;

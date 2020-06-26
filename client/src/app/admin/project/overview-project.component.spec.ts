@@ -18,6 +18,8 @@ import {
   ApolloTestingController,
 } from "apollo-angular/testing";
 
+import {Apollo, APOLLO_OPTIONS, ApolloModule} from 'apollo-angular';
+
 import { first } from "rxjs/operators";
 
 import { NaturalLanguagesService } from "../../natural-languages.service";
@@ -41,8 +43,14 @@ import {
 } from "../../../generated/graphql";
 
 import { OverviewProjectComponent } from "./overview-project.component";
+import {HttpLink, HttpLinkModule} from "apollo-angular-link-http";
+import {InMemoryCache} from "apollo-cache-inmemory";
+import {AppModule} from "../../app.module";
+import {ApolloTestingModuleCore} from "apollo-angular/testing/module";
+
 
 describe("OverviewProjectComponent", () => {
+
   async function createComponent(localeId: string = "en") {
     await TestBed.configureTestingModule({
       imports: [
@@ -54,6 +62,7 @@ describe("OverviewProjectComponent", () => {
         MatSortModule,
         MatTableModule,
         PortalModule,
+        HttpLinkModule,
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([]),
       ],
@@ -95,7 +104,7 @@ describe("OverviewProjectComponent", () => {
     };
   }
 
-  xit(`can be instantiated`, async () => {
+  fit(`can be instantiated`, async () => {
     const t = await createComponent();
 
     expect(t.component).toBeDefined();
@@ -141,7 +150,7 @@ describe("OverviewProjectComponent", () => {
     expect(afterResponse).toBe(false);
   });*/
 
-  xit(`Displays an empty list`, async () => {
+ /* xit(`Displays an empty list`, async () => {
     const t = await createComponent();
 
     provideProjectList([]);

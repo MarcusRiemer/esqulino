@@ -12,8 +12,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { SortDirection, MatSort } from "@angular/material/sort";
 import { MatTable, MatColumnDef } from "@angular/material/table";
 
-import { ListData } from "../serverdata";
-import { BehaviorSubject, EMPTY, Observable, Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { QueryRef } from "apollo-angular";
 import { PageInfo } from "../../../generated/graphql";
 import { map } from "rxjs/operators";

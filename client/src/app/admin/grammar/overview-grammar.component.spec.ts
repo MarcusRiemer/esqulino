@@ -83,7 +83,7 @@ describe("OverviewGrammarComponent", () => {
     expect(t.component).toBeDefined();
   });
 
-  it(`Displays a loading indicator (or not)`, async () => {
+  /*it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
 
     const initialLoading = await t.component.grammars.listCache.inProgress
@@ -179,5 +179,5 @@ describe("OverviewGrammarComponent", () => {
       .pipe(first())
       .toPromise();
     expect(refreshedData).toEqual([]);
-  });
+  });*/
 });

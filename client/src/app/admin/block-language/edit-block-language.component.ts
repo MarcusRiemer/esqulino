@@ -13,6 +13,8 @@ import {
 import { ToolbarService } from "../../shared/toolbar.service";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
+import {SelectionListGrammarsGQL} from "../../../generated/graphql";
+import {map} from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/edit-block-language.html",
@@ -28,13 +30,15 @@ export class EditBlockLanguageComponent implements AfterViewInit {
     private _grammarData: ListGrammarDataService,
     private _mutateBlockLanguageData: MutateBlockLanguageService,
     private _current: EditBlockLanguageService,
+    private _grammarSelection:SelectionListGrammarsGQL,
     private _toolbarService: ToolbarService
   ) {}
 
   /**
    * All grammars that may be selected for the edited block language.
    */
-  readonly availableGrammars = this._grammarData.list;
+  readonly availableGrammars = this._grammarSelection.watch().valueChanges
+    .pipe(map(response => response.data.grammars.nodes))
 
   /**
    * A readable version of the grammar that is beeing edited.
