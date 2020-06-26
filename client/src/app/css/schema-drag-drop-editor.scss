@@ -2,7 +2,8 @@
 
 	.vis {
 		border: 1px solid black;
-		font-size: 65%;
+		font-family: monospace;
+		font-size: 14;
 		padding: 12px;
 	}
 
@@ -24,9 +25,9 @@
 		border: none;
 		font-family: inherit;
 		font-size: inherit;
-		padding: none;
-		padding-right: 6px;
+		padding: 3px;
 		width: inherit;
+		margin: 0;
 	}
 	
 	.tableName {
