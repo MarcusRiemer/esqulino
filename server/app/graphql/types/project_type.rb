@@ -1,6 +1,6 @@
 module Types
   class Types::ProjectType < Types::Base::BaseObject
-
+    field :id, ID, null:false
     field :name, Types::Scalar::LangJson, null: false
     field :description, Types::Scalar::LangJson, null:false
     field :public, Boolean,null:true

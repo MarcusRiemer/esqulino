@@ -1,5 +1,6 @@
 module Types
   class Types::IdentityType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :provider, String, null:false
     field :type, String, null:false
     field :providerData, GraphQL::Types::JSON, null:true

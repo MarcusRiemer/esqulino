@@ -21,6 +21,7 @@ class BlockLanguagesController < ApplicationController
 
   # Create a new block language
   def create
+    byebug
     block_lang = BlockLanguage.new(basic_params)
     block_lang.model = model_params
 

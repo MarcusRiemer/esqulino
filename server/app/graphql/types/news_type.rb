@@ -1,5 +1,6 @@
 module Types
   class Types::NewsType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :title, Types::Scalar::LangJson, null:false
     field :text, Types::Scalar::LangJson, null:false
     field :publishedFrom, GraphQL::Types::ISO8601DateTime, null:true

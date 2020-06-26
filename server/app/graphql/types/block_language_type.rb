@@ -1,15 +1,17 @@
 module Types
   class Types::BlockLanguageType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :name, String, null:false
     field :model, GraphQL::Types::JSON, null:false
-    field :createdAt, Types::Scalar::Datetime, null:true
-    field :updatedAt, Types::Scalar::Datetime, null:true
     field :slug, String, null:true
     field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
     field :grammar, Types::GrammarType, null:true
     field :grammarId, ID, null: true
     field :generated, Boolean, null:true
     field :codeResources, [Types::CodeResourceType], null:true
+
+    field :createdAt, Types::Scalar::Datetime, null:true
+    field :updatedAt, Types::Scalar::Datetime, null:true
 
     def generated
       # generated defined in grammars.rb in scope
@@ -53,7 +55,5 @@ module Types
       argument :filter, FilterFieldType, required: false
       argument :languages, [Types::Base::BaseEnum::LanguageEnum], required: false
     end
-
-
   end
 end

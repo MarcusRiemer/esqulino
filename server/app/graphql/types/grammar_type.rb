@@ -1,5 +1,6 @@
 module Types
   class Types::GrammarType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :name, String, null:false
     field :slug, String, null:true
     field :types, GraphQL::Types::JSON, null:false, default_value: {}

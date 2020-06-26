@@ -1,5 +1,6 @@
 module Types
   class Types::CodeResourceType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :name, String, null:false
     field :ast, Types::Scalar::NodeDescription, null:true
     field :project, Types::ProjectType,null:false

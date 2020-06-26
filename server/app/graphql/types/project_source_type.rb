@@ -1,5 +1,6 @@
 module Types
   class Types::ProjectSourceType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :project, Types::ProjectType, null:false
     field :url, String, null:false
     field :title, String, null:false

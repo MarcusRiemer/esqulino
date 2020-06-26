@@ -1,8 +1,8 @@
 module Types
   class Types::UserType < Types::Base::BaseObject
+    field :id, ID, null:false
     field :roles, Types::RoleType, null:false
     field :displayName, String, null:true
-
     field :createdAt, Types::Scalar::Datetime, null:false
     field :updatedAt, Types::Scalar::Datetime, null:false
     field :email, String, null:true
