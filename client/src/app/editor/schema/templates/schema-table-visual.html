@@ -31,6 +31,7 @@
             (focus)="saveTempValue($event.target.value)"
             (blur)="changedColumnName(column.index, $event.target.value)"
             [(ngModel)]="column.name"
+			[size]="nameLength"
           />
         </td>
         <td>

@@ -81,6 +81,10 @@ export class SchemaTableVisualComponent {
   get top(): number {
     return this.yPos;
   }
+  
+  public nameLength = 0;
+  
+  public con = [];
 
   readonly schemaRevision = this._schemaService.changeCount;
 
@@ -147,6 +151,8 @@ export class SchemaTableVisualComponent {
         }
       );
     });
+	
+	this.getNameLength();
   }
 
   ngOnDestroy() {
@@ -248,6 +254,8 @@ export class SchemaTableVisualComponent {
 
   private parseSchemaText(text: any) {
     let nodes = text.objects;
+	let connectors = text.edges;
+	let coords = [];
 
     for (var i = 1; i < nodes.length; i++) {
       if (this.table.name == nodes[i].name) {
@@ -260,6 +268,39 @@ export class SchemaTableVisualComponent {
         this.width = nodes[i].width;
       }
     }
+	
+	for (var i = 0; i < connectors.length; i++) {
+		this.con[i] = [];
+		
+		let points = connectors[i].pos.split(" ");
+		
+		coords = points[0].split(",");
+		this.con[i].push({ x: coords[1], y: coords[2] });
+		
+		for (var p = 2; p < points.length; p++) {
+			coords = points[p].split(",");
+			this.con[i].push({ x: coords[0], y: coords[1] });
+		}
+		
+		coords = points[1].split(",");
+		this.con[i].push({ x: coords[1], y: coords[2] });
+	}
+	console.log(this.con);
+  }
+  
+  private getNameLength() {
+	//forEach(this.table.columns, function(value, key) {
+	//	if (value.name.length > this.nameLength){
+	//		this.nameLength = value.name.length;
+	//	}
+	//});
+	
+	for(var i = 0; i < this.table.columns.length; i++) {
+		if (this.table.columns[i].name.length > this.nameLength){
+			this.nameLength = this.table.columns[i].name.length;
+		}
+	}
+	console.log(this.nameLength);
   }
 
   showError(error: any) {
