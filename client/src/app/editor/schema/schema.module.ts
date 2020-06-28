@@ -15,6 +15,7 @@ import { SchemaTableDataComponent } from "./schema-table-data.component";
 import { SchemaTableImportComponent } from "./schema-table-import.component";
 import { SchemaVisualComponent } from "./schema-visual.component";
 import { SchemaTableVisualComponent } from "./schema-table-visual.component";
+import { SchemaConnectorComponent } from "./schema-connector-component";
 import { TableEditorSidebarStackComponent } from "./table-editor-stack.sidebar";
 import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sidebar";
 import { DragulaModule } from "ng2-dragula";
@@ -38,6 +39,7 @@ import { EditorSharedComponentsModule } from "../shared-components/editor-shared
     SchemaTableImportComponent,
     SchemaVisualComponent,
     SchemaTableVisualComponent,
+	SchemaConnectorComponent,
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent,
   ],

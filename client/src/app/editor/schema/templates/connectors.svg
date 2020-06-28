@@ -1,0 +1,6 @@
+<svg width="1500" height="1200" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <path style="position: absolute;" *ngFor="let line of connectors"
+        stroke="#000000"
+		stroke-width="5"
+        [attr.d]="getPath(line)"/>
+</svg>
