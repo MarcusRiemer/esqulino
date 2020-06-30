@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import {
+  Freight,
   Position,
   TileOpening,
   World,
@@ -58,6 +59,12 @@ export class TruckWorldEditorService implements OnDestroy {
             case TruckTileFeatureType.Road:
               this.startDrawRoad();
               break;
+            case TruckTileFeatureType.FreightTarget:
+              this.placeFrightTarget();
+              break;
+            case TruckTileFeatureType.Freight:
+              this.placeFright();
+              break;
           }
         } else {
           this.stopDrawRoad();
@@ -66,12 +73,16 @@ export class TruckWorldEditorService implements OnDestroy {
     );
     this._subscriptions.push(
       this._mouse.rightMouseButtonDown.subscribe((isDown) => {
-        if (
-          isDown &&
-          this._editorModeEnabled &&
-          this._feature.getValue().feature === TruckTileFeatureType.Road
-        ) {
-          this.startDestroyRoad();
+        if (isDown && this._editorModeEnabled) {
+          switch (this._feature.getValue().feature) {
+            case TruckTileFeatureType.Road:
+              this.startDestroyRoad();
+              break;
+            case TruckTileFeatureType.FreightTarget:
+            case TruckTileFeatureType.Freight:
+              this.removeFrightsOrTarget();
+              break;
+          }
         } else {
           this.stopDestroyRoad();
         }
@@ -142,6 +153,30 @@ export class TruckWorldEditorService implements OnDestroy {
     this._rightMouseDownPosUpdaterSubscription = undefined;
   }
 
+  private placeFright(): void {
+    const worldFreight = TruckWorldEditorService.frightFeatureToWorldFright(
+      this._feature.getValue()
+    );
+    this.mutateWorldAndCode(this._world, (s) =>
+      s.getTile(this._mouse.peekCurrentPosition).addFreight(worldFreight)
+    );
+  }
+
+  private placeFrightTarget(): void {
+    const worldFreight = TruckWorldEditorService.frightFeatureToWorldFright(
+      this._feature.getValue()
+    );
+    this.mutateWorldAndCode(this._world, (s) =>
+      s.getTile(this._mouse.peekCurrentPosition).setFrightTarget(worldFreight)
+    );
+  }
+
+  private removeFrightsOrTarget() {
+    this.mutateWorldAndCode(this._world, (s) =>
+      s.getTile(this._mouse.peekCurrentPosition).removeFreightsOrTarget()
+    );
+  }
+
   public resizeWorld(newSize: number): void {
     if (newSize >= 2 && newSize <= 15) {
       this.mutateWorldAndCode(this._world, (s) => s.resize(newSize));
@@ -151,6 +186,14 @@ export class TruckWorldEditorService implements OnDestroy {
   /*
    * General functions
    */
+
+  private static frightFeatureToWorldFright(
+    feature: TruckFeature<
+      TruckTileFeatureType.Freight | TruckTileFeatureType.FreightTarget
+    >
+  ): Freight {
+    return Freight[feature.options];
+  }
 
   /**
    * Selects a feature

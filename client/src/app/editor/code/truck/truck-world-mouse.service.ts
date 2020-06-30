@@ -36,4 +36,7 @@ export class TruckWorldMouseService {
   public updateCursorPos(pos?: Position): void {
     this._currentPosition.next(pos);
   }
+  public get peekCurrentPosition(): Position | undefined {
+    return this._currentPosition.value;
+  }
 }

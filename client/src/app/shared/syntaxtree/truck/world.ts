@@ -1158,8 +1158,12 @@ export class Tile {
    * Adds a freight on the field.
    * @param freight Freight.
    */
-  addFreight(freight: Freight) {
+  addFreight(freight: Freight): boolean {
+    if (this.freight.includes(freight) || this.openings === TileOpening.None) {
+      return false;
+    }
     this.freight.push(freight);
+    return true;
   }
 
   /**
@@ -1173,6 +1177,16 @@ export class Tile {
       this.freight.splice(n, 1);
     }
     return freight;
+  }
+
+  removeFreightsOrTarget(): boolean {
+    if (this.freightTarget === null && this.freight.length == 0) {
+      return false;
+    }
+
+    this.freightTarget = null;
+    this.freight = [];
+    return true;
   }
 
   /**
@@ -1209,6 +1223,19 @@ export class Tile {
       this.freightTarget,
       this.trafficLights.map((t) => (t ? t.clone() : t))
     );
+  }
+
+  /**
+   * Sets the fright target
+   * @param freight the new target
+   * @return true if a change has occurred
+   */
+  public setFrightTarget(freight: Freight | null): boolean {
+    if (this.freightTarget === freight || this.openings === TileOpening.None) {
+      return false;
+    }
+    this.freightTarget = freight;
+    return true;
   }
 
   public reset(): boolean {
