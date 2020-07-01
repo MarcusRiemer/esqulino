@@ -59,6 +59,7 @@ export class SchemaTableVisualComponent {
   public xPos = 0;
   public yPos = 0;
   public width = 0;
+  public height = 0;
 
   constructor(
     private _http: HttpClient,
@@ -74,12 +75,22 @@ export class SchemaTableVisualComponent {
 
   @HostBinding("style.left.px")
   get left(): number {
-    return this.xPos;
+    return this.xPos - this.width * 50 / 2;
   }
 
   @HostBinding("style.top.px")
   get top(): number {
-    return this.yPos;
+    return (this.yPos - this.height * 100 / 2);
+  }
+  
+  @HostBinding("style.width.px")
+  get tableWidth(): number {
+	  return this.width * 50;
+  }
+  
+  @HostBinding("style.height.px")
+  get tableHeight(): number {
+	  return this.height * 50;
   }
   
   public nameLength = 0;
@@ -151,6 +162,7 @@ export class SchemaTableVisualComponent {
     });
 	
 	this.getNameLength();
+	console.log(this.table);
   }
 
   ngOnDestroy() {
@@ -252,6 +264,9 @@ export class SchemaTableVisualComponent {
 
   private parseSchemaText(text: any) {
     let nodes = text.objects;
+	let parser = new DOMParser();
+	let svgDom = parser.parseFromString(text, "image/svg+xml");
+	console.log(nodes);
 
     for (var i = 1; i < nodes.length; i++) {
       if (this.table.name == nodes[i].name) {
@@ -262,6 +277,7 @@ export class SchemaTableVisualComponent {
         this.xPos = +positions[0];
         this.yPos = +positions[1];
         this.width = nodes[i].width;
+		this.height = nodes[i].height;
       }
     }
   }

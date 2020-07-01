@@ -3,8 +3,7 @@
 	.vis {
 		border: 1px solid black;
 		font-family: monospace;
-		font-size: 14;
-		padding: 12px;
+		font-size: 14px;
 	}
 
 	.vis thead {
@@ -18,6 +17,11 @@
 	
 	.vis label input {
 		opacity: 0;
+		padding: 0;
+	}
+	
+	.vis td {
+		padding: 0;
 	}
 
 	.tableEdit {
@@ -25,14 +29,17 @@
 		border: none;
 		font-family: inherit;
 		font-size: inherit;
-		padding: 3px;
+		padding: 0;
+		padding-right: 3px;
 		width: inherit;
 		margin: 0;
+		-webkit-appearance: none;
+		line-height: inherit;
 	}
 	
 	.tableName {
 		border: none;
-		padding: none;
+		padding: 0;
 		text-align: center;
 		font-family: inherit;
 		font-size: inherit;
