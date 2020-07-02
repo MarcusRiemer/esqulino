@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "project",
+    "description": "A project from Esqulino",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "name": {
+            "type": "string"
+        }      ,
+        "developer": {
+            "description": "The developer of a project",
+            "type": "object"
+            "properties": {
+                "forename": {
+                    "description": "The forename of the developer",
+                    "type": "string"
+                },
+                "proudFather". {
+                    "description": "Indicator if he is a father or not",
+                    "type: "boolean"
+                }
+            },
+            "required": [ "forename" ]
+        },
+        "createdAt": {
+            "description": "Date of creation in milliseconds",
+            "type": "number"
+        },
+    },
+    "required": [ "id", "name", "developer", "createdAt" ]
+}

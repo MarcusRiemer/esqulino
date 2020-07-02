@@ -1,0 +1,5 @@
+enum LanguageEnum {
+ DE
+ EN
+ FR
+}
