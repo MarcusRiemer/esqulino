@@ -1,8 +1,5 @@
-import {
-  NodeConverterRegistration,
-  CodeGeneratorProcess,
-} from "../codegenerator";
-import { Node } from "../syntaxtree";
+import { NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
+import { Node } from '../syntaxtree'
 
 /**
  * Converts a RegEx-AST to a properly indented stringified representation.
@@ -59,8 +56,9 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        const expressions = node.children["expressions"];
-        expressions.forEach((expr) => process.generateNode(expr));
+        // TODO: Dome something meaningful
+        // const expressions = node.children["expressions"];
+        // expressions.forEach((expr) => process.generateNode(expr));
       },
     },
   },

@@ -1,0 +1,7 @@
+{
+  "language": "regex",
+  "name": "constant",
+  "properties": {
+    "value": "a"
+  }
+}
