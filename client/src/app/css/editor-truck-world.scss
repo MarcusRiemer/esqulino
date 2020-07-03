@@ -1,6 +1,12 @@
+.truck-world-editor-menu {
+    .traffic-light-config {
+        position: absolute;
+        z-index: 1;
+    }
+}
+
 .editor-tile-selection {
     --editor-tile-size: 7rem;
-    overflow-x: auto;
 
     .fa.fa-paint-brush {
         color: white;
@@ -92,5 +98,4 @@
         background-image: url("/vendor/truck/truck.svg");
         background-size: calc(var(--editor-tile-size) * var(--image-count));
     }
-
 }

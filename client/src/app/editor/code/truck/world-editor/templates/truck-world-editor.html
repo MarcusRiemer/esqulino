@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row truck-world-editor-menu">
   <div class="col-9">
     <div class="btn-group btn-group-sm d-flex pl-1" role="group">
       <button class="btn btn-outline-primary flex-grow-1" (click)="undo()">
@@ -23,7 +23,7 @@
   </div>
   <div class="col-3">
     <div class="form-group row">
-      <label for="world-size" class="col-3 col-form-label">Size</label>
+      <label for="world-size" class="col-3 col-form-label">Größe</label>
       <div class="col-9">
         <input
           class="form-control"
@@ -33,6 +33,60 @@
           max="15"
           [(ngModel)]="size"
         />
+      </div>
+    </div>
+    <div class="feature-options" *ngIf="(feature$ | async) as feature">
+      <div
+        class="traffic-light-config"
+        *ngIf="feature.feature === tileFeatureType.TrafficLight"
+      >
+        <div class="card card-body">
+          <div class="col-12">
+            <h4>Ampel Konfiguration</h4>
+            <div class="form-group row">
+              <label class="col-6 col-form-label text-right">
+                Start Zeit
+              </label>
+              <div class="col-4">
+                <input
+                  class="form-control"
+                  type="number"
+                  value="1"
+                  min="0"
+                  [(ngModel)]="feature.options.startPhase"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-6 col-form-label text-right">
+                Rot Zeit
+              </label>
+              <div class="col-4">
+                <input
+                  class="form-control"
+                  type="number"
+                  value="1"
+                  min="0"
+                  [(ngModel)]="feature.options.redPhase"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-6 col-form-label text-right">
+                Grün Zeit
+              </label>
+              <div class="col-4">
+                <input
+                  class="form-control"
+                  type="number"
+                  value="1"
+                  min="0"
+                  [(ngModel)]="feature.options.greenPhase"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

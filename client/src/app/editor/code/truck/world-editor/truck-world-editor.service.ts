@@ -65,6 +65,9 @@ export class TruckWorldEditorService implements OnDestroy {
             case TruckTileFeatureType.Freight:
               this.placeFright();
               break;
+            case TruckTileFeatureType.TrafficLight:
+              this.placeTrafficLight();
+              break;
           }
         } else {
           this.stopDrawRoad();
@@ -154,7 +157,7 @@ export class TruckWorldEditorService implements OnDestroy {
   }
 
   private placeFright(): void {
-    const worldFreight = TruckWorldEditorService.frightFeatureToWorldFright(
+    const worldFreight = TruckWorldEditorService.frightFeatureAsWorldFright(
       this._feature.getValue()
     );
     this.mutateWorldAndCode(this._world, (s) =>
@@ -163,7 +166,7 @@ export class TruckWorldEditorService implements OnDestroy {
   }
 
   private placeFrightTarget(): void {
-    const worldFreight = TruckWorldEditorService.frightFeatureToWorldFright(
+    const worldFreight = TruckWorldEditorService.frightFeatureAsWorldFright(
       this._feature.getValue()
     );
     this.mutateWorldAndCode(this._world, (s) =>
@@ -177,6 +180,14 @@ export class TruckWorldEditorService implements OnDestroy {
     );
   }
 
+  private placeTrafficLight(): void {
+    const trafficLightFeature = this._feature.getValue() as TruckFeature<
+      TruckTileFeatureType.TrafficLight
+    >;
+    console.log("would place traffic light with", trafficLightFeature.options);
+    this.mutateWorldAndCode(this._world, (s) => false);
+  }
+
   public resizeWorld(newSize: number): void {
     if (newSize >= 2 && newSize <= 15) {
       this.mutateWorldAndCode(this._world, (s) => s.resize(newSize));
@@ -187,7 +198,7 @@ export class TruckWorldEditorService implements OnDestroy {
    * General functions
    */
 
-  private static frightFeatureToWorldFright(
+  private static frightFeatureAsWorldFright(
     feature: TruckFeature<
       TruckTileFeatureType.Freight | TruckTileFeatureType.FreightTarget
     >
