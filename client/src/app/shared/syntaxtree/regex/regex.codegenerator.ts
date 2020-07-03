@@ -1,10 +1,27 @@
-import { NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
-import { Node } from '../syntaxtree'
+import {
+  NodeConverterRegistration,
+  CodeGeneratorProcess,
+} from "../codegenerator";
+import { Node } from "../syntaxtree";
 
 /**
  * Converts a RegEx-AST to a properly indented stringified representation.
  */
 export const NODE_CONVERTER: NodeConverterRegistration[] = [
+  {
+    type: {
+      languageName: "regex",
+      typeName: "expression",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(
+          "// TODO: Implement RegEx code generation",
+          node
+        );
+      },
+    },
+  },
   {
     type: {
       languageName: "regex",
