@@ -1,0 +1,48 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 2683e46f-008e-4194-ad6f-cc170c435062
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta RegEx
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-03 08:47:38.832946000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-03 12:23:29.384412000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: regex
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 59bda8aa-c068-44e6-871d-80f1e48c5dce
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"regex": {"group": {"type": "concrete", "attributes":
+    [{"type": "terminal", "symbol": "("}, {"name": "subexpression", "type": "sequence",
+    "nodeTypes": [{"typeName": "subexpression", "languageName": "regex"}]}, {"type":
+    "terminal", "symbol": ")"}]}, "match": {"type": "concrete", "attributes": [{"name":
+    "sequence", "type": "sequence", "nodeTypes": [{"typeName": "characters", "languageName":
+    "regex"}]}]}, "characters": {"type": "concrete", "attributes": []}, "expression":
+    {"type": "concrete", "attributes": [{"name": "firstExpression", "type": "allowed",
+    "nodeTypes": [{"typeName": "subexpression", "languageName": "regex"}]}, {"name":
+    "alternatives", "type": "sequence", "nodeTypes": [{"typeName": "alternative",
+    "languageName": "regex"}]}]}, "alternative": {"type": "concrete", "attributes":
+    [{"type": "terminal", "symbol": "|"}, {"name": "subexpression", "type": "sequence",
+    "nodeTypes": [{"typeName": "subexpression", "languageName": "regex"}]}]}, "subexpression":
+    {"type": "oneOf", "oneOf": [{"typeName": "match", "languageName": "regex"}, {"typeName":
+    "group", "languageName": "regex"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "expression", "languageName": "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: extends_id
+new_record: false
+active_record_yaml_version: 2

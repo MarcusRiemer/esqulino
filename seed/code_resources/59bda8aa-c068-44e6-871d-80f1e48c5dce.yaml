@@ -2,10 +2,10 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
-  value_before_type_cast: ee7c510f-2eea-4524-8f00-5c75323baca5
+  value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
   original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
     name: project_id
-    value_before_type_cast: ee7c510f-2eea-4524-8f00-5c75323baca5
+    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
       precision:
       scale:
@@ -15,7 +15,7 @@ concise_attributes:
   value_before_type_cast: 59bda8aa-c068-44e6-871d-80f1e48c5dce
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: RegEx
+  value_before_type_cast: 00 RegEx
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
@@ -58,7 +58,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-02 13:49:14.143547000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-02 13:49:14.143547000 Z
+  value_before_type_cast: 2020-07-03 12:23:29.218321000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -67,5 +67,116 @@ concise_attributes:
   value_before_type_cast: meta-grammar
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "regex": {
+          "expression": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "allowed",
+                "name": "firstExpression",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "subexpression"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "alternatives",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "alternative"
+                  }
+                ]
+              }
+            ]
+          },
+          "subexpression": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "match"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "group"
+              }
+            ]
+          },
+          "group": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "("
+              },
+              {
+                "type": "sequence",
+                "name": "subexpression",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "subexpression"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": ")"
+              }
+            ]
+          },
+          "alternative": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "|"
+              },
+              {
+                "type": "sequence",
+                "name": "subexpression",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "subexpression"
+                  }
+                ]
+              }
+            ]
+          },
+          "match": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "sequence",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "characters"
+                  }
+                ]
+              }
+            ]
+          },
+          "characters": {
+            "type": "concrete",
+            "attributes": []
+          }
+        }
+      },
+      "foreignTypes": {},
+      "root": {
+        "languageName": "regex",
+        "typeName": "expression"
+      }
+    }
 new_record: false
 active_record_yaml_version: 2
