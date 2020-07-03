@@ -27,7 +27,7 @@ des von Marcus Riemers entwickelten Systems und gehören somit für die Schaffun
 Der Begriff REST wurde erstmalig in der Dissertation "Architectural Styles and the Design of 
 Network-based Software Architectures" von Roy Thomas Fielding im Jahr 2000 geprägt~\cite{fielding-dissertation}.
 Er beschreibt REST als einen Architekturstil für verteilte Systeme, welcher in eine einheitliche Schnittstelle für Kommunikation mündet.
-Dieser Architekturstil oder auch Programmierparadigma, wird von verschiedene nSoftware-Engineering-Prinzipien und Beschränkungen definiert.
+Dieser Architekturstil oder auch Programmierparadigma, wird durch verschiedene Software-Engineering-Prinzipien und Beschränkungen definiert.
 Im Folgenden werden die Prizipien von REST näher erläutert.
 
 \subsection{Client-Server-Modell}
@@ -36,16 +36,16 @@ Es verbessert die Portabilität der Benutzeroberfläche in Bezug auf die Anbindu
 also die Wiederverwendbarkeit und die Skalierbarkeit aufgrund der Vereinfachung der Serverkomponenten.
 
 \subsection{Zustandslosigkeit}
-Zustandslosigkeit ist eine Interaktionsbeschränkung in Bezug auf die Kommunikation zwischen Server und Client. 
-Anfragen vom Client müssen alle Informationen beinhalten um diese interpretieren zu können und als grundsätzlich voneinander unabhängige Transaktionen behandelt werden zu können.
+Zustandslosigkeit ist eine Beschränkung in Bezug auf die Kommunikation zwischen Server und Client.
+Anfragen vom Client müssen alle Informationen beinhalten um diese interpretieren zu können.
 Insbesondere werden Anfragen ohne Bezug zu früheren Anfragen behandelt und keine Sitzungsinformationen ausgetauscht bzw. verwaltet.
 Diese befinden sich ausschließlich auf dem Client. 
 
 Anfragen können unabhängig voneinander betrachtet werden, da jede Anfrage für sich eine vollständige Anforderung an den Server beschreibt.
-Zudem kann einfacher auf den Misserfolg einer Anfrage reagiert werden, als auf eine erfolglose Kette von zusammenhängenden Anforderungen 
+Zudem kann einfacher auf den Misserfolg einer Anfrage reagiert werden, als auf eine erfolglose Kette von zusammenhängenden Anfragen
 und es ist nicht vonnöten Zwischenzustände bzw. Status zu speichern, welche die Ressourcenauslastung erhöhen würde.
 Dies kann jedoch zu einer verringerten Netzwerkleistung führen, aufgrund von Zusatzinformationen, 
-die sich bei mehreren verschiedenen Anfragen wiederholen, erneut mit gesendet werden.
+die sich bei mehreren verschiedenen Anfragen wiederholen und erneut mit gesendet werden müssen.
 
 \subsection{Cache}
 In Hinblick auf das Verbessern der Netzwerkleistung wurde ein Cache als Einschränkung hinzugefügt.
@@ -67,16 +67,18 @@ Eine Anwendung kann dadurch ihre Anforderungen auf mehrere Schichten verteilen, 
 die Daten auf Server B lagert und einen Authetifizierungsdienst von Server C nutzt.
 Nachteile dieser Einschränkung spiegeln sich in gestiegener Komplexität der Gesamtarchitektur und kommunikativem Overhead wieder.
 
+
 Desweiteren gibt es noch eine optionale Einschränkung auf die nicht näher eingegangen wird.
-Als Entwickler einer Anwendung stellt Modularität ein von Beginn an bedachtes Kalkül dar.
+%Als Entwickler einer Anwendung stellt Modularität ein von Beginn an bedachtes Kalkül dar.
 Alles in allem bietet REST als Achitekturstil Grundlagen für Entwicklung eines modularen, verteilten und einfach mit zu interagierendem Systems.
+TODO: Abschlusswort finden!
 
 \section{GraphQL}
 \label{sec:basics:graphql}
 Das wesentliche Motiv bei der Nutzung des Internets ist die Informationsaufnahme~\cite{statista-1}\cite{ard-zdf}.
 Informationen werden auf unzähligen Webapplikationen bereitgestellt, die jeder mit einem Internetzugang einsehen kann,
 solange der Zugriff auf die Informationen nicht sonderlich geschützt wird.
-Um persistente und sensible Daten gesichert und nicht für Jedermann zugreifbar lagern zu können, werden sie serverseitig gehalten.
+Um persistente und sensible Daten gesichert und nicht für Jedermann zugreifbar lagern zu können, werden sie \emph{serverseitig} gehalten.
 Möchte man diese Daten zusätzlich Filtern, Sortieren oder mehrere Datensätze miteinander verknüpfen, wird eine Datenbank benötigt.
 Eine Datei in der die Daten abgelegt werden, wäre auch eine Option, allerdings müsste man alle Methoden zum Filtern, Sortieren und Verknüpfen
 selber implementieren und damit das Rad neu erfinden.
@@ -84,17 +86,17 @@ selber implementieren und damit das Rad neu erfinden.
 Die in einer Datenbank gespeicherten Informationen sind also aus Nutzersicht nur über eine Anfrage an den Sever abrufbar.
 Somit ist der Server das Bindeglied zwischen einem Client und der Datenbank und kümmert sich um Aufgaben wie Authentifizierung des Nutzers
 und Überprüfung der Authorisierung bezüglich der angefragten Daten, aber auch um die Zusammensetzung und Ausführung von Datenbankabfragen.
-Daraus geht hervor das ein Client nur begrenzten Zugriff bekommt, indem die Ausführung von vordefinierten Datenbanktransaktionen
-angefragt wird. Werden die vordefinierten Transaktionen den Bedarf an Informationen nicht gerecht, müssen neue Transaktionen entwickelt werden
-oder der es muss mithilfe von mehreren Anfragen die Daten zusammengesammelt werden.
+Daraus geht hervor das ein Client nur begrenzten Zugriff bekommt, da die Ausführung von vordefinierten Datenbanktransaktionen
+lediglich angefragt werden kann. Werden die vordefinierten Transaktionen den Bedarf an Informationen nicht gerecht, müssen neue Transaktionen entwickelt
+oder mithilfe von mehreren Anfragen die Daten zusammengesammelt werden.
 
-Der Entwicklungsaufwand könnte verringert werden, indem der Client mehr Flexibilität, Verantwortung und Effizienz besitzen würde,
+Dieser Entwicklungsaufwand könnte verringert werden, indem der Client mehr Flexibilität, Verantwortung und Effizienz besitzen würde,
 z.B. durch eine direkte Anbindung an die Datenbank.
-Dieser könnte alle benötigten Daten dann direkt und effizient z.B. per SQL Query aus der Datenbank auslesen.
+Er könnte alle benötigten Daten dann direkt und effizient z.B. per SQL Query aus der Datenbank auslesen.
 Jedoch würde dieser Ansatz viele Gefahren mit sich bringen. Ein Client der direkten Datenbankzugriff erlangt,
 könnte unerwünschte Transaktionen in der Datenbank ausführen, wodurch die konsistenz der Daten verletzt,
-Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnte. Also müssten Zugriffsbeschränkungen erteilt werden, die
-auf der Datenbankschicht realisiert werden, da Clientseitiger Code nach belieben vom Nutzer eingesehen und verändert werden könnte.
+Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnte. Also sollten Zugriffsbeschränkungen erteilt werden, die
+auf der Datenbankschicht realisiert werden, da Clientseitiger Code nach belieben vom Nutzer eingesehen und verändert werden kann.
 Hinzu kommen weitere Herausforderungen wenn die verbindung zur Datenbank veröffentlicht wurde,
 wie das Schützen vor exessiver Nutzung oder denial of service (Dos) Attacken.
 Alles in allem ist das ein Verfahren, von dem dringend abgeraten wird, da es in den wenigsten Fällen nutzbringend und sicher gehandhabt werden kann~\cite{client-to-database}.
@@ -108,7 +110,7 @@ Es ist an keinerlei Datenbanksysteme oder Speicherengines gebunden und lässt si
 
 Ein GraphQL Service ensteht durch das Definieren von Typen, vergleichbar mit Datenbanktabellen. Im Gegensatz zu einem Datenbank Schema,
 ermöglicht das Typsystem von GraphQL zu jedem Typen Argumente zu definieren, die wiederum einer Funktion (Resolver) übergeben werden kann, die aufgerufen wird, wenn das Feld
-im Kontext einer Query aufgelöst werden soll. Desweiteren lassen sich zu jedem Feld eines Typs, wie bei Datenbanken, Datentypen und Restriktionen wie Not Null definieren.
+im Kontext einer Query aufgelöst werden soll. Desweiteren lassen sich zu jedem Feld eines Typs, wie bei Datenbanken, Datentypen und Restriktionen wie \emph{Not Null} definieren.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/basics/graphql-project-type.txt}
@@ -123,11 +125,14 @@ im Kontext einer Query aufgelöst werden soll. Desweiteren lassen sich zu jedem 
 \end{figure}
 
 Die aufgeführten Codefragmente definieren einen Typen Project, mit 2 Feldern und ein Enum mit allen bereitgestellten Sprachen.
-- id hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
-% id und name als Code einbinden
-zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
-- name besitzt den Typen String, der ebenfalls nicht den Wert Null annehmen kann. Zusätzlich wurde dem Feld ein Argument "language" zugeteilt,
-welches den selbst definierten Datentypen LanguageEnum besitzt, mit dem Defaultwert DE.
+
+\begin{itemize}
+    \item \emph{id}: hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
+    zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
+    \item \emph{name}: besitzt den Typen String, der ebenfalls nicht den Wert Null annehmen kann. Zusätzlich wurde dem Feld ein Argument "language" zugeteilt,
+    welches den selbst definierten Datentypen LanguageEnum besitzt, mit dem Defaultwert DE.
+\end{itemize}
+
 Wie schon erwähnt lassen sich zu Feldern Funktionen definieren die als Resolver betitelt werden.
 Für das Feld name ließe sich ein Resolver definieren, der Logik beinhalten könnte um den String, je nach dem welche Sprache als Argument übergeben wurde,
 in andere Sprachen zu übersetzen.
@@ -162,7 +167,7 @@ ein Ergebnis, typischerweise in Form von JSON, zurück gegeben, das die Form und
 \end{figure}
 
 Auf der obersten Ebene eines GraphQL Servers befindet sich ein Typ, der alle möglichen Einstiegspunkte in die GraphQL API repräsentiert.
-Dies könnte zum Beispiel der bereits definierte Query-Typ projects sein.
+Dies könnte zum Beispiel der bereits definierte Query-Typ \emph{projects} sein.
 Damit der GraphQL Server eine Anfrage an eine an den Server gebundene Datenbank schicken kann wird die zum Query-Typen definierte
 Resolver Funktion ausgeführt~\cite{graphql-execution}. Innerhalb dieser Resolver Funktion ist der Zugriff auf das Dateisystem festgelegt, sodass
 man neben Datenbanken auch andere Speicherengines oder gar Dateien als Speichermedium nutzen könnte.
@@ -173,16 +178,12 @@ Diese setzt voraus, das der Zugriff auf persistent gespeicherte Daten ausschlie�
 Datenzugriffe, die vom Client angestoßen werden, werden über einen festgelegte Menge an vordefinierten Datenbank Transaktionen auf dem Server bereitgestellt.
 Jede dieser unterschiedlichen Transaktionen kann über eine Anfrage an den Server ausgelöst werden.
 
-\begin{lstlisting}
-GET      /api/project(.:format)                       projects#index
-GET      /api/project/list_admin(.:format)            projects#index_admin
-POST     /api/project(.:format)                       projects#create
-DELETE   /api/project(.:format)                       projects#destroy
-GET      /api/project/:project_id(.:format)           projects#show
-PUT      /api/project/:project_id(.:format)           projects#update
-DELETE   /api/project/:project_id(.:format)           projects#destroy
-GET      /api/project/:project_id/preview(.:format)   projects#preview_image
-\end{lstlisting}
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/graphql-rest-transactions.txt}
+    \caption{Liste von Routen die auf Controllerfunktionen zeigen}
+    \label{fig:basics:graphql:6}
+\end{figure}
 
 Die in Abbildung 1 aufgeführte Liste gibt zu jeder Transaktion an über welche Route sie aufgerufen werden kann.
 Je größer eine Anwendung wird, desto größer wird der Datenbestand und die Menge an Transaktionen die vordefiniert werden muss.
