@@ -158,7 +158,7 @@ export class TruckWorldEditorService implements OnDestroy {
       this._feature.getValue()
     );
     this.mutateWorldAndCode(this._world, (s) =>
-      s.getTile(this._mouse.peekCurrentPosition).addFreight(worldFreight)
+      s.getTile(this._mouse.peekCurrentPosition).tryAddFreight(worldFreight)
     );
   }
 

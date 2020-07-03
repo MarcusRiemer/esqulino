@@ -293,7 +293,7 @@ describe("Shared: Tile", () => {
     tile = new Tile(position, TileOpening.None, [], null, []);
     tileNE = new Tile(position, TileOpening.N | TileOpening.E, [], null, []);
 
-    // Kacheln mit Fracht
+    // Tiles with freight
     tileRF = new Tile(position, TileOpening.None, [Freight.Red], null, []);
     tileGF = new Tile(position, TileOpening.None, [Freight.Green], null, []);
     tileBF = new Tile(position, TileOpening.None, [Freight.Blue], null, []);
@@ -340,15 +340,36 @@ describe("Shared: Tile", () => {
     expect(tileBF.freightItems).toEqual(1);
   });
 
-  it("should have freight after adding it", () => {
-    tile.addFreight(Freight.Red);
-    expect(tile.freightItems).toEqual(1);
+  it("should not add freight on _no road_ tile", () => {
+    expect(tile.tryAddFreight(Freight.Red)).toBeFalse();
+    expect(tile.freightItems).toEqual(0);
+  });
+
+  it("should add freight on tile with road", () => {
+    expect(tileNE.tryAddFreight(Freight.Red)).toBeTrue();
+    expect(tileNE.freightItems).toEqual(1);
+    expect(tileNE.freight[0]).toEqual(Freight.Red);
   });
 
   it("shouldn't have freight after removing it", () => {
-    tile.addFreight(Freight.Red);
-    tile.removeFreight();
-    expect(tile.freightItems).toEqual(0);
+    tileNE.tryAddFreight(Freight.Red);
+    expect(tileNE.freightItems).toEqual(1);
+    expect(tileNE.removeFreight()).toEqual(Freight.Red);
+    expect(tileNE.freightItems).toEqual(0);
+  });
+
+  it("shouldn't have freight after removeFreightsOrTarget", () => {
+    tileNE.tryAddFreight(Freight.Red);
+    expect(tileNE.freightItems).toEqual(1);
+    expect(tileNE.removeFreightsOrTarget()).toBeTrue();
+    expect(tileNE.freightItems).toEqual(0);
+  });
+
+  it("shouldn't have freight target after removeFreightsOrTarget", () => {
+    tileNE.setFrightTarget(Freight.Red);
+    expect(tileNE.freightTarget).toEqual(Freight.Red);
+    expect(tileNE.removeFreightsOrTarget()).toBeTrue();
+    expect(tileNE.freightTarget).toBeNull();
   });
 
   it("should know the freight colors", () => {

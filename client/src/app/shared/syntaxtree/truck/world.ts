@@ -120,8 +120,7 @@ export class World {
           state.time = 1;
           return state;
           // Can be unloaded on empty field?
-        } else if (tile.freightItems === 0 && tile.freightTarget == null) {
-          tile.addFreight(state.truck.unloadFreight());
+        } else if (tile.tryAddFreight(state.truck.unloadFreight())) {
           state.time = 1;
           return state;
         }
@@ -1156,13 +1155,36 @@ export class Tile {
 
   /**
    * Adds a freight on the field.
+   * The field must be empty(still have a road) and if it has a fright target the color must match
    * @param freight Freight.
+   * @return true if a change has occurred
    */
-  addFreight(freight: Freight): boolean {
-    if (this.freight.includes(freight) || this.openings === TileOpening.None) {
+  tryAddFreight(freight: Freight): boolean {
+    if (
+      this.freight.length !== 0 || // Cannot have a fright already on it
+      this.openings === TileOpening.None || // Must have openings
+      this.freightTarget !== null // FreightTarget must be empty
+    ) {
       return false;
     }
     this.freight.push(freight);
+    return true;
+  }
+
+  /**
+   * Sets the fright target
+   * @param freight the new target
+   * @return true if a change has occurred
+   */
+  setFrightTarget(freight: Freight | null): boolean {
+    if (
+      this.freight.length !== 0 || // Cannot have a fright already on it
+      this.openings === TileOpening.None || // Must have openings
+      this.freightTarget !== null // FreightTarget must be empty
+    ) {
+      return false;
+    }
+    this.freightTarget = freight;
     return true;
   }
 
@@ -1223,19 +1245,6 @@ export class Tile {
       this.freightTarget,
       this.trafficLights.map((t) => (t ? t.clone() : t))
     );
-  }
-
-  /**
-   * Sets the fright target
-   * @param freight the new target
-   * @return true if a change has occurred
-   */
-  public setFrightTarget(freight: Freight | null): boolean {
-    if (this.freightTarget === freight || this.openings === TileOpening.None) {
-      return false;
-    }
-    this.freightTarget = freight;
-    return true;
   }
 
   public reset(): boolean {
