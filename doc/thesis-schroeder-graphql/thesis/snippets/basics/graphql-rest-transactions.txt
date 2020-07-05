@@ -1,6 +1,6 @@
-GET      /api/project(.:format)                       projects#index
-GET      /api/project/list_admin(.:format)            projects#index_admin
-POST     /api/project(.:format)                       projects#create
+GET      /api/projects                      projects#index
+GET      /api/projects/:id            projects#index_admin
+POST     /api/projects                       projects#create
 DELETE   /api/project(.:format)                       projects#destroy
 GET      /api/project/:project_id(.:format)           projects#show
 PUT      /api/project/:project_id(.:format)           projects#update

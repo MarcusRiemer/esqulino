@@ -1,4 +1,4 @@
 type Project {
  id: ID!
- name(language: LanguageEnum = DE): String!
+ public: Boolean!
 }

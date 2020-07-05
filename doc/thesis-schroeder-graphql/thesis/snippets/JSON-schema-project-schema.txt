@@ -9,7 +9,10 @@
         },
         "name": {
             "type": "string"
-        }      ,
+        },
+        "public": {
+            "type": "boolean"
+        },
         "developer": {
             "description": "The developer of a project",
             "type": "object"
@@ -30,5 +33,5 @@
             "type": "number"
         },
     },
-    "required": [ "id", "name", "developer", "createdAt" ]
+    "required": [ "id", "name", "public", "developer", "createdAt" ]
 }

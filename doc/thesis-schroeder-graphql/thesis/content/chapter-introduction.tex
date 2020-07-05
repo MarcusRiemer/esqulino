@@ -8,7 +8,7 @@
 \label{sec:requirements}
 
 Ziel dieser Arbeit ist die Evaluierung von Verfahren, welche eine sichere, effiziente und leichte Nutzung der Kommunikationsschnittstellen 
-zwischen Client, Server und Datenbank ermöglichen soll und wenn möglich die Integration eines dieser Verfahren
+zwischen Client, Server und Datenbank ermöglichen sollen und wenn möglich die Integration eines dieser Verfahren
 in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe~\ref{sec:basics}),
 In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die Anforderungen an die Nutzung der Kommunikationsschnittstellen näher beschrieben.
 %Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
@@ -19,59 +19,63 @@ In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die A
 \chapter{Grundlagen}
 \label{sec:basics}
 In diesem Kapitel werden grundlegende Inhalte beschrieben, welche im späteren Verlauf der Arbeit aufgegriffen 
-und bei Erläuterungen und Code-Beispielen als Wissensbasis vorausgesetzt werden. Viele dieser Inhalte sind aktuell Gegenstand
-des von Marcus Riemers entwickelten Systems und gehören somit für die Schaffung und Umsetzung von Verbesserungen grundlegend verstanden.
+und bei Erläuterungen bzw. Code-Beispielen als bekannt vorausgesetzt werden. Viele dieser Inhalte sind aktuell Gegenstand
+des von Marcus Riemers entwickelten Systems und müssen somit für die Schaffung und Umsetzung von Verbesserungen grundlegend verstanden werden.
 %Nicht spezifisch auf Blattwerzeuge werden!! Kleines Beispiel ist erlaubt (Begriff Blattwerzeug wird nicht erwähnt).
 \section{REST API}
 \label{sec:basics:restapi}
-Der Begriff REST wurde erstmalig in der Dissertation "Architectural Styles and the Design of 
+Der Begriff Representational State Transfer (abgekürzt REST, seltener auch ReST) wurde erstmalig in der Dissertation "Architectural Styles and the Design of
 Network-based Software Architectures" von Roy Thomas Fielding im Jahr 2000 geprägt~\cite{fielding-dissertation}.
 Er beschreibt REST als einen Architekturstil für verteilte Systeme, welcher in eine einheitliche Schnittstelle für Kommunikation mündet.
-Dieser Architekturstil oder auch Programmierparadigma, wird durch verschiedene Software-Engineering-Prinzipien und Beschränkungen definiert.
-Im Folgenden werden die Prizipien von REST näher erläutert.
+Dieser Architekturstil oder auch Programmierparadigma wird durch verschiedene Software-Engineering-Prinzipien und Beschränkungen definiert.
+Im Folgenden werden die Prinzipien von REST näher erläutert.
 
 \subsection{Client-Server-Modell}
-Der Ausgangspunkt des Client-Server-Modells ist eine Trennung der Benutzeroberfläche von der Datenhaltung/-verwertung.
-Es verbessert die Portabilität der Benutzeroberfläche in Bezug auf die Anbindung an verschiedene Datenhaltungs/-verwertungs Systeme,
+Der Ausgangspunkt des Client-Server-Modells ist eine strikte Trennung der Benutzeroberfläche von der Datenhaltung/-verwertung.
+Das bedeutet wiederum, dass kein HTML, CSS und Javascript vom Server an den Client geschickt wird, sondern ausschließlich Datensätze
+meist in Form von XML oder JSON, die clientseitig in die Benutzeroberfläche eingebaut werden.
+Dadurch verbessert sich die Portabilität der Benutzeroberfläche in Bezug auf die Anbindung an verschiedene Datenhaltungs/-verwertungs-Systeme,
 also die Wiederverwendbarkeit und die Skalierbarkeit aufgrund der Vereinfachung der Serverkomponenten.
 
 \subsection{Zustandslosigkeit}
 Zustandslosigkeit ist eine Beschränkung in Bezug auf die Kommunikation zwischen Server und Client.
 Anfragen vom Client müssen alle Informationen beinhalten um diese interpretieren zu können.
-Insbesondere werden Anfragen ohne Bezug zu früheren Anfragen behandelt und keine Sitzungsinformationen ausgetauscht bzw. verwaltet.
-Diese befinden sich ausschließlich auf dem Client. 
+Insbesondere werden Anfragen ohne Bezug zu früheren Anfragen behandelt und keine Sitzungsinformationen -
+wie Authentifizierungs- und Authorisierungsinformationen - ausgetauscht bzw. verwaltet.
+Diese befinden sich ausschließlich auf dem Client und müssen bei Anforderung von geschützten Daten der Anfrage beigefügt werden.
 
-Anfragen können unabhängig voneinander betrachtet werden, da jede Anfrage für sich eine vollständige Anforderung an den Server beschreibt.
+Vorteile aus dieser Beschränkung sind, dass Anfragen unabhängig voneinander betrachtet werden können
+und somit z.B. von mehreren Maschinen parallel ausgeführt werden können, da jede Anfrage für sich eine vollständige Anforderung an den Server beschreibt.
 Zudem kann einfacher auf den Misserfolg einer Anfrage reagiert werden, als auf eine erfolglose Kette von zusammenhängenden Anfragen
 und es ist nicht vonnöten Zwischenzustände bzw. Status zu speichern, welche die Ressourcenauslastung erhöhen würde.
-Dies kann jedoch zu einer verringerten Netzwerkleistung führen, aufgrund von Zusatzinformationen, 
+Dies kann jedoch zu einer verringerten Netzwerkleistung führen aufgrund von Zusatzinformationen,
 die sich bei mehreren verschiedenen Anfragen wiederholen und erneut mit gesendet werden müssen.
 
 \subsection{Cache}
 In Hinblick auf das Verbessern der Netzwerkleistung wurde ein Cache als Einschränkung hinzugefügt.
 Diese Einschränkung setzt voraus, dass Daten aus einer Antwort vom Server implizit oder explizit als cachefähig oder nicht cachefähig gekennzeichnet werden.
 Werden Daten in einer Antwort auf eine Anfrage als cachefähig gekennzeichnet, kann der Client diese Information speichern und erhält das Recht diese
-bei einer späteren gleichwertigen Anfrage, wiederzuverwenden.
+bei einer späteren gleichwertigen Anfrage wiederzuverwenden.
 Somit können Anfragen effizienter behandelt bzw. ganz durch eine direkt aus dem Cache geladene Antwort ersetzt werden.
 
 \subsection{Einheitliche Schnittstelle}
 Ein zentrales Merkmal von REST ist die einheitliche und vom Dienst entkoppelte Schnittstelle.
+Auf jede Ressource muss über einen einheitlichen Satz an URLs, hinter denen sich Transaktionen zum Erstellen, Lesen, Aktualisieren
+und zum Löschen (CRUD) verbergen, zugegriffen werden können (siehe~\ref{tbl:basics:crud}).
+
 Durch eine einheitliche Komponentenschnittstelle wird die Sichtbarkeit der einzelnen Interaktionen erhöht.
-Das hat zu Folge, dass anwendungsspezifische Daten in einer standardisierten Form übertragen werden müssen,
+Das hat zur Folge, dass anwendungsspezifische Daten in einer standardisierten Form übertragen werden müssen,
 wodurch die Effizienz der Datenübertragung Mängel aufwerfen kann.
 
 \subsection{Layered System}
 Der Layered System Software-Architekturstil beschreibt das Prinzip eines hierachisch in Schichten aufgebauten Systems.
-Jede Komponente kann ausschließlich Schichten "sehen" mit denen sie interagiert.
-Eine Anwendung kann dadurch ihre Anforderungen auf mehrere Schichten verteilen, wie zum Beispiel bei einer Anwendung die ihre API auf Server A anbietet,
-die Daten auf Server B lagert und einen Authetifizierungsdienst von Server C nutzt.
+Jede Komponente kann ausschließlich Schichten "sehen", mit denen sie interagiert.
+Eine Anwendung kann dadurch ihre Anforderungen auf mehrere Schichten verteilen, wie zum Beispiel bei einer Anwendung, die ihre API auf Server A anbietet,
+die Daten auf Server B lagert und einen Authentifizierungsdienst von Server C nutzt.
 Nachteile dieser Einschränkung spiegeln sich in gestiegener Komplexität der Gesamtarchitektur und kommunikativem Overhead wieder.
 
-
-Desweiteren gibt es noch eine optionale Einschränkung auf die nicht näher eingegangen wird.
+Desweiteren gibt es noch eine optionale Einschränkung, auf die nicht näher eingegangen wird.
 %Als Entwickler einer Anwendung stellt Modularität ein von Beginn an bedachtes Kalkül dar.
-Alles in allem bietet REST als Achitekturstil Grundlagen für Entwicklung eines modularen, verteilten und einfach mit zu interagierendem Systems.
-TODO: Abschlusswort finden!
 
 \section{GraphQL}
 \label{sec:basics:graphql}
@@ -79,14 +83,14 @@ Das wesentliche Motiv bei der Nutzung des Internets ist die Informationsaufnahme
 Informationen werden auf unzähligen Webapplikationen bereitgestellt, die jeder mit einem Internetzugang einsehen kann,
 solange der Zugriff auf die Informationen nicht sonderlich geschützt wird.
 Um persistente und sensible Daten gesichert und nicht für Jedermann zugreifbar lagern zu können, werden sie \emph{serverseitig} gehalten.
-Möchte man diese Daten zusätzlich Filtern, Sortieren oder mehrere Datensätze miteinander verknüpfen, wird eine Datenbank benötigt.
-Eine Datei in der die Daten abgelegt werden, wäre auch eine Option, allerdings müsste man alle Methoden zum Filtern, Sortieren und Verknüpfen
+Möchte man diese Daten zusätzlich filtern, sortieren oder mehrere Datensätze miteinander verknüpfen, wird eine Datenbank benötigt.
+Eine Datei, in der die Daten abgelegt werden, wäre auch eine Option, allerdings müsste man alle Methoden zum Filtern, Sortieren und Verknüpfen
 selber implementieren und damit das Rad neu erfinden.
 
 Die in einer Datenbank gespeicherten Informationen sind also aus Nutzersicht nur über eine Anfrage an den Sever abrufbar.
 Somit ist der Server das Bindeglied zwischen einem Client und der Datenbank und kümmert sich um Aufgaben wie Authentifizierung des Nutzers
 und Überprüfung der Authorisierung bezüglich der angefragten Daten, aber auch um die Zusammensetzung und Ausführung von Datenbankabfragen.
-Daraus geht hervor das ein Client nur begrenzten Zugriff bekommt, da die Ausführung von vordefinierten Datenbanktransaktionen
+Daraus geht hervor, dass ein Client nur begrenzten Zugriff bekommt, da die Ausführung von vordefinierten Transaktionen
 lediglich angefragt werden kann. Werden die vordefinierten Transaktionen den Bedarf an Informationen nicht gerecht, müssen neue Transaktionen entwickelt
 oder mithilfe von mehreren Anfragen die Daten zusammengesammelt werden.
 
@@ -94,28 +98,52 @@ Dieser Entwicklungsaufwand könnte verringert werden, indem der Client mehr Flex
 z.B. durch eine direkte Anbindung an die Datenbank.
 Er könnte alle benötigten Daten dann direkt und effizient z.B. per SQL Query aus der Datenbank auslesen.
 Jedoch würde dieser Ansatz viele Gefahren mit sich bringen. Ein Client der direkten Datenbankzugriff erlangt,
-könnte unerwünschte Transaktionen in der Datenbank ausführen, wodurch die konsistenz der Daten verletzt,
-Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnte. Also sollten Zugriffsbeschränkungen erteilt werden, die
-auf der Datenbankschicht realisiert werden, da Clientseitiger Code nach belieben vom Nutzer eingesehen und verändert werden kann.
-Hinzu kommen weitere Herausforderungen wenn die verbindung zur Datenbank veröffentlicht wurde,
-wie das Schützen vor exessiver Nutzung oder denial of service (Dos) Attacken.
+könnte unerwünschte Transaktionen in der Datenbank ausführen, wodurch die Konsistenz der Daten verletzt,
+Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnten. Also sollten Zugriffsbeschränkungen erteilt werden, die
+auf der Datenbankschicht realisiert werden, da clientseitiger Code nach Belieben vom Nutzer eingesehen und verändert werden kann.
+Hinzu kommen weitere Herausforderungen, wenn die Verbindung zur Datenbank veröffentlicht wird,
+wie zum Beispiel das Schützen vor exzessiver Nutzung oder denial of service (Dos) Attacken.
 Alles in allem ist das ein Verfahren, von dem dringend abgeraten wird, da es in den wenigsten Fällen nutzbringend und sicher gehandhabt werden kann~\cite{client-to-database}.
 
 %Nutzung einer statischen Schnittstelle zu einer sich ändernden Implementierung
 
-GraphQL könnte als Lösung für die aufgeführten Probleme fungieren, besonders in Bezug auf Flexibilität, Verantwortung und Effizienz~\cite{graphql-scalablepath}.
-Es handelt sich um eine Abfragesprache für APIs
-und eine Laufzeitumgebnung, zum Ausführen dieser Abfragen und Wiedergeben von Daten unter Verwendung eines von für die Daten definierten Typensystems.
-Es ist an keinerlei Datenbanksysteme oder Speicherengines gebunden und lässt sich gut mit vorhandenem Code und Daten verbinden.
+GraphQL dient als Lösung für die aufgeführten Probleme, besonders in Bezug auf Flexibilität, Verantwortung und Effizienz~\cite{graphql-scalablepath}.
+Es handelt sich um eine Abfragesprache für APIs und eine Laufzeitumgebnung,
+zum Ausführen dieser Abfragen und Wiedergeben von Daten unter Verwendung eines von für die Daten definierten Typensystems.
+Es ist an keinerlei Datenbanksysteme gebunden und lässt sich gut mit vorhandenen Code und Daten verbinden.
 
-Ein GraphQL Service ensteht durch das Definieren von Typen, vergleichbar mit Datenbanktabellen. Im Gegensatz zu einem Datenbank Schema,
-ermöglicht das Typsystem von GraphQL zu jedem Typen Argumente zu definieren, die wiederum einer Funktion (Resolver) übergeben werden kann, die aufgerufen wird, wenn das Feld
-im Kontext einer Query aufgelöst werden soll. Desweiteren lassen sich zu jedem Feld eines Typs, wie bei Datenbanken, Datentypen und Restriktionen wie \emph{Not Null} definieren.
+Ein GraphQL Service entsteht durch das Definieren von Typen, vergleichbar mit Datenbanktabellen. Zu jedem Feld eines Typs lassen sich - geanuso wie bei Datenbanken -
+Datentypen und Restriktionen wie \emph{NOT NULL} definieren.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/basics/graphql-project-type.txt}
     \caption{Project Typdefinition}
     \label{fig:basics:graphql:1}
+\end{figure}
+
+Das aufgeführte Codefragment~\ref{fig:basics:graphql:1} definiert einen Typen \emph{Project} mit zwei Feldern, welcher ein Programmierprojekt darstellen soll.
+\begin{itemize}
+    \item \emph{id}: hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
+    Zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
+    \item \emph{public}: besitzt den Typen Boolean, der ebenfalls nicht den Wert Null annehmen kann.
+    Es gibt an, ob das Projekt bereits veröffentlicht und für jeden zugreifbar gemacht wurde.
+\end{itemize}
+
+Im Gegensatz zu einem Datenbank-Schema ermöglicht das Typsystem von GraphQL zu jedem Typen Argumente zu definieren,
+die wiederum einer Funktion (Resolver) übergeben werden können,
+die aufgerufen wird, wenn das Feld im Kontext einer Query aufgelöst werden soll~\cite{graphql-resolver}.
+Erweitern wir für ein Beispiel unseren Typen um ein Feld:
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/graphql-project-full-type.txt}
+    \caption{Erweiterung der Typdefinition von Project}
+    \label{fig:basics:graphql:3}
+\end{figure}
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/graphql-projects-name-resolver.txt}
+    \caption{Resolver des Feldes \emph{name}}
+    \label{fig:basics:graphql:4}
 \end{figure}
 
 \begin{figure}[h]
@@ -124,72 +152,74 @@ im Kontext einer Query aufgelöst werden soll. Desweiteren lassen sich zu jedem 
     \label{fig:basics:graphql:2}
 \end{figure}
 
-Die aufgeführten Codefragmente definieren einen Typen Project, mit 2 Feldern und ein Enum mit allen bereitgestellten Sprachen.
-
 \begin{itemize}
-    \item \emph{id}: hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
-    zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
     \item \emph{name}: besitzt den Typen String, der ebenfalls nicht den Wert Null annehmen kann. Zusätzlich wurde dem Feld ein Argument "language" zugeteilt,
-    welches den selbst definierten Datentypen LanguageEnum besitzt, mit dem Defaultwert DE.
+    welches den selbst definierten Datentypen LanguageEnum besitzt mit dem Defaultwert DE.
 \end{itemize}
 
-Wie schon erwähnt lassen sich zu Feldern Funktionen definieren die als Resolver betitelt werden.
-Für das Feld name ließe sich ein Resolver definieren, der Logik beinhalten könnte um den String, je nach dem welche Sprache als Argument übergeben wurde,
+Obendrein wurde für das Feld \emph{name} ein Resolver definiert, der Logik beinhaltet, um den String, je nach dem welche Sprache als Argument übergeben wurde,
 in andere Sprachen zu übersetzen.
-Damit ein Datentyp abgefragt werden kann müssen Queries zu den Datentypen definiert werden.
+
+Damit ein Datentyp abgefragt werden kann, müssen Queries zu den Datentypen definiert werden.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/basics/graphql-projects-query-type.txt}
     \caption{GraphQL Query Typdefinition}
-    \label{fig:basics:graphql:3}
+    \label{fig:basics:graphql:5}
 \end{figure}
 
 Die Query Typen gehören zum Typsystem von Graphql. Es wird in diesem Fall angegeben, dass es eine Query gibt, die mit dem Bezeichner projects
-ein Array vom Typ Project erwartet. Zusätzlich wurde angegeben das ein Project und die Liste nicht Null sein darf.
-Es wird also mindestens eine Leeres Array erwartet, aber keinesfalls Null oder ein Array das mit Null Werten gefüllt ist~\cite{graphql}.
-Jetzt kann dem Client die Freiheit gewährt werden eigene Abfragen zu formulieren für genau den Datensatz der benötigt wird.
-Zudem lässt sich anhand der gestellten Abfrage die Struktur der erhaltenen Antwort festlegen. Dies könnte wie folgt aussehen.
+ein Array vom Typ Project erwartet. Zusätzlich wurde angegeben, dass ein Projekt und die Liste nicht Null sein dürfen.
+Es wird also mindestens eine leeres Array erwartet, aber keinesfalls Null oder ein Array, das mit Null-Werten gefüllt ist~\cite{graphql}.
+Jetzt kann dem Client die Freiheit gewährt werden eigene Abfragen für genau den Datensatz der benötigt wird zu formulieren.
+Zudem lässt sich anhand der gestellten Abfrage die Struktur der erhaltenen Antwort festlegen. Dies könnte wie folgt aussehen:
 
 \begin{figure}[h]
     \lstinputlisting{snippets/basics/graphql-projects-request.txt}
     \caption{GraphQL Projects Query}
-    \label{fig:basics:graphql:4}
+    \label{fig:basics:graphql:6}
 \end{figure}
 
-Der oben aufgeführte Code verkörpert eine GraphQL Query mit dem Namen Projects, die für alle vorhandenen Projekte die Felder id und name
-zurück gibt. Nachdem eine GraphQL Query gegen das Typsystem validiert wurde wird sie von dem GraphQL Server ausgeführt und
-ein Ergebnis, typischerweise in Form von JSON, zurück gegeben, das die Form und Struktur der Anfrage spiegelt.
+Der aufgeführte Code~\ref{fig:basics:graphql:6} verkörpert eine GraphQL Query mit dem Namen Projects, die für alle vorhandenen Projekte die Felder \emph{id} und \emph{name}
+zurückgibt. Nachdem eine GraphQL Query gegen das Typsystem validiert wurde, wird sie von dem GraphQL Server ausgeführt und
+ein Ergebnis - typischerweise in Form von JSON - zurückgegeben, das die Form und Struktur der Anfrage spiegelt.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/basics/graphql-projects-response.txt}
-    \caption{Antwort auf GraphQL Projects Query}
-    \label{fig:basics:graphql:5}
+    \caption{JSON Antwort auf die Projects Query}
+    \label{fig:basics:graphql:7}
 \end{figure}
 
 Auf der obersten Ebene eines GraphQL Servers befindet sich ein Typ, der alle möglichen Einstiegspunkte in die GraphQL API repräsentiert.
 Dies könnte zum Beispiel der bereits definierte Query-Typ \emph{projects} sein.
-Damit der GraphQL Server eine Anfrage an eine an den Server gebundene Datenbank schicken kann wird die zum Query-Typen definierte
-Resolver Funktion ausgeführt~\cite{graphql-execution}. Innerhalb dieser Resolver Funktion ist der Zugriff auf das Dateisystem festgelegt, sodass
-man neben Datenbanken auch andere Speicherengines oder gar Dateien als Speichermedium nutzen könnte.
-Hierzu später noch mehr.
+Damit der GraphQL Server eine Anfrage an eine an den Server gebundene Datenbank schicken kann, wird die zum Query-Typen definierte
+Resolver-Funktion ausgeführt~\cite{graphql-execution}. Innerhalb dieser Resolver-Funktion ist der Zugriff auf das Dateisystem festgelegt, sodass
+man neben Datenbanken oder gar Dateien als Speichermedium nutzen könnte. Hierzu später noch mehr.
 
-Eine andere Möglichkeit die bereits umrissen wurde wäre die in Kapitel 1.1 vorgestellten Inhalte einer REST API.
-Diese setzt voraus, das der Zugriff auf persistent gespeicherte Daten ausschließlich an den Server gekoppelt ist - oftmals in Form einer Datenbank.
-Datenzugriffe, die vom Client angestoßen werden, werden über einen festgelegte Menge an vordefinierten Datenbank Transaktionen auf dem Server bereitgestellt.
+Eine andere Möglichkeit, die bereits umrissen wurde, wären die in Kapitel~\ref{sec:basics:restapi} vorgestellten Inhalte einer REST API.
+Diese setzt voraus, dass der Zugriff auf persistent gespeicherte Daten ausschließlich an den Server gekoppelt ist - oftmals in Form einer Datenbank.
+Datenzugriffe, die vom Client angestoßen werden, werden über eine festgelegte Menge an vordefinierten Transaktionen auf dem Server bereitgestellt.
 Jede dieser unterschiedlichen Transaktionen kann über eine Anfrage an den Server ausgelöst werden.
 
+\begin{table}
+    \begin{tabular}{|p{0.11\textwidth}|p{0.08\textwidth}|p{0.12\textwidth}|p{0.2\textwidth}|p{0.35\textwidth}|}
+        \hline
+        \textbf{CRUD\newline  Operation} & \textbf{SQL} & \textbf{HTTP} & \textbf{URL} & \textbf{Bedeutung} \\ \hline
+        Create & \inlinec{INSERT} & \inlinec{POST} & \inlinec{/projects} & Erstellen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects} & Abrufen aller Projekte \\ \hline
+        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
+        Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
+        Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- developer} & Abrufen des Entwicklers eines Projekts \\ \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Einheitliche Schnittstellen}
+    \label{tbl:basics:crud}
+\end{table}
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-rest-transactions.txt}
-    \caption{Liste von Routen die auf Controllerfunktionen zeigen}
-    \label{fig:basics:graphql:6}
-\end{figure}
-
-Die in Abbildung 1 aufgeführte Liste gibt zu jeder Transaktion an über welche Route sie aufgerufen werden kann.
-Je größer eine Anwendung wird, desto größer wird der Datenbestand und die Menge an Transaktionen die vordefiniert werden muss.
-Für jeden Datensatz der an den Client ausgeliefert werden soll muss also solch ein Eintrag vorgenommen werden und die dazugehörige Transaktion entwickelt werden.
-Da bietet GraphQL eine deutlich flexiblere Lösung.
-
+Die in Abbildung~\ref{tbl:basics:crud} aufgeführte Liste gibt zu jeder Transaktion an, über welche Route sie aufgerufen werden kann.
+Je größer eine Anwendung wird, desto größer wird der Datenbestand und damit die Menge an Transaktionen, die vordefiniert werden muss.
+Für jeden Datensatz, der an den Client ausgeliefert werden soll, muss also solch ein Eintrag vorgenommen werden und die dazugehörige Transaktion entwickelt werden.
 
 %Nutzung einer statischen Schnittstelle zu einer sich ändernden Implementierung
 %https://graphql.org/
@@ -199,17 +229,98 @@ Da bietet GraphQL eine deutlich flexiblere Lösung.
 %Alternative wäre REST API mit 1 Route pro Query
 
 \section{Ausgewählte Details des Typescript Typsystems}
+TypeScript ist ein typisiertes Superset von Javascript, das zu reinem Javascript kompiliert~\cite{typescript}.
+Das heisst, es beinhaltet alle Funktionalitäten von Javascript und wurde darüber hinaus erweitert und verbessert~\cite{superset}.
+Dazu gehört das in Typescript eingeführte Typsystem. Selbstverständlich besitzt Javascript ebenfalls Typen, doch kann eine Variable,
+auf die ursprünglich eine \emph{number} zugewiesen wurde, auch als \emph{string} enden. Das kann schnell zu unbedachten Seiteneffekten führen.
+
+Was ist also ein Typsystem? Ein Typsystem ist eine Menge von Regeln, die jeder Variable, jedem Ausdruck, jeder Klasse,
+jeder Funktion, jedem Objekt oder Modul im System einen Typ zuweist.
+Diese Regeln werden zur  Kompilierungszeit (statische Typprüfung) oder zur Laufzeit (dynamische Typprüfung) geprüft,
+um Fehler in einem Programm aufzudecken~\cite{typescript-typesystem-medium}.
+
+Der Typescript-Compiler prüft zur Kompilierungszeit alle Variablen und Ausdrücke auf ihren Typen und entfernt anschließend alle Typinformationen
+bei der Konvertierung zu Javascript Code~\cite{typescript-github-specification}.
+Die im folgenden Beispiel deklarierte Funktion gibt die zweite Hälfte eines übergebenen \emph{strings} zurück.
+Der erste Aufruf der Funktion führt zu einem Fehler beim Kompilieren. Es wird also direkt darauf hingewiesen, dass es sich um ein fehlerhaften Code handelt.
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/typescript-example.txt}
+    \caption{Typescript Funktion mit typisiertem Parameter}
+    \label{fig:basics:typescript:1}
+\end{figure}
+
+Nach der Kompilierung sind alle Typinformationen entfernt worden, wodurch erst durch einen fehlerhaften Aufruf
+ein \emph{TypeError} auftritt.
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/typescript-example-compiled.txt}
+    \caption{Zu Javascript kompilierte Funktion}
+    \label{fig:basics:typescript:2}
+\end{figure}
+
+Nehmen wir an, wir möchten den in Kapitel GraphQL~\ref{sec:basics:graphql} erstellten Typen \emph{Project} nutzen,
+um eine Funktion zu schreiben, die einen neuen \emph{Project} Datensatz an den Server schickt. Um diesen Typen clientseitig nutzen zu können,
+können wir ein äquivalentes Typescript Interface erstellen oder eines generieren lassen (dazu später mehr).
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/typescript-project-interface.txt}
+    \caption{Typescript Project Interface}
+    \label{fig:basics:typescript:3}
+\end{figure}
+
+Wollen wir jetzt einen neuen Datensatz an den Server schicken, können wir das Interface nutzen. Jedoch ist nur der Name des neuen Datensatzes bekannt,
+die \emph{id} ist eine \emph{uuid} und wird serverseitig generiert. Also wollen wir die \emph{id} beim clientseitigen Erstellen außen vorlassen.
+Dafür bietet Typescript unter einer Vielzahl von Werkzeugen, die allgemeine Typtransformationen ermöglichen~\cite{typescript-utility-types},
+\emph{Omit<T,K>}, das alle Attribute von \emph{T} nimmt und anschließend \emph{K} aus den Attributen entfernt.
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/typescript-post-project.txt}
+    \caption{Transformierter \emph{Project} Typ}
+    \label{fig:basics:typescript:4}
+\end{figure}
+
+Der Typ \emph{PostProject} beinhaltet also alle Felder von \emph{Project}, allerdings ohne \emph{id}. Das Gegenstück zu \emph{Omit<T,K>} wäre \emph{Pick<T,K>},
+welches aus dem Typ \emph{T} nur die Attribute \emph{K} nimmt. Mithilfe dieser Typen lässt sich eine typsichere Methode entwickeln,
+um einen neuen Datensatz an den Server schicken zu können.
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/typescript-create-project-request.txt}
+    \caption{Typen und Methode zum Abschicken eines \emph{Project}-Datensatzes}
+    \label{fig:basics:typescript:5}
+\end{figure}
+
+Die Methode \inlinec{createProjectRecord} erwartet also ein \inlinec{Project} ohne \inlinec{id} als Parameter und gibt ein \inlinec{ProjectResponse} wieder.
+Der Code im Methodenrumpf ist hierbei nur Pseudocode. Der Typ \inlinec{ProjectResponse} beinhaltet neben dem \inlinec{Project} auch ein \inlinec{error} Feld,
+welches in dem Kontext angibt, ob ein neuer Datensatz auf dem Server erstellt werden konnte oder nicht.
+Desweiteren gibt es noch \inlinec{Exclude<T,U>} wodurch sich von T diejenigen Typen ausschließen lassen,
+die U zugeordnet werden können. Gäbe es mehrere \emph{"Response"}-Typen, ließe sich das Feld extrahieren,
+über welches auf die Datensätze zugegriffen werden kann (siehe~\ref{fig:basics:typescript:6})(dazu später mehr).
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/basics/typescript-datakey.txt}
+    \caption{Exclude zum Exkludieren von Schlüsseln}
+    \label{fig:basics:typescript:6}
+\end{figure}
+
 % Definition eines Schemas mit Typescript Interfaces, Bsp. Project Tabelle
 % pick operator / exclude operator
 
 \section{JSON Schema}
 \label{sec:basics:jsonschema}
-Ziel dieses Kapitels ist es anhand eines Beispiels kurz zu erläutern, wobei es sich bei JSON Schema handelt und wie man es nutzen kann.
 JSON-Schema ist ein Vokabular, mit dem JSON-Dokumente  annotiert und validiert werden können~\cite{json-schema}.
-Es wird genutzt zur Überprüfung, ob JSON Objekte die im JSON-Schema beschriebene Struktur einhalten.
-Nehmen wir an wir möchten den in Kapitel GraphQL erstellten Typen Project mit verschiedenen Attributen erweitern.
+Es wird zur Überprüfung genutzt, ob JSON Objekte die im JSON-Schema beschriebene Struktur einhalten.
+
+Der Vorgänger von JSON-Schema war das XML-Schema.
+XML-Schema erlaubte es, das allgemeine Format eines XML-Dokuments zu definieren,
+d.h. welche Elemente erlaubt sind, die Anzahl und Reihenfolge ihres Auftretens, welchen Datentyp sie haben sollen usw.
+Seit 2006 gibt es einen neuen Akteur auf dem Gebiet der Datenformate, JavaScript Object Notation (JSON).
+Die JSON Daten sind viel kleiner als ihr XML-Gegenstück und ihre Instanzen sind gültige JavaScript-Objekte, was es interessant für Webentwickler macht, da sie beim Laden von
+Informationen in asynchronen Webanwendungen über AJAX (Asynchronous JavaScript and XML) keinen separaten Konvertierungsschritt mehr benötigen~\cite{json-schema-xml}.
+
+Nehmen wir an, wir möchten den in Kapitel GraphQL erstellten Typen \emph{Project}~\ref{fig:basics:graphql:3} mit verschiedenen Attributen erweitern.
 Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angabe, ob es sich bei dem Entwickler
-um einen stolzen Vater handelt optional ist.
+um einen stolzen Vater handelt, optional ist.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/JSON-schema-project-object.txt}
@@ -217,7 +328,7 @@ um einen stolzen Vater handelt optional ist.
     \label{fig:basics:jsonschema:1}
 \end{figure}
 
-Das passendes Schema dazu sieht folgendermaßen aus.
+Das passendes Schema dazu sieht folgendermaßen aus~\ref{fig:basics:jsonschema:2}.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/JSON-schema-project-schema.txt}
@@ -225,43 +336,74 @@ Das passendes Schema dazu sieht folgendermaßen aus.
     \label{fig:basics:jsonschema:2}
 \end{figure}
 
-Neben den hier verwendeten Schlüsselwörtern gibt es noch eine Vielzahl Weiterer, die es unter anderem erlauben Einschränkungen, Abhängigkeiten,
-Muster in Form von Regulären Ausdrücken oder die maximale oder minimale Anzahl an zu einem Objekt gehörenden Attributen festzulegen.
-Die hier verwendeten Schlüsselwörter haben folgende Bedeutung.
+Neben den verwendeten Schlüsselwörtern gibt es noch eine Vielzahl weiterer, die es unter anderem erlauben Einschränkungen, Abhängigkeiten,
+Muster in Form von Regulären Ausdrücken oder die maximale oder minimale Anzahl an zu einem Objekt gehörende Attribute festzulegen.
+Die hier verwendeten Schlüsselwörter haben folgende Bedeutung:
 
 \begin{itemize}
-    \item \emph{\$schema}: Besagt, dass dieses Schema nach einem bestimmten Entwurf des Standards geschrieben ist, in erster Linie zur Versionskontrolle.
-    \item \emph{title/description}: Haben nur beschreibenden Charakter.
-    \item \emph{type}: Schlüsselwort für die Typüberprüfung definiert die erste Beschränkung für die JSON-Daten, und in diesem Fall muss es sich um ein JSON-Objekt handeln.
-    \item \emph{properties}: Ist für die Validierung von Attributen eines Objekts.
-    \item \emph{required}: Da das Schlüsselwort ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
+    \label{basics:jsonschema:items}
+    \item \emph{\$schema}: besagt, dass dieses Schema nach einem bestimmten Entwurf des Standards geschrieben ist, in erster Linie zur Versionskontrolle.
+    \item \emph{title/description}: haben nur beschreibenden Charakter.
+    \item \emph{type}: Dieses Schlüsselwort für die Typüberprüfung definiert die erste Beschränkung für die JSON-Daten und in diesem Fall muss es sich um ein JSON-Objekt handeln.
+    \item \emph{properties}: ist für die Validierung von Attributen eines Objekts.
+    \item \emph{required}: Da dieses Schlüsselwort ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
 \end{itemize}
 
-Die händische Erstellung solcher JSON Schema kann bei einer Vielzahl von Typen schnell lästig werden.
-Um dem Problem entegegen zu wirken lassen sich aus Typescript Interfaces passende JSON Schema Dateien generieren.
-Der Vorteil daraus ist, dass sich clientseitig definierte Datentypen durch die Generierung serverseitig validieren lassen.
-Denn für die meisten gängigen Programmiersprachen sind JSON Schema Validatoren entwickelt worden, somit ist es unabhängig welche Programmiersprache der Server nutzt~\cite{json-schema-implementations}.
+Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\ref{fig:basics:jsonschema:3}.
+
+\begin{figure}[h]
+    \lstinputlisting{snippets/JSON-schema-project-wrong-object.txt}
+    \caption{Ein fehlerhaftes Projekt}
+    \label{fig:basics:jsonschema:3}
+\end{figure}
+
+Es kommt bei der Validierung dieses Objektes zu folgenden Verstößen:
+
+\begin{itemize}
+    \item \emph{name}: ist im \emph{required} Array angegeben und muss somit vorhanden sein.
+    \item \emph{createdAt}: Es wurde ein falscher Datentyp angegeben, \emph{string} statt \emph{number}.
+    \item \emph{professor}: Dieses Attribut ist nicht im \emph{properties} Objekt angegeben und dadurch fehl am Platz.
+\end{itemize}
+
+Die händische Erstellung solcher JSON-Schema kann bei einer Vielzahl von Typen schnell lästig werden.
+Um dem Problem entgegen zu wirken lassen sich aus Typescript Interfaces passende JSON-Schema Dateien generieren.
+Der Vorteil daran ist, dass sich clientseitig definierte Datentypen durch die Generierung serverseitig validieren lassen;
+denn für die meisten gängigen Programmiersprachen sind JSON-Schema Validatoren entwickelt worden.
+Somit ist es unabhängig welche Programmiersprache der Server nutzt~\cite{json-schema-implementations}.
 
 % kurz halten
 % Äquivalenz: typescript Interface und JSON.schema
 
 \section{Postgres jsonb und hstore Typen}
-Gegenstand dieses Kapitels ist es zwei Datentypen des Datenbanksystems PostgreSQL näher zu erläutern und miteinander zu vergleichen.
-PostgreSQL ist ein objektrelationales Datenbanksystem mit über 30 Jahren aktiver Entwicklung,
-das sich einen guten Ruf für Zuverlässigkeit, Robustheit der Funktionen und Leistung erworben hat~\cite{postgresql}.
-Im Laufe der Zeit hat Postgresql Unterstützung für JSON-Daten in Form des jsonb und des hstore Datentyps hinzugefügt,
+Das PostgreSQL Datenbanksystem kennt über den SQL-Standard hinaus die Datentypen \emph{hstore} und \emph{jsonb} zur Speicherung von JSON Strukturen oder assoziativen Arrays,
 die üblicherweise in NoSQL-Systemen gespeichert werden.
-Hstore differenziert sich von jsonb indem es nur eine Ebene von Schlüssel-Werte Paaren, ohne weitere Verschachtelung zulässt und
+Hstore differenziert sich von jsonb, indem es nur eine Ebene von Schlüssel-Werte-Paaren ohne weitere Verschachtelungen zulässt und
 diese als String abspeichert.
 Im Gegensatz dazu können jsonb Datensätze beliebig tief verschachtelt werden und
 darüber hinaus werden sie in einem dekomprimierten Binärformat gespeichert, wodurch die Eingabe aufgrund des zusätzlichen Konvertierungs-Overheads etwas langsamer,
 die Verarbeitung jedoch erheblich schneller ist, da kein Reparsen erforderlich ist~\cite{postgresql-json}.
-Ansonten haben beide Typen in vielen Dingen die gleiche verhaltensweisen, wie bei der Eingabe doppelter Schlüssel, wird nur der letzte Wert beibehalten.
-Zudem wurden für beide Datentypen eine beachtliche Menge an Operationen und Funktionen bereitgestellt, die es möglich machen auf SQL Ebene ein hstore oder jsonb Datensatz,
-fast wie ein Hash in Ruby oder ein JSON Objekt in Javascript zu behandeln~\cite{postgresql-hstore}.
+Ansonsten haben beide Typen in vielen Dingen die gleichen Verhaltensweisen. Wie bei der Eingabe doppelter Schlüssel wird nur der letzte Wert beibehalten.
+Zudem wurden für beide Datentypen eine beachtliche Menge an Operationen und Funktionen bereitgestellt (siehe Abbildung~\ref{tbl:basics:hstore-operations}), die es möglich machen,
+auf SQL Ebene einen hstore oder jsonb Datensatz fast wie ein Hash in Ruby oder ein JSON-Objekt in Javascript zu behandeln~\cite{postgresql-hstore}.
+
+\begin{table}
+    \small
+    \begin{tabular}{|p{0.21\textwidth}|p{0.31\textwidth}|p{0.33\textwidth}|p{0.1\textwidth}|}
+        \hline
+        \textbf{Operator} & \textbf{Beschreibung} & \textbf{Beispiel} & \textbf{Ergebnis}  \\ \hline
+        \inlinec{hstore -> text} & liefert Wert für Schlüssel (NULL, wenn nicht vorhanden) & \inlinec{'a=>x, b=>y'::hstore -> 'a'} & \inlinec{x}  \\ \hline
+        \inlinec{hstore -> text[]} & liefert Werte für Schlüssel (NULL, wenn nicht vorhanden) & \inlinec{'a=>x, b=>y, c=>z'::hstore -> ARRAY['c','a']} & \inlinec{{"z","x"}}  \\ \hline
+        \inlinec{hstore || hstore} & konkateniert hstores & \inlinec{'a=>b, c=>d'::hstore || 'c=>x, d=>q'::hstore} & \inlinec{"a"=>"b", "c"=>"x", "d"=>"q"}  \\ \hline
+        \inlinec{hstore ? text} & prüft ob hstore Schlüssel beinhaltet & \inlinec{'a=>1'::hstore ? 'a'} & \inlinec{t}  \\ \hline
+        \inlinec{hstore - text} & entfernt Schlüssel des linken Operanden & \inlinec{'a=>1, b=>2, c=>3'::hstore - 'b'::text} & \inlinec{"a"=>"1", "c"=>"3"}  \\ \hline
+        \inlinec{hstore - hstore } & entfernt passende Schlüssel/Wert-Paare vom linken Operanden & \inlinec{'a=>1, b=>2, c=>3'::hstore - 'a=>4, b=>2'::hstore} & \inlinec{"a"=>"1", "c"=>"3"}  \\ \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Beispiele für bereitgestellte Hstore Operationen}
+    \label{tbl:basics:hstore-operations}
+\end{table}
 
 % Postgres wird benutzt als Dokumenten Datenbank in bezug auf jsonb und hstore
-
 \chapter{Anforderungsanalyse}
 \section{Aktuelles System}
 
