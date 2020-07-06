@@ -1269,7 +1269,48 @@ export class Tile {
 
     this.openings &= ~opening;
 
-    this.trafficLights[DirectionUtil.toNumber(direction)] = null;
+    this.removeTrafficLight(direction);
+  }
+
+  /**
+   * Sets a traffic light at for a given direction
+   * @param direction the direction of the traffic light
+   * @param newTrafficLight the configuration of this traffic light
+   * @return true if a change has occurred
+   */
+  public setTrafficLight(
+    direction: Direction,
+    newTrafficLight: TrafficLight
+  ): boolean {
+    if (!this.hasOpeningInDirection(direction)) {
+      return false; // Has no opening in this direction
+    }
+    const dirNumber = DirectionUtil.toNumber(direction);
+    const currentTrafficLight = this.trafficLights[dirNumber];
+    if (
+      currentTrafficLight &&
+      currentTrafficLight.redPhase == newTrafficLight.redPhase &&
+      currentTrafficLight.greenPhase == newTrafficLight.greenPhase &&
+      currentTrafficLight.initial == newTrafficLight.initial
+    ) {
+      return false; // no change has occurred
+    }
+    this.trafficLights[dirNumber] = newTrafficLight;
+    return true;
+  }
+
+  /**
+   * Removes a traffic light for a given direction
+   * @param direction the direction of the traffic light that should be removed
+   * @return true if a change has occurred
+   */
+  public removeTrafficLight(direction: Direction): boolean {
+    const dirNumber = DirectionUtil.toNumber(direction);
+    if (this.trafficLights[dirNumber]) {
+      this.trafficLights[dirNumber] = null;
+      return true;
+    }
+    return false;
   }
 }
 
@@ -1368,6 +1409,15 @@ export class Position {
    */
   clone(): Position {
     return new Position(this.x, this.y);
+  }
+
+  /**
+   * Checks if a position equals another position
+   * @param other the other position, can be null or undefined
+   * @return true if equal
+   */
+  public isEqual(other?: Position): boolean {
+    return other && this.x === other.x && this.y === other.y;
   }
 }
 
@@ -1573,13 +1623,13 @@ export class DirectionUtil {
     const dY = toPos.y - fromPos.y;
 
     let dir: Direction = undefined;
-    if (dX == 0 && dY == 1) {
+    if (dX === 0 && dY === 1) {
       dir = Direction.South; // Up to Down
-    } else if (dX == 0 && dY == -1) {
+    } else if (dX === 0 && dY === -1) {
       dir = Direction.North; // Down to Up
-    } else if (dX == 1 && dY == 0) {
+    } else if (dX === 1 && dY === 0) {
       dir = Direction.East; // Left to Right
-    } else if (dX == -1 && dY == 0) {
+    } else if (dX === -1 && dY === 0) {
       dir = Direction.West; // Right to Left
     }
 

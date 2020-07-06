@@ -452,6 +452,16 @@ describe("Shared: Position", () => {
     expect(position.x).toEqual(1);
     expect(position.y).toEqual(20);
   });
+  it("should know it is equal", () => {
+    expect(new Position(1, 20).isEqual(new Position(1, 20))).toBeTrue();
+    expect(new Position(2, 5).isEqual(new Position(2, 5))).toBeTrue();
+    expect(new Position(4, 9).isEqual(new Position(4, 9))).toBeTrue();
+  });
+  it("should know it is not equal", () => {
+    expect(new Position(2, 20).isEqual(new Position(1, 20))).toBeFalse();
+    expect(new Position(2, 6).isEqual(new Position(2, 5))).toBeFalse();
+    expect(new Position(5, 0).isEqual(new Position(4, 9))).toBeFalse();
+  });
 });
 
 /******************************************************************************

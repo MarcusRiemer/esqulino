@@ -1,8 +1,10 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import {
+  Direction,
+  DirectionUtil,
   Freight,
   Position,
-  TileOpening,
+  TrafficLight,
   World,
   WorldState,
 } from "../../../../shared/syntaxtree/truck/world";
@@ -68,6 +70,9 @@ export class TruckWorldEditorService implements OnDestroy {
             case TruckTileFeatureType.TrafficLight:
               this.placeTrafficLight();
               break;
+            case TruckTileFeatureType.TruckSpawn:
+              this.setTruckSpawn();
+              break;
           }
         } else {
           this.stopDrawRoad();
@@ -84,6 +89,9 @@ export class TruckWorldEditorService implements OnDestroy {
             case TruckTileFeatureType.FreightTarget:
             case TruckTileFeatureType.Freight:
               this.removeFrightsOrTarget();
+              break;
+            case TruckTileFeatureType.TrafficLight:
+              this.removeTrafficLight();
               break;
           }
         } else {
@@ -121,15 +129,15 @@ export class TruckWorldEditorService implements OnDestroy {
 
     let prevPos: Position | undefined;
     this._leftMouseDownPosUpdaterSubscription = this._mouse.currentPosition.subscribe(
-      (pos) => {
-        if (!pos) return;
+      (posAndDirection) => {
+        if (!posAndDirection) return;
 
         if (prevPos) {
           this.mutateWorldAndCode(this._world, (s) =>
-            s.connectTilesWithRoad(prevPos, pos)
+            s.connectTilesWithRoad(prevPos, posAndDirection.pos)
           );
         }
-        prevPos = pos;
+        prevPos = posAndDirection.pos;
       }
     );
   }
@@ -143,10 +151,12 @@ export class TruckWorldEditorService implements OnDestroy {
     this.stopDestroyRoad();
 
     this._rightMouseDownPosUpdaterSubscription = this._mouse.currentPosition.subscribe(
-      (pos) => {
-        if (!pos) return;
+      (posAndDirection) => {
+        if (!posAndDirection) return;
 
-        this.mutateWorldAndCode(this._world, (s) => s.resetTile(pos));
+        this.mutateWorldAndCode(this._world, (s) =>
+          s.resetTile(posAndDirection.pos)
+        );
       }
     );
   }
@@ -161,7 +171,7 @@ export class TruckWorldEditorService implements OnDestroy {
       this._feature.getValue()
     );
     this.mutateWorldAndCode(this._world, (s) =>
-      s.getTile(this._mouse.peekCurrentPosition).tryAddFreight(worldFreight)
+      s.getTile(this._mouse.peekCurrentPosition.pos).tryAddFreight(worldFreight)
     );
   }
 
@@ -170,13 +180,15 @@ export class TruckWorldEditorService implements OnDestroy {
       this._feature.getValue()
     );
     this.mutateWorldAndCode(this._world, (s) =>
-      s.getTile(this._mouse.peekCurrentPosition).setFrightTarget(worldFreight)
+      s
+        .getTile(this._mouse.peekCurrentPosition.pos)
+        .setFrightTarget(worldFreight)
     );
   }
 
   private removeFrightsOrTarget() {
     this.mutateWorldAndCode(this._world, (s) =>
-      s.getTile(this._mouse.peekCurrentPosition).removeFreightsOrTarget()
+      s.getTile(this._mouse.peekCurrentPosition.pos).removeFreightsOrTarget()
     );
   }
 
@@ -184,8 +196,47 @@ export class TruckWorldEditorService implements OnDestroy {
     const trafficLightFeature = this._feature.getValue() as TruckFeature<
       TruckTileFeatureType.TrafficLight
     >;
-    console.log("would place traffic light with", trafficLightFeature.options);
-    this.mutateWorldAndCode(this._world, (s) => false);
+    const option = trafficLightFeature.options;
+    const { pos, direction } = this._mouse.peekCurrentPosition;
+    this.mutateWorldAndCode(this._world, (s) =>
+      s
+        .getTile(pos)
+        .setTrafficLight(
+          direction,
+          new TrafficLight(
+            option.redPhase,
+            option.greenPhase,
+            option.startPhase
+          )
+        )
+    );
+  }
+
+  private removeTrafficLight() {
+    const { pos, direction } = this._mouse.peekCurrentPosition;
+    this.mutateWorldAndCode(this._world, (s) =>
+      s.getTile(pos).removeTrafficLight(direction)
+    );
+  }
+
+  private setTruckSpawn(): void {
+    const { pos, direction } = this._mouse.peekCurrentPosition;
+    this.mutateWorldAndCode(this._world, (s) => {
+      if (!s.getTile(pos).hasOpeningInDirection(direction)) {
+        return false; // We dont have a opening in this direction
+      }
+      const initialPos = s.truck.position;
+      const initialFacing = s.truck.facing;
+      s.truck.position = pos.clone();
+      s.truck.facing = DirectionUtil.toNumber(direction);
+      // We need to go one step forward otherwise the truck would spawn at the start of the tile
+      s.truck.position = s.truck.positionAfterMove;
+
+      return (
+        !initialPos.isEqual(s.truck.position) ||
+        s.truck.facing !== initialFacing
+      );
+    });
   }
 
   public resizeWorld(newSize: number): void {
