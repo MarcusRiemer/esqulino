@@ -263,6 +263,29 @@ RSpec.describe "CodeResource request", :type => :request do
       end
     end
 
+    it "replace an existing AST with an empty AST and a new name" do
+      new_lang = FactoryBot.create(:programming_language)
+      resource = FactoryBot.create(:code_resource, :sql_key_value_select_double)
+      creation_attr = resource.attributes
+
+      put "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
+          :headers => json_headers,
+          :params => '{ "resource": { "ast": null, "name": "new" } }'
+
+      aggregate_failures do
+        expect(response.status).to eq 200
+        expect(response.media_type).to eq "application/json"
+
+        result = JSON.parse response.body
+        expect(result['ast']).to eq nil
+        expect(result['name']).to eq "new"
+
+        resource.reload
+        expect(resource.ast).to eq nil
+        expect(resource.name).to eq "new"
+      end
+    end
+
     it "replace an existing AST with another AST" do
       new_lang = FactoryBot.create(:programming_language)
       resource = FactoryBot.create(:code_resource, :sql_key_value_select_double)
