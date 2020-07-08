@@ -39,7 +39,7 @@ import { EditorSharedComponentsModule } from "../shared-components/editor-shared
     SchemaTableImportComponent,
     SchemaVisualComponent,
     SchemaTableVisualComponent,
-	SchemaConnectorComponent,
+    SchemaConnectorComponent,
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent,
   ],

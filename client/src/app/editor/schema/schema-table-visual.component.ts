@@ -75,24 +75,24 @@ export class SchemaTableVisualComponent {
 
   @HostBinding("style.left.px")
   get left(): number {
-    return this.xPos - this.width * 50 / 2;
+    return this.xPos;
   }
 
   @HostBinding("style.top.px")
   get top(): number {
-    return (this.yPos - this.height * 100 / 2);
+    return this.yPos + 1170;
   }
-  
+
   @HostBinding("style.width.px")
   get tableWidth(): number {
-	  return this.width * 50;
+    return this.width;
   }
-  
+
   @HostBinding("style.height.px")
   get tableHeight(): number {
-	  return this.height * 50;
+    return this.height * 50;
   }
-  
+
   public nameLength = 0;
 
   readonly schemaRevision = this._schemaService.changeCount;
@@ -104,7 +104,7 @@ export class SchemaTableVisualComponent {
   readonly visualSchemaUrl = zip(this.schemaRevision, this.schemaName).pipe(
     map(
       ([rev, name]) =>
-        `/api/project/${this._project.slug}/db/${name}/visual_schema?format=json&revision=${rev}`
+        `/api/project/${this._project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
     )
   );
 
@@ -149,20 +149,19 @@ export class SchemaTableVisualComponent {
     this._subscriptionRefs.push(dragRef);
 
     let schemaUrl = this.visualSchemaUrl.subscribe((url) => {
-      let visualSchemaText = this._http.get(url, { responseType: "json" });
+      let visualSchemaText = this._http.get(url, { responseType: "text" });
       let schemaRef = visualSchemaText.subscribe(
         (data) => {
           this.parseSchemaText(data);
-          console.log(data);
         },
         (error) => {
           console.log(error);
         }
       );
     });
-	
-	this.getNameLength();
-	console.log(this.table);
+
+    this.getNameLength();
+    console.log(this.table);
   }
 
   ngOnDestroy() {
@@ -263,38 +262,37 @@ export class SchemaTableVisualComponent {
   }
 
   private parseSchemaText(text: any) {
-    let nodes = text.objects;
-	let parser = new DOMParser();
-	let svgDom = parser.parseFromString(text, "image/svg+xml");
-	console.log(nodes);
+    let parser = new DOMParser();
+    let svgDom = parser.parseFromString(text, "image/svg+xml");
 
-    for (var i = 1; i < nodes.length; i++) {
-      if (this.table.name == nodes[i].name) {
-        let points = nodes[i].pos;
-        let positions = points.split(",");
-        console.log(positions);
+    let nodes = svgDom.getElementById("graph0").getElementsByTagName("g");
+    console.log(nodes);
+
+    for (var i = 0; i < nodes.length; i++) {
+      let children = nodes[i].children;
+
+      if (this.table.name == children[0].textContent) {
+        let points = children[children.length - 1]
+          .getAttribute("points")
+          .split(" ");
+        console.log(points);
+
+        let positions = points[1].split(",");
 
         this.xPos = +positions[0];
         this.yPos = +positions[1];
-        this.width = nodes[i].width;
-		this.height = nodes[i].height;
+        this.width = +points[2].split(",")[0] - this.xPos;
       }
     }
   }
-  
+
   private getNameLength() {
-	//forEach(this.table.columns, function(value, key) {
-	//	if (value.name.length > this.nameLength){
-	//		this.nameLength = value.name.length;
-	//	}
-	//});
-	
-	for(var i = 0; i < this.table.columns.length; i++) {
-		if (this.table.columns[i].name.length > this.nameLength){
-			this.nameLength = this.table.columns[i].name.length;
-		}
-	}
-	console.log(this.nameLength);
+    for (var i = 0; i < this.table.columns.length; i++) {
+      if (this.table.columns[i].name.length > this.nameLength) {
+        this.nameLength = this.table.columns[i].name.length;
+      }
+    }
+    console.log(this.nameLength);
   }
 
   showError(error: any) {

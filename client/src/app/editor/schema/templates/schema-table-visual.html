@@ -20,9 +20,9 @@
               [(ngModel)]="column.primary"
               placeholder="Primary"
             />
-            <span *ngIf="column.primary">
+            <!--<span *ngIf="column.primary">
               <span class="fa fa-key" aria-hidden="true"></span>
-            </span>
+            </span>-->
           </label>
         </td>
         <td>
@@ -31,7 +31,7 @@
             (focus)="saveTempValue($event.target.value)"
             (blur)="changedColumnName(column.index, $event.target.value)"
             [(ngModel)]="column.name"
-			[size]="nameLength"
+            [size]="nameLength"
           />
         </td>
         <td>
@@ -41,7 +41,7 @@
             (focus)="saveTempValue($event.target.value)"
             (change)="changedColumnType(column.index, $event.target.value)"
           >
-		    <option disabled>{{ column.type }}</option>
+            <option disabled>{{ column.type }}</option>
             <option value="integer">integer</option>
             <option value="string">string</option>
             <option value="boolean">boolean</option>
@@ -50,18 +50,18 @@
           </select>
         </td>
         <!-- <td> -->
-          <!-- <label class="tableEdit"> -->
-            <!-- <input -->
-              <!-- type="checkbox" -->
-              <!-- [(disabled)]="column.primary" -->
-              <!-- (click)="ChangeColumnNotNullStatus(column.index)" -->
-              <!-- [(ngModel)]="column.not_null" -->
-              <!-- placeholder="Not Null" -->
-            <!-- /> -->
-            <!-- <span *ngIf="column.not_null || column.primary"> -->
-              <!-- Not Null -->
-            <!-- </span> -->
-          <!-- </label> -->
+        <!-- <label class="tableEdit"> -->
+        <!-- <input -->
+        <!-- type="checkbox" -->
+        <!-- [(disabled)]="column.primary" -->
+        <!-- (click)="ChangeColumnNotNullStatus(column.index)" -->
+        <!-- [(ngModel)]="column.not_null" -->
+        <!-- placeholder="Not Null" -->
+        <!-- /> -->
+        <!-- <span *ngIf="column.not_null || column.primary"> -->
+        <!-- Not Null -->
+        <!-- </span> -->
+        <!-- </label> -->
         <!-- </td> -->
       </tr>
     </div>
