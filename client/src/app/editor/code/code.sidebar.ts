@@ -7,6 +7,7 @@ import { flatMap, map } from "rxjs/operators";
 import {
   FixedBlocksSidebar,
   FixedBlocksSidebarDescription,
+  SidebarDescription,
 } from "../../shared/block";
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
@@ -17,11 +18,12 @@ import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.com
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 import { DatabaseSchemaSidebarComponent } from "./query/database-schema-sidebar.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
+import { TruckWorldTilesSidebarComponent } from "./truck/world-editor/truck-world-tiles-sidebar.component";
 
 /**
  * Maps ids of sidebar components to their actual components.
  */
-function resolvePortalComponentId(id: string): any {
+function resolvePortalComponentId(id: SidebarDescription["type"]): any {
   switch (id) {
     case "fixedBlocks":
       return CodeSidebarFixedBlocksComponent;
@@ -31,6 +33,8 @@ function resolvePortalComponentId(id: string): any {
       return UserFunctionsSidebarComponent;
     case "metaDefinedTypes":
       return DefinedTypesSidebarComponent;
+    case "truckWorldTiles":
+      return TruckWorldTilesSidebarComponent;
   }
 }
 

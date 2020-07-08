@@ -7,36 +7,30 @@
       "description": "A request to update a code resource. May omit values to be updated\nand may explicitly set the ast to `null` which will delete it.",
       "properties": {
         "resource": {
-          "anyOf": [
-            {
-              "additionalProperties": false,
-              "properties": {
-                "ast": {
-                  "$ref": "#/definitions/NodeDescription"
-                },
-                "blockLanguageId": {
-                  "type": "string"
-                },
-                "name": {
-                  "description": "The user-chosen name of this resource. This property is free to change.",
-                  "type": "string"
-                },
-                "programmingLanguageId": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            {
-              "additionalProperties": false,
-              "properties": {
-                "ast": {
+          "additionalProperties": false,
+          "properties": {
+            "ast": {
+              "anyOf": [
+                {
                   "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/NodeDescription"
                 }
-              },
-              "type": "object"
+              ]
+            },
+            "blockLanguageId": {
+              "type": "string"
+            },
+            "name": {
+              "description": "The user-chosen name of this resource. This property is free to change.",
+              "type": "string"
+            },
+            "programmingLanguageId": {
+              "type": "string"
             }
-          ]
+          },
+          "type": "object"
         }
       },
       "required": [

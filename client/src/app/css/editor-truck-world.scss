@@ -2,19 +2,6 @@
     --editor-tile-size: 7rem;
     overflow-x: auto;
 
-    .card-deck {
-        margin: 0;
-        min-width: 70rem;
-    }
-
-    .card-deck .card:first-child {
-        margin-left: 0;
-    }
-
-    .card-deck .card:last-child {
-        margin-right: 0;
-    }
-
     .fa.fa-paint-brush {
         color: white;
     }

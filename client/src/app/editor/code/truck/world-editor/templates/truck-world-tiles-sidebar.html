@@ -1,0 +1,116 @@
+<div class="editor-tile-selection text-center">
+  <div>
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="selectRoad()"
+      [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Road"
+      [disabled]="(feature$ | async).feature == tileFeatureType.Road"
+    >
+      <span class="editor-tile editor-tile-road">
+        <span class="fa fa-paint-brush"></span>
+      </span>
+    </button>
+    <p i18n="@@road">Straße</p>
+  </div>
+  <div>
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="selectTrafficLight()"
+      [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.TrafficLight"
+      [disabled]="(feature$ | async).feature == tileFeatureType.TrafficLight"
+    >
+      <span class="editor-tile editor-tile-trafficlight"></span>
+    </button>
+    <p i18n="@@trafficLight">Ampel</p>
+  </div>
+  <div>
+    <div class="btn-group-vertical">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="selectFreight('Red')"
+        [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Red'"
+        [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Red'"
+      >
+        <span
+          class="editor-tile-3 editor-tile-freight editor-tile-freight-red"
+        ></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="selectFreight('Green')"
+        [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Green'"
+        [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Green'"
+      >
+        <span
+          class="editor-tile-3 editor-tile-freight editor-tile-freight-green"
+        ></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="selectFreight('Blue')"
+        [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Blue'"
+        [disabled]="(feature$ | async).feature == tileFeatureType.Freight && (feature$ | async).options == 'Blue'"
+      >
+        <span
+          class="editor-tile-3 editor-tile-freight editor-tile-freight-blue"
+        ></span>
+      </button>
+    </div>
+    <p i18n="@@freight">Fracht</p>
+  </div>
+  <div>
+    <div class="btn-group-vertical">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="selectFreightTarget('Red')"
+        [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Red'"
+        [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Red'"
+      >
+        <span
+          class="editor-tile-3 editor-tile-freight editor-tile-freight-target-red"
+        ></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="selectFreightTarget('Green')"
+        [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Green'"
+        [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Green'"
+      >
+        <span
+          class="editor-tile-3 editor-tile-freight editor-tile-freight-target-green"
+        ></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="selectFreightTarget('Blue')"
+        [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Blue'"
+        [disabled]="(feature$ | async).feature == tileFeatureType.FreightTarget && (feature$ | async).options == 'Blue'"
+      >
+        <span
+          class="editor-tile-3 editor-tile-freight editor-tile-freight-target-blue"
+        ></span>
+      </button>
+    </div>
+    <p i18n="@@freightTarget">Fracht Ziel</p>
+  </div>
+  <div>
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="selectTruckSpawn()"
+      [class.editor-tile-selected]="(feature$ | async).feature == tileFeatureType.TruckSpawn"
+      [disabled]="(feature$ | async).feature == tileFeatureType.TruckSpawn"
+    >
+      <span class="editor-tile editor-tile-truck"></span>
+    </button>
+    <p i18n="@@truckStart">Lastwagen Start</p>
+  </div>
+</div>

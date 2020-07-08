@@ -46,7 +46,7 @@ export class BlockRenderComponent {
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
   @HostBinding("class")
-  private _hostClassNodeType = "errLang errType";
+  public _hostClassNodeType = "errLang errType";
 
   constructor(private _renderData: RenderedCodeResourceService) {}
 

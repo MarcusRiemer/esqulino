@@ -16,12 +16,17 @@ export interface CodeResourceDescription extends ProjectResourceDescription {
   blockLanguageId: string;
 }
 
+// Only used to allow a `null` ast (which indicates deletion)
+interface CodeResourceUpdateDescription extends CodeResourceDescription {
+  ast: null | NodeDescription;
+}
+
 /**
  * A request to update a code resource. May omit values to be updated
  * and may explicitly set the ast to `null` which will delete it.
  */
 export interface CodeResourceRequestUpdateDescription {
-  resource:
-    | Partial<Omit<CodeResourceDescription, "id" | "createdAt" | "updatedAt">>
-    | { ast?: null };
+  resource: Partial<
+    Omit<CodeResourceUpdateDescription, "id" | "createdAt" | "updatedAt">
+  >;
 }
