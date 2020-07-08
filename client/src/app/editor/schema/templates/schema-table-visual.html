@@ -15,14 +15,12 @@
         <td>
           <label class="tableEdit">
             <input
+			  id="primaryBox"
+			  class="primaryBox"
               type="checkbox"
               (click)="ChangeColumnPrimaryKeyStatus(column.index)"
               [(ngModel)]="column.primary"
-              placeholder="Primary"
             />
-            <!--<span *ngIf="column.primary">
-              <span class="fa fa-key" aria-hidden="true"></span>
-            </span>-->
           </label>
         </td>
         <td>
