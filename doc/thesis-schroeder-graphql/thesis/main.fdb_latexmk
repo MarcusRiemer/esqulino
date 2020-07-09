@@ -1,0 +1,20 @@
+# Fdb version 3
+["pdflatex"] 1589397367 "/home/yannux/esqulino/doc/thesis-schroeder-graphql/thesis/main.tex" "/home/yannux/esqulino/doc/thesis-schroeder-graphql/thesis/main.pdf" "main" 1589397367
+  "/home/yannux/esqulino/doc/thesis-schroeder-graphql/thesis/main.aux" 1589397367 8 a94a2480d3289e625eea47cd1b285758 ""
+  "/home/yannux/esqulino/doc/thesis-schroeder-graphql/thesis/main.tex" 1589388300 5277 05bc53b1b1b7762672585530b986624e ""
+  "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1572595918 3332 103109f5612ad95229751940c61aada0 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1572595918 1328 c834bbb027764024c09d3d2bf908b5f0 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1572595918 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1572595918 768 1321e9409b4137d6fb428ac9dc956269 ""
+  "/usr/share/texmf-dist/web2c/texmf.cnf" 1572595918 33301 a3134070eacafb10b1f371612ce2650d ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1588946065 4572998 f9631eebba48c3ee98e5d310044b0a09 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1588946057 8044938 4c9ec5852ba836350b5a8bcb326ae785 ""
+  "content/chapter-introduction.tex" 1589397366 9413 2afb804ef07cb1b839b2860b25bb10aa ""
+  "content/titlepages.tex" 1589363701 1873 9f07b786194712ffab3ca9d7637abe1f ""
+  "main.aux" 0 -1 0 "pdflatex"
+  "main.tex" 1589388300 5277 05bc53b1b1b7762672585530b986624e ""
+  (generated)
+  "/home/yannux/esqulino/doc/thesis-schroeder-graphql/thesis/main.pdf"
+  "main.aux"
+  "main.log"
+  "/home/yannux/esqulino/doc/thesis-schroeder-graphql/thesis/main.log"

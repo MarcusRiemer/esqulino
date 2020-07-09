@@ -2,6 +2,8 @@ class NewsController < ApplicationController
   include LocaleHelper
   include JsonSchemaHelper
   include UserHelper
+  include PaginationHelper
+
 
   # All news that are visible on the frontpage
   def index
@@ -19,7 +21,8 @@ class NewsController < ApplicationController
 
   # All news that are visible in the admin backend
   def index_admin
-    render :json => News.all.map{|l| l.to_full_api_response}
+    params["orderField"] = params.fetch("orderField", "created_at")
+    render :json => pagination_response(News,News.all,options:{full_api_response:true})
   end
 
   # A single news that is visible in the admin backend

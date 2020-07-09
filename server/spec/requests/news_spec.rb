@@ -127,7 +127,7 @@ RSpec.describe NewsController, type: :request do
 
       set_access_token(admin)
       get '/api/news/admin'
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)['data']
       expect(json_data[0]['title']['de']).to eq("Schlagzeile 1")
       expect(json_data[0]['title']['en']).to eq("Headline 1")
       expect(json_data[1]['title']['de']).to eq("Schlagzeile")

@@ -1,0 +1,1 @@
+type PostProject = Omit<Project, 'id'>; // Äquivalent zu Pick<Project, 'name'>

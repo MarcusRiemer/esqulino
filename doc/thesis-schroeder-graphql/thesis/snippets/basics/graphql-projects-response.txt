@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "id": "368b6ee9-2b1f-4661-a82f-ff7b62dc9251"
+      "name: "Esqulino"
+    },
+    {
+      "id": "b25c342e-f2b1-4a74-8124-a7a688911380"
+      "name": "Trucklino"
+    }
+  ]
+}

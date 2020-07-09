@@ -1,0 +1,172 @@
+% **************************************************
+% Information and Commands for Reuse
+% **************************************************
+\newcommand{\thesisTitle}{Evaluierung und Implementierung von Server Roundtrip Verfahren unter Gewährleistung der Typsicherheit in einer bestehenden Webapplikation}
+\newcommand{\thesisSubtitle}{Bachelor-Thesis im Fachbereich Informatik}
+\newcommand{\thesisDate}{26. August 2020}
+%\newcommand{\thesisVersion}{\input{GIT_REV}}
+
+\newcommand{\thesisAuthor}{Yannick Schröder}
+\newcommand{\thesisAuthorStudentNumber}{Informatik 102751}
+\newcommand{\thesisAuthorEmail}{inf102751@fh-wedel.de}
+
+\newcommand{\thesisFirstReviewer}{Dr. Michael Predeschly}
+\newcommand{\thesisFirstReviewerEmail}{\protect{mpr@fh-wedel.de}}
+
+\newcommand{\thesisSecondReviewer}{M.~Sc. Marcus Riemer}
+\newcommand{\thesisSecondReviewerEmail}{\protect{mri@fh-wedel.de}}
+
+\newcommand{\thesisUniversity}{\protect{Fachhochschule Wedel}}
+\newcommand{\thesisUniversityCity}{Wedel}
+\newcommand{\thesisUniversityStreetAddress}{Feldstra{\ss}e 143}
+\newcommand{\thesisUniversityPostalCode}{22880}
+
+% **************************************************
+% Load and Configure Packages
+% **************************************************
+\usepackage[utf8]{inputenc}       % defines file's character encoding
+\usepackage[ngerman]{babel}       % babel system, adjust the language of the content
+\usepackage[                      % clean thesis style
+	figuresep=colon,%
+	sansserif=false,%
+	hangfigurecaption=false,%
+	hangsection=false,%
+	hangsubsection=false,%
+	colorize=full,%
+	colortheme=bluemagenta,%
+	bibsys=bibtex,%
+	bibfile=bib-refs,%
+	bibstyle=alphabetic,%
+]{sty/cleanthesis}
+
+\hypersetup{                      % setup the hyperref-package options
+	pdftitle={\thesisTitle},      %   - title (PDF meta)
+	pdfsubject={\thesisSubtitle}, %   - subject (PDF meta)
+	pdfauthor={\thesisAuthor},    %   - author (PDF meta)
+	plainpages=false,             %   -
+	colorlinks=false,             %   - colorize links?
+	pdfborder={0 0 0},            %   -
+	breaklinks=true,              %   - allow line break inside links
+	bookmarksnumbered=true,       %
+	bookmarksopen=true            %
+}
+
+% Font and Color
+\cthesissetcolor{cmyk}{1, .87, .27, .12}{1, .87, .27, .12}
+\usepackage{fontspec}
+
+% \setmainfont{Dax Pro}
+% \renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
+% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
+
+% \renewcommand{\ttfamily}{\fontspec{Ubuntu Mono}}
+
+\renewcommand{\cftchapfont}{\normalfont\bfseries}
+\renewcommand{\cftchappagefont}{\normalfont\bfseries}
+\usepackage{multicol}
+\addtokomafont{caption}{\normalfont}
+\addtokomafont{captionlabel}{\normalfont}
+\urlstyle{rm}
+\makeatletter
+\def\blx@maxline{77}
+\makeatother
+
+% **************************************************
+% Additional Utilities
+% **************************************************
+
+% \inlinec for inline code
+\NewDocumentCommand{\inlinec}{v}{%
+\texttt{#1}%
+}
+
+% Fix quotes
+\usepackage{csquotes}
+\MakeOuterQuote{"}
+
+% Code
+\usepackage{listings,lstautogobble}
+\lstset{
+   backgroundcolor=\color{white},
+   extendedchars=true,
+   basicstyle=\scriptsize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   stepnumber=1,
+   numberstyle=\tiny\ttfamily,
+   numbersep=9pt,
+   tabsize=4,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b,
+   autogobble=true,
+   frame=single
+}
+
+\usepackage[simplified]{sty/pgf-umlcd}
+\usepackage{float}
+
+% https://tex.stackexchange.com/a/42620
+\usepackage{amssymb}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\usepackage{nameref}
+\usepackage[multidot]{grffile}
+\usepackage{xparse}
+
+% **************************************************
+% Document CONTENT
+% **************************************************
+\begin{document}
+
+% --------------------------
+% rename document parts
+% --------------------------
+\renewcaptionname{ngerman}{\figurename}{Abb.}
+\renewcaptionname{ngerman}{\tablename}{Tab.}
+
+% --------------------------
+% Front matter
+% --------------------------
+\pagenumbering{roman}             % roman page numbing (invisible for empty page style)
+\pagestyle{empty}                 % no header or footers
+\input{content/titlepages}        % INCLUDE: all titlepages
+\cleardoublepage
+%
+\pagestyle{plain}                 % display just page numbers
+%\input{content/abstract}          % INCLUDE: the abstracts (english and german)
+\cleardoublepage
+%
+\pdfbookmark[0]{Inhaltsverzeichnis}{Inhaltsverzeichnis}
+\setcounter{tocdepth}{2}          % define depth of toc
+\tableofcontents                  % display table of contents
+\cleardoublepage
+
+% --------------------------
+% Body matter
+% --------------------------
+\pagenumbering{arabic}            % arabic page numbering
+\setcounter{page}{1}              % set page counter
+\pagestyle{maincontentstyle}      % fancy header and footer
+
+\input{content/chapter-introduction}
+
+\appendix{}
+
+\input{content/appendix-bliography}
+%\input{content/appendix-exercises}
+%\input{content/appendix-cd-rom}
+
+% \listoffigures
+% \cleardoublepage
+
+% \listoftables
+% \cleardoublepage
+
+\input{content/appendix-declaration}
+\cleardoublepage

@@ -1,0 +1,73 @@
+%************************************************
+% Titlepages
+%************************************************
+% ------------------------------------  --> main title page
+\begin{titlepage}
+	\pdfbookmark[0]{Titelseite}{Titelseite}
+	\tgherosfont
+	\centering
+
+	\includegraphics[width=6cm]{gfx/fhw} \\
+
+	\vfill
+  \begin{minipage}[t]{.8\textwidth}
+    \centering
+    {\LARGE \color{ctcolortitle}\textbf{\thesisTitle} \\[10mm]}
+	  {\Large \thesisSubtitle} \\
+  \end{minipage}
+	\vfill
+	\begin{minipage}[t]{.27\textwidth}
+		\raggedleft
+		\textit{Autor}
+	\end{minipage}
+	\hspace*{15pt}
+	\begin{minipage}[t]{.65\textwidth}
+		{\Large \thesisAuthor} \\
+	  	{\thesisAuthorStudentNumber} \\
+	  	{\thesisAuthorEmail} \\
+    \end{minipage} \\[5mm]
+    \begin{minipage}[t]{.27\textwidth}
+		\raggedleft
+		\textit{Erstgutachter}
+	\end{minipage}
+	\hspace*{15pt}
+	\begin{minipage}[t]{.65\textwidth}
+		{\Large \thesisFirstReviewer} \\
+	  	{\thesisFirstReviewerEmail} \\
+	\end{minipage} \\[5mm]
+	\begin{minipage}[t]{.27\textwidth}
+		\raggedleft
+		\textit{Zweitgutachter}
+	\end{minipage}
+	\hspace*{15pt}
+	\begin{minipage}[t]{.65\textwidth}
+		{\Large \thesisSecondReviewer} \\
+	  	{\thesisSecondReviewerEmail} \\
+	\end{minipage} \\[10mm]
+	\begin{minipage}[t]{.27\textwidth}
+		\raggedleft
+		\textit{Eingereicht am}
+	\end{minipage}
+	\hspace*{15pt}
+	\begin{minipage}[t]{.65\textwidth}
+		\thesisDate
+	\end{minipage} \\
+
+\end{titlepage}
+
+
+% ------------------------------------  --> lower title back for single page layout
+\hfill
+\vfill
+\begin{minipage}[t]{.7\textwidth}
+  \small
+  \raggedright
+	\textbf{\thesisAuthor} \\
+	\textit{\thesisTitle} \\
+	\thesisSubtitle, \thesisDate \\
+    Gutachter: \thesisFirstReviewer\ und \thesisSecondReviewer
+
+	\textbf{\thesisUniversity} \\
+	\thesisUniversityStreetAddress \\
+	\thesisUniversityPostalCode\ \thesisUniversityCity
+\end{minipage}

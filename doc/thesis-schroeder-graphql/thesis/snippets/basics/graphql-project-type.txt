@@ -1,0 +1,4 @@
+type Project {
+ id: ID!
+ public: Boolean!
+}

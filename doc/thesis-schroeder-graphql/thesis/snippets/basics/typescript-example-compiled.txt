@@ -1,0 +1,5 @@
+function printSecondHalf(s) {
+    return s.substr(s.length/2)
+}
+printSecondHalf(123);     // Error zur Laufzeit - TypeError: s.substr is not a function
+printSecondHalf("hello"); // Ok - "llo"

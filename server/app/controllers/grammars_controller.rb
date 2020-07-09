@@ -6,7 +6,7 @@ class GrammarsController < ApplicationController
 
   # List all existing grammars
   def index
-    render :json => pagination_response(Grammar,Grammar.scope_list,options:{})
+    render :json => pagination_response(Grammar,Grammar.scope_list)
   end
 
   # Find a single grammar
