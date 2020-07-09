@@ -40,7 +40,7 @@ export class CreateBlockLanguageComponent {
 
   constructor(
     private _router: Router,
-    private _mutation:CreateBlockLanguageMutationGQL,
+    private _createBlockLanguageGQL:CreateBlockLanguageMutationGQL,
     private _grammarSelection:SelectionListGrammarsGQL,
     private _grammarData: GrammarDescriptionItemGQL,
   ) {}
@@ -55,7 +55,7 @@ export class CreateBlockLanguageComponent {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
     const g = await this._grammarData.fetch({id: this.blockLanguage.grammarId})
-      .pipe(map(response => response.data.grammars.nodes[0]))
+      .pipe(map(response => response.data.singleGrammar))
       .toPromise();
 
     // Generate some default blocks
@@ -73,14 +73,8 @@ export class CreateBlockLanguageComponent {
     if (!this.useSlug) {
       delete toCreate.slug;
     }
-
-    const res = await this._mutation.mutate(toCreate)
+    this._createBlockLanguageGQL.mutate(toCreate)
       .pipe(map(response => response.data.createBlockLanguage))
-      .toPromise();
-    console.log("response arrived")
-    console.log(res)
-    await this._router.navigateByUrl(`/admin/block-language/${res.id}`);
-
-    return res;
+      .subscribe(res => this._router.navigateByUrl(`/admin/block-language/${res.id}`));
   }
 }

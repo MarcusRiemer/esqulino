@@ -2,18 +2,17 @@
 class Mutations::BlockLanguage::BlockLanguageMutation < Mutations::BaseMutation
 
   field :blockLanguage, Types::BlockLanguageType, null: true
+  field :blockLanguageDescription, Types::BlockLanguageDescriptionType, null:true
   field :id, ID, null: true
   field :errors, [String], null: false
 
   def save_block_language(block_language)
     if block_language.save
-      byebug
       {
           blockLanguage: block_language,
           errors: []
       }
     else
-      byebug
       {
           blockLanguage: nil,
           errors: block_language.errors.full_messages
@@ -53,7 +52,12 @@ class Mutations::BlockLanguage::BlockLanguageMutation < Mutations::BaseMutation
           :editorBlocks,
           :editorComponents,
           :localGeneratorInstructions
-      )
+      ).compact
+    end
+
+    # These parameters may be used to identify a block language
+    def id_params(params)
+     params.permit(:id, :slug)
     end
 end
 

@@ -42,7 +42,7 @@ export class OverviewBlockLanguageComponent
   @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  constructor(readonly projectsService: AdminListBlockLanguagesGQL) {}
+  constructor(readonly projectsGQL: AdminListBlockLanguagesGQL) {}
 
   typed(doc: any): ListItem {
     return doc as ListItem;
@@ -55,7 +55,7 @@ export class OverviewBlockLanguageComponent
 
   //Query Object which can be used to refetch data
   //fetchPolicy must be network-only, to get a clean pagination
-  readonly query = this.projectsService.watch(
+  readonly query = this.projectsGQL.watch(
     { first: this.pageSize },
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );

@@ -8,8 +8,6 @@ import { switchMap, map, first, filter, flatMap } from "rxjs/operators";
 
 import {
   IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-  MutateBlockLanguageService,
 } from "../../shared/serverdata";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
@@ -20,6 +18,10 @@ import { prettyPrintBlockLanguage } from "../../shared/block/prettyprint";
 import { GeneratorError } from "../../shared/block/generator/error.description";
 import { prettyPrintGrammar } from "../../shared/syntaxtree";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
+import {
+  AdminEditBlockLanguageGQL,
+  UpdateBlockLanguageMutationGQL
+} from "../../../generated/graphql";
 
 @Injectable()
 export class EditBlockLanguageService {
@@ -35,20 +37,26 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _mutateBlockLanguageData: MutateBlockLanguageService,
+    private _singleBlockLanguageGQL: AdminEditBlockLanguageGQL,
+    private _updateBlockLanguageGQL: UpdateBlockLanguageMutationGQL,
     private _individualGrammarData: IndividualGrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private _title: Title
+    private _title: Title,
   ) {
     // Ensures that a block language that matches the URL is loaded.
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get("blockLanguageId")),
         switchMap((id: string) =>
-          this._individualBlockLanguageData.getSingle(id).pipe(first())
-        )
+          this._singleBlockLanguageGQL.fetch({id:id})
+            .pipe(
+              map(bl =>
+                // unpack model Object
+                bl.data.singleBlockLanguage
+              )
+            )
+          )
       )
       .subscribe((blockLanguage) => {
         this._editedSubject.next(blockLanguage);
@@ -106,7 +114,6 @@ export class EditBlockLanguageService {
     if (!changedValue) {
       changedValue = this._editedSubject.value;
     }
-
     // That JSON-wrapping and unwrapping is a dirty hack to ensure that the
     // Angular change detector "sees" a new object.
     this._editedSubject.next(JSON.parse(JSON.stringify(changedValue)));
@@ -176,7 +183,7 @@ export class EditBlockLanguageService {
    * Saves the current state of the block language
    */
   save() {
-    this._mutateBlockLanguageData.updateSingle(this.editedSubject);
+    this._updateBlockLanguageGQL.mutate(this.editedSubject).toPromise();
   }
 
   /**

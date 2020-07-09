@@ -6,14 +6,13 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import {
-  ListGrammarDataService,
-  MutateBlockLanguageService,
-} from "../../shared/serverdata";
 import { ToolbarService } from "../../shared/toolbar.service";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
-import {SelectionListGrammarsGQL} from "../../../generated/graphql";
+import {
+  DestroyBlockLanguageMutationGQL,
+  SelectionListGrammarsGQL,
+} from "../../../generated/graphql";
 import {map} from "rxjs/operators";
 
 @Component({
@@ -27,8 +26,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _grammarData: ListGrammarDataService,
-    private _mutateBlockLanguageData: MutateBlockLanguageService,
+    private _deleteBlockLanguageGQL: DestroyBlockLanguageMutationGQL,
     private _current: EditBlockLanguageService,
     private _grammarSelection:SelectionListGrammarsGQL,
     private _toolbarService: ToolbarService
@@ -121,7 +119,7 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._mutateBlockLanguageData.deleteSingle(this.editedSubject.id);
+    await this._deleteBlockLanguageGQL.mutate({id:this.editedSubject.id}).toPromise();
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 
