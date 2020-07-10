@@ -54,7 +54,6 @@
                 <input
                   class="form-control"
                   type="number"
-                  value="1"
                   min="0"
                   [(ngModel)]="feature.options.startPhase"
                 />
@@ -68,8 +67,7 @@
                 <input
                   class="form-control"
                   type="number"
-                  value="1"
-                  min="0"
+                  min="1"
                   [(ngModel)]="feature.options.redPhase"
                 />
               </div>
@@ -85,12 +83,16 @@
                 <input
                   class="form-control"
                   type="number"
-                  value="1"
-                  min="0"
+                  min="1"
                   [(ngModel)]="feature.options.greenPhase"
                 />
               </div>
             </div>
+          </div>
+          <div class="col-12">
+            <TrafficLightVisualisator
+              [options]="feature.options"
+            ></TrafficLightVisualisator>
           </div>
         </div>
       </div>

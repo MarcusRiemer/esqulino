@@ -4,7 +4,6 @@ import { World } from "../../../../shared/syntaxtree/truck/world";
 
 import { TruckWorldService } from "../truck-world.service";
 import {
-  TruckFeature,
   TruckTileFeatureType,
   TruckWorldEditorService,
 } from "./truck-world-editor.service";

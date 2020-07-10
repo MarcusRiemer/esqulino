@@ -3,6 +3,36 @@
         position: absolute;
         z-index: 1;
     }
+
+    .traffic-light-bar {
+        display: flex;
+        height: 2em;
+        line-height: 2em;
+        text-align: center;
+
+        div {
+            flex: 1;
+
+            &.start {
+                border-left: 0.1em solid yellow;
+                &::before {
+                    content: "🡆";
+                    position: absolute;
+                    transform: translateX(-50%);
+                    color: yellow;
+                    display: block;
+                }
+            }
+
+            &.redPhase {
+                background-color: red;
+            }
+
+            &.greenPhase {
+                background-color: green;
+            }
+        }
+    }
 }
 
 .editor-tile-selection {
