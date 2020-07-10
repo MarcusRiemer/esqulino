@@ -51,6 +51,36 @@ FactoryBot.define do
       }
     end
 
+    trait :grammar_include do
+      association :programming_language, factory: [:programming_language, :meta_grammar]
+      ast {
+        ({
+           "language"=> "MetaGrammar",
+           "name"=> "grammar",
+           "properties"=> {
+             "name"=> "lang"
+           },
+           "children" => {
+             "includes" => [
+               {
+                 "language" => "MetaGrammar",
+                 "name" => "grammarIncludes",
+                 "children" => {
+                   "includes" => [
+                     "language" => "MetaGrammar",
+                     "name" => "grammarRef",
+                     "properties" => {
+                       "grammarId" => "7928f0fd-eccb-49cc-88f0-e2d203b4c18a"
+                     }
+                   ]
+                 }
+               }
+             ]
+           }
+         })
+      }
+    end
+
     # A query that re-uses the same columns in the SELECT portion
     trait :sql_key_value_select_double do |query|
       association :programming_language, factory: [:programming_language, :sql]

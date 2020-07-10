@@ -30,7 +30,10 @@ class Grammar < ApplicationRecord
   has_many :code_resources, through: :block_languages
 
   # All references that use this grammar as an origin
-  has_many :grammar_reference_origins, class_name: 'GrammarReference', foreign_key: "origin_id"
+  has_many :grammar_reference_origins,
+           class_name: 'GrammarReference',
+           foreign_key: "origin_id",
+           dependent: :destroy # Needed because Rails otherwise tries to nullify the column
 
   # All grammars that are referenced by this grammar
   has_many :referenced_grammars, through: :grammar_reference_origins, source: "target"
@@ -76,6 +79,11 @@ class Grammar < ApplicationRecord
     regenerated_attributes = grammar_document
                                .slice('types', 'foreignTypes', 'root')
                                .transform_keys { |k| k.underscore }
+
+    regenerated_relationships = grammar_document
+                                  .slice('includes')
+                                  .transform_keys { |k| k.underscore }
+
 
 
     # All other entities that are affected by this regeneration

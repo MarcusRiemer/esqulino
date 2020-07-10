@@ -283,6 +283,23 @@ RSpec.describe Grammar, type: :model do
       expect { res.save }.to raise_error ActiveRecord::InvalidForeignKey
     end
 
+    it "adds includes" do
+      resource = FactoryBot.create(:code_resource, :grammar_include)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+    end
+
+    it "replaces includes" do
+      resource = FactoryBot.create(:code_resource, :grammar_include)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+      prev_ref = FactoryBot.create(:grammar)
+      grammar.grammar_reference_origins.create(target: prev_ref, reference_type: "include_types")
+
+      grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+    end
+
     it "can associate a code resource" do
       grammar = FactoryBot.create(:grammar, generated_from: nil)
       resource = FactoryBot.create(:code_resource, :grammar_single_type)
@@ -347,6 +364,103 @@ RSpec.describe Grammar, type: :model do
 
       expect(origin.grammar_reference_origins).to eq [reference]
       expect(origin.referenced_grammars).to eq [target]
+    end
+
+    it "adds includes" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+      expect(grammar.referenced_grammars).to eq [inc_1]
+    end
+
+    it "destroys includes, but leaves the grammar intact" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+      grammar.grammar_reference_origins.clear
+
+      expect(grammar.grammar_reference_origins).to eq []
+      expect(GrammarReference.all).to eq []
+      expect(Grammar.all).to eq [grammar, inc_1]
+    end
+
+    it "doesn't change includes if they stay the same" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+      ref_1_again = GrammarReference.find_or_initialize_by(
+        origin: grammar,
+        target: inc_1,
+        reference_type: "include_types"
+      )
+
+      expect(ref_1).to eq ref_1_again
+      expect(grammar.referenced_grammars).to eq [inc_1]
+    end
+
+    it "replaces an existing includes with a new includes" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+      expect(grammar.referenced_grammars).to eq [inc_1]
+
+      inc_2 = FactoryBot.create(:grammar)
+
+      # Not using factory bot here because we don't want the automatic association
+      ref_2 = GrammarReference.find_or_initialize_by(
+        origin: grammar,
+        target: inc_2,
+        reference_type: "include_types"
+      )
+
+      # Replacing all existing references, this *must* delete ref_1 because it is now obsolete
+      # but it must not delete inc_1 because thats still a valid grammar that exists.
+      grammar.grammar_reference_origins = [ref_2]
+      grammar.reload # Dependant relationships are cached
+
+      expect(grammar.referenced_grammars).to eq [inc_2]
+      expect(GrammarReference.all).to match_array [ref_2]
+      expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
+    end
+
+    it "add an new includes to an existing includes" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      ref_1_orig = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+      expect(grammar.referenced_grammars).to eq [inc_1]
+
+      inc_2 = FactoryBot.create(:grammar)
+
+      # Not using factory bot here because we don't want the automatic association
+
+      # This exists
+      ref_1 = GrammarReference.find_or_initialize_by(
+        origin: grammar,
+        target: inc_1,
+        reference_type: "include_types"
+      )
+
+      # This is new
+      ref_2 = GrammarReference.find_or_initialize_by(
+        origin: grammar,
+        target: inc_2,
+        reference_type: "include_types"
+      )
+
+      # Adding one reference to the existing reference
+      grammar.grammar_reference_origins = [ref_1, ref_2]
+
+      grammar.reload # Dependant relationships are cached
+
+      expect(ref_1_orig).to eq ref_1
+      expect(grammar.referenced_grammars).to eq [inc_1, inc_2]
+      expect(GrammarReference.all).to match_array [ref_1, ref_2]
+      expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
   end
 end

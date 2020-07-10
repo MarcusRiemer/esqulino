@@ -72,7 +72,15 @@ RSpec.describe CodeResource, type: :model do
       # Compiled should be *something* after saving
       res.save!
       expect(res.compiled).not_to be_nil
-      expect(res.to_full_api_response).to validate_against "CodeResourceDescription"
+      expect(res.ast).to validate_against "NodeDescription"
+    end
+
+    it "builds the correct tree for included grammars" do
+      res = FactoryBot.build(:code_resource, :grammar_include)
+      expect(res.ast).to validate_against "NodeDescription"
+
+      compiled_grammar_description = JSON.parse res.emit_ast!(IdeService.guaranteed_instance)
+      expect(compiled_grammar_description["includes"].length).to eq 1
     end
   end
 
