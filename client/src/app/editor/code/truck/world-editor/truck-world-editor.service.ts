@@ -292,7 +292,13 @@ export class TruckWorldEditorService implements OnDestroy {
    * Overrides the current world with an empty one (size will stay the same)
    */
   public resetEverything(): void {
-    // TODO
+    this.mutateWorldAndCode(this._world, (s) => {
+      let modifiedAtLeastOne = false;
+      for (const tile of s.tiles) {
+        modifiedAtLeastOne = tile.reset();
+      }
+      return modifiedAtLeastOne;
+    });
   }
 
   /**
