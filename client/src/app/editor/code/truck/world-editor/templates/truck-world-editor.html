@@ -1,5 +1,5 @@
 <div class="row truck-world-editor-menu">
-  <div class="col-9">
+  <div class="col-8">
     <div class="btn-group btn-group-sm d-flex pl-1" role="group">
       <button class="btn btn-outline-primary flex-grow-1" (click)="undo()">
         <i class="fa fa-undo"></i>
@@ -21,7 +21,7 @@
       </button>
     </div>
   </div>
-  <div class="col-3">
+  <div class="col-4">
     <div class="form-group row">
       <label for="world-size" class="col-3 col-form-label">Größe</label>
       <div class="col-9">
@@ -42,12 +42,15 @@
       >
         <div class="card card-body">
           <div class="col-12">
-            <h4>Ampel Konfiguration</h4>
+            <h4 i18n="@@trafficLightConfiguration">Ampel Konfiguration</h4>
             <div class="form-group row">
-              <label class="col-6 col-form-label text-right">
+              <label
+                class="col-7 col-form-label text-right"
+                i18n="@@startPhase"
+              >
                 Start Zeit
               </label>
-              <div class="col-4">
+              <div class="col-3">
                 <input
                   class="form-control"
                   type="number"
@@ -58,10 +61,10 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-6 col-form-label text-right">
+              <label class="col-7 col-form-label text-right" i18n="@@redPhase">
                 Rot Zeit
               </label>
-              <div class="col-4">
+              <div class="col-3">
                 <input
                   class="form-control"
                   type="number"
@@ -72,10 +75,13 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-6 col-form-label text-right">
+              <label
+                class="col-7 col-form-label text-right"
+                i18n="@@greenPhase"
+              >
                 Grün Zeit
               </label>
-              <div class="col-4">
+              <div class="col-3">
                 <input
                   class="form-control"
                   type="number"
