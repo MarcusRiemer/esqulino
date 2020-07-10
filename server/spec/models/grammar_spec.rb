@@ -283,23 +283,6 @@ RSpec.describe Grammar, type: :model do
       expect { res.save }.to raise_error ActiveRecord::InvalidForeignKey
     end
 
-    it "adds includes" do
-      resource = FactoryBot.create(:code_resource, :grammar_include)
-      grammar = FactoryBot.create(:grammar, generated_from: resource)
-
-      grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
-    end
-
-    it "replaces includes" do
-      resource = FactoryBot.create(:code_resource, :grammar_include)
-      grammar = FactoryBot.create(:grammar, generated_from: resource)
-
-      prev_ref = FactoryBot.create(:grammar)
-      grammar.grammar_reference_origins.create(target: prev_ref, reference_type: "include_types")
-
-      grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
-    end
-
     it "can associate a code resource" do
       grammar = FactoryBot.create(:grammar, generated_from: nil)
       resource = FactoryBot.create(:code_resource, :grammar_single_type)
@@ -343,6 +326,63 @@ RSpec.describe Grammar, type: :model do
       expect(grammar.regenerate_from_code_resource!(ide_service)).to eq [grammar]
       expect(grammar.regenerate_from_code_resource!(ide_service)).to eq []
     end
+
+    context "references" do
+      def grammar_document_includes(*grammar_ids)
+        ({
+           "language"=> "MetaGrammar",
+           "name"=> "grammar",
+           "properties"=> {
+             "name"=> "lang"
+           },
+           "children" => {
+             "includes" => [
+               {
+                 "language" => "MetaGrammar",
+                 "name" => "grammarIncludes",
+                 "children" => {
+                   "includes" => grammar_ids.map do |id|
+                     ({
+                        "language" => "MetaGrammar",
+                        "name" => "grammarRef",
+                        "properties" => {
+                          "grammarId" => id
+                        }
+                      })
+                   end
+                 }
+               }
+             ]
+           }
+         })
+      end
+
+      it "no previous references, new code resource references" do
+        inc_1 = FactoryBot.create(:grammar)
+
+        resource = FactoryBot.create(:code_resource, :meta_grammar, ast: grammar_document_includes(inc_1.id))
+        grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+        grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+
+        expect(grammar.referenced_grammars).to match_array [inc_1]
+      end
+
+      it "replaces includes" do
+        inc_1 = FactoryBot.create(:grammar)
+        inc_2 = FactoryBot.create(:grammar)
+
+        resource = FactoryBot.create(:code_resource, :meta_grammar, ast: grammar_document_includes(inc_2.id))
+        grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+        grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+        grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+
+        expect(grammar.referenced_grammars).to match_array [inc_2]
+      end
+    end
+
   end
 
   context "references to other grammars" do

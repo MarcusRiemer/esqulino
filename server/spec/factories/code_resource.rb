@@ -16,8 +16,12 @@ FactoryBot.define do
       end
     end
 
-    trait :grammar_single_type do
+    trait :meta_grammar do
       association :programming_language, factory: [:programming_language, :meta_grammar]
+    end
+
+    trait :grammar_single_type do
+      meta_grammar
       ast {
         ({
            "children"=> {
@@ -46,36 +50,6 @@ FactoryBot.define do
            "name"=> "grammar",
            "properties"=> {
              "name"=> "lang"
-           }
-         })
-      }
-    end
-
-    trait :grammar_include do
-      association :programming_language, factory: [:programming_language, :meta_grammar]
-      ast {
-        ({
-           "language"=> "MetaGrammar",
-           "name"=> "grammar",
-           "properties"=> {
-             "name"=> "lang"
-           },
-           "children" => {
-             "includes" => [
-               {
-                 "language" => "MetaGrammar",
-                 "name" => "grammarIncludes",
-                 "children" => {
-                   "includes" => [
-                     "language" => "MetaGrammar",
-                     "name" => "grammarRef",
-                     "properties" => {
-                       "grammarId" => "7928f0fd-eccb-49cc-88f0-e2d203b4c18a"
-                     }
-                   ]
-                 }
-               }
-             ]
            }
          })
       }
