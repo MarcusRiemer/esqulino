@@ -1,28 +1,28 @@
 <div class="row truck-world-editor-menu">
   <div class="col-8">
-    <div class="btn-group btn-group-sm d-flex pl-1" role="group">
+    <div class="quickaction-buttons btn-group btn-group-sm d-flex pl-1" role="group">
       <button class="btn btn-outline-primary flex-grow-1" (click)="undo()">
         <i class="fa fa-undo"></i>
-        Schritt zurück
+        <span i18n="@@undo">Schritt zurück</span>
       </button>
       <button
         class="btn btn-outline-primary flex-grow-1"
         (click)="resetChanges()"
       >
         <i class="fa fa-ban"></i>
-        Änderungen zurücksetzten
+        <span i18n="@@undoAllChanges">Änderungen zurücksetzten</span>
       </button>
       <button
         class="btn btn-outline-primary flex-grow-1"
         (click)="resetEverything()"
       >
         <i class="fa fa-trash"></i>
-        Alles löschen
+        <span i18n="@@clearWorld">Alles löschen</span>
       </button>
     </div>
   </div>
   <div class="col-4">
-    <div class="form-group row">
+    <div class="world-size-config form-group row">
       <label for="world-size" class="col-3 col-form-label">Größe</label>
       <div class="col-9">
         <input

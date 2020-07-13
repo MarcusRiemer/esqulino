@@ -1,35 +1,43 @@
 .truck-world-editor-menu {
+    .quickaction-buttons span {
+        margin-left: 0.5em;
+    }
+
+    .world-size-config {
+        margin-bottom: 0;
+    }
+
     .traffic-light-config {
         position: absolute;
         z-index: 1;
-    }
 
-    .traffic-light-bar {
-        display: flex;
-        height: 2em;
-        line-height: 2em;
-        text-align: center;
+        .traffic-light-bar {
+            display: flex;
+            height: 2em;
+            line-height: 2em;
+            text-align: center;
 
-        div {
-            flex: 1;
+            div {
+                flex: 1;
 
-            &.start {
-                border-left: 0.1em solid yellow;
-                &::before {
-                    content: "🡆";
-                    position: absolute;
-                    transform: translateX(-50%);
-                    color: yellow;
-                    display: block;
+                &.start {
+                    border-left: 0.1em solid yellow;
+                    &::before {
+                        content: "🡆";
+                        position: absolute;
+                        transform: translateX(-50%);
+                        color: yellow;
+                        display: block;
+                    }
                 }
-            }
 
-            &.redPhase {
-                background-color: red;
-            }
+                &.redPhase {
+                    background-color: red;
+                }
 
-            &.greenPhase {
-                background-color: green;
+                &.greenPhase {
+                    background-color: green;
+                }
             }
         }
     }
