@@ -1,0 +1,49 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: ee7c510f-2eea-4524-8f00-5c75323baca5
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: ee7c510f-2eea-4524-8f00-5c75323baca5
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision:
+      scale:
+      limit:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5cd97ed7-24d7-4cd1-b33e-cced348e3f91
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta Test Includes
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"includes": [{"name":
+    "grammarIncludes", "children": {"includes": [{"name": "grammarRef", "language":
+    "MetaGrammar", "properties": {"grammarId": "10163ab2-303b-4072-915a-57aeff0eaf60"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"name":
+    "includes"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-13 13:51:14.398724000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-13 14:04:34.877922000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {},
+      "foreignTypes": {},
+      "includes": [
+        "10163ab2-303b-4072-915a-57aeff0eaf60"
+      ]
+    }
+new_record: false
+active_record_yaml_version: 2
