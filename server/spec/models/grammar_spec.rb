@@ -357,6 +357,16 @@ RSpec.describe Grammar, type: :model do
          })
       end
 
+      it "ensure that the AST leads to 'include' instructions" do
+        exp_uuid = "f8528b38-cdee-4539-ac7a-b90fe0da6e37"
+
+        res = FactoryBot.build(:code_resource, :meta_grammar, ast: grammar_document_includes(exp_uuid))
+        expect(res.ast).to validate_against "NodeDescription"
+
+        compiled_grammar_description = JSON.parse res.emit_ast!(IdeService.guaranteed_instance)
+        expect(compiled_grammar_description["includes"]).to eq [exp_uuid]
+      end
+
       it "no previous references, new code resource references" do
         inc_1 = FactoryBot.create(:grammar)
 
