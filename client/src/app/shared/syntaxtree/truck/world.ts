@@ -835,6 +835,20 @@ export class WorldState {
     return wasChanged;
   }
 
+  /**
+   * Calls resetTile on each tile
+   * @return true if a change has occurred
+   */
+  public resetAllTiles(): boolean {
+    let modifiedAtLeastOne = false;
+    for (const tile of this.tiles) {
+      if (tile.reset()) {
+        modifiedAtLeastOne = true;
+      }
+    }
+    return modifiedAtLeastOne;
+  }
+
   private cutLooseOpenings(center: Position): boolean {
     let modifiedAtLeastOneTile = false;
     // After deleting the current tile, we also want to remove the connections that lead to this tile.
