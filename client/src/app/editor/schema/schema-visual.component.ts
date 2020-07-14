@@ -41,6 +41,7 @@ export class SchemaVisualComponent implements OnInit {
   }
 
   public con = [];
+  public schemaData;
 
   readonly schemaRevision = this._schemaService.changeCount;
 
@@ -138,6 +139,8 @@ export class SchemaVisualComponent implements OnInit {
         }
       );
     });
+	
+	this.schemaData = this._schemaService.getSchemaData(this.project);
   }
 
   private get commandsHolder() {

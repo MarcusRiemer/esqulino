@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, Observable } from "rxjs";
-import { tap, catchError, first } from "rxjs/operators";
+import { BehaviorSubject, Observable, zip } from "rxjs";
+import { tap, catchError, first, map } from "rxjs/operators";
 
 import { ServerApiService } from "../shared";
 
@@ -39,6 +39,13 @@ export class SchemaService {
    * schema in the current session.
    */
   private _changeCount = new BehaviorSubject(0);
+  
+  private schemaData = {
+		xPos : [],
+		yPos : [],
+		width : [],
+		con : []
+	};
 
   /**
    * @param _http Used to do HTTP requests
@@ -162,6 +169,57 @@ export class SchemaService {
       .pipe(catchError((res) => this.handleError(res)));
 
     return toReturn;
+  }
+  
+  getSchemaData(project: Project): Object {
+	  let visualSchemaUrl = zip(this._changeCount, project.currentDatabaseName).pipe(
+		map(
+		  ([rev, name]) =>
+			`/api/project/${project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
+		)
+	  );
+	  
+	  let schemaUrl = visualSchemaUrl.subscribe((url) => {
+		  let visualSchemaText = this._http.get(url, { responseType: "text" });
+		  let schemaRef = visualSchemaText.subscribe(
+			(data) => {
+				this.parseSchemaText(data);
+			},
+			(error) => {
+			  console.log(error);
+			}
+		  );
+	  });
+	  
+	  return this.schemaData;
+  }
+  
+  private parseSchemaText(text: any): void {
+	
+    let parser = new DOMParser();
+    let svgDom = parser.parseFromString(text, "image/svg+xml");
+
+    let nodes = svgDom.getElementById("graph0").getElementsByTagName("g");
+
+    for (var i = 0; i < nodes.length; i++) {
+      let children = nodes[i].children;
+		if (nodes[i].classList[0] == "node") {
+			let points = children[children.length - 1]
+			  .getAttribute("points")
+			  .split(" ");
+
+			let positions = points[1].split(",");
+
+			this.schemaData.xPos[i] = +positions[0];
+			this.schemaData.yPos[i] = +positions[1];
+			this.schemaData.width[i] = +points[2].split(",")[0] - this.schemaData.xPos[i];
+		}
+	
+		let path = nodes[i].children[1].getAttribute("d");
+		if (path) {
+			this.schemaData.con[i] = path;
+		}
+	}
   }
 
   /**
