@@ -4,9 +4,8 @@ class Mutations::Grammar::RegenerateForeignTypes < Mutations::BaseMutation
 
   field :grammar, Types::GrammarType, null: false
 
-  def resolve(**args)
-    grammar = Grammar.find(args['id'])
-
+  def resolve(id:)
+    grammar = Grammar.find(id)
     grammar.refresh_from_references!
     grammar.save!
 
