@@ -132,9 +132,15 @@ update-xlf : src/locale/messages.en.xlf
 # GraphQL Client Generation
 ##################################
 
-generate-graphql-client:
+src/generated/graphql.ts : ../schema/graphql/schema.json
 	npm run graphql-codegen
+	# Horrible hack to generate an appropriate constructor, will hopefully be obsoleted by
+	# https://github.com/dotansimha/graphql-code-generator/issues/4366
+	sed -i "s/Document;/Document;\n  constructor(apollo: Apollo.Apollo) { super(apollo); }/g" $@
 	npx prettier --write "src/generated/**/*.{html,ts}"
+
+generate-graphql-client: src/generated/graphql.ts
+
 
 ##################################
 # Dependencies
