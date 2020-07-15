@@ -3,7 +3,7 @@ import {
   NodeAttributeDescription,
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
-  GrammarDocument,
+  NamedLanguages,
 } from "../../syntaxtree/";
 import { FullNodeConcreteTypeDescription } from "../../syntaxtree/grammar-type-util.description";
 import { fullNodeDescription } from "../../syntaxtree/grammar-type-util";
@@ -96,7 +96,7 @@ export function generateDefaultNode(
  * Generates a concrete block that is draggable and shal be shown on its own.
  */
 export function generateSidebarBlock(
-  grammar: GrammarDocument,
+  languages: NamedLanguages,
   block: AnySidebarBlockDescription
 ): SidebarBlockDescription {
   if (block.type === "constant") {
@@ -108,7 +108,7 @@ export function generateSidebarBlock(
     delete toReturn.type;
     return toReturn;
   } else {
-    const nodeType = fullNodeDescription(grammar, block.nodeType);
+    const nodeType = fullNodeDescription(languages, block.nodeType);
     const toReturn: SidebarBlockDescription = {
       displayName: block.displayName || block.nodeType.typeName,
       defaultNode: generateDefaultNode(nodeType),
@@ -122,7 +122,7 @@ export function generateSidebarBlock(
  * Generates all blocks in this sidebar category.
  */
 export function generateSidebarCategory(
-  grammar: GrammarDocument,
+  languages: NamedLanguages,
   category: AnySidebarCategoryDescription
 ): FixedBlocksSidebarCategoryDescription {
   switch (category.type) {
@@ -139,7 +139,7 @@ export function generateSidebarCategory(
       // Generate relevant blocks
       const toReturn: FixedBlocksSidebarCategoryDescription = {
         categoryCaption: category.categoryCaption,
-        blocks: category.blocks.map((b) => generateSidebarBlock(grammar, b)),
+        blocks: category.blocks.map((b) => generateSidebarBlock(languages, b)),
       };
 
       return toReturn;
@@ -166,7 +166,7 @@ export function generateSidebarCategory(
         });
       });
 
-      return generateSidebarCategory(grammar, toGenerate);
+      return generateSidebarCategory(languages, toGenerate);
     }
   }
 }
@@ -176,15 +176,15 @@ export function generateSidebarCategory(
  * information.
  */
 export function generateSidebar(
-  grammar: GrammarDocument,
+  languages: NamedLanguages,
   desc: GeneratedBlocksSidebarDescription
 ): FixedBlocksSidebarDescription;
 export function generateSidebar(
-  grammar: GrammarDocument,
+  languages: NamedLanguages,
   desc: AnySidebarDescription
 ): SidebarDescription;
 export function generateSidebar(
-  grammar: GrammarDocument,
+  languages: NamedLanguages,
   desc: AnySidebarDescription
 ): SidebarDescription {
   // Is there anything to generate?
@@ -193,7 +193,7 @@ export function generateSidebar(
       type: "fixedBlocks",
       caption: desc.caption,
       categories: desc.categories.map((category) =>
-        generateSidebarCategory(grammar, category)
+        generateSidebarCategory(languages, category)
       ),
     };
   } else {

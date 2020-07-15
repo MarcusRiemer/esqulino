@@ -103,6 +103,7 @@ concise_attributes:
           }
         }
       },
+      "foreignTypes": {},
       "root": {
         "languageName": "xml",
         "typeName": "element"

@@ -15,6 +15,7 @@ import {
 import { resolveChildOccurs } from "./grammar-util";
 import { OccursSpecificDescription, resolveOccurs } from "./occurs";
 import { QualifiedTypeName } from "./syntaxtree.description";
+import { allPresentTypes } from "./grammar-type-util";
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -1317,6 +1318,7 @@ class TypeReference {
       this._languageName = currentLang;
       this._typeName = desc;
     } else {
+      // debugger;
       throw new Error("Impossible: Unknown type reference");
     }
   }
@@ -1371,7 +1373,7 @@ class TypeReference {
  * A language consists of type definitions and a set of types that may occur at the root.
  */
 export class GrammarValidator {
-  private _registeredTypes: {
+  private _registeredLanguages: {
     [languageName: string]: { [typeName: string]: NodeType };
   } = {};
 
@@ -1388,20 +1390,36 @@ export class GrammarValidator {
   constructor(validator: Validator, desc: Desc.GrammarDocument) {
     this.validator = validator;
 
-    Object.entries(desc.types).forEach(([langName, types]) => {
-      Object.entries(types).forEach(([typeName, typeDesc]) => {
+    // Ensure there is a bucket for every language
+    const allLanguageNames = new Set([
+      ...Object.keys(desc.types),
+      ...Object.keys(desc.foreignTypes),
+    ]);
+    allLanguageNames.forEach((langName) => {
+      this._registeredLanguages[langName] = {};
+    });
+
+    // Grammar needs to take local and foreign types into account
+    const allTypes = allPresentTypes(desc);
+
+    // Register all existing types
+    Object.entries(allTypes).forEach(([langName, langTypes]) => {
+      Object.entries(langTypes).forEach(([typeName, typeDesc]) => {
         this.registerTypeValidator(langName, typeName, typeDesc);
       });
     });
 
-    this.rootType = new TypeReference(validator, desc.root);
+    // If a root type was specified: Make it resolveable
+    if (desc.root) {
+      this.rootType = new TypeReference(validator, desc.root);
+    }
   }
 
   /**
    * @return All types that are part of this grammar.
    */
   get availableTypes(): NodeType[] {
-    const nested = Object.values(this._registeredTypes).map((lang) =>
+    const nested = Object.values(this._registeredLanguages).map((lang) =>
       Object.values(lang)
     );
     return [].concat.apply([], nested);
@@ -1411,11 +1429,7 @@ export class GrammarValidator {
    * @return All languages that are part of this grammar.
    */
   get availableLanguages() {
-    const toReturn = new Set<string>();
-
-    this.availableTypes.forEach((t) => toReturn.add(t.languageName));
-
-    return Array.from(toReturn);
+    return Object.keys(this._registeredLanguages);
   }
 
   /**
@@ -1423,7 +1437,9 @@ export class GrammarValidator {
    * type is used as the root.
    */
   validateFromRoot(ast: AST.Node, context: ValidationContext) {
-    if (!this.rootType.isResolveable) {
+    if (!this.rootType) {
+      context.addError(ErrorCodes.UnspecifiedRoot, ast);
+    } else if (!this.rootType.isResolveable) {
       context.addError(ErrorCodes.UnknownRoot, ast);
     } else {
       this.rootType.validate(ast, context);
@@ -1434,7 +1450,7 @@ export class GrammarValidator {
    * @return True if the given typename is known in this language.
    */
   isKnownType(languageName: string, typename: string): boolean {
-    const lang = this._registeredTypes[languageName];
+    const lang = this._registeredLanguages[languageName];
     return lang && !!lang[typename];
   }
 
@@ -1445,7 +1461,7 @@ export class GrammarValidator {
     if (!this.isKnownType(languageName, typename)) {
       throw new Error(`Language does not have type "${typename}"`);
     } else {
-      return this._registeredTypes[languageName][typename];
+      return this._registeredLanguages[languageName][typename];
     }
   }
 
@@ -1461,17 +1477,13 @@ export class GrammarValidator {
     if (this.isKnownType(languageName, nodeName)) {
       throw new Error(
         `Attempted to register node "${nodeName}" twice for "${languageName}. Previous definition: ${JSON.stringify(
-          this._registeredTypes[nodeName]
+          this._registeredLanguages[nodeName]
         )}, Conflicting Definition: ${JSON.stringify(desc)}`
       );
     }
 
-    // Ensure the object for the language in question exists
-    if (!this._registeredTypes[languageName]) {
-      this._registeredTypes[languageName] = {};
-    }
-
-    const langTypes = this._registeredTypes[languageName];
+    // All types of the language we have at hand
+    const langTypes = this._registeredLanguages[languageName];
 
     // Actually instantiate the correct validator
     if (Desc.isNodeConcreteTypeDescription(desc)) {

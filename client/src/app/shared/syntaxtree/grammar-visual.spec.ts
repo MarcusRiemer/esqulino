@@ -3,42 +3,53 @@ import { GRAMMAR_BOOLEAN_DESCRIPTION } from "./grammar.spec.boolean";
 import { GRAMMAR_SQL_DESCRIPTION } from "./grammar.spec.sql";
 import { singleLanguageGrammar } from "./grammar.spec-util";
 
-import { isVisualGrammar } from "./grammar-visual";
+import { hasVisualType } from "./grammar-visual";
 import * as AST from "./syntaxtree";
 import { Validator } from "./validator";
+import { allPresentTypes } from "./grammar-type-util";
 
 describe(`Visual Grammar`, () => {
   it(`isVisual() for spec languages`, () => {
-    expect(isVisualGrammar(GRAMMAR_ARITHMETIC_DESCRIPTION)).toBe(false);
-    expect(isVisualGrammar(GRAMMAR_BOOLEAN_DESCRIPTION)).toBe(false);
-    expect(isVisualGrammar(GRAMMAR_SQL_DESCRIPTION)).toBe(true);
+    expect(
+      hasVisualType(allPresentTypes(GRAMMAR_ARITHMETIC_DESCRIPTION))
+    ).toBeFalse();
+    expect(
+      hasVisualType(allPresentTypes(GRAMMAR_BOOLEAN_DESCRIPTION))
+    ).toBeFalse();
+    expect(hasVisualType(allPresentTypes(GRAMMAR_SQL_DESCRIPTION))).toBeTrue();
   });
 
   it(`isVisual() detects terminal symbols`, () => {
-    const g = singleLanguageGrammar("spec", "root", {
-      root: {
-        type: "concrete",
-        attributes: [{ type: "terminal", name: "foo", symbol: "foo" }],
-      },
-    });
-    expect(isVisualGrammar(g)).toBe(true);
+    expect(
+      hasVisualType({
+        spec: {
+          root: {
+            type: "concrete",
+            attributes: [{ type: "terminal", name: "foo", symbol: "foo" }],
+          },
+        },
+      })
+    ).toBe(true);
   });
 
   it(`isVisual() detects terminal rows`, () => {
-    const g = singleLanguageGrammar("spec", "root", {
-      root: {
-        type: "concrete",
-        attributes: [
-          {
-            type: "container",
-            orientation: "horizontal",
-            name: "argh",
-            children: [{ type: "allowed", name: "a1", nodeTypes: [] }],
+    expect(
+      hasVisualType({
+        spec: {
+          root: {
+            type: "concrete",
+            attributes: [
+              {
+                type: "container",
+                orientation: "horizontal",
+                name: "argh",
+                children: [{ type: "allowed", name: "a1", nodeTypes: [] }],
+              },
+            ],
           },
-        ],
-      },
-    });
-    expect(isVisualGrammar(g)).toBe(true);
+        },
+      })
+    ).toBe(true);
   });
 
   it(`Parses terminals (and ignores them)`, () => {

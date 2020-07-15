@@ -1,4 +1,3 @@
-import { LOCALE_ID } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import {
   HttpClientTestingModule,
@@ -39,7 +38,6 @@ describe(`Component: Server-tasks`, () => {
 
     fixture.detectChanges();
 
-    const serverApi = TestBed.inject(ServerApiService);
     const httpTestingController = TestBed.inject(HttpTestingController);
     const serverTaskService = TestBed.inject(ServerTasksService);
 

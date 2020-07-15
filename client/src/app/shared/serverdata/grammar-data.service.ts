@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { Subscription } from "rxjs";
+import { first } from "rxjs/operators";
 
 import { GrammarDescription, GrammarListDescription } from "../syntaxtree";
 
@@ -33,9 +34,25 @@ export class MutateGrammarService extends MutateData<GrammarDescription> {
   public constructor(
     http: HttpClient,
     snackBar: MatSnackBar,
-    serverApi: ServerApiService
+    private _serverApi: ServerApiService
   ) {
-    super(http, snackBar, urlResolver(serverApi), "Grammar");
+    super(http, snackBar, urlResolver(_serverApi), "Grammar");
+  }
+
+  async regenerateForeignTypes(grammarId: string) {
+    const url = this._serverApi.individualGrammarRegenerateForeignTypes(
+      grammarId
+    );
+    const result = await this._http
+      .post<GrammarDescription>(url, null)
+      .pipe(first())
+      .toPromise();
+
+    // TODO: This should also update the cached instance in the
+    //       IndividualGrammarDataService
+    this._listInvalidated.next();
+
+    return result;
   }
 }
 

@@ -1,0 +1,18 @@
+{
+  "root": { "languageName": "g19", "typeName": "n1" },
+  "types": {},
+  "foreignTypes": {
+    "g19": {
+      "n1": {
+        "type": "oneOf",
+        "oneOf": ["n2", "n3"]
+      },
+      "n2": {
+        "type": "concrete"
+      },
+      "n3": {
+        "type": "concrete"
+      }
+    }
+  }
+}

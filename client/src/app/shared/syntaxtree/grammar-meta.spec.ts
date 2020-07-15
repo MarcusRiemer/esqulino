@@ -186,6 +186,64 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Root Node with empty includes`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          includes: [
+            {
+              language: "MetaGrammar",
+              name: "grammarIncludes",
+              children: {
+                includes: [],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {},
+        includes: [],
+      });
+    });
+
+    it(`Root Node with single include`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          includes: [
+            {
+              language: "MetaGrammar",
+              name: "grammarIncludes",
+              children: {
+                includes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "grammarRef",
+                    properties: {
+                      grammarId: "e495ac2f-9413-4fb7-8480-d7d807bfc59a",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {},
+        includes: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
+      });
+    });
+
     it(`Root Node without types but with defined root type`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",

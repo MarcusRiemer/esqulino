@@ -1,0 +1,32 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 8dfa6990-c1b1-4d96-8f7c-b55d9d88e5a3
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta CSS
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "document",
+    "languageName": "css"}}], "editorComponents": []}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-06-07 12:00:15.215200000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-06-07 12:00:25.153056000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: f08946d5-7eda-428b-b10d-7feb6e602296
+new_record: false
+active_record_yaml_version: 2

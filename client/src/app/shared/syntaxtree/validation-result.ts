@@ -4,6 +4,8 @@ import * as AST from "./syntaxtree";
 export enum ErrorCodes {
   // The AST does simply not exist at all
   Empty = "EMPTY",
+  // The AST can't be evaluated because it is not clear what the root must be
+  UnspecifiedRoot = "UNSPECIFIED_ROOT",
   // A AST has a root node that does not match any allowed root node
   UnknownRoot = "UNKNOWN_ROOT",
   // A AST has a root node in an unknown language

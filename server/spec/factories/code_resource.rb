@@ -16,8 +16,12 @@ FactoryBot.define do
       end
     end
 
-    trait :grammar_single_type do
+    trait :meta_grammar do
       association :programming_language, factory: [:programming_language, :meta_grammar]
+    end
+
+    trait :grammar_single_type do
+      meta_grammar
       ast {
         ({
            "children"=> {

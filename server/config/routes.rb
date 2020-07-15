@@ -122,6 +122,7 @@ Rails.application.routes.draw do
     resources :grammars, only: [:create, :index, :show, :update, :destroy]
     get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages
     get 'grammars/:id/code_resources_gallery', controller: 'grammars', action: :code_resources_gallery
+    post 'grammars/:id/regenerate_foreign_types', controller: 'grammars', action: :regenerate_foreign_types
 
     get 'code_resources/by_programming_language/:programming_language_id',
         controller: 'code_resources', action: :index_by_programming_language

@@ -72,7 +72,7 @@ RSpec.describe CodeResource, type: :model do
       # Compiled should be *something* after saving
       res.save!
       expect(res.compiled).not_to be_nil
-      expect(res.to_full_api_response).to validate_against "CodeResourceDescription"
+      expect(res.ast).to validate_against "NodeDescription"
     end
   end
 

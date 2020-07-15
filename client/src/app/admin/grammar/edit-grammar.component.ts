@@ -16,7 +16,10 @@ import { ServerApiService } from "../../shared/serverdata/serverapi.service";
 import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
 import { GrammarDescription, QualifiedTypeName } from "../../shared/syntaxtree";
 import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
-import { getAllTypes } from "../../shared/syntaxtree/grammar-util";
+import {
+  getTypeList,
+  allPresentTypes,
+} from "../../shared/syntaxtree/grammar-type-util";
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
@@ -58,7 +61,7 @@ export class EditGrammarComponent implements OnInit {
       )
       .subscribe((g) => {
         this.grammar = g;
-        this.availableTypes = getAllTypes(this.grammar);
+        this.availableTypes = getTypeList(allPresentTypes(this.grammar));
         this.grammarRoot = g.root;
         this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
 
@@ -101,9 +104,13 @@ export class EditGrammarComponent implements OnInit {
    * This allows ngModel to pre-select the correct value.
    */
   set grammarRoot(t: QualifiedTypeName) {
-    this.grammar.root = this.availableTypes.find(
-      (a) => a.languageName === t.languageName && a.typeName === t.typeName
-    );
+    if (!!t) {
+      this.grammar.root = this.availableTypes.find(
+        (a) => a.languageName === t.languageName && a.typeName === t.typeName
+      );
+    } else {
+      this.grammar.root = undefined;
+    }
   }
 
   get grammarTypes() {
@@ -115,7 +122,7 @@ export class EditGrammarComponent implements OnInit {
    */
   set grammarTypes(types) {
     this.grammar.types = types;
-    this.availableTypes = getAllTypes(this.grammar);
+    this.availableTypes = getTypeList(allPresentTypes(this.grammar));
     this.grammarRoot = this.grammar.root;
   }
 
@@ -125,6 +132,15 @@ export class EditGrammarComponent implements OnInit {
   async onDelete() {
     await this._mutateGrammarData.deleteSingle(this.grammar.id);
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
+  }
+
+  async onRegenerateForeignTypes() {
+    const updated = await this._mutateGrammarData.regenerateForeignTypes(
+      this.grammar.id
+    );
+
+    this._individualGrammarData.setLocal(updated);
+    this.grammar = updated;
   }
 
   /**

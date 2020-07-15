@@ -186,6 +186,14 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
     };
   }
 
+  // References to other grammars
+  const includesNode = tree.rootNode.getChildInCategory("includes");
+  if (includesNode) {
+    toReturn.includes = includesNode
+      .getChildrenInCategory("includes")
+      .map((refNode) => refNode.properties["grammarId"]);
+  }
+
   // Add all defined types
   const definedTypes = tree.rootNode.getChildrenInCategory("nodes");
   definedTypes

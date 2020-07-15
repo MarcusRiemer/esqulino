@@ -269,6 +269,7 @@ concise_attributes:
           }
         }
       },
+      "foreignTypes": {},
       "root": {
         "languageName": "json",
         "typeName": "value"

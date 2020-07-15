@@ -1,0 +1,7 @@
+grammar "g019-one-of-root" {
+  typedef "g19"."n1" ::= n2 | n3
+  node "g19"."n2" {
+  }
+  node "g19"."n3" {
+  }
+}

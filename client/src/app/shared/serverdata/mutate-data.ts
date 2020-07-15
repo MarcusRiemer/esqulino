@@ -18,7 +18,7 @@ export class MutateData<TSingle extends IdentifiableResourceDescription> {
     private _speakingName: string
   ) {}
 
-  private readonly _listInvalidated = new Subject<void>();
+  protected readonly _listInvalidated = new Subject<void>();
 
   readonly listInvalidated = this._listInvalidated.asObservable();
 

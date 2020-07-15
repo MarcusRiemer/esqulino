@@ -53,7 +53,7 @@
             "generatedFromId": {
               "type": "string"
             },
-            "includedGrammars": {
+            "includes": {
               "items": {
                 "type": "string"
               },

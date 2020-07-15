@@ -1,0 +1,42 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b036b416-4932-4433-9a87-6f5beaf6ccee
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 01 Header
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "document", "children": {"body": [{"name": "body",
+    "children": {"elements": [{"name": "heading", "language": "html", "properties":
+    {"text": "Hello World"}}, {"name": "paragraph", "language": "html", "properties":
+    {"text": "This is a paragraph"}}]}, "language": "html"}], "head": []}, "language":
+    "html"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-06-07 12:02:06.503861000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-06-07 12:11:01.788589000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: addb5583-2859-4011-88e2-3f6366e92313
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

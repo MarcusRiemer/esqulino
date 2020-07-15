@@ -55,5 +55,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root
   value_before_type_cast: '{"typeName": "element", "languageName": "dxml"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: extends_id
 new_record: false
 active_record_yaml_version: 2
