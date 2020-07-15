@@ -1,0 +1,47 @@
+mutation CreateNews(
+    $title: JSON!,
+    $text: JSON!,
+    $publishedFrom: ISO8601DateTime!,
+    $userId: ID
+) {
+    createNews(input:{
+        title:$title,
+        text:$text,
+        publishedFrom:$publishedFrom,
+        userId:$userId
+    }) {
+        id
+        errors
+    }
+}
+
+
+mutation UpdateNews(
+    $id: ID!,
+    $title: JSON!,
+    $text: JSON!,
+    $publishedFrom: ISO8601DateTime!,
+    $userId: ID
+) {
+    updateNews(input:{
+        id:$id,
+        title:$title,
+        text:$text,
+        publishedFrom:$publishedFrom,
+        userId:$userId
+    }) {
+        id
+        errors
+    }
+}
+
+mutation DestroyNews(
+    $id: ID!,
+) {
+    destroyNews(input:{
+        id:$id
+    }) {
+        id
+        errors
+    }
+}

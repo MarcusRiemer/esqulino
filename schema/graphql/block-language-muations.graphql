@@ -1,5 +1,58 @@
-mutation CreateBlockLanguageMutation($name:String!,$slug:String,$defaultProgrammingLanguageId:ID,$grammarId:ID,$sidebars:JSON!,$editorBlocks:JSON!,$editorComponents:JSON!){
-    createBlockLanguage(input: {name:$name,slug:$slug,defaultProgrammingLanguageId:$defaultProgrammingLanguageId,grammarId:$grammarId,sidebars:$sidebars,editorBlocks:$editorBlocks,editorComponents:$editorComponents}){
+mutation CreateBlockLanguage(
+    $name:String!,
+    $slug:String,
+    $defaultProgrammingLanguageId:ID,
+    $grammarId:ID,
+    $sidebars:JSON!,
+    $editorBlocks:JSON!,
+    $editorComponents:JSON!
+){
+    createBlockLanguage(input:{
+        name:$name,
+        slug:$slug,
+        defaultProgrammingLanguageId:$defaultProgrammingLanguageId,
+        grammarId:$grammarId,
+        sidebars:$sidebars,
+        editorBlocks:$editorBlocks,
+        editorComponents:$editorComponents
+    }){
+        id
+        errors
+    }
+}
+
+mutation UpdateBlockLanguage(
+    $name:String!,
+    $slug:String,
+    $defaultProgrammingLanguageId:ID,
+    $grammarId:ID,$sidebars:JSON!,
+    $editorBlocks:JSON!,
+    $rootCssClasses:JSON,
+    $editorComponents:JSON!,
+    $localGeneratorInstructions:JSON
+){
+    updateBlockLanguage(input:{
+        name:$name,
+        slug:$slug,
+        defaultProgrammingLanguageId:$defaultProgrammingLanguageId,
+        grammarId:$grammarId,
+        sidebars:$sidebars,
+        editorBlocks:$editorBlocks,
+        rootCssClasses:$rootCssClasses,
+        editorComponents:$editorComponents
+        localGeneratorInstructions:$localGeneratorInstructions
+    }){
+        id
+        errors
+    }
+}
+
+mutation DestroyBlockLanguage(
+    $id:ID!,
+){
+    destroyBlockLanguage(input:{
+        id:$id,
+    }){
         id
         errors
     }

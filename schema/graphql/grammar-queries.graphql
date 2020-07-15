@@ -16,36 +16,32 @@ query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input
 }
 
 query GrammarDescriptionItem($id: ID!) {
-    grammars(input: {filter: {id: $id}}){
-        nodes {
-            id
-            name
-            programmingLanguageId
-            slug
-            generatedFromId
-            foreignTypes
-            root
-            types
-        }
+    singleGrammar(id: $id){
+        id
+        name
+        programmingLanguageId
+        slug
+        generatedFromId
+        foreignTypes
+        root
+        types
     }
 }
 
-query AdminEditGrammar($id: ID!) {
-    grammars(input: {filter: {id: $id}}) {
-        nodes {
-            id
-            name
-            programmingLanguageId
-            slug
-            generatedFromId
-            foreignTypes
-            root
-            types
-            blockLanguages {
-                nodes {
-                    id
-                    name
-                }
+query AdminSingleGrammar($id: ID!) {
+    singleGrammar(id: $id) {
+        id
+        name
+        programmingLanguageId
+        slug
+        generatedFromId
+        foreignTypes
+        root
+        types
+        blockLanguages {
+            nodes {
+                id
+                name
             }
         }
     }

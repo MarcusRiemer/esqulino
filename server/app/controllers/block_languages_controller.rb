@@ -10,25 +10,23 @@ class BlockLanguagesController < ApplicationController
   # Find a single block language by ID or by slug
   def show
     needle = id_params[:id]
-    block_lang = if (BlattwerkzeugUtil::string_is_uuid? needle) then
+    block_lang = if BlattwerkzeugUtil::string_is_uuid? needle then
                    BlockLanguage.find needle
                  else
                    BlockLanguage.find_by! slug: needle
                  end
-
     render json: block_lang.to_full_api_response
   end
 
   # Create a new block language
   def create
-    byebug
     block_lang = BlockLanguage.new(basic_params)
     block_lang.model = model_params
 
     if block_lang.save
       render :json => block_lang.to_full_api_response
     else
-      render :json => { 'errors' => block_lang.errors }, status: 400
+      render :json => {:errors => block_lang.errors }, status: 400
     end
   end
 

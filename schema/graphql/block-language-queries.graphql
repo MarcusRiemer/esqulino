@@ -16,3 +16,30 @@ query AdminListBlockLanguages($first:Int,$after:String,$before:String,$last:Int,
         }
     }
 }
+
+query SelectionListBlockLanguages{
+    blockLanguages{
+        nodes {
+            id
+            name
+        }
+    }
+}
+
+query AdminEditBlockLanguage($id: ID!) {
+    singleBlockLanguage(id: $id) {
+        id
+        name
+        slug
+        generated
+        grammarId
+        sidebars
+        editorBlocks
+        editorComponents
+        rootCssClasses
+        localGeneratorInstructions
+        createdAt
+        updatedAt
+        defaultProgrammingLanguageId
+    }
+}

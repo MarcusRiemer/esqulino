@@ -1,4 +1,4 @@
-mutation CreateGrammarMutation($name:String!,$slug:String,$types:JSON!,$foreignTypes:JSON!,$root:JSON!,$programmingLanguageId:ID!) {
+mutation CreateGrammar($name:String!,$slug:String,$types:JSON!,$foreignTypes:JSON!,$root:JSON!,$programmingLanguageId:ID!) {
     createGrammar(input:{name:$name,slug:$slug, types:$types,foreignTypes:$foreignTypes,root:$root,programmingLanguageId:$programmingLanguageId}) {
         grammar {
             id
@@ -6,7 +6,7 @@ mutation CreateGrammarMutation($name:String!,$slug:String,$types:JSON!,$foreignT
         errors
     }
 }
-mutation UpdateGrammarMutation($id:ID!,$name:String!,$slug:String,$types:JSON!,$foreignTypes:JSON!,$root:JSON,$programmingLanguageId:ID!,$generatedFromId:ID,$blockLanguageIds:[ID!]) {
+mutation UpdateGrammar($id:ID!,$name:String!,$slug:String,$types:JSON!,$foreignTypes:JSON!,$root:JSON,$programmingLanguageId:ID!,$generatedFromId:ID,$blockLanguageIds:[ID!]) {
     updateGrammar(input:{id:$id,name:$name,slug:$slug, types:$types,foreignTypes:$foreignTypes,root:$root,programmingLanguageId:$programmingLanguageId,generatedFromId:$generatedFromId,blockLanguageIds:$blockLanguageIds}) {
         grammar {
             id
@@ -14,7 +14,7 @@ mutation UpdateGrammarMutation($id:ID!,$name:String!,$slug:String,$types:JSON!,$
         errors
     }
 }
-mutation DestroyGrammarMutation($id: ID!) {
+mutation DestroyGrammar($id: ID!) {
     destroyGrammar(input: {id: $id}) {
         errors
     }

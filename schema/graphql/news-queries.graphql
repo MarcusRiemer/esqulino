@@ -1,0 +1,32 @@
+query AdminListNews($first:Int,$after:String,$before:String,$last:Int,$input:NewsInputType) {
+    news(first:$first,after:$after,before:$before,last:$last,input:$input) {
+        nodes {
+            id
+            title
+            text
+            publishedFrom
+            createdAt
+            updatedAt
+            userId
+        }
+        totalCount
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}
+
+query AdminSingleNews($id: ID!) {
+    singleNews(id: $id) {
+        id
+        title
+        text
+        publishedFrom
+        createdAt
+        updatedAt
+        userId
+    }
+}
