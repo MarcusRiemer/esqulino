@@ -1,28 +1,31 @@
 
 module Resolvers
-  class NewsResolver
-    #scope { Grammar.all }
+  class NewsResolver < BaseResolver
 
-    #Query arguments for filtering and ordering
-    #option :id, type: types.String, with: :apply_id_filter
-    #option :title, type: types.String, with: :apply_title_filter
-    # option :order, type: NewsOrderType, with: :apply_order
+    attr_reader(:scope)
 
-    # TODO: Filter for published_from, created_at and updated_at ?
+    def initialize(context:nil,filter:nil,order:nil,languages:nil)
+      # query context instance of GraphQL::Query::Context
+      scope = News
 
-    # def apply_id_filter(scope, value)
-    #  scope.where id: value
-    #end
+      #requested_columns(context).filter {|c| c.ends_with?("_id")}.each do |col|
+      #table = col[0,col.length-3].to_sym
+      #       scope = scope.left_joins(table).select(' grammars.id AS grammar_id').group('block_languages.id, grammars.id')
+      #
+      #end
 
-    #def apply_title_filter(scope, value)
-    #  scope.where \'title LIKE ?\', escape_search_term(value)
-    #end
+      unless (requested_columns(context) & ["user_id"]).empty?
+        # grammar_name will be used for field resolving in block_language_type.rb
+        # Used to solve n+1 query problem
+        scope = scope.left_joins(:user).select(' users.id AS user_id').group('news.id, users.id')
+      end
 
-    #def apply_order(scope,value)
-    #  order_key = value.to_h.stringify_keys.fetch("orderField","title")
-    #  order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
-    #  scope.order "#{order_key} #{order_dir}"
-    #end"
+      super(News,context:context,scope:scope,filter:filter,order:order,languages:languages)
+    end
+
+    def default_order_field
+      "title"
+    end
+
   end
 end
-

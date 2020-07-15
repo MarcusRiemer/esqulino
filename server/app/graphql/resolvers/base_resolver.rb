@@ -7,6 +7,7 @@ module Resolvers
       @context = context
       @languages = languages.nil? ? Types::Base::BaseEnum::LanguageEnum.enum_values : languages
       scope = select_relevant_fields(scope)
+
       scope = apply_filter(scope,filter)
       @scope = apply_order(scope,order)
     end
@@ -25,8 +26,8 @@ module Resolvers
     def apply_filter(scope, value)
       # When filtering via pattern (substring) matching
       # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
-      value.to_h.each do |filter_key,filter_value|
-        if filter_key.to_s == "id"
+      value.to_h.transform_keys{|k| k.to_s.underscore}.each do |filter_key,filter_value|
+        if is_uuid_column? filter_key
           scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
         elsif is_multilingual_column? filter_key
           scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
@@ -114,7 +115,13 @@ module Resolvers
     end
 
     def is_multilingual_column?(name)
-      @model_class.columns_hash[name.to_s].type == :hstore
+      col = @model_class.columns_hash[name]
+      col ? col.type == :hstore : false
+    end
+
+    def is_uuid_column?(name)
+      col = @model_class.columns_hash[name]
+      col ? col.type == :uuid : false
     end
   end
 end
