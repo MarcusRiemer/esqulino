@@ -9,21 +9,21 @@ import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
 import { QualifiedTypeName } from "../../shared/syntaxtree";
 import { getAllTypes } from "../../shared/syntaxtree/grammar-util";
 import {
-  AdminEditGrammarGQL,
-  AdminEditGrammarQuery,
+  AdminSingleGrammarGQL,
+  AdminSingleGrammarQuery,
   BlockLanguage,
   DestroyGrammarMutationGQL,
   UpdateGrammarMutationGQL
 } from "../../../generated/graphql";
 import {Subscription} from "rxjs";
 
-type Query = ReturnType<AdminEditGrammarGQL["watch"]>;
+type Query = ReturnType<AdminSingleGrammarGQL["watch"]>;
 
-type DataKey = Exclude<keyof AdminEditGrammarQuery, "__typename">;
+type DataKey = Exclude<keyof AdminSingleGrammarQuery, "__typename">;
 
 // TODO: Resolve this from the Query type above, requires unpacking
 //       a type argument to Observable
-type ListItem = AdminEditGrammarQuery[DataKey]["nodes"][0];
+type GrammarType = AdminSingleGrammarQuery[DataKey];
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
@@ -33,7 +33,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
   toolbarButtons: TemplateRef<any>;
 
   // The grammar that is beeing edited
-  grammar: ListItem;
+  grammar: GrammarType;
 
   subscriptions: Subscription[] = [];
 
@@ -49,9 +49,9 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _title: Title,
     private _toolbarService: ToolbarService,
-    private _updateMutation: UpdateGrammarMutationGQL,
-    private _destroyMutation: DestroyGrammarMutationGQL,
-    private _grammarsService: AdminEditGrammarGQL,
+    private _updateGrammarGQL: UpdateGrammarMutationGQL,
+    private _destroyGrammarGQL: DestroyGrammarMutationGQL,
+    private _editGrammarGQL: AdminSingleGrammarGQL,
   ) {}
 
   ngOnInit() {
@@ -61,11 +61,11 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
       .pipe(
         map((params: ParamMap) => params.get("grammarId")),
         switchMap((id: string) =>
-          this._grammarsService.watch({id}).valueChanges
+          this._editGrammarGQL.watch({id}).valueChanges
         )
       )
       .subscribe((g) => {
-        this.grammar = g.data.grammars.nodes[0];
+        this.grammar = g.data.singleGrammar;
         this.availableTypes = getAllTypes(this.grammar);
         this.grammarRoot = this.grammar.root;
         this._title.setTitle(`Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`);
@@ -90,7 +90,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
    * User has decided to save.
    */
   onSave() {
-    const mutationSubscription = this._updateMutation.mutate(this.grammar).subscribe();
+    const mutationSubscription = this._updateGrammarGQL.mutate(this.grammar).subscribe();
     this.subscriptions = [...this.subscriptions, mutationSubscription];
   }
 
@@ -125,7 +125,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._destroyMutation.mutate({id:this.grammar.id}).toPromise();
+    await this._destroyGrammarGQL.mutate({id:this.grammar.id}).toPromise();
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 

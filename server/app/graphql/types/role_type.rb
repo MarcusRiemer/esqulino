@@ -5,7 +5,8 @@ module Types
     field :name, String, null:true
     field :resourceId, String, null:true
     field :resourceType, String, null:true
-    field :createdAt, Types::Scalar::Datetime, null:false
-    field :updatedAt, Types::Scalar::Datetime, null:false
+
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false
   end
 end

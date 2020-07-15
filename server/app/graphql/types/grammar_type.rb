@@ -13,8 +13,8 @@ module Types
     field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
     field :codeResources, Types::CodeResourceType.connection_type, null:true
 
-    field :createdAt, Types::Scalar::Datetime, null:false
-    field :updatedAt, Types::Scalar::Datetime, null:false
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'GrammarOrderFieldEnum'

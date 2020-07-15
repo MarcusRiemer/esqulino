@@ -5,22 +5,28 @@ module Types
     field :model, GraphQL::Types::JSON, null:false
     field :slug, String, null:true
     field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
+    field :defaultProgrammingLanguageId, ID,null:false
     field :grammar, Types::GrammarType, null:true
     field :grammarId, ID, null: true
     field :generated, Boolean, null:true
     field :codeResources, [Types::CodeResourceType], null:true
 
-    field :createdAt, Types::Scalar::Datetime, null:true
-    field :updatedAt, Types::Scalar::Datetime, null:true
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
 
     def generated
       # generated defined in grammars.rb in scope
-      object.generated
+      normalize_keys(object)["generated"]
     end
 
     def grammar_id
       # generated defined in grammars.rb in scope
-      object.grammar_id
+      normalize_keys(object)["grammar_id"]
+    end
+
+    def default_programming_language_id
+      # coming from BlockLanguage.scope_list
+      normalize_keys(object)["default_programming_language_id"]
     end
 
     class OrderFieldEnum < Types::Base::BaseEnum

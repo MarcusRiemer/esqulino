@@ -1,4 +1,4 @@
-class Mutations::BlockLanguage::DestroyBlockLanguageMutation < Mutations::BlockLanguage::BlockLanguageMutation
+class Mutations::BlockLanguage::DestroyBlockLanguage < Mutations::BlockLanguage::BlockLanguage
 
   argument :id, ID, required: true
 

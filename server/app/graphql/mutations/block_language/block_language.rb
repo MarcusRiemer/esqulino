@@ -1,5 +1,5 @@
 
-class Mutations::BlockLanguage::BlockLanguageMutation < Mutations::BaseMutation
+class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
 
   field :blockLanguage, Types::BlockLanguageType, null: true
   field :blockLanguageDescription, Types::BlockLanguageDescriptionType, null:true

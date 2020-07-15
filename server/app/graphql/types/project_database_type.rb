@@ -4,7 +4,8 @@ module Types
     field :name, String, null:true
     field :project, Types::ProjectType,null:true
     field :schema, GraphQL::Types::JSON, null:true
-    field :createdAt, Types::Scalar::Datetime, null:false
-    field :updatedAt, Types::Scalar::Datetime, null:false
+
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false
   end
 end

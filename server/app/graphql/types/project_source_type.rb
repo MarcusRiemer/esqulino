@@ -6,7 +6,8 @@ module Types
     field :title, String, null:false
     field :display, String, null:false
     field :readOnly, Boolean,null:false
-    field :createdAt, Types::Scalar::Datetime, null:true
-    field :updatedAt, Types::Scalar::Datetime, null:true
+
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
   end
 end

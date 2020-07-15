@@ -6,16 +6,17 @@ module Types
     field :public, Boolean,null:true
     field :preview, String, null:true
     field :indexPageId, String, null:true
-    field :createdAt, Types::Scalar::Datetime, null:true
-    field :updatedAt, Types::Scalar::Datetime, null:true
     field :slug, String, null:true
     field :defaultDatabase, Types::ProjectDatabaseType,null:true
     field :user, Types::UserType,null:true
-    field :codeResources, Types::CodeResourceType.connection_type, null:true
+    field :codeResources, [Types::CodeResourceType], null:true
     field :codeResourceCount, Integer, null:true
-    field :projectSources, Types::ProjectSourceType.connection_type, null:true
-    field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
-    field :grammars, Types::GrammarType.connection_type,null:true
+    field :projectSources, [Types::ProjectSourceType], null:true
+    field :blockLanguages, [Types::BlockLanguageType], null:true
+    field :grammars, [Types::GrammarType],null:true
+
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
 
     def code_resource_count
       # code_resource_count defined in projects_resolver.rb

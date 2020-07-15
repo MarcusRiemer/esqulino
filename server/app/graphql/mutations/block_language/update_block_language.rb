@@ -1,4 +1,4 @@
-class Mutations::BlockLanguage::UpdateBlockLanguageMutation < Mutations::BlockLanguage::BlockLanguageMutation
+class Mutations::BlockLanguage::UpdateBlockLanguage < Mutations::BlockLanguage::BlockLanguage
 
   argument :name, String, required: true
   argument :slug, String, required: false

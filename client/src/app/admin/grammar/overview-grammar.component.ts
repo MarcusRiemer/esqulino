@@ -41,7 +41,7 @@ export class OverviewGrammarComponent
   @ViewChild(MatSort, {static: true})
   sort: MatSort;
 
-  constructor(readonly grammarsService: AdminListGrammarsGQL) {
+  constructor(readonly grammarsGQL: AdminListGrammarsGQL) {
   }
 
   typed(doc: any): ListItem {
@@ -55,7 +55,7 @@ export class OverviewGrammarComponent
 
   //Query Object which can be used to refetch data
   //fetchPolicy must be network-only, to get a clean pagination
-  readonly query = this.grammarsService.watch(
+  readonly query = this.grammarsGQL.watch(
     {first: this.pageSize},
     {notifyOnNetworkStatusChange: true, fetchPolicy: "network-only"}
   );
