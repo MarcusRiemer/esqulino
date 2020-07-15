@@ -62,7 +62,6 @@ reset-live-data: delete-live-data load-live-data
 test-watch:
 	bundle exec guard --plugin=RSpec
 
-
 generate-graphql-schema:
 	bin/rake graphql:schema:json --trace
 

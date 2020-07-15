@@ -189,7 +189,7 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   // References to other grammars
   const includesNode = tree.rootNode.getChildInCategory("includes");
   if (includesNode) {
-    toReturn.includes = includesNode
+    toReturn.includedGrammarIds = includesNode
       .getChildrenInCategory("includes")
       .map((refNode) => refNode.properties["grammarId"]);
   }

@@ -14,8 +14,6 @@ import { switchMap, map } from "rxjs/operators";
 
 import {
   AdminSingleGrammarGQL,
-  AdminSingleGrammarQuery,
-  BlockLanguage,
   DestroyGrammarGQL,
   UpdateGrammarGQL,
   RegenerateForeignTypesGQL,
@@ -23,17 +21,12 @@ import {
 
 import { ToolbarService } from "../../shared/toolbar.service";
 import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
-import { QualifiedTypeName } from "../../shared/syntaxtree";
+import { QualifiedTypeName, GrammarDescription } from "../../shared/syntaxtree";
 import {
   getTypeList,
   allPresentTypes,
 } from "../../shared/syntaxtree/grammar-type-util";
-
-type DataKey = Exclude<keyof AdminSingleGrammarQuery, "__typename">;
-
-// TODO: Resolve this from the Query type above, requires unpacking
-//       a type argument to Observable
-type GrammarType = AdminSingleGrammarQuery[DataKey];
+import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
@@ -43,12 +36,12 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
   toolbarButtons: TemplateRef<any>;
 
   // The grammar that is beeing edited
-  grammar: GrammarType;
+  grammar: GrammarDescription;
 
   subscriptions: Subscription[] = [];
 
   // Block languages that are related to this grammar
-  relatedBlockLanguages: Pick<BlockLanguage, "id" | "name">[];
+  relatedBlockLanguages: Pick<BlockLanguageDescription, "id" | "name">[];
 
   // All types that are available as root. These may not be regenerated
   // on the fly because [ngValue] uses the identity of the objects to compare them.
@@ -77,14 +70,21 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
           (id: string) => this._editGrammarGQL.watch({ id }).valueChanges
         )
       )
-      .subscribe((g) => {
-        this.grammar = g.data.singleGrammar;
+      .subscribe((response) => {
+        const g = response.data.singleGrammar;
+
+        // The response object contains additional properties that
+        // we don't expect.
+        this.grammar = Object.assign({}, g);
+        delete this.grammar["blockLanguages"];
+
         this.availableTypes = getTypeList(allPresentTypes(this.grammar));
         this.grammarRoot = this.grammar.root;
         this._title.setTitle(
           `Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`
         );
-        this.relatedBlockLanguages = this.grammar.blockLanguages.nodes;
+        this.relatedBlockLanguages =
+          response.data.singleGrammar.blockLanguages.nodes;
         if (this.grammar.generatedFromId === null) {
           this.grammar.generatedFromId = undefined;
         }

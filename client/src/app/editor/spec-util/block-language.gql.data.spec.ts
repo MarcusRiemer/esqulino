@@ -1,20 +1,5 @@
-import { TestBed } from "@angular/core/testing";
-import { HttpTestingController } from "@angular/common/http/testing";
-
-import {
-  BlockLanguageDescription,
-  BlockLanguageListDescription,
-} from "../../shared/block/block-language.description";
 import { generateUUIDv4 } from "../../shared/util-browser";
-import {
-  ServerApiService,
-  IndividualBlockLanguageDataService,
-} from "../../shared/serverdata";
-import { provideListResponse, ListOrder } from "./list.data.spec";
-import {
-  AdminListBlockLanguagesQuery,
-  AdminListGrammarsQuery,
-} from "../../../generated/graphql";
+import { AdminListBlockLanguagesQuery } from "../../../generated/graphql";
 
 type BlockLanguageGQLResponse = { data: AdminListBlockLanguagesQuery };
 type AdminListBlockLanguageNode = AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0];

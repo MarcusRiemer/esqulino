@@ -133,6 +133,7 @@ update-xlf : src/locale/messages.en.xlf
 ##################################
 
 src/generated/graphql.ts : ../schema/graphql/schema.json
+	make -C ../server generate-graphql-schema
 	npm run graphql-codegen
 	# Horrible hack to generate an appropriate constructor, will hopefully be obsoleted by
 	# https://github.com/dotansimha/graphql-code-generator/issues/4366

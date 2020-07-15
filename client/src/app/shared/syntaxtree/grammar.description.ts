@@ -346,7 +346,7 @@ export interface GrammarDocument {
   root?: QualifiedTypeName;
 
   // IDs of the grammars that this grammar includes
-  includes?: string[];
+  includedGrammarIds?: string[];
 }
 
 /**

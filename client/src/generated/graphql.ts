@@ -281,6 +281,7 @@ export type Grammar = {
   generatedFrom?: Maybe<CodeResource>;
   generatedFromId?: Maybe<Scalars["ID"]>;
   id: Scalars["ID"];
+  includedGrammarIds: Array<Scalars["ID"]>;
   name: Scalars["String"];
   programmingLanguage: ProgrammingLanguage;
   programmingLanguageId: Scalars["ID"];
@@ -1113,6 +1114,7 @@ export type AdminSingleGrammarQuery = { __typename?: "Query" } & {
     | "foreignTypes"
     | "root"
     | "types"
+    | "includedGrammarIds"
   > & {
       blockLanguages?: Maybe<
         { __typename?: "BlockLanguageConnection" } & {
@@ -1705,6 +1707,7 @@ export const AdminSingleGrammarDocument = gql`
       foreignTypes
       root
       types
+      includedGrammarIds
       blockLanguages {
         nodes {
           id

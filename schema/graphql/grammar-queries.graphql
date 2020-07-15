@@ -38,6 +38,7 @@ query AdminSingleGrammar($id: ID!) {
         foreignTypes
         root
         types
+        includedGrammarIds
         blockLanguages {
             nodes {
                 id

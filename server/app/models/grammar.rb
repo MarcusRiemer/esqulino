@@ -36,7 +36,15 @@ class Grammar < ApplicationRecord
            dependent: :destroy # Needed because Rails otherwise tries to nullify the column
 
   # All grammars that are referenced by this grammar
-  has_many :referenced_grammars, through: :grammar_reference_origins, source: "target"
+  has_many :referenced_grammars,
+           through: :grammar_reference_origins,
+           source: "target"
+
+  # All grammars that are included by this grammar
+  has_many :included_grammars,
+           -> { where( grammar_references: { reference_type: GrammarReference.reference_types["include_types"] })},
+           through: :grammar_reference_origins,
+           source: "target"
 
   # Grammar with properties that are relevant when listing
 

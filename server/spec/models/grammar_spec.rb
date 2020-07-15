@@ -473,6 +473,7 @@ RSpec.describe Grammar, type: :model do
       grammar.reload # Dependant relationships are cached
 
       expect(grammar.referenced_grammars).to eq [inc_2]
+      expect(grammar.included_grammars).to eq [inc_2]
       expect(GrammarReference.all).to match_array [ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
@@ -509,6 +510,7 @@ RSpec.describe Grammar, type: :model do
 
       expect(ref_1_orig).to eq ref_1
       expect(grammar.referenced_grammars).to eq [inc_1, inc_2]
+      expect(grammar.included_grammars).to eq [inc_1, inc_2]
       expect(GrammarReference.all).to match_array [ref_1, ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
