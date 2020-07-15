@@ -163,8 +163,8 @@ RSpec.describe Resolvers::ProjectsResolver do
   it "Get only languages which are requested in name column" do
     FactoryBot.create(:project, name: {de: "hallo",en:"hello"})
     FactoryBot.create(:project, name: {de: "hallo2"})
-    FactoryBot.create(:project, name: {en:"hello3"})
     FactoryBot.create(:project, name: {en:"hello4"})
+    FactoryBot.create(:project, name: {en:"hello3"})
 
     res = Resolvers::ProjectsResolver.new(
         languages: ["en"]
@@ -172,7 +172,7 @@ RSpec.describe Resolvers::ProjectsResolver do
     res2 = Resolvers::ProjectsResolver.new(
         languages: ["de"]
     )
-    expect(res.scope.map { |p| p.name}).to eq([{"en"=>"hello"}, {}, {"en"=>"hello3"}, {"en"=>"hello4"}])
+    expect(res.scope.map { |p| p.name}).to eq([{"en"=>"hello"}, {"en"=>"hello3"}, {"en"=>"hello4"},{}])
     expect(res2.scope.map { |p| p.name}).to eq([{"de"=>"hallo"}, {"de"=>"hallo2"}, {}, {}])
   end
 

@@ -181,14 +181,13 @@ RSpec.describe GraphqlController, type: :request do
       expect(projects_data.has_key? "totalCount").to be true
     end
 
-    it 'Projects: Requesting all columns of projects model and  not to return error' do
+    it 'Projects: Requesting all columns of projects model and expect not to return error' do
       FactoryBot.create(:project, name: {en: "hello",de: "hallo"})
       post "/graphql",
            headers: json_headers,
            params: {
-               query:"{projects{nodes{name blockLanguages{nodes{id}}codeResources{nodes{id}}createdAt defaultDatabase{id}description grammars{nodes {id}}id indexPageId name preview projectSources{nodes{id}}public slug updatedAt user{id}}}}"
+               query:"{projects{nodes{name blockLanguages{id}codeResources{id}createdAt defaultDatabase{id}description grammars{id}id indexPageId name preview projectSources{id}public slug updatedAt user{id}}}}"
            }.to_json
-
       response_data =  JSON.parse(response.body)['data']['projects']
 
       expect(response).to have_http_status(200)
@@ -233,29 +232,28 @@ RSpec.describe GraphqlController, type: :request do
       post "/graphql",
            headers: json_headers,
            params: {
-               query:"{projects {nodes{codeResources{nodes{name} totalCount}codeResourceCount}}}"
+               query:"{projects {nodes{codeResources{name}codeResourceCount}}}"
            }.to_json
-
       nodes_data =  JSON.parse(response.body)['data']['projects']['nodes'].first
-      code_resource_data = nodes_data['codeResources']['nodes']
+      code_resource_data = nodes_data['codeResources']
       expect(response).to have_http_status(200)
       expect(nodes_data['codeResourceCount']).to eq(2)
       expect(code_resource_data.map {|c| c['name']}).to eq(["test1","test2"])
-      expect(nodes_data['codeResources']['totalCount']).to eq(2)
     end
 
     it 'Projects: Requesting code_resource relation without having code_resources' do
-      FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
+      p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
+      FactoryBot.create(:code_resource, name: "Leer", project_id: p.id)
       post "/graphql",
            headers: json_headers,
            params: {
-               query:"{projects {nodes{codeResources{nodes{name} totalCount}codeResourceCount}}}"
+               query:"{projects {nodes{codeResources{name}codeResourceCount}}}"
            }.to_json
 
       nodes_data =  JSON.parse(response.body)['data']['projects']['nodes'].first
       expect(response).to have_http_status(200)
-      expect(nodes_data['codeResourceCount']).to eq(0)
-      expect(nodes_data['codeResources']['totalCount']).to eq(0)
+      expect(nodes_data['codeResourceCount']).to eq(1)
+      expect(nodes_data['codeResources'][0]['name']).to eq("Leer")
     end
     it 'Projects: Requesting code_resource_count and projects totalCount, so projects totalCount (in connection) has to deal with AcitveRecord::Relation' do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
