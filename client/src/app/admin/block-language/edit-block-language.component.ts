@@ -36,7 +36,10 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * All grammars that may be selected for the edited block language.
    */
   readonly availableGrammars = this._grammarSelection
-    .watch()
+    .watch(
+      {},
+      { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+    )
     .valueChanges.pipe(map((response) => response.data.grammars.nodes));
 
   /**

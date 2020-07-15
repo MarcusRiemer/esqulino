@@ -79,6 +79,7 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`Displays a loading indicator (or not)`, async () => {
     const t = await createComponent();
+    // only works like that when fetch-policy is network-only
     const states: boolean[] = [false, true, false];
     const response = buildSingleBlockLanguageResponse();
 

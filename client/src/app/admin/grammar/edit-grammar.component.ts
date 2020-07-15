@@ -69,7 +69,11 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
       .pipe(
         map((params: ParamMap) => params.get("grammarId")),
         switchMap(
-          (id: string) => this._editGrammarGQL.watch({ id }).valueChanges
+          (id: string) =>
+            this._editGrammarGQL.watch(
+              { id },
+              { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+            ).valueChanges
         )
       )
       .subscribe((g) => {
