@@ -149,7 +149,7 @@ class Grammar < ApplicationRecord
 
     to_json_api_response
       .except("model", "createdAt", "updatedAt")
-      .merge({"includes" => includes})
+      .merge({"includedGrammarIds" => includes})
   end
 
   # Computes a hash that may be sent back to the client if only superficial

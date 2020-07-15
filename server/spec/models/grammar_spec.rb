@@ -522,7 +522,7 @@ RSpec.describe Grammar, type: :model do
 
       full_response = grammar.to_full_api_response
       expect(full_response).to validate_against "GrammarDescription"
-      expect(full_response["includes"]).to match_array([])
+      expect(full_response["includedGrammarIds"]).to match_array([])
     end
 
     it "Includes a single reference" do
@@ -532,7 +532,7 @@ RSpec.describe Grammar, type: :model do
 
       full_response = grammar.to_full_api_response
       expect(full_response).to validate_against "GrammarDescription"
-      expect(full_response["includes"]).to match_array([inc_1.id])
+      expect(full_response["includedGrammarIds"]).to match_array([inc_1.id])
     end
   end
 end
