@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_29_045910) do
+ActiveRecord::Schema.define(version: 2020_06_07_185733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -30,6 +30,17 @@ ActiveRecord::Schema.define(version: 2020_05_29_045910) do
     t.index ["slug"], name: "index_block_languages_on_slug", unique: true
   end
 
+  create_table "code_resource_references", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "origin_id", null: false
+    t.uuid "target_id", null: false
+    t.integer "reference_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["origin_id", "target_id"], name: "code_resource_references_unique", unique: true
+    t.index ["origin_id"], name: "index_code_resource_references_on_origin_id"
+    t.index ["target_id"], name: "index_code_resource_references_on_target_id"
+  end
+
   create_table "code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.jsonb "ast"
@@ -44,6 +55,17 @@ ActiveRecord::Schema.define(version: 2020_05_29_045910) do
     t.index ["project_id"], name: "index_code_resources_on_project_id"
   end
 
+  create_table "grammar_references", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "origin_id", null: false
+    t.uuid "target_id", null: false
+    t.integer "reference_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["origin_id", "target_id"], name: "grammar_references_unique", unique: true
+    t.index ["origin_id"], name: "index_grammar_references_on_origin_id"
+    t.index ["target_id"], name: "index_grammar_references_on_target_id"
+  end
+
   create_table "grammars", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "slug"
@@ -55,6 +77,8 @@ ActiveRecord::Schema.define(version: 2020_05_29_045910) do
     t.jsonb "types", default: {}
     t.jsonb "foreign_types", default: {}
     t.jsonb "root"
+    t.uuid "extends_id"
+    t.index ["extends_id"], name: "index_grammars_on_extends_id"
     t.index ["generated_from_id"], name: "index_grammars_on_generated_from_id"
     t.index ["programming_language_id"], name: "index_grammars_on_programming_language_id"
     t.index ["slug"], name: "index_grammars_on_slug", unique: true
@@ -165,10 +189,15 @@ ActiveRecord::Schema.define(version: 2020_05_29_045910) do
 
   add_foreign_key "block_languages", "grammars"
   add_foreign_key "block_languages", "programming_languages", column: "default_programming_language_id"
+  add_foreign_key "code_resource_references", "code_resources", column: "origin_id"
+  add_foreign_key "code_resource_references", "code_resources", column: "target_id"
   add_foreign_key "code_resources", "block_languages"
   add_foreign_key "code_resources", "programming_languages"
   add_foreign_key "code_resources", "projects"
+  add_foreign_key "grammar_references", "grammars", column: "origin_id"
+  add_foreign_key "grammar_references", "grammars", column: "target_id"
   add_foreign_key "grammars", "code_resources", column: "generated_from_id"
+  add_foreign_key "grammars", "grammars", column: "extends_id"
   add_foreign_key "grammars", "programming_languages"
   add_foreign_key "identities", "users"
   add_foreign_key "log_entries", "users"

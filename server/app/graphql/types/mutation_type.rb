@@ -3,6 +3,7 @@ module Types
     field :create_grammar, mutation: Mutations::Grammar::CreateGrammar
     field :update_grammar, mutation: Mutations::Grammar::UpdateGrammar
     field :destroy_grammar, mutation: Mutations::Grammar::DestroyGrammar
+    field :regenerate_foreign_types, mutation: Mutations::Grammar::RegenerateForeignTypes
     field :create_block_language, mutation: Mutations::BlockLanguage::CreateBlockLanguage
     field :update_block_language, mutation: Mutations::BlockLanguage::UpdateBlockLanguage
     field :destroy_block_language, mutation: Mutations::BlockLanguage::DestroyBlockLanguage

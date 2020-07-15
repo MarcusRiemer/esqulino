@@ -134,6 +134,7 @@ update-xlf : src/locale/messages.en.xlf
 
 generate-graphql-client:
 	npm run graphql-codegen
+	npx prettier --write "src/generated/**/*.{html,ts}"
 
 ##################################
 # Dependencies

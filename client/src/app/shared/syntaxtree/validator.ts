@@ -88,20 +88,20 @@ export class Validator {
    */
   validateFromRoot(ast: AST.Node | AST.Tree, additionalContext: any = {}) {
     // Grab the actual root
-    let rootNode: AST.Node = undefined;
+    let astRoot: AST.Node = undefined;
     if (ast instanceof AST.Tree && !ast.isEmpty) {
-      rootNode = ast.rootNode;
+      astRoot = ast.rootNode;
     } else if (ast instanceof AST.Node) {
-      rootNode = ast;
+      astRoot = ast;
     }
 
     const context = new ValidationContext(additionalContext);
 
-    if (rootNode) {
-      if (this.isKnownLanguage(rootNode.languageName)) {
+    if (astRoot) {
+      if (this.isKnownLanguage(astRoot.languageName)) {
         // Use the appropriate grammar for the root node
-        const lang = this.getGrammarValidator(rootNode.languageName);
-        lang.validateFromRoot(rootNode, context);
+        const lang = this.getGrammarValidator(astRoot.languageName);
+        lang.validateFromRoot(astRoot, context);
 
         // Run more specialized validators.
         this._registeredSpecialized.forEach((specialized: any) => {
@@ -109,15 +109,15 @@ export class Validator {
           // class. We of course know that we are smart enough to only pass in classes
           // that may be instantiated.
           const instance = new specialized();
-          instance.validateFromRoot(rootNode, context);
+          instance.validateFromRoot(astRoot, context);
         });
       } else {
         // Not knowing the language is a single error
         const available = Array.from(
           new Set(this.availableTypes.map((t) => t.languageName))
         );
-        context.addError(ErrorCodes.UnknownRootLanguage, rootNode, {
-          requiredLanguage: rootNode.languageName,
+        context.addError(ErrorCodes.UnknownRootLanguage, astRoot, {
+          requiredLanguage: astRoot.languageName,
           availableLanguages: available,
         });
       }

@@ -8,22 +8,26 @@ import {
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 
+import { Subscription } from "rxjs";
+
 import { switchMap, map } from "rxjs/operators";
 
-import { ToolbarService } from "../../shared/toolbar.service";
-import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
-import { QualifiedTypeName } from "../../shared/syntaxtree";
-import { getAllTypes } from "../../shared/syntaxtree/grammar-util";
 import {
   AdminSingleGrammarGQL,
   AdminSingleGrammarQuery,
   BlockLanguage,
   DestroyGrammarGQL,
   UpdateGrammarGQL,
+  RegenerateForeignTypesGQL,
 } from "../../../generated/graphql";
-import { Subscription } from "rxjs";
 
-type Query = ReturnType<AdminSingleGrammarGQL["watch"]>;
+import { ToolbarService } from "../../shared/toolbar.service";
+import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
+import { QualifiedTypeName } from "../../shared/syntaxtree";
+import {
+  getTypeList,
+  allPresentTypes,
+} from "../../shared/syntaxtree/grammar-type-util";
 
 type DataKey = Exclude<keyof AdminSingleGrammarQuery, "__typename">;
 
@@ -57,7 +61,8 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
     private _toolbarService: ToolbarService,
     private _updateGrammarGQL: UpdateGrammarGQL,
     private _destroyGrammarGQL: DestroyGrammarGQL,
-    private _editGrammarGQL: AdminSingleGrammarGQL
+    private _editGrammarGQL: AdminSingleGrammarGQL,
+    private _regenerateGrammar: RegenerateForeignTypesGQL
   ) {}
 
   //TODO: Related Blocklanguages are still in cache after they were deleted.
@@ -74,7 +79,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
       )
       .subscribe((g) => {
         this.grammar = g.data.singleGrammar;
-        this.availableTypes = getAllTypes(this.grammar);
+        this.availableTypes = getTypeList(allPresentTypes(this.grammar));
         this.grammarRoot = this.grammar.root;
         this._title.setTitle(
           `Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`
@@ -115,9 +120,13 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
    * This allows ngModel to pre-select the correct value.
    */
   set grammarRoot(t: QualifiedTypeName) {
-    this.grammar.root = this.availableTypes.find(
-      (a) => a.languageName === t.languageName && a.typeName === t.typeName
-    );
+    if (!!t) {
+      this.grammar.root = this.availableTypes.find(
+        (a) => a.languageName === t.languageName && a.typeName === t.typeName
+      );
+    } else {
+      this.grammar.root = undefined;
+    }
   }
 
   get grammarTypes() {
@@ -129,7 +138,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
    */
   set grammarTypes(types) {
     this.grammar.types = types;
-    this.availableTypes = getAllTypes(this.grammar);
+    this.availableTypes = getTypeList(allPresentTypes(this.grammar));
     this.grammarRoot = this.grammar.root;
   }
 
@@ -139,6 +148,17 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
   async onDelete() {
     await this._destroyGrammarGQL.mutate({ id: this.grammar.id }).toPromise();
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
+  }
+
+  async onRegenerateForeignTypes() {
+    const response = await this._regenerateGrammar
+      .mutate({
+        id: this.grammar.id,
+      })
+      .toPromise();
+
+    this.grammar.foreignTypes =
+      response.data.regenerateForeignTypes.grammar.foreignTypes;
   }
 
   /**

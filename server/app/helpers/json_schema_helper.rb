@@ -4,8 +4,8 @@ module JsonSchemaHelper
 
   # Validates the given object against the schema with the given name
   #
-  # @param object [Hash] Any JSON-compatible structure
   # @param schema_name [string] The name of the schema
+  # @param object [Hash] Any JSON-compatible structure
   # @return [Hash] Array of errors that occurred during validation
   def json_schema_validate(schema_name, document)
     schema = @@json_schema_storage.get_schema schema_name

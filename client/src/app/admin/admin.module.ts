@@ -42,6 +42,7 @@ import { GalleryGrammarComponent } from "./grammar/gallery-grammar.component";
 import { MetaCodeResourceSelectComponent } from "./grammar/meta-code-resource-select.component";
 
 import { ProgrammingLanguageSelectComponent } from "./shared/programming-language-select.component";
+import { GrammarSelectComponent } from "./shared/grammar-select.component";
 
 import { OverviewProjectComponent } from "./project/overview-project.component";
 
@@ -98,6 +99,7 @@ const materialModules = [
     GalleryGrammarComponent,
     MetaCodeResourceSelectComponent,
     ProgrammingLanguageSelectComponent,
+    GrammarSelectComponent,
   ],
   providers: [JsonSchemaValidationService],
   exports: [],

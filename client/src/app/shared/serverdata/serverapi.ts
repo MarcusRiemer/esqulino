@@ -215,6 +215,13 @@ export class ServerApi {
   }
 
   /**
+   * Regenerates the foreign types of a grammar
+   */
+  individualGrammarRegenerateForeignTypes(id: string) {
+    return `${this.individualGrammarUrl(id)}/regenerate_foreign_types`;
+  }
+
+  /**
    * Retrieves code resources that may be visualized for a grammar code gallery.
    */
   individualGrammarCodeResourceGallery(id: string) {

@@ -182,6 +182,7 @@ concise_attributes:
           }
         }
       },
+      "foreignTypes": {},
       "root": {
         "languageName": "css",
         "typeName": "document"

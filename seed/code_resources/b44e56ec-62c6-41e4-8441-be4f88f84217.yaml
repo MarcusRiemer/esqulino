@@ -1,0 +1,57 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b44e56ec-62c6-41e4-8441-be4f88f84217
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 CSS
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "document", "languageName":
+    "css"}}], "nodes": [{"name": "concreteNode", "language": "MetaGrammar", "properties":
+    {"typeName": "document", "languageName": "css"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "css"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-06-07 11:48:04.373202000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-06-07 11:50:03.835813000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "css": {
+          "document": {
+            "type": "concrete",
+            "attributes": []
+          }
+        }
+      },
+      "foreignTypes": {},
+      "root": {
+        "languageName": "css",
+        "typeName": "document"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

@@ -332,9 +332,10 @@ export type NamedTypes = { [nodeName: string]: NodeTypeDescription };
 export type NamedLanguages = { [languageName: string]: NamedTypes };
 
 /**
- * This part of the grammar is stored as a JSON blob in the database.
+ * The technical aspects of a grammar that are used for actual validation
+ * or generation.
  */
-export interface GrammarDatabaseBlob {
+export interface GrammarDocument {
   // All types that are defined on this language
   types: NamedLanguages;
 
@@ -343,15 +344,9 @@ export interface GrammarDatabaseBlob {
 
   // The type that needs to be at the root of the language.
   root?: QualifiedTypeName;
-}
 
-/**
- * The technical aspects of a grammar that are used for actual validation
- * or generation.
- */
-export interface GrammarDocument extends GrammarDatabaseBlob {
-  // These grammars are included in this grammar
-  includedGrammars?: string[];
+  // IDs of the grammars that this grammar includes
+  includes?: string[];
 }
 
 /**

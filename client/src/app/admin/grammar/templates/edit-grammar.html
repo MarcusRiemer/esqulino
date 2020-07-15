@@ -3,7 +3,10 @@
     <span class="fa fa-floppy-o" aria-hidden="t"></span>
     Speichern
   </button>
-
+  <button (click)="onRegenerateForeignTypes()" mat-button>
+    <span class="fa fa-refresh" aria-hidden="t"></span>
+    Geerbte Typen neu laden
+  </button>
   <button (click)="onDelete()" mat-button class="btn btn-outline-danger btn-sm">
     <span class="fa fa-trash-o" aria-hidden="true"></span>
     Löschen
@@ -89,6 +92,24 @@
           {{ type.languageName }}.{{ type.typeName }}
         </option>
       </select>
+    </div>
+  </div>
+
+  <!-- All grammars that are included -->
+  <div class="form-group row">
+    <label for="grammar-root" class="col-sm-2 col-form-label">
+      Inkludierte Grammatiken
+    </label>
+    <div class="col-sm-10 col-form-label">
+      <ul
+        *ngIf="grammar.includes?.length > 0 else noGrammarReferences"
+        class="list-inline"
+      >
+        <li *ngFor="let grammarId of grammar.includes" class="list-inline-item">
+          <link-grammar [grammarId]="grammarId"></link-grammar>
+        </li>
+      </ul>
+      <ng-template #noGrammarReferences>Keine</ng-template>
     </div>
   </div>
 
