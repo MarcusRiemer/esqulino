@@ -1,4 +1,4 @@
-class Mutations::Grammar::CreateGrammarMutation < Mutations::Grammar::GrammarMutation
+class Mutations::Grammar::CreateGrammar < Mutations::Grammar::Grammar
 
   argument :name, String, required: true
   argument :slug, String, required: false

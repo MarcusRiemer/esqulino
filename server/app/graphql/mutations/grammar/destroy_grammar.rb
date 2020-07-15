@@ -1,4 +1,4 @@
-class Mutations::Grammar::DestroyGrammarMutation < Mutations::Grammar::GrammarMutation
+class Mutations::Grammar::DestroyGrammar< Mutations::Grammar::Grammar
 
   argument :id, ID, required: true
 

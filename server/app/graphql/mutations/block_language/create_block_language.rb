@@ -1,4 +1,4 @@
-class Mutations::BlockLanguage::CreateBlockLanguageMutation < Mutations::BlockLanguage::BlockLanguageMutation
+class Mutations::BlockLanguage::CreateBlockLanguage < Mutations::BlockLanguage::BlockLanguage
 
   argument :name, String, required: true
   argument :slug, String, required: false

@@ -1,4 +1,4 @@
-class Mutations::Grammar::UpdateGrammarMutation < Mutations::Grammar::GrammarMutation
+class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
 
   argument :id, ID, required: true
   argument :name, String, required: true

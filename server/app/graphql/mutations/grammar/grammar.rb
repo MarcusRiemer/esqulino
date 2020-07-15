@@ -1,4 +1,4 @@
-class Mutations::Grammar::GrammarMutation < Mutations::BaseMutation
+class Mutations::Grammar::Grammar < Mutations::BaseMutation
 
   field :grammar, Types::GrammarType, null: true
   field :errors, [String], null: false
