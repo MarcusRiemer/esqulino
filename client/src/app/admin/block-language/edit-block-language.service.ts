@@ -18,6 +18,7 @@ import { prettyPrintGrammar } from "../../shared/syntaxtree";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 import {
   AdminEditBlockLanguageGQL,
+  AdminSingleGrammarGQL,
   UpdateBlockLanguageGQL,
 } from "../../../generated/graphql";
 
@@ -37,7 +38,7 @@ export class EditBlockLanguageService {
   constructor(
     private _singleBlockLanguageGQL: AdminEditBlockLanguageGQL,
     private _updateBlockLanguageGQL: UpdateBlockLanguageGQL,
-    private _individualGrammarData: IndividualGrammarDataService,
+    private _individualGrammarData: AdminSingleGrammarGQL,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private _title: Title
@@ -47,13 +48,15 @@ export class EditBlockLanguageService {
       .pipe(
         map((params: ParamMap) => params.get("blockLanguageId")),
         switchMap((id: string) =>
-          this._singleBlockLanguageGQL.fetch({ id: id }).pipe(
-            map(
-              (bl) =>
-                // unpack model Object
-                bl.data.singleBlockLanguage
+          this._singleBlockLanguageGQL
+            .fetch({ id: id }, { fetchPolicy: "network-only" })
+            .pipe(
+              map(
+                (bl) =>
+                  // unpack model Object
+                  bl.data.singleBlockLanguage
+              )
             )
-          )
         )
       )
       .subscribe((blockLanguage) => {
@@ -78,7 +81,9 @@ export class EditBlockLanguageService {
    */
   readonly baseGrammar = this._editedSubject.pipe(
     flatMap((blockLang) =>
-      this._individualGrammarData.getSingle(blockLang.grammarId)
+      this._individualGrammarData
+        .watch({ id: blockLang.grammarId })
+        .valueChanges.pipe(map((response) => response.data.singleGrammar))
     )
   );
 
@@ -133,8 +138,8 @@ export class EditBlockLanguageService {
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
       this._individualGrammarData
-        .getSingle(this.editedSubject.grammarId, true)
-        .pipe(first())
+        .fetch({ id: this.editedSubject.grammarId })
+        .pipe(map((response) => response.data.singleGrammar))
         .subscribe((g) => {
           try {
             this.generatorErrors.push(...validateGenerator(instructions));

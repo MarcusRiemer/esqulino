@@ -41,11 +41,11 @@ export class CreateBlockLanguageComponent {
   constructor(
     private _router: Router,
     private _createBlockLanguageGQL: CreateBlockLanguageGQL,
-    private _grammarSelection: SelectionListGrammarsGQL,
-    private _grammarData: GrammarDescriptionItemGQL
+    private _grammarSelectionGQL: SelectionListGrammarsGQL,
+    private _grammarGQL: GrammarDescriptionItemGQL
   ) {}
 
-  readonly availableGrammars$ = this._grammarSelection
+  readonly availableGrammars$ = this._grammarSelectionGQL
     .watch()
     .valueChanges.pipe(map((response) => response.data.grammars.nodes));
 
@@ -55,7 +55,7 @@ export class CreateBlockLanguageComponent {
   async submitForm() {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
-    const g = await this._grammarData
+    const g = await this._grammarGQL
       .fetch({ id: this.blockLanguage.grammarId })
       .pipe(map((response) => response.data.singleGrammar))
       .toPromise();
