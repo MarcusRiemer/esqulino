@@ -80,8 +80,6 @@ export class CreateBlockLanguageComponent {
       .mutate(toCreate)
       .pipe(map((response) => response.data.createBlockLanguage))
       .subscribe((res) => {
-        console.log("res: ");
-        console.log(res);
         this._router.navigateByUrl(`/admin/block-language/${res.id}`);
       });
   }

@@ -77,7 +77,6 @@ describe("CreateBlockLanguageComponent", () => {
       t.fixture.detectChanges();
       await t.fixture.whenRenderingDone();
 
-      console.log(response);
       const grammarIdSelect: HTMLSelectElement = t.element.querySelector(
         "select[data-spec=grammarIdSelect]"
       );
