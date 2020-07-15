@@ -207,7 +207,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         root: undefined,
         foreignTypes: {},
         types: {},
-        includes: [],
+        includedGrammarIds: [],
       });
     });
 
@@ -240,7 +240,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         root: undefined,
         foreignTypes: {},
         types: {},
-        includes: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
+        includedGrammarIds: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
       });
     });
 
