@@ -513,4 +513,24 @@ RSpec.describe Grammar, type: :model do
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
   end
+
+  describe "to_full_api_response" do
+    it "Includes empty references" do
+      grammar = FactoryBot.create(:grammar)
+
+      full_response = grammar.to_full_api_response
+      expect(full_response).to validate_against "GrammarDescription"
+      expect(full_response["includes"]).to match_array([])
+    end
+
+    it "Includes a single reference" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
+
+      full_response = grammar.to_full_api_response
+      expect(full_response).to validate_against "GrammarDescription"
+      expect(full_response["includes"]).to match_array([inc_1.id])
+    end
+  end
 end

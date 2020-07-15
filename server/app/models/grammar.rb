@@ -135,8 +135,11 @@ class Grammar < ApplicationRecord
   # Computes a hash that may be sent back to the client if it requires
   # full access to grammar.
   def to_full_api_response
+    includes = self.referenced_grammars.pluck(:target_id)
+
     to_json_api_response
       .except("model", "createdAt", "updatedAt")
+      .merge({"includes" => includes})
   end
 
   # Computes a hash that may be sent back to the client if only superficial
