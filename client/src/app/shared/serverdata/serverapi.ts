@@ -288,6 +288,7 @@ export class ServerApi {
    * Getting a List of User News
    */
   getAdminNewsListUrl(): string {
+    console.log(`${this._apiBaseUrl}/news/admin`);
     return `${this._apiBaseUrl}/news/admin`;
   }
 

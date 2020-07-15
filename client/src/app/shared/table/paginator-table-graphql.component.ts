@@ -127,9 +127,7 @@ export class PaginatorTableGraphqlComponent
       this.queryData.query.setVariables({ first: $event.pageSize });
     }
     //Next Page
-    else if (
-      $event.previousPageIndex < $event.pageIndex
-    ) {
+    else if ($event.previousPageIndex < $event.pageIndex) {
       this.queryData.query.setVariables({
         first: $event.pageSize,
         after: pageInfo.endCursor,

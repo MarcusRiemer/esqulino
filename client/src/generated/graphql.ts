@@ -1,6 +1,6 @@
-import gql from 'graphql-tag';
-import { Injectable } from '@angular/core';
-import * as Apollo from 'apollo-angular';
+import gql from "graphql-tag";
+import { Injectable } from "@angular/core";
+import * as Apollo from "apollo-angular";
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -10,57 +10,75 @@ export type Scalars = {
   Int: number;
   Float: number;
   NodeDescription: any;
-  Datetime: any;
+  /** An ISO 8601-encoded datetime */
+  ISO8601DateTime: any;
   /** Represents untyped JSON */
   JSON: any;
   LangJson: any;
-  /** An ISO 8601-encoded datetime */
-  ISO8601DateTime: any;
 };
 
-
-
 export type BlockLanguage = {
-  __typename?: 'BlockLanguage';
+  __typename?: "BlockLanguage";
   codeResources?: Maybe<Array<CodeResource>>;
-  createdAt?: Maybe<Scalars['Datetime']>;
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
   defaultProgrammingLanguage: ProgrammingLanguage;
-  generated?: Maybe<Scalars['Boolean']>;
+  defaultProgrammingLanguageId: Scalars["ID"];
+  generated?: Maybe<Scalars["Boolean"]>;
   grammar?: Maybe<Grammar>;
-  grammarId?: Maybe<Scalars['ID']>;
-  id: Scalars['ID'];
-  model: Scalars['JSON'];
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['Datetime']>;
+  grammarId?: Maybe<Scalars["ID"]>;
+  id: Scalars["ID"];
+  model: Scalars["JSON"];
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
 };
 
 /** The connection type for BlockLanguage. */
 export type BlockLanguageConnection = {
-  __typename?: 'BlockLanguageConnection';
+  __typename?: "BlockLanguageConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<BlockLanguageEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<BlockLanguage>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
+};
+
+export type BlockLanguageDescription = {
+  __typename?: "BlockLanguageDescription";
+  codeResources?: Maybe<Array<CodeResource>>;
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
+  defaultProgrammingLanguage: ProgrammingLanguage;
+  defaultProgrammingLanguageId: Scalars["ID"];
+  editorBlocks: Scalars["JSON"];
+  editorComponents: Scalars["JSON"];
+  generated?: Maybe<Scalars["Boolean"]>;
+  grammar?: Maybe<Grammar>;
+  grammarId?: Maybe<Scalars["ID"]>;
+  id: Scalars["ID"];
+  localGeneratorInstructions?: Maybe<Scalars["JSON"]>;
+  name: Scalars["String"];
+  rootCssClasses?: Maybe<Scalars["JSON"]>;
+  sidebars: Scalars["JSON"];
+  slug?: Maybe<Scalars["String"]>;
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
 };
 
 /** An edge in a connection. */
 export type BlockLanguageEdge = {
-  __typename?: 'BlockLanguageEdge';
+  __typename?: "BlockLanguageEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<BlockLanguage>;
 };
 
 export type BlockLanguageFilterFieldType = {
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  grammar?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
+  slug?: Maybe<Scalars["String"]>;
+  grammar?: Maybe<Scalars["String"]>;
 };
 
 export type BlockLanguageInputType = {
@@ -70,9 +88,9 @@ export type BlockLanguageInputType = {
 };
 
 export enum BlockLanguageOrderFieldEnum {
-  Name = 'name',
-  Slug = 'slug',
-  Grammar = 'grammar'
+  Name = "name",
+  Slug = "slug",
+  Grammar = "grammar",
 }
 
 export type BlockLanguageOrderType = {
@@ -81,182 +99,236 @@ export type BlockLanguageOrderType = {
 };
 
 export type CodeResource = {
-  __typename?: 'CodeResource';
-  ast?: Maybe<Scalars['NodeDescription']>;
+  __typename?: "CodeResource";
+  ast?: Maybe<Scalars["NodeDescription"]>;
   blockLanguage: BlockLanguage;
-  compiled?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
+  compiled?: Maybe<Scalars["String"]>;
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
   grammars?: Maybe<Grammar>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars["ID"];
+  name: Scalars["String"];
   programmingLanguage: ProgrammingLanguage;
+  programmingLanguageId: Scalars["ID"];
   project: Project;
-  updatedAt?: Maybe<Scalars['Datetime']>;
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
 };
 
 /** The connection type for CodeResource. */
 export type CodeResourceConnection = {
-  __typename?: 'CodeResourceConnection';
+  __typename?: "CodeResourceConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<CodeResourceEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<CodeResource>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 /** An edge in a connection. */
 export type CodeResourceEdge = {
-  __typename?: 'CodeResourceEdge';
+  __typename?: "CodeResourceEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<CodeResource>;
 };
 
-/** Autogenerated input type of CreateBlockLanguageMutation */
-export type CreateBlockLanguageMutationInput = {
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  defaultProgrammingLanguageId?: Maybe<Scalars['ID']>;
-  grammarId?: Maybe<Scalars['ID']>;
-  sidebars: Scalars['JSON'];
-  editorBlocks: Scalars['JSON'];
-  editorComponents: Scalars['JSON'];
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
+export type CodeResourceFilterFieldType = {
+  id?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
+  programmingLanguageId?: Maybe<Scalars["ID"]>;
 };
 
-/** Autogenerated return type of CreateBlockLanguageMutation */
-export type CreateBlockLanguageMutationPayload = {
-  __typename?: 'CreateBlockLanguageMutationPayload';
+export type CodeResourceInputType = {
+  order?: Maybe<CodeResourceOrderType>;
+  filter?: Maybe<CodeResourceFilterFieldType>;
+  languages?: Maybe<Array<LanguageEnum>>;
+};
+
+export enum CodeResourceOrderFieldEnum {
+  Name = "name",
+}
+
+export type CodeResourceOrderType = {
+  orderField?: Maybe<CodeResourceOrderFieldEnum>;
+  orderDirection?: Maybe<OrderDirectionEnum>;
+};
+
+/** Autogenerated input type of CreateBlockLanguage */
+export type CreateBlockLanguageInput = {
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  defaultProgrammingLanguageId?: Maybe<Scalars["ID"]>;
+  grammarId?: Maybe<Scalars["ID"]>;
+  sidebars: Scalars["JSON"];
+  editorBlocks: Scalars["JSON"];
+  editorComponents: Scalars["JSON"];
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+};
+
+/** Autogenerated return type of CreateBlockLanguage */
+export type CreateBlockLanguagePayload = {
+  __typename?: "CreateBlockLanguagePayload";
   blockLanguage?: Maybe<BlockLanguage>;
+  blockLanguageDescription?: Maybe<BlockLanguageDescription>;
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
-  errors: Array<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
+  id?: Maybe<Scalars["ID"]>;
 };
 
-/** Autogenerated input type of CreateGrammarMutation */
-export type CreateGrammarMutationInput = {
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  types: Scalars['JSON'];
-  foreignTypes: Scalars['JSON'];
-  root: Scalars['JSON'];
-  programmingLanguageId: Scalars['ID'];
-  generatedFromId?: Maybe<Scalars['ID']>;
+/** Autogenerated input type of CreateGrammar */
+export type CreateGrammarInput = {
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  types: Scalars["JSON"];
+  foreignTypes: Scalars["JSON"];
+  root: Scalars["JSON"];
+  programmingLanguageId: Scalars["ID"];
+  generatedFromId?: Maybe<Scalars["ID"]>;
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
 };
 
-/** Autogenerated return type of CreateGrammarMutation */
-export type CreateGrammarMutationPayload = {
-  __typename?: 'CreateGrammarMutationPayload';
+/** Autogenerated return type of CreateGrammar */
+export type CreateGrammarPayload = {
+  __typename?: "CreateGrammarPayload";
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
-  errors: Array<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
   grammar?: Maybe<Grammar>;
-  id: Scalars['ID'];
 };
 
-/** Autogenerated input type of CreateNewsMutation */
-export type CreateNewsMutationInput = {
-  title: Scalars['JSON'];
-  text: Scalars['JSON'];
-  publishedFrom?: Maybe<Scalars['Datetime']>;
+/** Autogenerated input type of CreateNews */
+export type CreateNewsInput = {
+  title: Scalars["JSON"];
+  text: Scalars["JSON"];
+  publishedFrom: Scalars["ISO8601DateTime"];
+  userId?: Maybe<Scalars["ID"]>;
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
 };
 
-/** Autogenerated return type of CreateNewsMutation */
-export type CreateNewsMutationPayload = {
-  __typename?: 'CreateNewsMutationPayload';
+/** Autogenerated return type of CreateNews */
+export type CreateNewsPayload = {
+  __typename?: "CreateNewsPayload";
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
-  errors: Array<Scalars['String']>;
-  id: Scalars['ID'];
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
+  id?: Maybe<Scalars["ID"]>;
   news?: Maybe<News>;
 };
 
-
-/** Autogenerated input type of DestroyGrammarMutation */
-export type DestroyGrammarMutationInput = {
-  id: Scalars['ID'];
+/** Autogenerated input type of DestroyBlockLanguage */
+export type DestroyBlockLanguageInput = {
+  id: Scalars["ID"];
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
 };
 
-/** Autogenerated return type of DestroyGrammarMutation */
-export type DestroyGrammarMutationPayload = {
-  __typename?: 'DestroyGrammarMutationPayload';
+/** Autogenerated return type of DestroyBlockLanguage */
+export type DestroyBlockLanguagePayload = {
+  __typename?: "DestroyBlockLanguagePayload";
+  blockLanguage?: Maybe<BlockLanguage>;
+  blockLanguageDescription?: Maybe<BlockLanguageDescription>;
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
-  errors: Array<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
+  id?: Maybe<Scalars["ID"]>;
+};
+
+/** Autogenerated input type of DestroyGrammar */
+export type DestroyGrammarInput = {
+  id: Scalars["ID"];
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+};
+
+/** Autogenerated return type of DestroyGrammar */
+export type DestroyGrammarPayload = {
+  __typename?: "DestroyGrammarPayload";
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
   grammar?: Maybe<Grammar>;
-  id: Scalars['ID'];
+};
+
+/** Autogenerated input type of DestroyNews */
+export type DestroyNewsInput = {
+  id?: Maybe<Scalars["ID"]>;
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+};
+
+/** Autogenerated return type of DestroyNews */
+export type DestroyNewsPayload = {
+  __typename?: "DestroyNewsPayload";
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
+  id?: Maybe<Scalars["ID"]>;
+  news?: Maybe<News>;
 };
 
 export type Grammar = {
-  __typename?: 'Grammar';
+  __typename?: "Grammar";
   blockLanguages?: Maybe<BlockLanguageConnection>;
   codeResources?: Maybe<CodeResourceConnection>;
-  createdAt: Scalars['Datetime'];
-  foreignTypes: Scalars['JSON'];
+  createdAt: Scalars["ISO8601DateTime"];
+  foreignTypes: Scalars["JSON"];
   generatedFrom?: Maybe<CodeResource>;
-  generatedFromId?: Maybe<Scalars['ID']>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  generatedFromId?: Maybe<Scalars["ID"]>;
+  id: Scalars["ID"];
+  name: Scalars["String"];
   programmingLanguage: ProgrammingLanguage;
-  programmingLanguageId: Scalars['ID'];
-  root: Scalars['JSON'];
-  slug?: Maybe<Scalars['String']>;
-  types: Scalars['JSON'];
-  updatedAt: Scalars['Datetime'];
+  programmingLanguageId: Scalars["ID"];
+  root: Scalars["JSON"];
+  slug?: Maybe<Scalars["String"]>;
+  types: Scalars["JSON"];
+  updatedAt: Scalars["ISO8601DateTime"];
 };
-
 
 export type GrammarBlockLanguagesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
 };
 
-
 export type GrammarCodeResourcesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
 };
 
 /** The connection type for Grammar. */
 export type GrammarConnection = {
-  __typename?: 'GrammarConnection';
+  __typename?: "GrammarConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<GrammarEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<Grammar>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 /** An edge in a connection. */
 export type GrammarEdge = {
-  __typename?: 'GrammarEdge';
+  __typename?: "GrammarEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<Grammar>;
 };
 
 export type GrammarFilterFieldType = {
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
+  slug?: Maybe<Scalars["String"]>;
 };
 
 export type GrammarInputType = {
@@ -266,8 +338,8 @@ export type GrammarInputType = {
 };
 
 export enum GrammarOrderFieldEnum {
-  Name = 'name',
-  Slug = 'slug'
+  Name = "name",
+  Slug = "slug",
 }
 
 export type GrammarOrderType = {
@@ -276,247 +348,251 @@ export type GrammarOrderType = {
 };
 
 export type Identity = {
-  __typename?: 'Identity';
-  createdAt?: Maybe<Scalars['Datetime']>;
-  id: Scalars['ID'];
-  ownData?: Maybe<Scalars['JSON']>;
-  provider: Scalars['String'];
-  providerData?: Maybe<Scalars['JSON']>;
-  type: Scalars['String'];
-  updatedAt?: Maybe<Scalars['Datetime']>;
+  __typename?: "Identity";
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
+  id: Scalars["ID"];
+  ownData?: Maybe<Scalars["JSON"]>;
+  provider: Scalars["String"];
+  providerData?: Maybe<Scalars["JSON"]>;
+  type: Scalars["String"];
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
   user: User;
 };
 
-
-
-
 export enum LanguageEnum {
-  De = 'de',
-  En = 'en'
+  De = "de",
+  En = "en",
 }
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  createBlockLanguage?: Maybe<CreateBlockLanguageMutationPayload>;
-  createGrammar?: Maybe<CreateGrammarMutationPayload>;
-  createNews?: Maybe<CreateNewsMutationPayload>;
-  destroyGrammar?: Maybe<DestroyGrammarMutationPayload>;
-  id: Scalars['ID'];
-  updateGrammar?: Maybe<UpdateGrammarMutationPayload>;
+  __typename?: "Mutation";
+  createBlockLanguage?: Maybe<CreateBlockLanguagePayload>;
+  createGrammar?: Maybe<CreateGrammarPayload>;
+  createNews?: Maybe<CreateNewsPayload>;
+  destroyBlockLanguage?: Maybe<DestroyBlockLanguagePayload>;
+  destroyGrammar?: Maybe<DestroyGrammarPayload>;
+  destroyNews?: Maybe<DestroyNewsPayload>;
+  updateBlockLanguage?: Maybe<UpdateBlockLanguagePayload>;
+  updateGrammar?: Maybe<UpdateGrammarPayload>;
+  updateNews?: Maybe<UpdateNewsPayload>;
 };
-
 
 export type MutationCreateBlockLanguageArgs = {
-  input: CreateBlockLanguageMutationInput;
+  input: CreateBlockLanguageInput;
 };
-
 
 export type MutationCreateGrammarArgs = {
-  input: CreateGrammarMutationInput;
+  input: CreateGrammarInput;
 };
-
 
 export type MutationCreateNewsArgs = {
-  input: CreateNewsMutationInput;
+  input: CreateNewsInput;
 };
 
+export type MutationDestroyBlockLanguageArgs = {
+  input: DestroyBlockLanguageInput;
+};
 
 export type MutationDestroyGrammarArgs = {
-  input: DestroyGrammarMutationInput;
+  input: DestroyGrammarInput;
 };
 
+export type MutationDestroyNewsArgs = {
+  input: DestroyNewsInput;
+};
+
+export type MutationUpdateBlockLanguageArgs = {
+  input: UpdateBlockLanguageInput;
+};
 
 export type MutationUpdateGrammarArgs = {
-  input: UpdateGrammarMutationInput;
+  input: UpdateGrammarInput;
+};
+
+export type MutationUpdateNewsArgs = {
+  input: UpdateNewsInput;
 };
 
 export type News = {
-  __typename?: 'News';
-  createdAt: Scalars['ISO8601DateTime'];
-  id: Scalars['ID'];
-  publishedFrom?: Maybe<Scalars['ISO8601DateTime']>;
-  text: Scalars['LangJson'];
-  title: Scalars['LangJson'];
-  updatedAt: Scalars['ISO8601DateTime'];
+  __typename?: "News";
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
+  id: Scalars["ID"];
+  publishedFrom: Scalars["ISO8601DateTime"];
+  text: Scalars["LangJson"];
+  title: Scalars["LangJson"];
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
   user?: Maybe<User>;
+  userId?: Maybe<Scalars["ID"]>;
 };
 
 /** The connection type for News. */
 export type NewsConnection = {
-  __typename?: 'NewsConnection';
+  __typename?: "NewsConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<NewsEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<News>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 /** An edge in a connection. */
 export type NewsEdge = {
-  __typename?: 'NewsEdge';
+  __typename?: "NewsEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<News>;
 };
 
+export type NewsFilterFieldType = {
+  id?: Maybe<Scalars["ID"]>;
+  title?: Maybe<Scalars["String"]>;
+  text?: Maybe<Scalars["String"]>;
+  userId?: Maybe<Scalars["String"]>;
+};
+
+export type NewsInputType = {
+  order?: Maybe<NewsOrderType>;
+  filter?: Maybe<NewsFilterFieldType>;
+  languages?: Maybe<Array<LanguageEnum>>;
+};
+
+export enum NewsOrderFieldEnum {
+  Title = "title",
+  PublishedFrom = "publishedFrom",
+  CreatedAt = "createdAt",
+  UpdatedAt = "updatedAt",
+}
+
+export type NewsOrderType = {
+  orderField?: Maybe<NewsOrderFieldEnum>;
+  orderDirection?: Maybe<OrderDirectionEnum>;
+};
 
 export enum OrderDirectionEnum {
-  Asc = 'asc',
-  Desc = 'desc'
+  Asc = "asc",
+  Desc = "desc",
 }
 
 /** Information about pagination in a connection. */
 export type PageInfo = {
-  __typename?: 'PageInfo';
+  __typename?: "PageInfo";
   /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['String']>;
+  endCursor?: Maybe<Scalars["String"]>;
   /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
+  hasNextPage: Scalars["Boolean"];
   /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars["Boolean"];
   /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['String']>;
+  startCursor?: Maybe<Scalars["String"]>;
 };
 
 export type ProgrammingLanguage = {
-  __typename?: 'ProgrammingLanguage';
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  __typename?: "ProgrammingLanguage";
+  id: Scalars["ID"];
+  name: Scalars["String"];
 };
 
 /** The connection type for ProgrammingLanguage. */
 export type ProgrammingLanguageConnection = {
-  __typename?: 'ProgrammingLanguageConnection';
+  __typename?: "ProgrammingLanguageConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<ProgrammingLanguageEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<ProgrammingLanguage>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 /** An edge in a connection. */
 export type ProgrammingLanguageEdge = {
-  __typename?: 'ProgrammingLanguageEdge';
+  __typename?: "ProgrammingLanguageEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<ProgrammingLanguage>;
 };
 
 export type Project = {
-  __typename?: 'Project';
-  blockLanguages?: Maybe<BlockLanguageConnection>;
-  codeResourceCount?: Maybe<Scalars['Int']>;
-  codeResources?: Maybe<CodeResourceConnection>;
-  createdAt?: Maybe<Scalars['Datetime']>;
+  __typename?: "Project";
+  blockLanguages?: Maybe<Array<BlockLanguage>>;
+  codeResourceCount?: Maybe<Scalars["Int"]>;
+  codeResources?: Maybe<Array<CodeResource>>;
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
   defaultDatabase?: Maybe<ProjectDatabase>;
-  description: Scalars['LangJson'];
-  grammars?: Maybe<GrammarConnection>;
-  id: Scalars['ID'];
-  indexPageId?: Maybe<Scalars['String']>;
-  name: Scalars['LangJson'];
-  preview?: Maybe<Scalars['String']>;
-  projectSources?: Maybe<ProjectSourceConnection>;
-  public?: Maybe<Scalars['Boolean']>;
-  slug?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['Datetime']>;
+  description: Scalars["LangJson"];
+  grammars?: Maybe<Array<Grammar>>;
+  id: Scalars["ID"];
+  indexPageId?: Maybe<Scalars["String"]>;
+  name: Scalars["LangJson"];
+  preview?: Maybe<Scalars["String"]>;
+  projectSources?: Maybe<Array<ProjectSource>>;
+  public?: Maybe<Scalars["Boolean"]>;
+  slug?: Maybe<Scalars["String"]>;
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
   user?: Maybe<User>;
-};
-
-
-export type ProjectBlockLanguagesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-};
-
-
-export type ProjectCodeResourcesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-};
-
-
-export type ProjectGrammarsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-};
-
-
-export type ProjectProjectSourcesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
 };
 
 /** The connection type for Project. */
 export type ProjectConnection = {
-  __typename?: 'ProjectConnection';
+  __typename?: "ProjectConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<ProjectEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<Project>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 export type ProjectDatabase = {
-  __typename?: 'ProjectDatabase';
-  createdAt: Scalars['Datetime'];
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  __typename?: "ProjectDatabase";
+  createdAt: Scalars["ISO8601DateTime"];
+  id: Scalars["ID"];
+  name?: Maybe<Scalars["String"]>;
   project?: Maybe<Project>;
-  schema?: Maybe<Scalars['JSON']>;
-  updatedAt: Scalars['Datetime'];
+  schema?: Maybe<Scalars["JSON"]>;
+  updatedAt: Scalars["ISO8601DateTime"];
 };
 
 /** The connection type for ProjectDatabase. */
 export type ProjectDatabaseConnection = {
-  __typename?: 'ProjectDatabaseConnection';
+  __typename?: "ProjectDatabaseConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<ProjectDatabaseEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<ProjectDatabase>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 /** An edge in a connection. */
 export type ProjectDatabaseEdge = {
-  __typename?: 'ProjectDatabaseEdge';
+  __typename?: "ProjectDatabaseEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<ProjectDatabase>;
 };
 
 /** An edge in a connection. */
 export type ProjectEdge = {
-  __typename?: 'ProjectEdge';
+  __typename?: "ProjectEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<Project>;
 };
 
 export type ProjectFilterFieldType = {
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  public?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
+  slug?: Maybe<Scalars["String"]>;
+  public?: Maybe<Scalars["Boolean"]>;
 };
 
 export type ProjectInputType = {
@@ -526,8 +602,8 @@ export type ProjectInputType = {
 };
 
 export enum ProjectOrderFieldEnum {
-  Name = 'name',
-  Slug = 'slug'
+  Name = "name",
+  Slug = "slug",
 }
 
 export type ProjectOrderType = {
@@ -536,40 +612,40 @@ export type ProjectOrderType = {
 };
 
 export type ProjectSource = {
-  __typename?: 'ProjectSource';
-  createdAt?: Maybe<Scalars['Datetime']>;
-  display: Scalars['String'];
-  id: Scalars['ID'];
+  __typename?: "ProjectSource";
+  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
+  display: Scalars["String"];
+  id: Scalars["ID"];
   project: Project;
-  readOnly: Scalars['Boolean'];
-  title: Scalars['String'];
-  updatedAt?: Maybe<Scalars['Datetime']>;
-  url: Scalars['String'];
+  readOnly: Scalars["Boolean"];
+  title: Scalars["String"];
+  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
+  url: Scalars["String"];
 };
 
 /** The connection type for ProjectSource. */
 export type ProjectSourceConnection = {
-  __typename?: 'ProjectSourceConnection';
+  __typename?: "ProjectSourceConnection";
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<ProjectSourceEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<ProjectSource>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars["Int"];
 };
 
 /** An edge in a connection. */
 export type ProjectSourceEdge = {
-  __typename?: 'ProjectSourceEdge';
+  __typename?: "ProjectSourceEdge";
   /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
+  cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<ProjectSource>;
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   blockLanguages: BlockLanguageConnection;
   codeResources: CodeResourceConnection;
   grammars: GrammarConnection;
@@ -578,453 +654,967 @@ export type Query = {
   projectDatabases: ProjectDatabaseConnection;
   projectSources: ProjectSourceConnection;
   projects: ProjectConnection;
+  singleBlockLanguage: BlockLanguageDescription;
+  singleGrammar: Grammar;
+  singleNews: News;
+  singleProject: Project;
 };
 
-
 export type QueryBlockLanguagesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
   input?: Maybe<BlockLanguageInputType>;
 };
 
-
 export type QueryCodeResourcesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
+  input?: Maybe<CodeResourceInputType>;
 };
 
-
 export type QueryGrammarsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
   input?: Maybe<GrammarInputType>;
 };
 
-
 export type QueryNewsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
+  input?: Maybe<NewsInputType>;
 };
-
 
 export type QueryProgrammingLanguagesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
 };
-
 
 export type QueryProjectDatabasesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
 };
-
 
 export type QueryProjectSourcesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
 };
 
-
 export type QueryProjectsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
   input?: Maybe<ProjectInputType>;
 };
 
+export type QuerySingleBlockLanguageArgs = {
+  id: Scalars["ID"];
+};
+
+export type QuerySingleGrammarArgs = {
+  id: Scalars["ID"];
+};
+
+export type QuerySingleNewsArgs = {
+  id: Scalars["ID"];
+};
+
+export type QuerySingleProjectArgs = {
+  id: Scalars["ID"];
+};
+
 export type Role = {
-  __typename?: 'Role';
-  createdAt: Scalars['Datetime'];
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  resourceType?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['Datetime'];
+  __typename?: "Role";
+  createdAt: Scalars["ISO8601DateTime"];
+  id: Scalars["ID"];
+  name?: Maybe<Scalars["String"]>;
+  resourceId?: Maybe<Scalars["String"]>;
+  resourceType?: Maybe<Scalars["String"]>;
+  updatedAt: Scalars["ISO8601DateTime"];
   users?: Maybe<Array<User>>;
 };
 
-/** Autogenerated input type of UpdateGrammarMutation */
-export type UpdateGrammarMutationInput = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  types?: Maybe<Scalars['JSON']>;
-  foreignTypes?: Maybe<Scalars['JSON']>;
-  root?: Maybe<Scalars['JSON']>;
-  programmingLanguageId?: Maybe<Scalars['ID']>;
-  generatedFromId?: Maybe<Scalars['ID']>;
-  blockLanguageIds?: Maybe<Array<Scalars['ID']>>;
+/** Autogenerated input type of UpdateBlockLanguage */
+export type UpdateBlockLanguageInput = {
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  defaultProgrammingLanguageId?: Maybe<Scalars["ID"]>;
+  grammarId?: Maybe<Scalars["ID"]>;
+  sidebars: Scalars["JSON"];
+  editorBlocks: Scalars["JSON"];
+  rootCssClasses?: Maybe<Scalars["JSON"]>;
+  editorComponents: Scalars["JSON"];
+  localGeneratorInstructions?: Maybe<Scalars["JSON"]>;
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
 };
 
-/** Autogenerated return type of UpdateGrammarMutation */
-export type UpdateGrammarMutationPayload = {
-  __typename?: 'UpdateGrammarMutationPayload';
+/** Autogenerated return type of UpdateBlockLanguage */
+export type UpdateBlockLanguagePayload = {
+  __typename?: "UpdateBlockLanguagePayload";
+  blockLanguage?: Maybe<BlockLanguage>;
+  blockLanguageDescription?: Maybe<BlockLanguageDescription>;
   /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>;
-  errors: Array<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
+  id?: Maybe<Scalars["ID"]>;
+};
+
+/** Autogenerated input type of UpdateGrammar */
+export type UpdateGrammarInput = {
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  types?: Maybe<Scalars["JSON"]>;
+  foreignTypes?: Maybe<Scalars["JSON"]>;
+  root?: Maybe<Scalars["JSON"]>;
+  programmingLanguageId?: Maybe<Scalars["ID"]>;
+  generatedFromId?: Maybe<Scalars["ID"]>;
+  blockLanguageIds?: Maybe<Array<Scalars["ID"]>>;
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+};
+
+/** Autogenerated return type of UpdateGrammar */
+export type UpdateGrammarPayload = {
+  __typename?: "UpdateGrammarPayload";
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
   grammar?: Maybe<Grammar>;
-  id: Scalars['ID'];
+};
+
+/** Autogenerated input type of UpdateNews */
+export type UpdateNewsInput = {
+  id: Scalars["ID"];
+  title: Scalars["JSON"];
+  text: Scalars["JSON"];
+  publishedFrom: Scalars["ISO8601DateTime"];
+  userId?: Maybe<Scalars["ID"]>;
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+};
+
+/** Autogenerated return type of UpdateNews */
+export type UpdateNewsPayload = {
+  __typename?: "UpdateNewsPayload";
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  errors: Array<Scalars["String"]>;
+  id?: Maybe<Scalars["ID"]>;
+  news?: Maybe<News>;
 };
 
 export type User = {
-  __typename?: 'User';
-  createdAt: Scalars['Datetime'];
-  displayName?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
+  __typename?: "User";
+  createdAt: Scalars["ISO8601DateTime"];
+  displayName?: Maybe<Scalars["String"]>;
+  email?: Maybe<Scalars["String"]>;
+  id: Scalars["ID"];
   identities?: Maybe<Array<Identity>>;
   news?: Maybe<Array<News>>;
   projects?: Maybe<Array<Project>>;
   roles: Role;
-  updatedAt: Scalars['Datetime'];
+  updatedAt: Scalars["ISO8601DateTime"];
 };
 
-export type CreateBlockLanguageMutationMutationVariables = {
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  defaultProgrammingLanguageId?: Maybe<Scalars['ID']>;
-  grammarId?: Maybe<Scalars['ID']>;
-  sidebars: Scalars['JSON'];
-  editorBlocks: Scalars['JSON'];
-  editorComponents: Scalars['JSON'];
+export type CreateBlockLanguageMutationVariables = {
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  defaultProgrammingLanguageId?: Maybe<Scalars["ID"]>;
+  grammarId?: Maybe<Scalars["ID"]>;
+  sidebars: Scalars["JSON"];
+  editorBlocks: Scalars["JSON"];
+  editorComponents: Scalars["JSON"];
 };
 
+export type CreateBlockLanguageMutation = { __typename?: "Mutation" } & {
+  createBlockLanguage?: Maybe<
+    { __typename?: "CreateBlockLanguagePayload" } & Pick<
+      CreateBlockLanguagePayload,
+      "id" | "errors"
+    >
+  >;
+};
 
-export type CreateBlockLanguageMutationMutation = (
-  { __typename?: 'Mutation' }
-  & { createBlockLanguage?: Maybe<(
-    { __typename?: 'CreateBlockLanguageMutationPayload' }
-    & Pick<CreateBlockLanguageMutationPayload, 'id' | 'errors'>
-  )> }
-);
+export type UpdateBlockLanguageMutationVariables = {
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  defaultProgrammingLanguageId?: Maybe<Scalars["ID"]>;
+  grammarId?: Maybe<Scalars["ID"]>;
+  sidebars: Scalars["JSON"];
+  editorBlocks: Scalars["JSON"];
+  rootCssClasses?: Maybe<Scalars["JSON"]>;
+  editorComponents: Scalars["JSON"];
+  localGeneratorInstructions?: Maybe<Scalars["JSON"]>;
+};
+
+export type UpdateBlockLanguageMutation = { __typename?: "Mutation" } & {
+  updateBlockLanguage?: Maybe<
+    { __typename?: "UpdateBlockLanguagePayload" } & Pick<
+      UpdateBlockLanguagePayload,
+      "id" | "errors"
+    >
+  >;
+};
+
+export type DestroyBlockLanguageMutationVariables = {
+  id: Scalars["ID"];
+};
+
+export type DestroyBlockLanguageMutation = { __typename?: "Mutation" } & {
+  destroyBlockLanguage?: Maybe<
+    { __typename?: "DestroyBlockLanguagePayload" } & Pick<
+      DestroyBlockLanguagePayload,
+      "id" | "errors"
+    >
+  >;
+};
 
 export type AdminListBlockLanguagesQueryVariables = {
-  first?: Maybe<Scalars['Int']>;
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  last?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars["Int"]>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  last?: Maybe<Scalars["Int"]>;
   input?: Maybe<BlockLanguageInputType>;
 };
 
-
-export type AdminListBlockLanguagesQuery = (
-  { __typename?: 'Query' }
-  & { blockLanguages: (
-    { __typename?: 'BlockLanguageConnection' }
-    & Pick<BlockLanguageConnection, 'totalCount'>
-    & { nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'BlockLanguage' }
-      & Pick<BlockLanguage, 'id' | 'name' | 'slug' | 'generated' | 'grammarId'>
-    )>>>, pageInfo: (
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'hasPreviousPage' | 'hasNextPage' | 'startCursor' | 'endCursor'>
-    ) }
-  ) }
-);
-
-export type CreateGrammarMutationMutationVariables = {
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  types: Scalars['JSON'];
-  foreignTypes: Scalars['JSON'];
-  root: Scalars['JSON'];
-  programmingLanguageId: Scalars['ID'];
+export type AdminListBlockLanguagesQuery = { __typename?: "Query" } & {
+  blockLanguages: { __typename?: "BlockLanguageConnection" } & Pick<
+    BlockLanguageConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "BlockLanguage" } & Pick<
+              BlockLanguage,
+              "id" | "name" | "slug" | "generated" | "grammarId"
+            >
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
 };
 
+export type SelectionListBlockLanguagesQueryVariables = {};
 
-export type CreateGrammarMutationMutation = (
-  { __typename?: 'Mutation' }
-  & { createGrammar?: Maybe<(
-    { __typename?: 'CreateGrammarMutationPayload' }
-    & Pick<CreateGrammarMutationPayload, 'errors'>
-    & { grammar?: Maybe<(
-      { __typename?: 'Grammar' }
-      & Pick<Grammar, 'id'>
-    )> }
-  )> }
-);
-
-export type UpdateGrammarMutationMutationVariables = {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug?: Maybe<Scalars['String']>;
-  types: Scalars['JSON'];
-  foreignTypes: Scalars['JSON'];
-  root?: Maybe<Scalars['JSON']>;
-  programmingLanguageId: Scalars['ID'];
-  generatedFromId?: Maybe<Scalars['ID']>;
-  blockLanguageIds?: Maybe<Array<Scalars['ID']>>;
+export type SelectionListBlockLanguagesQuery = { __typename?: "Query" } & {
+  blockLanguages: { __typename?: "BlockLanguageConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "BlockLanguage" } & Pick<BlockLanguage, "id" | "name">
+        >
+      >
+    >;
+  };
 };
 
-
-export type UpdateGrammarMutationMutation = (
-  { __typename?: 'Mutation' }
-  & { updateGrammar?: Maybe<(
-    { __typename?: 'UpdateGrammarMutationPayload' }
-    & Pick<UpdateGrammarMutationPayload, 'errors'>
-    & { grammar?: Maybe<(
-      { __typename?: 'Grammar' }
-      & Pick<Grammar, 'id'>
-    )> }
-  )> }
-);
-
-export type DestroyGrammarMutationMutationVariables = {
-  id: Scalars['ID'];
+export type AdminEditBlockLanguageQueryVariables = {
+  id: Scalars["ID"];
 };
 
+export type AdminEditBlockLanguageQuery = { __typename?: "Query" } & {
+  singleBlockLanguage: { __typename?: "BlockLanguageDescription" } & Pick<
+    BlockLanguageDescription,
+    | "id"
+    | "name"
+    | "slug"
+    | "generated"
+    | "grammarId"
+    | "sidebars"
+    | "editorBlocks"
+    | "editorComponents"
+    | "rootCssClasses"
+    | "localGeneratorInstructions"
+    | "createdAt"
+    | "updatedAt"
+    | "defaultProgrammingLanguageId"
+  >;
+};
 
-export type DestroyGrammarMutationMutation = (
-  { __typename?: 'Mutation' }
-  & { destroyGrammar?: Maybe<(
-    { __typename?: 'DestroyGrammarMutationPayload' }
-    & Pick<DestroyGrammarMutationPayload, 'errors'>
-  )> }
-);
+export type AdminMetaCodeResourcesQueryVariables = {
+  programmingLanguageId: Scalars["ID"];
+};
+
+export type AdminMetaCodeResourcesQuery = { __typename?: "Query" } & {
+  codeResources: { __typename?: "CodeResourceConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "CodeResource" } & Pick<CodeResource, "id" | "name">
+        >
+      >
+    >;
+  };
+};
+
+export type CreateGrammarMutationVariables = {
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  types: Scalars["JSON"];
+  foreignTypes: Scalars["JSON"];
+  root: Scalars["JSON"];
+  programmingLanguageId: Scalars["ID"];
+};
+
+export type CreateGrammarMutation = { __typename?: "Mutation" } & {
+  createGrammar?: Maybe<
+    { __typename?: "CreateGrammarPayload" } & Pick<
+      CreateGrammarPayload,
+      "errors"
+    > & { grammar?: Maybe<{ __typename?: "Grammar" } & Pick<Grammar, "id">> }
+  >;
+};
+
+export type UpdateGrammarMutationVariables = {
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  slug?: Maybe<Scalars["String"]>;
+  types: Scalars["JSON"];
+  foreignTypes: Scalars["JSON"];
+  root?: Maybe<Scalars["JSON"]>;
+  programmingLanguageId: Scalars["ID"];
+  generatedFromId?: Maybe<Scalars["ID"]>;
+  blockLanguageIds?: Maybe<Array<Scalars["ID"]>>;
+};
+
+export type UpdateGrammarMutation = { __typename?: "Mutation" } & {
+  updateGrammar?: Maybe<
+    { __typename?: "UpdateGrammarPayload" } & Pick<
+      UpdateGrammarPayload,
+      "errors"
+    > & { grammar?: Maybe<{ __typename?: "Grammar" } & Pick<Grammar, "id">> }
+  >;
+};
+
+export type DestroyGrammarMutationVariables = {
+  id: Scalars["ID"];
+};
+
+export type DestroyGrammarMutation = { __typename?: "Mutation" } & {
+  destroyGrammar?: Maybe<
+    { __typename?: "DestroyGrammarPayload" } & Pick<
+      DestroyGrammarPayload,
+      "errors"
+    >
+  >;
+};
 
 export type AdminListGrammarsQueryVariables = {
-  first?: Maybe<Scalars['Int']>;
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  last?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars["Int"]>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  last?: Maybe<Scalars["Int"]>;
   input?: Maybe<GrammarInputType>;
 };
 
-
-export type AdminListGrammarsQuery = (
-  { __typename?: 'Query' }
-  & { grammars: (
-    { __typename?: 'GrammarConnection' }
-    & Pick<GrammarConnection, 'totalCount'>
-    & { nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Grammar' }
-      & Pick<Grammar, 'id' | 'name' | 'slug'>
-    )>>>, pageInfo: (
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'hasPreviousPage' | 'hasNextPage' | 'startCursor' | 'endCursor'>
-    ) }
-  ) }
-);
+export type AdminListGrammarsQuery = { __typename?: "Query" } & {
+  grammars: { __typename?: "GrammarConnection" } & Pick<
+    GrammarConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "Grammar" } & Pick<Grammar, "id" | "name" | "slug">
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
+};
 
 export type GrammarDescriptionItemQueryVariables = {
-  id: Scalars['ID'];
+  id: Scalars["ID"];
 };
 
-
-export type GrammarDescriptionItemQuery = (
-  { __typename?: 'Query' }
-  & { grammars: (
-    { __typename?: 'GrammarConnection' }
-    & { nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Grammar' }
-      & Pick<Grammar, 'id' | 'name' | 'programmingLanguageId' | 'slug' | 'generatedFromId' | 'foreignTypes' | 'root' | 'types'>
-    )>>> }
-  ) }
-);
-
-export type AdminEditGrammarQueryVariables = {
-  id: Scalars['ID'];
+export type GrammarDescriptionItemQuery = { __typename?: "Query" } & {
+  singleGrammar: { __typename?: "Grammar" } & Pick<
+    Grammar,
+    | "id"
+    | "name"
+    | "programmingLanguageId"
+    | "slug"
+    | "generatedFromId"
+    | "foreignTypes"
+    | "root"
+    | "types"
+  >;
 };
 
+export type AdminSingleGrammarQueryVariables = {
+  id: Scalars["ID"];
+};
 
-export type AdminEditGrammarQuery = (
-  { __typename?: 'Query' }
-  & { grammars: (
-    { __typename?: 'GrammarConnection' }
-    & { nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Grammar' }
-      & Pick<Grammar, 'id' | 'name' | 'programmingLanguageId' | 'slug' | 'generatedFromId' | 'foreignTypes' | 'root' | 'types'>
-      & { blockLanguages?: Maybe<(
-        { __typename?: 'BlockLanguageConnection' }
-        & { nodes?: Maybe<Array<Maybe<(
-          { __typename?: 'BlockLanguage' }
-          & Pick<BlockLanguage, 'id' | 'name'>
-        )>>> }
-      )> }
-    )>>> }
-  ) }
-);
+export type AdminSingleGrammarQuery = { __typename?: "Query" } & {
+  singleGrammar: { __typename?: "Grammar" } & Pick<
+    Grammar,
+    | "id"
+    | "name"
+    | "programmingLanguageId"
+    | "slug"
+    | "generatedFromId"
+    | "foreignTypes"
+    | "root"
+    | "types"
+  > & {
+      blockLanguages?: Maybe<
+        { __typename?: "BlockLanguageConnection" } & {
+          nodes?: Maybe<
+            Array<
+              Maybe<
+                { __typename?: "BlockLanguage" } & Pick<
+                  BlockLanguage,
+                  "id" | "name"
+                >
+              >
+            >
+          >;
+        }
+      >;
+    };
+};
 
 export type SelectionListGrammarsQueryVariables = {};
 
+export type SelectionListGrammarsQuery = { __typename?: "Query" } & {
+  grammars: { __typename?: "GrammarConnection" } & {
+    nodes?: Maybe<
+      Array<Maybe<{ __typename?: "Grammar" } & Pick<Grammar, "id" | "name">>>
+    >;
+  };
+};
 
-export type SelectionListGrammarsQuery = (
-  { __typename?: 'Query' }
-  & { grammars: (
-    { __typename?: 'GrammarConnection' }
-    & { nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Grammar' }
-      & Pick<Grammar, 'id' | 'name'>
-    )>>> }
-  ) }
-);
+export type CreateNewsMutationVariables = {
+  title: Scalars["JSON"];
+  text: Scalars["JSON"];
+  publishedFrom: Scalars["ISO8601DateTime"];
+  userId?: Maybe<Scalars["ID"]>;
+};
+
+export type CreateNewsMutation = { __typename?: "Mutation" } & {
+  createNews?: Maybe<
+    { __typename?: "CreateNewsPayload" } & Pick<
+      CreateNewsPayload,
+      "id" | "errors"
+    >
+  >;
+};
+
+export type UpdateNewsMutationVariables = {
+  id: Scalars["ID"];
+  title: Scalars["JSON"];
+  text: Scalars["JSON"];
+  publishedFrom: Scalars["ISO8601DateTime"];
+  userId?: Maybe<Scalars["ID"]>;
+};
+
+export type UpdateNewsMutation = { __typename?: "Mutation" } & {
+  updateNews?: Maybe<
+    { __typename?: "UpdateNewsPayload" } & Pick<
+      UpdateNewsPayload,
+      "id" | "errors"
+    >
+  >;
+};
+
+export type DestroyNewsMutationVariables = {
+  id: Scalars["ID"];
+};
+
+export type DestroyNewsMutation = { __typename?: "Mutation" } & {
+  destroyNews?: Maybe<
+    { __typename?: "DestroyNewsPayload" } & Pick<
+      DestroyNewsPayload,
+      "id" | "errors"
+    >
+  >;
+};
+
+export type AdminListNewsQueryVariables = {
+  first?: Maybe<Scalars["Int"]>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  last?: Maybe<Scalars["Int"]>;
+  input?: Maybe<NewsInputType>;
+};
+
+export type AdminListNewsQuery = { __typename?: "Query" } & {
+  news: { __typename?: "NewsConnection" } & Pick<
+    NewsConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "News" } & Pick<
+              News,
+              | "id"
+              | "title"
+              | "text"
+              | "publishedFrom"
+              | "createdAt"
+              | "updatedAt"
+              | "userId"
+            >
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
+};
+
+export type AdminSingleNewsQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type AdminSingleNewsQuery = { __typename?: "Query" } & {
+  singleNews: { __typename?: "News" } & Pick<
+    News,
+    | "id"
+    | "title"
+    | "text"
+    | "publishedFrom"
+    | "createdAt"
+    | "updatedAt"
+    | "userId"
+  >;
+};
 
 export type AdminListProjectsQueryVariables = {
-  first?: Maybe<Scalars['Int']>;
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  last?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars["Int"]>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  last?: Maybe<Scalars["Int"]>;
   input?: Maybe<ProjectInputType>;
 };
 
+export type AdminListProjectsQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & Pick<
+    ProjectConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "Project" } & Pick<
+              Project,
+              "id" | "name" | "slug" | "codeResourceCount"
+            >
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
+};
 
-export type AdminListProjectsQuery = (
-  { __typename?: 'Query' }
-  & { projects: (
-    { __typename?: 'ProjectConnection' }
-    & Pick<ProjectConnection, 'totalCount'>
-    & { nodes?: Maybe<Array<Maybe<(
-      { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'name' | 'slug' | 'codeResourceCount'>
-    )>>>, pageInfo: (
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'hasPreviousPage' | 'hasNextPage' | 'startCursor' | 'endCursor'>
-    ) }
-  ) }
-);
+export const CreateBlockLanguageDocument = gql`
+  mutation CreateBlockLanguage(
+    $name: String!
+    $slug: String
+    $defaultProgrammingLanguageId: ID
+    $grammarId: ID
+    $sidebars: JSON!
+    $editorBlocks: JSON!
+    $editorComponents: JSON!
+  ) {
+    createBlockLanguage(
+      input: {
+        name: $name
+        slug: $slug
+        defaultProgrammingLanguageId: $defaultProgrammingLanguageId
+        grammarId: $grammarId
+        sidebars: $sidebars
+        editorBlocks: $editorBlocks
+        editorComponents: $editorComponents
+      }
+    ) {
+      id
+      errors
+    }
+  }
+`;
 
-export const CreateBlockLanguageMutationDocument = gql`
-    mutation CreateBlockLanguageMutation($name: String!, $slug: String, $defaultProgrammingLanguageId: ID, $grammarId: ID, $sidebars: JSON!, $editorBlocks: JSON!, $editorComponents: JSON!) {
-  createBlockLanguage(input: {name: $name, slug: $slug, defaultProgrammingLanguageId: $defaultProgrammingLanguageId, grammarId: $grammarId, sidebars: $sidebars, editorBlocks: $editorBlocks, editorComponents: $editorComponents}) {
-    id
-    errors
+@Injectable({
+  providedIn: "root",
+})
+export class CreateBlockLanguageGQL extends Apollo.Mutation<
+  CreateBlockLanguageMutation,
+  CreateBlockLanguageMutationVariables
+> {
+  document = CreateBlockLanguageDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class CreateBlockLanguageMutationGQL extends Apollo.Mutation<CreateBlockLanguageMutationMutation, CreateBlockLanguageMutationMutationVariables> {
-    document = CreateBlockLanguageMutationDocument;
-    
+export const UpdateBlockLanguageDocument = gql`
+  mutation UpdateBlockLanguage(
+    $name: String!
+    $slug: String
+    $defaultProgrammingLanguageId: ID
+    $grammarId: ID
+    $sidebars: JSON!
+    $editorBlocks: JSON!
+    $rootCssClasses: JSON
+    $editorComponents: JSON!
+    $localGeneratorInstructions: JSON
+  ) {
+    updateBlockLanguage(
+      input: {
+        name: $name
+        slug: $slug
+        defaultProgrammingLanguageId: $defaultProgrammingLanguageId
+        grammarId: $grammarId
+        sidebars: $sidebars
+        editorBlocks: $editorBlocks
+        rootCssClasses: $rootCssClasses
+        editorComponents: $editorComponents
+        localGeneratorInstructions: $localGeneratorInstructions
+      }
+    ) {
+      id
+      errors
+    }
   }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UpdateBlockLanguageGQL extends Apollo.Mutation<
+  UpdateBlockLanguageMutation,
+  UpdateBlockLanguageMutationVariables
+> {
+  document = UpdateBlockLanguageDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DestroyBlockLanguageDocument = gql`
+  mutation DestroyBlockLanguage($id: ID!) {
+    destroyBlockLanguage(input: { id: $id }) {
+      id
+      errors
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class DestroyBlockLanguageGQL extends Apollo.Mutation<
+  DestroyBlockLanguageMutation,
+  DestroyBlockLanguageMutationVariables
+> {
+  document = DestroyBlockLanguageDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const AdminListBlockLanguagesDocument = gql`
-    query AdminListBlockLanguages($first: Int, $after: String, $before: String, $last: Int, $input: BlockLanguageInputType) {
-  blockLanguages(first: $first, after: $after, before: $before, last: $last, input: $input) {
-    nodes {
+  query AdminListBlockLanguages(
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+    $input: BlockLanguageInputType
+  ) {
+    blockLanguages(
+      first: $first
+      after: $after
+      before: $before
+      last: $last
+      input: $input
+    ) {
+      nodes {
+        id
+        name
+        slug
+        generated
+        grammarId
+      }
+      totalCount
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminListBlockLanguagesGQL extends Apollo.Query<
+  AdminListBlockLanguagesQuery,
+  AdminListBlockLanguagesQueryVariables
+> {
+  document = AdminListBlockLanguagesDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SelectionListBlockLanguagesDocument = gql`
+  query SelectionListBlockLanguages {
+    blockLanguages {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class SelectionListBlockLanguagesGQL extends Apollo.Query<
+  SelectionListBlockLanguagesQuery,
+  SelectionListBlockLanguagesQueryVariables
+> {
+  document = SelectionListBlockLanguagesDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminEditBlockLanguageDocument = gql`
+  query AdminEditBlockLanguage($id: ID!) {
+    singleBlockLanguage(id: $id) {
       id
       name
       slug
       generated
       grammarId
+      sidebars
+      editorBlocks
+      editorComponents
+      rootCssClasses
+      localGeneratorInstructions
+      createdAt
+      updatedAt
+      defaultProgrammingLanguageId
     }
-    totalCount
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminEditBlockLanguageGQL extends Apollo.Query<
+  AdminEditBlockLanguageQuery,
+  AdminEditBlockLanguageQueryVariables
+> {
+  document = AdminEditBlockLanguageDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class AdminListBlockLanguagesGQL extends Apollo.Query<AdminListBlockLanguagesQuery, AdminListBlockLanguagesQueryVariables> {
-    document = AdminListBlockLanguagesDocument;
-    
-  }
-export const CreateGrammarMutationDocument = gql`
-    mutation CreateGrammarMutation($name: String!, $slug: String, $types: JSON!, $foreignTypes: JSON!, $root: JSON!, $programmingLanguageId: ID!) {
-  createGrammar(input: {name: $name, slug: $slug, types: $types, foreignTypes: $foreignTypes, root: $root, programmingLanguageId: $programmingLanguageId}) {
-    grammar {
-      id
+export const AdminMetaCodeResourcesDocument = gql`
+  query AdminMetaCodeResources($programmingLanguageId: ID!) {
+    codeResources(
+      input: { filter: { programmingLanguageId: $programmingLanguageId } }
+    ) {
+      nodes {
+        id
+        name
+      }
     }
-    errors
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminMetaCodeResourcesGQL extends Apollo.Query<
+  AdminMetaCodeResourcesQuery,
+  AdminMetaCodeResourcesQueryVariables
+> {
+  document = AdminMetaCodeResourcesDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class CreateGrammarMutationGQL extends Apollo.Mutation<CreateGrammarMutationMutation, CreateGrammarMutationMutationVariables> {
-    document = CreateGrammarMutationDocument;
-    
-  }
-export const UpdateGrammarMutationDocument = gql`
-    mutation UpdateGrammarMutation($id: ID!, $name: String!, $slug: String, $types: JSON!, $foreignTypes: JSON!, $root: JSON, $programmingLanguageId: ID!, $generatedFromId: ID, $blockLanguageIds: [ID!]) {
-  updateGrammar(input: {id: $id, name: $name, slug: $slug, types: $types, foreignTypes: $foreignTypes, root: $root, programmingLanguageId: $programmingLanguageId, generatedFromId: $generatedFromId, blockLanguageIds: $blockLanguageIds}) {
-    grammar {
-      id
+export const CreateGrammarDocument = gql`
+  mutation CreateGrammar(
+    $name: String!
+    $slug: String
+    $types: JSON!
+    $foreignTypes: JSON!
+    $root: JSON!
+    $programmingLanguageId: ID!
+  ) {
+    createGrammar(
+      input: {
+        name: $name
+        slug: $slug
+        types: $types
+        foreignTypes: $foreignTypes
+        root: $root
+        programmingLanguageId: $programmingLanguageId
+      }
+    ) {
+      grammar {
+        id
+      }
+      errors
     }
-    errors
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class CreateGrammarGQL extends Apollo.Mutation<
+  CreateGrammarMutation,
+  CreateGrammarMutationVariables
+> {
+  document = CreateGrammarDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class UpdateGrammarMutationGQL extends Apollo.Mutation<UpdateGrammarMutationMutation, UpdateGrammarMutationMutationVariables> {
-    document = UpdateGrammarMutationDocument;
-    
+export const UpdateGrammarDocument = gql`
+  mutation UpdateGrammar(
+    $id: ID!
+    $name: String!
+    $slug: String
+    $types: JSON!
+    $foreignTypes: JSON!
+    $root: JSON
+    $programmingLanguageId: ID!
+    $generatedFromId: ID
+    $blockLanguageIds: [ID!]
+  ) {
+    updateGrammar(
+      input: {
+        id: $id
+        name: $name
+        slug: $slug
+        types: $types
+        foreignTypes: $foreignTypes
+        root: $root
+        programmingLanguageId: $programmingLanguageId
+        generatedFromId: $generatedFromId
+        blockLanguageIds: $blockLanguageIds
+      }
+    ) {
+      grammar {
+        id
+      }
+      errors
+    }
   }
-export const DestroyGrammarMutationDocument = gql`
-    mutation DestroyGrammarMutation($id: ID!) {
-  destroyGrammar(input: {id: $id}) {
-    errors
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UpdateGrammarGQL extends Apollo.Mutation<
+  UpdateGrammarMutation,
+  UpdateGrammarMutationVariables
+> {
+  document = UpdateGrammarDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DestroyGrammarMutationGQL extends Apollo.Mutation<DestroyGrammarMutationMutation, DestroyGrammarMutationMutationVariables> {
-    document = DestroyGrammarMutationDocument;
-    
+export const DestroyGrammarDocument = gql`
+  mutation DestroyGrammar($id: ID!) {
+    destroyGrammar(input: { id: $id }) {
+      errors
+    }
   }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class DestroyGrammarGQL extends Apollo.Mutation<
+  DestroyGrammarMutation,
+  DestroyGrammarMutationVariables
+> {
+  document = DestroyGrammarDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const AdminListGrammarsDocument = gql`
-    query AdminListGrammars($first: Int, $after: String, $before: String, $last: Int, $input: GrammarInputType) {
-  grammars(first: $first, after: $after, before: $before, last: $last, input: $input) {
-    nodes {
-      id
-      name
-      slug
+  query AdminListGrammars(
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+    $input: GrammarInputType
+  ) {
+    grammars(
+      first: $first
+      after: $after
+      before: $before
+      last: $last
+      input: $input
+    ) {
+      nodes {
+        id
+        name
+        slug
+      }
+      totalCount
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
     }
-    totalCount
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminListGrammarsGQL extends Apollo.Query<
+  AdminListGrammarsQuery,
+  AdminListGrammarsQueryVariables
+> {
+  document = AdminListGrammarsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class AdminListGrammarsGQL extends Apollo.Query<AdminListGrammarsQuery, AdminListGrammarsQueryVariables> {
-    document = AdminListGrammarsDocument;
-    
-  }
 export const GrammarDescriptionItemDocument = gql`
-    query GrammarDescriptionItem($id: ID!) {
-  grammars(input: {filter: {id: $id}}) {
-    nodes {
+  query GrammarDescriptionItem($id: ID!) {
+    singleGrammar(id: $id) {
       id
       name
       programmingLanguageId
@@ -1035,20 +1625,23 @@ export const GrammarDescriptionItemDocument = gql`
       types
     }
   }
-}
-    `;
+`;
 
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GrammarDescriptionItemGQL extends Apollo.Query<GrammarDescriptionItemQuery, GrammarDescriptionItemQueryVariables> {
-    document = GrammarDescriptionItemDocument;
-    
+@Injectable({
+  providedIn: "root",
+})
+export class GrammarDescriptionItemGQL extends Apollo.Query<
+  GrammarDescriptionItemQuery,
+  GrammarDescriptionItemQueryVariables
+> {
+  document = GrammarDescriptionItemDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
-export const AdminEditGrammarDocument = gql`
-    query AdminEditGrammar($id: ID!) {
-  grammars(input: {filter: {id: $id}}) {
-    nodes {
+}
+export const AdminSingleGrammarDocument = gql`
+  query AdminSingleGrammar($id: ID!) {
+    singleGrammar(id: $id) {
       id
       name
       programmingLanguageId
@@ -1065,58 +1658,246 @@ export const AdminEditGrammarDocument = gql`
       }
     }
   }
-}
-    `;
+`;
 
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class AdminEditGrammarGQL extends Apollo.Query<AdminEditGrammarQuery, AdminEditGrammarQueryVariables> {
-    document = AdminEditGrammarDocument;
-    
+@Injectable({
+  providedIn: "root",
+})
+export class AdminSingleGrammarGQL extends Apollo.Query<
+  AdminSingleGrammarQuery,
+  AdminSingleGrammarQueryVariables
+> {
+  document = AdminSingleGrammarDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
+}
 export const SelectionListGrammarsDocument = gql`
-    query SelectionListGrammars {
-  grammars {
-    nodes {
-      id
-      name
+  query SelectionListGrammars {
+    grammars {
+      nodes {
+        id
+        name
+      }
     }
   }
-}
-    `;
+`;
 
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class SelectionListGrammarsGQL extends Apollo.Query<SelectionListGrammarsQuery, SelectionListGrammarsQueryVariables> {
-    document = SelectionListGrammarsDocument;
-    
+@Injectable({
+  providedIn: "root",
+})
+export class SelectionListGrammarsGQL extends Apollo.Query<
+  SelectionListGrammarsQuery,
+  SelectionListGrammarsQueryVariables
+> {
+  document = SelectionListGrammarsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
+}
+export const CreateNewsDocument = gql`
+  mutation CreateNews(
+    $title: JSON!
+    $text: JSON!
+    $publishedFrom: ISO8601DateTime!
+    $userId: ID
+  ) {
+    createNews(
+      input: {
+        title: $title
+        text: $text
+        publishedFrom: $publishedFrom
+        userId: $userId
+      }
+    ) {
+      id
+      errors
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class CreateNewsGQL extends Apollo.Mutation<
+  CreateNewsMutation,
+  CreateNewsMutationVariables
+> {
+  document = CreateNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateNewsDocument = gql`
+  mutation UpdateNews(
+    $id: ID!
+    $title: JSON!
+    $text: JSON!
+    $publishedFrom: ISO8601DateTime!
+    $userId: ID
+  ) {
+    updateNews(
+      input: {
+        id: $id
+        title: $title
+        text: $text
+        publishedFrom: $publishedFrom
+        userId: $userId
+      }
+    ) {
+      id
+      errors
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UpdateNewsGQL extends Apollo.Mutation<
+  UpdateNewsMutation,
+  UpdateNewsMutationVariables
+> {
+  document = UpdateNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DestroyNewsDocument = gql`
+  mutation DestroyNews($id: ID!) {
+    destroyNews(input: { id: $id }) {
+      id
+      errors
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class DestroyNewsGQL extends Apollo.Mutation<
+  DestroyNewsMutation,
+  DestroyNewsMutationVariables
+> {
+  document = DestroyNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminListNewsDocument = gql`
+  query AdminListNews(
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+    $input: NewsInputType
+  ) {
+    news(
+      first: $first
+      after: $after
+      before: $before
+      last: $last
+      input: $input
+    ) {
+      nodes {
+        id
+        title
+        text
+        publishedFrom
+        createdAt
+        updatedAt
+        userId
+      }
+      totalCount
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminListNewsGQL extends Apollo.Query<
+  AdminListNewsQuery,
+  AdminListNewsQueryVariables
+> {
+  document = AdminListNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminSingleNewsDocument = gql`
+  query AdminSingleNews($id: ID!) {
+    singleNews(id: $id) {
+      id
+      title
+      text
+      publishedFrom
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminSingleNewsGQL extends Apollo.Query<
+  AdminSingleNewsQuery,
+  AdminSingleNewsQueryVariables
+> {
+  document = AdminSingleNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const AdminListProjectsDocument = gql`
-    query AdminListProjects($first: Int, $after: String, $before: String, $last: Int, $input: ProjectInputType) {
-  projects(first: $first, after: $after, before: $before, last: $last, input: $input) {
-    nodes {
-      id
-      name
-      slug
-      codeResourceCount
+  query AdminListProjects(
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+    $input: ProjectInputType
+  ) {
+    projects(
+      first: $first
+      after: $after
+      before: $before
+      last: $last
+      input: $input
+    ) {
+      nodes {
+        id
+        name
+        slug
+        codeResourceCount
+      }
+      totalCount
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
     }
-    totalCount
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminListProjectsGQL extends Apollo.Query<
+  AdminListProjectsQuery,
+  AdminListProjectsQueryVariables
+> {
+  document = AdminListProjectsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class AdminListProjectsGQL extends Apollo.Query<AdminListProjectsQuery, AdminListProjectsQueryVariables> {
-    document = AdminListProjectsDocument;
-    
-  }

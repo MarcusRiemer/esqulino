@@ -1,21 +1,49 @@
 import { map } from "rxjs/operators";
-import { Component, Inject, LOCALE_ID } from "@angular/core";
+import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { PerformDataService } from "./../shared/authorisation/perform-data.service";
-import { ServerDataService } from "../shared";
-import { MultiLangString } from "./../shared/multilingual-string.description";
-import { locales } from "../shared/change-language.component";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { ServerDataService } from "../../shared";
+import { MultiLangString } from "../../shared/multilingual-string.description";
+import { locales } from "../../shared/change-language.component";
+import {
+  AdminListGrammarsGQL,
+  AdminListGrammarsQuery,
+  AdminListNewsGQL,
+  AdminListNewsQuery,
+} from "../../../generated/graphql";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+
+// TODO: Should be beautified and used
+type Query = ReturnType<AdminListNewsGQL["watch"]>;
+
+type DataKey = Exclude<keyof AdminListNewsQuery, "__typename">;
+
+// TODO: Resolve this from the Query type above, requires unpacking
+//       a type argument to Observable
+type ListItem = AdminListNewsQuery[DataKey]["nodes"][0];
+
+type ColumnName = keyof ListItem;
+
 @Component({
   templateUrl: "./templates/news.html",
 })
 export class AdminNewsListComponent {
+  @ViewChild(MatPaginator)
+  _paginator: MatPaginator;
+
+  // Angular Material UI to sort by different columns
+  @ViewChild(MatSort, { static: true })
+  sort: MatSort;
+
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
     private readonly _serverData: ServerDataService,
     private _router: Router,
     private _active: ActivatedRoute,
-    private _performData: PerformDataService
+    private _performData: PerformDataService,
+    private _newsGQL: AdminListNewsGQL
   ) {}
 
   readonly languages = locales;
@@ -24,7 +52,25 @@ export class AdminNewsListComponent {
     { name: "translation", description: "Übersetzungsmodus" },
   ];
 
+  readonly dataKey: DataKey = "news";
+
+  displayedColumns: ColumnName[] = [
+    "title",
+    "text",
+    "id",
+    "publishedFrom",
+    "createdAt",
+    "updatedAt",
+  ];
+
+  // mat-pagination info
+  pageSize: number = 25;
+
   readonly performCreateData = this._performData.news.create();
+  readonly query = this._newsGQL.watch(
+    { first: this.pageSize },
+    { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+  );
 
   public adminNewsList = this._serverData.getAdminNewsList.value;
   public searchList = this.adminNewsList;
@@ -74,5 +120,19 @@ export class AdminNewsListComponent {
 
   public createNews(): void {
     this._router.navigate(["create"], { relativeTo: this._active });
+  }
+
+  public parseUTCDate(date: any) {
+    return date;
+  }
+
+  get queryData() {
+    return {
+      query: this.query,
+      dataKey: this.dataKey,
+      displayColumns: this.displayedColumns,
+      pageSize: this.pageSize,
+      sort: this.sort,
+    };
   }
 }

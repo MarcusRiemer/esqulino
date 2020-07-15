@@ -46,12 +46,7 @@
       </may-perform>
     </div>
   </form>
-  <app-table-paginator
-    [listData]="news"
-    [activeColumns]="displayedColumns"
-    [sort]="sort"
-    matSort
-  >
+  <app-table-paginator-graphql [queryData]="queryData" matSort>
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Titel</th>
       <td mat-cell *matCellDef="let news">
@@ -69,7 +64,7 @@
         <code>{{ news.id }}</code>
       </td>
     </ng-container>
-    <ng-container matColumnDef="availableIn">
+    <ng-container matColumnDef="text">
       <th mat-header-cell *matHeaderCellDef>Verfügbar In</th>
       <td mat-cell *matCellDef="let news">
         {{getLanguagesFlags(news.text)}}
@@ -93,5 +88,5 @@
         {{(parseUTCDate(news.updatedAt) | date: 'dd.MM.yyyy HH:mm') || ''}}
       </td>
     </ng-container>
-  </app-table-paginator>
+  </app-table-paginator-graphql>
 </div>

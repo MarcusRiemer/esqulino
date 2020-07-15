@@ -1,4 +1,3 @@
-import { MayPerformRequestDescription } from "./../shared/may-perform.description";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   Component,
@@ -8,12 +7,18 @@ import {
   ViewChild,
   TemplateRef,
 } from "@angular/core";
-import { first } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { NewsUpdateDescription } from "../shared/news.description";
-import { ServerDataService, ToolbarService } from "../shared";
+import { ToolbarService } from "../shared";
 import { PerformDataService } from "../shared/authorisation/perform-data.service";
+import {
+  CreateNewsGQL,
+  UpdateNewsGQL,
+  DestroyNewsGQL,
+  AdminSingleNewsGQL,
+} from "../../generated/graphql";
 
 /**
  * Administrative UI to edit or create news.
@@ -26,13 +31,15 @@ export class AdminNewsEditComponent implements OnInit {
   toolbarItems: TemplateRef<any>;
 
   constructor(
-    private _serverData: ServerDataService,
     private _activeRoute: ActivatedRoute,
     private _router: Router,
-    private _serverService: ServerDataService,
     private _snackBar: MatSnackBar,
     private _toolbar: ToolbarService,
     private _performData: PerformDataService,
+    private _singleNewsGQL: AdminSingleNewsGQL,
+    private _createNewsGQL: CreateNewsGQL,
+    private _updateNewsGQL: UpdateNewsGQL,
+    private _destroyNewsGQL: DestroyNewsGQL,
     @Inject(LOCALE_ID) private readonly localeID: string
   ) {}
 
@@ -66,9 +73,9 @@ export class AdminNewsEditComponent implements OnInit {
       this.newNews();
     } else {
       // Retrieve the news that should be edited
-      this._serverData.getAdminNewsSingle
-        .getDescription(this._newsId)
-        .pipe(first())
+      this._singleNewsGQL
+        .fetch({ id: this._newsId })
+        .pipe(map((result) => result.data.singleNews))
         .subscribe(
           (news) => {
             this.newsData = news;
@@ -114,7 +121,7 @@ export class AdminNewsEditComponent implements OnInit {
    * Send our new news to the server.
    */
   onCreate(): void {
-    this._serverService.createNews(this.newsData).subscribe(
+    this._createNewsGQL.mutate(this.newsData).subscribe(
       (_) => {
         this._router.navigate(["admin/news"]);
         this._snackBar.open("Created succesful", "", { duration: 3000 });
@@ -126,17 +133,20 @@ export class AdminNewsEditComponent implements OnInit {
   /**
    * Update the news on the server.
    *
-   * @param option May be "redirect" to redirect the user back to the overview page
+   * @param option May be "redirect" to redirect the user
+      this._serverService.deleteNews(this._newsId) back to the overview page
    */
   public onUpdate(option: "redirect" | "stay"): void {
-    this._serverService.updateNews(this._newsId, this.newsData).subscribe(
-      (_) => {
-        if (option == "redirect") this._router.navigate(["admin/news"]);
+    this._updateNewsGQL
+      .mutate({ id: this._newsId, ...this.newsData })
+      .subscribe(
+        (_) => {
+          if (option == "redirect") this._router.navigate(["admin/news"]);
 
-        this._snackBar.open("Update succesful", "", { duration: 3000 });
-      },
-      (err) => alert(`Error: ${JSON.stringify(err)}`)
-    );
+          this._snackBar.open("Update succesful", "", { duration: 3000 });
+        },
+        (err) => alert(`Error: ${JSON.stringify(err)}`)
+      );
   }
 
   /**
@@ -145,7 +155,7 @@ export class AdminNewsEditComponent implements OnInit {
   public onDelete(): void {
     let question = confirm("Ganze Nachricht löschen?");
     if (question) {
-      this._serverService.deleteNews(this._newsId).subscribe(
+      this._destroyNewsGQL.mutate({ id: this._newsId }).subscribe(
         (_) => {
           this._router.navigate(["admin/news"]);
           this._snackBar.open("Deleted succesful", "", { duration: 3000 });

@@ -10,10 +10,10 @@ import { ToolbarService } from "../../shared/toolbar.service";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
 import {
-  DestroyBlockLanguageMutationGQL,
+  DestroyBlockLanguageGQL,
   SelectionListGrammarsGQL,
 } from "../../../generated/graphql";
-import {map} from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/edit-block-language.html",
@@ -26,17 +26,18 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _deleteBlockLanguageGQL: DestroyBlockLanguageMutationGQL,
+    private _deleteBlockLanguageGQL: DestroyBlockLanguageGQL,
     private _current: EditBlockLanguageService,
-    private _grammarSelection:SelectionListGrammarsGQL,
+    private _grammarSelection: SelectionListGrammarsGQL,
     private _toolbarService: ToolbarService
   ) {}
 
   /**
    * All grammars that may be selected for the edited block language.
    */
-  readonly availableGrammars = this._grammarSelection.watch().valueChanges
-    .pipe(map(response => response.data.grammars.nodes))
+  readonly availableGrammars = this._grammarSelection
+    .watch()
+    .valueChanges.pipe(map((response) => response.data.grammars.nodes));
 
   /**
    * A readable version of the grammar that is beeing edited.
@@ -119,7 +120,9 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._deleteBlockLanguageGQL.mutate({id:this.editedSubject.id}).toPromise();
+    await this._deleteBlockLanguageGQL
+      .mutate({ id: this.editedSubject.id })
+      .toPromise();
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 

@@ -2,49 +2,39 @@ import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { PortalModule } from "@angular/cdk/portal";
 
-import {
-  LanguageService,
-  ServerApiService,
-  ToolbarService,
-} from "../../shared";
-import {
-  ListGrammarDataService,
-  MutateGrammarService,
-} from "../../shared/serverdata";
+import { LanguageService, ToolbarService } from "../../shared";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
-import { buildGrammar } from "../../editor/spec-util";
 
 import { CreateGrammarComponent } from "./create-grammar.component";
-import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
+import {
+  ApolloTestingController,
+  ApolloTestingModule,
+} from "apollo-angular/testing";
+import { CreateGrammarDocument } from "../../../generated/graphql";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { EmptyComponent } from "../../shared/empty.component";
+import { NavigationStart, Router } from "@angular/router";
 
 describe("CreateGrammarComponent", () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
+        ApolloTestingModule,
         FormsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
         MatTableModule,
         PortalModule,
+        RouterTestingModule.withRoutes([
+          { path: "admin/grammar/:id", component: EmptyComponent },
+        ]),
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([]),
       ],
-      providers: [
-        ToolbarService,
-        ServerApiService,
-        LanguageService,
-        ListGrammarDataService,
-        MutateGrammarService,
-        ServerTasksService,
-      ],
+      providers: [ToolbarService, LanguageService],
       declarations: [CreateGrammarComponent, DefaultValuePipe],
     }).compileComponents();
 
@@ -52,21 +42,21 @@ describe("CreateGrammarComponent", () => {
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
-    const httpTesting = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
+    const controller = TestBed.inject(ApolloTestingController);
+    const router = TestBed.inject(Router);
 
     return {
       fixture,
       component,
+      controller,
+      router,
       element: fixture.nativeElement as HTMLElement,
-      httpTesting,
-      serverApi,
     };
   }
 
   it(`can be instantiated`, async () => {
     const t = await createComponent();
-
+    debugger;
     expect(t.component).toBeDefined();
   });
 
@@ -104,8 +94,14 @@ describe("CreateGrammarComponent", () => {
 
     t.fixture.detectChanges();
 
-    t.httpTesting
-      .expectOne({ method: "POST", url: t.serverApi.createGrammarUrl() })
-      .flush("");
+    const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
+    const op = t.controller.expectOne(CreateGrammarDocument);
+    op.flush({ data: { createGrammar: { grammar: { id: generatedId } } } });
+    t.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        // Navigation started.
+        expect(event.url).toEqual(`/admin/grammar/${generatedId}`);
+      }
+    });
   });
 });

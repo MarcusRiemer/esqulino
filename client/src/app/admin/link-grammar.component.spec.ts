@@ -1,54 +1,38 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { RouterTestingModule } from "@angular/router/testing";
 
-import { ServerApiService } from "../shared";
-import {
-  ListGrammarDataService,
-  MutateGrammarService,
-} from "../shared/serverdata";
 import { LinkGrammarComponent } from "./link-grammar.component";
 import { generateUUIDv4 } from "../shared/util-browser";
-import { buildGrammar, provideGrammarList } from "../editor/spec-util";
-import { ServerTasksService } from "../shared/serverdata/server-tasks.service";
+import {
+  ApolloTestingController,
+  ApolloTestingModule,
+} from "apollo-angular/testing";
+import { buildSingleGrammarResponse } from "../editor/spec-util/grammar.gql.data.spec";
+import { AdminListGrammarsDocument } from "../../generated/graphql";
 
 describe("LinkGrammarComponent", () => {
   async function createComponent(grammarId: string = undefined) {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatSnackBarModule,
-        RouterTestingModule,
-      ],
-      providers: [
-        ServerApiService,
-        ListGrammarDataService,
-        MutateGrammarService,
-        ServerTasksService,
-      ],
+      imports: [ApolloTestingModule, MatSnackBarModule, RouterTestingModule],
       declarations: [LinkGrammarComponent],
     }).compileComponents();
 
     let fixture = TestBed.createComponent(LinkGrammarComponent);
     let component = fixture.componentInstance;
+
     component.grammarId = grammarId;
 
     fixture.detectChanges();
     await fixture.whenRenderingDone();
 
-    const httpTesting = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
+    const controller = TestBed.inject(ApolloTestingController);
 
     return {
       fixture,
       component,
+      controller,
       element: fixture.nativeElement as HTMLElement,
-      httpTesting,
-      serverApi,
     };
   }
 
@@ -67,15 +51,18 @@ describe("LinkGrammarComponent", () => {
   });
 
   it(`Renders the name once the data is available`, async () => {
-    const g = buildGrammar({ name: "spec g" });
-    const t = await createComponent(g.id);
+    const response = buildSingleGrammarResponse();
+    const grammar = response.data.grammars.nodes[0];
+    const t = await createComponent(grammar.id);
 
-    provideGrammarList([g]);
+    t.component.description.toPromise();
+    const op = t.controller.expectOne(AdminListGrammarsDocument);
+    op.flush(response);
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
 
-    expect(t.element.innerText.trim()).toEqual(g.name);
-    expect(t.element.querySelector("a").href).toContain(g.id);
+    expect(t.element.innerText.trim()).toEqual(grammar.name);
+    expect(t.element.querySelector("a").href).toContain(grammar.id);
   });
 });

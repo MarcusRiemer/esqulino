@@ -59,7 +59,7 @@ export class ServerDataService {
     NewsDescription[]
   >(
     this._http.get<NewsDescription[]>(this._serverApi.getAdminNewsListUrl()),
-    "GET " + this._serverApi.getAdminNewsListUrl()
+    "GET " + "/api/" + this._serverApi.getAdminNewsListUrl()
   );
 
   readonly getAdminNewsSingle = new IndividualDescriptionCache<NewsDescription>(

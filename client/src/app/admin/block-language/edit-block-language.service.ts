@@ -6,9 +6,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject } from "rxjs";
 import { switchMap, map, first, filter, flatMap } from "rxjs/operators";
 
-import {
-  IndividualGrammarDataService,
-} from "../../shared/serverdata";
+import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
   generateBlockLanguage,
@@ -20,7 +18,7 @@ import { prettyPrintGrammar } from "../../shared/syntaxtree";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 import {
   AdminEditBlockLanguageGQL,
-  UpdateBlockLanguageMutationGQL
+  UpdateBlockLanguageGQL,
 } from "../../../generated/graphql";
 
 @Injectable()
@@ -38,25 +36,25 @@ export class EditBlockLanguageService {
 
   constructor(
     private _singleBlockLanguageGQL: AdminEditBlockLanguageGQL,
-    private _updateBlockLanguageGQL: UpdateBlockLanguageMutationGQL,
+    private _updateBlockLanguageGQL: UpdateBlockLanguageGQL,
     private _individualGrammarData: IndividualGrammarDataService,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private _title: Title,
+    private _title: Title
   ) {
     // Ensures that a block language that matches the URL is loaded.
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get("blockLanguageId")),
         switchMap((id: string) =>
-          this._singleBlockLanguageGQL.fetch({id:id})
-            .pipe(
-              map(bl =>
+          this._singleBlockLanguageGQL.fetch({ id: id }).pipe(
+            map(
+              (bl) =>
                 // unpack model Object
                 bl.data.singleBlockLanguage
-              )
             )
           )
+        )
       )
       .subscribe((blockLanguage) => {
         this._editedSubject.next(blockLanguage);

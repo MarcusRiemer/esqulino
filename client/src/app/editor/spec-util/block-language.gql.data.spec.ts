@@ -11,21 +11,24 @@ import {
   IndividualBlockLanguageDataService,
 } from "../../shared/serverdata";
 import { provideListResponse, ListOrder } from "./list.data.spec";
-import {AdminListBlockLanguagesQuery, AdminListGrammarsQuery} from "../../../generated/graphql";
+import {
+  AdminListBlockLanguagesQuery,
+  AdminListGrammarsQuery,
+} from "../../../generated/graphql";
 
-type BlockLanguageGQLResponse = { data: (AdminListBlockLanguagesQuery)};
-type AdminListBlockLanguageNode = AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0]
+type BlockLanguageGQLResponse = { data: AdminListBlockLanguagesQuery };
+type AdminListBlockLanguageNode = AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0];
 
-const ADMIN_LIST_BLOCKLANGUAGE :AdminListBlockLanguageNode={
+const ADMIN_LIST_BLOCKLANGUAGE: AdminListBlockLanguageNode = {
   id: "96659508-e006-4290-926e-0734e7dd061a",
   name: "Empty Spec Block Language",
   slug: "BlockLanguage Slug",
   generated: true,
-  grammarId: "96659508-e006-4290-926e-0734e7dd072b"
+  grammarId: "96659508-e006-4290-926e-0734e7dd072b",
 };
 
 const wrapBlockLanguageData = (
-  data:AdminListBlockLanguageNode[]
+  data: AdminListBlockLanguageNode[]
 ): BlockLanguageGQLResponse => {
   return {
     data: {
@@ -36,11 +39,11 @@ const wrapBlockLanguageData = (
           hasPreviousPage: false,
           hasNextPage: false,
           startCursor: "NQ",
-          endCursor: "NQ"
-        }
-      }
-    }
-  }
+          endCursor: "NQ",
+        },
+      },
+    },
+  };
 };
 
 /**
@@ -50,11 +53,12 @@ const wrapBlockLanguageData = (
 export const buildSingleBlockLanguageResponse = (
   override?: AdminListBlockLanguageNode
 ): BlockLanguageGQLResponse => {
-
-  const blockLanguages:AdminListBlockLanguageNode[] = [];
-  blockLanguages.push(Object.assign({}, ADMIN_LIST_BLOCKLANGUAGE, override || {}, {
-    id: generateUUIDv4(),
-  }));
+  const blockLanguages: AdminListBlockLanguageNode[] = [];
+  blockLanguages.push(
+    Object.assign({}, ADMIN_LIST_BLOCKLANGUAGE, override || {}, {
+      id: generateUUIDv4(),
+    })
+  );
   return wrapBlockLanguageData(blockLanguages);
 };
 

@@ -5,9 +5,10 @@ import { MatSort } from "@angular/material/sort";
 import {
   AdminListBlockLanguagesGQL,
   AdminListBlockLanguagesQuery,
-  AdminListBlockLanguagesQueryVariables
+  AdminListBlockLanguagesQueryVariables,
+  DestroyBlockLanguageGQL,
 } from "../../../generated/graphql";
-import {GraphQLQueryComponent} from "../../shared/table/paginator-table-graphql.component";
+import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
 
 // TODO: Should be beautified and used
 type Query = ReturnType<AdminListBlockLanguagesGQL["watch"]>;
@@ -18,7 +19,7 @@ type DataKey = Exclude<keyof AdminListBlockLanguagesQuery, "__typename">;
 //       a type argument to Observable
 type ListItem = AdminListBlockLanguagesQuery[DataKey]["nodes"][0];
 
-type ColumnName = keyof ListItem;
+type ColumnName = keyof ListItem | "actions";
 
 /**
  *
@@ -33,7 +34,7 @@ export class OverviewBlockLanguageComponent
       AdminListBlockLanguagesQueryVariables,
       DataKey,
       ColumnName
-      > {
+    > {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;
@@ -42,7 +43,10 @@ export class OverviewBlockLanguageComponent
   @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  constructor(readonly projectsGQL: AdminListBlockLanguagesGQL) {}
+  constructor(
+    readonly projectsGQL: AdminListBlockLanguagesGQL,
+    private _destroyBlockLanguage: DestroyBlockLanguageGQL
+  ) {}
 
   typed(doc: any): ListItem {
     return doc as ListItem;
@@ -66,14 +70,14 @@ export class OverviewBlockLanguageComponent
     "grammarId",
     "generated",
     "id",
+    "actions",
   ];
   async onDeleteBlockLanguage(id: string) {
-    // delete mutation
+    await this._destroyBlockLanguage.mutate({ id: id }).toPromise();
+    this.query.refetch();
   }
 
-  onRefresh() {
-
-  }
+  onRefresh() {}
 
   get queryData() {
     return {
@@ -84,6 +88,4 @@ export class OverviewBlockLanguageComponent
       sort: this.sort,
     };
   }
-
-
 }

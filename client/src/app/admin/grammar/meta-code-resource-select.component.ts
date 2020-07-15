@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
-
-import { ListMetaCodeResourcesService } from "./meta-code-resource-list.service";
+import { AdminMetaCodeResourcesGQL } from "../../../generated/graphql";
+import { map } from "rxjs/operators";
 
 /**
  * Allows the selection of a single meta code resource (or none).
@@ -8,18 +8,19 @@ import { ListMetaCodeResourcesService } from "./meta-code-resource-list.service"
 @Component({
   templateUrl: `templates/meta-code-resource-select.html`,
   selector: `meta-code-resource-select`,
-  providers: [ListMetaCodeResourcesService],
 })
 export class MetaCodeResourceSelectComponent {
   @Output()
   selectedCodeResourceIdChange = new EventEmitter<string>();
 
-  constructor(private _list: ListMetaCodeResourcesService) {}
+  constructor(private _metaCodeResourcesGQL: AdminMetaCodeResourcesGQL) {}
 
   /**
    * The code resources that are available.
    */
-  readonly metaCodeResources$ = this._list.metaCodeResources.list;
+  readonly metaCodeResources$ = this._metaCodeResourcesGQL
+    .watch({ programmingLanguageId: "meta-grammar" })
+    .valueChanges.pipe(map((respone) => respone.data.codeResources.nodes));
 
   private _selectedCodeResourceId: string;
 

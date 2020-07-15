@@ -9,10 +9,10 @@ import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.descri
 import { generateBlockLanguage } from "../../shared/block/generator/generator";
 
 import {
-  CreateBlockLanguageMutationGQL, GrammarDescriptionItemGQL,
-  SelectionListGrammarsGQL
+  CreateBlockLanguageGQL,
+  GrammarDescriptionItemGQL,
+  SelectionListGrammarsGQL,
 } from "../../../generated/graphql";
-
 
 /**
  * A comprehensive way to create new block languages
@@ -40,13 +40,14 @@ export class CreateBlockLanguageComponent {
 
   constructor(
     private _router: Router,
-    private _createBlockLanguageGQL:CreateBlockLanguageMutationGQL,
-    private _grammarSelection:SelectionListGrammarsGQL,
-    private _grammarData: GrammarDescriptionItemGQL,
+    private _createBlockLanguageGQL: CreateBlockLanguageGQL,
+    private _grammarSelection: SelectionListGrammarsGQL,
+    private _grammarData: GrammarDescriptionItemGQL
   ) {}
 
-  readonly availableGrammars = this._grammarSelection.watch().valueChanges
-    .pipe(map(response => response.data.grammars.nodes));
+  readonly availableGrammars$ = this._grammarSelection
+    .watch()
+    .valueChanges.pipe(map((response) => response.data.grammars.nodes));
 
   /**
    * Attempts to create the specified block language
@@ -54,8 +55,9 @@ export class CreateBlockLanguageComponent {
   async submitForm() {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
-    const g = await this._grammarData.fetch({id: this.blockLanguage.grammarId})
-      .pipe(map(response => response.data.singleGrammar))
+    const g = await this._grammarData
+      .fetch({ id: this.blockLanguage.grammarId })
+      .pipe(map((response) => response.data.singleGrammar))
       .toPromise();
 
     // Generate some default blocks
@@ -73,8 +75,14 @@ export class CreateBlockLanguageComponent {
     if (!this.useSlug) {
       delete toCreate.slug;
     }
-    this._createBlockLanguageGQL.mutate(toCreate)
-      .pipe(map(response => response.data.createBlockLanguage))
-      .subscribe(res => this._router.navigateByUrl(`/admin/block-language/${res.id}`));
+
+    this._createBlockLanguageGQL
+      .mutate(toCreate)
+      .pipe(map((response) => response.data.createBlockLanguage))
+      .subscribe((res) => {
+        console.log("res: ");
+        console.log(res);
+        this._router.navigateByUrl(`/admin/block-language/${res.id}`);
+      });
   }
 }

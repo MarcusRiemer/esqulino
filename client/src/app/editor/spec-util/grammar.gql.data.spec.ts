@@ -1,16 +1,19 @@
 import { generateUUIDv4 } from "../../shared/util-browser";
-import {AdminListGrammarsQuery, GrammarDescriptionItemQuery} from "../../../generated/graphql";
+import {
+  AdminListGrammarsQuery,
+  GrammarDescriptionItemQuery,
+} from "../../../generated/graphql";
 
-type GrammarGQLResponse = { data: (AdminListGrammarsQuery)};
+type GrammarGQLResponse = { data: AdminListGrammarsQuery };
 type AdminListGrammarNode = AdminListGrammarsQuery["grammars"]["nodes"][0];
 
 type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["singleGrammar"];
-type GrammarItemGQLResponse = { data: (GrammarDescriptionItemQuery)};
+type GrammarItemGQLResponse = { data: GrammarDescriptionItemQuery };
 
 const ADMIN_LIST_Grammar: AdminListGrammarNode = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
-  name: "Grammar"
+  name: "Grammar",
 };
 
 const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
@@ -30,13 +33,11 @@ const wrapGrammarItem = (
   return {
     data: {
       singleGrammar: data,
-    }
-  }
+    },
+  };
 };
 
-const wrapGrammarData = (
-  data:AdminListGrammarNode[]
-): GrammarGQLResponse => {
+const wrapGrammarData = (data: AdminListGrammarNode[]): GrammarGQLResponse => {
   return {
     data: {
       grammars: {
@@ -46,11 +47,11 @@ const wrapGrammarData = (
           hasPreviousPage: false,
           hasNextPage: false,
           startCursor: "NQ",
-          endCursor: "NQ"
-        }
-      }
-    }
-  }
+          endCursor: "NQ",
+        },
+      },
+    },
+  };
 };
 
 /**
@@ -61,7 +62,7 @@ export const buildSingleGrammarResponse = (
   override?: AdminListGrammarNode
 ): GrammarGQLResponse => {
   const id = override?.id ?? generateUUIDv4();
-  const projects:AdminListGrammarNode[] = [];
+  const projects: AdminListGrammarNode[] = [];
   projects.push(Object.assign({}, ADMIN_LIST_Grammar, override || {}, { id }));
   return wrapGrammarData(projects);
 };
@@ -73,7 +74,9 @@ export const buildGrammarDescItemResponse = (
   override?: GrammarDescriptionItemNode
 ): GrammarItemGQLResponse => {
   const id = override?.id ?? generateUUIDv4();
-  return wrapGrammarItem(Object.assign({}, GRAMMAR_DESCRIPTION_ITEM, override || {}, { id }));
+  return wrapGrammarItem(
+    Object.assign({}, GRAMMAR_DESCRIPTION_ITEM, override || {}, { id })
+  );
 };
 
 /**

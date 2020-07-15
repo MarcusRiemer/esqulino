@@ -137,7 +137,7 @@
       </label>
       <select class="custom-select mr-sm-2" #selectedBlockLanguage>
         <option
-          *ngFor="let blockLanguage of availableBlockLanguages | async"
+          *ngFor="let blockLanguage of availableBlockLanguages$ | async"
           [value]="blockLanguage.id"
         >
           {{ blockLanguage.name }}
