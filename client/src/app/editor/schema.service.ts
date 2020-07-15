@@ -210,9 +210,9 @@ export class SchemaService {
 
 			let positions = points[1].split(",");
 
-			this.schemaData.xPos[i] = +positions[0];
-			this.schemaData.yPos[i] = +positions[1];
-			this.schemaData.width[i] = +points[2].split(",")[0] - this.schemaData.xPos[i];
+			this.schemaData.xPos.push( +positions[0] );
+			this.schemaData.yPos.push( +positions[1] );
+			this.schemaData.width.push( +points[2].split(",")[0] - +positions[0] );
 		}
 	
 		let path = nodes[i].children[1].getAttribute("d");

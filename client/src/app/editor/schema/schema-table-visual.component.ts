@@ -5,11 +5,6 @@ import {
   EventEmitter,
   HostBinding,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
-
-import { map, first } from "rxjs/operators";
-import { zip } from "rxjs";
 
 import { Table, ColumnStatus } from "../../shared/schema";
 
@@ -56,19 +51,14 @@ export class SchemaTableVisualComponent {
 
   public rowList = {};
 
-  //public xPos = 0;
-  //public yPos = 0;
-  //public width = 0;
   @Input() xPos : number;
   @Input() yPos : number;
   @Input() width : number;
 
   constructor(
-    private _http: HttpClient,
     private _schemaService: SchemaService,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
-    private _route: ActivatedRoute,
     private dragulaService: DragulaService
   ) {}
 
@@ -91,19 +81,6 @@ export class SchemaTableVisualComponent {
   }
 
   public nameLength = 0;
-
-  readonly schemaRevision = this._schemaService.changeCount;
-
-  readonly schemaName = this._route.paramMap.pipe(
-    map((p) => p.get("schemaName"))
-  );
-
-  readonly visualSchemaUrl = zip(this.schemaRevision, this.schemaName).pipe(
-    map(
-      ([rev, name]) =>
-        `/api/project/${this._project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
-    )
-  );
 
   ngOnInit() {
     let subRef = this._projectService.activeProject.subscribe((res) => {
@@ -243,31 +220,6 @@ export class SchemaTableVisualComponent {
     this.commandsHolder.do(new ChangeColumnNotNull(this.table, row));
 
     this.saveChanges();
-  }
-
-  private parseSchemaText(text: any) {
-    let parser = new DOMParser();
-    let svgDom = parser.parseFromString(text, "image/svg+xml");
-
-    let nodes = svgDom.getElementById("graph0").getElementsByTagName("g");
-    console.log(nodes);
-
-    for (var i = 0; i < nodes.length; i++) {
-      let children = nodes[i].children;
-
-      if (this.table.name == children[0].textContent) {
-        let points = children[children.length - 1]
-          .getAttribute("points")
-          .split(" ");
-        console.log(points);
-
-        let positions = points[1].split(",");
-
-        this.xPos = +positions[0];
-        this.yPos = +positions[1];
-        this.width = +points[2].split(",")[0] - this.xPos;
-      }
-    }
   }
 
   private getNameLength() {

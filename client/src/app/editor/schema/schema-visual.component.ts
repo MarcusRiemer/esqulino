@@ -1,10 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router, ActivatedRoute } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 
-import { map, flatMap, first, share } from "rxjs/operators";
-import { zip } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { ServerApiService } from "../../shared";
 
@@ -22,7 +20,6 @@ export class SchemaVisualComponent implements OnInit {
   private _subscriptionRefs: any[] = [];
 
   constructor(
-    private _http: HttpClient,
     private _sanitizer: DomSanitizer,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
@@ -40,20 +37,10 @@ export class SchemaVisualComponent implements OnInit {
     return this.project && this.project.schema.isEmpty;
   }
 
-  public con = [];
   public schemaData;
-
-  readonly schemaRevision = this._schemaService.changeCount;
 
   readonly schemaName = this._route.paramMap.pipe(
     map((p) => p.get("schemaName"))
-  );
-
-  readonly visualSchemaUrl = zip(this.schemaRevision, this.schemaName).pipe(
-    map(
-      ([rev, name]) =>
-        `/api/project/${this.project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
-    )
   );
 
   /**
@@ -126,61 +113,12 @@ export class SchemaVisualComponent implements OnInit {
       this.project = res;
     });
     this._subscriptionRefs.push(subRef);
-
-    let schemaUrl = this.visualSchemaUrl.subscribe((url) => {
-      let visualSchemaText = this._http.get(url, { responseType: "text" });
-      let schemaRef = visualSchemaText.subscribe(
-        (data) => {
-          this.parseSchemaText(data);
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    });
 	
 	this.schemaData = this._schemaService.getSchemaData(this.project);
   }
 
   private get commandsHolder() {
     return this._schemaService.getCurrentlyEditedStack();
-  }
-
-  private parseSchemaText(text: any) {
-    // let connectors = text.edges;
-    // let coords = [];
-
-    // for (var i = 0; i < connectors.length; i++) {
-    // this.con[i] = [];
-
-    // let points = connectors[i].pos.split(" ");
-
-    // coords = points[0].split(",");
-    // this.con[i].push({ x: coords[1], y: coords[2] });
-
-    // for (var p = 2; p < points.length; p++) {
-    // coords = points[p].split(",");
-    // this.con[i].push({ x: coords[0], y: coords[1] });
-    // }
-
-    // coords = points[1].split(",");
-    // this.con[i].push({ x: coords[1], y: coords[2] });
-    // }
-
-    let coords = [];
-    let parser = new DOMParser();
-    let svgDom = parser.parseFromString(text, "image/svg+xml");
-
-    let nodes = svgDom.getElementById("graph0").getElementsByTagName("g");
-
-    for (var i = 0; i < nodes.length; i++) {
-      let path = nodes[i].children[1].getAttribute("d");
-      if (path) {
-        console.log(path);
-        this.con[i] = path;
-      }
-    }
   }
 
   ngOnDestroy() {
