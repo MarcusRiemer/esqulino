@@ -3,7 +3,11 @@
 /dist-live
 /tmp
 /coverage
+
+# Test output
 /test-results
+/karma_html
+local.log
 
 # dependencies
 /node_modules

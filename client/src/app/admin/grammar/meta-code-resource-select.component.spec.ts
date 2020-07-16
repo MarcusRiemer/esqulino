@@ -1,8 +1,4 @@
 import { TestBed } from "@angular/core/testing";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { FormsModule } from "@angular/forms";
 
 import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
@@ -14,10 +10,7 @@ import {
   ApolloTestingController,
   ApolloTestingModule,
 } from "apollo-angular/testing";
-import {
-  AdminMetaCodeResourcesDocument,
-  AdminMetaCodeResourcesGQL,
-} from "../../../generated/graphql";
+import { AdminMetaCodeResourcesDocument } from "../../../generated/graphql";
 
 describe("MetaCodeResourceSelect", () => {
   async function createComponent(preSelectedId = undefined) {
@@ -64,6 +57,7 @@ describe("MetaCodeResourceSelect", () => {
     expect(selectElement.value).toBeFalsy();
     expect(selectElement.children.length).toEqual(1);
   });
+
   it(`Shows a list with a single unselected item`, async () => {
     const fixture = await createComponent();
 
@@ -80,8 +74,12 @@ describe("MetaCodeResourceSelect", () => {
     fixture.fixture.detectChanges();
     await fixture.fixture.whenRenderingDone();
 
+    debugger;
+
     const selectElement = fixture.element.querySelector("select");
-    expect(selectElement.selectedIndex).toEqual(-1);
+    expect(selectElement.selectedIndex)
+      .withContext("Some Browsers (Safari) pre-select the first element")
+      .toBeLessThanOrEqual(0);
     expect(selectElement.children.length).toEqual(2);
     expect(selectElement.children[1].textContent.trim()).toEqual(
       response[0].name

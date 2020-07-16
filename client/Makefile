@@ -23,8 +23,14 @@ CLIENT_ALL_SOURCES = $(shell find src ! -name 'version.ts' 2> /dev/null) angular
 # All sources except the translation files
 CLIENT_NON_XLF_SOURCES = $(filter-out %.xlf, $(CLIENT_ALL_SOURCES))
 
-TEST_SINGLE_RUN ?= true
-TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
+# Decide what to test
+LOCAL_BROWSERS  ?= ChromeHeadless FirefoxHeadless
+REMOTE_BROWSERS ?= BrowserStackiPhoneLatest BrowserStackSafariLatest BrowserStackEdgeLatest
+ifdef TEST_REMOTE
+	TEST_BROWSERS = $(shell ./join-browsers.sh $(LOCAL_BROWSERS) $(REMOTE_BROWSERS))
+else
+	TEST_BROWSERS = $(shell ./join-browsers.sh $(LOCAL_BROWSERS))
+endif
 
 # Default to production build in complete build
 NG_PROD         ?= --prod
@@ -141,9 +147,6 @@ src/generated/graphql.ts : ../schema/graphql/schema.json
 	npx prettier --write "src/generated/**/*.{html,ts}"
 
 generate-graphql-client: src/generated/graphql.ts
-
-print-sources:
-	echo $(GRAPHQL_RUBY_SOURCES)
 
 
 ##################################
