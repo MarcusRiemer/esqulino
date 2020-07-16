@@ -6,6 +6,31 @@
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
     filter: alpha(opacity=80);
     pointer-events: none;
+	font-family: monospace;
+	font-size: 14px;
+	width: inherit;
+	height: inherit;
+	line-height: inherit;
+}
+
+.gu-mirror .primaryBox {
+	visibility: hidden;
+}
+
+.gu-mirror .primaryBox:checked::before {
+	visibility: visible;
+	display: inline-block;
+	content: "\f084";
+	font-family: FontAwesome;
+}
+	
+.gu-mirror * {
+	border: none;
+	padding: 0;
+	padding-right: 3px;
+	margin: 0;
+	-webkit-appearance: none;
+	line-height: inherit;
 }
 
 .gu-hide {
