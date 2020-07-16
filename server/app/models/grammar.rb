@@ -165,7 +165,7 @@ class Grammar < ApplicationRecord
   # @param grammar_document [Hash] A GrammarDocument (or at least the portion that provides grammars)
   # @return [GrammarReference[]] An array of relevant GrammarReference instances
   def document_included_grammar_ids(grammar_document)
-    grammar_ids = grammar_document.fetch("includes", [])
+    grammar_ids = grammar_document.fetch("includedGrammarIds", [])
     grammar_ids.map do |grammar_id|
       GrammarReference.find_or_initialize_by(
         origin: self,
