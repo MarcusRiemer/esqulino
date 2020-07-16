@@ -7,15 +7,15 @@
       <sql-table-visual
         *ngFor="let table of project?.schema.tables; let i = index"
         [table]="table"
-		[xPos]="schemaData.xPos[i]"
-		[yPos]="schemaData.yPos[i]"
-		[width]="schemaData.width[i]"
+		[xPos]="schemaData.tableData[i].xPos"
+		[yPos]="schemaData.tableData[i].yPos"
+		[width]="schemaData.tableData[i].width"
         [readOnly]="false"
       ></sql-table-visual>
     </div>
 
     <schema-connectors 
-		[connectors]="schemaData.con"
+		[connectors]="schemaData.connectors"
 	></schema-connectors>
   </div>
 </ng-container>

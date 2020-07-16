@@ -11,6 +11,8 @@ import { SchemaService } from "../schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
 
+import { SchemaData } from "../schema.service";
+
 @Component({
   templateUrl: "templates/schema-visual.html",
 })
@@ -37,7 +39,7 @@ export class SchemaVisualComponent implements OnInit {
     return this.project && this.project.schema.isEmpty;
   }
 
-  public schemaData;
+  public schemaData : SchemaData;
 
   readonly schemaName = this._route.paramMap.pipe(
     map((p) => p.get("schemaName"))

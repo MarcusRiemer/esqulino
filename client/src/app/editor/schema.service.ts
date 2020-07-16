@@ -19,6 +19,17 @@ interface CurrentlyEdited {
   stack?: TableCommandHolder;
 }
 
+export interface TableData {
+	xPos : number;
+	yPos : number;
+	width : number;
+}
+
+export interface SchemaData {
+  tableData: TableData[];
+  connectors: string[];
+}
+
 /**
  * Service to hold, get and send data from a schema.
  */
@@ -40,12 +51,10 @@ export class SchemaService {
    */
   private _changeCount = new BehaviorSubject(0);
   
-  private schemaData = {
-		xPos : [],
-		yPos : [],
-		width : [],
-		con : []
-	};
+  private _schemaData : SchemaData = { 
+	tableData : [],
+	connectors : []
+  };
 
   /**
    * @param _http Used to do HTTP requests
@@ -171,7 +180,7 @@ export class SchemaService {
     return toReturn;
   }
   
-  getSchemaData(project: Project): Object {
+  getSchemaData(project: Project): SchemaData {
 	  let visualSchemaUrl = zip(this._changeCount, project.currentDatabaseName).pipe(
 		map(
 		  ([rev, name]) =>
@@ -183,7 +192,7 @@ export class SchemaService {
 		  let visualSchemaText = this._http.get(url, { responseType: "text" });
 		  let schemaRef = visualSchemaText.subscribe(
 			(data) => {
-				this.parseSchemaText(data);
+				this.parseSchemaText(data, project);
 			},
 			(error) => {
 			  console.log(error);
@@ -191,10 +200,10 @@ export class SchemaService {
 		  );
 	  });
 	  
-	  return this.schemaData;
+	  return this._schemaData;
   }
   
-  private parseSchemaText(text: any): void {
+  private parseSchemaText(text: any, project: Project): void {
 	
     let parser = new DOMParser();
     let svgDom = parser.parseFromString(text, "image/svg+xml");
@@ -207,17 +216,29 @@ export class SchemaService {
 			let points = children[children.length - 1]
 			  .getAttribute("points")
 			  .split(" ");
-
 			let positions = points[1].split(",");
+			
+			let index = 0;
+			for(var i2 = 0; i2 < project.schema.tables.length; i2++) {
+				if( project.schema.tables[i2].name == nodes[i].classList[1] ) {
+					index = i2;
+				}
+			}
 
-			this.schemaData.xPos.push( +positions[0] );
-			this.schemaData.yPos.push( +positions[1] );
-			this.schemaData.width.push( +points[2].split(",")[0] - +positions[0] );
+			let tableValues : TableData = {
+				xPos : 0,
+				yPos : 0,
+				width : 0
+			}
+			tableValues.xPos = +positions[0];
+			tableValues.yPos = +positions[1];
+			tableValues.width = +points[2].split(",")[0] - +positions[0];
+			this._schemaData.tableData[index] = tableValues;
 		}
 	
 		let path = nodes[i].children[1].getAttribute("d");
 		if (path) {
-			this.schemaData.con[i] = path;
+			this._schemaData.connectors[i] = path;
 		}
 	}
   }

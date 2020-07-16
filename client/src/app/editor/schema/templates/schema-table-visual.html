@@ -13,7 +13,7 @@
     <div [dragula]="table.name" [dragulaModel]="table.columns">
       <tr *ngFor="let column of table.columns">
         <td>
-          <label class="tableEdit">
+          <label class="tableKey tableEdit">
             <input
 			  id="primaryBox"
 			  class="primaryBox"
@@ -34,6 +34,7 @@
         </td>
         <td>
           <select
+			*ngIf="!table.columnIsForeignKeyOfTable(column.name)"
             class="tableEdit"
             [(ngModel)]="column.type"
             (focus)="saveTempValue($event.target.value)"
@@ -46,6 +47,7 @@
             <option value="float">float</option>
             <option value="url">url</option>
           </select>
+		  <label *ngIf="table.columnIsForeignKeyOfTable(column.name)" class="tableEdit">FK</label>
         </td>
         <!-- <td> -->
         <!-- <label class="tableEdit"> -->

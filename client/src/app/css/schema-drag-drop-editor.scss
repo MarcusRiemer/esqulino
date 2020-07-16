@@ -4,7 +4,7 @@
 		border: 1px solid black;
 		font-family: monospace;
 		font-size: 14px;
-		width: 100%;
+		width: inherit;
 	}
 
 	.vis thead {
@@ -31,7 +31,7 @@
 		padding: 0;
 	}
 	
-	label.tableEdit {
+	.tableKey {
 		padding-left: 3px;
 	}
 
