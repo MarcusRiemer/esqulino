@@ -2,6 +2,7 @@
 # the Angular CLI
 
 include ../Makefile.common
+include ../schema/graphql/Makefile
 
 # Various tools may be installed in different locations
 # * npm dependencies should not be installed globally
@@ -133,7 +134,6 @@ update-xlf : src/locale/messages.en.xlf
 ##################################
 
 src/generated/graphql.ts : ../schema/graphql/schema.json
-	make -C ../server generate-graphql-schema
 	npm run graphql-codegen
 	# Horrible hack to generate an appropriate constructor, will hopefully be obsoleted by
 	# https://github.com/dotansimha/graphql-code-generator/issues/4366
@@ -141,6 +141,9 @@ src/generated/graphql.ts : ../schema/graphql/schema.json
 	npx prettier --write "src/generated/**/*.{html,ts}"
 
 generate-graphql-client: src/generated/graphql.ts
+
+print-sources:
+	echo $(GRAPHQL_RUBY_SOURCES)
 
 
 ##################################
