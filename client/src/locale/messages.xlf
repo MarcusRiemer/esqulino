@@ -1025,21 +1025,76 @@
         <source>Fracht</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="freightTarget" datatype="html">
         <source>Fracht Ziel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="truckStart" datatype="html">
         <source>Lastwagen Start</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-tiles-sidebar.html</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="undo" datatype="html">
+        <source>Schritt zurück</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="undoAllChanges" datatype="html">
+        <source>Änderungen zurücksetzten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="clearWorld" datatype="html">
+        <source>Alles löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trafficLightConfiguration" datatype="html">
+        <source>Ampel Konfiguration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="startPhase" datatype="html">
+        <source>
+                Start Zeit
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="redPhase" datatype="html">
+        <source>
+                Rot Zeit
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="greenPhase" datatype="html">
+        <source>
+                Grün Zeit
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/code/truck/world-editor/templates/truck-world-editor.html</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="unknownCodeResource" datatype="html">

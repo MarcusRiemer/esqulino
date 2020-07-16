@@ -1,49 +1,103 @@
-<div class="row">
-  <div class="col-9">
-    <div class="btn-group btn-group-sm d-flex pl-1" role="group">
+<div class="row truck-world-editor-menu">
+  <div class="col-8">
+    <div
+      class="quickaction-buttons btn-group btn-group-sm d-flex pl-1"
+      role="group"
+    >
       <button class="btn btn-outline-primary flex-grow-1" (click)="undo()">
         <i class="fa fa-undo"></i>
-        Schritt zurück
+        <span i18n="@@undo">Schritt zurück</span>
       </button>
       <button
         class="btn btn-outline-primary flex-grow-1"
         (click)="resetChanges()"
       >
         <i class="fa fa-ban"></i>
-        Änderungen zurücksetzten
+        <span i18n="@@undoAllChanges">Änderungen zurücksetzten</span>
       </button>
       <button
         class="btn btn-outline-primary flex-grow-1"
         (click)="resetEverything()"
       >
         <i class="fa fa-trash"></i>
-        Alles löschen
+        <span i18n="@@clearWorld">Alles löschen</span>
       </button>
     </div>
   </div>
-  <div class="col-3">
-    <div class="form-group row">
-      <label for="world-size-x" class="col-2 col-form-label">X</label>
-      <div class="col-10">
+  <div class="col-4">
+    <div class="world-size-config form-group row">
+      <label for="world-size" class="col-3 col-form-label">Größe</label>
+      <div class="col-9">
         <input
           class="form-control"
-          id="world-size-x"
+          id="world-size"
           type="number"
-          min="1"
-          max="25"
-          [(ngModel)]="sizeX"
+          min="2"
+          max="15"
+          [(ngModel)]="size"
         />
       </div>
-      <label for="world-size-y" class="col-2 col-form-label">Y</label>
-      <div class="col-10">
-        <input
-          class="form-control"
-          id="world-size-y"
-          type="number"
-          min="1"
-          max="25"
-          [(ngModel)]="sizeY"
-        />
+    </div>
+    <div class="feature-options" *ngIf="(feature$ | async) as feature">
+      <div
+        class="traffic-light-config"
+        *ngIf="feature.feature === tileFeatureType.TrafficLight"
+      >
+        <div class="card card-body">
+          <div class="col-12">
+            <h4 i18n="@@trafficLightConfiguration">Ampel Konfiguration</h4>
+            <div class="form-group row">
+              <label
+                class="col-7 col-form-label text-right"
+                i18n="@@startPhase"
+              >
+                Start Zeit
+              </label>
+              <div class="col-3">
+                <input
+                  class="form-control"
+                  type="number"
+                  min="0"
+                  [(ngModel)]="feature.options.startPhase"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-7 col-form-label text-right" i18n="@@redPhase">
+                Rot Zeit
+              </label>
+              <div class="col-3">
+                <input
+                  class="form-control"
+                  type="number"
+                  min="1"
+                  [(ngModel)]="feature.options.redPhase"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label
+                class="col-7 col-form-label text-right"
+                i18n="@@greenPhase"
+              >
+                Grün Zeit
+              </label>
+              <div class="col-3">
+                <input
+                  class="form-control"
+                  type="number"
+                  min="1"
+                  [(ngModel)]="feature.options.greenPhase"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <TrafficLightVisualisator
+              [options]="feature.options"
+            ></TrafficLightVisualisator>
+          </div>
+        </div>
       </div>
     </div>
   </div>
