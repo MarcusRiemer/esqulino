@@ -22,7 +22,7 @@ import {
   RemoveForeignKey,
 } from "../../shared/schema/table-commands";
 
-import { SchemaService } from "../schema.service";
+import { SchemaService, TableData } from "../schema.service";
 import { ProjectService, Project } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
 import { DragulaService } from "ng2-dragula";
@@ -51,9 +51,7 @@ export class SchemaTableVisualComponent {
 
   public rowList = {};
 
-  @Input() xPos : number;
-  @Input() yPos : number;
-  @Input() width : number;
+  @Input() data : TableData;
 
   constructor(
     private _schemaService: SchemaService,
@@ -67,17 +65,17 @@ export class SchemaTableVisualComponent {
 
   @HostBinding("style.left.px")
   get left(): number {
-    return this.xPos;
+    return this.data.xPos;
   }
 
   @HostBinding("style.top.px")
   get top(): number {
-    return this.yPos + 1170;
+    return this.data.yPos + 1170;
   }
 
   @HostBinding("style.width.px")
   get tableWidth(): number {
-    return this.width;
+    return this.data.width;
   }
 
   public nameLength = 0;

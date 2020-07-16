@@ -20,14 +20,15 @@ interface CurrentlyEdited {
 }
 
 export interface TableData {
-	xPos : number;
-	yPos : number;
-	width : number;
+	xPos: number;
+	yPos: number;
+	width: number;
 }
 
 export interface SchemaData {
-  tableData: TableData[];
+  tableData: {[tableName: string]: TableData};
   connectors: string[];
+  completed: boolean;
 }
 
 /**
@@ -52,8 +53,9 @@ export class SchemaService {
   private _changeCount = new BehaviorSubject(0);
   
   private _schemaData : SchemaData = { 
-	tableData : [],
-	connectors : []
+	tableData: {},
+	connectors: [],
+	completed: false
   };
 
   /**
@@ -195,7 +197,10 @@ export class SchemaService {
 				this.parseSchemaText(data, project);
 			},
 			(error) => {
-			  console.log(error);
+				console.log(error);
+			},
+			() => {
+				this._schemaData.completed = true;
 			}
 		  );
 	  });
@@ -233,7 +238,8 @@ export class SchemaService {
 			tableValues.xPos = +positions[0];
 			tableValues.yPos = +positions[1];
 			tableValues.width = +points[2].split(",")[0] - +positions[0];
-			this._schemaData.tableData[index] = tableValues;
+			//this._schemaData.tableData[index] = tableValues;
+			this._schemaData.tableData[nodes[i].classList[1]] = tableValues;
 		}
 	
 		let path = nodes[i].children[1].getAttribute("d");

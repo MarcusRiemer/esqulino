@@ -7,11 +7,9 @@ import { map } from "rxjs/operators";
 import { ServerApiService } from "../../shared";
 
 import { ProjectService, Project } from "../project.service";
-import { SchemaService } from "../schema.service";
+import { SchemaService, SchemaData } from "../schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
-
-import { SchemaData } from "../schema.service";
 
 @Component({
   templateUrl: "templates/schema-visual.html",

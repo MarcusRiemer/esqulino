@@ -18,6 +18,8 @@
 	
 	.primaryBox {
 		visibility: hidden;
+		margin-left: 3px;
+		margin-bottom: 3px;
 	}
 
 	.primaryBox:checked::before {
@@ -29,10 +31,6 @@
 	
 	.vis td {
 		padding: 0;
-	}
-	
-	.tableKey {
-		padding-left: 3px;
 	}
 
 	.tableEdit {
@@ -53,5 +51,6 @@
 		text-align: center;
 		font-family: inherit;
 		font-size: inherit;
+		width: 100%;
 	}
 }
