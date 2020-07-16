@@ -4,6 +4,40 @@ RSpec.describe GraphqlController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
   before(:each) { create(:user, :guest) }
 
+  describe 'Basic error handling', pending: "Currently no server side query loading" do
+    it 'no query, only invalid name' do
+      post "/graphql",
+           :headers => json_headers,
+           :params => {
+             operationName: "ThisOperationWillNeverExist",
+             variables: { }
+           }.to_json
+
+      response_json = JSON.parse response.body
+
+      aggregate_failures do
+        expect(response.status).to eq 404
+        expect(response_json.fetch("errors", [])).not_to eq [{"message" => "No query string was present"}]
+      end
+    end
+
+    it 'no query, only valid name' do
+      post "/graphql",
+           :headers => json_headers,
+           :params => {
+             operationName: "RegenerateForeignTypes",
+             variables: { }
+           }.to_json
+
+      response_json = JSON.parse response.body
+
+      aggregate_failures do
+        expect(response.status).to eq 200
+        expect(response_json.fetch("errors", [])).not_to eq [{"message" => "No query string was present"}]
+      end
+    end
+  end
+
   describe 'POST /graphql Projects' do
     let(:user) { create(:user) }
     it 'Projects: Reuqesting name and total count without any input' do
@@ -272,4 +306,3 @@ RSpec.describe GraphqlController, type: :request do
     end
   end
 end
-

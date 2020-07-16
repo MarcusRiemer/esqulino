@@ -8,6 +8,7 @@ RSpec.configure do |config|
   SimpleCov.start 'rails' do
     add_group "Policies", "app/policies"
     add_group "Seed Manager", "app/services/seed"
+    add_group "GraphQL", "app/graphql"
   end
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
     [
