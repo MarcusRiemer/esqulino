@@ -1,6 +1,7 @@
 import {
   NodeConverterRegistration,
   CodeGeneratorProcess,
+  OutputSeparator,
 } from "../codegenerator";
 import { Node } from "../syntaxtree";
 
@@ -15,8 +16,42 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        const subexpressions = node.getChildrenInCategory("subexpressions");
+        if (subexpressions.length === 0) {
+          process.addConvertedFragment(``, node);
+        } else {
+          process.indent(() => {
+            subexpressions.forEach((c, i, a) => {
+              process.generateNode(c);
+              if (i < a.length - 1) {
+                process.addConvertedFragment(``, node, OutputSeparator.NONE);
+              }
+            });
+          });
+        }
+      },
+    },
+  },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "characters",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`"${node.properties["chars"]}"`, node);
+      },
+    },
+  },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "knownCharacterClass",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(
-          "// TODO: Implement RegEx code generation",
+          `\\"${node.properties["characterClass"]}"`,
           node
         );
       },
@@ -25,12 +60,26 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "regex",
-      typeName: "constant",
+      typeName: "characterRange",
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        // TODO: Escaping
-        process.addConvertedFragment(node.properties["value"], node);
+        const characters = node.getChildrenInCategory("characters");
+        if (characters.length === 0) {
+          process.addConvertedFragment(`[]`, node);
+        } else {
+          process.addConvertedFragment(`[`, node, OutputSeparator.NONE);
+          process.indent(() => {
+            characters.forEach((c, i, a) => {
+              process.generateNode(c);
+              if (i < a.length - 1) {
+                process.addConvertedFragment(``, node, OutputSeparator.NONE);
+              }
+            });
+          });
+          // TODO überlegen wegen a-z -> vllt n bool, welches wenn true dann ausgewertet wird? oder String abfrage welche nach - sucht?
+          process.addConvertedFragment(`]`, node, OutputSeparator.NONE);
+        }
       },
     },
   },
@@ -41,41 +90,61 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment("(", node);
-
-        const alternatives = node.children["expressions"];
-        alternatives.forEach((expr, i) => {
-          if (i > 0) {
-            process.addConvertedFragment("|", node);
-          }
-          process.generateNode(expr);
-        });
-
-        process.addConvertedFragment(")", node);
+        process.addConvertedFragment(`|`, node);
       },
     },
   },
   {
     type: {
       languageName: "regex",
-      typeName: "expr",
+      typeName: "group",
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        process.generateNode(node.children["singleExpression"][0]);
+        const subexpressions = node.getChildrenInCategory("subexpressions");
+        if (subexpressions.length === 0) {
+          process.addConvertedFragment(`()`, node);
+        } else {
+          process.addConvertedFragment(`(`, node, OutputSeparator.NONE);
+          process.indent(() => {
+            subexpressions.forEach((c, i, a) => {
+              process.generateNode(c);
+              if (i < a.length - 1) {
+                process.addConvertedFragment(``, node, OutputSeparator.NONE);
+              }
+            });
+          });
+          process.addConvertedFragment(`)`, node, OutputSeparator.NONE);
+        }
       },
     },
   },
   {
     type: {
       languageName: "regex",
-      typeName: "root",
+      typeName: "quantifierClass",
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        // TODO: Dome something meaningful
-        // const expressions = node.children["expressions"];
-        // expressions.forEach((expr) => process.generateNode(expr));
+        // TODO validation?
+        process.addConvertedFragment(
+          `"${node.properties["quantifierClass"]}"`,
+          node
+        );
+      },
+    },
+  },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "quantifierRange",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(
+          `{"${node.properties["lowerBound"]}", "${node.properties["upperBound"]}"}`,
+          node
+        );
       },
     },
   },
