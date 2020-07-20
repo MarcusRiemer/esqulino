@@ -6,8 +6,8 @@ import {
   Truck,
   TurnDirection,
   Direction,
+  Size,
 } from "../../../shared/syntaxtree/truck/world";
-import { BehaviorSubject } from "rxjs";
 
 export type RenderingDimensions = { width: number; height: number };
 
@@ -298,6 +298,8 @@ class WorldRenderer implements ObjectRenderer {
  * ObjectRenderer for a world state.
  */
 class WorldStateRenderer implements ObjectRenderer {
+  lastSize: Size;
+
   /** World state to be drawn. */
   state: WorldState;
 
@@ -319,8 +321,8 @@ class WorldStateRenderer implements ObjectRenderer {
     this.state = state;
     this.parent = parent;
 
-    // Preload TileRenderer
-    this.tileRenderers = this.state.tiles.map((t) => new TileRenderer(t, this));
+    this.lastSize = this.state.size.clone();
+    this.rebuildTileRenderers();
 
     // Preload TruckRenderer
     this.truckRenderer = new TruckRenderer(this.state.truck, this);
@@ -343,8 +345,19 @@ class WorldStateRenderer implements ObjectRenderer {
   update(state: WorldState, undo: boolean = false) {
     this.state = state;
 
-    this.tileRenderers.forEach((t, k) => t.update(state.tiles[k], undo));
+    if (!this.state.size.isEqual(this.lastSize)) {
+      this.lastSize = this.state.size.clone();
+      this.rebuildTileRenderers();
+    } else {
+      this.tileRenderers.forEach((t, k) => t.update(state.tiles[k], undo));
+    }
+
     this.truckRenderer.update(state.truck, undo);
+  }
+
+  private rebuildTileRenderers(): void {
+    // Preload TileRenderer
+    this.tileRenderers = this.state.tiles.map((t) => new TileRenderer(t, this));
   }
 }
 
@@ -410,8 +423,8 @@ class TileRenderer implements ObjectRenderer {
    */
   draw(ctx: RenderingContext) {
     // Calculate the height and width of the tile
-    const tileWidth = ctx.width / this.tile.position.width;
-    const tileHeight = ctx.height / this.tile.position.height;
+    const tileWidth = ctx.width / this.parent.state.size.width;
+    const tileHeight = ctx.height / this.parent.state.size.height;
 
     if (this.startAnimation === null) {
       this.startAnimation = ctx.currentFrame;
@@ -685,8 +698,8 @@ class TruckRenderer implements ObjectRenderer {
    */
   draw(ctx: RenderingContext) {
     // Calculate the height and width of the tile
-    const tileWidth = ctx.width / this.truck.position.width;
-    const tileHeight = ctx.height / this.truck.position.height;
+    const tileWidth = ctx.width / this.parent.state.size.width;
+    const tileHeight = ctx.height / this.parent.state.size.height;
 
     // Calculate the height and width of the truck
     const truckWidth = tileWidth / 3;

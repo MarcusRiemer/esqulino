@@ -10,7 +10,6 @@ import { World, Sensor } from "../../../shared/syntaxtree/truck/world";
 export class WorldSensorsComponent implements OnInit, OnDestroy {
   private _worldSubscription: Subscription;
   public world: World;
-  readonly currentWorld = this._truckWorld.currentWorld;
 
   constructor(private _truckWorld: TruckWorldService) {}
 

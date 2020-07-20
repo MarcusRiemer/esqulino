@@ -11,7 +11,11 @@ import { Subscription } from "rxjs";
 import { TruckWorldService } from "./truck-world.service";
 import { Renderer } from "./renderer";
 import { TruckWorldMouseService } from "./truck-world-mouse.service";
-import { Position, World } from "../../../shared/syntaxtree/truck/world";
+import {
+  Direction,
+  Position,
+  World,
+} from "../../../shared/syntaxtree/truck/world";
 
 const MOUSE_BUTTON_LEFT = 0;
 const MOUSE_BUTTON_RIGHT = 2;
@@ -112,13 +116,19 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
       const relX = (ev.clientX - bb.left) / (bb.right - bb.left);
       const relY = (ev.clientY - bb.top) / (bb.bottom - bb.top);
 
-      // tile{x,y} integer value from 0 to (this._currentWorld.size.{width,height} - 1)
-      const tileX = Math.floor(relX * this._currentWorld.size.width);
-      const tileY = Math.floor(relY * this._currentWorld.size.height);
+      // fTile{x,y} float value from 0 to (this._currentWorld.size.{width,height} - 1)
+      const fTileX = Math.max(relX * this._currentWorld.state.size.width);
+      const fTileY = Math.max(relY * this._currentWorld.state.size.height);
 
-      this._mouse.updateCursorPos(
-        new Position(tileX, tileY, this._currentWorld)
+      const tileX = Math.trunc(fTileX);
+      const tileY = Math.trunc(fTileY);
+
+      const pos = new Position(tileX, tileY);
+      const direction = WorldRenderComponent.subTilePositionToDirection(
+        fTileX - tileX,
+        fTileY - tileY
       );
+      this._mouse.updateCursorPos({ pos, direction });
     });
     this.addRemovableEventListener(canvas, "contextmenu", (ev) => {
       ev.preventDefault(); // Disable right click context menu
@@ -142,5 +152,28 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
       element.removeEventListener(type, listener);
     });
     element.addEventListener(type, listener);
+  }
+
+  private static subTilePositionToDirection(
+    subTileX: number,
+    subTileY: number
+  ): Direction {
+    if (subTileY < 0.5) {
+      if (subTileY > subTileX) {
+        return Direction.West;
+      } else if (subTileY > 1 - subTileX) {
+        return Direction.East;
+      } else {
+        return Direction.North;
+      }
+    } else {
+      if (subTileY < subTileX) {
+        return Direction.East;
+      } else if (subTileY > 1 - subTileX) {
+        return Direction.South;
+      } else {
+        return Direction.West;
+      }
+    }
   }
 }

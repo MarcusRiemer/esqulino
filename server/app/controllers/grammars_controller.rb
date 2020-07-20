@@ -62,7 +62,7 @@ class GrammarsController < ApplicationController
   def regenerate_foreign_types
     grammar = Grammar.find(id_params['id'])
 
-    grammar.regenerate_foreign_types!
+    grammar.refresh_from_references!
     grammar.save!
 
     render json: grammar.to_full_api_response

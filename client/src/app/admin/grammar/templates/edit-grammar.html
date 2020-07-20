@@ -56,13 +56,6 @@
     </div>
   </div>
 
-  <div class="form-group row">
-    <div class="col-sm-2 col-form-label">Extends</div>
-    <div class="col-sm-10">
-      <grammar-select [(selectedId)]="grammar.extendsId"></grammar-select>
-    </div>
-  </div>
-
   <!-- Related block languages -->
   <div class="form-group row">
     <div class="col-sm-2">Related Block Languages</div>
@@ -99,6 +92,24 @@
           {{ type.languageName }}.{{ type.typeName }}
         </option>
       </select>
+    </div>
+  </div>
+
+  <!-- All grammars that are included -->
+  <div class="form-group row">
+    <label for="grammar-root" class="col-sm-2 col-form-label">
+      Inkludierte Grammatiken
+    </label>
+    <div class="col-sm-10 col-form-label">
+      <ul
+        *ngIf="grammar.includes?.length > 0 else noGrammarReferences"
+        class="list-inline"
+      >
+        <li *ngFor="let grammarId of grammar.includes" class="list-inline-item">
+          <link-grammar [grammarId]="grammarId"></link-grammar>
+        </li>
+      </ul>
+      <ng-template #noGrammarReferences>Keine</ng-template>
     </div>
   </div>
 

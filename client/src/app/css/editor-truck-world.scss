@@ -1,19 +1,50 @@
+.truck-world-editor-menu {
+    .quickaction-buttons span {
+        margin-left: 0.5em;
+    }
+
+    .world-size-config {
+        margin-bottom: 0;
+    }
+
+    .traffic-light-config {
+        position: absolute;
+        z-index: 1;
+
+        .traffic-light-bar {
+            display: flex;
+            height: 2em;
+            line-height: 2em;
+            text-align: center;
+
+            div {
+                flex: 1;
+
+                &.start {
+                    border-left: 0.1em solid yellow;
+                    &::before {
+                        content: "🡆";
+                        position: absolute;
+                        transform: translateX(-50%);
+                        color: yellow;
+                        display: block;
+                    }
+                }
+
+                &.redPhase {
+                    background-color: red;
+                }
+
+                &.greenPhase {
+                    background-color: green;
+                }
+            }
+        }
+    }
+}
+
 .editor-tile-selection {
     --editor-tile-size: 7rem;
-    overflow-x: auto;
-
-    .card-deck {
-        margin: 0;
-        min-width: 70rem;
-    }
-
-    .card-deck .card:first-child {
-        margin-left: 0;
-    }
-
-    .card-deck .card:last-child {
-        margin-right: 0;
-    }
 
     .fa.fa-paint-brush {
         color: white;
@@ -105,5 +136,4 @@
         background-image: url("/vendor/truck/truck.svg");
         background-size: calc(var(--editor-tile-size) * var(--image-count));
     }
-
 }

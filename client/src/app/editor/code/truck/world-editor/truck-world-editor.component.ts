@@ -4,7 +4,6 @@ import { World } from "../../../../shared/syntaxtree/truck/world";
 
 import { TruckWorldService } from "../truck-world.service";
 import {
-  TruckFreightTileFeatureOptions,
   TruckTileFeatureType,
   TruckWorldEditorService,
 } from "./truck-world-editor.service";
@@ -13,12 +12,11 @@ import {
   templateUrl: "templates/truck-world-editor.html",
 })
 export class TruckWorldEditorComponent implements OnInit, OnDestroy {
-  public tileFeatureType = TruckTileFeatureType;
-
   private _subscriptions: Subscription[] = [];
 
   private _currentWorld?: World;
 
+  public tileFeatureType = TruckTileFeatureType; // Required to use the enum inside the template
   public feature$ = this._editor.feature;
 
   constructor(
@@ -43,20 +41,12 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
     this._subscriptions = [];
   }
 
-  public get sizeX(): number {
-    return this._currentWorld?.size.width;
+  public get size(): number {
+    return this._currentWorld?.state.size.width;
   }
 
-  public set sizeX(value: number) {
-    this._editor.resizeWorld(value, this.sizeY);
-  }
-
-  public get sizeY(): number {
-    return this._currentWorld?.size.height;
-  }
-
-  public set sizeY(value: number) {
-    this._editor.resizeWorld(this.sizeX, value);
+  public set size(value: number) {
+    this._editor.resizeWorld(Number(value));
   }
 
   public undo(): void {
@@ -69,29 +59,5 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
 
   public resetEverything(): void {
     this._editor.resetEverything();
-  }
-
-  public selectRoad() {
-    this._editor.selectTileFeature(TruckTileFeatureType.Road, null);
-  }
-
-  public selectTrafficLight() {
-    this._editor.selectTileFeature(TruckTileFeatureType.TrafficLight, {
-      greenPhase: 2,
-      redPhase: 2,
-      startPhase: 0,
-    });
-  }
-
-  public selectFreight(color: TruckFreightTileFeatureOptions) {
-    this._editor.selectTileFeature(TruckTileFeatureType.Freight, color);
-  }
-
-  public selectFreightTarget(color: TruckFreightTileFeatureOptions) {
-    this._editor.selectTileFeature(TruckTileFeatureType.FreightTarget, color);
-  }
-
-  public selectTruckSpawn() {
-    this._editor.selectTileFeature(TruckTileFeatureType.TruckSpawn, null);
   }
 }

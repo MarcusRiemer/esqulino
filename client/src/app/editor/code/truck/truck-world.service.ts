@@ -7,7 +7,6 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { World } from "../../../shared/syntaxtree/truck/world";
 import { readFromNode } from "../../../shared/syntaxtree/truck/world.description";
 import { ProjectService } from "../../project.service";
-import { TruckWorldEditorService } from "./world-editor/truck-world-editor.service";
 
 /**
  * Keeps track of different states for Trucklino.
@@ -20,16 +19,13 @@ export class TruckWorldService {
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
-    private _projectService: ProjectService,
-    private _worldEditor: TruckWorldEditorService
+    private _projectService: ProjectService
   ) {
     this._currentCodeResource.currentResource.subscribe((currentProgram) => {
-      _worldEditor.disableEditorMode();
       if (currentProgram.emittedLanguageIdPeek === "truck-world") {
         // Current program is a world
         this._worldIds[currentProgram.id] = currentProgram.id;
         this._currentWorldId.next(currentProgram.id);
-        _worldEditor.enableEditorMode();
       } else if (this._worldIds[currentProgram.id]) {
         // Current program is a program and already has a world set
         this._currentWorldId.next(this._worldIds[currentProgram.id]);

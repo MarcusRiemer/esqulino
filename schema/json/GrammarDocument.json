@@ -49,6 +49,12 @@
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },
+        "includes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "root": {
           "$ref": "#/definitions/QualifiedTypeName"
         },
@@ -57,8 +63,8 @@
         }
       },
       "required": [
-        "foreignTypes",
-        "types"
+        "types",
+        "foreignTypes"
       ],
       "type": "object"
     },

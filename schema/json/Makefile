@@ -25,7 +25,7 @@ clean : msg-pre-clean
 # Ensures that no files have been modified after running the generator again
 verify-cached-schemas :
 	@make -j -B all
-	@test -z "`$(GIT_LS_CHANGED_FILES)`" || (echo "There are modified schema files"; $(GIT_LS_CHANGED_FILES); exit 1) >&2
+	@test -z "`$(GIT_LS_CHANGED_FILES)`" || (git --no-pager diff; echo "There are modified schema files"; $(GIT_LS_CHANGED_FILES); exit 1) >&2
 
 ##################################
 # Messaging targets
