@@ -47,7 +47,6 @@ import { EditorToolbarService } from "./toolbar.service";
     TrashComponent,
     SourceIconComponent,
   ],
-  entryComponents: [DraggedBlockComponent],
   providers: [
     TrashService,
     SchemaService,

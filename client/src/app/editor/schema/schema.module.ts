@@ -30,10 +30,6 @@ import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sid
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent,
   ],
-  entryComponents: [
-    TableEditorSidebarStackComponent,
-    TableEditorSidebarControlsComponent,
-  ],
   exports: [SchemaHostComponent],
 })
 export class SchemaEditorModule {
