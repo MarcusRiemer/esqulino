@@ -33,8 +33,11 @@
             "polyfills": "src/polyfills.ts",
             "aot": true,
             "extractCss": true,
-            "sourceMap": true,
-            "vendorSourceMap": true,
+            "sourceMap": {
+              "styles": true,
+              "scripts": true,
+              "vendor": true
+            },
             "statsJson": true,
             "outputHashing": "all",
             "assets": [
@@ -181,9 +184,7 @@
     }
   },
   "cli": {
-    "warnings": {
-      "typescriptMismatch": true
-    },
+    "warnings": {},
     "analytics": false
   }
 }

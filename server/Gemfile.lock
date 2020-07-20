@@ -327,10 +327,6 @@ GEM
     samovar (2.1.4)
       console (~> 1.0)
       mapping (~> 1.0)
-    search_object (1.2.4)
-    search_object_graphql (0.3.2)
-      graphql (~> 1.8)
-      search_object (~> 1.2.2)
     sentry-raven (2.13.0)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
@@ -405,7 +401,6 @@ DEPENDENCIES
   rspec-rails (= 4.0.0.beta3)
   rspec_junit_formatter
   ruby-filemagic (~> 0.7)
-  search_object_graphql
   sentry-raven (~> 2.9)
   simplecov (~> 0.18.0.beta1)
   simplecov-cobertura
