@@ -259,6 +259,20 @@ RSpec.describe GraphqlController, type: :request do
       expect(nodes_data['codeResourceCount']).to eq(2)
     end
 
+    it 'Projects: Requesting only public projects' do
+      FactoryBot.create(:project, name: {en: "hello",de: "hallo"},public:true)
+      FactoryBot.create(:project, name: {en: "hello",de: "hallo"},public:false)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query:"{projects(input: {filter: {public: true}}){totalCount}}"
+           }.to_json
+
+      total_count =  JSON.parse(response.body)['data']['projects']['totalCount']
+      expect(response).to have_http_status(200)
+      expect(total_count).to eq(1)
+    end
+
     it 'Projects: Requesting code_resource relation' do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
       FactoryBot.create(:code_resource, name: "test1", project_id: p.id)

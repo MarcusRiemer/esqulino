@@ -15,3 +15,27 @@ query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$input
         }
     }
 }
+
+query FrontpageListProjects {
+    projects(input: {filter: {public: true}}) {
+        nodes {
+            id
+            slug
+            name
+            public
+            description
+            preview
+            indexPageId
+            createdAt
+            updatedAt
+            userId
+            blockLanguages {
+                defaultProgrammingLanguage {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}
+

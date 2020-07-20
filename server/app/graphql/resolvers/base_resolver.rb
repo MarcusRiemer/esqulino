@@ -31,6 +31,8 @@ module Resolvers
           scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
         elsif is_multilingual_column? filter_key
           scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
+        elsif is_boolean_column? filter_key
+          scope = scope.where "#{@model_class.table_name}.#{filter_key} = ?", filter_value
         else
           scope = scope.where "#{@model_class.table_name}.#{filter_key} LIKE ?", filter_value
         end
@@ -122,6 +124,11 @@ module Resolvers
     def is_uuid_column?(name)
       col = @model_class.columns_hash[name]
       col ? col.type == :uuid : false
+    end
+
+    def is_boolean_column?(name)
+      col = @model_class.columns_hash[name]
+      col ? col.type == :boolean : false
     end
   end
 end

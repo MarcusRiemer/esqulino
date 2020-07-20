@@ -30,3 +30,14 @@ query AdminSingleNews($id: ID!) {
         userId
     }
 }
+
+query FrontpageListNews{
+    news {
+        nodes {
+            id
+            title
+            text
+            publishedFrom
+        }
+    }
+}
