@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
+      precision: 
+      scale: 
+      limit: 
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 53152493-1926-4230-be97-f8cec0689972
@@ -25,7 +25,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-03 08:50:28.998263000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-03 09:46:26.631286000 Z
+  value_before_type_cast: 2020-07-14 15:55:27.004679000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6
@@ -34,6 +34,6 @@ concise_attributes:
   value_before_type_cast: regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: Generic Language without code generator
+  value_before_type_cast: "// TODO: Implement RegEx code generation"
 new_record: false
 active_record_yaml_version: 2

@@ -10,47 +10,99 @@ concise_attributes:
   value_before_type_cast: Meta RegEx
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"blockType": "iterator", "childGroupName": "firstExpression", "emptyDropTarget":
-    false}, {"blockType": "iterator", "childGroupName": "alternatives", "emptyDropTarget":
-    false}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "expression", "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color":
+  value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "RegEx",
+    "categories": [{"blocks": [{"defaultNode": {"name": "expression", "children":
+    {"subexpressions": []}, "language": "regex"}, "displayName": "expression"}, {"defaultNode":
+    {"name": "characters", "language": "regex", "properties": {"chars": ""}}, "displayName":
+    "characters"}, {"defaultNode": {"name": "knownCharacterClass", "language": "regex",
+    "properties": {"characterClass": ""}}, "displayName": "knownCharacterClass"},
+    {"defaultNode": {"name": "characterRange", "children": {"characters": []}, "language":
+    "regex"}, "displayName": "characterRange"}, {"defaultNode": {"name": "alternative",
+    "language": "regex"}, "displayName": "alternative"}, {"defaultNode": {"name":
+    "group", "children": {"subexpressions": []}, "language": "regex"}, "displayName":
+    "group"}], "categoryCaption": "Automatisch"}, {"blocks": [{"defaultNode": [{"name":
+    "quantifiers", "language": "regex", "properties": {"quantifiersClass": "+"}}],
+    "displayName": "+"}, {"defaultNode": [{"name": "quantifiers", "language": "regex",
+    "properties": {"quantifiersClass": "*"}}], "displayName": "*"}, {"defaultNode":
+    [{"name": "quantifiers", "language": "regex", "properties": {"quantifiersClass":
+    "?"}}], "displayName": "?"}, {"defaultNode": {"name": "characters", "language":
+    "regex", "properties": {"characters": "b"}}, "displayName": "b"}], "categoryCaption":
+    "Manuell"}]}], "editorBlocks": [{"visual": [{"children": [{"style": {"color":
     "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
     "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text":
     "(", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
-    "iterator", "childGroupName": "subexpression", "emptyDropTarget": false}, {"text":
+    "iterator", "childGroupName": "subexpressions", "emptyDropTarget": false}, {"text":
     ")", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
     "block", "dropTarget": {}}], "describedType": {"typeName": "group", "languageName":
     "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
     solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "|", "style": {"display":
-    "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator", "childGroupName":
-    "subexpression", "emptyDropTarget": false}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "alternative", "languageName": "regex"}},
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
+    "property": "chars", "blockType": "input"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "characters", "languageName": "regex"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "subexpressions",
+    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "expression", "languageName": "regex"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"text": "|", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "alternative",
+    "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "[",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
+    "childGroupName": "characters", "emptyDropTarget": false}, {"text": "]", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "characterRange", "languageName": "regex"}},
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "sequence",
-    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "match", "languageName": "regex"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "characters",
-    "languageName": "regex"}}], "editorComponents": [{"componentType": "block-root"},
-    {"componentType": "validator"}, {"componentType": "generated-code"}], "localGeneratorInstructions":
-    {"type": "manual"}}'
+    "INVALID_MIN_OCCURENCES"]}, {"text": "\\", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "characterClass",
+    "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "knownCharacterClass", "languageName": "regex"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"text": "+", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "quantifierOneOrMore",
+    "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "?",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "quantifierZeroOrOne", "languageName":
+    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "*", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "quantifierZeroOrMore", "languageName": "regex"}}],
+    "rootCssClasses": ["activate-block-outline"], "editorComponents": [{"componentType":
+    "block-root"}, {"componentType": "validator"}, {"componentType": "generated-code"}],
+    "localGeneratorInstructions": {"type": "manual", "staticSidebars": [{"type": "generatedBlocks",
+    "caption": "RegEx", "categories": [{"type": "generated", "grammar": {"regex":
+    ["expression", "characters", "knownCharacterClass", "characterRange", "alternative",
+    "group"]}, "categoryCaption": "Automatisch"}, {"type": "constant", "blocks": [{"defaultNode":
+    [{"name": "quantifiers", "language": "regex", "properties": {"quantifiersClass":
+    "+"}}], "displayName": "+"}, {"defaultNode": [{"name": "quantifiers", "language":
+    "regex", "properties": {"quantifiersClass": "*"}}], "displayName": "*"}, {"defaultNode":
+    [{"name": "quantifiers", "language": "regex", "properties": {"quantifiersClass":
+    "?"}}], "displayName": "?"}, {"defaultNode": {"name": "characters", "language":
+    "regex", "properties": {"characters": "b"}}, "displayName": "b"}], "categoryCaption":
+    "Manuell"}]}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-03 08:48:34.136111000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-03 12:23:29.395426000 Z
+  value_before_type_cast: 2020-07-20 12:37:45.646111000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: regex
