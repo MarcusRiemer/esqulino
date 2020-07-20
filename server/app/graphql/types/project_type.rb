@@ -9,6 +9,7 @@ module Types
     field :slug, String, null:true
     field :defaultDatabase, Types::ProjectDatabaseType,null:true
     field :user, Types::UserType,null:true
+    field :userId, ID,null:true
     field :codeResources, [Types::CodeResourceType], null:true
     field :codeResourceCount, Integer, null:true
     field :projectSources, [Types::ProjectSourceType], null:true

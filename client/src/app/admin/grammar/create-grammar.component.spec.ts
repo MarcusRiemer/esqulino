@@ -56,7 +56,6 @@ describe("CreateGrammarComponent", () => {
 
   it(`can be instantiated`, async () => {
     const t = await createComponent();
-    debugger;
     expect(t.component).toBeDefined();
   });
 

@@ -77,6 +77,9 @@
 % Additional Utilities
 % **************************************************
 
+\newcommand{\fullref}[1]{\ref{#1}~\enquote{\nameref{#1}}}
+
+
 % \inlinec for inline code
 \NewDocumentCommand{\inlinec}{v}{%
 \texttt{#1}%
@@ -88,23 +91,96 @@
 
 % Code
 \usepackage{listings,lstautogobble}
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{orange}{rgb}{1, 0.722, 0.424}
+
 \lstset{
-   backgroundcolor=\color{white},
-   extendedchars=true,
-   basicstyle=\scriptsize\ttfamily,
-   showstringspaces=false,
-   showspaces=false,
-   numbers=left,
-   stepnumber=1,
-   numberstyle=\tiny\ttfamily,
-   numbersep=9pt,
-   tabsize=4,
-   breaklines=true,
-   showtabs=false,
-   captionpos=b,
-   autogobble=true,
-   frame=single
+	numberstyle=\tiny
 }
+
+
+\lstdefinelanguage{SQL}{
+	keywords={INSERT, UPDATE, DELETE, SELECT, FROM, WHERE, GROUP BY, SET, INTO, VALUES, LIMIT},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={strftime},
+	ndkeywordstyle=\color{OliveGreen}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{HTML}{
+	keywords={select, option, h1, template, h2, div, ul, li, table, thead, tr, th, td, tbody, tr, value, innerHtml, class, id},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={for, in, include, endfor, endif, else, if, ngIf, ngFor, each},
+	ndkeywordstyle=\color{OliveGreen}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, let, const, if, in, while, do, else, case, break},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, number, string, throw, extends, implements, import, this, constructor, public, private},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{Ruby}{
+	keywords={do, def, end, if, else, return},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={each, map, zip},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstset{
+	backgroundcolor=\color{white},
+	extendedchars=true,
+	basicstyle=\scriptsize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	stepnumber=1,
+	numberstyle=\tiny\ttfamily,
+	numbersep=9pt,
+	tabsize=4,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b,
+	autogobble=true,
+	frame=single
+}
+
+
 
 \usepackage[simplified]{sty/pgf-umlcd}
 \usepackage{float}

@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 
-import { ServerDataService } from "../shared";
-
 /**
  * The initial page a new user will see. Hosts a "best of" of landing-page
  * like content.
@@ -11,10 +9,9 @@ import { ServerDataService } from "../shared";
   templateUrl: "templates/about.html",
 })
 export class AboutComponent implements OnInit {
-  constructor(private _title: Title, private _serverData: ServerDataService) {}
+  constructor(private _title: Title) {}
 
   ngOnInit() {
     this._title.setTitle("BlattWerkzeug");
-    this._serverData.newsListFrontpage.refresh();
   }
 }
