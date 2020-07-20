@@ -9,7 +9,7 @@
 
 Ziel dieser Arbeit ist die Evaluierung von Verfahren, welche eine sichere, effiziente und leichte Nutzung der Kommunikationsschnittstellen 
 zwischen Client, Server und Datenbank ermöglichen sollen und wenn möglich die Integration eines dieser Verfahren
-in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe~\ref{sec:basics}),
+in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe~\fullref{sec:basics}),
 In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die Anforderungen an die Nutzung der Kommunikationsschnittstellen näher beschrieben.
 %Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
 
@@ -18,9 +18,40 @@ In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die A
 %************************************************
 \chapter{Grundlagen}
 \label{sec:basics}
-In diesem Kapitel werden grundlegende Inhalte beschrieben, welche im späteren Verlauf der Arbeit aufgegriffen 
-und bei Erläuterungen bzw. Code-Beispielen als bekannt vorausgesetzt werden. Viele dieser Inhalte sind aktuell Gegenstand
-des von Marcus Riemers entwickelten Systems und müssen somit für die Schaffung und Umsetzung von Verbesserungen grundlegend verstanden werden.
+Das wesentliche Motiv bei der Nutzung des Internets ist die In\-for\-ma\-tions\-auf\-nah\-me~\cite{statista-1}\cite{ard-zdf}.
+Informationen werden auf unzähligen Webapplikationen bereitgestellt, die jeder mit einem Internetzugang einsehen kann,
+solange der Zugriff auf die Informationen nicht sonderlich geschützt wird.
+
+Um persistente und sensible Daten gesichert und nicht für Jedermann zugreifbar lagern zu können, werden sie \emph{serverseitig} gehalten.
+Möchte man diese Daten zusätzlich filtern, sortieren oder mehrere Datensätze miteinander verknüpfen, wird eine Datenbank benötigt.
+Eine Datei, in der die Daten abgelegt werden, wäre auch eine Option, allerdings müsste man alle Methoden zum Filtern, Sortieren und Verknüpfen
+selber implementieren.
+
+Die in einer Datenbank gespeicherten Informationen sind also aus Nutzersicht nur über eine Anfrage an den Sever abrufbar.
+Somit ist der Server das Bindeglied zwischen einem Client und der Datenbank und kümmert sich um Aufgaben wie Authentifizierung des Nutzers
+und Überprüfung der Authorisierung bezüglich der angefragten Daten, aber auch um die Zusammensetzung und Ausführung von Datenbankabfragen.
+Daraus geht hervor, dass ein Client nur begrenzten Zugriff bekommt, da die Ausführung von vordefinierten Funktionen, die Anfragen an die Datenbank beinhalten,
+lediglich angefragt werden kann. Werden die vordefinierten Funktionen den Bedarf an Informationen nicht gerecht, müssen neue Funktionen entwickelt
+oder mithilfe von mehreren Anfragen die Daten zusammengesammelt werden.
+
+Dieser Entwicklungsaufwand könnte verringert werden, indem der Client mehr Flexibilität, Verantwortung und Effizienz besitzen würde,
+z.B. durch eine direkte Anbindung an die Datenbank.
+Er könnte exakt die benötigten Daten, mit nur einer Anfrage direkt und effizient aus der Datenbank auslesen.
+Jedoch würde dieser Ansatz viele Gefahren mit sich bringen. Ein Client der direkten Datenbankzugriff erlangt,
+könnte unerwünschte Transaktionen in der Datenbank ausführen, wodurch der erwartete Datenbestand geändert,
+Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnten. Also sollten Zugriffsbeschränkungen erteilt werden, die
+auf der Datenbankschicht realisiert werden, da clientseitiger Code nach Belieben vom Nutzer eingesehen und verändert werden kann.
+Hinzu kommen weitere Herausforderungen, wenn die Verbindung zur Datenbank veröffentlicht wird,
+wie zum Beispiel das Schützen vor zu exzessiver Nutzung oder das Ausnutzen von bekannten Sicherheitslücken bei nicht aktuellsten Versionen~\cite{postgresql-security}.
+Alles in allem ist das ein Verfahren, von dem dringend abgeraten wird, da es in den wenigsten Fällen nutzbringend und sicher gehandhabt werden kann~\cite{client-to-database}.
+
+Im Folgenden werden diese Probleme anhand von grundlegenden Inhalten, die aktuell Gegenstand des von Marcus Riemers entwickelten Systems~\cite{riemer2016} sind,
+wieder aufgegriffen und bei Erläuterungen bzw. Code-Beispielen als bekannt vorausgesetzt.
+Dazu gehören die Unterkapitel \fullref{sec:basics:restapi}, \fullref{sec:basics:typescript}, \fullref{sec:basics:jsonschema} und \fullref{sec:basics:postgres}.
+Diese müssen für die Schaffung und Umsetzung von Verbesserungen grundlegend verstanden werden.
+Bei dem Kapitel \fullref{sec:basics:graphql} handelt es sich um eine Abfragesprache und Laufzeitumgebung,
+für die im Laufe der Arbeit evaluiert wird, ob sie gewinnbringend in das bestehende System migriert werden und Teile ersetzen kann.
+
 %Nicht spezifisch auf Blattwerzeuge werden!! Kleines Beispiel ist erlaubt (Begriff Blattwerzeug wird nicht erwähnt).
 \section{REST API}
 \label{sec:basics:restapi}
@@ -61,9 +92,28 @@ Somit können Anfragen effizienter behandelt bzw. ganz durch eine direkt aus dem
 \subsection{Einheitliche Schnittstelle}
 Ein zentrales Merkmal von REST ist die einheitliche und vom Dienst entkoppelte Schnittstelle.
 Auf jede Ressource muss über einen einheitlichen Satz an URLs, hinter denen sich Transaktionen zum Erstellen, Lesen, Aktualisieren
-und zum Löschen (CRUD) verbergen, zugegriffen werden können (siehe~\ref{tbl:basics:crud}).
+und zum Löschen (CRUD) verbergen, zugegriffen werden können.
 
 Durch eine einheitliche Komponentenschnittstelle wird die Sichtbarkeit der einzelnen Interaktionen erhöht.
+Dies bedeutet, dass es für jede Ressource eine Menge fest definierter Interaktionen gibt, die sich in ihrer Struktur nur durch den Namen der
+Ressource und ihre Fremdbeziehungen unterscheiden.
+
+\begin{table}[h]
+    \begin{tabular}{|p{0.11\textwidth}|p{0.08\textwidth}|p{0.12\textwidth}|p{0.2\textwidth}|p{0.35\textwidth}|}
+        \hline
+        \textbf{CRUD\newline  Operation} & \textbf{SQL} & \textbf{HTTP} & \textbf{URL} & \textbf{Bedeutung} \\ \hline
+        Create & \inlinec{INSERT} & \inlinec{POST} & \inlinec{/projects} & Erstellen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects} & Abrufen aller Projekte \\ \hline
+        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
+        Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
+        Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- developer} & Abrufen des Entwicklers eines Projekts \\ \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Einheitliche Schnittstellen}
+    \label{tbl:basics:crud}
+\end{table}
+
 Das hat zur Folge, dass anwendungsspezifische Daten in einer standardisierten Form übertragen werden müssen,
 wodurch die Effizienz der Datenübertragung Mängel aufwerfen kann.
 
@@ -74,40 +124,14 @@ Eine Anwendung kann dadurch ihre Anforderungen auf mehrere Schichten verteilen, 
 die Daten auf Server B lagert und einen Authentifizierungsdienst von Server C nutzt.
 Nachteile dieser Einschränkung spiegeln sich in gestiegener Komplexität der Gesamtarchitektur und kommunikativem Overhead wieder.
 
-Desweiteren gibt es noch eine optionale Einschränkung, auf die nicht näher eingegangen wird.
+Desweiteren gibt es noch eine optionale Einschränkung \emph{Code-On-Demand}, welche die Client-Funktionalität durch Herunterladen und Ausführen von Code in
+Form von Applets oder Skripten erweitert. Diese wird im Rahmen der Arbeit nicht genutzt und deshalb nur am Rande erwähnt.
 %Als Entwickler einer Anwendung stellt Modularität ein von Beginn an bedachtes Kalkül dar.
 
 \section{GraphQL}
 \label{sec:basics:graphql}
-Das wesentliche Motiv bei der Nutzung des Internets ist die Informationsaufnahme~\cite{statista-1}\cite{ard-zdf}.
-Informationen werden auf unzähligen Webapplikationen bereitgestellt, die jeder mit einem Internetzugang einsehen kann,
-solange der Zugriff auf die Informationen nicht sonderlich geschützt wird.
-Um persistente und sensible Daten gesichert und nicht für Jedermann zugreifbar lagern zu können, werden sie \emph{serverseitig} gehalten.
-Möchte man diese Daten zusätzlich filtern, sortieren oder mehrere Datensätze miteinander verknüpfen, wird eine Datenbank benötigt.
-Eine Datei, in der die Daten abgelegt werden, wäre auch eine Option, allerdings müsste man alle Methoden zum Filtern, Sortieren und Verknüpfen
-selber implementieren und damit das Rad neu erfinden.
-
-Die in einer Datenbank gespeicherten Informationen sind also aus Nutzersicht nur über eine Anfrage an den Sever abrufbar.
-Somit ist der Server das Bindeglied zwischen einem Client und der Datenbank und kümmert sich um Aufgaben wie Authentifizierung des Nutzers
-und Überprüfung der Authorisierung bezüglich der angefragten Daten, aber auch um die Zusammensetzung und Ausführung von Datenbankabfragen.
-Daraus geht hervor, dass ein Client nur begrenzten Zugriff bekommt, da die Ausführung von vordefinierten Transaktionen
-lediglich angefragt werden kann. Werden die vordefinierten Transaktionen den Bedarf an Informationen nicht gerecht, müssen neue Transaktionen entwickelt
-oder mithilfe von mehreren Anfragen die Daten zusammengesammelt werden.
-
-Dieser Entwicklungsaufwand könnte verringert werden, indem der Client mehr Flexibilität, Verantwortung und Effizienz besitzen würde,
-z.B. durch eine direkte Anbindung an die Datenbank.
-Er könnte alle benötigten Daten dann direkt und effizient z.B. per SQL Query aus der Datenbank auslesen.
-Jedoch würde dieser Ansatz viele Gefahren mit sich bringen. Ein Client der direkten Datenbankzugriff erlangt,
-könnte unerwünschte Transaktionen in der Datenbank ausführen, wodurch die Konsistenz der Daten verletzt,
-Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnten. Also sollten Zugriffsbeschränkungen erteilt werden, die
-auf der Datenbankschicht realisiert werden, da clientseitiger Code nach Belieben vom Nutzer eingesehen und verändert werden kann.
-Hinzu kommen weitere Herausforderungen, wenn die Verbindung zur Datenbank veröffentlicht wird,
-wie zum Beispiel das Schützen vor exzessiver Nutzung oder denial of service (Dos) Attacken.
-Alles in allem ist das ein Verfahren, von dem dringend abgeraten wird, da es in den wenigsten Fällen nutzbringend und sicher gehandhabt werden kann~\cite{client-to-database}.
-
 %Nutzung einer statischen Schnittstelle zu einer sich ändernden Implementierung
-
-GraphQL dient als Lösung für die aufgeführten Probleme, besonders in Bezug auf Flexibilität, Verantwortung und Effizienz~\cite{graphql-scalablepath}.
+GraphQL dient als Lösung für die in Kapitel \fullref{sec:basics} aufgeführten Probleme, besonders in Bezug auf Flexibilität, Verantwortung und Effizienz~\cite{graphql-scalablepath}.
 Es handelt sich um eine Abfragesprache für APIs und eine Laufzeitumgebnung,
 zum Ausführen dieser Abfragen und Wiedergeben von Daten unter Verwendung eines von für die Daten definierten Typensystems.
 Es ist an keinerlei Datenbanksysteme gebunden und lässt sich gut mit vorhandenen Code und Daten verbinden.
@@ -121,7 +145,7 @@ Datentypen und Restriktionen wie \emph{NOT NULL} definieren.
     \label{fig:basics:graphql:1}
 \end{figure}
 
-Das aufgeführte Codefragment~\ref{fig:basics:graphql:1} definiert einen Typen \emph{Project} mit zwei Feldern, welcher ein Programmierprojekt darstellen soll.
+Das aufgeführte Codefragment~\fullref{fig:basics:graphql:1} definiert einen Typen \emph{Project} mit zwei Feldern, welcher ein Programmierprojekt darstellen soll.
 \begin{itemize}
     \item \emph{id}: hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
     Zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
@@ -168,8 +192,8 @@ Damit ein Datentyp abgefragt werden kann, müssen Queries zu den Datentypen defi
     \label{fig:basics:graphql:5}
 \end{figure}
 
-Die Query Typen gehören zum Typsystem von Graphql. Es wird in diesem Fall angegeben, dass es eine Query gibt, die mit dem Bezeichner projects
-ein Array vom Typ Project erwartet. Zusätzlich wurde angegeben, dass ein Projekt und die Liste nicht Null sein dürfen.
+Die Query Typen gehören zum Typsystem von Graphql. Es wird in diesem Fall angegeben, dass es eine Query gibt, die mit dem Bezeichner \emph{projects}
+ein Array vom Typ \emph{Project} erwartet. Zusätzlich wurde angegeben, dass ein Projekt und die Liste nicht Null sein dürfen.
 Es wird also mindestens eine leeres Array erwartet, aber keinesfalls Null oder ein Array, das mit Null-Werten gefüllt ist~\cite{graphql}.
 Jetzt kann dem Client die Freiheit gewährt werden eigene Abfragen für genau den Datensatz der benötigt wird zu formulieren.
 Zudem lässt sich anhand der gestellten Abfrage die Struktur der erhaltenen Antwort festlegen. Dies könnte wie folgt aussehen:
@@ -180,7 +204,7 @@ Zudem lässt sich anhand der gestellten Abfrage die Struktur der erhaltenen Antw
     \label{fig:basics:graphql:6}
 \end{figure}
 
-Der aufgeführte Code~\ref{fig:basics:graphql:6} verkörpert eine GraphQL Query mit dem Namen Projects, die für alle vorhandenen Projekte die Felder \emph{id} und \emph{name}
+Der aufgeführte Code~\fullref{fig:basics:graphql:6} verkörpert eine GraphQL Query mit dem Namen \emph{Projects}, die für alle vorhandenen Projekte die Felder \emph{id} und \emph{name}
 zurückgibt. Nachdem eine GraphQL Query gegen das Typsystem validiert wurde, wird sie von dem GraphQL Server ausgeführt und
 ein Ergebnis - typischerweise in Form von JSON - zurückgegeben, das die Form und Struktur der Anfrage spiegelt.
 
@@ -196,28 +220,12 @@ Damit der GraphQL Server eine Anfrage an eine an den Server gebundene Datenbank 
 Resolver-Funktion ausgeführt~\cite{graphql-execution}. Innerhalb dieser Resolver-Funktion ist der Zugriff auf das Dateisystem festgelegt, sodass
 man neben Datenbanken oder gar Dateien als Speichermedium nutzen könnte. Hierzu später noch mehr.
 
-Eine andere Möglichkeit, die bereits umrissen wurde, wären die in Kapitel~\ref{sec:basics:restapi} vorgestellten Inhalte einer REST API.
+Eine andere Möglichkeit, die bereits umrissen wurde, wären die in Kapitel~\fullref{sec:basics:restapi} vorgestellten Inhalte einer REST API.
 Diese setzt voraus, dass der Zugriff auf persistent gespeicherte Daten ausschließlich an den Server gekoppelt ist - oftmals in Form einer Datenbank.
 Datenzugriffe, die vom Client angestoßen werden, werden über eine festgelegte Menge an vordefinierten Transaktionen auf dem Server bereitgestellt.
 Jede dieser unterschiedlichen Transaktionen kann über eine Anfrage an den Server ausgelöst werden.
 
-\begin{table}
-    \begin{tabular}{|p{0.11\textwidth}|p{0.08\textwidth}|p{0.12\textwidth}|p{0.2\textwidth}|p{0.35\textwidth}|}
-        \hline
-        \textbf{CRUD\newline  Operation} & \textbf{SQL} & \textbf{HTTP} & \textbf{URL} & \textbf{Bedeutung} \\ \hline
-        Create & \inlinec{INSERT} & \inlinec{POST} & \inlinec{/projects} & Erstellen eines Projekts \\ \hline
-        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects} & Abrufen aller Projekte \\ \hline
-        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
-        Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
-        Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
-        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- developer} & Abrufen des Entwicklers eines Projekts \\ \hline
-    \end{tabular}
-    \vspace{5pt}
-    \caption{Einheitliche Schnittstellen}
-    \label{tbl:basics:crud}
-\end{table}
-
-Die in Abbildung~\ref{tbl:basics:crud} aufgeführte Liste gibt zu jeder Transaktion an, über welche Route sie aufgerufen werden kann.
+Die in Tabelle~\fullref{tbl:basics:crud} aufgeführte Liste gibt zu jeder Transaktion an, über welche Route sie aufgerufen werden kann.
 Je größer eine Anwendung wird, desto größer wird der Datenbestand und damit die Menge an Transaktionen, die vordefiniert werden muss.
 Für jeden Datensatz, der an den Client ausgeliefert werden soll, muss also solch ein Eintrag vorgenommen werden und die dazugehörige Transaktion entwickelt werden.
 
@@ -229,6 +237,7 @@ Für jeden Datensatz, der an den Client ausgeliefert werden soll, muss also solc
 %Alternative wäre REST API mit 1 Route pro Query
 
 \section{Ausgewählte Details des Typescript Typsystems}
+\label{sec:basics:typescript}
 TypeScript ist ein typisiertes Superset von Javascript, das zu reinem Javascript kompiliert~\cite{typescript}.
 Das heisst, es beinhaltet alle Funktionalitäten von Javascript und wurde darüber hinaus erweitert und verbessert~\cite{superset}.
 Dazu gehört das in Typescript eingeführte Typsystem. Selbstverständlich besitzt Javascript ebenfalls Typen, doch kann eine Variable,
@@ -259,7 +268,7 @@ ein \emph{TypeError} auftritt.
     \label{fig:basics:typescript:2}
 \end{figure}
 
-Nehmen wir an, wir möchten den in Kapitel GraphQL~\ref{sec:basics:graphql} erstellten Typen \emph{Project} nutzen,
+Nehmen wir an, wir möchten den in Kapitel GraphQL~\fullref{sec:basics:graphql} erstellten Typen \emph{Project} nutzen,
 um eine Funktion zu schreiben, die einen neuen \emph{Project} Datensatz an den Server schickt. Um diesen Typen clientseitig nutzen zu können,
 können wir ein äquivalentes Typescript Interface erstellen oder eines generieren lassen (dazu später mehr).
 
@@ -295,7 +304,7 @@ Der Code im Methodenrumpf ist hierbei nur Pseudocode. Der Typ \inlinec{ProjectRe
 welches in dem Kontext angibt, ob ein neuer Datensatz auf dem Server erstellt werden konnte oder nicht.
 Desweiteren gibt es noch \inlinec{Exclude<T,U>} wodurch sich von T diejenigen Typen ausschließen lassen,
 die U zugeordnet werden können. Gäbe es mehrere \emph{"Response"}-Typen, ließe sich das Feld extrahieren,
-über welches auf die Datensätze zugegriffen werden kann (siehe~\ref{fig:basics:typescript:6})(dazu später mehr).
+über welches auf die Datensätze zugegriffen werden kann (siehe~\fullref{fig:basics:typescript:6})(dazu später mehr).
 
 \begin{figure}[h]
     \lstinputlisting{snippets/basics/typescript-datakey.txt}
@@ -318,9 +327,9 @@ Seit 2006 gibt es einen neuen Akteur auf dem Gebiet der Datenformate, JavaScript
 Die JSON Daten sind viel kleiner als ihr XML-Gegenstück und ihre Instanzen sind gültige JavaScript-Objekte, was es interessant für Webentwickler macht, da sie beim Laden von
 Informationen in asynchronen Webanwendungen über AJAX (Asynchronous JavaScript and XML) keinen separaten Konvertierungsschritt mehr benötigen~\cite{json-schema-xml}.
 
-Nehmen wir an, wir möchten den in Kapitel GraphQL erstellten Typen \emph{Project}~\ref{fig:basics:graphql:3} mit verschiedenen Attributen erweitern.
+Nehmen wir an, wir möchten den in Kapitel GraphQL erstellten Typen \emph{Project}~\fullref{fig:basics:graphql:3} mit verschiedenen Attributen erweitern.
 Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angabe, ob es sich bei dem Entwickler
-um einen stolzen Vater handelt, optional ist.
+um einen proudFather handelt, optional ist.
 
 \begin{figure}[h]
     \lstinputlisting{snippets/JSON-schema-project-object.txt}
@@ -328,9 +337,9 @@ um einen stolzen Vater handelt, optional ist.
     \label{fig:basics:jsonschema:1}
 \end{figure}
 
-Das passendes Schema dazu sieht folgendermaßen aus~\ref{fig:basics:jsonschema:2}.
+Das passendes Schema dazu sieht folgendermaßen aus~\fullref{fig:basics:jsonschema:2}.
 
-\begin{figure}[h]
+\begin{figure}[hb!]
     \lstinputlisting{snippets/JSON-schema-project-schema.txt}
     \caption{JSON Schema zu Projekt Objekt}
     \label{fig:basics:jsonschema:2}
@@ -342,16 +351,17 @@ Die hier verwendeten Schlüsselwörter haben folgende Bedeutung:
 
 \begin{itemize}
     \label{basics:jsonschema:items}
-    \item \emph{\$schema}: besagt, dass dieses Schema nach einem bestimmten Entwurf des Standards geschrieben ist, in erster Linie zur Versionskontrolle.
-    \item \emph{title/description}: haben nur beschreibenden Charakter.
-    \item \emph{type}: Dieses Schlüsselwort für die Typüberprüfung definiert die erste Beschränkung für die JSON-Daten und in diesem Fall muss es sich um ein JSON-Objekt handeln.
-    \item \emph{properties}: ist für die Validierung von Attributen eines Objekts.
-    \item \emph{required}: Da dieses Schlüsselwort ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
+    \setlength\itemsep{-1em}
+    \item \emph{2: \$schema}: besagt, dass dieses Schema nach einem bestimmten Entwurf des Standards geschrieben ist, in erster Linie zur Versionskontrolle.
+    \item \emph{3: title/description}: haben nur beschreibenden Charakter.
+    \item \emph{5: type}: Dieses Schlüsselwort für die Typüberprüfung definiert die erste Beschränkung für die JSON-Daten und in diesem Fall muss es sich um ein JSON-Objekt handeln.
+    \item \emph{6: properties}: ist für die Validierung von Attributen eines Objekts.
+    \item \emph{36: required}: Da dieses Schlüsselwort ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
 \end{itemize}
 
-Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\ref{fig:basics:jsonschema:3}.
+Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\fullref{fig:basics:jsonschema:3}.
 
-\begin{figure}[h]
+\begin{figure}[hb!]
     \lstinputlisting{snippets/JSON-schema-project-wrong-object.txt}
     \caption{Ein fehlerhaftes Projekt}
     \label{fig:basics:jsonschema:3}
@@ -360,6 +370,7 @@ Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\re
 Es kommt bei der Validierung dieses Objektes zu folgenden Verstößen:
 
 \begin{itemize}
+    \setlength\itemsep{-1em}
     \item \emph{name}: ist im \emph{required} Array angegeben und muss somit vorhanden sein.
     \item \emph{createdAt}: Es wurde ein falscher Datentyp angegeben, \emph{string} statt \emph{number}.
     \item \emph{professor}: Dieses Attribut ist nicht im \emph{properties} Objekt angegeben und dadurch fehl am Platz.
@@ -375,6 +386,7 @@ Somit ist es unabhängig welche Programmiersprache der Server nutzt~\cite{json-s
 % Äquivalenz: typescript Interface und JSON.schema
 
 \section{Postgres jsonb und hstore Typen}
+\label{sec:basics:postgres}
 Das PostgreSQL Datenbanksystem kennt über den SQL-Standard hinaus die Datentypen \emph{hstore} und \emph{jsonb} zur Speicherung von JSON Strukturen oder assoziativen Arrays,
 die üblicherweise in NoSQL-Systemen gespeichert werden.
 Hstore differenziert sich von jsonb, indem es nur eine Ebene von Schlüssel-Werte-Paaren ohne weitere Verschachtelungen zulässt und
@@ -383,10 +395,10 @@ Im Gegensatz dazu können jsonb Datensätze beliebig tief verschachtelt werden u
 darüber hinaus werden sie in einem dekomprimierten Binärformat gespeichert, wodurch die Eingabe aufgrund des zusätzlichen Konvertierungs-Overheads etwas langsamer,
 die Verarbeitung jedoch erheblich schneller ist, da kein Reparsen erforderlich ist~\cite{postgresql-json}.
 Ansonsten haben beide Typen in vielen Dingen die gleichen Verhaltensweisen. Wie bei der Eingabe doppelter Schlüssel wird nur der letzte Wert beibehalten.
-Zudem wurden für beide Datentypen eine beachtliche Menge an Operationen und Funktionen bereitgestellt (siehe Abbildung~\ref{tbl:basics:hstore-operations}), die es möglich machen,
+Zudem wurden für beide Datentypen eine beachtliche Menge an Operationen und Funktionen bereitgestellt (siehe Abbildung~\fullref{tbl:basics:hstore-operations}), die es möglich machen,
 auf SQL Ebene einen hstore oder jsonb Datensatz fast wie ein Hash in Ruby oder ein JSON-Objekt in Javascript zu behandeln~\cite{postgresql-hstore}.
 
-\begin{table}
+\begin{table}[h]
     \small
     \begin{tabular}{|p{0.21\textwidth}|p{0.31\textwidth}|p{0.33\textwidth}|p{0.1\textwidth}|}
         \hline
@@ -405,153 +417,201 @@ auf SQL Ebene einen hstore oder jsonb Datensatz fast wie ein Hash in Ruby oder e
 
 % Postgres wird benutzt als Dokumenten Datenbank in bezug auf jsonb und hstore
 \chapter{Anforderungsanalyse}
-\section{Aktuelles System}
+\label{sec:requirements}
 
-Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug entwickelt,
+\section{Aktuelles System}
+\label{sec:requirements:system}
+
+Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug als Webapplikation entwickelt,
 die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Edi\-toren,
 für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}.
 Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt.
 
 %Server:
-Der Server ist auf Basis von Ruby mit Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten.
+Der Server dieser Web-App ist auf Basis von Ruby on Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten.
 Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}.
-%Die für diese Arbeit entwickelte Software baut jedoch lediglich auf dem Client von BlattWerkzeug auf und hat mit der serverseitigen Anwendung keine direkten Berührungspunkte.
 
 %Client:
 Der Client wurde als eine Single-Page Application mit rein clientseitiger Visualisierung aufgebaut,
-die lediglich für den Zugriff auf serverseitige Resourcen  (Datenbank, gespeicherte Ressourcen,gerenderte Seiten) Roundtrips zum Server nutzt~\cite[94-95]{riemer2016}.
+die lediglich für den Zugriff auf serverseitige Resourcen  (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) Roundtrips zum Server nutzt~\cite[94-95]{riemer2016}.
 Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in TypeScript, der damalig neusten Angular Version.
 Zum aktuellen Zeitpunkt wird allerdings auf die Angular Version 9.1.0 gesetzt.
 
 %Datenbanksystem
-
 Für die Wahl des einzusetzenden Datenbanksystems wurde sich beim Entwicklungsstart, auf Grund der Kriterien "Kostenlose Verfügbarkeit",
 "Einfacher Betrieb", "Einfache Backups", "Tools zur Modellierung" und "Externe Tools zur Entwicklung von SQL-Abfragen"
 für eine SQLite Datenbank entschieden~\cite[99-100]{riemer2016}. Im November 2017 ist dann der Grundstein gelegt worden,
 um den Server mit einer PostgreSQL Datenbank zu verbinden~\cite{riemerPostgresCommit}, da diese es unter anderem ermöglicht JSON Objekte direkt zu speichern,
 ohne diese in Text Datentypen konvertieren zu müssen.
+
+Anhand eines Praxisbeispiels wird im Weiteren die Funktionsweise des Systems in Hinblick auf das Hinzufügen neuer Daten
+unter gewährleistung der Typsicherheit verdeutlicht.
+
 \section{Praxisbeispiel}
+\label{sec:requirements:example}
 
-\subsection{1. Anlegen des Typescript Interfaces}
+Typsicherheit ist gegeben, wenn Server und Client mit exakt den
+selben Typdefinitionen arbeiten. Dafür sind mehrere Schritte erforderlich.
+Die Reihenfolge der nachfolgend aufgeführten Schritte ergibt sich aus dem bisherigen Entwicklungsprozess.
 
-\begin{lstlisting}
-export interface CodeResourceDescription extends ProjectResourceDescription {
- // The tree that describes the code of this resource.
- ast?: NodeDescription;
+\subsection{Anlegen des Typescript Interfaces}
+\label{sec:requirements:example:interface}
 
- // The actual programming language this resource uses.
- programmingLanguageId: string;
+Als erstes wird ein Typescript Interface für den Datensatz erstellt, der abgebildet werden soll.
+Wir erweitern den Datentyp \emph{Project}~\ref{fig:basics:graphql:3} erneut:
 
- // The block language this resource uses
- blockLanguageId: string;
-}
-
-export interface ProjectResourceDescription
-extends IdentifiableResourceDescription {
- // The user-chosen name of this resource. This property is free to change.
- name: string;
-
- // Date & time this resource was created
- createdAt?: string;
-
- // Date & time this resource was updated the last time
- updatedAt?: string;
+\begin{lstlisting}[language=JavaScript,float=h!,caption={TypeScript Interface für die Darstellung eines Projektes}, label={lst:example:projectdesc}]
+export interface Project {
+    id: string;
+    name:string;
+    public: boolean;
+    slug?: string;
+    userId?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 \end{lstlisting}
-Bsp. CodeResource
-List Interface/Response Interface
-Dokument Interface
-\subsection{2. Generierung der JSON Schema Definitionen}
-\begin{lstlisting}
-JSON_SCHEMA_FILES = CodeResourceDescription.json
 
-define CONVERT_COMMAND
- @echo "Creating $(notdir $(basename $@)).json"
- $(TYPESCRIPT_JSON_SCHEMA_BIN) --no-type-check --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
- sed -i -- 's/</_/g' "$@.tmp"
- sed -i -- 's/>/_/g' "$@.tmp"
- mv "$@.tmp" "$@"
-endef
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item \emph{id/name/public}: siehe~\ref{fig:basics:graphql:3}.
+    \item \emph{slug}: ist ein aus einem oder wenigen Wörtern bestehender benutzer- und suchmaschinenfreundlicher
+    Text (sprechender Name) als Bestandteil einer URL~\cite{slug-wikipedia}. Diese Angabe ist optional.
+    \item \emph{userId}: ist die ID des Nutzers dem dieses \emph{Project} zugeordnet ist (Fremdschlüsselbeziehung).
+    \item \emph{createdAt}: ist die optionale zeitliche Angabe wann dieses \emph{Project} erstellt wurde.
+    \item \emph{updatedAt}: ist die optionale zeitliche Angabe wann dieses \emph{Project} zuletzt verändert wurde.
+\end{itemize}
 
-CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
+Wird dieser Datensatz vom Server abgefragt, so lässt sich die Antwort des Servers auf eine Variable mit dem Typ \emph{Project} zuweisen.
+Dadurch wird zur Kompilierzeit ermöglicht typsicher auf die einzelnen Felder des Interfaces zugreifen zu können.
+
+Im nächsten Schritt wird das Interface dem Server zur Verfügung gestellt.
+
+%List Interface/Response Interface
+%Dokument Interface
+\subsection{Generierung der JSON Schema Definitionen}
+\label{sec:requirements:example:schema}
+\label{}
+Um das Interface~\ref{lst:example:projectdesc} serverseitig nutzen zu können wird eine JSON Schema Datei generiert.
+Dafür ist ein Eintrag in einem Makefile nötig, welches sich um die Generierung aller JSON Schema Dateien,
+die relevant für den Server sind, kümmert.
+
+\begin{lstlisting}[float=h!,caption={TypeScript Interface für die Project Darstellung in einer Liste}, label={lst:example:makefile}]
+Project.json : $(SRC_PATH)/shared/project.ts
 $(CONVERT_COMMAND)
 \end{lstlisting}
 
-Makefile
-\subsection{3. Anlegen des Models in Rails}
+Mithilfe der Schema Datei können dann Datensätze nach Abruf aus der Datenbank validiert werden.
 
-\begin{lstlisting}
-class CreateCodeResources < ActiveRecord::Migration[5.1]
- def change
-  create_table :code_resources, id: :uuid do |t|
-  t.string :name, null: false
-  t.json :ast, null: true
-  t.references :project, type: :uuid
+\subsection{Anlegen des Models in Rails}
+\label{sec:requirements:example:model}
 
-  t.timestamps
-  end
- end
+Sollte das Interface~\ref{lst:example:projectdesc} nicht nur ein Subtyp eines bestehende Datentyps sein,
+sondern einer neuen Datenbanktabelle entsprechen, muss eine Active Record Migration erstellt werden,
+um das Datenbankschema erweitern zu können~\cite{rails-migration}.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Rails Migration zum hinzufügen einer \emph{projects} Datenbanktabelle}, label={lst:example:migration}]
+create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "slug"
+    t.hstore "name", default: {}, null: false
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
 end
 \end{lstlisting}
 
-\begin{lstlisting}
-class CodeResource < ApplicationRecord
- # Each resource belongs to a single project ...
- belongs_to :project
- # ... uses exactly one block language ...
- belongs_to :block_language
- # ... and compiles to exactly one programming language.
- belongs_to :programming_language
+Hierdurch~\ref{lst:example:migration} wird eine neue Tabelle mit der Bezeichnung \emph{projects} erstellt.
+Hinzukommend wird ein Active Record Model benötigt, dem die \emph{projects}-Tabelle zugeordnet wird.
+Das lässt sich realisieren, indem eine Ruby Klasse mit dem selben Namen wie die Tabelle erstellt wird und
+von der Klasse ApplicationRecord erbt.
+Die Rails Konvention sieht vor das Datenbanktabellen im Plural und das dazugehörige Model im Singular benannt wird~\cite{rails-naming-convention}.
 
- # May be the basis for generated grammars
- has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+\begin{lstlisting}[language=Ruby,float=h!,caption={Model}, label={lst:example:model}]
+class Project < ApplicationRecord
+    # The owner if this project
+    belongs_to :user
 end
 \end{lstlisting}
-Datenbankmigration
-\subsection{4. Anlegen eines Controllers in Rails}
-\begin{lstlisting}
-resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
-post 'code_resources/:code_resource_id/clone', controller:  'code_resources', action: 'clone'
-\end{lstlisting}
-\begin{lstlisting}
-class CodeResourcesController < ApplicationController
 
- include JsonSchemaHelper
+Auf diese Weise entsteht die Möglichkeit, die Spalten jeder Zeile in dieser Tabelle mit den Attributen der Instanzen des Models abzubilden.
+Jede Zeile dieser Tabelle stellt also ein bestimmtes "Projekt" mit den ind \fullref{sec:requirements:example:interface} aufgeführten Feldern dar.
 
- # All available code resources for a certain programming language
- def index_by_programming_language
-  render json: CodeResource
-  .list_by_programming_language(params[:programming_language_id])
- end
+Um nun auf Anfragen reagieren und Daten aus Model Instanzen an den Client liefern zu können bedarf es einem Controller.
 
- # Create a new resource that is part of a specific project
- def create
-  project_id = params[:project_id]
-  proj = Project.find_by_slug_or_id! project_id
+\subsection{Anlegen eines Controllers in Rails}
+\label{sec:requirements:example:controller}
+Controller haben die Aufgabe Anfragen entgegen zu nehmen, die vom Router~\ref{lst:example:router} an sie weitergeleitet wurden.
+Die Funktionen innerhalb eines Controllers sind dafür verantwortlich den Anfragen einen "Sinn" zu geben und die entsprechende Antwort zu erzeugen.
+Bei einer Anfrage die Projekt-Daten ausgeliefert bekommen soll, kümmert die Controller Funktion sich darum alle Daten aus dem \emph{Project}-Model
+zu holen und gibt diese dann wie bei REST APIs üblich in JSON Form zurück.
 
-  res = proj.code_resources.new(code_resource_create_params)
-  if res.save
-   render :json => res.to_full_api_response, :status => 200
-  else
-   render :json => { 'errors' => res.errors }, :status => 400
-  end
- end
+\begin{lstlisting}[language=Ruby,float=h!,caption={Route entspricht URL '/project/' und leitet Anfrage an die ProjectsController Funktion \emph{index} weiter }, label={lst:example:router}]
+scope 'project' do
+    get '/', controller: 'projects', action: :index
 end
- \end{lstlisting}
-Für jede Sicht (z.B. Admin/Frontend) eine Route und Controller Funktion.
-\subsection{5. DataServices auf dem Client}
-\subsection{6. Komponenten auf dem Client}
-template
-\subsection{7. Neue Sicht}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Controller mit Funktion zum zurückgeben aller Project Instanzen}, label={lst:example:controller}]
+class ProjectsController < ApplicationController
+    def index
+      render json: Project.all
+    end
+end
+\end{lstlisting}
+
+In Zeile 3 des Controllers~\ref{lst:example:controller} werden alle Projekte aus der Datenbank geladen und in JSON Form
+zurück gegeben. Zusätzlich wird für jede Anfrage ein Test geschrieben, der gewährleistet, das die Antwort vom Server auch dem
+Interface~\ref{lst:example:projectdesc} entspricht.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Test überprüft, ob bei Anfrage der Route '/project/' eine Antwort vom Typ Project folgt}, label={lst:example:controller}]
+it 'lists a single project' do
+    FactoryBot.create(:project, :public)
+    get "/project/"
+
+    expect(response).to have_http_status(200)
+
+    parsed = JSON.parse(response.body)
+    expect(parsed['data'].length).to eq 1
+    expect(parsed['data'][0]).to validate_against "Project"
+end
+
+\end{lstlisting}
+
+Der Server hat nun die Fähigkeit auf eine Anfrage nach allen Projekten unter Gewährlöesitung der Typsicherheit zu reagieren.
+Somit muss dem Client jetzt noch die Möglichkeit gegeben werden eine Anfrage zu erstellen und die Antwort grapfisch abbilden zu können.
+
+%Für jede Sicht (z.B. Admin/Frontend) eine Route und Controller Funktion.
+\subsection{DataServices auf dem Client}
+\label{sec:requirements:dataservice}
+In der Welt von Angular gibt es eine strikte Trennung zwischen Darstellung und Verarbeitung von Daten~\cite{angular-service}.
+Für die Verarbeitung von Daten, wie das Abrufen von Daten vom Server, werden Angular Services genutzt.
+Innerhalb dieser Services kann mithilfe des HttpClient~\cite{angular-http} eine typisierte Anfrage erstellt werden, die zur eben
+hinzugefügten Route~\ref{lst:example:router} führt.
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
+readonly allProjectsUrl = '/project/';
+getProjects() {
+    return this.http.get<Project>(this.allProjectsUrl);
+}
+\end{lstlisting}
+
+Die Angabe des Antworttyps fungiert zur Kompilierungszeit als Type Assertion~\cite{typescript-typeassertion}
+und erleichtert den Zugriff auf die Attribute der Antwort. Der TypeScript Compiler führt während der Laufzeit keine Überprüfung durch.
+Er geht an dieser Stelle davon aus, das der Entwickler spezielle Prüfungen durchgeführt hat.
+
+Für die Dartsellung der erhaltenen Daten wird eine Angular Komponente genutzt, in die der Service "injiziert" werden kann.
+
+\subsection{Komponenten auf dem Client}
+\label{sec:requirements:component}
+Eine Angular Komponente entspricht einem Teilbaum des DOM-Baums, der auch View genannt wird.
+
+\subsection{Neue Sicht}
 1. + 2. + 4.(Route + Funktion) + 5. + 6.
 Graphql: 5. (Wird generiert) + 6.
-\subsection{8. Automatische Generierung von JSON Schema Definitionen}
+\subsection{Automatische Generierung von JSON Schema Definitionen}
 Anhand von Beispiel: Übersicht über alle
 
 \section{Anforderungen}
-
-\subsection{Mehrsprachigkeit}
-Felder in mehreren Sprachen
 
 \subsection{Darstellungsvielfalt}
 Nutzerbereich:
@@ -561,6 +621,9 @@ Tabellen Übersicht benötigt weniger Daten. Editierung benötigt alle Daten.
 Mehrere Requests für einen View
 
 \subsection{End-to-end Typsicherheit}
+An dieser Stelle könnte eine Typüberprüfung durchgeführt werden. Ein Nachteil der sich daraus ergibt ist das jedes mal wenn ein Objekt
+mit Daten an den Client geschickt wird, alle Attribute dieses Objekts validiert werden müssen. Das führt zu zusätzlichem Berechnungsaufwand.
+
 Erfordert applikationsübergreifende Typdefinitionen.
 JSON Schema Validator für Datenbankfelder:
 /models/json schema validator

@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 
-import { ProjectDataService } from "../shared/serverdata";
+import { FrontpageListProjectsGQL } from "../../generated/graphql";
+import { map, tap } from "rxjs/operators";
 
 /**
  * Lists all publicly available projects
@@ -10,7 +11,9 @@ import { ProjectDataService } from "../shared/serverdata";
   templateUrl: "templates/project-list.html",
 })
 export class ProjectListComponent {
-  constructor(private _serverData: ProjectDataService) {}
+  constructor(private _projectsGQL: FrontpageListProjectsGQL) {}
 
-  readonly projects = this._serverData.list;
+  readonly projects = this._projectsGQL
+    .watch()
+    .valueChanges.pipe(map((response) => response.data.projects.nodes));
 }

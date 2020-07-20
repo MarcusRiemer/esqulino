@@ -74,7 +74,7 @@ export interface ProjectSourceDescription {
 
 /**
  * The properties of a project that can be queried from the
- * server when asking for all available projecs.
+ * server when asking for all available projects.
  *
  * This is a stripped down version of all possibly
  * existing project properties that is used to list available

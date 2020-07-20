@@ -34,7 +34,6 @@ import {
 } from "../../../generated/graphql";
 
 import { OverviewProjectComponent } from "./overview-project.component";
-import { HttpLinkModule } from "apollo-angular-link-http";
 import {
   buildEmptyProjectResponse,
   buildSingleProjectResponse,
@@ -58,10 +57,7 @@ describe("OverviewProjectComponent", () => {
       providers: [
         AdminListProjectsGQL,
         ToolbarService,
-        ServerApiService,
-        AdminListProjectDataService,
         LanguageService,
-        ServerTasksService,
         NaturalLanguagesService,
         LinkService,
         { provide: LOCALE_ID, useValue: localeId },
