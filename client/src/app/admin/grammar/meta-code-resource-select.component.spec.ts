@@ -1,8 +1,4 @@
 import { TestBed } from "@angular/core/testing";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { FormsModule } from "@angular/forms";
 
 import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
@@ -16,7 +12,6 @@ import {
 } from "apollo-angular/testing";
 import {
   AdminMetaCodeResourcesDocument,
-  AdminMetaCodeResourcesGQL,
 } from "../../../generated/graphql";
 
 describe("MetaCodeResourceSelect", () => {

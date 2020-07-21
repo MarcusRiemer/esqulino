@@ -7,8 +7,6 @@ import { ServerDataService } from "../../shared";
 import { MultiLangString } from "../../shared/multilingual-string.description";
 import { locales } from "../../shared/change-language.component";
 import {
-  AdminListGrammarsGQL,
-  AdminListGrammarsQuery,
   AdminListNewsGQL,
   AdminListNewsQuery,
 } from "../../../generated/graphql";

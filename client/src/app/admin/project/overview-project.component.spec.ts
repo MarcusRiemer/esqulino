@@ -39,6 +39,7 @@ import {
   buildSingleProjectResponse,
 } from "../../editor/spec-util";
 import { PaginatorTableGraphqlComponent } from "../../shared/table/paginator-table-graphql.component";
+import {ConditionalDisplayDirective} from "../../shared/table/directives/conditional-display.directive";
 
 describe("OverviewProjectComponent", () => {
   async function createComponent(localeId: string = "en") {
@@ -67,6 +68,7 @@ describe("OverviewProjectComponent", () => {
         DefaultValuePipe,
         CurrentLanguagePipe,
         PaginatorTableGraphqlComponent,
+        ConditionalDisplayDirective
       ],
     }).compileComponents();
 

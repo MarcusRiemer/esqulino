@@ -29,6 +29,9 @@ import {
   buildEmptyBlockLanguageResponse,
   buildSingleBlockLanguageResponse,
 } from "../../editor/spec-util/block-language.gql.data.spec";
+import {ConditionalDisplayDirective} from "../../shared/table/directives/conditional-display.directive";
+import {CreateBlockLanguageComponent} from "./create-block-language.component";
+import {LinkGrammarComponent} from "../link-grammar.component";
 
 describe("OverviewBlockLanguageComponent", () => {
   async function createComponent() {
@@ -53,6 +56,9 @@ describe("OverviewBlockLanguageComponent", () => {
         OverviewBlockLanguageComponent,
         DefaultValuePipe,
         PaginatorTableGraphqlComponent,
+        ConditionalDisplayDirective,
+        CreateBlockLanguageComponent,
+        LinkGrammarComponent
       ],
     }).compileComponents();
 
@@ -158,7 +164,7 @@ describe("OverviewBlockLanguageComponent", () => {
     const emptyBlockLanguage = buildEmptyBlockLanguageResponse();
     const responses = [emptyBlockLanguage, singleBlockLanguage];
 
-    const res = t.component.query.valueChanges.subscribe((response) => {
+    t.component.query.valueChanges.subscribe((response) => {
       if (!response.loading) {
         expect(response.data).toEqual(responses.pop().data);
       }
@@ -166,7 +172,6 @@ describe("OverviewBlockLanguageComponent", () => {
 
     const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
     op.flush(singleBlockLanguage);
-
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
 
@@ -179,6 +184,6 @@ describe("OverviewBlockLanguageComponent", () => {
     i1Delete.click();
 
     const op2 = t.controller.expectOne(DestroyBlockLanguageDocument);
-    op2.flush({ data: {} });
+    op2.flush({ data: {destroyBlockLanguage: {id:"test",errors:[]}}} );
   });
 });

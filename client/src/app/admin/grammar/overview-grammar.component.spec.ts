@@ -27,6 +27,7 @@ import {
   ApolloTestingController,
   ApolloTestingModule,
 } from "apollo-angular/testing";
+import {ConditionalDisplayDirective} from "../../shared/table/directives/conditional-display.directive";
 
 describe("OverviewGrammarComponent", () => {
   async function createComponent() {
@@ -48,6 +49,7 @@ describe("OverviewGrammarComponent", () => {
         OverviewGrammarComponent,
         DefaultValuePipe,
         PaginatorTableGraphqlComponent,
+        ConditionalDisplayDirective
       ],
     }).compileComponents();
 
@@ -171,6 +173,6 @@ describe("OverviewGrammarComponent", () => {
     i1Delete.click();
 
     const op2 = t.controller.expectOne(DestroyGrammarDocument);
-    op2.flush({ data: {} });
+    op2.flush({ data: {destroyGrammar: {id:"test",errors:[]}} });
   });
 });
