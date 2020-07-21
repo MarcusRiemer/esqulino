@@ -7,10 +7,7 @@ RAILS_ENV ?= development
 
 # Install ruby dependencies
 install-deps : msg-pre-install-deps
-	bundle install --path vendor/bundle
-
-clean-deps : msg-pre-clean-deps
-	rm -rf "./vendor"
+	bundle install
 
 # Running in production mode
 # `RACK_HANDLER=falcon` because of https://github.com/rack/rack/pull/1181

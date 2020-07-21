@@ -30,6 +30,5 @@ import { AddEmailDialogComponent } from "./components/add-email-dialog.component
     DisplayAllLinkedProvidersComponent,
     ProviderLinkingComponent,
   ],
-  entryComponents: [AddEmailDialogComponent],
 })
 export class UserSettingsModule {}

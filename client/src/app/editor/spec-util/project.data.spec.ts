@@ -41,10 +41,8 @@ export const specLoadEmptyProject = (
   projectService: ProjectService,
   override?: Partial<ProjectFullDescription>
 ): Promise<Project> => {
-  const httpTestingController: HttpTestingController = TestBed.get(
-    HttpTestingController
-  );
-  const serverApi: ServerApiService = TestBed.get(ServerApiService);
+  const httpTestingController = TestBed.inject(HttpTestingController);
+  const serverApi = TestBed.inject(ServerApiService);
 
   const id = override?.id ?? generateUUIDv4();
   const p = Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
