@@ -70,7 +70,7 @@ export class SchemaTableVisualComponent {
 
   @HostBinding("style.top.px")
   get top(): number {
-    return this.data.yPos + 1170;
+    return this.data.yPos;
   }
 
   @HostBinding("style.width.px")
@@ -186,6 +186,9 @@ export class SchemaTableVisualComponent {
   }
 
   ChangeColumnPrimaryKeyStatus(row: number) {
+	  if (this.commandsHolder.activeIndex + 1 == this.dbErrorCode) {
+      this.dbErrorCode = -1;
+    }
     this._schemaService.initCurrentlyEdit(
       this._project.schema.getTable(this.table.name)
     );

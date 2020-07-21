@@ -2,7 +2,7 @@
   <h4 class="card-title">
     Schema-Übersicht für Datenbank "{{ schemaName | async }}"
   </h4>
-  <div style="position: relative;" *ngIf="schemaData.completed">
+  <div class="card card-mb3" *ngIf="schemaData.completed">
     <div class="db-schema-drag-drop">
       <sql-table-visual
         *ngFor="let table of project?.schema.tables; let i = index"
@@ -14,6 +14,7 @@
 
     <schema-connectors 
 		[connectors]="schemaData.connectors"
+		[height]="schemaData.height"
 	></schema-connectors>
   </div>
 </ng-container>

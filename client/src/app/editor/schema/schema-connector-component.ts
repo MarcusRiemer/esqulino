@@ -1,9 +1,17 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
   selector: "schema-connectors",
   templateUrl: "templates/connectors.svg",
 })
-export class SchemaConnectorComponent {
-  @Input() connectors: any;
+export class SchemaConnectorComponent implements OnInit {
+  @Input() connectors: Object[];
+  @Input() height: number;
+  public viewBox: string;
+  public transform: string;
+  
+  ngOnInit() {  
+	this.viewBox = "0.00 0.00 1605.00 " + this.height;
+	this.transform = "translate(0 " + this.height + ")";
+  }
 }

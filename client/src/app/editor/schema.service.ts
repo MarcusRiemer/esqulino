@@ -28,6 +28,7 @@ export interface TableData {
 export interface SchemaData {
   tableData: {[tableName: string]: TableData};
   connectors: string[];
+  height: number;
   completed: boolean;
 }
 
@@ -55,6 +56,7 @@ export class SchemaService {
   private _schemaData : SchemaData = { 
 	tableData: {},
 	connectors: [],
+	height: 0,
 	completed: false
   };
 
@@ -196,9 +198,7 @@ export class SchemaService {
 			(data) => {
 				this.parseSchemaText(data, project);
 			},
-			(error) => {
-				console.log(error);
-			},
+			this.handleError,
 			() => {
 				this._schemaData.completed = true;
 			}
@@ -214,6 +214,7 @@ export class SchemaService {
     let svgDom = parser.parseFromString(text, "image/svg+xml");
 
     let nodes = svgDom.getElementById("graph0").getElementsByTagName("g");
+	this._schemaData.height = +svgDom.children[0].getAttribute("height").split("p")[0];
 
     for (var i = 0; i < nodes.length; i++) {
       let children = nodes[i].children;
@@ -236,7 +237,7 @@ export class SchemaService {
 				width : 0
 			}
 			tableValues.xPos = +positions[0];
-			tableValues.yPos = +positions[1];
+			tableValues.yPos = +positions[1] + this._schemaData.height;
 			tableValues.width = +points[2].split(",")[0] - +positions[0];
 			//this._schemaData.tableData[index] = tableValues;
 			this._schemaData.tableData[nodes[i].classList[1]] = tableValues;
@@ -348,6 +349,7 @@ export class SchemaService {
     // in a real world app, we may send the error to some remote logging infrastructure
     // instead of just logging it to the console
     console.error(error.json());
+	console.error(error);
     return Observable.throw(error);
   }
 }
