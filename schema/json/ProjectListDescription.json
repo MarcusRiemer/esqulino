@@ -10,7 +10,7 @@
     },
     "ProjectListDescription": {
       "additionalProperties": false,
-      "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
+      "description": "The properties of a project that can be queried from the\nserver when asking for all available projects.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
       "properties": {
         "createdAt": {
           "type": "string"
