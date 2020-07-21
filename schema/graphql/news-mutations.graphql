@@ -1,6 +1,6 @@
 mutation CreateNews(
-    $title: JSON!,
-    $text: JSON!,
+    $title: LangJson!,
+    $text: LangJson!,
     $publishedFrom: ISO8601DateTime!,
     $userId: ID
 ) {
@@ -18,8 +18,8 @@ mutation CreateNews(
 
 mutation UpdateNews(
     $id: ID!,
-    $title: JSON!,
-    $text: JSON!,
+    $title: LangJson!,
+    $text: LangJson!,
     $publishedFrom: ISO8601DateTime!,
     $userId: ID
 ) {

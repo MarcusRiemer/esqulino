@@ -1,17 +1,17 @@
 class Mutations::Projects::Projects < Mutations::BaseMutation
 
-  field :project, Types::ProjectType, null: true
+  field :id, ID, null: true
   field :errors, [String], null: false
 
   def save_project(project)
     if project.save
       {
-          project: project,
+          id: project.id,
           errors: []
       }
     else
       {
-          project: nil,
+          id: nil,
           errors: project.errors.full_messages
       }
     end

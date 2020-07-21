@@ -10,5 +10,6 @@ module Types
     field :create_news, mutation: Mutations::News::CreateNews
     field :update_news, mutation: Mutations::News::UpdateNews
     field :destroy_news, mutation: Mutations::News::DestroyNews
+    field :create_project, mutation: Mutations::Projects::CreateProject
   end
 end
