@@ -20,13 +20,13 @@ interface CurrentlyEdited {
 }
 
 export interface TableData {
-	xPos: number;
-	yPos: number;
-	width: number;
+  xPos: number;
+  yPos: number;
+  width: number;
 }
 
 export interface SchemaData {
-  tableData: {[tableName: string]: TableData};
+  tableData: { [tableName: string]: TableData };
   connectors: string[];
   height: number;
   completed: boolean;
@@ -52,16 +52,20 @@ export class SchemaService {
    * schema in the current session.
    */
   private _changeCount = new BehaviorSubject(0);
-  
-  private _schemaData : SchemaData = { 
-	tableData: {},
-	connectors: [],
-	height: 0,
-	completed: false
+
+  /**
+   * Data used in displaying the schema
+   */
+  private _schemaData: SchemaData = {
+    tableData: {},
+    connectors: [],
+    height: 0,
+    completed: false,
   };
 
   /**
    * @param _http Used to do HTTP requests
+   * @param _projectService Used to load the currently edited project
    * @param _server Used to figure out paths for HTTP requests
    */
   constructor(
@@ -183,71 +187,83 @@ export class SchemaService {
 
     return toReturn;
   }
-  
+
+  /**
+   * Function to get the full data of the schema
+   * @param project - the current project
+   */
   getSchemaData(project: Project): SchemaData {
-	  let visualSchemaUrl = zip(this._changeCount, project.currentDatabaseName).pipe(
-		map(
-		  ([rev, name]) =>
-			`/api/project/${project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
-		)
-	  );
-	  
-	  let schemaUrl = visualSchemaUrl.subscribe((url) => {
-		  let visualSchemaText = this._http.get(url, { responseType: "text" });
-		  let schemaRef = visualSchemaText.subscribe(
-			(data) => {
-				this.parseSchemaText(data, project);
-			},
-			this.handleError,
-			() => {
-				this._schemaData.completed = true;
-			}
-		  );
-	  });
-	  
-	  return this._schemaData;
+    let visualSchemaUrl = zip(
+      this._changeCount,
+      project.currentDatabaseName
+    ).pipe(
+      map(
+        ([rev, name]) =>
+          `/api/project/${project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
+      )
+    );
+
+    let schemaUrl = visualSchemaUrl.subscribe((url) => {
+      let visualSchemaText = this._http.get(url, { responseType: "text" });
+      let schemaRef = visualSchemaText.subscribe(
+        (data) => {
+          this.parseSchemaText(data, project);
+        },
+        this.handleError,
+        () => {
+          this._schemaData.completed = true;
+        }
+      );
+    });
+
+    return this._schemaData;
   }
-  
+
+  /**
+   * Function to parse the raw svg text into useable data
+   * @param text - the svg string to be parsed
+   * @param project - the current project
+   */
   private parseSchemaText(text: any, project: Project): void {
-	
     let parser = new DOMParser();
     let svgDom = parser.parseFromString(text, "image/svg+xml");
 
     let nodes = svgDom.getElementById("graph0").getElementsByTagName("g");
-	this._schemaData.height = +svgDom.children[0].getAttribute("height").split("p")[0];
+    this._schemaData.height = +svgDom.children[0]
+      .getAttribute("height")
+      .split("p")[0];
 
     for (var i = 0; i < nodes.length; i++) {
       let children = nodes[i].children;
-		if (nodes[i].classList[0] == "node") {
-			let points = children[children.length - 1]
-			  .getAttribute("points")
-			  .split(" ");
-			let positions = points[1].split(",");
-			
-			let index = 0;
-			for(var i2 = 0; i2 < project.schema.tables.length; i2++) {
-				if( project.schema.tables[i2].name == nodes[i].classList[1] ) {
-					index = i2;
-				}
-			}
+      if (nodes[i].classList[0] == "node") {
+        let points = children[children.length - 1]
+          .getAttribute("points")
+          .split(" ");
+        let positions = points[1].split(",");
 
-			let tableValues : TableData = {
-				xPos : 0,
-				yPos : 0,
-				width : 0
-			}
-			tableValues.xPos = +positions[0];
-			tableValues.yPos = +positions[1] + this._schemaData.height;
-			tableValues.width = +points[2].split(",")[0] - +positions[0];
-			//this._schemaData.tableData[index] = tableValues;
-			this._schemaData.tableData[nodes[i].classList[1]] = tableValues;
-		}
-	
-		let path = nodes[i].children[1].getAttribute("d");
-		if (path) {
-			this._schemaData.connectors[i] = path;
-		}
-	}
+        let index = 0;
+        for (var i2 = 0; i2 < project.schema.tables.length; i2++) {
+          if (project.schema.tables[i2].name == nodes[i].classList[1]) {
+            index = i2;
+          }
+        }
+
+        let tableValues: TableData = {
+          xPos: 0,
+          yPos: 0,
+          width: 0,
+        };
+        tableValues.xPos = +positions[0];
+        tableValues.yPos = +positions[1] + this._schemaData.height;
+        tableValues.width = +points[2].split(",")[0] - +positions[0];
+        this._schemaData.tableData[nodes[i].classList[1]] = tableValues;
+      }
+
+      let path = nodes[i].children[1].getAttribute("d");
+      if (path) {
+        this._schemaData.connectors[i] = path;
+      }
+    }
   }
 
   /**
@@ -349,7 +365,7 @@ export class SchemaService {
     // in a real world app, we may send the error to some remote logging infrastructure
     // instead of just logging it to the console
     console.error(error.json());
-	console.error(error);
+    console.error(error);
     return Observable.throw(error);
   }
 }

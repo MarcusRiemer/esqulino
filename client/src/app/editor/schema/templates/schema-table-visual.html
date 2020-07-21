@@ -15,8 +15,8 @@
         <td>
           <label class="tableKey tableEdit">
             <input
-			  id="primaryBox"
-			  class="primaryBox"
+              id="primaryBox"
+              class="primaryBox"
               type="checkbox"
               (click)="ChangeColumnPrimaryKeyStatus(column.index)"
               [(ngModel)]="column.primary"
@@ -34,7 +34,7 @@
         </td>
         <td>
           <select
-			*ngIf="!table.columnIsForeignKeyOfTable(column.name)"
+            *ngIf="!table.columnIsForeignKeyOfTable(column.name)"
             class="tableEdit"
             [(ngModel)]="column.type"
             (focus)="saveTempValue($event.target.value)"
@@ -47,7 +47,12 @@
             <option value="float">float</option>
             <option value="url">url</option>
           </select>
-		  <label *ngIf="table.columnIsForeignKeyOfTable(column.name)" class="tableEdit">FK</label>
+          <label
+            *ngIf="table.columnIsForeignKeyOfTable(column.name)"
+            class="tableEdit"
+          >
+            FK
+          </label>
         </td>
         <!-- <td> -->
         <!-- <label class="tableEdit"> -->

@@ -11,14 +11,26 @@ import { SchemaService, SchemaData } from "../schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
 
+/**
+ * Class for displaying the general schema
+ */
 @Component({
   templateUrl: "templates/schema-visual.html",
 })
 export class SchemaVisualComponent implements OnInit {
+  /**
+   * The currently edited project
+   */
   public project: Project;
 
+  /**
+   * Subscriptions that need to be released
+   */
   private _subscriptionRefs: any[] = [];
 
+  /**
+   * Constructor for dependency injection.
+   */
   constructor(
     private _sanitizer: DomSanitizer,
     private _projectService: ProjectService,
@@ -37,15 +49,15 @@ export class SchemaVisualComponent implements OnInit {
     return this.project && this.project.schema.isEmpty;
   }
 
-  public schemaData : SchemaData;
+  public schemaData: SchemaData;
 
+  /**
+   * The name of the currently viewed schema.
+   */
   readonly schemaName = this._route.paramMap.pipe(
     map((p) => p.get("schemaName"))
   );
 
-  /**
-   * Load the project to access the schema
-   */
   ngOnInit() {
     this._sidebarService.hideSidebar();
 
@@ -81,7 +93,7 @@ export class SchemaVisualComponent implements OnInit {
       this._subscriptionRefs.push(subRef);
     }
 
-    // Butto to switch to database import
+    // Button to switch to database import
     let btnUpload = this._toolbarService.addButton(
       "uploadDatabase",
       "Datenbank hochladen",
@@ -93,7 +105,7 @@ export class SchemaVisualComponent implements OnInit {
     });
     this._subscriptionRefs.push(subRef);
 
-    // Butto to switch to database import
+    // Button to switch to database import
     let btnDownload = this._toolbarService.addButton(
       "downloadDatabase",
       "Datenbank herunterladen",
@@ -113,14 +125,14 @@ export class SchemaVisualComponent implements OnInit {
       this.project = res;
     });
     this._subscriptionRefs.push(subRef);
-	
-	this.schemaData = this._schemaService.getSchemaData(this.project);
+
+    //Load the schema data
+    this.schemaData = this._schemaService.getSchemaData(this.project);
   }
 
-  private get commandsHolder() {
-    return this._schemaService.getCurrentlyEditedStack();
-  }
-
+  /**
+   * Unsubscribe from active subscribtions
+   */
   ngOnDestroy() {
     this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];

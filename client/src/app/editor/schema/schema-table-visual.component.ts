@@ -28,15 +28,27 @@ import { EditorToolbarService } from "../toolbar.service";
 import { DragulaService } from "ng2-dragula";
 import { FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
 
+/**
+ * Class for displaying individual tables
+ */
 @Component({
   templateUrl: "templates/schema-table-visual.html",
   selector: "sql-table-visual",
 })
 export class SchemaTableVisualComponent {
+  /**
+   * The table that is currently displayed.
+   */
   @Input() table: Table;
 
+  /**
+   * The currently edited project
+   */
   private _project: Project;
 
+  /**
+   * Subscriptions that need to be released
+   */
   private _subscriptionRefs: any[] = [];
 
   @Input() readOnly: boolean;
@@ -49,10 +61,14 @@ export class SchemaTableVisualComponent {
 
   dbErrorCode: number = -1;
 
-  public rowList = {};
+  /**
+   * Position and width of the table
+   */
+  @Input() data: TableData;
 
-  @Input() data : TableData;
-
+  /**
+   * Constructor for dependency injection
+   */
   constructor(
     private _schemaService: SchemaService,
     private _projectService: ProjectService,
@@ -60,6 +76,9 @@ export class SchemaTableVisualComponent {
     private dragulaService: DragulaService
   ) {}
 
+  /**
+   * Configuring styles from the data input
+   */
   @HostBinding("style.position")
   position: string = "absolute";
 
@@ -78,6 +97,9 @@ export class SchemaTableVisualComponent {
     return this.data.width;
   }
 
+  /**
+   * Number of letters in the table name
+   */
   public nameLength = 0;
 
   ngOnInit() {
@@ -123,6 +145,9 @@ export class SchemaTableVisualComponent {
     this.getNameLength();
   }
 
+  /**
+   * Unsubscribe from active subscribtions
+   */
   ngOnDestroy() {
     this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];
@@ -132,6 +157,9 @@ export class SchemaTableVisualComponent {
     return this._schemaService.getCurrentlyEditedStack();
   }
 
+  /**
+   * Save current input value
+   */
   saveTempValue(oldValue: string) {
     this._oldValue = oldValue;
   }
@@ -166,6 +194,9 @@ export class SchemaTableVisualComponent {
     }
   }
 
+  /**
+   * Function to save changes into the database
+   */
   async saveChanges() {
     this.commandsHolder.prepareToSend();
     await this._schemaService.sendAlterTableCommands(
@@ -177,6 +208,9 @@ export class SchemaTableVisualComponent {
     this._schemaService.clearCurrentlyEdited();
   }
 
+  /**
+   * Function to drop a Table
+   */
   async deleteTable() {
     try {
       await this._schemaService.deleteTable(this._project, this.table);
@@ -186,7 +220,7 @@ export class SchemaTableVisualComponent {
   }
 
   ChangeColumnPrimaryKeyStatus(row: number) {
-	  if (this.commandsHolder.activeIndex + 1 == this.dbErrorCode) {
+    if (this.commandsHolder.activeIndex + 1 == this.dbErrorCode) {
       this.dbErrorCode = -1;
     }
     this._schemaService.initCurrentlyEdit(
@@ -213,16 +247,6 @@ export class SchemaTableVisualComponent {
     }
   }
 
-  ChangeColumnNotNullStatus(row: number) {
-    this._schemaService.initCurrentlyEdit(
-      this._project.schema.getTable(this.table.name)
-    );
-
-    this.commandsHolder.do(new ChangeColumnNotNull(this.table, row));
-
-    this.saveChanges();
-  }
-
   private getNameLength() {
     for (var i = 0; i < this.table.columns.length; i++) {
       if (this.table.columns[i].name.length > this.nameLength) {
@@ -231,6 +255,9 @@ export class SchemaTableVisualComponent {
     }
   }
 
+  /**
+   * Function to show error alerts
+   */
   showError(error: any) {
     window.alert(
       `Ein Fehler ist aufgetreten!\nNachricht: ${error
@@ -239,26 +266,4 @@ export class SchemaTableVisualComponent {
         .replace(new RegExp("\\\\", "g"), "")}`
     );
   }
-
-  /**
-getControl(index: number, field: string): FormControl {
-    return this.controls.at(index).get(field) as FormControl;
-}
-
-updateField(index: number, field: string) {
-    const control = this.getControl(index, field);
-
-    if (control.valid) {
-      this.table.columns = this.table.columns.map((e, i) => {
-        if (index === i) {
-          return {
-            ...e,
-            [field]: control.value
-          }
-        }
-        return e;
-      }) 
-    }
-
-  }  */
 }
