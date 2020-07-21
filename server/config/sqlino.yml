@@ -10,7 +10,7 @@ development:
     admin: "Marcus@GurXite.de"
   ide_service:
     exec:
-      node_binary: /usr/bin/node
+      node_binary: <%= ENV['NODE_BIN'] || '/usr/bin/node' %>
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one_shot
   seed:
@@ -51,7 +51,7 @@ test:
   ide_service:
     mock: true
     exec:
-      node_binary: /usr/bin/node
+      node_binary: <%= ENV['NODE_BIN'] || '/usr/bin/node' %>
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one_shot
   seed:
@@ -84,7 +84,7 @@ production:
     admin: "Marcus@GurXite.de"
   ide_service:
     exec:
-      node_binary: /usr/bin/node
+      node_binary: <%= ENV['NODE_BIN'] || '/usr/bin/node' %>
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist-live/cli/bundle.cli.js' %>
       mode: one_shot
   seed:
