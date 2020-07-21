@@ -144,7 +144,7 @@ jobs:
   - bash: "whereis node"
     displayName: 'whereis node'
 
-  - script: apt-get install -y graphviz
+  - script: sudo apt-get install -y graphviz
     displayName: 'Install Graphviz'
     continueOnError: true
 
@@ -176,7 +176,7 @@ jobs:
     displayName: "Download IDE CLI"
 
   - script: |
-      mkdir -p browser/de
+      mkdir -p browser/de/vendor/logos
       touch browser/de/index.html browser/de/vendor/logos/blattwerkzeug-caption.svg browser/de/vendor/logos/cau.png
     displayName: 'Touch static dummy files'
     workingDirectory: client/dist
