@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 
 import { ListGrammarDataService } from "../../shared/serverdata";
-import { first, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 
 /**
  * Allows the selection of a single meta code resource (or none).

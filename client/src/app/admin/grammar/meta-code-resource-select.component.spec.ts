@@ -10,9 +10,7 @@ import {
   ApolloTestingController,
   ApolloTestingModule,
 } from "apollo-angular/testing";
-import {
-  AdminMetaCodeResourcesDocument,
-} from "../../../generated/graphql";
+import { AdminMetaCodeResourcesDocument } from "../../../generated/graphql";
 
 describe("MetaCodeResourceSelect", () => {
   async function createComponent(preSelectedId = undefined) {

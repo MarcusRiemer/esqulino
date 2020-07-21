@@ -13,6 +13,12 @@
       {{ project.name | currentLanguage }}
     </h2>
     <p class="card-text">{{ project.description | currentLanguage }}</p>
+    <span
+      *ngFor="let blockLang of project.blockLanguages"
+      class="badge badge-primary"
+    >
+      {{blockLang.defaultProgrammingLanguage.name}}
+    </span>
     <a
       [routerLink]="['/editor/', project.slug]"
       class="btn btn-info btn-block btn-edit-project"

@@ -18,15 +18,9 @@ import {
 import { NaturalLanguagesService } from "../../natural-languages.service";
 import { LinkService } from "../../link.service";
 
-import {
-  ServerApiService,
-  ToolbarService,
-  LanguageService,
-} from "../../shared";
-import { AdminListProjectDataService } from "../../shared/serverdata";
+import { ToolbarService, LanguageService } from "../../shared";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
 import { CurrentLanguagePipe } from "../../shared/current-language.pipe";
-import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 import {
   AdminListProjectsDocument,
@@ -39,7 +33,7 @@ import {
   buildSingleProjectResponse,
 } from "../../editor/spec-util";
 import { PaginatorTableGraphqlComponent } from "../../shared/table/paginator-table-graphql.component";
-import {ConditionalDisplayDirective} from "../../shared/table/directives/conditional-display.directive";
+import { ConditionalDisplayDirective } from "../../shared/table/directives/conditional-display.directive";
 
 describe("OverviewProjectComponent", () => {
   async function createComponent(localeId: string = "en") {
@@ -68,7 +62,7 @@ describe("OverviewProjectComponent", () => {
         DefaultValuePipe,
         CurrentLanguagePipe,
         PaginatorTableGraphqlComponent,
-        ConditionalDisplayDirective
+        ConditionalDisplayDirective,
       ],
     }).compileComponents();
 

@@ -147,10 +147,3 @@ export interface ProjectCreationRequest {
   slug: ProjectSlug;
   name: ProjectName;
 }
-
-/**
- * Server feedback when attempting project creation.
- */
-export interface ProjectCreationResponse {
-  id: string;
-}

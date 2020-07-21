@@ -75,14 +75,18 @@
             </small>
           </div>
         </div>
-        <div *ngIf="currentError" class="alert alert-danger" role="alert">
+        <div
+          *ngIf="currentError.length > 0"
+          class="alert alert-danger"
+          role="alert"
+        >
           <strong>Projekt konnte nicht angelegt werden!</strong>
           Der Server meldet das folgende Problem:
           <pre [innerText]="currentError | json"></pre>
         </div>
         <button
           (click)="createProject()"
-          [disabled]="inProgress"
+          [disabled]="inProgress | async"
           type="submit"
           class="btn btn-primary btn-lg btn-block"
         >

@@ -3,30 +3,31 @@ import { Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 import { TestBed } from "@angular/core/testing";
 import { LOCALE_ID } from "@angular/core";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { MatCardModule } from "@angular/material/card";
 
 import { CreateProjectComponent } from "./create-project.component";
 
 import { JavascriptRequiredComponent } from "../shared/javascript-required.component";
-import { ServerApiService } from "../shared";
 import { EmptyComponent } from "../shared/empty.component";
+
+import {
+  ApolloTestingModule,
+  ApolloTestingController,
+} from "apollo-angular/testing";
+import { CreateProjectDocument } from "../../generated/graphql";
 
 describe("CreateProjectComponent", () => {
   async function createComponent(localeId: string = "de") {
     await TestBed.configureTestingModule({
       imports: [
+        ApolloTestingModule,
         RouterTestingModule.withRoutes([
           { path: "editor/:id", component: EmptyComponent },
         ]),
         FormsModule,
-        HttpClientTestingModule,
         MatCardModule,
       ],
-      providers: [{ provide: LOCALE_ID, useValue: localeId }, ServerApiService],
+      providers: [{ provide: LOCALE_ID, useValue: localeId }],
       declarations: [
         CreateProjectComponent,
         JavascriptRequiredComponent,
@@ -38,9 +39,12 @@ describe("CreateProjectComponent", () => {
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
+    const controller = TestBed.inject(ApolloTestingController);
+
     return {
       fixture,
       component,
+      controller,
       element: fixture.nativeElement as HTMLElement,
       localeId,
     };
@@ -48,9 +52,8 @@ describe("CreateProjectComponent", () => {
 
   it(`Can be instantiated`, async () => {
     const c = await createComponent();
-
-    expect(c.component.currentError).toBeUndefined();
-    expect(c.component.inProgress).toBe(false);
+    expect(c.component.currentError).toEqual([]);
+    expect(c.component.inProgress.getValue()).toBe(false);
     expect(c.component.params).not.toBeUndefined();
     expect(c.element.querySelectorAll("input").length).toEqual(2);
   });
@@ -58,25 +61,29 @@ describe("CreateProjectComponent", () => {
   it(`Creates a project with valid name and slug`, async () => {
     const c = await createComponent();
 
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
-
     c.component.params.name = { de: "Name des Projekts" };
     c.component.params.slug = "name-des-projekts";
+    const expProgess: boolean[] = [false, true, false];
+    c.component.inProgress.subscribe((prog) => {
+      expect(prog).toEqual(expProgess.pop());
+    });
 
     const request = c.component.createProject();
 
-    expect(c.component.inProgress).toEqual(true);
+    const serverResponse = {
+      data: {
+        createProject: {
+          id: "bdcb9a69-cadc-4ffb-9c95-077e81fc7aae",
+          errors: [],
+        },
+      },
+    };
 
-    const serverResponse = { id: "bdcb9a69-cadc-4ffb-9c95-077e81fc7aae" };
-    httpTestingController
-      .expectOne(serverApi.createProjectUrl())
-      .flush(serverResponse);
+    c.controller.expectOne(CreateProjectDocument).flush(serverResponse);
 
     const result = await request;
 
-    expect(c.component.inProgress).toEqual(false);
-    expect(result).toEqual(serverResponse);
+    expect(result).toEqual(serverResponse.data.createProject);
 
     const router = TestBed.inject(Router);
     expect(router.url).toEqual("/editor/" + result.id);
@@ -85,33 +92,41 @@ describe("CreateProjectComponent", () => {
   it(`Displays errors`, async () => {
     const c = await createComponent();
 
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
-
+    const expProgess: boolean[] = [false, true, false];
+    c.component.inProgress.subscribe((prog) => {
+      expect(prog).toEqual(expProgess.pop());
+    });
     const request = c.component.createProject();
 
-    expect(c.component.inProgress).toEqual(true);
-
     const serverResponse = {
-      errors: ["name may not be empty", "slug may not be empty"],
+      data: {
+        createProject: {
+          id: null,
+          errors: ["name may not be empty", "slug may not be empty"],
+        },
+      },
     };
-    httpTestingController
-      .expectOne(serverApi.createProjectUrl())
-      .flush(serverResponse, { status: 400, statusText: "Invalid Request" });
+
+    const op = c.controller.expectOne(CreateProjectDocument);
+    op.flush(serverResponse);
 
     await request;
 
-    expect(c.component.inProgress).toEqual(false);
-    expect(c.component.currentError).toEqual(serverResponse);
+    expect(c.component.currentError).toEqual(
+      serverResponse.data.createProject.errors
+    );
   });
-
   it(`Allows only a single request`, async () => {
     const c = await createComponent();
+    const expProgess: boolean[] = [false, true, false];
+
+    c.component.inProgress.subscribe((prog) => {
+      expect(prog).toEqual(expProgess.pop());
+    });
 
     c.component.createProject();
     c.fixture.detectChanges();
 
-    expect(c.component.inProgress).toEqual(true);
     expect(c.element.querySelector("button").disabled).toEqual(true);
 
     try {

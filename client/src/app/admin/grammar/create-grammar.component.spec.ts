@@ -95,7 +95,9 @@ describe("CreateGrammarComponent", () => {
 
     const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
     const op = t.controller.expectOne(CreateGrammarDocument);
-    op.flush({ data: { createGrammar: { grammar: { id: generatedId },errors:[] } } });
+    op.flush({
+      data: { createGrammar: { grammar: { id: generatedId }, errors: [] } },
+    });
     t.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         // Navigation started.

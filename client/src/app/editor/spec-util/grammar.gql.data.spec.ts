@@ -4,13 +4,19 @@ import {
   AdminListGrammarsQuery,
   GrammarDescriptionItemQuery,
 } from "../../../generated/graphql";
-import {GraphQLError} from "graphql/error/GraphQLError";
+import { GraphQLError } from "graphql/error/GraphQLError";
 
-type GrammarGQLResponse = { data: AdminListGrammarsQuery, errors:ReadonlyArray<GraphQLError> };
+type GrammarGQLResponse = {
+  data: AdminListGrammarsQuery;
+  errors: ReadonlyArray<GraphQLError>;
+};
 type AdminListGrammarNode = AdminListGrammarsQuery["grammars"]["nodes"][0];
 
 type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["singleGrammar"];
-type GrammarItemGQLResponse = { data: GrammarDescriptionItemQuery, errors:ReadonlyArray<GraphQLError> };
+type GrammarItemGQLResponse = {
+  data: GrammarDescriptionItemQuery;
+  errors: ReadonlyArray<GraphQLError>;
+};
 
 const ADMIN_LIST_Grammar: AdminListGrammarNode = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
@@ -33,7 +39,7 @@ const wrapGrammarItem = (
   data: GrammarDescriptionItemNode
 ): GrammarItemGQLResponse => {
   return {
-    errors:[],
+    errors: [],
     data: {
       singleGrammar: data,
     },
@@ -42,7 +48,7 @@ const wrapGrammarItem = (
 
 const wrapGrammarData = (data: AdminListGrammarNode[]): GrammarGQLResponse => {
   return {
-    errors:[],
+    errors: [],
     data: {
       grammars: {
         nodes: data,

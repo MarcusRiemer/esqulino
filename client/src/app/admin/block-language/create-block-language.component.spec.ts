@@ -130,9 +130,12 @@ describe("CreateBlockLanguageComponent", () => {
 
     const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
     const op3 = t.controller.expectOne(CreateBlockLanguageDocument);
-    op3.flush({ data: { createBlockLanguage: { id: generatedId,errors:[] } },errors:[] });
+    op3.flush({
+      data: { createBlockLanguage: { id: generatedId, errors: [] } },
+      errors: [],
+    });
     //expecting in subscribe would cause a warning that test has no expectations.
-    const prom = await new Promise<boolean>((resolve,_)=>{
+    const prom = await new Promise<boolean>((resolve, _) => {
       t.router.events.subscribe((event) => {
         if (event instanceof NavigationStart) {
           // Navigation started.
