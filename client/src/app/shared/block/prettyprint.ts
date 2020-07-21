@@ -256,7 +256,7 @@ function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
   const head = `sidebarBlock "${desc.displayName}" {`;
 
   const defaultNode = desc.defaultNode
-    ? prettyPrintSyntaxTreeNode(desc.defaultNode)
+    ? prettyPrintSyntaxTreeNode(desc.defaultNode[0])
     : [];
 
   const tail = `}`;

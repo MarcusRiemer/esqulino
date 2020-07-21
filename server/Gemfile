@@ -27,7 +27,7 @@ gem 'sentry-raven', '~> 2.9'
 # Markdown rendering
 gem 'redcarpet', '~> 3.4'
 
-# Jason Web Token handling
+# JSON Web Token handling
 gem 'jwt'
 
 # oAuth2 authentication

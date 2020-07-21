@@ -27,9 +27,6 @@ export class World {
   /** States of the world, where the first state is always the most recent. */
   states: Array<WorldState>;
 
-  /** Size of the world. */
-  size: Size;
-
   /** Duration of a step in milliseconds. */
   animationSpeed = 1000;
 
@@ -123,8 +120,7 @@ export class World {
           state.time = 1;
           return state;
           // Can be unloaded on empty field?
-        } else if (tile.freightItems === 0 && tile.freightTarget == null) {
-          tile.addFreight(state.truck.unloadFreight());
+        } else if (tile.tryAddFreight(state.truck.unloadFreight())) {
           state.time = 1;
           return state;
         }
@@ -228,10 +224,8 @@ export class World {
    * @param desc Description of the world.
    */
   constructor(desc: WorldDescription) {
-    this.size = new Size(desc.size.width, desc.size.height);
-
     const truck = new Truck(
-      new Position(desc.trucks[0].position.x, desc.trucks[0].position.y, this),
+      new Position(desc.trucks[0].position.x, desc.trucks[0].position.y),
       DirectionUtil.toNumber(DirectionUtil.fromChar(desc.trucks[0].facing)),
       desc.trucks[0].freight.map(
         (f) =>
@@ -294,7 +288,7 @@ export class World {
       }
 
       return new Tile(
-        new Position(tile.position.x, tile.position.y, this),
+        new Position(tile.position.x, tile.position.y),
         openings,
         freight,
         freightTarget,
@@ -302,7 +296,8 @@ export class World {
       );
     });
 
-    this.states = [new WorldState(0, tiles, truck, 0)];
+    const size = new Size(desc.size.width, desc.size.height);
+    this.states = [new WorldState(0, size, tiles, truck, 0)];
   }
 
   /**
@@ -348,7 +343,7 @@ export class World {
    *          if necessary and returns it.
    * @return Changed state.
    */
-  mutateState(f: (state: WorldState) => WorldState): WorldState {
+  mutateState(f: (state: WorldState) => WorldState | null): WorldState {
     const state = f(this.state.clone());
     if (state != null) {
       state.prev = this.state;
@@ -577,44 +572,6 @@ export class World {
   }
 
   /**
-   * Get the tile openings between two positions.
-   * The tiles must be directly connectable, otherwise the result will be _undefined_.
-   * @param fromPos the first tile position
-   * @param toPos the second tile position
-   * @return an object with the corresponding openings for each tile, in order to make a working road.
-   */
-  static getRoadOpeningsBetween(
-    fromPos: Position,
-    toPos: Position
-  ): { from: TileOpening; to: TileOpening } | undefined {
-    const dX = toPos.x - fromPos.x;
-    const dY = toPos.y - fromPos.y;
-
-    let dir: Direction = undefined;
-    if (dX == 0 && dY == 1) {
-      dir = Direction.South; // Up to Down
-    }
-    if (dX == 0 && dY == -1) {
-      dir = Direction.North; // Down to Up
-    }
-    if (dX == 1 && dY == 0) {
-      dir = Direction.East; // Left to Right
-    }
-    if (dX == -1 && dY == 0) {
-      dir = Direction.West; // Right to Left
-    }
-
-    if (dir) {
-      return {
-        from: DirectionUtil.toTileOpening(dir),
-        to: DirectionUtil.toTileOpening(DirectionUtil.opposite(dir)),
-      };
-    } else {
-      return undefined;
-    }
-  }
-
-  /**
    * Converts the current state to a WorldDescription
    * @return the world description
    */
@@ -679,15 +636,15 @@ export class World {
       };
     }
 
-    function toWorldDesc(worldSize: Size, state: WorldState): WorldDescription {
+    function toWorldDesc(state: WorldState): WorldDescription {
       return {
-        size: { width: worldSize.width, height: worldSize.height },
+        size: { width: state.size.width, height: state.size.height },
         trucks: [toTruckDesc(state)],
         tiles: state.tiles.map(toTileDesc),
       };
     }
 
-    return toWorldDesc(this.size, this.state);
+    return toWorldDesc(this.state);
   }
 }
 
@@ -701,6 +658,9 @@ export class WorldState {
   /** Time steps that are sheduled for the execution of this step.  */
   time: number;
 
+  /** Size of the world. */
+  size: Size;
+
   /** Tiles from left to right and top to bottom. */
   tiles: Array<Tile>;
 
@@ -713,6 +673,7 @@ export class WorldState {
   /**
    * Initializes a new state of the world.
    * @param step Step for this state.
+   * @param size The size of the world.
    * @param tiles Tiles from left to right and top to bottom.
    * @param truck Truck.
    * @param time Time steps that are sheduled for the execution of this step.
@@ -720,6 +681,7 @@ export class WorldState {
    */
   constructor(
     step: number,
+    size: Size,
     tiles: Tile[],
     truck: Truck,
     time: number = 0,
@@ -727,6 +689,7 @@ export class WorldState {
   ) {
     this.step = step;
     this.time = time;
+    this.size = size;
     this.tiles = tiles;
     this.truck = truck;
     this.prev = prev;
@@ -749,7 +712,10 @@ export class WorldState {
    * @return Tile at the passed position.
    */
   getTile(pos: Position): Tile {
-    return this.tiles[pos.y * pos.width + pos.x];
+    if (pos.x >= this.size.width) {
+      return undefined; // Out of range
+    }
+    return this.tiles[pos.y * this.size.width + pos.x];
   }
 
   /**
@@ -765,17 +731,169 @@ export class WorldState {
   }
 
   /**
+   * Returns all positions of direct neighbors that can be reached by the current position.
+   * Directly means going north, east, south or west _NOT_ diagonal.
+   * When the center position is at the worldborder the result might contain less than 4 elements.
+   * @param center The center position
+   * @return An array of all direct neighbor positions
+   */
+  public getDirectNeighbors(center: Position): Position[] {
+    const result: Position[] = [];
+
+    const north = new Position(center.x, center.y - 1);
+    if (north.y >= 0) {
+      result.push(north);
+    }
+
+    const east = new Position(center.x + 1, center.y);
+    if (east.x < this.size.width) {
+      result.push(east);
+    }
+
+    const south = new Position(center.x, center.y + 1);
+    if (south.y < this.size.height) {
+      result.push(south);
+    }
+
+    const west = new Position(center.x - 1, center.y);
+    if (west.x >= 0) {
+      result.push(west);
+    }
+
+    return result;
+  }
+
+  /**
    * Creates a copy of the state.
    * @return Copy of the state.
    */
   clone(): WorldState {
     return new WorldState(
       this.step,
+      this.size.clone(),
       this.tiles.map((t) => t.clone()),
       this.truck.clone(),
       this.time,
       this.prev
     );
+  }
+
+  // Mutation functions
+  /**
+   * Will resize the current world state.
+   * Newly created tiles will be empty.
+   * Truncated tiles will be removed.
+   * @param newSize the new width and height of the world
+   * @return true if a change has occurred
+   */
+  public resize(newSize: number): boolean {
+    if (this.size.width === newSize && this.size.height === newSize) {
+      return false; // No change
+    }
+    const isShrinking = newSize < this.size.width || newSize < this.size.height;
+
+    const newTileArray: Tile[] = [];
+    for (let y = 0; y < newSize; y++) {
+      for (let x = 0; x < newSize; x++) {
+        const pos = new Position(x, y);
+        const currentTile = this.getTile(pos);
+        if (isShrinking) {
+          // We dont have to have a straight road into the world border
+          if (pos.x === newSize - 1) {
+            currentTile.resetDirection(Direction.East);
+          }
+          if (pos.y === newSize - 1) {
+            currentTile.resetDirection(Direction.South);
+          }
+        }
+        newTileArray.push(currentTile || new Tile(pos, TileOpening.None));
+      }
+    }
+
+    this.tiles = newTileArray;
+    this.size = new Size(newSize, newSize);
+
+    return true;
+  }
+
+  /**
+   * Will reset a tile to an empty tile. (All openings and features will be removed)
+   * @param pos Position of the tile that should be resetted
+   * @return true if a tile was really changed
+   */
+  public resetTile(pos: Position): boolean {
+    const thisTile = this.getTile(pos);
+
+    let wasChanged = thisTile.reset();
+
+    // cutLooseOpenings will ensure that all other tiles have a nice corner
+    // If you want to have hard cuts in the world just comment out the following line
+    wasChanged = this.cutLooseOpenings(pos) || wasChanged;
+
+    // TODO: Find a way to delete the truck start point
+
+    return wasChanged;
+  }
+
+  /**
+   * Calls resetTile on each tile
+   * @return true if a change has occurred
+   */
+  public resetAllTiles(): boolean {
+    let modifiedAtLeastOne = false;
+    for (const tile of this.tiles) {
+      if (tile.reset()) {
+        modifiedAtLeastOne = true;
+      }
+    }
+    return modifiedAtLeastOne;
+  }
+
+  private cutLooseOpenings(center: Position): boolean {
+    let modifiedAtLeastOneTile = false;
+    // After deleting the current tile, we also want to remove the connections that lead to this tile.
+    for (const neighborPos of this.getDirectNeighbors(center)) {
+      const deletedDirection = DirectionUtil.getDirectionToPos(
+        center,
+        neighborPos
+      );
+      const tile = this.getTile(neighborPos);
+      if (tile.resetDirection(DirectionUtil.opposite(deletedDirection))) {
+        modifiedAtLeastOneTile = true;
+      }
+    }
+    return modifiedAtLeastOneTile;
+  }
+
+  /**
+   * The to position must be exactly one tile be away from the form pos
+   * @param fromPos the start
+   * @param toPos the end
+   * @return true if a change has occurred
+   */
+  public connectTilesWithRoad(fromPos: Position, toPos: Position): boolean {
+    const direction = DirectionUtil.getDirectionToPos(fromPos, toPos);
+    if (!direction) {
+      // We might have some incorrect positions.
+      // This can occur if the client lags, and we get for example Pos(0,0) and then Pos(1,1)
+      return false;
+    }
+
+    const fromTile = this.getTile(fromPos);
+    const toTile = this.getTile(toPos);
+
+    const fromOpening = DirectionUtil.toTileOpening(direction);
+    const toOpening = DirectionUtil.toTileOpening(
+      DirectionUtil.opposite(direction)
+    );
+
+    if (fromTile.openings & fromOpening && toTile.openings & toOpening) {
+      return false; // This opening was already connected
+    }
+
+    fromTile.openings |= fromOpening;
+    toTile.openings |= toOpening;
+    return true;
   }
 }
 
@@ -1051,10 +1169,37 @@ export class Tile {
 
   /**
    * Adds a freight on the field.
+   * The field must be empty(still have a road) and if it has a fright target the color must match
    * @param freight Freight.
+   * @return true if a change has occurred
    */
-  addFreight(freight: Freight) {
+  tryAddFreight(freight: Freight): boolean {
+    if (
+      this.freight.length !== 0 || // Cannot have a fright already on it
+      this.openings === TileOpening.None || // Must have openings
+      this.freightTarget !== null // FreightTarget must be empty
+    ) {
+      return false;
+    }
     this.freight.push(freight);
+    return true;
+  }
+
+  /**
+   * Sets the fright target
+   * @param freight the new target
+   * @return true if a change has occurred
+   */
+  setFrightTarget(freight: Freight | null): boolean {
+    if (
+      this.freight.length !== 0 || // Cannot have a fright already on it
+      this.openings === TileOpening.None || // Must have openings
+      this.freightTarget !== null // FreightTarget must be empty
+    ) {
+      return false;
+    }
+    this.freightTarget = freight;
+    return true;
   }
 
   /**
@@ -1068,6 +1213,16 @@ export class Tile {
       this.freight.splice(n, 1);
     }
     return freight;
+  }
+
+  removeFreightsOrTarget(): boolean {
+    if (this.freightTarget === null && this.freight.length == 0) {
+      return false;
+    }
+
+    this.freightTarget = null;
+    this.freight = [];
+    return true;
   }
 
   /**
@@ -1104,6 +1259,72 @@ export class Tile {
       this.freightTarget,
       this.trafficLights.map((t) => (t ? t.clone() : t))
     );
+  }
+
+  public reset(): boolean {
+    if (this.openings === TileOpening.None) {
+      return false;
+    }
+    this.openings = TileOpening.None;
+    this.trafficLights = this.trafficLights.map((tl) => null);
+    this.freightTarget = null;
+    this.freight = [];
+    return true;
+  }
+
+  public resetDirection(direction: Direction): boolean {
+    const opening = DirectionUtil.toTileOpening(direction);
+    if (!(this.openings & opening)) {
+      return false;
+    }
+    if (this.openings == opening) {
+      return this.reset();
+    }
+
+    this.openings &= ~opening;
+
+    this.removeTrafficLight(direction);
+  }
+
+  /**
+   * Sets a traffic light at for a given direction
+   * @param direction the direction of the traffic light
+   * @param newTrafficLight the configuration of this traffic light
+   * @return true if a change has occurred
+   */
+  public setTrafficLight(
+    direction: Direction,
+    newTrafficLight: TrafficLight
+  ): boolean {
+    if (!this.hasOpeningInDirection(direction)) {
+      return false; // Has no opening in this direction
+    }
+    const dirNumber = DirectionUtil.toNumber(direction);
+    const currentTrafficLight = this.trafficLights[dirNumber];
+    if (
+      currentTrafficLight &&
+      currentTrafficLight.redPhase == newTrafficLight.redPhase &&
+      currentTrafficLight.greenPhase == newTrafficLight.greenPhase &&
+      currentTrafficLight.initial == newTrafficLight.initial
+    ) {
+      return false; // no change has occurred
+    }
+    this.trafficLights[dirNumber] = newTrafficLight;
+    return true;
+  }
+
+  /**
+   * Removes a traffic light for a given direction
+   * @param direction the direction of the traffic light that should be removed
+   * @return true if a change has occurred
+   */
+  public removeTrafficLight(direction: Direction): boolean {
+    const dirNumber = DirectionUtil.toNumber(direction);
+    if (this.trafficLights[dirNumber]) {
+      this.trafficLights[dirNumber] = null;
+      return true;
+    }
+    return false;
   }
 }
 
@@ -1179,72 +1400,38 @@ export class Size {
   clone(): Size {
     return new Size(this.width, this.height);
   }
+
+  public isEqual(other: Size): boolean {
+    return this.width == other.width && this.height == other.height;
+  }
 }
 
 /**
- * 2D position with reference to the world.
+ * 2D position.
  */
 export class Position {
   /**
    * Initializes the position.
    * @param x X-position.
    * @param y Y-position.
-   * @param world World to which the position refers.
    */
-  constructor(public x: number, public y: number, readonly world: World) {}
-
-  /**
-   * Width of the associated world.
-   */
-  get width() {
-    return this.world.size.width;
-  }
-
-  /**
-   * Height of the associated world.
-   */
-  get height() {
-    return this.world.size.height;
-  }
+  constructor(public x: number, public y: number) {}
 
   /**
    * Creates a copy of the position.
    * @return Copy of the position.
    */
   clone(): Position {
-    return new Position(this.x, this.y, this.world);
+    return new Position(this.x, this.y);
   }
 
   /**
-   * Returns all positions of direct neighbors that can be reached by the current position.
-   * Directly means going north, east, south or west _NOT_ diagonal.
-   * When the current position is at the worldborder the result might contain less than 4 elements.
-   * @return An array of all direct neighbor positions
+   * Checks if a position equals another position
+   * @param other the other position, can be null or undefined
+   * @return true if equal
    */
-  getDirectNeighbors(): Position[] {
-    const result: Position[] = [];
-
-    const north = new Position(this.x, this.y - 1, this.world);
-    if (north.y >= 0) {
-      result.push(north);
-    }
-
-    const east = new Position(this.x + 1, this.y, this.world);
-    if (east.x < east.width) {
-      result.push(east);
-    }
-
-    const south = new Position(this.x, this.y + 1, this.world);
-    if (south.y < south.height) {
-      result.push(south);
-    }
-
-    const west = new Position(this.x - 1, this.y, this.world);
-    if (west.x >= 0) {
-      result.push(west);
-    }
-
-    return result;
+  public isEqual(other?: Position): boolean {
+    return other && this.x === other.x && this.y === other.y;
   }
 }
 
@@ -1433,6 +1620,34 @@ export class DirectionUtil {
     if (opening & TileOpening.South) result.push(Direction.South);
     if (opening & TileOpening.West) result.push(Direction.West);
     return result;
+  }
+
+  /**
+   * Get the direction to navigate from on tile to another.
+   * The tiles must be directly connectable, otherwise the result will be _undefined_.
+   * @param fromPos the first tile position
+   * @param toPos the second tile position
+   * @return the direction
+   */
+  static getDirectionToPos(
+    fromPos: Position,
+    toPos: Position
+  ): Direction | undefined {
+    const dX = toPos.x - fromPos.x;
+    const dY = toPos.y - fromPos.y;
+
+    let dir: Direction = undefined;
+    if (dX === 0 && dY === 1) {
+      dir = Direction.South; // Up to Down
+    } else if (dX === 0 && dY === -1) {
+      dir = Direction.North; // Down to Up
+    } else if (dX === 1 && dY === 0) {
+      dir = Direction.East; // Left to Right
+    } else if (dX === -1 && dY === 0) {
+      dir = Direction.West; // Right to Left
+    }
+
+    return dir;
   }
 }
 

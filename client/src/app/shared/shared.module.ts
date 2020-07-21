@@ -221,11 +221,6 @@ const materialModules = [
     PaginatorTableComponent,
     ServerTasksComponent,
   ],
-  entryComponents: [
-    AuthDialogComponent,
-    ChangePasswordComponent,
-    MessageDialogComponent,
-  ],
 })
 export class SharedAppModule {
   static forRoot(): ModuleWithProviders<SharedAppModule> {

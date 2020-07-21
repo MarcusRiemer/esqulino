@@ -47,7 +47,9 @@ describe(`tailorBlockDescription()`, () => {
       },
     };
 
-    const r: NodeDescription = Object.assign({}, n, { properties: { a: "1" } });
+    const r = Object.assign({}, n, {
+      properties: { a: "1" },
+    }) as NodeDescription;
     expect(tailorBlockDescription(tRootWitha1, n)).toEqual(r);
   });
 
@@ -71,7 +73,9 @@ describe(`tailorBlockDescription()`, () => {
       },
     };
 
-    const r: NodeDescription = Object.assign({}, n, { properties: { a: "" } });
+    const r = Object.assign({}, n, {
+      properties: { a: "" },
+    }) as NodeDescription;
     expect(tailorBlockDescription(t, n)).toEqual(r);
   });
 
@@ -89,9 +93,9 @@ describe(`tailorBlockDescription()`, () => {
       },
     };
 
-    const r: NodeDescription = Object.assign({}, n, {
+    const r = Object.assign({}, n, {
       properties: { a: "1", b: "2" },
-    });
+    }) as NodeDescription;
     expect(tailorBlockDescription(tRootWitha1, n)).toEqual(r);
   });
 
@@ -158,7 +162,9 @@ describe(`tailorBlockDescription()`, () => {
       },
     };
 
-    const r: NodeDescription = Object.assign({}, n, { properties: { a: "2" } });
+    const r = Object.assign({}, n, {
+      properties: { a: "2" },
+    }) as NodeDescription;
     expect(tailorBlockDescription(tRootTwoLeafs, n)).toEqual(r);
   });
 
@@ -175,7 +181,9 @@ describe(`tailorBlockDescription()`, () => {
       },
     };
 
-    const r: NodeDescription = Object.assign({}, n, { properties: { a: "3" } });
+    const r = Object.assign({}, n, {
+      properties: { a: "3" },
+    }) as NodeDescription;
     expect(tailorBlockDescription(tRootTwoLeafs, n)).toEqual(r);
   });
 
@@ -192,7 +200,9 @@ describe(`tailorBlockDescription()`, () => {
       },
     };
 
-    const r: NodeDescription = Object.assign({}, n, { properties: { a: "4" } });
+    const r = Object.assign({}, n, {
+      properties: { a: "4" },
+    }) as NodeDescription;
     expect(tailorBlockDescription(tRootTwoLeafs, n)).toEqual(r);
   });
 

@@ -17,7 +17,6 @@ import { ImageService } from "./image.service";
     ImageEditComponent,
     ImageSelectorComponent,
   ],
-  entryComponents: [],
   exports: [ImageSelectorComponent],
 })
 export class ImageEditorModule {

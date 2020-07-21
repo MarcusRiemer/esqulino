@@ -4,7 +4,6 @@ import { World } from "../../../../shared/syntaxtree/truck/world";
 
 import { TruckWorldService } from "../truck-world.service";
 import {
-  TruckFreightTileFeatureOptions,
   TruckTileFeatureType,
   TruckWorldEditorService,
 } from "./truck-world-editor.service";
@@ -16,6 +15,9 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
 
   private _currentWorld?: World;
+
+  public tileFeatureType = TruckTileFeatureType; // Required to use the enum inside the template
+  public feature$ = this._editor.feature;
 
   constructor(
     private _truckWorld: TruckWorldService,
@@ -39,20 +41,12 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
     this._subscriptions = [];
   }
 
-  public get sizeX(): number {
-    return this._currentWorld?.size.width;
+  public get size(): number {
+    return this._currentWorld?.state.size.width;
   }
 
-  public set sizeX(value: number) {
-    this._editor.resizeWorld(value, this.sizeY);
-  }
-
-  public get sizeY(): number {
-    return this._currentWorld?.size.height;
-  }
-
-  public set sizeY(value: number) {
-    this._editor.resizeWorld(this.sizeX, value);
+  public set size(value: number) {
+    this._editor.resizeWorld(Number(value));
   }
 
   public undo(): void {

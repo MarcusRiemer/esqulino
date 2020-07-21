@@ -43,10 +43,6 @@ import { EditorSharedComponentsModule } from "../shared-components/editor-shared
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent,
   ],
-  entryComponents: [
-    TableEditorSidebarStackComponent,
-    TableEditorSidebarControlsComponent,
-  ],
   exports: [SchemaHostComponent],
 })
 export class SchemaEditorModule {

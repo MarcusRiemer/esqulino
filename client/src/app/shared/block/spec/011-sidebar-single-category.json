@@ -13,13 +13,15 @@
           "blocks": [
             {
               "displayName": "Test Block",
-              "defaultNode": {
-                "language": "test",
-                "name": "bar",
-                "properties": {
-                  "p1": "v1"
+              "defaultNode": [
+                {
+                  "language": "test",
+                  "name": "bar",
+                  "properties": {
+                    "p1": "v1"
+                  }
                 }
-              }
+              ]
             }
           ]
         }

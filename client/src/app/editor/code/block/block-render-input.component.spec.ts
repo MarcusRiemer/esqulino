@@ -10,7 +10,6 @@ import { FocusDirective } from "../../../shared/focus-element.directive";
 import {
   LanguageService,
   NodeDescription,
-  Tree,
   CodeResource,
 } from "../../../shared";
 import {
@@ -53,9 +52,7 @@ describe("BlockRenderInputComponent", () => {
 
     const fixture = TestBed.createComponent(BlockRenderInputComponent);
     const component = fixture.componentInstance;
-    const renderData = TestBed.get(
-      RenderedCodeResourceService
-    ) as RenderedCodeResourceService;
+    const renderData = TestBed.inject(RenderedCodeResourceService);
 
     const blockLanguage = new BlockLanguage({
       id: "specBlockLang",

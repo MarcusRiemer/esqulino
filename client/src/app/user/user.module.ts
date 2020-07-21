@@ -8,6 +8,5 @@ import { UserComponent } from "./user.component";
   imports: [SharedAppModule, userRouting],
   declarations: [UserComponent, ResetPasswordComponent],
   exports: [UserComponent, ResetPasswordComponent],
-  entryComponents: [ResetPasswordComponent],
 })
 export class UserModule {}

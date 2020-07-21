@@ -78,17 +78,15 @@ describe("CreateProjectComponent", () => {
     expect(c.component.inProgress).toEqual(false);
     expect(result).toEqual(serverResponse);
 
-    const router: Router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     expect(router.url).toEqual("/editor/" + result.id);
   });
 
   it(`Displays errors`, async () => {
     const c = await createComponent();
 
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
 
     const request = c.component.createProject();
 

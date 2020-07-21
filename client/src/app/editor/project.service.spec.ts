@@ -40,7 +40,7 @@ describe(`ProjectService`, () => {
       declarations: [],
     });
 
-    return TestBed.get(ProjectService);
+    return TestBed.inject(ProjectService);
   }
 
   it(`Initially loads a project`, async () => {
@@ -110,10 +110,8 @@ describe(`ProjectService`, () => {
       }
     );
 
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
 
     const req = projectService.setActiveProject("0", false);
 

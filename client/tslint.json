@@ -10,6 +10,9 @@
       "check-space"
     ],
     "curly": false,
+    "deprecation": {
+      "severity": "warning"
+    },
     "eofline": false,
     "forin": false,
     "import-blacklist": [false],
@@ -53,7 +56,6 @@
     "no-switch-case-fall-through": false,
     "no-trailing-whitespace": false,
     "no-unused-expression": false,
-    "no-use-before-declare": false,
     "no-var-keyword": false,
     "object-literal-sort-keys": false,
     "one-line": [

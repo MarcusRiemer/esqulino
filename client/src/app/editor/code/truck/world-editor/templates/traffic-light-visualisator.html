@@ -1,0 +1,16 @@
+<div class="traffic-light-bar">
+  <div
+    *ngFor="let item of [].constructor(options.redPhase); let i = index"
+    class="redPhase"
+    [class.start]="i === (options.startPhase % (options.redPhase + options.greenPhase))"
+  >
+    {{i}}
+  </div>
+  <div
+    *ngFor="let item of [].constructor(options.greenPhase); let i = index"
+    class="greenPhase"
+    [class.start]="(i + options.redPhase) === (options.startPhase % (options.redPhase + options.greenPhase))"
+  >
+    {{i + options.redPhase}}
+  </div>
+</div>

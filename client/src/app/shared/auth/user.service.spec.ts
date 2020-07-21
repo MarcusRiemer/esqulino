@@ -68,7 +68,7 @@ describe(`UserService`, () => {
       declarations: [],
     });
 
-    return TestBed.get(UserService);
+    return TestBed.inject(UserService);
   }
 
   it(`default user data`, () => {
@@ -83,10 +83,8 @@ describe(`UserService`, () => {
 
   it("user data after guest response", () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
     const userData = mkGuestResponse();
 
     service.userData$
@@ -106,10 +104,8 @@ describe(`UserService`, () => {
 
   it("user data after proper user response", () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
     const userData = mkUserResponse("Tom");
 
     service.userDisplayName$
@@ -133,10 +129,8 @@ describe(`UserService`, () => {
 
   it("user data after logout", async () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
 
     let numCalls = 0;
 
@@ -174,10 +168,8 @@ describe(`UserService`, () => {
 
   it("userData on error generic error", () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
 
     let numCalls = 0;
 
@@ -199,10 +191,8 @@ describe(`UserService`, () => {
 
   it("Sign up and sign in", async () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
     const guest = mkGuestResponse();
     const user = mkUserResponse("Tom");
     const login = { email: "", username: "", password: "" };
@@ -235,10 +225,8 @@ describe(`UserService`, () => {
 
   it("addEmail", async () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
     const identities = mkIdentitiesResponse();
     const addEmailData = { email: "", password: "" };
 
@@ -260,10 +248,8 @@ describe(`UserService`, () => {
 
   it("unexpectedLogout", async () => {
     const service = instantiate();
-    const httpTestingController: HttpTestingController = TestBed.get(
-      HttpTestingController
-    );
-    const serverApi: ServerApiService = TestBed.get(ServerApiService);
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    const serverApi = TestBed.inject(ServerApiService);
     const user = mkUserResponse("Tom");
 
     let userDataCalls = 0;
