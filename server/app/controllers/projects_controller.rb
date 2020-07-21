@@ -20,7 +20,12 @@ class ProjectsController < ApplicationController
   # request the client will make to retrieve the *whole* project with
   # *everything* that is required to render it properly.
   def show
-    project = Project.full.find_by!(slug: params[:project_id])
+    needle = params[:project_id]
+    project = if (BlattwerkzeugUtil::string_is_uuid? needle) then
+                Project.full.find(needle)
+              else
+                Project.full.find_by! slug: needle
+              end
     render json: project.to_full_api_response
   end
 

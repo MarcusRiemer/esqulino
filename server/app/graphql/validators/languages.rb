@@ -1,8 +1,7 @@
 module Validators
   class Languages
     def self.validate!(args)
-      # TODO: Use language Enum to validate all provided languages!
-      unless args.kind_of?(Hash) && (args["de"].present? || args["en"].present?)
+      if (Types::Base::BaseEnum::LanguageEnum.values.keys & args.keys).empty?
         raise GraphQL::ExecutionError, "Language Keys are missing for #{args}"
       end
     end

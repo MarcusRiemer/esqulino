@@ -8,7 +8,7 @@ class Mutations::Projects::CreateProject < Mutations::Projects::Projects
     project = Project.new(
         name:args[:name],
         slug:args[:slug],
-        user_id:context[:current_user].id)
+        user_id:context[:user].id)
     if project.save
       {
           id: project.id,

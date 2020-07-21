@@ -9,7 +9,7 @@ class Mutations::News::CreateNews < Mutations::News::News
         title:args[:title],
         text:args[:text],
         published_from:args[:publishedFrom],
-        user_id:context[:current_user].id)
+        user_id:context[:user].id)
     if news.save
       {
           id: news.id,

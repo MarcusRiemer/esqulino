@@ -1,14 +1,12 @@
 mutation CreateNews(
     $title: LangJson!,
     $text: LangJson!,
-    $publishedFrom: ISO8601DateTime!,
-    $userId: ID
+    $publishedFrom: ISO8601DateTime!
 ) {
     createNews(input:{
         title:$title,
         text:$text,
-        publishedFrom:$publishedFrom,
-        userId:$userId
+        publishedFrom:$publishedFrom
     }) {
         id
         errors
@@ -20,15 +18,13 @@ mutation UpdateNews(
     $id: ID!,
     $title: LangJson!,
     $text: LangJson!,
-    $publishedFrom: ISO8601DateTime!,
-    $userId: ID
+    $publishedFrom: ISO8601DateTime!
 ) {
     updateNews(input:{
         id:$id,
         title:$title,
         text:$text,
-        publishedFrom:$publishedFrom,
-        userId:$userId
+        publishedFrom:$publishedFrom
     }) {
         id
         errors

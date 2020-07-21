@@ -80,7 +80,11 @@ module Types
     end
 
     def single_project(id:)
-      Project.full.find_by!(slug: id).to_full_api_response
+      if BlattwerkzeugUtil::string_is_uuid? id
+        Project.full.find(id)
+      else
+        Project.full.find_by! slug: id
+      end
     end
 
     def projects(input:nil)
@@ -91,7 +95,11 @@ module Types
       end
     end
     def single_grammar(id:)
-      Grammar.find(id)
+      if BlattwerkzeugUtil::string_is_uuid? id
+        Grammar.find(id)
+      else
+        Grammar.find_by! slug: id
+      end
     end
 
     def grammars(input:nil)
