@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-03 08:47:38.832946000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-20 12:35:45.023949000 Z
+  value_before_type_cast: 2020-07-21 13:52:01.536854000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: regex
@@ -22,26 +22,36 @@ concise_attributes:
   value_before_type_cast: 926ff25e-2ea2-4b10-abfd-a72721e3fadb
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
-  value_before_type_cast: '{"regex": {"group": {"type": "concrete", "attributes":
-    [{"type": "terminal", "symbol": "("}, {"name": "subexpressions", "type": "sequence",
-    "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "subexpression", "languageName":
-    "regex"}}]}, {"type": "terminal", "symbol": ")"}]}, "characters": {"type": "concrete",
-    "attributes": [{"base": "string", "name": "chars", "type": "property"}]}, "expression":
-    {"type": "concrete", "attributes": [{"name": "subexpressions", "type": "sequence",
-    "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "subexpression", "languageName":
-    "regex"}}]}]}, "alternative": {"type": "concrete", "attributes": [{"type": "terminal",
-    "symbol": "|"}]}, "quantifiers": {"type": "concrete", "attributes": [{"base":
-    "string", "name": "quantifiersClass", "type": "property"}]}, "subexpression":
-    {"type": "oneOf", "oneOf": [{"typeName": "characters", "languageName": "regex"},
-    {"typeName": "knownCharacterClass", "languageName": "regex"}, {"typeName": "characterRange",
-    "languageName": "regex"}, {"typeName": "alternative", "languageName": "regex"},
-    {"typeName": "group", "languageName": "regex"}, {"typeName": "quantifiers", "languageName":
+  value_before_type_cast: '{"regex": {"empty": {"type": "concrete", "attributes":
+    []}, "group": {"type": "concrete", "attributes": [{"type": "terminal", "symbol":
+    "("}, {"name": "subexpressions", "type": "sequence", "nodeTypes": [{"occurs":
+    "+", "nodeType": {"typeName": "subexpression", "languageName": "regex"}}]}, {"type":
+    "terminal", "symbol": ")"}]}, "number": {"type": "concrete", "attributes": [{"base":
+    "integer", "name": "number", "type": "property"}]}, "lineTails": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "tail", "type": "property"}]}, "characters":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "chars", "type":
+    "property"}]}, "expression": {"type": "concrete", "attributes": [{"name": "subexpressions",
+    "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "subexpression",
+    "languageName": "regex"}}]}]}, "alternative": {"type": "concrete", "attributes":
+    [{"type": "terminal", "symbol": "|"}]}, "numberOrEmpty": {"type": "oneOf", "oneOf":
+    [{"typeName": "number", "languageName": "regex"}, {"typeName": "empty", "languageName":
+    "regex"}]}, "subexpression": {"type": "oneOf", "oneOf": [{"typeName": "characters",
+    "languageName": "regex"}, {"typeName": "knownCharacterClass", "languageName":
+    "regex"}, {"typeName": "characterRange", "languageName": "regex"}, {"typeName":
+    "alternative", "languageName": "regex"}, {"typeName": "group", "languageName":
+    "regex"}, {"typeName": "quantifierClass", "languageName": "regex"}, {"typeName":
+    "quantifierRange", "languageName": "regex"}, {"typeName": "lineTails", "languageName":
     "regex"}]}, "characterRange": {"type": "concrete", "attributes": [{"type": "terminal",
     "symbol": "["}, {"name": "characters", "type": "sequence", "nodeTypes": [{"occurs":
     "+", "nodeType": {"typeName": "characters", "languageName": "regex"}}]}, {"type":
-    "terminal", "symbol": "]"}]}, "knownCharacterClass": {"type": "concrete", "attributes":
-    [{"type": "terminal", "symbol": "\\"}, {"base": "string", "name": "characterClass",
-    "type": "property"}]}}}'
+    "terminal", "symbol": "]"}]}, "quantifierClass": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "quantifierClass", "type": "property"}]}, "quantifierRange":
+    {"type": "concrete", "attributes": [{"type": "terminal", "symbol": "{"}, {"name":
+    "bounds", "type": "sequence", "nodeTypes": [{"typeName": "number", "languageName":
+    "regex"}, {"occurs": "?", "nodeType": {"typeName": "numberOrEmpty", "languageName":
+    "regex"}}]}, {"type": "terminal", "symbol": "}"}]}, "knownCharacterClass": {"type":
+    "concrete", "attributes": [{"type": "terminal", "symbol": "\\"}, {"base": "string",
+    "name": "characterClass", "type": "property"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

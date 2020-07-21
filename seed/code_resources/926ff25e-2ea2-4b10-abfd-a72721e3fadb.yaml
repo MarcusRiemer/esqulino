@@ -37,11 +37,14 @@ concise_attributes:
     "MetaGrammar", "properties": {"typeName": "alternative", "languageName": "regex"}},
     {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "group",
     "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "quantifiers", "languageName": "regex"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "subexpression", "languageName": "regex"}}, {"name":
-    "concreteNode", "children": {"attributes": [{"name": "property", "language": "MetaGrammar",
-    "properties": {"base": "string", "name": "chars"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "characters", "languageName": "regex"}}, {"name": "concreteNode",
+    {"typeName": "quantifierClass", "languageName": "regex"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "quantifierRange", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "lineTails", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "subexpression", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "chars"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "characters", "languageName": "regex"}}, {"name": "concreteNode",
     "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
     {"symbol": "\\"}}, {"name": "property", "language": "MetaGrammar", "properties":
     {"base": "string", "name": "characterClass"}}]}, "language": "MetaGrammar", "properties":
@@ -59,9 +62,7 @@ concise_attributes:
     {"typeName": "characterRange", "languageName": "regex"}}, {"name": "concreteNode",
     "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
     {"symbol": "|"}}]}, "language": "MetaGrammar", "properties": {"typeName": "alternative",
-    "languageName": "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties":
-    {"text": "Alternativ groupStart/End mit Terminalsymbol verwenden, um Ebene beizubehalten
-    und dynamisch zu klammern"}}, {"name": "concreteNode", "children": {"attributes":
+    "languageName": "regex"}}, {"name": "concreteNode", "children": {"attributes":
     [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "("}},
     {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
     "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
@@ -72,15 +73,37 @@ concise_attributes:
     "MetaGrammar", "properties": {"symbol": ")"}}]}, "language": "MetaGrammar", "properties":
     {"typeName": "group", "languageName": "regex"}}, {"name": "concreteNode", "children":
     {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "quantifiersClass"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "quantifiers", "languageName": "regex"}}]}, "language":
-    "MetaGrammar", "properties": {"name": "regex"}}'
+    {"base": "string", "name": "quantifierClass"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "quantifierClass", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "{"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
+    "regex"}}, {"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "numberOrEmpty",
+    "languageName": "regex"}}], "cardinality": [{"name": "knownCardinality", "language":
+    "MetaGrammar", "properties": {"cardinality": "?"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "bounds"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "}"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "quantifierRange", "languageName":
+    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "tail"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "lineTails", "languageName":
+    "regex"}}, {"name": "typedef", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "empty", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "numberOrEmpty", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "integer", "name": "number"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "number", "languageName": "regex"}}, {"name": "concreteNode", "language":
+    "MetaGrammar", "properties": {"typeName": "empty", "languageName": "regex"}}]},
+    "language": "MetaGrammar", "properties": {"name": "regex"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-14 15:55:57.065407000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-20 12:35:44.547099000 Z
+  value_before_type_cast: 2020-07-21 13:52:01.273505000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -136,7 +159,15 @@ concise_attributes:
               },
               {
                 "languageName": "regex",
-                "typeName": "quantifiers"
+                "typeName": "quantifierClass"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "quantifierRange"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "lineTails"
               }
             ]
           },
@@ -225,15 +256,82 @@ concise_attributes:
               }
             ]
           },
-          "quantifiers": {
+          "quantifierClass": {
             "type": "concrete",
             "attributes": [
               {
                 "type": "property",
                 "base": "string",
-                "name": "quantifiersClass"
+                "name": "quantifierClass"
               }
             ]
+          },
+          "quantifierRange": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "{"
+              },
+              {
+                "type": "sequence",
+                "name": "bounds",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "number"
+                  },
+                  {
+                    "nodeType": {
+                      "languageName": "regex",
+                      "typeName": "numberOrEmpty"
+                    },
+                    "occurs": "?"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "}"
+              }
+            ]
+          },
+          "lineTails": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "tail"
+              }
+            ]
+          },
+          "numberOrEmpty": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "number"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "empty"
+              }
+            ]
+          },
+          "number": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "integer",
+                "name": "number"
+              }
+            ]
+          },
+          "empty": {
+            "type": "concrete",
+            "attributes": []
           }
         }
       },

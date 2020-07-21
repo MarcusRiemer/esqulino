@@ -24,7 +24,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
             subexpressions.forEach((c, i, a) => {
               process.generateNode(c);
               if (i < a.length - 1) {
-                process.addConvertedFragment(``, node, OutputSeparator.NONE);
+                process.addConvertedFragment(``, node);
               }
             });
           });
@@ -39,7 +39,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(`"${node.properties["chars"]}"`, node);
+        process.addConvertedFragment(`${node.properties["chars"]}`, node);
       },
     },
   },
@@ -51,7 +51,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(
-          `\\"${node.properties["characterClass"]}"`,
+          `\\${node.properties["characterClass"]}`,
           node
         );
       },
@@ -68,17 +68,17 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         if (characters.length === 0) {
           process.addConvertedFragment(`[]`, node);
         } else {
-          process.addConvertedFragment(`[`, node, OutputSeparator.NONE);
+          process.addConvertedFragment(`[`, node);
           process.indent(() => {
             characters.forEach((c, i, a) => {
               process.generateNode(c);
               if (i < a.length - 1) {
-                process.addConvertedFragment(``, node, OutputSeparator.NONE);
+                process.addConvertedFragment(``, node);
               }
             });
           });
           // TODO überlegen wegen a-z -> vllt n bool, welches wenn true dann ausgewertet wird? oder String abfrage welche nach - sucht?
-          process.addConvertedFragment(`]`, node, OutputSeparator.NONE);
+          process.addConvertedFragment(`]`, node);
         }
       },
     },
@@ -105,16 +105,16 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         if (subexpressions.length === 0) {
           process.addConvertedFragment(`()`, node);
         } else {
-          process.addConvertedFragment(`(`, node, OutputSeparator.NONE);
+          process.addConvertedFragment(`(`, node);
           process.indent(() => {
             subexpressions.forEach((c, i, a) => {
               process.generateNode(c);
               if (i < a.length - 1) {
-                process.addConvertedFragment(``, node, OutputSeparator.NONE);
+                process.addConvertedFragment(``, node);
               }
             });
           });
-          process.addConvertedFragment(`)`, node, OutputSeparator.NONE);
+          process.addConvertedFragment(`)`, node);
         }
       },
     },
@@ -128,7 +128,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         // TODO validation?
         process.addConvertedFragment(
-          `"${node.properties["quantifierClass"]}"`,
+          `${node.properties["quantifierClass"]}`,
           node
         );
       },
@@ -141,11 +141,63 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+          const bounds = node.getChildrenInCategory("bounds");
+          if (bounds.length === 0) {
+              process.addConvertedFragment(`{}`, node);
+          } else {
+              process.addConvertedFragment(`{`, node);
+
+              process.indent(() => {
+                bounds.forEach((c, i, a) => {
+                  process.generateNode(c);
+                  if (i < a.length - 1) {
+                    process.addConvertedFragment(`, `, node);
+                  }
+                });
+              });
+
+              process.addConvertedFragment(`}`, node);
+          }
+      },
+    },
+  },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "lineTails",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(
-          `{"${node.properties["lowerBound"]}", "${node.properties["upperBound"]}"}`,
-          node
+            `${node.properties["tail"]}`,
+            node
         );
       },
     },
   },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "number",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(
+            `${node.properties["number"]}`,
+            node
+        );
+      },
+    },
+  },
+    {
+        type: {
+            languageName: "regex",
+            typeName: "empty",
+        },
+        converter: {
+            init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+                process.addConvertedFragment(``, node);
+            },
+        },
+    }
 ];

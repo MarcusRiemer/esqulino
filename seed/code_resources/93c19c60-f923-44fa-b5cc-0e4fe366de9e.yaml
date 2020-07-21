@@ -12,21 +12,23 @@ concise_attributes:
       limit: 
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 53152493-1926-4230-be97-f8cec0689972
+  value_before_type_cast: 93c19c60-f923-44fa-b5cc-0e4fe366de9e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 01 a
+  value_before_type_cast: 06 ^abc$
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "expression", "children": {"subexpressions": [{"name":
-    "characters", "language": "regex", "properties": {"chars": "a", "characters":
-    "a"}}]}, "language": "regex"}'
+    "lineTails", "language": "regex", "properties": {"tail": "^"}}, {"name": "characters",
+    "language": "regex", "properties": {"chars": "abc", "characters": "a"}}, {"name":
+    "lineTails", "language": "regex", "properties": {"tail": "$"}}]}, "language":
+    "regex"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-07-03 08:50:28.998263000 Z
+  value_before_type_cast: 2020-07-21 12:28:12.318324000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-21 12:28:10.479281000 Z
+  value_before_type_cast: 2020-07-21 12:28:47.072846000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6
@@ -35,6 +37,6 @@ concise_attributes:
   value_before_type_cast: regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: '"a"'
+  value_before_type_cast: '"^""abc""$"'
 new_record: false
 active_record_yaml_version: 2

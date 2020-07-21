@@ -6,6 +6,8 @@ import { ErrorCodes } from "../validation-result";
 import { NODE_CONVERTER } from "./regex.codegenerator";
 import { GRAMMAR_DESCRIPTION } from "./regex.grammar";
 
+
+// TODO verwerfen und neu machen
 describe("Language: RegEx", () => {
   it("Invalid: Empty RegEx", () => {
     const astDesc: NodeDescription = {
