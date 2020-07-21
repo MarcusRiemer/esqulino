@@ -90,6 +90,7 @@ jobs:
   - bash: 'make client-test'
     workingDirectory: client
     displayName: 'make client-test'
+    continueOnError: true
 
   - task: PublishTestResults@2
     displayName: 'Publish Client Test Results'
