@@ -1,7 +1,8 @@
 import { generateUUIDv4 } from "../../shared/util-browser";
 import { AdminListBlockLanguagesQuery } from "../../../generated/graphql";
+import {GraphQLError} from "graphql/error/GraphQLError";
 
-type BlockLanguageGQLResponse = { data: AdminListBlockLanguagesQuery };
+type BlockLanguageGQLResponse = { data: AdminListBlockLanguagesQuery, errors:ReadonlyArray<GraphQLError> };
 type AdminListBlockLanguageNode = AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0];
 
 const ADMIN_LIST_BLOCKLANGUAGE: AdminListBlockLanguageNode = {
@@ -16,6 +17,7 @@ const wrapBlockLanguageData = (
   data: AdminListBlockLanguageNode[]
 ): BlockLanguageGQLResponse => {
   return {
+    errors:[],
     data: {
       blockLanguages: {
         nodes: data,
