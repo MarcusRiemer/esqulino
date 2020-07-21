@@ -48,18 +48,22 @@ concise_attributes:
     "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
     {"symbol": "\\"}}, {"name": "property", "language": "MetaGrammar", "properties":
     {"base": "string", "name": "characterClass"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "knownCharacterClass", "languageName": "regex"}}, {"name": "comment",
-    "language": "MetaGrammar", "properties": {"text": "TODO hier noch was sinnvolles
-    ausdenken, wie du a-Z abbilden kannst"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"typeName": "knownCharacterClass", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
     {"symbol": "["}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
     "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "characters", "languageName": "regex"}}], "cardinality":
+    "properties": {"typeName": "characterRangeItem", "languageName": "regex"}}], "cardinality":
     [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
     "+"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
     {"base": "sequence", "name": "characters"}}, {"name": "terminal", "language":
     "MetaGrammar", "properties": {"symbol": "]"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "characterRange", "languageName": "regex"}}, {"name": "concreteNode",
+    {"typeName": "characterRange", "languageName": "regex"}}, {"name": "typedef",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "characters", "languageName": "regex"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "knownCharacterClass", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "negation", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "characterRangeItem", "languageName": "regex"}}, {"name": "concreteNode",
     "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
     {"symbol": "|"}}]}, "language": "MetaGrammar", "properties": {"typeName": "alternative",
     "languageName": "regex"}}, {"name": "concreteNode", "children": {"attributes":
@@ -95,15 +99,18 @@ concise_attributes:
     {"typeName": "numberOrEmpty", "languageName": "regex"}}, {"name": "concreteNode",
     "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
     {"base": "integer", "name": "number"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "number", "languageName": "regex"}}, {"name": "concreteNode", "language":
-    "MetaGrammar", "properties": {"typeName": "empty", "languageName": "regex"}}]},
-    "language": "MetaGrammar", "properties": {"name": "regex"}}'
+    {"typeName": "number", "languageName": "regex"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "^"}}]}, "language": "MetaGrammar", "properties": {"typeName": "negation",
+    "languageName": "regex"}}, {"name": "concreteNode", "language": "MetaGrammar",
+    "properties": {"typeName": "empty", "languageName": "regex"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "regex"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-14 15:55:57.065407000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-21 13:52:01.273505000 Z
+  value_before_type_cast: 2020-07-21 16:25:30.350285000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -209,7 +216,7 @@ concise_attributes:
                   {
                     "nodeType": {
                       "languageName": "regex",
-                      "typeName": "characters"
+                      "typeName": "characterRangeItem"
                     },
                     "occurs": "+"
                   }
@@ -218,6 +225,23 @@ concise_attributes:
               {
                 "type": "terminal",
                 "symbol": "]"
+              }
+            ]
+          },
+          "characterRangeItem": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "characters"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "knownCharacterClass"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "negation"
               }
             ]
           },
@@ -326,6 +350,15 @@ concise_attributes:
                 "type": "property",
                 "base": "integer",
                 "name": "number"
+              }
+            ]
+          },
+          "negation": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "^"
               }
             ]
           },

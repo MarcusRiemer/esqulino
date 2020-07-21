@@ -1,7 +1,6 @@
 import {
   NodeConverterRegistration,
   CodeGeneratorProcess,
-  OutputSeparator,
 } from "../codegenerator";
 import { Node } from "../syntaxtree";
 
@@ -77,7 +76,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
               }
             });
           });
-          // TODO überlegen wegen a-z -> vllt n bool, welches wenn true dann ausgewertet wird? oder String abfrage welche nach - sucht?
           process.addConvertedFragment(`]`, node);
         }
       },
@@ -126,7 +124,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        // TODO validation?
         process.addConvertedFragment(
           `${node.properties["quantifierClass"]}`,
           node
@@ -141,23 +138,23 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-          const bounds = node.getChildrenInCategory("bounds");
-          if (bounds.length === 0) {
-              process.addConvertedFragment(`{}`, node);
-          } else {
-              process.addConvertedFragment(`{`, node);
+        const bounds = node.getChildrenInCategory("bounds");
+        if (bounds.length === 0) {
+          process.addConvertedFragment(`{}`, node);
+        } else {
+          process.addConvertedFragment(`{`, node);
 
-              process.indent(() => {
-                bounds.forEach((c, i, a) => {
-                  process.generateNode(c);
-                  if (i < a.length - 1) {
-                    process.addConvertedFragment(`, `, node);
-                  }
-                });
-              });
+          process.indent(() => {
+            bounds.forEach((c, i, a) => {
+              process.generateNode(c);
+              if (i < a.length - 1) {
+                process.addConvertedFragment(`, `, node);
+              }
+            });
+          });
 
-              process.addConvertedFragment(`}`, node);
-          }
+          process.addConvertedFragment(`}`, node);
+        }
       },
     },
   },
@@ -168,10 +165,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(
-            `${node.properties["tail"]}`,
-            node
-        );
+        process.addConvertedFragment(`${node.properties["tail"]}`, node);
       },
     },
   },
@@ -182,22 +176,30 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        process.addConvertedFragment(
-            `${node.properties["number"]}`,
-            node
-        );
+        process.addConvertedFragment(`${node.properties["number"]}`, node);
       },
     },
   },
-    {
-        type: {
-            languageName: "regex",
-            typeName: "empty",
-        },
-        converter: {
-            init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-                process.addConvertedFragment(``, node);
-            },
-        },
-    }
+  {
+    type: {
+      languageName: "regex",
+      typeName: "empty",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(``, node);
+      },
+    },
+  },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "negation",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`^`, node);
+      },
+    },
+  },
 ];
