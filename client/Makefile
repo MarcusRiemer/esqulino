@@ -22,6 +22,8 @@ CLIENT_ALL_SOURCES = $(shell find src ! -name 'version.ts' 2> /dev/null) angular
 
 # All sources except the translation files
 CLIENT_NON_XLF_SOURCES = $(filter-out %.xlf, $(CLIENT_ALL_SOURCES))
+# All sources except generated files
+CLIENT_NON_GENERATED_SOURCES = $(filter-out src/generated/%, $(CLIENT_NON_XLF_SOURCES))
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
@@ -78,7 +80,7 @@ client-test-watch: src/environments/version.ts
 ##################################
 # Commandline Client
 ##################################
-dist/cli/main.cli.js : $(CLIENT_NON_XLF_SOURCES) src/environments/version.ts
+dist/cli/main.cli.js : $(CLIENT_NON_GENERATED_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) -p src/tsconfig.cli.json
 
