@@ -62,8 +62,9 @@ const DevelopmentLinks: DevelopmentLink[] = [
       en: `Did my last commit break anything for the build? Do the tests still run? The CI-service runs after every push and finds out.`,
     },
     titleBadgeImage:
-      "https://dev.azure.com/marcusriemer/BlattWerkzeug/_apis/build/status/Docker%20CI?branchName=master",
-    href: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build",
+      "https://dev.azure.com/marcusriemer/BlattWerkzeug/_apis/build/status/marcusriemer.esqulino?branchName=master",
+    href:
+      "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build?definitionId=7",
   },
   {
     icon: "slack",
