@@ -39,25 +39,6 @@ clean : msg-pre-clean
 
 dist: client-compile cli-compile universal-compile
 
-dist-dev: client-compile cli-compile universal-compile
-
-# Run the currently configured formatting toolset
-format-code:
-	npx prettier --write "src/**/*.{html,ts}"
-
-# Verify that the coding style is sound
-verify-format-code:
-	npx prettier --check "src/**/*.{html,ts}"
-
-##################################
-# Revision tracking file
-##################################
-
-# This file is used to tag each and every build that was made. This allows to
-# match logged errors to different states of the codebase.
-src/environments/version.ts :
-	./gen-git-revision.ts.sh > $@
-
 ##################################
 # Webclient
 ##################################
@@ -67,12 +48,6 @@ client-compile : msg-pre-build src/environments/version.ts
 
 client-compile-dev : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --watch
-
-client-test : src/environments/version.ts
-	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true
-
-client-test-watch: src/environments/version.ts
-	$(NG_BIN) test --watch --browsers $(TEST_BROWSERS) --code-coverage true
 
 ##################################
 # Commandline Client
@@ -103,6 +78,21 @@ universal-compile:
 universal-run: universal-compile
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
 	$(NG_BIN) run blattwerkzeug-client:serve-ssr
+
+##################################
+# Testing
+##################################
+
+test : src/environments/version.ts
+	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true
+
+test-watch: src/environments/version.ts
+	$(NG_BIN) test --watch --browsers $(TEST_BROWSERS) --code-coverage true
+
+# Backward compatability
+client-test: test
+client-test-watch: test-watch
+
 
 ##################################
 # Preparing assets
@@ -142,6 +132,28 @@ clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
 
 ##################################
+# Code Hygiene
+##################################
+
+# Run the currently configured formatting toolset
+format-code:
+	npx prettier --write "src/**/*.{html,ts}"
+
+# Verify that the coding style is sound
+verify-format-code:
+	npx prettier --check "src/**/*.{html,ts}"
+
+##################################
+# Revision tracking file
+##################################
+
+# This file is used to tag each and every build that was made. This allows to
+# match logged errors to different states of the codebase.
+src/environments/version.ts :
+	./gen-git-revision.ts.sh > $@
+
+
+##################################
 # Messaging targets
 ##################################
 
@@ -157,4 +169,4 @@ msg-pre-clean-deps :
 msg-pre-install-deps :
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Installing dependencies ..."; $(TPUT_BIN) sgr0
 
-.PHONY : all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills format-code src/environments/version.ts
+.PHONY : test test-watch all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills format-code src/environments/version.ts
