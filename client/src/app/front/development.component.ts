@@ -80,7 +80,8 @@ const DevelopmentLinks: DevelopmentLink[] = [
       de: `Welche akuten Änderungen stehen gerade an? Wie kann ich eigentlich ..? Hinweise und Antworten gibt es im Chat.`,
       en: `Which acute changes are about to happen? How can I ..? Hints and answers are available in chat.`,
     },
-    href: "https://blattwerkzeug.slack.com",
+    href:
+      "https://join.slack.com/t/blattwerkzeug/shared_invite/zt-gbzwusqo-Mg0G3dhcoHThs6e5Nfx4ww",
   },
 ];
 
