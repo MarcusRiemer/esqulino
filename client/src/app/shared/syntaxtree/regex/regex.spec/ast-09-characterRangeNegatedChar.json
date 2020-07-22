@@ -1,0 +1,27 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "characterRange",
+        "language": "regex",
+        "children": {
+          "characters": [
+            {
+              "name": "negation",
+              "language": "regex"
+            },
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "a"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

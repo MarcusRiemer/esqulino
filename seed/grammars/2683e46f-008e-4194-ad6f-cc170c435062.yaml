@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-03 08:47:38.832946000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-21 16:25:30.593113000 Z
+  value_before_type_cast: 2020-07-22 11:30:16.776038000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: regex
@@ -34,7 +34,8 @@ concise_attributes:
     "property"}]}, "expression": {"type": "concrete", "attributes": [{"name": "subexpressions",
     "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "subexpression",
     "languageName": "regex"}}]}]}, "alternative": {"type": "concrete", "attributes":
-    [{"type": "terminal", "symbol": "|"}]}, "numberOrEmpty": {"type": "oneOf", "oneOf":
+    [{"type": "terminal", "symbol": "|"}]}, "anyCharacter": {"type": "concrete", "attributes":
+    [{"type": "terminal", "symbol": "."}]}, "numberOrEmpty": {"type": "oneOf", "oneOf":
     [{"typeName": "number", "languageName": "regex"}, {"typeName": "empty", "languageName":
     "regex"}]}, "subexpression": {"type": "oneOf", "oneOf": [{"typeName": "characters",
     "languageName": "regex"}, {"typeName": "knownCharacterClass", "languageName":
@@ -42,20 +43,20 @@ concise_attributes:
     "alternative", "languageName": "regex"}, {"typeName": "group", "languageName":
     "regex"}, {"typeName": "quantifierClass", "languageName": "regex"}, {"typeName":
     "quantifierRange", "languageName": "regex"}, {"typeName": "lineTails", "languageName":
-    "regex"}]}, "characterRange": {"type": "concrete", "attributes": [{"type": "terminal",
-    "symbol": "["}, {"name": "characters", "type": "sequence", "nodeTypes": [{"occurs":
-    "+", "nodeType": {"typeName": "characterRangeItem", "languageName": "regex"}}]},
-    {"type": "terminal", "symbol": "]"}]}, "quantifierClass": {"type": "concrete",
-    "attributes": [{"base": "string", "name": "quantifierClass", "type": "property"}]},
-    "quantifierRange": {"type": "concrete", "attributes": [{"type": "terminal", "symbol":
-    "{"}, {"name": "bounds", "type": "sequence", "nodeTypes": [{"typeName": "number",
-    "languageName": "regex"}, {"occurs": "?", "nodeType": {"typeName": "numberOrEmpty",
-    "languageName": "regex"}}]}, {"type": "terminal", "symbol": "}"}]}, "characterRangeItem":
-    {"type": "oneOf", "oneOf": [{"typeName": "characters", "languageName": "regex"},
-    {"typeName": "knownCharacterClass", "languageName": "regex"}, {"typeName": "negation",
-    "languageName": "regex"}]}, "knownCharacterClass": {"type": "concrete", "attributes":
-    [{"type": "terminal", "symbol": "\\"}, {"base": "string", "name": "characterClass",
-    "type": "property"}]}}}'
+    "regex"}, {"typeName": "anyCharacter", "languageName": "regex"}]}, "characterRange":
+    {"type": "concrete", "attributes": [{"type": "terminal", "symbol": "["}, {"name":
+    "characters", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": {"typeName":
+    "characterRangeItem", "languageName": "regex"}}]}, {"type": "terminal", "symbol":
+    "]"}]}, "quantifierClass": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "quantifierClass", "type": "property"}]}, "quantifierRange": {"type":
+    "concrete", "attributes": [{"type": "terminal", "symbol": "{"}, {"name": "bounds",
+    "type": "sequence", "nodeTypes": [{"typeName": "number", "languageName": "regex"},
+    {"occurs": "?", "nodeType": {"typeName": "numberOrEmpty", "languageName": "regex"}}]},
+    {"type": "terminal", "symbol": "}"}]}, "characterRangeItem": {"type": "oneOf",
+    "oneOf": [{"typeName": "characters", "languageName": "regex"}, {"typeName": "knownCharacterClass",
+    "languageName": "regex"}, {"typeName": "negation", "languageName": "regex"}]},
+    "knownCharacterClass": {"type": "concrete", "attributes": [{"type": "terminal",
+    "symbol": "\\"}, {"base": "string", "name": "characterClass", "type": "property"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

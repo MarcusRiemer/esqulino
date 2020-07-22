@@ -16,18 +16,14 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const subexpressions = node.getChildrenInCategory("subexpressions");
-        if (subexpressions.length === 0) {
-          process.addConvertedFragment(``, node);
-        } else {
-          process.indent(() => {
-            subexpressions.forEach((c, i, a) => {
-              process.generateNode(c);
-              if (i < a.length - 1) {
-                process.addConvertedFragment(``, node);
-              }
-            });
+        process.indent(() => {
+          subexpressions.forEach((c, i, a) => {
+            process.generateNode(c);
+            if (i < a.length - 1) {
+              process.addConvertedFragment(``, node);
+            }
           });
-        }
+        });
       },
     },
   },
@@ -64,20 +60,16 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const characters = node.getChildrenInCategory("characters");
-        if (characters.length === 0) {
-          process.addConvertedFragment(`[]`, node);
-        } else {
-          process.addConvertedFragment(`[`, node);
-          process.indent(() => {
-            characters.forEach((c, i, a) => {
-              process.generateNode(c);
-              if (i < a.length - 1) {
-                process.addConvertedFragment(``, node);
-              }
-            });
+        process.addConvertedFragment(`[`, node);
+        process.indent(() => {
+          characters.forEach((c, i, a) => {
+            process.generateNode(c);
+            if (i < a.length - 1) {
+              process.addConvertedFragment(``, node);
+            }
           });
-          process.addConvertedFragment(`]`, node);
-        }
+        });
+        process.addConvertedFragment(`]`, node);
       },
     },
   },
@@ -100,20 +92,16 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const subexpressions = node.getChildrenInCategory("subexpressions");
-        if (subexpressions.length === 0) {
-          process.addConvertedFragment(`()`, node);
-        } else {
-          process.addConvertedFragment(`(`, node);
-          process.indent(() => {
-            subexpressions.forEach((c, i, a) => {
-              process.generateNode(c);
-              if (i < a.length - 1) {
-                process.addConvertedFragment(``, node);
-              }
-            });
+        process.addConvertedFragment(`(`, node);
+        process.indent(() => {
+          subexpressions.forEach((c, i, a) => {
+            process.generateNode(c);
+            if (i < a.length - 1) {
+              process.addConvertedFragment(``, node);
+            }
           });
-          process.addConvertedFragment(`)`, node);
-        }
+        });
+        process.addConvertedFragment(`)`, node);
       },
     },
   },
@@ -139,22 +127,16 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const bounds = node.getChildrenInCategory("bounds");
-        if (bounds.length === 0) {
-          process.addConvertedFragment(`{}`, node);
-        } else {
-          process.addConvertedFragment(`{`, node);
-
-          process.indent(() => {
-            bounds.forEach((c, i, a) => {
-              process.generateNode(c);
-              if (i < a.length - 1) {
-                process.addConvertedFragment(`, `, node);
-              }
-            });
+        process.addConvertedFragment(`{`, node);
+        process.indent(() => {
+          bounds.forEach((c, i, a) => {
+            process.generateNode(c);
+            if (i < a.length - 1) {
+              process.addConvertedFragment(`, `, node);
+            }
           });
-
-          process.addConvertedFragment(`}`, node);
-        }
+        });
+        process.addConvertedFragment(`}`, node);
       },
     },
   },
@@ -199,6 +181,17 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`^`, node);
+      },
+    },
+  },
+  {
+    type: {
+      languageName: "regex",
+      typeName: "anyCharacter",
+    },
+    converter: {
+      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+        process.addConvertedFragment(`.`, node);
       },
     },
   },

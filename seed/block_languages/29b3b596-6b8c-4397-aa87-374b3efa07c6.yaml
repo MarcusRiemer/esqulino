@@ -14,87 +14,54 @@ concise_attributes:
     "categories": [{"blocks": [{"defaultNode": {"name": "expression", "children":
     {"subexpressions": []}, "language": "regex"}, "displayName": "expression"}, {"defaultNode":
     {"name": "characters", "language": "regex", "properties": {"chars": ""}}, "displayName":
-    "characters"}, {"defaultNode": {"name": "knownCharacterClass", "language": "regex",
-    "properties": {"characterClass": ""}}, "displayName": "knownCharacterClass"},
-    {"defaultNode": {"name": "characterRange", "children": {"characters": []}, "language":
-    "regex"}, "displayName": "characterRange"}, {"defaultNode": {"name": "alternative",
-    "language": "regex"}, "displayName": "alternative"}, {"defaultNode": {"name":
-    "group", "children": {"subexpressions": []}, "language": "regex"}, "displayName":
+    "characters"}, {"defaultNode": {"name": "characterRange", "children": {"characters":
+    []}, "language": "regex"}, "displayName": "characterRange"}, {"defaultNode": {"name":
+    "alternative", "language": "regex"}, "displayName": "alternative"}, {"defaultNode":
+    {"name": "group", "children": {"subexpressions": []}, "language": "regex"}, "displayName":
     "group"}, {"defaultNode": {"name": "quantifierRange", "children": {"bounds": []},
     "language": "regex"}, "displayName": "quantifierRange"}, {"defaultNode": {"name":
     "number", "language": "regex", "properties": {"number": "0"}}, "displayName":
     "number"}, {"defaultNode": {"name": "empty", "language": "regex"}, "displayName":
     "empty"}, {"defaultNode": {"name": "negation", "language": "regex"}, "displayName":
-    "negation"}], "categoryCaption": "Automatisch"}, {"blocks": [{"defaultNode": [{"name":
+    "negation"}, {"defaultNode": {"name": "anyCharacter", "language": "regex"}, "displayName":
+    "anyCharacter"}], "categoryCaption": "Automatisch"}, {"blocks": [{"defaultNode":
+    [{"name": "knownCharacterClass", "language": "regex", "properties": {"characterClass":
+    "b"}}], "displayName": "\\b"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "B"}}], "displayName": "\\B"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "d"}}], "displayName": "\\d"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "D"}}], "displayName": "\\D"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "s"}}], "displayName": "\\s"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "S"}}], "displayName": "\\S"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "w"}}], "displayName": "\\w"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "W"}}], "displayName": "\\W"}],
+    "categoryCaption": "Characterklassen"}, {"blocks": [{"defaultNode": [{"name":
     "quantifierClass", "language": "regex", "properties": {"quantifierClass": "+"}}],
     "displayName": "+"}, {"defaultNode": [{"name": "quantifierClass", "language":
     "regex", "properties": {"quantifierClass": "*"}}], "displayName": "*"}, {"defaultNode":
     [{"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
-    "?"}}], "displayName": "?"}, {"defaultNode": [{"name": "lineTails", "language":
-    "regex", "properties": {"tail": "^"}}], "displayName": "^"}, {"defaultNode": [{"name":
-    "lineTails", "language": "regex", "properties": {"tail": "$"}}], "displayName":
-    "$"}, {"defaultNode": {"name": "characters", "language": "regex", "properties":
-    {"chars": "a"}}, "displayName": "a"}, {"defaultNode": {"name": "characters", "language":
-    "regex", "properties": {"chars": "b"}}, "displayName": "b"}], "categoryCaption":
-    "Manuell"}]}], "editorBlocks": [{"visual": [{"children": [{"style": {"color":
-    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
-    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType":
-    "iterator", "childGroupName": "subexpressions", "emptyDropTarget": false}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "expression", "languageName":
-    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
-    "property": "chars", "blockType": "input"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "characters", "languageName": "regex"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "\\", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "characterClass",
-    "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "knownCharacterClass", "languageName": "regex"}}, {"visual": [{"children":
+    "?"}}], "displayName": "?"}], "categoryCaption": "Kardinalitätsklassen"}, {"blocks":
+    [{"defaultNode": [{"name": "lineTails", "language": "regex", "properties": {"tail":
+    "^"}}], "displayName": "^"}, {"defaultNode": [{"name": "lineTails", "language":
+    "regex", "properties": {"tail": "$"}}], "displayName": "$"}], "categoryCaption":
+    "Zeilenanfang/ende"}, {"blocks": [{"defaultNode": {"name": "characters", "language":
+    "regex", "properties": {"chars": "a"}}, "displayName": "a"}, {"defaultNode": {"name":
+    "characters", "language": "regex", "properties": {"chars": "b"}}, "displayName":
+    "b"}], "categoryCaption": "Manuell"}]}], "editorBlocks": [{"visual": [{"children":
     [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
     "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "[", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
-    "iterator", "childGroupName": "characters", "emptyDropTarget": false}, {"text":
-    "]", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "characterRange", "languageName":
-    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "|", "style": {"display":
-    "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "alternative", "languageName": "regex"}},
-    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
-    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
-    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "(", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "subexpressions",
-    "emptyDropTarget": false}, {"text": ")", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "group", "languageName": "regex"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"style": {"display": "inline-flex"}, "property": "quantifierClass", "blockType":
-    "input"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "quantifierClass", "languageName": "regex"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "{", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
-    "iterator", "childGroupName": "bounds", "emptyDropTarget": false}, {"text": "}",
-    "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "quantifierRange", "languageName":
-    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
-    "property": "tail", "blockType": "input"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "lineTails", "languageName": "regex"}}, {"visual":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "empty",
+    "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "(",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
+    "childGroupName": "subexpressions", "emptyDropTarget": false}, {"text": ")", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "group", "languageName": "regex"}}, {"visual":
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
@@ -109,31 +76,98 @@ concise_attributes:
     "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
     "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "empty", "languageName":
-    "regex"}}], "rootCssClasses": ["activate-block-outline"], "editorComponents":
-    [{"componentType": "block-root"}, {"componentType": "validator"}, {"componentType":
-    "generated-code"}], "localGeneratorInstructions": {"type": "manual", "staticSidebars":
-    [{"type": "generatedBlocks", "caption": "RegEx", "categories": [{"type": "generated",
-    "grammar": {"regex": ["expression", "characters", "knownCharacterClass", "characterRange",
-    "alternative", "group", "quantifierRange", "number", "empty", "negation"]}, "categoryCaption":
-    "Automatisch"}, {"type": "constant", "blocks": [{"defaultNode": [{"name": "quantifierClass",
-    "language": "regex", "properties": {"quantifierClass": "+"}}], "displayName":
-    "+"}, {"defaultNode": [{"name": "quantifierClass", "language": "regex", "properties":
-    {"quantifierClass": "*"}}], "displayName": "*"}, {"defaultNode": [{"name": "quantifierClass",
-    "language": "regex", "properties": {"quantifierClass": "?"}}], "displayName":
-    "?"}, {"defaultNode": [{"name": "lineTails", "language": "regex", "properties":
-    {"tail": "^"}}], "displayName": "^"}, {"defaultNode": [{"name": "lineTails", "language":
-    "regex", "properties": {"tail": "$"}}], "displayName": "$"}, {"defaultNode": {"name":
-    "characters", "language": "regex", "properties": {"chars": "a"}}, "displayName":
-    "a"}, {"defaultNode": {"name": "characters", "language": "regex", "properties":
-    {"chars": "b"}}, "displayName": "b"}], "categoryCaption": "Manuell"}]}]}}'
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "tail", "blockType": "input"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "lineTails", "languageName":
+    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
+    "property": "chars", "blockType": "input"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "characters", "languageName": "regex"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "subexpressions",
+    "emptyDropTarget": false}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "expression", "languageName": "regex"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"text": "|", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "alternative",
+    "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": ".",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "anyCharacter", "languageName":
+    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "[", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator", "childGroupName":
+    "characters", "emptyDropTarget": false}, {"text": "]", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "characterRange", "languageName": "regex"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"style": {"display": "inline-flex"}, "property": "quantifierClass", "blockType":
+    "input"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
+    "quantifierClass", "languageName": "regex"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"text": "{", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "iterator", "childGroupName": "bounds", "emptyDropTarget": false}, {"text": "}",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "quantifierRange", "languageName":
+    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "\\", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}, {"style": {"display": "inline-flex"},
+    "property": "characterClass", "blockType": "input"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "knownCharacterClass", "languageName": "regex"}}],
+    "rootCssClasses": ["activate-block-outline"], "editorComponents": [{"componentType":
+    "block-root"}, {"componentType": "validator"}, {"componentType": "generated-code"}],
+    "localGeneratorInstructions": {"type": "manual", "staticSidebars": [{"type": "generatedBlocks",
+    "caption": "RegEx", "categories": [{"type": "generated", "grammar": {"regex":
+    ["expression", "characters", "characterRange", "alternative", "group", "quantifierRange",
+    "number", "empty", "negation", "anyCharacter"]}, "categoryCaption": "Automatisch"},
+    {"type": "constant", "blocks": [{"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "b"}}], "displayName": "\\b"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "B"}}], "displayName": "\\B"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "d"}}], "displayName": "\\d"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "D"}}], "displayName": "\\D"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "s"}}], "displayName": "\\s"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "S"}}], "displayName": "\\S"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "w"}}], "displayName": "\\w"},
+    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "W"}}], "displayName": "\\W"}], "categoryCaption": "Characterklassen"},
+    {"type": "constant", "blocks": [{"defaultNode": [{"name": "quantifierClass", "language":
+    "regex", "properties": {"quantifierClass": "+"}}], "displayName": "+"}, {"defaultNode":
+    [{"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
+    "*"}}], "displayName": "*"}, {"defaultNode": [{"name": "quantifierClass", "language":
+    "regex", "properties": {"quantifierClass": "?"}}], "displayName": "?"}], "categoryCaption":
+    "Kardinalitätsklassen"}, {"type": "constant", "blocks": [{"defaultNode": [{"name":
+    "lineTails", "language": "regex", "properties": {"tail": "^"}}], "displayName":
+    "^"}, {"defaultNode": [{"name": "lineTails", "language": "regex", "properties":
+    {"tail": "$"}}], "displayName": "$"}], "categoryCaption": "Zeilenanfang/ende"},
+    {"type": "constant", "blocks": [{"defaultNode": {"name": "characters", "language":
+    "regex", "properties": {"chars": "a"}}, "displayName": "a"}, {"defaultNode": {"name":
+    "characters", "language": "regex", "properties": {"chars": "b"}}, "displayName":
+    "b"}], "categoryCaption": "Manuell"}]}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-03 08:48:34.136111000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-21 16:25:30.612479000 Z
+  value_before_type_cast: 2020-07-22 11:35:51.573838000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: regex

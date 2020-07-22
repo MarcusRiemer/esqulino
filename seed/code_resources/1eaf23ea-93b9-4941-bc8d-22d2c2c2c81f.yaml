@@ -27,7 +27,8 @@ concise_attributes:
     "4"}}]}, "language": "regex", "properties": {"lowerBound": "1", "upperBound":
     "4"}}, {"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
     "?"}}, {"name": "characterRange", "children": {"characters": [{"name": "characters",
-    "language": "regex", "properties": {"chars": "-.\\s"}}]}, "language": "regex"},
+    "language": "regex", "properties": {"chars": "-."}}, {"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "s"}}]}, "language": "regex"},
     {"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
     "?"}}, {"name": "characters", "language": "regex", "properties": {"chars": "("}},
     {"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
@@ -40,21 +41,24 @@ concise_attributes:
     "regex", "properties": {"chars": ")"}}, {"name": "quantifierClass", "language":
     "regex", "properties": {"quantifierClass": "?"}}, {"name": "characterRange", "children":
     {"characters": [{"name": "characters", "language": "regex", "properties": {"chars":
-    "-.\\s"}}]}, "language": "regex"}, {"name": "quantifierClass", "language": "regex",
+    "-."}}, {"name": "knownCharacterClass", "language": "regex", "properties": {"characterClass":
+    "s"}}]}, "language": "regex"}, {"name": "quantifierClass", "language": "regex",
     "properties": {"quantifierClass": "?"}}, {"name": "knownCharacterClass", "language":
     "regex", "properties": {"characterClass": "d"}}, {"name": "quantifierRange", "children":
     {"bounds": [{"name": "number", "language": "regex", "properties": {"number": "1"}},
     {"name": "number", "language": "regex", "properties": {"number": "4"}}]}, "language":
     "regex", "properties": {"lowerBound": "1", "upperBound": "4"}}, {"name": "characterRange",
     "children": {"characters": [{"name": "characters", "language": "regex", "properties":
-    {"chars": "-.\\s"}}]}, "language": "regex"}, {"name": "quantifierClass", "language":
-    "regex", "properties": {"quantifierClass": "?"}}, {"name": "knownCharacterClass",
+    {"chars": "-."}}, {"name": "knownCharacterClass", "language": "regex", "properties":
+    {"characterClass": "s"}}]}, "language": "regex"}, {"name": "quantifierClass",
+    "language": "regex", "properties": {"quantifierClass": "?"}}, {"name": "knownCharacterClass",
     "language": "regex", "properties": {"characterClass": "d"}}, {"name": "quantifierRange",
     "children": {"bounds": [{"name": "number", "language": "regex", "properties":
     {"number": "1"}}, {"name": "number", "language": "regex", "properties": {"number":
     "4"}}]}, "language": "regex", "properties": {"lowerBound": "1", "upperBound":
     "4"}}, {"name": "characterRange", "children": {"characters": [{"name": "characters",
-    "language": "regex", "properties": {"chars": "-.\\s"}}]}, "language": "regex"},
+    "language": "regex", "properties": {"chars": "-."}}, {"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "s"}}]}, "language": "regex"},
     {"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
     "?"}}, {"name": "knownCharacterClass", "language": "regex", "properties": {"characterClass":
     "d"}}, {"name": "quantifierRange", "children": {"bounds": [{"name": "number",
@@ -66,7 +70,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-20 15:47:26.395921000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-21 13:18:30.194064000 Z
+  value_before_type_cast: 2020-07-22 11:26:42.702352000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6
@@ -75,8 +79,7 @@ concise_attributes:
   value_before_type_cast: regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: '"+""?"\"d"{[object Object], [object Object]}"?"["-.\s"]"?""(""?"\"d"{[object
-    Object], [object Object]}"?"")""?"["-.\s"]"?"\"d"{[object Object], [object Object]}["-.\s"]"?"\"d"{[object
-    Object], [object Object]}["-.\s"]"?"\"d"{[object Object], [object Object]}'
+  value_before_type_cast: "+?\\d{1, 4}?[-.\\s]?(?\\d{1, 3}?)?[-.\\s]?\\d{1, 4}[-.\\s]?\\d{1,
+    4}[-.\\s]?\\d{1, 9}"
 new_record: false
 active_record_yaml_version: 2

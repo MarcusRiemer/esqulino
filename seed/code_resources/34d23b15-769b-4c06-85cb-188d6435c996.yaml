@@ -19,15 +19,14 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "expression", "children": {"subexpressions": [{"name":
-    "characters", "language": "regex", "properties": {"chars": "a", "characters":
-    "a"}}, {"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
-    "+"}}]}, "language": "regex"}'
+    "characters", "language": "regex", "properties": {"chars": "a"}}, {"name": "quantifierClass",
+    "language": "regex", "properties": {"quantifierClass": "+"}}]}, "language": "regex"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-20 15:42:59.615581000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-20 15:46:09.381431000 Z
+  value_before_type_cast: 2020-07-22 13:27:09.095028000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6
@@ -36,6 +35,6 @@ concise_attributes:
   value_before_type_cast: regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: '"a""+"'
+  value_before_type_cast: a+
 new_record: false
 active_record_yaml_version: 2

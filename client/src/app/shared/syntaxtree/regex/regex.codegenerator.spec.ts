@@ -44,7 +44,54 @@ function emitTreeWithProgressCallbacks(astDesc: NodeDescription) {
 }
 
 describe("Language: RegEx Program (Codegen)", () => {
-  it("constant", () => {
-    verifyFiles("ast-01-constant", emitTree);
+  it("01: a", () => {
+    verifyFiles("ast-01-a", emitTree);
+  });
+
+  it("02: a|b", () => {
+    verifyFiles("ast-02-aORb", emitTree);
+  });
+
+  it("03: d", () => {
+    verifyFiles("ast-03-digitClass", emitTree);
+  });
+
+  it("04: a+", () => {
+    verifyFiles("ast-04-a+", emitTree);
+  });
+
+  it("05: telephoneRegex", () => {
+    verifyFiles("ast-05-telephoneRegex", emitTree);
+  });
+
+  it("06: ^abc$", () => {
+    verifyFiles("ast-06-startAndEndOfLine", emitTree);
+  });
+
+  it("07: a{1}b{1, }c{1, 2}", () => {
+    verifyFiles("ast-07-quantifierRanges", emitTree);
+  });
+
+  it("08: a(a|b)b", () => {
+    verifyFiles("ast-08-groupedAlternative", emitTree);
+  });
+
+  it("09: [^a]", () => {
+    verifyFiles("ast-09-characterRangeNegatedChar", emitTree);
+  });
+
+  it("10: [%^\\d]", () => {
+    verifyFiles(
+      "ast-10-characterRangeSymbolAndNegatedCharacterClass",
+      emitTree
+    );
+  });
+
+  it("11: anyCharacter", () => {
+    verifyFiles("ast-11-anyCharacter", emitTree);
+  });
+
+  it("12: email regex", () => {
+    verifyFiles("ast-12-emailRegex", emitTree);
   });
 });

@@ -26,7 +26,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-03 08:50:28.998263000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-21 14:45:57.643574000 Z
+  value_before_type_cast: 2020-07-22 15:07:52.584778000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6

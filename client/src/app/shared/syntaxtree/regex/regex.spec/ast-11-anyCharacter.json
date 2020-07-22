@@ -1,0 +1,12 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "anyCharacter",
+        "language": "regex"
+      }
+    ]
+  }
+}
