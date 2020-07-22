@@ -12,8 +12,8 @@ import {
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import {response} from "express";
-import {BehaviorSubject} from "rxjs";
+import { response } from "express";
+import { BehaviorSubject } from "rxjs";
 
 // TODO: Should be beautified and used
 type Query = ReturnType<AdminListNewsGQL["watch"]>;
@@ -63,9 +63,7 @@ export class AdminNewsListComponent {
     "updatedAt",
   ];
 
-  filterColumns: ColumnName[] = [
-    "title"
-  ];
+  filterColumns: ColumnName[] = ["title"];
 
   // mat-pagination info
   pageSize: number = 25;
@@ -113,8 +111,8 @@ export class AdminNewsListComponent {
       displayColumns: this.displayedColumns,
       pageSize: this.pageSize,
       sort: this.sort,
-      filterColumns:this.filterColumns,
-      filterString$:this._filter$
+      filterColumns: this.filterColumns,
+      filterString$: this._filter$,
     };
   }
 }

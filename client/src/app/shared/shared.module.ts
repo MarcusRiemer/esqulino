@@ -93,7 +93,6 @@ import { ConditionalDisplayDirective } from "./table/directives/conditional-disp
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { OverlayModule } from "@angular/cdk/overlay";
-import { AdminListNewsDataService } from "./serverdata/news-data.service";
 
 const dataServices = [
   ListGrammarDataService,
@@ -106,7 +105,6 @@ const dataServices = [
   IndividualProjectDataService,
   AdminListProjectDataService,
   ServerTasksService,
-  AdminListNewsDataService,
 ];
 
 const materialModules = [
