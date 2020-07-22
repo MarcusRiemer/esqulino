@@ -68,6 +68,15 @@ export const ProjectProposals: ProjectProposal[] = [
     tools: "BlattWerkzeug-Syntaxbäume, TypeScript mit Angular",
   },
   {
+    id: "monaco-editor",
+    language: "de",
+    title: "Integration des Monaco Editors (Visual Studio Code)",
+    text: `<p>
+        Im Rahmen dieses Projekts soll auf Basis von <a href="https://microsoft.github.io/monaco-editor/">Monaco</a> ein Text-Editor als eine Alternative zum Block-Editor angeboten werden. Der Monaco-Editor ist gewissermaßen die <code>&lt;textarea&gt;</code> der Visual Studio Code IDE. Da es das erklärte Ziel dieses Projekts ist, die Anwender möglichst schnell zu mündigen Programmierern (also ohne Drag & Drop) zu machen, wäre es schön den "Absprung" in Form eines tauglichen Texteditors mit Syntax Hervorhebung und Code Vervollständigung zu versüßen.
+          </p>`,
+    tools: `TypeScript mit Angular, <a href="https://microsoft.github.io/monaco-editor/">Monaco-Editor</a>`,
+  },
+  /*{
     id: "regex-course",
     language: "de",
     title: "Kurs für Reguläre Ausdrücke",
@@ -87,7 +96,7 @@ export const ProjectProposals: ProjectProposal[] = [
         des generierten Block-Editors soll er dazu einen Ausdruck bauen, der alle Testfälle erfüllt.
       </p>`,
     tools: "BlattWerkzeug-Sprachdefinitionen, TypeScript mit Angular",
-  },
+  },*/
   {
     id: "community-functions",
     language: "de",
@@ -126,17 +135,6 @@ export const ProjectProposals: ProjectProposal[] = [
       "Eigene Konzeption und Recherche, TypeScript mit Angular, Ruby mit Rails",
   },
   {
-    id: "visual-database-editor",
-    language: "de",
-    title: "Visueller Drag & Drop Editor für Datenbanken",
-    text: `
-          <p>
-          Aufbauend auf der <a href="http://files.blattwerkzeug.de/theses/marco-pawlowski-thesis-schema-editor.pdf"> Bachelor-Thesis von Marco Pawloski</a> soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
-          </p>`,
-    tools: "TypeScript mit Angular",
-  },
-  /*
-  {
     id: "web-environment",
     language: "de",
     title: "Web-Umgebung",
@@ -155,10 +153,9 @@ export const ProjectProposals: ProjectProposal[] = [
        <li>Wie kann eine Seite die Datenquellen angeben, die zur Darstellung benötigt werden?</li>
        <li>Wie können Formulardaten verarbeitet werden?</li>
      </ul>`,
-    tools: "TypeScript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
+    tools:
+      "TypeScript (client- und serverseitig), Grammatik-Editor von BlattWerkzeug",
   },
-  */
-  /*
   {
     id: "code-sandbox",
     language: "de",
@@ -177,6 +174,17 @@ export const ProjectProposals: ProjectProposal[] = [
       <p>
        Dazu sollen eigens geschriebene, bösartige Programme in einer Testsuite zusammengefasst und (möglichst) mit den gewählten Isolationsverfahren korrekt eingeschränkt werden. Die Bandbreite umfasst dabei schlicht schädliche Skripten (<code>rm -rf /</code>), triviale Versuche Passwörter auszulesen (<code>cat /etc/shadow</code>), über (BitCoin-)Miner (oder profane Endlosschleifen) bis hin zu Versuchen, einen <q>Command and Control</q>-Server aufzusetzen.
       </p>`,
-    tools: "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), Docker",
-  }, */
+    tools:
+      "Mandatory Access Control Features des Linux Kernels (AppArmor, SE Linux), ggfs. Docker",
+  },
+  {
+    id: "visual-database-editor",
+    language: "de",
+    title: "Visueller Drag & Drop Editor für Datenbanken",
+    text: `
+          <p>
+          Aufbauend auf der <a href="http://files.blattwerkzeug.de/theses/marco-pawlowski-thesis-schema-editor.pdf"> Bachelor-Thesis von Marco Pawloski</a> soll ein Datenbank - Editor mit Drag & Drop - Funktionalität entwickelt werden. Die visuelle Gestaltung und die Benutzerführung kann sich dabei gerne an etablierten Tools wie der <a href="https://www.mysql.com/products/workbench/">MySQL - Workbench</a> oder <a href="https://www.pgmodeler.com.br/">pgModeler</a> orientieren. Allerdings müssen die speziellen Anforderungen der Zielgruppe (Schüler und deren Lehrer) explizit berücksichtigt werden.
+          </p>`,
+    tools: "TypeScript mit Angular",
+  },
 ];
