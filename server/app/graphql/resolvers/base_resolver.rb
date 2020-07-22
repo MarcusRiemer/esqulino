@@ -41,7 +41,7 @@ module Resolvers
     end
 
     def apply_order(scope,value)
-      order_key = value.to_h.stringify_keys.fetch("orderField",default_order_field)
+      order_key = value.to_h.stringify_keys.fetch("orderField",default_order_field).underscore
       order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
       if is_multilingual_column? order_key
         # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"

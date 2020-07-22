@@ -1279,6 +1279,17 @@ export type FrontpageListNewsQuery = { __typename?: "Query" } & {
   };
 };
 
+export type FrontpageSingleNewsQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type FrontpageSingleNewsQuery = { __typename?: "Query" } & {
+  singleNews: { __typename?: "News" } & Pick<
+    News,
+    "id" | "title" | "text" | "publishedFrom"
+  >;
+};
+
 export type CreateProjectMutationVariables = {
   name: Scalars["LangJson"];
   slug: Scalars["String"];
@@ -2015,6 +2026,29 @@ export class FrontpageListNewsGQL extends Apollo.Query<
   FrontpageListNewsQueryVariables
 > {
   document = FrontpageListNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FrontpageSingleNewsDocument = gql`
+  query FrontpageSingleNews($id: ID!) {
+    singleNews(id: $id) {
+      id
+      title
+      text
+      publishedFrom
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FrontpageSingleNewsGQL extends Apollo.Query<
+  FrontpageSingleNewsQuery,
+  FrontpageSingleNewsQueryVariables
+> {
+  document = FrontpageSingleNewsDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
