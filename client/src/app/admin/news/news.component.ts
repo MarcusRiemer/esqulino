@@ -12,6 +12,8 @@ import {
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
+import {response} from "express";
+import {BehaviorSubject} from "rxjs";
 
 // TODO: Should be beautified and used
 type Query = ReturnType<AdminListNewsGQL["watch"]>;
@@ -61,6 +63,10 @@ export class AdminNewsListComponent {
     "updatedAt",
   ];
 
+  filterColumns: ColumnName[] = [
+    "title"
+  ];
+
   // mat-pagination info
   pageSize: number = 25;
 
@@ -70,38 +76,14 @@ export class AdminNewsListComponent {
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
-  public adminNewsList = this._serverData.getAdminNewsList.value;
-  public searchList = this.adminNewsList;
   public selectedLanguage: string = this.localeId;
   public selectedEditor: string = "single";
+  private _filter$ = new BehaviorSubject<string>("");
+  //need searchFor to fire ngModelChange event
   public searchFor: string = "";
 
-  public change(): void {
-    this.searchList = this.adminNewsList;
-    this.searchFor = this.searchFor.toLowerCase();
-    this.searchList = this.searchList.pipe(
-      map((item) =>
-        item.filter(
-          (entry) =>
-            entry.id.includes(this.searchFor) ||
-            (entry.text
-              ? entry.text[this.selectedLanguage]
-                ? entry.text[this.selectedLanguage]
-                    .toLowerCase()
-                    .includes(this.searchFor)
-                : null
-              : null) ||
-            (entry.title
-              ? entry.title[this.selectedLanguage]
-                ? entry.title[this.selectedLanguage]
-                    .toLowerCase()
-                    .includes(this.searchFor)
-                : null
-              : null) ||
-            (entry.publishedFrom ? entry.publishedFrom : null)
-        )
-      )
-    );
+  public change($event): void {
+    this._filter$.next($event);
   }
 
   /**
@@ -131,6 +113,8 @@ export class AdminNewsListComponent {
       displayColumns: this.displayedColumns,
       pageSize: this.pageSize,
       sort: this.sort,
+      filterColumns:this.filterColumns,
+      filterString$:this._filter$
     };
   }
 }

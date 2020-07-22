@@ -12,10 +12,10 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { SortDirection, MatSort } from "@angular/material/sort";
 import { MatTable, MatColumnDef } from "@angular/material/table";
 
-import { Observable, Subscription } from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, Subscription} from "rxjs";
 import { QueryRef } from "apollo-angular";
 import { PageInfo } from "../../../generated/graphql";
-import { map } from "rxjs/operators";
+import {map, startWith, tap} from "rxjs/operators";
 import { ApolloQueryResult } from "apollo-client";
 
 export interface GraphQLQueryData<
@@ -29,6 +29,8 @@ export interface GraphQLQueryData<
   displayColumns: ColumnName[];
   pageSize: number;
   sort: MatSort;
+  filterColumns?: ColumnName[];
+  filterString$?: BehaviorSubject<string>;
 }
 
 export interface GraphQLQueryComponent<
@@ -89,10 +91,23 @@ export class PaginatorTableGraphqlComponent
       map((responseDocument) => responseDocument.loading)
     );
     this.data$ = this._response$.pipe(
-      map((responseDocument) => responseDocument.data[this.queryData.dataKey])
+      map((responseDocument) => responseDocument.data[this.queryData.dataKey]),
     );
     this.totalCount$ = this.data$.pipe(map((data) => data.totalCount));
-    this.listData$ = this.data$.pipe(map((data) => data.nodes));
+    // if filterString$ and filterColumns are provided, each row in the table will be filtered
+    // by combining the response data with the filterString and filtering the response by filtercolumns
+    if(this.queryData.filterString$ && this.queryData.filterColumns) {
+      this.listData$ = combineLatest(
+        this.data$.pipe(map((data) => data.nodes)),
+        this.queryData.filterString$
+      ).pipe(map(([nodes, filter]) => nodes.filter(node =>
+         this.queryData.filterColumns.some(col =>
+            JSON.stringify(node[col]).toLowerCase().includes(filter.toLowerCase())
+          )
+      )));
+    } else {
+      this.listData$ = this.data$.pipe(map((data) => data.nodes));
+    }
     this._pageSize = this.queryData.pageSize;
   }
 
@@ -146,11 +161,10 @@ export class PaginatorTableGraphqlComponent
    * User has requested different sorting options
    */
   onChangeSort(active: string, direction: SortDirection) {
-    const pageInfo: PageInfo = this.getPageInfo();
+    //const pageInfo: PageInfo = this.getPageInfo();
     if (direction != "") {
       this.queryData.query.setVariables({
         first: this._pageSize,
-        //
         // after: btoa((+atob(pageInfo.startCursor) - 1).toString()),
         input: { order: { orderField: active, orderDirection: direction } },
       });

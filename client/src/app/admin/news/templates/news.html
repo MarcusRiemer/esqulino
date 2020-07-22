@@ -32,7 +32,7 @@
         <input
           class="form-control"
           name="search-for"
-          (ngModelChange)="change()"
+          (ngModelChange)="change($event)"
           [(ngModel)]="searchFor"
         />
       </div>
