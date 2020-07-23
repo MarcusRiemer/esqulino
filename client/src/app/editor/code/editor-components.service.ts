@@ -17,6 +17,7 @@ import { WorldRenderComponent } from "./truck/world-render.component";
 import { WorldControllerComponent } from "./truck/world-controller.component";
 import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
+import { RegexTestComponent } from "./regex/regex-test.component";
 
 /**
  * Allows registration of available editor components and hands them
@@ -42,6 +43,8 @@ export class EditorComponentsService {
         return new ComponentPortal(ValidationComponent);
       case "generated-code":
         return new ComponentPortal(CodeGeneratorComponent);
+      case "regex-test":
+        return new ComponentPortal(RegexTestComponent);
       case "truck-world":
         return new ComponentPortal(WorldRenderComponent);
       case "truck-controller":

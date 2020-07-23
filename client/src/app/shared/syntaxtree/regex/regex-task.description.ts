@@ -1,7 +1,7 @@
 /**
  * A list of testcases for regular expressions.
  */
-interface RegexTestDescription {
+export interface RegexTestDescription {
   cases: RegexTestCaseDescription[];
 }
 
@@ -12,7 +12,7 @@ interface RegexTestDescription {
  * - `noMatch`: The regex must not match anything in the string
  * - `exactMatch`: The regex must match exactly according to the expected hits.
  */
-interface RegexTestCaseDescription {
+export interface RegexTestCaseDescription {
   input: string;
 
   expected:
