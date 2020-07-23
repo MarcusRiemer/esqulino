@@ -1,0 +1,11 @@
+language "test" {
+  fixedBlocksSidebar "RegEx" {
+    category "Manuell" {
+      sidebarBlock "a" {
+        node "regex.characters" {
+          prop "chars" a
+        }
+      }
+    }
+  }
+}

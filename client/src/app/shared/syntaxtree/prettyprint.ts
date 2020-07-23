@@ -4,6 +4,7 @@ import { NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
 import * as Desc from "./grammar.description";
 import { orderTypes, allPresentTypes } from "./grammar-type-util";
 import { OccursDescription } from "./occurs";
+import { NodeTailoredDescription } from "../block";
 
 /**
  * Converts the internal structure of a grammar into a more readable
@@ -343,7 +344,7 @@ export function prettyPrintSyntaxTree(desc: NodeDescription): string {
  * Pretty prints a node of a syntaxtree. This includes all children of the given node.
  */
 export function prettyPrintSyntaxTreeNode(
-  desc: NodeDescription | NodeDescription[]
+  ...desc: NodeTailoredDescription[]
 ): NestedString {
   let allDescriptions = Array.isArray(desc) ? desc : [desc];
 
@@ -356,7 +357,7 @@ export function prettyPrintSyntaxTreeNode(
     const children = Object.entries(desc.children || {}).map(([key, value]) => {
       return [
         `childGroup "${key}" {`,
-        ...value.map(prettyPrintSyntaxTreeNode),
+        ...value.map((n) => prettyPrintSyntaxTreeNode(n)),
         `}`,
       ];
     });
