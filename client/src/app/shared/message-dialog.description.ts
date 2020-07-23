@@ -1,4 +1,4 @@
 export interface MessageDialogDescription {
-  type: "error";
+  caption?: string;
   description: string;
 }
