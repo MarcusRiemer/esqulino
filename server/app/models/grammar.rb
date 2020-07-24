@@ -36,7 +36,7 @@ class Grammar < ApplicationRecord
            dependent: :destroy # Needed because Rails otherwise tries to nullify the column
 
   # All grammars that are referenced by this grammar
-  has_many :referenced_grammars, through: :grammar_reference_origins, source: "target"
+  has_many :targeted_grammars, through: :grammar_reference_origins, source: "target"
 
   # Grammar with properties that are relevant when listing
   scope :scope_list, lambda {
@@ -135,7 +135,7 @@ class Grammar < ApplicationRecord
   # Computes a hash that may be sent back to the client if it requires
   # full access to grammar.
   def to_full_api_response
-    includes = self.referenced_grammars.pluck(:target_id)
+    includes = self.targeted_grammars.pluck(:target_id)
 
     to_json_api_response
       .except("model", "createdAt", "updatedAt")
@@ -171,7 +171,7 @@ class Grammar < ApplicationRecord
     if new_references.any? { |ref| not ref.persisted? }
       return true
     else
-      curr_ids = referenced_grammars.map {|r| r.id}.to_set
+      curr_ids = targeted_grammars.map {|r| r.id}.to_set
       new_ids = new_references.map {|r| r.id}.to_set
       return not((curr_ids ^ new_ids).empty?)
     end
