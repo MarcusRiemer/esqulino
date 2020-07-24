@@ -1,7 +1,13 @@
-<h1 mat-dialog-title>{{ data.type | uppercase }}</h1>
+<h1 *ngIf="data.caption" mat-dialog-title>{{ data.caption }}</h1>
 <div mat-dialog-content>
   <p>{{ data.description }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onClose()">Ok</button>
+  <ng-container [ngSwitch]="dialogueType">
+    <button *ngSwitchCase="'alert'" mat-button (click)="onClose()">Ok</button>
+    <ng-container *ngSwitchCase="'confirm'">
+      <button mat-button (click)="onClose(true)">Ja</button>
+      <button mat-button (click)="onClose(false)">Nein</button>
+    </ng-container>
+  </ng-container>
 </div>

@@ -127,9 +127,15 @@ export class UserService {
     map((u) => u.roles)
   );
 
-  readonly primaryEmail$ = this.identities.pipe(map((u) => u.primary));
+  readonly primaryEmail$ = this.identities.pipe(
+    filter((u) => !!u),
+    map((u) => u.primary)
+  );
 
-  readonly providers$ = this.identities.pipe(map((u) => u.providers));
+  readonly providers$ = this.identities.pipe(
+    filter((u) => !!u),
+    map((u) => u.providers)
+  );
 
   /**
    * Sends a http-request for the sign up of a password identity

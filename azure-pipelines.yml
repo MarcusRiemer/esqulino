@@ -87,9 +87,9 @@ jobs:
       verbose: false
     condition: ne(variables.CACHE_RESTORED, 'true')
 
-  - bash: 'make client-test'
+  - bash: 'make test'
     workingDirectory: client
-    displayName: 'make client-test'
+    displayName: 'make test'
     continueOnError: true
 
   - task: PublishTestResults@2

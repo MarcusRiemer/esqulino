@@ -25,16 +25,10 @@ export class IsAdminGuard implements CanActivate {
     // If the user is not an administrator, redirect him to the frontpage
     if (!roles.includes(Roles.Admin)) {
       // Waiting for a login
-      await this._matDialog
-        .open(MessageDialogComponent, {
-          data: {
-            type: "error",
-            description: "You are not allowed to visit this page.",
-          },
-        })
-        .afterClosed()
-        .pipe(first())
-        .toPromise();
+      await MessageDialogComponent.alert(this._matDialog, {
+        caption: $localize`:@@caption.error:Fehler`,
+        description: $localize`:@@message.page-note-allowed:Sie sind nicht berechtigt diese Seite aufzurufen`,
+      });
 
       return this._router.parseUrl("/");
     }
