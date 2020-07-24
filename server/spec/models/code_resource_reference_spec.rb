@@ -7,9 +7,8 @@ RSpec.describe CodeResourceReference, type: :model do
 
     reference = create(:code_resource_reference,
                        origin: origin,
-                       target: target,
-                       reference_type: "generic")
+                       target: target)
 
-    expect(CodeResourceReference.generic).to eq([reference])
+    expect(origin.targeted_code_resources).to match_array [target]
   end
 end

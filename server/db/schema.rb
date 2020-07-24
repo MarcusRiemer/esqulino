@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_07_185733) do
+ActiveRecord::Schema.define(version: 2020_07_24_113148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_185733) do
   create_table "code_resource_references", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "origin_id", null: false
     t.uuid "target_id", null: false
-    t.integer "reference_type", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["origin_id", "target_id"], name: "code_resource_references_unique", unique: true

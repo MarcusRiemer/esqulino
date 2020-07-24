@@ -15,6 +15,15 @@ class CodeResource < ApplicationRecord
   # May be the basis for generated grammars
   has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
 
+  # A code resource may reference other code resources (this `includes` other)
+  has_many :code_resource_reference_origins,
+           class_name: 'CodeResourceReference',
+           foreign_key: "origin_id",
+           dependent: :destroy
+
+  # All code resources that are targeted by this code resource
+  has_many :targeted_code_resources, through: :code_resource_reference_origins, source: "target"
+
   # Name may not be empty
   validates :name, presence: true
   # The AST is a single root node or empty
