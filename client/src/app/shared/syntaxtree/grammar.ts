@@ -16,6 +16,7 @@ import { resolveChildOccurs } from "./grammar-util";
 import { OccursSpecificDescription, resolveOccurs } from "./occurs";
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { allPresentTypes } from "./grammar-type-util";
+import { isValidId } from "../util";
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -287,14 +288,19 @@ export class NodeConcreteType extends NodeType {
   private instanciatePropertyValidator(
     desc: Desc.NodePropertyTypeDescription
   ): NodePropertyValidator {
-    if (Desc.isNodePropertyStringDesciption(desc)) {
-      return new NodePropertyStringValidator(desc);
-    } else if (Desc.isNodePropertyBooleanDesciption(desc)) {
-      return new NodePropertyBooleanValidator(desc);
-    } else if (Desc.isNodePropertyIntegerDesciption(desc)) {
-      return new NodePropertyIntegerValidator(desc);
-    } else {
-      throw new Error(`Unknown property validator for base "${desc.base}"`);
+    switch (desc.base) {
+      case "boolean":
+        return new NodePropertyBooleanValidator(desc);
+      case "string":
+        return new NodePropertyStringValidator(desc);
+      case "integer":
+        return new NodePropertyIntegerValidator(desc);
+      case "codeResourceReference":
+      case "grammarReference":
+        return new NodePropertyReferenceValidator(desc);
+      default:
+        // @ts-ignore `base` is technically never, but we want clean errors for non-conforming inputs
+        throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
   }
 }
@@ -1190,6 +1196,27 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
 }
 
 /**
+ * Ensures that the given attribute is at least a valid ID. Also marks the id (if valid)
+ * to be later on checked for existence.
+ */
+export class NodePropertyReferenceValidator extends NodePropertyValidator {
+  private readonly _referenceType: Desc.NodePropertyReferenceDescription["base"];
+
+  constructor(desc: Desc.NodePropertyReferenceDescription) {
+    super(desc);
+    this._referenceType = desc.base;
+  }
+
+  validate(node: AST.Node, idValue: string, context: ValidationContext): void {
+    if (isValidId(idValue)) {
+      context.addReference(this._referenceType, idValue);
+    } else {
+      context.addError(ErrorCodes.InvalidResourceId, node);
+    }
+  }
+}
+
+/**
  * Ensures that given nodes match exactly one of the types given
  * in the description.
  */
@@ -1318,7 +1345,6 @@ class TypeReference {
       this._languageName = currentLang;
       this._typeName = desc;
     } else {
-      // debugger;
       throw new Error("Impossible: Unknown type reference");
     }
   }

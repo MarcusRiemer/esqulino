@@ -1864,6 +1864,57 @@ describe("Grammar Validation", () => {
     );
   });
 
+  describe(`References`, () => {
+    const langRef = singleLanguageGrammar("ref", "root", {
+      root: {
+        type: "concrete",
+        attributes: [
+          {
+            name: "resRef",
+            type: "property",
+            base: "codeResourceReference",
+          },
+        ],
+      },
+    });
+
+    it(`Marks a valid ID for check`, () => {
+      const v = new Validator([langRef]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "ref",
+        name: "root",
+        properties: {
+          resRef: "35cbb311-c412-4af9-bafd-58c38e08e78b",
+        },
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+
+      const res = v.validateFromRoot(ast);
+      expect(res.errors).toEqual([]);
+    });
+
+    it(`Rejects an invalid ID and doesn't mark it for check`, () => {
+      const v = new Validator([langRef]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "ref",
+        name: "root",
+        properties: {
+          resRef: "invalid",
+        },
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+
+      const res = v.validateFromRoot(ast);
+      expect(res.errors.map((e) => e.code)).toEqual([
+        ErrorCodes.InvalidResourceId,
+      ]);
+    });
+  });
+
   describe(`Root omitted`, () => {
     it(`No types present at all`, () => {
       const g: GrammarDocument = {
