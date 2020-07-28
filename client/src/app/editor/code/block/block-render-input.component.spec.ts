@@ -130,7 +130,7 @@ describe("BlockRenderInputComponent", () => {
 
   it(`Switches to editing mode on click`, async () => {
     const c = await createComponent(mkNode(), DEFAULT_VISUAL);
-    c.element.querySelector("span").click();
+    (c.element.querySelector(".not-editing > span") as HTMLElement).click();
 
     expect(c.component.currentlyEditing).toEqual(true);
     expect(c.component.currentValue).toEqual("original");
@@ -146,7 +146,7 @@ describe("BlockRenderInputComponent", () => {
 
   it(`Switches to editing mode on click`, async () => {
     const c = await createComponent(mkNode(), DEFAULT_VISUAL);
-    c.element.querySelector("span").click();
+    (c.element.querySelector(".not-editing > span") as HTMLElement).click();
 
     expect(c.component.currentlyEditing).toEqual(true);
     expect(c.component.currentValue).toEqual("original");
@@ -168,7 +168,7 @@ describe("BlockRenderInputComponent", () => {
 
   it(`Changes the model after an accepted edit`, async () => {
     const c = await createComponent(mkNode(), DEFAULT_VISUAL);
-    c.element.querySelector("span").click();
+    (c.element.querySelector(".not-editing > span") as HTMLElement).click();
 
     c.fixture.detectChanges(); // Should render input from now on
 
@@ -208,7 +208,7 @@ describe("BlockRenderInputComponent", () => {
 
   it(`Does not change the model after an accepted edit with no change`, async () => {
     const c = await createComponent(mkNode(), DEFAULT_VISUAL);
-    c.element.querySelector("span").click();
+    (c.element.querySelector(".not-editing > span") as HTMLElement).click();
 
     c.fixture.detectChanges(); // Should render input from now on
 
@@ -238,7 +238,7 @@ describe("BlockRenderInputComponent", () => {
 
   it(`Does not change the model after a cancelled edit`, async () => {
     const c = await createComponent(mkNode(), DEFAULT_VISUAL);
-    c.element.querySelector("span").click();
+    (c.element.querySelector(".not-editing > span") as HTMLElement).click();
 
     c.fixture.detectChanges(); // Should render input from now on
 

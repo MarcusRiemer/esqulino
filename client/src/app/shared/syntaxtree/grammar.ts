@@ -186,6 +186,10 @@ export class NodeConcreteType extends NodeType {
     }
   }
 
+  getPropertyBaseType(name: string) {
+    return this._allowedProperties[name].baseName;
+  }
+
   /**
    * @return Names of all categories that could have children.
    */
@@ -1044,12 +1048,14 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
  * Validates any property.
  */
 abstract class NodePropertyValidator {
-  private _isOptional: boolean;
-  private _base: string;
+  //! True if this property may be omitted from a node
+  readonly isOptional: boolean;
+  //! The type to use as the validation base
+  readonly baseName: string;
 
   constructor(desc: Desc.NodePropertyTypeDescription) {
-    this._isOptional = !!desc.isOptional;
-    this._base = desc.base;
+    this.isOptional = !!desc.isOptional;
+    this.baseName = desc.base;
   }
 
   abstract validate(
@@ -1057,20 +1063,6 @@ abstract class NodePropertyValidator {
     value: string,
     context: ValidationContext
   ): void;
-
-  /**
-   * @return This property may be omitted from a node.
-   */
-  get isOptional() {
-    return this._isOptional;
-  }
-
-  /**
-   * @return The typename of the property
-   */
-  get baseName() {
-    return this._base;
-  }
 }
 
 /**
@@ -1483,9 +1475,9 @@ export class GrammarValidator {
   /**
    * @return The type with the matching name.
    */
-  getType(n: AST.Node): NodeType;
+  getType(n: AST.Node): NodeConcreteType;
   getType(languageName: string, typename: string): NodeType;
-  getType(nodeOrLang: string | AST.Node, givenTypename?: string): NodeType {
+  getType(nodeOrLang: string | AST.Node, givenTypename?: string) {
     const languageName =
       nodeOrLang instanceof AST.Node ? nodeOrLang.languageName : nodeOrLang;
     const typename =

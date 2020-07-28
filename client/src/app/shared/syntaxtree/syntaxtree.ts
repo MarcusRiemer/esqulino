@@ -600,7 +600,7 @@ export class Tree {
       node.properties = {};
     }
 
-    node.properties[key] = value;
+    node.properties[key] = value.toString();
 
     return new Tree(newDescription);
   }

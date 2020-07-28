@@ -2433,8 +2433,8 @@ describe("Grammar Validation", () => {
         name: "r",
       }).rootNode;
 
-      const resType = g.getType(n);
-      const resParams = g.getType("l", "r");
+      const resType: any = g.getType(n);
+      const resParams: any = g.getType("l", "r");
 
       expect(resType).toBe(resParams);
     });

@@ -5,6 +5,8 @@ import { VisualBlockDescriptions } from "../../../shared/block";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 
+type VisualizedDatatype = "string" | "boolean" | "enum";
+
 /**
  * Allows editing of atomic values. These are cached inside this component
  * before beeing applied to the node.
@@ -22,18 +24,46 @@ export class BlockRenderInputComponent {
    */
   public editedValue: string;
 
-  constructor(private _renderData: RenderedCodeResourceService) {}
+  public editedType: VisualizedDatatype = "string";
 
   /**
    * True, if this block is currently beeing edited.
    */
-  public _currentlyEditing = false;
+  private _currentlyEditing = false;
+
+  constructor(private _renderData: RenderedCodeResourceService) {}
 
   /**
    * Initializes default values.
    */
   ngOnInit() {
     this.editedValue = this.currentValue;
+    this.editedType = this.determineDatatype();
+  }
+
+  private determineDatatype(): VisualizedDatatype {
+    // TODO: Remove this hack for the regex testbench
+    if (this.visual.property === "wholeMatch") {
+      return "boolean";
+    }
+
+    const langName = this.node.languageName;
+    const g = this._renderData.validator?.getGrammarValidator(langName);
+
+    // There should be a matching validator, but better not freak out if not ...
+    if (!g) {
+      return "string";
+    }
+    const nodeType = g.getType(this.node);
+    const baseType = nodeType.getPropertyBaseType(this.visual.property);
+
+    switch (baseType) {
+      case "boolean":
+      case "enum":
+        return baseType;
+      default:
+        return "string";
+    }
   }
 
   /**
@@ -66,6 +96,10 @@ export class BlockRenderInputComponent {
     if (!this._renderData.readOnly) {
       this.currentlyEditing = true;
     }
+  }
+
+  onEvent(evt: any) {
+    debugger;
   }
 
   /**
