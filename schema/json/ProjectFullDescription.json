@@ -1386,9 +1386,6 @@
           "type": "string"
         },
         "isOptional": {
-          "enum": [
-            false
-          ],
           "type": "boolean"
         },
         "name": {

@@ -150,7 +150,7 @@ export interface NodePropertyIntegerDescription {
 export interface NodePropertyReferenceDescription {
   type: "property";
   name: string;
-  isOptional?: false; // Optional references should probably be modeled as optional nodes
+  isOptional?: boolean;
   base: "grammarReference" | "codeResourceReference";
   tags?: string[];
 }
@@ -368,6 +368,17 @@ export type GrammarRequestUpdateDescription =
   | Partial<Omit<GrammarDescription, "id">>
   | { generatedFromId: null }
   | { root: null };
+
+/**
+ * @return True, if the given instance satisfies "GrammarDocument"
+ */
+export function isGrammarDocument(arg: any): arg is GrammarDocument {
+  return (
+    arg instanceof Object &&
+    arg.types instanceof Object &&
+    arg.foreignTypes instanceof Object
+  );
+}
 
 /**
  * @return True if the given instance satisfies "QualifiedTypeName"
