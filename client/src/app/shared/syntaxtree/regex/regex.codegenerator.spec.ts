@@ -1,7 +1,7 @@
 import { CodeGenerator } from "../codegenerator";
 import { NodeDescription, Tree } from "../syntaxtree";
 
-import { NODE_CONVERTER } from "./regex.codegenerator";
+import { REGEX_CONVERTER } from "./regex.codegenerator";
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -30,7 +30,7 @@ export function verifyFiles<T>(
  */
 function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
   const ast = new Tree(astDesc).rootNode;
-  const codeGen = new CodeGenerator(NODE_CONVERTER, []);
+  const codeGen = new CodeGenerator(REGEX_CONVERTER, []);
 
   return codeGen.emit(ast);
 }

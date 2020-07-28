@@ -3,9 +3,9 @@ import { Observable, of, combineLatest } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 
 import {
-  RegexTestDescription,
+  RegexTestBenchDescription,
   RegexTestCaseDescription,
-} from "../../../shared/syntaxtree/regex/regex-task.description";
+} from "../../../shared/syntaxtree/regex/regex-testbench.description";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 
@@ -41,7 +41,7 @@ export class RegexTestComponent {
   /**
    * The testcases to execute
    */
-  readonly test$: Observable<RegexTestDescription> = of({
+  readonly test$: Observable<RegexTestBenchDescription> = of({
     cases: [
       {
         input: "ab",

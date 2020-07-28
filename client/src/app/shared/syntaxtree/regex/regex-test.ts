@@ -1,4 +1,4 @@
-import { RegexTestCaseDescription } from "./regex-task.description";
+import { RegexTestCaseDescription } from "./regex-testbench.description";
 
 function simplifyMatch(
   testCase: RegexTestCaseDescription

@@ -7,7 +7,7 @@ import { Node } from "../syntaxtree";
 /**
  * Converts a RegEx-AST to a properly indented stringified representation.
  */
-export const NODE_CONVERTER: NodeConverterRegistration[] = [
+export const REGEX_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "regex",
