@@ -18,6 +18,7 @@ FactoryBot.define do
 
     trait :meta_grammar do
       association :programming_language, factory: [:programming_language, :meta_grammar]
+      association :block_language, factory: [:block_language, :grammar_meta]
     end
 
     trait :grammar_code_resource_references do

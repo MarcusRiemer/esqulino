@@ -27,6 +27,10 @@ FactoryBot.define do
       }
     end
 
+    trait :grammar_meta do
+      association :grammar, factory: [:grammar, :model_meta]
+    end
+
     trait :grammar_code_resource_references do
       association :grammar, factory: [:grammar, :model_spec_code_resource_references]
     end

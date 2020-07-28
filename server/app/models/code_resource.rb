@@ -86,9 +86,21 @@ class CodeResource < ApplicationRecord
     end
   end
 
+  # Aaaaand this is the second time we are between a rock and a hard place:
+  # How to synchronize the references in the JSON model with a "normal"
+  # relational database?
+  #
+  # I decided to automatically update after every save operation but to only
+  # log errors in case something goes wrong due to a faulty grammar.
   after_save do
     if self.saved_change_to_attribute? :ast
-      self.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
+      begin
+        self.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
+      rescue EsqulinoError::Base => ex
+        # Log message and stacktrace
+        Rails.logger.error [ex.message, *ex.backtrace].join($/)
+        Raven.capture_exception ex
+      end
     end
   end
 
