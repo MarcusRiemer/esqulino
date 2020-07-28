@@ -2416,4 +2416,38 @@ describe("Grammar Validation", () => {
       });
     });
   });
+
+  describe(`getType overloads`, () => {
+    const gDesc = singleLanguageGrammar("l", "r", {
+      r: {
+        type: "concrete",
+        attributes: [],
+      },
+    });
+
+    const g = new Validator([gDesc]).getGrammarValidator("l");
+
+    it(`Works with a node that has an existing type`, () => {
+      const n = new AST.Tree({
+        language: "l",
+        name: "r",
+      }).rootNode;
+
+      const resType = g.getType(n);
+      const resParams = g.getType("l", "r");
+
+      expect(resType).toBe(resParams);
+    });
+
+    it(`Throws on missing types`, () => {
+      const n = new AST.Tree({
+        language: "l",
+        name: "nonexistant",
+      }).rootNode;
+
+      expect(() => {
+        g.getType(n);
+      }).toThrowError(/l\.nonexistant/);
+    });
+  });
 });

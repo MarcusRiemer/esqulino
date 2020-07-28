@@ -1483,9 +1483,18 @@ export class GrammarValidator {
   /**
    * @return The type with the matching name.
    */
-  getType(languageName: string, typename: string): NodeType {
+  getType(n: AST.Node): NodeType;
+  getType(languageName: string, typename: string): NodeType;
+  getType(nodeOrLang: string | AST.Node, givenTypename?: string): NodeType {
+    const languageName =
+      nodeOrLang instanceof AST.Node ? nodeOrLang.languageName : nodeOrLang;
+    const typename =
+      nodeOrLang instanceof AST.Node ? nodeOrLang.typeName : givenTypename;
+
     if (!this.isKnownType(languageName, typename)) {
-      throw new Error(`Language does not have type "${typename}"`);
+      throw new Error(
+        `Could not get type "${languageName}.${typename}": Is unknown`
+      );
     } else {
       return this._registeredLanguages[languageName][typename];
     }
