@@ -12,13 +12,14 @@ import {
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { IndividualGrammarDataService } from "../../shared/serverdata";
+import { allPresentTypes } from "../../shared/syntaxtree/grammar-type-util";
+
 import { CurrentCodeResourceService } from "../current-coderesource.service";
 
 import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 import { DatabaseSchemaSidebarComponent } from "./query/database-schema-sidebar.component";
 import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.component";
-import { allPresentTypes } from "src/app/shared/syntaxtree/grammar-type-util";
 import { TruckWorldTilesSidebarComponent } from "./truck/world-editor/truck-world-tiles-sidebar.component";
 
 /**

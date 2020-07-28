@@ -1,0 +1,277 @@
+trigger:
+- "*"
+
+pool:
+  name: Hosted Ubuntu 1604
+  demands: npm
+
+variables:
+  TPUT_BIN: true
+  NODE_BIN: "/usr/local/bin/node" # Obtained by running `whereis node` in the pipeline
+  BUNDLE_PATH: $(Pipeline.Workspace)/.bundle
+
+resources:
+  containers:
+    - container: postgres
+      image: postgres:latest
+      env:
+        POSTGRES_DB: esqulino_test
+        POSTGRES_USER: esqulino
+        POSTGRES_HOST_AUTH_METHOD: trust
+      ports:
+      - 5432:5432
+
+jobs:
+- job: client_compile_browser
+  displayName: Client (Browser)
+
+  steps:
+  - task: Cache@2
+    inputs:
+      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      path: 'client/node_modules'
+      cacheHitVar: 'CACHE_RESTORED'
+    displayName: Cache for node_modules
+
+  - task: Npm@1
+    displayName: 'Install Dependencies'
+    inputs:
+      command: ci
+      workingDir: client
+      verbose: false
+    condition: ne(variables.CACHE_RESTORED, 'true')
+
+  - bash: 'make client-compile'
+    workingDirectory: client
+    displayName: 'make client-compile'
+
+- job: client_compile_universal
+  displayName: Client (Universal)
+
+  steps:
+  - task: Cache@2
+    inputs:
+      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      path: 'client/node_modules'
+      cacheHitVar: 'CACHE_RESTORED'
+    displayName: Cache for node_modules
+
+  - task: Npm@1
+    displayName: 'Install Dependencies'
+    inputs:
+      command: ci
+      workingDir: client
+      verbose: false
+    condition: ne(variables.CACHE_RESTORED, 'true')
+
+  - bash: 'make src/environments/version.ts universal-compile'
+    workingDirectory: client
+    displayName: 'make universal-compile'
+
+- job: client_test
+  displayName: Client (Tests)
+
+  steps:
+  - task: Cache@2
+    inputs:
+      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      path: 'client/node_modules'
+      cacheHitVar: 'CACHE_RESTORED'
+    displayName: Cache for node_modules
+
+  - task: Npm@1
+    displayName: 'Install Dependencies'
+    inputs:
+      command: ci
+      workingDir: client
+      verbose: false
+    condition: ne(variables.CACHE_RESTORED, 'true')
+
+  - bash: 'make client-test'
+    workingDirectory: client
+    displayName: 'make client-test'
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Client Test Results'
+    inputs:
+      testResultsFiles: 'client/test-results/TEST*.xml'
+      failTaskOnFailedTests: true
+      testRunTitle: Client
+    continueOnError: true
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish Client Code Coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/client/coverage/cobertura-coverage.xml'
+      reportDirectory: '$(System.DefaultWorkingDirectory)/client/coverage/'
+    continueOnError: true
+
+- job: client_compile_cli  # name of the job (A-Z, a-z, 0-9, and underscore)
+  displayName: Client (CLI)
+
+  steps:
+  - task: Cache@2
+    inputs:
+      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      path: 'client/node_modules'
+      cacheHitVar: 'CACHE_RESTORED'
+    displayName: Cache for node_modules
+
+  - task: Npm@1
+    displayName: 'Install Dependencies'
+    inputs:
+      command: ci
+      workingDir: client
+      verbose: false
+    condition: ne(variables.CACHE_RESTORED, 'true')
+
+  - bash: 'make cli-compile'
+    workingDirectory: client
+    displayName: 'make cli-compile'
+    continueOnError: true
+
+  - publish: $(System.DefaultWorkingDirectory)/client/dist
+    artifact: ClientCliDist
+
+- job: server_compile_test  # name of the job (A-Z, a-z, 0-9, and underscore)
+  displayName: Server Test
+  dependsOn: client_compile_cli
+  services:
+    postgres: postgres
+
+  steps:
+  - bash: "whereis node"
+    displayName: 'whereis node'
+
+  - script: sudo apt-get install -y graphviz
+    displayName: 'Install Graphviz'
+    continueOnError: true
+
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: '>= 2.6'
+
+  - script: gem install bundler
+    displayName: 'gem install bundler'
+
+  - task: Cache@2
+    inputs:
+      key: 'gems | "$(Agent.OS)" | server/Gemfile.lock'
+      restoreKeys: |
+        gems | "$(Agent.OS)"
+        gems
+      path: $(BUNDLE_PATH)
+    displayName: Cache gems
+
+  - bash: 'make install-deps'
+    workingDirectory: server
+    displayName: 'make install-deps'
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      buildType: 'current'
+      artifactName: 'ClientCliDist'
+      targetPath: '$(System.DefaultWorkingDirectory)/client/dist'
+    displayName: "Download IDE CLI"
+
+  - script: |
+      mkdir -p browser/de/vendor/logos
+      touch browser/de/index.html browser/de/vendor/logos/blattwerkzeug-caption.svg browser/de/vendor/logos/cau.png
+    displayName: 'Touch static dummy files'
+    workingDirectory: client/dist
+
+  - bash: "make test"
+    workingDirectory: server
+    displayName: 'make test'
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Server Test Results'
+    inputs:
+      testResultsFiles: 'server/test-results/rspec.xml'
+      failTaskOnFailedTests: true
+      testRunTitle: Server
+    continueOnError: true
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish Server Code Coverage'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/server/coverage/coverage.xml'
+      pathToSources: '$(System.DefaultWorkingDirectory)/server'
+      reportDirectory: '$(System.DefaultWorkingDirectory)/server/coverage/'
+    continueOnError: true
+
+- job: server_load_seed  # name of the job (A-Z, a-z, 0-9, and underscore)
+  displayName: Server Load Seed Data
+  dependsOn: client_compile_cli
+  services:
+    postgres: postgres
+
+  steps:
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: '>= 2.6'
+
+  - script: gem install bundler
+    displayName: 'gem install bundler'
+
+  - task: Cache@2
+    inputs:
+      key: 'gems | "$(Agent.OS)" | server/Gemfile.lock'
+      restoreKeys: |
+        gems | "$(Agent.OS)"
+        gems
+      path: $(BUNDLE_PATH)
+    displayName: Cache gems
+
+  - bash: 'make install-deps'
+    workingDirectory: server
+    displayName: 'make install-deps'
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      buildType: 'current'
+      artifactName: 'ClientCliDist'
+      targetPath: '$(System.DefaultWorkingDirectory)/client/dist'
+    displayName: "Download IDE CLI"
+
+  - bash: "ls ../client/dist/cli"
+    workingDirectory: server
+    displayName: 'Debug Output'
+
+  - bash: "make reset-live-data"
+    workingDirectory: server
+    displayName: 'make reset-live-data'
+
+- job: code_formatting
+  displayName: Check Code Formatting
+  steps:
+  - task: Npm@1
+    displayName: 'Install prettier'
+    inputs:
+      command: custom
+      workingDir: client
+      verbose: false
+      customCommand: 'install prettier'
+
+  - bash: 'make verify-format-code || echo "Client: Some files are not correctly formatted" >&2'
+    workingDirectory: client
+    failOnStderr: true
+    displayName: 'Verify Client Code Formatting'
+
+- job: json_schemas_synced
+  displayName: Check JSON Schemas are Synced
+  steps:
+  - task: Npm@1
+    displayName: 'Install JSON Schema Generator'
+    inputs:
+      command: 'ci'
+      workingDir: 'schema/json'
+      verbose: false
+
+  - bash: 'make verify-cached-schemas'
+    workingDirectory: schema/json
+    displayName: 'Verify Synced Schemas'
