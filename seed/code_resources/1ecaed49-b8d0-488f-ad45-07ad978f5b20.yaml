@@ -1,0 +1,182 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision:
+      scale:
+      limit:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 1ecaed49-b8d0-488f-ad45-07ad978f5b20
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 TestCases
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "root", "languageName":
+    "regex-testbench"}}], "nodes": [{"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "Testfälle"}}, {"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "case", "languageName":
+    "regex-testbench"}}], "cardinality": [{"name": "knownCardinality", "language":
+    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "cases"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "root", "languageName": "regex-testbench"}}, {"name":
+    "typedef", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "caseHits", "languageName": "regex-testbench"}}, {"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "caseSingle",
+    "languageName": "regex-testbench"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "case", "languageName": "regex-testbench"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "Eingabe:"}}, {"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "input"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ", Treffer?"}}, {"name": "property", "language": "MetaGrammar",
+    "properties": {"base": "boolean", "name": "wholeMatch"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "caseSingle", "languageName": "regex-testbench"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "string", "name": "input"}}, {"name": "children",
+    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "string", "languageName": "regex-testbench"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "hits"}}]}, "language": "MetaGrammar", "properties": {"typeName": "caseHits",
+    "languageName": "regex-testbench"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "string",
+    "languageName": "regex-testbench"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "regex-testbench"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-28 19:56:53.038504000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-28 21:16:16.537427000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "regex-testbench": {
+          "root": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "Testfälle"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "cases",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "regex-testbench",
+                          "typeName": "case"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "case": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex-testbench",
+                "typeName": "caseHits"
+              },
+              {
+                "languageName": "regex-testbench",
+                "typeName": "caseSingle"
+              }
+            ]
+          },
+          "caseSingle": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "Eingabe:"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "input"
+              },
+              {
+                "type": "terminal",
+                "symbol": ", Treffer?"
+              },
+              {
+                "type": "property",
+                "base": "boolean",
+                "name": "wholeMatch"
+              }
+            ]
+          },
+          "caseHits": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "input"
+              },
+              {
+                "type": "sequence",
+                "name": "hits",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "regex-testbench",
+                      "typeName": "string"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              }
+            ]
+          },
+          "string": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "root": {
+        "languageName": "regex-testbench",
+        "typeName": "root"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

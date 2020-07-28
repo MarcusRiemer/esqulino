@@ -1,0 +1,42 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision:
+      scale:
+      limit:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b7b78ada-5352-4a8f-aafa-1ab2e83614d9
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 02 a|b - Tests
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "root", "children": {"cases": [{"name": "caseSingle",
+    "language": "regex-testbench", "properties": {"input": "a", "wholeMatch": "true"}},
+    {"name": "caseSingle", "language": "regex-testbench", "properties": {"input":
+    "b", "wholeMatch": "true"}}, {"name": "caseSingle", "language": "regex-testbench",
+    "properties": {"input": "c", "wholeMatch": "false"}}]}, "language": "regex-testbench"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-28 21:32:40.416042000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-28 21:33:40.739948000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: '09ef2069-c6d5-4cca-9c6f-9d883cb07f64'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: regex-testbench
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
