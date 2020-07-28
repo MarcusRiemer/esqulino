@@ -128,17 +128,60 @@ export class SchemaTableVisualComponent {
     this._subscriptionRefs.push(projref);
 
     let dragRef = this.dragulaService
-      .dropModel(this.table.name)
+      .dropModel("tables")
       .subscribe(({ name, el, target, source, sibling, sourceModel, item }) => {
-        let newIndex = sourceModel.indexOf(item);
+        if (source.id == this.table.name) {
+          if (source.id == target.id) {
+            let newIndex = sourceModel.indexOf(item);
 
-        this._schemaService.initCurrentlyEdit(
-          this._project.schema.getTable(this.table.name)
-        );
-        this.commandsHolder.do(
-          new SwitchColumnOrder(this.table, item.index, newIndex)
-        );
-        this.saveChanges();
+            this._schemaService.initCurrentlyEdit(
+              this._project.schema.getTable(this.table.name)
+            );
+            this.commandsHolder.do(
+              new SwitchColumnOrder(this.table, item.index, newIndex)
+            );
+
+            this.saveChanges();
+          } else {
+            if (
+              this.table.columnIsForeignKeyOfTable(item.name) == undefined &&
+              sibling
+            ) {
+              let siblingName = sibling.children[1].firstElementChild.getAttribute(
+                "ng-reflect-model"
+              );
+              let siblingIndex = 0;
+              let targetTable = this._project.schema.getTable(target.id)
+                .columns;
+
+              for (var i = 0; i < targetTable.length; i++) {
+                if (targetTable[i].name == siblingName) {
+                  siblingIndex = targetTable[i].index;
+                }
+              }
+
+              if (item.type == targetTable[siblingIndex].type) {
+                this._schemaService.initCurrentlyEdit(
+                  this._project.schema.getTable(this.table.name)
+                );
+
+                this.commandsHolder.do(
+                  new AddForeignKey(this.table, item.index, {
+                    references: [
+                      {
+                        to_table: target.id,
+                        from_column: item.name,
+                        to_column: siblingName,
+                      },
+                    ],
+                  })
+                );
+
+                this.saveChanges();
+              }
+            }
+          }
+        }
       });
     this._subscriptionRefs.push(dragRef);
 

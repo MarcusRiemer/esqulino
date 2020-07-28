@@ -10,6 +10,7 @@ import { ProjectService, Project } from "../project.service";
 import { SchemaService, SchemaData } from "../schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
+import { DragulaService } from "ng2-dragula";
 
 /**
  * Class for displaying the general schema
@@ -21,7 +22,7 @@ export class SchemaVisualComponent implements OnInit {
   /**
    * The currently edited project
    */
-  public project: Project;
+  public _project: Project;
 
   /**
    * Subscriptions that need to be released
@@ -39,14 +40,54 @@ export class SchemaVisualComponent implements OnInit {
     private _route: ActivatedRoute,
     private _sidebarService: SidebarService,
     private _schemaService: SchemaService,
-    private _serverApi: ServerApiService
-  ) {}
+    private _serverApi: ServerApiService,
+    private dragulaService: DragulaService
+  ) {
+    dragulaService.createGroup("tables", {
+      copy: (el, source) => {
+        return false;
+      },
+      accepts: (el, target, source, sibling) => {
+        let elName = el.children[1].firstElementChild.getAttribute(
+          "ng-reflect-model"
+        );
+        let elType = el.children[2].firstElementChild.getAttribute(
+          "ng-reflect-model"
+        );
+        let sourceTable = this._project.schema.getTable(source.id);
+        let targetTable = this._project.schema.getTable(target.id).columns;
+
+        if (target.id == source.id) {
+          return true;
+        } else if (sibling) {
+          let siblingName = sibling.children[1].firstElementChild.getAttribute(
+            "ng-reflect-model"
+          );
+          let siblingIndex = 0;
+
+          for (var i = 0; i < targetTable.length; i++) {
+            if (targetTable[i].name == siblingName) {
+              siblingIndex = targetTable[i].index;
+            }
+          }
+
+          return (
+            target.id == source.id ||
+            (sourceTable.columnIsForeignKeyOfTable(elName) == undefined &&
+              elType == targetTable[siblingIndex].type)
+          );
+        } else {
+          return false;
+        }
+      },
+    });
+  }
 
   /**
    * @return True, if this is an empty schema
    */
   get isEmpty() {
-    return this.project && this.project.schema.isEmpty;
+    return this._project && this._project.schema.isEmpty;
   }
 
   public schemaData: SchemaData;
@@ -114,20 +155,20 @@ export class SchemaVisualComponent implements OnInit {
     );
     subRef = btnDownload.onClick.subscribe((_) => {
       window.location.href = this._serverApi.downloadDatabase(
-        this.project.id,
-        this.project.currentDatabaseName
+        this._project.id,
+        this._project.currentDatabaseName
       );
     });
     this._subscriptionRefs.push(subRef);
 
     // Ensure that the active project is always available
     subRef = this._projectService.activeProject.subscribe((res) => {
-      this.project = res;
+      this._project = res;
     });
     this._subscriptionRefs.push(subRef);
 
     //Load the schema data
-    this.schemaData = this._schemaService.getSchemaData(this.project);
+    this.schemaData = this._schemaService.getSchemaData(this._project);
   }
 
   /**

@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <div [dragula]="table.name" [dragulaModel]="table.columns">
+    <div dragula="tables" [id]="table.name" [dragulaModel]="table.columns">
       <tr *ngFor="let column of table.columns">
         <td>
           <label class="tableKey tableEdit">

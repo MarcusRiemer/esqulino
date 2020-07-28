@@ -5,7 +5,7 @@
   <div class="card card-mb3" *ngIf="schemaData.completed">
     <div class="db-schema-drag-drop">
       <sql-table-visual
-        *ngFor="let table of project?.schema.tables; let i = index"
+        *ngFor="let table of _project?.schema.tables; let i = index"
         [table]="table"
         [data]="schemaData.tableData[table.name]"
         [readOnly]="false"
