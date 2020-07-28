@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-28 21:02:21.772590000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-28 21:34:01.582217000 Z
+  value_before_type_cast: 2020-07-28 23:00:47.574222000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: regex-testbench
@@ -34,8 +34,8 @@ concise_attributes:
     "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "string", "languageName":
     "regex-testbench"}}]}]}, "caseSingle": {"type": "concrete", "attributes": [{"type":
     "terminal", "symbol": "Eingabe:"}, {"base": "string", "name": "input", "type":
-    "property"}, {"type": "terminal", "symbol": ", Treffer?"}, {"base": "boolean",
-    "name": "wholeMatch", "type": "property"}]}}}'
+    "property"}, {"type": "terminal", "symbol": ", "}, {"base": "boolean", "name":
+    "wholeMatch", "type": "property"}, {"type": "terminal", "symbol": "Treffer?"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"
