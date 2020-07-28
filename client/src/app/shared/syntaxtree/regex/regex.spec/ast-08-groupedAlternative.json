@@ -1,0 +1,48 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "a"
+        }
+      },
+      {
+        "name": "group",
+        "language": "regex",
+        "children": {
+          "subexpressions": [
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "a"
+              }
+            },
+            {
+              "name": "alternative",
+              "language": "regex"
+            },
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "b"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "b"
+        }
+      }
+    ]
+  }
+}

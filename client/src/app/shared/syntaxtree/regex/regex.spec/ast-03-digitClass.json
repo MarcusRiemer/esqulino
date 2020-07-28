@@ -1,0 +1,15 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "knownCharacterClass",
+        "language": "regex",
+        "properties": {
+          "characterClass": "d"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,423 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 926ff25e-2ea2-4b10-abfd-a72721e3fadb
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 RegEx 3
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "expression", "languageName":
+    "regex"}}], "nodes": [{"name": "comment", "language": "MetaGrammar", "properties":
+    {"text": "Regulärer Ausdruck bestehend aus Teil-Ausdrücken"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
+    "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "subexpression", "languageName": "regex"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "+"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "subexpressions"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "expression", "languageName": "regex"}}, {"name": "comment",
+    "language": "MetaGrammar", "properties": {"text": "Teil-Ausdrücke die einen regulären
+    Ausdruck bilden"}}, {"name": "typedef", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "characters", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "knownCharacterClass", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "characterRange", "languageName": "regex"}},
+    {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "alternative",
+    "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "group", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "quantifierClass", "languageName": "regex"}},
+    {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "quantifierRange",
+    "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "lineTails", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "anyCharacter", "languageName": "regex"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "subexpression", "languageName":
+    "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
+    "Node um Character-Matches im RegEx abzubilden"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "chars"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "characters", "languageName": "regex"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Node um Charakterklassen wie \\d oder \\w
+    abzubilden"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "\\"}}, {"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "characterClass"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "knownCharacterClass", "languageName":
+    "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
+    "Node um CharacterRanges mit Zeichen und Charakterklassen abzubilden, welche negiert
+    werden können"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "["}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "characterRangeItem", "languageName": "regex"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "+"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "characters"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "]"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "characterRange", "languageName": "regex"}}, {"name": "comment",
+    "language": "MetaGrammar", "properties": {"text": "Typen welche innerhalb einer
+    CharacterRange verwendet werden können"}}, {"name": "typedef", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "characters", "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "knownCharacterClass", "languageName": "regex"}}, {"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "negation",
+    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "characterRangeItem", "languageName": "regex"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Node mit dem Terminalsymbol | welches verwendet
+    wird um Alternativen abzubilden"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "|"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "alternative", "languageName":
+    "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
+    "Node welche verwendet wird um Teil-Ausdrücke zu kapseln -> vom Verhalten wie
+    eine Expression"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "("}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "subexpression", "languageName": "regex"}}], "cardinality": [{"name":
+    "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality": "+"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "subexpressions"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ")"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "group", "languageName": "regex"}}, {"name": "comment", "language": "MetaGrammar",
+    "properties": {"text": "Node welche verwendet wird um Kardinalitätsklassen auf
+    einen Teil-Ausdruck anzuwenden"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "quantifierClass"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "quantifierClass", "languageName": "regex"}}, {"name": "comment", "language":
+    "MetaGrammar", "properties": {"text": "Node mit welcher spezifische Kardinalitäten
+    auf einen Teil-Ausdruck angewendet werden kann"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "{"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
+    "regex"}}, {"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "numberOrEmpty",
+    "languageName": "regex"}}], "cardinality": [{"name": "knownCardinality", "language":
+    "MetaGrammar", "properties": {"cardinality": "?"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "bounds"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "}"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "quantifierRange", "languageName":
+    "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
+    "Node die die Terminalsymbole ^ und $ für Zeilen-Anfang/Ende abbildet"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "property", "language": "MetaGrammar",
+    "properties": {"base": "string", "name": "tail"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "lineTails", "languageName": "regex"}}, {"name": "comment",
+    "language": "MetaGrammar", "properties": {"text": "Typ welcher verwendet wird
+    um in einer QuantifierRange die Varianten {x, } und {x, y} abzubilden"}}, {"name":
+    "typedef", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "number", "languageName": "regex"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "empty", "languageName":
+    "regex"}}]}, "language": "MetaGrammar", "properties": {"typeName": "numberOrEmpty",
+    "languageName": "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties":
+    {"text": "Node welche verwendet wird um in QuantifierRanges nummerische Angaben
+    zu machen"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "integer", "name": "number"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "number", "languageName":
+    "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
+    "Node welches das Terminalsymbol ^ innerhalb einer CharacterRange für die Negation
+    abbildet"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "^"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "negation", "languageName": "regex"}}, {"name": "comment",
+    "language": "MetaGrammar", "properties": {"text": "leere Node welche verwendet
+    wird um in einer QuantifierRange die Varianten {x, } und {x, y} abzubilden"}},
+    {"name": "concreteNode", "language": "MetaGrammar", "properties": {"typeName":
+    "empty", "languageName": "regex"}}, {"name": "comment", "language": "MetaGrammar",
+    "properties": {"text": "Node welche einen beliebiges Zeichen abbildet"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "."}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "anyCharacter", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "regex"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-14 15:55:57.065407000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-22 11:30:16.514032000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "regex": {
+          "expression": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "subexpressions",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "regex",
+                      "typeName": "subexpression"
+                    },
+                    "occurs": "+"
+                  }
+                ]
+              }
+            ]
+          },
+          "subexpression": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "characters"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "knownCharacterClass"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "characterRange"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "alternative"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "group"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "quantifierClass"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "quantifierRange"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "lineTails"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "anyCharacter"
+              }
+            ]
+          },
+          "characters": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "chars"
+              }
+            ]
+          },
+          "knownCharacterClass": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "\\"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "characterClass"
+              }
+            ]
+          },
+          "characterRange": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "["
+              },
+              {
+                "type": "sequence",
+                "name": "characters",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "regex",
+                      "typeName": "characterRangeItem"
+                    },
+                    "occurs": "+"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "]"
+              }
+            ]
+          },
+          "characterRangeItem": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "characters"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "knownCharacterClass"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "negation"
+              }
+            ]
+          },
+          "alternative": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "|"
+              }
+            ]
+          },
+          "group": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "("
+              },
+              {
+                "type": "sequence",
+                "name": "subexpressions",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "regex",
+                      "typeName": "subexpression"
+                    },
+                    "occurs": "+"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": ")"
+              }
+            ]
+          },
+          "quantifierClass": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "quantifierClass"
+              }
+            ]
+          },
+          "quantifierRange": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "{"
+              },
+              {
+                "type": "sequence",
+                "name": "bounds",
+                "nodeTypes": [
+                  {
+                    "languageName": "regex",
+                    "typeName": "number"
+                  },
+                  {
+                    "nodeType": {
+                      "languageName": "regex",
+                      "typeName": "numberOrEmpty"
+                    },
+                    "occurs": "?"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "}"
+              }
+            ]
+          },
+          "lineTails": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "tail"
+              }
+            ]
+          },
+          "numberOrEmpty": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "number"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "empty"
+              }
+            ]
+          },
+          "number": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "integer",
+                "name": "number"
+              }
+            ]
+          },
+          "negation": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "^"
+              }
+            ]
+          },
+          "empty": {
+            "type": "concrete",
+            "attributes": []
+          },
+          "anyCharacter": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "."
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "root": {
+        "languageName": "regex",
+        "typeName": "expression"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

@@ -1,0 +1,31 @@
+.regex {
+    .group > * {
+        background-color: #b5ead7;
+    }
+
+    .quantifierRange > * {
+        background-color: #ffe39c;
+    }
+
+    .characterRange > * {
+        background-color: #d291bc;
+    }
+
+    .quantifierClass > * {
+        background-color: #97c5f6;
+    }
+
+    .knownCharacterClass > * {
+        background-color: #ee9798;
+    }
+
+    .characters > * {
+        background-color: #b4d6a9;
+    }
+
+    .negation > *, .alternative > * {
+        background-color: #fff;
+    }
+}
+
+// TODO Terminalsymbole wieder weiß bzw nur die Speziellen

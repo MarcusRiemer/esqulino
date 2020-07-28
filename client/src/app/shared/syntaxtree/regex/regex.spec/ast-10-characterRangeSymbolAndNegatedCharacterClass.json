@@ -1,0 +1,34 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "characterRange",
+        "language": "regex",
+        "children": {
+          "characters": [
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "%"
+              }
+            },
+            {
+              "name": "negation",
+              "language": "regex"
+            },
+            {
+              "name": "knownCharacterClass",
+              "language": "regex",
+              "properties": {
+                "characterClass": "d"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

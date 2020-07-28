@@ -1,0 +1,48 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f581daa3-c047-47fd-8740-3552df66c490
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 07 a{1}b{1, }c{1, 2}
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "expression", "children": {"subexpressions": [{"name":
+    "characters", "language": "regex", "properties": {"chars": "a", "characters":
+    "a"}}, {"name": "quantifierRange", "children": {"bounds": [{"name": "number",
+    "language": "regex", "properties": {"number": "1"}}]}, "language": "regex"}, {"name":
+    "characters", "language": "regex", "properties": {"chars": "b"}}, {"name": "quantifierRange",
+    "children": {"bounds": [{"name": "number", "language": "regex", "properties":
+    {"number": "1"}}, {"name": "empty", "language": "regex"}]}, "language": "regex"},
+    {"name": "characters", "language": "regex", "properties": {"chars": "c"}}, {"name":
+    "quantifierRange", "children": {"bounds": [{"name": "number", "language": "regex",
+    "properties": {"number": "1"}}, {"name": "number", "language": "regex", "properties":
+    {"number": "2"}}]}, "language": "regex"}]}, "language": "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-21 13:55:48.497888000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-21 13:58:07.966026000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: regex
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: a{1}b{1, }c{1, 2}
+new_record: false
+active_record_yaml_version: 2
