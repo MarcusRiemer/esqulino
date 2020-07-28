@@ -30,5 +30,41 @@ FactoryBot.define do
     trait :generated_model_single_type do
       association :generated_from, factory: [:code_resource, :grammar_single_type]
     end
+
+    # A toy grammar for code resource references
+    trait :model_spec_code_resource_references do
+      types {
+        {
+          l: {
+            r: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "property",
+                  base: "codeResourceReference",
+                  name: "ref1",
+                },
+                {
+                  type: "property",
+                  base: "codeResourceReference",
+                  name: "ref2",
+                  isOptional: true,
+                },
+                {
+                  type: "sequence",
+                  name: "c",
+                  nodeTypes: [
+                    {
+                      nodeType: "r",
+                      occurs: "*",
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    end
   end
 end

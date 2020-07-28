@@ -61,7 +61,21 @@ class BaseIdeService
     else
       nil
     end
+  end
 
+  # Finds out which other code resources are referenced by the given
+  # code resource
+  def referenced_code_resource_ids(code_resource)
+    grammar_document = code_resource
+                         .block_language
+                         .grammar
+                         .document
+                         .transform_keys{ |k| k.camelize(:lower) }
+    execute_request({
+                      "type" => "referencedCodeResources",
+                      "ast" => code_resource.ast,
+                      "grammar" => grammar_document
+                    })
   end
 
   # Checks whether the IDE-service is available

@@ -236,6 +236,59 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
+  context "synchronize code resource references" do
+    it "Non persisted records can't be updated" do
+      c = FactoryBot.build(:code_resource, :grammar_code_resource_references)
+
+      expect { c.update_code_resource_references! }.to raise_error EsqulinoError::Base
+
+    end
+
+    it "Empty AST has no references" do
+      c = FactoryBot.create(:code_resource, :grammar_code_resource_references)
+
+      refs = c.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
+      expect(refs).to match_array []
+    end
+
+    it "New reference to an existing resource" do
+      ref_1 = FactoryBot.create(:code_resource);
+      c = FactoryBot.create(:code_resource, :grammar_code_resource_references, ast: {
+                              language: "l",
+                              name: "r",
+                              properties: { ref1: ref_1.id }
+                            })
+
+      expect(c.targeted_code_resources).to match_array [ref_1]
+      expect(CodeResourceReference.count).to eq 1
+    end
+
+    it "Change reference to an existing resource" do
+      ref_old = FactoryBot.create(:code_resource);
+      ref_new = FactoryBot.create(:code_resource);
+      c = FactoryBot.create(:code_resource, :grammar_code_resource_references, ast: {
+                              language: "l",
+                              name: "r",
+                              properties: { ref1: ref_old.id }
+                            })
+
+      expect(c.targeted_code_resources).to match_array [ref_old]
+      expect(CodeResourceReference.count).to eq 1
+
+      c.ast = {
+        language: "l",
+        name: "r",
+        properties: { ref1: ref_new.id }
+      }
+
+      c.save!
+      c.reload # Required for targeted_code_resources
+
+      expect(c.targeted_code_resources).to match_array [ref_new]
+      expect(CodeResourceReference.count).to eq 1
+    end
+  end
+
   it "project is required" do
     res = FactoryBot.build(:code_resource, project: nil)
 

@@ -80,7 +80,7 @@ class Grammar < ApplicationRecord
                                .slice('types', 'foreignTypes', 'root')
                                .transform_keys { |k| k.underscore }
 
-    regenerated_relationships = self.document_included_grammar_ids grammar_document
+    regenerated_relationships = self.document_included_grammars grammar_document
 
     # Can't use ActiveModel::Dirty because this relies on saves to the database
     # as anchor points. It will therefore not tell us whether the two hashes
@@ -154,7 +154,7 @@ class Grammar < ApplicationRecord
 
   # @param grammar_document [Hash] A GrammarDocument (or at least the portion that provides grammars)
   # @return [GrammarReference[]] An array of relevant GrammarReference instances
-  def document_included_grammar_ids(grammar_document)
+  def document_included_grammars(grammar_document)
     grammar_ids = grammar_document.fetch("includes", [])
     grammar_ids.map do |grammar_id|
       GrammarReference.find_or_initialize_by(

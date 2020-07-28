@@ -9,8 +9,10 @@ class CodeResource < ApplicationRecord
   belongs_to :project
   # ... uses exactly one block language ...
   belongs_to :block_language
-  # ... and compiles to exactly one programming language.
+  # ... compiles to exactly one programming language ...
   belongs_to :programming_language
+  # ... uses exactly one grammar for validation ...
+  has_one :grammar, through: :block_language
 
   # May be the basis for generated grammars
   has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
@@ -84,6 +86,12 @@ class CodeResource < ApplicationRecord
     end
   end
 
+  after_save do
+    if self.saved_change_to_attribute? :ast
+      self.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
+    end
+  end
+
   # Takes the current syntaxtree and asks the IDE service for the
   # compiled representation.
   #
@@ -97,6 +105,31 @@ class CodeResource < ApplicationRecord
   def emit_ast!(ide_service = IdeService.instance, programming_language_id: nil)
     programming_language_id ||= self.programming_language_id
     ide_service.emit_code(self.ast, programming_language_id)
+  end
+
+  # Checks the current state of the AST and synchronizes this state to the
+  # referenced code resources.
+  def update_code_resource_references!(ide_service: IdeService.instance)
+    if not persisted?
+      raise EsqulinoError::Base.new(
+              "Code Resource must be persisted when updating references",
+              500, true
+            )
+    end
+
+    ast_referenced_code_resource_ids = ide_service.referenced_code_resource_ids(self)
+    referenced_ids = CodeResource
+                       .where(id: ast_referenced_code_resource_ids)
+                       .pluck(:id)
+
+    updated_references = referenced_ids.map do |id|
+      CodeResourceReference.find_or_initialize_by(
+        origin: self,
+        target_id: id
+      )
+    end
+
+    self.code_resource_reference_origins = updated_references
   end
 
   # All records that are immediatly depending on this code resource. This
