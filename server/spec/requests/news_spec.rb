@@ -1,25 +1,33 @@
 require 'rails_helper'
+include GraphqlQueryHelper
 
 RSpec.describe NewsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
   before(:each) { create(:user, :guest) }
 
-  describe 'GET /api/news' do
+  fdescribe 'GET /api/news' do
     let(:user) { create(:user) }
-    it 'Frontpage: retrieving news without anything published' do
-      news = create(:news, published_from: Date.new(2999, 1, 1) )
-      get '/api/news'
-      json_data = JSON.parse(response.body)
 
+    it 'Frontpage: retrieving news without anything published' do
+      create(:news, published_from: Date.new(2999, 1, 1) )
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews")
+           }.to_json
+
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(response).to have_http_status(200)
       expect(json_data.length).to eq(0)
     end
-
     it 'Frontpage: retrieving the only existing news (default language)' do
-      news = create(:news)
-      get '/api/news'
-
-      json_data = JSON.parse(response.body)
+      create(:news)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews")
+           }.to_json
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(1)
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
       expect(response).to have_http_status(200)
@@ -27,18 +35,29 @@ RSpec.describe NewsController, type: :request do
 
     it 'Frontpage: retrieving only published news, skipping unpublished ones' do
       create(:news, published_from: nil)
-      get '/api/news'
 
-      json_data = JSON.parse(response.body)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews")
+           }.to_json
+
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(0)
       expect(response).to have_http_status(200)
     end
 
     it 'Frontpage: retrieving only published news, skipping future ones' do
       create(:news, published_from: Date.new(9999, 1, 1))
-      get '/api/news'
 
-      json_data = JSON.parse(response.body)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews")
+           }.to_json
+
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+
       expect(json_data.length).to eq(0)
       expect(response).to have_http_status(200)
     end
@@ -47,21 +66,34 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 1, 1)) # Future
       create(:news, published_from: nil) # Unpublished
       create(:news) # Published
-      get '/api/news'
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews")
+           }.to_json
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+
       expect(json_data.length).to eq(1)
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
       expect(response).to have_http_status(200)
     end
 
-    it 'Frontpage: retrieving the only existing news (english)' do
+    fit 'Frontpage: retrieving the only existing news (english)' do
       host! 'en.example.com'
 
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      get '/api/news'
+      news = create(:news, published_from: Date.new(2019, 1, 1))
 
-      json_data = JSON.parse(response.body)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews"),
+               variables: {
+                   languages: ["en"]
+               }
+           }.to_json
+
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(1)
       expect(json_data[0]['title']).to eq({ "en" =>  news.title['en'] })
       expect(json_data[0]['text']).to eq({ "en" =>  news.rendered_text()['en'] })
@@ -73,8 +105,16 @@ RSpec.describe NewsController, type: :request do
       host! 'de.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1) )
-      get '/api/news'
-      json_data = JSON.parse(response.body)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews"),
+               variables: {
+                   languages: ["de"]
+               }
+           }.to_json
+
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(1)
       expect(json_data[0]['title']).to eq({ "de" =>  news.title['de'] })
       expect(json_data[0]['text']).to eq({ "de" =>  news.rendered_text()['de'] })
@@ -85,8 +125,13 @@ RSpec.describe NewsController, type: :request do
     it 'Frontpage: News are shortened' do
       news = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
 
-      get '/api/news'
-      json_data = JSON.parse(response.body)
+      post "/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("FrontpageListNews")
+           }.to_json
+
+      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
 
       aggregate_failures "frontpage response" do
         expect(json_data.length).to eq(1)
@@ -127,7 +172,7 @@ RSpec.describe NewsController, type: :request do
 
       set_access_token(admin)
       get '/api/news/admin'
-      json_data = JSON.parse(response.body)['data']
+      json_data = JSON.parse(response.body)
       expect(json_data[0]['title']['de']).to eq("Schlagzeile 1")
       expect(json_data[0]['title']['en']).to eq("Headline 1")
       expect(json_data[1]['title']['de']).to eq("Schlagzeile")
