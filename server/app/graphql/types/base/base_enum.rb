@@ -17,5 +17,12 @@ module Types
       value 'asc'
       value 'desc'
     end
+
+    class TextLengthOptionsEnum < Types::Base::BaseEnum
+      graphql_name 'TextLengthOptionsEnum'
+      value 'short'
+      value 'long'
+    end
+
   end
 end

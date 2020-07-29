@@ -23,8 +23,14 @@ module Types
     field :news, Types::NewsType.connection_type,null:false do
       argument :input, Types::NewsType::InputType, required: false
     end
-    field :singleNews, Types::NewsType,null:false do
+    field :adminSingleNews, Types::NewsType,null:false do
       argument :id, ID,required:true
+    end
+    field :frontpageSingleNews, Types::NewsType,null:false do
+      argument :id, ID,required:true
+    end
+    field :frontpageListNews, Types::NewsType.connection_type,null:false do
+      argument :input, Types::NewsType::AdvancedInputType, required: false
     end
     field :projectDatabases, Types::ProjectDatabaseType.connection_type,null:false
     field :projectSources, Types::ProjectSourceType.connection_type,null:false
@@ -58,9 +64,27 @@ module Types
         Resolvers::CodeResourceResolver::new(context:@context).scope
       end
     end
-    #admin single news
-    def single_news(id:)
+
+    def admin_single_news(id:)
       News.find(id).to_full_api_response.transform_keys {|a| a.underscore}
+    end
+
+    def frontpage_single_news(id:)
+      News.scope_single_language(context[:language])
+          .where("id = ?", id)
+          .first!
+          .to_frontpage_api_response(languages: [context[:language]])
+          .transform_keys {|a| a.underscore}
+    end
+
+    def frontpage_list_news(input:nil)
+      input = input.to_h.merge({languages:[context[:language]]}) if input[:languages].nil?
+      news = if input
+               Resolvers::NewsResolver::new(context:@context,**input.to_h.except(:text_length)).scope
+             else
+               Resolvers::NewsResolver::new(context:@context).scope
+             end
+      news.each { |n| n['text'] = n.rendered_text(text_length: input[:text_length].to_sym)}
     end
 
     def news(input:nil)

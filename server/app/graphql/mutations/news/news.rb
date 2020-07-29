@@ -37,31 +37,12 @@ class Mutations::News::News < Mutations::BaseMutation
     }
   end
 
-  # Ensures that the date of the request is a proper ruby object
-  def ensure_request(schema_name, body_string)
-    # Do the basic loading and checking
-    data = super
-    byebug
-    # Turn the date-string into a proper date object
-    published_from = data["published_from"]
-    if published_from
-      data["published_from"] = parse_date(published_from)
-    end
-      data
-  end
-
   # Parses the given date, possibly throws an Error if the string
   # is not actually a valid date.
   def parse_date(date_str)
     Date.parse(date_str)
   rescue ArgumentError => e
     raise EsqulinoError::Base.new("Invalid date #{date_str}", 400)
-  end
-
-  # Appends current_user to a hash
-  def append_current_user(hash)
-    hash[:user] = current_user
-    hash
   end
 
 end

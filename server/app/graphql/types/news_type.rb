@@ -3,7 +3,7 @@ module Types
     field :id, ID, null:false
     field :title, Types::Scalar::LangJson, null:false
     field :text, Types::Scalar::LangJson, null:false
-    field :publishedFrom, GraphQL::Types::ISO8601DateTime, null:false
+    field :publishedFrom, GraphQL::Types::ISO8601DateTime, null:true
     field :user, Types::UserType, null:true
     field :userId, ID,null: true
 
@@ -37,6 +37,7 @@ module Types
       argument :title, type: String, required: false
       argument :text, type: String, required: false
       argument :userId, type: String, required: false
+      argument :publishedFrom, type: Types::Base::BaseInputObject::DateTimeFilterType, required: false
     end
 
     class InputType < Types::Base::BaseInputObject
@@ -44,6 +45,11 @@ module Types
       argument :order, OrderType, required: false
       argument :filter, FilterFieldType, required: false
       argument :languages, [Types::Base::BaseEnum::LanguageEnum], required: false
+    end
+
+    class AdvancedInputType < InputType
+      graphql_name 'AdvancedNewsInputType'
+      argument :text_length, Types::Base::BaseEnum::TextLengthOptionsEnum, required: false
     end
   end
 end
