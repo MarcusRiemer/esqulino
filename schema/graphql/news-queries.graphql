@@ -20,7 +20,7 @@ query AdminListNews($first:Int,$after:String,$before:String,$last:Int,$input:New
 }
 
 query AdminSingleNews($id: ID!) {
-    singleNews(id: $id) {
+    adminSingleNews(id: $id) {
         id
         title
         text
@@ -32,12 +32,21 @@ query AdminSingleNews($id: ID!) {
 }
 
 query FrontpageListNews{
-    news {
+    news(input: {filter: {publishedFrom: {until: true}}}) {
         nodes {
             id
             title
             text
             publishedFrom
         }
+    }
+}
+
+query FrontpageSingleNews($id: ID!) {
+    frontpageSingleNews(id: $id) {
+        id
+        title
+        text
+        publishedFrom
     }
 }

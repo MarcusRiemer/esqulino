@@ -7,7 +7,7 @@ import {
   ViewChild,
   TemplateRef,
 } from "@angular/core";
-import { first, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { NewsUpdateDescription } from "../shared/news.description";
@@ -75,9 +75,11 @@ export class AdminNewsEditComponent implements OnInit {
       // Retrieve the news that should be edited
       this._singleNewsGQL
         .fetch({ id: this._newsId })
-        .pipe(map((result) => result.data.singleNews))
+        .pipe(map((result) => result.data.adminSingleNews))
         .subscribe(
           (news) => {
+            //TODO FIX the ignore
+            // @ts-ignore
             this.newsData = news;
             if (this.newsData.publishedFrom) {
               this.newsData.publishedFrom = new Date(

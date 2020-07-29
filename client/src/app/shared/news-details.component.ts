@@ -1,9 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, LOCALE_ID, Inject } from "@angular/core";
 
-import { ServerDataService } from "./serverdata/server-data.service";
 import { FrontpageSingleNewsGQL } from "../../generated/graphql";
-import { response } from "express";
 import { map } from "rxjs/operators";
 
 @Component({
@@ -21,5 +19,5 @@ export class NewsDetailsComponent {
   readonly locale = this._localeId;
   readonly news$ = this._singleNewsGQL
     .watch({ id: this._id })
-    .valueChanges.pipe(map((response) => response.data.singleNews));
+    .valueChanges.pipe(map((response) => response.data.frontpageSingleNews));
 }

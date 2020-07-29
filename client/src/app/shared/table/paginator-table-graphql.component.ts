@@ -12,10 +12,10 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { SortDirection, MatSort } from "@angular/material/sort";
 import { MatTable, MatColumnDef } from "@angular/material/table";
 
-import { BehaviorSubject, combineLatest, Observable, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { QueryRef } from "apollo-angular";
 import { PageInfo } from "../../../generated/graphql";
-import { map, startWith, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { ApolloQueryResult } from "apollo-client";
 
 export interface GraphQLQueryData<
@@ -94,26 +94,9 @@ export class PaginatorTableGraphqlComponent
       map((responseDocument) => responseDocument.data[this.queryData.dataKey])
     );
     this.totalCount$ = this.data$.pipe(map((data) => data.totalCount));
-    // if filterString$ and filterColumns are provided, each row in the table will be filtered
-    // by combining the response data with the filterString and filtering the response by filtercolumns
-    if (this.queryData.filterString$ && this.queryData.filterColumns) {
-      this.listData$ = combineLatest(
-        this.data$.pipe(map((data) => data.nodes)),
-        this.queryData.filterString$
-      ).pipe(
-        map(([nodes, filter]) =>
-          nodes.filter((node) =>
-            this.queryData.filterColumns.some((col) =>
-              JSON.stringify(node[col])
-                .toLowerCase()
-                .includes(filter.toLowerCase())
-            )
-          )
-        )
-      );
-    } else {
-      this.listData$ = this.data$.pipe(map((data) => data.nodes));
-    }
+
+    this.listData$ = this.data$.pipe(map((data) => data.nodes));
+
     this._pageSize = this.queryData.pageSize;
   }
 
