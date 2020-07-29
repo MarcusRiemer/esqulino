@@ -1,0 +1,10 @@
+mutation DestroyNews(
+    $id: ID!,
+) {
+    destroyNews(input:{
+        id:$id
+    }) {
+        id
+        errors
+    }
+}

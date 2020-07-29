@@ -1,0 +1,8 @@
+query FrontpageSingleNews($id: ID!) {
+    frontpageSingleNews(id: $id) {
+        id
+        title
+        text
+        publishedFrom
+    }
+}

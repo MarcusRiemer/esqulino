@@ -1,0 +1,14 @@
+mutation CreateNews(
+    $title: LangJson!,
+    $text: LangJson!,
+    $publishedFrom: ISO8601DateTime
+) {
+    createNews(input:{
+        title:$title,
+        text:$text,
+        publishedFrom:$publishedFrom
+    }) {
+        id
+        errors
+    }
+}

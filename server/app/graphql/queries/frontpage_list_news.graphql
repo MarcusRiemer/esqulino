@@ -1,0 +1,10 @@
+query FrontpageListNews($languages: [LanguageEnum!]) {
+    frontpageListNews(first:10,input: {filter: {publishedFrom: {until: true}}, textLength:short,languages: $languages,order: {orderField:publishedFrom,orderDirection:desc}}) {
+        nodes {
+            id
+            title
+            text
+            publishedFrom
+        }
+    }
+}
