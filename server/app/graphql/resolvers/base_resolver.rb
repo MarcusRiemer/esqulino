@@ -33,6 +33,10 @@ module Resolvers
           scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
         elsif is_boolean_column? filter_key
           scope = scope.where "#{@model_class.table_name}.#{filter_key} = ?", filter_value
+        elsif is_datetime_column? filter_key
+          comparator = filter_value[:until] ? "<=" : ">"
+          date = filter_value[:date] ? filter_value[:date] : Date.today
+          scope = scope.where "#{@model_class.table_name}.#{filter_key} #{comparator} ?", date
         else
           scope = scope.where "#{@model_class.table_name}.#{filter_key} LIKE ?", filter_value
         end
@@ -42,7 +46,7 @@ module Resolvers
 
     def apply_order(scope,value)
       order_key = value.to_h.stringify_keys.fetch("orderField",default_order_field).underscore
-      order_dir = value.to_h.stringify_keys.fetch("orderDirection", "asc")
+      order_dir = value.to_h.stringify_keys.fetch("orderDirection", default_order_dir)
       if is_multilingual_column? order_key
         # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
         # Using gsub to add comma as delimiter
@@ -117,18 +121,24 @@ module Resolvers
     end
 
     def is_multilingual_column?(name)
-      col = @model_class.columns_hash[name]
-      col ? col.type == :hstore : false
+      is_type_column?(name: name,type: :hstore)
     end
 
     def is_uuid_column?(name)
-      col = @model_class.columns_hash[name]
-      col ? col.type == :uuid : false
+      is_type_column?(name: name,type: :uuid)
     end
 
     def is_boolean_column?(name)
+      is_type_column?(name: name,type: :boolean)
+    end
+
+    def is_datetime_column?(name)
+      is_type_column?(name: name,type: :datetime)
+    end
+
+    def is_type_column?(name:,type:)
       col = @model_class.columns_hash[name]
-      col ? col.type == :boolean : false
+      col ? col.type == type : false
     end
   end
 end

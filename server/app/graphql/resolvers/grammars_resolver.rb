@@ -14,5 +14,9 @@ module Resolvers
       "name"
     end
 
+    def default_order_dir
+      "asc"
+    end
+
   end
 end

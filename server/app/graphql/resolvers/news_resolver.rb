@@ -24,8 +24,11 @@ module Resolvers
     end
 
     def default_order_field
-      "title"
+      "publishedFrom"
     end
 
+    def default_order_dir
+      "desc"
+    end
   end
 end
