@@ -7,6 +7,14 @@ class UserController < ApplicationController
     api_response(user_information)
   end
 
+  def keycloak_settings
+    config = Rails.application.config_for :sqlino
+    site = config[:auth_provider_keys][:keycloak_site]
+    realm = config[:auth_provider_keys][:keycloak_realm]
+
+    redirect_to "#{site}/auth/realms/#{realm}/account/"
+  end
+
   # Changes the username
   def change_username
     authorize current_user

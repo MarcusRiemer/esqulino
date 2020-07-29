@@ -41,6 +41,9 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     provider :keycloak_openid,
              "blattwerkzeug-omniauth",
              nil, # No secret required
-             client_options: {site: 'http://lvh.me:8080', realm: 'BlattWerkzeug'}
+             client_options: {
+               site: config[:auth_provider_keys][:keycloak_site],
+               realm: config[:auth_provider_keys][:keycloak_realm]
+             }
   end
 end

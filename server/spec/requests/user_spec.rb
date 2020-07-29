@@ -197,6 +197,12 @@ RSpec.describe "user controller" do
     end
   end
 
+  it "forwards to the keycloak accountpage" do
+    get "/api/user/keycloak_account_settings"
+
+    assert_redirected_to %r(.*/auth/realms/.*/account/)
+  end
+
   describe "user may-perform" do
     let!(:identity) { create(:identity_provider, :existing) }
 

@@ -29,6 +29,8 @@ development:
     google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
     github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
     github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+    keycloak_site: <%= ENV['KEYCLOAK_SITE'] || 'http://lvh.me:8080' %>
+    keycloak_realm: <%= ENV['KEYCLOAK_REALM'] || 'BlattWerkzeug' %>
   seed_users:
     guest: "00000000-0000-0000-0000-000000000001"
     system: "00000000-0000-0000-0000-000000000002"
