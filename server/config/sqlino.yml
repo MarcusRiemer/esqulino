@@ -23,7 +23,7 @@ development:
     refresh_token: 432000 # 5 days
     access_cookie: # Is empty because of the session duration
     refresh_cookie: 1209600 # 14 days
-  auth_provider: ["Identity::Google", "Identity::Github", "Identity::Password", "Identity::Developer"]
+  auth_provider: ["Identity::Google", "Identity::Github", "Identity::Password", "Identity::Developer", "Identity::Keycloak"]
   auth_provider_keys:
     google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
     google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
