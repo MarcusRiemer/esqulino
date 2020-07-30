@@ -122,9 +122,13 @@ update-xlf : src/locale/messages.en.xlf
 # Dependencies
 ##################################
 
-# Uses the `package.json` file to grab all dependencies according to the
-# `package-lock.json`.
+# Ensures that all required packages are available
 install-deps : msg-pre-install-deps
+	npm install --no-save
+
+# Uses the `package.json` file to grab all dependencies according to the
+# `package-lock.json`. Previously installed packages will be deleted.
+reinstall-deps: msg-pre-install-deps
 	npm ci
 
 # Remove currently cached dependencies.
