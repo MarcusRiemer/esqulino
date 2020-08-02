@@ -20,16 +20,7 @@ module Resolvers
         scope = scope.left_joins(:grammar).select(' grammars.id AS grammar_id').group('block_languages.id, grammars.id')
       end
 
-      super(BlockLanguage,context:context,scope:scope,filter:filter,order:order,languages:languages)
+      super(BlockLanguage,context:context,scope:scope,filter:filter,order:order,languages:languages,order_dir: "asc",order_field:"name")
     end
-
-    def default_order_field
-      "name"
-    end
-
-    def default_order_dir
-      "asc"
-    end
-
   end
 end

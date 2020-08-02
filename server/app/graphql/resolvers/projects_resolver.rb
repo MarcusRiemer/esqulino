@@ -12,16 +12,7 @@ module Resolvers
         # Used to solve n+1 query problem
         scope = Project.left_joins(:code_resources).select('COUNT(code_resources) AS code_resource_count').group('projects.id')
       end
-      super(Project,context:context,scope:scope,filter:filter,order:order,languages:languages)
+      super(Project,context:context,scope:scope,filter:filter,order:order,languages:languages,order_dir: "asc",order_field:"name")
     end
-
-    def default_order_field
-      "name"
-    end
-
-    def default_order_dir
-      "asc"
-    end
-
   end
 end

@@ -5,7 +5,7 @@ RSpec.describe NewsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
   before(:each) { create(:user, :guest) }
 
-  fdescribe 'GET /api/news' do
+  describe 'GET /api/news' do
     let(:user) { create(:user) }
 
     it 'Frontpage: retrieving news without anything published' do
@@ -79,7 +79,7 @@ RSpec.describe NewsController, type: :request do
       expect(response).to have_http_status(200)
     end
 
-    fit 'Frontpage: retrieving the only existing news (english)' do
+    it 'Frontpage: retrieving the only existing news (english)' do
       host! 'en.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1))

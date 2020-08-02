@@ -7,16 +7,7 @@ module Resolvers
       # query context instance of GraphQL::Query::Context
       scope = Grammar
 
-      super(Grammar,context:context,scope:scope,filter:filter,order:order,languages:languages)
+      super(Grammar,context:context,scope:scope,filter:filter,order:order,languages:languages,order_dir: "asc",order_field:"name")
     end
-
-    def default_order_field
-      "name"
-    end
-
-    def default_order_dir
-      "asc"
-    end
-
   end
 end

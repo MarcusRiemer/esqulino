@@ -2,10 +2,12 @@
 module Resolvers
   class BaseResolver
 
-    def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil)
+    def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil,order_field:,order_dir:)
       @model_class = model_class
       @context = context
       @languages = languages.nil? ? Types::Base::BaseEnum::LanguageEnum.enum_values : languages
+      @order_dir = order_dir
+      @order_field = order_field
       scope = select_relevant_fields(scope)
 
       scope = apply_filter(scope,filter)
@@ -45,8 +47,8 @@ module Resolvers
     end
 
     def apply_order(scope,value)
-      order_key = value.to_h.stringify_keys.fetch("orderField",default_order_field).underscore
-      order_dir = value.to_h.stringify_keys.fetch("orderDirection", default_order_dir)
+      order_key = value.to_h.stringify_keys.fetch("orderField",@order_field).underscore
+      order_dir = value.to_h.stringify_keys.fetch("orderDirection", @order_dir)
       if is_multilingual_column? order_key
         # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
         # Using gsub to add comma as delimiter
