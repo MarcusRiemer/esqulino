@@ -6,7 +6,7 @@ RSpec.describe GraphqlController, type: :request do
 
   describe 'Basic error handling', pending: "Currently no server side query loading" do
     it 'no query, only invalid name' do
-      post "/graphql",
+      post "/api/graphql",
            :headers => json_headers,
            :params => {
              operationName: "ThisOperationWillNeverExist",
@@ -22,7 +22,7 @@ RSpec.describe GraphqlController, type: :request do
     end
 
     it 'no query, only valid name' do
-      post "/graphql",
+      post "/api/graphql",
            :headers => json_headers,
            :params => {
              operationName: "RegenerateForeignTypes",
@@ -38,13 +38,13 @@ RSpec.describe GraphqlController, type: :request do
     end
   end
 
-  describe 'POST /graphql Projects' do
+  describe 'POST /api/graphql Projects' do
     let(:user) { create(:user) }
     it 'Projects: Reuqesting name and total count without any input' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
       FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects{nodes{name}totalCount}}"
@@ -62,7 +62,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
       FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {languages:[de]}){nodes{name}}}"
@@ -76,7 +76,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Added not provided language as input parameter and should return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {languages:[test]}){nodes{name}}}"
@@ -91,7 +91,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
       FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {filter:{name:\"hello-1\"}}){nodes{name}}}"
@@ -104,7 +104,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Added not provided filter field as input parameter and should return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {filter:{test:\"hello-1\"}}){nodes{name}}}"
@@ -120,7 +120,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
       FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {order:{orderField:name,orderDirection:asc}}){nodes{name}}}"
@@ -134,7 +134,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Added not provided orderField as input parameter and expect to return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {order:{orderField:test,orderDirection:asc}}){nodes{name}}}"
@@ -148,7 +148,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Added not provided orderDirection as input parameter and expect to return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {order:{orderField:name,orderDirection:test}}){nodes{name}}}"
@@ -162,7 +162,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Added not provided input parameter and expect to return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {test:test}){nodes{name}}}"
@@ -176,7 +176,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Requesting not provided column and expect to return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects{nodes{test}}}"
@@ -190,7 +190,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Requesting all pagination connection type fields' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects{nodes{name}edges{cursor node{name}}pageInfo{endCursor hasNextPage hasPreviousPage startCursor}totalCount}}"
@@ -217,7 +217,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Requesting all columns of projects model and expect not to return error' do
       FactoryBot.create(:project, name: {en: "hello",de: "hallo"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects{nodes{name blockLanguages{id}codeResources{id}createdAt defaultDatabase{id}description grammars{id}id indexPageId name preview projectSources{id}public slug updatedAt user{id}}}}"
@@ -230,7 +230,7 @@ RSpec.describe GraphqlController, type: :request do
 
     it 'Projects: Requesting all multilingual columns and expect to return json with language keys' do
       FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects{nodes {description name}}}"
@@ -248,7 +248,7 @@ RSpec.describe GraphqlController, type: :request do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
       FactoryBot.create(:code_resource, project_id: p.id)
       FactoryBot.create(:code_resource, project_id: p.id)
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects{nodes {codeResourceCount}}}"
@@ -262,7 +262,7 @@ RSpec.describe GraphqlController, type: :request do
     it 'Projects: Requesting only public projects' do
       FactoryBot.create(:project, name: {en: "hello",de: "hallo"},public:true)
       FactoryBot.create(:project, name: {en: "hello",de: "hallo"},public:false)
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects(input: {filter: {public: true}}){totalCount}}"
@@ -277,7 +277,7 @@ RSpec.describe GraphqlController, type: :request do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
       FactoryBot.create(:code_resource, name: "test1", project_id: p.id)
       FactoryBot.create(:code_resource, name: "test2", project_id: p.id)
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects {nodes{codeResources{name}codeResourceCount}}}"
@@ -292,7 +292,7 @@ RSpec.describe GraphqlController, type: :request do
     it 'Projects: Requesting code_resource relation without having code_resources' do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
       FactoryBot.create(:code_resource, name: "Leer", project_id: p.id)
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects {nodes{codeResources{name}codeResourceCount}}}"
@@ -307,7 +307,7 @@ RSpec.describe GraphqlController, type: :request do
       p = FactoryBot.create(:project, name: {en: "hello",de: "hallo"},description:{en: "Greeting",de: "Begruessung"})
       FactoryBot.create(:code_resource, name: "test1", project_id: p.id)
       FactoryBot.create(:code_resource, name: "test2", project_id: p.id)
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query:"{projects {nodes{codeResourceCount}totalCount}}"

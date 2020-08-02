@@ -97,7 +97,7 @@ if (environment.sentry && environment.sentry.active) {
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: "/graphql",
+            uri: "/api/graphql",
           }),
         };
       },

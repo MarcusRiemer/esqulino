@@ -10,7 +10,7 @@ RSpec.describe NewsController, type: :request do
 
     it 'Frontpage: retrieving news without anything published' do
       create(:news, published_from: Date.new(2999, 1, 1) )
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews")
@@ -22,7 +22,7 @@ RSpec.describe NewsController, type: :request do
     end
     it 'Frontpage: retrieving the only existing news (default language)' do
       create(:news)
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews")
@@ -36,7 +36,7 @@ RSpec.describe NewsController, type: :request do
     it 'Frontpage: retrieving only published news, skipping unpublished ones' do
       create(:news, published_from: nil)
 
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews")
@@ -50,7 +50,7 @@ RSpec.describe NewsController, type: :request do
     it 'Frontpage: retrieving only published news, skipping future ones' do
       create(:news, published_from: Date.new(9999, 1, 1))
 
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews")
@@ -66,7 +66,7 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 1, 1)) # Future
       create(:news, published_from: nil) # Unpublished
       create(:news) # Published
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews")
@@ -84,7 +84,7 @@ RSpec.describe NewsController, type: :request do
 
       news = create(:news, published_from: Date.new(2019, 1, 1))
 
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews"),
@@ -105,7 +105,7 @@ RSpec.describe NewsController, type: :request do
       host! 'de.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1) )
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews"),
@@ -125,7 +125,7 @@ RSpec.describe NewsController, type: :request do
     it 'Frontpage: News are shortened' do
       news = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
 
-      post "/graphql",
+      post "/api/graphql",
            headers: json_headers,
            params: {
                query: GraphqlQueryHelper.get_query("FrontpageListNews")

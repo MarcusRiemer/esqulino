@@ -53,7 +53,7 @@ RSpec.describe Mutations::Grammar::RegenerateForeignTypes, :type => :request do
   it "grammar without reference" do
     g = FactoryBot.create(:grammar)
 
-    post "/graphql",
+    post "/api/graphql",
          :headers => json_headers,
          :params => {
            operationName: "RegenerateForeignTypes",
@@ -80,7 +80,7 @@ RSpec.describe Mutations::Grammar::RegenerateForeignTypes, :type => :request do
     g = FactoryBot.create(:grammar)
     g.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
 
-    post "/graphql",
+    post "/api/graphql",
          :headers => json_headers,
          :params => {
            operationName: "RegenerateForeignTypes",
