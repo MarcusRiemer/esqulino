@@ -1,20 +1,17 @@
-<ng-container>
-  <h4 class="card-title">
-    Schema-Übersicht für Datenbank "{{ schemaName | async }}"
-  </h4>
-  <div class="card card-mb3" *ngIf="schemaData.completed">
-    <div class="db-schema-drag-drop">
-      <sql-table-visual
-        *ngFor="let table of _project?.schema.tables; let i = index"
-        [table]="table"
-        [data]="schemaData.tableData[table.name]"
-        [readOnly]="false"
-      ></sql-table-visual>
-    </div>
-
-    <schema-connectors
-      [connectors]="schemaData.connectors"
-      [height]="schemaData.height"
-    ></schema-connectors>
+<h4 class="card-title">
+  Schema-Übersicht für Datenbank "{{ schemaName | async }}"
+</h4>
+<div class="card card-mb3" *ngIf="schemaData.completed">
+  <div class="db-schema-drag-drop">
+    <sql-table-visual
+      *ngFor="let table of _project?.schema.tables"
+      [table]="table"
+      [data]="schemaData.tableData[table.name]"
+    ></sql-table-visual>
   </div>
-</ng-container>
+
+  <schema-connectors
+    [connectors]="schemaData.connectors"
+    [height]="schemaData.height"
+  ></schema-connectors>
+</div>

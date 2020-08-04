@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { map } from "rxjs/operators";
@@ -33,7 +32,6 @@ export class SchemaVisualComponent implements OnInit {
    * Constructor for dependency injection.
    */
   constructor(
-    private _sanitizer: DomSanitizer,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
     private _router: Router,
@@ -60,21 +58,9 @@ export class SchemaVisualComponent implements OnInit {
         if (target.id == source.id) {
           return true;
         } else if (sibling) {
-          let siblingName = sibling.children[1].firstElementChild.getAttribute(
-            "ng-reflect-model"
-          );
-          let siblingIndex = 0;
-
-          for (var i = 0; i < targetTable.length; i++) {
-            if (targetTable[i].name == siblingName) {
-              siblingIndex = targetTable[i].index;
-            }
-          }
-
           return (
-            target.id == source.id ||
-            (sourceTable.columnIsForeignKeyOfTable(elName) == undefined &&
-              elType == targetTable[siblingIndex].type)
+            sourceTable.columnIsForeignKeyOfTable(elName) == undefined &&
+            _schemaService.isSiblingType(elType, sibling, targetTable)
           );
         } else {
           return false;
@@ -113,7 +99,7 @@ export class SchemaVisualComponent implements OnInit {
       "n"
     );
     let subRef = btnCreate.onClick.subscribe((_) => {
-      this._router.navigate(["./create"], { relativeTo: this._route });
+      this._router.navigate(["../create"], { relativeTo: this._route });
     });
     this._subscriptionRefs.push(subRef);
 
@@ -129,7 +115,7 @@ export class SchemaVisualComponent implements OnInit {
         "i"
       );
       subRef = btnImport.onClick.subscribe((_) => {
-        this._router.navigate(["./import"], { relativeTo: this._route });
+        this._router.navigate(["../import"], { relativeTo: this._route });
       });
       this._subscriptionRefs.push(subRef);
     }
@@ -142,7 +128,7 @@ export class SchemaVisualComponent implements OnInit {
       "u"
     );
     subRef = btnUpload.onClick.subscribe((_) => {
-      this._router.navigate(["./upload"], { relativeTo: this._route });
+      this._router.navigate(["../upload"], { relativeTo: this._route });
     });
     this._subscriptionRefs.push(subRef);
 

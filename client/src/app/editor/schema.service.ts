@@ -7,7 +7,7 @@ import { tap, catchError, first, map } from "rxjs/operators";
 import { ServerApiService } from "../shared";
 
 import { Project, ProjectService } from "./project.service";
-import { Table, Schema } from "../shared/schema/";
+import { Table, Schema, Column } from "../shared/schema/";
 import {
   RawTableDataDescription,
   TableDescription,
@@ -25,9 +25,17 @@ export interface TableData {
   width: number;
 }
 
+export interface Connector {
+  path: string;
+  x1: string;
+  y1: string;
+  x2: string;
+  y2: string;
+}
+
 export interface SchemaData {
   tableData: { [tableName: string]: TableData };
-  connectors: string[];
+  connectors: Connector[];
   height: number;
   completed: boolean;
 }
@@ -259,11 +267,42 @@ export class SchemaService {
         this._schemaData.tableData[nodes[i].classList[1]] = tableValues;
       }
 
-      let path = nodes[i].children[1].getAttribute("d");
-      if (path) {
-        this._schemaData.connectors[i] = path;
+      let connector: Connector = {
+        path: nodes[i].children[1].getAttribute("d"),
+        x1: nodes[i].children[2].getAttribute("cx"),
+        y1: nodes[i].children[2].getAttribute("cy"),
+        x2: nodes[i].children[3].getAttribute("cx"),
+        y2: nodes[i].children[3].getAttribute("cy"),
+      };
+      if (connector.path) {
+        this._schemaData.connectors.push(connector);
       }
     }
+  }
+
+  /**
+   * Function to check if a row has a given type
+   * @param type - the string of the type
+   * @param sibling - the row to check
+   * @param targetTable - the table that includes the row
+   */
+  isSiblingType(
+    type: string,
+    sibling: Element,
+    targetTable: Column[]
+  ): boolean {
+    let siblingName = sibling.children[1].firstElementChild.getAttribute(
+      "ng-reflect-model"
+    );
+    let siblingIndex = 0;
+
+    for (var i = 0; i < targetTable.length; i++) {
+      if (targetTable[i].name == siblingName) {
+        siblingIndex = targetTable[i].index;
+      }
+    }
+
+    return type == targetTable[siblingIndex].type;
   }
 
   /**
@@ -364,8 +403,6 @@ export class SchemaService {
   private handleError(error: Response) {
     // in a real world app, we may send the error to some remote logging infrastructure
     // instead of just logging it to the console
-    console.error(error.json());
-    console.error(error);
     return Observable.throw(error);
   }
 }

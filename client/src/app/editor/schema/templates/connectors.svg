@@ -1,8 +1,26 @@
 <svg style="max-width: 100%;" width="1605px" [attr.viewBox]="viewBox" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
 	<g id="graph0" class="graph" [attr.transform]="transform">
-		<path *ngFor="let line of connectors"
-        stroke="#000000"
-		fill="none"
-        [attr.d]="line"/>
+		<g *ngFor="let line of connectors">
+			<path
+			stroke="#000000"
+			fill="none"
+			[attr.d]="line.path"/>
+			
+			<ellipse
+			stroke="#000000"
+			fill="#000000"
+			rx="4"
+			ry="4"
+			[attr.cx]="line.x1"
+			[attr.cy]="line.y1"/>
+			
+			<ellipse
+			stroke="#000000"
+			fill="#000000"
+			rx="4"
+			ry="4"
+			[attr.cx]="line.x2"
+			[attr.cy]="line.y2"/>
+		</g>
 	</g>
 </svg>

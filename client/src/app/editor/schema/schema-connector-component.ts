@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Connector } from "../schema.service";
 
 @Component({
   selector: "schema-connectors",
@@ -8,7 +9,7 @@ export class SchemaConnectorComponent implements OnInit {
   /**
    * List of connector properties
    */
-  @Input() connectors: Object[];
+  @Input() connectors: Connector[];
 
   @Input() height: number;
 

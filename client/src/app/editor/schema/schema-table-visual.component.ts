@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   HostBinding,
+  OnInit,
 } from "@angular/core";
 
 import { Table, ColumnStatus } from "../../shared/schema";
@@ -26,7 +27,6 @@ import { SchemaService, TableData } from "../schema.service";
 import { ProjectService, Project } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
 import { DragulaService } from "ng2-dragula";
-import { FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
 
 /**
  * Class for displaying individual tables
@@ -35,7 +35,7 @@ import { FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
   templateUrl: "templates/schema-table-visual.html",
   selector: "sql-table-visual",
 })
-export class SchemaTableVisualComponent {
+export class SchemaTableVisualComponent implements OnInit {
   /**
    * The table that is currently displayed.
    */
@@ -51,15 +51,7 @@ export class SchemaTableVisualComponent {
    */
   private _subscriptionRefs: any[] = [];
 
-  @Input() readOnly: boolean;
-
-  controls: FormArray;
-
   private _oldValue: string;
-
-  editingEnabled: boolean = false;
-
-  dbErrorCode: number = -1;
 
   /**
    * Position and width of the table
@@ -108,35 +100,22 @@ export class SchemaTableVisualComponent {
     });
     this._subscriptionRefs.push(subRef);
 
-    const toGroups = this.table.columns.map((column) => {
-      const a = new FormControl(column.not_null);
-      return new FormGroup({
-        name: new FormControl(column.name, Validators.required),
-        type: new FormControl(column.type, Validators.required),
-        not_null: new FormControl(column.not_null),
-        dflt_value: new FormControl(column.dflt_value),
-      });
-    });
-    this.controls = new FormArray(toGroups);
-
     let projref = this._projectService.activeProject.subscribe((res) => {
       this._project = res;
-      this._schemaService.initCurrentlyEdit(
-        res.schema.getTable(this.table.name)
-      );
     });
     this._subscriptionRefs.push(projref);
 
     let dragRef = this.dragulaService
       .dropModel("tables")
       .subscribe(({ name, el, target, source, sibling, sourceModel, item }) => {
-        if (source.id == this.table.name) {
+        if (
+          source.id == this.table.name &&
+          this._schemaService.getCurrentlyEdited() == undefined
+        ) {
           if (source.id == target.id) {
             let newIndex = sourceModel.indexOf(item);
 
-            this._schemaService.initCurrentlyEdit(
-              this._project.schema.getTable(this.table.name)
-            );
+            this._schemaService.initCurrentlyEdit(this.table);
             this.commandsHolder.do(
               new SwitchColumnOrder(this.table, item.index, newIndex)
             );
@@ -147,22 +126,19 @@ export class SchemaTableVisualComponent {
               this.table.columnIsForeignKeyOfTable(item.name) == undefined &&
               sibling
             ) {
-              let siblingName = sibling.children[1].firstElementChild.getAttribute(
-                "ng-reflect-model"
-              );
-              let siblingIndex = 0;
               let targetTable = this._project.schema.getTable(target.id)
                 .columns;
 
-              for (var i = 0; i < targetTable.length; i++) {
-                if (targetTable[i].name == siblingName) {
-                  siblingIndex = targetTable[i].index;
-                }
-              }
-
-              if (item.type == targetTable[siblingIndex].type) {
-                this._schemaService.initCurrentlyEdit(
-                  this._project.schema.getTable(this.table.name)
+              if (
+                this._schemaService.isSiblingType(
+                  item.type,
+                  sibling,
+                  targetTable
+                )
+              ) {
+                this._schemaService.initCurrentlyEdit(this.table);
+                let siblingName = sibling.children[1].firstElementChild.getAttribute(
+                  "ng-reflect-model"
                 );
 
                 this.commandsHolder.do(
@@ -208,10 +184,11 @@ export class SchemaTableVisualComponent {
   }
 
   changedColumnName(index: number, newValue: string) {
-    if (this._oldValue != newValue) {
-      this._schemaService.initCurrentlyEdit(
-        this._project.schema.getTable(this.table.name)
-      );
+    if (
+      this._oldValue != newValue &&
+      this._schemaService.getCurrentlyEdited() == undefined
+    ) {
+      this._schemaService.initCurrentlyEdit(this.table);
 
       this.commandsHolder.do(
         new RenameColumn(this.table, index, this._oldValue, newValue)
@@ -223,10 +200,11 @@ export class SchemaTableVisualComponent {
   }
 
   changedColumnType(index: number, newValue: string) {
-    if (this._oldValue != newValue) {
-      this._schemaService.initCurrentlyEdit(
-        this._project.schema.getTable(this.table.name)
-      );
+    if (
+      this._oldValue != newValue &&
+      this._schemaService.getCurrentlyEdited() == undefined
+    ) {
+      this._schemaService.initCurrentlyEdit(this.table);
 
       this.commandsHolder.do(
         new ChangeColumnType(this.table, index, this._oldValue, newValue)
@@ -244,42 +222,29 @@ export class SchemaTableVisualComponent {
     this.commandsHolder.prepareToSend();
     await this._schemaService.sendAlterTableCommands(
       this._project,
-      this._schemaService.getCurrentlyEditedTable().name,
+      this.table.name,
       this.commandsHolder
     );
 
     this._schemaService.clearCurrentlyEdited();
   }
 
-  /**
-   * Function to drop a Table
-   */
-  async deleteTable() {
-    try {
-      await this._schemaService.deleteTable(this._project, this.table);
-    } catch (error) {
-      this.showError(error);
-    }
-  }
-
   ChangeColumnPrimaryKeyStatus(row: number) {
-    if (this.commandsHolder.activeIndex + 1 == this.dbErrorCode) {
-      this.dbErrorCode = -1;
+    if (this._schemaService.getCurrentlyEdited() == undefined) {
+      this._schemaService.initCurrentlyEdit(this.table);
+
+      this.commandsHolder.do(new ChangeColumnPrimaryKey(this.table, row));
+
+      this.saveChanges();
     }
-    this._schemaService.initCurrentlyEdit(
-      this._project.schema.getTable(this.table.name)
-    );
-
-    this.commandsHolder.do(new ChangeColumnPrimaryKey(this.table, row));
-
-    this.saveChanges();
   }
 
   changedTableName(newValue: string) {
-    if (this._oldValue != newValue) {
-      this._schemaService.initCurrentlyEdit(
-        this._project.schema.getTable(this.table.name)
-      );
+    if (
+      this._oldValue != newValue &&
+      this._schemaService.getCurrentlyEdited() == undefined
+    ) {
+      this._schemaService.initCurrentlyEdit(this.table);
 
       this.commandsHolder.do(
         new ChangeTableName(this.table, this._oldValue, newValue)
