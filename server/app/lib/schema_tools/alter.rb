@@ -92,7 +92,7 @@ module SchemaTools
     end
 
     def self.ensure_consistency!(db)
-      raise EsqulinoError.new("Database inconsistent") if db.foreign_key_check().size > 0
+      raise EsqulinoError::Base.new("Database inconsistent") if db.foreign_key_check().size > 0
     end
 
     def self.internal_rename_table(sqlite_file_path, from_tableName, to_tableName)
