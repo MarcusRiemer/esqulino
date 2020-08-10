@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 53152493-1926-4230-be97-f8cec0689972
@@ -18,15 +18,17 @@ concise_attributes:
   value_before_type_cast: 01 a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "expression", "children": {"subexpressions": [{"name":
-    "characters", "language": "regex", "properties": {"chars": "a"}}]}, "language":
-    "regex"}'
+  value_before_type_cast: '{"name": "expression", "children": {"refTestCases": [{"name":
+    "refTestCase", "language": "regex", "properties": {"testId": "3d631c69-697c-42a6-af16-ff5a49b31982"}},
+    {"name": "refTestCase", "language": "regex", "properties": {"testId": "92ca693e-18de-46a4-8890-6932d6c40df9"}}],
+    "subexpressions": [{"name": "characters", "language": "regex", "properties": {"chars":
+    "a"}}]}, "language": "regex"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-03 08:50:28.998263000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-22 15:07:52.584778000 Z
+  value_before_type_cast: 2020-08-10 13:30:07.671290000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 29b3b596-6b8c-4397-aa87-374b3efa07c6

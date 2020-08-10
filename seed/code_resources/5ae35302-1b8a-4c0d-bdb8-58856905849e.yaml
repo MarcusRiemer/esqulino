@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 5ae35302-1b8a-4c0d-bdb8-58856905849e

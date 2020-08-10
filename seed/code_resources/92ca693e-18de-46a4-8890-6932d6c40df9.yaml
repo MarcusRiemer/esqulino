@@ -12,23 +12,25 @@ concise_attributes:
       limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: b7b78ada-5352-4a8f-aafa-1ab2e83614d9
+  value_before_type_cast: 92ca693e-18de-46a4-8890-6932d6c40df9
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 02 a|b - Tests
+  value_before_type_cast: 01 a - More Tests
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "root", "children": {"cases": [{"name": "caseSingle",
     "language": "regex-testbench", "properties": {"input": "a", "wholeMatch": "true"}},
     {"name": "caseSingle", "language": "regex-testbench", "properties": {"input":
-    "b", "wholeMatch": "true"}}, {"name": "caseSingle", "language": "regex-testbench",
-    "properties": {"input": "c", "wholeMatch": "false"}}]}, "language": "regex-testbench"}'
+    "b", "wholeMatch": "false"}}, {"name": "caseSingle", "language": "regex-testbench",
+    "properties": {"input": "c", "wholeMatch": "false"}}, {"name": "caseSingle", "language":
+    "regex-testbench", "properties": {"input": "aa", "wholeMatch": "false"}}]}, "language":
+    "regex-testbench"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-07-28 21:32:40.416042000 Z
+  value_before_type_cast: 2020-08-10 13:29:25.289056000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-28 21:33:40.739948000 Z
+  value_before_type_cast: 2020-08-10 13:29:45.560074000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: '09ef2069-c6d5-4cca-9c6f-9d883cb07f64'
@@ -49,11 +51,17 @@ concise_attributes:
         {
           "input": "b",
           "expected": {
-            "type": "wholeMatch"
+            "type": "noMatch"
           }
         },
         {
           "input": "c",
+          "expected": {
+            "type": "noMatch"
+          }
+        },
+        {
+          "input": "aa",
           "expected": {
             "type": "noMatch"
           }

@@ -22,7 +22,7 @@ concise_attributes:
     "language": "MetaGrammar", "properties": {"typeName": "root", "languageName":
     "regex-testbench"}}], "nodes": [{"name": "concreteNode", "children": {"attributes":
     [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "Testfälle"}}, {"name": "children", "children":
+    "MetaGrammar", "properties": {"symbol": "Testfälle:"}}, {"name": "children", "children":
     {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
     "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "case", "languageName":
     "regex-testbench"}}], "cardinality": [{"name": "knownCardinality", "language":
@@ -60,7 +60,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-28 19:56:53.038504000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-28 21:16:16.537427000 Z
+  value_before_type_cast: 2020-08-10 12:02:35.415269000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -82,7 +82,7 @@ concise_attributes:
                 "children": [
                   {
                     "type": "terminal",
-                    "symbol": "Testfälle"
+                    "symbol": "Testfälle:"
                   },
                   {
                     "type": "sequence",

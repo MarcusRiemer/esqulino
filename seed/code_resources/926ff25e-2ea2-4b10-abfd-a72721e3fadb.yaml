@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 926ff25e-2ea2-4b10-abfd-a72721e3fadb
@@ -22,30 +22,43 @@ concise_attributes:
     "language": "MetaGrammar", "properties": {"typeName": "expression", "languageName":
     "regex"}}], "nodes": [{"name": "comment", "language": "MetaGrammar", "properties":
     {"text": "Regulärer Ausdruck bestehend aus Teil-Ausdrücken"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "container", "children": {"attributes": [{"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "subexpression", "languageName":
+    "regex"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "+"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "subexpressions"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}, {"name": "container",
     "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
     "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "subexpression", "languageName": "regex"}}],
+    "MetaGrammar", "properties": {"typeName": "refTestCase", "languageName": "regex"}}],
     "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
-    {"cardinality": "+"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
-    "properties": {"base": "sequence", "name": "subexpressions"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "expression", "languageName": "regex"}}, {"name": "comment",
-    "language": "MetaGrammar", "properties": {"text": "Teil-Ausdrücke die einen regulären
-    Ausdruck bilden"}}, {"name": "typedef", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "characters", "languageName":
-    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "knownCharacterClass", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "characterRange", "languageName": "regex"}},
-    {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "alternative",
-    "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "group", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "quantifierClass", "languageName": "regex"}},
-    {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "quantifierRange",
-    "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "lineTails", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "anyCharacter", "languageName": "regex"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "subexpression", "languageName":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "refTestCases"}}], "orientation": [{"name":
+    "orientation", "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]},
+    "language": "MetaGrammar"}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"typeName": "expression", "languageName":
     "regex"}}, {"name": "comment", "language": "MetaGrammar", "properties": {"text":
-    "Node um Character-Matches im RegEx abzubilden"}}, {"name": "concreteNode", "children":
+    "Teil-Ausdrücke die einen regulären Ausdruck bilden"}}, {"name": "typedef", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "characters", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "knownCharacterClass", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "characterRange", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "alternative", "languageName": "regex"}},
+    {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "group",
+    "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "quantifierClass", "languageName": "regex"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "quantifierRange", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "lineTails", "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "anyCharacter", "languageName": "regex"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "subexpression", "languageName": "regex"}},
+    {"name": "comment", "language": "MetaGrammar", "properties": {"text": "Node um
+    Character-Matches im RegEx abzubilden"}}, {"name": "concreteNode", "children":
     {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
     {"base": "string", "name": "chars"}}]}, "language": "MetaGrammar", "properties":
     {"typeName": "characters", "languageName": "regex"}}, {"name": "comment", "language":
@@ -135,14 +148,18 @@ concise_attributes:
     "properties": {"text": "Node welche einen beliebiges Zeichen abbildet"}}, {"name":
     "concreteNode", "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar",
     "properties": {"symbol": "."}}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "anyCharacter", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
-    {"name": "regex"}}'
+    "anyCharacter", "languageName": "regex"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "Tests:"}}, {"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "codeResourceReference", "name": "testId"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "refTestCase", "languageName": "regex"}}]}, "language":
+    "MetaGrammar", "properties": {"name": "regex"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-14 15:55:57.065407000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-22 11:30:16.514032000 Z
+  value_before_type_cast: 2020-08-10 12:25:04.148024000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -159,15 +176,46 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
-                "type": "sequence",
-                "name": "subexpressions",
-                "nodeTypes": [
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
                   {
-                    "nodeType": {
-                      "languageName": "regex",
-                      "typeName": "subexpression"
-                    },
-                    "occurs": "+"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "sequence",
+                        "name": "subexpressions",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "regex",
+                              "typeName": "subexpression"
+                            },
+                            "occurs": "+"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
+                      {
+                        "type": "sequence",
+                        "name": "refTestCases",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "regex",
+                              "typeName": "refTestCase"
+                            },
+                            "occurs": "*"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               }
@@ -408,6 +456,20 @@ concise_attributes:
               {
                 "type": "terminal",
                 "symbol": "."
+              }
+            ]
+          },
+          "refTestCase": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "Tests:"
+              },
+              {
+                "type": "property",
+                "base": "codeResourceReference",
+                "name": "testId"
               }
             ]
           }

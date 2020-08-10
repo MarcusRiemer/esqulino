@@ -22,13 +22,15 @@ concise_attributes:
     "language": "regex-testbench", "properties": {"input": "a", "wholeMatch": "true"}},
     {"name": "caseSingle", "language": "regex-testbench", "properties": {"input":
     "b", "wholeMatch": "false"}}, {"name": "caseSingle", "language": "regex-testbench",
-    "properties": {"input": "c", "wholeMatch": "false"}}]}, "language": "regex-testbench"}'
+    "properties": {"input": "c", "wholeMatch": "false"}}, {"name": "caseSingle", "language":
+    "regex-testbench", "properties": {"input": "aa", "wholeMatch": "false"}}]}, "language":
+    "regex-testbench"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-28 21:11:31.546847000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-28 21:34:28.926886000 Z
+  value_before_type_cast: 2020-08-10 13:27:06.265913000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: '09ef2069-c6d5-4cca-9c6f-9d883cb07f64'
@@ -54,6 +56,12 @@ concise_attributes:
         },
         {
           "input": "c",
+          "expected": {
+            "type": "noMatch"
+          }
+        },
+        {
+          "input": "aa",
           "expected": {
             "type": "noMatch"
           }
