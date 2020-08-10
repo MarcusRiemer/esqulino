@@ -1,13 +1,16 @@
 import { Component } from "@angular/core";
 import { Observable, of, combineLatest } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { switchMap, map, refCount, filter } from "rxjs/operators";
 
 import {
   RegexTestBenchDescription,
   RegexTestCaseDescription,
+  readFromNode,
 } from "../../../shared/syntaxtree/regex/regex-testbench.description";
+import { referencedCodeResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { ProjectService } from "../../project.service";
 
 interface ExecutedTestCase extends RegexTestCaseDescription {
   result: boolean;
@@ -21,13 +24,16 @@ interface ExecutedTestCase extends RegexTestCaseDescription {
 })
 export class RegexTestComponent {
   constructor(
-    private readonly _currentCodeResource: CurrentCodeResourceService
+    private readonly _currentCodeResource: CurrentCodeResourceService,
+    private readonly _projectService: ProjectService
   ) {}
 
   /**
    * The currently loaded regular expression.
    */
-  readonly regexResource$ = this._currentCodeResource.currentResource;
+  readonly regexResource$ = this._currentCodeResource.currentResource.pipe(
+    filter((res) => res.syntaxTreePeek.rootNode.languageName === "regex")
+  );
 
   readonly regexCompiled$ = this.regexResource$.pipe(
     switchMap((res) => res.generatedCode)
@@ -41,18 +47,22 @@ export class RegexTestComponent {
   /**
    * The testcases to execute
    */
-  readonly test$: Observable<RegexTestBenchDescription> = of({
-    cases: [
-      {
-        input: "ab",
-        expected: { type: "wholeMatch" },
-      },
-      {
-        input: "ba",
-        expected: { type: "noMatch" },
-      },
-    ],
-  });
+  readonly test$: Observable<
+    RegexTestBenchDescription[]
+  > = this.regexResource$.pipe(
+    map((res) => {
+      const p = this._projectService.cachedProject;
+      const g = res.validatorPeek.getGrammarValidator("regex").description;
+      const testRes = referencedCodeResourceIds(res.syntaxTreePeek.rootNode, g);
+
+      const testDocs = testRes.map((tId) => {
+        const t = p.getCodeResourceById(tId);
+        return readFromNode(t.syntaxTreePeek.rootNode);
+      });
+
+      return testDocs;
+    })
+  );
 
   readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest(
     this.regexCompiled$,
@@ -62,11 +72,17 @@ export class RegexTestComponent {
       const regex = new RegExp(regexString);
       // TODO: Compile and use regex for each testcase
 
-      const toReturn: ExecutedTestCase[] = testCases.cases.map((testCase) => {
-        // TODO: Run testCase.input through regex and compare against expected result
-        //       runTestCases in `regex-test.ts`
-        //       Return the computed result instead of `true`
-        return Object.assign({}, testCase, { result: true });
+      const toReturn: ExecutedTestCase[] = [];
+
+      // We don't want to rely on array.float so we build the flattened array
+      // by appending to it.
+      testCases.forEach((t) => {
+        t.cases.forEach((testCase) => {
+          // TODO: Run testCase.input through regex and compare against expected result
+          //       runTestCases in `regex-test.ts`
+          //       Return the computed result instead of `true`
+          toReturn.push(Object.assign({}, testCase, { result: true }));
+        });
       });
 
       return toReturn;

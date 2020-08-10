@@ -1,4 +1,4 @@
-<table>
+<table *ngIf="(executedTestCases$ | async) as executedTestCases">
   <tr>
     <th>
       Eingabe
@@ -10,7 +10,7 @@
       Erfüllt?
     </th>
   </tr>
-  <tr *ngFor="let testCase of (executedTestCases$ | async)">
+  <tr *ngFor="let testCase of executedTestCases">
     <td>{{ testCase.input }}</td>
     <td>{{ testCase.expected.type }}</td>
     <td>{{ testCase.result }}</td>

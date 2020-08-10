@@ -1395,7 +1395,6 @@ export class GrammarValidator {
     [languageName: string]: { [typeName: string]: NodeType };
   } = {};
 
-  public readonly validator: Validator;
   public readonly rootType: TypeReference;
 
   /**
@@ -1403,22 +1402,25 @@ export class GrammarValidator {
    *
    * @param validator The parenting validator of this grammar, used to look
    *                  up possible cross references to other grammars.
-   * @param desc The description of the grammar to validate.
+   * @param description The description of the grammar to validate.
    */
-  constructor(validator: Validator, desc: Desc.GrammarDocument) {
+  constructor(
+    readonly validator: Validator,
+    readonly description: Desc.GrammarDocument
+  ) {
     this.validator = validator;
 
     // Ensure there is a bucket for every language
     const allLanguageNames = new Set([
-      ...Object.keys(desc.types),
-      ...Object.keys(desc.foreignTypes),
+      ...Object.keys(description.types),
+      ...Object.keys(description.foreignTypes),
     ]);
     allLanguageNames.forEach((langName) => {
       this._registeredLanguages[langName] = {};
     });
 
     // Grammar needs to take local and foreign types into account
-    const allTypes = allPresentTypes(desc);
+    const allTypes = allPresentTypes(description);
 
     // Register all existing types
     Object.entries(allTypes).forEach(([langName, langTypes]) => {
@@ -1428,8 +1430,8 @@ export class GrammarValidator {
     });
 
     // If a root type was specified: Make it resolveable
-    if (desc.root) {
-      this.rootType = new TypeReference(validator, desc.root);
+    if (description.root) {
+      this.rootType = new TypeReference(validator, description.root);
     }
   }
 
