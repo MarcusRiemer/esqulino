@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: bd2e95a4-5ae3-4b08-9c0d-89cbd9b88ea6
@@ -20,14 +20,16 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "program", "children": {"main": [{"name": "procedureCall",
     "language": "trucklino_program", "properties": {"name": "goForward"}}, {"name":
-    "procedureCall", "language": "trucklino_program", "properties": {"name": "unload"}}]},
-    "language": "trucklino_program"}'
+    "procedureCall", "language": "trucklino_program", "properties": {"name": "unload"}}],
+    "worldReferences": [{"name": "refWorldList", "children": {"worldReferences": [{"name":
+    "refWorld", "language": "trucklino_program", "properties": {"worldId": "5eaab1f0-ced1-45d2-967d-6f1eb5d86415"}}]},
+    "language": "trucklino_program"}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-02-05 10:28:28.861568000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-02-05 10:33:25.964302000 Z
+  value_before_type_cast: 2020-08-11 15:57:44.099007000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f

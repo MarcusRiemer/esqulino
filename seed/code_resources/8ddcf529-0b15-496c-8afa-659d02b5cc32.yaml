@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: c97f00ae-921e-405f-bec9-319d1e42dadd
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 8ddcf529-0b15-496c-8afa-659d02b5cc32
@@ -43,14 +43,16 @@ concise_attributes:
     {"body": [{"name": "procedureCall", "language": "trucklino_program", "properties":
     {"name": "wait"}}], "pred": [{"name": "sensor", "language": "trucklino_program",
     "properties": {"type": "lightIsRed"}}]}, "language": "trucklino_program"}], "arguments":
-    []}, "language": "trucklino_program", "properties": {"name": "waitForTrafficLight"}}]},
-    "language": "trucklino_program"}'
+    []}, "language": "trucklino_program", "properties": {"name": "waitForTrafficLight"}}],
+    "worldReferences": [{"name": "refWorldList", "children": {"worldReferences": [{"name":
+    "refWorld", "language": "trucklino_program", "properties": {"worldId": "0e813946-cdb8-49ed-86d7-e73aa70267cc"}}]},
+    "language": "trucklino_program"}]}, "language": "trucklino_program"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-02-05 18:24:53.341459000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-03-12 14:10:32.608057000 Z
+  value_before_type_cast: 2020-08-12 08:07:11.948947000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
