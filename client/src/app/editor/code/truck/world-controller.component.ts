@@ -6,10 +6,10 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { World, Command } from "../../../shared/syntaxtree/truck/world";
 import { NodeLocation } from "../../../shared/syntaxtree";
 import { rxFilterRootLanguage } from "../../../shared/util";
+import { referencedCodeResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
 
 import { TruckWorldService } from "./truck-world.service";
 import { WorldSelectorComponent } from "./world-selector.component";
-import { referencedCodeResourceIds } from "src/app/shared/syntaxtree/syntaxtree-util";
 
 @Component({
   templateUrl: "templates/world-controller.html",
