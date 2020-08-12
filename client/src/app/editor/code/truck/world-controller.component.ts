@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy, ViewChild, NgZone } from "@angular/core";
 import { Subscription } from "rxjs";
-import { flatMap, first } from "rxjs/operators";
+import { flatMap, first, filter } from "rxjs/operators";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { World, Command } from "../../../shared/syntaxtree/truck/world";
 import { NodeLocation } from "../../../shared/syntaxtree";
+import { rxFilterRootLanguage } from "../../../shared/util";
 
 import { TruckWorldService } from "./truck-world.service";
 import { WorldSelectorComponent } from "./world-selector.component";
+import { referencedCodeResourceIds } from "src/app/shared/syntaxtree/syntaxtree-util";
 
 @Component({
   templateUrl: "templates/world-controller.html",
@@ -51,6 +53,19 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
         this._truckWorld.setNewWorld(selectedWorldId);
       }
     );
+
+    // If the program provides a world to use: Use it
+    // TODO?: Maybe honor a pre-selected world?
+    this.currentProgram
+      .pipe(filter(rxFilterRootLanguage("trucklino_program")))
+      .subscribe((prog) => {
+        const g = prog.validatorPeek.getGrammarValidator("trucklino_program")
+          .description;
+        const refs = referencedCodeResourceIds(prog.syntaxTreePeek, g);
+        if (refs.length > 0) {
+          this._truckWorld.setNewWorld(refs[0]);
+        }
+      });
   }
 
   ngOnDestroy(): void {

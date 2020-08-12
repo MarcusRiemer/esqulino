@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable, of, combineLatest } from "rxjs";
-import { switchMap, map, refCount, filter } from "rxjs/operators";
+import { Observable, combineLatest } from "rxjs";
+import { switchMap, map, filter } from "rxjs/operators";
 
 import {
   RegexTestBenchDescription,
@@ -8,6 +8,7 @@ import {
   readFromNode,
 } from "../../../shared/syntaxtree/regex/regex-testbench.description";
 import { referencedCodeResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
+import { rxFilterRootLanguage } from "../../../shared/util";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { ProjectService } from "../../project.service";
@@ -17,7 +18,8 @@ interface ExecutedTestCase extends RegexTestCaseDescription {
 }
 
 /**
- *
+ * Displays the results for various testcases that are associated with
+ * the currently shown resource.
  */
 @Component({
   templateUrl: "templates/regex-test.html",
@@ -32,7 +34,7 @@ export class RegexTestComponent {
    * The currently loaded regular expression.
    */
   readonly regexResource$ = this._currentCodeResource.currentResource.pipe(
-    filter((res) => res.syntaxTreePeek.rootNode.languageName === "regex")
+    filter(rxFilterRootLanguage("regex"))
   );
 
   readonly regexCompiled$ = this.regexResource$.pipe(
@@ -57,6 +59,7 @@ export class RegexTestComponent {
 
       const testDocs = testRes.map((tId) => {
         const t = p.getCodeResourceById(tId);
+
         return readFromNode(t.syntaxTreePeek.rootNode);
       });
 
