@@ -295,6 +295,39 @@ RSpec.describe Grammar, type: :model do
       expect(grammar.generated_from_id).to eq resource.id
     end
 
+    it "regeneration from code_resource does not override foreign types" do
+      foreign_types = {
+        "foreign" => {
+          "elsewhere" => {
+            "type" => "concrete",
+            "attributes" => []
+          }
+        }
+      }
+
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource, foreign_types: foreign_types)
+
+      expect(grammar.types).to eq Hash.new
+      expect(grammar.foreign_types).to eq foreign_types
+      expect(grammar.root).to be_nil
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+      did_change = grammar.regenerate_from_code_resource!(ide_service)
+
+      expect(did_change).to eq [grammar]
+      expect(grammar.root).to eq({ "languageName" => "lang", "typeName" => "root" })
+      expect(grammar.types).to eq({
+                                    "lang" => {
+                                      "root" => {
+                                        "type" => "concrete",
+                                        "attributes" => []
+                                      }
+                                    }
+                                  })
+      expect(grammar.foreign_types).to eq foreign_types
+    end
+
     it "can regenerate" do
       resource = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: resource)
