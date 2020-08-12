@@ -1,4 +1,5 @@
 import * as AST from "./syntaxtree";
+import * as Desc from "./grammar.description";
 
 // Groups together all error codes that exist in the core of the validator.
 export enum ErrorCodes {
@@ -38,6 +39,8 @@ export enum ErrorCodes {
   SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE",
   // A parentheses group had no types and is therefore undecidable
   ParenthesesEmptyTypes = "PARENTHESES_EMPTY_TYPES",
+  // A string should have been an ID but wasn't
+  InvalidResourceId = "INVALID_RESOURCE_ID",
 }
 
 /**
@@ -134,48 +137,67 @@ export function printableError(e: ValidationError) {
   return toReturn;
 }
 
+type ReferencedResources = {
+  [id: string]: Desc.NodePropertyReferenceDescription["base"];
+};
+
 /**
  * Used during validation to accumulate validation results. Additionaly
  * provides some extra data that may be relevant during validation.
+ *
+ * The references
  */
 export class ValidationContext {
   private _errors: ValidationError[] = [];
+  private _referencedResources: ReferencedResources = {};
 
   constructor(public additional: Readonly<any> = {}) {}
 
   addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = {}) {
-    this._errors.push({ code: code, node: node, data: data });
+    this._errors.push({ code, node, data });
   }
 
-  get errors() {
-    return this._errors;
+  /**
+   * Adds a reference that was found during the validation and should be checked
+   * once all references are known.
+   */
+  addReference(
+    type: Desc.NodePropertyReferenceDescription["base"],
+    id: string
+  ) {
+    const existing = this._referencedResources[id];
+    if (!existing) {
+      this._referencedResources[id] = type;
+    } else if (existing != type) {
+      throw new Error(
+        `Attempted to re-register reference "${id}" with type "{type}", was "${existing}"`
+      );
+    }
   }
+
+  readonly errors: ReadonlyArray<ValidationError> = this._errors;
 }
 
 /**
  * Represents the result of a completed validation.
  */
 export class ValidationResult {
-  private _errors: ValidationError[];
-
   static EMPTY = new ValidationResult(new ValidationContext());
 
+  readonly errors: ReadonlyArray<ValidationError>;
+
   constructor(context: ValidationContext) {
-    this._errors = context.errors;
+    this.errors = context.errors;
   }
 
   /**
    * @return All errors that happened on the given node.
    */
   getErrorsOn(node: AST.Node) {
-    return this._errors.filter((e) => e.node === node);
+    return this.errors.filter((e) => e.node === node);
   }
 
   get isValid() {
-    return this._errors.length === 0;
-  }
-
-  get errors() {
-    return this._errors;
+    return this.errors.length === 0;
   }
 }

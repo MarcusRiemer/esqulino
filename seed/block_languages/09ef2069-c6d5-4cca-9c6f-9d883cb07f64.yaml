@@ -1,0 +1,59 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: '09ef2069-c6d5-4cca-9c6f-9d883cb07f64'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta RegEx Testbench
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"text": "Testfälle", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}, {"blockType": "iterator", "childGroupName": "cases", "emptyDropTarget":
+    false}], "blockType": "container", "orientation": "vertical"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "root", "languageName": "regex-testbench"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "Eingabe:", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "input",
+    "blockType": "input"}, {"text": ", ", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}, {"style": {"display": "inline-flex"}, "property": "wholeMatch", "blockType":
+    "input"}, {"text": "Treffer?", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
+    "caseSingle", "languageName": "regex-testbench"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"style": {"display": "inline-flex"}, "property": "input", "blockType": "input"},
+    {"blockType": "iterator", "childGroupName": "hits", "emptyDropTarget": false}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "caseHits",
+    "languageName": "regex-testbench"}}, {"visual": [{"children": [{"style": {"color":
+    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
+    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
+    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style":
+    {"display": "inline-flex"}, "property": "value", "blockType": "input"}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "string", "languageName":
+    "regex-testbench"}}], "rootCssClasses": ["activate-block-outline"], "editorComponents":
+    [{"componentType": "block-root"}, {"componentType": "validator"}, {"componentType":
+    "generated-code"}], "localGeneratorInstructions": {"type": "manual"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-28 21:08:21.917757000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-28 23:00:47.586918000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: regex-testbench
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 0ea1d28d-868d-4032-b30c-bdf57ae282c6
+new_record: false
+active_record_yaml_version: 2

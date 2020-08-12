@@ -100,6 +100,14 @@ export interface JsonAstComponentDescription
 }
 
 /**
+ * Testcases for regular expressions.
+ */
+export interface RegexTestComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "regex-test";
+}
+
+/**
  * Displays debug information about an ongoing drag process
  */
 export interface DropDebugComponentDescription
@@ -177,7 +185,8 @@ export type EditorComponentDescription =
   | TruckSensorsComponentDescription
   | TruckWorldEditorMenuComponentDescription
   | DropDebugComponentDescription
-  | JsonAstComponentDescription;
+  | JsonAstComponentDescription
+  | RegexTestComponentDescription;
 
 /**
  * The data about a language model that is stored in the database

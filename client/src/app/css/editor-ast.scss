@@ -152,7 +152,7 @@ editor-block-host {
     }
 
     editor-block-render-input {
-        .not-editing > .display-value {
+        .not-editing > * > .display-value {
             display: inline-flex;
             border-bottom: 1px dashed black;
             min-height: 1ch;

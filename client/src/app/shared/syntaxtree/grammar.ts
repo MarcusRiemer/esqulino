@@ -16,6 +16,7 @@ import { resolveChildOccurs } from "./grammar-util";
 import { OccursSpecificDescription, resolveOccurs } from "./occurs";
 import { QualifiedTypeName } from "./syntaxtree.description";
 import { allPresentTypes } from "./grammar-type-util";
+import { isValidId } from "../util";
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -185,6 +186,10 @@ export class NodeConcreteType extends NodeType {
     }
   }
 
+  getPropertyBaseType(name: string) {
+    return this._allowedProperties[name].baseName;
+  }
+
   /**
    * @return Names of all categories that could have children.
    */
@@ -287,14 +292,19 @@ export class NodeConcreteType extends NodeType {
   private instanciatePropertyValidator(
     desc: Desc.NodePropertyTypeDescription
   ): NodePropertyValidator {
-    if (Desc.isNodePropertyStringDesciption(desc)) {
-      return new NodePropertyStringValidator(desc);
-    } else if (Desc.isNodePropertyBooleanDesciption(desc)) {
-      return new NodePropertyBooleanValidator(desc);
-    } else if (Desc.isNodePropertyIntegerDesciption(desc)) {
-      return new NodePropertyIntegerValidator(desc);
-    } else {
-      throw new Error(`Unknown property validator for base "${desc.base}"`);
+    switch (desc.base) {
+      case "boolean":
+        return new NodePropertyBooleanValidator(desc);
+      case "string":
+        return new NodePropertyStringValidator(desc);
+      case "integer":
+        return new NodePropertyIntegerValidator(desc);
+      case "codeResourceReference":
+      case "grammarReference":
+        return new NodePropertyReferenceValidator(desc);
+      default:
+        // @ts-ignore `base` is technically never, but we want clean errors for non-conforming inputs
+        throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
   }
 }
@@ -1038,12 +1048,14 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
  * Validates any property.
  */
 abstract class NodePropertyValidator {
-  private _isOptional: boolean;
-  private _base: string;
+  //! True if this property may be omitted from a node
+  readonly isOptional: boolean;
+  //! The type to use as the validation base
+  readonly baseName: string;
 
   constructor(desc: Desc.NodePropertyTypeDescription) {
-    this._isOptional = !!desc.isOptional;
-    this._base = desc.base;
+    this.isOptional = !!desc.isOptional;
+    this.baseName = desc.base;
   }
 
   abstract validate(
@@ -1051,20 +1063,6 @@ abstract class NodePropertyValidator {
     value: string,
     context: ValidationContext
   ): void;
-
-  /**
-   * @return This property may be omitted from a node.
-   */
-  get isOptional() {
-    return this._isOptional;
-  }
-
-  /**
-   * @return The typename of the property
-   */
-  get baseName() {
-    return this._base;
-  }
 }
 
 /**
@@ -1186,6 +1184,27 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
           throw new Error(`Unknown string restriction: "${restriction.type}"`);
       }
     });
+  }
+}
+
+/**
+ * Ensures that the given attribute is at least a valid ID. Also marks the id (if valid)
+ * to be later on checked for existence.
+ */
+export class NodePropertyReferenceValidator extends NodePropertyValidator {
+  private readonly _referenceType: Desc.NodePropertyReferenceDescription["base"];
+
+  constructor(desc: Desc.NodePropertyReferenceDescription) {
+    super(desc);
+    this._referenceType = desc.base;
+  }
+
+  validate(node: AST.Node, idValue: string, context: ValidationContext): void {
+    if (isValidId(idValue)) {
+      context.addReference(this._referenceType, idValue);
+    } else {
+      context.addError(ErrorCodes.InvalidResourceId, node);
+    }
   }
 }
 
@@ -1318,7 +1337,6 @@ class TypeReference {
       this._languageName = currentLang;
       this._typeName = desc;
     } else {
-      // debugger;
       throw new Error("Impossible: Unknown type reference");
     }
   }
@@ -1377,7 +1395,6 @@ export class GrammarValidator {
     [languageName: string]: { [typeName: string]: NodeType };
   } = {};
 
-  public readonly validator: Validator;
   public readonly rootType: TypeReference;
 
   /**
@@ -1385,22 +1402,25 @@ export class GrammarValidator {
    *
    * @param validator The parenting validator of this grammar, used to look
    *                  up possible cross references to other grammars.
-   * @param desc The description of the grammar to validate.
+   * @param description The description of the grammar to validate.
    */
-  constructor(validator: Validator, desc: Desc.GrammarDocument) {
+  constructor(
+    readonly validator: Validator,
+    readonly description: Desc.GrammarDocument
+  ) {
     this.validator = validator;
 
     // Ensure there is a bucket for every language
     const allLanguageNames = new Set([
-      ...Object.keys(desc.types),
-      ...Object.keys(desc.foreignTypes),
+      ...Object.keys(description.types),
+      ...Object.keys(description.foreignTypes),
     ]);
     allLanguageNames.forEach((langName) => {
       this._registeredLanguages[langName] = {};
     });
 
     // Grammar needs to take local and foreign types into account
-    const allTypes = allPresentTypes(desc);
+    const allTypes = allPresentTypes(description);
 
     // Register all existing types
     Object.entries(allTypes).forEach(([langName, langTypes]) => {
@@ -1410,8 +1430,8 @@ export class GrammarValidator {
     });
 
     // If a root type was specified: Make it resolveable
-    if (desc.root) {
-      this.rootType = new TypeReference(validator, desc.root);
+    if (description.root) {
+      this.rootType = new TypeReference(validator, description.root);
     }
   }
 
@@ -1457,9 +1477,18 @@ export class GrammarValidator {
   /**
    * @return The type with the matching name.
    */
-  getType(languageName: string, typename: string): NodeType {
+  getType(n: AST.Node): NodeConcreteType;
+  getType(languageName: string, typename: string): NodeType;
+  getType(nodeOrLang: string | AST.Node, givenTypename?: string) {
+    const languageName =
+      nodeOrLang instanceof AST.Node ? nodeOrLang.languageName : nodeOrLang;
+    const typename =
+      nodeOrLang instanceof AST.Node ? nodeOrLang.typeName : givenTypename;
+
     if (!this.isKnownType(languageName, typename)) {
-      throw new Error(`Language does not have type "${typename}"`);
+      throw new Error(
+        `Could not get type "${languageName}.${typename}": Is unknown`
+      );
     } else {
       return this._registeredLanguages[languageName][typename];
     }

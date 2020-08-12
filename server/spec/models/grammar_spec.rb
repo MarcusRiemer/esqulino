@@ -375,7 +375,7 @@ RSpec.describe Grammar, type: :model do
 
         grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
 
-        expect(grammar.referenced_grammars).to match_array [inc_1]
+        expect(grammar.targeted_grammars).to match_array [inc_1]
       end
 
       it "replaces includes" do
@@ -389,7 +389,7 @@ RSpec.describe Grammar, type: :model do
 
         grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
 
-        expect(grammar.referenced_grammars).to match_array [inc_2]
+        expect(grammar.targeted_grammars).to match_array [inc_2]
       end
     end
 
@@ -400,7 +400,7 @@ RSpec.describe Grammar, type: :model do
       g = create(:grammar)
 
       expect(g.grammar_reference_origins). to eq []
-      expect(g.referenced_grammars). to eq []
+      expect(g.targeted_grammars). to eq []
     end
 
     it "includes types of another grammar" do
@@ -413,7 +413,7 @@ RSpec.describe Grammar, type: :model do
                          reference_type: "include_types")
 
       expect(origin.grammar_reference_origins).to eq [reference]
-      expect(origin.referenced_grammars).to eq [target]
+      expect(origin.targeted_grammars).to eq [target]
     end
 
     it "adds includes" do
@@ -421,7 +421,7 @@ RSpec.describe Grammar, type: :model do
       inc_1 = FactoryBot.create(:grammar)
       grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
 
-      expect(grammar.referenced_grammars).to eq [inc_1]
+      expect(grammar.targeted_grammars).to eq [inc_1]
     end
 
     it "destroys includes, but leaves the grammar intact" do
@@ -448,7 +448,7 @@ RSpec.describe Grammar, type: :model do
       )
 
       expect(ref_1).to eq ref_1_again
-      expect(grammar.referenced_grammars).to eq [inc_1]
+      expect(grammar.targeted_grammars).to eq [inc_1]
     end
 
     it "replaces an existing includes with a new includes" do
@@ -456,7 +456,7 @@ RSpec.describe Grammar, type: :model do
       inc_1 = FactoryBot.create(:grammar)
       ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
 
-      expect(grammar.referenced_grammars).to eq [inc_1]
+      expect(grammar.targeted_grammars).to eq [inc_1]
 
       inc_2 = FactoryBot.create(:grammar)
 
@@ -472,7 +472,7 @@ RSpec.describe Grammar, type: :model do
       grammar.grammar_reference_origins = [ref_2]
       grammar.reload # Dependant relationships are cached
 
-      expect(grammar.referenced_grammars).to eq [inc_2]
+      expect(grammar.targeted_grammars).to eq [inc_2]
       expect(GrammarReference.all).to match_array [ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
@@ -482,7 +482,7 @@ RSpec.describe Grammar, type: :model do
       inc_1 = FactoryBot.create(:grammar)
       ref_1_orig = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
 
-      expect(grammar.referenced_grammars).to eq [inc_1]
+      expect(grammar.targeted_grammars).to eq [inc_1]
 
       inc_2 = FactoryBot.create(:grammar)
 
@@ -508,7 +508,7 @@ RSpec.describe Grammar, type: :model do
       grammar.reload # Dependant relationships are cached
 
       expect(ref_1_orig).to eq ref_1
-      expect(grammar.referenced_grammars).to eq [inc_1, inc_2]
+      expect(grammar.targeted_grammars).to eq [inc_1, inc_2]
       expect(GrammarReference.all).to match_array [ref_1, ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end

@@ -474,6 +474,9 @@
         },
         {
           "$ref": "#/definitions/JsonAstComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/RegexTestComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -1095,7 +1098,7 @@
           "$ref": "#/definitions/NodeVisualContainerDescription"
         }
       ],
-      "description": "Attributes of a node are either validation atoms like properties\nor children or visual cues like terminals or rows."
+      "description": "Attributes of a node may be:\n- validation atoms like properties\n- children\n- references to other resources\n- visual cues like terminals or rows."
     },
     "NodeChildrenGroupDescription": {
       "anyOf": [
@@ -1375,6 +1378,42 @@
       ],
       "type": "object"
     },
+    "NodePropertyReferenceDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "enum": [
+            "grammarReference",
+            "codeResourceReference"
+          ],
+          "type": "string"
+        },
+        "isOptional": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "property"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "base"
+      ],
+      "type": "object"
+    },
     "NodePropertyStringDescription": {
       "additionalProperties": false,
       "description": "Denotes the \"string\" type and describes ways it can be further restricted.",
@@ -1427,6 +1466,9 @@
         },
         {
           "$ref": "#/definitions/NodePropertyStringDescription"
+        },
+        {
+          "$ref": "#/definitions/NodePropertyReferenceDescription"
         }
       ],
       "description": "Properties are used for atomic values and may be optional."
@@ -2357,6 +2399,28 @@
     "ReferenceableTypeInstructionsDescription": {
       "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions%2CParameterReferenceable_BlockInstructions__",
       "description": "Type instructions that may contain references."
+    },
+    "RegexTestComponentDescription": {
+      "additionalProperties": false,
+      "description": "Testcases for regular expressions.",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "regex-test"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     },
     "RegularExpressionRestrictionDescription": {
       "additionalProperties": false,

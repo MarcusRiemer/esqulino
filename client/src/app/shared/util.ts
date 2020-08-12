@@ -1,4 +1,4 @@
-import { NodeLocation } from "./syntaxtree";
+import { NodeLocation, CodeResource } from "./syntaxtree";
 
 /**
  * Any mapping from String -> String
@@ -126,4 +126,17 @@ export function objectOmit<K extends keyof T, T>(omit: K, obj: T): Omit<T, K> {
   delete deepCopy[omit];
 
   return deepCopy;
+}
+
+/**
+ * May be used in a filter pipe to only lets code resources through
+ * where the root node has the given type.
+ */
+export function rxFilterRootLanguage(langName: string) {
+  const toReturn = (cr: CodeResource) => {
+    const ast = cr.syntaxTreePeek;
+    return !ast.isEmpty && ast.rootNode.languageName === langName;
+  };
+
+  return toReturn;
 }

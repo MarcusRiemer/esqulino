@@ -1,0 +1,86 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "a",
+          "characters": "a"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "b"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "empty",
+              "language": "regex"
+            }
+          ]
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "c"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "2"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

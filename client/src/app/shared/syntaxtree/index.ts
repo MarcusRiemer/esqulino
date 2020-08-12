@@ -27,6 +27,7 @@ export const AvailableLanguages = {
   DXmlLiquid: new Language(DynamicXml.LANGUAGE_DESCRIPTION_LIQUID),
   DXmlERuby: new Language(DynamicXml.LANGUAGE_DESCRIPTION_ERUBY),
   RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
+  RegExTestbench: new Language(RegEx.TESTBENCH_DESCRIPTION),
   Css: new Language(Css.LANGUAGE_DESCRIPTION),
   Json: new Language(Json.LANGUAGE_DESCRIPTION),
   TruckWorld: new Language(Truck.WORLD_LANGUAGE_DESCRIPTION),

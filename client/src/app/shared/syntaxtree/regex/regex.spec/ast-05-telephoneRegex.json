@@ -1,0 +1,345 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "+"
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "knownCharacterClass",
+        "language": "regex",
+        "properties": {
+          "characterClass": "d"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "properties": {
+          "lowerBound": "1",
+          "upperBound": "4"
+        },
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "4"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "characterRange",
+        "language": "regex",
+        "children": {
+          "characters": [
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "-."
+              }
+            },
+            {
+              "name": "knownCharacterClass",
+              "language": "regex",
+              "properties": {
+                "characterClass": "s"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "("
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "knownCharacterClass",
+        "language": "regex",
+        "properties": {
+          "characterClass": "d"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "properties": {
+          "lowerBound": "1",
+          "upperBound": "3"
+        },
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "3"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": ")"
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "characterRange",
+        "language": "regex",
+        "children": {
+          "characters": [
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "-."
+              }
+            },
+            {
+              "name": "knownCharacterClass",
+              "language": "regex",
+              "properties": {
+                "characterClass": "s"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "knownCharacterClass",
+        "language": "regex",
+        "properties": {
+          "characterClass": "d"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "properties": {
+          "lowerBound": "1",
+          "upperBound": "4"
+        },
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "4"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "characterRange",
+        "language": "regex",
+        "children": {
+          "characters": [
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "-."
+              }
+            },
+            {
+              "name": "knownCharacterClass",
+              "language": "regex",
+              "properties": {
+                "characterClass": "s"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "knownCharacterClass",
+        "language": "regex",
+        "properties": {
+          "characterClass": "d"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "properties": {
+          "lowerBound": "1",
+          "upperBound": "4"
+        },
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "4"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "characterRange",
+        "language": "regex",
+        "children": {
+          "characters": [
+            {
+              "name": "characters",
+              "language": "regex",
+              "properties": {
+                "chars": "-."
+              }
+            },
+            {
+              "name": "knownCharacterClass",
+              "language": "regex",
+              "properties": {
+                "characterClass": "s"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "?"
+        }
+      },
+      {
+        "name": "knownCharacterClass",
+        "language": "regex",
+        "properties": {
+          "characterClass": "d"
+        }
+      },
+      {
+        "name": "quantifierRange",
+        "language": "regex",
+        "properties": {
+          "lowerBound": "1",
+          "upperBound": "9"
+        },
+        "children": {
+          "bounds": [
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "1"
+              }
+            },
+            {
+              "name": "number",
+              "language": "regex",
+              "properties": {
+                "number": "9"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

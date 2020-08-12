@@ -60,8 +60,11 @@ export interface NodeConcreteTypeDescription {
 }
 
 /**
- * Attributes of a node are either validation atoms like properties
- * or children or visual cues like terminals or rows.
+ * Attributes of a node may be:
+ * - validation atoms like properties
+ * - children
+ * - references to other resources
+ * - visual cues like terminals or rows.
  */
 export type NodeAttributeDescription =
   | NodePropertyTypeDescription
@@ -100,7 +103,8 @@ export interface NodeVisualContainerDescription {
 export type NodePropertyTypeDescription =
   | NodePropertyBooleanDescription
   | NodePropertyIntegerDescription
-  | NodePropertyStringDescription;
+  | NodePropertyStringDescription
+  | NodePropertyReferenceDescription;
 
 /**
  * Simple strings are used to refer to local types that share the
@@ -141,6 +145,14 @@ export interface NodePropertyIntegerDescription {
   isOptional?: boolean;
   tags?: string[];
   restrictions?: NodeIntegerTypeRestrictions[];
+}
+
+export interface NodePropertyReferenceDescription {
+  type: "property";
+  name: string;
+  isOptional?: boolean;
+  base: "grammarReference" | "codeResourceReference";
+  tags?: string[];
 }
 
 /**
@@ -358,6 +370,17 @@ export type GrammarRequestUpdateDescription =
   | { root: null };
 
 /**
+ * @return True, if the given instance satisfies "GrammarDocument"
+ */
+export function isGrammarDocument(arg: any): arg is GrammarDocument {
+  return (
+    arg instanceof Object &&
+    arg.types instanceof Object &&
+    arg.foreignTypes instanceof Object
+  );
+}
+
+/**
  * @return True if the given instance satisfies "QualifiedTypeName"
  */
 export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
@@ -434,4 +457,17 @@ export function isNodePropertyIntegerDesciption(
   obj: any
 ): obj is NodePropertyBooleanDescription {
   return obj instanceof Object && obj.base === "integer";
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodePropertyIntegerDescription"
+ */
+export function isNodePropertyReferenceDesciption(
+  obj: any
+): obj is NodePropertyReferenceDescription {
+  const validBases: Set<NodePropertyReferenceDescription["base"]> = new Set([
+    "grammarReference",
+    "codeResourceReference",
+  ]);
+  return obj instanceof Object && validBases.has(obj.base);
 }

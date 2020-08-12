@@ -1,0 +1,4 @@
+---
+- - "../seed/programming_language"
+  - regex-testbench
+  - !ruby/class 'Seed::ProgrammingLanguageSeed'

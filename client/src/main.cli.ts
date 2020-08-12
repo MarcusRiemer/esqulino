@@ -13,6 +13,7 @@ import {
   graphvizSyntaxTree,
   prettyPrintGrammar,
 } from "./app/shared/syntaxtree/prettyprint";
+import { referencedCodeResourceIds } from "./app/shared/syntaxtree/syntaxtree-util";
 import { NodeDescription } from "./app/shared/syntaxtree/syntaxtree.description";
 import { GrammarDescription } from "./app/shared/syntaxtree/grammar.description";
 
@@ -81,6 +82,12 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available";
 }
 
+interface ReferencedCodeResourcesCommand {
+  type: "referencedCodeResources";
+  ast: NodeDescription;
+  grammar: GrammarDescription;
+}
+
 type Command =
   | PingCommand
   | PrintGrammarCommand
@@ -88,7 +95,8 @@ type Command =
   | AvailableProgrammingLanguagesCommand
   | GraphvizSyntaxTreeCommand
   | EmitCodeCommand
-  | EmitGeneratedBlocksCommand;
+  | EmitGeneratedBlocksCommand
+  | ReferencedCodeResourcesCommand;
 
 // Knows all URLs that are avaiable to the API
 const serverApi: ServerApi = new ServerApi("http://localhost:9292/api");
@@ -177,6 +185,9 @@ async function executeCommand(command: Command): Promise<Object | string> {
           command.generator,
           command.grammar
         );
+      }
+      case "referencedCodeResources": {
+        return referencedCodeResourceIds(command.ast, command.grammar);
       }
     }
   });
