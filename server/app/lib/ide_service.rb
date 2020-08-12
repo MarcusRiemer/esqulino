@@ -58,16 +58,19 @@ class BaseIdeService
     end
   end
 
-  # Finds out which other code resources are referenced by the given
+  # Finds out which other resources are referenced by the given
   # code resource
-  def referenced_code_resource_ids(code_resource)
+  # @param code_resource [CodeResource]
+  #   The code resource that is analyzed
+  # @param search_type ["referencedCodeResources"|"referencedGrammars"]
+  def referenced_resource_ids(code_resource, search_type)
     grammar_document = code_resource
                          .block_language
                          .grammar
                          .document
                          .transform_keys{ |k| k.camelize(:lower) }
     execute_request({
-                      "type" => "referencedCodeResources",
+                      "type" => search_type,
                       "ast" => code_resource.ast,
                       "grammar" => grammar_document
                     })

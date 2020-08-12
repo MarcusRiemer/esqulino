@@ -9,9 +9,13 @@ module Seed
     SEED_DIRECTORY = "grammars"
 
     def initialize(seed_id)
-      super(seed_id, dependencies = {
-              "programming_language" => ProgrammingLanguageSeed
-            }, defer_referential_checks = true)
+      super(
+        seed_id,
+        dependencies = {
+          "programming_language" => ProgrammingLanguageSeed
+        },
+        defer_referential_checks = true
+      )
     end
   end
 end

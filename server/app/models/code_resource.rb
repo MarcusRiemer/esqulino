@@ -129,7 +129,7 @@ class CodeResource < ApplicationRecord
             )
     end
 
-    ast_referenced_code_resource_ids = ide_service.referenced_code_resource_ids(self)
+    ast_referenced_code_resource_ids = ide_service.referenced_resource_ids(self, "referencedCodeResources")
     referenced_ids = CodeResource
                        .where(id: ast_referenced_code_resource_ids)
                        .pluck(:id)

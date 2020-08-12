@@ -7,7 +7,7 @@ import {
   RegexTestCaseDescription,
   readFromNode,
 } from "../../../shared/syntaxtree/regex/regex-testbench.description";
-import { referencedCodeResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
+import { referencedResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
 import { rxFilterRootLanguage } from "../../../shared/util";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
@@ -55,7 +55,11 @@ export class RegexTestComponent {
     map((res) => {
       const p = this._projectService.cachedProject;
       const g = res.validatorPeek.getGrammarValidator("regex").description;
-      const testRes = referencedCodeResourceIds(res.syntaxTreePeek.rootNode, g);
+      const testRes = referencedResourceIds(
+        res.syntaxTreePeek.rootNode,
+        g,
+        "codeResourceReference"
+      );
 
       const testDocs = testRes.map((tId) => {
         const t = p.getCodeResourceById(tId);

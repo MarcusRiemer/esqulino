@@ -14,9 +14,10 @@ import { NodeDescription } from "./syntaxtree.description";
 /**
  * Calculates all resource IDs that are referenced in the given AST.
  */
-export function referencedCodeResourceIds(
+export function referencedResourceIds(
   ast: Tree | Node | NodeDescription,
-  types: NamedLanguages | GrammarDocument
+  types: NamedLanguages | GrammarDocument,
+  searched: "codeResourceReference" | "grammarReference"
 ): string[] {
   const resolveAstArg = (ast: Tree | Node | NodeDescription): Node => {
     if (!ast) {
@@ -72,7 +73,7 @@ export function referencedCodeResourceIds(
 
     // Find all attributes that are references
     const refAttributes = nodeType.attributes.filter(
-      (a) => a.type === "property" && a.base === "codeResourceReference"
+      (a) => a.type === "property" && a.base === searched
     );
 
     // And add all IDs that are found in these properties
