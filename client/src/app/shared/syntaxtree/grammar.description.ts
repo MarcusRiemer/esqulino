@@ -68,6 +68,7 @@ export interface NodeConcreteTypeDescription {
  */
 export type NodeAttributeDescription =
   | NodePropertyTypeDescription
+  | NodeInterpolateDescription
   | NodeChildrenGroupDescription
   | NodeTerminalSymbolDescription
   | NodeVisualContainerDescription;
@@ -147,6 +148,9 @@ export interface NodePropertyIntegerDescription {
   restrictions?: NodeIntegerTypeRestrictions[];
 }
 
+/**
+ * A value that must reference another grammar or coderesource
+ */
 export interface NodePropertyReferenceDescription {
   type: "property";
   name: string;
@@ -226,6 +230,17 @@ export interface MaxInclusiveRestriction {
 export interface MinInclusiveRestriction {
   type: "minInclusive";
   value: number;
+}
+
+/**
+ * References an existing property on this node. This is useful for languages
+ * that have some kind of reference to a common name in opening and closing
+ * contexts (eg. XML with <the-name></the-name>).
+ */
+export interface NodeInterpolateDescription {
+  type: "interpolate";
+  name: string;
+  tags?: string[];
 }
 
 /**
@@ -369,9 +384,6 @@ export type GrammarRequestUpdateDescription =
   | { generatedFromId: null }
   | { root: null };
 
-/**
- * @return True, if the given instance satisfies "GrammarDocument"
- */
 export function isGrammarDocument(arg: any): arg is GrammarDocument {
   return (
     arg instanceof Object &&
@@ -380,88 +392,64 @@ export function isGrammarDocument(arg: any): arg is GrammarDocument {
   );
 }
 
-/**
- * @return True if the given instance satisfies "QualifiedTypeName"
- */
 export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
   return arg instanceof Object && arg.typeName && arg.languageName;
 }
 
-/**
- * @return True if the given instance satisfies "NodeConcreteTypeDescription"
- */
 export function isNodeConcreteTypeDescription(
   arg: any
 ): arg is NodeConcreteTypeDescription {
   return arg instanceof Object && !arg.oneOf;
 }
 
-/**
- * @return True if the given instance satisfies "NodeConcreteTypeDescription"
- */
 export function isNodeOneOfTypeDescription(
   arg: any
 ): arg is NodeOneOfTypeDescription {
   return arg instanceof Object && arg.oneOf instanceof Array;
 }
 
-/**
- * @return True if the given instance probably satisfies "NodeTypesAllowedDescription"
- */
 export function isNodeTypesAllowedDescription(
   obj: any
 ): obj is NodeTypesAllowedDescription {
   return obj instanceof Object && obj.type === "allowed";
 }
 
-/**
- * @return True, if the given instance probably satisfies "NodeTypesSequenceDescription"
- */
 export function isNodeTypesSequenceDescription(
   obj: any
 ): obj is NodeTypesSequenceDescription {
   return obj instanceof Object && obj.type === "sequence";
 }
 
-/**
- * @return True, if the given instance probably satisfies "ChildCardinalityDescription"
- */
 export function isChildCardinalityDescription(
   obj: any
 ): obj is ChildCardinalityDescription {
   return obj instanceof Object && "occurs" in obj && "nodeType" in obj;
 }
 
-/**
- * @return True, if the given instance probably satisfies "NodePropertyStringDescription"
- */
 export function isNodePropertyStringDesciption(
   obj: any
 ): obj is NodePropertyStringDescription {
   return obj instanceof Object && obj.base === "string";
 }
 
-/**
- * @return True, if the given instance probably satisfies "NodePropertyBooleanDescription"
- */
 export function isNodePropertyBooleanDesciption(
   obj: any
 ): obj is NodePropertyBooleanDescription {
   return obj instanceof Object && obj.base === "boolean";
 }
 
-/**
- * @return True, if the given instance probably satisfies "NodePropertyIntegerDescription"
- */
 export function isNodePropertyIntegerDesciption(
   obj: any
-): obj is NodePropertyBooleanDescription {
+): obj is NodePropertyIntegerDescription {
   return obj instanceof Object && obj.base === "integer";
 }
 
-/**
- * @return True, if the given instance probably satisfies "NodePropertyIntegerDescription"
- */
+export function isNodePropertyDesciption(
+  obj: any
+): obj is NodePropertyTypeDescription {
+  return obj instanceof Object && obj.type === "property";
+}
+
 export function isNodePropertyReferenceDesciption(
   obj: any
 ): obj is NodePropertyReferenceDescription {

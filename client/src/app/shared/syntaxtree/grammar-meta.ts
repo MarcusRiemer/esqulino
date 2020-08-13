@@ -14,6 +14,7 @@ import {
   ChildCardinalityDescription,
   NodeVisualContainerDescription,
   Orientation,
+  NodeInterpolateDescription,
 } from "./grammar.description";
 import { OccursDescription, OccursString } from "./occurs.description";
 
@@ -21,6 +22,13 @@ export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   return {
     type: "property",
     base: attrNode.properties["base"] as any,
+    name: attrNode.properties["name"],
+  };
+}
+
+export function convertInterpolate(attrNode: Node): NodeInterpolateDescription {
+  return {
+    type: "interpolate",
     name: attrNode.properties["name"],
   };
 }
@@ -135,6 +143,9 @@ export function readAttributes(
   switch (attrNode.typeName) {
     case "property":
       target.push(convertProperty(attrNode));
+      break;
+    case "interpolate":
+      target.push(convertInterpolate(attrNode));
       break;
     case "terminal":
       target.push(convertTerminal(attrNode));

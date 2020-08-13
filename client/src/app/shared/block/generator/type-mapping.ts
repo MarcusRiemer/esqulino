@@ -5,6 +5,7 @@ import {
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
   NodeVisualContainerDescription,
+  NodeInterpolateDescription,
 } from "../../syntaxtree/grammar.description";
 
 import { VisualBlockDescriptions } from "../block.description";
@@ -61,7 +62,7 @@ export function mapTerminal(
  * Maps properties to read-only interpolated values.
  */
 export function mapInterpolated(
-  attr: NodePropertyTypeDescription,
+  attr: NodePropertyTypeDescription | NodeInterpolateDescription,
   instructions: PropertyInstructions
 ): VisualBlockDescriptions.EditorInterpolated {
   const toReturn: VisualBlockDescriptions.EditorInterpolated = {
@@ -211,6 +212,8 @@ export function mapAttribute(
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
     case "property":
       return [mapProperty(attr, instructions.scopeProperty(attr.name))];
+    case "interpolate":
+      return [mapInterpolated(attr, instructions.scopeProperty(attr.name))];
     case "terminal":
       return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
     case "container":

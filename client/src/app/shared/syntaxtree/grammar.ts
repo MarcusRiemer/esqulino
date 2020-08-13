@@ -175,6 +175,7 @@ export class NodeConcreteType extends NodeType {
             this.loadAttributes(a.children);
             break;
           case "terminal":
+          case "interpolate":
             // Do nothing, terminals have no impact on validation
             break;
           default:

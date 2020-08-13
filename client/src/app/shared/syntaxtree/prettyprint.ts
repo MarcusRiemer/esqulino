@@ -87,6 +87,7 @@ export function prettyPrintConcreteNodeTypeAttribute(
 ): NestedString {
   switch (a.type) {
     case "property":
+    case "interpolate":
       return prettyPrintProperty(a);
     case "terminal":
       return prettyPrintTerminal(a);
@@ -134,52 +135,59 @@ export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
  * Prints the grammar for a property
  */
 export function prettyPrintProperty(
-  p: Desc.NodePropertyTypeDescription
+  p: Desc.NodePropertyTypeDescription | Desc.NodeInterpolateDescription
 ): NestedString {
-  const optional = p.isOptional ? "?" : "";
-  const head = `prop${optional} "${p.name}"`;
+  const headName = Desc.isNodePropertyDesciption(p) ? "prop" : "interpolate";
+  const optional = Desc.isNodePropertyDesciption(p) && p.isOptional ? "?" : "";
+  const head = `${headName}${optional} "${p.name}"`;
 
-  const restrictionSign = (baseType: string) => {
-    switch (baseType) {
-      case "length":
-        return "==";
-      case "minLength":
-        return ">";
-      case "maxLength":
-        return "<";
-      case "minInclusive":
-        return "≥";
-      case "maxInclusive":
-        return "≤";
-      default:
-        return baseType;
-    }
-  };
-
-  let restrictions: string[] = [];
-  if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
-    restrictions = p.restrictions.map((r) => {
-      switch (r.type) {
+  if (Desc.isNodePropertyDesciption(p)) {
+    const restrictionSign = (baseType: string) => {
+      switch (baseType) {
         case "length":
-        case "maxLength":
+          return "==";
         case "minLength":
-          return `length ${restrictionSign(r.type)} ${r.value}`;
-        case "enum":
-          return `${r.type} ${r.value.map((v) => JSON.stringify(v)).join(" ")}`;
+          return ">";
+        case "maxLength":
+          return "<";
+        case "minInclusive":
+          return "≥";
+        case "maxInclusive":
+          return "≤";
+        default:
+          return baseType;
       }
-    });
-  } else if (p.base === "integer" && p.restrictions) {
-    restrictions = p.restrictions.map(
-      (r) => `${restrictionSign(r.type)} ${r.value}`
-    );
-  }
+    };
 
-  if (restrictions.length === 0) {
-    return [`${head} { ${p.base} }`];
-  } else if (restrictions.length === 1) {
-    return [`${head} { ${p.base} ${restrictions[0]} }`];
+    let restrictions: string[] = [];
+    if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
+      restrictions = p.restrictions.map((r) => {
+        switch (r.type) {
+          case "length":
+          case "maxLength":
+          case "minLength":
+            return `length ${restrictionSign(r.type)} ${r.value}`;
+          case "enum":
+            return `${r.type} ${r.value
+              .map((v) => JSON.stringify(v))
+              .join(" ")}`;
+        }
+      });
+    } else if (Desc.isNodePropertyIntegerDesciption(p) && p.restrictions) {
+      restrictions = p.restrictions.map(
+        (r) => `${restrictionSign(r.type)} ${r.value}`
+      );
+    }
+
+    if (restrictions.length === 0) {
+      return [`${head} { ${p.base} }`];
+    } else if (restrictions.length === 1) {
+      return [`${head} { ${p.base} ${restrictions[0]} }`];
+    } else {
+      return [head + " {", [p.base + " {", restrictions, "}"], "}"];
+    }
   } else {
-    return [head + " {", [p.base + " {", restrictions, "}"], "}"];
+    return [head];
   }
 }
 

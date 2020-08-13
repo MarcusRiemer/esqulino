@@ -10,13 +10,14 @@ import {
   convertTerminal,
   convertOccurs,
   convertNodeRefOne,
+  convertInterpolate,
 } from "./grammar-meta";
 import { Node } from "./syntaxtree";
 import { NodeDescription } from "./syntaxtree.description";
 
 describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
   describe(`Utility Functions`, () => {
-    it(`Property`, () => {
+    it(`property`, () => {
       const n = new Node(
         {
           language: "MetaGrammar",
@@ -32,6 +33,24 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(convertProperty(n)).toEqual({
         type: "property",
         base: "integer",
+        name: "prop1",
+      });
+    });
+
+    it(`interpolate`, () => {
+      const n = new Node(
+        {
+          language: "MetaGrammar",
+          name: "interpolate",
+          properties: {
+            name: "prop1",
+          },
+        },
+        undefined
+      );
+
+      expect(convertInterpolate(n)).toEqual({
+        type: "interpolate",
         name: "prop1",
       });
     });

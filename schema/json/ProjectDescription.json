@@ -986,6 +986,9 @@
           "$ref": "#/definitions/NodePropertyTypeDescription"
         },
         {
+          "$ref": "#/definitions/NodeInterpolateDescription"
+        },
+        {
           "$ref": "#/definitions/NodeChildrenGroupDescription"
         },
         {
@@ -1153,6 +1156,32 @@
       ],
       "description": "The restrictions that are applicable to integers"
     },
+    "NodeInterpolateDescription": {
+      "additionalProperties": false,
+      "description": "References an existing property on this node. This is useful for languages\nthat have some kind of reference to a common name in opening and closing\ncontexts (eg. XML with _the-name__/the-name_).",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "interpolate"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "type": "object"
+    },
     "NodeLocation": {
       "description": "Contains the path to find a certain node in a syntax tree.\nThese paths currently always start from the root node.",
       "items": {
@@ -1277,6 +1306,7 @@
     },
     "NodePropertyReferenceDescription": {
       "additionalProperties": false,
+      "description": "A value that must reference another grammar or coderesource",
       "properties": {
         "base": {
           "enum": [
