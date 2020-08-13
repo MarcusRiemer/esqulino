@@ -1,0 +1,4 @@
+---
+- - "../seed/programming_language"
+  - dxml-eruby
+  - !ruby/class 'Seed::ProgrammingLanguageSeed'

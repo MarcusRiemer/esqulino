@@ -1,0 +1,52 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: e4ad4071-ab82-4687-be04-4d19a7ecae36
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta XML
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"children": [{"text": "<", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "name",
+    "blockType": "input"}, {"blockType": "iterator", "childGroupName": "attributes",
+    "emptyDropTarget": false}, {"text": ">", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "container", "orientation": "horizontal"},
+    {"blockType": "iterator", "childGroupName": "elements", "emptyDropTarget": false},
+    {"children": [{"text": "</", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}, {"style": {"display": "inline-flex"}, "property": "name", "blockType":
+    "interpolated"}, {"text": ">", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}], "blockType": "container", "orientation": "horizontal"}], "blockType":
+    "container", "orientation": "vertical"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "element", "languageName": "dxml"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
+    "name", "blockType": "input"}, {"text": "=", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "value",
+    "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "attribute", "languageName": "dxml"}}], "rootCssClasses": ["activate-block-outline"],
+    "editorComponents": [{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}], "localGeneratorInstructions": {"type": "manual"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-08-13 11:37:16.251809000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-08-13 12:35:29.434550000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: dxml-eruby
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 3b919483-8a97-41a8-8798-a8bb386609ba
+new_record: false
+active_record_yaml_version: 2
