@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-13 11:00:35.335388000 Z
+  value_before_type_cast: 2020-08-14 09:38:22.133229000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -29,8 +29,9 @@ concise_attributes:
     "children": [{"type": "container", "children": [{"tags": ["space-after", "keyword"],
     "type": "terminal", "symbol": "grammar"}, {"base": "string", "name": "name", "tags":
     ["double-quote", "space-after"], "type": "property"}, {"name": "includes", "type":
-    "sequence", "nodeTypes": [{"occurs": "?", "nodeType": "grammarIncludes"}]}, {"type":
-    "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"],
+    "sequence", "nodeTypes": [{"occurs": "?", "nodeType": "grammarIncludes"}]}, {"name":
+    "visualizes", "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": "grammarVisualizes"}]},
+    {"type": "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"],
     "type": "container", "children": [{"type": "container", "children": [{"tags":
     ["space-after", "keyword"], "type": "terminal", "symbol": "root"}, {"tags": ["space-after"],
     "type": "terminal", "symbol": "="}, {"name": "root", "type": "sequence", "nodeTypes":
@@ -95,10 +96,13 @@ concise_attributes:
     "terminal", "symbol": "includes"}, {"name": "includes", "type": "sequence", "nodeTypes":
     [{"occurs": "1", "nodeType": "grammarRef"}]}]}, "knownCardinality": {"type": "concrete",
     "attributes": [{"base": "string", "name": "cardinality", "type": "property", "restrictions":
-    [{"type": "enum", "value": ["*", "?", "+"]}]}]}, "nodeRefCardinality": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"name": "references",
-    "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name":
-    "cardinality", "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "cardinality"}]}],
+    [{"type": "enum", "value": ["*", "?", "+"]}]}]}, "grammarVisualizes": {"type":
+    "concrete", "attributes": [{"tags": ["space-after", "keyword"], "type": "terminal",
+    "symbol": "includes"}, {"name": "includes", "type": "sequence", "nodeTypes": [{"occurs":
+    "1", "nodeType": "grammarRef"}]}]}, "nodeRefCardinality": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "references", "type":
+    "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name": "cardinality",
+    "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "cardinality"}]}],
     "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
