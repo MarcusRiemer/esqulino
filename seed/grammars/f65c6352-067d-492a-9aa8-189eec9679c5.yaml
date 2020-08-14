@@ -1,0 +1,47 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f65c6352-067d-492a-9aa8-189eec9679c5
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Meta XML visual
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-08-14 08:18:16.049875000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-08-14 09:29:10.555860000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 48ecf76c-3543-49bc-af52-d881e856fe77
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: '{"dxml": {"element": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"type": "container", "children": [{"type":
+    "terminal", "symbol": "<"}, {"base": "string", "name": "name", "type": "property"},
+    {"name": "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    {"typeName": "attribute", "languageName": "dxml"}}]}, {"type": "terminal", "symbol":
+    ">"}], "orientation": "horizontal"}, {"name": "elements", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "element", "languageName":
+    "dxml"}}]}, {"type": "container", "children": [{"type": "terminal", "symbol":
+    "</"}, {"name": "name", "type": "interpolate"}, {"type": "terminal", "symbol":
+    ">"}], "orientation": "horizontal"}], "orientation": "vertical"}]}, "attribute":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "name", "type":
+    "property"}, {"type": "terminal", "symbol": "="}, {"base": "string", "name": "value",
+    "type": "property"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "", "languageName": ""}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: extends_id
+new_record: false
+active_record_yaml_version: 2

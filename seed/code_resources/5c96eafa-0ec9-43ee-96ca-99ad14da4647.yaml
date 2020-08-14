@@ -15,7 +15,7 @@ concise_attributes:
   value_before_type_cast: 5c96eafa-0ec9-43ee-96ca-99ad14da4647
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 00 Grammar XML
+  value_before_type_cast: 00 XML Structure
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
@@ -57,7 +57,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-13 09:57:41.797908000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-13 11:40:41.007162000 Z
+  value_before_type_cast: 2020-08-14 07:23:29.971143000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -129,6 +129,10 @@ concise_attributes:
                       {
                         "type": "terminal",
                         "symbol": "</"
+                      },
+                      {
+                        "type": "interpolate",
+                        "name": "name"
                       },
                       {
                         "type": "terminal",
