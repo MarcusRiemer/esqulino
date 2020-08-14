@@ -3,7 +3,10 @@ import {
   NodeTerminalSymbolDescription,
   NodeTypesSequenceDescription,
   NodeVisualContainerDescription,
-} from "./grammar.description";
+} from "../grammar.description";
+import { Node } from "../syntaxtree";
+import { NodeDescription } from "../syntaxtree.description";
+
 import {
   readFromNode,
   convertProperty,
@@ -11,9 +14,7 @@ import {
   convertOccurs,
   convertNodeRefOne,
   convertInterpolate,
-} from "./grammar-meta";
-import { Node } from "./syntaxtree";
-import { NodeDescription } from "./syntaxtree.description";
+} from "./meta-grammar";
 
 describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
   describe(`Utility Functions`, () => {

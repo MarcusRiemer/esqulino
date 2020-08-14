@@ -1,5 +1,5 @@
-import { NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
-import { Tree, Node } from "./syntaxtree";
+import { NodeDescription, QualifiedTypeName } from "../syntaxtree.description";
+import { Tree, Node } from "../syntaxtree";
 import {
   NodePropertyTypeDescription,
   NodeTerminalSymbolDescription,
@@ -15,8 +15,8 @@ import {
   NodeVisualContainerDescription,
   Orientation,
   NodeInterpolateDescription,
-} from "./grammar.description";
-import { OccursDescription, OccursString } from "./occurs.description";
+} from "../grammar.description";
+import { OccursDescription, OccursString } from "../occurs.description";
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   return {

@@ -4,7 +4,8 @@ import {
   OutputSeparator,
 } from "../codegenerator";
 import { Node } from "../syntaxtree";
-import { readFromNode } from "../grammar-meta";
+
+import { readFromNode } from "./meta-grammar";
 
 export const GRAMMAR_NODE_CONVERTER: NodeConverterRegistration[] = [
   {
