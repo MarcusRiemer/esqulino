@@ -127,10 +127,21 @@ class Grammar < ApplicationRecord
       ref.reference_type == "include_types"
     end
 
-    if include_types.length == 1
+    visualize_types = self.grammar_reference_origins.filter do |ref|
+      ref.reference_type == "visualize"
+    end
+
+    # Required for two error conditions
+    counts = "included: #{include_types.length}, visualized: #{visualize_types.length}"
+
+    if include_types.length > 0 && visualize_types.length > 0
+      raise EsqulinoError::Base.new("Inclusion and visualization may currently not be mixed (#{counts})")
+    elsif include_types.length == 1
       self.foreign_types = include_types[0].target.all_types
-    elsif include_types.length > 1
-      raise EsqulinoError::Base.new("Including more than one other grammar not currently supported :(")
+    elsif visualize_types.length == 1
+      self.foreign_types = visualize_types[0].target.all_types
+    elsif include_types.length > 1 || visualize_types.length > 0
+      raise EsqulinoError::Base.new("Referencing more than one other grammar not currently supported (#{counts})")
     end
   end
 

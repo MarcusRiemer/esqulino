@@ -228,7 +228,7 @@ RSpec.describe Grammar, type: :model do
       end
     end
 
-    context "regenerate_foreign_types!" do
+    context "refresh_from_references!" do
       it "doesn't extend anything" do
         g = FactoryBot.build(:grammar)
 
@@ -265,6 +265,36 @@ RSpec.describe Grammar, type: :model do
         origin.refresh_from_references!
 
         expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
+      end
+
+      it "The base grammar is visualized" do
+        origin = FactoryBot.create(:grammar)
+        target = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
+        origin.grammar_reference_origins.create(target: target, reference_type: :visualize)
+
+        origin.refresh_from_references!
+
+        expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
+      end
+
+      it "Multiple inclusions" do
+        origin = FactoryBot.create(:grammar)
+        target_1 = FactoryBot.create(:grammar)
+        target_2 = FactoryBot.create(:grammar)
+        origin.grammar_reference_origins.create(target: target_1, reference_type: :include_types)
+        origin.grammar_reference_origins.create(target: target_2, reference_type: :include_types)
+
+        expect { origin.refresh_from_references! }.to raise_error EsqulinoError::Base
+      end
+
+      it "Mixed references" do
+        origin = FactoryBot.create(:grammar)
+        target_1 = FactoryBot.create(:grammar)
+        target_2 = FactoryBot.create(:grammar)
+        origin.grammar_reference_origins.create(target: target_1, reference_type: :include_types)
+        origin.grammar_reference_origins.create(target: target_2, reference_type: :visualize)
+
+        expect { origin.refresh_from_references! }.to raise_error EsqulinoError::Base
       end
     end
   end
