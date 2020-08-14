@@ -126,6 +126,19 @@ export class EditGrammarComponent implements OnInit {
     this.grammarRoot = this.grammar.root;
   }
 
+  get grammarReferences() {
+    const all = [
+      ...(this.grammar?.includes ?? []),
+      ...(this.grammar?.visualizes ?? []),
+    ];
+
+    return all.map((grammarId) => {
+      return {
+        grammarId,
+      };
+    });
+  }
+
   /**
    * User has decided to delete.
    */

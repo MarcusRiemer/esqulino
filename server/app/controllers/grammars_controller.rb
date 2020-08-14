@@ -42,7 +42,7 @@ class GrammarsController < ApplicationController
 
     # TODO: Update included grammars in this path
     grammar.assign_attributes updated_attributes
-                                .except("includes")
+                                .except("includes", "visualizes")
 
     # Possibly update the code resource that this grammar is based on
     if params.key? "generatedFromId"

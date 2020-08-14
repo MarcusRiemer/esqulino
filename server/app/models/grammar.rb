@@ -132,7 +132,7 @@ class Grammar < ApplicationRecord
     end
 
     # Required for two error conditions
-    counts = "included: #{include_types.length}, visualized: #{visualize_types.length}"
+    counts = "include_types: #{include_types.length}, visualize: #{visualize_types.length}"
 
     if include_types.length > 0 && visualize_types.length > 0
       raise EsqulinoError::Base.new("Inclusion and visualization may currently not be mixed (#{counts})")
@@ -145,14 +145,28 @@ class Grammar < ApplicationRecord
     end
   end
 
+  # All grammar references that are included by this grammar
+  def includes_references
+    include_types = GrammarReference.reference_types["include_types"]
+    self.grammar_reference_origins.where(reference_type: include_types)
+  end
+
+  # All grammar references that are visualized by this grammar
+  def visualizes_references
+    visualizes = GrammarReference.reference_types["visualize"]
+    self.grammar_reference_origins.where(reference_type: visualizes)
+  end
+
+
   # Computes a hash that may be sent back to the client if it requires
   # full access to grammar.
   def to_full_api_response
-    includes = self.targeted_grammars.pluck(:target_id)
-
     to_json_api_response
       .except("model", "createdAt", "updatedAt")
-      .merge({"includes" => includes})
+      .merge({
+               "includes" => includes_references.pluck(:target_id),
+               "visualizes" => visualizes_references.pluck(:target_id)
+             })
   end
 
   # Computes a hash that may be sent back to the client if only superficial
@@ -168,14 +182,25 @@ class Grammar < ApplicationRecord
   # @param grammar_document [Hash] A GrammarDocument (or at least the portion that provides grammars)
   # @return [GrammarReference[]] An array of relevant GrammarReference instances
   def document_included_grammars(grammar_document)
-    grammar_ids = grammar_document.fetch("includes", [])
-    grammar_ids.map do |grammar_id|
+    included_grammar_ids = grammar_document.fetch("includes", [])
+    include_refs = included_grammar_ids.map do |grammar_id|
       GrammarReference.find_or_initialize_by(
         origin: self,
         target_id: grammar_id,
         reference_type: "include_types"
       )
     end
+
+    visualized_grammar_ids = grammar_document.fetch("visualizes", [])
+    visualize_refs = visualized_grammar_ids.map do |grammar_id|
+      GrammarReference.find_or_initialize_by(
+        origin: self,
+        target_id: grammar_id,
+        reference_type: "visualize"
+      )
+    end
+
+    return include_refs + visualize_refs
   end
 
   # @param new_references [GrammarReference[]]

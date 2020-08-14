@@ -3,11 +3,12 @@ import { OccursDescription } from "./occurs.description";
 import { StringUnion } from "../string-union";
 
 /**
- * Types may either be concrete new type or an alias
- * grouping together multiple other types.
+ * Types may either be concrete new type, an alias grouping together multiple
+ * other types or a visualization of an existing type.
  */
 export type NodeTypeDescription =
   | NodeConcreteTypeDescription
+  | NodeVisualTypeDescription
   | NodeOneOfTypeDescription;
 
 /**
@@ -322,6 +323,19 @@ export type NodeChildrenGroupDescription =
   | NodeTypesParenthesesDescription;
 
 /**
+ * These attributes are available when visualizing things
+ */
+export type VisualNodeAttributeDescription =
+  | NodeTerminalSymbolDescription
+  | NodeVisualContainerDescription
+  | NodeInterpolateDescription;
+
+export interface NodeVisualTypeDescription {
+  type: "visualize";
+  attributes: VisualNodeAttributeDescription[];
+}
+
+/**
  * Listing data about grammars
  */
 export interface GrammarListDescription {
@@ -367,6 +381,9 @@ export interface GrammarDocument {
 
   // IDs of the grammars that this grammar includes
   includes?: string[];
+
+  // IDs of the grammars that this grammar visualizes
+  visualizes?: string[];
 }
 
 /**

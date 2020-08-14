@@ -391,7 +391,7 @@ RSpec.describe Grammar, type: :model do
     end
 
     context "references" do
-      def grammar_document_includes(*grammar_ids)
+      def grammar_document_references(category_name, *grammar_ids)
         ({
            "language"=> "MetaGrammar",
            "name"=> "grammar",
@@ -399,7 +399,7 @@ RSpec.describe Grammar, type: :model do
              "name"=> "lang"
            },
            "children" => {
-             "includes" => [
+             category_name => [
                {
                  "language" => "MetaGrammar",
                  "name" => "grammarIncludes",
@@ -423,7 +423,8 @@ RSpec.describe Grammar, type: :model do
       it "ensure that the AST leads to 'include' instructions" do
         exp_uuid = "f8528b38-cdee-4539-ac7a-b90fe0da6e37"
 
-        res = FactoryBot.build(:code_resource, :meta_grammar, ast: grammar_document_includes(exp_uuid))
+        res = FactoryBot.build(:code_resource, :meta_grammar,
+                               ast: grammar_document_references("includes", exp_uuid))
         expect(res.ast).to validate_against "NodeDescription"
 
         compiled_grammar_description = JSON.parse res.emit_ast!(IdeService.guaranteed_instance)
@@ -433,7 +434,21 @@ RSpec.describe Grammar, type: :model do
       it "no previous references, new code resource references" do
         inc_1 = FactoryBot.create(:grammar)
 
-        resource = FactoryBot.create(:code_resource, :meta_grammar, ast: grammar_document_includes(inc_1.id))
+        resource = FactoryBot.create(:code_resource, :meta_grammar,
+                                     ast: grammar_document_references("includes", inc_1.id))
+
+        grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+        grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+
+        expect(grammar.targeted_grammars).to match_array [inc_1]
+      end
+
+      it "no previous references, new code resource visualization" do
+        inc_1 = FactoryBot.create(:grammar)
+
+        resource = FactoryBot.create(:code_resource, :meta_grammar,
+                                     ast: grammar_document_references("visualizes", inc_1.id))
         grammar = FactoryBot.create(:grammar, generated_from: resource)
 
         grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
@@ -445,7 +460,8 @@ RSpec.describe Grammar, type: :model do
         inc_1 = FactoryBot.create(:grammar)
         inc_2 = FactoryBot.create(:grammar)
 
-        resource = FactoryBot.create(:code_resource, :meta_grammar, ast: grammar_document_includes(inc_2.id))
+        resource = FactoryBot.create(:code_resource, :meta_grammar,
+                                     ast: grammar_document_references("includes", inc_2.id))
         grammar = FactoryBot.create(:grammar, generated_from: resource)
 
         grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
@@ -477,6 +493,8 @@ RSpec.describe Grammar, type: :model do
 
       expect(origin.grammar_reference_origins).to eq [reference]
       expect(origin.targeted_grammars).to eq [target]
+      expect(origin.includes_references).to eq [reference]
+      expect(origin.visualizes_references).to eq []
     end
 
     it "adds includes" do
@@ -495,6 +513,9 @@ RSpec.describe Grammar, type: :model do
       grammar.grammar_reference_origins.clear
 
       expect(grammar.grammar_reference_origins).to eq []
+      expect(grammar.includes_references).to eq []
+      expect(grammar.visualizes_references).to eq []
+
       expect(GrammarReference.all).to eq []
       expect(Grammar.all).to eq [grammar, inc_1]
     end
@@ -512,6 +533,8 @@ RSpec.describe Grammar, type: :model do
 
       expect(ref_1).to eq ref_1_again
       expect(grammar.targeted_grammars).to eq [inc_1]
+      expect(grammar.includes_references).to eq [ref_1_again]
+      expect(grammar.visualizes_references).to eq []
     end
 
     it "replaces an existing includes with a new includes" do
@@ -536,6 +559,9 @@ RSpec.describe Grammar, type: :model do
       grammar.reload # Dependant relationships are cached
 
       expect(grammar.targeted_grammars).to eq [inc_2]
+      expect(grammar.includes_references).to eq [ref_2]
+      expect(grammar.visualizes_references).to eq []
+
       expect(GrammarReference.all).to match_array [ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
@@ -571,7 +597,10 @@ RSpec.describe Grammar, type: :model do
       grammar.reload # Dependant relationships are cached
 
       expect(ref_1_orig).to eq ref_1
-      expect(grammar.targeted_grammars).to eq [inc_1, inc_2]
+      expect(grammar.targeted_grammars).to match_array [inc_1, inc_2]
+      expect(grammar.includes_references).to match_array [ref_1, ref_2]
+      expect(grammar.visualizes_references).to match_array []
+
       expect(GrammarReference.all).to match_array [ref_1, ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
@@ -584,6 +613,7 @@ RSpec.describe Grammar, type: :model do
       full_response = grammar.to_full_api_response
       expect(full_response).to validate_against "GrammarDescription"
       expect(full_response["includes"]).to match_array([])
+      expect(full_response["visualizes"]).to match_array([])
     end
 
     it "Includes a single reference" do
@@ -594,6 +624,18 @@ RSpec.describe Grammar, type: :model do
       full_response = grammar.to_full_api_response
       expect(full_response).to validate_against "GrammarDescription"
       expect(full_response["includes"]).to match_array([inc_1.id])
+      expect(full_response["visualizes"]).to match_array([])
+    end
+
+    it "Visualizes a single reference" do
+      grammar = FactoryBot.create(:grammar)
+      inc_1 = FactoryBot.create(:grammar)
+      ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "visualize")
+
+      full_response = grammar.to_full_api_response
+      expect(full_response).to validate_against "GrammarDescription"
+      expect(full_response["includes"]).to match_array([])
+      expect(full_response["visualizes"]).to match_array([inc_1.id])
     end
   end
 end

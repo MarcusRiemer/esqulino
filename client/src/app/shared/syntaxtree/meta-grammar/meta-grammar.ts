@@ -197,13 +197,15 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
     };
   }
 
-  // References to other grammars
-  const includesNode = tree.rootNode.getChildInCategory("includes");
-  if (includesNode) {
-    toReturn.includes = includesNode
-      .getChildrenInCategory("includes")
-      .map((refNode) => refNode.properties["grammarId"]);
-  }
+  // References to other grammars: includes and visualizes
+  ["includes", "visualizes"].forEach((categoryName) => {
+    const includesNode = tree.rootNode.getChildInCategory(categoryName);
+    if (includesNode) {
+      toReturn[categoryName] = includesNode
+        .getChildrenInCategory("includes")
+        .map((refNode) => refNode.properties["grammarId"]);
+    }
+  });
 
   // Add all defined types
   const definedTypes = tree.rootNode.getChildrenInCategory("nodes");

@@ -264,6 +264,39 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Root Node with single visualization`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          includes: [
+            {
+              language: "MetaGrammar",
+              name: "grammarVisualizes",
+              children: {
+                includes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "grammarRef",
+                    properties: {
+                      grammarId: "e495ac2f-9413-4fb7-8480-d7d807bfc59a",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {},
+        includes: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
+      });
+    });
+
     it(`Root Node without types but with defined root type`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",
