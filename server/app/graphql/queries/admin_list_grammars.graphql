@@ -1,0 +1,17 @@
+query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input:GrammarInputType) {
+    grammars(first:$first,after:$after,before:$before,last:$last,input:$input) {
+        nodes{
+            id
+            name
+            slug
+            programmingLanguageId
+        }
+        totalCount
+        pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+        }
+    }
+}

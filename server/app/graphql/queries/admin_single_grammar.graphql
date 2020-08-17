@@ -1,0 +1,19 @@
+query AdminSingleGrammar($id: ID!) {
+    singleGrammar(id: $id) {
+        id
+        name
+        programmingLanguageId
+        slug
+        generatedFromId
+        foreignTypes
+        root
+        types
+        includedGrammarIds
+        blockLanguages {
+            nodes {
+                id
+                name
+            }
+        }
+    }
+}

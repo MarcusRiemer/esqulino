@@ -2,7 +2,7 @@ mutation UpdateNews(
     $id: ID!,
     $title: LangJson!,
     $text: LangJson!,
-    $publishedFrom: ISO8601DateTime
+    $publishedFrom: ISO8601DateTime!
 ) {
     updateNews(input:{
         id:$id,
@@ -10,7 +10,15 @@ mutation UpdateNews(
         text:$text,
         publishedFrom:$publishedFrom
     }) {
-        id
+        news {
+            id
+            createdAt
+            updatedAt
+            publishedFrom
+            text
+            title
+            userId
+        }
         errors
     }
 }

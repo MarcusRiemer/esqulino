@@ -1,14 +1,22 @@
 mutation CreateNews(
     $title: LangJson!,
     $text: LangJson!,
-    $publishedFrom: ISO8601DateTime
+    $publishedFrom: ISO8601DateTime!
 ) {
     createNews(input:{
         title:$title,
         text:$text,
         publishedFrom:$publishedFrom
     }) {
-        id
+        news {
+            id
+            createdAt
+            updatedAt
+            publishedFrom
+            text
+            title
+            userId
+        }
         errors
     }
 }

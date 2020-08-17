@@ -1,0 +1,12 @@
+query GrammarDescriptionItem($id: ID!) {
+    singleGrammar(id: $id){
+        id
+        name
+        programmingLanguageId
+        slug
+        generatedFromId
+        foreignTypes
+        root
+        types
+    }
+}
