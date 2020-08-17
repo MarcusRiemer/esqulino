@@ -6,16 +6,6 @@ module GraphqlQueryHelper
 
   @@query_storage = GraphqlQueryStorage.new Rails.configuration.sqlino['query_dir']
 
-  def execute(name:, variables:, user:nil)
-    variables = ensure_hash(variables)
-    query = @@query_storage.get_query(name.underscore)
-    context = {
-        user: user ? user : current_user(false),
-        language: request_locale
-    }
-    ServerSchema.execute(query, variables: variables, context: context, operation_name: name)
-  end
-
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)
     case ambiguous_param

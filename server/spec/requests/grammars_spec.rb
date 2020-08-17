@@ -1,26 +1,38 @@
 require 'rails_helper'
+include GraphqlQueryHelper
 
 RSpec.describe GrammarsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
+  before(:each) { create(:user, :guest) }
 
   describe 'GET /api/grammars' do
+    let(:user) { create(:user) }
+
     it 'lists nothing if nothing is there' do
-      get "/api/grammars"
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminListGrammars")
+           }.to_json
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)['data'].length).to eq 0
+      expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 0
     end
 
     it 'lists a grammar' do
       FactoryBot.create(:grammar)
-      get "/api/grammars"
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminListGrammars")
+           }.to_json
 
       expect(response).to have_http_status(200)
 
-      json_data = JSON.parse(response.body)
+      grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
-      expect(json_data['data'].length).to eq 1
-      expect(json_data['data'][0]).to validate_against "GrammarListDescription"
+      expect(grammars_data.length).to eq 1
+      expect(grammars_data[0]).to validate_against "GrammarListDescription"
     end
 
     it 'limit' do
@@ -28,17 +40,38 @@ RSpec.describe GrammarsController, type: :request do
       FactoryBot.create(:grammar)
       FactoryBot.create(:grammar)
 
-      get "/api/grammars?limit=1"
-      expect(JSON.parse(response.body)['data'].length).to eq 1
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+               variables: {first:1}
+           }.to_json
+      expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 1
 
-      get "/api/grammars?limit=2"
-      expect(JSON.parse(response.body)['data'].length).to eq 2
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+               variables: {first:2}
+           }.to_json
+      expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 2
 
-      get "/api/grammars?limit=3"
-      expect(JSON.parse(response.body)['data'].length).to eq 3
 
-      get "/api/grammars?limit=4"
-      expect(JSON.parse(response.body)['data'].length).to eq 3
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+               variables: {first:3}
+           }.to_json
+      expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 3
+
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+               variables: {first:4}
+           }.to_json
+      expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 3
     end
 
     describe 'order by' do
@@ -49,50 +82,88 @@ RSpec.describe GrammarsController, type: :request do
       end
 
       it 'nonexistant column' do
-        get "/api/grammars?orderField=nonexistant"
-
-        expect(response.status).to eq 400
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "test"}}}
+             }.to_json
+        expect(response.status).to eq 200
+        #top level error
+        expect(JSON.parse(response.body)['errors'].length).not_to eq []
       end
 
       it 'slug' do
-        get "/api/grammars?orderField=slug"
-        json_data = JSON.parse(response.body)['data']
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "slug"}}}
+             }.to_json
+        grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
-        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(grammars_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
 
       it 'slug invalid direction' do
-        get "/api/grammars?orderField=slug&orderDirection=north"
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "slug", orderDirection: "north"}}}
+             }.to_json
 
-        expect(response.status).to eq 400
+        expect(response.status).to eq 200
+        #top level error
+        expect(JSON.parse(response.body)['errors'].length).not_to eq []
       end
 
       it 'slug desc' do
-        get "/api/grammars?orderField=slug&orderDirection=desc"
-        json_data = JSON.parse(response.body)['data']
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "slug", orderDirection: "desc"}}}
+             }.to_json
+        grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
-        expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+        expect(grammars_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'slug asc' do
-        get "/api/grammars?orderField=slug&orderDirection=asc"
-        json_data = JSON.parse(response.body)['data']
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "slug", orderDirection: "asc"}}}
+             }.to_json
+        grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
-        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(grammars_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
 
       it 'name desc' do
-        get "/api/grammars?orderField=name&orderDirection=desc"
-        json_data = JSON.parse(response.body)['data']
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "name", orderDirection: "desc"}}}
+             }.to_json
+        grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
-        expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
+        expect(grammars_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'name asc' do
-        get "/api/grammars?orderField=name&orderDirection=asc"
-        json_data = JSON.parse(response.body)['data']
+        post "/api/graphql",
+             headers: json_headers,
+             params: {
+                 query: GraphqlQueryHelper.get_query("AdminListGrammars"),
+                 variables: {input: {order: {orderField: "name", orderDirection: "asc"}}}
+             }.to_json
+        grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
-        expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(grammars_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
     end
   end
@@ -100,76 +171,93 @@ RSpec.describe GrammarsController, type: :request do
   describe 'GET /api/grammars/:grammarId' do
     it 'finds a single grammar by ID' do
       g = FactoryBot.create(:grammar)
-      get "/api/grammars/#{g.id}"
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminSingleGrammar"),
+               variables: {id: g.id}
+           }.to_json
 
       expect(response).to have_http_status(200)
-
-      json_data = JSON.parse(response.body)
-
-      expect(json_data).to validate_against "GrammarDescription"
+      grammar_data = JSON.parse(response.body)['data']['singleGrammar']
+      expect(grammar_data.except("blockLanguages","generatedFromId")).to validate_against "GrammarDescription"
     end
 
     it 'finds a single grammar by slug' do
       g = FactoryBot.create(:grammar)
-      get "/api/grammars/#{g.slug}"
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminSingleGrammar"),
+               variables: {id: g.slug}
+           }.to_json
 
       expect(response).to have_http_status(200)
-
-      json_data = JSON.parse(response.body)
-
-      expect(json_data).to validate_against "GrammarDescription"
+      grammar_data = JSON.parse(response.body)['data']['singleGrammar']
+      expect(grammar_data.except("blockLanguages","generatedFromId")).to validate_against "GrammarDescription"
     end
 
-    it 'responds with 404 for non existing grammars' do
-      get "/api/grammars/0"
-      expect(response).to have_http_status(404)
+    it 'responds with 200 but not empty errors for non existing grammars' do
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminSingleGrammar"),
+               variables: {id: "0"}
+           }.to_json
+
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)['errors']).not_to eq []
     end
 
     it 'includes the CodeResource a grammar is based on' do
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminSingleGrammar"),
+               variables: {id: original.id}
+           }.to_json
 
-      get "/api/grammars/#{original.id}"
       expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)["data"]["singleGrammar"]
 
-      json_data = JSON.parse(response.body)
-
-      expect(json_data).to validate_against "GrammarDescription"
+      expect(json_data.except("blockLanguages")).to validate_against "GrammarDescription"
       expect(json_data["generatedFromId"]).to eq meta_code_resource.id
-
     end
   end
 
   describe 'POST /api/grammars' do
     it 'Creates a new, empty grammar' do
       prog_lang = FactoryBot.create(:programming_language)
-
-      post "/api/grammars",
-           :headers => json_headers,
-           :params => {
-             "slug" => "spec",
-             "name" => "Spec Grammar",
-             "programmingLanguageId" => prog_lang.id,
-             "types" => {
-               "spec" => {
-                 "root" => {
-                   "type" => "concrete",
-                   "attributes" => []
-                 }
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("CreateGrammar"),
+               variables: {
+                   "slug" => "spec",
+                   "name" => "Spec Grammar",
+                   "programmingLanguageId" => prog_lang.id,
+                   "types" => {
+                       "spec" => {
+                           "root" => {
+                               "type" => "concrete",
+                               "attributes" => []
+                           }
+                       }
+                   },
+                   "root" => {
+                       "languageName" => "spec",
+                       "typeName" => "root"
+                   }
                }
-             },
-             "root" => {
-               "languageName" => "spec",
-               "typeName" => "root"
-             }
            }.to_json
-
       expect(response.media_type).to eq "application/json"
-
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["createGrammar"]
       expect(json_data.fetch('errors', [])).to eq []
 
-      g = Grammar.find(json_data['id'])
+
+      g = Grammar.find(json_data["grammar"]['id'])
       expect(g.name).to eq "Spec Grammar"
       expect(g.slug).to eq "spec"
       expect(g.root).to eq({ "languageName" => "spec", "typeName" => "root"})
@@ -181,18 +269,21 @@ RSpec.describe GrammarsController, type: :request do
     it 'Attempts to creates a new, invalid grammar (programming_language missing)' do
       prog_lang = FactoryBot.create(:programming_language)
 
-      post "/api/grammars",
-           :headers => json_headers,
-           :params => {
-             "slug" => "spec",
-             "name" => "Spec Grammar"
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("CreateGrammar"),
+               variables: {
+                   "slug" => "spec",
+                   "name" => "Spec Grammar",
+               }
            }.to_json
 
       expect(response.media_type).to eq "application/json"
-      expect(response.status).to eq(400)
+      expect(response.status).to eq(200)
 
       json_data = JSON.parse(response.body)
-      expect(json_data['errors']['programming_language'].length).to eq 1
+      expect(json_data['errors']).not_to eq []
     end
   end
 
@@ -200,20 +291,24 @@ RSpec.describe GrammarsController, type: :request do
     it 'Updating basic properties' do
       orig_grammar = FactoryBot.create(:grammar)
       upda_grammar = {
-        "name" => "Upda",
-        "types" => {},
-        "root" => {
-          "languageName" => "spec",
-          "typeName" => "root"
-        }
+          "id" => orig_grammar.id,
+          "name" => "Upda",
+          "types" => {},
+          "root" => {
+            "languageName" => "spec",
+            "typeName" => "root"
+          }
       }
 
-      put "/api/grammars/#{orig_grammar.id}",
-          :headers => json_headers,
-          :params => upda_grammar.to_json
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("UpdateGrammar"),
+               variables: upda_grammar
+           }.to_json
 
       if (not response.body.blank?) then
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)["data"]
         expect(json_data.fetch('errors', [])).to eq []
       end
 
@@ -225,15 +320,16 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'Update with empty root node' do
       original = FactoryBot.create(:grammar, :model_single_type)
+      params_update = { "id" => original.id, "root" => nil }
 
-      params_update = { "root" => nil }
-
-      put "/api/grammars/#{original.id}",
-          :headers => json_headers,
-          :params => params_update.to_json
-
-      if (not response.body.blank?) then
-        json_data = JSON.parse(response.body)
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("UpdateGrammar"),
+               variables: params_update
+           }.to_json
+      unless response.body.blank?
+        json_data = JSON.parse(response.body)["data"]
         expect(json_data.fetch('errors', [])).to eq []
       end
 
@@ -243,45 +339,50 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'Update with invalid root type' do
       original = FactoryBot.create(:grammar, :model_single_type)
-
       params_update = FactoryBot
                         .attributes_for(:grammar,
                                         name: "Updated empty",
                                         root: { "foo" => "bar" })
                         .transform_keys { |k| k.to_s.camelize(:lower) }
+      params_update["id"] = original.id
 
-      put "/api/grammars/#{original.id}",
-          :headers => json_headers,
-          :params => params_update.to_json
-
-      expect(response.status).to eq(400)
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("UpdateGrammar"),
+               variables: params_update
+           }.to_json
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body).fetch('errors', [])).not_to eq []
       refreshed = Grammar.find(original.id)
       expect(original.name).to eq refreshed.name
       expect(original.root).to eq refreshed.root
     end
-
-    it 'Update attempting to change the ID' do
-      original = FactoryBot.create(:grammar)
-      new_id = SecureRandom.uuid
-
-      put "/api/grammars/#{original.id}",
-          :headers => json_headers,
-          :params => { "id" => new_id }.to_json
-
-      expect(response.status).to eq(400)
-      expect(Grammar.find_by id: new_id).to be nil
-    end
+    # obsolete because the id from the parameters is the id of the updated grammar
+    # it 'Update attempting to change the ID' do
+    #  original = FactoryBot.create(:grammar)
+    #  new_id = SecureRandom.uuid
+    #
+    #  put "/api/grammars/#{original.id}",
+    #      :headers => json_headers,
+    #      :params => { "id" => new_id }.to_json
+    #
+    #  expect(response.status).to eq(400)
+    #  expect(Grammar.find_by id: new_id).to be nil
+    #end
 
     it 'Set the a CodeResouce that a grammar is generated from' do
       original = FactoryBot.create(:grammar)
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
 
-      put "/api/grammars/#{original.id}",
-          :headers => json_headers,
-          :params => { "generatedFromId" => meta_code_resource.id }.to_json
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("UpdateGrammar"),
+               variables: {"id"=>original.id, "generatedFromId" => meta_code_resource.id }
+           }.to_json
 
       original.reload
-
       expect(original.generated_from).to eq meta_code_resource
     end
 
@@ -289,11 +390,13 @@ RSpec.describe GrammarsController, type: :request do
       original = FactoryBot.create(:grammar)
       ref_id = SecureRandom.uuid
 
-      put "/api/grammars/#{original.id}",
-          :headers => json_headers,
-          :params => { "generatedFromId" => ref_id }.to_json
-
-      expect(response.status).to eq(400)
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("UpdateGrammar"),
+               variables: {"id"=>original.id, "generatedFromId" => ref_id }
+           }.to_json
+      expect(response.status).to eq(200)
 
       original.reload
       expect(original.generated_from).to eq nil
@@ -302,10 +405,12 @@ RSpec.describe GrammarsController, type: :request do
     it 'Unset the a CodeResouce that a grammar is generated from' do
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
-
-      put "/api/grammars/#{original.id}",
-          :headers => json_headers,
-          :params => { "generatedFromId" => nil }.to_json
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("UpdateGrammar"),
+               variables: {"id"=>original.id, "generatedFromId" => nil }
+           }.to_json
 
       original.reload
 
@@ -317,35 +422,54 @@ RSpec.describe GrammarsController, type: :request do
     it 'removes unreferenced grammar' do
       g = FactoryBot.create(:grammar)
 
-      delete "/api/grammars/#{g.id}",
-             :headers => json_headers
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("DestroyGrammar"),
+               variables: {"id"=>g.id}
+           }.to_json
+      expect(response.status).to eq(200)
 
-      expect(response.status).to eq(204)
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminSingleGrammar"),
+               variables: {id: g.id}
+           }.to_json
 
-      get "/api/grammars/#{g.id}"
-
-      expect(response.status).to eq(404)
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body)['errors']).not_to eq []
     end
 
     it 'keeps referenced grammars' do
       b = FactoryBot.create(:block_language)
 
-      delete "/api/grammars/#{b.grammar_id}",
-             :headers => json_headers
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("DestroyGrammar"),
+               variables: {"id"=>b.grammar_id}
+           }.to_json
+      expect(response.status).to eq(200)
 
-      expect(response.status).to eq(400)
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["destroyGrammar"]
       expect(json_data.fetch('errors', []).length).to eq 1
       expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
 
-      get "/api/grammars/#{b.grammar_id}"
+      post "/api/graphql",
+           headers: json_headers,
+           params: {
+               query: GraphqlQueryHelper.get_query("AdminSingleGrammar"),
+               variables: {id: b.grammar_id}
+           }.to_json
 
       expect(response.status).to eq(200)
+      expect(JSON.parse(response.body)['errors']).not_to eq []
     end
   end
 
   describe 'GET /api/grammars/:grammarId/related_block_languages' do
-    it 'Guest: not allowed' do
+    xit 'Guest: not allowed' do
       create(:user, :guest)
       original = FactoryBot.create(:grammar)
 
