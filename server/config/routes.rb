@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphql"
   end
   # Second stop: The API for the editor
   scope '/api' do
