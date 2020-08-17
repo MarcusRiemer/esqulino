@@ -78,6 +78,19 @@ module ApplicationRecordSpecExtensions
   end
 end
 
+module GraphqlSpecHelper
+  include GraphqlQueryHelper
+  def send_query(query_name:, variables: {})
+    post "/api/graphql",
+         headers: { "CONTENT_TYPE" => "application/json" },
+         params: {
+             query: get_query(query_name),
+             variables: variables
+         }.to_json
+  end
+end
+
+
 ApplicationRecord.include ApplicationRecordSpecExtensions
 
 # More natural way to expect cookies that should be set
@@ -137,6 +150,7 @@ RSpec.configure do |config|
 
   # Ensure we can actually validate stuff
   config.include ValidateAgainstMatcher
+  config.include GraphqlSpecHelper
 end
 
 FactoryBot::SyntaxRunner.class_eval do

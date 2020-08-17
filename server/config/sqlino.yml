@@ -3,7 +3,7 @@ development:
   data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
-  query_dir: ./app/graphql/queries
+  query_dir: ../schema/graphql/queries
   project_domains: ["projects.localdomain:9292"]
   editor_domain: "lvh.me:9292"
   mail:
@@ -39,7 +39,7 @@ test:
   data_dir: "../data/test"
   client_dir: ../client/dist/browser
   schema_dir: ../schema/json
-  query_dir: ./app/graphql/queries
+  query_dir: ../schema/graphql/queries
   project_domains: ["projects.localdomain:9292"]
   editor_domain: "localhost.localdomain:9292"
   mail:
@@ -79,7 +79,7 @@ production:
   data_dir: <%= ENV['DATA_DIR'] || '../data/prod' %>
   client_dir: ../client/dist-live/browser # Beware, this is *not* the normal output folder
   schema_dir: ../schema/json
-  query_dir: ./app/graphql/queries
+  query_dir: ../schema/graphql/queries
   project_domains: ["blattzeug.de"]
   editor_domain: "blattwerkzeug.de"
   mail:
