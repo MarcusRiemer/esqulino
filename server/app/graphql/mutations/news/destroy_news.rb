@@ -3,13 +3,16 @@ class Mutations::News::DestroyNews < Mutations::News::News
 
   argument :id, ID, required:false
 
-  def resolve(**args)
-    news = News.find(args[:id])
-    news.destroy
-    {
-        news: nil,
-        errors: []
-    }
+  def resolve(id:)
+    begin
+    news = News.find(id)
+    destroy_news(news)
+    rescue ActiveRecord::RecordNotFound
+      {
+          news: nil,
+          errors: ["Couldn't find News with 'id'=\"#{id}\""]
+      }
+    end
   end
 end
 

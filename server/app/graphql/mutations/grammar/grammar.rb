@@ -1,15 +1,17 @@
 class Mutations::Grammar::Grammar < Mutations::BaseMutation
+  include JsonSchemaHelper
 
   field :grammar, Types::GrammarType, null: true
   field :errors, [String], null: false
 
   def save_grammar(grammar)
-    if grammar.save
+    begin
+      grammar.save!
       {
           grammar: grammar,
           errors: []
       }
-    else
+    rescue ActiveRecord::InvalidForeignKey, ActiveRecord::RecordInvalid
       {
           grammar: nil,
           errors: grammar.errors.full_messages

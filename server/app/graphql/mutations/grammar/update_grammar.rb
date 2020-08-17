@@ -5,12 +5,13 @@ class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
   argument :slug, String, required: false
   argument :types, GraphQL::Types::JSON, required:false
   argument :foreign_types, GraphQL::Types::JSON, required:false
-  argument :root, GraphQL::Types::JSON, required:false
+  argument :root, Types::Scalar::QualifiedTypeName, required:false
   argument :programming_language_id,  ID, required: false
   argument :generated_from_id, ID, required: false
   argument :block_language_ids, [ID], required: false
 
   def resolve(**args)
+    begin
     grammar = Grammar.find(args[:id])
     grammar.assign_attributes args
 
@@ -24,6 +25,12 @@ class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
       grammar.root = params.fetch("root", nil)
     end
     save_grammar(grammar)
+    rescue ActiveRecord::RecordNotFound
+      {
+          news: nil,
+          errors: ["Couldn't find Grammar with 'id'=#{args[:id]}"]
+      }
+    end
   end
 end
 

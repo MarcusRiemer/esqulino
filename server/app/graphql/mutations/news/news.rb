@@ -10,21 +10,20 @@ class Mutations::News::News < Mutations::BaseMutation
   def save_news(news)
     if news.save
       {
-          grammar: news.to_full_api_response,
+          news: news,
           errors: []
       }
     else
-      news.errors.full_messages.each do |err|
-          ({
-              type: "railsValidation",
-              data: {
-                  msg: err,
-              }
-          })
-      end
       {
-          grammar: nil,
-          errors: news.errors.full_messages
+          news: nil,
+          errors: news.errors.full_messages.map do |err|
+            ({
+                type: "railsValidation",
+                data: {
+                    msg: err,
+                }
+            })
+          end
       }
     end
   end

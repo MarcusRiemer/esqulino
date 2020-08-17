@@ -11,6 +11,7 @@ class Mutations::BlockLanguage::UpdateBlockLanguage < Mutations::BlockLanguage::
   argument :localGeneratorInstructions, GraphQL::Types::JSON,required: false
 
   def resolve(**args)
+    begin
     params = ActionController::Parameters.new(args)
     needle = id_params(params)[:id].nil? ? id_params(params)[:slug] : id_params(params)[:id]
     block_lang = if BlattwerkzeugUtil::string_is_uuid? needle then
@@ -29,6 +30,12 @@ class Mutations::BlockLanguage::UpdateBlockLanguage < Mutations::BlockLanguage::
       {
           id: nil,
           errors: block_lang.errors.full_messages
+      }
+    end
+    rescue ActiveRecord::RecordNotFound
+      {
+          news: nil,
+          errors: ["Couldn't find BlockLanguage with 'id'/'slug'=#{needle}"]
       }
     end
   end
