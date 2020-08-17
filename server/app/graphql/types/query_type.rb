@@ -54,7 +54,11 @@ module Types
     end
 
     def single_block_language(id:)
+      begin
       BlockLanguage.find(id).to_full_api_response.transform_keys {|a| a.underscore}
+      rescue ActiveRecord::RecordNotFound
+        raise GraphQL::ExecutionError.new("BlockLangugae with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
+      end
     end
 
     def code_resources(input:nil)
@@ -66,15 +70,23 @@ module Types
     end
 
     def admin_single_news(id:)
+      begin
       News.find(id).to_full_api_response.transform_keys {|a| a.underscore}
+      rescue ActiveRecord::RecordNotFound
+        raise GraphQL::ExecutionError.new("News with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
+      end
     end
 
     def frontpage_single_news(id:)
+      begin
       News.scope_single_language(context[:language])
           .where("id = ?", id)
           .first!
           .to_frontpage_api_response(languages: [context[:language]])
           .transform_keys {|a| a.underscore}
+      rescue ActiveRecord::RecordNotFound
+        raise GraphQL::ExecutionError.new("News with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
+      end
     end
 
     def frontpage_list_news(input:nil)
@@ -104,10 +116,14 @@ module Types
     end
 
     def single_project(id:)
+      begin
       if BlattwerkzeugUtil::string_is_uuid? id
         Project.full.find(id)
       else
         Project.full.find_by! slug: id
+      end
+      rescue ActiveRecord::RecordNotFound
+        raise GraphQL::ExecutionError.new("Project with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
       end
     end
 
@@ -118,11 +134,16 @@ module Types
         Resolvers::ProjectsResolver::new(context:@context).scope
       end
     end
+
     def single_grammar(id:)
-      if BlattwerkzeugUtil::string_is_uuid? id
-        Grammar.find(id)
-      else
-        Grammar.find_by! slug: id
+      begin
+        if BlattwerkzeugUtil::string_is_uuid? id
+          Grammar.find(id)
+        else
+          Grammar.find_by! slug: id
+        end
+      rescue ActiveRecord::RecordNotFound
+        raise GraphQL::ExecutionError.new("Grammar with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
       end
     end
 

@@ -5,9 +5,9 @@ module Types
     field :slug, String, null:true
     field :types, GraphQL::Types::JSON, null:false, default_value: {}
     field :foreign_types, GraphQL::Types::JSON, null:false, default_value: {}
-    field :root, GraphQL::Types::JSON, null:false, default_value: {}
-    field :programmingLanguageId,  ID,null:false
-    field :programmingLanguage, Types::ProgrammingLanguageType,null:false
+    field :root, Types::Scalar::QualifiedTypeName, null:false, default_value: {"typeName"=> "","languageName"=> ""}
+    field :programmingLanguageId,  ID, null:false
+    field :programmingLanguage, Types::ProgrammingLanguageType, null:false
     field :generatedFromId, ID, null:true
     field :generatedFrom, Types::CodeResourceType, null:true
     field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
