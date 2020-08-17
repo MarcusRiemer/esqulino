@@ -500,6 +500,90 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Empty visualization in single language`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "visualizeNode",
+              children: {
+                references: [
+                  {
+                    name: "nodeRefOne",
+                    language: "MetaGrammar",
+                    properties: {
+                      typeName: "t",
+                      languageName: "l",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {
+          l: { t: { type: "visualize", attributes: [] } },
+        },
+      });
+    });
+
+    it(`Filled visualization in single language`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "visualizeNode",
+              children: {
+                references: [
+                  {
+                    name: "nodeRefOne",
+                    language: "MetaGrammar",
+                    properties: {
+                      typeName: "t",
+                      languageName: "l",
+                    },
+                  },
+                ],
+                attributes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "terminal",
+                    properties: {
+                      symbol: "s",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {
+          l: {
+            t: {
+              type: "visualize",
+              attributes: [{ type: "terminal", symbol: "s" }],
+            },
+          },
+        },
+      });
+    });
+
     it(`oneOf for two non-existant types`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",

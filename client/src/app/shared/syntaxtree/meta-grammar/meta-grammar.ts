@@ -15,6 +15,7 @@ import {
   NodeVisualContainerDescription,
   Orientation,
   NodeInterpolateDescription,
+  NodeVisualTypeDescription,
 } from "../grammar.description";
 import { OccursDescription, OccursString } from "../occurs.description";
 
@@ -210,10 +211,13 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   // Add all defined types
   const definedTypes = tree.rootNode.getChildrenInCategory("nodes");
   definedTypes
-    .filter((n) => n.typeName.match(/typedef|concreteNode/))
+    .filter((n) => n.typeName.match(/typedef|(concrete|visualize)Node/))
     .forEach((n) => {
-      const languageName = n.properties["languageName"];
-      const typeName = n.properties["typeName"];
+      const nameNode =
+        n.typeName === "visualizeNode" ? n.getChildInCategory("references") : n;
+
+      const languageName = nameNode.properties["languageName"];
+      const typeName = nameNode.properties["typeName"];
 
       if (!typeName || !languageName) {
         throw new Error(
@@ -236,7 +240,7 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
 
       // Add the correct type of type
       switch (n.typeName) {
-        case "concreteNode":
+        case "concreteNode": {
           const concreteNode: NodeConcreteTypeDescription = {
             type: "concrete",
             attributes: [],
@@ -248,6 +252,20 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
 
           lang[typeName] = concreteNode;
           break;
+        }
+        case "visualizeNode": {
+          const visualizeNode: NodeVisualTypeDescription = {
+            type: "visualize",
+            attributes: [],
+          };
+
+          n.getChildrenInCategory("attributes").forEach((a) =>
+            readAttributes(a, visualizeNode.attributes)
+          );
+
+          lang[typeName] = visualizeNode;
+          break;
+        }
         case "typedef":
           const references = n
             .getChildrenInCategory("references")
