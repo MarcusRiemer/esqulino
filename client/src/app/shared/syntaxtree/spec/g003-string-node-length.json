@@ -3,6 +3,7 @@
   "types": {
     "g3": {
       "s1": {
+        "type": "concrete",
         "attributes": [
           {
             "name": "value",

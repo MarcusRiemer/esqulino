@@ -416,13 +416,19 @@ export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
 export function isNodeConcreteTypeDescription(
   arg: any
 ): arg is NodeConcreteTypeDescription {
-  return arg instanceof Object && !arg.oneOf;
+  return arg instanceof Object && arg.type === "concrete";
 }
 
 export function isNodeOneOfTypeDescription(
   arg: any
 ): arg is NodeOneOfTypeDescription {
-  return arg instanceof Object && arg.oneOf instanceof Array;
+  return arg instanceof Object && arg.type === "oneOf";
+}
+
+export function isNodeVisualTypeDescription(
+  arg: any
+): arg is NodeVisualTypeDescription {
+  return arg instanceof Object && arg.type === "visualize";
 }
 
 export function isNodeTypesAllowedDescription(

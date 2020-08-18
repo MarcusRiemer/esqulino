@@ -3,6 +3,7 @@
   "types": {
     "g10": {
       "n1": {
+        "type": "concrete",
         "attributes": [
           {
             "type": "terminal",

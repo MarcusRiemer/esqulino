@@ -2,8 +2,12 @@
   "root": { "languageName": "g1", "typeName": "n1" },
   "types": {
     "g1": {
-      "n1": {},
-      "n2": {}
+      "n1": {
+        "type": "concrete"
+      },
+      "n2": {
+        "type": "concrete"
+      }
     }
   },
   "foreignTypes": {}

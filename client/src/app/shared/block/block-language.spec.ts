@@ -21,6 +21,7 @@ const langEmptyBlocks: LanguageDefinition = {
       types: {
         emptyBlocks: {
           root: {
+            type: "concrete",
             attributes: [
               {
                 name: "cat_a",
@@ -33,9 +34,9 @@ const langEmptyBlocks: LanguageDefinition = {
                 ],
               },
             ],
-          } as NodeTypeDescription,
-          a: {} as NodeTypeDescription,
-          z: {} as NodeTypeDescription,
+          },
+          a: { type: "concrete" },
+          z: { type: "concrete" },
         },
       },
       foreignTypes: {},

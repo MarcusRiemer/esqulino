@@ -3,6 +3,7 @@
   "types": {
     "g18": {
       "n1": {
+        "type": "concrete",
         "attributes": [
           {
             "type": "container",
