@@ -42,11 +42,15 @@ export class DefinedTypesSidebarComponent {
         languageName: "MetaGrammar",
         typeName: "typedef",
       });
+      const visualizes = t.getNodesOfType({
+        languageName: "MetaGrammar",
+        typeName: "visualizesNode",
+      });
 
       // Step 2: Included types on possibly referenced grammar
       // TODO
 
-      return [...concrete, ...typedefs].map(
+      return [...concrete, ...visualizes, ...typedefs].map(
         (n): QualifiedTypeName => {
           return {
             languageName: n.properties["languageName"],

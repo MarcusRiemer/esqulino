@@ -6,6 +6,7 @@ import {
   NodeChildrenGroupDescription,
   NodeVisualContainerDescription,
   NodeInterpolateDescription,
+  NodeVisualTypeDescription,
 } from "../../syntaxtree/grammar.description";
 
 import { VisualBlockDescriptions } from "../block.description";
@@ -18,6 +19,8 @@ import {
 } from "./instructions.description";
 
 import { TypeInstructions } from "./instructions";
+
+type MappedNodeType = NodeConcreteTypeDescription | NodeVisualTypeDescription;
 
 /**
  * Checks whether the given attributes have any tags assigned. If that is the case
@@ -113,7 +116,7 @@ export function mapProperty(
  * Maps children of a specific child group to an iterable block.
  */
 export function mapChildren(
-  _typeDesc: NodeConcreteTypeDescription,
+  _typeDesc: MappedNodeType,
   attr: NodeChildrenGroupDescription,
   instructions: IteratorInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -179,7 +182,7 @@ export function mapChildren(
 }
 
 export function mapContainer(
-  _typeDesc: NodeConcreteTypeDescription,
+  _typeDesc: MappedNodeType,
   attr: NodeVisualContainerDescription,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock {
@@ -200,7 +203,7 @@ export function mapContainer(
 }
 
 export function mapAttribute(
-  typeDesc: NodeConcreteTypeDescription,
+  typeDesc: MappedNodeType,
   attr: NodeAttributeDescription,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -229,7 +232,7 @@ export function mapAttribute(
  * given explicitly.
  */
 export function mapBlockAttributes(
-  typeDesc: NodeConcreteTypeDescription,
+  typeDesc: MappedNodeType,
   instructions: TypeInstructions,
   blockNumber: number
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -260,7 +263,7 @@ export function mapBlockAttributes(
  * of multiple blocks.
  */
 export function mapType(
-  typeDesc: NodeConcreteTypeDescription,
+  typeDesc: MappedNodeType,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
   const toReturn: VisualBlockDescriptions.ConcreteBlock[] = [];
