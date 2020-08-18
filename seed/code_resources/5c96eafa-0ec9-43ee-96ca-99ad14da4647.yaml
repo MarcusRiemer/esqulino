@@ -21,43 +21,31 @@ concise_attributes:
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
     "dxml"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
-    "container", "children": {"attributes": [{"name": "container", "children": {"attributes":
-    [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "<"}},
-    {"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
-    "name": "name"}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
+    "name"}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
     "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
     "properties": {"typeName": "attribute", "languageName": "dxml"}}], "cardinality":
     [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
     "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "attributes"}}, {"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": ">"}}], "orientation": [{"name": "orientation",
-    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
-    "MetaGrammar"}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "element", "languageName": "dxml"}}], "cardinality":
-    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
-    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "elements"}}, {"name": "container", "children": {"attributes":
-    [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "</"}},
-    {"name": "interpolate", "language": "MetaGrammar", "properties": {"name": "name"}},
-    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ">"}}],
-    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
-    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}], "orientation":
-    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
-    "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "element", "languageName": "dxml"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "name"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "="}}, {"name": "property", "language": "MetaGrammar",
-    "properties": {"base": "string", "name": "value"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "attribute", "languageName": "dxml"}}]}, "language":
-    "MetaGrammar", "properties": {"name": "dxml"}}'
+    {"base": "sequence", "name": "attributes"}}, {"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "element",
+    "languageName": "dxml"}}], "cardinality": [{"name": "knownCardinality", "language":
+    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "elements"}}]},
+    "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
+    "dxml"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "name"}},
+    {"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "attribute",
+    "languageName": "dxml"}}]}, "language": "MetaGrammar", "properties": {"name":
+    "dxml"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-08-13 09:57:41.797908000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-14 07:23:29.971143000 Z
+  value_before_type_cast: 2020-08-18 13:24:48.734332000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -74,71 +62,33 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
-                "type": "container",
-                "orientation": "vertical",
-                "children": [
+                "type": "property",
+                "base": "string",
+                "name": "name"
+              },
+              {
+                "type": "sequence",
+                "name": "attributes",
+                "nodeTypes": [
                   {
-                    "type": "container",
-                    "orientation": "horizontal",
-                    "children": [
-                      {
-                        "type": "terminal",
-                        "symbol": "<"
-                      },
-                      {
-                        "type": "property",
-                        "base": "string",
-                        "name": "name"
-                      },
-                      {
-                        "type": "sequence",
-                        "name": "attributes",
-                        "nodeTypes": [
-                          {
-                            "nodeType": {
-                              "languageName": "dxml",
-                              "typeName": "attribute"
-                            },
-                            "occurs": "*"
-                          }
-                        ]
-                      },
-                      {
-                        "type": "terminal",
-                        "symbol": ">"
-                      }
-                    ]
-                  },
+                    "nodeType": {
+                      "languageName": "dxml",
+                      "typeName": "attribute"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "elements",
+                "nodeTypes": [
                   {
-                    "type": "sequence",
-                    "name": "elements",
-                    "nodeTypes": [
-                      {
-                        "nodeType": {
-                          "languageName": "dxml",
-                          "typeName": "element"
-                        },
-                        "occurs": "*"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "container",
-                    "orientation": "horizontal",
-                    "children": [
-                      {
-                        "type": "terminal",
-                        "symbol": "</"
-                      },
-                      {
-                        "type": "interpolate",
-                        "name": "name"
-                      },
-                      {
-                        "type": "terminal",
-                        "symbol": ">"
-                      }
-                    ]
+                    "nodeType": {
+                      "languageName": "dxml",
+                      "typeName": "element"
+                    },
+                    "occurs": "*"
                   }
                 ]
               }
@@ -151,10 +101,6 @@ concise_attributes:
                 "type": "property",
                 "base": "string",
                 "name": "name"
-              },
-              {
-                "type": "terminal",
-                "symbol": "="
               },
               {
                 "type": "property",
