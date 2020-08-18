@@ -31,17 +31,6 @@ query AdminSingleNews($id: ID!) {
     }
 }
 
-query FrontpageListNews{
-    news(input: {filter: {publishedFrom: {until: true}}}) {
-        nodes {
-            id
-            title
-            text
-            publishedFrom
-        }
-    }
-}
-
 query FrontpageSingleNews($id: ID!) {
     frontpageSingleNews(id: $id) {
         id

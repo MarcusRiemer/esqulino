@@ -1,20 +1,3 @@
-query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input:GrammarInputType) {
-    grammars(first:$first,after:$after,before:$before,last:$last,input:$input) {
-        nodes{
-            id
-            name
-            slug
-        }
-        totalCount
-        pageInfo {
-            hasPreviousPage
-            hasNextPage
-            startCursor
-            endCursor
-        }
-    }
-}
-
 query GrammarDescriptionItem($id: ID!) {
     singleGrammar(id: $id){
         id
@@ -25,26 +8,6 @@ query GrammarDescriptionItem($id: ID!) {
         foreignTypes
         root
         types
-    }
-}
-
-query AdminSingleGrammar($id: ID!) {
-    singleGrammar(id: $id) {
-        id
-        name
-        programmingLanguageId
-        slug
-        generatedFromId
-        foreignTypes
-        root
-        types
-        includedGrammarIds
-        blockLanguages {
-            nodes {
-                id
-                name
-            }
-        }
     }
 }
 
