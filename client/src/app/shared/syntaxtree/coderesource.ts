@@ -266,7 +266,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The latest generated code for this resource.
    */
-  readonly generatedCode = combineLatest(
+  readonly generatedCode: Observable<string> = combineLatest(
     this.syntaxTree,
     this.emittedLanguage
   ).pipe(

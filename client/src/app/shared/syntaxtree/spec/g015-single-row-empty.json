@@ -3,6 +3,7 @@
   "types": {
     "g015": {
       "root": {
+        "type": "concrete",
         "attributes": [
           {
             "type": "container",

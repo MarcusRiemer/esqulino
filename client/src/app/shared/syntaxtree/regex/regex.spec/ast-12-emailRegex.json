@@ -1,0 +1,290 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "lineTails",
+        "language": "regex",
+        "properties": {
+          "tail": "^"
+        }
+      },
+      {
+        "name": "group",
+        "language": "regex",
+        "children": {
+          "subexpressions": [
+            {
+              "name": "group",
+              "language": "regex",
+              "children": {
+                "subexpressions": [
+                  {
+                    "name": "characterRange",
+                    "language": "regex",
+                    "children": {
+                      "characters": [
+                        {
+                          "name": "characters",
+                          "language": "regex",
+                          "properties": {
+                            "chars": "^<>()[].,;:"
+                          }
+                        },
+                        {
+                          "name": "knownCharacterClass",
+                          "language": "regex",
+                          "properties": {
+                            "characterClass": "s"
+                          }
+                        },
+                        {
+                          "name": "characters",
+                          "language": "regex",
+                          "properties": {
+                            "chars": "@\""
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "quantifierClass",
+                    "language": "regex",
+                    "properties": {
+                      "quantifierClass": "+"
+                    }
+                  },
+                  {
+                    "name": "group",
+                    "language": "regex",
+                    "children": {
+                      "subexpressions": [
+                        {
+                          "name": "characters",
+                          "language": "regex",
+                          "properties": {
+                            "chars": "."
+                          }
+                        },
+                        {
+                          "name": "characterRange",
+                          "language": "regex",
+                          "children": {
+                            "characters": [
+                              {
+                                "name": "characters",
+                                "language": "regex",
+                                "properties": {
+                                  "chars": "^<>()[].,;:"
+                                }
+                              },
+                              {
+                                "name": "knownCharacterClass",
+                                "language": "regex",
+                                "properties": {
+                                  "characterClass": "s"
+                                }
+                              },
+                              {
+                                "name": "characters",
+                                "language": "regex",
+                                "properties": {
+                                  "chars": "@\""
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "name": "quantifierClass",
+                          "language": "regex",
+                          "properties": {
+                            "quantifierClass": "+"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "quantifierClass",
+                    "language": "regex",
+                    "properties": {
+                      "quantifierClass": "*"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "alternative",
+              "language": "regex"
+            },
+            {
+              "name": "group",
+              "language": "regex",
+              "children": {
+                "subexpressions": [
+                  {
+                    "name": "characters",
+                    "language": "regex",
+                    "properties": {
+                      "chars": "\""
+                    }
+                  },
+                  {
+                    "name": "anyCharacter",
+                    "language": "regex"
+                  },
+                  {
+                    "name": "quantifierClass",
+                    "language": "regex",
+                    "properties": {
+                      "quantifierClass": "+"
+                    }
+                  },
+                  {
+                    "name": "characters",
+                    "language": "regex",
+                    "properties": {
+                      "chars": "\""
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "@"
+        }
+      },
+      {
+        "name": "group",
+        "language": "regex",
+        "children": {
+          "subexpressions": [
+            {
+              "name": "group",
+              "language": "regex",
+              "children": {
+                "subexpressions": [
+                  {
+                    "name": "characterRange",
+                    "language": "regex",
+                    "children": {
+                      "characters": [
+                        {
+                          "name": "characters",
+                          "language": "regex",
+                          "properties": {
+                            "chars": "^<>()[].,;:"
+                          }
+                        },
+                        {
+                          "name": "knownCharacterClass",
+                          "language": "regex",
+                          "properties": {
+                            "characterClass": "s"
+                          }
+                        },
+                        {
+                          "name": "characters",
+                          "language": "regex",
+                          "properties": {
+                            "chars": "@\""
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "quantifierClass",
+                    "language": "regex",
+                    "properties": {
+                      "quantifierClass": "+"
+                    }
+                  },
+                  {
+                    "name": "characters",
+                    "language": "regex",
+                    "properties": {
+                      "chars": "."
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "quantifierClass",
+              "language": "regex",
+              "properties": {
+                "quantifierClass": "+"
+              }
+            },
+            {
+              "name": "characterRange",
+              "language": "regex",
+              "children": {
+                "characters": [
+                  {
+                    "name": "characters",
+                    "language": "regex",
+                    "properties": {
+                      "chars": "^<>()[].,;:"
+                    }
+                  },
+                  {
+                    "name": "knownCharacterClass",
+                    "language": "regex",
+                    "properties": {
+                      "characterClass": "s"
+                    }
+                  },
+                  {
+                    "name": "characters",
+                    "language": "regex",
+                    "properties": {
+                      "chars": "@\""
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "quantifierRange",
+              "language": "regex",
+              "children": {
+                "bounds": [
+                  {
+                    "name": "number",
+                    "language": "regex",
+                    "properties": {
+                      "number": "2"
+                    }
+                  },
+                  {
+                    "name": "empty",
+                    "language": "regex"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "lineTails",
+        "language": "regex",
+        "properties": {
+          "tail": "$"
+        }
+      }
+    ]
+  }
+}

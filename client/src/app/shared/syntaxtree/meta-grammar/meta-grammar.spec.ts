@@ -3,20 +3,22 @@ import {
   NodeTerminalSymbolDescription,
   NodeTypesSequenceDescription,
   NodeVisualContainerDescription,
-} from "./grammar.description";
+} from "../grammar.description";
+import { Node } from "../syntaxtree";
+import { NodeDescription } from "../syntaxtree.description";
+
 import {
   readFromNode,
   convertProperty,
   convertTerminal,
   convertOccurs,
   convertNodeRefOne,
-} from "./grammar-meta";
-import { Node } from "./syntaxtree";
-import { NodeDescription } from "./syntaxtree.description";
+  convertInterpolate,
+} from "./meta-grammar";
 
 describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
   describe(`Utility Functions`, () => {
-    it(`Property`, () => {
+    it(`property`, () => {
       const n = new Node(
         {
           language: "MetaGrammar",
@@ -32,6 +34,24 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(convertProperty(n)).toEqual({
         type: "property",
         base: "integer",
+        name: "prop1",
+      });
+    });
+
+    it(`interpolate`, () => {
+      const n = new Node(
+        {
+          language: "MetaGrammar",
+          name: "interpolate",
+          properties: {
+            name: "prop1",
+          },
+        },
+        undefined
+      );
+
+      expect(convertInterpolate(n)).toEqual({
+        type: "interpolate",
         name: "prop1",
       });
     });
@@ -244,6 +264,39 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Root Node with single visualization`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          includes: [
+            {
+              language: "MetaGrammar",
+              name: "grammarVisualizes",
+              children: {
+                includes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "grammarRef",
+                    properties: {
+                      grammarId: "e495ac2f-9413-4fb7-8480-d7d807bfc59a",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {},
+        includes: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
+      });
+    });
+
     it(`Root Node without types but with defined root type`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",
@@ -443,6 +496,90 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [] } },
+        },
+      });
+    });
+
+    it(`Empty visualization in single language`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "visualizeNode",
+              children: {
+                references: [
+                  {
+                    name: "nodeRefOne",
+                    language: "MetaGrammar",
+                    properties: {
+                      typeName: "t",
+                      languageName: "l",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {
+          l: { t: { type: "visualize", attributes: [] } },
+        },
+      });
+    });
+
+    it(`Filled visualization in single language`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "visualizeNode",
+              children: {
+                references: [
+                  {
+                    name: "nodeRefOne",
+                    language: "MetaGrammar",
+                    properties: {
+                      typeName: "t",
+                      languageName: "l",
+                    },
+                  },
+                ],
+                attributes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "terminal",
+                    properties: {
+                      symbol: "s",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {
+          l: {
+            t: {
+              type: "visualize",
+              attributes: [{ type: "terminal", symbol: "s" }],
+            },
+          },
         },
       });
     });

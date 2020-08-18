@@ -255,11 +255,15 @@ function prettyPrintFixedBlocksSidebarCategory(
 function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
   const head = `sidebarBlock "${desc.displayName}" {`;
 
-  const defaultNode = desc.defaultNode
-    ? prettyPrintSyntaxTreeNode(desc.defaultNode[0])
+  const defaultNodeDescription = Array.isArray(desc.defaultNode)
+    ? desc.defaultNode
+    : [desc.defaultNode];
+
+  const prettyDefaultNode = defaultNodeDescription
+    ? prettyPrintSyntaxTreeNode(defaultNodeDescription[0])
     : [];
 
   const tail = `}`;
 
-  return [head, [...defaultNode], tail];
+  return [head, [...prettyDefaultNode], tail];
 }

@@ -1,0 +1,22 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "a"
+        }
+      },
+      {
+        "name": "quantifierClass",
+        "language": "regex",
+        "properties": {
+          "quantifierClass": "+"
+        }
+      }
+    ]
+  }
+}

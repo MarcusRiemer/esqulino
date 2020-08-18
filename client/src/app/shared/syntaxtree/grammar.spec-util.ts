@@ -26,13 +26,14 @@ export function singleLanguageGrammar(
 
 export function multiLanguageGrammar(
   _langName: string,
-  rootType: QualifiedTypeName,
-  languages: NamedLanguages
+  root: QualifiedTypeName,
+  types: NamedLanguages,
+  foreignTypes: NamedLanguages = {}
 ): GrammarDocument {
   return {
-    types: languages,
-    foreignTypes: {},
-    root: rootType,
+    types,
+    foreignTypes,
+    root,
   };
 }
 

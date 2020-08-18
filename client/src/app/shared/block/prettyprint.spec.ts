@@ -86,4 +86,8 @@ describe("BlockLanguage PrettyPrinter", () => {
   it("014 Container: Two constants", () => {
     verifyFiles("014-container-constants", prettyPrintBlockLanguage);
   });
+
+  it("015 Sidebar: Single default node", () => {
+    verifyFiles("015-sidebar-single-default-node", prettyPrintBlockLanguage);
+  });
 });

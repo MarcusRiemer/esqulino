@@ -53,7 +53,7 @@ RSpec.describe "IDE Service" do
         "name" => "false"
       }
 
-      expect { service.emit_code(tree_desc, "doesntExist") }.to raise_exception IdeServiceError
+      expect { service.emit_code(tree_desc, "doesntExist") }.to raise_exception EsqulinoError::IdeService
     end
   end
 
@@ -98,7 +98,7 @@ RSpec.describe "IDE Service" do
     end
 
     it "missing modes are an error" do
-      expect { IdeService.instantiate(service_config: { }) }.to raise_exception IdeServiceError
+      expect { IdeService.instantiate(service_config: { }) }.to raise_exception EsqulinoError::IdeService
     end
   end
 end

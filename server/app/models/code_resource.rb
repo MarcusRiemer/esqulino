@@ -9,11 +9,22 @@ class CodeResource < ApplicationRecord
   belongs_to :project
   # ... uses exactly one block language ...
   belongs_to :block_language
-  # ... and compiles to exactly one programming language.
+  # ... compiles to exactly one programming language ...
   belongs_to :programming_language
+  # ... uses exactly one grammar for validation ...
+  has_one :grammar, through: :block_language
 
   # May be the basis for generated grammars
   has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+
+  # A code resource may reference other code resources (this `includes` other)
+  has_many :code_resource_reference_origins,
+           class_name: 'CodeResourceReference',
+           foreign_key: "origin_id",
+           dependent: :destroy
+
+  # All code resources that are targeted by this code resource
+  has_many :targeted_code_resources, through: :code_resource_reference_origins, source: "target"
 
   # Name may not be empty
   validates :name, presence: true
@@ -75,6 +86,24 @@ class CodeResource < ApplicationRecord
     end
   end
 
+  # Aaaaand this is the second time we are between a rock and a hard place:
+  # How to synchronize the references in the JSON model with a "normal"
+  # relational database?
+  #
+  # I decided to automatically update after every save operation but to only
+  # log errors in case something goes wrong due to a faulty grammar.
+  after_save do
+    if self.saved_change_to_attribute? :ast
+      begin
+        self.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
+      rescue EsqulinoError::Base => ex
+        # Log message and stacktrace
+        Rails.logger.error [ex.message, *ex.backtrace].join($/)
+        Raven.capture_exception ex
+      end
+    end
+  end
+
   # Takes the current syntaxtree and asks the IDE service for the
   # compiled representation.
   #
@@ -88,6 +117,31 @@ class CodeResource < ApplicationRecord
   def emit_ast!(ide_service = IdeService.instance, programming_language_id: nil)
     programming_language_id ||= self.programming_language_id
     ide_service.emit_code(self.ast, programming_language_id)
+  end
+
+  # Checks the current state of the AST and synchronizes this state to the
+  # referenced code resources.
+  def update_code_resource_references!(ide_service: IdeService.instance)
+    if not persisted?
+      raise EsqulinoError::Base.new(
+              "Code Resource must be persisted when updating references",
+              500, true
+            )
+    end
+
+    ast_referenced_code_resource_ids = ide_service.referenced_resource_ids(self, "referencedCodeResources")
+    referenced_ids = CodeResource
+                       .where(id: ast_referenced_code_resource_ids)
+                       .pluck(:id)
+
+    updated_references = referenced_ids.map do |id|
+      CodeResourceReference.find_or_initialize_by(
+        origin: self,
+        target_id: id
+      )
+    end
+
+    self.code_resource_reference_origins = updated_references
   end
 
   # All records that are immediatly depending on this code resource. This

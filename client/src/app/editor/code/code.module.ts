@@ -41,10 +41,12 @@ import { UserFunctionsSidebarComponent } from "./truck/user-functions-sidebar.co
 import { TruckWorldMouseService } from "./truck/truck-world-mouse.service";
 import { TruckWorldEditorService } from "./truck/world-editor/truck-world-editor.service";
 import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
-
-import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 import { TruckWorldTilesSidebarComponent } from "./truck/world-editor/truck-world-tiles-sidebar.component";
 import { TrafficLightVisualisator } from "./truck/world-editor/traffic-light-visualisator.component";
+
+import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
+
+import { RegexTestComponent } from "./regex/regex-test.component";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
@@ -75,6 +77,7 @@ import { TrafficLightVisualisator } from "./truck/world-editor/traffic-light-vis
     UnknownCodeResourceComponent,
     DefinedTypesSidebarComponent,
     JsonAstComponent,
+    RegexTestComponent,
   ],
   providers: [ResourceChangedGuard],
   exports: [BlockHostComponent],

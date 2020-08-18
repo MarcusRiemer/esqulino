@@ -1,0 +1,144 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision:
+      scale:
+      limit:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 59bda8aa-c068-44e6-871d-80f1e48c5dce
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 RegEx
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "expression", "languageName":
+    "regex"}}], "nodes": [{"name": "comment", "language": "MetaGrammar", "properties":
+    {"text": "TODO ^ und $ als optionale Felder reindoktoren"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
+    "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "subexpression", "languageName": "regex"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "subexpressions"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "expression", "languageName": "regex"}}, {"name": "typedef",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "characters", "languageName": "regex"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "knownCharacterClass", "languageName":
+    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "alternative", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "subexpression", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "chars"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "characters", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "\\"}}, {"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "charcterClass"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "knownCharacterClass", "languageName": "regex"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "|"}}]}, "language": "MetaGrammar", "properties": {"typeName": "alternative",
+    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"name":
+    "regex"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-07-02 13:49:14.143547000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-07-14 16:26:08.247386000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "regex": {
+          "expression": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "subexpressions",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "regex",
+                      "typeName": "subexpression"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              }
+            ]
+          },
+          "subexpression": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex",
+                "typeName": "characters"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "knownCharacterClass"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "alternative"
+              }
+            ]
+          },
+          "characters": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "chars"
+              }
+            ]
+          },
+          "knownCharacterClass": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "\\"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "charcterClass"
+              }
+            ]
+          },
+          "alternative": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "|"
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "root": {
+        "languageName": "regex",
+        "typeName": "expression"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

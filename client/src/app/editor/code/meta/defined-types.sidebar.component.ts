@@ -33,6 +33,7 @@ export class DefinedTypesSidebarComponent {
 
   readonly availableNodes = this._current.currentTree.pipe(
     map((t) => {
+      // Step 1: Types as they are currently defined
       const concrete = t.getNodesOfType({
         languageName: "MetaGrammar",
         typeName: "concreteNode",
@@ -41,8 +42,15 @@ export class DefinedTypesSidebarComponent {
         languageName: "MetaGrammar",
         typeName: "typedef",
       });
+      const visualizes = t.getNodesOfType({
+        languageName: "MetaGrammar",
+        typeName: "visualizesNode",
+      });
 
-      return [...concrete, ...typedefs].map(
+      // Step 2: Included types on possibly referenced grammar
+      // TODO
+
+      return [...concrete, ...visualizes, ...typedefs].map(
         (n): QualifiedTypeName => {
           return {
             languageName: n.properties["languageName"],

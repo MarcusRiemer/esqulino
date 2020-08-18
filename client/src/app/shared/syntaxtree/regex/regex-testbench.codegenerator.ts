@@ -4,19 +4,22 @@ import {
   OutputSeparator,
 } from "../codegenerator";
 import { Node } from "../syntaxtree";
-import { readFromNode } from "../grammar-meta";
+import { readFromNode } from "./regex-testbench.description";
 
-export const GRAMMAR_NODE_CONVERTER: NodeConverterRegistration[] = [
+/**
+ * Converts regular expression testbenches to a printable JSON document.
+ */
+export const TESTBENCH_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
-      languageName: "MetaGrammar",
-      typeName: "grammar",
+      languageName: "regex-testbench",
+      typeName: "root",
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        const grammarDocument = readFromNode(node.toModel());
+        const testbenchDocument = readFromNode(node);
         process.addConvertedFragment(
-          JSON.stringify(grammarDocument, undefined, 2),
+          JSON.stringify(testbenchDocument, undefined, 2),
           node,
           OutputSeparator.NEW_LINE_AFTER
         );

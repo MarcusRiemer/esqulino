@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ComponentPortal } from "@angular/cdk/portal";
+import { MatDialog } from "@angular/material/dialog";
 
 import { Observable } from "rxjs";
 import { map, switchMap, first, combineLatest } from "rxjs/operators";
 
 import { EditorComponentDescription } from "../../../shared/block/block-language.description";
 import { IndividualBlockLanguageDataService } from "../../../shared/serverdata";
+import { MessageDialogComponent } from "../../../shared/message-dialog.component";
 
 import { EditorToolbarService } from "../../toolbar.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
@@ -50,7 +52,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
     private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _sidebarService: SidebarService
+    private _sidebarService: SidebarService,
+    private _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -64,14 +67,22 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       "trash",
       "w"
     );
-    btnDelete.onClick.subscribe((_) => {
-      this._codeResourceService
-        .deleteCodeResource(this.peekProject, this.peekResource)
-        .pipe(first())
-        .subscribe((_) => {
-          this.peekProject.removedCodeResource(this.peekResource);
-          this._router.navigate(["create"], { relativeTo: this._route.parent });
-        });
+    btnDelete.onClick.subscribe(async (_) => {
+      const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
+        description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
+      });
+
+      if (confirmed) {
+        this._codeResourceService
+          .deleteCodeResource(this.peekProject, this.peekResource)
+          .pipe(first())
+          .subscribe((_) => {
+            this.peekProject.removedCodeResource(this.peekResource);
+            this._router.navigate(["create"], {
+              relativeTo: this._route.parent,
+            });
+          });
+      }
     });
 
     // Reacting to saving

@@ -287,7 +287,7 @@ RSpec.describe GrammarsController, type: :request do
       expect(original.generated_from).to eq nil
     end
 
-    it 'Unset the a CodeResouce that a grammar is generated from' do
+    it 'Unset the CodeResouce that a grammar is generated from' do
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
 

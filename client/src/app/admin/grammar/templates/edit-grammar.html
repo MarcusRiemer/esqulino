@@ -98,18 +98,15 @@
   <!-- All grammars that are included -->
   <div class="form-group row">
     <label for="grammar-root" class="col-sm-2 col-form-label">
-      Inkludierte Grammatiken
+      Referenzierte Grammatiken
     </label>
     <div class="col-sm-10 col-form-label">
       <ul
-        *ngIf="grammar.includedGrammarIds?.length > 0 else noGrammarReferences"
+        *ngIf="grammarReferences.length > 0 else noGrammarReferences"
         class="list-inline"
       >
-        <li
-          *ngFor="let grammarId of grammar.includedGrammarIds"
-          class="list-inline-item"
-        >
-          <link-grammar [grammarId]="grammarId"></link-grammar>
+        <li *ngFor="let ref of grammarReferences" class="list-inline-item">
+          <link-grammar [grammarId]="ref.grammarId"></link-grammar>
         </li>
       </ul>
       <ng-template #noGrammarReferences>Keine</ng-template>

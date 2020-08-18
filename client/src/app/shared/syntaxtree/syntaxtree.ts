@@ -23,12 +23,20 @@ export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
 }
 
 /**
+ * @return A human friendly name to read
+ */
+export function printableTypename(n: Node | NodeDescription): string {
+  const langName = n instanceof Node ? n.languageName : n.language;
+  const typeName = n instanceof Node ? n.typeName : n.name;
+  return `"${langName}.${typeName}"`;
+}
+
+/**
  * @return Possibly helpful information about the node during debugging
  */
 export function printableNodeDebug(n: Node) {
-  const name = n.qualifiedName;
   const path = JSON.stringify(n.location);
-  return `"${name.languageName}.${name.typeName}" at ${path}`;
+  return `${printableTypename(n)} at ${path}`;
 }
 
 /**
@@ -592,7 +600,7 @@ export class Tree {
       node.properties = {};
     }
 
-    node.properties[key] = value;
+    node.properties[key] = value.toString();
 
     return new Tree(newDescription);
   }

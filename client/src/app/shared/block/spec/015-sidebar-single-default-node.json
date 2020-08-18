@@ -1,0 +1,30 @@
+{
+  "id": "test",
+  "name": "test",
+  "defaultProgrammingLanguageId": "generic",
+  "editorBlocks": [],
+  "sidebars": [
+    {
+      "type": "fixedBlocks",
+      "caption": "RegEx",
+      "categories": [
+        {
+          "type": "constant",
+          "blocks": [
+            {
+              "defaultNode": {
+                "name": "characters",
+                "language": "regex",
+                "properties": {
+                  "chars": "a"
+                }
+              },
+              "displayName": "a"
+            }
+          ],
+          "categoryCaption": "Manuell"
+        }
+      ]
+    }
+  ]
+}

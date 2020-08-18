@@ -1,10 +1,5 @@
 require 'open3'
 
-# Something went wrong inside the IDE service or in the communication
-# with it
-class IdeServiceError < RuntimeError
-end
-
 # Common functionality for all IDE operations, no matter whether
 # they are routed through the "exec" or the "systemd" supervisor.
 class BaseIdeService
@@ -61,7 +56,24 @@ class BaseIdeService
     else
       nil
     end
+  end
 
+  # Finds out which other resources are referenced by the given
+  # code resource
+  # @param code_resource [CodeResource]
+  #   The code resource that is analyzed
+  # @param search_type ["referencedCodeResources"|"referencedGrammars"]
+  def referenced_resource_ids(code_resource, search_type)
+    grammar_document = code_resource
+                         .block_language
+                         .grammar
+                         .document
+                         .transform_keys{ |k| k.camelize(:lower) }
+    execute_request({
+                      "type" => search_type,
+                      "ast" => code_resource.ast,
+                      "grammar" => grammar_document
+                    })
   end
 
   # Checks whether the IDE-service is available
@@ -105,7 +117,7 @@ class BaseIdeService
   # Ensures the node runtime has something meaningful to start
   def assert_cli_program_exists!
     if not cli_program_exists?
-      raise IdeServiceError, "Could not find compiled CLI at \"#{@program}\""
+      raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{@program}\""
     end
   end
 
@@ -127,7 +139,7 @@ class BaseIdeService
         sleep wait_time
         sum_wait_time += wait_time
       else
-        raise IdeServiceError, "Could not find compiled CLI at \"#{cli_program_path}\""
+        raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{cli_program_path}\""
       end
     end
 
@@ -171,11 +183,11 @@ class OneShotExecIdeService < ExecIdeService
       begin
         JSON.parse stdout
       rescue JSON::ParserError
-        raise IdeServiceError, "Bad JSON: \"#{stdout}\""
+        raise EsqulinoError::IdeService, "Bad JSON: \"#{stdout}\""
       end
     else
       # Nope, thats a defect
-      raise IdeServiceError, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}"
+      raise EsqulinoError::IdeService, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}"
     end
   end
 end
@@ -258,11 +270,11 @@ module IdeService
       # Which kind of exec mode?
       case exec_config_mode = exec_config[:mode]
       when "one_shot" then return OneShotExecIdeService.new(config: exec_config)
-      else raise IdeServiceError, "Unkown IDE exec mode \"#{exec_config_mode}\""
+      else raise EsqulinoError::IdeService, "Unkown IDE exec mode \"#{exec_config_mode}\""
       end
     # No known mode
     else
-      raise IdeServiceError, "Unkown general IDE-service configuration"
+      raise EsqulinoError::IdeService, "Unkown general IDE-service configuration"
     end
   end
 

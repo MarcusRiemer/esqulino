@@ -3,6 +3,7 @@
   "types": {
     "g013": {
       "n1": {
+        "type": "concrete",
         "attributes": [
           {
             "name": "c",
@@ -16,7 +17,9 @@
       }
     },
     "g013-foreign": {
-      "n1": {}
+      "n1": {
+        "type": "concrete"
+      }
     }
   },
   "foreignTypes": {}

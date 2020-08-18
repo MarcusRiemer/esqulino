@@ -1,0 +1,30 @@
+{
+  "name": "expression",
+  "language": "regex",
+  "children": {
+    "subexpressions": [
+      {
+        "name": "lineTails",
+        "language": "regex",
+        "properties": {
+          "tail": "^"
+        }
+      },
+      {
+        "name": "characters",
+        "language": "regex",
+        "properties": {
+          "chars": "abc",
+          "characters": "a"
+        }
+      },
+      {
+        "name": "lineTails",
+        "language": "regex",
+        "properties": {
+          "tail": "$"
+        }
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
-import { NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
-import { Tree, Node } from "./syntaxtree";
+import { NodeDescription, QualifiedTypeName } from "../syntaxtree.description";
+import { Tree, Node } from "../syntaxtree";
 import {
   NodePropertyTypeDescription,
   NodeTerminalSymbolDescription,
@@ -14,13 +14,22 @@ import {
   ChildCardinalityDescription,
   NodeVisualContainerDescription,
   Orientation,
-} from "./grammar.description";
-import { OccursDescription, OccursString } from "./occurs.description";
+  NodeInterpolateDescription,
+  NodeVisualTypeDescription,
+} from "../grammar.description";
+import { OccursDescription, OccursString } from "../occurs.description";
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   return {
     type: "property",
     base: attrNode.properties["base"] as any,
+    name: attrNode.properties["name"],
+  };
+}
+
+export function convertInterpolate(attrNode: Node): NodeInterpolateDescription {
+  return {
+    type: "interpolate",
     name: attrNode.properties["name"],
   };
 }
@@ -136,6 +145,9 @@ export function readAttributes(
     case "property":
       target.push(convertProperty(attrNode));
       break;
+    case "interpolate":
+      target.push(convertInterpolate(attrNode));
+      break;
     case "terminal":
       target.push(convertTerminal(attrNode));
       break;
@@ -186,21 +198,26 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
     };
   }
 
-  // References to other grammars
-  const includesNode = tree.rootNode.getChildInCategory("includes");
-  if (includesNode) {
-    toReturn.includedGrammarIds = includesNode
-      .getChildrenInCategory("includes")
-      .map((refNode) => refNode.properties["grammarId"]);
-  }
+  // References to other grammars: includes and visualizes
+  ["includes", "visualizes"].forEach((categoryName) => {
+    const includesNode = tree.rootNode.getChildInCategory(categoryName);
+    if (includesNode) {
+      toReturn[categoryName] = includesNode
+        .getChildrenInCategory("includes")
+        .map((refNode) => refNode.properties["grammarId"]);
+    }
+  });
 
   // Add all defined types
   const definedTypes = tree.rootNode.getChildrenInCategory("nodes");
   definedTypes
-    .filter((n) => n.typeName.match(/typedef|concreteNode/))
+    .filter((n) => n.typeName.match(/typedef|(concrete|visualize)Node/))
     .forEach((n) => {
-      const languageName = n.properties["languageName"];
-      const typeName = n.properties["typeName"];
+      const nameNode =
+        n.typeName === "visualizeNode" ? n.getChildInCategory("references") : n;
+
+      const languageName = nameNode.properties["languageName"];
+      const typeName = nameNode.properties["typeName"];
 
       if (!typeName || !languageName) {
         throw new Error(
@@ -223,7 +240,7 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
 
       // Add the correct type of type
       switch (n.typeName) {
-        case "concreteNode":
+        case "concreteNode": {
           const concreteNode: NodeConcreteTypeDescription = {
             type: "concrete",
             attributes: [],
@@ -235,6 +252,20 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
 
           lang[typeName] = concreteNode;
           break;
+        }
+        case "visualizeNode": {
+          const visualizeNode: NodeVisualTypeDescription = {
+            type: "visualize",
+            attributes: [],
+          };
+
+          n.getChildrenInCategory("attributes").forEach((a) =>
+            readAttributes(a, visualizeNode.attributes)
+          );
+
+          lang[typeName] = visualizeNode;
+          break;
+        }
         case "typedef":
           const references = n
             .getChildrenInCategory("references")

@@ -1864,6 +1864,57 @@ describe("Grammar Validation", () => {
     );
   });
 
+  describe(`References`, () => {
+    const langRef = singleLanguageGrammar("ref", "root", {
+      root: {
+        type: "concrete",
+        attributes: [
+          {
+            name: "resRef",
+            type: "property",
+            base: "codeResourceReference",
+          },
+        ],
+      },
+    });
+
+    it(`Marks a valid ID for check`, () => {
+      const v = new Validator([langRef]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "ref",
+        name: "root",
+        properties: {
+          resRef: "35cbb311-c412-4af9-bafd-58c38e08e78b",
+        },
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+
+      const res = v.validateFromRoot(ast);
+      expect(res.errors).toEqual([]);
+    });
+
+    it(`Rejects an invalid ID and doesn't mark it for check`, () => {
+      const v = new Validator([langRef]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "ref",
+        name: "root",
+        properties: {
+          resRef: "invalid",
+        },
+      };
+
+      const ast = new AST.Node(astDesc, undefined);
+
+      const res = v.validateFromRoot(ast);
+      expect(res.errors.map((e) => e.code)).toEqual([
+        ErrorCodes.InvalidResourceId,
+      ]);
+    });
+  });
+
   describe(`Root omitted`, () => {
     it(`No types present at all`, () => {
       const g: GrammarDocument = {
@@ -2175,6 +2226,49 @@ describe("Grammar Validation", () => {
     });
   });
 
+  describe(`Visualisation`, () => {
+    it(`Foreign type visualized`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "t1" },
+        {
+          g: {
+            t1: {
+              type: "visualize",
+              attributes: [],
+            },
+          },
+        },
+        {
+          g: {
+            t1: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "property",
+                  base: "integer",
+                  name: "p1",
+                },
+              ],
+            },
+          },
+        }
+      );
+
+      const v = new Validator([g]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "g",
+        name: "t1",
+      };
+
+      const ast = new AST.Tree(astDesc);
+      expect(comparableErrors(v.validateFromRoot(ast))).toEqual([
+        { code: ErrorCodes.MissingProperty, location: [] },
+      ]);
+    });
+  });
+
   describe(`Multiple Languages in Single Grammar`, () => {
     it(`Two languages, same typename, no relation`, () => {
       const g = multiLanguageGrammar(
@@ -2363,6 +2457,40 @@ describe("Grammar Validation", () => {
           .withContext(JSON.stringify(astDesc))
           .toEqual([]);
       });
+    });
+  });
+
+  describe(`getType overloads`, () => {
+    const gDesc = singleLanguageGrammar("l", "r", {
+      r: {
+        type: "concrete",
+        attributes: [],
+      },
+    });
+
+    const g = new Validator([gDesc]).getGrammarValidator("l");
+
+    it(`Works with a node that has an existing type`, () => {
+      const n = new AST.Tree({
+        language: "l",
+        name: "r",
+      }).rootNode;
+
+      const resType: any = g.getType(n);
+      const resParams: any = g.getType("l", "r");
+
+      expect(resType).toBe(resParams);
+    });
+
+    it(`Throws on missing types`, () => {
+      const n = new AST.Tree({
+        language: "l",
+        name: "nonexistant",
+      }).rootNode;
+
+      expect(() => {
+        g.getType(n);
+      }).toThrowError(/l\.nonexistant/);
     });
   });
 });
