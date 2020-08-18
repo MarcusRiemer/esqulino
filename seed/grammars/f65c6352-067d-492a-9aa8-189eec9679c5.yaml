@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-14 08:18:16.049875000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-14 09:29:10.555860000 Z
+  value_before_type_cast: 2020-08-17 13:37:20.069781000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -22,7 +22,13 @@ concise_attributes:
   value_before_type_cast: 48ecf76c-3543-49bc-af52-d881e856fe77
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
-  value_before_type_cast: "{}"
+  value_before_type_cast: '{"dxml": {"element": {"type": "visualize", "attributes":
+    [{"type": "container", "children": [{"type": "container", "children": [{"type":
+    "terminal", "symbol": "<"}, {"name": "name", "type": "interpolate"}, {"type":
+    "terminal", "symbol": ">"}], "orientation": "horizontal"}, {"type": "container",
+    "children": [{"type": "terminal", "symbol": "</"}, {"name": "name", "type": "interpolate"},
+    {"type": "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation":
+    "vertical"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: '{"dxml": {"element": {"type": "concrete", "attributes":
@@ -40,7 +46,7 @@ concise_attributes:
     "type": "property"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root
-  value_before_type_cast: '{"typeName": "", "languageName": ""}'
+  value_before_type_cast: '{"typeName": "element", "languageName": "dxml"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: extends_id
 new_record: false

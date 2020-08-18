@@ -18,17 +18,34 @@ concise_attributes:
   value_before_type_cast: 00 XML Visual
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "grammar", "children": {"includes": [], "visualizes":
-    [{"name": "grammarVisualizes", "children": {"includes": [{"name": "grammarRef",
-    "language": "MetaGrammar", "properties": {"grammarId": "3b919483-8a97-41a8-8798-a8bb386609ba"}}]},
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
+    "dxml"}}], "nodes": [{"name": "visualizeNode", "children": {"attributes": [{"name":
+    "container", "children": {"attributes": [{"name": "container", "children": {"attributes":
+    [{"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "<"}},
+    {"name": "interpolate", "language": "MetaGrammar", "properties": {"name": "name"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ">"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}, {"name": "container",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "</"}}, {"name": "interpolate", "language": "MetaGrammar", "properties":
+    {"name": "name"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": ">"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}], "references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
+    "dxml"}}]}, "language": "MetaGrammar"}], "includes": [], "visualizes": [{"name":
+    "grammarVisualizes", "children": {"includes": [{"name": "grammarRef", "language":
+    "MetaGrammar", "properties": {"grammarId": "3b919483-8a97-41a8-8798-a8bb386609ba"}}]},
     "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"name":
-    "xml"}}'
+    "dxml"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-08-14 07:17:51.678142000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-14 09:02:45.351648000 Z
+  value_before_type_cast: 2020-08-17 13:37:19.771891000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -39,8 +56,62 @@ concise_attributes:
   name: compiled
   value_before_type_cast: |-
     {
-      "types": {},
+      "types": {
+        "dxml": {
+          "element": {
+            "type": "visualize",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "<"
+                      },
+                      {
+                        "type": "interpolate",
+                        "name": "name"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "</"
+                      },
+                      {
+                        "type": "interpolate",
+                        "name": "name"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
       "foreignTypes": {},
+      "root": {
+        "languageName": "dxml",
+        "typeName": "element"
+      },
       "visualizes": [
         "3b919483-8a97-41a8-8798-a8bb386609ba"
       ]

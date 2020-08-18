@@ -16,10 +16,8 @@ concise_attributes:
     "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
     {"children": [{"children": [{"text": "<", "style": {"display": "inline-flex"},
     "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "name",
-    "blockType": "input"}, {"blockType": "iterator", "childGroupName": "attributes",
-    "emptyDropTarget": false}, {"text": ">", "style": {"display": "inline-flex"},
+    "blockType": "interpolated"}, {"text": ">", "style": {"display": "inline-flex"},
     "blockType": "constant"}], "blockType": "container", "orientation": "horizontal"},
-    {"blockType": "iterator", "childGroupName": "elements", "emptyDropTarget": false},
     {"children": [{"text": "</", "style": {"display": "inline-flex"}, "blockType":
     "constant"}, {"style": {"display": "inline-flex"}, "property": "name", "blockType":
     "interpolated"}, {"text": ">", "style": {"display": "inline-flex"}, "blockType":
@@ -41,12 +39,12 @@ concise_attributes:
   value_before_type_cast: 2020-08-13 11:37:16.251809000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-13 12:35:29.434550000 Z
+  value_before_type_cast: 2020-08-17 13:37:20.081650000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: grammar_id
-  value_before_type_cast: 3b919483-8a97-41a8-8798-a8bb386609ba
+  value_before_type_cast: f65c6352-067d-492a-9aa8-189eec9679c5
 new_record: false
 active_record_yaml_version: 2
