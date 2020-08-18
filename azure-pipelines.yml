@@ -275,3 +275,49 @@ jobs:
   - bash: 'make verify-cached-schemas'
     workingDirectory: schema/json
     displayName: 'Verify Synced Schemas'
+
+- job: graphql_schemas_synced
+  displayName: Check GraphQL Schemas and the generated code are Synced
+  steps:
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: '>= 2.6'
+
+  - script: gem install bundler
+    displayName: 'gem install bundler'
+
+  - task: Cache@2
+    inputs:
+      key: 'gems | "$(Agent.OS)" | server/Gemfile.lock'
+      restoreKeys: |
+        gems | "$(Agent.OS)"
+        gems
+      path: $(BUNDLE_PATH)
+    displayName: Cache gems
+
+  - bash: 'make install-deps'
+    workingDirectory: server
+    displayName: 'make install-deps'
+
+  - task: Cache@2
+    inputs:
+      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      path: 'client/node_modules'
+      cacheHitVar: 'CACHE_RESTORED'
+    displayName: Cache for node_modules
+
+  - task: Npm@1
+    displayName: 'Install Dependencies'
+    inputs:
+      command: ci
+      workingDir: client
+      verbose: false
+    condition: ne(variables.CACHE_RESTORED, 'true')
+
+  - bash: 'make verify-cached-schemas'
+    workingDirectory: client
+    displayName: 'make verify-cached-schemas'
+
+  - bash: 'make verify-compile-graphql-client'
+    workingDirectory: client
+    displayName: 'make verify-compile-graphql-client'

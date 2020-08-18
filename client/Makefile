@@ -134,9 +134,15 @@ src/generated/graphql.ts : ../schema/graphql/schema.json
 
 generate-graphql-client: src/generated/graphql.ts
 
-print-sources:
-	echo $(GRAPHQL_RUBY_SOURCES)
+GIT_LS_CHANGED_FILES = git ls-files --modified $(JSON_SCHEMA_FILES)
 
+verify-cached-schemas:
+	@make -B generate-graphql-client
+	@test -z "`$(GIT_LS_CHANGED_FILES)`" || (git --no-pager diff; echo "There are modified schema files"; $(GIT_LS_CHANGED_FILES); exit 1) >&2
+
+# Ensures that the GraphQL-Client can be compiled
+verify-compile-graphql-client: src/generated/graphql.ts
+	npx tsc --experimentalDecorators $^
 
 ##################################
 # Dependencies
