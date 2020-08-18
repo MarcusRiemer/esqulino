@@ -8,7 +8,8 @@ query AdminSingleGrammar($id: ID!) {
         foreignTypes
         root
         types
-        includedGrammarIds
+        includes
+        visualizes
         blockLanguages {
             nodes {
                 id

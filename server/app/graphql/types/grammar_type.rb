@@ -12,8 +12,8 @@ module Types
     field :generatedFrom, Types::CodeResourceType, null:true
     field :blockLanguages, Types::BlockLanguageType.connection_type, null:true
     field :codeResources, Types::CodeResourceType.connection_type, null:true
-    field :referencedGrammarIds, [ID], null:false
-    field :includedGrammarIds, [ID], null:false
+    field :includes, [ID], null:false
+    field :visualizes, [ID], null:false
 
     field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
     field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false

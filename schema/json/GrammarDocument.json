@@ -49,7 +49,7 @@
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },
-        "includedGrammarIds": {
+        "includes": {
           "items": {
             "type": "string"
           },

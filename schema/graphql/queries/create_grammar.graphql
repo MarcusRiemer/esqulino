@@ -9,7 +9,8 @@ mutation CreateGrammar($name:String!,$slug:String,$types:JSON,$foreignTypes:JSON
             foreignTypes
             root
             types
-            includedGrammarIds
+            visualizes
+            includes
             blockLanguages {
                 nodes {
                     id

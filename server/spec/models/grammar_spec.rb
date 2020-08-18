@@ -428,7 +428,7 @@ RSpec.describe Grammar, type: :model do
         expect(res.ast).to validate_against "NodeDescription"
 
         compiled_grammar_description = JSON.parse res.emit_ast!(IdeService.guaranteed_instance)
-        expect(compiled_grammar_description["includedGrammarIds"]).to eq [exp_uuid]
+        expect(compiled_grammar_description["includes"]).to eq [exp_uuid]
       end
 
       it "no previous references, new code resource references" do

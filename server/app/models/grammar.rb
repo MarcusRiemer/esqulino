@@ -151,10 +151,20 @@ class Grammar < ApplicationRecord
     self.grammar_reference_origins.where(reference_type: include_types)
   end
 
+  # The grammar ids that are included by this grammar
+  def includes
+    includes_references.pluck(:target_id)
+  end
+
   # All grammar references that are visualized by this grammar
   def visualizes_references
     visualizes = GrammarReference.reference_types["visualize"]
     self.grammar_reference_origins.where(reference_type: visualizes)
+  end
+
+  # The grammar ids that are visualized by this grammar
+  def visualizes
+    visualizes_references.pluck(:target_id)
   end
 
 

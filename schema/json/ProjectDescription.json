@@ -577,7 +577,7 @@
         "id": {
           "type": "string"
         },
-        "includedGrammarIds": {
+        "includes": {
           "items": {
             "type": "string"
           },

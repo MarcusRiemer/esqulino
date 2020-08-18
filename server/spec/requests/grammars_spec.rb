@@ -292,6 +292,7 @@ RSpec.describe GrammarsController, type: :request do
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
 
       send_query(query_name:"UpdateGrammar",variables:{"id"=>original.id, "generatedFromId" => nil })
+      expect(response.status).to eq(200)
 
       original.reload
 
