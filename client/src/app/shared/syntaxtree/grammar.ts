@@ -1532,8 +1532,18 @@ export class GrammarValidator {
         nodeName
       );
     } else if (Desc.isNodeVisualTypeDescription(desc)) {
-      const origType = grammarDoc.foreignTypes[languageName][nodeName];
-      this.registerTypeValidator(languageName, nodeName, origType, grammarDoc);
+      const origType = grammarDoc.foreignTypes?.[languageName]?.[nodeName];
+      if (!origType) {
+        const origName = languageName + "." + nodeName;
+        throw new Error(`Visual type ${origName} has no concrete counterpart`);
+      } else {
+        this.registerTypeValidator(
+          languageName,
+          nodeName,
+          origType,
+          grammarDoc
+        );
+      }
     }
   }
 }
