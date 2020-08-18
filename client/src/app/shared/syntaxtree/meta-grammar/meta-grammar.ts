@@ -14,8 +14,9 @@ import {
   ChildCardinalityDescription,
   NodeVisualContainerDescription,
   Orientation,
-  NodeInterpolateDescription,
+  NodeInterpolatePropertyDescription,
   NodeVisualTypeDescription,
+  NodeInterpolateChildrenDescription,
 } from "../grammar.description";
 import { OccursDescription, OccursString } from "../occurs.description";
 
@@ -27,7 +28,9 @@ export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   };
 }
 
-export function convertInterpolate(attrNode: Node): NodeInterpolateDescription {
+export function convertInterpolate(
+  attrNode: Node
+): NodeInterpolatePropertyDescription {
   return {
     type: "interpolate",
     name: attrNode.properties["name"],
@@ -115,6 +118,17 @@ export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
   return toReturn;
 }
 
+export function convertEach(
+  attrNode: Node
+): NodeInterpolateChildrenDescription {
+  const toReturn: ReturnType<typeof convertEach> = {
+    type: "each",
+    name: attrNode.properties["name"],
+  };
+
+  return toReturn;
+}
+
 export function convertContainer(
   attrNode: Node
 ): NodeVisualContainerDescription {
@@ -150,6 +164,9 @@ export function readAttributes(
       break;
     case "terminal":
       target.push(convertTerminal(attrNode));
+      break;
+    case "each":
+      target.push(convertEach(attrNode));
       break;
     case "children":
       target.push(convertChildren(attrNode));

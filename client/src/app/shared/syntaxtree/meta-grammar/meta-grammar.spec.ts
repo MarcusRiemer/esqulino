@@ -535,7 +535,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
-    it(`Filled visualization in single language`, () => {
+    it(`Interpolate visualization in single language`, () => {
       const g: GrammarDocument = readFromNode({
         language: "MetaGrammar",
         name: "grammar",
@@ -558,9 +558,9 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
                 attributes: [
                   {
                     language: "MetaGrammar",
-                    name: "terminal",
+                    name: "interpolate",
                     properties: {
-                      symbol: "s",
+                      name: "s",
                     },
                   },
                 ],
@@ -577,7 +577,56 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
           l: {
             t: {
               type: "visualize",
-              attributes: [{ type: "terminal", symbol: "s" }],
+              attributes: [{ type: "interpolate", name: "s" }],
+            },
+          },
+        },
+      });
+    });
+
+    it(`each visualization in single language`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "visualizeNode",
+              children: {
+                references: [
+                  {
+                    name: "nodeRefOne",
+                    language: "MetaGrammar",
+                    properties: {
+                      typeName: "t",
+                      languageName: "l",
+                    },
+                  },
+                ],
+                attributes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "each",
+                    properties: {
+                      name: "s",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        types: {
+          l: {
+            t: {
+              type: "visualize",
+              attributes: [{ type: "each", name: "s" }],
             },
           },
         },
