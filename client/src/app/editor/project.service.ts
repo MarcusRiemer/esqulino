@@ -20,7 +20,16 @@ import {
 } from "../shared/project";
 import { ResourceReferencesService } from "../shared/resource-references.service";
 
+import { FullProjectQuery, FullProjectGQL } from "../../generated/graphql";
+
 export { Project, ProjectFullDescription };
+
+export function fromGraphQL(descInQuery: FullProjectQuery) {
+  const descIn = descInQuery.projects.nodes[0];
+  const toReturn: ProjectFullDescription = descIn;
+
+  return toReturn;
+}
 
 /**
  * Wraps access to a single project, which is deemed to be "active"
@@ -46,7 +55,8 @@ export class ProjectService {
   constructor(
     private _http: HttpClient,
     private _server: ServerApiService,
-    private _resourceReferences: ResourceReferencesService
+    private _resourceReferences: ResourceReferencesService,
+    private _fullProject: FullProjectGQL
   ) {
     // Create a single subject once and for all. This instance is not
     // allowed to changed as it is passed on to every subscriber.
@@ -86,8 +96,9 @@ export class ProjectService {
 
     // Build the HTTP-request
     const url = this._server.getProjectUrl(slugOrId);
-    this._httpRequest = this._http.get<ProjectFullDescription>(url).pipe(
+    this._httpRequest = this._fullProject.fetch({ id: slugOrId }).pipe(
       first(),
+      map((graphQlDoc) => fromGraphQL(graphQlDoc.data)),
       map((res) => new Project(res, this._resourceReferences)),
       share() // Ensure that the request is not executed multiple times
     );

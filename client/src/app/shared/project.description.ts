@@ -103,7 +103,7 @@ export interface ProjectDescription extends ProjectListDescription {
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[];
   blockLanguages: BlockLanguageDescription[];
   grammars: GrammarDescription[];
-  sources: ProjectSourceDescription[];
+  projectSources: ProjectSourceDescription[];
 }
 
 /**

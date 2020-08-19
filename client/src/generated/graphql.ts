@@ -563,21 +563,22 @@ export type ProgrammingLanguageEdge = {
 
 export type Project = {
   __typename?: "Project";
-  blockLanguages?: Maybe<Array<BlockLanguage>>;
+  blockLanguages: Array<BlockLanguage>;
   codeResourceCount?: Maybe<Scalars["Int"]>;
-  codeResources?: Maybe<Array<CodeResource>>;
+  codeResources: Array<CodeResource>;
   createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
   defaultDatabase?: Maybe<ProjectDatabase>;
   defaultDatabaseId?: Maybe<Scalars["ID"]>;
   description: Scalars["LangJson"];
-  grammars?: Maybe<Array<Grammar>>;
+  grammars: Array<Grammar>;
   id: Scalars["ID"];
   indexPageId?: Maybe<Scalars["String"]>;
   name: Scalars["LangJson"];
   preview?: Maybe<Scalars["String"]>;
-  projectSources?: Maybe<Array<ProjectSource>>;
-  projectUsesBlockLanguages?: Maybe<Array<ProjectUsesBlockLanguage>>;
+  projectSources: Array<ProjectSource>;
+  projectUsesBlockLanguages: Array<ProjectUsesBlockLanguage>;
   public?: Maybe<Scalars["Boolean"]>;
+  schema: Array<SqlTable>;
   slug?: Maybe<Scalars["String"]>;
   updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
   user?: Maybe<User>;
@@ -834,6 +835,36 @@ export type Role = {
   users?: Maybe<Array<User>>;
 };
 
+export type SqlColumn = {
+  __typename?: "SqlColumn";
+  dfltValue?: Maybe<Scalars["String"]>;
+  index: Scalars["Int"];
+  name: Scalars["String"];
+  notNull: Scalars["Boolean"];
+  primary: Scalars["Boolean"];
+  type: Scalars["String"];
+};
+
+export type SqlForeignKey = {
+  __typename?: "SqlForeignKey";
+  references: Array<SqlForeignKeyReference>;
+};
+
+export type SqlForeignKeyReference = {
+  __typename?: "SqlForeignKeyReference";
+  fromColumn: Scalars["String"];
+  toColumn: Scalars["String"];
+  toTable: Scalars["String"];
+};
+
+export type SqlTable = {
+  __typename?: "SqlTable";
+  columns: Array<SqlColumn>;
+  foreignKeys: Array<SqlForeignKey>;
+  name: Scalars["String"];
+  systemTable: Scalars["Boolean"];
+};
+
 export enum TextLengthOptionsEnum {
   Short = "short",
   Long = "long",
@@ -1020,14 +1051,12 @@ export type FrontpageListProjectsQuery = { __typename?: "Query" } & {
             | "updatedAt"
             | "userId"
           > & {
-              blockLanguages?: Maybe<
-                Array<
-                  { __typename?: "BlockLanguage" } & {
-                    defaultProgrammingLanguage: {
-                      __typename?: "ProgrammingLanguage";
-                    } & Pick<ProgrammingLanguage, "id" | "name">;
-                  }
-                >
+              blockLanguages: Array<
+                { __typename?: "BlockLanguage" } & {
+                  defaultProgrammingLanguage: {
+                    __typename?: "ProgrammingLanguage";
+                  } & Pick<ProgrammingLanguage, "id" | "name">;
+                }
               >;
             }
         >
@@ -1384,45 +1413,77 @@ export type FullProjectQuery = { __typename?: "Query" } & {
             Project,
             "id" | "slug" | "name" | "description" | "public" | "indexPageId"
           > & {
-              codeResources?: Maybe<
-                Array<
-                  { __typename?: "CodeResource" } & Pick<
-                    CodeResource,
-                    | "id"
-                    | "name"
-                    | "ast"
-                    | "blockLanguageId"
-                    | "programmingLanguageId"
-                  >
+              codeResources: Array<
+                { __typename?: "CodeResource" } & Pick<
+                  CodeResource,
+                  | "id"
+                  | "name"
+                  | "ast"
+                  | "blockLanguageId"
+                  | "programmingLanguageId"
                 >
               >;
-              blockLanguages?: Maybe<
-                Array<
-                  { __typename?: "BlockLanguage" } & Pick<
-                    BlockLanguage,
-                    | "id"
-                    | "name"
-                    | "model"
-                    | "grammarId"
-                    | "defaultProgrammingLanguageId"
-                  >
+              blockLanguages: Array<
+                { __typename?: "BlockLanguage" } & Pick<
+                  BlockLanguage,
+                  | "id"
+                  | "name"
+                  | "model"
+                  | "grammarId"
+                  | "defaultProgrammingLanguageId"
                 >
               >;
-              projectUsesBlockLanguages?: Maybe<
-                Array<
-                  { __typename?: "ProjectUsesBlockLanguage" } & Pick<
-                    ProjectUsesBlockLanguage,
-                    "blockLanguageId"
-                  >
+              grammars: Array<
+                { __typename?: "Grammar" } & Pick<
+                  Grammar,
+                  | "id"
+                  | "name"
+                  | "root"
+                  | "types"
+                  | "foreignTypes"
+                  | "includes"
+                  | "visualizes"
                 >
               >;
-              projectSources?: Maybe<
-                Array<
-                  { __typename?: "ProjectSource" } & Pick<
-                    ProjectSource,
-                    "id" | "display" | "title" | "url"
-                  >
+              projectUsesBlockLanguages: Array<
+                { __typename?: "ProjectUsesBlockLanguage" } & Pick<
+                  ProjectUsesBlockLanguage,
+                  "id" | "blockLanguageId"
                 >
+              >;
+              projectSources: Array<
+                { __typename?: "ProjectSource" } & Pick<
+                  ProjectSource,
+                  "id" | "display" | "title" | "url"
+                >
+              >;
+              schema: Array<
+                { __typename?: "SqlTable" } & Pick<
+                  SqlTable,
+                  "name" | "systemTable"
+                > & {
+                    columns: Array<
+                      { __typename?: "SqlColumn" } & Pick<
+                        SqlColumn,
+                        | "index"
+                        | "name"
+                        | "type"
+                        | "notNull"
+                        | "dfltValue"
+                        | "primary"
+                      >
+                    >;
+                    foreignKeys: Array<
+                      { __typename?: "SqlForeignKey" } & {
+                        references: Array<
+                          { __typename?: "SqlForeignKeyReference" } & Pick<
+                            SqlForeignKeyReference,
+                            "fromColumn" | "toTable" | "toColumn"
+                          >
+                        >;
+                      }
+                    >;
+                  }
               >;
             }
         >
@@ -2238,7 +2299,17 @@ export const FullProjectDocument = gql`
           grammarId
           defaultProgrammingLanguageId
         }
+        grammars {
+          id
+          name
+          root
+          types
+          foreignTypes
+          includes
+          visualizes
+        }
         projectUsesBlockLanguages {
+          id
           blockLanguageId
         }
         projectSources {
@@ -2246,6 +2317,25 @@ export const FullProjectDocument = gql`
           display
           title
           url
+        }
+        schema {
+          name
+          columns {
+            index
+            name
+            type
+            notNull
+            dfltValue
+            primary
+          }
+          foreignKeys {
+            references {
+              fromColumn
+              toTable
+              toColumn
+            }
+          }
+          systemTable
         }
       }
     }

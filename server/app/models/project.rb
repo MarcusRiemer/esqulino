@@ -125,6 +125,14 @@ class Project < ApplicationRecord
     to_return
   end
 
+  def schema
+    if default_database
+      default_database.schema
+    else
+      []
+    end
+  end
+
   # Hands out "settings data" that concerns the project itself but no complicated
   # things like resources or schemas.
   def to_project_api_response

@@ -14,12 +14,14 @@ module Types
     field :user, Types::UserType,null:true
     field :userId, ID,null:true
 
-    field :codeResources, [Types::CodeResourceType], null:true
+    field :codeResources, [Types::CodeResourceType], null:false
     field :codeResourceCount, Integer, null:true
-    field :projectSources, [Types::ProjectSourceType], null:true
-    field :blockLanguages, [Types::BlockLanguageType], null:true
-    field :projectUsesBlockLanguages, [Types::ProjectUsesBlockLanguageType], null:true
-    field :grammars, [Types::GrammarType],null:true
+    field :projectSources, [Types::ProjectSourceType], null:false
+    field :blockLanguages, [Types::BlockLanguageType], null:false
+    field :projectUsesBlockLanguages, [Types::ProjectUsesBlockLanguageType], null:false
+    field :grammars, [Types::GrammarType], null: false
+
+    field :schema, [Types::SqlTableType], null: false
 
     field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
     field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true

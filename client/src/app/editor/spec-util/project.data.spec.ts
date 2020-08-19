@@ -18,7 +18,7 @@ const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   blockLanguages: [],
   grammars: [],
   availableDatabases: {},
-  sources: [],
+  projectSources: [],
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: { en: "Project" },
   description: { en: "Default Empty Project" },

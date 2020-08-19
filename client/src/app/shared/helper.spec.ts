@@ -24,7 +24,7 @@ export function emptyProject(
     grammars: [],
     codeResources: [],
     schema: [],
-    sources: [],
+    projectSources: [],
   };
 
   return Object.assign(defaultDescription, override);

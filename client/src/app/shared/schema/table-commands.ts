@@ -415,9 +415,9 @@ export class AddForeignKey extends TableCommand {
       this._newForeignKey.references.length
     )) {
       this._toInsert.references.push({
-        from_column: ref.from_column,
-        to_column: ref.to_column,
-        to_table: ref.to_table,
+        fromColumn: ref.fromColumn,
+        toColumn: ref.toColumn,
+        toTable: ref.toTable,
       });
     }
     table.foreign_keys.push(this._toInsert);
@@ -431,9 +431,9 @@ export class AddForeignKey extends TableCommand {
       this._newForeignKey.references.length
     )) {
       this._toInsert.references.push({
-        from_column: ref.from_column,
-        to_column: ref.to_column,
-        to_table: ref.to_table,
+        fromColumn: ref.fromColumn,
+        toColumn: ref.toColumn,
+        toTable: ref.toTable,
       });
     }
     this._toInsert = table.removeForeignKey(this._toInsert);
@@ -450,7 +450,7 @@ export class AddForeignKey extends TableCommand {
   }
 
   get commandText(): String {
-    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._newForeignKey.references[0].to_table} mit Spalte ${this._newForeignKey.references[0].to_column} erzeugt`;
+    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._newForeignKey.references[0].toTable} mit Spalte ${this._newForeignKey.references[0].toColumn} erzeugt`;
   }
 }
 
@@ -474,9 +474,9 @@ export class RemoveForeignKey extends TableCommand {
       this._oldForeignKey.references.length
     )) {
       this._toRemove.references.push({
-        from_column: ref.from_column,
-        to_column: ref.to_column,
-        to_table: ref.to_table,
+        fromColumn: ref.fromColumn,
+        toColumn: ref.toColumn,
+        toTable: ref.toTable,
       });
     }
     this._oldForeignKey = table.removeForeignKey(this._toRemove);
@@ -490,9 +490,9 @@ export class RemoveForeignKey extends TableCommand {
       this._oldForeignKey.references.length
     )) {
       this._toRemove.references.push({
-        from_column: ref.from_column,
-        to_column: ref.to_column,
-        to_table: ref.to_table,
+        fromColumn: ref.fromColumn,
+        toColumn: ref.toColumn,
+        toTable: ref.toTable,
       });
     }
     table.foreign_keys.push(this._toRemove);
@@ -509,7 +509,7 @@ export class RemoveForeignKey extends TableCommand {
   }
 
   get commandText(): String {
-    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._oldForeignKey.references[0].to_table} mit Spalte ${this._oldForeignKey.references[0].to_column} entfernt`;
+    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._oldForeignKey.references[0].toTable} mit Spalte ${this._oldForeignKey.references[0].toColumn} entfernt`;
   }
 }
 
