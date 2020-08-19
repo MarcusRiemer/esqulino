@@ -115,8 +115,8 @@ RSpec.describe GrammarsController, type: :request do
 
       expect(response).to have_http_status(200)
       grammar_data = JSON.parse(response.body)['data']['singleGrammar']
-      byebug
-      expect(grammar_data.except("blockLanguages","generatedFromId")).to validate_against "GrammarDescription"
+
+      expect(grammar_data.except("blockLanguages","generatedFromId","root")).to validate_against "GrammarDescription"
     end
 
     it 'finds a single grammar by slug' do
@@ -124,8 +124,10 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"AdminSingleGrammar",variables:{id: g.slug})
 
       expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)['errors']).to eq []
       grammar_data = JSON.parse(response.body)['data']['singleGrammar']
-      expect(grammar_data.except("blockLanguages","generatedFromId")).to validate_against "GrammarDescription"
+      # root can't be null in GrammarDocument, but in database
+      expect(grammar_data.except("blockLanguages","generatedFromId","root")).to validate_against "GrammarDescription"
     end
 
     it 'responds with 200 but not empty errors for non existing grammars' do

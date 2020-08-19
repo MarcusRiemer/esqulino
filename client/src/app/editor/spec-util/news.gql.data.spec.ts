@@ -1,7 +1,5 @@
 import { generateUUIDv4 } from "../../shared/util-browser";
-import {
-  FrontpageListNewsQuery,
-} from "../../../generated/graphql";
+import { FrontpageListNewsQuery } from "../../../generated/graphql";
 
 export type NewsGQLResponse = { data: FrontpageListNewsQuery };
 type FrontpageListNewsNode = FrontpageListNewsQuery["frontpageListNews"]["nodes"][0];

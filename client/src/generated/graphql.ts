@@ -195,7 +195,7 @@ export type CreateGrammarInput = {
   slug?: Maybe<Scalars["String"]>;
   types: Scalars["JSON"];
   foreignTypes: Scalars["JSON"];
-  root: Scalars["QualifiedTypeName"];
+  root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId: Scalars["ID"];
   generatedFromId?: Maybe<Scalars["ID"]>;
   /** A unique identifier for the client performing the mutation. */
@@ -312,15 +312,15 @@ export type Grammar = {
   generatedFrom?: Maybe<CodeResource>;
   generatedFromId?: Maybe<Scalars["ID"]>;
   id: Scalars["ID"];
-  includedGrammarIds: Array<Scalars["ID"]>;
+  includes?: Maybe<Array<Scalars["ID"]>>;
   name: Scalars["String"];
   programmingLanguage: ProgrammingLanguage;
   programmingLanguageId: Scalars["ID"];
-  referencedGrammarIds: Array<Scalars["ID"]>;
-  root: Scalars["QualifiedTypeName"];
+  root?: Maybe<Scalars["QualifiedTypeName"]>;
   slug?: Maybe<Scalars["String"]>;
   types: Scalars["JSON"];
   updatedAt: Scalars["ISO8601DateTime"];
+  visualizes?: Maybe<Array<Scalars["ID"]>>;
 };
 
 export type GrammarBlockLanguagesArgs = {
@@ -1158,7 +1158,8 @@ export type AdminSingleGrammarQuery = { __typename?: "Query" } & {
     | "foreignTypes"
     | "root"
     | "types"
-    | "includedGrammarIds"
+    | "includes"
+    | "visualizes"
   > & {
       blockLanguages?: Maybe<
         { __typename?: "BlockLanguageConnection" } & {
@@ -1220,7 +1221,7 @@ export type CreateGrammarMutationVariables = {
   slug?: Maybe<Scalars["String"]>;
   types: Scalars["JSON"];
   foreignTypes: Scalars["JSON"];
-  root: Scalars["QualifiedTypeName"];
+  root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId: Scalars["ID"];
 };
 
@@ -1241,7 +1242,8 @@ export type CreateGrammarMutation = { __typename?: "Mutation" } & {
             | "foreignTypes"
             | "root"
             | "types"
-            | "includedGrammarIds"
+            | "visualizes"
+            | "includes"
           > & {
               blockLanguages?: Maybe<
                 { __typename?: "BlockLanguageConnection" } & {
@@ -1375,16 +1377,6 @@ export type GrammarDescriptionItemQuery = { __typename?: "Query" } & {
   >;
 };
 
-export type ProjectsQueryVariables = {};
-
-export type ProjectsQuery = { __typename?: "Query" } & {
-  projects: { __typename?: "ProjectConnection" } & {
-    nodes?: Maybe<
-      Array<Maybe<{ __typename?: "Project" } & Pick<Project, "id" | "name">>>
-    >;
-  };
-};
-
 export type RegenerateForeignTypesMutationVariables = {
   id: Scalars["ID"];
 };
@@ -1471,7 +1463,8 @@ export type UpdateGrammarMutation = { __typename?: "Mutation" } & {
             | "foreignTypes"
             | "root"
             | "types"
-            | "includedGrammarIds"
+            | "includes"
+            | "visualizes"
           > & {
               blockLanguages?: Maybe<
                 { __typename?: "BlockLanguageConnection" } & {
@@ -1848,7 +1841,8 @@ export const AdminSingleGrammarDocument = gql`
       foreignTypes
       root
       types
-      includedGrammarIds
+      includes
+      visualizes
       blockLanguages {
         nodes {
           id
@@ -1946,7 +1940,7 @@ export const CreateGrammarDocument = gql`
     $slug: String
     $types: JSON!
     $foreignTypes: JSON!
-    $root: QualifiedTypeName!
+    $root: QualifiedTypeName
     $programmingLanguageId: ID!
   ) {
     createGrammar(
@@ -1968,7 +1962,8 @@ export const CreateGrammarDocument = gql`
         foreignTypes
         root
         types
-        includedGrammarIds
+        visualizes
+        includes
         blockLanguages {
           nodes {
             id
@@ -2173,29 +2168,6 @@ export class GrammarDescriptionItemGQL extends Apollo.Query<
     super(apollo);
   }
 }
-export const ProjectsDocument = gql`
-  query Projects {
-    projects {
-      nodes {
-        id
-        name
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class ProjectsGQL extends Apollo.Query<
-  ProjectsQuery,
-  ProjectsQueryVariables
-> {
-  document = ProjectsDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const RegenerateForeignTypesDocument = gql`
   mutation RegenerateForeignTypes($id: ID!) {
     regenerateForeignTypes(input: { id: $id }) {
@@ -2341,7 +2313,8 @@ export const UpdateGrammarDocument = gql`
         foreignTypes
         root
         types
-        includedGrammarIds
+        includes
+        visualizes
         blockLanguages {
           nodes {
             id

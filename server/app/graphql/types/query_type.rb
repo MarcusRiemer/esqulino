@@ -142,11 +142,13 @@ module Types
 
     def single_grammar(id:)
       begin
-        if BlattwerkzeugUtil::string_is_uuid? id
-          Grammar.find(id)
-        else
-          Grammar.find_by! slug: id
-        end
+        a = if BlattwerkzeugUtil::string_is_uuid? id
+              Grammar.find(id)
+            else
+              Grammar.find_by! slug: id
+            end
+        a.root = 1
+        return a
       rescue ActiveRecord::RecordNotFound
         raise GraphQL::ExecutionError.new("Grammar with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
       end

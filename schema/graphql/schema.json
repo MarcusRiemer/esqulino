@@ -1593,13 +1593,9 @@
               "name": "root",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "QualifiedTypeName",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "QualifiedTypeName",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -2542,25 +2538,21 @@
               "deprecationReason": null
             },
             {
-              "name": "includedGrammarIds",
+              "name": "includes",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
+                  "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
                   }
                 }
               },
@@ -2622,45 +2614,15 @@
               "deprecationReason": null
             },
             {
-              "name": "referencedGrammarIds",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "root",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "QualifiedTypeName",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "QualifiedTypeName",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2710,6 +2672,28 @@
                   "kind": "SCALAR",
                   "name": "ISO8601DateTime",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "visualizes",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
                 }
               },
               "isDeprecated": false,

@@ -22,7 +22,7 @@ const ADMIN_LIST_GRAMMAR: AdminListGrammarNode = {
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
   id: "28066939-7d53-40de-a89b-95bf37c982be",
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
-  name: "Grammar"
+  name: "Grammar",
 };
 
 const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {

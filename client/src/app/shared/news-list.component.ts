@@ -16,5 +16,7 @@ export class NewsListComponent {
 
   readonly newsList$ = this._newsGQL
     .watch()
-    .valueChanges.pipe(map((response) => response.data.frontpageListNews.nodes));
+    .valueChanges.pipe(
+      map((response) => response.data.frontpageListNews.nodes)
+    );
 }
