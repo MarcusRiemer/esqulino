@@ -160,7 +160,7 @@
       class="list-group-item"
     >
       <h5 class="card-title">
-        {{ (resolveBlockLanguageName(used.blockLanguageId) | async)?.name }}
+        {{ resolveBlockLanguageName(used.blockLanguageId)?.name }}
       </h5>
       <button
         *ngIf="used.id"
