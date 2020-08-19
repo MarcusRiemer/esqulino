@@ -110,6 +110,7 @@ export type CodeResource = {
   __typename?: "CodeResource";
   ast?: Maybe<Scalars["NodeDescription"]>;
   blockLanguage: BlockLanguage;
+  blockLanguageId: Scalars["ID"];
   compiled?: Maybe<Scalars["String"]>;
   createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
   grammars?: Maybe<Grammar>;
@@ -567,6 +568,7 @@ export type Project = {
   codeResources?: Maybe<Array<CodeResource>>;
   createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
   defaultDatabase?: Maybe<ProjectDatabase>;
+  defaultDatabaseId?: Maybe<Scalars["ID"]>;
   description: Scalars["LangJson"];
   grammars?: Maybe<Array<Grammar>>;
   id: Scalars["ID"];
@@ -574,6 +576,7 @@ export type Project = {
   name: Scalars["LangJson"];
   preview?: Maybe<Scalars["String"]>;
   projectSources?: Maybe<Array<ProjectSource>>;
+  projectUsesBlockLanguages?: Maybe<Array<ProjectUsesBlockLanguage>>;
   public?: Maybe<Scalars["Boolean"]>;
   slug?: Maybe<Scalars["String"]>;
   updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
@@ -687,6 +690,15 @@ export type ProjectSourceEdge = {
   cursor: Scalars["String"];
   /** The item at the end of the edge. */
   node?: Maybe<ProjectSource>;
+};
+
+export type ProjectUsesBlockLanguage = {
+  __typename?: "ProjectUsesBlockLanguage";
+  blockLanguage: BlockLanguage;
+  blockLanguageId: Scalars["ID"];
+  id: Scalars["ID"];
+  project: Project;
+  projectId: Scalars["ID"];
 };
 
 export type Query = {

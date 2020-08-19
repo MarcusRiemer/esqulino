@@ -1,0 +1,35 @@
+query FullProject($id: ID!) {
+  projects(input: {filter: {id: $id}}) {
+    nodes {
+      id
+      slug
+      name
+      description
+      public
+      indexPageId
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
+      }
+      blockLanguages {
+        id
+        name
+        model
+        grammarId
+        defaultProgrammingLanguageId
+      }
+      projectUsesBlockLanguages {
+        blockLanguageId
+      }
+      projectSources {
+        id
+        display
+        title
+        url
+      }
+    }
+  }
+}

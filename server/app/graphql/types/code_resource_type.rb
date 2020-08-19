@@ -5,6 +5,7 @@ module Types
     field :ast, Types::Scalar::NodeDescription, null:true
     field :project, Types::ProjectType,null:false
     field :blockLanguage, Types::BlockLanguageType,null:false
+    field :blockLanguageId, ID,null:false
     field :programmingLanguage, Types::ProgrammingLanguageType,null:false
     field :programmingLanguageId, ID,null:false
     field :compiled, String, null:true

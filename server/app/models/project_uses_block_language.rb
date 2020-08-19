@@ -1,4 +1,5 @@
-# Links projects and block languages
+# Links projects and block languages, possibly contains configuration
+# parameters for the used block language.
 class ProjectUsesBlockLanguage < ApplicationRecord
   belongs_to :project
   belongs_to :block_language

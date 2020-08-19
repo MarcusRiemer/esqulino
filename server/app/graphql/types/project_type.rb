@@ -7,13 +7,18 @@ module Types
     field :preview, String, null:true
     field :indexPageId, String, null:true
     field :slug, String, null:true
+
     field :defaultDatabase, Types::ProjectDatabaseType,null:true
+    field :defaultDatabaseId, ID,null:true
+
     field :user, Types::UserType,null:true
     field :userId, ID,null:true
+
     field :codeResources, [Types::CodeResourceType], null:true
     field :codeResourceCount, Integer, null:true
     field :projectSources, [Types::ProjectSourceType], null:true
     field :blockLanguages, [Types::BlockLanguageType], null:true
+    field :projectUsesBlockLanguages, [Types::ProjectUsesBlockLanguageType], null:true
     field :grammars, [Types::GrammarType],null:true
 
     field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
