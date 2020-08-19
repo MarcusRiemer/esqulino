@@ -12,19 +12,19 @@ class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
 
   def resolve(**args)
     begin
-    grammar = Grammar.find(args[:id])
-    grammar.assign_attributes args
+      grammar = Grammar.find(args[:id])
+      grammar.assign_attributes args
 
-    # Possibly update the code resource that this grammar is based on
-    if args.key? "generated_from_id"
-      grammar.generated_from_id = params.fetch("generated_from_id", nil)
-    end
+      # Possibly update the code resource that this grammar is based on
+      if args.key? "generated_from_id"
+        grammar.generated_from_id = params.fetch("generated_from_id", nil)
+      end
 
-    # Possibly update the root node
-    if args.key? "root"
-      grammar.root = params.fetch("root", nil)
-    end
-    save_grammar(grammar)
+      # Possibly update the root node
+      if args.key? "root"
+        grammar.root = params.fetch("root", nil)
+      end
+      save_grammar(grammar)
     rescue ActiveRecord::RecordNotFound
       {
           news: nil,

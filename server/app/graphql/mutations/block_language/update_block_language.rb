@@ -13,7 +13,6 @@ class Mutations::BlockLanguage::UpdateBlockLanguage < Mutations::BlockLanguage::
 
   def resolve(**args)
     begin
-      byebug
       params = ActionController::Parameters.new(args)
       needle = id_params(params)[:id].nil? ? id_params(params)[:slug] : id_params(params)[:id]
       block_lang = if BlattwerkzeugUtil::string_is_uuid? needle then

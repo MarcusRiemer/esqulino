@@ -4,7 +4,7 @@ class Mutations::Grammar::CreateGrammar < Mutations::Grammar::Grammar
   argument :slug, String, required: false
   argument :types, GraphQL::Types::JSON, required:true
   argument :foreign_types, GraphQL::Types::JSON, required:true
-  argument :root, Types::Scalar::QualifiedTypeName, required:true
+  argument :root, Types::Scalar::QualifiedTypeName, required:false
   argument :programming_language_id,  ID, required: true
   argument :generated_from_id, ID, required: false
 
