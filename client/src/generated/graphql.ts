@@ -195,7 +195,7 @@ export type CreateGrammarInput = {
   name: Scalars["String"];
   slug?: Maybe<Scalars["String"]>;
   types: Scalars["JSON"];
-  foreignTypes: Scalars["JSON"];
+  foreignTypes?: Maybe<Scalars["JSON"]>;
   root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId: Scalars["ID"];
   generatedFromId?: Maybe<Scalars["ID"]>;
@@ -1232,7 +1232,7 @@ export type CreateGrammarMutationVariables = {
   name: Scalars["String"];
   slug?: Maybe<Scalars["String"]>;
   types: Scalars["JSON"];
-  foreignTypes: Scalars["JSON"];
+  foreignTypes?: Maybe<Scalars["JSON"]>;
   root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId: Scalars["ID"];
 };
@@ -1371,6 +1371,66 @@ export type FrontpageSingleNewsQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type FullProjectQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type FullProjectQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "Project" } & Pick<
+            Project,
+            "id" | "slug" | "name" | "description" | "public" | "indexPageId"
+          > & {
+              codeResources?: Maybe<
+                Array<
+                  { __typename?: "CodeResource" } & Pick<
+                    CodeResource,
+                    | "id"
+                    | "name"
+                    | "ast"
+                    | "blockLanguageId"
+                    | "programmingLanguageId"
+                  >
+                >
+              >;
+              blockLanguages?: Maybe<
+                Array<
+                  { __typename?: "BlockLanguage" } & Pick<
+                    BlockLanguage,
+                    | "id"
+                    | "name"
+                    | "model"
+                    | "grammarId"
+                    | "defaultProgrammingLanguageId"
+                  >
+                >
+              >;
+              projectUsesBlockLanguages?: Maybe<
+                Array<
+                  { __typename?: "ProjectUsesBlockLanguage" } & Pick<
+                    ProjectUsesBlockLanguage,
+                    "blockLanguageId"
+                  >
+                >
+              >;
+              projectSources?: Maybe<
+                Array<
+                  { __typename?: "ProjectSource" } & Pick<
+                    ProjectSource,
+                    "id" | "display" | "title" | "url"
+                  >
+                >
+              >;
+            }
+        >
+      >
+    >;
+  };
+};
+
 export type GrammarDescriptionItemQueryVariables = {
   id: Scalars["ID"];
 };
@@ -1426,14 +1486,15 @@ export type SelectionListGrammarsQuery = { __typename?: "Query" } & {
 };
 
 export type UpdateBlockLanguageMutationVariables = {
-  name: Scalars["String"];
+  id?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
   slug?: Maybe<Scalars["String"]>;
   defaultProgrammingLanguageId?: Maybe<Scalars["ID"]>;
   grammarId?: Maybe<Scalars["ID"]>;
-  sidebars: Scalars["JSON"];
-  editorBlocks: Scalars["JSON"];
+  sidebars?: Maybe<Scalars["JSON"]>;
+  editorBlocks?: Maybe<Scalars["JSON"]>;
   rootCssClasses?: Maybe<Scalars["JSON"]>;
-  editorComponents: Scalars["JSON"];
+  editorComponents?: Maybe<Scalars["JSON"]>;
   localGeneratorInstructions?: Maybe<Scalars["JSON"]>;
 };
 
@@ -1951,7 +2012,7 @@ export const CreateGrammarDocument = gql`
     $name: String!
     $slug: String
     $types: JSON!
-    $foreignTypes: JSON!
+    $foreignTypes: JSON
     $root: QualifiedTypeName
     $programmingLanguageId: ID!
   ) {
@@ -2153,6 +2214,56 @@ export class FrontpageSingleNewsGQL extends Apollo.Query<
     super(apollo);
   }
 }
+export const FullProjectDocument = gql`
+  query FullProject($id: ID!) {
+    projects(input: { filter: { id: $id } }) {
+      nodes {
+        id
+        slug
+        name
+        description
+        public
+        indexPageId
+        codeResources {
+          id
+          name
+          ast
+          blockLanguageId
+          programmingLanguageId
+        }
+        blockLanguages {
+          id
+          name
+          model
+          grammarId
+          defaultProgrammingLanguageId
+        }
+        projectUsesBlockLanguages {
+          blockLanguageId
+        }
+        projectSources {
+          id
+          display
+          title
+          url
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FullProjectGQL extends Apollo.Query<
+  FullProjectQuery,
+  FullProjectQueryVariables
+> {
+  document = FullProjectDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GrammarDescriptionItemDocument = gql`
   query GrammarDescriptionItem($id: ID!) {
     singleGrammar(id: $id) {
@@ -2250,18 +2361,20 @@ export class SelectionListGrammarsGQL extends Apollo.Query<
 }
 export const UpdateBlockLanguageDocument = gql`
   mutation UpdateBlockLanguage(
-    $name: String!
+    $id: ID
+    $name: String
     $slug: String
     $defaultProgrammingLanguageId: ID
     $grammarId: ID
-    $sidebars: JSON!
-    $editorBlocks: JSON!
+    $sidebars: JSON
+    $editorBlocks: JSON
     $rootCssClasses: JSON
-    $editorComponents: JSON!
+    $editorComponents: JSON
     $localGeneratorInstructions: JSON
   ) {
     updateBlockLanguage(
       input: {
+        id: $id
         name: $name
         slug: $slug
         defaultProgrammingLanguageId: $defaultProgrammingLanguageId
