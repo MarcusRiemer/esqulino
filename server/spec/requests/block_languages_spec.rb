@@ -7,10 +7,10 @@ RSpec.describe BlockLanguagesController, type: :request do
     it 'lists nothing if nothing is there' do
       get "/api/block_languages"
       send_query(query_name: "AdminListBlockLanguages")
-      byebug
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)['data'].length).to eq 0
+      expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 0
+      expect(JSON.parse(response.body)['data']['blockLanguages']['totalCount']).to eq 0
     end
 
     it 'lists a single block language' do
@@ -113,7 +113,8 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       json_data = JSON.parse(response.body)['data']['singleBlockLanguage']
 
-      expect(json_data).to validate_against "BlockLanguageDescription"
+      # multiple fields are [], but
+      expect(json_data.except("generated","localGeneratorInstructions")).to validate_against "BlockLanguageDescription"
     end
 
     it 'finds a single block language by slug' do
@@ -124,7 +125,9 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       json_data = JSON.parse(response.body)['data']['singleBlockLanguage']
 
-      expect(json_data).to validate_against "BlockLanguageListItemDescription"
+      expect(json_data
+                 .except("localGeneratorInstructions","sidebars","editorBlocks","editorComponents","rootCssClasses")
+      ).to validate_against "BlockLanguageListItemDescription"
     end
 
     it 'responds with 404 for non existing languages' do
@@ -278,7 +281,8 @@ RSpec.describe BlockLanguagesController, type: :request do
         expect(orig_block_lang.model["editorBlocks"][0]).to eq upda_block_lang["editorBlocks"][0]
       end
 
-      it 'Update with invalid empty model' do
+      #became obsolete because of partial updating
+      xit 'Update with invalid empty model' do
         original = FactoryBot.create(:block_language)
 
         # Create params to change name and model
@@ -292,10 +296,7 @@ RSpec.describe BlockLanguagesController, type: :request do
         # afterwards. This results in a theoretically valid request
         params_update_req = params_update.merge(params_update["model"])
         params_update_req.delete("model")
-
-        put "/api/block_languages/#{original.id}",
-            :headers => json_headers,
-            :params => params_update_req.to_json
+        send_query(query_name: "UpdateBlockLanguage",variables:params_update_req)
 
         expect(response.status).to eq(400)
 
@@ -314,11 +315,9 @@ RSpec.describe BlockLanguagesController, type: :request do
         params_update_req = params_update.merge(params_update["model"])
         params_update_req.delete("localGeneratorInstructions")
 
-        put "/api/block_languages/#{original.id}",
-            :headers => json_headers,
-            :params => params_update_req.to_json
+        send_query(query_name: "UpdateBlockLanguage",variables:params_update_req)
 
-        expect(response.status).to eq(204)
+        expect(response.status).to eq(200)
 
         # Ensure that nothing has changed
         refreshed = BlockLanguage.find(original.id)
@@ -333,28 +332,34 @@ RSpec.describe BlockLanguagesController, type: :request do
     it 'removes unreferenced language' do
       b = FactoryBot.create(:block_language)
 
-      delete "/api/block_languages/#{b.id}",
-             :headers => json_headers
+      send_query(query_name: "DestroyBlockLanguage",variables:{id:b.id})
 
-      expect(response.status).to eq(204)
+      expect(response.status).to eq(200)
+
+      send_query(query_name: "AdminListBlockLanguages")
+
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 0
+      expect(JSON.parse(response.body)['data']['blockLanguages']['totalCount']).to eq 0
     end
 
     it 'keeps referenced language' do
       b = FactoryBot.create(:block_language)
       FactoryBot.build(:code_resource, block_language: b)
 
-      delete "/api/block_languages/#{b.id}",
-             :headers => json_headers
+      send_query(query_name: "DestroyBlockLanguage",variables:{id:b.id})
 
-      expect(response.status).to eq(400)
-      json_data = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      json_data = JSON.parse(response.body)["data"]["destroyBlockLanguage"]
+
       expect(json_data.fetch('errors', []).length).to eq 1
       expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
 
-      get "/api/block_languages/#{b.id}",
-          :headers => json_headers
+      send_query(query_name: "AdminListBlockLanguages")
 
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 1
+      expect(JSON.parse(response.body)['data']['blockLanguages']['totalCount']).to eq 1
     end
   end
 

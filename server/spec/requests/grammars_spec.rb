@@ -124,7 +124,8 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"AdminSingleGrammar",variables:{id: g.slug})
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)['errors']).to eq []
+
+      expect(JSON.parse(response.body).fetch('errors',[])).to eq []
       grammar_data = JSON.parse(response.body)['data']['singleGrammar']
       # root can't be null in GrammarDocument, but in database
       expect(grammar_data.except("blockLanguages","generatedFromId","root")).to validate_against "GrammarDescription"
@@ -145,7 +146,8 @@ RSpec.describe GrammarsController, type: :request do
       expect(response).to have_http_status(200)
       json_data = JSON.parse(response.body)["data"]["singleGrammar"]
 
-      expect(json_data.except("blockLanguages")).to validate_against "GrammarDescription"
+      # root can't be null in GrammarDocument, but in database
+      expect(json_data.except("blockLanguages","root")).to validate_against "GrammarDescription"
       expect(json_data["generatedFromId"]).to eq meta_code_resource.id
     end
   end
@@ -173,6 +175,7 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"CreateGrammar",variables:params)
 
       expect(response.media_type).to eq "application/json"
+
       json_data = JSON.parse(response.body)["data"]["createGrammar"]
       expect(json_data.fetch('errors', [])).to eq []
 
