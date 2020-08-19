@@ -1,14 +1,16 @@
 mutation UpdateBlockLanguage(
-    $name:String!,
+    $id:ID,
+    $name:String,
     $slug:String,
     $defaultProgrammingLanguageId:ID,
-    $grammarId:ID,$sidebars:JSON!,
-    $editorBlocks:JSON!,
+    $grammarId:ID,$sidebars:JSON,
+    $editorBlocks:JSON,
     $rootCssClasses:JSON,
-    $editorComponents:JSON!,
+    $editorComponents:JSON,
     $localGeneratorInstructions:JSON
 ){
     updateBlockLanguage(input:{
+        id:$id,
         name:$name,
         slug:$slug,
         defaultProgrammingLanguageId:$defaultProgrammingLanguageId,

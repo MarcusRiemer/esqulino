@@ -2,7 +2,7 @@ mutation CreateGrammar(
   $name: String!,
   $slug: String,
   $types: JSON!,
-  $foreignTypes: JSON!,
+  $foreignTypes: JSON,
   $root: QualifiedTypeName,
   $programmingLanguageId: ID!
 ) {
