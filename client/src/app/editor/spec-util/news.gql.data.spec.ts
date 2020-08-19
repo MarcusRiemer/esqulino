@@ -1,12 +1,10 @@
 import { generateUUIDv4 } from "../../shared/util-browser";
 import {
-  AdminListProjectsQuery,
   FrontpageListNewsQuery,
-  Project,
 } from "../../../generated/graphql";
 
 export type NewsGQLResponse = { data: FrontpageListNewsQuery };
-type FrontpageListNewsNode = FrontpageListNewsQuery["news"]["nodes"][0];
+type FrontpageListNewsNode = FrontpageListNewsQuery["frontpageListNews"]["nodes"][0];
 
 const FRONTPAGE_LIST_NEWS: FrontpageListNewsNode = {
   id: generateUUIDv4(),
@@ -22,7 +20,7 @@ const FRONTPAGE_LIST_NEWS: FrontpageListNewsNode = {
 const wrapNewsData = (data: FrontpageListNewsNode[]): NewsGQLResponse => {
   return {
     data: {
-      news: {
+      frontpageListNews: {
         nodes: data,
       },
     },

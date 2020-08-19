@@ -6,3 +6,12 @@ query AdminMetaCodeResources($programmingLanguageId: ID!) {
         }
     }
 }
+
+query CodeResourcesGallery($id: ID!) {
+    codeResources {
+        nodes {
+            id
+            name
+        }
+    }
+}

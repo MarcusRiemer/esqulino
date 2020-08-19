@@ -13,7 +13,6 @@ module Resolvers
         #       scope = scope.left_joins(table).select(' grammars.id AS grammar_id').group('block_languages.id, grammars.id')
         #
         #end
-
       unless (requested_columns(context) & ["grammar_id"]).empty?
         # grammar_name will be used for field resolving in block_language_type.rb
         # Used to solve n+1 query problem

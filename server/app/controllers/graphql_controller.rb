@@ -10,6 +10,7 @@ class GraphqlController < ApplicationController
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
+
     context = {
       user: current_user(false),
       language: request_locale

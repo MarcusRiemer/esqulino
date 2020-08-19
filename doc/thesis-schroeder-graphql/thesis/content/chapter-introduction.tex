@@ -5,7 +5,7 @@
 % Grundlagen
 %************************************************
 \chapter{Einleitung}
-\label{sec:requirements}
+\label{sec:introduction}
 
 Ziel dieser Arbeit ist die Evaluierung von Verfahren, welche eine sichere, effiziente und leichte Nutzung der Kommunikationsschnittstellen 
 zwischen Client, Server und Datenbank ermöglichen sollen und wenn möglich die Integration eines dieser Verfahren
@@ -491,7 +491,6 @@ Im nächsten Schritt wird das Interface dem Server zur Verfügung gestellt.
 %Dokument Interface
 \subsection{Generierung der JSON Schema Definitionen}
 \label{sec:requirements:example:schema}
-\label{}
 Um das Interface~\ref{lst:example:projectdesc} serverseitig nutzen zu können wird eine JSON Schema Datei generiert.
 Dafür ist ein Eintrag in einem Makefile nötig, welches sich um die Generierung aller JSON Schema Dateien,
 die relevant für den Server sind, kümmert.
@@ -534,13 +533,13 @@ end
 \end{lstlisting}
 
 Auf diese Weise entsteht die Möglichkeit, die Spalten jeder Zeile in dieser Tabelle mit den Attributen der Instanzen des Models abzubilden.
-Jede Zeile dieser Tabelle stellt also ein bestimmtes "Projekt" mit den ind \fullref{sec:requirements:example:interface} aufgeführten Feldern dar.
+Jede Zeile dieser Tabelle stellt also ein bestimmtes "Projekt" mit den in \fullref{sec:requirements:example:interface} aufgeführten Feldern dar.
 
 Um nun auf Anfragen reagieren und Daten aus Model Instanzen an den Client liefern zu können bedarf es einem Controller.
 
 \subsection{Anlegen eines Controllers in Rails}
 \label{sec:requirements:example:controller}
-Controller haben die Aufgabe Anfragen entgegen zu nehmen, die vom Router~\ref{lst:example:router} an sie weitergeleitet wurden.
+Controller haben die Aufgabe Anfragen zu verarbeiten, die vom Router~\ref{lst:example:router} an sie weitergeleitet wurden.
 Die Funktionen innerhalb eines Controllers sind dafür verantwortlich den Anfragen einen "Sinn" zu geben und die entsprechende Antwort zu erzeugen.
 Bei einer Anfrage die Projekt-Daten ausgeliefert bekommen soll, kümmert die Controller Funktion sich darum alle Daten aus dem \emph{Project}-Model
 zu holen und gibt diese dann wie bei REST APIs üblich in JSON Form zurück.
@@ -560,10 +559,10 @@ end
 \end{lstlisting}
 
 In Zeile 3 des Controllers~\ref{lst:example:controller} werden alle Projekte aus der Datenbank geladen und in JSON Form
-zurück gegeben. Zusätzlich wird für jede Anfrage ein Test geschrieben, der gewährleistet, das die Antwort vom Server auch dem
-Interface~\ref{lst:example:projectdesc} entspricht.
+zurück gegeben. Um gewährleisten zu können, das die Antwort vom Server auch die erwarteten Daten liefert, wird ein
+Test geschrieben der prüft, ob die Antwort dem clientseitig erstellten Interface~\ref{lst:example:projectdesc} entspricht.
 
-\begin{lstlisting}[language=Ruby,float=h!,caption={Test überprüft, ob bei Anfrage der Route '/project/' eine Antwort vom Typ Project folgt}, label={lst:example:controller}]
+\begin{lstlisting}[language=Ruby,float=h!,caption={Test überprüft, ob bei Anfrage der Route '/project/' eine Antwort vom Typ Project folgt}, label={lst:example:controller-test}]
 it 'lists a single project' do
     FactoryBot.create(:project, :public)
     get "/project/"
@@ -572,46 +571,179 @@ it 'lists a single project' do
 
     parsed = JSON.parse(response.body)
     expect(parsed['data'].length).to eq 1
+
+    # Validierung gegen  das "Project" interface
     expect(parsed['data'][0]).to validate_against "Project"
 end
-
 \end{lstlisting}
 
-Der Server hat nun die Fähigkeit auf eine Anfrage nach allen Projekten unter Gewährlöesitung der Typsicherheit zu reagieren.
-Somit muss dem Client jetzt noch die Möglichkeit gegeben werden eine Anfrage zu erstellen und die Antwort grapfisch abbilden zu können.
+Das kann in Ruby zum Beispiel mit einem JSON Schema Validator~\cite{json-schemer} erreicht werden (Zeile 9).
+Nun hat der Server die Fähigkeit auf eine Anfrage nach allen Projekten unter Gewährleistung der Typsicherheit zu reagieren.
+Somit muss der Client noch die Möglichkeit erhalten eine Anfrage zu erstellen und die Antwort grafisch abbilden zu können.
 
 %Für jede Sicht (z.B. Admin/Frontend) eine Route und Controller Funktion.
 \subsection{DataServices auf dem Client}
-\label{sec:requirements:dataservice}
+\label{sec:requirements:example:service}
 In der Welt von Angular gibt es eine strikte Trennung zwischen Darstellung und Verarbeitung von Daten~\cite{angular-service}.
-Für die Verarbeitung von Daten, wie das Abrufen von Daten vom Server, werden Angular Services genutzt.
-Innerhalb dieser Services kann mithilfe des HttpClient~\cite{angular-http} eine typisierte Anfrage erstellt werden, die zur eben
-hinzugefügten Route~\ref{lst:example:router} führt.
+Für die Verarbeitung von Daten, wie das Abrufen, werden Angular Services genutzt. Diese sind typischerweise Typescript Klassen,
+mit genau definierten Nutzungsmöglichkeiten. Der im Folgenden beschriebene Service hat die Aufgabe Projekt-Daten zu verarbeiten.
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
-readonly allProjectsUrl = '/project/';
-getProjects() {
-    return this.http.get<Project>(this.allProjectsUrl);
+@Injectable()
+export class ProjectsDataService {
+    constructor(private http: HttpClient) { }
+    getProjects() {
+        // Die Antwort soll dem Typparameter "Project" entsprechen
+        return this.http.get<Project>('/project/');
+    }
 }
 \end{lstlisting}
 
-Die Angabe des Antworttyps fungiert zur Kompilierungszeit als Type Assertion~\cite{typescript-typeassertion}
-und erleichtert den Zugriff auf die Attribute der Antwort. Der TypeScript Compiler führt während der Laufzeit keine Überprüfung durch.
-Er geht an dieser Stelle davon aus, das der Entwickler spezielle Prüfungen durchgeführt hat.
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item \emph{Zeile 1}: \emph{@Injectable} stellt sicher, dass der Compiler die notwendigen Metadaten erzeugt, um die Abhängigkeiten der Klasse zu erstellen, wenn die Klasse injiziert wird.
+    \item \emph{Zeile 2}: Deklarierung der Klasse/des Services ProjectsDataService
+    \item \emph{Zeile 3}: Injizierung des HttpClient~\cite{angular-http} in den Service
+    \item \emph{Zeile 4}: Methode zum abfragen von Projekt-Daten
+    \item \emph{Zeile 6}: Nutzung des HttpClient zur Erstellung eines typisierten HTTP-Requests, welcher zur bereits hinzugefügten Route~\ref{lst:example:router} führt.
+\end{itemize}
 
-Für die Dartsellung der erhaltenen Daten wird eine Angular Komponente genutzt, in die der Service "injiziert" werden kann.
+Die Angabe des Antworttyps \emph{Project} in Zeile 6 fungiert dabei zur Kompilierungszeit als Type Assertion~\cite{typescript-typeassertion}
+und erleichtert den Zugriff auf die Attribute der Antwort. Der TypeScript Compiler führt während der Laufzeit jedoch keine Überprüfung durch.
+Er geht an dieser Stelle davon aus, das der Entwickler spezielle Prüfungen, wie z.B. der Test ~\ref{lst:example:controller-test}, durchgeführt hat.
+
+Die Dartsellung der erhaltenen Daten übernehmen dann Angular Komponenten, in die Services "injiziert" werden können.
+Dadurch können Komponenten die Funktionen eines injizierten Services nach Belieben nutzen.
 
 \subsection{Komponenten auf dem Client}
-\label{sec:requirements:component}
-Eine Angular Komponente entspricht einem Teilbaum des DOM-Baums, der auch View genannt wird.
+\label{sec:requirements:example:component}
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
+@Component({
+    selector: "project-list",
+    templateUrl: "templates/project-list.html",
+})
+export class ProjectListComponent {
+    // Injizierung des ProjectsDataService
+    constructor(private _projectsData: ProjectsDataService) {}
+
+    readonly projects = this._projectsData.getProjects();
+}
+\end{lstlisting}
+Eine Angular Komponente entspricht einem Teilbaum des DOM-Baums, der auch View genannt wird und erhält somit einen genau definierten Zweck.
+In unserem Fall wird die Komponente zur grafischen Auflistung der Projekt-Daten genutzt, was wie folgt umgesetzt wurde:
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item \emph{Zeile 1}: Annotierung einer Typescript-Klasse als Komponente
+    \item \emph{Zeile 2}: Der Wert von \emph{selector} kann als HTML-Tag (<project-list></project-list>) in Templates genutzt werden,
+    um diese Komponente Instanziieren und das zugehörige Template innerhalb des Bezeichners rendern zu können
+    \item \emph{Zeile 3}: Festlegung des Pfades, wo sich das zu rendernde Template, also der darzustellende HTML Code befindet
+    \item \emph{Zeile 4}: Deklarierung der Klasse/des Komponente ProjectListComponent
+    \item \emph{Zeile 6}: Injizierung des ProjectsDataService~\cite{angular-http} in die Komponente
+    \item \emph{Zeile 8}: Nutzung des ProjectsDataService zum Abrufen der Projekt-Daten
+\end{itemize}
+
+Das zugehörige Template project-list.html sieht folgendermaßen aus:
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
+<project-list-item
+  *ngFor="let project of projects | async"
+  [project]="project"
+></project-list-item>
+\end{lstlisting}
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item \emph{Zeile 1}: Aufruf der Komponente mit dem \emph{selector} "project-list-item".
+    Diese übernimmt hier die Darstellung eines einzelnen Projektes innerhalb einer Liste und verdeutlicht damit
+    die Modularität von Angular Komponenten.
+    \item \emph{Zeile 2}: *ngFor ist die "Repeater"-Direktive ~\cite{ng-for} in Angular.
+    Sie ermöglicht ein gegebenes HTML Template einmal für jeden Wert in einem Array zu wiederholen,
+    wobei jedes Mal der Array-Wert als Kontext übergeben wird.
+    \item \emph{Zeile 3}: Übergibt den Wert aus dem Array an eine mit \emph{@Input()} annotierte Variable \emph{project} aus der "project-list-item" Komponenten.
+\end{itemize}
 
 \subsection{Neue Sicht}
-1. + 2. + 4.(Route + Funktion) + 5. + 6.
-Graphql: 5. (Wird generiert) + 6.
+\label{sec:requirements:example:newview}
+
+Für das Bereitstellen einer neuen Sicht auf die Projekt Daten müssen mehrere der Schritte wiederholt werden.
+In der Tabelle \ref{tbl:newview} wird aufgeführt welche Schritte in welchem Ausmaß ausgeführt werden müssen.
+
+\begin{table}[h]
+    \begin{tabular}{|p{0.12\textwidth}|p{0.52\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|}
+        \hline
+        \textbf{Schritt} & \textbf{Beschreibung} & \textbf{Aktuelles \newline System} & \textbf{GraphQL} \\ \hline
+        $\ref{sec:requirements:example:interface}$ & Anlegen eines Interfaces & $\surd$ &  $X$ \\ \hline
+        $\ref{sec:requirements:example:schema}$ & Eintrag in Makefile & $\surd$ &  $X$ \\ \hline
+        $\ref{sec:requirements:example:model}$ & Anlegen des Models & $X$ &  $X$ \\ \hline
+        \multirow{3}{*}{$\ref{sec:requirements:example:controller}$}
+        & Route definieren & $\surd$ &  $X$ \\
+        & Anlegen des Controllers & $X$ &  $X$ \\
+        & Controller Funktion schreiben & $\surd$ &  $X$ \\ \hline
+        $\ref{sec:requirements:example:service}$ & Anlegen eines Angular Services & $\surd$ &  $X$ \\ \hline
+        $\ref{sec:requirements:example:component}$ & Anlegen einer Angular Komponenten & $\surd$ &  $\surd$ \\ \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Vergleich der Funktionweise des aktuellen Systems mit GraphQL in Bezug auf die Erstellung neuer Sichten auf bereist vorhandene Datensätze}
+    \label{tbl:newview}
+\end{table}
+
+Auffallend ist, dass GraphQL nur eine dezimiertere Menge an Schritten benötigt. Das resultiert aus der Funktionsweise von GraphQL,
+da zu beginn lediglich ein Typ (hier: \emph{project}) definiert werden muss der alle Felder beinhaltet die der Client braucht.
+Um eine spezielle Sicht auf den Datentyp in Form einer Teilmenge der vorhandenen Felder zu erlangen wird eine Anfrage geschrieben, die
+nur die benötigten Felder beinhaltet. Mithilfe eines Codegenerators lässt sich aus der Anfrage ein Typescript Interface und ein Angular Service,
+dem eine Funktion zum abschicken der Anfrage beigefügt wird, generieren.
+Somit werden die Schritte "Anlegen eines Interfaces" und "Anlegen eines Angular Services" obsolet.
+Zudem gibt es nur eine Route und Controller Funktion auf dem Server, nachfolgend Endpunkt genannt, der alle GraphQL Anfragen entgegen nimmt
+und an den GraphQL Server weiterleitet. Dort werden Datenbank Abfragen automatisch zusammengestellt und die Antwort an die Controller Funktion zurück gegeben.
+Somit sind die Schritte aus \fullref{sec:requirements:example:controller} und \fullref{sec:requirements:example:service} ebenfalls obsolet.
+
+Die genaue Funktionsweise des Codegenerators lässt sich anhand eines Beispiels simplifizieren ~\fullref{sec:requirements:example:autogeneration}.
+
 \subsection{Automatische Generierung von JSON Schema Definitionen}
+\label{sec:requirements:example:autogeneration}
+
+
+export const ProjectsDocument = gql`
+query Projects {
+    projects {
+        nodes {
+            id
+            name
+        }
+    }
+}
+`;
+
+@Injectable({
+    providedIn: "root",
+})
+export class ProjectsGQL extends Apollo.Query<
+ProjectsQuery,
+ProjectsQueryVariables
+> {
+    document = ProjectsDocument;
+    constructor(apollo: Apollo.Apollo) {
+        super(apollo);
+    }
+}
+
+export type ProjectsQuery = { __typename?: "Query" } & {
+    projects: { __typename?: "ProjectConnection" } & {
+        nodes?: Maybe<
+        Array<Maybe<{ __typename?: "Project" } & Pick<Project, "id" | "name">>>
+        >;
+    };
+};
+
+export type ProjectsQueryVariables = {};
+
+
 Anhand von Beispiel: Übersicht über alle
 
 \section{Anforderungen}
+\label{sec:requirements:req}
 
 \subsection{Darstellungsvielfalt}
 Nutzerbereich:

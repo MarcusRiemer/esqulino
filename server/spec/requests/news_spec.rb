@@ -10,11 +10,8 @@ RSpec.describe NewsController, type: :request do
 
     it 'Frontpage: retrieving news without anything published' do
       create(:news, published_from: Date.new(2999, 1, 1) )
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews")
-           }.to_json
+      send_query(query_name:"FrontpageListNews")
+
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(response).to have_http_status(200)
@@ -22,11 +19,8 @@ RSpec.describe NewsController, type: :request do
     end
     it 'Frontpage: retrieving the only existing news (default language)' do
       create(:news)
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews")
-           }.to_json
+      send_query(query_name:"FrontpageListNews")
+
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(1)
       expect(json_data[0]).to validate_against "NewsFrontpageDescription"
@@ -35,12 +29,7 @@ RSpec.describe NewsController, type: :request do
 
     it 'Frontpage: retrieving only published news, skipping unpublished ones' do
       create(:news, published_from: nil)
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews")
-           }.to_json
+      send_query(query_name:"FrontpageListNews")
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(0)
@@ -49,12 +38,7 @@ RSpec.describe NewsController, type: :request do
 
     it 'Frontpage: retrieving only published news, skipping future ones' do
       create(:news, published_from: Date.new(9999, 1, 1))
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews")
-           }.to_json
+      send_query(query_name:"FrontpageListNews")
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
 
@@ -66,11 +50,7 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 1, 1)) # Future
       create(:news, published_from: nil) # Unpublished
       create(:news) # Published
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews")
-           }.to_json
+      send_query(query_name:"FrontpageListNews")
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
 
@@ -83,15 +63,7 @@ RSpec.describe NewsController, type: :request do
       host! 'en.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1))
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews"),
-               variables: {
-                   languages: ["en"]
-               }
-           }.to_json
+      send_query(query_name:"FrontpageListNews", variables:{languages: ["en"]})
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(1)
@@ -105,14 +77,7 @@ RSpec.describe NewsController, type: :request do
       host! 'de.example.com'
 
       news = create(:news, published_from: Date.new(2019, 1, 1) )
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews"),
-               variables: {
-                   languages: ["de"]
-               }
-           }.to_json
+      send_query(query_name:"FrontpageListNews", variables:{languages: ["de"]})
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(json_data.length).to eq(1)
@@ -125,11 +90,7 @@ RSpec.describe NewsController, type: :request do
     it 'Frontpage: News are shortened' do
       news = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
 
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageListNews")
-           }.to_json
+      send_query(query_name:"FrontpageListNews")
 
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
 
@@ -149,12 +110,7 @@ RSpec.describe NewsController, type: :request do
       #TODO: Authentication
       #set_access_token(n.user)
       #
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageSingleNews"),
-               variables: {id: n.id}
-           }.to_json
+      send_query(query_name:"FrontpageSingleNews", variables:{id: n.id})
 
       json_data = JSON.parse(response.body)["data"]["frontpageSingleNews"]
 
@@ -166,12 +122,7 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'Frontpage: non existant news' do
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("FrontpageSingleNews"),
-               variables: {id: "63ed0067-7bef-4a54-bac7-06831c0fccbd"}
-           }.to_json
+      send_query(query_name:"FrontpageSingleNews", variables:{id: "63ed0067-7bef-4a54-bac7-06831c0fccbd"})
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)["errors"]).not_to eq []
@@ -186,12 +137,8 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 12, 1) )
 
       #set_access_token(admin)
+      send_query(query_name:"AdminListNews")
 
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("AdminListNews")
-           }.to_json
       json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
       expect(json_data[2]['title']['de']).to eq("Schlagzeile 1")
@@ -209,12 +156,8 @@ RSpec.describe NewsController, type: :request do
     it 'Admin: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
       #set_access_token(n.user)
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("AdminSingleNews"),
-               variables: {id: n.id}
-           }.to_json
+      send_query(query_name:"AdminSingleNews",variables: {id: n.id})
+
       json_data = JSON.parse(response.body)["data"]["adminSingleNews"]
 
       aggregate_failures "frontpage detail response" do
@@ -225,12 +168,8 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'Admin: non existant news' do
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("AdminSingleNews"),
-               variables: {id: "63ed0067-7bef-4a54-bac7-06831c0fccbd"}
-           }.to_json
+      send_query(query_name:"AdminSingleNews",variables: {id: "63ed0067-7bef-4a54-bac7-06831c0fccbd"})
+
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)["errors"]).not_to eq []
     end
@@ -241,13 +180,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       #set_access_token(news.user)
       news_params = news.api_attributes.merge({ "title" => { "de" => "Test" }, "id" => news.id })
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("UpdateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"UpdateNews",variables: news_params)
 
       # Ensure that no error was reported
       json_data = JSON.parse(response.body)["data"]
@@ -266,13 +199,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
       #set_access_token(news.user)
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }, "id" => news.id })
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("UpdateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"UpdateNews",variables: news_params)
 
       aggregate_failures "update response" do
         # Graphql always returns with status: 200
@@ -294,13 +221,7 @@ RSpec.describe NewsController, type: :request do
       news_params = news.api_attributes.merge({ "publishedFrom" => nil, "id" => news.id })
 
       #set_access_token(news.user)
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("UpdateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"UpdateNews",variables: news_params)
 
       aggregate_failures "update response" do
         expect(response).to have_http_status(200)
@@ -320,13 +241,7 @@ RSpec.describe NewsController, type: :request do
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }, "id" => news.id })
 
       #set_access_token(news.user)
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("UpdateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"UpdateNews",variables: news_params)
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)["data"]["updateNews"]
@@ -342,13 +257,7 @@ RSpec.describe NewsController, type: :request do
       news_params = news.api_attributes.merge({ "publishedFrom" => "test", "id" => news.id })
 
       #set_access_token(news.user)
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("UpdateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"UpdateNews",variables: news_params)
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)
@@ -364,12 +273,7 @@ RSpec.describe NewsController, type: :request do
       news = create(:news)
       news_params = news.slice(:id,:title,:text)
       #set_access_token(news.user)
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("UpdateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"UpdateNews",variables: news_params)
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)
@@ -389,12 +293,7 @@ RSpec.describe NewsController, type: :request do
     it 'deleting a news' do
       news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1), user: create(:user, :admin) )
       # set_access_token(news.user)
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("DestroyNews"),
-               variables: news.slice(:id)
-           }.to_json
+      send_query(query_name:"DestroyNews",variables: news.slice(:id))
 
       expect(response).to have_http_status(200)
       expect(News.find_by(id: news.id)).to be_nil
@@ -404,13 +303,7 @@ RSpec.describe NewsController, type: :request do
     it 'deleting a news with an invalid id' do
       news = create(:news)
       count_news = News.all.count
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("DestroyNews"),
-               variables: {id: "63ed0067-7bef-4a54-bac7-06831c0fccbd"}
-           }.to_json
+      send_query(query_name:"DestroyNews",variables: {id: "63ed0067-7bef-4a54-bac7-06831c0fccbd"})
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)["data"]["destroyNews"]["errors"]).not_to eq []
@@ -424,16 +317,12 @@ RSpec.describe NewsController, type: :request do
     it 'creating a news' do
       #set_access_token(user)
       count_news = News.all.count
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("CreateNews"),
-               variables: {
-                   title: { 'de': 'Test' },
-                   text: { 'de': 'Test2' },
-                   publishedFrom: Date.new(2019, 1, 1)
-               }
-           }.to_json
+      news_params = {
+          title: { 'de': 'Test' },
+          text: { 'de': 'Test2' },
+          publishedFrom: Date.new(2019, 1, 1)
+      }
+      send_query(query_name:"CreateNews",variables:  news_params)
 
       json_data = JSON.parse(response.body)["data"]["createNews"]
       expect(json_data.fetch('errors', [])).to eq []
@@ -449,17 +338,12 @@ RSpec.describe NewsController, type: :request do
     xit 'creating a news with an empty publishing date' do
       #set_access_token(user)
       count_news = News.all.count
-
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("CreateNews"),
-               variables: {
-                   title: { 'de': 'Test' },
-                   text: { 'de': 'Test2' },
-                   publishedFrom: nil
-               }
-           }.to_json
+      news_params = {
+          title: { 'de': 'Test' },
+          text: { 'de': 'Test2' },
+          publishedFrom: nil
+      }
+      send_query(query_name:"CreateNews",variables:  news_params)
 
       json_data = JSON.parse(response.body)["data"]["createNews"]
 
@@ -475,16 +359,12 @@ RSpec.describe NewsController, type: :request do
 
     it 'creating a news with an invalid date' do
       #set_access_token(user)
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("CreateNews"),
-               variables: {
-                   title: { 'de': 'Test' },
-                   text: { 'de': 'Test2' },
-                   publishedFrom: "tom"
-               }
-           }.to_json
+      news_params = {
+          title: { 'de': 'Test' },
+          text: { 'de': 'Test2' },
+          publishedFrom: "tom"
+      }
+      send_query(query_name:"CreateNews",variables:  news_params)
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).not_to eq []
@@ -496,12 +376,7 @@ RSpec.describe NewsController, type: :request do
       news_params = news.api_attributes.except("publishedFrom")
       #set_access_token(user)
 
-      post "/api/graphql",
-           headers: json_headers,
-           params: {
-               query: GraphqlQueryHelper.get_query("CreateNews"),
-               variables: news_params
-           }.to_json
+      send_query(query_name:"CreateNews",variables: news_params)
       json_data = JSON.parse(response.body)
 
       expect(json_data.fetch('errors', [])).not_to eq []

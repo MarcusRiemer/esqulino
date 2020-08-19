@@ -55,7 +55,12 @@ module Types
 
     def single_block_language(id:)
       begin
-      BlockLanguage.find(id).to_full_api_response.transform_keys {|a| a.underscore}
+        block_lang = if BlattwerkzeugUtil::string_is_uuid? id then
+                       BlockLanguage.find id
+                     else
+                       BlockLanguage.find_by! slug: id
+                     end
+        block_lang.to_full_api_response.transform_keys {|a| a.underscore}
       rescue ActiveRecord::RecordNotFound
         raise GraphQL::ExecutionError.new("BlockLangugae with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
       end

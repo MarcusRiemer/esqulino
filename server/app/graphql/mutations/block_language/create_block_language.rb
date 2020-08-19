@@ -8,16 +8,17 @@ class Mutations::BlockLanguage::CreateBlockLanguage < Mutations::BlockLanguage::
   argument :editorBlocks, GraphQL::Types::JSON,required: true
   argument :editorComponents, GraphQL::Types::JSON,required: true
 
-
   # both arguments are sliced in model_params, but are not sent to the server from
   # create-block-language.component.ts in admin backend
-  # argument :rootCssClasses, GraphQL::Types::JSON,required:false
-  # argument :localGeneratorInstructions, GraphQL::Types::JSON,required:false
+  # currently :rootCssClasses, :localGeneratorInstructions exists in create mutation for testing purposes
+  argument :rootCssClasses, GraphQL::Types::JSON,required:false
+  argument :localGeneratorInstructions, GraphQL::Types::JSON,required:false
 
   def resolve(**args)
     params = ActionController::Parameters.new(args)
     block_lang = BlockLanguage.new(basic_params(params))
     block_lang.model = model_params(params)
+    save_block_language(block_lang)
     if block_lang.save
       {
           id: block_lang[:id],

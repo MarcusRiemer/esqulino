@@ -1,7 +1,7 @@
 class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
 
-  argument :id, ID, required: true
-  argument :name, String, required: true
+  argument :id, ID, required: false
+  argument :name, String, required: false
   argument :slug, String, required: false
   argument :types, GraphQL::Types::JSON, required:false
   argument :foreign_types, GraphQL::Types::JSON, required:false

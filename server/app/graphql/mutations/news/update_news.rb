@@ -1,9 +1,9 @@
 class Mutations::News::UpdateNews < Mutations::News::News
 
-  argument :id, ID, required:true
-  argument :title, Types::Scalar::LangJson, required:true
-  argument :text, Types::Scalar::LangJson, required:true
-  argument :publishedFrom, GraphQL::Types::ISO8601DateTime, required:true
+  argument :id, ID, required:false
+  argument :title, Types::Scalar::LangJson, required:false
+  argument :text, Types::Scalar::LangJson, required:false
+  argument :publishedFrom, GraphQL::Types::ISO8601DateTime, required:false
   argument :userId, ID, required:false
 
   def resolve(**args)
