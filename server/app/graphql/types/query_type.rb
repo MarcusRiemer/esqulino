@@ -55,12 +55,16 @@ module Types
 
     def single_block_language(id:)
       begin
+        block_lang = BlockLanguage.scope_list.select("model")
         block_lang = if BlattwerkzeugUtil::string_is_uuid? id then
-                       BlockLanguage.find id
+                       block_lang.find id
                      else
-                       BlockLanguage.find_by! slug: id
+                       block_lang.find_by! slug: id
                      end
-        block_lang.to_full_api_response.transform_keys {|a| a.underscore}
+        block_lang
+            .to_list_api_response(options:{include_list_calculations:true})
+            .merge(block_lang.model)
+            .transform_keys {|a| a.underscore}
       rescue ActiveRecord::RecordNotFound
         raise GraphQL::ExecutionError.new("BlockLangugae with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
       end
@@ -142,13 +146,11 @@ module Types
 
     def single_grammar(id:)
       begin
-        a = if BlattwerkzeugUtil::string_is_uuid? id
-              Grammar.find(id)
-            else
-              Grammar.find_by! slug: id
-            end
-        a.root = 1
-        return a
+        if BlattwerkzeugUtil::string_is_uuid? id
+          Grammar.find(id)
+        else
+          Grammar.find_by! slug: id
+        end
       rescue ActiveRecord::RecordNotFound
         raise GraphQL::ExecutionError.new("Grammar with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
       end
