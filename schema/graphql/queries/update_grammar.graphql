@@ -1,6 +1,6 @@
 mutation UpdateGrammar(
   $id: ID!,
-  $name: String!,
+  $name: String,
   $slug: String,
   $types: JSON,
   $foreignTypes: JSON,

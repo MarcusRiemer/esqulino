@@ -1,0 +1,26 @@
+mutation CreateBlockLanguage(
+    $name:String!,
+    $slug:String,
+    $defaultProgrammingLanguageId:ID,
+    $grammarId:ID,
+    $sidebars:JSON!,
+    $editorBlocks:JSON!,
+    $editorComponents:JSON!
+    $rootCssClasses:JSON,
+    $localGeneratorInstructions:JSON
+){
+    createBlockLanguage(input:{
+        name:$name,
+        slug:$slug,
+        defaultProgrammingLanguageId:$defaultProgrammingLanguageId,
+        grammarId:$grammarId,
+        sidebars:$sidebars,
+        editorBlocks:$editorBlocks,
+        editorComponents:$editorComponents,
+        rootCssClasses:$rootCssClasses,
+        localGeneratorInstructions:$localGeneratorInstructions
+    }){
+        id
+        errors
+    }
+}

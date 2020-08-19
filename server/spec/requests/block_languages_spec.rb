@@ -221,7 +221,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(json_data.except("id", "createdAt", "updatedAt","generated","localGeneratorInstructions","slug")).to eq block_lang_model
     end
 
-    fdescribe 'PUT /api/block_languages/:id' do
+    describe 'PUT /api/block_languages/:id' do
       it 'Updating basic properties' do
         orig_block_lang = FactoryBot.create(:block_language)
         upda_block_lang = {
@@ -267,7 +267,7 @@ RSpec.describe BlockLanguagesController, type: :request do
         end
 
         expect(response.status).to eq(200)
-        byebug
+
         orig_block_lang.reload
         expect(orig_block_lang.name).to eq upda_block_lang['name']
 

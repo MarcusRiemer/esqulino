@@ -115,6 +115,7 @@ RSpec.describe GrammarsController, type: :request do
 
       expect(response).to have_http_status(200)
       grammar_data = JSON.parse(response.body)['data']['singleGrammar']
+      byebug
       expect(grammar_data.except("blockLanguages","generatedFromId")).to validate_against "GrammarDescription"
     end
 
@@ -292,6 +293,7 @@ RSpec.describe GrammarsController, type: :request do
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
 
       send_query(query_name:"UpdateGrammar",variables:{"id"=>original.id, "generatedFromId" => nil })
+
       expect(response.status).to eq(200)
 
       original.reload

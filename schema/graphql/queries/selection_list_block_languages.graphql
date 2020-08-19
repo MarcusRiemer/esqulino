@@ -1,0 +1,8 @@
+query SelectionListBlockLanguages{
+  blockLanguages{
+    nodes {
+      id
+      name
+    }
+  }
+}

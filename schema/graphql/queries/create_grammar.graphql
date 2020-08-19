@@ -3,7 +3,7 @@ mutation CreateGrammar(
   $slug: String,
   $types: JSON!,
   $foreignTypes: JSON!,
-  $root: JSON,
+  $root: QualifiedTypeName,
   $programmingLanguageId: ID!
 ) {
   createGrammar(
@@ -12,7 +12,7 @@ mutation CreateGrammar(
       slug: $slug,
       types: $types,
       foreignTypes: $foreignTypes,
-      root: QualifiedTypeName,
+      root: $root,
       programmingLanguageId: $programmingLanguageId
     }
   ) {

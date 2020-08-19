@@ -1,0 +1,10 @@
+mutation DestroyBlockLanguage(
+    $id:ID!,
+){
+    destroyBlockLanguage(input:{
+        id:$id,
+    }){
+        id
+        errors
+    }
+}

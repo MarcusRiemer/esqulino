@@ -1,0 +1,25 @@
+mutation UpdateBlockLanguage(
+    $name:String!,
+    $slug:String,
+    $defaultProgrammingLanguageId:ID,
+    $grammarId:ID,$sidebars:JSON!,
+    $editorBlocks:JSON!,
+    $rootCssClasses:JSON,
+    $editorComponents:JSON!,
+    $localGeneratorInstructions:JSON
+){
+    updateBlockLanguage(input:{
+        name:$name,
+        slug:$slug,
+        defaultProgrammingLanguageId:$defaultProgrammingLanguageId,
+        grammarId:$grammarId,
+        sidebars:$sidebars,
+        editorBlocks:$editorBlocks,
+        rootCssClasses:$rootCssClasses,
+        editorComponents:$editorComponents
+        localGeneratorInstructions:$localGeneratorInstructions
+    }){
+        id
+        errors
+    }
+}
