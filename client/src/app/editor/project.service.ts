@@ -2,15 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { BehaviorSubject, Observable } from "rxjs";
-import {
-  catchError,
-  delay,
-  first,
-  filter,
-  tap,
-  map,
-  share,
-} from "rxjs/operators";
+import { catchError, delay, filter, tap, map, share } from "rxjs/operators";
 
 import { ServerApiService } from "../shared/serverdata/serverapi.service";
 import {
@@ -96,12 +88,13 @@ export class ProjectService {
 
     // Build the HTTP-request
     const url = this._server.getProjectUrl(slugOrId);
-    this._httpRequest = this._fullProject.fetch({ id: slugOrId }).pipe(
-      first(),
-      map((graphQlDoc) => fromGraphQL(graphQlDoc.data)),
-      map((res) => new Project(res, this._resourceReferences)),
-      share() // Ensure that the request is not executed multiple times
-    );
+    this._httpRequest = this._fullProject
+      .fetch({ id: slugOrId }, { fetchPolicy: "network-only" })
+      .pipe(
+        map((graphQlDoc) => fromGraphQL(graphQlDoc.data)),
+        map((res) => new Project(res, this._resourceReferences)),
+        share() // Ensure that the request is not executed multiple times
+      );
 
     // And execute it by subscribing to it.
     this._httpRequest.subscribe(

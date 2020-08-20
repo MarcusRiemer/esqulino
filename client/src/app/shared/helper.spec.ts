@@ -43,6 +43,7 @@ export function emptyBlockLanguage(
   const defaultDescription: BlockLanguageDescription = {
     id: "test",
     slug: "test",
+    rootCssClasses: [],
     defaultProgrammingLanguageId: "test",
     name: "Empty BlockLanguage",
     editorBlocks: [],

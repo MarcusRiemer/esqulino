@@ -1,7 +1,11 @@
 import { TestBed } from "@angular/core/testing";
-import { HttpTestingController } from "@angular/common/http/testing";
 
 import { ProjectService } from "../project.service";
+
+import {
+  FullProjectDocument,
+  FullProjectQuery,
+} from "../../../generated/graphql";
 
 import {
   ProjectFullDescription,
@@ -11,19 +15,38 @@ import {
 import { ServerApiService } from "../../shared";
 import { generateUUIDv4 } from "../../shared/util-browser";
 import { ListOrder, provideListResponse } from "./list.data.spec";
+import { ApolloTestingController } from "apollo-angular/testing";
+import { GraphQLError } from "graphql";
+
+type FullProjectNode = FullProjectQuery["projects"]["nodes"][0];
+
+type FullProjectGQLResponse =
+  | { data: FullProjectQuery }
+  | { errors: ReadonlyArray<GraphQLError> };
 
 const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
-  projectUsesBlockLanguages: [],
   blockLanguages: [],
-  grammars: [],
-  availableDatabases: {},
-  projectSources: [],
-  slug: "28066939-7d53-40de-a89b-95bf37c982be",
-  name: { en: "Project" },
-  description: { en: "Default Empty Project" },
-  schema: [],
   codeResources: [],
+  description: { en: "Default Empty Project" },
+  grammars: [],
+  name: { en: "Project" },
+  projectSources: [],
+  projectUsesBlockLanguages: [],
+  schema: [],
+  public: false,
+  indexPageId: null,
+  slug: null,
+};
+
+const wrapProjectData = (data: FullProjectNode[]): FullProjectGQLResponse => {
+  return {
+    data: {
+      projects: {
+        nodes: data,
+      },
+    },
+  };
 };
 
 /**
@@ -37,19 +60,25 @@ export const buildProject = (
   return Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
 };
 
-export const specLoadEmptyProject = (
+export const specLoadProject = (
   projectService: ProjectService,
   override?: Partial<ProjectFullDescription>
 ): Promise<Project> => {
-  const httpTestingController = TestBed.inject(HttpTestingController);
-  const serverApi = TestBed.inject(ServerApiService);
+  const testingController = TestBed.inject(ApolloTestingController);
 
   const id = override?.id ?? generateUUIDv4();
   const p = Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
 
   const toReturn = projectService.setActiveProject(p.id, true);
+  const wrappedData = wrapProjectData([p]);
 
-  httpTestingController.expectOne(serverApi.getProjectUrl(p.id)).flush(p);
+  testingController
+    .expectOne(
+      (op) => op.query === FullProjectDocument && op.variables.id === p.id
+    )
+    .flush(wrappedData);
+
+  testingController.verify();
 
   return toReturn;
 };

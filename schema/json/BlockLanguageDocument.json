@@ -66,18 +66,12 @@
       "description": "The data about a language model that is stored in the database",
       "properties": {
         "editorBlocks": {
-          "description": "How blocks should be represented in the drag & drop editor.",
-          "items": {
-            "$ref": "#/definitions/EditorBlockDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageEditorBlocksDescription",
+          "description": "How blocks should be represented in the drag & drop editor."
         },
         "editorComponents": {
-          "description": "Specialised components that should be shown for this block\nlanguage.",
-          "items": {
-            "$ref": "#/definitions/EditorComponentDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageEditorComponentsDescription",
+          "description": "Specialised components that should be shown for this block\nlanguage."
         },
         "localGeneratorInstructions": {
           "$ref": "#/definitions/BlockLanguageGeneratorDocument",
@@ -91,11 +85,8 @@
           "type": "array"
         },
         "sidebars": {
-          "description": "How the available blocks should be represented in the sidebar.",
-          "items": {
-            "$ref": "#/definitions/SidebarDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageSidebarsDescription",
+          "description": "How the available blocks should be represented in the sidebar."
         }
       },
       "required": [
@@ -104,6 +95,18 @@
         "editorComponents"
       ],
       "type": "object"
+    },
+    "BlockLanguageEditorBlocksDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorBlockDescription"
+      },
+      "type": "array"
+    },
+    "BlockLanguageEditorComponentsDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorComponentDescription"
+      },
+      "type": "array"
     },
     "BlockLanguageGeneratorDocument": {
       "anyOf": [
@@ -115,6 +118,12 @@
         }
       ],
       "description": "All possible instructions to generate a block language."
+    },
+    "BlockLanguageSidebarsDescription": {
+      "items": {
+        "$ref": "#/definitions/SidebarDescription"
+      },
+      "type": "array"
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,

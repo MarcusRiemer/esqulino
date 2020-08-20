@@ -5,10 +5,14 @@ class ProjectSource < ApplicationRecord
   def to_full_api_response
     to_return = to_json_api_response.except("projectId")
 
-    to_return['type'] = "data"
+    to_return['type'] = type
     to_return['id'] = to_return['id'].to_s # TODO: I should be a UUID
 
     to_return
+  end
+
+  def type
+    "data"
   end
 
   # Returns a nicely readable representation of id and type

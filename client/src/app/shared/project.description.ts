@@ -56,7 +56,7 @@ export interface AvailableDatabaseDescription {
 export interface ProjectSourceDescription {
   id: string;
   title: string;
-  type: "data";
+  kind: "data";
   url: string;
   display: string;
   readOnly: boolean;

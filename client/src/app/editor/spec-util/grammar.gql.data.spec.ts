@@ -18,15 +18,17 @@ type GrammarItemGQLResponse = {
   errors: ReadonlyArray<GraphQLError>;
 };
 
+export const defaultSpecGrammarId = "28066939-7d53-40de-a89b-95bf37c982be";
+
 const ADMIN_LIST_GRAMMAR: AdminListGrammarNode = {
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
-  id: "28066939-7d53-40de-a89b-95bf37c982be",
+  id: defaultSpecGrammarId,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
 };
 
 const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
-  id: "28066939-7d53-40de-a89b-95bf37c982be",
+  id: defaultSpecGrammarId,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
@@ -47,7 +49,9 @@ const wrapGrammarItem = (
   };
 };
 
-const wrapGrammarData = (data: AdminListGrammarNode[]): GrammarGQLResponse => {
+const wrapGrammarData = (
+  ...data: AdminListGrammarNode[]
+): GrammarGQLResponse => {
   return {
     errors: [],
     data: {
@@ -73,9 +77,13 @@ export const buildSingleGrammarResponse = (
   override?: AdminListGrammarNode
 ): GrammarGQLResponse => {
   const id = override?.id ?? generateUUIDv4();
-  const projects: AdminListGrammarNode[] = [];
-  projects.push(Object.assign({}, ADMIN_LIST_GRAMMAR, override || {}, { id }));
-  return wrapGrammarData(projects);
+  const g: AdminListGrammarNode = Object.assign(
+    {},
+    ADMIN_LIST_GRAMMAR,
+    override || {},
+    { id }
+  );
+  return wrapGrammarData(g);
 };
 /**
  * Generates a valid project with a unique ID, that uses
@@ -94,5 +102,5 @@ export const buildGrammarDescItemResponse = (
  * Generates an empty project response
  */
 export const buildEmptyGrammarResponse = (): GrammarGQLResponse => {
-  return wrapGrammarData([]);
+  return wrapGrammarData();
 };

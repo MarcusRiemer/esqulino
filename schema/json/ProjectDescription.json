@@ -91,18 +91,12 @@
           "type": "string"
         },
         "editorBlocks": {
-          "description": "How blocks should be represented in the drag & drop editor.",
-          "items": {
-            "$ref": "#/definitions/EditorBlockDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageEditorBlocksDescription",
+          "description": "How blocks should be represented in the drag & drop editor."
         },
         "editorComponents": {
-          "description": "Specialised components that should be shown for this block\nlanguage.",
-          "items": {
-            "$ref": "#/definitions/EditorComponentDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageEditorComponentsDescription",
+          "description": "Specialised components that should be shown for this block\nlanguage."
         },
         "grammarId": {
           "description": "The grammar that this block language may visualize.",
@@ -128,11 +122,8 @@
           "type": "array"
         },
         "sidebars": {
-          "description": "How the available blocks should be represented in the sidebar.",
-          "items": {
-            "$ref": "#/definitions/SidebarDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageSidebarsDescription",
+          "description": "How the available blocks should be represented in the sidebar."
         },
         "slug": {
           "description": "A unique (but possibly empty) id. If this is undefined the language has\nno builtin counterpart on the client.",
@@ -153,6 +144,18 @@
       ],
       "type": "object"
     },
+    "BlockLanguageEditorBlocksDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorBlockDescription"
+      },
+      "type": "array"
+    },
+    "BlockLanguageEditorComponentsDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorComponentDescription"
+      },
+      "type": "array"
+    },
     "BlockLanguageGeneratorDocument": {
       "anyOf": [
         {
@@ -163,6 +166,12 @@
         }
       ],
       "description": "All possible instructions to generate a block language."
+    },
+    "BlockLanguageSidebarsDescription": {
+      "items": {
+        "$ref": "#/definitions/SidebarDescription"
+      },
+      "type": "array"
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,
@@ -2093,6 +2102,12 @@
         "preview": {
           "type": "string"
         },
+        "projectSources": {
+          "items": {
+            "$ref": "#/definitions/ProjectSourceDescription"
+          },
+          "type": "array"
+        },
         "projectUsesBlockLanguages": {
           "items": {
             "$ref": "#/definitions/ProjectUsesBlockLanguageDescription"
@@ -2104,12 +2119,6 @@
         },
         "slug": {
           "$ref": "#/definitions/ProjectSlug"
-        },
-        "sources": {
-          "items": {
-            "$ref": "#/definitions/ProjectSourceDescription"
-          },
-          "type": "array"
         },
         "updatedAt": {
           "type": "string"
@@ -2124,8 +2133,8 @@
         "grammars",
         "id",
         "name",
-        "projectUsesBlockLanguages",
-        "sources"
+        "projectSources",
+        "projectUsesBlockLanguages"
       ],
       "type": "object"
     },

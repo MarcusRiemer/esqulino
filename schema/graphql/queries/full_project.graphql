@@ -17,7 +17,11 @@ query FullProject($id: ID!) {
       blockLanguages {
         id
         name
-        model
+        sidebars
+        editorBlocks
+        editorComponents
+        localGeneratorInstructions
+        rootCssClasses
         grammarId
         defaultProgrammingLanguageId
       }
@@ -29,6 +33,7 @@ query FullProject($id: ID!) {
         foreignTypes
         includes
         visualizes
+        programmingLanguageId
       }
       projectUsesBlockLanguages {
         id
@@ -36,6 +41,8 @@ query FullProject($id: ID!) {
       }
       projectSources {
         id
+        kind
+        readOnly
         display
         title
         url

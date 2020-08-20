@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_24_113148) do
+ActiveRecord::Schema.define(version: 2020_08_20_071157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(version: 2020_07_24_113148) do
     t.string "slug"
     t.text "default_programming_language_id"
     t.uuid "grammar_id"
+    t.jsonb "sidebars", default: []
+    t.jsonb "editor_blocks", default: []
+    t.jsonb "editor_components", default: []
+    t.jsonb "local_generator_instructions"
+    t.string "root_css_classes", default: [], array: true
     t.index ["default_programming_language_id"], name: "index_block_languages_on_default_programming_language_id"
     t.index ["grammar_id"], name: "index_block_languages_on_grammar_id"
     t.index ["slug"], name: "index_block_languages_on_slug", unique: true

@@ -1,14 +1,20 @@
 # A user defined view on a programming language that uses blocks. These block models
 # closely rely on the grammars of their corresponding programming language.
 class BlockLanguage < ApplicationRecord
+  # In progress: Pulling out model type
+  self.ignored_columns = ['model']
+
   # Every language must have a name and a family assigned
   validates :name, presence: true
 
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true, length: { minimum: 1 }
 
-  # The JSON document needs to be a valid block language
-  validates :model, json_schema: 'BlockLanguageDocument'
+  # The JSON documents needs to describe a valid block language
+  validates :sidebars, json_schema: 'BlockLanguageSidebarsDescription'
+  validates :editor_blocks, json_schema: 'BlockLanguageEditorBlocksDescription'
+  validates :editor_components, json_schema: 'BlockLanguageEditorComponentsDescription'
+  validates :local_generator_instructions, json_schema: 'BlockLanguageGeneratorDocument'
 
   # The programming language that should be chosen as a default when
   # creating code resources.

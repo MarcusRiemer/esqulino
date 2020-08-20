@@ -1,0 +1,482 @@
+{
+  "$ref": "#/definitions/BlockLanguageEditorBlocksDescription",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BlockLanguageEditorBlocksDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorBlockDescription"
+      },
+      "type": "array"
+    },
+    "EditorBlockDescription": {
+      "additionalProperties": false,
+      "description": "Describes how certain nodes in the syntaxtree should be presented\nto an end user inside the drag & drop interface.",
+      "properties": {
+        "describedType": {
+          "$ref": "#/definitions/QualifiedTypeName",
+          "description": "Nodes of this type are presented using this block."
+        },
+        "visual": {
+          "description": "The actual visual representation.",
+          "items": {
+            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "describedType",
+        "visual"
+      ],
+      "type": "object"
+    },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
+    },
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
+      ],
+      "type": "object"
+    },
+    "Restricted.Expression_VisualBlockDescriptions.VisibilityVars_": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Restricted.Value"
+        },
+        {
+          "$ref": "#/definitions/Restricted.Variable_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.Operation_VisualBlockDescriptions.VisibilityVars_"
+        }
+      ]
+    },
+    "Restricted.Operation_VisualBlockDescriptions.VisibilityVars_": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Restricted.OperationEvery_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.OperationSome_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.OperationNot_VisualBlockDescriptions.VisibilityVars_"
+        }
+      ]
+    },
+    "Restricted.OperationEvery_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$every": {
+          "items": {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "$every"
+      ],
+      "type": "object"
+    },
+    "Restricted.OperationNot_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$not": {
+          "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+        }
+      },
+      "required": [
+        "$not"
+      ],
+      "type": "object"
+    },
+    "Restricted.OperationSome_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$some": {
+          "items": {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "$some"
+      ],
+      "type": "object"
+    },
+    "Restricted.Value": {
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "$value"
+      ],
+      "type": "object"
+    },
+    "Restricted.Variable_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$var": {
+          "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
+        }
+      },
+      "required": [
+        "$var"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.BlockStyle": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "We currently allow any CSS style to be used.\n\nTODO: This could be a Readonly__ type but that causes the JSON-\nschema generator to (sort of rightfully) emit false for\n\"additionalProperties\" and that in turn makes this type rather\npointless.",
+      "type": "object"
+    },
+    "VisualBlockDescriptions.ConcreteBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorContainer"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorBlock"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorDropTarget"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorIterator"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorConstant"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorInterpolated"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorInput"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorErrorIndicator"
+        }
+      ]
+    },
+    "VisualBlockDescriptions.DropTargetProperties": {
+      "additionalProperties": false,
+      "description": "These properties are required to specify drop targets.",
+      "properties": {
+        "visibility": {
+          "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
+        }
+      },
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorBlock": {
+      "additionalProperties": false,
+      "description": "Describes how a certain block should be represented. Blocks are\nalways draggable and also possible drop targets.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "block"
+          ],
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dropAction": {
+          "enum": [
+            "append",
+            "replace"
+          ],
+          "type": "string"
+        },
+        "dropTarget": {
+          "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorConstant": {
+      "additionalProperties": false,
+      "description": "Displays a constant value that does not allow any user interaction.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockType",
+        "text"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorContainer": {
+      "additionalProperties": false,
+      "description": "An element that exists merely for layout purposes, think \"div\" or \"span\"",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "container"
+          ],
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType",
+        "orientation"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorDropTarget": {
+      "additionalProperties": false,
+      "description": "Describes a \"block\" that only acts as a hole to drop things at.\nIt is not necesarily visible in every state and it is not draggable.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "dropTarget"
+          ],
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dropTarget": {
+          "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+        },
+        "emptyDropTarget": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorErrorIndicator": {
+      "additionalProperties": false,
+      "description": "Shows a marker if there is some kind of error",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "error"
+          ],
+          "type": "string"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "excludedErrors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorInput": {
+      "additionalProperties": false,
+      "description": "Displays an interpolated value and allows it to be edited.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "input"
+          ],
+          "type": "string"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "propReadOnly": {
+          "type": "boolean"
+        },
+        "property": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType",
+        "property"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorInterpolated": {
+      "additionalProperties": false,
+      "description": "Displays a dynamic value that depends on some property of the node but\ndoes not allow to edit the property.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "interpolated"
+          ],
+          "type": "string"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "property": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType",
+        "property"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorIterator": {
+      "additionalProperties": false,
+      "description": "Allows to iterate over all blocks in a certain category.",
+      "properties": {
+        "between": {
+          "items": {
+            "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
+          },
+          "type": "array"
+        },
+        "blockType": {
+          "enum": [
+            "iterator"
+          ],
+          "type": "string"
+        },
+        "childGroupName": {
+          "type": "string"
+        },
+        "cssClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "emptyDropTarget": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType",
+        "childGroupName"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.VisibilityExpression": {
+      "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_",
+      "description": "This expression is evaluated to determine whether a drop target should be shown."
+    },
+    "VisualBlockDescriptions.VisibilityVars": {
+      "description": "These variables are available when evaluating drop target visibility.",
+      "enum": [
+        "ifAnyDrag",
+        "ifLegalDrag",
+        "ifLegalChild",
+        "ifEmpty",
+        "ifChildrenRequired"
+      ],
+      "type": "string"
+    }
+  }
+}

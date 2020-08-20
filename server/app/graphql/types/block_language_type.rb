@@ -2,8 +2,14 @@ module Types
   class Types::BlockLanguageType < Types::Base::BaseObject
     field :id, ID, null:false
     field :name, String, null:false
-    field :model, GraphQL::Types::JSON, null:false
     field :slug, String, null:true
+
+    field :sidebars, GraphQL::Types::JSON, null:false
+    field :editorBlocks, GraphQL::Types::JSON, null:false
+    field :editorComponents, GraphQL::Types::JSON, null:false
+    field :localGeneratorInstructions, GraphQL::Types::JSON, null:true
+    field :rootCssClasses, [String], null:false
+
     field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
     field :defaultProgrammingLanguageId, ID,null:false
     field :grammar, Types::GrammarType, null:true
