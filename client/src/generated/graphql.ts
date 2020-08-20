@@ -57,26 +57,6 @@ export type BlockLanguageConnection = {
   totalCount: Scalars["Int"];
 };
 
-export type BlockLanguageDescription = {
-  __typename?: "BlockLanguageDescription";
-  codeResources?: Maybe<Array<CodeResource>>;
-  createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
-  defaultProgrammingLanguage: ProgrammingLanguage;
-  defaultProgrammingLanguageId: Scalars["ID"];
-  editorBlocks: Scalars["JSON"];
-  editorComponents: Scalars["JSON"];
-  generated?: Maybe<Scalars["Boolean"]>;
-  grammar?: Maybe<Grammar>;
-  grammarId?: Maybe<Scalars["ID"]>;
-  id: Scalars["ID"];
-  localGeneratorInstructions?: Maybe<Scalars["JSON"]>;
-  name: Scalars["String"];
-  rootCssClasses?: Maybe<Scalars["JSON"]>;
-  sidebars: Scalars["JSON"];
-  slug?: Maybe<Scalars["String"]>;
-  updatedAt?: Maybe<Scalars["ISO8601DateTime"]>;
-};
-
 /** An edge in a connection. */
 export type BlockLanguageEdge = {
   __typename?: "BlockLanguageEdge";
@@ -181,7 +161,7 @@ export type CreateBlockLanguageInput = {
 export type CreateBlockLanguagePayload = {
   __typename?: "CreateBlockLanguagePayload";
   blockLanguage?: Maybe<BlockLanguage>;
-  blockLanguageDescription?: Maybe<BlockLanguageDescription>;
+  blockLanguageDescription?: Maybe<BlockLanguage>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
   errors: Array<Scalars["String"]>;
@@ -262,7 +242,7 @@ export type DestroyBlockLanguageInput = {
 export type DestroyBlockLanguagePayload = {
   __typename?: "DestroyBlockLanguagePayload";
   blockLanguage?: Maybe<BlockLanguage>;
-  blockLanguageDescription?: Maybe<BlockLanguageDescription>;
+  blockLanguageDescription?: Maybe<BlockLanguage>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
   errors: Array<Scalars["String"]>;
@@ -703,7 +683,7 @@ export type Query = {
   projectDatabases: ProjectDatabaseConnection;
   projectSources: ProjectSourceConnection;
   projects: ProjectConnection;
-  singleBlockLanguage: BlockLanguageDescription;
+  singleBlockLanguage: BlockLanguage;
   singleGrammar: Grammar;
   singleProject: Project;
 };
@@ -875,7 +855,7 @@ export type UpdateBlockLanguageInput = {
 export type UpdateBlockLanguagePayload = {
   __typename?: "UpdateBlockLanguagePayload";
   blockLanguage?: Maybe<BlockLanguage>;
-  blockLanguageDescription?: Maybe<BlockLanguageDescription>;
+  blockLanguageDescription?: Maybe<BlockLanguage>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
   errors: Array<Scalars["String"]>;
@@ -1055,8 +1035,8 @@ export type AdminEditBlockLanguageQueryVariables = {
 };
 
 export type AdminEditBlockLanguageQuery = { __typename?: "Query" } & {
-  singleBlockLanguage: { __typename?: "BlockLanguageDescription" } & Pick<
-    BlockLanguageDescription,
+  singleBlockLanguage: { __typename?: "BlockLanguage" } & Pick<
+    BlockLanguage,
     | "id"
     | "name"
     | "slug"

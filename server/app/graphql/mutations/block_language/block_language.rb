@@ -2,7 +2,7 @@
 class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
 
   field :blockLanguage, Types::BlockLanguageType, null: true
-  field :blockLanguageDescription, Types::BlockLanguageDescriptionType, null:true
+  field :blockLanguageDescription, Types::BlockLanguageType, null:true
   field :id, ID, null: true
   field :errors, [String], null: false
 
@@ -60,5 +60,3 @@ class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
      params.permit(:id, :slug)
     end
 end
-
-

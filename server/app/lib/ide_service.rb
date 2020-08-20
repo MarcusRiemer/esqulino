@@ -31,7 +31,7 @@ class BaseIdeService
   # Emits the block visualization instructions for the given block
   # language.
   def emit_generated_blocks(block_language)
-    generator_description = block_language.model['localGeneratorInstructions']
+    generator_description = block_language.local_generator_instructions
     if (generator_description)
       ensure_valid_document(
         "BlockLanguageGeneratorDocument",
@@ -47,12 +47,13 @@ class BaseIdeService
         block_language.to_list_api_response
       )
 
-      execute_request({
-                        "type" => "emitGeneratedBlocks",
-                        "block_language" => block_language_description,
-                        "generator" => generator_description,
-                        "grammar" => grammar_description
-                      })
+      json_result = execute_request({
+                                      "type" => "emitGeneratedBlocks",
+                                      "block_language" => block_language_description,
+                                      "generator" => generator_description,
+                                      "grammar" => grammar_description
+                                    })
+      return json_result.transform_keys { |k| k.underscore }
     else
       nil
     end

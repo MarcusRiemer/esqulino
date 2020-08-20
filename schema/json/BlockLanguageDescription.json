@@ -127,6 +127,7 @@
         "editorComponents",
         "id",
         "name",
+        "rootCssClasses",
         "sidebars"
       ],
       "type": "object"

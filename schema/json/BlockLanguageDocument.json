@@ -92,7 +92,8 @@
       "required": [
         "sidebars",
         "editorBlocks",
-        "editorComponents"
+        "editorComponents",
+        "rootCssClasses"
       ],
       "type": "object"
     },

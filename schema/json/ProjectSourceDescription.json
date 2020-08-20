@@ -16,16 +16,16 @@
         "id": {
           "type": "string"
         },
+        "kind": {
+          "enum": [
+            "data"
+          ],
+          "type": "string"
+        },
         "readOnly": {
           "type": "boolean"
         },
         "title": {
-          "type": "string"
-        },
-        "type": {
-          "enum": [
-            "data"
-          ],
           "type": "string"
         },
         "updatedAt": {
@@ -39,7 +39,7 @@
       "required": [
         "id",
         "title",
-        "type",
+        "kind",
         "url",
         "display",
         "readOnly"

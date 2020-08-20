@@ -3,6 +3,42 @@ require 'rails_helper'
 RSpec.describe ProjectsController, type: :request do
   before(:each) { create(:user, :guest) }
 
+  describe 'GraphQL FullProject' do
+    it 'finds a project by id' do
+      p = create(:project)
+
+      send_query(
+        query_name: "FullProject",
+        variables: { "id" => p.id}
+      )
+
+      expect(response.status).to eq 200
+      expect(response.media_type).to eq "application/json"
+      data = JSON.parse(response.body)
+      expect(data.fetch("errors", [])).to eq []
+
+      node = data["data"]["projects"]["nodes"][0];
+      expect(node["id"]).to eq p.id
+    end
+
+    it 'finds a project by slug' do
+      p = create(:project, slug: "uniq")
+
+      send_query(
+        query_name: "FullProject",
+        variables: { "id" => p.slug}
+      )
+
+      expect(response.status).to eq 200
+      expect(response.media_type).to eq "application/json"
+      data = JSON.parse(response.body)
+      expect(data.fetch("errors", [])).to eq []
+
+      node = data["data"]["projects"]["nodes"][0];
+      expect(node["id"]).to eq p.id
+    end
+  end
+
   describe 'POST /api/project' do
     let(:user) { create(:user) }
 

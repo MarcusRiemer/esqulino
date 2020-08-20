@@ -6,7 +6,7 @@ module Types
     field :blockLanguages, Types::BlockLanguageType.connection_type, null: false do
       argument :input, Types::BlockLanguageType::InputType,required:false
     end
-    field :singleBlockLanguage, Types::BlockLanguageDescriptionType, null:false do
+    field :singleBlockLanguage, Types::BlockLanguageType, null:false do
       argument :id, ID,required:true
     end
 
