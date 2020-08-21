@@ -397,29 +397,48 @@ RSpec.describe ProjectsController, type: :request do
 
   describe 'DELETE /api/project/:project_id' do
     it 'unauthorized' do
-      to_delete = FactoryBot.create(:project)
-      delete "/api/project/#{to_delete.slug}"
+      p = create(:project)
 
-      expect(response).to have_http_status(401)
+      send_query(
+        query_name: "DestroyProject",
+        variables: { "id" => p.id}
+      )
 
-      expect(Project.exists?(to_delete.id)).to be true
+      expect(response).to have_http_status(200)
+
+      json_body = JSON.parse(response.body)
+      expect(json_body["data"]["destroyProject"]["errors"].length).to eq 1
+
+      # Must still exist
+      expect(Project.exists?(p.id)).to be true
     end
 
     it 'nonexistant' do
-      delete "/api/project/not_even_a_uuid"
+      send_query(
+        query_name: "DestroyProject",
+        variables: { "id" => "11ceddb1-951b-40dc-bf60-fcfbcdaddc65" }
+      )
 
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(200)
+      json_body = JSON.parse(response.body)
+      expect(json_body["data"]["destroyProject"]["errors"].length).to eq 1
     end
 
     it 'an empty project' do
       to_delete = FactoryBot.create(:project)
       set_access_token(to_delete.user)
 
-      delete "/api/project/#{to_delete.slug}"
+      send_query(
+        query_name: "DestroyProject",
+        variables: { "id" => to_delete.id }
+      )
 
-      expect(response.body).to be_empty
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(200)
 
+      json_body = JSON.parse(response.body)
+      expect(json_body["data"]["destroyProject"].fetch("errors", [])).to eq []
+
+      # Mustn't exist anymore
       expect(Project.exists?(to_delete.id)).to be false
     end
   end

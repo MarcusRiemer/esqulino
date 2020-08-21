@@ -1,4 +1,3 @@
-
 class Mutations::Projects::CreateProject < Mutations::Projects::Projects
 
   argument :name, Types::Scalar::LangJson, required:true
@@ -6,21 +5,21 @@ class Mutations::Projects::CreateProject < Mutations::Projects::Projects
 
   def resolve(**args)
     project = Project.new(
-        name:args[:name],
-        slug:args[:slug],
-        user_id:context[:user].id)
+      name: args[:name],
+      slug: args[:slug],
+      user_id: context[:user].id
+    )
+
     if project.save
       {
-          id: project.id,
-          errors: []
+        id: project.id,
+        errors: []
       }
     else
       {
-          id: nil,
-          errors: project.errors.full_messages
+        id: nil,
+        errors: project.errors.full_messages
       }
     end
   end
 end
-
-
