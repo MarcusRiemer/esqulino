@@ -12,7 +12,11 @@ import {
 } from "../shared/project";
 import { ResourceReferencesService } from "../shared/resource-references.service";
 
-import { FullProjectQuery, FullProjectGQL } from "../../generated/graphql";
+import {
+  FullProjectQuery,
+  FullProjectGQL,
+  DestroyProjectGQL,
+} from "../../generated/graphql";
 
 export { Project, ProjectFullDescription };
 
@@ -48,7 +52,8 @@ export class ProjectService {
     private _http: HttpClient,
     private _server: ServerApiService,
     private _resourceReferences: ResourceReferencesService,
-    private _fullProject: FullProjectGQL
+    private _fullProject: FullProjectGQL,
+    private _destroyProject: DestroyProjectGQL
   ) {
     // Create a single subject once and for all. This instance is not
     // allowed to changed as it is passed on to every subscriber.
@@ -166,8 +171,7 @@ export class ProjectService {
    * Asks the server to delete the project with the given id.
    */
   deleteProject(projectId: string) {
-    const url = this._server.getProjectUrl(projectId);
-    return this._http.delete(url);
+    return this._destroyProject.mutate({ id: projectId }).toPromise();
   }
 
   private passThroughError(error: Response) {

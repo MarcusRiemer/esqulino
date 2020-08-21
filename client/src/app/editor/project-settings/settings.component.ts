@@ -85,17 +85,14 @@ export class SettingsComponent {
       "d",
       this._performData.project.delete(this.project.id)
     );
-    subRef = btnDelete.onClick.subscribe((_) => {
+    subRef = btnDelete.onClick.subscribe(async (_) => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
-        this._projectService
-          .deleteProject(this.project.slug)
-          .subscribe((res) => {
-            // Go back to title after deleting
-            if (res) {
-              this._router.navigateByUrl("/");
-            }
-          });
+        const res = await this._projectService.deleteProject(this.project.slug);
+        // Go back to title after deleting
+        if (res) {
+          this._router.navigateByUrl("/");
+        }
       }
     });
     this._subscriptionRefs.push(subRef);

@@ -64,17 +64,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Destroy an existing project and all of its associated data
-  def destroy
-    begin
-      authorize current_project
-
-      current_project.destroy
-    rescue Pundit::NotAuthorizedError => e
-      error_response("You need the permission")
-    end
-  end
-
 
   # The preview image for a specific project
   def preview_image
