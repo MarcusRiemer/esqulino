@@ -45,10 +45,16 @@ RSpec.describe ProjectsController, type: :request do
     describe 'valid request' do
       it 'creates a project' do
         set_access_token(user)
-        post '/api/project', params: {"name" => { "en" => "Some project" }, "slug" => "test" }
+        send_query(
+          query_name: "CreateProject",
+          variables: {"name" => { "en" => "Some project" }, "slug" => "test" }
+        )
 
         expect(response.status).to eq(200)
         expect(response.media_type).to eq "application/json"
+
+        json_body = JSON.parse(response.body)
+        expect(json_body["data"]["createProject"].fetch("errors", [])).to eq []
 
         created_project = Project.find_by(slug: "test")
         expect(created_project.name).to eq({ "en" => "Some project" })
@@ -60,8 +66,16 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'missing the slug' do
         set_access_token(user)
-        post '/api/project', params: { "name": { "en" => "Some project" } }
-        expect(response).to have_http_status(200)
+        send_query(
+          query_name: "CreateProject",
+          variables: {"name" => { "en" => "Some project" }, "slug" => "test" }
+        )
+
+        expect(response.status).to eq(200)
+        expect(response.media_type).to eq "application/json"
+
+        json_body = JSON.parse(response.body)
+        expect(json_body["data"]["createProject"].fetch("errors", [])).to eq []
 
         expect(Project.all.length).to eq 1
       end
@@ -70,8 +84,18 @@ RSpec.describe ProjectsController, type: :request do
     describe 'invalid request' do
       it 'missing a name' do
         set_access_token(user)
-        post '/api/project', params: { "slug": "foof" }
-        expect(response).to have_http_status(400)
+        send_query(
+          query_name: "CreateProject",
+          variables: { "slug" => "test" }
+        )
+
+        expect(response.status).to eq(200)
+        expect(response.media_type).to eq "application/json"
+
+        json_body = JSON.parse(response.body)
+        expect(json_body.fetch("errors", []).length).to eq 1
+
+        expect(Project.all.length).to eq 0
       end
     end
   end
