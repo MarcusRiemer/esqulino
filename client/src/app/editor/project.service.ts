@@ -5,17 +5,14 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { catchError, delay, filter, tap, map, share } from "rxjs/operators";
 
 import { ServerApiService } from "../shared/serverdata/serverapi.service";
-import {
-  Project,
-  ProjectDescription,
-  ProjectFullDescription,
-} from "../shared/project";
+import { Project, ProjectFullDescription } from "../shared/project";
 import { ResourceReferencesService } from "../shared/resource-references.service";
 
 import {
   FullProjectQuery,
   FullProjectGQL,
   DestroyProjectGQL,
+  UpdateProjectGQL,
 } from "../../generated/graphql";
 
 export { Project, ProjectFullDescription };
@@ -53,7 +50,8 @@ export class ProjectService {
     private _server: ServerApiService,
     private _resourceReferences: ResourceReferencesService,
     private _fullProject: FullProjectGQL,
-    private _destroyProject: DestroyProjectGQL
+    private _destroyProject: DestroyProjectGQL,
+    private _updateProject: UpdateProjectGQL
   ) {
     // Create a single subject once and for all. This instance is not
     // allowed to changed as it is passed on to every subscriber.
@@ -155,12 +153,10 @@ export class ProjectService {
    */
   storeProjectDescription(proj: Project) {
     const desc = proj.toUpdateRequest();
-    const url = this._server.getProjectUrl(proj.slug);
 
-    const toReturn = this._http.put<ProjectDescription>(url, desc).pipe(
+    const toReturn = this._updateProject.mutate(desc).pipe(
       catchError(this.passThroughError),
       delay(250),
-      tap((desc) => proj.updateDescription(desc)),
       tap((_) => proj.markSaved())
     );
 

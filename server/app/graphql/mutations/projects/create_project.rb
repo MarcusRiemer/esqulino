@@ -3,6 +3,8 @@ class Mutations::Projects::CreateProject < Mutations::Projects::Projects
   argument :name, Types::Scalar::LangJson, required: true
   argument :slug, String, required: true
 
+  field :id, ID, null: true
+
   def resolve(**args)
     authorize :project, :create?
 
@@ -15,12 +17,11 @@ class Mutations::Projects::CreateProject < Mutations::Projects::Projects
     if project.save
       ProjectMailer.with(project: project).created_admin.deliver_later
       {
+        errors: [],
         id: project.id,
-        errors: []
       }
     else
       {
-        id: nil,
         errors: project.errors.full_messages
       }
     end

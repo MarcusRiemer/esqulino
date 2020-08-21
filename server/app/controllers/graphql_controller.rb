@@ -1,20 +1,27 @@
 class GraphqlController < ApplicationController
   include UserHelper
   include LocaleHelper
-  # If accessing from outside this domain, nullify the session
-  # This allows for outside API access while preventing CSRF attacks,
-  # but you'll have to authenticate your user separately
-  # protect_from_forgery with: :null_session
 
+  # Runs a GraphQL query
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
 
+    if not operation_name
+      raise EsqulinoError::Base("GraphQL queries must provide operationName")
+    end
+
     context = {
-      user: current_user(false),
+      user: current_user,
       language: request_locale
     }
+
+    # TODO: proper authorisation instead of relying on the name of the query
+    if operation_name.start_with? "Admin" and not current_user.is_admin?
+      raise EsqulinoError::Authorization
+    end
+
     result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
   rescue => e

@@ -1,4 +1,3 @@
-
 module Resolvers
   class BaseResolver
 

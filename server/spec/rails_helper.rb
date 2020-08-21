@@ -81,10 +81,12 @@ end
 module GraphqlSpecHelper
   include GraphqlQueryHelper
   def send_query(query_name:, variables: {})
-    post "/api/graphql", headers: { "CONTENT_TYPE" => "application/json" },
+    post "/api/graphql",
+         headers: { "CONTENT_TYPE" => "application/json" },
          params: {
-             query: get_query(query_name),
-             variables: variables
+           query: get_query(query_name),
+           operationName: query_name,
+           variables: variables
          }.to_json
   end
 end

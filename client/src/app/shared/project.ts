@@ -16,6 +16,10 @@ import { DatabaseSchemaAdditionalContext } from "./syntaxtree/sql/sql.validator"
 import { ResourceReferencesService } from "./resource-references.service";
 import { isValidId } from "./util";
 import { MultiLangString } from "./multilingual-string.description";
+import {
+  UpdateProjectInput,
+  UpdateProjectMutation,
+} from "src/generated/graphql";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -97,20 +101,6 @@ export class Project implements Saveable {
     // Construct relevant block languages
     this._blockLanguages = (json.blockLanguages || []).map(
       (val) => new BlockLanguage(val)
-    );
-  }
-
-  /**
-   * Called when partial updates are beeing made to the project,
-   * this is required to get hold of IDs that have been assigned
-   * by the server.
-   */
-  updateDescription(desc: ProjectDescription) {
-    console.log("Updated Project:", desc);
-    // Simply take the now used languages for granted
-    this._usesBlockLanguages = desc.projectUsesBlockLanguages;
-    this._blockLanguages = desc.blockLanguages.map(
-      (blockDesc) => new BlockLanguage(blockDesc)
     );
   }
 
@@ -394,31 +384,13 @@ export class Project implements Saveable {
   /**
    * @return An object that the server can use to update the stored data.
    */
-  toUpdateRequest(): ProjectUpdateDescription {
-    const toReturn: ProjectUpdateDescription = {
+  toUpdateRequest(): UpdateProjectInput {
+    const toReturn: UpdateProjectInput = {
+      id: this.id,
+      slug: this.slug,
       name: this.name,
       description: this.description,
-      activeDatabase: this._currentDatabase,
-      projectUsesBlockLanguages: [],
     };
-
-    this._removedBlockLanguages.forEach((removed) => {
-      toReturn.projectUsesBlockLanguages.push({
-        id: removed,
-        _destroy: true,
-      });
-    });
-
-    this._usesBlockLanguages.forEach((used) => {
-      toReturn.projectUsesBlockLanguages.push({
-        id: used.id,
-        blockLanguageId: used.blockLanguageId,
-      });
-    });
-
-    if (this._indexPageId) {
-      toReturn.indexPageId = this.indexPageId;
-    }
 
     if (this._projectImageId) {
       toReturn.preview = this._projectImageId;
