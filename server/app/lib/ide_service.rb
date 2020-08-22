@@ -53,6 +53,7 @@ class BaseIdeService
                                       "generator" => generator_description,
                                       "grammar" => grammar_description
                                     })
+
       return json_result.transform_keys { |k| k.underscore }
     else
       nil
@@ -201,13 +202,12 @@ class MockIdeService < BaseIdeService
   end
 
   def emit_generated_blocks(block_language)
-    result = super
-    if not result.nil?
+    if block_language and block_language.local_generator_instructions
       return ({
-                "editorBlocks" => [],
-                "editorComponents" => [],
+                "editor_blocks" => [],
+                "editor_components" => [],
                 "sidebars" => [],
-                "rootCssClasses" => []
+                "root_css_classes" => []
               })
     else
       return nil

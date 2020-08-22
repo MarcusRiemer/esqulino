@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Project-Policy" do
-  subject { ProjectPolicy.new(user, project) }
-
   let(:project) { create(:project) }
+
+  subject { ProjectPolicy.new(user, project) }
 
   context "as guest" do
     let(:user) { create(:user, :guest) }

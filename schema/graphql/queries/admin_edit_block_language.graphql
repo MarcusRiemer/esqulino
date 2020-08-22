@@ -1,17 +1,19 @@
 query AdminEditBlockLanguage($id: ID!) {
-    singleBlockLanguage(id: $id) {
-        id
-        name
-        slug
-        generated
-        grammarId
-        sidebars
-        editorBlocks
-        editorComponents
-        rootCssClasses
-        localGeneratorInstructions
-        createdAt
-        updatedAt
-        defaultProgrammingLanguageId
+  blockLanguages(input: {filter: {id: $id}}) {
+    nodes {
+      id
+      name
+      slug
+      generated
+      grammarId
+      sidebars
+      editorBlocks
+      editorComponents
+      rootCssClasses
+      localGeneratorInstructions
+      createdAt
+      updatedAt
+      defaultProgrammingLanguageId
     }
+  }
 }

@@ -169,7 +169,6 @@ RSpec.describe "user controller" do
 
     it "valid" do
       set_access_token(identity.user)
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
       patch '/api/user/change_username',
         :headers => json_headers,
@@ -185,7 +184,6 @@ RSpec.describe "user controller" do
 
     it "invalid (empty string)" do
       set_access_token(identity.user)
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
       patch '/api/user/change_username',
         :headers => json_headers,
@@ -193,7 +191,7 @@ RSpec.describe "user controller" do
           displayName: ""
         }.to_json
 
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
+      expect(User.find_by(id: identity.user_id)[:display_name]).to eq(identity.user.display_name)
     end
   end
 

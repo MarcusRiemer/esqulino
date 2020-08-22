@@ -27,19 +27,20 @@ FactoryBot.define do
                 "type" => "INTEGER",
                 "index" => 0,
                 "primary" => true,
-                "not_null" => true,
-                "dflt_value" => nil
+                "notNull" => true,
+                "dfltValue" => nil
               },
               {
                 "name" => "value",
                 "type" => "TEXT",
                 "index" => 1,
                 "primary" => false,
-                "not_null" => false,
-                "dflt_value" => "value"
+                "notNull" => false,
+                "dfltValue" => "value"
               }
             ],
-            "foreign_keys" => []
+            "foreignKeys" => [],
+            "systemTable" => false
           }
         )
 
@@ -87,11 +88,12 @@ FactoryBot.define do
                 "type" => "INTEGER",
                 "index" => 0,
                 "primary" => true,
-                "not_null" => true,
-                "dflt_value" => nil
+                "notNull" => true,
+                "dfltValue" => nil
               },
             ],
-            "foreign_keys" => []
+            "foreignKeys" => [],
+            "systemTable" => false
           }
         )
 

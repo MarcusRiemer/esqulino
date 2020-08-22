@@ -129,7 +129,10 @@ RSpec.describe NewsController, type: :request do
     end
   end
 
-  describe 'GET /api/news/admin' do
+  describe 'GraphQL AdminListNews' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
     it 'Admin: getting all news in multiple languages, even if unpublished' do
       admin = create(:user, :admin)
       create(:news, published_from: nil )
@@ -137,7 +140,7 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 12, 1) )
 
       #set_access_token(admin)
-      send_query(query_name:"AdminListNews")
+      send_query(query_name: "AdminListNews")
 
       json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
@@ -152,7 +155,10 @@ RSpec.describe NewsController, type: :request do
     end
   end
 
-  describe 'GET /api/news/admin/:id' do
+  describe 'GraphQL AdminSingleNews' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
     it 'Admin: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
       #set_access_token(n.user)

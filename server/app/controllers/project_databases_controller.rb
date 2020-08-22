@@ -99,7 +99,7 @@ class ProjectDatabasesController < ApplicationController
   # Creates a new table in the given database
   def table_create
     ensure_write_access do
-      table_description = ensure_request("TableDescription", request.body.read)
+      table_description = ensure_request("TableDescription", request.body.read, underscore_keys: false)
 
       # Grab the database and modify it
       if (current_database.nil?) then

@@ -32,7 +32,8 @@ RSpec.describe "IDE Service" do
       grammar = create(:grammar)
       block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
 
-      expect(service.emit_generated_blocks(block_language).keys).to(
+      result = service.emit_generated_blocks(block_language)
+      expect(result.keys).to(
         contain_exactly("editor_blocks", "editor_components", "sidebars", "root_css_classes")
       )
     end

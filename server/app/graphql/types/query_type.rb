@@ -53,23 +53,6 @@ module Types
       end
     end
 
-    def single_block_language(id:)
-      begin
-        block_lang = BlockLanguage.scope_list.select("model")
-        block_lang = if BlattwerkzeugUtil::string_is_uuid? id then
-                       block_lang.find id
-                     else
-                       block_lang.find_by! slug: id
-                     end
-        block_lang
-            .to_list_api_response(options:{include_list_calculations:true})
-            .merge(block_lang.model)
-            .transform_keys {|a| a.underscore}
-      rescue ActiveRecord::RecordNotFound
-        raise GraphQL::ExecutionError.new("BlockLangugae with 'id'=#{id} could not be found", extensions: { code: 'NOT_FOUND' })
-      end
-    end
-
     def code_resources(input:nil)
       if input
         Resolvers::CodeResourceResolver::new(context:@context,**input).scope

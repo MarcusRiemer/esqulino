@@ -15,10 +15,8 @@ class Mutations::BlockLanguage::CreateBlockLanguage < Mutations::BlockLanguage::
   argument :localGeneratorInstructions, GraphQL::Types::JSON,required:false
 
   def resolve(**args)
-    params = ActionController::Parameters.new(args)
-    block_lang = BlockLanguage.new(basic_params(params))
-    block_lang.model = model_params(params)
-    save_block_language(block_lang)
+    underscore_args = args.transform_keys {|a| a.to_s.underscore}
+    block_lang = BlockLanguage.new(**underscore_args)
     if block_lang.save
       {
           id: block_lang[:id],

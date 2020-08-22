@@ -14,7 +14,6 @@ class Project < ApplicationRecord
 
   # The block languages this project explicitly allows
   has_many :project_uses_block_languages, :dependent => :destroy
-  accepts_nested_attributes_for :project_uses_block_languages, allow_destroy: true
 
   # The actual allowed languages
   has_many :block_languages, -> { distinct }, :through => :project_uses_block_languages
@@ -108,49 +107,14 @@ class Project < ApplicationRecord
     end
   end
 
-  # Packs the project and all of its dependencies into a big blob of data. This blob
-  # is meant to be fully self contained as we expect projects to be fairly small in the
-  # average case. We may need to rethink this approach if individual projects turn out
-  # to be too big.
-  def to_full_api_response
-    to_return = to_project_api_response
-
-    to_return['schema'] = []
-    to_return['codeResources'] = self.code_resources.map(&:to_full_api_response)
-
-    if default_database then
-      to_return['schema'] = default_database.schema
-    end
-
-    to_return
-  end
-
+  # The schema of the default database
+  # TODO: Remove this shortcut
   def schema
     if default_database
       default_database.schema
     else
       []
     end
-  end
-
-  # Hands out "settings data" that concerns the project itself but no complicated
-  # things like resources or schemas.
-  def to_project_api_response
-    to_return = to_json_api_response
-
-    to_return['activeDatabase'] = "default"
-    to_return['sources'] = self.project_sources.map(&:to_full_api_response)
-    to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
-    to_return['blockLanguages'] = self.block_languages.map(&:to_full_api_response)
-    to_return['grammars'] = self.grammars.map(&:to_full_api_response)
-
-    to_return
-  end
-
-  # Hands out just enough data about this project to allow a nice listing of available
-  # projects in the client.
-  def to_list_api_response(options:{})
-    to_json_api_response
   end
 
   # TODO: This is a legacy holdover

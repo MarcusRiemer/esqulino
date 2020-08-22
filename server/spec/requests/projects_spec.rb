@@ -221,78 +221,68 @@ RSpec.describe ProjectsController, type: :request do
         expect(updated.name).to eq ({ "en" => "Only" })
         expect(updated.description).to eq ({ "en" => "Only" })
       end
-
-      xit 'adds new used block languages' do
-        added_block_language = FactoryBot.create(:block_language)
-        new_block_language = FactoryBot.create(:block_language)
-        project.project_uses_block_languages.create(block_language: added_block_language)
-
-        put "/api/project/#{project.slug}",
-            params: {
-              "apiVersion" => 4,
-              "projectUsesBlockLanguages" => [
-                { "blockLanguageId" => new_block_language.id }
-              ]
-            }
-
-        # Ensure the response is well formed
-        expect(response).to have_http_status(200)
-        json_data = JSON.parse(response.body)
-        expect(json_data).to validate_against "ProjectDescription"
-
-        # Ensure the database has actually changed
-        project.reload
-        expect(project.project_uses_block_languages.size).to eq 2
-        expect(project.block_languages.include? new_block_language).to be true
-      end
-
-      xit 'removes used block languages' do
-        added_block_language = FactoryBot.create(:block_language)
-        use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
-
-        put "/api/project/#{project.slug}",
-            params: {
-              "apiVersion" => 4,
-              "projectUsesBlockLanguages" => [
-                { "id" => use_added_block_language.id, "_destroy": true }
-              ]
-            }
-
-        # Ensure the response is well formed
-        expect(response).to have_http_status(200)
-        json_data = JSON.parse(response.body)
-        expect(json_data).to validate_against "ProjectDescription"
-
-        # Ensure the database has actually changed
-        project.reload
-        expect(project.project_uses_block_languages.size).to eq 0
-      end
-
-      xit 'updates used block languages' do
-        added_block_language = FactoryBot.create(:block_language)
-        use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
-        new_block_language = FactoryBot.create(:block_language)
-
-        put "/api/project/#{project.slug}",
-            params: {
-              "apiVersion" => 4,
-              "projectUsesBlockLanguages" => [
-                { "id" => use_added_block_language.id, "blockLanguageId": new_block_language.id }
-              ]
-            }
-
-        # Ensure the response is well formed
-        expect(response).to have_http_status(200)
-        json_data = JSON.parse(response.body)
-        expect(json_data).to validate_against "ProjectDescription"
-
-        # Ensure the database has actually changed
-        project.reload
-        expect(project.project_uses_block_languages.size).to eq 1
-        expect(project.block_languages.include? new_block_language).to be true
-      end
     end
   end
+
+  describe "GraphQL Project BlockLanguage Mutations" do
+    let(:user) { create(:user) }
+    let(:project) { create(:project, user: user) }
+
+    before(:each) { set_access_token(project.user) }
+
+    it 'adds new used block languages' do
+      # The project has already a block language that is in use
+      added_block_language = FactoryBot.create(:block_language)
+      project.project_uses_block_languages.create(block_language: added_block_language)
+
+      # The block language to add
+      new_block_language = FactoryBot.create(:block_language)
+
+      send_query(
+        query_name: "ProjectAddUsedBlockLanguage",
+        variables: {
+          projectId: project.id,
+          blockLanguageId: new_block_language.id
+        }
+      )
+
+      expect(response.status).to eq(200)
+      expect(response.media_type).to eq "application/json"
+
+      json_body = JSON.parse(response.body)
+      expect(json_body["errors"]).to eq nil
+
+      # Ensure the database has actually changed
+      project.reload
+      expect(project.project_uses_block_languages.size).to eq 2
+      expect(project.block_languages.include? new_block_language).to be true
+    end
+
+    it 'removes used block languages' do
+      b = FactoryBot.create(:block_language)
+      used = project.project_uses_block_languages.create(block_language: b)
+
+      send_query(
+        query_name: "ProjectRemoveUsedBlockLanguage",
+        variables: {
+          usedBlockLanguageId: used.id
+        }
+      )
+
+      expect(response.status).to eq(200)
+      expect(response.media_type).to eq "application/json"
+
+      json_body = JSON.parse(response.body)
+      expect(json_body["errors"]).to eq nil
+
+
+      # Ensure the database has actually changed
+      project.reload
+      expect(project.project_uses_block_languages.size).to eq 0
+      expect(BlockLanguage.count).to eq 1
+    end
+  end
+
 
   describe 'GraphQL FrontpageListProjects' do
     it 'lists nothing if nothing is there' do

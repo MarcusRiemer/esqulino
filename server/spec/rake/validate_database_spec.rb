@@ -134,9 +134,10 @@ RSpec.describe 'Rake Model Validation' do
       FactoryBot.create(:block_language) # Valid
 
       # Invalid, partially because of given values, partially because fields are missing
-      p = FactoryBot.build(:block_language, model: {
-                             "sidebars" => false # Should be an array
-                           })
+      p = FactoryBot.build(
+        :block_language,
+        :sidebars => false # Should be an array
+      )
       p.save(validate: false)
 
       res = select_all_invalid_block_languages

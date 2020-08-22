@@ -4,11 +4,12 @@ RSpec.describe GrammarsController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
   before(:each) { create(:user, :guest) }
 
-  describe 'GET /api/grammars' do
-    let(:user) { create(:user) }
+  describe 'GraphQL AdminListGrammars' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
 
     it 'lists nothing if nothing is there' do
-      send_query(query_name:"AdminListGrammars")
+      send_query(query_name: "AdminListGrammars")
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 0
@@ -108,7 +109,10 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'GET /api/grammars/:grammarId' do
+  describe 'GraphQL AdminSingleGrammar' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
     it 'finds a single grammar by ID' do
       g = FactoryBot.create(:grammar)
       send_query(query_name:"AdminSingleGrammar",variables:{id: g.id})
@@ -308,6 +312,9 @@ RSpec.describe GrammarsController, type: :request do
   end
 
   describe 'DELETE /api/grammars/:grammarId' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
     it 'removes unreferenced grammar' do
       g = FactoryBot.create(:grammar)
       send_query(query_name:"DestroyGrammar",variables:{"id"=>g.id})

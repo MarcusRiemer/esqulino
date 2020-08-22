@@ -13,5 +13,7 @@ module Types
     field :create_project, mutation: Mutations::Projects::CreateProject
     field :destroy_project, mutation: Mutations::Projects::DestroyProject
     field :update_project, mutation: Mutations::Projects::UpdateProject
+    field :add_used_block_language, mutation: Mutations::Projects::AddUsedBlockLanguage
+    field :remove_used_block_language, mutation: Mutations::Projects::RemoveUsedBlockLanguage
   end
 end

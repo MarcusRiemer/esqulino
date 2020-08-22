@@ -8,19 +8,19 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
 
-    if not operation_name
-      raise EsqulinoError::Base("GraphQL queries must provide operationName")
+    if not operation_name and Rails.env.production?
+      raise EsqulinoError::Base.new "GraphQL queries must provide operationName"
+    end
+
+    # TODO: proper authorisation instead of relying on the name of the query
+    if operation_name and operation_name.start_with? "Admin" and not current_user.is_admin?
+      raise EsqulinoError::Authorization
     end
 
     context = {
       user: current_user,
       language: request_locale
     }
-
-    # TODO: proper authorisation instead of relying on the name of the query
-    if operation_name.start_with? "Admin" and not current_user.is_admin?
-      raise EsqulinoError::Authorization
-    end
 
     result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
