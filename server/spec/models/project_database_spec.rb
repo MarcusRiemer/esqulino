@@ -477,6 +477,17 @@ RSpec.describe ProjectDatabase, type: :model do
     end
   end
 
+  it 'properly generates foreign_key references' do
+    db = create(:project_database, :tables_references)
+    schema = db.refresh_schema
+
+    expect(schema[0]["foreignKeys"][0]["references"][0]).to eq({
+                                                                 "fromColumn"=>"key",
+                                                                 "toTable"=>"B",
+                                                                 "toColumn"=>"key"
+                                                               })
+  end
+
   # This spec can't be run with FakeFS as the C-bindings of SQLite
   # don't know anything about the faking that goes on in the background.
   it 'creates database files' do

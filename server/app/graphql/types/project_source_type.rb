@@ -9,8 +9,7 @@ module Types
     field :url, String, null:false
     field :title, String, null:false
     field :kind, ProjectSourceKindType, null:false
-    field :display, String, null:false
-    field :readOnly, Boolean,null:false
+    field :read_only, Boolean,null:false
 
     field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
     field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true

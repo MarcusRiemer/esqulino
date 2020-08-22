@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 9ba2daa8-d66a-4e95-b52b-535edac64f58
@@ -19,24 +19,24 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "chapter", "columns": [{"name": "chapter_id",
-    "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
-    null}, {"name": "text", "type": "TEXT", "index": 1, "primary": false, "not_null":
-    true, "dflt_value": null}, {"name": "caption", "type": "TEXT", "index": 2, "primary":
-    false, "not_null": true, "dflt_value": null}, {"name": "dead_end", "type": "INTEGER",
-    "index": 3, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
-    []}, {"name": "next_chapter", "columns": [{"name": "chapter_from", "type": "INTEGER",
-    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
-    "chapter_to", "type": "INTEGER", "index": 1, "primary": true, "not_null": false,
-    "dflt_value": null}, {"name": "decision_text", "type": "TEXT", "index": 2, "primary":
-    false, "not_null": true, "dflt_value": null}], "foreign_keys": [{"references":
-    [{"to_table": "chapter", "to_column": "chapter_id", "from_column": "chapter_to"}]},
-    {"references": [{"to_table": "chapter", "to_column": "chapter_id", "from_column":
-    "chapter_from"}]}]}]'
+    "type": "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue":
+    null}, {"name": "text", "type": "TEXT", "index": 1, "notNull": true, "primary":
+    false, "dfltValue": null}, {"name": "caption", "type": "TEXT", "index": 2, "notNull":
+    true, "primary": false, "dfltValue": null}, {"name": "dead_end", "type": "INTEGER",
+    "index": 3, "notNull": true, "primary": false, "dfltValue": null}], "foreignKeys":
+    [], "systemTable": false}, {"name": "next_chapter", "columns": [{"name": "chapter_from",
+    "type": "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue":
+    null}, {"name": "chapter_to", "type": "INTEGER", "index": 1, "notNull": false,
+    "primary": true, "dfltValue": null}, {"name": "decision_text", "type": "TEXT",
+    "index": 2, "notNull": true, "primary": false, "dfltValue": null}], "foreignKeys":
+    [{"references": [{"toTable": "chapter", "toColumn": "chapter_id", "fromColumn":
+    "chapter_to"}]}, {"references": [{"toTable": "chapter", "toColumn": "chapter_id",
+    "fromColumn": "chapter_from"}]}], "systemTable": false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-02-26 10:22:36.331336000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2018-02-26 10:24:43.034854000 Z
+  value_before_type_cast: 2020-08-22 21:58:29.789599000 Z
 new_record: false
 active_record_yaml_version: 2

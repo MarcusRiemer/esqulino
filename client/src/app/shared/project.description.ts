@@ -58,7 +58,6 @@ export interface ProjectSourceDescription {
   title: string;
   kind: "data";
   url: string;
-  display: string;
   readOnly: boolean;
 
   /**
@@ -98,8 +97,6 @@ export interface ProjectListDescription {
  * complicated standalone resources.
  */
 export interface ProjectDescription extends ProjectListDescription {
-  availableDatabases?: { [id: string]: AvailableDatabaseDescription };
-  activeDatabase?: string;
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[];
   blockLanguages: BlockLanguageDescription[];
   grammars: GrammarDescription[];
@@ -114,6 +111,10 @@ export interface ProjectDescription extends ProjectListDescription {
 export interface ProjectFullDescription extends ProjectDescription {
   schema: TableDescription[];
   codeResources: CodeResourceDescription[];
+  defaultDatabase?: {
+    id: string;
+    name: string;
+  };
 }
 
 /**

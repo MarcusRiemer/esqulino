@@ -619,9 +619,9 @@ export type ProjectDatabase = {
   __typename?: "ProjectDatabase";
   createdAt: Scalars["ISO8601DateTime"];
   id: Scalars["ID"];
-  name?: Maybe<Scalars["String"]>;
-  project?: Maybe<Project>;
-  schema?: Maybe<Scalars["JSON"]>;
+  name: Scalars["String"];
+  project: Project;
+  schema: Scalars["JSON"];
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
@@ -678,7 +678,6 @@ export type ProjectOrderType = {
 export type ProjectSource = {
   __typename?: "ProjectSource";
   createdAt?: Maybe<Scalars["ISO8601DateTime"]>;
-  display: Scalars["String"];
   id: Scalars["ID"];
   kind: ProjectSourceKind;
   project: Project;
@@ -860,7 +859,7 @@ export type RemoveUsedBlockLanguagePayload = {
 export type Response = {
   __typename?: "Response";
   blockLanguage: BlockLanguage;
-  project: Project;
+  projectUsesBlockLanguage: ProjectUsesBlockLanguage;
 };
 
 export type Role = {
@@ -1489,6 +1488,12 @@ export type FullProjectQuery = { __typename?: "Query" } & {
             Project,
             "id" | "slug" | "name" | "description" | "public" | "indexPageId"
           > & {
+              defaultDatabase?: Maybe<
+                { __typename?: "ProjectDatabase" } & Pick<
+                  ProjectDatabase,
+                  "id" | "name"
+                >
+              >;
               codeResources: Array<
                 { __typename?: "CodeResource" } & Pick<
                   CodeResource,
@@ -1535,7 +1540,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
               projectSources: Array<
                 { __typename?: "ProjectSource" } & Pick<
                   ProjectSource,
-                  "id" | "kind" | "readOnly" | "display" | "title" | "url"
+                  "id" | "kind" | "readOnly" | "title" | "url"
                 >
               >;
               schema: Array<
@@ -1603,10 +1608,9 @@ export type ProjectAddUsedBlockLanguageMutation = {
     { __typename?: "AddUsedBlockLanguagePayload" } & {
       result?: Maybe<
         { __typename?: "Response" } & {
-          blockLanguage: { __typename?: "BlockLanguage" } & Pick<
-            BlockLanguage,
-            "id" | "name"
-          >;
+          projectUsesBlockLanguage: {
+            __typename?: "ProjectUsesBlockLanguage";
+          } & Pick<ProjectUsesBlockLanguage, "id">;
         }
       >;
     }
@@ -2446,6 +2450,10 @@ export const FullProjectDocument = gql`
         description
         public
         indexPageId
+        defaultDatabase {
+          id
+          name
+        }
         codeResources {
           id
           name
@@ -2482,7 +2490,6 @@ export const FullProjectDocument = gql`
           id
           kind
           readOnly
-          display
           title
           url
         }
@@ -2555,9 +2562,8 @@ export const ProjectAddUsedBlockLanguageDocument = gql`
       input: { projectId: $projectId, blockLanguageId: $blockLanguageId }
     ) {
       result {
-        blockLanguage {
+        projectUsesBlockLanguage {
           id
-          name
         }
       }
     }

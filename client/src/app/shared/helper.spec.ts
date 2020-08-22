@@ -18,8 +18,10 @@ export function emptyProject(
     description: { en: "Dynamically created for client side specs" },
     public: true,
     projectUsesBlockLanguages: [],
-    activeDatabase: "default",
-    availableDatabases: {},
+    defaultDatabase: {
+      id: "spec",
+      name: "specDb",
+    },
     blockLanguages: [],
     grammars: [],
     codeResources: [],

@@ -150,7 +150,13 @@ class ProjectDatabase < ApplicationRecord
     # Not so nice: Converting keys
     self.schema = SchemaTools::database_describe_schema(db_connection_admin).map do |t|
       t
-        .serializable_hash(include: { columns: {}, foreign_keys: {}, system_table: {} })
+        .serializable_hash(include: {
+                             columns: {},
+                             foreign_keys: {
+                               include: { references: {} }
+                             },
+                             system_table: {}
+                           })
         .deep_transform_keys { |key| key.camelize(:lower) }
     end
   end

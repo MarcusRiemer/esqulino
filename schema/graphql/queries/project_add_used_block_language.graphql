@@ -9,9 +9,8 @@ mutation ProjectAddUsedBlockLanguage(
     }
   ) {
     result {
-      blockLanguage {
+      projectUsesBlockLanguage {
         id
-        name
       }
     }
   }

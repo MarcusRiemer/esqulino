@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: '0583e928-3c8a-4f5a-9587-9fd69fe55534'
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: bdd01223-0d02-42a0-ac88-fa34150258ae
@@ -19,34 +19,35 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "gefangen", "columns": [{"name": "gefangen_id",
-    "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
-    null}, {"name": "pokedex_nummer", "type": "INTEGER", "index": 1, "primary": false,
-    "not_null": true, "dflt_value": null}, {"name": "spitzname", "type": "TEXT", "index":
-    2, "primary": false, "not_null": true, "dflt_value": null}, {"name": "staerke",
-    "type": "INTEGER", "index": 3, "primary": false, "not_null": true, "dflt_value":
-    null}], "foreign_keys": [{"references": [{"to_table": "pokedex", "to_column":
-    "nummer", "from_column": "pokedex_nummer"}]}]}, {"name": "pokedex", "columns":
-    [{"name": "nummer", "type": "INTEGER", "index": 0, "primary": true, "not_null":
-    true, "dflt_value": null}, {"name": "name", "type": "TEXT", "index": 1, "primary":
-    false, "not_null": true, "dflt_value": null}, {"name": "name_en", "type": "TEXT",
-    "index": 2, "primary": false, "not_null": true, "dflt_value": null}, {"name":
-    "typ1", "type": "INTEGER", "index": 3, "primary": false, "not_null": true, "dflt_value":
-    null}, {"name": "typ2", "type": "INTEGER", "index": 4, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "entwickelt_aus", "type": "INTEGER", "index":
-    5, "primary": false, "not_null": false, "dflt_value": null}, {"name": "bild",
-    "type": "TEXT", "index": 6, "primary": false, "not_null": false, "dflt_value":
-    null}], "foreign_keys": [{"references": [{"to_table": "typ", "to_column": "typ_id",
-    "from_column": "typ1"}]}, {"references": [{"to_table": "typ", "to_column": "typ_id",
-    "from_column": "typ2"}]}, {"references": [{"to_table": "pokedex", "to_column":
-    "nummer", "from_column": "entwickelt_aus"}]}]}, {"name": "typ", "columns": [{"name":
-    "typ_id", "type": "INTEGER", "index": 0, "primary": true, "not_null": true, "dflt_value":
-    null}, {"name": "typ_name", "type": "TEXT", "index": 1, "primary": false, "not_null":
-    true, "dflt_value": null}], "foreign_keys": []}]'
+    "type": "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue":
+    null}, {"name": "pokedex_nummer", "type": "INTEGER", "index": 1, "notNull": true,
+    "primary": false, "dfltValue": null}, {"name": "spitzname", "type": "TEXT", "index":
+    2, "notNull": true, "primary": false, "dfltValue": null}, {"name": "staerke",
+    "type": "INTEGER", "index": 3, "notNull": true, "primary": false, "dfltValue":
+    null}], "foreignKeys": [{"references": [{"toTable": "pokedex", "toColumn": "nummer",
+    "fromColumn": "pokedex_nummer"}]}], "systemTable": false}, {"name": "pokedex",
+    "columns": [{"name": "nummer", "type": "INTEGER", "index": 0, "notNull": true,
+    "primary": true, "dfltValue": null}, {"name": "name", "type": "TEXT", "index":
+    1, "notNull": true, "primary": false, "dfltValue": null}, {"name": "name_en",
+    "type": "TEXT", "index": 2, "notNull": true, "primary": false, "dfltValue": null},
+    {"name": "typ1", "type": "INTEGER", "index": 3, "notNull": true, "primary": false,
+    "dfltValue": null}, {"name": "typ2", "type": "INTEGER", "index": 4, "notNull":
+    false, "primary": false, "dfltValue": null}, {"name": "entwickelt_aus", "type":
+    "INTEGER", "index": 5, "notNull": false, "primary": false, "dfltValue": null},
+    {"name": "bild", "type": "TEXT", "index": 6, "notNull": false, "primary": false,
+    "dfltValue": null}], "foreignKeys": [{"references": [{"toTable": "typ", "toColumn":
+    "typ_id", "fromColumn": "typ1"}]}, {"references": [{"toTable": "typ", "toColumn":
+    "typ_id", "fromColumn": "typ2"}]}, {"references": [{"toTable": "pokedex", "toColumn":
+    "nummer", "fromColumn": "entwickelt_aus"}]}], "systemTable": false}, {"name":
+    "typ", "columns": [{"name": "typ_id", "type": "INTEGER", "index": 0, "notNull":
+    true, "primary": true, "dfltValue": null}, {"name": "typ_name", "type": "TEXT",
+    "index": 1, "notNull": true, "primary": false, "dfltValue": null}], "foreignKeys":
+    [], "systemTable": false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-02-26 10:17:14.554688000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2018-02-26 10:18:41.704110000 Z
+  value_before_type_cast: 2020-08-22 21:58:29.754917000 Z
 new_record: false
 active_record_yaml_version: 2

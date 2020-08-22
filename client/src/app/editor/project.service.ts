@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 
 import { BehaviorSubject, Observable } from "rxjs";
 import { catchError, delay, filter, tap, map, share } from "rxjs/operators";
@@ -40,13 +39,7 @@ export class ProjectService {
    */
   private _subject: BehaviorSubject<Project>;
 
-  /**
-   * @param _http To make HTTP requests
-   * @param _server To know where the requests should go
-   * @param _resourceReferences The currently available resources
-   */
   constructor(
-    private _http: HttpClient,
     private _server: ServerApiService,
     private _resourceReferences: ResourceReferencesService,
     private _fullProject: FullProjectGQL,

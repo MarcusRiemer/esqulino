@@ -40,6 +40,42 @@ RSpec.describe ProjectsController, type: :request do
       expect(node["id"]).to eq p.id
     end
 
+    it 'project with database schema (no foreign keys)' do
+      db = create(:project_database, :table_key_value)
+      p = db.project
+
+      send_query(
+        query_name: "FullProject",
+        variables: { "id" => p.id }
+      )
+
+      expect(response.status).to eq 200
+      expect(response.media_type).to eq "application/json"
+      data = JSON.parse(response.body)
+      expect(data.fetch("errors", [])).to eq []
+
+      node = data["data"]["projects"]["nodes"][0];
+      expect(node["id"]).to eq p.id
+    end
+
+    it 'project with database schema (with foreign keys)' do
+      db = create(:project_database, :tables_references)
+      p = db.project
+
+      send_query(
+        query_name: "FullProject",
+        variables: { "id" => p.id }
+      )
+
+      expect(response.status).to eq 200
+      expect(response.media_type).to eq "application/json"
+      data = JSON.parse(response.body)
+      expect(data.fetch("errors", [])).to eq []
+
+      node = data["data"]["projects"]["nodes"][0];
+      expect(node["id"]).to eq p.id
+    end
+
     it 'empty list on non existant projects' do
       send_query(
         query_name: "FullProject",

@@ -33,6 +33,10 @@ const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   name: { en: "Project" },
   projectSources: [],
   projectUsesBlockLanguages: [],
+  defaultDatabase: {
+    id: "4861f7ad-53c6-481f-b4a7-2b19aeffb021",
+    name: "specDb",
+  },
   schema: [],
   public: false,
   indexPageId: null,

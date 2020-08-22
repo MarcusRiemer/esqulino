@@ -16,10 +16,8 @@ import { DatabaseSchemaAdditionalContext } from "./syntaxtree/sql/sql.validator"
 import { ResourceReferencesService } from "./resource-references.service";
 import { isValidId } from "./util";
 import { MultiLangString } from "./multilingual-string.description";
-import {
-  UpdateProjectInput,
-  UpdateProjectMutation,
-} from "src/generated/graphql";
+
+import { UpdateProjectInput } from "../..//generated/graphql";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -52,7 +50,6 @@ export class Project implements Saveable {
   private _description: MultiLangString;
 
   private _currentDatabase: string;
-  private _availableDatabases: { [id: string]: AvailableDatabaseDescription };
 
   private _codeResources: CodeResource[];
 
@@ -69,9 +66,6 @@ export class Project implements Saveable {
 
   readonly grammarDescriptions: GrammarDescription[];
 
-  // Tracking added and removed block languages
-  private _removedBlockLanguages: string[] = [];
-
   /**
    * Construct a new project and a whole slew of other
    * objects based on the JSON wire format.
@@ -85,11 +79,10 @@ export class Project implements Saveable {
     this._name = json.name;
     this._description = json.description;
     this._indexPageId = json.indexPageId;
-    this._currentDatabase = json.activeDatabase;
-    this._availableDatabases = json.availableDatabases;
     this._projectImageId = json.preview;
     this._sources = json.projectSources || []; // Sources may be undefined
     this._usesBlockLanguages = json.projectUsesBlockLanguages;
+    this._currentDatabase = json.defaultDatabase?.name;
     this.grammarDescriptions = json.grammars;
     this.schema = new Schema(json.schema);
 
@@ -176,10 +169,6 @@ export class Project implements Saveable {
    * Signals that this project has been saved.
    */
   markSaved() {
-    // If these languages have been removed there is no
-    // reason to keep track of them any more.
-    this._removedBlockLanguages = [];
-
     // Required internal bookkeeping
     this._saveRequired = false;
     this.fireCurrentSaveState();
@@ -242,17 +231,6 @@ export class Project implements Saveable {
   }
 
   /**
-   * @return Names of all databases that are available to this project
-   */
-  get availableDatabaseNames() {
-    if (this._availableDatabases) {
-      return Object.keys(this._availableDatabases);
-    } else {
-      return [];
-    }
-  }
-
-  /**
    * @return All block languages that are available as part of this project.
    */
   get projectBlockLanguages() {
@@ -278,10 +256,9 @@ export class Project implements Saveable {
   /**
    *
    */
-  addUsedBlockLanguage(blockLanguageId: string) {
-    console.log(blockLanguageId);
+  addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
     this._usesBlockLanguages.push({
-      id: undefined,
+      id: usageId,
       blockLanguageId: blockLanguageId,
     });
   }
@@ -291,22 +268,9 @@ export class Project implements Saveable {
    * use by any code resource.
    */
   removeUsedBlockLanguage(usedId: string) {
-    const used = this._usesBlockLanguages.find((u) => u.id === usedId);
-
-    // Is the language unknown or referenced?
-    if (!used || this.isBlockLanguageReferenced(used.blockLanguageId)) {
-      // If it is: Don't change anything
-      return false;
-    } else {
-      // It isn't: Lets remove it
-      this._usesBlockLanguages = this._usesBlockLanguages.filter(
-        (b) => b.id !== usedId
-      );
-      this._removedBlockLanguages.push(used.id);
-      this.markSaveRequired();
-
-      return true;
-    }
+    this._usesBlockLanguages = this._usesBlockLanguages.filter(
+      (b) => b.id !== usedId
+    );
   }
 
   /**

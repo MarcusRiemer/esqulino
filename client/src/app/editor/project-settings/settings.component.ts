@@ -10,7 +10,11 @@ import { PerformDataService } from "../../shared/authorisation/perform-data.serv
 import { ProjectService, Project } from "../project.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
-import { SelectionListBlockLanguagesGQL } from "../../../generated/graphql";
+import {
+  SelectionListBlockLanguagesGQL,
+  ProjectAddUsedBlockLanguageGQL,
+  ProjectRemoveUsedBlockLanguageGQL,
+} from "../../../generated/graphql";
 import { map } from "rxjs/operators";
 
 @Component({
@@ -43,6 +47,8 @@ export class SettingsComponent {
     private _sidebarService: SidebarService,
     private _router: Router,
     private _selectBlockLanguagesGQL: SelectionListBlockLanguagesGQL,
+    private _addUsedBlockLanguage: ProjectAddUsedBlockLanguageGQL,
+    private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
     private _performData: PerformDataService
   ) {}
 
@@ -109,18 +115,33 @@ export class SettingsComponent {
   /**
    * Reference a block language from this project.
    */
-  addUsedBlockLanguage(blockLanguageId: string) {
-    console.log("bl id: " + blockLanguageId);
-    this.project.addUsedBlockLanguage(blockLanguageId);
+  async addUsedBlockLanguage(blockLanguageId: string) {
+    const res = await this._addUsedBlockLanguage
+      .mutate({
+        blockLanguageId,
+        projectId: this.project.id,
+      })
+      .toPromise();
+
+    const used =
+      res.data.addUsedBlockLanguage.result.projectUsesBlockLanguage.id;
+    this.project.addUsedBlockLanguage(blockLanguageId, used);
   }
 
   /**
    * Remove a block language from this project.
    */
-  removeUsedBlockLanguage(blockLanguageId: string) {
-    console.log("Removing", blockLanguageId);
-    if (!this.project.removeUsedBlockLanguage(blockLanguageId)) {
+  async removeUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+    if (this.project.isBlockLanguageReferenced(blockLanguageId)) {
       alert("Benutzte Programmiersprachen können nicht entfernt werden");
+    } else {
+      await this._removeUsedBlockLanguage
+        .mutate({
+          usedBlockLanguageId: usageId,
+        })
+        .toPromise();
+
+      this.project.removeUsedBlockLanguage(usageId);
     }
   }
 

@@ -3,8 +3,8 @@ class Mutations::Projects::AddUsedBlockLanguage < Mutations::Projects::Projects
   argument :block_language_id, ID, required: true
 
   class Response < Types::Base::BaseObject
-    field :project, Types::ProjectType, null: false
     field :block_language, Types::BlockLanguageType, null: false
+    field :project_uses_block_language, Types::ProjectUsesBlockLanguageType, null: false
   end
 
   field :result, Response, null: true
@@ -15,11 +15,11 @@ class Mutations::Projects::AddUsedBlockLanguage < Mutations::Projects::Projects
 
     b = BlockLanguage.find(args[:block_language_id])
 
-    p.project_uses_block_languages.create(block_language: b)
+    uses = p.project_uses_block_languages.create(block_language: b)
 
     return ({
               result: {
-                project: p,
+                project_uses_block_language: uses,
                 block_language: b
               }
             })
