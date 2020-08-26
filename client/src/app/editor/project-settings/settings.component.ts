@@ -10,11 +10,7 @@ import { PerformDataService } from "../../shared/authorisation/perform-data.serv
 import { ProjectService, Project } from "../project.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
-import {
-  AdminEditBlockLanguageGQL,
-  AdminListBlockLanguagesGQL,
-  SelectionListBlockLanguagesGQL,
-} from "../../../generated/graphql";
+import { SelectionListBlockLanguagesGQL } from "../../../generated/graphql";
 import { map } from "rxjs/operators";
 
 @Component({
@@ -34,7 +30,6 @@ export class SettingsComponent {
   /**
    * @return All block languages that could currently be used.
    */
-  //https://stackoverflow.com/questions/38569116/how-can-i-prevent-the-angular-async-pipe-from-making-frequent-server-calls-when
   readonly availableBlockLanguages$ = this._selectBlockLanguagesGQL
     .watch()
     .valueChanges.pipe(map((result) => result.data.blockLanguages.nodes));
@@ -47,7 +42,6 @@ export class SettingsComponent {
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router,
-    private _singleBlockLanguageGQL: AdminEditBlockLanguageGQL,
     private _selectBlockLanguagesGQL: SelectionListBlockLanguagesGQL,
     private _performData: PerformDataService
   ) {}
@@ -137,8 +131,6 @@ export class SettingsComponent {
    * Retrieves the name of the given block language
    */
   resolveBlockLanguageName(blockLanguageId: string) {
-    return this._singleBlockLanguageGQL
-      .watch({ id: blockLanguageId })
-      .valueChanges.pipe(map((result) => result.data.singleBlockLanguage));
+    return this._projectService.cachedProject.getBlockLanguage(blockLanguageId);
   }
 }
