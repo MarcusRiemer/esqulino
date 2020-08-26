@@ -23,23 +23,23 @@ GIT_REV :
 	echo $(CURR_GIT_REV) > GIT_REV
 
 thesis-update: msg-pre-pdf $(TEX_FILES) $(SVG_PDF_FILES) $(GRAPH_PDF_FILES)
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis
 
 $(PDF_FILENAME) : clean msg-pre-pdf $(TEX_FILES) $(SVG_PDF_FILES) $(GRAPH_PDF_FILES) GIT_REV
 	mkdir -p build
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis
 	cp bib-refs.bib build
 	cd build; bibtex thesis
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis
 
 $(PDF_FILENAME_TWOSIDE) : msg-pre-pdf-twoside $(TEX_FILES) $(SVG_PDF_FILES) $(GRAPH_PDF_FILES) GIT_REV
 	mkdir -p build
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis-twoside
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis-twoside
 	cp bib-refs.bib build
 	cd build; bibtex thesis-twoside
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis-twoside
-	xelatex -synctex=1 -file-line-error -output-directory=build thesis-twoside
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis-twoside
+	xelatex -synctex=1 -shell-escape -file-line-error -output-directory=build thesis-twoside
 
 graphs: $(GRAPHVIZ_FILES)
 
