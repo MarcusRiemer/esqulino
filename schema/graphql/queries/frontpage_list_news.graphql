@@ -5,6 +5,8 @@ query FrontpageListNews($languages: [LanguageEnum!]) {
             title
             text
             publishedFrom
+            __typename
         }
+        __typename
     }
 }

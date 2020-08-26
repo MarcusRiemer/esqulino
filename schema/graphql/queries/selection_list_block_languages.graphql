@@ -3,6 +3,8 @@ query SelectionListBlockLanguages{
     nodes {
       id
       name
+      __typename
     }
+    __typename
   }
 }

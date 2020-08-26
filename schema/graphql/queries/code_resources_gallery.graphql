@@ -1,5 +1,5 @@
-query SelectionListGrammars{
-    grammars{
+query CodeResourcesGallery($id: ID!) {
+    codeResources {
         nodes {
             id
             name

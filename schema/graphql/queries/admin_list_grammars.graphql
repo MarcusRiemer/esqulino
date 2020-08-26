@@ -5,6 +5,7 @@ query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input
             name
             slug
             programmingLanguageId
+            __typename
         }
         totalCount
         pageInfo {
@@ -12,6 +13,8 @@ query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input
             hasNextPage
             startCursor
             endCursor
+            __typename
         }
+        __typename
     }
 }

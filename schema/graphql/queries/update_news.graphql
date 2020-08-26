@@ -18,7 +18,9 @@ mutation UpdateNews(
             text
             title
             userId
+            __typename
         }
         errors
+        __typename
     }
 }

@@ -3,15 +3,8 @@ query AdminMetaCodeResources($programmingLanguageId: ID!) {
         nodes {
             id
             name
+            __typename
         }
-    }
-}
-
-query CodeResourcesGallery($id: ID!) {
-    codeResources {
-        nodes {
-            id
-            name
-        }
+        __typename
     }
 }

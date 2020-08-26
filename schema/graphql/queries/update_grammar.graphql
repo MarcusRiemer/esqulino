@@ -37,9 +37,13 @@ mutation UpdateGrammar(
         nodes {
           id
           name
+          __typename
         }
+        __typename
       }
+      __typename
     }
     errors
+    __typename
   }
 }

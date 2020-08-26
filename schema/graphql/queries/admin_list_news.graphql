@@ -8,6 +8,7 @@ query AdminListNews($first:Int,$after:String,$before:String,$last:Int,$input:New
             createdAt
             updatedAt
             userId
+            __typename
         }
         totalCount
         pageInfo {
@@ -15,6 +16,8 @@ query AdminListNews($first:Int,$after:String,$before:String,$last:Int,$input:New
             hasNextPage
             startCursor
             endCursor
+            __typename
         }
+        __typename
     }
 }

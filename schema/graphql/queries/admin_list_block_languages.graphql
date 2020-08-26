@@ -6,6 +6,7 @@ query AdminListBlockLanguages($first:Int,$after:String,$before:String,$last:Int,
             slug
             generated
             grammarId
+            __typename
         }
         totalCount
         pageInfo {
@@ -13,6 +14,8 @@ query AdminListBlockLanguages($first:Int,$after:String,$before:String,$last:Int,
             hasNextPage
             startCursor
             endCursor
+            __typename
         }
+        __typename
     }
 }

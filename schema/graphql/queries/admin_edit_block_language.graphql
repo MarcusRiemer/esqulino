@@ -13,5 +13,7 @@ query AdminEditBlockLanguage($id: ID!) {
         createdAt
         updatedAt
         defaultProgrammingLanguageId
+        __typename
     }
+    __typename
 }

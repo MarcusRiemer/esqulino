@@ -6,5 +6,6 @@ mutation DestroyNews(
     }) {
         id
         errors
+        __typename
     }
 }

@@ -1,5 +1,6 @@
 mutation DestroyGrammar($id: ID!) {
     destroyGrammar(input: {id: $id}) {
         errors
+        __typename
     }
 }

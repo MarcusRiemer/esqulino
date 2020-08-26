@@ -6,5 +6,6 @@ mutation DestroyBlockLanguage(
     }){
         id
         errors
+        __typename
     }
 }

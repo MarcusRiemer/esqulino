@@ -2,6 +2,8 @@ mutation RegenerateForeignTypes($id: ID!) {
     regenerateForeignTypes(input: {id: $id}) {
         grammar {
             foreignTypes
+            __typename
         }
+        __typename
     }
 }

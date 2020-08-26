@@ -7,5 +7,6 @@ query AdminSingleNews($id: ID!) {
         createdAt
         updatedAt
         userId
+        __typename
     }
 }

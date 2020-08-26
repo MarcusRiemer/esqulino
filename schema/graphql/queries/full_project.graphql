@@ -13,6 +13,7 @@ query FullProject($id: ID!) {
                 ast
                 blockLanguageId
                 programmingLanguageId
+                __typename
             }
             blockLanguages {
                 id
@@ -20,16 +21,21 @@ query FullProject($id: ID!) {
                 model
                 grammarId
                 defaultProgrammingLanguageId
+                __typename
             }
             projectUsesBlockLanguages {
                 blockLanguageId
+                __typename
             }
             projectSources {
                 id
                 display
                 title
                 url
+                __typename
             }
+            __typename
         }
+        __typename
     }
 }
