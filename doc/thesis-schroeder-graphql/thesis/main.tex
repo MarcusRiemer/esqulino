@@ -73,6 +73,22 @@
 \def\blx@maxline{77}
 \makeatother
 
+\usepackage{hyperref}
+\usepackage{nameref}
+
+\makeatletter
+\let\orgdescriptionlabel\descriptionlabel
+\renewcommand*{\descriptionlabel}[1]{%
+	\let\orglabel\label
+	\let\label\@gobble
+	\phantomsection
+	%\edef\@currentlabel{#1}%
+    \edef\@currentlabelname{#1}%
+	\let\label\orglabel
+	\orgdescriptionlabel{#1}%
+}
+\makeatother
+
 % **************************************************
 % Additional Utilities
 % **************************************************
@@ -184,6 +200,10 @@
 
 \usepackage[simplified]{sty/pgf-umlcd}
 \usepackage{float}
+% https://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD
+\usepackage{xfrac}
+\usepackage{svg}
+\usepackage{amsmath}
 
 % https://tex.stackexchange.com/a/42620
 \usepackage{amssymb}
@@ -232,6 +252,10 @@
 \pagestyle{maincontentstyle}      % fancy header and footer
 
 \input{content/chapter-introduction}
+\input{content/chapter-basics}
+\input{content/chapter-requirements}
+\input{content/chapter-graphql}
+
 
 \appendix{}
 

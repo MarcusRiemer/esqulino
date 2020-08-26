@@ -1,0 +1,100 @@
+%! Author = yannux
+%! Date = 24.08.20
+
+
+% Postgres wird benutzt als Dokumenten Datenbank in bezug auf jsonb und hstore
+\chapter{GraphQL}
+
+\section{GraphQL}
+\subsection{Codegenerator}
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Aufruf der gql-Funktion erhält Querystring als Parameter}, label={lst:example:service}]
+export const ProjectsDocument = gql`
+query Projects {
+    projects {
+        nodes {
+            id
+            name
+        }
+    }
+}
+`;
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Service enthält den Aufruf der Query als Instanzvariable}, label={lst:example:service}]
+@Injectable({
+    providedIn: "root",
+})
+export class ProjectsGQL extends Apollo.Query<
+ProjectsQuery,
+ProjectsQueryVariables
+> {
+    document = ProjectsDocument;
+    constructor(apollo: Apollo.Apollo) {
+        super(apollo);
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Antworttyp}, label={lst:example:service}]
+export type ProjectsQuery = { __typename?: "Query" } & {
+    projects: { __typename?: "ProjectConnection" } & {
+        nodes?: Maybe<
+        Array<Maybe<{ __typename?: "Project" } & Pick<Project, "id" | "name">>>
+        >;
+    };
+};
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Parametertyp}, label={lst:example:service}]
+export type ProjectsQueryVariables = {};
+\end{lstlisting}
+
+
+
+
+\subsection{Schema-first}
+GraphQL Schema in SDL geschrieben. Resolvers für übersetzung zu anderen sprachen etc.
+\subsection{Modularisierung}
+feature brands?
+Eine Datei pro Typ?
+Eine große schema Datei?
+\subsection{Codeverdoppelung}
+Bei der Pagination.
+\subsection{Code-first}
+Nutzung von gapqhl-ruby
+https://github.com/rmosolgo/graphql-ruby
+\subsection{GraphQL Scorecard}
+\section{Optimierung der bestehenden Lösung - make or buy}
+Narrow-Funktion um nur einen Request pro Seitenaufruf ermöglichen zu können. JSON Api Konzept wird dabei teilweise genutzt.
+\section{Alternative Verfahren}
+\subsection{Fast JSON API}
+\subsubsection{Graphiti}
+https://www.graphiti.dev/guides/
+\subsubsection{JSON API Scorecard}
+\subsection{Deepr}
+Gibt es nur in Javascript.
+https://github.com/deeprjs/deepr
+\subsubsection{Deepr Scorecard}
+\section{Balanced Scorecard}
+\chapter{Implementierung}
+
+\section{Validierungen}
+\subsection{MultiLingual Strings}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/multilang-validation.pdf}
+	\caption{Beispiel für die Validierung von Multilingualen String in JSON Form}
+	\label{req:typesafe:example}
+\end{figure}
+
+Beim Laden der Daten aus der Datenbank wird zwischen Lazy Loading und Eager Loading unterschieden. Wir möchten alle Freunde aller Nutzer herausfinden:
+
+\section{Unerwartete Hindernisse}
+\subsection{Fehlerhafte Codegenerierung der Angular Services}
+\subsection{Fehlerhafte Codegenerierung der Typescript Interfaces}
+
+\chapter{Fazit}
+\section{Erreichte Ziele}
+\section{Nicht erreichte Ziele}
+\section{Ausblick}
+Server Round Trip mit TCP messen nicht mit ICMP. Tracer middleware
