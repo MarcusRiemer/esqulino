@@ -1,6 +1,7 @@
 class GraphqlController < ApplicationController
   include UserHelper
   include LocaleHelper
+  include GraphqlQueryHelper
   # If accessing from outside this domain, nullify the session
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
@@ -8,11 +9,12 @@ class GraphqlController < ApplicationController
 
   def execute
     variables = ensure_hash(params[:variables])
-    query = params[:query]
     operation_name = params[:operationName]
-
+    #query = params[:query]
+    #ensures that only listed querys will be executed
+    query = get_query(operation_name)
     context = {
-      user: current_user(false),
+      user: current_user,
       language: request_locale
     }
     result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)

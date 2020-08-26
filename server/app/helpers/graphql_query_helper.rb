@@ -28,6 +28,11 @@ module GraphqlQueryHelper
     @@query_storage.get_query(name.underscore)
   end
 
+  def exists?(name:)
+    @@query_storage.exists?(query_name:name)
+  end
+
+
   # Returns the path the given query would be found under
   def schema_path(name)
     @@query_storage.query_path(name)

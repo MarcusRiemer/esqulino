@@ -32,6 +32,10 @@ class GraphqlQueryStorage
     query
   end
 
+  def exists?(query_name:)
+    not @queries[query_name].nil?
+  end
+
   # @return [string] Path for a query with the given name
   def query_path(name)
     File.join(@query_dir, name + ".json")

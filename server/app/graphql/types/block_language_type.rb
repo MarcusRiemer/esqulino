@@ -14,21 +14,6 @@ module Types
     field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
     field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
 
-    def generated
-      # generated defined in grammars.rb in scope
-      normalize_keys(object)["generated"]
-    end
-
-    def grammar_id
-      # generated defined in grammars.rb in scope
-      normalize_keys(object)["grammar_id"]
-    end
-
-    def default_programming_language_id
-      # coming from BlockLanguage.scope_list
-      normalize_keys(object)["default_programming_language_id"]
-    end
-
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'BlockLanguageOrderFieldEnum'
       #Order Fields

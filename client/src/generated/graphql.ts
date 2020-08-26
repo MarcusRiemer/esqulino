@@ -924,118 +924,6 @@ export type User = {
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
-export type AdminMetaCodeResourcesQueryVariables = {
-  programmingLanguageId: Scalars["ID"];
-};
-
-export type AdminMetaCodeResourcesQuery = { __typename?: "Query" } & {
-  codeResources: { __typename?: "CodeResourceConnection" } & {
-    nodes?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: "CodeResource" } & Pick<CodeResource, "id" | "name">
-        >
-      >
-    >;
-  };
-};
-
-export type CodeResourcesGalleryQueryVariables = {
-  id: Scalars["ID"];
-};
-
-export type CodeResourcesGalleryQuery = { __typename?: "Query" } & {
-  codeResources: { __typename?: "CodeResourceConnection" } & {
-    nodes?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: "CodeResource" } & Pick<CodeResource, "id" | "name">
-        >
-      >
-    >;
-  };
-};
-
-export type CreateProjectMutationVariables = {
-  name: Scalars["LangJson"];
-  slug: Scalars["String"];
-};
-
-export type CreateProjectMutation = { __typename?: "Mutation" } & {
-  createProject?: Maybe<
-    { __typename?: "CreateProjectPayload" } & Pick<
-      CreateProjectPayload,
-      "errors" | "id"
-    >
-  >;
-};
-
-export type AdminListProjectsQueryVariables = {
-  first?: Maybe<Scalars["Int"]>;
-  after?: Maybe<Scalars["String"]>;
-  before?: Maybe<Scalars["String"]>;
-  last?: Maybe<Scalars["Int"]>;
-  input?: Maybe<ProjectInputType>;
-};
-
-export type AdminListProjectsQuery = { __typename?: "Query" } & {
-  projects: { __typename?: "ProjectConnection" } & Pick<
-    ProjectConnection,
-    "totalCount"
-  > & {
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: "Project" } & Pick<
-              Project,
-              "id" | "name" | "slug" | "codeResourceCount"
-            >
-          >
-        >
-      >;
-      pageInfo: { __typename?: "PageInfo" } & Pick<
-        PageInfo,
-        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
-      >;
-    };
-};
-
-export type FrontpageListProjectsQueryVariables = {};
-
-export type FrontpageListProjectsQuery = { __typename?: "Query" } & {
-  projects: { __typename?: "ProjectConnection" } & {
-    nodes?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: "Project" } & Pick<
-            Project,
-            | "id"
-            | "slug"
-            | "name"
-            | "public"
-            | "description"
-            | "preview"
-            | "indexPageId"
-            | "createdAt"
-            | "updatedAt"
-            | "userId"
-          > & {
-              blockLanguages?: Maybe<
-                Array<
-                  { __typename?: "BlockLanguage" } & {
-                    defaultProgrammingLanguage: {
-                      __typename?: "ProgrammingLanguage";
-                    } & Pick<ProgrammingLanguage, "id" | "name">;
-                  }
-                >
-              >;
-            }
-        >
-      >
-    >;
-  };
-};
-
 export type AdminEditBlockLanguageQueryVariables = {
   id: Scalars["ID"];
 };
@@ -1155,6 +1043,52 @@ export type AdminListNewsQuery = { __typename?: "Query" } & {
     };
 };
 
+export type AdminListProjectsQueryVariables = {
+  first?: Maybe<Scalars["Int"]>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  last?: Maybe<Scalars["Int"]>;
+  input?: Maybe<ProjectInputType>;
+};
+
+export type AdminListProjectsQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & Pick<
+    ProjectConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "Project" } & Pick<
+              Project,
+              "id" | "name" | "slug" | "codeResourceCount"
+            >
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
+};
+
+export type AdminMetaCodeResourcesQueryVariables = {
+  programmingLanguageId: Scalars["ID"];
+};
+
+export type AdminMetaCodeResourcesQuery = { __typename?: "Query" } & {
+  codeResources: { __typename?: "CodeResourceConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "CodeResource" } & Pick<CodeResource, "id" | "name">
+        >
+      >
+    >;
+  };
+};
+
 export type AdminSingleGrammarQueryVariables = {
   id: Scalars["ID"];
 };
@@ -1205,6 +1139,22 @@ export type AdminSingleNewsQuery = { __typename?: "Query" } & {
     | "updatedAt"
     | "userId"
   >;
+};
+
+export type CodeResourcesGalleryQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type CodeResourcesGalleryQuery = { __typename?: "Query" } & {
+  codeResources: { __typename?: "CodeResourceConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "CodeResource" } & Pick<CodeResource, "id" | "name">
+        >
+      >
+    >;
+  };
 };
 
 export type CreateBlockLanguageMutationVariables = {
@@ -1302,6 +1252,20 @@ export type CreateNewsMutation = { __typename?: "Mutation" } & {
   >;
 };
 
+export type CreateProjectMutationVariables = {
+  name: Scalars["LangJson"];
+  slug: Scalars["String"];
+};
+
+export type CreateProjectMutation = { __typename?: "Mutation" } & {
+  createProject?: Maybe<
+    { __typename?: "CreateProjectPayload" } & Pick<
+      CreateProjectPayload,
+      "errors" | "id"
+    >
+  >;
+};
+
 export type DestroyBlockLanguageMutationVariables = {
   id: Scalars["ID"];
 };
@@ -1354,6 +1318,42 @@ export type FrontpageListNewsQuery = { __typename?: "Query" } & {
             News,
             "id" | "title" | "text" | "publishedFrom"
           >
+        >
+      >
+    >;
+  };
+};
+
+export type FrontpageListProjectsQueryVariables = {};
+
+export type FrontpageListProjectsQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "Project" } & Pick<
+            Project,
+            | "id"
+            | "slug"
+            | "name"
+            | "public"
+            | "description"
+            | "preview"
+            | "indexPageId"
+            | "createdAt"
+            | "updatedAt"
+            | "userId"
+          > & {
+              blockLanguages?: Maybe<
+                Array<
+                  { __typename?: "BlockLanguage" } & {
+                    defaultProgrammingLanguage: {
+                      __typename?: "ProgrammingLanguage";
+                    } & Pick<ProgrammingLanguage, "id" | "name">;
+                  }
+                >
+              >;
+            }
         >
       >
     >;
@@ -1585,156 +1585,6 @@ export type UpdateNewsMutation = { __typename?: "Mutation" } & {
   >;
 };
 
-export const AdminMetaCodeResourcesDocument = gql`
-  query AdminMetaCodeResources($programmingLanguageId: ID!) {
-    codeResources(
-      input: { filter: { programmingLanguageId: $programmingLanguageId } }
-    ) {
-      nodes {
-        id
-        name
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class AdminMetaCodeResourcesGQL extends Apollo.Query<
-  AdminMetaCodeResourcesQuery,
-  AdminMetaCodeResourcesQueryVariables
-> {
-  document = AdminMetaCodeResourcesDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const CodeResourcesGalleryDocument = gql`
-  query CodeResourcesGallery($id: ID!) {
-    codeResources {
-      nodes {
-        id
-        name
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class CodeResourcesGalleryGQL extends Apollo.Query<
-  CodeResourcesGalleryQuery,
-  CodeResourcesGalleryQueryVariables
-> {
-  document = CodeResourcesGalleryDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const CreateProjectDocument = gql`
-  mutation CreateProject($name: LangJson!, $slug: String!) {
-    createProject(input: { name: $name, slug: $slug }) {
-      errors
-      id
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class CreateProjectGQL extends Apollo.Mutation<
-  CreateProjectMutation,
-  CreateProjectMutationVariables
-> {
-  document = CreateProjectDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const AdminListProjectsDocument = gql`
-  query AdminListProjects(
-    $first: Int
-    $after: String
-    $before: String
-    $last: Int
-    $input: ProjectInputType
-  ) {
-    projects(
-      first: $first
-      after: $after
-      before: $before
-      last: $last
-      input: $input
-    ) {
-      nodes {
-        id
-        name
-        slug
-        codeResourceCount
-      }
-      totalCount
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-        startCursor
-        endCursor
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class AdminListProjectsGQL extends Apollo.Query<
-  AdminListProjectsQuery,
-  AdminListProjectsQueryVariables
-> {
-  document = AdminListProjectsDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const FrontpageListProjectsDocument = gql`
-  query FrontpageListProjects {
-    projects(input: { filter: { public: true } }) {
-      nodes {
-        id
-        slug
-        name
-        public
-        description
-        preview
-        indexPageId
-        createdAt
-        updatedAt
-        userId
-        blockLanguages {
-          defaultProgrammingLanguage {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class FrontpageListProjectsGQL extends Apollo.Query<
-  FrontpageListProjectsQuery,
-  FrontpageListProjectsQueryVariables
-> {
-  document = FrontpageListProjectsDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const AdminEditBlockLanguageDocument = gql`
   query AdminEditBlockLanguage($id: ID!) {
     singleBlockLanguage(id: $id) {
@@ -1903,6 +1753,75 @@ export class AdminListNewsGQL extends Apollo.Query<
     super(apollo);
   }
 }
+export const AdminListProjectsDocument = gql`
+  query AdminListProjects(
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+    $input: ProjectInputType
+  ) {
+    projects(
+      first: $first
+      after: $after
+      before: $before
+      last: $last
+      input: $input
+    ) {
+      nodes {
+        id
+        name
+        slug
+        codeResourceCount
+      }
+      totalCount
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminListProjectsGQL extends Apollo.Query<
+  AdminListProjectsQuery,
+  AdminListProjectsQueryVariables
+> {
+  document = AdminListProjectsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminMetaCodeResourcesDocument = gql`
+  query AdminMetaCodeResources($programmingLanguageId: ID!) {
+    codeResources(
+      input: { filter: { programmingLanguageId: $programmingLanguageId } }
+    ) {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminMetaCodeResourcesGQL extends Apollo.Query<
+  AdminMetaCodeResourcesQuery,
+  AdminMetaCodeResourcesQueryVariables
+> {
+  document = AdminMetaCodeResourcesDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const AdminSingleGrammarDocument = gql`
   query AdminSingleGrammar($id: ID!) {
     singleGrammar(id: $id) {
@@ -1960,6 +1879,29 @@ export class AdminSingleNewsGQL extends Apollo.Query<
   AdminSingleNewsQueryVariables
 > {
   document = AdminSingleNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CodeResourcesGalleryDocument = gql`
+  query CodeResourcesGallery($id: ID!) {
+    codeResources {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class CodeResourcesGalleryGQL extends Apollo.Query<
+  CodeResourcesGalleryQuery,
+  CodeResourcesGalleryQueryVariables
+> {
+  document = CodeResourcesGalleryDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
@@ -2096,6 +2038,27 @@ export class CreateNewsGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const CreateProjectDocument = gql`
+  mutation CreateProject($name: LangJson!, $slug: String!) {
+    createProject(input: { name: $name, slug: $slug }) {
+      errors
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class CreateProjectGQL extends Apollo.Mutation<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
+> {
+  document = CreateProjectDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const DestroyBlockLanguageDocument = gql`
   mutation DestroyBlockLanguage($id: ID!) {
     destroyBlockLanguage(input: { id: $id }) {
@@ -2187,6 +2150,43 @@ export class FrontpageListNewsGQL extends Apollo.Query<
   FrontpageListNewsQueryVariables
 > {
   document = FrontpageListNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FrontpageListProjectsDocument = gql`
+  query FrontpageListProjects {
+    projects(input: { filter: { public: true } }) {
+      nodes {
+        id
+        slug
+        name
+        public
+        description
+        preview
+        indexPageId
+        createdAt
+        updatedAt
+        userId
+        blockLanguages {
+          defaultProgrammingLanguage {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FrontpageListProjectsGQL extends Apollo.Query<
+  FrontpageListProjectsQuery,
+  FrontpageListProjectsQueryVariables
+> {
+  document = FrontpageListProjectsDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
