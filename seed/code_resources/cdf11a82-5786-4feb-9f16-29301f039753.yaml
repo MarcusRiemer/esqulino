@@ -12,21 +12,24 @@ concise_attributes:
       limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 94c71d60-4b75-496b-94fd-42ab5831b66d
+  value_before_type_cast: cdf11a82-5786-4feb-9f16-29301f039753
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 03 Empty Array
+  value_before_type_cast: 04 Object
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "array", "children": {"values": [{"name": "number",
-    "language": "json", "properties": {"value": "0"}}, {"name": "number", "language":
-    "json", "properties": {"value": "0"}}]}, "language": "json"}'
+  value_before_type_cast: '{"name": "object", "children": {"values": [{"name": "key-value",
+    "children": {"key": [{"name": "string", "language": "json", "properties": {"value":
+    "test"}}], "value": [{"name": "array", "language": "json"}]}, "language": "json"},
+    {"name": "key-value", "children": {"key": [{"name": "string", "language": "json",
+    "properties": {"value": "hallo"}}], "value": [{"name": "string", "language": "json",
+    "properties": {"value": "welt"}}]}, "language": "json"}]}, "language": "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-05-03 16:21:15.504013000 Z
+  value_before_type_cast: 2020-08-31 10:55:49.192890000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-31 11:07:07.927550000 Z
+  value_before_type_cast: 2020-08-31 11:06:41.730274000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
@@ -36,9 +39,9 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    [
-      0,
-      0
-    ]
+    {
+      "test": [],
+      "hallo": "welt"
+    }
 new_record: false
 active_record_yaml_version: 2
