@@ -10,9 +10,6 @@
           "description": "Date & time this resource was created",
           "type": "string"
         },
-        "display": {
-          "type": "string"
-        },
         "id": {
           "type": "string"
         },
@@ -41,7 +38,6 @@
         "title",
         "kind",
         "url",
-        "display",
         "readOnly"
       ],
       "type": "object"

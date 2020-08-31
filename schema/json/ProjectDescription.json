@@ -61,19 +61,6 @@
         }
       ]
     },
-    "AvailableDatabaseDescription": {
-      "additionalProperties": false,
-      "description": "Describes a database that could possibly be used.",
-      "properties": {
-        "type": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "type": "object"
-    },
     "BlockLanguageDescription": {
       "additionalProperties": false,
       "description": "Augments a language with information about the UI layer. This definition is\nused by the editors, especially the block editor, to show customized editors\nfor different languages. These customizations include:\n\n* The blocks that are shown in the sidebar.\n* Possibly language specific sidebars.\n* Definitions of the actual blocks.\n* Possibly language specific editor components.",
@@ -2064,15 +2051,6 @@
       "additionalProperties": false,
       "description": "The \"shallow\" properties of a project that do not contain any\ncomplicated standalone resources.",
       "properties": {
-        "activeDatabase": {
-          "type": "string"
-        },
-        "availableDatabases": {
-          "additionalProperties": {
-            "$ref": "#/definitions/AvailableDatabaseDescription"
-          },
-          "type": "object"
-        },
         "blockLanguages": {
           "items": {
             "$ref": "#/definitions/BlockLanguageDescription"
@@ -2157,9 +2135,6 @@
           "description": "Date & time this resource was created",
           "type": "string"
         },
-        "display": {
-          "type": "string"
-        },
         "id": {
           "type": "string"
         },
@@ -2188,7 +2163,6 @@
         "title",
         "kind",
         "url",
-        "display",
         "readOnly"
       ],
       "type": "object"
