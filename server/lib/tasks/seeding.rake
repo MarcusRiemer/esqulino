@@ -62,6 +62,11 @@ namespace :blattwerkzeug do
     task :store, [:block_language_id] => :environment do |t, args|
       m.store_block_language(args[:block_language_id])
     end
+
+    desc 'Serialize all block languages to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_block_languages
+    end
   end
 
   namespace :programming_language do

@@ -9,31 +9,45 @@ concise_attributes:
   name: name
   value_before_type_cast: Trucklino World
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: model
-  value_before_type_cast: '{"sidebars": [{"type": "truckWorldTiles"}], "editorBlocks":
-    [{"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
-    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
-    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "Road {", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"text": "position:", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "position",
-    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "openings",
-    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "trafficLights",
-    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "unloading_bay",
-    "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName": "freight",
-    "emptyDropTarget": false}, {"text": "}", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "road", "languageName": "truck_world"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"text": "Vec2 {", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"text": "x:", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"style": {"display": "inline-flex"}, "property": "x", "blockType": "input"},
-    {"text": ", ", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"text": "y:", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"style": {"display": "inline-flex"}, "property": "y", "blockType": "input"},
-    {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+  name: created_at
+  value_before_type_cast: 2018-12-20 14:25:50.522385000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-08-31 13:29:46.963196000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: truck-world
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 120027a8-2ef9-4a24-98ea-64f9fbac3cc5
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: sidebars
+  value_before_type_cast: '[{"type": "truckWorldTiles"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_blocks
+  value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "Road
+    {", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text": "position:",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
+    "childGroupName": "position", "emptyDropTarget": false}, {"blockType": "iterator",
+    "childGroupName": "openings", "emptyDropTarget": false}, {"blockType": "iterator",
+    "childGroupName": "trafficLights", "emptyDropTarget": false}, {"blockType": "iterator",
+    "childGroupName": "unloading_bay", "emptyDropTarget": false}, {"blockType": "iterator",
+    "childGroupName": "freight", "emptyDropTarget": false}, {"text": "}", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "road", "languageName": "truck_world"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "Vec2 {", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"text": "x:", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"style": {"display": "inline-flex"}, "property": "x",
+    "blockType": "input"}, {"text": ", ", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}, {"text": "y:", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}, {"style": {"display": "inline-flex"}, "property": "y", "blockType":
+    "input"}, {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
     "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "vec2",
     "languageName": "truck_world"}}, {"visual": [{"children": [{"style": {"color":
     "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
@@ -84,26 +98,22 @@ concise_attributes:
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
     ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
     "property": "colour", "blockType": "input"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "unloading_bay", "languageName": "truck_world"}}],
+    {}}], "describedType": {"typeName": "unloading_bay", "languageName": "truck_world"}}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_components
+  value_before_type_cast: '[{"componentType": "truck-world-editor"}, {"columnClasses":
+    ["col-lg-6"], "componentType": "truck-world"}, {"columnClasses": ["col-lg-6"],
+    "componentType": "generated-code"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: local_generator_instructions
+  value_before_type_cast: '{"type": "manual", "staticSidebars": [{"type": "truckWorldTiles"}],
     "editorComponents": [{"componentType": "truck-world-editor"}, {"columnClasses":
     ["col-lg-6"], "componentType": "truck-world"}, {"columnClasses": ["col-lg-6"],
-    "componentType": "generated-code"}], "localGeneratorInstructions": {"type": "manual",
-    "staticSidebars": [{"type": "truckWorldTiles"}], "editorComponents": [{"componentType":
-    "truck-world-editor"}, {"columnClasses": ["col-lg-6"], "componentType": "truck-world"},
-    {"columnClasses": ["col-lg-6"], "componentType": "generated-code"}], "typeInstructions":
-    {"trucklino_world": {"world": {"blocks": [{"attributeMapping": ["seq_size", "size"]},
-    {"attributeMapping": ["seq_trucks", "trucks"]}]}}}}}'
+    "componentType": "generated-code"}], "typeInstructions": {"trucklino_world": {"world":
+    {"blocks": [{"attributeMapping": ["seq_size", "size"]}, {"attributeMapping": ["seq_trucks",
+    "trucks"]}]}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: created_at
-  value_before_type_cast: 2018-12-20 14:25:50.522385000 Z
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: updated_at
-  value_before_type_cast: 2020-06-07 14:31:27.515297000 Z
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: default_programming_language_id
-  value_before_type_cast: truck-world
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: grammar_id
-  value_before_type_cast: 120027a8-2ef9-4a24-98ea-64f9fbac3cc5
+  name: root_css_classes
+  value_before_type_cast: "{}"
 new_record: false
 active_record_yaml_version: 2

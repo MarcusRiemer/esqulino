@@ -20,7 +20,7 @@ class BlockLanguagePullUpModel < ActiveRecord::Migration[6.0]
           b.editor_blocks = b.model.fetch("editorBlocks", [])
           b.editor_components = b.model.fetch("editorComponents", [])
           b.local_generator_instructions = b.model.fetch("localGeneratorInstructions", { "type" => "manual" })
-          b.root_css_classes = b.model.fetch("root_css_classes", [])
+          b.root_css_classes = b.model.fetch("rootCssClasses", [])
 
           b.save!
         end
