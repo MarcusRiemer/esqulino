@@ -4,15 +4,15 @@ module Types
     field :name, String, null:false
     field :ast, Types::Scalar::NodeDescription, null:true
     field :project, Types::ProjectType,null:false
-    field :blockLanguage, Types::BlockLanguageType,null:false
-    field :blockLanguageId, ID,null:false
-    field :programmingLanguage, Types::ProgrammingLanguageType,null:false
-    field :programmingLanguageId, ID,null:false
+    field :block_language, Types::BlockLanguageType,null:false
+    field :block_language_id, ID,null:false
+    field :programming_language, Types::ProgrammingLanguageType,null:false
+    field :programming_language_id, ID,null:false
     field :compiled, String, null:true
     field :grammars, Types::GrammarType, null:true
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'CodeResourceOrderFieldEnum'

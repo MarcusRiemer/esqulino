@@ -7,7 +7,7 @@ module Types
     field :display, String, null:false
     field :readOnly, Boolean,null:false
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false
   end
 end

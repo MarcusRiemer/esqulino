@@ -5,7 +5,7 @@ module Types
     field :project, Types::ProjectType,null:true
     field :schema, GraphQL::Types::JSON, null:true
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false
+    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
   end
 end

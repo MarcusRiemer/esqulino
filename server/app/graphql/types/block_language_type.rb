@@ -4,15 +4,15 @@ module Types
     field :name, String, null:false
     field :model, GraphQL::Types::JSON, null:false
     field :slug, String, null:true
-    field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
-    field :defaultProgrammingLanguageId, ID,null:false
+    field :default_programming_language, Types::ProgrammingLanguageType,null:false
+    field :default_programming_language_id, ID,null:false
     field :grammar, Types::GrammarType, null:true
     field :grammarId, ID, null: true
     field :generated, Boolean, null:true
-    field :codeResources, [Types::CodeResourceType], null:true
+    field :code_resources, [Types::CodeResourceType], null:true
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'BlockLanguageOrderFieldEnum'

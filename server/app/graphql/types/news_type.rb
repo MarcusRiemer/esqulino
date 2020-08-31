@@ -3,12 +3,12 @@ module Types
     field :id, ID, null:false
     field :title, Types::Scalar::LangJson, null:false
     field :text, Types::Scalar::LangJson, null:false
-    field :publishedFrom, GraphQL::Types::ISO8601DateTime, null:true
+    field :published_from, GraphQL::Types::ISO8601DateTime, null:true
     field :user, Types::UserType, null:true
     field :userId, ID,null: true
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'NewsOrderFieldEnum'

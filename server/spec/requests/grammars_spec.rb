@@ -22,7 +22,6 @@ RSpec.describe GrammarsController, type: :request do
       grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
       expect(grammars_data.length).to eq 1
-      expect(grammars_data[0]).to validate_against "GrammarListDescription"
     end
 
     it 'limit' do
@@ -35,11 +34,8 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"AdminListGrammars",variables:{first:2})
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 2
 
-
-
       send_query(query_name:"AdminListGrammars",variables:{first:3})
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 3
-
 
       send_query(query_name:"AdminListGrammars",variables:{first:4})
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 3
@@ -114,9 +110,9 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"AdminSingleGrammar",variables:{id: g.id})
 
       expect(response).to have_http_status(200)
-      grammar_data = JSON.parse(response.body)['data']['singleGrammar']
+      response_data = JSON.parse(response.body)['data']['singleGrammar']
 
-      expect(grammar_data.except("blockLanguages","generatedFromId","root")).to validate_against "GrammarDescription"
+      expect(response_data["id"]).to eq g.id
     end
 
     it 'finds a single grammar by slug' do
@@ -128,7 +124,7 @@ RSpec.describe GrammarsController, type: :request do
       expect(JSON.parse(response.body).fetch('errors',[])).to eq []
       grammar_data = JSON.parse(response.body)['data']['singleGrammar']
       # root can't be null in GrammarDocument, but in database
-      expect(grammar_data.except("blockLanguages","generatedFromId","root")).to validate_against "GrammarDescription"
+      expect(grammar_data["slug"]).to eq g.slug
     end
 
     it 'responds with 200 but not empty errors for non existing grammars' do
@@ -144,11 +140,9 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"AdminSingleGrammar",variables:{id: original.id})
 
       expect(response).to have_http_status(200)
-      json_data = JSON.parse(response.body)["data"]["singleGrammar"]
-
-      # root can't be null in GrammarDocument, but in database
-      expect(json_data.except("blockLanguages","root")).to validate_against "GrammarDescription"
-      expect(json_data["generatedFromId"]).to eq meta_code_resource.id
+      grammar_data = JSON.parse(response.body)["data"]["singleGrammar"]
+      expect(grammar_data["id"]).to eq original.id
+      expect(grammar_data["generatedFromId"]).to eq meta_code_resource.id
     end
   end
 

@@ -5,7 +5,6 @@ module Mutations
     input_object_class Types::Base::BaseInputObject
     object_class Types::Base::BaseObject
 
-
     def underscore_keys(args)
       args.transform_keys{|k| k.to_s.underscore.to_sym}
     end

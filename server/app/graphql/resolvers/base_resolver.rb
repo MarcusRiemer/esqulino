@@ -5,11 +5,10 @@ module Resolvers
     def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil,order_field:,order_dir:)
       @model_class = model_class
       @context = context
-      @languages = languages.nil? ? Types::Base::BaseEnum::LanguageEnum.enum_values : languages
+      @languages = languages.nil? ? [@context[:language]] : languages
       @order_dir = order_dir
       @order_field = order_field
       scope = select_relevant_fields(scope)
-
       scope = apply_filter(scope,filter)
       @scope = apply_order(scope,order)
     end

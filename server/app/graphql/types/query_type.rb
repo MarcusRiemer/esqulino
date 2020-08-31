@@ -158,9 +158,9 @@ module Types
 
     def grammars(input:nil)
       if input
-        Resolvers::GrammarsResolver::new(**input).scope
+        Resolvers::GrammarsResolver::new(context:@context,**input).scope
       else
-        Resolvers::GrammarsResolver::new.scope
+        Resolvers::GrammarsResolver::new(context:@context).scope
       end
     end
   end

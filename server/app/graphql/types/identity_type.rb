@@ -7,7 +7,7 @@ module Types
     field :ownData, GraphQL::Types::JSON, null:true
     field :user, Types::UserType,null:false
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null:true
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:true
+    field :createdAt, GraphQL::Types::ISO8601DateTime, null:false
+    field :updatedAt, GraphQL::Types::ISO8601DateTime, null:false
   end
 end
