@@ -74,7 +74,7 @@ const wrapGrammarData = (
  * the given data (if provided) and uses default data
  */
 export const buildSingleGrammarResponse = (
-  override?: AdminListGrammarNode
+  override?: Partial<AdminListGrammarNode>
 ): GrammarGQLResponse => {
   const id = override?.id ?? generateUUIDv4();
   const g: AdminListGrammarNode = Object.assign(

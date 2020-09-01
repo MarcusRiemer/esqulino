@@ -39,7 +39,10 @@ export function prettyPrintType(
   name: QualifiedTypeName,
   t: Desc.NodeTypeDescription
 ): NestedString {
-  if (Desc.isNodeConcreteTypeDescription(t)) {
+  if (
+    Desc.isNodeConcreteTypeDescription(t) ||
+    Desc.isNodeVisualTypeDescription(t)
+  ) {
     return prettyPrintConcreteNodeType(name, t);
   } else if (Desc.isNodeOneOfTypeDescription(t)) {
     return prettyPrintOneOfType(name, t);
@@ -64,9 +67,11 @@ export function prettyPrintQualifiedTypeName(name: QualifiedTypeName): string {
  */
 export function prettyPrintConcreteNodeType(
   name: QualifiedTypeName,
-  t: Desc.NodeConcreteTypeDescription
+  t: Desc.NodeConcreteTypeDescription | Desc.NodeVisualTypeDescription
 ): NestedString {
-  const head = `node ${prettyPrintQualifiedTypeName(name)} {`;
+  const nodeType = Desc.isNodeConcreteTypeDescription(t) ? "node" : "visualize";
+
+  const head = `${nodeType} ${prettyPrintQualifiedTypeName(name)} {`;
   const attributes = (t.attributes ? t.attributes : []).map((a) =>
     prettyPrintConcreteNodeTypeAttribute(name, a)
   );

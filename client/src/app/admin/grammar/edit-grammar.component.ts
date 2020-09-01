@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 
-import { Subscription } from "rxjs";
+import { Subscription, BehaviorSubject } from "rxjs";
 
 import { switchMap, map } from "rxjs/operators";
 
@@ -46,6 +46,10 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
   // All types that are available as root. These may not be regenerated
   // on the fly because [ngValue] uses the identity of the objects to compare them.
   availableTypes: QualifiedTypeName[] = [];
+
+  readonly grammarReferences$ = new BehaviorSubject<{ grammarId: string }[]>(
+    []
+  );
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -92,6 +96,21 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
         if (this.grammar.generatedFromId === null) {
           this.grammar.generatedFromId = undefined;
         }
+
+        const grammarRefs = () => {
+          const all = [
+            ...(this.grammar?.includes ?? []),
+            ...(this.grammar?.visualizes ?? []),
+          ];
+
+          return all.map((grammarId) => {
+            return {
+              grammarId,
+            };
+          });
+        };
+
+        this.grammarReferences$.next(grammarRefs());
       });
     // Setup the toolbar buttons
     this._toolbarService.addItem(this.toolbarButtons);
@@ -144,19 +163,6 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
     this.grammar.types = types;
     this.availableTypes = getTypeList(allPresentTypes(this.grammar));
     this.grammarRoot = this.grammar.root;
-  }
-
-  get grammarReferences() {
-    const all = [
-      ...(this.grammar?.includes ?? []),
-      ...(this.grammar?.visualizes ?? []),
-    ];
-
-    return all.map((grammarId) => {
-      return {
-        grammarId,
-      };
-    });
   }
 
   /**

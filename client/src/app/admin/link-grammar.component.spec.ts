@@ -51,11 +51,13 @@ describe("LinkGrammarComponent", () => {
   });
 
   it(`Renders the name once the data is available`, async () => {
-    const response = buildSingleGrammarResponse();
+    const response = buildSingleGrammarResponse({ name: "spec" });
     const grammar = response.data.grammars.nodes[0];
     const t = await createComponent(grammar.id);
 
-    t.component.description.toPromise();
+    t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
+
     const op = t.controller.expectOne(AdminListGrammarsDocument);
     op.flush(response);
 
