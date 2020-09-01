@@ -489,17 +489,17 @@
 
 % own font definitions
 \newcommand{\helv}{\fontfamily{phv}\fontsize{9}{11}\selectfont}
-\newcommand{\book}{\fontfamily{pbk}\fontseries{m}\fontsize{11}{13}\selectfont}
+\newcommand{\book}{\fontfamily{pbk}\fontseries{m}\fontsize{11}{13}\selectfont}\selectfont
 \newcommand{\tgherosfont}{\fontfamily{qhv}\selectfont}
 
 \newcommand{\thesispartlabelfont}{\color{ctcolorpartnum}\book\fontsize{60}{60}\selectfont}
 \newcommand{\thesispartfont}{\color{ctcolorparttext}\huge \tgherosfont\selectfont}
-\newcommand{\thesischapterfont}{\color{ctcolorchapter}\huge \fontfamily{phv}\selectfont}
+\newcommand{\thesischapterfont}{\color{ctcolorchapter}\huge\bfseries\selectfont}
 %\newcommand{\thesissectionfont}{\color{ctcolormain}\LARGE\bfseries \tgherosfont}
-\newcommand{\thesissectionfont}{\color{ctcolorsection}\LARGE \tgherosfont}
-\newcommand{\thesissubsectionfont}{\color{ctcolorsubsection}\Large \tgherosfont}
-\newcommand{\thesissubsubsectionfont}{\color{ctcolorsubsection}\large \tgherosfont}
-\newcommand{\thesisparagraphfont}{\color{ctcolorparagraph}\tgherosfont\small\bfseries}
+\newcommand{\thesissectionfont}{\color{ctcolorsection}\LARGE\bfseries\selectfont}
+\newcommand{\thesissubsectionfont}{\color{ctcolorsubsection}\Large\bfseries\selectfont}
+\newcommand{\thesissubsubsectionfont}{\color{ctcolorsubsection}\large\bfseries\selectfont}
+\newcommand{\thesisparagraphfont}{\color{ctcolorparagraph}\tgherosfont\small\bfseries\selectfont}
 %
 % headings
 \setkomafont{part}{\thesispartfont} % for chapter entries

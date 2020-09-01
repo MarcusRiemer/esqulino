@@ -83,22 +83,6 @@ class ServerSchema < GraphQL::Schema
 end
 \end{lstlisting}
 
-\subsection{Ordnerstruktur}
-\begin{lstlisting}[language=Ruby,float=h!,caption={Ordnerstruktur}, label={lst:graphql:directory}]
-|-- graphql
-|   |-- mutations
-|   |   |-- block_language
-|   |   |-- grammar
-|   |   |-- news
-|   |   |-- projects
-|   |-- resolvers
-|   |-- types
-|   |   |-- base
-|   |   |-- scalar
-|   |-- validators
-\end{lstlisting}
-
-
 \begin{itemize}
 	\setlength\itemsep{-1em}
 	\item \emph{Zeile 1}: Definition des Schemas.
@@ -110,33 +94,17 @@ end
 	\item \emph{Zeile 15}: Ermöglicht die Nutzung von Connections~\ref{graphql:connections}.
 \end{itemize}
 
-Um nun Anfragen zu schreiben und auszuführen, müssen zunächst Datentypen definiert werden, die den Models in der Rails Applikation entsprechen.
-%Typdefinitionen wurden bei der Implementierung in Gruppierungen Unterteilt. 
-
-%\begin{table}[h!]
-%	\begin{tabular}{|p{0.24\textwidth}|p{0.64\textwidth}|}
-%		\hline
-%		\textbf{Referenz} & \textbf{Typ} \\ \hline
-%		$\ref{graphql:objecttype}$ & Model Instanzen als Objekt Typen  \\ \hline
-%		$\ref{graphql:querytypes}$ & Queries als Objekt Typen \\ \hline
-%		$\ref{graphql:querytypes}$ & Mutationen als Objekt Typen \\ \hline
-%		$\ref{graphql:inputtypes}$ & Input Typen  \\ \hline
-%		$\ref{graphql:enumtypes}$ & Enums \\ \hline
-%		$\ref{graphql:scalartypes}$ & Scalar Typen \\ \hline
-%	\end{tabular}
-%	\vspace{5pt}
-%	\caption{Graphql Gruppierungen in den Typdefinitionen}
-%	\label{tbl:newview}
-%\end{table}
-
+Nachfolgend werden anhand eines Praxisbeispiels alle Schritte durchgeführt, die das Abschicken einer Query und das Darstellen der Antwort ermöglichen.
 
 \section{Praxisbeispiel - Erweiterung des Datenkonstruktes}
 In diesem Abschnitt wird das~\fullref{sec:requirements:example} nach erfolgter Migration von GraphQL wiederholt, um aufzuzeigen welche Schritte bei Nutzung von GraphQL durchgeführt werden müssen und wie diese sich zum alten System unterscheiden.
 
 \subsection{Anlegen des Models in Rails}
-Als ersten Schritt empfehle ich das Anlegen und Durchführen einer Datenbankmigration und das Erstellen des neuen Models, genau wie in~\fullref{sec:requirements:example:model}. Die Idee diesen Schritt als ersten auszuführen stammt aus der Endgültigkeit einer Datenbankmigration. Selbstverständlich können Datenbankmigrationen auch rückgängig gemacht werden, allerdings sollte Vorsicht geboten und genau überlegt sein, wie die Datenbankmigration auszusehen hat. Wenn alles korrekt verlaufen ist, müssen die Typen im nach hinein nicht angepasst werden und bei der Erstellung des GraphQL Typen kann der Name, der Typ, der Default Wert und ob der Typ nullable ist aus der Datenbank abgelesen werden. Hinzuzufügen ist, dass es Code Generatoren wie GraphQL Rails Schemaker~\ref{graphql-rails-schemaker} gibt, die suggerieren aus dem Datenbankschema GraphQL Typen generieren zu können. Wie gut diese funktionieren wurde im Rahmen der Arbeit allerdings nicht getestet
+\label{impl:graphql:model}
+Als ersten Schritt empfehle ich das Anlegen und Durchführen einer Datenbankmigration und das Erstellen des neuen Models, genau wie in~\fullref{sec:requirements:example:model}. Die Idee diesen Schritt als ersten auszuführen stammt aus der Endgültigkeit einer Datenbankmigration. Selbstverständlich können Datenbankmigrationen auch rückgängig gemacht werden, allerdings sollte Vorsicht geboten und genau überlegt sein, wie die Datenbankmigration auszusehen hat. Wenn alles korrekt verlaufen ist, müssen die Typen im nach hinein nicht angepasst werden und bei der Erstellung des GraphQL Typen kann der Name, der Typ, der Default Wert und ob der Typ nullable ist aus der Datenbank abgelesen werden. Hinzuzufügen ist, dass es Code Generatoren wie GraphQL Rails Schemaker~\cite{graphql-rails-schemaker} gibt, die suggerieren aus dem Datenbankschema GraphQL Typen generieren zu können. Wie gut diese funktionieren wurde im Rahmen der Arbeit allerdings nicht getestet
 
-\subsection{Anlegen der Model Instanz als Objekttyp}
+\subsection{Anlegen eines GraphQL Objekttypen}
+\label{impl:graphql:graphqltype}
 \label{graphql:objecttype}
 Wurde der GraphQL Typ nicht aus dem Datenbankschema generiert, müssen Datentypen die den Model Instanzen aus der Rails Applikation entsprechen in Form von GraphQL-Objekttypen definiert werden. 
 Jedes GraphQL Objekt hat Felder, die Daten extrahieren und anhand des Namens abgefragt werden können. 
@@ -189,7 +157,54 @@ Als drittes Attribut wurde festgelegt ob das Feld \lstinline|null| als Rückgabe
 Darüber hinaus gibt es noch  weitere Attribute mit denen Felder eingeschränkt oder Meta Daten hinzugefügt werden können~\cite{graphql-field-introduction}.
 Weitere Felder des \lstinline|ProjectType| werden aus Gründen der Relevanz nicht aufgeführt. 
 
-\subsection{Anlegen eines Query-Endpunktes}
+\subsection{Anlegen eines Input Typen}
+\label{impl:graphql:input}
+\label{graphql:inputtypes}
+Input-Objekttypen sind komplexe Eingaben für GraphQL-Operationen. Sie eignen sich hervorragend für Felder, die viele strukturierte Eingaben benötigen, wie Mutationen oder Suchfelder~\cite{graphql-input-type}.
+In dieser Implementierung wurden Input Typen für die Auswahl von Sprachen (\lstinline|:languages|), für das Filtern (\lstinline|:filter|) und für das Sortieren (\lstinline|:order|) genutzt~\ref{lst:graphql:inputtype}.
+Für jeden Typen der einer Model Instanz entspricht und deren Instanzen im Client in Listen-Form dargestellt werden, wird definiert welche der Attribute des Models sortierbar sind und nach welchen Attributen gefiltert werden kann. Diese Informationen fließen dann bei der Definition des zur Klasse gehörenden Input Typen ein (siehe \ref{lst:graphql:inputtype}).
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Definition der Input Typen in \lstinline|/graphql/types/project_type.rb|}, label={lst:graphql:inputtype}]
+class Types::ProjectType < Types::Base::BaseObject
+  [...]
+  # Enum mit Feldern nach denen sortiert werden soll 
+  class OrderFieldEnum < Types::Base::BaseEnum
+    value 'name'
+    value 'slug'
+  end
+
+  # Typ zum Sortieren nach den Feldern aus OrderFieldEnum mit der
+  # Sortierrichtung aus dem OrderDirectionEnum aus der BaseEnum Klasse
+  class OrderType < Types::Base::BaseInputObject
+    argument :orderField, OrderFieldEnum, required: false
+    argument :orderDirection, Types::Base::BaseEnum:des aktuellen Systems mit GraphQL:OrderDirectionEnum, required: false
+  end
+
+  # Enum mit Feldern die multilingual sind
+  class MultilingualColumnsEnum < Types::Base::BaseEnum
+    value "name"
+  end
+
+  # Typ zum Filtern nach den als Argumenten aufgeführten Feldern
+  class FilterFieldType < Types::Base::BaseInputObject
+    argument :id, type: ID, required: false
+    argument :name, type: String, required: false
+    argument :slug, type: String, required: false
+    argument :public, type: Boolean, required: false
+  end
+
+  # Input Typ zum Sortiere, Filter und Auswählen von Sprachen
+  class InputType < Types::Base::BaseInputObject
+    argument :order, OrderType, required: false
+    argument :filter, FilterFieldType, required: false
+    argument :languages, [Types::Base::BaseEnum::LanguageEnum], required: false
+  end
+end
+\end{lstlisting}
+
+
+\subsection{Anlegen eines Query Endpunktes}
+\label{impl:graphql:querytype}
 \label{graphql:querytypes}
 Bislang wurde ein Schema definiert~\ref{lst:graphql:schema}, eine Datenbankmigration durchgeführt und ein Datentyp~\ref{lst:graphql:projecttype} erstellt der einer Model Instanz entspricht. Damit der Datentyp über den Einstiegspunkt \lstinline|query| aus dem Schema abgefragt werden kann, wurde der \lstinline|QueryType|~\ref{lst:graphql:querytype} unter \lstinline|/graphql/types/query_type.rb| definiert.
 Dieser beinhaltet alle definierten Queries, die die Einstiegspunkte zu den Model Instanzen wieder spiegeln. Für jede Model Instanz die abgefragt werden soll, wurde somit ein Feld in der Klasse \lstinline|QueryType| definiert.
@@ -213,56 +228,8 @@ end
 In Zeile 2 wurde ein Feld mit dem Namen \lstinline|:projects| vom Typ \lstinline|ProjectType.connection_type| erstellt, welches ein Argument (\lstinline|argument|) mit dem Bezeichner \lstinline|:input| vom Typ \lstinline|ProjectType::InputType| mit der Einschränkung, dass das Argument nicht zwingend erwartet wird (\lstinline|required: false|), besitzt.
 Hinzukommend wurde in Zeile 6 ein Resolver für die projects query hinzugefügt. Dieser bekommt das Argument als Parameter übergeben.
 
-\subsection{Anlegen eines Input Typen}
-\label{graphql:inputtypes}
-Input-Objekttypen sind komplexe Eingaben für GraphQL-Operationen. Sie eignen sich hervorragend für Felder, die viele strukturierte Eingaben benötigen, wie Mutationen oder Suchfelder~\cite{graphql-input-type}.
-In dieser Implementierung wurden Input Typen für die Auswahl von Sprachen (\lstinline|:languages|), für das Filtern (\lstinline|:filter|) und für das Sortieren (\lstinline|:order|) genutzt~\ref{lst:graphql:inputtype}.
-Für jeden Typen der einer Model Instanz entspricht und deren Instanzen im Client in Listen-Form dargestellt werden, wird definiert welche der Attribute des Models sortierbar sind und nach welchen Attributen gefiltert werden kann. Diese Informationen fließen dann bei der Definition des zur Klasse gehörenden Input Typen ein (siehe \ref{lst:graphql:inputtype}).
-
-\begin{lstlisting}[language=Ruby,float=h!,caption={Definition der Input Typen in \lstinline|/graphql/types/project_type.rb|}, label={lst:graphql:inputtype}]
-class Types::ProjectType < Types::Base::BaseObject
-  [...]
-  # Enum mit Feldern nach denen sortiert werden soll 
-  class OrderFieldEnum < Types::Base::BaseEnum
-    graphql_name 'ProjectOrderFieldEnum'
-    value 'name'
-    value 'slug'
-  end
-
-  # Typ zum Sortieren nach den Feldern aus OrderFieldEnum mit der
-  # Sortierrichtung aus dem OrderDirectionEnum aus der BaseEnum Klasse
-  class OrderType < Types::Base::BaseInputObject
-    graphql_name 'ProjectOrderType'
-    argument :orderField, OrderFieldEnum, required: false
-    argument :orderDirection, Types::Base::BaseEnum::OrderDirectionEnum, required: false
-  end
-
-  # Enum mit Feldern die multilingual sind
-  class MultilingualColumnsEnum < Types::Base::BaseEnum
-    graphql_name 'ProjectMultilingualColumnsEnum'
-    value "name"
-  end
-
-  # Typ zum Filtern nach den als Argumenten aufgeführten Feldern
-  class FilterFieldType < Types::Base::BaseInputObject
-    graphql_name 'ProjectFilterFieldType'
-    argument :id, type: ID, required: false
-    argument :name, type: String, required: false
-    argument :slug, type: String, required: false
-    argument :public, type: Boolean, required: false
-  end
-
-  # Input Typ zum Sortiere, Filter und Auswählen von Sprachen
-  class InputType < Types::Base::BaseInputObject
-    graphql_name 'ProjectInputType'
-    argument :order, OrderType, required: false
-    argument :filter, FilterFieldType, required: false
-    argument :languages, [Types::Base::BaseEnum::LanguageEnum], required: false
-  end
-end
-\end{lstlisting}
-
 \subsection{Anlegen der Resolver Klasse}
+\label{impl:graphql:resolver}
 \label{graphql:resolver}
 Der Resolver \lstinline|projects|~\ref{lst:graphql:querytype} ist für das Auflösen eines Feldes, welches eine Query darstellt zuständig. Er delegiert diese Aufgabe im Falle, dass die Query eine Liste mit Filter- und Sortierfunktion erwartet an ein \emph{"Plain Old Ruby Object"} namens \lstinline|ProjectsResolver|~\ref{lst:graphql:projectsresolver} weiter und gibt deren Instanzvariable \lstinline|.scope| zurück. Das Argument \lstinline|input| wird ebenfalls weiter an die \lstinline|ProjectsResolver| Klasse übergeben, wenn dieses nicht \lstinline|nil| ist. 
 
@@ -295,6 +262,7 @@ Serverseitig wurde nun die Logik erstellt, um Project Datensätze abzufragen und
 Nun benötigt der Client eine Query, die genau die Daten abfragt die er benötigt und den dazugehörigen Antworttyp als Typescript Interface um die Antwort typsicher verarbeiten zu können.
 
 \subsection{Erstellen einer GraphQL Query}
+\label{impl:graphql:query}
 Für die gewollte Listendarstellung im Client muss eine zum Endpunkt aus Listing~\ref{lst:graphql:querytype} passende GraphQL Query geschrieben werden. Wir benötigen also eine Query, die den Bezeichner \emph{projects} beinhaltet. Zusätzlich muss die Query einen einzigartigen Namen erhalten, damit Generatoren diesen den daraus generierten Typescript Interfaces zuweisen kann und ein Entwickler die Interfaces intuitiv findet. Hinzukommend werden Argumente zum Filtern, Sortieren und für die Sprachauswahl hinzugefügt, so wie für die Paginierung. Für letzteres werden Felder die den Status der Paginierung anzeigen abgefragt. Neben den Argumenten und Metadaten 
 sind noch die Felder abzufragen, die dargestellt werden sollen.
 In Listing~\ref{lst:graphql:query} wird die Query eingeführt, die für die erweiterte Projekt Liste aus Tabelle~\ref{tbl:req:roles} genutzt wird.
@@ -336,17 +304,17 @@ query AdminListProjects(
 	\item \emph{Zeile 1}: Setzt \emph{AdminListProjects} als Namen der Query.
 	\item \emph{Zeile 2-6}: Definiert Argumente die übergeben werden können.
 	\item \emph{Zeile 8}: Definiert welcher Einstiegspunkt gewählt werden soll.
-	\item \emph{Zeile 9-13}: Übergibt die definierten Argumente die im Schema erstellten Argumenten.
+	\item \emph{Zeile 9-13}: Übergibt die definierten Argumente dem im Schema erstellten Argumenten.
 	\item \emph{Zeile 15}: Ist ein Feld aus der Connection und gibt Zugriff auf die Felder des ProjectTypes.
 	\item \emph{Zeile 16-19}: Setzt die für die Listendarstellung verwendeten Felder.
-	\item \emph{Zeile 21}: Ist ein Feld aus der benutzerdefinierten Connection und gibt Auskunft darüber wie viele Datensätze die Query im Ergebnis beinhaltet.
-
+	\item \emph{Zeile 21}: Ist ein Feld aus der benutzerdefinierten Connection und gibt Auskunft darüber wie viele Datensätze die Query im Ergebnis beinhaltet (siehe Abschnitt~\ref{graphql:connections}).
 	\item \emph{Zeile 22-26}: Sind Felder aus der Connection und geben Auskunft über den Zustand der Paginierung.
 \end{itemize}
 
 Nun muss die Query dem Client zugreifbar gemacht werden, durch Generierung eines Angular Services, der die Query und eine Funktion zum abschicken beinhaltet.
 
 \subsection{Codegenerierung}
+\label{impl:graphql:generation}
 Graphql-ruby stellt einen eingebauten Rake Task bereit der aus dem GraphQL Schema eine JSON Darstellung generiert~\cite{graphql-rake-task}. Diese wird in einem Schema-Ordner auf Wurzelebene der gesamten Applikation (Ebene auf der sich der Server und Client Ordner befindet) gehalten.
 Durch Nutzung des Tools graphql-code-generator~\cite{graphql-code-generator} wird dann aus der in Listing~\ref{lst:graphql:query} vorgestellten Query und dem GraphQL Schema in JSON Darstellung folgender Typescript Code generiert:
 
@@ -407,7 +375,8 @@ export type AdminListProjectsQueryVariables = {
 
 Die Ausführung des Rake Tasks und des anschließenden Codegenerators werden über ein Makefile realisiert, wodurch es nur der Aufruf des im Makefile zugewiesenen Kommandos benötigt, um alle Typen für den Client generieren zu können. 
 
-\subsection{Komponente auf dem Client}
+\subsection{Anlegen einer Angular Komponenten}
+\label{impl:graphql:component}
 
 Zur Darstellung wird eine Komponente verwendet. Diese bekommt den generierten Service aus Listing~\ref{lst:graphql:gen-service} im Konstruktor "injiziert". 
 
@@ -438,7 +407,40 @@ export class OverviewProjectComponent {
 \end{lstlisting}
 
 \subsection{Anlegen einer neuen Sicht}
+Um nun das migrierte System mit dem Ursprünglichen in Vergleich zu bringen, wird das Anlegen einer neuen Sicht auf Projekt Daten, wie in Abschnitt~\fullref{sec:requirements:example} simuliert und anschließend verglichen.
+Aus Tabelle~\ref{impl:tbl:newview} geht hervor das GraphQL nach erfolgter Implementierung eines Typs, Query Endpunktes und der dazugehörigen Resolver Klasse, so wie des Rails Models und der Datenbankmigration eine deutlich dezimierte Anzahl an Schritten (4 von 11) im Gegensatz zum alten System (8 von 12) ausgeführt werden muss.
+Zudem wurde keine Route, bzw. Controllerfunktion definiert oder Tests geschrieben.
+Das resultiert aus der Gegebenheit, dass es nur eine Route und Controller Funktion auf dem Server gibt die alle Anfragen entgegen nehmen und an den GraphQL Server weiterleiten. Dort werden die Anfragen auf Korrektheit geprüft,
+SQL Querys zusammengestellt, ausgeführt und die Antwort an die Controller Funktion zurück gegeben.
+Somit sind die Schritte aus Abschnitt~\fullref{sec:requirements:example:controller} und Abschnitt~\fullref{sec:requirements:example:service} obsolet.
 
+\begin{table}[h!]
+	\begin{tabular}{|p{0.12\textwidth}|p{0.52\textwidth}|p{0.12\textwidth}|}
+		\hline
+		\textbf{Schritt} & \textbf{Beschreibung} & \textbf{GraphQL} \\ \hline
+		\multirow{2}{*}{$\ref{impl:graphql:model}$}
+			& Anlegen einer Datenbank Migration & $X$ \\
+			& Anlegen des Models & $X$ \\ \hline
+		$\ref{impl:graphql:graphqltype}$ & Anlegen eines GraphQL Objekttypen &  $X$ \\ \hline
+		$\ref{impl:graphql:input}$ & Anlegen eines Input Typen &  $X$ \\ \hline
+		\multirow{2}{*}{$\ref{impl:graphql:querytype}$}
+			& Anlegen eines Query Endpunktes &  $X$ \\ 
+			& Anlegen einer Resolver Funktion &  $X$ \\ \hline
+		$\ref{impl:graphql:resolver}$ & Anlegen einer Resolver Klasse &  $X$ \\ \hline
+		$\ref{impl:graphql:query}$ & Erstellen einer GraphQL Query &  $\surd$ \\ \hline
+		$\ref{impl:graphql:generation}$ & Codegenerierung &  $\surd$ \\ \hline
+		\multirow{2}{*}{$\ref{impl:graphql:component}$}
+			& Anlegen einer Angular Komponenten & $\surd$ \\
+			& Anlegen eines Templates & $\surd$ \\ \hline
+	\end{tabular}
+	\vspace{5pt}
+	\centering
+	\caption{Funktionsweise von GraphQL bei Erstellung neuer Sichten auf bereits vorhandene Datensätze}
+	\label{impl:tbl:newview}
+\end{table}
+
+
+Letztendlich muss lediglich eine Angular komponente mit zugehörigem Template geschrieben werden, in die der generierte Service injiziert wird.
 
 \section{Scalar Typen}
 \label{graphql:scalartypes}
@@ -458,14 +460,14 @@ Die In Blattwerkzeug verfügbaren Sprachen und Sortierrichtungen werden in Enums
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Funktion zum Extrahieren der Enum Werte in ein Array. \lstinline|/graphql/types/base/base_enum.rb|}, label={lst:graphql:enum_values}]
 class Types::Base::BaseEnum < GraphQL::Schema::Enum
-def self.enum_values
-values.values.map(&:value)
-end
-[...]
-# Enum Definitionen
+  def self.enum_values
+    values.values.map(&:value)
+  end
+  [...]
+  # Enum Definitionen
 end
 \end{lstlisting}
-\section{Mutationen als Objekt Typen}
+\section{Mutationen als Objekttypen}
 TODO: Mutationen
 
 
@@ -488,19 +490,21 @@ TODO: BaseResolver beschreiben
 \end{figure}
 
 \section{Paginierung}
+Die geforderte Paginierung wurde durch einen Connection Typ im GraphQL Schema und durch eine Angular Komponente ermöglicht, die eine einheitliche Tabelle mit Möglichkeit der Paginierung und Sortierung ist.
+Der serverseitige Code erfordert nur einen Methodenaufruf (siehe Abschnitt{graphql:connections}), wohingegen im Client eine umfangreiche (165 Zeilen Typescript Code zuzüglich 25 Zeilen HTML Code) Komponente geschrieben wurde~\cite{}.
+TODO: Permalink zur Github Datei
+
 \subsection{Connection Typen}
 \label{graphql:connections}
 Der Connection Typ ist die Lösung für das Problem der Paginierung~\cite{graphql-connection-concept}.
-Es sind generische Objekte, die Metadaten zur Paginierung beinhalten und Zugriffsmöglichkeiten auf die Elemente
-einer Query besitzen.
-Jeder Connection, wie \lstinline|ProjectType.connection_type|~\ref{lst:graphql:querytype}, werden implizit Argumente zur Cursor-basierten Paginierung \lstinline|first|, \lstinline|last|, \lstinline|after|, \lstinline|before| hinzugefügt~\cite{graphql-relay-connection}. Genauso wie jeder Query das Feld \lstinline|pageInfo| beigefügt wird, über das die Informationen \lstinline|hasNextPage|, \lstinline|hasPreviousPage|,\lstinline|startCursor| und \lstinline|endCursor| erhältlich sind. Wie Cursor-basierte Paginierung funktioniert ist nicht Thema der Arbeit und wird daher nicht behandelt.
+Es sind generische Objekte, die eine Eins-zu-viele-Beziehung darstellen und Metadaten über die Liste, auch zur Paginierung beinhalten und Zugriffsmöglichkeiten auf die Elemente besitzen.
+Wird \lstinline|.connection_type| an einen Query Typ angehängt, wird eine Connection daraus. 
+Das bedeutet, dass wie bei \lstinline|ProjectType.connection_type|~\ref{lst:graphql:querytype} implizit Argumente zur Cursor-basierten Paginierung \lstinline|first|, \lstinline|last|, \lstinline|after|, \lstinline|before| hinzugefügt~\cite{graphql-relay-connection} werden, so wie jeder Query das Feld \lstinline|pageInfo| beigefügt wird, über das die Informationen \lstinline|hasNextPage|, \lstinline|hasPreviousPage|,\lstinline|startCursor| und \lstinline|endCursor| erhältlich sind. 
 
-Connections können 
-Wird \lstinline|.connection_type| an einen Objekttypen angehängt, wird eine Connection draus. 
-TODO: Edges, Nodes, Pageinfo erwähnen
-TODO: totalCount Beispiel beschreiben
-TODO: Wodurch entstehen connections?
-\begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Aufruf der gql-Funktion erhält Querystring als Parameter}, label={lst:example:service}]
+Zusätzlich wurde durch eine benutzerdefinierte Connection Klasse, die Connectiontypen um ein Feld erweitert.
+Dies geschieht in Listing~\ref{lst:graphql:total-count}.
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Benutzerdefinierte Connection Klasse mit hinzugefügtem Feld}, label={lst:graphql:total-count}]
 class Types::Base::BaseConnection < GraphQL::Types::Relay::BaseConnection
 
   field :total_count, Integer, null: false
@@ -511,9 +515,19 @@ class Types::Base::BaseConnection < GraphQL::Types::Relay::BaseConnection
 end
 \end{lstlisting}
 
-\subsection{PaginatorTable Komponente}
+\subsection{Einheitliche Tabelle mit Paginierung und Sortierung}
 \label{impl:paginator-component}
+Die Tabelle im Client sieht wie in Abbildung~\ref{impl:graphql:paginator-table} aus. Unterhalb der Tabelle kann die Seitengröße eingestellt, so wie eine Seite weiter gegangen werden. Die Anzeige \lstinline|1-5| steht dabei für die ersten fünf Elemente die gezeigt werden. Drückt man auf den Pfeil nach rechts werden die Argumente der GraphQL Query erneut gesetzt \lstinline|{first: pageSize, after: endCursor}| und damit ein neuer Request abgeschickt.
+Der Wert von \lstinline|endCursor| geht aus der letzten Antwort der "AdminListProjects" Query aus Listing~\ref{lst:graphql:query} hervor. Der Wert \lstinline|pageSize| wird innerhalb der Angular Komponente gehalten. 
 
+Des Weiteren wird ebenfalls ein neuer Request durch setzten des Inputtypen der Query gesendet, wenn auf die Spalten Bezeichner "name" oder "slug" gedrückt werden. Es sind nur die Spalten sortierbar die in Listing~\ref{lst:graphql:inputtype} im OrderFieldEnum enthalten sind.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/paginator-table.png}
+	\caption{Einheitliche Material Angular Tabelle zum Paginieren und Sortieren}
+	\label{impl:graphql:paginator-table}
+\end{figure}
 
 \section{Validierungen}
 \label{graphql:validation}
@@ -568,18 +582,6 @@ TODO: Benchmark Test mit Marcus besprechen. Sitespeed.io keine gute Idee!
 \section{Unerwartete Hindernisse}
 \subsection{Fehlerhafte Codegenerierung der Angular Services}
 \subsection{Fehlerhafte Codegenerierung der Typescript Interfaces}
-
-
-
-\section{Alternative Verfahren}
-TODO: Ganz kurz umreißen. Evtl. ganz raus lassen, da nicht mehr Thema der Arbeit und um Seiten zu sparen?
-\subsection{Fast JSON API}
-
-https://www.graphiti.dev/guides/
-\subsection{Deepr}
-Gibt es nur in Javascript.
-https://github.com/deeprjs/deepr
-
 
 \chapter{Fazit}
 \section{Erreichte Ziele}

@@ -280,47 +280,33 @@ bzw ist nur einmal erforderlich gewesen, wie das Ausführen einer Datenbankmigra
 Für das Bereitstellen einer neuen Sicht auf die Projekt Daten sind mehrere Schritte zu wiederholen~\ref{tbl:newview}.
 
 \begin{table}[h!]
-    \begin{tabular}{|p{0.12\textwidth}|p{0.52\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|}
+    \begin{tabular}{|p{0.12\textwidth}|p{0.52\textwidth}|p{0.12\textwidth}|}
         \hline
-        \textbf{Schritt} & \textbf{Beschreibung} & \textbf{Aktuelles \newline System} & \textbf{GraphQL} \\ \hline
-        $\ref{sec:requirements:example:interface}$ & Anlegen eines Interfaces & $\surd$ &  $X$ \\ \hline
-        $\ref{sec:requirements:example:schema}$ & Eintrag in Makefile & $\surd$ &  $X$ \\ \hline
+        \textbf{Schritt} & \textbf{Beschreibung} & \textbf{Aktuelles \newline System} \\ \hline
+        $\ref{sec:requirements:example:interface}$ & Anlegen eines Interfaces & $\surd$  \\ \hline
+        $\ref{sec:requirements:example:schema}$ & Eintrag in Makefile & $\surd$\\ \hline
         \multirow{2}{*}{$\ref{sec:requirements:example:model}$}
-        & Anlegen einer Datenbank Migration & $X$ &  $X$ \\
-        & Anlegen des Models & $X$ &  $X$ \\ \hline
+        & Anlegen einer Datenbank Migration & $X$  \\
+        & Anlegen des Models & $X$ \\ \hline
         \multirow{4}{*}{$\ref{sec:requirements:example:controller}$}
-        & Route definieren & $\surd$ &  $X$ \\
-        & Anlegen des Controllers & $X$ &  $X$ \\
-        & Controller Funktion schreiben & $\surd$ &  $X$ \\
-        & Tests schreiben & $\surd$ &  $X$ \\ \hline
+        & Route definieren & $\surd$  \\
+        & Anlegen des Controllers & $X$  \\
+        & Controller Funktion schreiben & $\surd$  \\
+        & Tests schreiben & $\surd$  \\ \hline
         \multirow{2}{*}{$\ref{sec:requirements:example:service}$}
-        & Anlegen eines Angular Services & $X$ &  $X$ \\
-        & Funktion zum Abschicken einer Query & $\surd$ &  $X$ \\ \hline
+        & Anlegen eines Angular Services & $X$  \\
+        & Funktion zum Abschicken einer Query & $\surd$  \\ \hline
         \multirow{2}{*}{$\ref{sec:requirements:example:component}$}
-        & Anlegen einer Angular Komponenten & $\surd$ &  $\surd$ \\
-        & Anlegen eines Templates & $\surd$ &  $\surd$ \\ \hline
+        & Anlegen einer Angular Komponenten & $\surd$  \\
+        & Anlegen eines Templates & $\surd$  \\ \hline
     \end{tabular}
     \vspace{5pt}
+    \centering
     \caption{Vergleich der Funktionweise des aktuellen Systems mit GraphQL in Bezug auf die Erstellung neuer Sichten auf bereits vorhandene Datensätze}
     \label{tbl:newview}
 \end{table}
 
-Auffallend ist, dass das aktuelle System einen Großteil der Schritte (\sfrac{8}{12}) erneut durchführen muss, im Gegensatz zu
-GraphQL (\sfrac{2}{12}). Das resultiert aus der Funktionsweise von GraphQL.
-Zu Beginn wird ein Schema mit Typen (z.B.: \fullref{fig:basics:graphql:3}) definiert.
-Entspricht ein Typ dabei einer neuen Enität muss eine Datenbankmigration durchgeführt werden.
-
-Um eine spezielle Sicht auf den Typen in Form einer Teilmenge der vorhandenen Felder zu erlangen wird eine Anfrage geschrieben, die
-nur die benötigten Felder erfragt. Aus den formulierten Anfragen und dem Schema lassen sich dann per Codegeneratoren Typescript Interfaces und
-Angular Services zum Abschicken der Anfragen erzeugen. Das manuelle Erstellen von Typescirpt Interfaces wird damit überflüssig.
-Somit werden die Schritte "Anlegen eines Interfaces" und "Anlegen eines Angular Services" obsolet.
-
-Zudem gibt es nur eine Route und Controller Funktion auf dem Server, nachfolgend GraphQL Endpunkt genannt, der alle Anfragen entgegen nimmt
-und an den GraphQL Server weiterleitet. Dort werden die Anfragen auf Korrekheit geprüft,
-SQL Querys automatisch zusammengestellt und ausgeführt und die Antwort an die Controller Funktion zurück gegeben.
-Somit sind die Schritte aus \fullref{sec:requirements:example:controller} und ~\fullref{sec:requirements:example:service} ebenfalls obsolet.
-
-Letztendlich muss lediglich eine Angular komponente mit zugehörigem Template geschrieben werden, in die der generierte Service injiziert wrid.
+Auffallend ist, dass im aktuellen System 8 von 12 Schritte erneut ausgeführt werden müssen.
 
 \section{Vorteile des bisherigen Ansatzes}
 \label{sec:requirements:pros}
