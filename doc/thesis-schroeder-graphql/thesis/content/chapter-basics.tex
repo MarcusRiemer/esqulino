@@ -96,7 +96,7 @@ Ressource und ihre Fremdbeziehungen unterscheiden.
         Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
         Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
         Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
-        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- developer} & Abrufen des Entwicklers eines Projekts \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- user} & Abrufen des Nutzer eines Projekts \\ \hline
     \end{tabular}
     \vspace{5pt}
     \caption{Einheitliche Schnittstellen}
@@ -105,40 +105,56 @@ Ressource und ihre Fremdbeziehungen unterscheiden.
 
 Das hat zur Folge, dass anwendungsspezifische Daten in einer standardisierten Form übertragen werden müssen,
 wodurch die Effizienz der Datenübertragung Mängel aufwerfen kann.
+Insbesondere treten im Kontext der Arbeit zwei für REST bekannte Mängel auf, die hier näher erläutert werden.
 
-\subsection{Layered System}
-Der Layered System Software-Architekturstil beschreibt das Prinzip eines hierachisch in Schichten aufgebauten Systems.
-Jede Komponente kann ausschließlich Schichten "sehen", mit denen sie interagiert.
-Eine Anwendung kann dadurch ihre Anforderungen auf mehrere Schichten verteilen, wie zum Beispiel bei einer Anwendung, die ihre API auf Server A anbietet,
-die Daten auf Server B lagert und einen Authentifizierungsdienst von Server C nutzt.
-Nachteile dieser Einschränkung spiegeln sich in gestiegener Komplexität der Gesamtarchitektur und kommunikativem Overhead wieder.
+\begin{description}
+	\item[Overfetching\label{rest:overfetching}] \ \\
+	Aufgrund der einheitliche Komponentenschnittstelle \ref{sec:basics:restapi:interface} gibt es für Projekte genau eine Route die alle Attribute zu einem bestimmten
+	Projekt ungekürzt liefert. Wird nur ein Teil der Attribute benötigt sind weitere Angaben nutzlos und damit ineffizient.
+	Dennoch werden sie von der API mitgeliefert.
+	\item[Underfetching\label{rest:underfetching}] \ \\
+	Ein weiteres Problem ist das mehrere Anfragen für Daten die in Beziehung zueinander stehen benötigt werden. Es wird oft vom N+1 Query Problem gesprochen, welches sich in diesem Kontext auf Anfragen an die Web API bezieht und nicht auf Datenbankabfragen.
+	In \fullref{req:neg:rest-data-fetching} muss für jeden Nutzer eines Projektes, erfragt werden welche Freunde dieser hat. Vorausgesetzt wird, das eine entsprechende Route für die Abfrage nach Freunden eines Nutzers existiert.
+	Sind einem Projekt N Nutzer zugeordnet muss für diese Information die dritte Abfrage N mal abgeschickt werden. Da zusätzlich noch die Liste von mit dem Projekt in Beziehung stehenden Nutzern erfragt wird spricht man von N+1 Abfragen.
+\end{description}
 
-Desweiteren gibt es noch eine optionale Einschränkung \emph{Code-On-Demand}, welche die Client-Funktionalität durch Herunterladen und Ausführen von Code in
-Form von Applets oder Skripten erweitert. Diese wird im Rahmen der Arbeit nicht genutzt und deshalb nur am Rande erwähnt.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/rest-data-fetching.pdf}
+	\caption{Abfragen von Projektdaten inklusive aller Nutzer die das Projekt einsehen können}
+	\label{basics:rest:data-fetching}
+\end{figure}
+
+\subsection{Weitere Einschränkungen}
+Zusätzlichgibt es noch die Einschränkung \emph{Layered System}, welches das Prinzip eines hierachisch in Schichten aufgebauten Systems
+beschreibt und eine optionale Einschränkung \emph{Code-On-Demand}, welche die Client-Funktionalität durch Herunterladen und Ausführen von Code in
+Form von Applets oder Skripten erweitert. Diese werden im Rahmen der Arbeit nicht genutzt und deshalb nur am Rande erwähnt.
 %Als Entwickler einer Anwendung stellt Modularität ein von Beginn an bedachtes Kalkül dar.
 
 \section{GraphQL}
 \label{sec:basics:graphql}
 %Nutzung einer statischen Schnittstelle zu einer sich ändernden Implementierung
-GraphQL dient als Lösung für die in Kapitel \fullref{sec:basics} aufgeführten Probleme, besonders in Bezug auf Flexibilität, Verantwortung und Effizienz~\cite{graphql-scalablepath}.
-Es handelt sich um eine Abfragesprache für APIs und eine Laufzeitumgebnung,
+Bei GraphQL handelt es sich um eine Abfragesprache für APIs und eine Laufzeitumgebnung,
 zum Ausführen dieser Abfragen und Wiedergeben von Daten unter Verwendung eines von für die Daten definierten Typensystems.
 Es ist an keinerlei Datenbanksysteme gebunden und lässt sich gut mit vorhandenen Code und Daten verbinden.
 
-Ein GraphQL Service entsteht durch das Definieren von Typen, vergleichbar mit Datenbanktabellen. Zu jedem Feld eines Typs lassen sich - geanuso wie bei Datenbanken -
+Ein GraphQL Service entsteht durch das Definieren eines Typschemas, vergleichbar mit Datenbanktabellen. Zu jedem Feld eines Typs lassen sich - genauso wie bei Datenbanken -
 Datentypen und Restriktionen wie \emph{NOT NULL} definieren.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-project-type.txt}
-    \caption{Project Typdefinition}
-    \label{fig:basics:graphql:1}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Project Typdefinition}, label={fig:basics:graphql:1}]
+type Project {
+    id: ID!
+    public: Boolean
+}
+\end{lstlisting}
 
 Das aufgeführte Codefragment~\fullref{fig:basics:graphql:1} definiert einen Typen \emph{Project} mit zwei Feldern, welcher ein Programmierprojekt darstellen soll.
+
 \begin{itemize}
+	\setlength\itemsep{-1em}
     \item \emph{id}: hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
     Zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
-    \item \emph{public}: besitzt den Typen Boolean, der ebenfalls nicht den Wert Null annehmen kann.
+    \item \emph{public}: besitzt den Typen Boolean, der den Wert Null annehmen kann.
     Es gibt an, ob das Projekt bereits veröffentlicht und für jeden zugreifbar gemacht wurde.
 \end{itemize}
 
@@ -147,76 +163,149 @@ die wiederum einer Funktion (Resolver) übergeben werden können,
 die aufgerufen wird, wenn das Feld im Kontext einer Query aufgelöst werden soll~\cite{graphql-resolver}.
 Erweitern wir für ein Beispiel unseren Typen um ein Feld:
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-project-full-type.txt}
-    \caption{Erweiterung der Typdefinition von Project}
-    \label{fig:basics:graphql:3}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Erweiterung der Typdefinition von Project und Einführung eines Enums mit Ländercodes}, label={fig:basics:graphql:2}]
+enum LanguageEnum {
+    DE
+    EN
+    FR
+}
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-projects-name-resolver.txt}
-    \caption{Resolver des Feldes \emph{name}}
-    \label{fig:basics:graphql:4}
-\end{figure}
-
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-projects-language-enum.txt}
-    \caption{Enum mit Ländercodes}
-    \label{fig:basics:graphql:2}
-\end{figure}
+type Project {
+    id: ID!
+    public: Boolean
+    name(language: LanguageEnum = DE): String!
+}
+\end{lstlisting}
 
 \begin{itemize}
+	\setlength\itemsep{-1em}
     \item \emph{name}: besitzt den Typen String, der ebenfalls nicht den Wert Null annehmen kann. Zusätzlich wurde dem Feld ein Argument "language" zugeteilt,
-    welches den selbst definierten Datentypen LanguageEnum besitzt mit dem Defaultwert DE.
+    welches den selbst definierten Datentypen LanguageEnum besitzt und de Defaultwert DE setzt.
 \end{itemize}
 
-Obendrein wurde für das Feld \emph{name} ein Resolver definiert, der Logik beinhaltet, um den String, je nach dem welche Sprache als Argument übergeben wurde,
-in andere Sprachen zu übersetzen.
+Zusätzlich wird eine Funktion benötigt, die das Argument \emph{language} verarbeiten kann und dementsprechend den Rückgabewert formuliert.
+Solche Funktionen nennen sich in der Welt von GraphQL Resolver.
+Aufgabe dieses Resolvers ist es durch Aufruf der in Zeile 2 \ref{fig:basics:graphql:3} als Pseudocode aufgeführten Funktion \emph{translate},
+den Namen eines Projektes in die übergebene Sprache zu übersetzen.
 
-Damit ein Datentyp abgefragt werden kann, müssen Queries zu den Datentypen definiert werden.
+\begin{lstlisting}[language=Javascript,float=h!,caption={Resolver des Feldes \emph{name}}, label={fig:basics:graphql:3}]
+name(obj, args, context, info) {
+    return translate(obj,args['language'])
+}
+\end{lstlisting}
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-projects-query-type.txt}
-    \caption{GraphQL Query Typdefinition}
-    \label{fig:basics:graphql:5}
-\end{figure}
+Damit nun ein Datentyp abgefragt werden kann, müssen Queries zu den Datentypen definiert werden.
 
-Die Query Typen gehören zum Typsystem von Graphql. Es wird in diesem Fall angegeben, dass es eine Query gibt, die mit dem Bezeichner \emph{projects}
-ein Array vom Typ \emph{Project} erwartet. Zusätzlich wurde angegeben, dass ein Projekt und die Liste nicht Null sein dürfen.
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Query Typdefinition}, label={fig:basics:graphql:4}]
+type Query {
+    projects: [Project!]!
+}
+\end{lstlisting}
+
+Der Query Typ gehört zum Typsystem von GraphQL. Er beinhaltet alle für das Schema definierten Queries, wie in diesem Fall~\ref{fig:basics:graphql:4} angegeben, eine Query mit dem Bezeichner \emph{projects}, die
+ein Array vom Typ \emph{Project} als Rückgabewert erwartet. Zusätzlich wurde angegeben, dass Projekte innerhalb des Arrays und das Array selber nicht Null sein dürfen.
 Es wird also mindestens eine leeres Array erwartet, aber keinesfalls Null oder ein Array, das mit Null-Werten gefüllt ist~\cite{graphql}.
+
+Um Queries im GraphQL Schema zugreifbar zu machen werden diese auf oberster Ebene des Schema definiert. Diese sind dann auch die Einstiegspunkte für alle Anfragen die der GraphQL Service behandeln soll.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Schema}, label={fig:basics:graphql:7}]
+schema {
+  query: Query
+  mutation: Mutation
+}
+\end{lstlisting}
+
 Jetzt kann dem Client die Freiheit gewährt werden eigene Abfragen für genau den Datensatz der benötigt wird zu formulieren.
 Zudem lässt sich anhand der gestellten Abfrage die Struktur der erhaltenen Antwort festlegen. Dies könnte wie folgt aussehen:
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-projects-request.txt}
-    \caption{GraphQL Projects Query}
-    \label{fig:basics:graphql:6}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Query mit dem Bezeichner Projects}, label={fig:basics:graphql:5}]
+query Projects{
+    projects {
+        id
+        name(language: EN)
+    }
+}
+\end{lstlisting}
 
-Der aufgeführte Code~\fullref{fig:basics:graphql:6} verkörpert eine GraphQL Query mit dem Namen \emph{Projects}, die für alle vorhandenen Projekte die Felder \emph{id} und \emph{name}
-zurückgibt. Nachdem eine GraphQL Query gegen das Typsystem validiert wurde, wird sie von dem GraphQL Server ausgeführt und
+Der aufgeführte Code~\fullref{fig:basics:graphql:5} verkörpert eine GraphQL Query mit dem Bezeichner \emph{Projects},
+die für alle vorhandenen Projekte die Felder \emph{id} und \emph{name} zurück gibt. 
+Aus dieser Query lässt sich nicht der Rückgabewert von projects erschließen.
+Diese Information erhält man als Entwickler lediglich aus den Query Definitionen.
+Bei abschicken der Query wird neben der Query auch der 
+Bezeichner als \emph{operationName} mit gegeben.
+Nachdem eine GraphQL Query gegen das Typsystem validiert wurde, wird sie von dem GraphQL Server ausgeführt und
 ein Ergebnis - typischerweise in Form von JSON - zurückgegeben, das die Form und Struktur der Anfrage spiegelt.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/graphql-projects-response.txt}
-    \caption{JSON Antwort auf die Projects Query}
-    \label{fig:basics:graphql:7}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={JSON Antwort auf die Projects Query}, label={fig:basics:graphql:6}]
+{
+  "projects": [
+    {
+      "id": "368b6ee9-2b1f-4661-a82f-ff7b62dc9251"
+      "name": "Esqulino"
+    },
+    {
+      "id": "b25c342e-f2b1-4a74-8124-a7a688911380"
+      "name": "Trucklino"
+    }
+  ]
+}
+\end{lstlisting}
 
-Auf der obersten Ebene eines GraphQL Servers befindet sich ein Typ, der alle möglichen Einstiegspunkte in die GraphQL API repräsentiert.
+
+
+
 Dies könnte zum Beispiel der bereits definierte Query-Typ \emph{projects} sein.
 Damit der GraphQL Server eine Anfrage an eine an den Server gebundene Datenbank schicken kann, wird die zum Query-Typen definierte
 Resolver-Funktion ausgeführt~\cite{graphql-execution}. Innerhalb dieser Resolver-Funktion ist der Zugriff auf das Dateisystem festgelegt, sodass
-man neben Datenbanken oder gar Dateien als Speichermedium nutzen könnte. Hierzu später noch mehr.
+neben Datenbanken sogar Dateien als Speichermedium genutzt werden könnten.
 
-Eine andere Möglichkeit, die bereits umrissen wurde, wären die in Kapitel~\fullref{sec:basics:restapi} vorgestellten Inhalte einer REST API.
-Diese setzt voraus, dass der Zugriff auf persistent gespeicherte Daten ausschließlich an den Server gekoppelt ist - oftmals in Form einer Datenbank.
-Datenzugriffe, die vom Client angestoßen werden, werden über eine festgelegte Menge an vordefinierten Transaktionen auf dem Server bereitgestellt.
-Jede dieser unterschiedlichen Transaktionen kann über eine Anfrage an den Server ausgelöst werden.
+GraphQL bietet neben Queries zum Abfragen von Datensätzen auch Anfragen zum Speichern von Daten im gewählten Speichermedium. Solche Anfragen nennen sich Mutationen. Genau wie bei Resolvern eines Feldes wird bei einer Mutation Code hinzugefügt, der  für das Erstellen oder Ändern von Datensätzen zuständig ist. Technisch gesehen könnte jede Query auch so implementiert werden, dass diese das Speichern von Daten bewirkt. Es ist jedoch nützlich, eine Konvention festzulegen, dass alle Operationen, die Schreibvorgänge verursachen, explizit über eine Mutation gesendet werden sollten~\cite{graphql-mutations}.
 
-Die in Tabelle~\fullref{tbl:basics:crud} aufgeführte Liste gibt zu jeder Transaktion an, über welche Route sie aufgerufen werden kann.
-Je größer eine Anwendung wird, desto größer wird der Datenbestand und damit die Menge an Transaktionen, die vordefiniert werden muss.
-Für jeden Datensatz, der an den Client ausgeliefert werden soll, muss also solch ein Eintrag vorgenommen werden und die dazugehörige Transaktion entwickelt werden.
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Mutation zum Erstellen eines Projektes}, label={fig:basics:graphql:7}]
+type creationResponse {
+  id: String
+  errors: [String]
+}
+
+type Mutation {
+  createProject(name: String!, public: Boolean):creationResponse
+}
+
+mutation CreateProject($name: String!, $public: Boolean) {
+  createProject(name: $name, public: $public) {
+    id
+    errors
+  }
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\setlength\itemsep{-1em}
+	\item \emph{Zeile 1-4}: Festlegung eines Typs mit den Feldern id und errors. Dieser Typ spiegelt den Rückgabewert einer Mutation zum Erstellen neuer Datensätze wieder. Wenn die Mutation erfolgreich war wird die id des neuen Datensatzen zurück gegeben, wenn Fehler aufgetreten sind, wird das errors Feld mit diesen gefüllt.
+	\item \emph{Zeile 6-8}: Definiert eine Mutation wie bei den Queries~\ref{fig:basics:graphql:4}. Diese bekommt zwei Argumente \emph{name} und \emph{public} übergeben. Letzteres ist dabei optional.
+	\item \emph{Zeile 10-15}: Festlegen einer Mutation mit dem Operations Namen \emph{CreateProject}, die das Argument \emph{name} als String zwingend erwartet und das optionale Argument \emph{public}.
+	Diese Argumente werden dann der \emph{createProject} mutation übergeben.
+	\emph{public} ist bei der Mutation zwar optional, wird aber bei Abfrage von Projektdaten zwingend erwartet~\ref{fig:basics:graphql:2}. Dementsprechend muss die Funktion zum Umsetzen der Mutation, bei nicht vorhandenem \emph{public} Argument, diesen Wert trotzdem setzen.
+	Als Antwort auf die Mutation werden die Felder id und errors erwartet.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+%Eine andere Möglichkeit, die bereits umrissen wurde, wären die in %Kapitel~\fullref{sec:basics:restapi} vorgestellten Inhalte einer REST API.
+%Diese setzt voraus, dass der Zugriff auf persistent gespeicherte Daten %ausschließlich an den Server gekoppelt ist - oftmals in Form einer %Datenbank.
+%Datenzugriffe, die vom Client angestoßen werden, werden über eine %festgelegte Menge an vordefinierten Transaktionen auf dem Server %bereitgestellt.
+%Jede dieser unterschiedlichen Transaktionen kann über eine Anfrage an den %Server ausgelöst werden.
+
+%Die in Tabelle~\fullref{tbl:basics:crud} aufgeführte Liste gibt zu jeder %Transaktion an, über welche Route sie aufgerufen werden kann.
+%Je größer eine Anwendung wird, desto größer wird der Datenbestand und %damit die Menge an Transaktionen, die vordefiniert werden muss.
+%Für jeden Datensatz, der an den Client ausgeliefert werden soll, muss also %solch ein Eintrag vorgenommen werden und die dazugehörige Transaktion %entwickelt werden.
 
 %Nutzung einer statischen Schnittstelle zu einer sich ändernden Implementierung
 %https://graphql.org/
@@ -232,7 +321,7 @@ Das heisst, es beinhaltet alle Funktionalitäten von Javascript und wurde darüb
 Dazu gehört das in Typescript eingeführte Typsystem. Selbstverständlich besitzt Javascript ebenfalls Typen, doch kann eine Variable,
 auf die ursprünglich eine \emph{number} zugewiesen wurde, auch als \emph{string} enden. Das kann schnell zu unbedachten Seiteneffekten führen.
 
-Was ist also ein Typsystem? Ein Typsystem ist eine Menge von Regeln, die jeder Variable, jedem Ausdruck, jeder Klasse,
+Ein Typsystem ist eine Menge von Regeln, die jeder Variable, jedem Ausdruck, jeder Klasse,
 jeder Funktion, jedem Objekt oder Modul im System einen Typ zuweist.
 Diese Regeln werden zur  Kompilierungszeit (statische Typprüfung) oder zur Laufzeit (dynamische Typprüfung) geprüft,
 um Fehler in einem Programm aufzudecken~\cite{typescript-typesystem-medium}.
@@ -317,22 +406,62 @@ Die JSON Daten sind viel kleiner als ihr XML-Gegenstück und ihre Instanzen sind
 Informationen in asynchronen Webanwendungen über AJAX (Asynchronous JavaScript and XML) keinen separaten Konvertierungsschritt mehr benötigen~\cite{json-schema-xml}.
 
 Nehmen wir an, wir möchten den in Kapitel GraphQL erstellten Typen \emph{Project}~\fullref{fig:basics:graphql:3} mit verschiedenen Attributen erweitern.
-Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angabe, ob es sich bei dem Entwickler
-um einen proudFather handelt, optional ist.
+Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angabe, ob es sich bei dem Entwicklerum einen proudFather handelt, optional ist.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/JSON-schema-project-object.txt}
-    \caption{Ein Projekt als JSON Objekt}
-    \label{fig:basics:jsonschema:1}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Ein Projekt als JSON Objekt}, label={fig:basics:jsonschema:1}]
+{
+  "id":"de0d91a7-61ae-49af-90d9-5a37dd883a01",
+  "name":"Esqulino",
+  "public": false,
+  "createdAt":1452985200000,
+  "developer": {
+    "firstname":"Marcus",
+    "proudFather":true
+  }
+}
+\end{lstlisting}
 
 Das passendes Schema dazu sieht folgendermaßen aus~\fullref{fig:basics:jsonschema:2}.
 
-\begin{figure}[hb!]
-    \lstinputlisting{snippets/JSON-schema-project-schema.txt}
-    \caption{JSON Schema zu Projekt Objekt}
-    \label{fig:basics:jsonschema:2}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={JSON Schema zu Projekt Objekt}, label={fig:basics:jsonschema:2}]
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "project",
+    "description": "A project from Esqulino",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "name": {
+            "type": "string"
+        },
+        "public": {
+            "type": "boolean"
+        },
+        "createdAt": {
+            "description": "Date of creation in milliseconds",
+            "type": "number"
+        },
+        "developer": {
+            "description": "The developer of a project",
+            "type": "object"
+            "properties": {
+                "firstname": {
+                    "description": "The forename of the developer",
+                    "type": "string"
+                },
+                "proudFather". {
+                    "description": "Indicator if he is a father or not",
+                    "type": "boolean"
+                }
+            },
+            "required": [ "firstname" ]
+        },
+    },
+    "required": [ "id", "name", "developer", "createdAt" ]
+}
+\end{lstlisting}
 
 Neben den verwendeten Schlüsselwörtern gibt es noch eine Vielzahl weiterer, die es unter anderem erlauben Einschränkungen, Abhängigkeiten,
 Muster in Form von Regulären Ausdrücken oder die maximale oder minimale Anzahl an zu einem Objekt gehörende Attribute festzulegen.
@@ -344,17 +473,24 @@ Die hier verwendeten Schlüsselwörter haben folgende Bedeutung:
     \item \emph{2: \$schema}: besagt, dass dieses Schema nach einem bestimmten Entwurf des Standards geschrieben ist, in erster Linie zur Versionskontrolle.
     \item \emph{3: title/description}: haben nur beschreibenden Charakter.
     \item \emph{5: type}: Dieses Schlüsselwort für die Typüberprüfung definiert die erste Beschränkung für die JSON-Daten und in diesem Fall muss es sich um ein JSON-Objekt handeln.
-    \item \emph{6: properties}: ist für die Validierung von Attributen eines Objekts.
+    \item \emph{6: properties}: Beschreibt welche Attribute das Objekt haben darf.
+    \item \emph{7-35}: Definierung der Attribute eines Projektes, wobei in Zeile 20-34 ein weiteres Objekt als Attribut definiert wird. Dieses besitzt die beiden Attribute firstname als String und proudFather als Boolean. Die Angabe von firstname wird bei einem developer Objekt zwingend erwartet, proudFather ist optional.
     \item \emph{36: required}: Da dieses Schlüsselwort ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
 \end{itemize}
 
-Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\fullref{fig:basics:jsonschema:3}.
+Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\fullref{fig:basics:jsonschema:2}.
 
-\begin{figure}[hb!]
-    \lstinputlisting{snippets/JSON-schema-project-wrong-object.txt}
-    \caption{Ein fehlerhaftes Projekt}
-    \label{fig:basics:jsonschema:3}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Ein fehlerhaftes Projekt}, label={fig:basics:jsonschema:2}]
+{
+  "id":"de0d91a7-61ae-49af-90d9-5a37dd883a01",
+  "public": false,
+  "developer":{
+    "firstname":"Michael",
+    "professor": true
+  },
+  "createdAt":"1452985200000"
+}
+\end{lstlisting}
 
 Es kommt bei der Validierung dieses Objektes zu folgenden Verstößen:
 
@@ -376,11 +512,20 @@ Somit ist es unabhängig welche Programmiersprache der Server nutzt~\cite{json-s
 
 \section{Postgres jsonb und hstore Typen}
 \label{sec:basics:postgres}
-Das PostgreSQL Datenbanksystem kennt über den SQL-Standard hinaus die Datentypen \emph{hstore} und \emph{jsonb} zur Speicherung von JSON Strukturen oder assoziativen Arrays,
-die üblicherweise in NoSQL-Systemen gespeichert werden.
-Hstore differenziert sich von jsonb, indem es nur eine Ebene von Schlüssel-Werte-Paaren ohne weitere Verschachtelungen zulässt und
-diese als String abspeichert.
-Im Gegensatz dazu können jsonb Datensätze beliebig tief verschachtelt werden und
+Das PostgreSQL Datenbanksystem kennt über den SQL-Standard hinaus die Datentypen \emph{hstore} und \emph{jsonb} zur Speicherung von JSON Strukturen oder assoziativen Arrays, die üblicherweise in NoSQL-Systemen gespeichert werden.
+Diese beiden Typen werden im Kontext der Arbeit für Objekte genutzt, die sich nur mit sehr großem Aufwand und zukünftigen Migrationen in ein Datenbankschema gießen lassen. Einer dieser Typen ist ein Objekt, das ein multilingualen String darstellen soll~\ref{fig:basics:jsonschema:3}. 
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Multilinguales Objekt}, label={fig:basics:jsonschema:3}]
+{
+  "DE": "Die Drei",
+  "EN": "The three"
+}
+\end{lstlisting}
+
+Zukünftig soll es möglich sein weitere Sprachen zu ermöglichen. Würde man dieses Objekt als Tabelle definieren, müsste bei zukünftigen Änderungen wie das Hinzufügen oder Entfernen einer Sprache eine Datenbankmigration durchgeführt werden. Um diese Objekte flexibel zu halten wurde sich für eine Speicherung als hstore entschieden.
+
+Hstore differenziert sich von jsonb, indem es nur eine Ebene von Schlüssel-Werte-Paaren ohne weitere Verschachtelungen zulässt und diese als String abspeichert. Erst durch die Einführung von jsonb wurde aus Postgres auch eine dokumentenorientierte Datenbank.
+Denn im Gegensatz zu hstore können jsonb Datensätze beliebig tief verschachtelt werden und
 darüber hinaus werden sie in einem dekomprimierten Binärformat gespeichert, wodurch die Eingabe aufgrund des zusätzlichen Konvertierungs-Overheads etwas langsamer,
 die Verarbeitung jedoch erheblich schneller ist, da kein Reparsen erforderlich ist~\cite{postgresql-json}.
 Ansonsten haben beide Typen in vielen Dingen die gleichen Verhaltensweisen. Wie bei der Eingabe doppelter Schlüssel wird nur der letzte Wert beibehalten.

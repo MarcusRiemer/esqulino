@@ -1,7 +1,7 @@
 % **************************************************
 % Information and Commands for Reuse
 % **************************************************
-\newcommand{\thesisTitle}{Evaluierung und Implementierung von Server Roundtrip Verfahren unter Gewährleistung der Typsicherheit in einer bestehenden Webapplikation}
+\newcommand{\thesisTitle}{Migration von GraphQL in eine bestehende Webapplikation}
 \newcommand{\thesisSubtitle}{Bachelor-Thesis im Fachbereich Informatik}
 \newcommand{\thesisDate}{26. August 2020}
 %\newcommand{\thesisVersion}{\input{GIT_REV}}
@@ -137,7 +137,7 @@
 	keywords={select, option, h1, template, h2, div, ul, li, table, thead, tr, th, td, tbody, tr, value, innerHtml, class, id},
 	keywordstyle=\color{blue}\bfseries,
 	ndkeywords={for, in, include, endfor, endif, else, if, ngIf, ngFor, each},
-	ndkeywordstyle=\color{OliveGreen}\bfseries,
+ndkeywordstyle=\color{OliveGreen}\bfseries,
 	identifierstyle=\color{black},
 	sensitive=false,
 	comment=[l]{//},
@@ -149,9 +149,9 @@
 }
 
 \lstdefinelanguage{JavaScript}{
-	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, let, const, if, in, while, do, else, case, break},
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, let, const, if, in, while, do, else, case, break, class, interface},
 	keywordstyle=\color{blue}\bfseries,
-	ndkeywords={class, export, boolean, number, string, throw, extends, implements, import, this, constructor, public, private},
+	ndkeywords={class, export, boolean, number, string, throw, extends, implements, import, this, constructor, private, object, readonly},
 	ndkeywordstyle=\color{darkgray}\bfseries,
 	identifierstyle=\color{black},
 	sensitive=false,
@@ -164,7 +164,7 @@
 }
 
 \lstdefinelanguage{Ruby}{
-	keywords={do, def, end, if, else, return},
+	keywords={do, def, end, if, else, elsif, not, return, class, field, argument},
 	keywordstyle=\color{blue}\bfseries,
 	ndkeywords={each, map, zip},
 	ndkeywordstyle=\color{darkgray}\bfseries,
@@ -254,10 +254,10 @@
 \input{content/chapter-introduction}
 \input{content/chapter-basics}
 \input{content/chapter-requirements}
-\input{content/chapter-graphql}
+\input{content/chapter-implementation}
 
 
-\appendix{}
+%\appendix{}
 
 \input{content/appendix-bliography}
 %\input{content/appendix-exercises}

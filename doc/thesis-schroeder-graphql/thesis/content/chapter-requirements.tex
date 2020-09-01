@@ -39,7 +39,7 @@ ohne diese in Text Datentypen konvertieren zu müssen.
 Anhand eines Praxisbeispiels wird im Weiteren die Funktionsweise des Systems in Hinblick auf das Hinzufügen neuer Daten
 unter Gewährleistung der Typsicherheit~\ref{req:typesafe} verdeutlicht.
 
-\section{Praxisbeispiel}
+\section{Praxisbeispiel - Erweiterung des Datenkonstruktes}
 \label{sec:requirements:example}
 
 Damit neue Datensätzen zwischen Server und Client typsicher ausgetauscht werden können sind mehrere Schritte erforderlich.
@@ -54,8 +54,8 @@ Wir erweitern den Datentyp \emph{Project}~\ref{fig:basics:graphql:3} erneut:
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Typescript Interface für die Darstellung eines Projektes}, label={lst:example:projectdesc}]
 export interface Project {
     id: string;
-    name:string;
-    public: boolean;
+    name:object;
+    public?: boolean;
     slug?: string;
     userId?: string;
     createdAt?: string;
@@ -65,7 +65,8 @@ export interface Project {
 
 \begin{itemize}
     \setlength\itemsep{-1em}
-    \item \emph{id/name/public}: siehe~\ref{fig:basics:graphql:3}.
+    \item \emph{id/public}: siehe~\ref{fig:basics:graphql:3}.
+    \item \emph{name}: hat sich zu einem multilingualen Feld geändert. object repräsentiert den nicht Primitiven Datentyp, also alles was nicht number, string, boolean, symbol, null oder undefined ist~\cite{typescript-object}.
     \item \emph{slug}: ist ein aus einem oder wenigen Wörtern bestehender benutzer- und suchmaschinenfreundlicher
     Text (sprechender Name) als Bestandteil einer URL~\cite{slug-wikipedia}. Diese Angabe ist optional.
     \item \emph{userId}: ist die ID des Nutzers dem dieses \emph{Project} zugeordnet ist (Fremdschlüsselbeziehung).
@@ -82,9 +83,9 @@ Im nächsten Schritt wird das Interface dem Server zur Verfügung gestellt.
 %Dokument Interface
 \subsection{Generierung der JSON Schema Definitionen}
 \label{sec:requirements:example:schema}
-Um das Interface~\ref{lst:example:projectdesc} serverseitig nutzen zu können wird daraus eine JSON Schema Datei generiert.
-Für die Generierung sind Einträge in einem Makefile nötig, welches sich um die Erstellung aller JSON Schema Dateien,
-die relevant für den Server sind, kümmert.
+Das Interface~\ref{lst:example:projectdesc} wurde clientseitig erstellt und kann auch nur dort verwendet werden. Um es serverseitig nutzen zu können wird daraus eine JSON Schema Datei generiert.
+Für die Generierung sind Einträge in einem Makefile nötig, welches sich um die Erstellung aller JSON Schema Dateien, kümmert. Nach der Generierung befinden sich zu jedem aufgeführten Typescript Interface ein passendes JSON Schema in einer eigenen Datei. Diese werden dann in einem Schema Ordner auf Projekt Ebene gehalten. Das jedes Schema in einer eigenen Datei gespeichert ist, kommt dem Server bei der Validierung zu gute. 
+Dieser Lädt die Datei, dessen Namen äquivalent zum ursprünglichen Typescript Interface ist, aus dem Ordner, liest das Schema aus und kann dieses zu Validierungszwecken nutzen.
 
 \begin{lstlisting}[float=h!,caption={TypeScript Interface für die Project Darstellung in einer Liste}, label={lst:example:makefile}]
 Project.json : $(SRC_PATH)/shared/project.ts
@@ -100,7 +101,7 @@ Sollte das Interface~\ref{lst:example:projectdesc} einer neuen Datenbanktabelle 
 die das Datenbankschema erweitert~\cite{rails-migration}.
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Rails Migration zum hinzufügen einer \emph{projects} Datenbanktabelle}, label={lst:example:migration}]
-create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+create_table "projects", id: :uuid, do |t|
 	t.string "slug"
 	t.hstore "name", default: {}, null: false
 	t.uuid "user_id"
@@ -193,10 +194,8 @@ deren Verwendungszwecke genau definiert sind. Der im Folgenden beschriebene Serv
 @Injectable()
 export class ProjectsDataService {
     constructor(private http: HttpClient) { }
-    getProjects() {
-        // Die Antwort soll dem Typparameter "Project" entsprechen
-        return this.http.get<Project>('/project/');
-    }
+    // Die Antwort soll dem Typparameter "Project" entsprechen
+    readonly projects = this.http.get<Project>('/project/');
 }
 \end{lstlisting}
 
@@ -205,11 +204,13 @@ export class ProjectsDataService {
     \item \emph{Zeile 1}: \emph{@Injectable} stellt sicher, dass der Compiler die notwendigen Metadaten erzeugt, um die Abhängigkeiten der Klasse zu erstellen, wenn die Klasse injiziert wird.
     \item \emph{Zeile 2}: Deklarierung der Klasse/des Services ProjectsDataService
     \item \emph{Zeile 3}: Injizierung des HttpClient~\cite{angular-http} in den Service
-    \item \emph{Zeile 4}: Methode zum abfragen von Projekt-Daten
-    \item \emph{Zeile 6}: Nutzung des HttpClient zur Erstellung eines typisierten HTTP-Requests, welcher zur bereits hinzugefügten Route~\ref{lst:example:router} führt.
+    \item \emph{Zeile 5}: Nutzung des HttpClient zur Erstellung eines typisierten HTTP-Requests, welcher zur bereits hinzugefügten Route~\ref{lst:example:router} führt.
+    Dieser wird auf die readonly Variable projects geschrieben.
 \end{itemize}
 
-Die Angabe des Antworttyps \emph{Project} in Zeile 6 fungiert dabei zur Kompilierungszeit als Type Assertion~\cite{typescript-typeassertion}
+Hinzuzufügen ist, das dieses Beispiel nur bedingt dem aktuellen System entspricht, da im eigentlich eine einheitliche Service Klasse mit einem Cache verwendet wird, von der der ProjectsDataService erbt. Das Aufzeigen der einheitlichen Service Klasse würde jedoch den Rahmen sprengen.
+
+Die Angabe des Antworttyps \emph{Project} in Zeile 5 fungiert dabei zur Kompilierungszeit als Type Assertion~\cite{typescript-typeassertion}
 und erleichtert den Zugriff auf die Attribute der Antwort. Der TypeScript Compiler führt während der Laufzeit jedoch keine Überprüfung durch.
 Er geht an dieser Stelle davon aus, das der Entwickler spezielle Prüfungen, wie z.B. der Test ~\ref{lst:example:controller-test}, durchgeführt hat.
 
@@ -232,7 +233,7 @@ export class ProjectListComponent {
     // Injizierung des ProjectsDataService
     constructor(private _projectsData: ProjectsDataService) {}
 
-    readonly projects = this._projectsData.getProjects();
+    readonly projects = this._projectsData.projects;
 }
 \end{lstlisting}
 
@@ -244,7 +245,7 @@ export class ProjectListComponent {
     \item \emph{Zeile 3}: Festlegung des Pfades, wo sich das zu rendernde Template, also der darzustellende HTML Code befindet.
     \item \emph{Zeile 5}: Deklarierung der Klasse/des Komponente ProjectListComponent.
     \item \emph{Zeile 7}: Injizierung des ProjectsDataService~\cite{angular-http} in die Komponente.
-    \item \emph{Zeile 9}: Sepichern der Funktion aus dem ProjectsDataService zum Abrufen der Projekt-Daten auf eine Instanzvariable.
+    \item \emph{Zeile 9}: Speichern der Funktion aus dem ProjectsDataService zum Abrufen der Projekt-Daten auf eine Instanzvariable.
 \end{itemize}
 
 Eine Komponente stellt HTML Code dar, der in einer Datei gespeichert wird, die als Template bezeichnet wird.
@@ -253,8 +254,8 @@ Das zugehörige Template project-list.html sieht folgendermaßen aus:
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
 <project-list-item
-*ngFor="let project of projects | async"
-[project]="project"
+  *ngFor="let project of projects | async"
+  [project]="project"
 ></project-list-item>
 \end{lstlisting}
 
@@ -320,9 +321,6 @@ SQL Querys automatisch zusammengestellt und ausgeführt und die Antwort an die C
 Somit sind die Schritte aus \fullref{sec:requirements:example:controller} und ~\fullref{sec:requirements:example:service} ebenfalls obsolet.
 
 Letztendlich muss lediglich eine Angular komponente mit zugehörigem Template geschrieben werden, in die der generierte Service injiziert wrid.
-
-\subsection{Automatische Generierung von JSON Schema Definitionen}
-\label{sec:requirements:example:autogeneration}
 
 \section{Vorteile des bisherigen Ansatzes}
 \label{sec:requirements:pros}
@@ -400,6 +398,7 @@ Im laufe der Zeit wurden viele Tests entwickelt die sicher stellen das alles wie
 Somit hat sich das aktuelle System seit mehreren Jahren bewährt.
 
 \section{Nachteile des bisherigen Ansatzes}
+\label{sec:requirements:cons:typescript}
 Auch wenn ein System funktionstüchtig ist, ist es nicht zwangsläufig perfekt.
 In diesem Abschnitt werden die relevanten Nachteile der bisherigen Umsetzung ausgearbeitet.
 
@@ -413,7 +412,7 @@ oder \emph{sorbet}~\cite{sorbet} die versprechen Rubycode typsicher zu machen. D
 \label{sec:requirements:cons:attributes}
 Ein bei REST APIs bekanntes Problem ist die Auswahl von bestimmten Attributen und die Abfrage von miteinander in Beziehung stehenden Daten.
 Für eine Detailansicht eines Projektes soll der Projektname und die Namen aller Nutzer aufgelistet werden die das Projekt einsehen können.
-Zu denen gehören die Nutzer (/projects/<id>/users), die am Projekt arbeiten und deren Freunde (/users/<id>/friends) (siehe \fullref{req:neg:rest-data-fetching}).
+Zu denen gehören die Nutzer (/projects/<id>/users), die am Projekt arbeiten und deren Freunde (/users/<id>/friends) (siehe \fullref{basics:rest:data-fetching}).
 REST stößt hier auf zwei Probleme:
 
 \begin{description}
@@ -423,7 +422,7 @@ REST stößt hier auf zwei Probleme:
     Dennoch werden sie von der API mitgeliefert.
     \item[Underfetching\label{cons:underfetching}] \ \\
     Ein weiteres Problem ist das mehrere Anfragen für Daten die in Beziehung zueinander stehen benötigt werden. Es wird oft vom N+1 Query Problem gesprochen, welches sich in diesem Kontext auf Anfragen an die Web API bezieht und nicht auf Datenbankabfragen.
-    In \fullref{req:neg:rest-data-fetching} muss für jeden Nutzer eines Projektes, erfragt werden welche Freunde dieser hat.
+    In \fullref{basics:rest:data-fetching} muss für jeden Nutzer eines Projektes, erfragt werden welche Freunde dieser hat.
     Sind einem Projekt N Nutzer zugeordnet muss für diese Information die dritte Abfrage N mal abgeschickt werden. Da zusätzlich die Liste von mit dem Projekt in Beziehung stehenden Nutzern erfragt wird spricht man von N+1 Abfragen.
 \end{description}
 
@@ -525,6 +524,7 @@ Hinzukommend soll es möglich sein eine Liste nach verschiedener Attribute sorti
 in der Datenbank als jsonb~\ref{sec:basics:postgres} gespeichert werden.
 
 \subsubsection{Suchen und Filtern}
+TODO: Kurze Erklärung
 
 \subsection{Typdefinitionen}
 
@@ -593,13 +593,39 @@ den der Client auch für das Abschicken nutzt und kompatibel mit dem Datenbanksc
 Umgekehrt gilt, dass jede Antwort gegen den selben Typen serverseitig validiert wird, den der Client zur Speicherung der Antwort verwendet.
 Voraussetzung dafür sind systemübergreifende Typdefinitionen, in \fullref{req:typesafe:server-client-short} SCHEMA genannt.
 
-Das \fullref{req:typesafe:example} zeigt in welchem Ausmaß die Validierung der Daten gefordert ist.
+Die folgenden Beispiele zeigen in welchem Ausmaß die Validierung der Daten gefordert ist. In Abbildung~\ref{req:typesafe:request-validation} wird durch ein Formular die Erstellung eines Projektes demonstriert. Die Inhalte des Formulars werden auf ein Objekt vom Typ \emph{CreateProjekt}~\ref{req:typesafe:createproject} geschrieben und an den Server geschickt. Dort wird der eingehende Datensatz gegen den selben Typ validiert. Treten hierbei Fehler auf, wird der Datensatz nicht in die Datenbank geschrieben und der HTTP Status 400 zurück gegeben.
+Wird der Datensatz erfolgreich validiert, wird der Datensatz in der Datenbank gespeichert und der HTTP Status 200 an den Client geschickt.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Interface zum Erstellen eines Projektes}, label={req:typesafe:createproject}]
+interface CreateProject {
+  name: string;
+  slug?: string;
+  public: boolean;
+}
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/project-create-validation.pdf}
+	\caption{Validierung von Requests zum Erstellen eines neuen Projekt Datensatzes}
+	\label{req:typesafe:request-validation}
+\end{figure}
+
+In Abbildung \ref{req:typesafe:list-validation} wird eine Liste von Projekten deren Attribut \emph{public} auf \emph{true} gesetzt ist beim Server angefragt. Bevor diese Liste an den Client zurück gegeben wird, wird gefordert, dass diese gegen das Interface validiert wird, welches der Client zur Darstellung nutzt~\ref{req:typesafe:listproject}. Schlägt die Validierung fehl, wird der HTTP Status 400 zurück gegeben, ansonsten der Datensatz (inkl. HTTP Status 200).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Interface zum Auflisten von Projekten}, label={req:typesafe:listproject}]
+interface ListProject {
+  id: string;
+  name: string;
+  slug?: string;
+}
+\end{lstlisting}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{snippets/typesafe-small.pdf}
-    \caption{Beispiel für Typsichere Kommunikation zwischen Typescript Client und Ruby Server}
-    \label{req:typesafe:example}
+    \includegraphics[width=\linewidth]{snippets/project-list-validation.pdf}
+    \caption{Validierung von Responses zum Auflisten von Projekt Datensätzen}
+    \label{req:typesafe:list-validation}
 \end{figure}
 
 Ein neues System muss als Anforderung mindestens den aktuellen Grad an Sicherheit aufweisen durch:
@@ -640,6 +666,7 @@ Dieses Problem gilt als Anforderung zu lösen.
 
 \subsubsection{Cache}
 Die Nutzung eines Caches soll bei HTTP Anfragen bereitgestellt werden.
+TODO: Weiter ausführen, aber kurz halten
 
 
 \begin{itemize}
@@ -652,17 +679,19 @@ Die Nutzung eines Caches soll bei HTTP Anfragen bereitgestellt werden.
 
 
 \subsection{Authentifizierung und Autorisierung}
+TODO: Evtl. raus lassen da nicht im Umfang der Migration enthalten.
 
 \section{Sonderanforderungen}
 Zu den Kernanforderungen sind weitere weniger schwer Gewichtete Anforderungen zu formulieren.
 Diese sind spezifischer auf das System zugeschnitten als die allgemeingültigen Anforderungen aus Abschnitt \ref{sec:requirements:req}.
 
 \subsection{Validierung von jsonb und hstore}
+\label{req:validation:json}
 Eine der Sonderanforderungen ist das Validieren von Entitäten aus der Datenbank, die ein JSON Objekt beinhalten.
 Manche zum Beispiel Abstrakte Datentypen wie eine Map lassen sich erschwert in ein Datenbankschema gießen. Sie können dann als json,
 jsonb oder hstore in ihrer Gesamtheit gespeichert werden, ohne das für Schlüssel und Werte Bedingungen (Constraints) auf Datenbankebene definiert werden können.
 
-Gefordert wird das diese JSON Objekte gegen einen Typen aus dem Typschema validiert werden, bevor sie in die Datenbank eingefügt werden.
+Gefordert wird das diese JSON Objekte gegen einen Typen aus dem Typschema validiert werden, bevor sie in die Datenbank eingefügt werden. Sollten die JSON Objekte ebenfalls nicht im Typschema des neues Systems abbildbar sein und dadurch implizit validiert werden können, müssen sie mindestens gegen das bereits existierende JSON Schema validiert werden.
 
 \subsection{Benennungskonvention}
 Die Verwendung verschiedener Benennungskonventionen kann problematische Folgen haben.
@@ -670,6 +699,3 @@ In der Welt von Ruby werden Woertrennungen in Dateinamne, Variablennamen, sowie 
 In Typescript sieht die Konvention vor Variablen- und Funktionsnamen in Camel Case und Klassennamen in Pascal Case zu schreiben~\cite{typescript-conventions}.
 
 Diese Gegebenheit erschwert die Kommunikation zwischen Typescript Client und Ruby Server. Anforderung ist, das ein neues System mit diesen Unterschieden umgehen kann.
-
-\section{Balanced Scorecard Kriterien}
-balanced Scoreboard gewichtung der Kriterien und formulierung
