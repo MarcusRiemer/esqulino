@@ -32,4 +32,34 @@ module GraphqlQueryHelper
   def schema_path(name)
     @@query_storage.query_path(name)
   end
+
+  # Takes an existing GraphQL query and ensures for all mentioned lists
+  # of fields that they include a `__typename`.
+  #
+  # @param query_string [String] The GraphQL query
+  # @return [String] The GraphQL query with possibly additional `__typename` fields
+  def query_insert_typename(query_string)
+    query = GraphQL.parse query_string
+
+    visitor = InsertTypenameVisitor.new(query)
+    visitor.visit
+
+    # Add a trailing newline, this eases the specs because
+    # we can work with heredocs to compare the result
+    return visitor.result.to_query_string + "\n"
+  end
+
+  private
+
+  class InsertTypenameVisitor < GraphQL::Language::Visitor
+    def on_field(node, parent)
+      names = node.selections.map {|s| s.name }
+      if not names.empty? and not names.include? "__typename"
+        typename_node = GraphQL::Language::Nodes::Field.new(name: "__typename");
+        node = node.merge(selections: node.selections + [typename_node])
+      end
+      super
+    end
+  end
+
 end
