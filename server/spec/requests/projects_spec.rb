@@ -216,6 +216,50 @@ RSpec.describe ProjectsController, type: :request do
         expect(updated.description).to eq project.description
       end
 
+      it 'update with empty name' do
+        pending("What exactly does an empty LangJson field mean for an update?")
+
+        send_query(
+          query_name: "UpdateProject",
+          variables: {
+            "id" => project.id,
+            "name" => { }
+          }
+        )
+
+         # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        expect(response.media_type).to eq "application/json"
+        json_body = JSON.parse(response.body)
+        expect(json_body.fetch("errors", [])).to eq []
+
+        # Should the project remain unchanged or should the name now be empty?
+        updated = Project.find_by(slug: project.slug)
+        expect(updated.name).to eq({ "en" => "Only" })
+        expect(updated.description).to eq project.description
+      end
+
+      it 'updates the name in two languages' do
+        send_query(
+          query_name: "UpdateProject",
+          variables: {
+            "id" => project.id,
+            "name" => { "en" => "Only", "de" => "Einzig" }
+          }
+        )
+
+         # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        expect(response.media_type).to eq "application/json"
+        json_body = JSON.parse(response.body)
+        expect(json_body.fetch("errors", [])).to eq []
+
+        # Ensure the database has actually changed
+        updated = Project.find_by(slug: project.slug)
+        expect(updated.name).to eq({ "en" => "Only", "de" => "Einzig" })
+        expect(updated.description).to eq project.description
+      end
+
       it 'updates only the description' do
         send_query(
           query_name: "UpdateProject",
