@@ -25,7 +25,7 @@ export function convertGrammarTreeInstructions(
   d: TreeBlockLanguageGeneratorDescription,
   g: GrammarDocument
 ): BlockLanguageDocument {
-  const allTypes = allPresentTypes(g);
+  const concreteTypes = allPresentTypes(g, (t) => t.type === "concrete");
 
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado.
@@ -33,7 +33,7 @@ export function convertGrammarTreeInstructions(
     editorBlocks: [],
     editorComponents: d.editorComponents ?? defaultEditorComponents,
     sidebars: (d.staticSidebars ?? []).map((sidebar) =>
-      generateSidebar(allTypes, sidebar)
+      generateSidebar(concreteTypes, sidebar)
     ),
     rootCssClasses: [
       "activate-indent",
@@ -45,20 +45,18 @@ export function convertGrammarTreeInstructions(
   // Create a visual representation for each concrete type
   const visualizedNodes: EditorBlockDescription[] = [];
 
-  Object.entries(allTypes ?? {}).forEach(([langName, types]) => {
-    const vis = Object.entries(types)
-      .filter(([_, typeDesc]) => typeDesc.type === "concrete")
-      .map(
-        ([name, typeDesc]): EditorBlockDescription => {
-          return {
-            describedType: { languageName: langName, typeName: name },
-            // typeDesc must be a concrete description here
-            visual: [
-              visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription),
-            ],
-          };
-        }
-      );
+  Object.entries(concreteTypes ?? {}).forEach(([langName, types]) => {
+    const vis = Object.entries(types).map(
+      ([name, typeDesc]): EditorBlockDescription => {
+        return {
+          describedType: { languageName: langName, typeName: name },
+          // typeDesc must be a concrete description here
+          visual: [
+            visualizeNode(d, name, typeDesc as NodeConcreteTypeDescription),
+          ],
+        };
+      }
+    );
 
     visualizedNodes.push(...vis);
   });
