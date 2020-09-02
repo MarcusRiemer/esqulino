@@ -353,8 +353,12 @@ export class Project implements Saveable {
       id: this.id,
       slug: this.slug,
       name: this.name,
-      description: this.description,
     };
+
+    // Only send a description if there is a description
+    if (Object.keys(this._description).length > 0) {
+      toReturn.description = this._description;
+    }
 
     if (this._projectImageId) {
       toReturn.preview = this._projectImageId;
