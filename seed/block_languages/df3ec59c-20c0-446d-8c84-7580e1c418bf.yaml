@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-02 19:31:02.699516000 Z
+  value_before_type_cast: 2020-09-02 20:45:44.140868000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
@@ -306,6 +306,6 @@ concise_attributes:
     "Kardinalität"}]}, {"type": "metaDefinedTypes"}]}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root_css_classes
-  value_before_type_cast: "{}"
+  value_before_type_cast: "{activate-keyword,activate-comment,activate-block-outline}"
 new_record: false
 active_record_yaml_version: 2

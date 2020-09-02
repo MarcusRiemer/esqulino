@@ -12,21 +12,22 @@ concise_attributes:
       limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 26acd25c-f54a-4f71-b430-e8ad9f74d35a
+  value_before_type_cast: 37d636a9-e411-4f62-9ec6-d9da90abde7a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 03 <e><c>
+  value_before_type_cast: 04 <ul><li>
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "element", "children": {"elements": [{"name":
-    "element", "language": "dxml", "properties": {"name": "c"}}], "attributes": []},
-    "language": "dxml", "properties": {"name": "e"}}'
+    "element", "language": "dxml", "properties": {"name": "li"}}, {"name": "element",
+    "language": "dxml", "properties": {"name": "li"}}]}, "language": "dxml", "properties":
+    {"name": "ul"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-08-13 12:46:47.927545000 Z
+  value_before_type_cast: 2020-09-02 20:38:38.367420000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-02 20:49:08.421516000 Z
+  value_before_type_cast: 2020-09-02 20:49:26.184620000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: e4ad4071-ab82-4687-be04-4d19a7ecae36
@@ -36,8 +37,9 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    <e>
-      <c></c>
-    </e>
+    <ul>
+      <li></li>
+      <li></li>
+    </ul>
 new_record: false
 active_record_yaml_version: 2
