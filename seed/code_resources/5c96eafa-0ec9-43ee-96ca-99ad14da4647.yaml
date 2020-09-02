@@ -29,23 +29,29 @@ concise_attributes:
     "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
     {"base": "sequence", "name": "attributes"}}, {"name": "children", "children":
     {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "element",
-    "languageName": "dxml"}}], "cardinality": [{"name": "knownCardinality", "language":
-    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "elements"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
-    "dxml"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
-    "language": "MetaGrammar", "properties": {"base": "string", "name": "name"}},
-    {"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
-    "name": "value"}}]}, "language": "MetaGrammar", "properties": {"typeName": "attribute",
-    "languageName": "dxml"}}]}, "language": "MetaGrammar", "properties": {"name":
-    "dxml"}}'
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "text", "languageName":
+    "dxml"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}, {"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "element", "languageName": "dxml"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "elements"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "element", "languageName": "dxml"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "name"}}, {"name": "property", "language": "MetaGrammar",
+    "properties": {"base": "string", "name": "value"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "attribute", "languageName": "dxml"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "text", "languageName": "dxml"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "dxml"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-08-13 09:57:41.797908000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-18 13:24:48.734332000 Z
+  value_before_type_cast: 2020-09-02 21:44:29.657927000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -86,6 +92,13 @@ concise_attributes:
                   {
                     "nodeType": {
                       "languageName": "dxml",
+                      "typeName": "text"
+                    },
+                    "occurs": "*"
+                  },
+                  {
+                    "nodeType": {
+                      "languageName": "dxml",
                       "typeName": "element"
                     },
                     "occurs": "*"
@@ -102,6 +115,16 @@ concise_attributes:
                 "base": "string",
                 "name": "name"
               },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          },
+          "text": {
+            "type": "concrete",
+            "attributes": [
               {
                 "type": "property",
                 "base": "string",

@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-14 08:18:16.049875000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-18 13:24:07.782598000 Z
+  value_before_type_cast: 2020-09-02 21:44:38.717880000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -35,19 +35,16 @@ concise_attributes:
     {"name": "value", "type": "interpolate"}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
-  value_before_type_cast: '{"dxml": {"element": {"type": "concrete", "attributes":
-    [{"type": "container", "children": [{"type": "container", "children": [{"type":
-    "terminal", "symbol": "<"}, {"base": "string", "name": "name", "type": "property"},
-    {"name": "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
-    {"typeName": "attribute", "languageName": "dxml"}}]}, {"type": "terminal", "symbol":
-    ">"}], "orientation": "horizontal"}, {"name": "elements", "type": "sequence",
-    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "element", "languageName":
-    "dxml"}}]}, {"type": "container", "children": [{"type": "terminal", "symbol":
-    "</"}, {"name": "name", "type": "interpolate"}, {"type": "terminal", "symbol":
-    ">"}], "orientation": "horizontal"}], "orientation": "vertical"}]}, "attribute":
-    {"type": "concrete", "attributes": [{"base": "string", "name": "name", "type":
-    "property"}, {"type": "terminal", "symbol": "="}, {"base": "string", "name": "value",
-    "type": "property"}]}}}'
+  value_before_type_cast: '{"dxml": {"text": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "value", "type": "property"}]}, "element": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "name", "type": "property"}, {"name":
+    "attributes", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName":
+    "attribute", "languageName": "dxml"}}]}, {"name": "elements", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "text", "languageName":
+    "dxml"}}, {"occurs": "*", "nodeType": {"typeName": "element", "languageName":
+    "dxml"}}]}]}, "attribute": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}, {"base": "string", "name": "value", "type":
+    "property"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root
   value_before_type_cast: '{"typeName": "element", "languageName": "dxml"}'
