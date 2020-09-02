@@ -160,6 +160,9 @@ export class EditBlockLanguageService {
                   instructions,
                   g
                 );
+                // Keep previous root css classes
+                updated.rootCssClasses = blockLanguage.rootCssClasses;
+
                 this._snackBar.open(`Regenerated block language`, "", {
                   duration: 3000,
                 });
