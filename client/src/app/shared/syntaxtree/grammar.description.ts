@@ -69,7 +69,8 @@ export interface NodeConcreteTypeDescription {
  */
 export type NodeAttributeDescription =
   | NodePropertyTypeDescription
-  | NodeInterpolateDescription
+  | NodeInterpolatePropertyDescription
+  | NodeInterpolateChildrenDescription
   | NodeChildrenGroupDescription
   | NodeTerminalSymbolDescription
   | NodeVisualContainerDescription;
@@ -238,10 +239,20 @@ export interface MinInclusiveRestriction {
  * that have some kind of reference to a common name in opening and closing
  * contexts (eg. XML with <the-name></the-name>).
  */
-export interface NodeInterpolateDescription {
+export interface NodeInterpolatePropertyDescription {
   type: "interpolate";
   name: string;
   tags?: string[];
+}
+
+/**
+ * References an existing child group on this node
+ */
+export interface NodeInterpolateChildrenDescription {
+  type: "each";
+  name: string;
+  tags?: string[];
+  between?: NodeTerminalSymbolDescription;
 }
 
 /**
@@ -328,7 +339,8 @@ export type NodeChildrenGroupDescription =
 export type VisualNodeAttributeDescription =
   | NodeTerminalSymbolDescription
   | NodeVisualContainerDescription
-  | NodeInterpolateDescription;
+  | NodeInterpolatePropertyDescription
+  | NodeInterpolateChildrenDescription;
 
 export interface NodeVisualTypeDescription {
   type: "visualize";

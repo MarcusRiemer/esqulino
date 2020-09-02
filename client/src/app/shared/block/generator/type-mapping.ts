@@ -5,8 +5,9 @@ import {
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
   NodeVisualContainerDescription,
-  NodeInterpolateDescription,
+  NodeInterpolatePropertyDescription,
   NodeVisualTypeDescription,
+  NodeInterpolateChildrenDescription,
 } from "../../syntaxtree/grammar.description";
 
 import { VisualBlockDescriptions } from "../block.description";
@@ -65,8 +66,8 @@ export function mapTerminal(
  * Maps properties to read-only interpolated values.
  */
 export function mapInterpolated(
-  attr: NodePropertyTypeDescription | NodeInterpolateDescription,
-  instructions: PropertyInstructions
+  attr: NodePropertyTypeDescription | NodeInterpolatePropertyDescription,
+  instructions: TerminalInstructions
 ): VisualBlockDescriptions.EditorInterpolated {
   const toReturn: VisualBlockDescriptions.EditorInterpolated = {
     blockType: "interpolated",
@@ -117,7 +118,7 @@ export function mapProperty(
  */
 export function mapChildren(
   _typeDesc: MappedNodeType,
-  attr: NodeChildrenGroupDescription,
+  attr: NodeChildrenGroupDescription | NodeInterpolateChildrenDescription,
   instructions: IteratorInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // Find out what goes between the elements
@@ -127,7 +128,8 @@ export function mapChildren(
   if (
     attr.type === "parentheses" ||
     attr.type === "allowed" ||
-    attr.type === "sequence"
+    attr.type === "sequence" ||
+    attr.type === "each"
   ) {
     if (attr.between) {
       between = [
@@ -149,8 +151,12 @@ export function mapChildren(
       ),
     ];
   }
-  // "allowed" and "sequence" may provide fallbacks in the grammar
-  else if (attr.type === "allowed" || attr.type === "sequence") {
+  // Complex type may provide fallbacks in the grammar
+  else if (
+    attr.type === "allowed" ||
+    attr.type === "sequence" ||
+    attr.type === "each"
+  ) {
     if (attr.between) {
       between = [
         mapTerminal(attr.between, DefaultInstructions.terminalInstructions),
@@ -212,6 +218,7 @@ export function mapAttribute(
     case "sequence":
     case "choice":
     case "parentheses":
+    case "each":
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
     case "property":
       return [mapProperty(attr, instructions.scopeProperty(attr.name))];

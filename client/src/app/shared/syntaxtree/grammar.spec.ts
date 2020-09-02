@@ -2267,6 +2267,23 @@ describe("Grammar Validation", () => {
         { code: ErrorCodes.MissingProperty, location: [] },
       ]);
     });
+
+    it(`Visualized type but no base type`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "t1" },
+        {
+          g: {
+            t1: {
+              type: "visualize",
+              attributes: [],
+            },
+          },
+        }
+      );
+
+      expect(() => new Validator([g])).toThrowError(/g\.t1/);
+    });
   });
 
   describe(`Multiple Languages in Single Grammar`, () => {

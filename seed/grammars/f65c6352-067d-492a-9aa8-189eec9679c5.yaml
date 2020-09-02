@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-14 08:18:16.049875000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-17 13:37:20.069781000 Z
+  value_before_type_cast: 2020-08-18 13:24:07.782598000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -24,11 +24,15 @@ concise_attributes:
   name: types
   value_before_type_cast: '{"dxml": {"element": {"type": "visualize", "attributes":
     [{"type": "container", "children": [{"type": "container", "children": [{"type":
-    "terminal", "symbol": "<"}, {"name": "name", "type": "interpolate"}, {"type":
-    "terminal", "symbol": ">"}], "orientation": "horizontal"}, {"type": "container",
-    "children": [{"type": "terminal", "symbol": "</"}, {"name": "name", "type": "interpolate"},
-    {"type": "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation":
-    "vertical"}]}}}'
+    "terminal", "symbol": "<"}, {"name": "name", "type": "interpolate"}, {"name":
+    "attributes", "type": "each"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}, {"type": "container", "children": [{"name": "elements", "type":
+    "each"}], "orientation": "vertical"}, {"type": "container", "children": [{"type":
+    "terminal", "symbol": "</"}, {"name": "name", "type": "interpolate"}, {"type":
+    "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation": "vertical"}]},
+    "attribute": {"type": "visualize", "attributes": [{"type": "container", "children":
+    [{"name": "name", "type": "interpolate"}, {"type": "terminal", "symbol": "="},
+    {"name": "value", "type": "interpolate"}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: '{"dxml": {"element": {"type": "concrete", "attributes":
