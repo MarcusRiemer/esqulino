@@ -44,11 +44,10 @@ Bei der Migration von GraphQL in eine bestehende Webapplikation muss vor Beginn 
 
 \begin{itemize}
 	\setlength\itemsep{-1em}
-	\item auf Ruby on Rails zugeschnitten ist, welches in Blattwerkzeug genutzt wird.
-	\item eine ausführliche Dokumentation und Tutorials bereit stellt.
-	\item bereits im Einsatz bei GitHub, Shopify und Kickstarter und damit kampferprobt ist.
-	\item ein modernerer Ansatz ist (siehe \ref{graphql:evolution}).
-	\item weniger Tooling benötigt im Gegensatz zu Schema-first.
+	\item ein neuerer Ansatz (siehe Abbildung~\ref{graphql:evolution}) und auf Ruby on Rails zugeschnitten ist.
+	\item ausführliche und für die Migration ausreichende Dokumentationen wie graphql-ruby Guides~\cite{graphql-ruby-guides} und graphql rubydoc~\cite{graphql-rubydoc}, sowie Tutorials von howtographql.com~\cite{howto-graphql-ruby}, dev.to~\cite{dev.to-graphql-ruby}, web-crunch.com~\cite{web-crunch-graphql-ruby} und vielen mehr bereitstellt.
+	\item bereits im Einsatz bei GitHub, Shopify und Kickstarter und damit auch in größeren Applikationen skalieren kann.
+	\item im Gegensatz zu Schema-first den geringeren Einsatz an Tools erfordert~\cite{schema-first-tooling}.
 
 \end{itemize}
 \end{description}
@@ -60,25 +59,37 @@ Bei der Migration von GraphQL in eine bestehende Webapplikation muss vor Beginn 
 	\label{graphql:evolution}
 \end{figure}
 
-\subsection{Typschema in graphql-ruby}
+\subsection{Integration von graphql-ruby}
 In graphql-ruby wird das Schema serverseitig in Ruby implementiert.
-Zur Umsetzung wurde das Rubygem \emph{graphql}~\cite{graphql-rubygem} in der Rails Applikation installiert und ein \lstinline|/graphql| Verzeichnis im app-Ordner auf Ebene der Models und Controller erstellt. Wie in der SDL~\ref{fig:basics:graphql:7} wird auf oberster Ebene das Schema mit den zugehörigen Einstiegspunkten definiert. Dafür wurde die Datei \lstinline|/graphql/server-schema.rb| erstellt~\ref{lst:graphql:schema}.
+Zur Umsetzung wurde das Rubygem \emph{graphql}~\cite{graphql-rubygem} in der Rails Applikation installiert und ein \lstinline|/graphql| Verzeichnis im app-Ordner auf Ebene der Models und Controller erstellt.
+Innerhalb des Ordners wurde die in Listing~\ref{lst:graphql:directory} gezeigte Ordnerstruktur gewählt.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Ordnerstruktur}, label={lst:graphql:directory}]
+|-- graphql
+|   |-- mutations
+|   |   |-- block_language
+|   |   |-- grammar
+|   |   |-- news
+|   |   |-- projects
+|   |-- resolvers
+|   |-- types
+|   |   |-- base
+|   |   |-- scalar
+|   |-- validators
+\end{lstlisting}
+
+Wie in der SDL in Listing~\ref{fig:basics:graphql:schema} wird nun auf oberster Ebene das Schema mit den zugehörigen Einstiegspunkten definiert. Dafür wurde die Datei \lstinline|/graphql/server-schema.rb| erstellt (sieh Listing~\ref{lst:graphql:schema}).
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={graphql-ruby Schema Definition und Festlegung der Einstiegpunkte query und mutation}, label={lst:graphql:schema}]
 class ServerSchema < GraphQL::Schema
   default_max_page_size 100
   
-  # Required
+  # Erwartet
   query(Types::QueryType)
   # Optional
   mutation(Types::MutationType)
 
-  # Optional
-  # Opt in to the new runtime (default in future graphql-ruby versions)
-  use GraphQL::Execution::Interpreter
-  use GraphQL::Analysis::AST
-
-  # Add built-in connections for pagination
+  # Fügt eingebaute Connections zur Paginierung hinzu
   use GraphQL::Pagination::Connections
 end
 \end{lstlisting}
@@ -86,31 +97,50 @@ end
 \begin{itemize}
 	\setlength\itemsep{-1em}
 	\item \emph{Zeile 1}: Definition des Schemas.
-	\item \emph{Zeile 2}: Setzt eine maximale Seitengröße für die Paginierung bei Connections.
+	\item \emph{Zeile 2}: Setzt eine maximale Seitengröße für die Paginierung mit Connections.
 	\item \emph{Zeile 5}: Definiert den Einstiegspunkt aller Queries.
 	\item \emph{Zeile 7}: Definiert den Einstiegspunkt aller Mutationen.
-	\item \emph{Zeile 12}: Einbindung eines neuen Laufzeit Moduls zur Erhöhung der Performance.
-	\item \emph{Zeile 13}: Ermöglicht Zugriff auf die zu behandelnde Query während der Laufzeit.
-	\item \emph{Zeile 15}: Ermöglicht die Nutzung von Connections~\ref{graphql:connections}.
+	\item \emph{Zeile 10}: Ermöglicht die Nutzung von Connections (siehe Unterabschnitt~\ref{graphql:connections}).
 \end{itemize}
 
-Nachfolgend werden anhand eines Praxisbeispiels alle Schritte durchgeführt, die das Abschicken einer Query und das Darstellen der Antwort ermöglichen.
+Die Klasse GraphQL::Schema vererbt die Funktion \lstinline|.execute| zum Ausführen von GraphQL Anfragen gegen das definierte Schema. Der Rails Server benötigt also eine Route die alle GraphQL Anfragen entgegen nimmt und an eine Controller Funtkion verweist, in der die \lstinline|.exectue| Funktion aufgerufen wird. Innerhalb dieser Funktion werden der Anfrage die Meta Daten (Context), welcher Nutzer die Anfrage geschickt hat und in welcher Sprache der Nutzer die Webseite lädt, beigefügt (siehe Abbildung~\ref{graphql:integration}). Anschließend werden die Anfragen vom GraphQL Servern verarbeitet. Dieser kommuniziert mit der Datenbank, erzeugt eine Antwort und gibt diese als Rückgabewert der \lstinline|.execute| Funktion an den Controller zurück der die Antwort an den Client weiterleitet.
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/system-components.pdf}
+	\caption{Koppelung des GraphQL Server an die bestehende Applikation}
+	\label{graphql:integration}
+\end{figure}
+
+Auf dem Client könnten eigens Angular Services entwickelt werden, um GraphQL Queries an den Server zu schicken. Eine bessere Alternative dazu, die zudem Features, wie Batching oder Caching bietet ist die Nutzung eines GraphQL Clients~\cite{graphql-client}. 
+
+\begin{description}
+	\item[Batching\label{rest:overfetching}] \ \\
+	Batching ist der Prozess, bei dem eine Gruppe von Anfragen zu einer einzigen zusammengefasst wird. Hierbei kann beispielsweise bei der Anforderung einer Anfrage ein Zeitlimit gesetzt werden, wodurch alle weiteren Anfragen, die vor Ablauf des Zeitlimits angefordert werden, mit dieser zusammengefasst und als Gruppe abgeschickt werden können.
+\end{description}
+
+ Aufgrund der Bereitstellung dieser Features und der Kompatibilität zu Angular~\cite{apollo-angular-doc} wurde sich für den Apollo Client~\cite{apollo-angular} entschieden.
+
+\subsection{Integration von Apollo Client}
+Apollo Client ist ein voll ausgestatteter GraphQL-Client mit Caching und Integrationen für React, Angular und mehr~\cite{apollo-angular}.
+TODO: zuende schreiben
+
+Nachfolgend wird anhand eines Praxisbeispiels die Umsetzung des gesamten Systems verbildlicht.
 \section{Praxisbeispiel - Erweiterung des Datenkonstruktes}
-In diesem Abschnitt wird das~\fullref{sec:requirements:example} nach erfolgter Migration von GraphQL wiederholt, um aufzuzeigen welche Schritte bei Nutzung von GraphQL durchgeführt werden müssen und wie diese sich zum alten System unterscheiden.
+Nachfolgend wird das in Abschnitt~\ref{sec:requirements:example} beschriebene Praxisbeispiel nach erfolgter Migration von GraphQL wiederholt, um aufzuzeigen welche Schritte bei Nutzung von GraphQL durchgeführt werden müssen und wie diese sich zum alten System unterscheiden.
 
 \subsection{Anlegen des Models in Rails}
 \label{impl:graphql:model}
-Als ersten Schritt empfehle ich das Anlegen und Durchführen einer Datenbankmigration und das Erstellen des neuen Models, genau wie in~\fullref{sec:requirements:example:model}. Die Idee diesen Schritt als ersten auszuführen stammt aus der Endgültigkeit einer Datenbankmigration. Selbstverständlich können Datenbankmigrationen auch rückgängig gemacht werden, allerdings sollte Vorsicht geboten und genau überlegt sein, wie die Datenbankmigration auszusehen hat. Wenn alles korrekt verlaufen ist, müssen die Typen im nach hinein nicht angepasst werden und bei der Erstellung des GraphQL Typen kann der Name, der Typ, der Default Wert und ob der Typ nullable ist aus der Datenbank abgelesen werden. Hinzuzufügen ist, dass es Code Generatoren wie GraphQL Rails Schemaker~\cite{graphql-rails-schemaker} gibt, die suggerieren aus dem Datenbankschema GraphQL Typen generieren zu können. Wie gut diese funktionieren wurde im Rahmen der Arbeit allerdings nicht getestet
+Als ersten Schritt empfehle ich das Anlegen und Durchführen einer Datenbankmigration und das Erstellen des neuen Models, genau wie in Unterabschnitt~\fullref{sec:requirements:example:model}. Die Idee diesen Schritt als ersten auszuführen stammt aus der Endgültigkeit einer Datenbankmigration. Selbstverständlich können Datenbankmigrationen auch rückgängig gemacht werden, allerdings sollte Vorsicht geboten und genau überlegt sein, wie die Datenbankmigration auszusehen hat. Wenn alles korrekt verlaufen ist, müssen die Typen im nach hinein nicht angepasst werden und bei der Erstellung des GraphQL Typen kann der Name, der Typ, der Default Wert und ob der Typ nullable ist aus dem Datenbankschema abgelesen werden. Hinzuzufügen ist, dass es Code Generatoren wie GraphQL Rails Schemaker~\cite{graphql-rails-schemaker} gibt, die suggerieren aus dem Datenbankschema GraphQL Typen generieren zu können.
 
 \subsection{Anlegen eines GraphQL Objekttypen}
 \label{impl:graphql:graphqltype}
 \label{graphql:objecttype}
 Wurde der GraphQL Typ nicht aus dem Datenbankschema generiert, müssen Datentypen die den Model Instanzen aus der Rails Applikation entsprechen in Form von GraphQL-Objekttypen definiert werden. 
 Jedes GraphQL Objekt hat Felder, die Daten extrahieren und anhand des Namens abgefragt werden können. 
-Die Felder sollten die Benennung der Model Attribute übernehmen, um direkten Zugriff auf diese zu erlangen. Das spart zusätzlich Code, da für jedes Feld, dessen Name nicht einem Model Attribut entspricht ein zusätzlicher Resolver bereitgestellt werden muss.
+Die Felder sollten die Benennung der Model Attribute übernehmen, um direkten Zugriff auf diese zu erlangen. Das spart Code, da für jedes Feld, dessen Name nicht einem Bezeichner einer Spalte in der Datenbank entspricht oder diese Spalte manuell durch eine SQL Alias (AS) hinzugefügt wird, ein zusätzlicher Resolver bereitgestellt werden muss.
 
-Nachfolgend wird der Projekt Typ~\fullref{lst:example:projectdesc} in graphql-ruby ausgedrückt und erweitert.
+Nachfolgend wird der Projekt Typ aus Listing~\fullref{lst:example:projectdesc} in graphql-ruby ausgedrückt und erweitert.
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Definition des ProjectTypes zum Abbilden von Project Model Instanzen}, label={lst:graphql:projecttype}]
 # Base Klasse definiert einen benutzerdefinierten Connection Typ BaseConnection 
@@ -133,36 +163,36 @@ class Types::ProjectType < Types::Base::BaseObject
 end
 \end{lstlisting}
 
-In~\fullref{lst:graphql:projecttype} sind mehrere Auffälligkeiten die es zu erklären gilt.
-Zuerst ist zu erwähnen, dass in Zeile 2~\ref{lst:graphql:projecttype} lediglich eine Base Klasse eingeführt wird (siehe~\ref{graphql:baseclass}).
+In Listing~\fullref{lst:graphql:projecttype} sind mehrere Auffälligkeiten die es zu erklären gilt.
+Zuerst ist zu erwähnen, dass in Zeile 2 Listing~\ref{lst:graphql:projecttype} eine Base Klasse eingeführt wird (siehe Abschnitt~\ref{graphql:baseclass}).
 Darüber hinaus bekommt jedes Feld (\lstinline|field|) mindestens drei Attribute zugewiesen. 
 
 \subsubsection{Name des Feldes}
-Das erste Attribut ist ein Symbol und beschreibt den Namen des Feldes, der äquivalent zum Model Attribut sein sollte. 
+Das erste Attribut ist ein Symbol und beschreibt den Namen des Feldes. 
 
-In Zeile 11~\ref{lst:graphql:projecttype} wird der Ersteller eines Projektes (user) modelliert. Dieses Feld erhält die Bezeichnung \lstinline|:user| und entspricht damit nicht der genauen Benennung aus der Model Instanz, die äquivalent zur Benennung \lstinline|:user_id| der \emph{projects} Migration ist~\ref{lst:example:migration}. Dennoch wird kein Resolver zum Auflösen des Feldes benötigt, da im \emph{Project} Model~\ref{lst:example:model} der Zugriff auf den in Beziehung stehende Nutzer mit dem Aufruf von \lstinline|.user| auf einer Project-Instanz ermöglicht wird. 
+In Zeile 11 Listing~\ref{lst:graphql:projecttype} wird der Ersteller eines Projektes (user) modelliert. Dieses Feld erhält die Bezeichnung \lstinline|:user| und entspricht damit nicht der Benennung \lstinline|:user_id| aus dem Model. Dennoch wird kein Resolver zum Auflösen des Feldes benötigt, da im Project Model aus Listing~\ref{lst:example:model} der Zugriff auf den in Beziehung stehenden Nutzer, mit dem Aufruf von \lstinline|.user| auf einer Project-Instanz, ermöglicht wird. 
 
-Desweiteren wurden in Zeile 15 und 16~\ref{lst:graphql:projecttype} die Felder \lstinline|:created_at| und \lstinline|:updated_at| in Snake-case definiert, was zwar der Benennungskonvention von Ruby entspricht, allerdings nicht der im Client verwendeten Camel-case Schreibweise und damit inkompatibel zum Client sein müsste. Die Konvention sieht allerdings vor das Felder und Argument Namen in Snake-case geschrieben werden. Denn Bei der Auflösung eines Feldes wird per Default versucht eine Methode mit dem Namen des Feldes auf dem übergebenen Objekt aufzurufen oder wenn das Objekt einem Hash entspricht, wird nach einem Schlüssel, der den Namen in String oder Symbol Form entspricht gesucht~\cite{graphql-field-resolution}. Anschließend werden die Felder im zugrundeliegenden GraphQL Typ zu Camel-case konvertiert~\cite{graphql-object-classes}.
+Desweiteren wurden in Zeile 15 und 16 Listing~\ref{lst:graphql:projecttype} die Felder \lstinline|:created_at| und \lstinline|:updated_at| in Snake-case definiert, was zwar der Benennungskonvention von Ruby entspricht, jedoch nicht der im Client verwendeten Camel-case Schreibweise und damit inkompatibel zum Client sein müsste. Die Konvention sieht allerdings vor das Felder und Argument Namen in Snake-case geschrieben werden da bei der Auflösung eines Feldes per Default versucht wird eine Methode mit dem Namen des Feldes auf dem übergebenen Objekt aufzurufen.
+Ist solch eine Methode nicht vorhanden und das Objekt ein Hash, wird nach einem Schlüssel, der den Namen in String oder Symbol Form entspricht gesucht~\cite{graphql-field-resolution}. Anschließend werden die Felder im zugrundeliegenden GraphQL Typ zu Camel-case konvertiert~\cite{graphql-object-classes}.
 
-Passend dazu wurde in Zeile 13 ein Feld hinzugefügt, das keinem Attribut des Project Models oder einer Beziehung zu einem anderen Model entspricht. Die Auflösung dieses Feldes wird dennoch implizit durch Zugriff über den gleichnamigen Schlüssel im Ergebnis der Query (Scope)~\ref{lst:graphql:querytype} erreicht. Wie der Wert in das Ergebnis der Query gerät wird im Unter-Unterabschnitt~\fullref{graphql:resolver} erklärt.
+Passend dazu wurde in Zeile 13 ein Feld hinzugefügt, das keinem Attribut des Project Models oder einer Beziehung zu einem anderen Model entspricht. Die Auflösung dieses Feldes wird dennoch implizit durch Zugriff über den gleichnamigen Schlüssel im Ergebnis der Query (Scope) erreicht. Wie der Wert in das Ergebnis der Query gerät wird im Unter-Unterabschnitt~\fullref{graphql:resolver} erklärt.
 
 \subsubsection{Datentyp des Feldes}
-Das zweite Attribut bei der Deklarierung eines Feldes stellt den Typen dar. graphql-ruby bietet alle von GraphQL bereitgestellten Typen (Scalar Typen) an. Zu denen gehören ID, String, Int, Float und Boolean. Darüber hinaus hat graphql-ruby noch weitere Typen wie \lstinline|ISO8601DateTime| im Repertoire. Da diese nicht ausreichen wurden obendrein eigens Scalar Typen hinzugefügt. Einer davon ist der in Zeile 8~\ref{lst:graphql:projecttype} aufgeführte \lstinline|LangJson| der einem multilingualen Feld entspricht~\ref{graphql:scalartypes}. Der Suffix \lstinline|Types::Scalar::| beschreibt den Pfad vom \lstinline|/graphql| Verzeichnis aus, wo der Typ zu finden ist, in diesem Fall \lstinline|/graphql/types/scalar/lang_json.rb|.
+Das zweite Attribut bei der Deklarierung eines Feldes stellt den Typen dar. Graphql-ruby bietet alle von GraphQL bereitgestellten Typen (Scalar Typen) an. Zu denen gehören ID, String, Int, Float und Boolean. Darüber hinaus hat graphql-ruby noch weitere Typen wie \lstinline|ISO8601DateTime| im Repertoire. Da diese nicht ausreichen wurden eigens Scalar Typen hinzugefügt (siehe Abschnitt ~\ref{graphql:scalartypes}). Einer davon ist der in Zeile 8 Listing~\ref{lst:graphql:projecttype} aufgeführte \lstinline|LangJson| der ein multilinguales Feld darstellt. Der Suffix \lstinline|Types::Scalar::| beschreibt den Pfad vom \lstinline|/graphql| Verzeichnis aus, wo der Typ zu finden ist - in diesem Fall \lstinline|/graphql/types/scalar/lang_json.rb|.
 
-In Zeile 11 und 12~\ref{lst:graphql:projecttype} wurden Typen verwendet die zu einer Model Instanz aus der Rails Applikation passen. In Zeile 11 wird eine User Instanz erwartet, in Zeile 12 eine Array gefüllt mit CodeResource Instanzen.
+In Zeile 11 und 12 Listing~\ref{lst:graphql:projecttype} wurden Typen verwendet die zu einer Model Instanz aus der Rails Applikation passen. In Zeile 11 wird eine User Instanz erwartet, in Zeile 12 eine Array gefüllt mit CodeResource Instanzen.
 
 \subsubsection{Nullable}
 Als drittes Attribut wurde festgelegt ob das Feld \lstinline|null| als Rückgabewert haben darf. Diese Angabe kann aus dem Datenbankschema abgelesen werden.
 
-Darüber hinaus gibt es noch  weitere Attribute mit denen Felder eingeschränkt oder Meta Daten hinzugefügt werden können~\cite{graphql-field-introduction}.
+Insgesamt gibt es noch  weitere Attribute mit denen Felder eingeschränkt oder Meta Daten hinzugefügt werden können~\cite{graphql-field-introduction}.
 Weitere Felder des \lstinline|ProjectType| werden aus Gründen der Relevanz nicht aufgeführt. 
 
 \subsection{Anlegen eines Input Typen}
 \label{impl:graphql:input}
-\label{graphql:inputtypes}
 Input-Objekttypen sind komplexe Eingaben für GraphQL-Operationen. Sie eignen sich hervorragend für Felder, die viele strukturierte Eingaben benötigen, wie Mutationen oder Suchfelder~\cite{graphql-input-type}.
-In dieser Implementierung wurden Input Typen für die Auswahl von Sprachen (\lstinline|:languages|), für das Filtern (\lstinline|:filter|) und für das Sortieren (\lstinline|:order|) genutzt~\ref{lst:graphql:inputtype}.
-Für jeden Typen der einer Model Instanz entspricht und deren Instanzen im Client in Listen-Form dargestellt werden, wird definiert welche der Attribute des Models sortierbar sind und nach welchen Attributen gefiltert werden kann. Diese Informationen fließen dann bei der Definition des zur Klasse gehörenden Input Typen ein (siehe \ref{lst:graphql:inputtype}).
+Bei der Migration von GraphQL wurden Input Typen für die Auswahl von Sprachen (\lstinline|:languages|), für das Filtern (\lstinline|:filter|) und für das Sortieren (\lstinline|:order|) genutzt.
+Für jeden Typen der einer Model Instanz entspricht und deren Instanzen im Client in Listen-Form dargestellt werden, wird definiert welche der Attribute des Models sortierbar sind und nach welchen Attributen gefiltert werden kann. Diese Informationen fließen bei der Definition des zur Klasse gehörenden Input Typen ein (siehe Listing~\ref{lst:graphql:inputtype}).
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Definition der Input Typen in \lstinline|/graphql/types/project_type.rb|}, label={lst:graphql:inputtype}]
 class Types::ProjectType < Types::Base::BaseObject
@@ -202,14 +232,16 @@ class Types::ProjectType < Types::Base::BaseObject
 end
 \end{lstlisting}
 
+Nach Hinzufügen des Input Typen ist die Klasse ProjectType fürs erste vollständig.
+Also wurde bislang ein Schema definiert, eine Rails Migration durchgeführt und ein Objekttyp inkl. Input Typ erstellt der zu migrierten Datenbanktabelle passt. Nun folgt die Logik für die Verarbeitung von Queries.
+
 
 \subsection{Anlegen eines Query Endpunktes}
 \label{impl:graphql:querytype}
-\label{graphql:querytypes}
-Bislang wurde ein Schema definiert~\ref{lst:graphql:schema}, eine Datenbankmigration durchgeführt und ein Datentyp~\ref{lst:graphql:projecttype} erstellt der einer Model Instanz entspricht. Damit der Datentyp über den Einstiegspunkt \lstinline|query| aus dem Schema abgefragt werden kann, wurde der \lstinline|QueryType|~\ref{lst:graphql:querytype} unter \lstinline|/graphql/types/query_type.rb| definiert.
-Dieser beinhaltet alle definierten Queries, die die Einstiegspunkte zu den Model Instanzen wieder spiegeln. Für jede Model Instanz die abgefragt werden soll, wurde somit ein Feld in der Klasse \lstinline|QueryType| definiert.
+Damit der Datentyp über den Einstiegspunkt \lstinline|query| aus dem Schema abgefragt werden kann, wurde die Klasse \lstinline|QueryType| in Listing~\ref{lst:graphql:querytype} definiert.
+Diese beinhaltet alle definierten Queries, die die Einstiegspunkte zu den Model Instanzen wieder spiegeln. Für jede Model Instanz die abgefragt werden soll, wurde somit ein Feld in der Klasse \lstinline|QueryType| definiert.
 
-\begin{lstlisting}[language=Ruby,float=h!,caption={Definition des QueryType als Einstiegspunkt in alle Queries}, label={lst:graphql:querytype}]
+\begin{lstlisting}[language=Ruby,float=h!,caption={Definition des QueryType als Einstiegspunkt in alle Queries. \lstinline|/graphql/types/query_type.rb|}, label={lst:graphql:querytype}]
 class QueryType < GraphQL::Schema::Object
   field :projects, Types::ProjectType.connection_type, null: false do
     argument :input, Types::ProjectType::InputType, required: false
@@ -225,15 +257,16 @@ class QueryType < GraphQL::Schema::Object
 end
 \end{lstlisting}
 
-In Zeile 2 wurde ein Feld mit dem Namen \lstinline|:projects| vom Typ \lstinline|ProjectType.connection_type| erstellt, welches ein Argument (\lstinline|argument|) mit dem Bezeichner \lstinline|:input| vom Typ \lstinline|ProjectType::InputType| mit der Einschränkung, dass das Argument nicht zwingend erwartet wird (\lstinline|required: false|), besitzt.
-Hinzukommend wurde in Zeile 6 ein Resolver für die projects query hinzugefügt. Dieser bekommt das Argument als Parameter übergeben.
+In Zeile 2 Listing~\ref{lst:graphql:querytype} wurde ein Feld mit dem Namen \lstinline|:projects| vom Typ \lstinline|ProjectType.connection_type| erstellt, welches ein Argument (\lstinline|argument|) mit dem Bezeichner \lstinline|:input| vom Typ \lstinline|ProjectType::InputType| mit der Einschränkung, dass das Argument nicht zwingend erwartet wird (\lstinline|required: false|), besitzt.
+Hinzukommend wurde in Zeile 6 Listing~\ref{lst:graphql:querytype} ein Resolver für die projects query hinzugefügt. Dieser bekommt das Argument als Parameter übergeben.
 
 \subsection{Anlegen der Resolver Klasse}
 \label{impl:graphql:resolver}
 \label{graphql:resolver}
-Der Resolver \lstinline|projects|~\ref{lst:graphql:querytype} ist für das Auflösen eines Feldes, welches eine Query darstellt zuständig. Er delegiert diese Aufgabe im Falle, dass die Query eine Liste mit Filter- und Sortierfunktion erwartet an ein \emph{"Plain Old Ruby Object"} namens \lstinline|ProjectsResolver|~\ref{lst:graphql:projectsresolver} weiter und gibt deren Instanzvariable \lstinline|.scope| zurück. Das Argument \lstinline|input| wird ebenfalls weiter an die \lstinline|ProjectsResolver| Klasse übergeben, wenn dieses nicht \lstinline|nil| ist. 
+Der Resolver \lstinline|projects| in Listing~\ref{lst:graphql:querytype} ist für das Auflösen einer Query zuständig. Im Falle das die Query eine Liste mit Filter- und Sortierfunktion erwartet,
+delegiert ein Resolver diese Aufgabe an ein \emph{"Plain Old Ruby Object"} weiter und gibt deren Instanzvariable \lstinline|.scope| zurück. Das Argument \lstinline|input| wird ebenfalls weiter an die Resolver Klasse übergeben, wenn dieses nicht \lstinline|nil| ist. 
 
-Das \emph{"Plain Old Ruby Object"}~\ref{lst:graphql:projectsresolver} und seine Oberklasse beinhalten umfangreiche Logik um effiziente SQL Queries zusammenzubasteln, die exakt nur die angefragten Felder mit Daten bedient. Hier werden die geforderten Lösungen des Overfetching, Underfetching und des N+1 Query Problems umgesetzt, genauso wie das Sortieren, Filtern und Auswählen von Sprachen ermöglicht.
+Das \emph{"Plain Old Ruby Object"} in Listing~\ref{lst:graphql:projectsresolver} und seine Oberklasse beinhalten umfangreiche Logik um effiziente SQL Queries zusammenzubasteln, die exakt nur die angefragten Felder mit Daten bedient. Hier werden die geforderten Lösungen des Overfetching, Underfetching und des N+1 Query Problems umgesetzt, genauso wie das Sortieren, Filtern und Auswählen von Sprachen ermöglicht.
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={\emph{"Plain Old Ruby Object"} zum Auflösung der Query \lstinline|:projects|. \lstinline|/graphql/resolvers/projects_resolver.rb|}, label={lst:graphql:projectsresolver}]
 class ProjectsResolver < Resolvers::BaseResolver
@@ -256,7 +289,7 @@ Im Konstruktor in Listing~\ref{lst:graphql:projectsresolver} wird zunächst der 
 %Beim Laden der Daten aus der Datenbank wird zwischen Lazy Loading und Eager Loading unterschieden. Wir möchten alle Freunde aller Nutzer herausfinden:
 Hieraus wird deutlich, das obwohl GraphQL die SQL Queries automatisch zusammen stellt bei Bedarf in den Prozess des Zusammensetzens eingegriffen werden kann.
 
-Zuletzt wird in Zeile 12 in Listing~\ref{lst:graphql:projectsresolver} der Konstruktor der Oberklasse \lstinline|BaseResolver|~\ref{} aufgerufen und  Argumente zum Sortieren, Filtern und Auswählen von Sprachen übergeben.
+Zuletzt wird in Zeile 12 in Listing~\ref{lst:graphql:projectsresolver} der Konstruktor der Oberklasse \lstinline|BaseResolver| (in Abschnitt~\ref{impl:base-resolver} beschrieben) aufgerufen und  Argumente zum Sortieren, Filtern und Auswählen von Sprachen übergeben.
 
 Serverseitig wurde nun die Logik erstellt, um Project Datensätze abzufragen und eine Antwort zu erstellen.
 Nun benötigt der Client eine Query, die genau die Daten abfragt die er benötigt und den dazugehörigen Antworttyp als Typescript Interface um die Antwort typsicher verarbeiten zu können.
@@ -316,7 +349,7 @@ Nun muss die Query dem Client zugreifbar gemacht werden, durch Generierung eines
 \subsection{Codegenerierung}
 \label{impl:graphql:generation}
 Graphql-ruby stellt einen eingebauten Rake Task bereit der aus dem GraphQL Schema eine JSON Darstellung generiert~\cite{graphql-rake-task}. Diese wird in einem Schema-Ordner auf Wurzelebene der gesamten Applikation (Ebene auf der sich der Server und Client Ordner befindet) gehalten.
-Durch Nutzung des Tools graphql-code-generator~\cite{graphql-code-generator} wird dann aus der in Listing~\ref{lst:graphql:query} vorgestellten Query und dem GraphQL Schema in JSON Darstellung folgender Typescript Code generiert:
+Durch Nutzung des Tools graphql-code-generator~\cite{graphql-code-generator} wird dann aus der in Listing~\ref{lst:graphql:query} vorgestellten Query und dem GraphQL Schema in JSON Darstellung folgender Typescript Code (siehe Listings~\ref{lst:graphql:gen-gql},~\ref{lst:graphql:gen-service},~\ref{lst:graphql:gen-responsetype} und~\ref{lst:graphql:gen-variables}) generiert:
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Aufruf der gql-Funktion erhält die AdminListProjects Query als String}, label={lst:graphql:gen-gql}]
 export const AdminListProjectsDocument = gql`
@@ -456,38 +489,141 @@ TODO: Weiter ausführen, aber kurz halten. Wie in projekt genutzt?
 
 \section{Enum Typen}
 \label{graphql:enumtypes}
-Die In Blattwerkzeug verfügbaren Sprachen und Sortierrichtungen werden in Enums innerhalb der Klasse \lstinline|Types::Base::BaseEnum| gespeichert. Zusätzlich gibt es eine statische Funktion \lstinline|self.enum_values| die die Werte eines Enums extrahiert und diese als Array zurück liefert~\ref{lst:graphql:enum_values}. Diese wird bei der Sortierung und Auswahl der Sprache im Base Resolver genutzt~\ref{lst:graphql:base_resolver}.
+Die in Blattwerkzeug verfügbaren Sprachen (\lstinline|LanguageEnum|) und Sortierrichtungen werden in Enums innerhalb der Klasse \lstinline|Types::Base::BaseEnum| aus Listing~\ref{lst:graphql:enum_values} gespeichert. Zusätzlich gibt es eine statische Funktion \lstinline|self.enum_values| die die Werte eines Enums extrahiert und diese als Array zurück liefert. Diese wird bei der Sortierung und Auswahl der Sprache im Base Resolver in Abschnitt~\ref{impl:base-resolver} genutzt.
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Funktion zum Extrahieren der Enum Werte in ein Array. \lstinline|/graphql/types/base/base_enum.rb|}, label={lst:graphql:enum_values}]
 class Types::Base::BaseEnum < GraphQL::Schema::Enum
   def self.enum_values
     values.values.map(&:value)
   end
+  
+  class LanguageEnum < Types::Base::BaseEnum
+    value 'de'
+    value 'en'
+  end
   [...]
-  # Enum Definitionen
+  # weitere Enum Definitionen
 end
 \end{lstlisting}
+
 \section{Mutationen als Objekttypen}
-TODO: Mutationen
+In diesem Abschnitt wird beschrieben wie die Funktionalitäten zum Erstellen, Ändern und Löschen von Datensätzen von den bestehenden Rails Controllern nach GraphQL Mutationen migriert wurden.
+Zu erst müssen dem Schema für die Ausführung von Mutationen entsprechende Einstiegspunkte hinzugefügt werden (siehe Listing~\ref{lst:graphql:mutation-entrypoint}). Im Unterschied zu den Queries werden zur Auflösung der Anfrage keine Resolver Funktionen verwendet, sondern Ruby Klassen, die von der Klasse \lstinline|GraphQL::Schema::RelayClassicMutation| erben. 
 
-
-\section{Apollo Client}
-TODO: Apollo Client kurz beschreiben
-\subsection{Cache}
-TODO: Auf die möglichkeit des caches eingehen zur gesteigerten Performance
-
-\section{Filtern, Sortieren und Sprachauswahl}
-\begin{lstlisting}[language=Ruby,float=h!,caption={ \lstinline|/graphql/resolvers/base_resolver.rb|}, label={lst:graphql:base_resolver}]
-# Base Resolver
+\begin{lstlisting}[language=Ruby,float=h!,caption={Definition eines Endpunktes zum Aufruf der Mutation für Erstellung eines Projektes \lstinline|/graphql/types/mutation_type.rb|}, label={lst:graphql:mutation-entrypoint}]
+class MutationType < Types::Base::BaseObject
+  field :create_project, mutation: Mutations::Projects::CreateProject
+end
 \end{lstlisting}
 
-TODO: BaseResolver beschreiben
+Der Einstiegspunkt aus Listing~\ref{lst:graphql:mutation-entrypoint} verweist auf die Klasse \lstinline|Mutations::Projects::CreateProject|aus Listing~\ref{lst:graphql:create_project}. Innerhalb der Klasse können neben Feldern auch Argumente definiert werden. Da die Funktionalität der benötigten Mutationen bereits in den Rails Controller Funktionen umgesetzt sind, wurde dort abgelesen welche Argumente eine Mutation benötigt. 
+Vorteilhaft ist das zu den Argumenten ein Typ angegeben wird und ob diese zwingend vorhanden sein müssen. Somit können sich ohne manuelle Prüfungen keine fehlerhafte Daten einschleichen wenn die Definition der Argumente korrekt umgesetzt wurde.
+
+Die Argumente einer Mutation werden der Funktion \lstinline|resolve| übergeben. Der Methodenrumpf der Funktion konnte in diesem Fall (siehe Listing~\ref{lst:graphql:create_project}) ebenfalls von der passenden \lstinline|create| Funktion aus dem ProjectsController übernommen werden. Dies gilt auch für jede andere Mutation, da der Rails Server zu jeder im kontext dieser Arbeit benötigten Mutation eine äquivalente Controller Funktion besitzt.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Definition der Mutation CreateProject \lstinline|/graphql/mutations/projects/create_project.rb|}, label={lst:graphql:create_project}]
+class Mutations::Projects::CreateProject < Mutations::Projects::Projects
+
+  argument :name, Types::Scalar::LangJson, required:true
+  argument :slug, String, required:true
+
+  def resolve(**args)
+    project = Project.new(
+      name:args[:name],
+      slug:args[:slug],
+      user_id:context[:user].id)
+    save_project(project)
+  end
+end
+\end{lstlisting}
+
+Zusätzlich zu den Argumenten lassen sich Felder hinzufügen. Möchte man zum Beispiel im Client über ein einfaches Formular einen Datensatz erstellen und dann anhand der Id des Datensatzes zu dessen Detailansicht weitergeleitet werden, kann als Rückgabewert der Mutation eben diese Information erfragt werden.
+Jeder Mutation wird ein \lstinline|:errors| Feld beigefügt (siehe Listing~\ref{lst:graphql:projects-mutation}) um auf Fehler in einer Mutation reagieren zu können.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Definition der Oberklasse aller projects Mutationen \lstinline|/graphql/mutations/projects/projects.rb|}, label={lst:graphql:projects-mutation}]
+class BaseMutation < GraphQL::Schema::RelayClassicMutation
+end
+
+class Mutations::Projects::Projects < Mutations::BaseMutation
+
+  field :id, ID, null: true
+  field :errors, [String], null: false
+
+  def save_project(project)
+    if project.save
+      {
+        id: project.id,
+        errors: []
+      }
+    else
+      {
+        id: nil,
+        errors: project.errors.full_messages
+      }
+    end
+  end
+end
+\end{lstlisting}
+
+Die Anfrage der Mutation sieht dementsprechend wie in Listing~\ref{lst:graphql:mutation-query} aus.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Anfrage der CreateProject Mutation}, label={lst:graphql:mutation-query}] 
+mutation CreateProject($name:LangJson!,$slug:String!){
+  createProject(input:{name:$name,slug:$slug}) {
+    errors
+	id
+  }
+}
+\end{lstlisting}
+
+\section{Filtern, Sortieren und Sprachauswahl}
+\label{impl:base-resolver}
+Die Felder- und Sprachauswahl, sowie das Filtern und Sortieren wird direkt in SQL in der Klasse BaseResolver realisiert (siehe Abbildung~\ref{graphql:sorting}). 
+Sie ist Zuständig für das Erweitern des in Zeile 12 Listing~\ref{lst:graphql:projectsresolver} übergebenen Scope.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{snippets/filtern-sortieren-sprachauswahl.pdf}
 	\caption{Durchlauf einer Query durch alle Resolver}
-	\label{graphql:evolution}
+	\label{graphql:sorting}
 \end{figure}
+
+
+Zu Beginn wird geprüft, ob dem BaseResolver ein Array mit Ländercodes (\lstinline|languages|) übergeben wurde. Wenn das nicht der Fall ist werden alle vorhandene Sprachen, als Array auf eine Instanzvariable \lstinline|@languages| gesetzt. In einer Methode \lstinline|select_relevant_fields(scope)| werden dann alle angefragten Felder, zuzüglich aller Felder die eine Fremdschlüsselbeziehung darstellen (Felder die auf \lstinline|_id| enden), sowie das Feld Id in einem Array zusammengefasst. Für jedes Element des Arrays wird geprüft, ob es ein in der Datenbank als hstore gespeichertes Attribut, also um einen multilingualer String ist.
+Trifft dies zu werden mithilfe der Funktion SLICE (siehe Tabelle~\ref{tbl:basics:hstore-operations}) nur die Schlüssel/Wert-Paare extrahiert, deren Schlüssel im \lstinline|@languages| Array enthalten sind, andernfalls wird das gesamte Feld selektiert.
+
+Anschließend wird bei der Verarbeitung jedes übergebenen Filters bestehend aus \lstinline|filter_key| für das Feld welches gefiltert werden soll und \lstinline|filter_value| für den Wert nachdem gefiltert werden soll, zwischen 5 PostgreSQL Datentypen wie folgt unterschieden:
+\begin{description}
+	\item[uuid] \ \\
+		Ist das zu filternde Feld eine uuid, muss der Wert des Feldes in einen Text gecastet werden, bevor es mit dem LIKE Operator verglichen werden kann. \\
+		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value|
+	\item[hstore] \ \\
+		Handelt es sich bei dem Feld um einen multilingualen String werden alle Werte zu den in \lstinline|@languages| vorhandenen Schlüsseln mit dem Operator \lstinline|hstore -> text[]| extrahiert und mit dem Operator \lstinline|ILIKE ANY| geprüft, ob der Filter Wert zu einem der extrahierten Werte passt~\cite{ilike-any-postgres}.
+		Die Funktion \lstinline|to_single_quotes_array| parst ein Array in Stringdarstellung mit einfachen Anführungszeichen.\\
+		\lstinline|scope.where "'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})"|
+	\item[boolean] \ \\
+		Entspricht das Feld einem Boolean muss mit einem $=$-Zeichen gefiltert werden.
+		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} = ?", filter_value|
+	\item[datetime] \ \\
+		Bei einem Datetime Feld muss der Filter erweitert werden. In Blattwerkzeug existiert ein Model News (Neuigkeiten). Instanzen des Models besitzen das Attribut \lstinline|published_from|, welches angibt, wann eine Neuigkeit veröffentlicht werden soll. Um eine Liste zu erzeugen, in der nur bereits veröffentlichte News Instanzen präsentiert werden, dürfen nur die selektiert werden deren Erscheinungsdatum kleiner (früher) ist als das heutige Datum. Damit die Auswahl flexibel bleibt wurde der Wert des Filters in zwei Argumente unterteilt. Das erste (\lstinline|:date|) gibt das Datum an nachdem gefiltert werden soll, das zweite Argument (\lstinline|:until|) gibt an, ob nach Daten gefiltert werden sollen, die vor oder nach dem zu filternden Datum liegen. Wird kein Wert für das erste Argument angegeben wird das heutige Datum stattdessen genommen. \\
+		\lstinline|comparator = filter_value[:until] ? "<=" : ">"| \\
+		\lstinline|date = filter_value[:date] ? filter_value[:date] : Date.today| \\
+		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} #{comparator} ?", date|
+	\item[default] \ \\
+		Alle anderen Datentypen werden mit dem LIKE Operator gefiltert. \\
+		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} LIKE ?", filter_value|
+\end{description}
+
+Als letztes werden Sortierfunktionen in das SQL Statement eingebaut. Wie bei der Sprachauswahl wird erneut von multilingualen Feldern unterschieden.
+Da diese einen Hash darstellen, muss angegeben werden nach welcher der Schlüssel/Wert-Paare sortiert werden soll. Hier kommt die Funktion COALESCE~\cite{coalesce-postgres} ins Spiel. Sie kann eine beliebige Anzahl von Parametern verarbeiten die der Reihe nach ausgewertet werden. Der erste Ausdruck, der einen Wert ungleich NULL zurückliefert, bestimmt das Ergebnis der Funktion. Sind mehrere Sprachen ausgewählt worden muss bestimmt werden nach welcher Sprache vorrangig sortiert werden soll. Da nicht jedes multilinguale Feld Werte für allen Sprachen besitzt, ist COALESCE hierbei die Lösung des Problems (siehe Listing~\ref{lst:graphql:sorting}).
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Sortieren von Feldern in der Klasse BaseResolver}, label={lst:graphql:sorting}] 
+  if is_multilingual_column? order_key
+    # Erstellt einen String wie folgt "name->'de',name->'en',name->'it',name->'fr'"
+    coalesce = @languages.map{|l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
+    scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
+  end
+\end{lstlisting}
 
 \section{Paginierung}
 Die geforderte Paginierung wurde durch einen Connection Typ im GraphQL Schema und durch eine Angular Komponente ermöglicht, die eine einheitliche Tabelle mit Möglichkeit der Paginierung und Sortierung ist.
@@ -515,12 +651,12 @@ class Types::Base::BaseConnection < GraphQL::Types::Relay::BaseConnection
 end
 \end{lstlisting}
 
-\subsection{Einheitliche Tabelle mit Paginierung und Sortierung}
+\subsection{Einheitliche Tabelle}
 \label{impl:paginator-component}
-Die Tabelle im Client sieht wie in Abbildung~\ref{impl:graphql:paginator-table} aus. Unterhalb der Tabelle kann die Seitengröße eingestellt, so wie eine Seite weiter gegangen werden. Die Anzeige \lstinline|1-5| steht dabei für die ersten fünf Elemente die gezeigt werden. Drückt man auf den Pfeil nach rechts werden die Argumente der GraphQL Query erneut gesetzt \lstinline|{first: pageSize, after: endCursor}| und damit ein neuer Request abgeschickt.
+Die Tabelle im Client sieht wie in Abbildung~\ref{impl:graphql:paginator-table} aus. Unterhalb der Tabelle kann die Seitengröße eingestellt, so wie eine Seite weiter gegangen werden. Die Anzeige \lstinline|1-5| steht dabei für die ersten fünf Elemente die gezeigt werden. Drückt man auf den Pfeil nach rechts werden die Argumente der GraphQL Query erneut gesetzt \lstinline|{first: pageSize, after: endCursor}| und dadurch ein neuer Request abgeschickt.
 Der Wert von \lstinline|endCursor| geht aus der letzten Antwort der "AdminListProjects" Query aus Listing~\ref{lst:graphql:query} hervor. Der Wert \lstinline|pageSize| wird innerhalb der Angular Komponente gehalten. 
 
-Des Weiteren wird ebenfalls ein neuer Request durch setzten des Inputtypen der Query gesendet, wenn auf die Spalten Bezeichner "name" oder "slug" gedrückt werden. Es sind nur die Spalten sortierbar die in Listing~\ref{lst:graphql:inputtype} im OrderFieldEnum enthalten sind.
+Des Weiteren wird ein neuer Request durch setzen des Inputtypen der Query gesendet, wenn auf die Spalten Bezeichner "name" oder "slug" gedrückt werden. Es sind nur die Spalten sortierbar die in Listing~\ref{lst:graphql:inputtype} im OrderFieldEnum enthalten sind.
 
 \begin{figure}[h!]
 	\centering
@@ -529,14 +665,14 @@ Des Weiteren wird ebenfalls ein neuer Request durch setzten des Inputtypen der Q
 	\label{impl:graphql:paginator-table}
 \end{figure}
 
-\section{Validierungen}
+\section{Validieren}
 \label{graphql:validation}
 Wie bereits in \fullref{req:validation:json} erwähnt müssen Felder die nicht implizit vom GraphQL Typschema validiert werden, gegen die bestehenden JSON Schema Definitionen validiert werden. Im Folgenden wird gezeigt wie multilinguale Strings und Typen gegen JSON Schema Definitionen validiert werden.
 
 \subsection{Multilinguale Strings}
 \label{graphql:validation:multi}
 Multilinguale Strings werden im GraphQL Schema als ein eigens definierter Scalar Typ behandelt.
-Dieser heisst \lstinline|LangJson| und besitzt wie für Scalar Typen üblich die beiden Funktionen \lstinline|self.coerce_input| und \lstinline|self.coerce_result|. In beiden dieser Methoden wird der eingehende bzw. ausgehende Datensatz mithilfe des Validators \lstinline|Languages|~\ref{lst:multilang-validation} geprüft. 
+Dieser heißt \lstinline|LangJson| und besitzt wie für Scalar Typen üblich die beiden Funktionen \lstinline|self.coerce_input| und \lstinline|self.coerce_result|. In beiden dieser Methoden wird der eingehende bzw. ausgehende Datensatz mithilfe des Validators \lstinline|Languages|~\ref{lst:multilang-validation} geprüft. 
 Bei der Prüfung wird die Schnittmenge zwischen den Schlüsseln des zu validierenden Objekts als Array und den im Enum aufgelisteten verfügbaren Ländercodes als Array gebildet. Wenn diese leer ist beinhaltet das übergebene Objekt keine valide Sprache und ist damit ungültig. Sollte die Schnittmenge nicht leer sein, wird geprüft ob die Differenzmenge von den Schlüsseln des Objektes, ohne die verfügbaren Ländercodes nicht leer ist. Ist das der Fall wurden Schlüssel angegeben, die nicht kompatibel zu den vorhandenen Ländercodes ist. 
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Validator Klasse zum Prüfen, ob der übergebene Parameter die Beschaffenheit eines multilingualen Strings aufweist. \lstinline|/graphql/validators/languages.rb|}, label={lst:multilang-validation}]
@@ -554,7 +690,7 @@ end
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\linewidth]{snippets/multilang-validation.pdf}
-    \caption{Beispiel für die Validierung von Multilingualen String in JSON Form}
+    \caption{Beispiel für die Validierung von Multilingualen Strings}
     \label{req:typesafe:example}
 \end{figure}
 
@@ -562,7 +698,7 @@ end
 \ \\
 
 \subsection{JSON Schema}
-Die Validation von im Schema nicht abbildbaren Typen gegen vorhandene JSON Schema funktioniert genau so wie bei multilingualen Strings. Der einzige unterschied ist der verwendete Validator. Beim Aufruf der \lstinline|validate!| Funktion werden als Parameter der JSON Schema Name und das zu validierende Objekt übergeben. Beim laden der JSON Schema Definition und Validieren wurde sich das bereits bestehende System zu Nutze gemacht, indem der JsonSchemaHelpers eingebunden wurde und dessen Funktion \lstinline|json_schema_validate| verwendet. 
+Die Validation von im Schema nicht abbildbaren Typen gegen vorhandene JSON Schema funktioniert genau wie bei multilingualen Strings. Der einzige Unterschied ist der verwendete Validator. Beim Aufruf der \lstinline|validate!| Funktion werden der Name des JSON Schemas und das zu validierende Objekt  als Parameter übergeben. Beim laden der JSON Schema Definition und Validieren wurde sich das bereits bestehende System zu Nutze gemacht, indem der JsonSchemaHelpers eingebunden wurde und dessen Funktion \lstinline|json_schema_validate| verwendet. 
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Validator Klasse zum Prüfen, ob der übergebene Parameter die Beschaffenheit des JSON Schema aufweist. \lstinline|/graphql/validators/graphql_validator.rb|}, label={lst:jsonschema-validation}]
 class GraphqlValidator
@@ -580,9 +716,46 @@ end
 \section{Benchmark Test}
 TODO: Benchmark Test mit Marcus besprechen. Sitespeed.io keine gute Idee!
 \section{Unerwartete Hindernisse}
+Im Laufe der Migration traten einige unerwartete Hindernisse bei der Nutzung von Codegeneratoren auf. Manche der Hindernisse ließen sich durch Nachfragen beim Entwickler und Erstellen eines Github Issues auflösen.
+
 \subsection{Fehlerhafte Codegenerierung der Angular Services}
-\subsection{Fehlerhafte Codegenerierung der Typescript Interfaces}
+Beim Testen von Angular Komponenten, die generierte Angular Services injiziert bekamen, war der Zugriff auf \lstinline|this.apollo| undefiniert~\cite{github-apollo-undefined}. Dies resultierte daraus, dass in der Testumgebung die Apollo Abhängigkeiten beim injizieren eines Services nicht richtig eingebunden wurden. Die Klasse \lstinline|Query| aus dem Apollo Framework bekam im Konstruktor nicht den Zugriff auf die Apollo Instanz übergeben. Somit schlugen alle Tests fehl, die einen aus GraphQL generierten Angular Service nutzten.
+
+Die Lösung dieses Problems, war das manuelle übergeben der Apollo Instanz an die Query Klasse durch injizieren von Apollo in die generierten Services und übergeben der Instanz im Aufruf des Konstruktors der Oberklasse (siehe Listing~\ref{lst:super-call}).
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Injizieren von Apollo in generierten Angular Service und übdergeben der Apollo Instanz an den Konstruktors der Oberklasse}, label={lst:super-call}]
+export class AdminListProjectsGQL extends Apollo.Query<
+  AdminListProjectsQuery,
+  AdminListProjectsQueryVariables
+> {
+	document = AdminListProjectsDocument;
+	constructor(apollo: Apollo.Apollo) {
+		super(apollo);
+	}
+}
+\end{lstlisting}
+
+\subsection{Unmöglichkeit der Modellierung mancher Typen}
+Die Typdefinitionen in SDL
 
 \chapter{Fazit}
 \section{Erreichte Ziele}
+Typsicherer als vorher durch Validierung von ausgehenden Daten
+Paginierung
+Sortieren Filtern Sprachauswahl
+Sicherheit durch halten der Querys auf dem Server
+Migration der Tests
+Underfetching -> beziehung anzahl an coderessourcen in tabllen sicht
+overfetching -> nur noch die daten die benötigt werden
+Schnelleres erstellen neuer sichten durch weniger schritte
+
 \section{Ausblick}
+Batching
+Client Cache
+ruby mit typen
+
+%\subsection{Ruby ohne Typangaben}
+%Umfangreiches Testen von untypisiertem Rubycode kann zwar das Gefühl von Sicherheit vermitteln, dieses hängt allerdings von der Fähigkeit des Programmierers ab, alle möglich Fälle die eintreten können mit den Tests abzudecken.
+%rest-projects-list-huge.png
+%Eine alternative Idee dazu wäre die Nutzung eines von vielen Rubygems wie %\emph{typesafe-ruby}~\cite{typesafe-ruby}
+%oder \emph{sorbet}~\cite{sorbet} die versprechen Rubycode typsicher zu machen. Diese Tools werden sich im aktuellen System nicht zu Nutze gemacht.

@@ -94,9 +94,12 @@ Ressource und ihre Fremdbeziehungen unterscheiden.
         Create & \inlinec{INSERT} & \inlinec{POST} & \inlinec{/projects} & Erstellen eines Projekts \\ \hline
         Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects} & Abrufen aller Projekte \\ \hline
         Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- users} & Abrufen aller Nutzer eines Projekts
+        \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/users/:id/- friends} & Abrufen aller Freunde eines Nutzers \\ \hline
         Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
         Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
-        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- user} & Abrufen des Nutzer eines Projekts \\ \hline
+
     \end{tabular}
     \vspace{5pt}
     \caption{Einheitliche Schnittstellen}
@@ -109,8 +112,7 @@ Insbesondere treten im Kontext der Arbeit zwei für REST bekannte Mängel auf, d
 
 \begin{description}
 	\item[Overfetching\label{rest:overfetching}] \ \\
-	Aufgrund der einheitliche Komponentenschnittstelle \ref{sec:basics:restapi:interface} gibt es für Projekte genau eine Route die alle Attribute zu einem bestimmten
-	Projekt ungekürzt liefert. Wird nur ein Teil der Attribute benötigt sind weitere Angaben nutzlos und damit ineffizient.
+	Aufgrund der einheitliche Komponentenschnittstelle gibt es für eine Liste aller Projekte genau eine Route \lstinline|GET /projects| die zu jedem Projekt alle Attribute ungekürzt liefert. Wird nur ein Teil der Attribute benötigt sind weitere Angaben nutzlos und damit ineffizient.
 	Dennoch werden sie von der API mitgeliefert.
 	\item[Underfetching\label{rest:underfetching}] \ \\
 	Ein weiteres Problem ist das mehrere Anfragen für Daten die in Beziehung zueinander stehen benötigt werden. Es wird oft vom N+1 Query Problem gesprochen, welches sich in diesem Kontext auf Anfragen an die Web API bezieht und nicht auf Datenbankabfragen.
@@ -208,7 +210,7 @@ Es wird also mindestens eine leeres Array erwartet, aber keinesfalls Null oder e
 
 Um Queries im GraphQL Schema zugreifbar zu machen werden diese auf oberster Ebene des Schema definiert. Diese sind dann auch die Einstiegspunkte für alle Anfragen die der GraphQL Service behandeln soll.
 
-\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Schema}, label={fig:basics:graphql:7}]
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Schema}, label={fig:basics:graphql:schema}]
 schema {
   query: Query
   mutation: Mutation
@@ -227,7 +229,7 @@ query Projects{
 }
 \end{lstlisting}
 
-Der aufgeführte Code~\fullref{fig:basics:graphql:5} verkörpert eine GraphQL Query mit dem Bezeichner \emph{Projects},
+Das aufgeführte Listing~\fullref{fig:basics:graphql:5} verkörpert eine GraphQL Query mit dem Bezeichner \emph{Projects},
 die für alle vorhandenen Projekte die Felder \emph{id} und \emph{name} zurück gibt. 
 Aus dieser Query lässt sich nicht der Rückgabewert von projects erschließen.
 Diese Information erhält man als Entwickler lediglich aus den Query Definitionen.
@@ -331,41 +333,45 @@ bei der Konvertierung zu Javascript Code~\cite{typescript-github-specification}.
 Die im folgenden Beispiel deklarierte Funktion gibt die zweite Hälfte eines übergebenen \emph{strings} zurück.
 Der erste Aufruf der Funktion führt zu einem Fehler beim Kompilieren. Es wird also direkt darauf hingewiesen, dass es sich um ein fehlerhaften Code handelt.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/typescript-example.txt}
-    \caption{Typescript Funktion mit typisiertem Parameter}
-    \label{fig:basics:typescript:1}
-\end{figure}
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Typescript Funktion mit typisiertem Parameter}, label={fig:basics:typescript:1}]
+function printSecondHalf(s: string) {
+  return s.substr(s.length/2);
+}
+printSecondHalf(123);     // Error bereits zur Kompilierungszeit
+printSecondHalf("hello"); // Ok - "llo"
+\end{lstlisting}
 
 Nach der Kompilierung sind alle Typinformationen entfernt worden, wodurch erst durch einen fehlerhaften Aufruf
 ein \emph{TypeError} auftritt.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/typescript-example-compiled.txt}
-    \caption{Zu Javascript kompilierte Funktion}
-    \label{fig:basics:typescript:2}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Zu Javascript kompilierte Funktion}, label={fig:basics:typescript:2}]
+function printSecondHalf(s) {
+  return s.substr(s.length/2);
+}
+printSecondHalf(123);     // Error zur Laufzeit - TypeError: s.substr is not a function
+printSecondHalf("hello"); // Ok - "llo"
+\end{lstlisting}
 
 Nehmen wir an, wir möchten den in Kapitel GraphQL~\fullref{sec:basics:graphql} erstellten Typen \emph{Project} nutzen,
 um eine Funktion zu schreiben, die einen neuen \emph{Project} Datensatz an den Server schickt. Um diesen Typen clientseitig nutzen zu können,
-können wir ein äquivalentes Typescript Interface erstellen oder eines generieren lassen (dazu später mehr).
+können wir ein äquivalentes Typescript Interface erstellen oder eines generieren lassen.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/typescript-project-interface.txt}
-    \caption{Typescript Project Interface}
-    \label{fig:basics:typescript:3}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Typescript Project Interface}, label={fig:basics:typescript:3}]
+interface Project {
+  id: string,
+  name: string
+}
+\end{lstlisting}
 
 Wollen wir jetzt einen neuen Datensatz an den Server schicken, können wir das Interface nutzen. Jedoch ist nur der Name des neuen Datensatzes bekannt,
 die \emph{id} ist eine \emph{uuid} und wird serverseitig generiert. Also wollen wir die \emph{id} beim clientseitigen Erstellen außen vorlassen.
 Dafür bietet Typescript unter einer Vielzahl von Werkzeugen, die allgemeine Typtransformationen ermöglichen~\cite{typescript-utility-types},
 \emph{Omit<T,K>}, das alle Attribute von \emph{T} nimmt und anschließend \emph{K} aus den Attributen entfernt.
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/typescript-post-project.txt}
-    \caption{Transformierter \emph{Project} Typ}
-    \label{fig:basics:typescript:4}
-\end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Transformierter \emph{Project} Typ}, label={fig:basics:typescript:4}]
+type PostProject = Omit<Project, 'id'>; // Äquivalent zu Pick<Project, 'name'>
+\end{lstlisting}
 
 Der Typ \emph{PostProject} beinhaltet also alle Felder von \emph{Project}, allerdings ohne \emph{id}. Das Gegenstück zu \emph{Omit<T,K>} wäre \emph{Pick<T,K>},
 welches aus dem Typ \emph{T} nur die Attribute \emph{K} nimmt. Mithilfe dieser Typen lässt sich eine typsichere Methode entwickeln,
@@ -376,20 +382,32 @@ um einen neuen Datensatz an den Server schicken zu können.
     \caption{Typen und Methode zum Abschicken eines \emph{Project}-Datensatzes}
     \label{fig:basics:typescript:5}
 \end{figure}
+\begin{lstlisting}[language=Javascript,float=h!,caption={Typen und Methode zum Abschicken eines \emph{Project}-Datensatzes}, label={fig:basics:typescript:5}]
+interface ProjectResponse {
+  project: Project,
+  error: string | null
+}
+const createProjectRecord = async (p: PostProject):Promise<ProjectResponse> => {
+  return xmlhttp.postProject(p);
+}
 
+const newRecord: PostProject = {
+  name: "esqulino"
+};
+\end{lstlisting}
+const response: ProjectResponse = await createProjectRecord(newRecord);
 Die Methode \inlinec{createProjectRecord} erwartet also ein \inlinec{Project} ohne \inlinec{id} als Parameter und gibt ein \inlinec{ProjectResponse} wieder.
 Der Code im Methodenrumpf ist hierbei nur Pseudocode. Der Typ \inlinec{ProjectResponse} beinhaltet neben dem \inlinec{Project} auch ein \inlinec{error} Feld,
 welches in dem Kontext angibt, ob ein neuer Datensatz auf dem Server erstellt werden konnte oder nicht.
 Desweiteren gibt es noch \inlinec{Exclude<T,U>} wodurch sich von T diejenigen Typen ausschließen lassen,
 die U zugeordnet werden können. Gäbe es mehrere \emph{"Response"}-Typen, ließe sich das Feld extrahieren,
-über welches auf die Datensätze zugegriffen werden kann (siehe~\fullref{fig:basics:typescript:6})(dazu später mehr).
+über welches auf die Datensätze zugegriffen werden kann (siehe Listing~\ref{fig:basics:typescript:6})(dazu später mehr).
 
-\begin{figure}[h]
-    \lstinputlisting{snippets/basics/typescript-datakey.txt}
-    \caption{Exclude zum Exkludieren von Schlüsseln}
-    \label{fig:basics:typescript:6}
-\end{figure}
-
+\begin{lstlisting}[language=Javascript,float=h!,caption={Exclude zum Exkludieren von Schlüsseln}, label={fig:basics:typescript:6}]
+type DataKey = Exclude<keyof ProjectResponse, "error">;
+const key: DataKey = "project";
+const project: Project = response[key];
+\end{lstlisting}
 % Definition eines Schemas mit Typescript Interfaces, Bsp. Project Tabelle
 % pick operator / exclude operator
 
@@ -399,7 +417,7 @@ JSON-Schema ist ein Vokabular, mit dem JSON-Dokumente  annotiert und validiert w
 Es wird zur Überprüfung genutzt, ob JSON Objekte die im JSON-Schema beschriebene Struktur einhalten.
 
 Der Vorgänger von JSON-Schema war das XML-Schema.
-XML-Schema erlaubte es, das allgemeine Format eines XML-Dokuments zu definieren,
+Es erlaubt das Format eines XML-Dokuments zu definieren,
 d.h. welche Elemente erlaubt sind, die Anzahl und Reihenfolge ihres Auftretens, welchen Datentyp sie haben sollen usw.
 Seit 2006 gibt es einen neuen Akteur auf dem Gebiet der Datenformate, JavaScript Object Notation (JSON).
 Die JSON Daten sind viel kleiner als ihr XML-Gegenstück und ihre Instanzen sind gültige JavaScript-Objekte, was es interessant für Webentwickler macht, da sie beim Laden von
@@ -421,7 +439,7 @@ Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angab
 }
 \end{lstlisting}
 
-Das passendes Schema dazu sieht folgendermaßen aus~\fullref{fig:basics:jsonschema:2}.
+Das passendes Schema dazu sieht folgendermaßen aus (siehe Listing~\fullref{fig:basics:jsonschema:2}).
 
 \begin{lstlisting}[language=Javascript,float=h!,caption={JSON Schema zu Projekt Objekt}, label={fig:basics:jsonschema:2}]
 {
@@ -478,7 +496,7 @@ Die hier verwendeten Schlüsselwörter haben folgende Bedeutung:
     \item \emph{36: required}: Da dieses Schlüsselwort ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
 \end{itemize}
 
-Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt~\fullref{fig:basics:jsonschema:2}.
+Nehmen wir an ein Entwickler hat ein fehlerhaftes Projekt wie folgt erstellt (siehe Listing~\fullref{fig:basics:jsonschema:2}).
 
 \begin{lstlisting}[language=Javascript,float=h!,caption={Ein fehlerhaftes Projekt}, label={fig:basics:jsonschema:2}]
 {
@@ -513,7 +531,7 @@ Somit ist es unabhängig welche Programmiersprache der Server nutzt~\cite{json-s
 \section{Postgres jsonb und hstore Typen}
 \label{sec:basics:postgres}
 Das PostgreSQL Datenbanksystem kennt über den SQL-Standard hinaus die Datentypen \emph{hstore} und \emph{jsonb} zur Speicherung von JSON Strukturen oder assoziativen Arrays, die üblicherweise in NoSQL-Systemen gespeichert werden.
-Diese beiden Typen werden im Kontext der Arbeit für Objekte genutzt, die sich nur mit sehr großem Aufwand und zukünftigen Migrationen in ein Datenbankschema gießen lassen. Einer dieser Typen ist ein Objekt, das ein multilingualen String darstellen soll~\ref{fig:basics:jsonschema:3}. 
+Diese beiden Typen werden im Kontext der Arbeit für Objekte genutzt, die sich nur mit sehr großem Aufwand und zukünftigen Migrationen in ein Datenbankschema gießen lassen. Einer dieser Typen ist ein Objekt, das in Listing~\ref{fig:basics:jsonschema:3} ein multilingualen String darstellen soll. 
 
 \begin{lstlisting}[language=Javascript,float=h!,caption={Multilinguales Objekt}, label={fig:basics:jsonschema:3}]
 {
@@ -522,7 +540,7 @@ Diese beiden Typen werden im Kontext der Arbeit für Objekte genutzt, die sich n
 }
 \end{lstlisting}
 
-Zukünftig soll es möglich sein weitere Sprachen zu ermöglichen. Würde man dieses Objekt als Tabelle definieren, müsste bei zukünftigen Änderungen wie das Hinzufügen oder Entfernen einer Sprache eine Datenbankmigration durchgeführt werden. Um diese Objekte flexibel zu halten wurde sich für eine Speicherung als hstore entschieden.
+Zukünftig sollen weitere Sprachen ermöglicht werden. Würde man dieses Objekt als Tabelle definieren, müsste bei Hinzufügen oder Entfernen einer Sprache eine Rails Migration durchgeführt werden, um das Datenbankschema anzupassen. Damit diese Objekte flexibel gehalten werden können wurde sich für eine Speicherung als hstore entschieden.
 
 Hstore differenziert sich von jsonb, indem es nur eine Ebene von Schlüssel-Werte-Paaren ohne weitere Verschachtelungen zulässt und diese als String abspeichert. Erst durch die Einführung von jsonb wurde aus Postgres auch eine dokumentenorientierte Datenbank.
 Denn im Gegensatz zu hstore können jsonb Datensätze beliebig tief verschachtelt werden und
@@ -542,7 +560,8 @@ auf SQL Ebene einen hstore oder jsonb Datensatz fast wie ein Hash in Ruby oder e
         \inlinec{hstore || hstore} & konkateniert hstores & \inlinec{'a=>b, c=>d'::hstore || 'c=>x, d=>q'::hstore} & \inlinec{"a"=>"b", "c"=>"x", "d"=>"q"}  \\ \hline
         \inlinec{hstore ? text} & prüft ob hstore Schlüssel beinhaltet & \inlinec{'a=>1'::hstore ? 'a'} & \inlinec{t}  \\ \hline
         \inlinec{hstore - text} & entfernt Schlüssel des linken Operanden & \inlinec{'a=>1, b=>2, c=>3'::hstore - 'b'::text} & \inlinec{"a"=>"1", "c"=>"3"}  \\ \hline
-        \inlinec{hstore - hstore } & entfernt passende Schlüssel/Wert-Paare vom linken Operanden & \inlinec{'a=>1, b=>2, c=>3'::hstore - 'a=>4, b=>2'::hstore} & \inlinec{"a"=>"1", "c"=>"3"}  \\ \hline
+       
+        \inlinec{slice(hstore, text[])} & extrahiert einen Teil aus einem hstore & \inlinec{slice('a=>1,b=>2,c=>3' ::hstore, ARRAY['b','c','x']) } & \inlinec{"b"=>"2", "c"=>"3"}  \\ \hline
     \end{tabular}
     \vspace{5pt}
     \caption{Beispiele für bereitgestellte Hstore Operationen}

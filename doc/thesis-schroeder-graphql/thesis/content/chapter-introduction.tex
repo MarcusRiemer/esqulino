@@ -7,10 +7,10 @@
 \chapter{Einleitung}
 \label{sec:introduction}
 
-Ziel dieser Arbeit ist die Evaluierung von Verfahren, welche eine sichere, effiziente und leichte Nutzung der Kommunikationsschnittstellen
-zwischen Client, Server und Datenbank ermöglichen sollen und wenn möglich die Integration eines dieser Verfahren
-in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe~\fullref{sec:basics}),
-In den nächsten Kapiteln sind die Probleme des derzeitigen Verfahrens und die Anforderungen an die Nutzung der Kommunikationsschnittstellen näher beschrieben.
-%Das im Rahmen dieser Arbeit zu entwickelnde Tool soll sich in BlattWerkzeug integrieren und die aktuellen Kommunikationsschnittstellen wenn möglich ersetzen.
-
+Ziel dieser Arbeit ist die Migration von GraphQL in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug (siehe~\fullref{sec:basics}), mit anschließender Evaluierung, ob die Migration der Aufwand Wert ist.
+GraphQL ist eine Abfragesprache und serverseitige Runtime für APIs, die dem Nutzer nur diejenigen Daten zur Verfügung stellt, die er wirklich braucht. Es wurde 2015 von Facebook als eine laufende Arbeit veröffentlich~\cite{graphql-first-commit} und im November 2018 von Facebook in die neu gegründete GraphQL Foundation unter dem Dach der gemeinnützigen Linux Foundation ausgegliedert. Es wurde schnell populär, als neue Unternehmen und Hobbyisten begannen, es auszubauen. Schließlich wurde die Technologie von größeren Unternehmen übernommen, beginnend mit GitHub im Jahr 2016 und später von Twitter, Yelp, The New York Times, Airbnb und anderen~\cite{graphql-users}.
+Im Kern dieser Arbeit wird eine vorhandene REST-artige Schnittstelle durch eine neuere Technologie (GraphQL) weitestgehend ersetzt. Hinzukommend werden alle Berührungspunkte der REST-artigen Schnittstelle ebenfalls auf die Nutzung von GraphQL angepasst. Dazu gehören neben der naheliegenden Kommunikationsschnittstelle auf dem Server auch clientseitiger Implementierungen die durch die Migration von GraphQL angepasst werden müssen. 
+Nachfolgend werden Grundlagen beschrieben, deren Kenntnis im späteren Verlauf vorausgesetzt ist, sowie das aktuelle System bewertet und Anforderungen an ein neues System formuliert. Anschließend wird die Implementierung von GraphQL
+erläutert und ein Fazit gezogen, ob es eine lohnenswerte Migration für Blattwerkzeug ist.
+ 
 
