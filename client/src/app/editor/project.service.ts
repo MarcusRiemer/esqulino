@@ -1,26 +1,27 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 
 import { BehaviorSubject, Observable } from "rxjs";
-import {
-  catchError,
-  delay,
-  first,
-  filter,
-  tap,
-  map,
-  share,
-} from "rxjs/operators";
+import { catchError, delay, filter, tap, map, share } from "rxjs/operators";
 
 import { ServerApiService } from "../shared/serverdata/serverapi.service";
-import {
-  Project,
-  ProjectDescription,
-  ProjectFullDescription,
-} from "../shared/project";
+import { Project, ProjectFullDescription } from "../shared/project";
 import { ResourceReferencesService } from "../shared/resource-references.service";
 
+import {
+  FullProjectQuery,
+  FullProjectGQL,
+  DestroyProjectGQL,
+  UpdateProjectGQL,
+} from "../../generated/graphql";
+
 export { Project, ProjectFullDescription };
+
+export function fromGraphQL(descInQuery: FullProjectQuery) {
+  const descIn = descInQuery.projects.nodes[0];
+  const toReturn: ProjectFullDescription = descIn;
+
+  return toReturn;
+}
 
 /**
  * Wraps access to a single project, which is deemed to be "active"
@@ -38,15 +39,12 @@ export class ProjectService {
    */
   private _subject: BehaviorSubject<Project>;
 
-  /**
-   * @param _http To make HTTP requests
-   * @param _server To know where the requests should go
-   * @param _resourceReferences The currently available resources
-   */
   constructor(
-    private _http: HttpClient,
     private _server: ServerApiService,
-    private _resourceReferences: ResourceReferencesService
+    private _resourceReferences: ResourceReferencesService,
+    private _fullProject: FullProjectGQL,
+    private _destroyProject: DestroyProjectGQL,
+    private _updateProject: UpdateProjectGQL
   ) {
     // Create a single subject once and for all. This instance is not
     // allowed to changed as it is passed on to every subscriber.
@@ -86,11 +84,13 @@ export class ProjectService {
 
     // Build the HTTP-request
     const url = this._server.getProjectUrl(slugOrId);
-    this._httpRequest = this._http.get<ProjectFullDescription>(url).pipe(
-      first(),
-      map((res) => new Project(res, this._resourceReferences)),
-      share() // Ensure that the request is not executed multiple times
-    );
+    this._httpRequest = this._fullProject
+      .fetch({ id: slugOrId }, { fetchPolicy: "network-only" })
+      .pipe(
+        map((graphQlDoc) => fromGraphQL(graphQlDoc.data)),
+        map((res) => new Project(res, this._resourceReferences)),
+        share() // Ensure that the request is not executed multiple times
+      );
 
     // And execute it by subscribing to it.
     this._httpRequest.subscribe(
@@ -146,12 +146,10 @@ export class ProjectService {
    */
   storeProjectDescription(proj: Project) {
     const desc = proj.toUpdateRequest();
-    const url = this._server.getProjectUrl(proj.slug);
 
-    const toReturn = this._http.put<ProjectDescription>(url, desc).pipe(
+    const toReturn = this._updateProject.mutate(desc).pipe(
       catchError(this.passThroughError),
       delay(250),
-      tap((desc) => proj.updateDescription(desc)),
       tap((_) => proj.markSaved())
     );
 
@@ -162,8 +160,7 @@ export class ProjectService {
    * Asks the server to delete the project with the given id.
    */
   deleteProject(projectId: string) {
-    const url = this._server.getProjectUrl(projectId);
-    return this._http.delete(url);
+    return this._destroyProject.mutate({ id: projectId }).toPromise();
   }
 
   private passThroughError(error: Response) {

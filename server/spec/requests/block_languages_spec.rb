@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe BlockLanguagesController, type: :request do
   before(:each) { create(:user, :guest) }
 
-  describe 'GET /api/block_languages' do
+  describe 'GraphQL AdminListBlockLanguages' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
     it 'lists nothing if nothing is there' do
       get "/api/block_languages"
       send_query(query_name: "AdminListBlockLanguages")
@@ -20,7 +23,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)['data']['blockLanguages']
-    
+
       expect(json_data['nodes'].length).to eq 1
       expect(json_data['totalCount']).to eq 1
         # Description file can't be used, because graphql query solved the overfetching problem. Only the fields are requested which are used.
@@ -104,42 +107,33 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'GET /api/block_language/:blockLanguageId' do
+  describe 'GraphQL AdminEditBlockLanguage' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
+
     it 'finds a single block language by ID' do
       b = FactoryBot.create(:block_language)
       send_query(query_name: "AdminEditBlockLanguage",variables:{id: b.id})
 
       expect(response).to have_http_status(200)
 
-      json_data = JSON.parse(response.body)['data']['singleBlockLanguage']
+      json_data = JSON.parse(response.body)
+      block_lang_node = json_data['data']['blockLanguages']['nodes'][0]
 
-      # multiple fields are [], but
-      expect(json_data.except("generated","localGeneratorInstructions")).to validate_against "BlockLanguageDescription"
+      expect(block_lang_node["id"]).to eq b.id
     end
 
-    it 'finds a single block language by slug' do
-      b = FactoryBot.create(:block_language)
-      send_query(query_name: "AdminEditBlockLanguage",variables:{id: b.slug})
-
-      expect(response).to have_http_status(200)
-
-      json_data = JSON.parse(response.body)['data']['singleBlockLanguage']
-
-      expect(json_data
-                 .except("localGeneratorInstructions","sidebars","editorBlocks","editorComponents","rootCssClasses")
-      ).to validate_against "BlockLanguageListItemDescription"
-    end
-
-    it 'responds with 404 for non existing languages' do
+    it 'non existing languages' do
       send_query(query_name: "AdminEditBlockLanguage",variables:{id: "0"})
 
       expect(response).to have_http_status(200)
       json_data = JSON.parse(response.body)
       expect(json_data["errors"]).not_to eq []
     end
-  end
+ end
 
-  describe 'POST /api/block_languages' do
+  describe 'GraphQL CreateBlockLanguage' do
     it 'Creates a new, empty block language' do
       g = FactoryBot.create(:grammar)
       params = {
@@ -211,124 +205,76 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(json_data.fetch('errors', [])).to eq []
       expect(response.status).to eq(200)
 
-      # can not be validated against BlockLanguageDescription, because graphql mutation fixed the overfetching problem.
-      # The client only needs the id and errors as return
-      #expect(json_data).to validate_against "BlockLanguageDescription"
+      expect(BlockLanguage.count).to eq 1
 
-      send_query(query_name: "AdminListBlockLanguages")
-      id = JSON.parse(response.body)['data']['blockLanguages']["nodes"][0]["id"]
-
-      send_query(query_name: "AdminEditBlockLanguage",variables:{id: id})
-      json_data = JSON.parse(response.body)['data']['singleBlockLanguage']
-
-      expect(json_data.except("id", "createdAt", "updatedAt","generated","localGeneratorInstructions","slug")).to eq block_lang_model
-    end
-
-    describe 'PUT /api/block_languages/:id' do
-      it 'Updating basic properties' do
-        orig_block_lang = FactoryBot.create(:block_language)
-        upda_block_lang = {
-          "id" => orig_block_lang.id,
-          "name" => "Upda",
-          "sidebars" => [
-            {
-              "type" => "fixedBlocks",
-              "caption" => "Spec Blocks",
-              "categories" => [
-                {
-                  "categoryCaption" => "first",
-                  "blocks" => [
-                    {
-                      "defaultNode" => {
-                        "language" => "spec",
-                        "name" => "block"
-                      },
-                      displayName: "Block #1",
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "editorComponents" => [],
-          "editorBlocks" => [
-            {
-              "describedType" => {
-                "languageName" => "spec",
-                "typeName" => "block"
-              },
-              "visual" => []
-            }
-          ]
-        }
-        send_query(query_name: "UpdateBlockLanguage",variables:upda_block_lang)
-
-
-        if (not response.body.blank?) then
-          json_data = JSON.parse(response.body)
-          expect(json_data.fetch('errors', [])).to eq []
-        end
-
-        expect(response.status).to eq(200)
-
-        orig_block_lang.reload
-        expect(orig_block_lang.name).to eq upda_block_lang['name']
-
-        # For whatever reason the order of things changes somewhere and RSpec
-        # freaks out because the order of things in a hash changes. We do some very
-        # basic poking to mitigate this ...
-        expect(orig_block_lang.model["sidebars"][0]["blocks"]).to eq upda_block_lang["sidebars"][0]["blocks"]
-        expect(orig_block_lang.model["editorBlocks"][0]).to eq upda_block_lang["editorBlocks"][0]
-      end
-
-      #became obsolete because of partial updating
-      xit 'Update with invalid empty model' do
-        original = FactoryBot.create(:block_language)
-
-        # Create params to change name and model
-        params_update = FactoryBot
-                          .attributes_for(:block_language,
-                                          name: "Updated empty",
-                                          model: Hash.new)
-                          .transform_keys { |k| k.to_s.camelize(:lower) }
-
-        # Merge the model parameters into the actual update and remove it
-        # afterwards. This results in a theoretically valid request
-        params_update_req = params_update.merge(params_update["model"])
-        params_update_req.delete("model")
-        send_query(query_name: "UpdateBlockLanguage",variables:params_update_req)
-
-        expect(response.status).to eq(400)
-
-        # Ensure that nothing has changed
-        refreshed = BlockLanguage.find(original.id)
-        expect(original.name).to eq refreshed.name
-        expect(refreshed.model).to_not be nil
-      end
-
-      it 'Update without localGeneratorInstructions' do
-        original = FactoryBot.create(:block_language, :auto_generated_blocks)
-        expect(original.model["localGeneratorInstructions"]).to_not be nil
-
-        # Parameters without localGeneratorInstructions
-        params_update = original.api_attributes
-        params_update_req = params_update.merge(params_update["model"])
-        params_update_req.delete("localGeneratorInstructions")
-
-        send_query(query_name: "UpdateBlockLanguage",variables:params_update_req)
-
-        expect(response.status).to eq(200)
-
-        # Ensure that nothing has changed
-        refreshed = BlockLanguage.find(original.id)
-        expect(original.name).to eq refreshed.name
-        expect(refreshed.model).to_not be nil
-        expect(refreshed.model["localGeneratorInstructions"]).to be nil
+      b = BlockLanguage.first
+      block_lang_model.each do |key,value|
+        key = key.underscore
+        expect(b[key]).to eq(value), "Attribute '#{key}' didn't match"
       end
     end
   end
 
-  describe 'DELETE /api/block_language/:blockLanguageId' do
+  describe 'GraphQL UpdateBlockLanguage' do
+    it 'Updating basic properties' do
+      orig_block_lang = FactoryBot.create(:block_language)
+      upda_block_lang = {
+        "id" => orig_block_lang.id,
+        "name" => "Upda",
+        "sidebars" => [
+          {
+            "type" => "fixedBlocks",
+            "caption" => "Spec Blocks",
+            "categories" => [
+              {
+                "categoryCaption" => "first",
+                "blocks" => [
+                  {
+                    "defaultNode" => {
+                      "language" => "spec",
+                      "name" => "block"
+                    },
+                    "displayName" => "Block #1",
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "editorComponents" => [],
+        "editorBlocks" => [
+          {
+            "describedType" => {
+              "languageName" => "spec",
+              "typeName" => "block"
+            },
+            "visual" => []
+          }
+        ]
+      }
+      send_query(query_name: "UpdateBlockLanguage",variables:upda_block_lang)
+
+
+      if (not response.body.blank?) then
+        json_data = JSON.parse(response.body)
+        expect(json_data.fetch('errors', [])).to eq []
+      end
+
+      expect(response.status).to eq(200)
+
+      orig_block_lang.reload
+      upda_block_lang.each do |key,value|
+        key = key.underscore
+        expect(orig_block_lang[key]).to eq(value), "Attribute '#{key}' didn't match"
+      end
+    end
+  end
+
+
+  describe 'GraphQL DestroyBlockLanguage' do
+    let(:user) { create(:user, :admin) }
+    before(:each) { set_access_token(user) }
+
     it 'removes unreferenced language' do
       b = FactoryBot.create(:block_language)
 
@@ -336,11 +282,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       expect(response.status).to eq(200)
 
-      send_query(query_name: "AdminListBlockLanguages")
-
-      expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 0
-      expect(JSON.parse(response.body)['data']['blockLanguages']['totalCount']).to eq 0
+      expect(BlockLanguage.count).to eq 0
     end
 
     it 'keeps referenced language' do

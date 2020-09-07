@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 3fdf9b83-08a3-4792-96a8-d18cce420985
@@ -19,46 +19,47 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "move", "columns": [{"name": "id", "type": "INTEGER",
-    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
-    "name_de", "type": "STRING", "index": 1, "primary": false, "not_null": false,
-    "dflt_value": null}, {"name": "name_en", "type": "STRING", "index": 2, "primary":
-    false, "not_null": false, "dflt_value": null}, {"name": "name_fr", "type": "STRING",
-    "index": 3, "primary": false, "not_null": false, "dflt_value": null}], "foreign_keys":
-    []}, {"name": "move_to_type", "columns": [{"name": "move_id", "type": "INTEGER",
-    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
-    "type_id", "type": "INTEGER", "index": 1, "primary": true, "not_null": false,
-    "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "type", "to_column":
-    null, "from_column": "type_id"}]}, {"references": [{"to_table": "move", "to_column":
-    "id", "from_column": "move_id"}]}]}, {"name": "pokemon", "columns": [{"name":
-    "id", "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
-    null}, {"name": "name_de", "type": "STRING", "index": 1, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "name_en", "type": "STRING", "index": 2,
-    "primary": false, "not_null": false, "dflt_value": null}, {"name": "name_fr",
-    "type": "STRING", "index": 3, "primary": false, "not_null": false, "dflt_value":
-    null}, {"name": "evolve_id", "type": "INTEGER", "index": 4, "primary": false,
-    "not_null": false, "dflt_value": null}], "foreign_keys": []}, {"name": "pokemon_to_move",
-    "columns": [{"name": "pokemon_id", "type": "INTEGER", "index": 0, "primary": true,
-    "not_null": false, "dflt_value": null}, {"name": "move_id", "type": "INTEGER",
-    "index": 1, "primary": true, "not_null": false, "dflt_value": null}], "foreign_keys":
-    [{"references": [{"to_table": "move", "to_column": "id", "from_column": "move_id"}]},
-    {"references": [{"to_table": "pokemon", "to_column": "id", "from_column": "pokemon_id"}]}]},
-    {"name": "pokemon_to_type", "columns": [{"name": "pokemon_id", "type": "INTEGER",
-    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
-    "type_id", "type": "INTEGER", "index": 1, "primary": true, "not_null": false,
-    "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "type", "to_column":
-    "id", "from_column": "type_id"}]}, {"references": [{"to_table": "pokemon", "to_column":
-    "id", "from_column": "pokemon_id"}]}]}, {"name": "type", "columns": [{"name":
-    "id", "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
-    null}, {"name": "name_de", "type": "STRING", "index": 1, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "name_en", "type": "STRING", "index": 2,
-    "primary": false, "not_null": false, "dflt_value": null}, {"name": "name_fr",
-    "type": "STRING", "index": 3, "primary": false, "not_null": false, "dflt_value":
-    null}], "foreign_keys": []}]'
+    "index": 0, "notNull": false, "primary": true, "dfltValue": null}, {"name": "name_de",
+    "type": "STRING", "index": 1, "notNull": false, "primary": false, "dfltValue":
+    null}, {"name": "name_en", "type": "STRING", "index": 2, "notNull": false, "primary":
+    false, "dfltValue": null}, {"name": "name_fr", "type": "STRING", "index": 3, "notNull":
+    false, "primary": false, "dfltValue": null}], "foreignKeys": [], "systemTable":
+    false}, {"name": "move_to_type", "columns": [{"name": "move_id", "type": "INTEGER",
+    "index": 0, "notNull": false, "primary": true, "dfltValue": null}, {"name": "type_id",
+    "type": "INTEGER", "index": 1, "notNull": false, "primary": true, "dfltValue":
+    null}], "foreignKeys": [{"references": [{"toTable": "type", "toColumn": null,
+    "fromColumn": "type_id"}]}, {"references": [{"toTable": "move", "toColumn": "id",
+    "fromColumn": "move_id"}]}], "systemTable": false}, {"name": "pokemon", "columns":
+    [{"name": "id", "type": "INTEGER", "index": 0, "notNull": false, "primary": true,
+    "dfltValue": null}, {"name": "name_de", "type": "STRING", "index": 1, "notNull":
+    false, "primary": false, "dfltValue": null}, {"name": "name_en", "type": "STRING",
+    "index": 2, "notNull": false, "primary": false, "dfltValue": null}, {"name": "name_fr",
+    "type": "STRING", "index": 3, "notNull": false, "primary": false, "dfltValue":
+    null}, {"name": "evolve_id", "type": "INTEGER", "index": 4, "notNull": false,
+    "primary": false, "dfltValue": null}], "foreignKeys": [], "systemTable": false},
+    {"name": "pokemon_to_move", "columns": [{"name": "pokemon_id", "type": "INTEGER",
+    "index": 0, "notNull": false, "primary": true, "dfltValue": null}, {"name": "move_id",
+    "type": "INTEGER", "index": 1, "notNull": false, "primary": true, "dfltValue":
+    null}], "foreignKeys": [{"references": [{"toTable": "move", "toColumn": "id",
+    "fromColumn": "move_id"}]}, {"references": [{"toTable": "pokemon", "toColumn":
+    "id", "fromColumn": "pokemon_id"}]}], "systemTable": false}, {"name": "pokemon_to_type",
+    "columns": [{"name": "pokemon_id", "type": "INTEGER", "index": 0, "notNull": false,
+    "primary": true, "dfltValue": null}, {"name": "type_id", "type": "INTEGER", "index":
+    1, "notNull": false, "primary": true, "dfltValue": null}], "foreignKeys": [{"references":
+    [{"toTable": "type", "toColumn": "id", "fromColumn": "type_id"}]}, {"references":
+    [{"toTable": "pokemon", "toColumn": "id", "fromColumn": "pokemon_id"}]}], "systemTable":
+    false}, {"name": "type", "columns": [{"name": "id", "type": "INTEGER", "index":
+    0, "notNull": false, "primary": true, "dfltValue": null}, {"name": "name_de",
+    "type": "STRING", "index": 1, "notNull": false, "primary": false, "dfltValue":
+    null}, {"name": "name_en", "type": "STRING", "index": 2, "notNull": false, "primary":
+    false, "dfltValue": null}, {"name": "name_fr", "type": "STRING", "index": 3, "notNull":
+    false, "primary": false, "dfltValue": null}], "foreignKeys": [], "systemTable":
+    false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-08-10 11:06:37.700147000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-08-10 11:07:08.339664000 Z
+  value_before_type_cast: 2020-08-22 21:58:29.741649000 Z
 new_record: false
 active_record_yaml_version: 2

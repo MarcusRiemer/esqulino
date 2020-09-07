@@ -16,7 +16,7 @@ export class SourceIconComponent {
    * @return A FontAwesome icon class that matches the type.
    */
   get fontAwesomeIcon() {
-    switch (this.source.type) {
+    switch (this.source.kind) {
       case "data":
         return "fa-database";
       default:

@@ -64,7 +64,7 @@ class ProjectDatabase < ApplicationRecord
     if table_exists? table_description["name"]
       raise CreateDuplicateTableNameDatabaseError.new(self, table_description["name"])
     else
-      create_statement = SchemaTools::Alter:: table_to_create_statement(table_description)
+      create_statement = SchemaTools::Alter::table_to_create_statement(table_description)
       db_connection_admin.execute(create_statement)
       refresh_schema
     end
@@ -147,8 +147,18 @@ class ProjectDatabase < ApplicationRecord
   # Refreshes the cached schema.
   def refresh_schema
     # Not so nice: Explicitly calling this complicated version of serializable_hash here
-    self.schema = SchemaTools::database_describe_schema(db_connection_admin)
-      .map { |t| t.serializable_hash(include: { columns: {}, foreign_keys: {} }) }
+    # Not so nice: Converting keys
+    self.schema = SchemaTools::database_describe_schema(db_connection_admin).map do |t|
+      t
+        .serializable_hash(include: {
+                             columns: {},
+                             foreign_keys: {
+                               include: { references: {} }
+                             },
+                             system_table: {}
+                           })
+        .deep_transform_keys { |key| key.camelize(:lower) }
+    end
   end
 
   # Refreshes and persists a possibly changed schema.

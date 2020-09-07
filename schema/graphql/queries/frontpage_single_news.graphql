@@ -4,6 +4,5 @@ query FrontpageSingleNews($id: ID!) {
         title
         text
         publishedFrom
-        __typename
     }
 }

@@ -1,9 +1,4 @@
-import {
-  Tree,
-  LanguageDefinition,
-  Language,
-  NodeTypeDescription,
-} from "../syntaxtree";
+import { Tree, LanguageDefinition, Language } from "../syntaxtree";
 
 import {
   BlockLanguageDescription,
@@ -51,6 +46,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   slug: "emptyblocks",
   defaultProgrammingLanguageId: "emptyBlocks",
   editorComponents: [],
+  rootCssClasses: [],
   sidebars: [
     {
       type: "fixedBlocks",

@@ -33,6 +33,7 @@ export class CreateBlockLanguageComponent {
     editorBlocks: [],
     editorComponents: [],
     sidebars: [],
+    rootCssClasses: [],
   };
 
   // Enables usage of slugs

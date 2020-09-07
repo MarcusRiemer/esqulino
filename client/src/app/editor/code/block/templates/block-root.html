@@ -33,7 +33,11 @@
           [readOnly]="false"
         ></editor-block-host>
         <ng-template #noRender>
-          Darstellung nicht möglich
+          Darstellung nicht möglich, die folgenden unbekannten Typen sind Teil
+          des Syntaxbaumes:
+          <pre
+            [innerText]="currentBlockLanguage.missingVisualBlocks(currentTree) | json"
+          ></pre>
         </ng-template>
       </ng-template>
     </ng-container>

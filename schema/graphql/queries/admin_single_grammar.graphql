@@ -14,10 +14,7 @@ query AdminSingleGrammar($id: ID!) {
             nodes {
                 id
                 name
-                __typename
             }
-            __typename
         }
-        __typename
     }
 }

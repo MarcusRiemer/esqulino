@@ -59,7 +59,7 @@ export class SchemaService {
     this._currentlyEdited.table = new Table(
       desc,
       desc.columns,
-      desc.foreign_keys
+      desc.foreignKeys
     );
     this._currentlyEdited.stack = new TableCommandHolder(
       this._currentlyEdited.table

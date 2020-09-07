@@ -154,6 +154,14 @@ export class BlockLanguage implements Forward.BlockLanguage {
     return types.every((type) => this.hasEditorBlock(type));
   }
 
+  missingVisualBlocks(tree: Tree) {
+    const types = Array.from(tree.typesPresent).map(
+      (type) => JSON.parse(type) as QualifiedTypeName
+    );
+
+    return types.filter((type) => !this.hasEditorBlock(type));
+  }
+
   /**
    * @return True, if a editor block is present for the given type
    */

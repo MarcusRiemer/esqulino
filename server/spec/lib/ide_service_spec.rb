@@ -32,8 +32,9 @@ RSpec.describe "IDE Service" do
       grammar = create(:grammar)
       block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
 
-      expect(service.emit_generated_blocks(block_language).keys).to(
-        contain_exactly("editorBlocks", "editorComponents", "sidebars", "rootCssClasses")
+      result = service.emit_generated_blocks(block_language)
+      expect(result.keys).to(
+        contain_exactly("editor_blocks", "editor_components", "sidebars", "root_css_classes")
       )
     end
 
@@ -64,17 +65,6 @@ RSpec.describe "IDE Service" do
       req = { "type" => "ping" }
 
       expect(service.execute_request(req)).to eq req.to_json
-    end
-
-    it "always returns valid (but empty) generated blocks" do
-      service = MockIdeService.new()
-
-      grammar = create(:grammar)
-      block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
-
-      expect(service.emit_generated_blocks(block_language).keys).to(
-        contain_exactly("editorBlocks", "editorComponents", "sidebars", "rootCssClasses")
-      )
     end
   end
 

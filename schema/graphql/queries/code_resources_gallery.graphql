@@ -3,8 +3,6 @@ query CodeResourcesGallery($id: ID!) {
         nodes {
             id
             name
-            __typename
         }
-        __typename
     }
 }

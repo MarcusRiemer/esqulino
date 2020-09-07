@@ -11,6 +11,7 @@ import {
   mapChildren,
   mapType,
   mapBlockAttributes,
+  mapInterpolated,
 } from "./type-mapping";
 import { DefaultInstructions } from "./instructions.description";
 import { TypeInstructions } from "./instructions";
@@ -48,6 +49,14 @@ describe("BlockLanguage Generator Type Mapping", () => {
     const res = mapProperty(
       { type: "property", name: "prop", base: "string" },
       { propReadOnly: true, style: {} }
+    );
+    expect(res).toEqual({ blockType: "interpolated", property: "prop" });
+  });
+
+  it("Interpolated => Interpolated", () => {
+    const res = mapInterpolated(
+      { type: "interpolate", name: "prop" },
+      { style: {} }
     );
     expect(res).toEqual({ blockType: "interpolated", property: "prop" });
   });
@@ -169,6 +178,44 @@ describe("BlockLanguage Generator Type Mapping", () => {
           {
             blockType: "constant",
             text: "::",
+            style: DefaultInstructions.terminalInstructions.style,
+          },
+        ],
+      },
+    ]);
+  });
+
+  it("Each with between => Iterator", () => {
+    const attrType: NodeAttributeDescription = {
+      type: "each",
+      name: "c1",
+      between: {
+        type: "terminal",
+        symbol: "b",
+        tags: ["t"],
+      },
+    };
+    const nodeType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [attrType],
+    };
+    const res = mapChildren(
+      nodeType,
+      attrType,
+      DefaultInstructions.iteratorInstructions
+    );
+
+    expect(res).toEqual([
+      {
+        blockType: "iterator",
+        childGroupName: "c1",
+        emptyDropTarget:
+          DefaultInstructions.iteratorInstructions.emptyDropTarget,
+        between: [
+          {
+            blockType: "constant",
+            text: "b",
+            cssClasses: ["t"],
             style: DefaultInstructions.terminalInstructions.style,
           },
         ],

@@ -24,7 +24,8 @@ RSpec.describe GraphqlController, type: :request do
 
   describe 'POST /api/graphql Projects' do
     let(:user) { create(:user) }
-    it 'Projects: Reuqesting name and total count without any input besides languages' do
+
+    it 'Projects: Requesting name and total count without any input' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
       FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})

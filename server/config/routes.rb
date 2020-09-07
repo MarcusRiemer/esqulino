@@ -37,16 +37,9 @@ Rails.application.routes.draw do
 
     # Everything in the context of projects
     scope 'project' do
-      get '/', controller: 'projects', action: :index
-      get '/list_admin', controller: 'projects', action: :index_admin
-      post '/', controller: 'projects', action: :create
-      delete '/', controller: 'projects', action: :destroy
 
       # Everything that does something in the context of a specific project
       scope ':project_id' do
-        get '/', controller: 'projects', action: :show
-        put '/', controller: 'projects', action: :update
-        delete '/', controller: 'projects', action: :destroy
 
         get 'preview', controller: 'projects', action: :preview_image
 

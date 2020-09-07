@@ -1,5 +1,5 @@
-# Path to the clients source and its project file
 SRC_PATH = $(realpath ../../client/src/app)
+# Path to the clients source and its project file
 SRC_PROJECT = $(realpath ../../client/src/tsconfig.app.json)
 
 GIT_LS_CHANGED_FILES = git ls-files --modified $(JSON_SCHEMA_FILES)

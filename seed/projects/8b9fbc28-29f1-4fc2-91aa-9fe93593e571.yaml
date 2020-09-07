@@ -8,7 +8,7 @@ concise_attributes:
   value_before_type_cast: lang-regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: '"de"=>"Language: RegEx"'
+  value_before_type_cast: '"de"=>"Sprache: RegEx"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -21,7 +21,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-03 08:40:33.642688000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-03 12:10:31.310231000 Z
+  value_before_type_cast: 2020-09-02 18:30:22.554398000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

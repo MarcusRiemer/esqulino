@@ -136,7 +136,8 @@ module SchemaTools
         end
       end
       # create fk constraints
-      schema_table['foreign_keys'].each do |fk|
+      foreign_keys = schema_table['foreignKeys'] || schema_table['foreign_keys']
+      foreign_keys.each do |fk|
         createStatement.concat(", ")
         createStatement.concat(tables_foreignKey_to_create_statement(fk))
       end
@@ -193,11 +194,11 @@ module SchemaTools
           fk_ref_columns.concat(", ")
         end
 
-        fk_columns.concat(ref['from_column'])
-        fk_ref_columns.concat(ref['to_column'])
+        fk_columns.concat(ref['from_column'] || ref['fromColumn'])
+        fk_ref_columns.concat(ref['to_column'] || ref['toColumn'])
       end
 
-      target_table = fk_references[0]['to_table']
+      target_table = fk_references[0]['to_table'] || fk_references[0]['toTable']
       to_return = "FOREIGN KEY (#{fk_columns}) REFERENCES #{target_table}(#{fk_ref_columns})"
       return to_return
     end
@@ -233,11 +234,13 @@ module SchemaTools
         createStatement.concat(" ")
       end
 
-      if schema_column['not_null'] || schema_column['primary']
+      if schema_column['notNull'] || schema_column['not_null'] || schema_column['primary']
         createStatement.concat("NOT NULL ")
       end
-      unless schema_column['dflt_value'].nil? or schema_column['dflt_value'].empty?
-        createStatement.concat("DEFAULT #{schema_column['dflt_value']}")
+
+      dflt_value = schema_column['dfltValue'] || schema_column['dflt_value']
+      if dflt_value and not dflt_value.empty?
+        createStatement.concat("DEFAULT #{dflt_value}")
       end
       return createStatement
     end
@@ -291,11 +294,13 @@ module SchemaTools
     end
 
     def self.changeColumnNotNull(table, columnIndex)
-      table.columns.find{|col| col.index == columnIndex}.not_null = !table.columns.find{|col| col.index == columnIndex}.not_null
+      col = table.columns.find{ |col| col.index == columnIndex }
+      col.not_null = !col.not_null
     end
 
     def self.changeColumnStandardValue(table, columnIndex, newValue)
-      table.columns.find{|col| col.index == columnIndex}.dflt_value = newValue
+      col = table.columns.find{|col| col.index == columnIndex}
+      col.dflt_value = newValue
     end
 
     def self.changeTableName(table, newName)

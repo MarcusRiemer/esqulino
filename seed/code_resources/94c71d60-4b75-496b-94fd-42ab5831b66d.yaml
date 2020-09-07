@@ -7,15 +7,15 @@ concise_attributes:
     name: project_id
     value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 94c71d60-4b75-496b-94fd-42ab5831b66d
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: '03 Value: Empty Array'
+  value_before_type_cast: 03 Empty Array
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "array", "children": {"values": [{"name": "number",
@@ -26,7 +26,7 @@ concise_attributes:
   value_before_type_cast: 2020-05-03 16:21:15.504013000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-05-03 16:27:36.149303000 Z
+  value_before_type_cast: 2020-08-31 11:07:07.927550000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9

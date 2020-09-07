@@ -10,22 +10,19 @@
           "description": "Date & time this resource was created",
           "type": "string"
         },
-        "display": {
+        "id": {
           "type": "string"
         },
-        "id": {
+        "kind": {
+          "enum": [
+            "data"
+          ],
           "type": "string"
         },
         "readOnly": {
           "type": "boolean"
         },
         "title": {
-          "type": "string"
-        },
-        "type": {
-          "enum": [
-            "data"
-          ],
           "type": "string"
         },
         "updatedAt": {
@@ -39,9 +36,8 @@
       "required": [
         "id",
         "title",
-        "type",
+        "kind",
         "url",
-        "display",
         "readOnly"
       ],
       "type": "object"

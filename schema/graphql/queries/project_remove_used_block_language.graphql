@@ -1,0 +1,11 @@
+mutation ProjectRemoveUsedBlockLanguage(
+  $usedBlockLanguageId: ID!
+){
+  removeUsedBlockLanguage(
+    input: {
+      usedBlockLanguageId: $usedBlockLanguageId
+    }
+  ) {
+    errors
+  }
+}
