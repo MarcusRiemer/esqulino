@@ -1,9 +1,0 @@
-{
-    "id":"de0d91a7-61ae-49af-90d9-5a37dd883a01",
-    "public": false,
-    "developer":{
-        "forename":"Michael",
-        "professor": true
-    },
-    "createdAt":"1452985200000"
-}

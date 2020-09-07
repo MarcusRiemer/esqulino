@@ -25,8 +25,8 @@ Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016
 
 %Client:
 Der Client wurde als eine Single-Page Application mit rein clientseitiger Visualisierung aufgebaut,
-die lediglich für den Zugriff auf serverseitige Resourcen  (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) Anfragen zum Server schickt.
-Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in TypeScript.
+die lediglich für den Zugriff auf serverseitige Ressourcen  (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) Anfragen zum Server schickt.
+Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in Typescript.
 Zum aktuellen Zeitpunkt wird allerdings auf die Angular Version 10.0.4 gesetzt.
 
 %Datenbanksystem
@@ -203,7 +203,7 @@ export class ProjectsDataService {
     \setlength\itemsep{-1em}
     \item Zeile 1: \texttt{@Injectable} stellt sicher, dass der Compiler die notwendigen Metadaten erzeugt, um die Abhängigkeiten der Klasse zu erstellen, wenn die Klasse zur Laufzeit injiziert wird.
     \item Zeile 2: Deklarierung der Klasse/des Services \texttt{ProjectsDataService}
-    \item Zeile 3: Injizierung des HttpClient~\cite{angular-http} in den Service
+    \item Zeile 3: Injektion des HttpClient~\cite{angular-http} in den Service
     \item Zeile 5: Nutzung des HttpClient zur Erstellung und zum Abschicken eines typisierten HTTP-Requests an die Route aus Listing~\ref{lst:example:router}.
     Dieser wird auf die readonly Variable projects geschrieben.
 \end{itemize}
@@ -238,8 +238,8 @@ export class ProjectListComponent {
 
 \begin{itemize}
     \setlength\itemsep{-1em}
-    \item Zeile 1: Annotierung einer Typescript-Klasse als Komponente.
-    \item Zeile 2: Der Wert von \texttt{selector} kann als HTML-Tag (\texttt{<project-list></project-list>}) in Templates genutzt werden,
+    \item Zeile 1: Annotation einer Typescript-Klasse als Komponente.
+    \item Zeile 2: Der Wert von \texttt{selector} kann als HTML-Tag in Templates genutzt werden (\texttt{<project-list></project-list>}),
     um diese Komponente instanziieren und das zugehörige Template innerhalb des Bezeichners rendern zu können.
     \item Zeile 3: Festlegung des Pfades, wo sich das zu rendernde Template, also der darzustellende HTML Code, befindet.
     \item Zeile 5: Deklarierung der Klasse/des Komponente \texttt{ProjectListComponent}.
@@ -271,7 +271,7 @@ Das zugehörige Template \texttt{project-list.html} sieht wie in Listing~\ref{ls
 
 Diese Schritte sind in ihrer Gänze nur bei der Einführung neuer Entitäten notwendig.
 Bei der Nutzung von Subtypen kann ein Teil der umgesetzten Schritte wiederverwendet werden,
-bzw ist nur einmal erforderlich, wie das Ausführen einer Datenbankmigration.
+bzw. ist nur einmal erforderlich, wie das Ausführen einer Datenbankmigration.
 
 \subsection{Anlegen einer neuen Sicht}
 \label{sec:requirements:example:newview}
@@ -299,7 +299,7 @@ bzw ist nur einmal erforderlich, wie das Ausführen einer Datenbankmigration.
 	\end{tabular}
 	\vspace{5pt}
 	\centering
-	\caption{Funktionweise des aktuellen Systems in Bezug auf die Erstellung neuer Sichten auf bereits vorhandene Datensätze}
+	\caption{Funktionsweise des aktuellen Systems in Bezug auf die Erstellung neuer Sichten auf bereits vorhandene Datensätze}
 	\label{tbl:newview}
 \end{table}
 
@@ -412,7 +412,7 @@ Für die Ermittlung der Werte wurde die verwendete Controller Funktion so umgesc
 	\label{tbl:req:data-transfer}
 \end{table}
 
-Möchte man zusätzlich noch Beziehungen abbilden kann ebenfalls das in Abschnitt~\fullref{sec:basics:restapi:interface} beschriebene Underfetching Problem auftauchen.
+Möchte man zusätzlich noch Beziehungen abbilden kann ebenfalls das in Abschnitt~\ref{sec:basics:restapi:interface} beschriebene Underfetching Problem auftauchen.
 Dieses ließe sich im aktuellen System durch manuelle Erstellung der SQL Queries beheben.
 
 \subsection{camelCase und snake\_case Notationen}
@@ -598,7 +598,7 @@ In Abbildung~\ref{req:typesafe:list-validation} wird eine Liste von Projekten, d
 
 
 
-Ein neues System muss als Anforderung mindestens den aktuellen Grad an Sicherheit aufweisen durch:
+Ein neues System muss als Anforderung mindestens den aktuellen Grad an Typsicherheit aufweisen durch:
 
 \begin{itemize}
     \setlength\itemsep{-1em}

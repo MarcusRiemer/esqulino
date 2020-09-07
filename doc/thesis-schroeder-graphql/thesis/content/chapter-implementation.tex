@@ -103,8 +103,8 @@ end
 	\item Zeile 10: Hinzufügen von Connections (siehe Unterabschnitt~\ref{graphql:connections}).
 \end{itemize}
 
-Die Klasse GraphQL::Schema vererbt die Funktion \texttt{.execute} zum Ausführen von GraphQL Anfragen gegen das definierte Schema. Der Rails Server benötigt also eine Route, die alle GraphQL Anfragen entgegen nimmt und an eine Controller Funtkion verweist, in der die \texttt{.exectue} Funktion aufgerufen wird. Innerhalb dieser Funktion wird der Name der Query (operationName) genutzt und nach einer gleichnamigen Query im Schema Ordner gesucht. Ist eine solche Query vorhanden, wird diese geladen und der \texttt{.execute} Funktion anstelle der in der Anfrage enthaltenen Query übergeben.
-Kann eine Query mit dem angefragten Namen nicht gefunden werden oder wurde kein Name übergeben, wird eine Fehlermeldung an den Client zurück gegeben. Dieses Verfahren stellt sicher, dass keine schädlichen GraphQL Queries ausgeführt werden können, sondern nur die im Projekt genutzten.
+Die Klasse GraphQL::Schema vererbt die Funktion \texttt{.execute} zum Ausführen von GraphQL Anfragen gegen das definierte Schema. Der Rails Server benötigt also eine Route, die alle GraphQL Anfragen entgegen nimmt und an eine Controller Funktion verweist, in der die \texttt{.exectue} Funktion aufgerufen wird. Innerhalb dieser Funktion wird der Name der Query (operationName) genutzt und nach einer gleichnamigen Query im Schema Ordner gesucht. Ist eine solche Query vorhanden, wird diese geladen und der \texttt{.execute} Funktion anstelle der in der Anfrage enthaltenen Query übergeben.
+Kann eine Query mit dem angefragten Namen nicht gefunden werden oder wurde kein Name übergeben, wird eine Fehlermeldung an den Client zurückgegeben. Dieses Verfahren stellt sicher, dass keine schädlichen GraphQL Queries ausgeführt werden können, sondern nur die im Projekt genutzten.
 Zusätzlich werden die Meta Daten (Context), welcher Nutzer die Anfrage geschickt hat und in welcher Sprache der Nutzer die Webseite lädt, beigefügt (siehe Abbildung~\ref{graphql:integration}). Anschließend werden die Anfragen vom GraphQL Modul verarbeitet. Dieser kommuniziert mit der Datenbank, erzeugt eine Antwort und gibt diese als Rückgabewert der \texttt{.execute} Funktion an den Controller zurück, der die Antwort an den Client weiterleitet.
 
 \begin{figure}[h!]
@@ -170,15 +170,15 @@ Das erste Attribut ist ein Symbol und beschreibt den Namen des Feldes.
 
 In Zeile 11 Listing~\ref{lst:graphql:projecttype} wird der Nutzer eines Projektes (user) modelliert. Dieses Feld erhält die Bezeichnung \texttt{:user} und entspricht damit nicht der Benennung \texttt{:user\_id} aus dem Model. Dennoch wird kein Resolver zum Auflösen des Feldes benötigt, da im \texttt{Project} Model aus Listing~\ref{lst:example:model} der Zugriff auf den in Beziehung stehenden Nutzer, mit dem Aufruf von \texttt{.user} auf einer Project-Instanz, ermöglicht wird. 
 
-Desweiteren wurden in Zeile 15 und 16 Listing~\ref{lst:graphql:projecttype} die Felder \texttt{:created\_at} und \texttt{:updated\_at} in Snake Case definiert, was zwar der Benennungskonvention von Ruby entspricht, jedoch nicht der im Client verwendeten Camel Case Schreibweise und damit inkompatibel zum Client sein müsste (siehe Anforderung in Unterabschnitt~\ref{req:naming:convention}). Die Konvention sieht allerdings vor, dass Felder und Argumenten-Bezeichner in Snake Case geschrieben werden, da bei der Auflösung eines Feldes per Default versucht wird, eine Methode mit dem Namen des Feldes auf dem übergebenen Objekt aufzurufen.
+Zudem wurden in Zeile 15 und 16 Listing~\ref{lst:graphql:projecttype} die Felder \texttt{:created\_at} und \texttt{:updated\_at} in Snake Case definiert, was zwar der Benennungskonvention von Ruby entspricht, jedoch nicht der im Client verwendeten Camel Case Schreibweise und damit inkompatibel zum Client sein müsste (siehe Anforderung in Unterabschnitt~\ref{req:naming:convention}). Die Konvention sieht allerdings vor, dass Felder und Argumenten-Bezeichner in Snake Case geschrieben werden, da bei der Auflösung eines Feldes per Default versucht wird, eine Methode mit dem Namen des Feldes auf dem übergebenen Objekt aufzurufen.
 Ist solch eine Methode nicht vorhanden und das Objekt ein Hash, wird nach einem Schlüssel, der den Namen als String oder Symbol entspricht, gesucht~\cite{graphql-field-resolution}. Anschließend werden die Felder im zugrundeliegenden GraphQL Typ zu Camel Case konvertiert~\cite{graphql-object-classes}.
 
 Passend dazu wurde in Zeile 13 ein Feld hinzugefügt, dass keinem Attribut des Project Models oder einer Beziehung zu einem anderen Model entspricht. Die Auflösung dieses Feldes wird dennoch implizit durch Zugriff über den gleichnamigen Schlüssel im Ergebnis der Query (Scope) erreicht. Wie der Wert in das Ergebnis der Query gerät, wird im Unter-Unterabschnitt~\fullref{impl:graphql:resolver} erklärt.
 
 \subsubsection{Datentyp des Feldes}
-Das zweite Attribut bei der Deklarierung eines Feldes stellt den Datentyp dar. Graphql-ruby bietet alle von GraphQL bereitgestellten Typen (Scalar Typen) an. Zu denen gehören ID, String, Int, Float und Boolean. Darüber hinaus hat graphql-ruby noch weitere Typen wie \texttt{ISO8601DateTime} im Repertoire. Da diese nicht ausreichen, wurden eigens Scalar Typen hinzugefügt (siehe Abschnitt ~\ref{graphql:scalartypes}). Einer davon ist der in Zeile 8 Listing~\ref{lst:graphql:projecttype} aufgeführte \texttt{LangJson}, der ein multilinguales Feld darstellt. Der Suffix \texttt{Types::Scalar::} beschreibt den Pfad vom \texttt{/graphql} Verzeichnis aus, wo der Typ zu finden ist - in diesem Fall \lstinline|/graphql/types/scalar/lang_json.rb|.
+Das zweite Attribut bei der Deklarierung eines Feldes stellt den Datentyp dar. graphql-ruby bietet alle von GraphQL bereitgestellten Typen (Scalar Typen) an. Zu denen gehören ID, String, Int, Float und Boolean. Darüber hinaus hat graphql-ruby noch weitere Typen wie \texttt{ISO8601DateTime} im Repertoire. Da diese nicht ausreichen, wurden eigens Scalar Typen hinzugefügt (siehe Abschnitt ~\ref{graphql:scalartypes}). Einer davon ist der in Zeile 8 Listing~\ref{lst:graphql:projecttype} aufgeführte \texttt{LangJson}, der ein multilinguales Feld darstellt. Der Suffix \texttt{Types::Scalar::} beschreibt den Pfad vom \texttt{/graphql} Verzeichnis aus, wo der Typ zu finden ist - in diesem Fall \lstinline|/graphql/types/scalar/lang_json.rb|.
 
-In Zeile 11 und 12 Listing~\ref{lst:graphql:projecttype} wurden Typen verwendet, die zu einer Model-Instanz aus der Rails Applikation passen. In Zeile 11 wird eine User-Instanz erwartet, in Zeile 12 eine Array gefüllt mit CodeResource-Instanzen.
+In Zeile 11 und 12 Listing~\ref{lst:graphql:projecttype} wurden Typen verwendet, die zu einer Model-Instanz aus der Rails Applikation passen. In Zeile 11 wird eine User-Instanz erwartet, in Zeile 12 ein Array gefüllt mit CodeResource-Instanzen.
 
 \subsubsection{Nullable}
 Als drittes Attribut wurde festgelegt, ob das Feld \texttt{null} als Rückgabewert haben darf. Diese Angabe kann aus dem Datenbankschema abgelesen werden.
@@ -282,7 +282,7 @@ class ProjectsResolver < Resolvers::BaseResolver
 end
 \end{lstlisting}
 
-Im Konstruktor in Listing~\ref{lst:graphql:projectsresolver} wird zunächst der Scope auf die von ApplicationRecord erbende (Model-)Klasse Project gesetzt, die der gleichnamigen Datenbanktabelle entspricht. Anschließend wird geprüft, ob das Feld \texttt{code\_resource\_count} in der Query abgefragt wird. Wenn das der Fall ist, wird ein Left Outer Join mit der CodeResource Tabelle durchgeführt, um die Anzahl der zu einem Projekt in Beziehung stehenden CodeResource-Instanzen zählen zu können und als \texttt{code\_resource\_count} zu selektieren, wodurch das angefragte Feld \texttt{:code\_resource\_count} aus dem Objkettypen  implizit aufgelöst werden kann. Durch dieses Verfahren können zum einen beliebige Felder einem Graphql-Objekttypen hinzugefügt werden, ohne dass es diese als Spalte in der Datenbank gibt, und zum anderen das N+1 Query Problem durch SQL Joins gelöst werden. 
+Im Konstruktor in Listing~\ref{lst:graphql:projectsresolver} wird zunächst der Scope auf die von ApplicationRecord erbende (Model-)Klasse Project gesetzt, die der gleichnamigen Datenbanktabelle entspricht. Anschließend wird geprüft, ob das Feld \texttt{code\_resource\_count} in der Query abgefragt wird. Wenn das der Fall ist, wird ein Left Outer Join mit der CodeResource Tabelle durchgeführt, um die Anzahl der zu einem Projekt in Beziehung stehenden CodeResource-Instanzen zählen zu können und als \texttt{code\_resource\_count} zu selektieren, wodurch das angefragte Feld \texttt{:code\_resource\_count} aus dem Objekttypen  implizit aufgelöst werden kann. Durch dieses Verfahren können zum einen beliebige Felder einem Graphql-Objekttypen hinzugefügt werden, ohne dass es diese als Spalte in der Datenbank gibt, und zum anderen das N+1 Query Problem durch SQL Joins gelöst werden. 
 Hieraus wird deutlich, dass obwohl GraphQL die SQL Queries automatisch zusammen stellt bei Bedarf in den Prozess des Zusammensetzens eingegriffen werden kann.
 
 Zuletzt wird in Zeile 12 in Listing~\ref{lst:graphql:projectsresolver} der Konstruktor der Oberklasse \texttt{BaseResolver} (in Abschnitt~\ref{impl:base-resolver} beschrieben) aufgerufen und  Argumente zum Sortieren, Filtern und Auswählen von Sprachen übergeben.
@@ -346,7 +346,7 @@ Nun muss die Query dem Client durch Generierung eines Angular Services, der die 
 
 \subsection{Codegenerierung}
 \label{impl:graphql:generation}
-Graphql-ruby stellt einen eingebauten Rake Task bereit, der aus dem GraphQL Schema eine JSON Darstellung generiert~\cite{graphql-rake-task}. Diese wird in einem Schema-Ordner auf Wurzelebene der gesamten Applikation (Ebene auf der sich der Server und Client Ordner befindet) gehalten.
+graphql-ruby stellt einen eingebauten Rake Task bereit, der aus dem GraphQL Schema eine JSON Darstellung generiert~\cite{graphql-rake-task}. Diese wird in einem Schema-Ordner auf Wurzelebene der gesamten Applikation (Ebene, auf der sich der Server und Client Ordner befindet) gehalten.
 Durch Nutzung des Tools graphql-code-generator~\cite{graphql-code-generator} wird dann aus der in Listing~\ref{lst:graphql:query} vorgestellten Query und dem GraphQL Schema in JSON Darstellung folgender Typescript Code (siehe Listings~\ref{lst:graphql:gen-gql},~\ref{lst:graphql:gen-service},~\ref{lst:graphql:gen-responsetype} und~\ref{lst:graphql:gen-variables}) generiert:
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Aufruf der gql-Funktion erhält die AdminListProjects Query als String}, label={lst:graphql:gen-gql}]
@@ -413,9 +413,9 @@ Zur Darstellung wird eine Komponente verwendet. Diese bekommt den generierten Se
 
 Die in Listing~\ref{lst:graphql:component} gezeigte Komponente enthält aus Gründen der Übersichtlichkeit lediglich die Logik um eine Query abzuschicken. Im Gegensatz dazu verwendet die im System verbaute Komponente zusätzlich eine weitere Komponente \texttt{PaginatorTableGraphql\-Component} (siehe Abschnitt~\fullref{impl:paginator-component}) zur paginierten Darstellung des Ergebnisses aus der Query in einer Angular Material Tabelle~\cite{angular-material-table}.
 Der Aufruf \texttt{.watch} in Listing~\ref{lst:graphql:component} Zeile 13 gibt ein \texttt{QueryRef} Objekt zurück, welches das Attribut \texttt{valueChanges} hat, das ein Observable~\cite{angular-observable} ist.
-Durch den Aufruf von \texttt{.subscribe()}~\cite{angular-subscribe} oder der Nutzung einer Async-Pipe~\cite{angular-async-pipe} im Angular template wird die Query abgefeuert.
+Durch den Aufruf von \texttt{.subscribe()} \cite{angular-subscribe} oder der Nutzung einer Async-Pipe~\cite{angular-async-pipe} im Angular template wird die Query abgefeuert.
 Die in Listing~\ref{lst:graphql:component} Zeile 14 und 15 verwendeten Parameter der \texttt{.watch} Methode geben die Variablen der Query (Zeile 14) und die von Apollo bereitgestellten Optionen (Zeile 15) an.
-\texttt{notifyOnNetworkStatusChange: true} ermöglicht die Nutzung einer Ladeanzeige (loading indicator). Desweiteren gibt der Parameter \texttt{fetchPolicy} an, wie die Daten geladen werden sollen. Hier besteht die Möglichkeit anzugeben, dass ein Cache automatisch genutzt werden soll. Jedoch wurde nach Erstellung eines neuen Datensatzes und Weiterleitung auf die Listendarstellung der gerade erstellte Datensatz nicht gezeigt, da die Liste aus dem Cache geladen wurde. Als Lösung wurde an dieser Stelle die Option \texttt{"network-only"} genutzt. Diese verbietet die Verwendung eines Caches, so dass immer eine Query geschickt wird, wenn die Liste benötigt wird.
+\texttt{notifyOnNetworkStatusChange: true} ermöglicht die Nutzung einer Ladeanzeige (loading indicator). Des Weiteren gibt der Parameter \texttt{fetchPolicy} an, wie die Daten geladen werden sollen. Hier besteht die Möglichkeit anzugeben, dass ein Cache automatisch genutzt werden soll. Jedoch wurde nach Erstellung eines neuen Datensatzes und Weiterleitung auf die Listendarstellung der gerade erstellte Datensatz nicht gezeigt, da die Liste aus dem Cache geladen wurde. Als Lösung wurde an dieser Stelle die Option \texttt{"network-only"} genutzt. Diese verbietet die Verwendung eines Caches, so dass immer eine Query geschickt wird, wenn die Liste benötigt wird.
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Angular Komponente zum Anzeigen der Projekte in Listendarstellung}, label={lst:graphql:component}]
 import {
@@ -444,7 +444,7 @@ Zusätzlich sind die Schritte, die beim Erstellen einer neuen Sicht ausgeführt 
 
 Es wird deutlich, dass nur eine dezimierte Anzahl von Schritten (4 von 11) im Gegensatz zum alten System (8 von 12) benötigt werden.
 Es mussten keine Routen, Controller Funktionen oder weitere Tests geschrieben werden, da es nur einen GraphQL Endpunkt (Route und Controller Funktion) auf dem Server gibt, der alle Anfragen entgegen nimmt und im GraphQL Modul verarbeitet. Dort werden die Anfragen auf Korrektheit geprüft,
-SQL Anfragen zusammengestellt, ausgeführt und die Antwort an die Controller Funktion zurück gegeben.
+SQL Anfragen zusammengestellt, ausgeführt und die Antwort an die Controller Funktion zurückgegeben.
 Somit sind alle Schritte, die in Tabelle~\fullref{tbl:newview} serverseitig durchgeführt wurden, obsolet und der Server bedarf keiner Änderungen.
 
 \begin{table}[h!]
@@ -478,7 +478,7 @@ Letztendlich muss lediglich eine Angular Komponente mit zugehörigem Template ge
 \section{Scalar Typen}
 \label{graphql:scalartypes}
 Ein GraphQL-Objekttyp hat einen Namen und Felder, aber irgendwann müssen diese Felder in konkrete Daten aufgelöst werden. An dieser Stelle kommen die skalaren Typen ins Spiel: Sie stellen die Blätter der Abfrage dar. 
-Skalare Typen sind Instanzen von sehr einfach strukturierten Ruby Klassen. Diese enthalten lediglich zwei Funktionen zum Auflösen des Feldes bei Queries \texttt{self.coerce\_result(value, \_context)} und zum Verarbeiten von Eingaben bei Mutationen \texttt{self.coerce\_input(value, \_context)}. Beide Funktionen erhaltenden einen Wert und den Context der Query. Die Funktion zum Auflösen eines Feldes wird ausgeführt, nachdem der zum Feld passende Wert aus der Datenbank ausgelesen wurde und bevor dieser an die anfragende Client Applikation zurück gegeben wird. Da Scalar Typen erst benötigt werden, wenn ein bisher genutzter Typ nicht mit der GraphQL SDL formuliert werden kann, ist die Funktion \texttt{coerce\_result} der beste Ort für die Validierung zum Beispiel gegen das JSON Schema, welches den Typ beschreibt. Das gleiche gilt bei der Ausführung einer Mutation zum Hinzufügen eines Datensatzes in die Datenbank. Die Funktion \texttt{coerce\_input} wird ausgeführt, bevor der Wert des Feldes an den zum Feld gehörenden Resolver gegeben wird. Somit ist dies ebenfalls der richtige Ort für die Validierung der Eingabe.
+Skalare Typen sind Instanzen von sehr einfach strukturierten Ruby Klassen. Diese enthalten lediglich zwei Funktionen zum Auflösen des Feldes bei Queries \texttt{self.coerce\_result(value, \_context)} und zum Verarbeiten von Eingaben bei Mutationen \texttt{self.coerce\_input(value, \_context)}. Beide Funktionen erhaltenden einen Wert und den Context der Query. Die Funktion zum Auflösen eines Feldes wird ausgeführt, nachdem der zum Feld passende Wert aus der Datenbank ausgelesen wurde und bevor dieser an die anfragende Client Applikation zurückgegeben wird. Da Scalar Typen erst benötigt werden, wenn ein bisher genutzter Typ nicht mit der GraphQL SDL formuliert werden kann, ist die Funktion \texttt{coerce\_result} der beste Ort für die Validierung zum Beispiel gegen das JSON Schema, welches den Typ beschreibt. Das gleiche gilt bei der Ausführung einer Mutation zum Hinzufügen eines Datensatzes in die Datenbank. Die Funktion \texttt{coerce\_input} wird ausgeführt, bevor der Wert des Feldes an den zum Feld gehörenden Resolver gegeben wird. Somit ist dies ebenfalls der richtige Ort für die Validierung der Eingabe.
 
 Wie diese Scalar Typen genau aussehen können, wird anhand eines Beispiels in Abschnitt~\fullref{graphql:validation} vorgeführt.
 
@@ -575,23 +575,26 @@ mutation CreateProject($name:LangJson!,$slug:String!){
 }
 \end{lstlisting}
 
-\section{Filtern, Sortieren und Sprachauswahl}
+\section{Felder Auswahl, Sprachauswahl, Filtern und Sortieren}
 \label{impl:base-resolver}
-Erhält eine Query Argumente zum Filtern, Sortieren und für die Sprachauswahl, durchläuft sie eine Reihe von Resolvern, (siehe Abbildung~\ref{graphql:sorting}) in der die Argumente sukzessive in eine SQL Abfrage integriert werden. Zuerst wird die Resolver Funktion zum Auflösen eines Query Einstiegspunktes aufgerufen. Innerhalb dieser wird eine Instanz einer spezifisch zum abgefragten Model passenden Resolver Klasse (hier ProjectsResolver) erstellt, Argumente übergeben und der Rückgabewert des Konstruktor zurück gegeben. Der Konstruktor der spezifischen Resolver Klasse erstellt einen Scope (SQL Abfrage) und inkludiert Beziehungen in die Ergebnismenge dieses Scopes. Anschließend wird der Konstruktor der Oberklasse (BaseResolver) aufgerufen, der Context, die Argumente, der Scope und der Name der Model Klasse übergeben sowie Default Werte für die Sortierung gesetzt (siehe Zeile 12 in Listing~\ref{lst:graphql:projectsresolver}).
+Erhält eine Query Argumente zum Filtern, Sortieren und für die Sprachauswahl, durchläuft sie im GraphQL Modul eine Reihe von Resolvern, (siehe Abbildung~\ref{graphql:sorting}) in der die Argumente sukzessive in eine SQL Abfrage integriert werden. Zuerst wird die Resolver Funktion zum Auflösen eines Query Einstiegspunktes aufgerufen. Innerhalb dieser wird eine Instanz einer spezifisch zum abgefragten Model passenden Resolver Klasse (hier ProjectsResolver) erstellt, Argumente übergeben und der Rückgabewert des Konstruktor zurückgegeben. Der Konstruktor der spezifischen Resolver Klasse erstellt einen Scope (SQL Abfrage) und inkludiert Beziehungen in die Ergebnismenge dieses Scopes. Anschließend wird der Konstruktor der Oberklasse (BaseResolver) aufgerufen, der Context, die Argumente, der Scope und der Name der Model Klasse übergeben sowie Default Werte für die Sortierung gesetzt (siehe Zeile 12 in Listing~\ref{lst:graphql:projectsresolver}). 
 Der BaseResolver ist eine einheitliche Komponente die den Scope wie nachfolgend erklärt erweitert. 
+Somit werden die in diesem Kapitel relevanten Funktionalitäten in der Resolver Funktion und in der spezifischen Resolver Klasse nur konfiguriert und erst im BaseResolver implementiert.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{snippets/filtern-sortieren-sprachauswahl.pdf}
-	\caption{Durchlauf einer Query durch alle Resolver}
+	\caption{Durchlauf einer Query durch alle Resolver im GraphQL Modul}
 	\label{graphql:sorting}
 \end{figure}
 
 
+\textbf{Felder- und Sprachauswahl} \ \\
 Zu Beginn wird geprüft, ob dem BaseResolver ein Array mit Ländercodes (\texttt{languages}) übergeben wurde. Wenn das nicht der Fall ist, werden alle vorhandene Sprachen als Array auf eine Instanzvariable \texttt{@languages} gesetzt. In einer Methode \texttt{select\_relevant\-\_fields} werden dann alle angefragten Felder zuzüglich aller Felder, die eine Fremdschlüsselbeziehung darstellen (Felder, die auf \texttt{\_id} enden) sowie das Feld Id, in einem Array zusammengefasst. Für jedes Element des Arrays wird geprüft, ob es ein in der Datenbank als hstore gespeichertes Feld ist, also einen multilingualen String darstellt.
 Trifft dies zu werden mithilfe der Funktion \texttt{SLICE}~\cite{postgresql-hstore} nur die Schlüssel/Wert-Paare extrahiert, deren Schlüssel im \texttt{@languages} Array enthalten sind, andernfalls wird das gesamte Feld selektiert.
 
-Anschließend wird bei der Verarbeitung jedes übergebenen Filters bestehend aus \texttt{filter\_key} und \texttt{filter\_value} zwischen 5 PostgreSQL Datentypen unterschieden.
+\textbf{Filtern} \ \\
+Anschließend wird bei der Verarbeitung jedes Filters bestehend aus \texttt{filter\_key} und \texttt{filter\_value} zwischen fünf PostgreSQL Datentypen unterschieden.
 \texttt{filter\_key} stellt dabei das Feld dar, auf welches der Filter angewendet werden soll. \texttt{filter\_value} hingegen ist der Wert, nachdem gefiltert wird.
 
 
@@ -612,10 +615,11 @@ Anschließend wird bei der Verarbeitung jedes übergebenen Filters bestehend aus
 		\lstinline|date = filter_value[:date] ? filter_value[:date] : Date.today| \\
 		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} #{comparator} ?", date|
 	\item[default] \ \\
-		Alle anderen Datentypen werden mit dem LIKE Operator gefiltert. \\
+		Alle anderen Datentypen werden mit dem \texttt{LIKE} Operator gefiltert. \\
 		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} LIKE ?", filter_value|
 \end{description}
 
+\textbf{Sortieren} \ \\
 Als letztes werden Sortierfunktionen in das SQL Statement eingebaut. Wie bei der Sprachauswahl wird erneut von multilingualen Feldern unterschieden.
 Da diese einen Hash darstellen, muss angegeben werden, nach welcher der Schlüssel/Wert-Paare sortiert werden soll. Hier kommt die Funktion COALESCE~\cite{coalesce-postgres} ins Spiel. Sie kann eine beliebige Anzahl von Parametern verarbeiten, die der Reihe nach ausgewertet werden. Der erste Ausdruck, der einen Wert ungleich NULL zurückliefert, bestimmt das Ergebnis der Funktion. Sind mehrere Sprachen ausgewählt worden, muss bestimmt werden, nach welcher Sprache vorrangig sortiert werden soll. Da nicht jedes multilinguale Feld Werte für allen Sprachen besitzt, ist COALESCE hierbei die Lösung des Problems (siehe Listing~\ref{lst:graphql:sorting}).
 
@@ -677,6 +681,13 @@ Multilinguale Strings werden im GraphQL Schema als ein eigens definierter Scalar
 Dieser heißt \texttt{LangJson} und besitzt wie für Scalar Typen üblich die beiden Funktionen \texttt{self.coerce\_input} und \texttt{self.coerce\_result}. In beiden dieser Methoden wird der eingehende bzw. ausgehende Datensatz mithilfe des Validators \texttt{Languages} aus Listing~\ref{lst:multilang-validation} geprüft. 
 Bei der Prüfung wird die Schnittmenge zwischen den Schlüsseln des zu validierenden Objekts als Array und den im Enum aufgelisteten verfügbaren Ländercodes als Array gebildet. Wenn die Schnittmenge leer ist beinhaltet das übergebene Objekt keine valide Sprache und ist damit ungültig. Sollte die Schnittmenge nicht leer sein, wird geprüft, ob die Differenzmenge von den Schlüsseln des Objektes ohne die verfügbaren Ländercodes nicht leer ist. Ist das der Fall, wurden Schlüssel angegeben, die nicht kompatibel zu den vorhandenen Ländercodes sind (siehe Abbildung~\ref{req:typesafe:example}). 
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/multilang-validation.pdf}
+	\caption{Beispiel für die Validierung von Multilingualen Strings}
+	\label{req:typesafe:example}
+\end{figure}
+
 \begin{lstlisting}[language=Ruby,float=h!,caption={Validator Klasse zum Prüfen, ob der übergebene Parameter die Beschaffenheit eines multilingualen Strings aufweist. \lstinline|/graphql/validators/languages.rb|}, label={lst:multilang-validation}]
 class Languages
   def self.validate!(args)
@@ -689,17 +700,8 @@ class Languages
 end
 \end{lstlisting}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\linewidth]{snippets/multilang-validation.pdf}
-    \caption{Beispiel für die Validierung von Multilingualen Strings}
-    \label{req:typesafe:example}
-\end{figure}
-
-\ \\
-\ \\
-
 \subsection{JSON Schema}
+\label{sec:impl:json-schema-validation}
 Die Validation von im Schema nicht abbildbaren Typen gegen vorhandene JSON Schema funktioniert genau wie bei multilingualen Strings. Der einzige Unterschied ist der verwendete Validator (siehe Listing~\ref{lst:jsonschema-validation}). Beim Aufruf der \texttt{validate!} Funktion werden der Name des JSON Schemas und das zu validierende Objekt  als Parameter übergeben. Beim Laden der JSON Schema Definitionen und beim Validieren wurde sich das bereits bestehende System zu Nutze gemacht, indem der \texttt{JsonSchemaHelper} eingebunden wurde und dessen Funktion \texttt{json\_schema\_validate} verwendet. 
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Validator Klasse zum Prüfen, ob der übergebene Parameter die Beschaffenheit des JSON Schema aufweist. \lstinline|/graphql/validators/graphql_validator.rb|}, label={lst:jsonschema-validation}]
@@ -735,43 +737,66 @@ export class AdminListProjectsGQL extends Apollo.Query<
 \end{lstlisting}
 
 \subsection{Unmöglichkeit der Modellierung mancher Typen}
-Die Typdefinitionen in SDL
+\label{sec:impl:scalar-any-types}
+In Unterabschnitt~\ref{sec:impl:json-schema-validation} und Abschnitt~\ref{graphql:scalartypes} wurde bereits aufgegriffen, dass manche Typen wie \texttt{LangJson} unmöglich im GraphQL Schema modelliert werden können und stattdessen Scalar Typen verwendet wurden.
+Die Verwendung der skalaren Typen für nicht abbildbare Typen hat allerdings den Nachteil, dass die Codegeneratoren an dieser Stelle lediglich den Typ \texttt{any} zuweisen können, da sie keine Kenntnis über die zugrunde liegenden JSON Schema Definitionen besitzen (siehe Listing~\ref{lst:skalar:codegeneration}).
+
+
+\begin{lstlisting}[float=h!,caption={Auflistung aller skalaren Typen nach der Codegerierung zu Typescript Typen}, label={lst:skalar:codegeneration}]
+export type Scalars = {
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+  LangJson: any;
+  [...]
+};
+\end{lstlisting}
 
 \chapter{Fazit}
 Dieses Fazit soll einen Überblick darüber verschaffen, welche Ziele aus der Anforderungsanalyse erreicht wurden und welche Features für die Zukunft noch interessant wären.
-Zu Beginn wird vorweggenommen, dass GraphQL bzw. explizit graphql-ruby Lösungen zu allen beschriebenen Problemen und Anforderungen aus Kapitel~\fullref{sec:requirements} ermöglicht. 
+Zu Beginn sei vorweggenommen, dass GraphQL bzw. explizit graphql-ruby Lösungen zu allen beschriebenen Problemen und Anforderungen aus Kapitel~\fullref{sec:requirements} ermöglicht. Zudem konnte durch die Migration nach GraphQL die Skalierbarkeit des Entwicklungsprozesses deutlich erhöht werden und zusätzlich der Grundstein für die Implementierung der in Ausblick aufgeführten Features, gelegt werden.
 
 \textbf{Typschema} \ \\
-Durch die Definition des Typschemas in Ruby und der Übersetzungsmöglichkeiten in andere Sprachen mit Einsatz von Codegeneratoren werden applikationsübergreifende und zentrale Typdefinitionen als JSON Schema,
-die sogar größtenteils zu den alten JSON Schema Definitionen passen, geschaffen. Ein Unterschied zum alten System ist, dass die Typen jetzt serverseitig definiert werden und dem Client als JSON Schema zur Verfügung gestellt werden. 
-
+Durch die Definition des Typschemas in Ruby und der Übersetzungsmöglichkeiten in andere Sprachen mithilfe von Codegeneratoren werden applikationsübergreifende und zentrale Typdefinitionen als JSON Schema,
+die sogar größtenteils zu den alten JSON Schema Definitionen passen, geschaffen (siehe Abschnitt~\ref{impl:graphql:generation}). Im Gegensatz zum alten System hat sich die Verantwortlichkeit für die Definition von Typen also vom Client auf den Server verlagert. Diese werden jetzt dem Client in Form von JSON Schemata zur Verfügung gestellt. Ausbaufähig an dieser Stelle ist das in Unterabschnitt~\ref{sec:impl:scalar-any-types} gezeigte Defizit in der Codegenerierung.
 
 \textbf{Validierung} \ \\
-Des Weiteren wurden für Typescript Interfaces wie \texttt{MultiLangString} (siehe Listing~\ref{lst:example:projectdesc}),  die sich nicht im GraphQL Schema abbilden lassen, Scalar Typen entwickelt, deren Werte bei lesenden und schreibenden Zugriffen gegen das alte JSON Schema validiert werden (siehe Abnschitt~\ref{graphql:validation}). Alle abbildbaren Typen werden automatisch auf Korrektheit geprüft. Die Prüfungen werde bei Lesen eingehenden Anfragen und bei Formulieren der Antworten durchgeführt. Dadurch wird im Vergleich zum alten System ein höherer Grad an Sicherheit erlangt, da nun zusätzlich die  Antworten zur Laufzeit vor dem Ausliefern an den Client validiert werden. Dies geschah vorher nur in Form von Request Specs zur Kompilierungszeit (siehe Unterabschnitt~\ref{sec:requirements:pros:typesafe-runtime}).
+Des Weiteren wurden für Typescript Interfaces wie \texttt{MultiLangString} (siehe Listing~\ref{lst:example:projectdesc}),  die sich nicht im GraphQL Schema abbilden lassen, Scalar Typen entwickelt, deren Werte bei lesenden und schreibenden Zugriffen gegen das alte JSON Schema validiert werden (siehe Abschnitt~\ref{graphql:validation}). Alle abbildbaren Typen werden automatisch auf Korrektheit geprüft. Die Prüfungen werden beim Lesen eingehender Anfragen und beim Erzeugen der Antworten durchgeführt. Dadurch wird im Vergleich zum alten System ein höherer Grad an Typsicherheit erlangt, da nun zusätzlich die  Antworten zur Laufzeit vor dem Ausliefern an den Client validiert werden. Dies geschah vorher nur in Form von Request Specs während des Deployment Prozesses (siehe Unterabschnitt~\ref{sec:requirements:pros:typesafe-runtime}).
 
 \textbf{Bennennungskonvention} \ \\
 graphql-ruby übersetzt automatisch alle Benennungen von der auf dem Server genutzte Snake Case Schreibweise zur im Schema verwendeten Camel Case Schreibweise, nach dem Auflösen eines Feldes. Somit kann auf dem Server weiterhin Snake Case für alle Benennungen genutzt werden und trotzdem wird Code in Camel Case Schreibweise generiert.
 
 \textbf{Sicherheit} \ \\
 Ein weiterer Aspekt zur Sicherheit ist, dass alle GraphQL Queries, die im gesamten Projekt genutzt werden, in einzelnen Dateien in einem für den Server zugreifbaren Ordner gehalten werden. 
-Stellt der Client eine Anfrage, wird geprüft, ob ein Name (\texttt{operationName}) übermittelt wurde und dieser zu einer der im Ordner existierenden Queries passt. Wenn ja, wird diese geladen und ausgeführt, andernfalls eine Fehlermeldung zurück gegeben. Somit können wie im alten System nur vordefinierte Interaktionen ausgeführt werden.
+Stellt der Client eine Anfrage, wird geprüft, ob ein Name (\texttt{operationName}) übermittelt wurde und dieser zu einer der im Ordner existierenden Queries passt. Wenn ja, wird diese geladen und ausgeführt, andernfalls eine Fehlermeldung zurückgegeben. Somit können wie im alten System nur vordefinierte Interaktionen ausgeführt werden.
 
 \textbf{Darstellungsflexibilität} \ \\
-In der Implementierung wurde obendrein ein System geschaffen, das alle für variierende Darstellungsformen benötigten Features - wie Felder- und Sprachauswahl sowie Filtern, Sortieren und Paginieren (siehe Unterabschnitt~\ref{sec:requirements:req:view}) - umsetzt. Innerhalb einer Klassen \texttt{BaseResolver}, dessen Konstruktor bei Listendarstellungen von allen GraphQL Queries durchlaufen werden (siehe Abbildung~\ref{graphql:sorting}), werden SQL Queries zusammengesetzt. Diesem Prozess können Werte zum Paginieren, Filtern, Sortieren und für die Sprachauswahl übergeben werden. Zudem kann aus dem Kontext einer Query ausgelesen werden welche Felder ausgewählt wurden.
+In der Implementierung wurde obendrein ein System geschaffen, das alle für variierende Darstellungsformen benötigten Features - wie Felder- und Sprachauswahl sowie Filtern, Sortieren und Paginieren (siehe Unterabschnitt~\ref{sec:requirements:req:view}) - umsetzt. Innerhalb einer serverseitigen Klasse \texttt{BaseResolver}, deren Konstruktor bei Listendarstellungen von allen GraphQL Queries durchlaufen werden (siehe Abbildung~\ref{graphql:sorting}), werden SQL Queries zusammengesetzt. Diesem Prozess können Werte zum Paginieren, Filtern, Sortieren und für die Sprachauswahl übergeben werden. Zudem kann aus dem Kontext einer Query ausgelesen werden, welche Felder ausgewählt wurden.
 
 \textbf{Performance und Skalierbarkeit} \ \\
 Durch Auswählen der benötigten Felder ist das Overfetching Problem beseitigt worden.
-Darüber hinaus kann in den Prozess des Zusammensetzens der SQL Query im \texttt{BaseResolver} eingegriffen werden. Bei z.B. Anfragen, die ein N+1 Query Problem aufweisen, können zur Beseitigung manuell Beziehungen in die Ergebnismenge einer Query inkludiert werden. Somit lässt sich jedes Underfetching Problem - wie in Tabelle~\ref{impl:graphql:paginator-table} mit der Anzahl der Code Ressourcen - manuell lösen.
-Vergleicht man zusätzlich die Tabellen \ref{impl:tbl:newview} und \ref{tbl:newview} wird deutlich, dass das neue System weniger Aufwand benötigt. 
+Darüber hinaus kann in den Prozess des Zusammensetzens der SQL Query im \texttt{BaseResolver} eingegriffen werden. Bei Anfragen, die ein N+1 Query Problem aufweisen, können zur Beseitigung manuell Beziehungen in die Ergebnismenge einer Query inkludiert werden. Somit lässt sich jedes Underfetching Problem - wie in Abbildung~\ref{impl:graphql:paginator-table} mit der Anzahl der Code Ressourcen - manuell lösen.
+Vergleicht man zusätzlich die Tabellen \ref{impl:tbl:newview} und \ref{tbl:newview}, in denen die Schritte zu Erstellung einer neuen Sicht beschrieben werden, wird erkenntlich, dass durch die Migration nach GraphQL der Entwicklungsaufwand deutlich reduziert werden konnte. 
 
-Abschließend ist zu sagen, dass die Migration von GraphQL eine Erhöhung der Skalierbarkeit und die Aussicht auf einfache Implementierung neuer Features verspricht.
 
 \section{Ausblick}
-Die Migration zu GraphQL bietet eine Menge Features, die es sich lohnt, zukünftig zu integrieren.
-Nachfolgend werden die wichtigsten Features aufgelistet und kurz erläutert: 
-\begin{description}
-	\item[Batching:] Wie bereits erwähnt, ist Batching ein Verfahren um Anfragen als eine gebündelt zu verschicken. Es könnte beispielsweise bei Anforderung einer Anfrage ein Zeitlimit (50ms) gesetzt werden, welches abgewartet wird, bevor die Anfrage verschickt wird. Fordert der Client innerhalb dieses Zeitlimits eine neue Anfrage an, wird diese mit der ersten zusammengefasst. Nach Ablauf der 50ms werden dann alle zusammen als eine an den Server geschickt. 
-	\item[Client Cache:] Apollo bietet die Möglichkeit an einen Cache zu nutzen. In der gezeigten Implementierung wird bei Anfragen aktuell die Option \texttt{fetchPolicy} auf \texttt{network\--only} gestellt um bei jeder Anfrage die neusten Daten zu erhalten (siehe Unterabschnitt~\ref{impl:graphql:component}). Diese Option könnte zum Beispiel nur nach Ausführung einer Mutation gesetzt werden, sodass nur neue Daten geladen werden, wenn sich auf dem Server sich etwas verändert hat.
-	\item[Authorisierung:] Der einzige Grad an Sicherheit, der implementiert wurde, ist, dass nur im Schema Ordner definierte GraphQL Queries ausgeführt werden können. Die Nutzung einer Library für rollenbasierte Authorisierung wie Pundit~\cite{pundit} ist zu empfehlen.
-	\item[Sorbet und Typesafe-Ruby:] Sorbet~\cite{sorbet} und Typesafe-Ruby~\cite{typesafe-ruby} sind Rubygems, die es unter anderem ermöglichen, bei Funktionen typisierte Rückgabewerte zu definieren oder einem übergebenen Parameter einen Typ aufzuzwingen und damit typsicher wie auf dem Client programmieren zu können. 
-\end{description}
+Die Migration nach GraphQL ermöglicht eine Menge Features, die es sich lohnt, zukünftig zu integrieren.
+Nachfolgend werden die wichtigsten Features aufgelistet und kurz erläutert.
+
+\textbf{Batching} \ \\
+Wie bereits erwähnt, ist Batching ein Verfahren um mehrere Anfragen gebündelt zu verschicken. Es könnte beispielsweise bei Anforderung einer Anfrage ein Zeitlimit (50ms) gesetzt werden, welches abgewartet wird, bevor die Anfrage verschickt wird. Fordert der Client innerhalb dieses Zeitlimits eine neue Anfrage an, wird diese mit der ersten zusammengefasst. Nach Ablauf der 50ms werden dann alle zusammen als eine an den Server geschickt. 
+
+\textbf{Client Cache} \ \\
+Apollo bietet die Möglichkeit an einen Cache zu nutzen. In der gezeigten Implementierung wird bei Anfragen aktuell die Option \texttt{fetchPolicy} auf \texttt{network\--only} gestellt um bei jeder Anfrage die neusten Daten zu erhalten (siehe Unterabschnitt~\ref{impl:graphql:component}). Diese Option könnte zum Beispiel nur nach Ausführung einer Mutation gesetzt werden, sodass nur neue Daten geladen werden, wenn sich auf dem Server etwas verändert hat.
+	
+\textbf{Autorisierung} \ \\
+Der einzige Grad an Sicherheit, der implementiert wurde, ist, dass nur im Schema Ordner definierte GraphQL Queries ausgeführt werden können. Die Nutzung einer Library für rollenbasierte Autorisierung wie Pundit~\cite{pundit} ist zu empfehlen.
+
+\textbf{Sorbet und Typesafe-Ruby} \ \\
+Sorbet~\cite{sorbet} und Typesafe-Ruby~\cite{typesafe-ruby} sind Rubygems, die es unter anderem ermöglichen, bei Funktionen typisierte Rückgabewerte zu definieren oder einem übergebenen Parameter einen Typ aufzuzwingen. Dadurch würde - analog zum Client - die Typsicherheit in der Serverapplikation garantiert werden.
+
+\textbf{Überschreiben von generierten Typdefinitionen} \ \\
+Das erwähnte Problem der löchrigen Codegenerierung (siehe Unterabschnitt~\ref{sec:impl:scalar-any-types}) kann durch Überschreiben der \texttt{any}-Typen mit den ursprünglich in Typescript definierten Interfaces, aus denen JSON Schemata generiert wurden, gelöst werden. Andernfalls kann durch zum Beispiel die Ausführung eines Scripts die generierte Typescript Datei manuell angepasst werden.
+

@@ -6,7 +6,7 @@
 %************************************************
 \chapter{Grundlagen}
 \label{sec:basics}
-Das wesentliche Motiv bei der Nutzung des Internets ist die In\-for\-ma\-tions\-auf\-nah\-me~\cite{statista-1}\cite{ard-zdf}.
+Das Hauptmotiv bei der Nutzung des Internets ist die In\-for\-ma\-tions\-auf\-nah\-me~\cite{statista-1}\cite{ard-zdf}.
 Informationen werden auf unzähligen Webapplikationen bereitgestellt, die jeder mit einem Internetzugang einsehen kann,
 solange der Zugriff auf die Informationen nicht sonderlich geschützt wird.
 
@@ -33,7 +33,7 @@ Hinzu kommen weitere Herausforderungen, wenn die Verbindung zur Datenbank veröf
 wie zum Beispiel das Schützen vor zu exzessiver Nutzung oder das Ausnutzen von bekannten Sicherheitslücken bei nicht aktuellsten Versionen~\cite{postgresql-security}.
 Alles in allem ist das ein Verfahren, von dem dringend abgeraten wird, da es in den wenigsten Fällen nutzbringend und sicher gehandhabt werden kann~\cite{client-to-database}.
 
-Im Folgenden werden diese Probleme anhand von grundlegenden Inhalten, die aktuell Gegenstand des von Marcus Riemers entwickelten Systems~\cite{riemer2016} sind,
+Im Folgenden werden diese Probleme anhand von grundlegenden Inhalten, die aktuell Gegenstand des von Marcus Riemers entwickelten Systems~\cite{riemer2016} sind 
 wieder aufgegriffen und bei Erläuterungen bzw. Code-Beispielen als bekannt vorausgesetzt.
 Dazu gehören die Unterkapitel \fullref{sec:basics:restapi}, \fullref{sec:basics:typescript}, \fullref{sec:basics:jsonschema} und \fullref{sec:basics:postgres}.
 Diese müssen für die Schaffung und Umsetzung von Verbesserungen grundlegend verstanden werden.
@@ -94,9 +94,9 @@ Ressource und ihre Fremdbeziehungen unterscheiden.
         Create & \inlinec{INSERT} & \inlinec{POST} & \inlinec{/projects} & Erstellen eines Projekts \\ \hline
         Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects} & Abrufen aller Projekte \\ \hline
         Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
-        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/- users} & Abrufen aller Nutzer eines Projekts
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/ users} & Abrufen aller Nutzer eines Projekts
         \\ \hline
-        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/users/:id/- friends} & Abrufen aller Freunde eines Nutzers \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/users/:id/ friends} & Abrufen aller Freunde eines Nutzers \\ \hline
         Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
         Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
     \end{tabular}
@@ -179,7 +179,7 @@ type Project {
 \begin{itemize}
 	\setlength\itemsep{-1em}
     \item \texttt{name}: besitzt den Typ String, der ebenfalls nicht den Wert Null annehmen kann. Zusätzlich wurde dem Feld ein Argument \texttt{language} zugeteilt,
-    welches den selbst definierten Datentypen \texttt{LanguageEnum} besitzt und de Defaultwert DE setzt.
+    welches den selbst definierten Datentypen \texttt{LanguageEnum} besitzt und den Default Wert DE setzt.
 \end{itemize}
 
 Zusätzlich wird eine Funktion benötigt, die das Argument \texttt{language} verarbeiten kann und dementsprechend den Rückgabewert formuliert.
@@ -363,7 +363,7 @@ const response: ProjectResponse = await createProjectRecord(newRecord);
 Die Methode \texttt{createProjectRecord} erwartet also ein \texttt{Project} ohne \texttt{id} als Parameter und gibt ein \texttt{ProjectResponse} wieder.
 Der Code im Methodenrumpf ist hierbei nur Pseudocode. Der Typ \texttt{ProjectResponse} beinhaltet neben dem \texttt{Project} auch ein \texttt{error} Feld,
 welches in dem Kontext angibt, ob ein neuer Datensatz auf dem Server erstellt werden konnte oder nicht.
-Desweiteren gibt es noch \texttt{Exclude<T,U>} wodurch sich von T diejenigen Typen ausschließen lassen,
+Des Weiteren gibt es noch \texttt{Exclude<T,U>} wodurch sich von T diejenigen Typen ausschließen lassen,
 die U zugeordnet werden können. Gäbe es mehrere \emph{"Response"}-Typen, ließe sich das Feld extrahieren,
 über welches auf die Datensätze zugegriffen werden kann (siehe Listing~\ref{fig:basics:typescript:6}).
 
@@ -402,8 +402,6 @@ Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angab
   }
 }
 \end{lstlisting}
-\ \\
-\ \\
 
 Das passendes Schema dazu sieht folgendermaßen aus (siehe Listing~\ref{fig:basics:jsonschema:2}).
 
