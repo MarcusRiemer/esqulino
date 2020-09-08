@@ -131,43 +131,45 @@ concise_attributes:
     "property": "characterClass", "blockType": "input"}], "blockType": "block", "dropTarget":
     {}}], "describedType": {"typeName": "knownCharacterClass", "languageName": "regex"}}],
     "rootCssClasses": ["activate-block-outline"], "editorComponents": [{"componentType":
-    "block-root"}, {"componentType": "validator"}, {"componentType": "generated-code"}],
-    "localGeneratorInstructions": {"type": "manual", "staticSidebars": [{"type": "generatedBlocks",
-    "caption": "RegEx", "categories": [{"type": "generated", "grammar": {"regex":
-    ["expression", "characters", "characterRange", "alternative", "group", "quantifierRange",
-    "number", "empty", "negation", "anyCharacter"]}, "categoryCaption": "Automatisch"},
-    {"type": "constant", "blocks": [{"defaultNode": [{"name": "knownCharacterClass",
-    "language": "regex", "properties": {"characterClass": "b"}}], "displayName": "\\b"},
+    "block-root"}, {"componentType": "regex-test"}, {"componentType": "generated-code"},
+    {"componentType": "validator"}], "localGeneratorInstructions": {"type": "manual",
+    "staticSidebars": [{"type": "generatedBlocks", "caption": "RegEx", "categories":
+    [{"type": "generated", "grammar": {"regex": ["expression", "characters", "characterRange",
+    "alternative", "group", "quantifierRange", "number", "empty", "negation", "anyCharacter"]},
+    "categoryCaption": "Automatisch"}, {"type": "constant", "blocks": [{"defaultNode":
+    [{"name": "knownCharacterClass", "language": "regex", "properties": {"characterClass":
+    "b"}}], "displayName": "\\b"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "B"}}], "displayName": "\\B"},
     {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
-    {"characterClass": "B"}}], "displayName": "\\B"}, {"defaultNode": [{"name": "knownCharacterClass",
-    "language": "regex", "properties": {"characterClass": "d"}}], "displayName": "\\d"},
+    {"characterClass": "d"}}], "displayName": "\\d"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "D"}}], "displayName": "\\D"},
     {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
-    {"characterClass": "D"}}], "displayName": "\\D"}, {"defaultNode": [{"name": "knownCharacterClass",
-    "language": "regex", "properties": {"characterClass": "s"}}], "displayName": "\\s"},
+    {"characterClass": "s"}}], "displayName": "\\s"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "S"}}], "displayName": "\\S"},
     {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
-    {"characterClass": "S"}}], "displayName": "\\S"}, {"defaultNode": [{"name": "knownCharacterClass",
-    "language": "regex", "properties": {"characterClass": "w"}}], "displayName": "\\w"},
-    {"defaultNode": [{"name": "knownCharacterClass", "language": "regex", "properties":
-    {"characterClass": "W"}}], "displayName": "\\W"}], "categoryCaption": "Characterklassen"},
-    {"type": "constant", "blocks": [{"defaultNode": [{"name": "quantifierClass", "language":
-    "regex", "properties": {"quantifierClass": "+"}}], "displayName": "+"}, {"defaultNode":
+    {"characterClass": "w"}}], "displayName": "\\w"}, {"defaultNode": [{"name": "knownCharacterClass",
+    "language": "regex", "properties": {"characterClass": "W"}}], "displayName": "\\W"}],
+    "categoryCaption": "Characterklassen"}, {"type": "constant", "blocks": [{"defaultNode":
     [{"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
-    "*"}}], "displayName": "*"}, {"defaultNode": [{"name": "quantifierClass", "language":
-    "regex", "properties": {"quantifierClass": "?"}}], "displayName": "?"}], "categoryCaption":
-    "Kardinalitätsklassen"}, {"type": "constant", "blocks": [{"defaultNode": [{"name":
-    "lineTails", "language": "regex", "properties": {"tail": "^"}}], "displayName":
-    "^"}, {"defaultNode": [{"name": "lineTails", "language": "regex", "properties":
-    {"tail": "$"}}], "displayName": "$"}], "categoryCaption": "Zeilenanfang/ende"},
-    {"type": "constant", "blocks": [{"defaultNode": {"name": "characters", "language":
-    "regex", "properties": {"chars": "a"}}, "displayName": "a"}, {"defaultNode": {"name":
-    "characters", "language": "regex", "properties": {"chars": "b"}}, "displayName":
-    "b"}], "categoryCaption": "Manuell"}]}]}}'
+    "+"}}], "displayName": "+"}, {"defaultNode": [{"name": "quantifierClass", "language":
+    "regex", "properties": {"quantifierClass": "*"}}], "displayName": "*"}, {"defaultNode":
+    [{"name": "quantifierClass", "language": "regex", "properties": {"quantifierClass":
+    "?"}}], "displayName": "?"}], "categoryCaption": "Kardinalitätsklassen"}, {"type":
+    "constant", "blocks": [{"defaultNode": [{"name": "lineTails", "language": "regex",
+    "properties": {"tail": "^"}}], "displayName": "^"}, {"defaultNode": [{"name":
+    "lineTails", "language": "regex", "properties": {"tail": "$"}}], "displayName":
+    "$"}], "categoryCaption": "Zeilenanfang/ende"}, {"type": "constant", "blocks":
+    [{"defaultNode": {"name": "characters", "language": "regex", "properties": {"chars":
+    "a"}}, "displayName": "a"}, {"defaultNode": {"name": "characters", "language":
+    "regex", "properties": {"chars": "b"}}, "displayName": "b"}], "categoryCaption":
+    "Manuell"}]}], "editorComponents": [{"componentType": "block-root"}, {"componentType":
+    "regex-test"}, {"componentType": "generated-code"}, {"componentType": "validator"}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-03 08:48:34.136111000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-22 11:35:51.573838000 Z
+  value_before_type_cast: 2020-07-23 13:05:59.715594000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: regex

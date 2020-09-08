@@ -8,9 +8,12 @@ import {
 } from "../../../shared/syntaxtree/regex/regex-task.description";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { runTestCase } from "../../../shared/syntaxtree/regex/regex-test";
 
-interface ExecutedTestCase extends RegexTestCaseDescription {
+export interface ExecutedTestCase extends RegexTestCaseDescription {
+  matches: string[];
   result: boolean;
+  error: string;
 }
 
 /**
@@ -44,29 +47,61 @@ export class RegexTestComponent {
   readonly test$: Observable<RegexTestDescription> = of({
     cases: [
       {
-        input: "ab",
+        input: "a",
+        expected: {
+          type: "exactMatch",
+          hits: ["a"],
+        },
+      },
+      {
+        input: "abc",
         expected: { type: "wholeMatch" },
       },
       {
-        input: "ba",
+        input: "cd",
         expected: { type: "noMatch" },
+      },
+      {
+        input: "abcde",
+        expected: {
+          type: "exactMatch",
+          hits: ["abc", "de"],
+        },
       },
     ],
   });
+
+  checkIfExpectedHitGotMatched(expectedMatch: string, testCase: ExecutedTestCase) {
+    return testCase.matches.find(x => x.trim() == expectedMatch.trim());
+  }
 
   readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest(
     this.regexCompiled$,
     this.test$
   ).pipe(
     map(([regexString, testCases]) => {
-      const regex = new RegExp(regexString);
-      // TODO: Compile and use regex for each testcase
+      // TODO make sure this is only called on proper test code resources and not in for example a grammar defining code resource
+      let regex;
+      let errorMessage = "";
+      try {
+        regex  = new RegExp(regexString);
+        console.log("regex: " + regexString);
+      } catch (e) {
+        errorMessage = e.message;
+      }
 
       const toReturn: ExecutedTestCase[] = testCases.cases.map((testCase) => {
-        // TODO: Run testCase.input through regex and compare against expected result
-        //       runTestCases in `regex-test.ts`
-        //       Return the computed result instead of `true`
-        return Object.assign({}, testCase, { result: true });
+        // TODO Return the computed result instead of `true`
+        if (errorMessage != "") {
+          return Object.assign({}, {
+            input: testCase.input,
+            expected: testCase.expected,
+            matches: [],
+            result: false,
+            error: errorMessage,
+          });
+        }
+        return Object.assign({}, runTestCase(regex, testCase));
       });
 
       return toReturn;

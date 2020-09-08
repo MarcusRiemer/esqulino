@@ -23,9 +23,29 @@
         background-color: #b4d6a9;
     }
 
-    .negation > *, .alternative > * {
+    .negation > *, .alternative > *, .lineTails > * {
         background-color: #fff;
     }
 }
 
-// TODO Terminalsymbole wieder weiß bzw nur die Speziellen
+#regexTestTable {
+    padding: 10px;
+
+    .headerRow {
+        font-weight: bold;
+        border-bottom: 1px solid #000;
+    }
+
+    .dataRow {
+        padding: 5px 0;
+    }
+
+    .dataRow:nth-child(even) {
+        background-color: darken(white, 5%);
+    }
+
+    .dataRow:hover {
+        background-color: darken(white, 20%);
+    }
+
+}
