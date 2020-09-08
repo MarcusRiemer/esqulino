@@ -1,18 +1,29 @@
-<table *ngIf="(executedTestCases$ | async) as executedTestCases">
-  <tr>
-    <th>
-      Eingabe
-    </th>
-    <th>
-      Erwartetes Ergebnis?
-    </th>
-    <th>
-      Erfüllt?
-    </th>
-  </tr>
-  <tr *ngFor="let testCase of executedTestCases">
-    <td>{{ testCase.input }}</td>
-    <td>{{ testCase.expected.type }}</td>
-    <td>{{ testCase.result }}</td>
-  </tr>
-</table>
+<div id="regexTestTable">
+  <div class="row headerRow">
+    <div class="col-md-4">Zu prüfende Eingabe</div>
+    <div class="col-md-4">Erwartete Treffer</div>
+    <div class="col-md-1">Erfüllt?</div>
+    <div class="col-md-3">evtl. Fehler</div>
+  </div>
+  <div
+    class="row dataRow"
+    *ngFor="let testCase of (executedTestCases$ | async)"
+  >
+    <div class="col-md-4">{{ testCase.input }}</div>
+    <div class="col-md-4">
+      <span *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last">
+        <span *ngIf="checkIfExpectedHitGotMatched(expectedMatch, testCase); else noHitTemplate"
+              style="background-color: #77dd77">
+          {{ expectedMatch }}
+        </span>
+        <ng-template #noHitTemplate>
+          {{ expectedMatch }}
+        </ng-template>
+        {{ isLast ? '' : ', ' }}
+      </span>
+    </div>
+    <div class="col-md-1">{{ testCase.result }}</div>
+    <div class="col-md-3">{{ testCase.error }}</div>
+
+  </div>
+</div>

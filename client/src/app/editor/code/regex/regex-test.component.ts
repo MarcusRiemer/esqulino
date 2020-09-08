@@ -9,12 +9,15 @@ import {
 } from "../../../shared/syntaxtree/regex/regex-testbench.description";
 import { referencedResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
 import { rxFilterRootLanguage } from "../../../shared/util";
+import { runTestCase } from "../../../shared/syntaxtree/regex/regex-test";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { ProjectService } from "../../project.service";
 
-interface ExecutedTestCase extends RegexTestCaseDescription {
+export interface ExecutedTestCase extends RegexTestCaseDescription {
+  matches: string[];
   result: boolean;
+  error: string;
 }
 
 /**
@@ -71,28 +74,48 @@ export class RegexTestComponent {
     })
   );
 
+  checkIfExpectedHitGotMatched(
+    expectedMatch: string,
+    testCase: ExecutedTestCase
+  ) {
+    return testCase.matches.find((x) => x.trim() == expectedMatch.trim());
+  }
+
   readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest(
     this.regexCompiled$,
     this.test$
   ).pipe(
     map(([regexString, testCases]) => {
-      const regex = new RegExp(regexString);
-      // TODO: Compile and use regex for each testcase
+      // TODO make sure this is only called on proper test code resources and not in for example a grammar defining code resource
+      let regex: RegExp;
+      let errorMessage = "";
+      try {
+        regex = new RegExp(regexString);
+        console.log("regex: " + regexString);
+      } catch (e) {
+        errorMessage = e.message;
+      }
 
-      const toReturn: ExecutedTestCase[] = [];
-
-      // We don't want to rely on array.float so we build the flattened array
-      // by appending to it.
-      testCases.forEach((t) => {
-        t.cases.forEach((testCase) => {
-          // TODO: Run testCase.input through regex and compare against expected result
-          //       runTestCases in `regex-test.ts`
-          //       Return the computed result instead of `true`
-          toReturn.push(Object.assign({}, testCase, { result: true }));
+      const executed: ExecutedTestCase[] = testCases.flatMap((bench) => {
+        return bench.cases.map((testCase) => {
+          if (errorMessage != "") {
+            return Object.assign(
+              {},
+              {
+                input: testCase.input,
+                expected: testCase.expected,
+                matches: [],
+                result: false,
+                error: errorMessage,
+              }
+            );
+          } else {
+            return Object.assign({}, runTestCase(regex, testCase));
+          }
         });
       });
 
-      return toReturn;
+      return executed;
     })
   );
 }
