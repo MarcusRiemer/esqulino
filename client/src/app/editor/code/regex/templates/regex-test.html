@@ -11,9 +11,13 @@
   >
     <div class="col-md-4">{{ testCase.input }}</div>
     <div class="col-md-4">
-      <span *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last">
-        <span *ngIf="checkIfExpectedHitGotMatched(expectedMatch, testCase); else noHitTemplate"
-              style="background-color: #77dd77">
+      <span
+        *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last"
+      >
+        <span
+          *ngIf="checkIfExpectedHitGotMatched(expectedMatch, testCase); else noHitTemplate"
+          style="background-color: #77dd77;"
+        >
           {{ expectedMatch }}
         </span>
         <ng-template #noHitTemplate>
@@ -24,6 +28,5 @@
     </div>
     <div class="col-md-1">{{ testCase.result }}</div>
     <div class="col-md-3">{{ testCase.error }}</div>
-
   </div>
 </div>
