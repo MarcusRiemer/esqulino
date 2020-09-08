@@ -25,7 +25,7 @@ module GraphqlQueryHelper
   end
 
   def get_query(name)
-    @@query_storage.get_query(name.underscore)
+    query_insert_typename @@query_storage.get_query(name.underscore)
   end
 
   def exists?(name:)
