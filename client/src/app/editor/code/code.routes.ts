@@ -24,6 +24,11 @@ export const codeEditorRoutes: Routes = [
     component: BlockEditorComponent,
   },
   {
+    path: ":resourceId/blockly",
+    loadChildren: () =>
+      import("./blockly/blockly.module").then((m) => m.BlocklyEditorModule),
+  },
+  {
     path: ":resourceId/unknown",
     component: UnknownCodeResourceComponent,
   },
