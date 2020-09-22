@@ -1,14 +1,20 @@
 import {
   Component,
   AfterViewInit,
+  OnInit,
   OnDestroy,
   ElementRef,
   ViewChild,
 } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+
+import { first } from "rxjs/operators";
 
 import * as Blockly from "blockly";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { EditorToolbarService } from "../../toolbar.service";
+import { SidebarService } from "../../sidebar.service";
 
 import { BlocklyBlocksService } from "./blockly-blocks.service";
 
@@ -22,7 +28,7 @@ import { BlocklyBlocksService } from "./blockly-blocks.service";
     <div #blocklyOutlet class="blockly-outlet"></div>
   `,
 })
-export class BlocklyComponent implements AfterViewInit, OnDestroy {
+export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
   // The DOM element in which blockly is hosted
   @ViewChild("blocklyOutlet")
   blocklyOutlet: ElementRef;
@@ -30,10 +36,35 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   // The canvas the user is interacting with
   private _workspace: Blockly.WorkspaceSvg;
 
+  // This is an experimental API not yet supported by Typescript
+  private _resizeObserver: any;
+
   constructor(
     private _blocklyBlocks: BlocklyBlocksService,
-    private _current: CurrentCodeResourceService
+    private _current: CurrentCodeResourceService,
+    private _toolbarService: EditorToolbarService,
+    private _sidebarService: SidebarService,
+    private _router: Router
   ) {}
+
+  ngOnInit() {
+    this._toolbarService.resetItems();
+    this._toolbarService.savingEnabled = false;
+    this._sidebarService.hideSidebar();
+
+    // Wiring up the delete button
+    let btnDelete = this._toolbarService.addButton(
+      "builtin-editor",
+      "Eingebauter Editor",
+      "star"
+    );
+    btnDelete.onClick.pipe(first()).subscribe(async (_) => {
+      const snap = this._router.url;
+      console.log(snap.substring(0, snap.length - 2));
+
+      this._router.navigateByUrl(snap.substring(0, snap.length - 2));
+    });
+  }
 
   /**
    * Injecting Blockly into the outlet and register relevant events.
@@ -62,10 +93,22 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
     );
 
     this._workspace.addChangeListener(this.onWorkspaceChangeCallback);
+
+    // Detect resizes
+    // @ts-ignore
+    if (ResizeObserver) {
+      // @ts-ignore
+      this._resizeObserver = new ResizeObserver((entries: any) => {
+        console.log(entries);
+        Blockly.svgResize(this._workspace);
+      });
+      this._resizeObserver.observe(this.blocklyOutlet.nativeElement);
+    }
   }
 
   ngOnDestroy(): void {
     this._workspace.removeChangeListener(this.onWorkspaceChangeCallback);
+    this._resizeObserver.disconnect();
   }
 
   /**
