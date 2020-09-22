@@ -8,6 +8,8 @@ import {
 
 import * as Blockly from "blockly";
 
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
+
 import { BlocklyBlocksService } from "./blockly-blocks.service";
 
 /**
@@ -28,13 +30,27 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy {
   // The canvas the user is interacting with
   private _workspace: Blockly.WorkspaceSvg;
 
-  constructor(private _blocklyBlocks: BlocklyBlocksService) {}
+  constructor(
+    private _blocklyBlocks: BlocklyBlocksService,
+    private _current: CurrentCodeResourceService
+  ) {}
 
   /**
    * Injecting Blockly into the outlet and register relevant events.
    */
   ngAfterViewInit(): void {
-    const generated = this._blocklyBlocks.load();
+    const validators = this._current.peekResource.validatorPeek
+      .grammarValidators;
+
+    if (!validators || validators.length != 1) {
+      throw new Error(
+        `Blockly generation currently requires a single grammar document`
+      );
+    }
+
+    const g = validators[0].description;
+
+    const generated = this._blocklyBlocks.load(g);
     console.log("Generated blockly settings", generated);
     console.log("XML Toolbox", generated.toolbox);
 

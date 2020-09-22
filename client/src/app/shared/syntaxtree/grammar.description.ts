@@ -450,6 +450,12 @@ export function isNodeVisualTypeDescription(
   return arg instanceof Object && arg.type === "visualize";
 }
 
+export function isVisualizableType(
+  arg: any
+): arg is NodeVisualTypeDescription | NodeConcreteTypeDescription {
+  return isNodeConcreteTypeDescription(arg) || isNodeVisualTypeDescription(arg);
+}
+
 export function isNodeTypesAllowedDescription(
   obj: any
 ): obj is NodeTypesAllowedDescription {

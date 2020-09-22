@@ -91,6 +91,19 @@ export function getFullQualifiedAttributes(
   return toReturn;
 }
 
+export function resolveNodeTypeChildReference(
+  ref: Desc.NodeTypesChildReference,
+  languageName: string
+): QualifiedTypeName {
+  if (Desc.isChildCardinalityDescription(ref)) {
+    return resolveNodeTypeChildReference(ref.nodeType, languageName);
+  } else if (Desc.isQualifiedTypeName(ref)) {
+    return ref;
+  } else {
+    return { languageName, typeName: ref };
+  }
+}
+
 /**
  * A predicate with a NodeTypeDescription as argument
  */
