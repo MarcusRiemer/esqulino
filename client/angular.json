@@ -13,7 +13,7 @@
           "baseHref": ""
         },
         "locales": {
-          "en":  {
+          "en": {
             "translation": "src/locale/messages.en.xlf",
             "baseHref": ""
           }
@@ -23,9 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": [
-              "en"
-            ],
+            "localize": ["en"],
             "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -41,23 +39,21 @@
             "statsJson": true,
             "outputHashing": "all",
             "assets": [
-              "src/vendor"
+              "src/vendor",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/blockly/media",
+                "output": "./blockly-media/"
+              }
             ],
             "styles": [
               "src/app/css/style.scss",
               "node_modules/font-awesome/css/font-awesome.css"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "node_modules/bootstrap/scss"
-              ]
+              "includePaths": ["node_modules/bootstrap/scss"]
             },
-            "scripts": [
-              "node_modules/ngx-blockly/scripts/blockly/blockly_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/blocks_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/python_compressed.js",
-              "node_modules/ngx-blockly/scripts/blockly/msg/js/en.js",
-            ],
+            "scripts": [],
             "showCircularDependencies": true
           },
           "configurations": {
@@ -111,9 +107,7 @@
               "i18nFormat": "xlf",
               "encoding": "UTF-8",
               "defaultLanguage": "de",
-              "languages": [
-                "en"
-              ],
+              "languages": ["en"],
               "useSourceAsTarget": false
             }
           }
@@ -131,10 +125,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.test.json"
-            ],
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.test.json"],
             "exclude": []
           }
         },
@@ -144,9 +135,7 @@
             "outputPath": "dist/server",
             "main": "src/universal-server.ts",
             "tsConfig": "src/tsconfig.server.json",
-            "localize": [
-              "en", "de"
-            ],
+            "localize": ["en", "de"]
           }
         },
         "serve-ssr": {
@@ -167,9 +156,7 @@
           "options": {
             "browserTarget": "blattwerkzeug-client:build:production",
             "serverTarget": "blattwerkzeug-client:server:production",
-            "routes": [
-              "/"
-            ]
+            "routes": ["/"]
           },
           "configurations": {
             "production": {}

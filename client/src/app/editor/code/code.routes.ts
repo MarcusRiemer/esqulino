@@ -15,7 +15,7 @@ export const codeEditorRoutes: Routes = [
   },
   {
     path: ":resourceId",
-    redirectTo: ":resourceId/block",
+    redirectTo: ":resourceId/blockly",
     pathMatch: "full",
   },
   {
