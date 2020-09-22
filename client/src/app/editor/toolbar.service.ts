@@ -28,11 +28,13 @@ export class ToolbarItem {
     private _id: string,
     private _caption: string,
     private _icon: string,
-    private _key: string,
+    private _key: string | undefined,
     private _native: boolean,
     private _mayPerform: MayPerformRequestDescription = undefined
   ) {
-    this._key = _key.toLowerCase();
+    if (_key) {
+      this._key = _key.toLowerCase();
+    }
 
     this._onClick = new Subject<void>();
   }
@@ -151,7 +153,7 @@ export class EditorToolbarService {
     id: string,
     caption: string,
     icon: string,
-    key: string,
+    key?: string,
     performDesc: MayPerformRequestDescription = undefined
   ): ToolbarItem {
     // Create a new non-native icon
