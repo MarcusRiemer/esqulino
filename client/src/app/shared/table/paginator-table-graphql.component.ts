@@ -94,9 +94,7 @@ export class PaginatorTableGraphqlComponent
       map((responseDocument) => responseDocument.data[this.queryData.dataKey])
     );
     this.totalCount$ = this.data$.pipe(map((data) => data.totalCount));
-
     this.listData$ = this.data$.pipe(map((data) => data.nodes));
-
     this._pageSize = this.queryData.pageSize;
   }
 

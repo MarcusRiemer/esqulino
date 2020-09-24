@@ -56,15 +56,8 @@ import { ProviderShowComponent } from "./provider-show.component";
 import { EmptyComponent } from "./empty.component";
 
 import {
-  ListGrammarDataService,
   IndividualGrammarDataService,
-  ListBlockLanguageDataService,
   IndividualBlockLanguageDataService,
-  ProjectDataService,
-  IndividualProjectDataService,
-  AdminListProjectDataService,
-  MutateGrammarService,
-  MutateBlockLanguageService,
 } from "./serverdata";
 
 import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
@@ -95,15 +88,8 @@ import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { OverlayModule } from "@angular/cdk/overlay";
 
 const dataServices = [
-  ListGrammarDataService,
   IndividualGrammarDataService,
-  MutateGrammarService,
-  ListBlockLanguageDataService,
   IndividualBlockLanguageDataService,
-  MutateBlockLanguageService,
-  ProjectDataService,
-  IndividualProjectDataService,
-  AdminListProjectDataService,
   ServerTasksService,
 ];
 

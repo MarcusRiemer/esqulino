@@ -155,19 +155,6 @@ export class ServerApi {
     return `${this._apiBaseUrl}/block_languages`;
   }
 
-  /**
-   * Retrieves the URL that is used to list all public grammars
-   */
-  getGrammarListUrl(): string {
-    return `${this._apiBaseUrl}/grammars`;
-  }
-
-  /**
-   * Retrieves the URL that is used to create a new grammar
-   */
-  createGrammarUrl(): string {
-    return `${this._apiBaseUrl}/grammars`;
-  }
 
   /**
    * Retrieves the URL that is used to list meta code resources (that may be used
@@ -208,20 +195,6 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves block languages that are related to this grammar
-   */
-  individualGrammarRelatedBlockLanguagesUrl(id: string) {
-    return `${this.individualGrammarUrl(id)}/related_block_languages`;
-  }
-
-  /**
-   * Regenerates the foreign types of a grammar
-   */
-  individualGrammarRegenerateForeignTypes(id: string) {
-    return `${this.individualGrammarUrl(id)}/regenerate_foreign_types`;
-  }
-
-  /**
    * Retrieves code resources that may be visualized for a grammar code gallery.
    */
   individualGrammarCodeResourceGallery(id: string) {
@@ -236,31 +209,10 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the URL that is used to list all public projects.
-   */
-  getProjectListUrl(): string {
-    return `${this._apiBaseUrl}/project`;
-  }
-
-  /**
-   * Retrieves the URL that is used to list all public projects.
-   */
-  getAdminProjectListUrl(): string {
-    return `${this._apiBaseUrl}/project/list_admin`;
-  }
-
-  /**
    * Retrieves the URL that uniquely describes a project.
    */
   getProjectUrl(projectId: string): string {
     return `${this._apiBaseUrl}/project/${projectId}`;
-  }
-
-  /**
-   * Retrieves the url to create a new project
-   */
-  createProjectUrl(): string {
-    return `${this._apiBaseUrl}/project`;
   }
 
   /**

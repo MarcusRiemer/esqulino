@@ -9,10 +9,6 @@ import { MatSortModule } from "@angular/material/sort";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { ToolbarService } from "../../shared";
-import {
-  ListBlockLanguageDataService,
-  MutateBlockLanguageService,
-} from "../../shared/serverdata";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
 
 import { OverviewBlockLanguageComponent } from "./overview-block-language.component";
@@ -49,8 +45,6 @@ describe("OverviewBlockLanguageComponent", () => {
       ],
       providers: [
         ToolbarService,
-        ListBlockLanguageDataService,
-        MutateBlockLanguageService,
       ],
       declarations: [
         OverviewBlockLanguageComponent,
