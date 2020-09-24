@@ -10,10 +10,11 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Overlay } from "@angular/cdk/overlay";
 
-import {
-  specLoadEmptyProject,
-  buildBlockLanguage,
-} from "../../editor/spec-util";
+import { ApolloTestingModule } from "apollo-angular/testing";
+
+import { FullProjectGQL } from "../../../generated/graphql";
+
+import { specLoadProject, buildBlockLanguage } from "../../editor/spec-util";
 
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
@@ -38,6 +39,7 @@ describe(`CreateCodeResourceComponent`, () => {
   async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
+        ApolloTestingModule,
         FormsModule,
         RouterTestingModule.withRoutes([
           { path: ":id", component: EmptyComponent },
@@ -60,6 +62,7 @@ describe(`CreateCodeResourceComponent`, () => {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
         },
+        FullProjectGQL,
       ],
       declarations: [CreateCodeResourceComponent, EmptyComponent],
     }).compileComponents();
@@ -88,7 +91,7 @@ describe(`CreateCodeResourceComponent`, () => {
   it(`Shows the default block language`, async () => {
     let t = await createComponent();
 
-    specLoadEmptyProject(t.projectService, {
+    await specLoadProject(t.projectService, {
       blockLanguages: [
         {
           id: "1",
@@ -97,6 +100,9 @@ describe(`CreateCodeResourceComponent`, () => {
           editorBlocks: [],
           editorComponents: [],
           defaultProgrammingLanguageId: "spec",
+          rootCssClasses: [],
+          grammarId: "4330b41a-294b-43be-b1d0-679df35a7c87",
+          localGeneratorInstructions: { type: "manual" },
         },
       ],
     });
@@ -110,7 +116,7 @@ describe(`CreateCodeResourceComponent`, () => {
     let t = await createComponent();
     const b = buildBlockLanguage();
 
-    specLoadEmptyProject(t.projectService, {
+    await specLoadProject(t.projectService, {
       blockLanguages: [
         b,
         buildBlockLanguage(), // Two languages available
@@ -125,7 +131,7 @@ describe(`CreateCodeResourceComponent`, () => {
   it(`Creating a new resource results in a HTTP request and a redirect`, async () => {
     const t = await createComponent();
     const b = buildBlockLanguage();
-    const p = await specLoadEmptyProject(t.projectService, {
+    const p = await specLoadProject(t.projectService, {
       blockLanguages: [b],
     });
     const r: CodeResourceDescription = {

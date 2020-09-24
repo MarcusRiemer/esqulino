@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4
@@ -19,24 +19,24 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "ereignis", "columns": [{"name": "ereignis_id",
-    "type": "TEXT", "index": 0, "primary": true, "not_null": true, "dflt_value": null},
-    {"name": "bezeichnung", "type": "TEXT", "index": 1, "primary": false, "not_null":
-    true, "dflt_value": null}, {"name": "beginn_jahr", "type": "INTEGER", "index":
-    2, "primary": false, "not_null": true, "dflt_value": null}, {"name": "ende_jahr",
-    "type": "INTEGER", "index": 3, "primary": false, "not_null": false, "dflt_value":
-    null}], "foreign_keys": []}, {"name": "person", "columns": [{"name": "person_id",
-    "type": "TEXT", "index": 0, "primary": true, "not_null": true, "dflt_value": null},
-    {"name": "name", "type": "TEXT", "index": 1, "primary": false, "not_null": true,
-    "dflt_value": null}, {"name": "geschlecht", "type": "TEXT", "index": 2, "primary":
-    false, "not_null": false, "dflt_value": null}, {"name": "geb_jahr", "type": "INTEGER",
-    "index": 3, "primary": false, "not_null": true, "dflt_value": null}, {"name":
-    "tod_jahr", "type": "INTEGER", "index": 4, "primary": false, "not_null": false,
-    "dflt_value": null}], "foreign_keys": []}]'
+    "type": "TEXT", "index": 0, "notNull": true, "primary": true, "dfltValue": null},
+    {"name": "bezeichnung", "type": "TEXT", "index": 1, "notNull": true, "primary":
+    false, "dfltValue": null}, {"name": "beginn_jahr", "type": "INTEGER", "index":
+    2, "notNull": true, "primary": false, "dfltValue": null}, {"name": "ende_jahr",
+    "type": "INTEGER", "index": 3, "notNull": false, "primary": false, "dfltValue":
+    null}], "foreignKeys": [], "systemTable": false}, {"name": "person", "columns":
+    [{"name": "person_id", "type": "TEXT", "index": 0, "notNull": true, "primary":
+    true, "dfltValue": null}, {"name": "name", "type": "TEXT", "index": 1, "notNull":
+    true, "primary": false, "dfltValue": null}, {"name": "geschlecht", "type": "TEXT",
+    "index": 2, "notNull": false, "primary": false, "dfltValue": null}, {"name": "geb_jahr",
+    "type": "INTEGER", "index": 3, "notNull": true, "primary": false, "dfltValue":
+    null}, {"name": "tod_jahr", "type": "INTEGER", "index": 4, "notNull": false, "primary":
+    false, "dfltValue": null}], "foreignKeys": [], "systemTable": false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-02-26 10:28:41.480787000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2018-02-26 10:29:15.219477000 Z
+  value_before_type_cast: 2020-08-22 21:04:42.388618000 Z
 new_record: false
 active_record_yaml_version: 2

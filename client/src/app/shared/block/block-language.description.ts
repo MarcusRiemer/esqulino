@@ -188,6 +188,12 @@ export type EditorComponentDescription =
   | JsonAstComponentDescription
   | RegexTestComponentDescription;
 
+export type BlockLanguageSidebarsDescription = SidebarDescription[];
+
+export type BlockLanguageEditorComponentsDescription = EditorComponentDescription[];
+
+export type BlockLanguageEditorBlocksDescription = EditorBlockDescription[];
+
 /**
  * The data about a language model that is stored in the database
  */
@@ -195,18 +201,18 @@ export interface BlockLanguageDocument {
   /**
    * How the available blocks should be represented in the sidebar.
    */
-  sidebars: SidebarDescription[];
+  sidebars: BlockLanguageSidebarsDescription;
 
   /**
    * How blocks should be represented in the drag & drop editor.
    */
-  editorBlocks: EditorBlockDescription[];
+  editorBlocks: BlockLanguageEditorBlocksDescription;
 
   /**
    * Specialised components that should be shown for this block
    * language.
    */
-  editorComponents: EditorComponentDescription[];
+  editorComponents: BlockLanguageEditorComponentsDescription;
 
   /**
    * Information on how to (re)-generate this block language.
@@ -216,7 +222,7 @@ export interface BlockLanguageDocument {
   /**
    * CSS classes that should be applied at the root
    */
-  rootCssClasses?: string[];
+  rootCssClasses: string[];
 }
 
 /**

@@ -4,9 +4,8 @@ import { Title } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { BehaviorSubject } from "rxjs";
-import { switchMap, map, first, filter, flatMap } from "rxjs/operators";
+import { switchMap, map, filter, flatMap } from "rxjs/operators";
 
-import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
   generateBlockLanguage,
@@ -54,7 +53,7 @@ export class EditBlockLanguageService {
               map(
                 (bl) =>
                   // unpack model Object
-                  bl.data.singleBlockLanguage
+                  bl.data.blockLanguages.nodes[0]
               )
             )
         )
@@ -161,6 +160,9 @@ export class EditBlockLanguageService {
                   instructions,
                   g
                 );
+                // Keep previous root css classes
+                updated.rootCssClasses = blockLanguage.rootCssClasses;
+
                 this._snackBar.open(`Regenerated block language`, "", {
                   duration: 3000,
                 });

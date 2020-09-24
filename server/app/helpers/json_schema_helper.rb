@@ -36,16 +36,20 @@ module JsonSchemaHelper
   # @param schema_name [string] The ID of the schema to validate against
   # @param body_string [string] The string representation of the object
   #                             that requires a check.
-  def ensure_request(schema_name, body_string)
+  def ensure_request(schema_name, body_string, underscore_keys: true)
     # Loading the actual body
     body = JSON.parse(body_string)
 
     ensure_valid_document(schema_name, body)
 
-    # In the case of a request: All keys of the top level document
-    # should be in "snake_case" as they might be immediately mapped
-    # to a model.
-    return body.transform_keys { |k| k.underscore }
+    if underscore_keys
+      # In the case of a request: All keys of the top level document
+      # should be in "snake_case" as they might be immediately mapped
+      # to a model.
+      return body.transform_keys { |k| k.underscore }
+    else
+      return body
+    end
   end
 
   # Returns the path the given schema would be found under

@@ -26,8 +26,8 @@ export class Column {
     this.index = desc.index;
     this.name = desc.name;
     this.type = desc.type;
-    this.not_null = desc.not_null;
-    this.dflt_value = desc.dflt_value;
+    this.not_null = desc.notNull;
+    this.dflt_value = desc.dfltValue;
     this.primary = desc.primary;
     this.state = state;
   }
@@ -54,8 +54,8 @@ export class Column {
       name: this.name,
       primary: this.primary,
       type: this.type,
-      not_null: this.not_null,
-      dflt_value: this.dflt_value,
+      notNull: this.not_null,
+      dfltValue: this.dflt_value,
     };
   }
 }

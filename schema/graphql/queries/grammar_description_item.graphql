@@ -8,6 +8,5 @@ query GrammarDescriptionItem($id: ID!) {
         foreignTypes
         root
         types
-        __typename
     }
 }

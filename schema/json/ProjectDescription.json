@@ -61,19 +61,6 @@
         }
       ]
     },
-    "AvailableDatabaseDescription": {
-      "additionalProperties": false,
-      "description": "Describes a database that could possibly be used.",
-      "properties": {
-        "type": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "type": "object"
-    },
     "BlockLanguageDescription": {
       "additionalProperties": false,
       "description": "Augments a language with information about the UI layer. This definition is\nused by the editors, especially the block editor, to show customized editors\nfor different languages. These customizations include:\n\n* The blocks that are shown in the sidebar.\n* Possibly language specific sidebars.\n* Definitions of the actual blocks.\n* Possibly language specific editor components.",
@@ -91,18 +78,12 @@
           "type": "string"
         },
         "editorBlocks": {
-          "description": "How blocks should be represented in the drag & drop editor.",
-          "items": {
-            "$ref": "#/definitions/EditorBlockDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageEditorBlocksDescription",
+          "description": "How blocks should be represented in the drag & drop editor."
         },
         "editorComponents": {
-          "description": "Specialised components that should be shown for this block\nlanguage.",
-          "items": {
-            "$ref": "#/definitions/EditorComponentDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageEditorComponentsDescription",
+          "description": "Specialised components that should be shown for this block\nlanguage."
         },
         "grammarId": {
           "description": "The grammar that this block language may visualize.",
@@ -128,11 +109,8 @@
           "type": "array"
         },
         "sidebars": {
-          "description": "How the available blocks should be represented in the sidebar.",
-          "items": {
-            "$ref": "#/definitions/SidebarDescription"
-          },
-          "type": "array"
+          "$ref": "#/definitions/BlockLanguageSidebarsDescription",
+          "description": "How the available blocks should be represented in the sidebar."
         },
         "slug": {
           "description": "A unique (but possibly empty) id. If this is undefined the language has\nno builtin counterpart on the client.",
@@ -149,9 +127,22 @@
         "editorComponents",
         "id",
         "name",
+        "rootCssClasses",
         "sidebars"
       ],
       "type": "object"
+    },
+    "BlockLanguageEditorBlocksDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorBlockDescription"
+      },
+      "type": "array"
+    },
+    "BlockLanguageEditorComponentsDescription": {
+      "items": {
+        "$ref": "#/definitions/EditorComponentDescription"
+      },
+      "type": "array"
     },
     "BlockLanguageGeneratorDocument": {
       "anyOf": [
@@ -163,6 +154,12 @@
         }
       ],
       "description": "All possible instructions to generate a block language."
+    },
+    "BlockLanguageSidebarsDescription": {
+      "items": {
+        "$ref": "#/definitions/SidebarDescription"
+      },
+      "type": "array"
     },
     "BlockRootComponentDescription": {
       "additionalProperties": false,
@@ -992,7 +989,10 @@
           "$ref": "#/definitions/NodePropertyTypeDescription"
         },
         {
-          "$ref": "#/definitions/NodeInterpolateDescription"
+          "$ref": "#/definitions/NodeInterpolatePropertyDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolateChildrenDescription"
         },
         {
           "$ref": "#/definitions/NodeChildrenGroupDescription"
@@ -1162,7 +1162,36 @@
       ],
       "description": "The restrictions that are applicable to integers"
     },
-    "NodeInterpolateDescription": {
+    "NodeInterpolateChildrenDescription": {
+      "additionalProperties": false,
+      "description": "References an existing child group on this node",
+      "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "each"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NodeInterpolatePropertyDescription": {
       "additionalProperties": false,
       "description": "References an existing property on this node. This is useful for languages\nthat have some kind of reference to a common name in opening and closing\ncontexts (eg. XML with _the-name__/the-name_).",
       "properties": {
@@ -2054,15 +2083,6 @@
       "additionalProperties": false,
       "description": "The \"shallow\" properties of a project that do not contain any\ncomplicated standalone resources.",
       "properties": {
-        "activeDatabase": {
-          "type": "string"
-        },
-        "availableDatabases": {
-          "additionalProperties": {
-            "$ref": "#/definitions/AvailableDatabaseDescription"
-          },
-          "type": "object"
-        },
         "blockLanguages": {
           "items": {
             "$ref": "#/definitions/BlockLanguageDescription"
@@ -2093,6 +2113,12 @@
         "preview": {
           "type": "string"
         },
+        "projectSources": {
+          "items": {
+            "$ref": "#/definitions/ProjectSourceDescription"
+          },
+          "type": "array"
+        },
         "projectUsesBlockLanguages": {
           "items": {
             "$ref": "#/definitions/ProjectUsesBlockLanguageDescription"
@@ -2104,12 +2130,6 @@
         },
         "slug": {
           "$ref": "#/definitions/ProjectSlug"
-        },
-        "sources": {
-          "items": {
-            "$ref": "#/definitions/ProjectSourceDescription"
-          },
-          "type": "array"
         },
         "updatedAt": {
           "type": "string"
@@ -2124,8 +2144,8 @@
         "grammars",
         "id",
         "name",
-        "projectUsesBlockLanguages",
-        "sources"
+        "projectSources",
+        "projectUsesBlockLanguages"
       ],
       "type": "object"
     },
@@ -2147,22 +2167,19 @@
           "description": "Date & time this resource was created",
           "type": "string"
         },
-        "display": {
+        "id": {
           "type": "string"
         },
-        "id": {
+        "kind": {
+          "enum": [
+            "data"
+          ],
           "type": "string"
         },
         "readOnly": {
           "type": "boolean"
         },
         "title": {
-          "type": "string"
-        },
-        "type": {
-          "enum": [
-            "data"
-          ],
           "type": "string"
         },
         "updatedAt": {
@@ -2176,9 +2193,8 @@
       "required": [
         "id",
         "title",
-        "type",
+        "kind",
         "url",
-        "display",
         "readOnly"
       ],
       "type": "object"
@@ -3093,7 +3109,10 @@
           "$ref": "#/definitions/NodeVisualContainerDescription"
         },
         {
-          "$ref": "#/definitions/NodeInterpolateDescription"
+          "$ref": "#/definitions/NodeInterpolatePropertyDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolateChildrenDescription"
         }
       ],
       "description": "These attributes are available when visualizing things"

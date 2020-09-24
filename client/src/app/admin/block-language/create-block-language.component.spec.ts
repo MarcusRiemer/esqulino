@@ -104,8 +104,7 @@ describe("CreateBlockLanguageComponent", () => {
 
     t.component.availableGrammars$.toPromise();
     // Render with grammar list
-    const op = t.controller.expectOne(SelectionListGrammarsDocument);
-    op.flush(singleGrammar);
+    t.controller.expectOne(SelectionListGrammarsDocument).flush(singleGrammar);
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
@@ -123,8 +122,9 @@ describe("CreateBlockLanguageComponent", () => {
 
     t.component.submitForm();
 
-    const op2 = t.controller.expectOne(GrammarDescriptionItemDocument);
-    op2.flush(grammarDescriptionItem);
+    t.controller
+      .expectOne(GrammarDescriptionItemDocument)
+      .flush(grammarDescriptionItem);
 
     await t.fixture.whenStable();
 

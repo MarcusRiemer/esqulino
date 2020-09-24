@@ -26,15 +26,15 @@ concise_attributes:
   value_before_type_cast: 2020-08-13 12:46:19.691981000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-13 12:46:40.057559000 Z
+  value_before_type_cast: 2020-09-02 20:49:43.173374000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: e4ad4071-ab82-4687-be04-4d19a7ecae36
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: generic
+  value_before_type_cast: dxml-liquid
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: Generic Language without code generator
+  value_before_type_cast: <e a="b"></e>
 new_record: false
 active_record_yaml_version: 2

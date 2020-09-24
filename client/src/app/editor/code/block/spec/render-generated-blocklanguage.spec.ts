@@ -9,6 +9,10 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 import { first } from "rxjs/operators";
 
+import { ApolloTestingModule } from "apollo-angular/testing";
+
+import { FullProjectGQL } from "../../../../../generated/graphql";
+
 import { BlockLanguage } from "../../../../shared/block";
 import { FocusDirective } from "../../../../shared/focus-element.directive";
 import {
@@ -53,6 +57,7 @@ describe(`Render Generated BlockLanguages`, () => {
   ) {
     await TestBed.configureTestingModule({
       imports: [
+        ApolloTestingModule,
         FormsModule,
         MatSnackBarModule,
         HttpClientTestingModule,
@@ -67,6 +72,7 @@ describe(`Render Generated BlockLanguages`, () => {
         CurrentCodeResourceService,
         TrashService,
         ServerApiService,
+        FullProjectGQL,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

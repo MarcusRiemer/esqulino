@@ -7,4 +7,8 @@ generates:
       - "typescript"
       - "typescript-operations"
       - "typescript-apollo-angular"
-
+    config:
+      enumsAsTypes: true
+hooks:
+  afterOneFileWrite:
+#    - prettier --write

@@ -339,7 +339,36 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
   }
 }
 
-export function allPresentTypes(g: Desc.GrammarDocument): Desc.NamedLanguages {
+export type FilterType = (desc: Desc.NodeTypeDescription) => boolean;
+
+/**
+ * Returns a new object with all keys removed whose values didn't
+ * satisfy the given predicate. If the predicate is not specified
+ * the given object is returned as is. This is not a particularly
+ * nice design but it allows this function to act as a NOP if no
+ * predicate is specified.
+ *
+ * @param obj The input object to be filtered
+ * @param predicate The predicate to use. No filter applied if omitted.
+ * @return The filtered object.
+ */
+const objectFilter = <O extends Object, T>(
+  obj: O,
+  predicate?: (a0: T) => boolean
+): Partial<O> => {
+  if (predicate) {
+    return Object.keys(obj)
+      .filter((key) => predicate(obj[key]))
+      .reduce((res, key) => ((res[key] = obj[key]), res), {});
+  } else {
+    return obj;
+  }
+};
+
+export function allPresentTypes(
+  g: Desc.GrammarDocument,
+  filter: FilterType = undefined
+): Desc.NamedLanguages {
   const allLangKeys = new Set([
     ...Object.keys(g.types ?? []),
     ...Object.keys(g.foreignTypes ?? []),
@@ -350,8 +379,8 @@ export function allPresentTypes(g: Desc.GrammarDocument): Desc.NamedLanguages {
   allLangKeys.forEach((lang) => {
     toReturn[lang] = Object.assign(
       {},
-      g.foreignTypes[lang] ?? {},
-      g.types[lang] ?? {}
+      objectFilter(g.foreignTypes[lang] ?? {}, filter),
+      objectFilter(g.types[lang] ?? {}, filter)
     );
   });
 

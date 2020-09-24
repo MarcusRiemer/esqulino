@@ -8,7 +8,7 @@ concise_attributes:
   value_before_type_cast: meta-json
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: '"de"=>"Language: JSON"'
+  value_before_type_cast: '"de"=>"Sprache: JSON"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -21,7 +21,7 @@ concise_attributes:
   value_before_type_cast: 2020-03-26 16:01:57.184612000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-05-29 05:27:22.226225000 Z
+  value_before_type_cast: 2020-09-02 18:29:23.961399000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

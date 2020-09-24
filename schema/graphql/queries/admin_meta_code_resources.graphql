@@ -3,8 +3,6 @@ query AdminMetaCodeResources($programmingLanguageId: ID!) {
         nodes {
             id
             name
-            __typename
         }
-        __typename
     }
 }

@@ -12,13 +12,18 @@ import {
 } from "../../shared/serverdata";
 import { provideListResponse, ListOrder } from "./list.data.spec";
 
+import { defaultSpecGrammarId } from "./grammar.gql.data.spec";
+
 const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
   name: "Empty Spec Block Language",
   sidebars: [],
   editorBlocks: [],
   editorComponents: [],
+  rootCssClasses: [],
   defaultProgrammingLanguageId: "generic",
+  grammarId: defaultSpecGrammarId,
+  localGeneratorInstructions: { type: "manual" },
 });
 
 /**

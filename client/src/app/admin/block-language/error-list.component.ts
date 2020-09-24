@@ -13,6 +13,8 @@ export class ErrorListComponent {
     switch (err.type) {
       case "ParameterMissingValue":
         return `Parameter "${err.name}" muss angegeben werden`;
+      case "Unexpected":
+        return `Unerwartet: ${err.message}, Exception: ${err.exception.message}`;
       default:
         return JSON.stringify(err);
     }

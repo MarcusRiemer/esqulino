@@ -125,7 +125,7 @@ update-xlf : src/locale/messages.en.xlf
 # GraphQL Client Generation
 ##################################
 
-src/generated/graphql.ts : ../schema/graphql/schema.json
+src/generated/graphql.ts : ../schema/graphql/schema.json $(GRAPHQL_QUERY_SOURCES)
 	npm run graphql-codegen
 	# Horrible hack to generate an appropriate constructor, will hopefully be obsoleted by
 	# https://github.com/dotansimha/graphql-code-generator/issues/4366

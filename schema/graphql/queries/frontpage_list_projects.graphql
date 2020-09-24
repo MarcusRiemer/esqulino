@@ -15,12 +15,8 @@ query FrontpageListProjects {
                 defaultProgrammingLanguage {
                     id
                     name
-                    __typename
                 }
-                __typename
             }
-            __typename
         }
-        __typename
     }
 }

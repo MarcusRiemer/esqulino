@@ -99,6 +99,11 @@ if (environment.sentry && environment.sentry.active) {
           link: httpLink.create({
             uri: "/api/graphql",
           }),
+          defaultOptions: {
+            watchQuery: {
+              errorPolicy: "all",
+            },
+          },
         };
       },
       deps: [HttpLink],

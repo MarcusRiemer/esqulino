@@ -39,7 +39,10 @@ export function prettyPrintType(
   name: QualifiedTypeName,
   t: Desc.NodeTypeDescription
 ): NestedString {
-  if (Desc.isNodeConcreteTypeDescription(t)) {
+  if (
+    Desc.isNodeConcreteTypeDescription(t) ||
+    Desc.isNodeVisualTypeDescription(t)
+  ) {
     return prettyPrintConcreteNodeType(name, t);
   } else if (Desc.isNodeOneOfTypeDescription(t)) {
     return prettyPrintOneOfType(name, t);
@@ -64,9 +67,10 @@ export function prettyPrintQualifiedTypeName(name: QualifiedTypeName): string {
  */
 export function prettyPrintConcreteNodeType(
   name: QualifiedTypeName,
-  t: Desc.NodeConcreteTypeDescription
+  t: Desc.NodeConcreteTypeDescription | Desc.NodeVisualTypeDescription
 ): NestedString {
-  const head = `node ${prettyPrintQualifiedTypeName(name)} {`;
+  const type = Desc.isNodeConcreteTypeDescription ? "node" : "visualize";
+  const head = `${type} ${prettyPrintQualifiedTypeName(name)} {`;
   const attributes = (t.attributes ? t.attributes : []).map((a) =>
     prettyPrintConcreteNodeTypeAttribute(name, a)
   );
@@ -87,7 +91,6 @@ export function prettyPrintConcreteNodeTypeAttribute(
 ): NestedString {
   switch (a.type) {
     case "property":
-    case "interpolate":
       return prettyPrintProperty(a);
     case "terminal":
       return prettyPrintTerminal(a);
@@ -96,6 +99,10 @@ export function prettyPrintConcreteNodeTypeAttribute(
     case "choice":
     case "parentheses":
       return prettyPrintChildGroup(name, a);
+    case "interpolate":
+      return prettyPrintInterpolateProperty(a);
+    case "each":
+      return prettyPrintInterpolateChildren(a);
     case "container":
       return prettyPrintContainer(name, a);
     default:
@@ -135,7 +142,7 @@ export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
  * Prints the grammar for a property
  */
 export function prettyPrintProperty(
-  p: Desc.NodePropertyTypeDescription | Desc.NodeInterpolateDescription
+  p: Desc.NodePropertyTypeDescription
 ): NestedString {
   const headName = Desc.isNodePropertyDesciption(p) ? "prop" : "interpolate";
   const optional = Desc.isNodePropertyDesciption(p) && p.isOptional ? "?" : "";
@@ -323,6 +330,18 @@ function prettyPrintChildGroupElements(
     default:
       throw new Error(`Can't print child group of type "${(p as any).type}"`);
   }
+}
+
+export function prettyPrintInterpolateProperty(
+  t: Desc.NodeInterpolatePropertyDescription
+): NestedString {
+  return [`{{${t.name}}}`];
+}
+
+export function prettyPrintInterpolateChildren(
+  t: Desc.NodeInterpolateChildrenDescription
+): NestedString {
+  return [`{{#each ${t.name}}}`];
 }
 
 export function prettyPrintContainer(

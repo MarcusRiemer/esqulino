@@ -1,0 +1,17 @@
+mutation ProjectAddUsedBlockLanguage(
+  $projectId: ID!,
+  $blockLanguageId: ID!
+){
+  addUsedBlockLanguage(
+    input: {
+      projectId: $projectId,
+      blockLanguageId: $blockLanguageId
+    }
+  ) {
+    result {
+      projectUsesBlockLanguage {
+        id
+      }
+    }
+  }
+}

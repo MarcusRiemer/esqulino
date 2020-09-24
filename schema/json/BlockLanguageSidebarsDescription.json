@@ -1,0 +1,313 @@
+{
+  "$ref": "#/definitions/BlockLanguageSidebarsDescription",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BlockLanguageSidebarsDescription": {
+      "items": {
+        "$ref": "#/definitions/SidebarDescription"
+      },
+      "type": "array"
+    },
+    "DatabaseSchemaSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "databaseSchema"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "FixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "Defines which blocks to show in a certain category.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
+    "FixedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "Defines the overall look of a sidebar. It at least sorts available blocks\ninto categories.",
+      "properties": {
+        "caption": {
+          "description": "The name that should be displayed to the user.",
+          "type": "string"
+        },
+        "categories": {
+          "description": "The actual blocks are categorized into categories.",
+          "items": {
+            "$ref": "#/definitions/FixedBlocksSidebarCategoryDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "fixedBlocks"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "caption",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "MetaDefinedTypeSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "metaDefinedTypes"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "NodeDerivedPropertiesDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+                },
+                {
+                  "$ref": "#/definitions/NodeDescription"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/NodeDerivedProperty"
+              }
+            ]
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "language",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NodeDerivedProperty": {
+      "additionalProperties": false,
+      "properties": {
+        "loc": {
+          "$ref": "#/definitions/NodeLocation"
+        },
+        "propName": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "nodeDerivedProperty"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "loc",
+        "propName"
+      ],
+      "type": "object"
+    },
+    "NodeDescription": {
+      "additionalProperties": false,
+      "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            "type": "array"
+          },
+          "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "language"
+      ],
+      "type": "object"
+    },
+    "NodeLocation": {
+      "description": "Contains the path to find a certain node in a syntax tree.\nThese paths currently always start from the root node.",
+      "items": {
+        "$ref": "#/definitions/NodeLocationStep"
+      },
+      "type": "array"
+    },
+    "NodeLocationStep": {
+      "description": "Determines the category and the index in that category\nof a node.",
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "NodeTailoredDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeDerivedPropertiesDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeDescription"
+        }
+      ],
+      "description": "A description of a node that has \"holes\" in it, which may be filled\nwith the help of an existing AST. Often used to fill in some data at\nthe beginning of a started drag."
+    },
+    "SidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
+      "properties": {
+        "defaultNode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NodeTailoredDescription"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NodeTailoredDescription"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
+        }
+      },
+      "required": [
+        "displayName",
+        "defaultNode"
+      ],
+      "type": "object"
+    },
+    "SidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FixedBlocksSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckProgramUserFunctionsSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/MetaDefinedTypeSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckWorldTilesSidebarDescription"
+        }
+      ],
+      "description": "All possible sidebar types"
+    },
+    "TruckProgramUserFunctionsSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "truckProgramUserFunctions"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "TruckWorldTilesSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "truckWorldTiles"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    }
+  }
+}

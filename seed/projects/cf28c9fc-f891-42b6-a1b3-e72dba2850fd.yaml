@@ -8,7 +8,7 @@ concise_attributes:
   value_before_type_cast: xml
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: '"de"=>"Meta XML", "en"=>"Meta XML"'
+  value_before_type_cast: '"de"=>"Sprache: XML", "en"=>"Language: XML"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -21,7 +21,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-13 09:57:01.858224000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-13 09:57:15.850811000 Z
+  value_before_type_cast: 2020-09-02 18:26:32.735941000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
@@ -29,6 +29,7 @@ concise_attributes:
   value_before_type_cast: 00000000-0000-0000-0000-000000000001
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
-  value_before_type_cast: ''
+  value_before_type_cast: '"de"=>"Modellierung der Extensible Markup Language (XML)",
+    "en"=>"Modelling the Extensible Markup Language (XML)"'
 new_record: false
 active_record_yaml_version: 2

@@ -276,20 +276,20 @@
           "items": {
             "additionalProperties": false,
             "properties": {
-              "from_column": {
+              "fromColumn": {
                 "type": "string"
               },
-              "to_column": {
+              "toColumn": {
                 "type": "string"
               },
-              "to_table": {
+              "toTable": {
                 "type": "string"
               }
             },
             "required": [
-              "to_table",
-              "to_column",
-              "from_column"
+              "toTable",
+              "toColumn",
+              "fromColumn"
             ],
             "type": "object"
           },

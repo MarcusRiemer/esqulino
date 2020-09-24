@@ -68,6 +68,7 @@ export function convertGrammarManualInstructions(
   // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
+    rootCssClasses: [],
     editorComponents: d.editorComponents || defaultEditorComponents,
     sidebars: (d.staticSidebars || []).map((sidebar) =>
       generateSidebar(strictlyNamedTypes, sidebar)

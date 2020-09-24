@@ -102,10 +102,13 @@
     </label>
     <div class="col-sm-10 col-form-label">
       <ul
-        *ngIf="grammarReferences.length > 0 else noGrammarReferences"
+        *ngIf="(grammarReferences$ | async).length > 0 else noGrammarReferences"
         class="list-inline"
       >
-        <li *ngFor="let ref of grammarReferences" class="list-inline-item">
+        <li
+          *ngFor="let ref of grammarReferences$ | async"
+          class="list-inline-item"
+        >
           <link-grammar [grammarId]="ref.grammarId"></link-grammar>
         </li>
       </ul>

@@ -16,9 +16,7 @@ mutation CreateNews(
             text
             title
             userId
-            __typename
         }
         errors
-        __typename
     }
 }

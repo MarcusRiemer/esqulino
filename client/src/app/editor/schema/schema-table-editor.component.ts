@@ -161,7 +161,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         this.isNewTable = true;
         this._schemaService.initCurrentlyEdit(
           new Table(
-            { name: "", columns: [], foreign_keys: [], system_table: false },
+            { name: "", columns: [], foreignKeys: [], systemTable: false },
             [],
             []
           )
@@ -275,7 +275,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
       // Create new table
       if (this.table.name != "") {
         let desc = this.table.toModel();
-        let tableToSend = new Table(desc, desc.columns, desc.foreign_keys);
+        let tableToSend = new Table(desc, desc.columns, desc.foreignKeys);
         for (var i = tableToSend.columns.length - 1; i >= 0; i--) {
           console.log(tableToSend.columns[i].state);
           if (this.table.columns[i].state == ColumnStatus.deleted) {
@@ -481,9 +481,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         new AddForeignKey(this.table, this.fk_fromColumn, {
           references: [
             {
-              to_table: this.fk_addTable,
-              from_column: this.table.getColumnByIndex(this.fk_fromColumn).name,
-              to_column: this.fk_addColumn,
+              toTable: this.fk_addTable,
+              fromColumn: this.table.getColumnByIndex(this.fk_fromColumn).name,
+              toColumn: this.fk_addColumn,
             },
           ],
         })
@@ -507,9 +507,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
       new RemoveForeignKey(this.table, fk_fromColumn, {
         references: [
           {
-            to_table: fk_addTable,
-            from_column: this.table.getColumnByIndex(fk_fromColumn).name,
-            to_column: fk_addColumn,
+            toTable: fk_addTable,
+            fromColumn: this.table.getColumnByIndex(fk_fromColumn).name,
+            toColumn: fk_addColumn,
           },
         ],
       })

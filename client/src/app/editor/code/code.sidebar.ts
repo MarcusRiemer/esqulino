@@ -89,14 +89,9 @@ export class CodeSidebarComponent {
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};
-      const allTypes = allPresentTypes(g);
+      const allTypes = allPresentTypes(g, (t) => t.type === "concrete");
       Object.entries(allTypes).forEach(([name, types]) => {
-        toGenerate[name] = [];
-        Object.entries(types).forEach(([typeName, desc]) => {
-          if (desc.type === "concrete") {
-            toGenerate[name].push(typeName);
-          }
-        });
+        toGenerate[name] = [...Object.keys(types)];
       });
       return generateSidebar(allTypes, {
         type: "generatedBlocks",

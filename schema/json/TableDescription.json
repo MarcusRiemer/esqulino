@@ -6,7 +6,7 @@
       "additionalProperties": false,
       "description": "The \"over-the-wire\" description of a single column\ninside a table.",
       "properties": {
-        "dflt_value": {
+        "dfltValue": {
           "type": "string"
         },
         "index": {
@@ -15,7 +15,7 @@
         "name": {
           "type": "string"
         },
-        "not_null": {
+        "notNull": {
           "type": "boolean"
         },
         "primary": {
@@ -29,7 +29,7 @@
         "index",
         "name",
         "type",
-        "not_null",
+        "notNull",
         "primary"
       ],
       "type": "object"
@@ -42,20 +42,20 @@
           "items": {
             "additionalProperties": false,
             "properties": {
-              "from_column": {
+              "fromColumn": {
                 "type": "string"
               },
-              "to_column": {
+              "toColumn": {
                 "type": "string"
               },
-              "to_table": {
+              "toTable": {
                 "type": "string"
               }
             },
             "required": [
-              "to_table",
-              "to_column",
-              "from_column"
+              "toTable",
+              "toColumn",
+              "fromColumn"
             ],
             "type": "object"
           },
@@ -78,7 +78,7 @@
           "minItems": 1,
           "type": "array"
         },
-        "foreign_keys": {
+        "foreignKeys": {
           "items": {
             "$ref": "#/definitions/ForeignKeyDescription"
           },
@@ -87,14 +87,15 @@
         "name": {
           "type": "string"
         },
-        "system_table": {
+        "systemTable": {
           "type": "boolean"
         }
       },
       "required": [
         "name",
         "columns",
-        "foreign_keys"
+        "foreignKeys",
+        "systemTable"
       ],
       "type": "object"
     }

@@ -3,6 +3,7 @@ import {
   NodeConcreteTypeDescription,
   NodeOneOfTypeDescription,
   NamedLanguages,
+  NodeVisualTypeDescription,
 } from "./grammar.description";
 import {
   orderTypes,
@@ -17,7 +18,7 @@ import {
 import { singleLanguageGrammar } from "./grammar.spec-util";
 
 describe(`Grammar Type Utilities`, () => {
-  describe(`getAllTypes()`, () => {
+  describe(`getTypeList()`, () => {
     it(`Empty`, () => {
       expect(getTypeList({})).toEqual([]);
     });
@@ -1008,6 +1009,11 @@ describe(`Grammar Type Utilities`, () => {
       attributes: [],
     };
 
+    const typeVisualize: NodeVisualTypeDescription = {
+      type: "visualize",
+      attributes: [],
+    };
+
     const typeTerminalA: NodeConcreteTypeDescription = {
       type: "concrete",
       attributes: [
@@ -1017,6 +1023,13 @@ describe(`Grammar Type Utilities`, () => {
         },
       ],
     };
+
+    it(`No type keys at all`, () => {
+      // Technically not legal, but should be tested anyway
+      const g: GrammarDocument = {} as GrammarDocument;
+
+      expect(allPresentTypes(g)).toEqual({});
+    });
 
     it(`No types at all`, () => {
       const g: GrammarDocument = {
@@ -1127,6 +1140,41 @@ describe(`Grammar Type Utilities`, () => {
 
       expect(allPresentTypes(g)).toEqual({
         l: { t1: typeTerminalA, t2: typeTerminalA },
+      });
+    });
+
+    describe(`Filter`, () => {
+      it(`Local language with single filtered visual type`, () => {
+        const g: GrammarDocument = {
+          types: { l: { t: typeVisualize } },
+          foreignTypes: {},
+        };
+
+        expect(allPresentTypes(g, (t) => t.type === "concrete")).toEqual({
+          l: {},
+        });
+      });
+
+      it(`Local language with remaining non visual type`, () => {
+        const g: GrammarDocument = {
+          types: { l: { t1: typeVisualize, t2: typeEmpty } },
+          foreignTypes: {},
+        };
+
+        expect(allPresentTypes(g, (t) => t.type === "concrete")).toEqual({
+          l: { t2: typeEmpty },
+        });
+      });
+
+      it(`Local language with local visualizing type but foreign concrete type`, () => {
+        const g: GrammarDocument = {
+          types: { l: { t1: typeVisualize } },
+          foreignTypes: { l: { t1: typeEmpty } },
+        };
+
+        expect(allPresentTypes(g, (t) => t.type === "concrete")).toEqual({
+          l: { t1: typeEmpty },
+        });
       });
     });
   });

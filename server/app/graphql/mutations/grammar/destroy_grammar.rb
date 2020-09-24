@@ -4,16 +4,12 @@ class Mutations::Grammar::DestroyGrammar < Mutations::Grammar::Grammar
 
   def resolve(id:)
     begin
-    grammar = Grammar.find(id)
-    destroy_grammar(grammar)
+      grammar = Grammar.find(id)
+      destroy_grammar(grammar)
     rescue ActiveRecord::RecordNotFound
       {
-          news: nil,
-          errors: ["Couldn't find Grammar with 'id'=\"#{id}\""]
+        errors: ["Couldn't find Grammar with 'id'=\"#{id}\""]
       }
     end
   end
 end
-
-
-

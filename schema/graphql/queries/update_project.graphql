@@ -1,0 +1,23 @@
+mutation UpdateProject(
+  $id: ID!,
+  $name: LangJson,
+  $description: LangJson,
+  $preview: ID
+){
+  updateProject(
+    input: {
+      id: $id,
+      name: $name,
+      description: $description,
+      preview: $preview
+    }
+  ) {
+    errors
+    project {
+      name
+      description
+      slug
+      preview
+    }
+  }
+}

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    display_name { "Blattwerkzeug" }
+    sequence (:display_name) { |n| "user #{n}" }
     email { }
     roles { [ Role.find_or_create_by(name: 'user') ] }
 

@@ -13,18 +13,19 @@ RSpec.describe ProjectDatabasesController, type: :request do
             "type" => "INTEGER",
             "index" => 0,
             "primary" => true,
-            "not_null" => true,
+            "notNull" => true,
           },
           {
             "name" => "value",
             "type" => "TEXT",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => "value"
+            "notNull" => false,
+            "dfltValue" => "value"
           }
         ],
-        "foreign_keys" => []
+        "foreignKeys" => [],
+        "systemTable" => false,
       }
     ]
   end

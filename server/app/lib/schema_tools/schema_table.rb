@@ -6,7 +6,7 @@ module SchemaTools
     attr_accessor :name, :columns, :foreign_keys
 
     def attributes
-      {'name' => nil, 'columns' => nil, 'foreign_keys' => nil}
+      {'name' => nil, 'columns' => nil, 'foreign_keys' => nil, 'system_table' => nil}
     end
 
     def initialize(name)
@@ -33,6 +33,18 @@ module SchemaTools
       @name.start_with? 'sqlite_'
     end
 
+    def system_table
+      system?
+    end
+
+    def systemTable
+      system?
+    end
+
+    def foreignKeys
+      @foreign_keys
+    end
+
     # Checks whether the given column is used as a foreign key
     # @param column [SchemaColumn] The column to test
     def is_column_fk?(column)
@@ -51,8 +63,8 @@ module SchemaTools
       {
         :name => @name,
         :columns => @columns,
-        :foreign_keys => @foreign_keys,
-        :system_table => system?
+        :foreignKeys => @foreign_keys,
+        :systemTable => system?
       }.to_json(options)
     end
   end

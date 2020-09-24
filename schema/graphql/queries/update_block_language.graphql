@@ -23,6 +23,5 @@ mutation UpdateBlockLanguage(
     }){
         id
         errors
-        __typename
     }
 }
