@@ -1,4 +1,5 @@
 require 'rails_helper'
+include GraphqlQueryHelper
 
 RSpec.describe ProjectsController, type: :request do
   before(:each) { create(:user, :guest) }
@@ -8,8 +9,8 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'valid request' do
       it 'creates a project' do
-        set_access_token(user)
-        post '/api/project', params: {"name" => { "en" => "Some project" }, "slug" => "test" }
+        params = {"name" => { "en" => "Some project" }, "slug" => "test" }
+        send_query(query_name:"CreateProject",variables:  params)
 
         expect(response.status).to eq(200)
         expect(response.media_type).to eq "application/json"
@@ -23,19 +24,22 @@ RSpec.describe ProjectsController, type: :request do
       end
 
       it 'missing the slug' do
-        set_access_token(user)
-        post '/api/project', params: { "name": { "en" => "Some project" } }
-        expect(response).to have_http_status(200)
+        params = {"name" => { "en" => "Some project" }}
+        send_query(query_name:"CreateProject",variables:  params)
 
+        expect(response).to have_http_status(200)
+        expect(JSON.parse(response.body)["data"]["createProject"]["errors"]).to eq []
         expect(Project.all.length).to eq 1
       end
     end
 
     describe 'invalid request' do
       it 'missing a name' do
-        set_access_token(user)
-        post '/api/project', params: { "slug": "foof" }
-        expect(response).to have_http_status(400)
+        params = { "slug": "foof" }
+        send_query(query_name:"CreateProject",variables:  params)
+
+        expect(response).to have_http_status(200)
+        expect(JSON.parse(response.body)["errors"]).not_to eq []
       end
     end
   end
@@ -191,58 +195,50 @@ RSpec.describe ProjectsController, type: :request do
 
   describe 'GET /api/project/' do
     it 'lists nothing if nothing is there' do
-      get "/api/project/"
+      send_query(query_name:"FrontpageListProjects")
 
       expect(response).to have_http_status(200)
-      parsed = JSON.parse(response.body)
-      expect(parsed['data'].length).to eq 0
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"].length).to eq 0
     end
 
     it 'lists a single public project' do
       FactoryBot.create(:project, :public)
-      get "/api/project/"
+      send_query(query_name:"FrontpageListProjects")
+      parsed = JSON.parse(response.body)["data"]["projects"]["nodes"]
 
       expect(response).to have_http_status(200)
-
-      parsed = JSON.parse(response.body)
-      expect(parsed['data'].length).to eq 1
-      expect(parsed['data'][0]).to validate_against "ProjectListDescription"
+      expect(parsed.length).to eq 1
+      # validate_against "ProjectListDescription" does not work because of __typename fields
     end
 
     describe 'does not list private projects' do
-      before do
+      it 'returns 200' do
         FactoryBot.create(:project, :private)
         FactoryBot.create(:project, public: true)
-        get "/api/project/"
-        @json_data = JSON.parse(response.body)['data']
-      end
 
-      it 'returns 200' do
+        send_query(query_name:"FrontpageListProjects")
+        json_data = JSON.parse(response.body)["data"]["projects"]["nodes"]
+
         expect(response).to have_http_status(200)
-        expect(@json_data.length).to eq 1
-      end
-
-      it 'validates against json schema' do
-        expect(@json_data[0]).to validate_against "ProjectListDescription"
+        expect(json_data.length).to eq 1
       end
     end
-
     it 'limit' do
       FactoryBot.create(:project, :public)
       FactoryBot.create(:project, :public)
       FactoryBot.create(:project, :public)
 
-      get "/api/project?limit=1"
-      expect(JSON.parse(response.body)['data'].length).to eq 1
+      send_query(query_name:"AdminListProjects", variables: {first: 1})
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"].length).to eq 1
 
-      get "/api/project?limit=2"
-      expect(JSON.parse(response.body)['data'].length).to eq 2
+      send_query(query_name:"AdminListProjects", variables: {first: 2})
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"].length).to eq 2
 
-      get "/api/project?limit=3"
-      expect(JSON.parse(response.body)['data'].length).to eq 3
+      send_query(query_name:"AdminListProjects", variables: {first: 3})
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"].length).to eq 3
 
-      get "/api/project?limit=4"
-      expect(JSON.parse(response.body)['data'].length).to eq 3
+      send_query(query_name:"AdminListProjects", variables: {first: 4})
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"].length).to eq 3
     end
 
     describe 'order by' do
@@ -253,100 +249,69 @@ RSpec.describe ProjectsController, type: :request do
       end
 
       it 'nonexistant column' do
-        get "/api/project?orderField=nonexistant"
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "nonexistant"}}})
 
-        expect(response.status).to eq 400
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)["errors"]).not_to eq []
       end
 
       it 'slug' do
-        get "/api/project?orderField=slug"
-        json_data = JSON.parse(response.body)['data']
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "slug"}}})
+        json_data = JSON.parse(response.body)["data"]["projects"]["nodes"]
 
         expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
 
       it 'slug invalid direction' do
-        get "/api/project?orderField=slug&orderDirection=north"
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "slug", orderDirection: "north"}}})
 
-        expect(response.status).to eq 400
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)["errors"]).not_to eq []
       end
 
       it 'slug desc' do
-        get "/api/project?orderField=slug&orderDirection=desc"
-        json_data = JSON.parse(response.body)['data']
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "slug", orderDirection: "desc"}}})
+        json_data = JSON.parse(response.body)["data"]["projects"]["nodes"]
 
         expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'slug asc' do
-        get "/api/project?orderField=slug&orderDirection=asc"
-        json_data = JSON.parse(response.body)['data']
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "slug", orderDirection: "asc"}}})
+        json_data = JSON.parse(response.body)["data"]["projects"]["nodes"]
 
         expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
 
       it 'name desc' do
-        get "/api/project?orderField=name&orderDirection=desc"
-        json_data = JSON.parse(response.body)['data']
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "name", orderDirection: "desc"}}})
+        json_data = JSON.parse(response.body)["data"]["projects"]["nodes"]
 
         expect(json_data.map { |p| p['name'] }).to eq [{"de"=>"cccc"}, {"de"=>"bbbb"}, {"de"=>"aaaa"}]
       end
 
       it 'name asc' do
-        get "/api/project?orderField=name&orderDirection=asc"
-        json_data = JSON.parse(response.body)['data']
+        send_query(query_name:"AdminListProjects", variables: {input: {order: {orderField: "name", orderDirection: "asc"}}})
+        json_data = JSON.parse(response.body)["data"]["projects"]["nodes"]
 
         expect(json_data.map { |p| p['name'] }).to eq [{"de"=>"aaaa"}, {"de"=>"bbbb"}, {"de"=>"cccc"}]
       end
     end
   end
-
-  describe 'GET /api/project/list_admin' do
-    it 'guest user: not permitted' do
-      get "/api/project/list_admin"
-
-      expect(response).to have_http_status(403)
-    end
-
-    it 'ordinary user: not permitted' do
-      user = create(:user)
-      set_access_token(user)
-
-      get "/api/project/list_admin"
-
-      expect(response).to have_http_status(403)
-    end
-
-    it 'admin user: properly paginated' do
-      FactoryBot.create(:project, :public, name: {"de" => 'cccc'}, slug: 'cccc')
-      FactoryBot.create(:project, :public, name: {"de" => 'aaaa'}, slug: 'aaaa')
-      FactoryBot.create(:project, :public, name: {"de" => 'bbbb'}, slug: 'bbbb')
-
-      user = create(:user, :admin)
-      set_access_token(user)
-
-      get "/api/project/list_admin?orderField=slug&orderDirection=desc"
-
-      expect(response).to have_http_status(200)
-      json_data = JSON.parse(response.body)['data']
-
-      expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
-    end
-  end
-
-
   describe 'GET /api/project/:project_id' do
     it 'empty project satisfies the JSON schema' do
       empty_project = FactoryBot.create(:project)
-      get "/api/project/#{empty_project.slug}"
+      send_query(query_name:"FullProject",variables: {id: empty_project.id})
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)).to validate_against "ProjectFullDescription"
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"][0]["slug"]).to eq empty_project.slug
+      # validate_against "ProjectFullDescription" does not work because of __typename fields
     end
 
-    it 'responds with 404 for non existing projects' do
-      get "/api/project/0"
-      expect(response).to have_http_status(404)
+    it 'responds with 200 for non existing projects' do
+      send_query(query_name:"FullProject",variables: {id: "00000000-0000-0000-0000-000000000001"})
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["data"]["projects"]["nodes"]).to eq []
     end
   end
 

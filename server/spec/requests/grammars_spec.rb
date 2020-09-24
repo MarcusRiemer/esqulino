@@ -329,16 +329,6 @@ RSpec.describe GrammarsController, type: :request do
   end
 
   describe 'GET /api/grammars/:grammarId/related_block_languages' do
-    xit 'Guest: not allowed' do
-      create(:user, :guest)
-      original = FactoryBot.create(:grammar)
-
-      get "/api/grammars/#{original.id}/code_resources_gallery",
-          :headers => json_headers
-
-      expect(response.status).to eq(403)
-    end
-
     it 'Admin: No resources exist' do
       admin = create(:user, :admin)
       set_access_token(admin)
