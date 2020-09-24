@@ -5,17 +5,6 @@ class ProjectsController < ApplicationController
   include UserHelper
   include PaginationHelper
 
-  # Lists all public projects
-  def index
-    render json: pagination_response(Project,Project.only_public)
-  end
-
-  # Lists all projects that exist in the system (if the user is an admin)
-  def index_admin
-    authorize Project, :list_all?
-    render json: pagination_response(Project,Project.all,options:{})
-  end
-
   # Retrieves all information about a single project. This is the only
   # request the client will make to retrieve the *whole* project with
   # *everything* that is required to render it properly.
@@ -27,27 +16,6 @@ class ProjectsController < ApplicationController
                 Project.full.find_by! slug: needle
               end
     render json: project.to_full_api_response
-  end
-
-  # Apart from creating the database object this action also needs to
-  # set up the directory layout for project assets that are stored
-  # on the disk. Thankfully the Project-model takes care of the whole
-  # filesystem stuff.
-  def create
-    begin
-      authorize Project, :create?
-      creation_params = project_creation_params
-      project = Project.new(creation_params)
-      if project.save
-        ProjectMailer.with(project: project).created_admin.deliver_later
-
-        render json: { 'id' => project.slug }, :status => 200
-      else
-        render :json => { 'errors' => project.errors }, :status => 400
-      end
-    rescue Pundit::NotAuthorizedError => e
-      error_response("Please log in")
-    end
   end
 
   # Update an existing project.

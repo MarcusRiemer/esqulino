@@ -26,17 +26,6 @@ const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   codeResources: [],
 };
 
-/**
- * Generates a valid grammar description with a unique ID, that uses
- * the given data (if provided) and uses default data
- */
-export const buildProject = (
-  override?: Partial<ProjectDescription>
-): ProjectDescription => {
-  const id = override?.id ?? generateUUIDv4();
-  return Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
-};
-
 export const specLoadEmptyProject = (
   projectService: ProjectService,
   override?: Partial<ProjectFullDescription>
@@ -52,26 +41,4 @@ export const specLoadEmptyProject = (
   httpTestingController.expectOne(serverApi.getProjectUrl(p.id)).flush(p);
 
   return toReturn;
-};
-
-export type ProjectOrder = ListOrder<ProjectDescription>;
-
-/**
- * Expects a request for the given list of grammars. If a ordered dataset
- * is requested, the `items` param must be already ordered accordingly.
- */
-export const provideProjectList = (
-  items: ProjectDescription[],
-  options?: {
-    order?: ProjectOrder;
-    pagination?: {
-      limit: number;
-      page: number;
-    };
-  }
-) => {
-  const serverApi = TestBed.inject(ServerApiService);
-  let reqUrl = serverApi.getAdminProjectListUrl();
-
-  return provideListResponse(items, reqUrl, options);
 };
