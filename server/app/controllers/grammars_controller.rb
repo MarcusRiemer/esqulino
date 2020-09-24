@@ -15,13 +15,6 @@ class GrammarsController < ApplicationController
     render json: grammar.to_full_api_response
   end
 
-  # Finds block languages that are related to a grammar
-  def related_block_languages
-    render :json => BlockLanguage.scope_list
-                      .where(grammar_id: id_params[:id])
-                      .map{|b| b.to_list_api_response(options:{include_list_calculations: false})}
-  end
-
   # List all code resources that depend on a single grammar
   def code_resources_gallery
     grammar = Grammar.find(id_params[:id])

@@ -199,7 +199,7 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'PUT /api/grammars/:id' do
+  describe 'GraphQL UpdateGrammar' do
     it 'Updating basic properties' do
       orig_grammar = FactoryBot.create(:grammar)
       upda_grammar = {
@@ -257,18 +257,6 @@ RSpec.describe GrammarsController, type: :request do
       expect(original.name).to eq refreshed.name
       expect(original.root).to eq refreshed.root
     end
-    # obsolete because the id from the parameters is the id of the updated grammar
-    # it 'Update attempting to change the ID' do
-    #  original = FactoryBot.create(:grammar)
-    #  new_id = SecureRandom.uuid
-    #
-    #  put "/api/grammars/#{original.id}",
-    #      :headers => json_headers,
-    #      :params => { "id" => new_id }.to_json
-    #
-    #  expect(response.status).to eq(400)
-    #  expect(Grammar.find_by id: new_id).to be nil
-    #end
 
     it 'Set the a CodeResouce that a grammar is generated from' do
       original = FactoryBot.create(:grammar)
@@ -305,7 +293,7 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'DELETE /api/grammars/:grammarId' do
+  describe 'GraphQL DestroyGrammar' do
     let(:user) { create(:user, :admin) }
     before(:each) { set_access_token(user) }
 
@@ -389,32 +377,32 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'GET /api/grammars/:grammarId/related_block_languages' do
+  describe 'GraphQL AdminSingleGrammar -> Access related blocklanguages' do
+    before(:each) {
+      admin = create(:user, :admin)
+      set_access_token(admin)
+    }
     it 'Finds nothing for an unused grammar' do
       original = FactoryBot.create(:grammar)
-
-      get "/api/grammars/#{original.id}/related_block_languages",
-          :headers => json_headers
+      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>original.id})
 
       expect(response.status).to eq(200)
-
-      json_data = JSON.parse(response.body)
-      expect(json_data.length).to eq 0
+      related = JSON.parse(response.body)["data"]["singleGrammar"]["blockLanguages"]["nodes"]
+      expect(related.length).to eq 0
     end
 
     it 'Finds the single related block language' do
       original = FactoryBot.create(:grammar)
       related = FactoryBot.create(:block_language, grammar: original)
 
-      get "/api/grammars/#{original.id}/related_block_languages",
-          :headers => json_headers
+      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>original.id})
 
       expect(response.status).to eq(200)
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["singleGrammar"]["blockLanguages"]["nodes"]
 
       expect(json_data.length).to eq 1
-      expect(json_data[0]).to validate_against "BlockLanguageListDescription"
+      # validate_against "BlockLanguageListDescription" does not work because of __typename fields
       expect(json_data[0]['name']).to eq related.name
     end
 
@@ -423,15 +411,14 @@ RSpec.describe GrammarsController, type: :request do
       related = FactoryBot.create(:block_language, grammar: original)
       unrelated = FactoryBot.create(:block_language)
 
-      get "/api/grammars/#{original.id}/related_block_languages",
-          :headers => json_headers
+      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>original.id})
 
       expect(response.status).to eq(200)
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["singleGrammar"]["blockLanguages"]["nodes"]
 
       expect(json_data.length).to eq 1
-      expect(json_data[0]).to validate_against "BlockLanguageListDescription"
+      # validate_against "BlockLanguageListDescription" does not work because of __typename fields
       expect(json_data[0]['name']).to eq related.name
     end
   end

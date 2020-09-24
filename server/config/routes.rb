@@ -104,7 +104,6 @@ Rails.application.routes.draw do
 
     resources :grammars, only: [:show]
     get 'grammars/:id/code_resources_gallery', controller: 'grammars', action: :code_resources_gallery
-    get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages
     get 'code_resources/by_programming_language/:programming_language_id',
         controller: 'code_resources', action: :index_by_programming_language
 
