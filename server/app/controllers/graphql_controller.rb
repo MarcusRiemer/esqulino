@@ -16,6 +16,7 @@ class GraphqlController < ApplicationController
     query = get_query(operation_name)
 
     # TODO: proper authorisation instead of relying on the name of the query
+
     if operation_name and operation_name.start_with? "Admin" and not current_user.is_admin?
       raise EsqulinoError::Authorization
     end

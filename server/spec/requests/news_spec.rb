@@ -3,10 +3,7 @@ include GraphqlQueryHelper
 
 RSpec.describe "GraphQL News Endpoint", type: :request do
   before(:each) { create(:user, :guest) }
-
   describe 'GET /api/news' do
-    let(:user) { create(:user) }
-
     it 'Frontpage: retrieving news without anything published' do
       create(:news, published_from: Date.new(2999, 1, 1) )
       send_query(query_name:"FrontpageListNews")
@@ -102,7 +99,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
   end
 
-  describe 'GET /api/news/:id' do
+  describe 'GraphQL FrontpageSingleNews' do
     it 'Frontpage: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
 
@@ -125,13 +122,14 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
   end
 
-  describe 'GET /api/news/admin' do
+  describe 'GraphQL AdminListNews' do
     it 'Admin: getting all news in multiple languages, even if unpublished' do
       admin = create(:user, :admin)
+      set_access_token(admin)
+
       create(:news, published_from: nil )
       create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
       create(:news, published_from: Date.new(9999, 12, 1) )
-
 
       send_query(query_name:"AdminListNews")
 
@@ -147,10 +145,13 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
   end
 
-  describe 'GET /api/news/admin/:id' do
+  describe 'GraphQL AdminSingleNews' do
+    before(:each) {
+      admin = create(:user, :admin)
+      set_access_token(admin)
+    }
     it 'Admin: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
-
       send_query(query_name:"AdminSingleNews",variables: {id: n.id})
 
       json_data = JSON.parse(response.body)["data"]["adminSingleNews"]
