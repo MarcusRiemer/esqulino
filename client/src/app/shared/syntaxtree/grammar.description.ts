@@ -468,6 +468,18 @@ export function isNodeTypesSequenceDescription(
   return obj instanceof Object && obj.type === "sequence";
 }
 
+export function isNodeTypeChildrenGroupDescription(
+  obj: any
+): obj is NodeChildrenGroupDescription {
+  return (
+    obj instanceof Object &&
+    (obj.type === "sequence" ||
+      obj.type === "allowed" ||
+      obj.type === "choice" ||
+      obj.type === "parentheses")
+  );
+}
+
 export function isChildCardinalityDescription(
   obj: any
 ): obj is ChildCardinalityDescription {

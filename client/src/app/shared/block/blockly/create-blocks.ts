@@ -1,25 +1,21 @@
 import {
   GrammarDocument,
   isVisualizableType,
-  NamedLanguages,
-  isGrammarDocument,
   NodeAttributeDescription,
   NodeStringTypeRestrictions,
   EnumRestrictionDescription,
   Orientation,
-  NodeTypesChildReference,
   QualifiedTypeName,
-  typenameEquals,
 } from "../../syntaxtree/";
 
 import { BlocklyBlock, BlockArgs } from "./blockly-types";
+import { allPresentTypes } from "../../syntaxtree/grammar-type-util";
+
 import {
-  allPresentTypes,
-  getQualifiedTypes,
-  QualifiedNodeTypeDescription,
-  stableQualifiedTypename,
-  resolveNodeTypeChildReference,
-} from "../../syntaxtree/grammar-type-util";
+  AppearanceContext,
+  blockOrientation,
+  buildAppearanceContext,
+} from "./appearance-context";
 
 function anyTag(a: NodeAttributeDescription, ...tag: string[]) {
   if (!a.tags) {
@@ -37,125 +33,6 @@ function getEnumRestriction(
   r: NodeStringTypeRestrictions[]
 ): EnumRestrictionDescription | undefined {
   return r && r.find((r): r is EnumRestrictionDescription => r.type === "enum");
-}
-
-/**
- * Blockly requires a single, definitive description for each and every
- * block. But the layout of those blocks depends on the context in which
- * they are used.
- */
-export type AppearanceContext = {
-  [typename: string]: {
-    orientation: Set<Orientation>;
-  };
-};
-
-/**
- * This function takes a look at all contexts that exist
- * for a certain set of types and gathers information that might be relevant
- * for block layout decisions.
- */
-export function buildAppearanceContext(
-  types: QualifiedNodeTypeDescription[]
-): AppearanceContext {
-  const toReturn: AppearanceContext = {};
-
-  // When a type references a typedef, all those "typedefed" types
-  // appear in that context.
-  const typedefs: { [typename: string]: QualifiedTypeName[] } = {};
-  types.forEach((t) => {
-    if (t.type === "oneOf") {
-      t.oneOf.forEach((ref) => {
-        const resolvedRef = resolveNodeTypeChildReference(ref, t.languageName);
-        const strRef = stableQualifiedTypename(t);
-        if (!typedefs[strRef]) {
-          typedefs[strRef] = [];
-        }
-        typedefs[strRef].push(resolvedRef);
-      });
-    }
-  });
-
-  // The given type was seen in the given context
-  const addAppearance = (
-    _from: NodeAttributeDescription,
-    ref: NodeTypesChildReference,
-    o: Orientation,
-    languageName: string
-  ) => {
-    const targetTypeRef = resolveNodeTypeChildReference(ref, languageName);
-    const targetTypeDesc = types.find((rhs) =>
-      typenameEquals(targetTypeRef, rhs)
-    );
-
-    const affected: QualifiedTypeName[] = [];
-
-    // If we have a concrete type, it is immediatly affected
-    if (
-      targetTypeDesc.type === "concrete" ||
-      targetTypeDesc.type === "visualize"
-    ) {
-      affected.push(targetTypeRef);
-    }
-    // A type reference on the other hand needs to be resolved
-    else {
-      affected.push(
-        ...(typedefs[stableQualifiedTypename(targetTypeRef)] ?? [])
-      );
-    }
-
-    affected.forEach((affectedType) => {
-      const stringRef = stableQualifiedTypename(affectedType);
-      if (affectedType.typeName === "columnName" && o === "vertical") {
-        debugger;
-      }
-      if (!toReturn[stringRef]) {
-        toReturn[stringRef] = { orientation: new Set() };
-      }
-      toReturn[stringRef].orientation.add(o);
-    });
-  };
-
-  const walkAttributes = (
-    attributes: NodeAttributeDescription[],
-    orientation: Orientation,
-    languageName: string
-  ) => {
-    attributes.forEach((a) => {
-      switch (a.type) {
-        case "allowed":
-        case "sequence":
-          a.nodeTypes.forEach((ref) =>
-            addAppearance(a, ref, orientation, languageName)
-          );
-          break;
-        case "container":
-          walkAttributes(a.children, a.orientation, languageName);
-          break;
-      }
-    });
-  };
-
-  types.forEach((t) => {
-    if (isVisualizableType(t)) {
-      walkAttributes(t.attributes, "horizontal", t.languageName);
-    }
-  });
-
-  return toReturn;
-}
-
-function blockOrientation(
-  t: QualifiedTypeName,
-  ac: AppearanceContext
-): Orientation {
-  const str = stableQualifiedTypename(t);
-  const singleContext = ac[str];
-  if (!singleContext || singleContext.orientation.has("vertical")) {
-    return "vertical";
-  } else if (singleContext.orientation.has("horizontal")) {
-    return "horizontal";
-  }
 }
 
 /**
@@ -191,30 +68,12 @@ function blockContinuation(
 /**
  * Generates JSON Blockly definitions from a grammar.
  */
-export function createBlocksFromGrammar(
-  g: NamedLanguages | GrammarDocument
-): BlocklyBlock[] {
-  const types = getQualifiedTypes(
-    isGrammarDocument(g) ? allPresentTypes(g) : g
-  );
-  const appearanceContext = buildAppearanceContext(types);
-  const invalidAppearances = Object.entries(appearanceContext)
-    .filter(([_t, ac]) => ac.orientation.size > 1)
-    .map(([t, ac]) => {
-      return {
-        t,
-        orientations: Array.from(ac.orientation),
-      };
-    });
-  if (invalidAppearances.length > 0) {
-    throw new Error(
-      `Invalid appearances for ${JSON.stringify(invalidAppearances)}`
-    );
-  }
+export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
+  const ac = buildAppearanceContext(allPresentTypes(g));
 
   const toReturn: BlocklyBlock[] = [];
 
-  types.forEach(
+  ac.qualifiedTypes.forEach(
     (t): BlocklyBlock => {
       if (!isVisualizableType(t)) {
         return;
@@ -294,7 +153,7 @@ export function createBlocksFromGrammar(
       walkAttributes(t.attributes, "horizontal");
 
       // Possibly add a possibility to append something at the right of this block
-      const continuation = blockContinuation(t, appearanceContext);
+      const continuation = blockContinuation(t, ac);
       if (continuation) {
         args.push(continuation);
         addPlaceholder();
@@ -310,7 +169,7 @@ export function createBlocksFromGrammar(
             args0: args,
             tooltip: t.languageName + "." + t.typeName,
           },
-          blockConnectors(t, appearanceContext)
+          blockConnectors(t, ac)
         )
       );
     }

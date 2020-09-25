@@ -1,5 +1,5 @@
 import * as Desc from "./grammar.description";
-import { QualifiedTypeName } from "./syntaxtree.description";
+import { QualifiedTypeName, NodeDescription } from "./syntaxtree.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-type-util.description";
 
 /**
@@ -102,6 +102,54 @@ export function resolveNodeTypeChildReference(
   } else {
     return { languageName, typeName: ref };
   }
+}
+
+export function allChildTypes(
+  attr: Desc.NodeChildrenGroupDescription,
+  languageName: string
+): QualifiedTypeName[] {
+  // The node for the references is named slightly different, depending on the context
+  const extractNodeTypes = () => {
+    switch (attr.type) {
+      case "allowed":
+      case "sequence":
+        return attr.nodeTypes;
+      case "parentheses":
+        return attr.group.nodeTypes;
+      case "choice":
+        return attr.choices;
+    }
+  };
+
+  return extractNodeTypes().map((t) =>
+    resolveNodeTypeChildReference(t, languageName)
+  );
+}
+
+/**
+ * The given type may or may not refer to a typedef. This function
+ * walks down the type hierarchy until each and every type that
+ * may appear as a typedef choice is resolved.
+ */
+export function resolveToConcreteTypes(
+  t: QualifiedTypeName,
+  g: Desc.NamedLanguages
+): QualifiedTypeName[] {
+  const toReturn: QualifiedTypeName[] = [];
+
+  const impl = (t: QualifiedTypeName) => {
+    const currType = g[t.languageName][t.typeName];
+    if (currType.type === "oneOf") {
+      currType.oneOf.forEach((option) =>
+        impl(resolveNodeTypeChildReference(option, t.languageName))
+      );
+    } else {
+      return toReturn.push(t);
+    }
+  };
+  impl(t);
+
+  return toReturn;
 }
 
 /**
@@ -247,15 +295,24 @@ export const ensureTypename = (
 
 export type OrderedTypes = QualifiedTypeName[];
 
+// Used to separate the language from the typename in the string representation
+const TYPE_SEPARATOR = ".";
+
 /**
  *
  */
-export function stableQualifiedTypename(n: QualifiedTypeName): string {
-  return n.languageName + "." + n.typeName;
+export function stableQualifiedTypename(
+  n: QualifiedTypeName | NodeDescription
+): string {
+  if (Desc.isQualifiedTypeName(n)) {
+    return n.languageName + TYPE_SEPARATOR + n.typeName;
+  } else {
+    return n.language + TYPE_SEPARATOR + n.name;
+  }
 }
 
 export function fromStableQualifiedTypename(n: string): QualifiedTypeName {
-  const parts = n.split(".");
+  const parts = n.split(TYPE_SEPARATOR);
   if (parts.length != 2) {
     throw new Error(`"${n}" is not a typename`);
   } else {

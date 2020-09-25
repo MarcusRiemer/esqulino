@@ -1,5 +1,20 @@
-import { GrammarDocument, Tree, NodeDescription } from "../../syntaxtree/";
-import { fromStableQualifiedTypename } from "../../syntaxtree/grammar-type-util";
+import {
+  GrammarDocument,
+  NodeDescription,
+  isGrammarDocument,
+  NamedLanguages,
+  isNodeTypeChildrenGroupDescription,
+} from "../../syntaxtree/";
+import {
+  fromStableQualifiedTypename,
+  stableQualifiedTypename,
+  getQualifiedTypes,
+  allPresentTypes,
+} from "../../syntaxtree/grammar-type-util";
+import {
+  buildAppearanceContext,
+  AppearanceContext,
+} from "./appearance-context";
 
 // A sequence of statements is encoded as a deeply nested tree in Blockly but
 // as a flat list in Blattwerkzeug.
@@ -102,6 +117,59 @@ function parseBlock(
     if (Object.keys(toReturn.children).length === 0) {
       delete toReturn.children;
     }
+  }
+
+  return toReturn;
+}
+
+function createWorkspaceBlock(
+  ast: NodeDescription,
+  ac: AppearanceContext,
+  doc: Document
+): Element {
+  const blockNode = doc.createElement("block");
+  blockNode.setAttribute("type", stableQualifiedTypename(ast));
+  if (ast.properties) {
+    Object.entries(ast.properties).forEach(([key, value]) => {
+      const field = doc.createElement("field");
+      field.setAttribute("name", key);
+      field.textContent = value;
+      blockNode.appendChild(field);
+    });
+  }
+
+  if (ast.children) {
+    const typeDesc = ac.types[ast.language][ast.name];
+    if (typeDesc.type === "concrete" || typeDesc.type === "visualize") {
+      Object.entries(ast.children).forEach(([groupName, children]) => {
+        const groupDesc = typeDesc.attributes.find(
+          (attr) => attr.name === groupName
+        );
+        if (isNodeTypeChildrenGroupDescription(groupDesc)) {
+          const mentionedTypes = groupDesc;
+        }
+      });
+    } else {
+      throw new Error(
+        `Found virtual typedef node in tree: ${JSON.stringify(ast)}`
+      );
+    }
+  }
+
+  return blockNode;
+}
+
+export function internalToBlockly(
+  ast: NodeDescription,
+  g: NamedLanguages
+): Element {
+  const doc = new Document();
+  const toReturn = doc.createElement("xml");
+  const ac = buildAppearanceContext(g);
+  // toReturn.setAttribute("xmlns", "https://developers.google.com/blockly/xml");
+
+  if (ast) {
+    toReturn.appendChild(createWorkspaceBlock(ast, ac, doc));
   }
 
   return toReturn;
