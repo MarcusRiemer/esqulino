@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { GrammarDocument } from "../../../shared/syntaxtree";
 
 import { BlocklyBlock } from "../../../shared/block/blockly/blockly-types";
-import { createBlocks } from "../../../shared/block/blockly/create-blocks";
+import { createBlocksFromGrammar } from "../../../shared/block/blockly/create-blocks";
 
 @Injectable()
 export class BlocklyBlocksService {
@@ -59,7 +59,7 @@ export class BlocklyBlocksService {
   load(g: GrammarDocument): { blocks: BlocklyBlock[]; toolbox: string } {
     let blocks = this._sql;
     if (g) {
-      blocks = createBlocks(g);
+      blocks = createBlocksFromGrammar(g);
     }
 
     return {

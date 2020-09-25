@@ -39,51 +39,22 @@ function getEnumRestriction(
   return r && r.find((r): r is EnumRestrictionDescription => r.type === "enum");
 }
 
+/**
+ * Blockly requires a single, definitive description for each and every
+ * block. But the layout of those blocks depends on the context in which
+ * they are used.
+ */
 export type AppearanceContext = {
   [typename: string]: {
     orientation: Set<Orientation>;
   };
 };
 
-function blockOrientation(
-  t: QualifiedTypeName,
-  ac: AppearanceContext
-): Orientation {
-  const str = stableQualifiedTypename(t);
-  const singleContext = ac[str];
-  if (!singleContext || singleContext.orientation.has("vertical")) {
-    return "vertical";
-  } else if (singleContext.orientation.has("horizontal")) {
-    return "horizontal";
-  }
-}
-
 /**
- * Checks the appearance context for the given type and returns
- * matching instructions
+ * This function takes a look at all contexts that exist
+ * for a certain set of types and gathers information that might be relevant
+ * for block layout decisions.
  */
-function blockConnectors(
-  t: QualifiedTypeName,
-  ac: AppearanceContext
-):
-  | Pick<BlocklyBlock, "previousStatement" | "nextStatement">
-  | Pick<BlocklyBlock, "output"> {
-  if (blockOrientation(t, ac) === "vertical") {
-    return { previousStatement: null, nextStatement: null };
-  } else {
-    return { output: null };
-  }
-}
-
-function blockContinuation(
-  t: QualifiedTypeName,
-  ac: AppearanceContext
-): BlockArgs | undefined {
-  if (blockOrientation(t, ac) === "horizontal") {
-    return { type: "input_value", name: "__list__" };
-  }
-}
-
 export function buildAppearanceContext(
   types: QualifiedNodeTypeDescription[]
 ): AppearanceContext {
@@ -107,7 +78,7 @@ export function buildAppearanceContext(
 
   // The given type was seen in the given context
   const addAppearance = (
-    from: NodeAttributeDescription,
+    _from: NodeAttributeDescription,
     ref: NodeTypesChildReference,
     o: Orientation,
     languageName: string
@@ -174,7 +145,53 @@ export function buildAppearanceContext(
   return toReturn;
 }
 
-export function createBlocks(
+function blockOrientation(
+  t: QualifiedTypeName,
+  ac: AppearanceContext
+): Orientation {
+  const str = stableQualifiedTypename(t);
+  const singleContext = ac[str];
+  if (!singleContext || singleContext.orientation.has("vertical")) {
+    return "vertical";
+  } else if (singleContext.orientation.has("horizontal")) {
+    return "horizontal";
+  }
+}
+
+/**
+ * Checks the appearance context for the given type and returns
+ * matching instructions
+ */
+function blockConnectors(
+  t: QualifiedTypeName,
+  ac: AppearanceContext
+):
+  | Pick<BlocklyBlock, "previousStatement" | "nextStatement">
+  | Pick<BlocklyBlock, "output"> {
+  if (blockOrientation(t, ac) === "vertical") {
+    return { previousStatement: null, nextStatement: null };
+  } else {
+    return { output: null };
+  }
+}
+
+/**
+ * Blocks that are used horizontally need to offer a way for other blocks
+ * to go "behind" them.
+ */
+function blockContinuation(
+  t: QualifiedTypeName,
+  ac: AppearanceContext
+): BlockArgs | undefined {
+  if (blockOrientation(t, ac) === "horizontal") {
+    return { type: "input_value", name: "__list__" };
+  }
+}
+
+/**
+ * Generates JSON Blockly definitions from a grammar.
+ */
+export function createBlocksFromGrammar(
   g: NamedLanguages | GrammarDocument
 ): BlocklyBlock[] {
   const types = getQualifiedTypes(
@@ -208,7 +225,10 @@ export function createBlocks(
       let messagePlaceholderIndex = 1;
 
       // Bad stateful function that adds something to the message buffer
-      const addPlaceholder = () => {
+      const addPlaceholder = (before?: string) => {
+        if (before !== undefined) {
+          messageString += before;
+        }
         messageString += "%" + messagePlaceholderIndex;
         messagePlaceholderIndex++;
       };
@@ -217,6 +237,10 @@ export function createBlocks(
         attributes: NodeAttributeDescription[],
         orientation: Orientation
       ) => {
+        const multipleChildgroups =
+          attributes.filter((a) => Object.keys(a).includes("children")).length >
+          1;
+
         attributes.forEach((attr) => {
           switch (attr.type) {
             case "container":
@@ -224,6 +248,8 @@ export function createBlocks(
               break;
             case "allowed":
             case "sequence":
+            case "parentheses":
+            case "choice":
               args.push({
                 type:
                   orientation === "vertical"
@@ -231,7 +257,8 @@ export function createBlocks(
                     : "input_value",
                 name: attr.name,
               });
-              addPlaceholder();
+              // Possibly prepend the name of the childgroup
+              addPlaceholder(multipleChildgroups ? attr.name : undefined);
               break;
             case "property":
               switch (attr.base) {

@@ -254,6 +254,15 @@ export function stableQualifiedTypename(n: QualifiedTypeName): string {
   return n.languageName + "." + n.typeName;
 }
 
+export function fromStableQualifiedTypename(n: string): QualifiedTypeName {
+  const parts = n.split(".");
+  if (parts.length != 2) {
+    throw new Error(`"${n}" is not a typename`);
+  } else {
+    return { languageName: parts[0], typeName: parts[1] };
+  }
+}
+
 /**
  * @return A meaningful order of the types in the given grammar
  */
