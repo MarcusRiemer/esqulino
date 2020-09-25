@@ -1,6 +1,7 @@
 import * as Desc from "./grammar.description";
 import { QualifiedTypeName, NodeDescription } from "./syntaxtree.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-type-util.description";
+import { typenameEquals } from "./syntaxtree";
 
 /**
  * If no name is provided: Generates a name based on a running number and the type.
@@ -144,7 +145,10 @@ export function resolveToConcreteTypes(
         impl(resolveNodeTypeChildReference(option, t.languageName))
       );
     } else {
-      return toReturn.push(t);
+      // Don't add items more than once
+      if (!toReturn.find((o) => typenameEquals(o, t))) {
+        return toReturn.push(t);
+      }
     }
   };
   impl(t);

@@ -74,13 +74,8 @@ export function buildAppearanceContext(
   const typedefs: { [typename: string]: QualifiedTypeName[] } = {};
   qualifiedTypes.forEach((t) => {
     if (t.type === "oneOf") {
-      resolveToConcreteTypes(t, types).forEach((ref) => {
-        const strRef = stableQualifiedTypename(ref);
-        if (!typedefs[strRef]) {
-          typedefs[strRef] = [];
-        }
-        typedefs[strRef].push(ref);
-      });
+      const strRef = stableQualifiedTypename(t);
+      typedefs[strRef] = resolveToConcreteTypes(t, types);
     }
   });
 

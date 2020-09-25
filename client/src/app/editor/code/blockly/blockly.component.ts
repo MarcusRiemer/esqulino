@@ -6,7 +6,7 @@ import {
   ElementRef,
   ViewChild,
 } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 
 import { first } from "rxjs/operators";
 

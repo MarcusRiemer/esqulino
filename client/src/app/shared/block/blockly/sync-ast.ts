@@ -4,16 +4,20 @@ import {
   isGrammarDocument,
   NamedLanguages,
   isNodeTypeChildrenGroupDescription,
+  Orientation,
 } from "../../syntaxtree/";
 import {
   fromStableQualifiedTypename,
   stableQualifiedTypename,
   getQualifiedTypes,
   allPresentTypes,
+  allChildTypes,
+  resolveToConcreteTypes,
 } from "../../syntaxtree/grammar-type-util";
 import {
   buildAppearanceContext,
   AppearanceContext,
+  blockOrientation,
 } from "./appearance-context";
 
 // A sequence of statements is encoded as a deeply nested tree in Blockly but
@@ -127,6 +131,7 @@ function createWorkspaceBlock(
   ac: AppearanceContext,
   doc: Document
 ): Element {
+  // Build the block and its properties
   const blockNode = doc.createElement("block");
   blockNode.setAttribute("type", stableQualifiedTypename(ast));
   if (ast.properties) {
@@ -138,15 +143,38 @@ function createWorkspaceBlock(
     });
   }
 
+  // Possibly build children for this block
   if (ast.children) {
     const typeDesc = ac.types[ast.language][ast.name];
     if (typeDesc.type === "concrete" || typeDesc.type === "visualize") {
-      Object.entries(ast.children).forEach(([groupName, children]) => {
-        const groupDesc = typeDesc.attributes.find(
-          (attr) => attr.name === groupName
-        );
-        if (isNodeTypeChildrenGroupDescription(groupDesc)) {
-          const mentionedTypes = groupDesc;
+      Object.entries(ast.children).forEach(([name, children]) => {
+        if (isNodeTypeChildrenGroupDescription(children)) {
+          // Check that all children have the same orientation
+          const mentionedTypes = allChildTypes(
+            children,
+            ast.language
+          ).flatMap((t) => resolveToConcreteTypes(t, ac.types));
+
+          const mentionedOrientations = new Set<Orientation>();
+          mentionedTypes.forEach((t) => {
+            const tO = ac.typeDetails[stableQualifiedTypename(t)].orientation;
+            tO.forEach((t) => mentionedOrientations.add(t));
+          });
+
+          // Hopefully all children agree on the same orientation
+          if (mentionedOrientations.size == 1) {
+            const orientation = Array.from(mentionedOrientations)[0];
+            if (orientation === "horizontal") {
+            } else {
+            }
+          } else {
+          }
+        } else {
+          throw new Error(
+            `Children in unknown childgroup ${name} of tree ${JSON.stringify(
+              ast
+            )}`
+          );
         }
       });
     } else {
