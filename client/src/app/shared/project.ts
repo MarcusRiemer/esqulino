@@ -17,7 +17,7 @@ import { ResourceReferencesService } from "./resource-references.service";
 import { isValidId } from "./util";
 import { MultiLangString } from "./multilingual-string.description";
 
-import { UpdateProjectInput } from "../..//generated/graphql";
+import { UpdateProjectInput } from "../../generated/graphql";
 
 export { ProjectDescription, ProjectFullDescription };
 

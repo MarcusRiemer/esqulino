@@ -155,7 +155,6 @@ export class ServerApi {
     return `${this._apiBaseUrl}/block_languages`;
   }
 
-
   /**
    * Retrieves the URL that is used to list meta code resources (that may be used
    * as the basis for a grammar).

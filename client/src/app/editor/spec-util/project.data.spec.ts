@@ -7,10 +7,7 @@ import {
   FullProjectQuery,
 } from "../../../generated/graphql";
 
-import {
-  ProjectFullDescription,
-  Project,
-} from "../../shared/project";
+import { ProjectFullDescription, Project } from "../../shared/project";
 import { generateUUIDv4 } from "../../shared/util-browser";
 import { ApolloTestingController } from "apollo-angular/testing";
 import { GraphQLError } from "graphql";
@@ -72,4 +69,3 @@ export const specLoadProject = (
 
   return toReturn;
 };
-

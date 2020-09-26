@@ -43,9 +43,7 @@ describe("OverviewBlockLanguageComponent", () => {
         PortalModule,
         RouterTestingModule.withRoutes([]),
       ],
-      providers: [
-        ToolbarService,
-      ],
+      providers: [ToolbarService],
       declarations: [
         OverviewBlockLanguageComponent,
         DefaultValuePipe,
