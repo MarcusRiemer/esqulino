@@ -734,6 +734,7 @@ export type Query = {
   projectDatabases: ProjectDatabaseConnection;
   projectSources: ProjectSourceConnection;
   projects: ProjectConnection;
+  relatedBlockLanguages: Array<BlockLanguage>;
   singleBlockLanguage: BlockLanguage;
   singleGrammar: Grammar;
   singleProject: Project;
@@ -814,6 +815,10 @@ export type QueryProjectsArgs = {
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
   input?: Maybe<ProjectInputType>;
+};
+
+export type QueryRelatedBlockLanguagesArgs = {
+  grammarId: Scalars["ID"];
 };
 
 export type QuerySingleBlockLanguageArgs = {
@@ -1182,6 +1187,16 @@ export type AdminMetaCodeResourcesQuery = { __typename?: "Query" } & {
       >
     >;
   };
+};
+
+export type AdminRelatedBlockLanguagesQueryVariables = {
+  grammarId: Scalars["ID"];
+};
+
+export type AdminRelatedBlockLanguagesQuery = { __typename?: "Query" } & {
+  relatedBlockLanguages: Array<
+    { __typename?: "BlockLanguage" } & Pick<BlockLanguage, "id" | "name">
+  >;
 };
 
 export type AdminSingleGrammarQueryVariables = {
@@ -2026,6 +2041,27 @@ export class AdminMetaCodeResourcesGQL extends Apollo.Query<
   AdminMetaCodeResourcesQueryVariables
 > {
   document = AdminMetaCodeResourcesDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRelatedBlockLanguagesDocument = gql`
+  query AdminRelatedBlockLanguages($grammarId: ID!) {
+    relatedBlockLanguages(grammarId: $grammarId) {
+      id
+      name
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class AdminRelatedBlockLanguagesGQL extends Apollo.Query<
+  AdminRelatedBlockLanguagesQuery,
+  AdminRelatedBlockLanguagesQueryVariables
+> {
+  document = AdminRelatedBlockLanguagesDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
