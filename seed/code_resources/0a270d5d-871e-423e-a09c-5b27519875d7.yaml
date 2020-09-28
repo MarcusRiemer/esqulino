@@ -12,19 +12,23 @@ concise_attributes:
       limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 94c71d60-4b75-496b-94fd-42ab5831b66d
+  value_before_type_cast: 0a270d5d-871e-423e-a09c-5b27519875d7
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 04 Empty Array
+  value_before_type_cast: 06 Mixed Array
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "array", "language": "json"}'
+  value_before_type_cast: '{"name": "array", "children": {"values": [{"name": "null",
+    "language": "json"}, {"name": "string", "language": "json", "properties": {"value":
+    "a"}}, {"name": "boolean", "language": "json", "properties": {"value": "FALSE"}},
+    {"name": "number", "language": "json", "properties": {"value": "42"}}]}, "language":
+    "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-05-03 16:21:15.504013000 Z
+  value_before_type_cast: 2020-09-28 19:58:50.243811000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-28 19:56:08.618912000 Z
+  value_before_type_cast: 2020-09-28 20:00:09.896259000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
@@ -33,6 +37,12 @@ concise_attributes:
   value_before_type_cast: json
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "[]"
+  value_before_type_cast: |-
+    [
+      null,
+      "a",
+      FALSE,
+      42
+    ]
 new_record: false
 active_record_yaml_version: 2

@@ -12,19 +12,20 @@ concise_attributes:
       limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 94c71d60-4b75-496b-94fd-42ab5831b66d
+  value_before_type_cast: 56948186-0b02-4e40-bc2c-cb002ce5f93c
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 04 Empty Array
+  value_before_type_cast: 03 Boolean
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "array", "language": "json"}'
+  value_before_type_cast: '{"name": "boolean", "language": "json", "properties": {"value":
+    "TRUE"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-05-03 16:21:15.504013000 Z
+  value_before_type_cast: 2020-09-28 19:56:27.127759000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-28 19:56:08.618912000 Z
+  value_before_type_cast: 2020-09-28 19:58:36.097596000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
@@ -33,6 +34,6 @@ concise_attributes:
   value_before_type_cast: json
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "[]"
+  value_before_type_cast: 'TRUE'
 new_record: false
 active_record_yaml_version: 2
