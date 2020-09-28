@@ -73,7 +73,7 @@ export interface User {
     \item Zeile 2:~\texttt{id}/\texttt{public} siehe Listing~\ref{fig:basics:graphql:2}.
     \item Zeile 3:~\texttt{name} hat sich zu einem multilingualen Feld geändert. \texttt{MultiLangString} repräsentiert eine Map von String auf String (\texttt{[key: string]: string;}).
     \item Zeile 5:~\texttt{slug} ist ein aus einem oder wenigen Wörtern bestehender benutzer- und suchmaschinenfreundlicher
-    Text (sprechender Name) als Bestandteil einer URL~\cite{slug-wikipedia}. Diese Angabe ist optional.
+    Text (sprechender Name) als Bestandteil einer URL \cite{slug-wikipedia}. Diese Angabe ist optional.
     \item Zeile 6:~\texttt{userId} ist die ID des Nutzers, dem dieses \texttt{Project} zugeordnet ist (Fremdschlüsselbeziehung).
     \item Zeile 7:~\texttt{createdAt} ist die optionale zeitliche Angabe, wann dieses \texttt{Project} erstellt wurde.
     \item Zeile 8:~\texttt{updatedAt} ist die optionale zeitliche Angabe, wann dieses \texttt{Project} zuletzt verändert wurde.
@@ -361,7 +361,7 @@ Um ungewolltem Verhalten vorzubeugen, wurden Fehlerbehandlungen hinzugefügt, be
 Voraussetzung ist, dass eingehende Anfragen gegen den selben Typ validiert werden,
 den der Client für das Abschicken nutzt und dieser Typ bei Anfragen zum Erstellen oder Ändern von Daten kompatibel mit dem Datenbankschema ist.
 Hinzuzufügen ist, dass - wie in Abschnitt~\ref{sec:requirements:example:schema} beschrieben - aus Interfaces JSON Schema Dateien erzeugt werden,
-die für die Validierung vom in Blattwerkzeug genutzten JSON Schemer Validator~\cite{json-schemer} gebraucht werden. Somit wird indirekt gegen die Typescript Interfaces validiert.
+die für die Validierung vom in BlattWerkzeug genutzten JSON Schemer Validator~\cite{json-schemer} gebraucht werden. Somit wird indirekt gegen die Typescript Interfaces validiert.
 
 Zusätzlich wurden auf dem Server Request Specs genutzt.
 Diese können zur Kompilierungszeit Laufzeitfehler in der API Kommunikation bestmöglich ausschließen.
@@ -389,9 +389,9 @@ Auch wenn ein System funktionstüchtig ist, ist es nicht zwangsläufig perfekt.
 In diesem Abschnitt werden die relevanten Nachteile der bisherigen Umsetzung ausgearbeitet.
 
 \subsection{Manuelle SQL Queries}
-Für alle im Client darzustellenden Models müssen die zwei Funktionen \texttt{to\_full\_api\_re\-sponse} und \texttt{to\_list\_api\_response} entwickelt werden.
-\texttt{to\_full\_api\_response} selektiert alle Attribute die ein Admin sehen darf. Nur ein Teil dieser Attribute wird im Admin Bereich auch wirklich gebraucht, sie sollen trotzdem dem Admin zugängig gemacht werden.
-\texttt{to\_list\_api\_response} selektiert nur die Attribute, die ein normaler Nutzer sehen darf. Dieses Verfahren ist sehr unflexibel und wird schnell aufwendig, wenn noch weitere Rollen mit anderen Berechtigungen - in Bezug auf den Zugriff von Daten - dazu kommen.
+Für alle im Client darzustellenden Models müssen die zwei Funktionen \texttt{to\_full\-\_api\-\_re\-sponse} und \texttt{to\_list\_api\_response} entwickelt werden.
+Die Funktion \texttt{to\-\_full\-\_api\-\_response} selektiert alle Attribute die ein Admin sehen darf. Nur ein Teil dieser Attribute wird im Admin Bereich auch wirklich gebraucht, sie sollen trotzdem dem Admin zugängig gemacht werden.
+\texttt{to\-\_list\-\_api\-\_response} selektiert nur die Attribute, die ein normaler Nutzer sehen darf. Dieses Verfahren ist sehr unflexibel und wird schnell aufwendig, wenn noch weitere Rollen mit anderen Berechtigungen - in Bezug auf den Zugriff von Daten - dazu kommen.
 
 \subsection{Auswahl von Attributen}
 \label{sec:requirements:cons:attributes}
@@ -412,7 +412,7 @@ Für die Ermittlung der Werte wurde die verwendete Controller Funktion so umgesc
 	\label{tbl:req:data-transfer}
 \end{table}
 
-Möchte man zusätzlich noch Beziehungen abbilden kann ebenfalls das in Abschnitt~\ref{sec:basics:restapi:interface} beschriebene Underfetching Problem auftauchen.
+Möchte man zusätzlich noch Beziehungen abbilden kann ebenfalls das in Abschnitt \ref{sec:basics:restapi:interface} beschriebene Underfetching Problem auftauchen.
 Dieses ließe sich im aktuellen System durch manuelle Erstellung der SQL Queries beheben.
 
 \subsection{camelCase und snake\_case Notationen}
@@ -462,11 +462,8 @@ Die relevanten Berechtigungen der einzelnen Rollen sind in Tabelle~\ref{tbl:req:
 \end{table}
 
 Viele dieser Sichten nutzen unterschiedliche Subtypen des Projekttypen.
-Beispielsweise listet die Projektliste auf der Frontpage nur öffentliche Projekte auf - bei denen das Attribut \texttt{public} auf \texttt{true} gesetzt ist  -
-und zeigt dabei die Datenfelder "name", "description", "slug" und "defaultProgrammingLanguage" an.
-Die Projektliste im Adminbereich zeigt im Gegensatz dazu alle Projekte an und greift auf
-die Datenfelder "name", "slug", "Anzahl der Code Ressourcen" und die "id" zu.
-Die Bedeutung der Felder "defaultProgrammingLanguage" und "Anzahl der Code Ressourcen" ist in diesem Kontext irrelevant und wird nicht näher erläutert.
+Beispielsweise zeigt die Projektliste auf der Frontpage nur öffentliche Projekte - bei denen das Attribut \texttt{public} auf \texttt{true} gesetzt ist  -
+und benötigt andere Attribute als die Projektliste im Adminbereich. 
 
 Zu diesen unterschiedlichen Sichten kommen noch weitere Spezifikationen in der Darstellung, die gefordert sind.
 
@@ -488,7 +485,7 @@ Das Sprachenangebot gilt bei einer Systemmigration weiterhin als gefordert und s
 
 \subsubsection{Sortieren und Paginierung}
 Die Paginierung ist das Portionieren großer Datensätze zur übersichtlicheren und schnelleren Verarbeitung und Darstellung.
-In Blattwerkzeug werden alle Listenansichten im Admin Bereich in einer Tabelle paginiert angezeigt.
+In BlattWerkzeug werden alle Listenansichten im Admin Bereich in einer Tabelle paginiert angezeigt.
 Ein Datensatz, der einer Liste mit 30 Einträgen entspricht, würde bei einer Paginierung mit der Seitengröße fünf auf sechs Seiten aufgeteilt werden.
 Ein Menü zum Traversieren der Einträge könnte wie in Abbildung~\ref{req:view:pagination} aussehen.
 

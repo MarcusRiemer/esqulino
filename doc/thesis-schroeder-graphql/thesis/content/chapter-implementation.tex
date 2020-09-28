@@ -4,7 +4,7 @@
 
 % Postgres wird benutzt als Dokumenten Datenbank in bezug auf jsonb und hstore
 \chapter{Implementierung}
-Dieses Kapitel beschreibt den Implementierungsprozess bei der Migration von GraphQL in die Webapplikation Blattwerkzeug. Zusätzlich wird anhand eines Praxisbeispiel der Prozess zum Erweitern des Datenmodells mit einem neuen Datensatz zur Prozedur im vorherigen Systems verglichen. Aus dem Implementierungsprozess und dem Praxisbeispiel lässt sich der erfolgte Entwicklungsaufwand unter Berücksichtigung der in Kapitel \fullref{sec:requirements} beschriebenen Anforderungen evaluieren.
+Dieses Kapitel beschreibt den Implementierungsprozess bei der Migration von GraphQL in die Webapplikation BlattWerkzeug. Zusätzlich wird anhand eines Praxisbeispiel der Prozess zum Erweitern des Datenmodells mit einem neuen Datensatz zur Prozedur im vorherigen Systems verglichen. Aus dem Implementierungsprozess und dem Praxisbeispiel lässt sich der erfolgte Entwicklungsaufwand unter Berücksichtigung der in Kapitel \fullref{sec:requirements} beschriebenen Anforderungen evaluieren.
 
 \section{GraphQL}
 Bei der Migration muss vor Beginn des Entwicklungsprozesses entschieden werden, nach welchem der folgenden Ansätze die Migration vollzogen werden soll.
@@ -162,7 +162,7 @@ end
 \end{lstlisting}
 
 In Listing~\ref{lst:graphql:projecttype} sind mehrere Auffälligkeiten, die es zu erklären gilt.
-Zuerst ist zu erwähnen, dass in Zeile 2 Listing~\ref{lst:graphql:projecttype} eine Base-Klasse eingeführt wird (siehe Abschnitt~\ref{graphql:baseclass}).
+Zuerst ist zu erwähnen, dass in Zeile 2 Listing~\ref{lst:graphql:projecttype} eine Base-Klasse eingeführt wird. Base-Klassen wie BaseObject in können genutzt werden, um das Typsystem von graphql-ruby zu erweitern~\cite{graphql-extending}. 
 Darüber hinaus bekommt jedes Feld (\texttt{field}) mindestens drei Attribute zugewiesen. 
 
 \subsubsection{Name des Feldes}
@@ -282,7 +282,7 @@ class ProjectsResolver < Resolvers::BaseResolver
 end
 \end{lstlisting}
 
-Im Konstruktor in Listing~\ref{lst:graphql:projectsresolver} wird zunächst der Scope auf die von ApplicationRecord erbende (Model-)Klasse Project gesetzt, die der gleichnamigen Datenbanktabelle entspricht. Anschließend wird geprüft, ob das Feld \texttt{code\_resource\_count} in der Query abgefragt wird. Wenn das der Fall ist, wird ein Left Outer Join mit der CodeResource Tabelle durchgeführt, um die Anzahl der zu einem Projekt in Beziehung stehenden CodeResource-Instanzen zählen zu können und als \texttt{code\_resource\_count} zu selektieren, wodurch das angefragte Feld \texttt{:code\_resource\_count} aus dem Objekttypen  implizit aufgelöst werden kann. Durch dieses Verfahren können zum einen beliebige Felder einem Graphql-Objekttypen hinzugefügt werden, ohne dass es diese als Spalte in der Datenbank gibt, und zum anderen das N+1 Query Problem durch SQL Joins gelöst werden. 
+Im Konstruktor in Listing~\ref{lst:graphql:projectsresolver} wird zunächst der Scope auf die von ApplicationRecord erbende (Model-)Klasse Project gesetzt, die der gleichnamigen Datenbanktabelle entspricht. Anschließend wird geprüft, ob das Feld \texttt{code\_resource\-\_count} in der Query abgefragt wird. Wenn das der Fall ist, wird ein Left Outer Join mit der CodeResource Tabelle durchgeführt, um die Anzahl der zu einem Projekt in Beziehung stehenden CodeResource-Instanzen zählen zu können und als \texttt{code\_resource\-\_count} zu selektieren, wodurch das angefragte Feld \texttt{:code\_resource\-\_count} aus dem Objekttypen  implizit aufgelöst werden kann. Durch dieses Verfahren können zum einen beliebige Felder einem Graphql-Objekttypen hinzugefügt werden, ohne dass es diese als Spalte in der Datenbank gibt, und zum anderen das N+1 Query Problem durch SQL Joins gelöst werden. 
 Hieraus wird deutlich, dass obwohl GraphQL die SQL Queries automatisch zusammen stellt bei Bedarf in den Prozess des Zusammensetzens eingegriffen werden kann.
 
 Zuletzt wird in Zeile 12 in Listing~\ref{lst:graphql:projectsresolver} der Konstruktor der Oberklasse \texttt{BaseResolver} (in Abschnitt~\ref{impl:base-resolver} beschrieben) aufgerufen und  Argumente zum Sortieren, Filtern und Auswählen von Sprachen übergeben.
@@ -347,13 +347,7 @@ Nun muss die Query dem Client durch Generierung eines Angular Services, der die 
 \subsection{Codegenerierung}
 \label{impl:graphql:generation}
 graphql-ruby stellt einen eingebauten Rake Task bereit, der aus dem GraphQL Schema eine JSON Darstellung generiert~\cite{graphql-rake-task}. Diese wird in einem Schema-Ordner auf Wurzelebene der gesamten Applikation (Ebene, auf der sich der Server und Client Ordner befindet) gehalten.
-Durch Nutzung des Tools graphql-code-generator~\cite{graphql-code-generator} wird dann aus der in Listing~\ref{lst:graphql:query} vorgestellten Query und dem GraphQL Schema in JSON Darstellung folgender Typescript Code (siehe Listings~\ref{lst:graphql:gen-gql},~\ref{lst:graphql:gen-service},~\ref{lst:graphql:gen-responsetype} und~\ref{lst:graphql:gen-variables}) generiert:
-
-\begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Aufruf der gql-Funktion erhält die AdminListProjects Query als String}, label={lst:graphql:gen-gql}]
-export const AdminListProjectsDocument = gql`
-  query AdminListProjects[...]
-`;
-\end{lstlisting}
+Durch Nutzung des Tools graphql-code-generator~\cite{graphql-code-generator} wird dann aus der in Listing~\ref{lst:graphql:query} vorgestellten Query und dem GraphQL Schema in JSON Darstellung folgender Typescript Code (siehe~\ref{lst:graphql:gen-service},~\ref{lst:graphql:gen-responsetype} und~\ref{lst:graphql:gen-variables}) generiert:
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Service enthält den Aufruf der Query als Instanzvariable}, label={lst:graphql:gen-service}]
 @Injectable({
@@ -364,11 +358,10 @@ export class AdminListProjectsGQL extends Apollo.Query<
   AdminListProjectsQueryVariables
 > {
   document = AdminListProjectsDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
 }
 \end{lstlisting}
+
+Die Klasse \texttt{AdminListProjectsGQL} in Listing~\ref{lst:graphql:gen-service} ist ein Angular Service und enthält in der Variablen \texttt{document} den Aufruf einer Funktion, mit der die Query aus Listing~\ref{lst:graphql:query} abgeschickt werden kann. Der passende Antworttyp zu der Query wurde ebenfalls generiert und ist in Listing~\ref{lst:graphql:gen-responsetype} gezeigt. Zusätzlich wurde aus dem GraphQL Schema ein Typ für die Argumente generiert (siehe Listing~\ref{lst:graphql:gen-variables}), die in Listing~\ref{lst:graphql:querytype} der Query \texttt{projects} hinzugefügt wurden.
 
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Antworttyp}, label={lst:graphql:gen-responsetype}]
 export type AdminListProjectsQuery = { __typename?: "Query" } & {
@@ -393,6 +386,9 @@ export type AdminListProjectsQuery = { __typename?: "Query" } & {
   };
 };
 \end{lstlisting}
+
+
+
 \begin{lstlisting}[language=JavaScript,float=h!,caption={Generierter Parametertyp}, label={lst:graphql:gen-variables}]
 export type AdminListProjectsQueryVariables = {
   first?: Maybe<Scalars["Int"]>;
@@ -411,7 +407,7 @@ Die Ausführung des Rake Tasks und des anschließenden Codegenerators werden üb
 
 Zur Darstellung wird eine Komponente verwendet. Diese bekommt den generierten Service aus Listing~\ref{lst:graphql:gen-service} im Konstruktor "injiziert". 
 
-Die in Listing~\ref{lst:graphql:component} gezeigte Komponente enthält aus Gründen der Übersichtlichkeit lediglich die Logik um eine Query abzuschicken. Im Gegensatz dazu verwendet die im System verbaute Komponente zusätzlich eine weitere Komponente \texttt{PaginatorTableGraphql\-Component} (siehe Abschnitt~\fullref{impl:paginator-component}) zur paginierten Darstellung des Ergebnisses aus der Query in einer Angular Material Tabelle~\cite{angular-material-table}.
+Die in Listing~\ref{lst:graphql:component} gezeigte Komponente enthält aus Gründen der Übersichtlichkeit lediglich die Logik um eine Query abzuschicken. Im Gegensatz dazu verwendet die im System verbaute Komponente zusätzlich eine weitere Komponente \texttt{Paginator\-Table\-Graphql\-Component} (siehe Abschnitt~\fullref{impl:paginator-component}) zur paginierten Darstellung des Ergebnisses aus der Query in einer Angular Material Tabelle~\cite{angular-material-table}.
 Der Aufruf \texttt{.watch} in Listing~\ref{lst:graphql:component} Zeile 13 gibt ein \texttt{QueryRef} Objekt zurück, welches das Attribut \texttt{valueChanges} hat, das ein Observable~\cite{angular-observable} ist.
 Durch den Aufruf von \texttt{.subscribe()} \cite{angular-subscribe} oder der Nutzung einer Async-Pipe~\cite{angular-async-pipe} im Angular template wird die Query abgefeuert.
 Die in Listing~\ref{lst:graphql:component} Zeile 14 und 15 verwendeten Parameter der \texttt{.watch} Methode geben die Variablen der Query (Zeile 14) und die von Apollo bereitgestellten Optionen (Zeile 15) an.
@@ -478,17 +474,13 @@ Letztendlich muss lediglich eine Angular Komponente mit zugehörigem Template ge
 \section{Scalar Typen}
 \label{graphql:scalartypes}
 Ein GraphQL-Objekttyp hat einen Namen und Felder, aber irgendwann müssen diese Felder in konkrete Daten aufgelöst werden. An dieser Stelle kommen die skalaren Typen ins Spiel: Sie stellen die Blätter der Abfrage dar. 
-Skalare Typen sind Instanzen von sehr einfach strukturierten Ruby Klassen. Diese enthalten lediglich zwei Funktionen zum Auflösen des Feldes bei Queries \texttt{self.coerce\_result(value, \_context)} und zum Verarbeiten von Eingaben bei Mutationen \texttt{self.coerce\_input(value, \_context)}. Beide Funktionen erhaltenden einen Wert und den Context der Query. Die Funktion zum Auflösen eines Feldes wird ausgeführt, nachdem der zum Feld passende Wert aus der Datenbank ausgelesen wurde und bevor dieser an die anfragende Client Applikation zurückgegeben wird. Da Scalar Typen erst benötigt werden, wenn ein bisher genutzter Typ nicht mit der GraphQL SDL formuliert werden kann, ist die Funktion \texttt{coerce\_result} der beste Ort für die Validierung zum Beispiel gegen das JSON Schema, welches den Typ beschreibt. Das gleiche gilt bei der Ausführung einer Mutation zum Hinzufügen eines Datensatzes in die Datenbank. Die Funktion \texttt{coerce\_input} wird ausgeführt, bevor der Wert des Feldes an den zum Feld gehörenden Resolver gegeben wird. Somit ist dies ebenfalls der richtige Ort für die Validierung der Eingabe.
+Skalare Typen sind Instanzen von sehr einfach strukturierten Ruby Klassen. Diese enthalten lediglich zwei Funktionen zum Auflösen des Feldes bei Queries \texttt{self.coerce\_result(value, \_context)} und zum Verarbeiten von Eingaben bei Mutationen \texttt{self.coerce\_input(\-value, \_context)}. Beide Funktionen erhaltenden einen Wert und den Context der Query. Die Funktion zum Auflösen eines Feldes wird ausgeführt, nachdem der zum Feld passende Wert aus der Datenbank ausgelesen wurde und bevor dieser an die anfragende Client Applikation zurückgegeben wird. Da Scalar Typen erst benötigt werden, wenn ein bisher genutzter Typ nicht mit der GraphQL SDL formuliert werden kann, ist die Funktion \texttt{coerce\_result} der beste Ort für die Validierung zum Beispiel gegen das JSON Schema, welches den Typ beschreibt. Das gleiche gilt bei der Ausführung einer Mutation zum Hinzufügen eines Datensatzes in die Datenbank. Die Funktion \texttt{coerce\_input} wird ausgeführt, bevor der Wert des Feldes an den zum Feld gehörenden Resolver gegeben wird. Somit ist dies ebenfalls der richtige Ort für die Validierung der Eingabe.
 
 Wie diese Scalar Typen genau aussehen können, wird anhand eines Beispiels in Abschnitt~\fullref{graphql:validation} vorgeführt.
 
-\section{Base Klassen}
-\label{graphql:baseclass}
-Base Klassen wie BaseObject in~\ref{lst:graphql:projecttype} können genutzt werden, um das Typsystem von graphql-ruby zu erweitern~\cite{graphql-extending}. 
-
 \section{Enum Typen}
 \label{graphql:enumtypes}
-Die in Blattwerkzeug verfügbaren Sprachen (\texttt{LanguageEnum}) und Sortierrichtungen werden in Enums innerhalb der Klasse \texttt{Types::Base::BaseEnum} aus Listing~\ref{lst:graphql:enum_values} gespeichert. Zusätzlich gibt es eine statische Funktion \texttt{self.enum\_values}, die die Werte eines Enums extrahiert und diese als Array zurück liefert. Diese wird bei der Sortierung und Auswahl der Sprache im Base Resolver in Abschnitt~\ref{impl:base-resolver} genutzt.
+Die in BlattWerkzeug verfügbaren Sprachen (\texttt{LanguageEnum}) und Sortierrichtungen werden in Enums innerhalb der Klasse \texttt{Types::Base::BaseEnum} aus Listing~\ref{lst:graphql:enum_values} gespeichert. Zusätzlich gibt es eine statische Funktion \texttt{self.enum\_values}, die die Werte eines Enums extrahiert und diese als Array zurück liefert. Diese wird bei der Sortierung und Auswahl der Sprache im Base Resolver in Abschnitt~\ref{impl:base-resolver} genutzt.
 
 \begin{lstlisting}[language=Ruby,float=h!,caption={Funktion zum Extrahieren der Enum Werte in ein Array. \lstinline|/graphql/types/base/base_enum.rb|}, label={lst:graphql:enum_values}]
 class Types::Base::BaseEnum < GraphQL::Schema::Enum
@@ -610,7 +602,7 @@ Anschließend wird bei der Verarbeitung jedes Filters bestehend aus \texttt{filt
 		Entspricht das Feld einem Boolean, muss mit einem $=$-Zeichen gefiltert werden.
 		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} = ?", filter_value|
 	\item[datetime] \ \\
-		Bei einem Datetime Feld muss der Filter erweitert werden. In Blattwerkzeug existiert ein Model News (Neuigkeiten). Instanzen des Models besitzen das Attribut \texttt{published\_from}, welches angibt, wann eine Neuigkeit veröffentlicht werden soll. Um eine Liste zu erzeugen, in der nur bereits veröffentlichte News-Instanzen präsentiert werden, dürfen nur die selektiert werden, deren Erscheinungsdatum kleiner (früher) ist als das heutige Datum. Damit die Auswahl flexibel bleibt, wurde der Wert des Filters in zwei Argumente unterteilt. Das erste (\texttt{:date}) gibt das Datum an, nachdem gefiltert werden soll, das zweite Argument (\texttt{:until}) gibt an, ob nach Daten gefiltert werden sollen, die vor oder nach dem zu filternden Datum liegen. Wird kein Wert für das erste Argument angegeben wird das heutige Datum stattdessen genommen. \\
+		Bei einem Datetime Feld muss der Filter erweitert werden. In BlattWerkzeug existiert ein Model News (Neuigkeiten). Instanzen des Models besitzen das Attribut \texttt{published\_from}, welches angibt, wann eine Neuigkeit veröffentlicht werden soll. Um eine Liste zu erzeugen, in der nur bereits veröffentlichte News-Instanzen präsentiert werden, dürfen nur die selektiert werden, deren Erscheinungsdatum kleiner (früher) ist als das heutige Datum. Damit die Auswahl flexibel bleibt, wurde der Wert des Filters in zwei Argumente unterteilt. Das erste (\texttt{:date}) gibt das Datum an, nachdem gefiltert werden soll, das zweite Argument (\texttt{:until}) gibt an, ob nach Daten gefiltert werden sollen, die vor oder nach dem zu filternden Datum liegen. Wird kein Wert für das erste Argument angegeben wird das heutige Datum stattdessen genommen. \\
 		\lstinline|comparator = filter_value[:until] ? "<=" : ">"| \\
 		\lstinline|date = filter_value[:date] ? filter_value[:date] : Date.today| \\
 		\lstinline|scope.where "#{@model_class.table_name}.#{filter_key} #{comparator} ?", date|
