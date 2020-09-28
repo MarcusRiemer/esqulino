@@ -69,7 +69,9 @@ function blockContinuation(
  * Generates JSON Blockly definitions from a grammar.
  */
 export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
-  const ac = buildAppearanceContext(allPresentTypes(g));
+  const ac = buildAppearanceContext(
+    allPresentTypes(g, (t) => t.type === "concrete")
+  );
 
   const toReturn: BlocklyBlock[] = [];
 

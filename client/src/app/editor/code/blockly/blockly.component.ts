@@ -126,7 +126,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
         const astXmlWorkspace = internalToBlockly(
           currRes.syntaxTreePeek.toModel(),
-          allPresentTypes(g)
+          allPresentTypes(g, (t) => t.type === "concrete")
         );
         const loadedIds = Blockly.Xml.domToWorkspace(
           astXmlWorkspace,
@@ -139,7 +139,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // Can't pass the method directly, `this` would be incorrectly bound
     // when the callback is executed.
-    this._workspace.addChangeListener((e: Blockly.Events.Change) => {
+    this._workspace.addChangeListener((_: Blockly.Events.Change) => {
       // this.syncToCodeResource(e);
     });
 
@@ -147,8 +147,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
     // @ts-ignore
     if (ResizeObserver) {
       // @ts-ignore
-      this._resizeObserver = new ResizeObserver((entries: any) => {
-        console.log(entries);
+      this._resizeObserver = new ResizeObserver(() => {
         Blockly.svgResize(this._workspace);
       });
       this._resizeObserver.observe(this.blocklyOutlet.nativeElement);
@@ -185,5 +184,10 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
     media: "/blockly-media/",
     trashcan: true,
     toolboxPosition: "end",
+    move: {
+      scrollbars: true,
+      drag: false,
+      wheel: true,
+    },
   };
 }

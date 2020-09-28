@@ -174,9 +174,9 @@ function createWorkspaceBlock(
         // And it should be a child group
         if (!isNodeTypeChildrenGroupDescription(childGroupDesc)) {
           throw new Error(
-            `Unexpected children in not-childgroup "${groupName}" of tree ${JSON.stringify(
-              ast
-            )}`
+            `Unexpected children of type "${
+              childGroupDesc.type
+            }" in not-childgroup "${groupName}" of tree ${JSON.stringify(ast)}`
           );
         }
 
@@ -259,6 +259,8 @@ function createWorkspaceBlock(
   return blockNode;
 }
 
+// TODO: Passing in the types via NamedLanguages is probably insufficient,
+//       Visualized types will require information from the base grammar.
 export function internalToBlockly(
   ast: NodeDescription,
   g: NamedLanguages
