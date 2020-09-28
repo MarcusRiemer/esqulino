@@ -27,14 +27,17 @@ function getImmediateChildrenByTagName(parent: Element, ...tagNames: string[]) {
   );
 }
 
-export function blocklyToInternal(blocklyXmlString: string): NodeDescription {
-  const parser = new DOMParser();
-  const blocklyXml = parser.parseFromString(blocklyXmlString, "text/xml");
+export function blocklyToInternal(
+  blocklyXml: string | Element
+): NodeDescription {
+  if (typeof blocklyXml === "string") {
+    const parser = new DOMParser();
+    blocklyXml = parser.parseFromString(blocklyXml, "text/xml").documentElement;
+  }
 
   let toReturn: NodeDescription;
 
-  const root = blocklyXml.documentElement;
-  const rootBlocks = getImmediateChildrenByTagName(root, "block");
+  const rootBlocks = getImmediateChildrenByTagName(blocklyXml, "block");
   if (rootBlocks.length === 1) {
     toReturn = parseBlock(rootBlocks[0], undefined);
   } else if (rootBlocks.length > 1) {
