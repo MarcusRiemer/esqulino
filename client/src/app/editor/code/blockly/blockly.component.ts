@@ -17,13 +17,13 @@ import {
   blocklyToInternal,
 } from "../../../shared/block/blockly/sync-ast";
 import { allPresentTypes } from "../../../shared/syntaxtree/grammar-type-util";
+import { CodeResource } from "../../../shared";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService } from "../../toolbar.service";
 import { SidebarService } from "../../sidebar.service";
 
 import { BlocklyBlocksService } from "./blockly-blocks.service";
-import { CodeResource } from "src/app/shared";
 import { Subscription } from "rxjs";
 
 /**
@@ -126,7 +126,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
         const astXmlWorkspace = internalToBlockly(
           currRes.syntaxTreePeek.toModel(),
-          allPresentTypes(g, (t) => t.type === "concrete")
+          allPresentTypes(g, (t) => t.type !== "visualize")
         );
         const loadedIds = Blockly.Xml.domToWorkspace(
           astXmlWorkspace,

@@ -70,7 +70,7 @@ function blockContinuation(
  */
 export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
   const ac = buildAppearanceContext(
-    allPresentTypes(g, (t) => t.type === "concrete")
+    allPresentTypes(g, (t) => t.type !== "visualize")
   );
 
   const toReturn: BlocklyBlock[] = [];
