@@ -3,7 +3,7 @@ include GraphqlQueryHelper
 
 RSpec.describe "GraphQL News Endpoint", type: :request do
   before(:each) { create(:user, :guest) }
-  describe 'GET /api/news' do
+  describe 'GraphQL FrontpageListNews' do
     it 'Frontpage: retrieving news without anything published' do
       create(:news, published_from: Date.new(2999, 1, 1) )
       send_query(query_name:"FrontpageListNews")
@@ -171,7 +171,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
   end
 
-  describe 'PUT /api/news/:id' do
+  describe 'GraphQL UpdateNews' do
     it 'updating the title of a news (removing a language)' do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
 
@@ -283,7 +283,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
   end
 
 
-  describe 'DELETE /api/news/:id' do
+  describe 'GraphQL DestroyNews' do
     it 'deleting a news' do
       news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1), user: create(:user, :admin) )
 
@@ -305,7 +305,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
   end
 
-  describe "POST /api/news" do
+  describe "GraphQL CreateNews" do
     let(:user) { create(:user, :admin) }
 
     it 'creating a news' do

@@ -150,7 +150,7 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'POST /api/grammars' do
+  describe 'GraphQL CreateGrammar' do
     it 'Creates a new, empty grammar' do
       prog_lang = FactoryBot.create(:programming_language)
       params = {
@@ -323,7 +323,7 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'GET /api/grammars/:grammarId/related_block_languages' do
+  describe 'GET /api/grammars/:grammarId/code_resources_gallery' do
     it 'Admin: No resources exist' do
       admin = create(:user, :admin)
       set_access_token(admin)
@@ -384,22 +384,22 @@ RSpec.describe GrammarsController, type: :request do
     }
     it 'Finds nothing for an unused grammar' do
       original = FactoryBot.create(:grammar)
-      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>original.id})
+      send_query(query_name:"AdminRelatedBlockLanguages",variables:{"grammarId"=>original.id})
 
       expect(response.status).to eq(200)
-      related = JSON.parse(response.body)["data"]["singleGrammar"]["blockLanguages"]["nodes"]
-      expect(related.length).to eq 0
+      json_data = JSON.parse(response.body)["data"]["relatedBlockLanguages"]
+      expect(json_data.length).to eq 0
     end
 
     it 'Finds the single related block language' do
       original = FactoryBot.create(:grammar)
       related = FactoryBot.create(:block_language, grammar: original)
 
-      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>original.id})
+      send_query(query_name:"AdminRelatedBlockLanguages",variables:{"grammarId"=>original.id})
 
       expect(response.status).to eq(200)
 
-      json_data = JSON.parse(response.body)["data"]["singleGrammar"]["blockLanguages"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["relatedBlockLanguages"]
 
       expect(json_data.length).to eq 1
       # validate_against "BlockLanguageListDescription" does not work because of __typename fields
@@ -411,11 +411,11 @@ RSpec.describe GrammarsController, type: :request do
       related = FactoryBot.create(:block_language, grammar: original)
       unrelated = FactoryBot.create(:block_language)
 
-      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>original.id})
+      send_query(query_name:"AdminRelatedBlockLanguages",variables:{"grammarId"=>original.id})
 
       expect(response.status).to eq(200)
 
-      json_data = JSON.parse(response.body)["data"]["singleGrammar"]["blockLanguages"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["relatedBlockLanguages"]
 
       expect(json_data.length).to eq 1
       # validate_against "BlockLanguageListDescription" does not work because of __typename fields

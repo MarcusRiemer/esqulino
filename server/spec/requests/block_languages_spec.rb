@@ -8,7 +8,6 @@ RSpec.describe BlockLanguagesController, type: :request do
     before(:each) { set_access_token(user) }
 
     it 'lists nothing if nothing is there' do
-      get "/api/block_languages"
       send_query(query_name: "AdminListBlockLanguages")
 
       expect(response).to have_http_status(200)
@@ -18,7 +17,6 @@ RSpec.describe BlockLanguagesController, type: :request do
 
     it 'lists a single block language' do
       FactoryBot.create(:block_language)
-      get "/api/block_languages"
       send_query(query_name: "AdminListBlockLanguages")
       expect(response).to have_http_status(200)
 
