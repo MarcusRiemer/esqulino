@@ -1,16 +1,21 @@
 <ng-container *ngIf="provider">
   <ng-container [ngSwitch]="provider.type">
-    <ng-container *ngSwitchCase="'Google'">
+    <ng-container *ngSwitchCase="'Identity::Google'">
       Google
     </ng-container>
-    <ng-container *ngSwitchCase="'Github'">
+    <ng-container *ngSwitchCase="'Identity::Github'">
       Github
     </ng-container>
-    <ng-container *ngSwitchCase="'Developer'">
+    <ng-container *ngSwitchCase="'Identity::Developer'">
       Developer
     </ng-container>
-    <ng-container *ngSwitchCase="'PasswordIdentity'">
-      Blattwerkzeug
+    <ng-container *ngSwitchCase="'Identity::Password'">
+      Blattwerkzeug (Alt)
+    </ng-container>
+    <ng-container *ngSwitchCase="'Identity::Keycloak'">
+      <a href="/api/user/keycloak_account_settings">
+        Blattwerkzeug (Keycloak)
+      </a>
     </ng-container>
   </ng-container>
 </ng-container>

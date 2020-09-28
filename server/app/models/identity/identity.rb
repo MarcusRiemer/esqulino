@@ -54,6 +54,8 @@ module Identity
         identity = ::Identity::Google.create_with_auth(auth, user)
       when 'github'
         identity = ::Identity::Github.create_with_auth(auth, user)
+      when 'keycloakopenid'
+        identity = ::Identity::Keycloak.create_with_auth(auth, user)
       else
         raise RuntimeError.new("Unknown provider: #{auth[:provider]}")
       end
