@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2018-05-15 18:24:27.264702000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-22 19:55:05.212136000 Z
+  value_before_type_cast: 2020-09-22 20:40:54.790113000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql
@@ -36,19 +36,19 @@ concise_attributes:
     "children": [{"name": "expressions", "type": "sequence", "nodeTypes": [{"occurs":
     "1", "nodeType": {"typeName": "expression", "languageName": "sql"}}, {"occurs":
     "*", "nodeType": {"typeName": "whereAdditional", "languageName": "sql"}}]}], "orientation":
-    "vertical"}], "orientation": "horizontal"}]}, "delete": {"type": "concrete", "attributes":
-    [{"tags": ["keyword", "component"], "type": "terminal", "symbol": "DELETE"}]},
-    "select": {"type": "concrete", "attributes": [{"type": "container", "children":
-    [{"tags": ["keyword", "component"], "type": "terminal", "symbol": "SELECT"}, {"name":
-    "distinct", "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": "distinct"}]},
-    {"tags": ["allow-wrap"], "type": "container", "children": [{"name": "columns",
-    "type": "parentheses", "group": {"type": "allowed", "nodeTypes": [{"occurs": "*",
-    "nodeType": "expression"}, {"occurs": "?", "nodeType": "starOperator"}]}, "between":
-    {"name": "columnSeparator", "tags": ["space-after"], "type": "terminal", "symbol":
-    ","}, "cardinality": "1"}], "orientation": "horizontal"}], "orientation": "horizontal"}]},
-    "groupBy": {"type": "concrete", "attributes": [{"type": "container", "children":
-    [{"tags": ["keyword", "component"], "type": "terminal", "symbol": "GROUP BY"},
-    {"name": "expressions", "type": "allowed", "between": {"name": "columnSeparator",
+    "horizontal"}], "orientation": "horizontal"}]}, "delete": {"type": "concrete",
+    "attributes": [{"tags": ["keyword", "component"], "type": "terminal", "symbol":
+    "DELETE"}]}, "select": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"tags": ["keyword", "component"], "type": "terminal", "symbol":
+    "SELECT"}, {"name": "distinct", "type": "sequence", "nodeTypes": [{"occurs": "?",
+    "nodeType": "distinct"}]}, {"tags": ["allow-wrap"], "type": "container", "children":
+    [{"name": "columns", "type": "parentheses", "group": {"type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": "expression"}, {"occurs": "?", "nodeType": "starOperator"}]},
+    "between": {"name": "columnSeparator", "tags": ["space-after"], "type": "terminal",
+    "symbol": ","}, "cardinality": "1"}], "orientation": "horizontal"}], "orientation":
+    "horizontal"}]}, "groupBy": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"tags": ["keyword", "component"], "type": "terminal", "symbol":
+    "GROUP BY"}, {"name": "expressions", "type": "allowed", "between": {"name": "columnSeparator",
     "tags": ["space-after"], "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs":
     "+", "nodeType": {"typeName": "expression", "languageName": "sql"}}]}], "orientation":
     "horizontal"}]}, "orderBy": {"type": "concrete", "attributes": [{"type": "container",
