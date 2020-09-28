@@ -27,12 +27,27 @@ export interface BlockArgsFieldInput {
   name: string;
 }
 
+export interface BlockArgsNumberInput {
+  type: "field_number";
+  name: string;
+}
+
+// According to:
+// https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox
+export interface BlockArgsFieldCheckbox {
+  type: "field_checkbox";
+  name: string;
+  checked?: boolean;
+}
+
 export type BlockArgs =
   | BlockArgsInputValue
   | BlockArgsInputStatement
   | BlockArgsLabelSerializable
   | BlockArgsFieldDropdown
-  | BlockArgsFieldInput;
+  | BlockArgsFieldInput
+  | BlockArgsNumberInput
+  | BlockArgsFieldCheckbox;
 
 /**
  * Home-grown subset of relevant Blockly properties

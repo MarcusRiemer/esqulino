@@ -137,6 +137,22 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
                   }
                   addPlaceholder();
                   break;
+                case "integer":
+                  args.push({
+                    name: attr.name,
+                    type: "field_number",
+                  });
+                  addPlaceholder();
+                  break;
+                case "boolean":
+                  args.push({
+                    name: attr.name,
+                    type: "field_checkbox",
+                  });
+                  addPlaceholder();
+                  break;
+                default:
+                  messageString += "<<" + attr.name + ":" + attr.base + ">> ";
               }
               break;
             case "terminal":
