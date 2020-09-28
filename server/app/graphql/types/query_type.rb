@@ -41,6 +41,16 @@ module Types
       argument :id, ID,required:true
     end
 
+    field :relatedBlockLanguages, [Types::BlockLanguageType],null:false do
+      argument :grammarId, ID,required:true
+    end
+
+    def related_block_languages(grammarId:)
+      BlockLanguage.scope_list
+        .where(grammar_id: grammarId)
+        .map{|b| b.to_list_api_response(options:{include_list_calculations: false})}
+    end
+
     def programming_languages
       ProgrammingLanguage.all
     end

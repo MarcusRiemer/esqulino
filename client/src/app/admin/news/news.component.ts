@@ -1,4 +1,3 @@
-import { map } from "rxjs/operators";
 import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
@@ -12,7 +11,6 @@ import {
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { response } from "express";
 import { BehaviorSubject } from "rxjs";
 
 // TODO: Should be beautified and used

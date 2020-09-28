@@ -1,6 +1,0 @@
-<select class="custom-select" name="grammar-id" [(ngModel)]="selectedId">
-  <option [ngValue]="undefined">-- No Grammar --</option>
-  <option *ngFor="let res of grammars$ | async;" [ngValue]="res.id">
-    {{ res.name }}
-  </option>
-</select>

@@ -4,7 +4,7 @@ module Resolvers
     def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil,order_field:,order_dir:)
       @model_class = model_class
       @context = context
-      @languages = languages.nil? ? [@context[:language]] : languages
+      @languages = languages.nil? ? Types::Base::BaseEnum::LanguageEnum.enum_values : languages
       @order_dir = order_dir
       @order_field = order_field
       scope = select_relevant_fields(scope)
@@ -30,7 +30,7 @@ module Resolvers
         if is_uuid_column? filter_key
           scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
         elsif is_multilingual_column? filter_key
-          scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
+          scope = scope.where "'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})"
         elsif is_boolean_column? filter_key
           scope = scope.where "#{@model_class.table_name}.#{filter_key} = ?", filter_value
         elsif is_datetime_column? filter_key
@@ -49,7 +49,7 @@ module Resolvers
       order_dir = value.to_h.stringify_keys.fetch("orderDirection", @order_dir)
       if is_multilingual_column? order_key
         # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
-        # Using gsub to add comma as delimiter
+        # Using join to add comma as delimiter
         coalesce = @languages.map{|l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
         scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
       else

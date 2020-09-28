@@ -105,7 +105,9 @@ mutation RegenerateForeignTypes($id: ID!) {
       expect(response_json).to eq ({
                                      "data" => {
                                        "regenerateForeignTypes" => {
+                                         "__typename"=>"RegenerateForeignTypesPayload",
                                          "grammar" => {
+                                           "__typename"=>"Grammar",
                                            "foreignTypes" => lang_single_type
                                          }
                                        }

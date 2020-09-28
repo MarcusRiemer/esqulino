@@ -7,8 +7,17 @@ generates:
       - "typescript"
       - "typescript-operations"
       - "typescript-apollo-angular"
+      - add:
+          content: 'import { NodeDescription, QualifiedTypeName } from "../app/shared/syntaxtree";'
+      - add:
+          content: 'import { MultiLangString } from "../app/shared/multilingual-string.description";'
     config:
       enumsAsTypes: true
+      scalars:
+        NodeDescription: NodeDescription
+        QualifiedTypeName: QualifiedTypeName
+        LangJson: MultiLangString
+        ISO8601DateTime: string
 hooks:
   afterOneFileWrite:
 #    - prettier --write

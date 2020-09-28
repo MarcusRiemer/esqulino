@@ -5,6 +5,19 @@ class ProjectsController < ApplicationController
   include UserHelper
   include PaginationHelper
 
+  # Retrieves all information about a single project. This is the only
+  # request the client will make to retrieve the *whole* project with
+  # *everything* that is required to render it properly.
+  def show
+    needle = params[:project_id]
+    project = if (BlattwerkzeugUtil::string_is_uuid? needle) then
+                Project.full.find(needle)
+              else
+                Project.full.find_by! slug: needle
+              end
+    render json: project.to_full_api_response
+  end
+
   # Update an existing project.
   def update
     begin
@@ -19,7 +32,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-
   # The preview image for a specific project
   def preview_image
     if current_project.preview_image_exists? then
@@ -30,6 +42,22 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  # These attributes are mandatory when a project is created
+  def project_creation_params
+    to_return = params.permit(:slug, name: {})
+      .transform_keys { |k| k.underscore }
+
+    to_return["user"] = current_user
+
+    return (to_return)
+  end
+
+  # These attributes may be changed once a project has been created
+  def project_update_params
+    params.permit(:indexPageId, :preview, name: {}, description: {})
+      .transform_keys { |k| k.underscore }
+  end
 
   # The references to block languages that are part of this project.
   # All of these references may be updated.

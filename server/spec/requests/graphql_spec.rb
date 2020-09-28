@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe GraphqlController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
-  #before(:each) { create(:user, :guest) }
 
   describe 'Basic error handling' do
     it 'no query, only invalid name' do
@@ -62,7 +61,7 @@ RSpec.describe GraphqlController, type: :request do
 
       project_names = execute_query(query:"{projects(input: {filter:{name:\"hallo-1\"}}){nodes{name}}}" )['data']['projects']['nodes'].map {|p| p['name']}
 
-      expect(project_names).to eq([{"de"=>"hallo-1"}])
+      expect(project_names).to eq([{"en"=>"hello-1","de"=>"hallo-1"}])
     end
 
     it 'Projects: Added not provided filter field as input parameter and should return error' do
@@ -81,7 +80,7 @@ RSpec.describe GraphqlController, type: :request do
 
       project_names = execute_query(query:query)['data']['projects']['nodes'].map {|p| p['name']}
 
-      expect(project_names).to eq([{"de"=>"hallo-1"}, {"de"=>"hallo-2"}, {"de"=>"hallo-3"}])
+      expect(project_names).to eq([{"en"=>"hello-1","de"=>"hallo-1"}, {"en"=>"hello-2","de"=>"hallo-2"}, {"en"=>"hello-3","de"=>"hallo-3"}])
     end
 
     it 'Projects: Added not provided orderField as input parameter and expect to return error' do

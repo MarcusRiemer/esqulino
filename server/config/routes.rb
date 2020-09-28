@@ -37,7 +37,6 @@ Rails.application.routes.draw do
 
     # Everything in the context of projects
     scope 'project' do
-
       # Everything that does something in the context of a specific project
       scope ':project_id' do
 
@@ -101,27 +100,10 @@ Rails.application.routes.draw do
       end
     end
 
-    # Getting the News as JSON
-    scope 'news' do
-      scope 'admin' do
-        get '/', controller: 'news', action: :index_admin
-        get ':id', controller: 'news', action: :show_admin
-      end
+    resources :block_languages, only: [:show]
 
-      get '/', controller: 'news', action: :index
-      post '/', controller: 'news', action: :create
-      get ':id', controller: 'news', action: :show
-      put ':id', controller: 'news', action: :update
-      delete ':id', controller: 'news', action: :destroy
-    end
-
-    resources :block_languages, only: [:create, :index, :show, :update, :destroy]
-
-    resources :grammars, only: [:create, :index, :show, :update, :destroy]
-    get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages
+    resources :grammars, only: [:show]
     get 'grammars/:id/code_resources_gallery', controller: 'grammars', action: :code_resources_gallery
-    post 'grammars/:id/regenerate_foreign_types', controller: 'grammars', action: :regenerate_foreign_types
-
     get 'code_resources/by_programming_language/:programming_language_id',
         controller: 'code_resources', action: :index_by_programming_language
 

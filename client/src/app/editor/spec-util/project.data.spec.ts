@@ -7,14 +7,8 @@ import {
   FullProjectQuery,
 } from "../../../generated/graphql";
 
-import {
-  ProjectFullDescription,
-  Project,
-  ProjectDescription,
-} from "../../shared/project";
-import { ServerApiService } from "../../shared";
+import { ProjectFullDescription, Project } from "../../shared/project";
 import { generateUUIDv4 } from "../../shared/util-browser";
-import { ListOrder, provideListResponse } from "./list.data.spec";
 import { ApolloTestingController } from "apollo-angular/testing";
 import { GraphQLError } from "graphql";
 
@@ -53,17 +47,6 @@ const wrapProjectData = (data: FullProjectNode[]): FullProjectGQLResponse => {
   };
 };
 
-/**
- * Generates a valid grammar description with a unique ID, that uses
- * the given data (if provided) and uses default data
- */
-export const buildProject = (
-  override?: Partial<ProjectDescription>
-): ProjectDescription => {
-  const id = override?.id ?? generateUUIDv4();
-  return Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
-};
-
 export const specLoadProject = (
   projectService: ProjectService,
   override?: Partial<ProjectFullDescription>
@@ -85,26 +68,4 @@ export const specLoadProject = (
   testingController.verify();
 
   return toReturn;
-};
-
-export type ProjectOrder = ListOrder<ProjectDescription>;
-
-/**
- * Expects a request for the given list of grammars. If a ordered dataset
- * is requested, the `items` param must be already ordered accordingly.
- */
-export const provideProjectList = (
-  items: ProjectDescription[],
-  options?: {
-    order?: ProjectOrder;
-    pagination?: {
-      limit: number;
-      page: number;
-    };
-  }
-) => {
-  const serverApi = TestBed.inject(ServerApiService);
-  let reqUrl = serverApi.getAdminProjectListUrl();
-
-  return provideListResponse(items, reqUrl, options);
 };

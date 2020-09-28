@@ -34,7 +34,10 @@ const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
   generatedFromId: "28123123-7d53-40de-a89b-95bf37c982be",
   foreignTypes: {},
-  root: {},
+  root: {
+    languageName: "",
+    typeName: "",
+  },
   types: {},
 };
 

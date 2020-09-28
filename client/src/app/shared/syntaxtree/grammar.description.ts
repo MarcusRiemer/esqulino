@@ -513,7 +513,7 @@ export function isNodePropertyDesciption(
 export function isNodePropertyReferenceDesciption(
   obj: any
 ): obj is NodePropertyReferenceDescription {
-  const validBases: Set<NodePropertyReferenceDescription["base"]> = new Set([
+  const validBases = new Set<NodePropertyReferenceDescription["base"]>([
     "grammarReference",
     "codeResourceReference",
   ]);

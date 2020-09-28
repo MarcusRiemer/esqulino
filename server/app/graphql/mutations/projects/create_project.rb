@@ -1,7 +1,7 @@
 class Mutations::Projects::CreateProject < Mutations::Projects::Projects
 
   argument :name, Types::Scalar::LangJson, required: true
-  argument :slug, String, required: true
+  argument :slug, String, required: false
 
   field :id, ID, null: true
 
