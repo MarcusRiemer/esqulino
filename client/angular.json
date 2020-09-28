@@ -135,7 +135,10 @@
             "outputPath": "dist/server",
             "main": "src/universal-server.ts",
             "tsConfig": "src/tsconfig.server.json",
-            "localize": ["en", "de"]
+            "localize": ["en", "de"],
+            "externalDependencies": [
+              "canvas"
+            ]
           }
         },
         "serve-ssr": {
