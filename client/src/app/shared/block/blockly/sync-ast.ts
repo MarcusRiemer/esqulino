@@ -1,23 +1,20 @@
 import {
-  GrammarDocument,
   NodeDescription,
-  isGrammarDocument,
   NamedLanguages,
   isNodeTypeChildrenGroupDescription,
   Orientation,
+  isNodeOneOfTypeDescription,
 } from "../../syntaxtree/";
 import {
   fromStableQualifiedTypename,
   stableQualifiedTypename,
-  getQualifiedTypes,
-  allPresentTypes,
   allChildTypes,
   resolveToConcreteTypes,
+  getNodeAttribute,
 } from "../../syntaxtree/grammar-type-util";
 import {
   buildAppearanceContext,
   AppearanceContext,
-  blockOrientation,
 } from "./appearance-context";
 
 // A sequence of statements is encoded as a deeply nested tree in Blockly but
@@ -129,8 +126,9 @@ function parseBlock(
 function createWorkspaceBlock(
   ast: NodeDescription,
   ac: AppearanceContext,
+  parent: Element,
   doc: Document
-): Element {
+) {
   // Build the block and its properties
   const blockNode = doc.createElement("block");
   blockNode.setAttribute("type", stableQualifiedTypename(ast));
@@ -143,37 +141,108 @@ function createWorkspaceBlock(
     });
   }
 
+  // Place it into the tree
+  parent.appendChild(blockNode);
+
+  // We will need to check the grammar type definition for
+  // the possible types of children multiple times in the
+  // upcoming loop.
+  const nodeDesc = ac.types[ast.language][ast.name];
+  if (isNodeOneOfTypeDescription(nodeDesc)) {
+    return;
+  }
+
   // Possibly build children for this block
   if (ast.children) {
     const typeDesc = ac.types[ast.language][ast.name];
     if (typeDesc.type === "concrete" || typeDesc.type === "visualize") {
-      Object.entries(ast.children).forEach(([name, children]) => {
-        if (isNodeTypeChildrenGroupDescription(children)) {
-          // Check that all children have the same orientation
-          const mentionedTypes = allChildTypes(
-            children,
-            ast.language
-          ).flatMap((t) => resolveToConcreteTypes(t, ac.types));
+      Object.entries(ast.children).forEach(([groupName, children]) => {
+        const childGroupDesc = getNodeAttribute(nodeDesc, groupName);
 
-          const mentionedOrientations = new Set<Orientation>();
-          mentionedTypes.forEach((t) => {
-            const tO = ac.typeDetails[stableQualifiedTypename(t)].orientation;
-            tO.forEach((t) => mentionedOrientations.add(t));
-          });
-
-          // Hopefully all children agree on the same orientation
-          if (mentionedOrientations.size == 1) {
-            const orientation = Array.from(mentionedOrientations)[0];
-            if (orientation === "horizontal") {
-            } else {
-            }
-          } else {
-          }
-        } else {
+        // The child group should be known to the grammar
+        if (!childGroupDesc) {
           throw new Error(
-            `Children in unknown childgroup ${name} of tree ${JSON.stringify(
+            `Children in unknown childgroup "${groupName}" of tree ${JSON.stringify(
               ast
             )}`
+          );
+        }
+
+        // And it should be a child group
+        if (!isNodeTypeChildrenGroupDescription(childGroupDesc)) {
+          throw new Error(
+            `Unexpected children in not-childgroup "${groupName}" of tree ${JSON.stringify(
+              ast
+            )}`
+          );
+        }
+
+        // Check that all children have the same orientation
+        const mentionedTypes = allChildTypes(
+          childGroupDesc,
+          ast.language
+        ).flatMap((t) => resolveToConcreteTypes(t, ac.types));
+
+        const mentionedOrientations = new Set<Orientation>();
+        mentionedTypes.forEach((t) => {
+          const tO = ac.typeDetails[stableQualifiedTypename(t)]?.orientation;
+          // There might not be orientation data about this type. If this
+          // happens for every type the following code has a fallback
+          if (tO) {
+            tO.forEach((t) => mentionedOrientations.add(t));
+          }
+        });
+
+        // Initially append to the block node, this will be switched later to the newly created nodes
+        let parentForContinuation = blockNode;
+
+        // Hopefully all children agree on the same orientation
+        if (mentionedOrientations.size <= 1) {
+          const orientation =
+            mentionedOrientations.size === 1
+              ? Array.from(mentionedOrientations)[0]
+              : "vertical";
+          children.forEach((child) => {
+            // The node that serves as the list container.
+            let listNode: Element = undefined;
+
+            // The details of the correct list node differ between value and statement blocks.
+            if (orientation === "horizontal") {
+              listNode = doc.createElement("value");
+              // Starting the child group: Use the name of the childgroup
+              if (parentForContinuation === blockNode) {
+                listNode.setAttribute("name", groupName);
+              }
+              // Continuing the child group: Use a special attribute name to indicate this
+              else {
+                listNode.setAttribute("name", CHILD_GROUP_NAME_CONTINUATION);
+              }
+            } else {
+              // Starting the child group: create a statements node with a name
+              if (parentForContinuation === blockNode) {
+                listNode = doc.createElement("statement");
+                listNode.setAttribute("name", groupName);
+              }
+              // Continuing a child group: use the next node
+              else {
+                listNode = doc.createElement("next");
+              }
+            }
+
+            parentForContinuation.appendChild(listNode);
+
+            parentForContinuation = createWorkspaceBlock(
+              child,
+              ac,
+              listNode,
+              doc
+            );
+          });
+        } else {
+          throw new Error(
+            `Impossible: Found orientations ${JSON.stringify(
+              Array.from(mentionedOrientations)
+            )} for child group ${groupName} in tree ${JSON.stringify(ast)}`
           );
         }
       });
@@ -197,7 +266,7 @@ export function internalToBlockly(
   // toReturn.setAttribute("xmlns", "https://developers.google.com/blockly/xml");
 
   if (ast) {
-    toReturn.appendChild(createWorkspaceBlock(ast, ac, doc));
+    createWorkspaceBlock(ast, ac, toReturn, doc);
   }
 
   return toReturn;

@@ -251,6 +251,9 @@ describe(`Blockly AST syncing`, () => {
         distinct: {
           type: "concrete",
         },
+        starOperator: {
+          type: "concrete",
+        },
         columnName: {
           type: "concrete",
           attributes: [
@@ -281,11 +284,6 @@ describe(`Blockly AST syncing`, () => {
               type: "container",
               children: [
                 {
-                  tags: ["keyword", "component"],
-                  type: "terminal",
-                  symbol: "SELECT",
-                },
-                {
                   name: "distinct",
                   type: "sequence",
                   nodeTypes: [
@@ -307,7 +305,7 @@ describe(`Blockly AST syncing`, () => {
                         nodeTypes: [
                           {
                             occurs: "*",
-                            nodeType: "expression",
+                            nodeType: "columnName",
                           },
                           {
                             occurs: "?",
@@ -331,6 +329,81 @@ describe(`Blockly AST syncing`, () => {
             },
           ],
         },
+        from: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              children: [
+                {
+                  tags: ["keyword", "component"],
+                  type: "terminal",
+                  symbol: "FROM",
+                },
+                {
+                  name: "tables",
+                  type: "sequence",
+                  between: {
+                    name: "columnSeparator",
+                    type: "terminal",
+                    symbol: ",",
+                  },
+                  nodeTypes: [
+                    {
+                      occurs: "+",
+                      nodeType: "tableIntroduction",
+                    },
+                  ],
+                },
+              ],
+              orientation: "horizontal",
+            },
+            {
+              tags: ["indent"],
+              type: "container",
+              children: [
+                {
+                  name: "joins",
+                  type: "sequence",
+                  nodeTypes: [
+                    {
+                      occurs: "*",
+                      nodeType: "crossJoin",
+                    },
+                  ],
+                },
+              ],
+              orientation: "vertical",
+            },
+          ],
+        },
+        crossJoin: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "horizontal",
+              children: [
+                {
+                  name: "table",
+                  type: "sequence",
+                  nodeTypes: ["tableIntroduction"],
+                },
+              ],
+            },
+          ],
+        },
+        tableIntroduction: {
+          type: "concrete",
+          attributes: [
+            {
+              base: "string",
+              name: "name",
+              tags: ["explicit-spaces"],
+              type: "property",
+            },
+          ],
+        },
       },
     };
 
@@ -348,7 +421,6 @@ describe(`Blockly AST syncing`, () => {
       prettydiff.options.diff = expected;
       const prettyExpected = prettydiff();
 
-      debugger;
       expect(prettyActual).toEqual(prettyExpected);
     };
 
@@ -400,7 +472,7 @@ describe(`Blockly AST syncing`, () => {
       );
     });
 
-    it(`Node with child :: SELECT person.id`, () => {
+    it(`Node with value children :: SELECT person.id, person.name`, () => {
       const res = internalToBlockly(
         {
           language: "sql",
@@ -447,6 +519,104 @@ describe(`Blockly AST syncing`, () => {
             </value>
           </block>
         </xml>
+        `
+      );
+    });
+
+    it(`Node with mixed children :: FROM v1 JOIN j1, j2 `, () => {
+      const res = internalToBlockly(
+        {
+          language: "sql",
+          name: "from",
+          children: {
+            tables: [
+              {
+                language: "sql",
+                name: "tableIntroduction",
+                properties: {
+                  name: "v1",
+                },
+              },
+              {
+                language: "sql",
+                name: "tableIntroduction",
+                properties: {
+                  name: "v2",
+                },
+              },
+            ],
+            joins: [
+              {
+                language: "sql",
+                name: "crossJoin",
+                children: {
+                  table: [
+                    {
+                      language: "sql",
+                      name: "tableIntroduction",
+                      properties: {
+                        name: "s1",
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                language: "sql",
+                name: "crossJoin",
+                children: {
+                  table: [
+                    {
+                      language: "sql",
+                      name: "tableIntroduction",
+                      properties: {
+                        name: "s2",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        SPEC_SQL
+      );
+
+      equalXml(
+        res,
+        `
+          <xml>
+            <block type="sql.from">
+              <value name="tables">
+                <block type="sql.tableIntroduction">
+                  <field name="name">v1</field>
+                  <value name="__list__">
+                    <block type="sql.tableIntroduction">
+                      <field name="name">v2</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <statement name="joins">
+                <block type="sql.crossJoin">
+                  <value name="table">
+                    <block type="sql.tableIntroduction">
+                      <field name="name">s1</field>
+                    </block>
+                  </value>
+                  <next>
+                    <block type="sql.crossJoin">
+                      <value name="table">
+                        <block type="sql.tableIntroduction">
+                          <field name="name">s2</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+            </block>
+          </xml>
         `
       );
     });

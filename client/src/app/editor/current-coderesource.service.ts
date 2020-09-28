@@ -116,6 +116,13 @@ export class CurrentCodeResourceService {
   }
 
   /**
+   * The currently edited syntaxtree
+   */
+  get peekSyntaxtree() {
+    return this.peekResource.syntaxTreePeek;
+  }
+
+  /**
    * Broadcasts a new execution location.
    */
   setCurrentExecutionLocation(loc?: NodeLocation) {

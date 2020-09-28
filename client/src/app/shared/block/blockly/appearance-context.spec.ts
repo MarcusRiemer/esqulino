@@ -247,5 +247,53 @@ describe(`Blockly Appearance Context`, () => {
         "sql.column": { orientation: new Set(["horizontal", "vertical"]) },
       });
     });
+
+    it(`Horizontal container with parentheses`, () => {
+      const res = buildAppearanceContext({
+        sql: {
+          select: {
+            type: "concrete",
+            attributes: [
+              {
+                type: "container",
+                orientation: "horizontal",
+                children: [
+                  {
+                    name: "columns",
+                    type: "parentheses",
+                    group: {
+                      type: "allowed",
+                      nodeTypes: [
+                        {
+                          occurs: "*",
+                          nodeType: "column",
+                        },
+                        {
+                          occurs: "?",
+                          nodeType: "starOperator",
+                        },
+                      ],
+                    },
+                    between: {
+                      name: "columnSeparator",
+                      tags: ["space-after"],
+                      type: "terminal",
+                      symbol: ",",
+                    },
+                    cardinality: "1",
+                  },
+                ],
+              },
+            ],
+          },
+          starOperator: EMPTY_CONCRETE_TYPE,
+          column: EMPTY_CONCRETE_TYPE,
+        },
+      });
+      expect(res.typeDetails).toEqual({
+        "sql.column": { orientation: new Set(["horizontal"]) },
+        "sql.starOperator": { orientation: new Set(["horizontal"]) },
+      });
+    });
   });
 });

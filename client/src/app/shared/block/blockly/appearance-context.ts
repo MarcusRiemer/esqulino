@@ -129,6 +129,16 @@ export function buildAppearanceContext(
             addAppearance(a, ref, orientation, languageName)
           );
           break;
+        case "choice":
+          a.choices.forEach((ref) =>
+            addAppearance(a, ref, orientation, languageName)
+          );
+          break;
+        case "parentheses":
+          a.group.nodeTypes.forEach((ref) =>
+            addAppearance(a, ref, orientation, languageName)
+          );
+          break;
         case "container":
           walkAttributes(a.children, a.orientation, languageName);
           break;

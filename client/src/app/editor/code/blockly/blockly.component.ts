@@ -12,11 +12,16 @@ import { first } from "rxjs/operators";
 
 import * as Blockly from "blockly";
 
+import { internalToBlockly } from "../../../shared/block/blockly/sync-ast";
+import { allPresentTypes } from "../../../shared/syntaxtree/grammar-type-util";
+
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService } from "../../toolbar.service";
 import { SidebarService } from "../../sidebar.service";
 
 import { BlocklyBlocksService } from "./blockly-blocks.service";
+import { NodeDescription, CodeResource } from "src/app/shared";
+import { Subscription } from "rxjs";
 
 const debugWorkspace = `<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="sql.querySelect" id="?6DU32Yrf{(ws:Sl)f1f" x="326" y="157">
@@ -119,6 +124,8 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
   // This is an experimental API not yet supported by Typescript
   private _resizeObserver: any;
 
+  private _subscriptions: Subscription[] = [];
+
   constructor(
     private _blocklyBlocks: BlocklyBlocksService,
     private _current: CurrentCodeResourceService,
@@ -150,29 +157,47 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
    * Injecting Blockly into the outlet and register relevant events.
    */
   ngAfterViewInit(): void {
-    const validators = this._current.peekResource.validatorPeek
-      .grammarValidators;
+    const currResSub = this._current.currentResource.subscribe(
+      (currRes: CodeResource) => {
+        // Clear previously loaded blockly data
+        if (this._workspace) {
+          this._workspace.clear();
+        }
 
-    if (!validators || validators.length != 1) {
-      throw new Error(
-        `Blockly generation currently requires a single grammar document`
-      );
-    }
+        const validators = currRes.validatorPeek.grammarValidators;
 
-    const g = validators[0].description;
+        if (!validators || validators.length != 1) {
+          throw new Error(
+            `Blockly generation currently requires a single grammar document`
+          );
+        }
 
-    const generated = this._blocklyBlocks.load(g);
-    console.log("Generated blockly settings", generated);
-    console.log("XML Toolbox", generated.toolbox);
+        const g = validators[0].description;
 
-    Blockly.defineBlocksWithJsonArray(generated.blocks);
+        const generated = this._blocklyBlocks.loadGrammar(g);
+        console.log("Generated blockly settings", generated);
+        console.log("XML Toolbox", generated.toolbox);
 
-    this._workspace = Blockly.inject(
-      this.blocklyOutlet.nativeElement,
-      Object.assign({}, this.config, { toolbox: generated.toolbox })
+        Blockly.defineBlocksWithJsonArray(generated.blocks);
+
+        if (!this._workspace) {
+          this._workspace = Blockly.inject(
+            this.blocklyOutlet.nativeElement,
+            Object.assign({}, this.config, { toolbox: generated.toolbox })
+          );
+        } else {
+          this._workspace.updateToolbox(generated.toolbox);
+        }
+
+        const astXmlWorkspace = internalToBlockly(
+          currRes.syntaxTreePeek.toModel(),
+          allPresentTypes(g)
+        );
+        Blockly.Xml.domToWorkspace(astXmlWorkspace, this._workspace);
+      }
     );
 
-    this.loadWorkspaceXml(debugWorkspace);
+    this._subscriptions = [currResSub];
 
     this._workspace.addChangeListener(this.onWorkspaceChangeCallback);
 
@@ -191,6 +216,9 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
   ngOnDestroy(): void {
     this._workspace.removeChangeListener(this.onWorkspaceChangeCallback);
     this._resizeObserver.disconnect();
+
+    this._subscriptions.forEach((s) => s.unsubscribe());
+    this._subscriptions = [];
   }
 
   /**
@@ -212,13 +240,5 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
   onCode(code: string) {
     console.log(code);
-  }
-
-  /**
-   * Loads the given blockly xml string into the workspace of this component.
-   */
-  private loadWorkspaceXml(xmlString: string) {
-    const xml = Blockly.Xml.textToDom(xmlString);
-    Blockly.Xml.domToWorkspace(xml, this._workspace);
   }
 }

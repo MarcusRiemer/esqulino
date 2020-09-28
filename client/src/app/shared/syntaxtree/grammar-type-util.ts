@@ -92,6 +92,37 @@ export function getFullQualifiedAttributes(
   return toReturn;
 }
 
+/**
+ * Retrieve the node with the given attribute name, no matter how
+ * deeply it is nested.
+ */
+export function getNodeAttribute(
+  nodeDesc: Desc.NodeConcreteTypeDescription | Desc.NodeVisualTypeDescription,
+  name: string
+) {
+  const recurseAttribute = (a: Desc.NodeAttributeDescription) => {
+    if (a.name === name) {
+      return a;
+    } else if (a.type === "container") {
+      for (let i = 0; i < a.children.length; i++) {
+        const res = recurseAttribute(a.children[i]);
+        if (res) {
+          return res;
+        }
+      }
+    }
+  };
+
+  for (let i = 0; i < nodeDesc.attributes.length; i++) {
+    const res = recurseAttribute(nodeDesc.attributes[i]);
+    if (res) {
+      return res;
+    }
+  }
+
+  return undefined;
+}
+
 export function resolveNodeTypeChildReference(
   ref: Desc.NodeTypesChildReference,
   languageName: string
@@ -139,7 +170,15 @@ export function resolveToConcreteTypes(
   const toReturn: QualifiedTypeName[] = [];
 
   const impl = (t: QualifiedTypeName) => {
-    const currType = g[t.languageName][t.typeName];
+    const currType = g?.[t.languageName]?.[t.typeName];
+    if (!currType) {
+      throw new Error(
+        `Unknown type ${JSON.stringify(
+          t
+        )} while resolving concrete types from ${JSON.stringify(g)}`
+      );
+    }
+
     if (currType.type === "oneOf") {
       currType.oneOf.forEach((option) =>
         impl(resolveNodeTypeChildReference(option, t.languageName))
