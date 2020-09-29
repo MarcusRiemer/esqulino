@@ -4,12 +4,22 @@ module Resolvers
     def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil,order_field:,order_dir:)
       @model_class = model_class
       @context = context
-      @languages = languages.nil? ? Types::Base::BaseEnum::LanguageEnum.enum_values : languages
+      @languages = set_languages(languages)
       @order_dir = order_dir
       @order_field = order_field
       scope = select_relevant_fields(scope)
       scope = apply_filter(scope,filter)
       @scope = apply_order(scope,order)
+    end
+
+    def set_languages(languages)
+      if languages.nil?
+        Types::Base::BaseEnum::LanguageEnum.enum_values
+      elsif languages.empty?
+        raise GraphQL::ExecutionError, "An empty Array is not allowed as languages input field."
+      else
+        languages
+      end
     end
 
     def select_relevant_fields(scope)
@@ -28,7 +38,13 @@ module Resolvers
       # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
       value.to_h.transform_keys{|k| k.to_s.underscore}.each do |filter_key,filter_value|
         if is_uuid_column? filter_key
-          scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
+          if BlattwerkzeugUtil::string_is_uuid? filter_value
+            scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
+          elsif @model_class.column_names.include? 'slug'
+            scope = scope.where "#{@model_class.table_name}.slug LIKE ?", filter_value
+          else
+            raise GraphQL::ExecutionError, "The provided filter_value #{filter_value} can not be used as needle, because its not a uuid or class #{@model_class} doesn't have slug as attribute"
+          end
         elsif is_multilingual_column? filter_key
           scope = scope.where "'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})"
         elsif is_boolean_column? filter_key
