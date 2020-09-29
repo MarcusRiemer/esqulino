@@ -1,88 +1,35 @@
 Block Languages
 ===============
 
-Block Languages are built with specific grammars in mind and can be thought of as an "representation layer" for syntaxtrees. Whilst the task of a grammar is to describe the structure of a tree, the task of a block language is to describe the visual representation. It does this via its own meta-description that may be either generated and maintained by hand or automatically generated from a grammar and some generation instructions.
+Block Languages are generated from grammars and can be thought of as a visualisation function for syntaxtrees. Whilst the task of a grammar is to describe the structure of a tree, the task of a block language is to describe the visual representation.
 
-This section of the manual initially describes the widgets that are available to represent a specific syntax tree. It then continues to describe how meaningful block languages may be automatically generated from a grammar.
+BlattWerkzeug comes with different generators for (block) languages:
 
-Available widgets
------------------
+* A builtin block editor that closely resembles syntax highlighted source code.
+* On the fly generated editors for `Googles Blockly <https://developers.google.com/blockly>`_.
+* A text only output that can be used for code generation.
 
-The formal definition of the available widgets is part of the Typescript-namespace ``VisualBlockDescriptions``. All available widgets are defined as a ``JSON``-object that must at least define the ``blockType``.
+Blockly Backend
+---------------
 
-Additionally every widget may be styled using arbitrary ``DOM``-properties using the optional ``style``-object. The given properties will be applied directly to the given ``DOM``-nodes, there is currently no support for "real" ``CSS``.
+Blockly defines compatible inputs and outputs on a per-block level, no matter the context. The outputs of a block also define their orientation (horizontal or vertical), which is not always compatible with BlockWerkzeug. In BlockWerkzeug a single type may be used in two different contexts. One example would be references to tables in ``SQL``.
 
-Constant
-~~~~~~~~
+The following snippet shows, how such a component could be modelled::
 
-Displays a constant value in the editor. This is meant to be used for keywords or keyword-like delimiters that may never be edited by the user. Constants are routinely meant to be styled with regards to their text colour and similar textual properties.
+   node "sql"."from" {
+      // First: One or more tables
+      children sequence "tables" ::= tableIntroduction+
+      // Afterwards: Sophisticated joins
+      children sequence "joins" ::= innerJoinOn*
+    }
 
-.. code-block:: json
+    node "sql"."tableIntroduction" {
+      prop "name" { string }
+    }
 
-   {
-     "blockType": "constant",
-     "text": "FROM",
-     "style": {
-       "color": "#0000ff",
-       "width": "9ch",
-       "display": "inline-block"
-     }
-   }
+    node "sql"."innerJoinOn" {
+      children sequence "table" ::= tableIntroduction
+      children sequence "on" ::= expression
+    }
 
-.. figure :: screenshots/sql-blocks-constants.png
-
-  Constants in the ``SQL`` language
-
-Interpolated Values
-~~~~~~~~~~~~~~~~~~~
-
-Displays a property of a node that is represented in its block form. Although the result looks pretty much like a constant text on the outside, the value that is actually displayed will be determined depending on the syntaxtree that is loaded.
-
-.. graphviz:: generated/ast-sql-column-name.graphviz
-   :align: center
-   :caption: Tree to visualize
-
-.. code-block:: json
-
-   {
-     "blockType": "interpolated",
-     "property": "columName"
-   }
-
-.. figure :: screenshots/sql-blocks-interpolated.png
-
-  Interpolated values in the ``SQL`` language
-
-Editable Values
-~~~~~~~~~~~~~~~
-
-This property works almost like an interpolated value: It displays the value of a property. But if the user clicks the value an editor is opened.
-
-.. code-block:: json
-
-   {
-     "blockType": "input",
-     "property": "columName"
-   }
-
-.. figure :: screenshots/sql-blocks-input.png
-
-  Editing a value
-
-Blocks
-~~~~~~
-
-The actual blocks have no default appearance of their own but they may define child widgets that should be rendered. These blocks usually correspond to distinct types in grammars.
-
-Iterating over children
-~~~~~~~~~~~~~~~~~~~~~~~
-
-So far every presented widget worked on atomic properties of a node. Child groups are rendered using an iterator which specifies the name of the child group to render.
-
-Block Language Generation
--------------------------
-
-Although it is possible to create block languages by hand, this approach does not scale too nicely with the idea of dynamically restricted programming environments. It would mean that e.g. different variants of ``SQL`` (that all share a common grammar) would require loads of duplicated effort to maintain.
-
-
-
+In this example the node ``sql.tableIntroduction`` may have nodes of the same type that follow it (when introducing multiple tables without sophisticated joins) but in the context of ``sql.innerJoinOn`` only a single node of that type is permitted. To the best of my knowledge this can't be expressed with a single type in Blockly.
