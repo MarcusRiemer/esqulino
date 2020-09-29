@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { FrontpageListProjectsGQL } from "../../generated/graphql";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 /**
  * Lists all publicly available projects

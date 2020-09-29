@@ -78,7 +78,6 @@ export class AdminNewsEditComponent implements OnInit {
         .pipe(map((result) => result.data.adminSingleNews))
         .subscribe(
           (news) => {
-
             this.newsData = news;
             if (this.newsData.publishedFrom != "UNSET") {
               this.newsData.publishedFrom = new Date(
@@ -112,15 +111,13 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   get isPublished(): boolean {
-    return (
-      this.newsData.publishedFrom !== "UNSET"
-    );
+    return this.newsData.publishedFrom !== "UNSET";
   }
 
   // method could be replaced by using the event which should be triggered when clicking on the delete button at form-group input field
-  correctPublishedFrom():void{
-    if (this.newsData.publishedFrom == ""){
-      this.newsData.publishedFrom = "UNSET"
+  correctPublishedFrom(): void {
+    if (this.newsData.publishedFrom == "") {
+      this.newsData.publishedFrom = "UNSET";
     }
   }
 
