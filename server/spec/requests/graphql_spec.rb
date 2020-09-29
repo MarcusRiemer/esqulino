@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe GraphqlController, type: :request do
-  json_headers = { "CONTENT_TYPE" => "application/json" }
-
   describe 'Basic error handling' do
     it 'no query, only invalid name' do
       response = execute_query(operation_name:"ThisOperationWillNeverExist" )
@@ -53,6 +51,12 @@ RSpec.describe GraphqlController, type: :request do
 
       expect(response_data.has_key? "errors").to be true
     end
+    it 'Projects: Added empty languages as input parameter and should return error' do
+      FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
+
+      response_data = execute_query(query:"{projects(input: {languages:[]}){nodes{name}}}" )
+      expect(response_data.has_key? "errors").to be true
+    end
 
     it 'Projects: Added filter as input parameter and expect to return only filtered project' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
@@ -64,6 +68,25 @@ RSpec.describe GraphqlController, type: :request do
       expect(project_names).to eq([{"en"=>"hello-1","de"=>"hallo-1"}])
     end
 
+    it 'Projects: filter for id' do
+      p1 = FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
+      FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
+      FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
+
+      projects = execute_query(query:"{projects(input: {filter:{id:\"#{p1.id}\"}}){nodes{id}}}" )['data']['projects']['nodes']
+      expect(projects.length).to eq(1)
+      expect(projects[0]["id"]).to eq(p1.id)
+    end
+    it 'Projects: filter for needle' do
+      p1 = FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
+      FactoryBot.create(:project, name: {en: "hello-2",de: "hallo-2"})
+      FactoryBot.create(:project, name: {en: "hello-3",de: "hallo-3"})
+
+      projects = execute_query(query:"{projects(input: {filter:{id:\"#{p1.slug}\"}}){nodes{id}}}" )['data']['projects']['nodes']
+
+      expect(projects.length).to eq(1)
+      expect(projects[0]["id"]).to eq(p1.id)
+    end
     it 'Projects: Added not provided filter field as input parameter and should return error' do
       FactoryBot.create(:project, name: {en: "hello-1",de: "hallo-1"})
       query = "{projects(input: {filter:{test:\"hello-1\"}}){nodes{name}}}"
