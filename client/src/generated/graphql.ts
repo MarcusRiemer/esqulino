@@ -13,6 +13,7 @@ export type Scalars = {
   Float: number;
   /** An ISO 8601-encoded datetime */
   ISO8601DateTime: string;
+  SettableDate: any;
   LangJson: MultiLangString;
   /** Represents untyped JSON */
   JSON: any;
@@ -212,7 +213,7 @@ export type CreateGrammarPayload = {
 export type CreateNewsInput = {
   title: Scalars["LangJson"];
   text: Scalars["LangJson"];
-  publishedFrom: Scalars["ISO8601DateTime"];
+  publishedFrom: Scalars["SettableDate"];
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
 };
@@ -485,7 +486,7 @@ export type News = {
   __typename?: "News";
   createdAt: Scalars["ISO8601DateTime"];
   id: Scalars["ID"];
-  publishedFrom?: Maybe<Scalars["ISO8601DateTime"]>;
+  publishedFrom: Scalars["SettableDate"];
   text: Scalars["LangJson"];
   title: Scalars["LangJson"];
   updatedAt: Scalars["ISO8601DateTime"];
@@ -967,7 +968,7 @@ export type UpdateNewsInput = {
   id?: Maybe<Scalars["ID"]>;
   title?: Maybe<Scalars["LangJson"]>;
   text?: Maybe<Scalars["LangJson"]>;
-  publishedFrom?: Maybe<Scalars["ISO8601DateTime"]>;
+  publishedFrom: Scalars["SettableDate"];
   userId?: Maybe<Scalars["ID"]>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
@@ -1340,7 +1341,7 @@ export type CreateGrammarMutation = { __typename?: "Mutation" } & {
 export type CreateNewsMutationVariables = {
   title: Scalars["LangJson"];
   text: Scalars["LangJson"];
-  publishedFrom: Scalars["ISO8601DateTime"];
+  publishedFrom: Scalars["SettableDate"];
 };
 
 export type CreateNewsMutation = { __typename?: "Mutation" } & {
@@ -1763,7 +1764,7 @@ export type UpdateNewsMutationVariables = {
   id: Scalars["ID"];
   title: Scalars["LangJson"];
   text: Scalars["LangJson"];
-  publishedFrom: Scalars["ISO8601DateTime"];
+  publishedFrom: Scalars["SettableDate"];
 };
 
 export type UpdateNewsMutation = { __typename?: "Mutation" } & {
@@ -2251,7 +2252,7 @@ export const CreateNewsDocument = gql`
   mutation CreateNews(
     $title: LangJson!
     $text: LangJson!
-    $publishedFrom: ISO8601DateTime!
+    $publishedFrom: SettableDate!
   ) {
     createNews(
       input: { title: $title, text: $text, publishedFrom: $publishedFrom }
@@ -2820,7 +2821,7 @@ export const UpdateNewsDocument = gql`
     $id: ID!
     $title: LangJson!
     $text: LangJson!
-    $publishedFrom: ISO8601DateTime!
+    $publishedFrom: SettableDate!
   ) {
     updateNews(
       input: {
