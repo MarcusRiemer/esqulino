@@ -116,7 +116,6 @@ RSpec.describe CodeResource, type: :model do
 
       # AST must not change
       expect(api_response['ast']).to eq ast
-      expect(api_response).to validate_against "CodeResourceDescription"
     end
   end
 
