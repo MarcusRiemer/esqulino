@@ -16,8 +16,8 @@ import { GeneratorError } from "../../shared/block/generator/error.description";
 import { prettyPrintGrammar } from "../../shared/syntaxtree";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 import {
-  AdminEditBlockLanguageGQL,
-  AdminSingleGrammarGQL,
+  FullGrammarGQL,
+  FullBlockLanguageGQL,
   UpdateBlockLanguageGQL,
 } from "../../../generated/graphql";
 
@@ -35,9 +35,9 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _singleBlockLanguageGQL: AdminEditBlockLanguageGQL,
+    private _singleBlockLanguageGQL: FullBlockLanguageGQL,
     private _updateBlockLanguageGQL: UpdateBlockLanguageGQL,
-    private _individualGrammarData: AdminSingleGrammarGQL,
+    private _individualGrammarData: FullGrammarGQL,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private _title: Title

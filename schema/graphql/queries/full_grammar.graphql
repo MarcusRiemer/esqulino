@@ -1,4 +1,4 @@
-query AdminSingleGrammar($id: ID!) {
+query FullGrammar($id: ID!) {
     singleGrammar(id: $id) {
         id
         name

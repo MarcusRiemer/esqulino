@@ -1017,37 +1017,6 @@ export type User = {
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
-export type AdminEditBlockLanguageQueryVariables = {
-  id: Scalars["ID"];
-};
-
-export type AdminEditBlockLanguageQuery = { __typename?: "Query" } & {
-  blockLanguages: { __typename?: "BlockLanguageConnection" } & {
-    nodes?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: "BlockLanguage" } & Pick<
-            BlockLanguage,
-            | "id"
-            | "name"
-            | "slug"
-            | "generated"
-            | "grammarId"
-            | "sidebars"
-            | "editorBlocks"
-            | "editorComponents"
-            | "rootCssClasses"
-            | "localGeneratorInstructions"
-            | "createdAt"
-            | "updatedAt"
-            | "defaultProgrammingLanguageId"
-          >
-        >
-      >
-    >;
-  };
-};
-
 export type AdminListBlockLanguagesQueryVariables = {
   first?: Maybe<Scalars["Int"]>;
   after?: Maybe<Scalars["String"]>;
@@ -1198,41 +1167,6 @@ export type AdminRelatedBlockLanguagesQuery = { __typename?: "Query" } & {
   relatedBlockLanguages: Array<
     { __typename?: "BlockLanguage" } & Pick<BlockLanguage, "id" | "name">
   >;
-};
-
-export type AdminSingleGrammarQueryVariables = {
-  id: Scalars["ID"];
-};
-
-export type AdminSingleGrammarQuery = { __typename?: "Query" } & {
-  singleGrammar: { __typename?: "Grammar" } & Pick<
-    Grammar,
-    | "id"
-    | "name"
-    | "programmingLanguageId"
-    | "slug"
-    | "generatedFromId"
-    | "foreignTypes"
-    | "root"
-    | "types"
-    | "includes"
-    | "visualizes"
-  > & {
-      blockLanguages?: Maybe<
-        { __typename?: "BlockLanguageConnection" } & {
-          nodes?: Maybe<
-            Array<
-              Maybe<
-                { __typename?: "BlockLanguage" } & Pick<
-                  BlockLanguage,
-                  "id" | "name"
-                >
-              >
-            >
-          >;
-        }
-      >;
-    };
 };
 
 export type AdminSingleNewsQueryVariables = {
@@ -1491,6 +1425,72 @@ export type FrontpageSingleNewsQuery = { __typename?: "Query" } & {
     News,
     "id" | "title" | "text" | "publishedFrom"
   >;
+};
+
+export type FullBlockLanguageQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type FullBlockLanguageQuery = { __typename?: "Query" } & {
+  blockLanguages: { __typename?: "BlockLanguageConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "BlockLanguage" } & Pick<
+            BlockLanguage,
+            | "id"
+            | "name"
+            | "slug"
+            | "generated"
+            | "grammarId"
+            | "sidebars"
+            | "editorBlocks"
+            | "editorComponents"
+            | "rootCssClasses"
+            | "localGeneratorInstructions"
+            | "createdAt"
+            | "updatedAt"
+            | "defaultProgrammingLanguageId"
+          >
+        >
+      >
+    >;
+  };
+};
+
+export type FullGrammarQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type FullGrammarQuery = { __typename?: "Query" } & {
+  singleGrammar: { __typename?: "Grammar" } & Pick<
+    Grammar,
+    | "id"
+    | "name"
+    | "programmingLanguageId"
+    | "slug"
+    | "generatedFromId"
+    | "foreignTypes"
+    | "root"
+    | "types"
+    | "includes"
+    | "visualizes"
+  > & {
+      blockLanguages?: Maybe<
+        { __typename?: "BlockLanguageConnection" } & {
+          nodes?: Maybe<
+            Array<
+              Maybe<
+                { __typename?: "BlockLanguage" } & Pick<
+                  BlockLanguage,
+                  "id" | "name"
+                >
+              >
+            >
+          >;
+        }
+      >;
+    };
 };
 
 export type FullProjectQueryVariables = {
@@ -1807,40 +1807,6 @@ export type UpdateProjectMutation = { __typename?: "Mutation" } & {
   >;
 };
 
-export const AdminEditBlockLanguageDocument = gql`
-  query AdminEditBlockLanguage($id: ID!) {
-    blockLanguages(input: { filter: { id: $id } }) {
-      nodes {
-        id
-        name
-        slug
-        generated
-        grammarId
-        sidebars
-        editorBlocks
-        editorComponents
-        rootCssClasses
-        localGeneratorInstructions
-        createdAt
-        updatedAt
-        defaultProgrammingLanguageId
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class AdminEditBlockLanguageGQL extends Apollo.Query<
-  AdminEditBlockLanguageQuery,
-  AdminEditBlockLanguageQueryVariables
-> {
-  document = AdminEditBlockLanguageDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const AdminListBlockLanguagesDocument = gql`
   query AdminListBlockLanguages(
     $first: Int
@@ -2063,41 +2029,6 @@ export class AdminRelatedBlockLanguagesGQL extends Apollo.Query<
   AdminRelatedBlockLanguagesQueryVariables
 > {
   document = AdminRelatedBlockLanguagesDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const AdminSingleGrammarDocument = gql`
-  query AdminSingleGrammar($id: ID!) {
-    singleGrammar(id: $id) {
-      id
-      name
-      programmingLanguageId
-      slug
-      generatedFromId
-      foreignTypes
-      root
-      types
-      includes
-      visualizes
-      blockLanguages {
-        nodes {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class AdminSingleGrammarGQL extends Apollo.Query<
-  AdminSingleGrammarQuery,
-  AdminSingleGrammarQueryVariables
-> {
-  document = AdminSingleGrammarDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
@@ -2475,6 +2406,75 @@ export class FrontpageSingleNewsGQL extends Apollo.Query<
   FrontpageSingleNewsQueryVariables
 > {
   document = FrontpageSingleNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FullBlockLanguageDocument = gql`
+  query FullBlockLanguage($id: ID!) {
+    blockLanguages(input: { filter: { id: $id } }) {
+      nodes {
+        id
+        name
+        slug
+        generated
+        grammarId
+        sidebars
+        editorBlocks
+        editorComponents
+        rootCssClasses
+        localGeneratorInstructions
+        createdAt
+        updatedAt
+        defaultProgrammingLanguageId
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FullBlockLanguageGQL extends Apollo.Query<
+  FullBlockLanguageQuery,
+  FullBlockLanguageQueryVariables
+> {
+  document = FullBlockLanguageDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FullGrammarDocument = gql`
+  query FullGrammar($id: ID!) {
+    singleGrammar(id: $id) {
+      id
+      name
+      programmingLanguageId
+      slug
+      generatedFromId
+      foreignTypes
+      root
+      types
+      includes
+      visualizes
+      blockLanguages {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FullGrammarGQL extends Apollo.Query<
+  FullGrammarQuery,
+  FullGrammarQueryVariables
+> {
+  document = FullGrammarDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
