@@ -117,7 +117,7 @@ class ProjectDatabasesController < ApplicationController
     ensure_write_access do
       # Grab parameters
       table_name = params['tablename']
-      alter_schema_request = JSON.parse request.body.read
+      alter_schema_request = ensure_request("AlterSchemaRequestDescription", request.body.read, underscore_keys: false)
 
       # Alter the database
       current_database.table_alter table_name, alter_schema_request['commands']

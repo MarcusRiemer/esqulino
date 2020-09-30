@@ -167,7 +167,6 @@ class Grammar < ApplicationRecord
     visualizes_references.pluck(:target_id)
   end
 
-
   # Computes a hash that may be sent back to the client if it requires
   # full access to grammar.
   def to_full_api_response

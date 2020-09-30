@@ -22,8 +22,6 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'finds a project by slug' do
-      pending("Projects must be resolved by slug or id")
-
       p = create(:project, slug: "uniq")
 
       send_query(

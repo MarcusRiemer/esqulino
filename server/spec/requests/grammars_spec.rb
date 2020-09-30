@@ -105,13 +105,13 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'GraphQL AdminSingleGrammar' do
+  describe 'GraphQL FullGrammar' do
     let(:user) { create(:user, :admin) }
     before(:each) { set_access_token(user) }
 
     it 'finds a single grammar by ID' do
       g = FactoryBot.create(:grammar)
-      send_query(query_name:"AdminSingleGrammar",variables:{id: g.id})
+      send_query(query_name:"FullGrammar",variables:{id: g.id})
 
       expect(response).to have_http_status(200)
       response_data = JSON.parse(response.body)['data']['singleGrammar']
@@ -121,7 +121,7 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'finds a single grammar by slug' do
       g = FactoryBot.create(:grammar)
-      send_query(query_name:"AdminSingleGrammar",variables:{id: g.slug})
+      send_query(query_name:"FullGrammar",variables:{id: g.slug})
 
       expect(response).to have_http_status(200)
 
@@ -132,7 +132,7 @@ RSpec.describe GrammarsController, type: :request do
     end
 
     it 'responds with 200 but not empty errors for non existing grammars' do
-      send_query(query_name:"AdminSingleGrammar",variables:{id: "0"})
+      send_query(query_name:"FullGrammar",variables:{id: "0"})
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
@@ -141,7 +141,7 @@ RSpec.describe GrammarsController, type: :request do
     it 'includes the CodeResource a grammar is based on' do
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
-      send_query(query_name:"AdminSingleGrammar",variables:{id: original.id})
+      send_query(query_name:"FullGrammar",variables:{id: original.id})
 
       expect(response).to have_http_status(200)
       grammar_data = JSON.parse(response.body)["data"]["singleGrammar"]
@@ -302,7 +302,7 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name:"DestroyGrammar",variables:{"id"=>g.id})
       expect(response.status).to eq(200)
 
-      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>g.id})
+      send_query(query_name:"FullGrammar",variables:{"id"=>g.id})
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
     end
@@ -316,7 +316,7 @@ RSpec.describe GrammarsController, type: :request do
       expect(json_data.fetch('errors', []).length).to eq 1
       expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
 
-      send_query(query_name:"AdminSingleGrammar",variables:{"id"=>b.grammar_id})
+      send_query(query_name:"FullGrammar",variables:{"id"=>b.grammar_id})
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
@@ -377,7 +377,7 @@ RSpec.describe GrammarsController, type: :request do
     end
   end
 
-  describe 'GraphQL AdminSingleGrammar -> Access related blocklanguages' do
+  describe 'GraphQL FullGrammar -> Access related blocklanguages' do
     before(:each) {
       admin = create(:user, :admin)
       set_access_token(admin)

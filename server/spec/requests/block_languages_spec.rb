@@ -105,14 +105,14 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'GraphQL AdminEditBlockLanguage' do
+  describe 'GraphQL FullBlockLanguage' do
     let(:user) { create(:user, :admin) }
     before(:each) { set_access_token(user) }
 
 
     it 'finds a single block language by ID' do
       b = FactoryBot.create(:block_language)
-      send_query(query_name: "AdminEditBlockLanguage",variables:{id: b.id})
+      send_query(query_name: "FullBlockLanguage",variables:{id: b.id})
 
       expect(response).to have_http_status(200)
 
@@ -123,7 +123,7 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
 
     it 'non existing languages' do
-      send_query(query_name: "AdminEditBlockLanguage",variables:{id: "0"})
+      send_query(query_name: "FullBlockLanguage",variables:{id: "0"})
 
       expect(response).to have_http_status(200)
       json_data = JSON.parse(response.body)

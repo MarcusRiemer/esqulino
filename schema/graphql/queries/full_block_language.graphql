@@ -1,4 +1,4 @@
-query AdminEditBlockLanguage($id: ID!) {
+query FullBlockLanguage($id: ID!) {
   blockLanguages(input: {filter: {id: $id}}) {
     nodes {
       id

@@ -3,12 +3,17 @@ module Types
     field :id, ID, null:false
     field :title, Types::Scalar::LangJson, null:false
     field :text, Types::Scalar::LangJson, null:false
-    field :published_from, GraphQL::Types::ISO8601DateTime, null:true
+    field :published_from, Types::Scalar::SettableDate, null:false
     field :user, Types::UserType, null:true
     field :userId, ID,null: true
 
     field :created_at, GraphQL::Types::ISO8601DateTime, null:false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
+
+    # if published_from is nil in database it will be converted to "UNPUBLISHED"
+    def published_from
+      object["published_from"].nil? ? "UNSET" : object["published_from"]
+    end
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'NewsOrderFieldEnum'

@@ -13,7 +13,7 @@ import { Subscription, BehaviorSubject } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 
 import {
-  AdminSingleGrammarGQL,
+  FullGrammarGQL,
   DestroyGrammarGQL,
   UpdateGrammarGQL,
   RegenerateForeignTypesGQL,
@@ -58,7 +58,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
     private _toolbarService: ToolbarService,
     private _updateGrammarGQL: UpdateGrammarGQL,
     private _destroyGrammarGQL: DestroyGrammarGQL,
-    private _editGrammarGQL: AdminSingleGrammarGQL,
+    private _editGrammarGQL: FullGrammarGQL,
     private _regenerateGrammar: RegenerateForeignTypesGQL
   ) {}
 

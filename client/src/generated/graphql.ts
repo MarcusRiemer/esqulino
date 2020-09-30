@@ -13,6 +13,7 @@ export type Scalars = {
   Float: number;
   /** An ISO 8601-encoded datetime */
   ISO8601DateTime: string;
+  SettableDate: any;
   LangJson: MultiLangString;
   /** Represents untyped JSON */
   JSON: any;
@@ -212,7 +213,7 @@ export type CreateGrammarPayload = {
 export type CreateNewsInput = {
   title: Scalars["LangJson"];
   text: Scalars["LangJson"];
-  publishedFrom: Scalars["ISO8601DateTime"];
+  publishedFrom: Scalars["SettableDate"];
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
 };
@@ -485,7 +486,7 @@ export type News = {
   __typename?: "News";
   createdAt: Scalars["ISO8601DateTime"];
   id: Scalars["ID"];
-  publishedFrom?: Maybe<Scalars["ISO8601DateTime"]>;
+  publishedFrom: Scalars["SettableDate"];
   text: Scalars["LangJson"];
   title: Scalars["LangJson"];
   updatedAt: Scalars["ISO8601DateTime"];
@@ -967,7 +968,7 @@ export type UpdateNewsInput = {
   id?: Maybe<Scalars["ID"]>;
   title?: Maybe<Scalars["LangJson"]>;
   text?: Maybe<Scalars["LangJson"]>;
-  publishedFrom?: Maybe<Scalars["ISO8601DateTime"]>;
+  publishedFrom: Scalars["SettableDate"];
   userId?: Maybe<Scalars["ID"]>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
@@ -1014,37 +1015,6 @@ export type User = {
   projects?: Maybe<Array<Project>>;
   roles: Role;
   updatedAt: Scalars["ISO8601DateTime"];
-};
-
-export type AdminEditBlockLanguageQueryVariables = {
-  id: Scalars["ID"];
-};
-
-export type AdminEditBlockLanguageQuery = { __typename?: "Query" } & {
-  blockLanguages: { __typename?: "BlockLanguageConnection" } & {
-    nodes?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: "BlockLanguage" } & Pick<
-            BlockLanguage,
-            | "id"
-            | "name"
-            | "slug"
-            | "generated"
-            | "grammarId"
-            | "sidebars"
-            | "editorBlocks"
-            | "editorComponents"
-            | "rootCssClasses"
-            | "localGeneratorInstructions"
-            | "createdAt"
-            | "updatedAt"
-            | "defaultProgrammingLanguageId"
-          >
-        >
-      >
-    >;
-  };
 };
 
 export type AdminListBlockLanguagesQueryVariables = {
@@ -1199,41 +1169,6 @@ export type AdminRelatedBlockLanguagesQuery = { __typename?: "Query" } & {
   >;
 };
 
-export type AdminSingleGrammarQueryVariables = {
-  id: Scalars["ID"];
-};
-
-export type AdminSingleGrammarQuery = { __typename?: "Query" } & {
-  singleGrammar: { __typename?: "Grammar" } & Pick<
-    Grammar,
-    | "id"
-    | "name"
-    | "programmingLanguageId"
-    | "slug"
-    | "generatedFromId"
-    | "foreignTypes"
-    | "root"
-    | "types"
-    | "includes"
-    | "visualizes"
-  > & {
-      blockLanguages?: Maybe<
-        { __typename?: "BlockLanguageConnection" } & {
-          nodes?: Maybe<
-            Array<
-              Maybe<
-                { __typename?: "BlockLanguage" } & Pick<
-                  BlockLanguage,
-                  "id" | "name"
-                >
-              >
-            >
-          >;
-        }
-      >;
-    };
-};
-
 export type AdminSingleNewsQueryVariables = {
   id: Scalars["ID"];
 };
@@ -1340,7 +1275,7 @@ export type CreateGrammarMutation = { __typename?: "Mutation" } & {
 export type CreateNewsMutationVariables = {
   title: Scalars["LangJson"];
   text: Scalars["LangJson"];
-  publishedFrom: Scalars["ISO8601DateTime"];
+  publishedFrom: Scalars["SettableDate"];
 };
 
 export type CreateNewsMutation = { __typename?: "Mutation" } & {
@@ -1490,6 +1425,72 @@ export type FrontpageSingleNewsQuery = { __typename?: "Query" } & {
     News,
     "id" | "title" | "text" | "publishedFrom"
   >;
+};
+
+export type FullBlockLanguageQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type FullBlockLanguageQuery = { __typename?: "Query" } & {
+  blockLanguages: { __typename?: "BlockLanguageConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "BlockLanguage" } & Pick<
+            BlockLanguage,
+            | "id"
+            | "name"
+            | "slug"
+            | "generated"
+            | "grammarId"
+            | "sidebars"
+            | "editorBlocks"
+            | "editorComponents"
+            | "rootCssClasses"
+            | "localGeneratorInstructions"
+            | "createdAt"
+            | "updatedAt"
+            | "defaultProgrammingLanguageId"
+          >
+        >
+      >
+    >;
+  };
+};
+
+export type FullGrammarQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type FullGrammarQuery = { __typename?: "Query" } & {
+  singleGrammar: { __typename?: "Grammar" } & Pick<
+    Grammar,
+    | "id"
+    | "name"
+    | "programmingLanguageId"
+    | "slug"
+    | "generatedFromId"
+    | "foreignTypes"
+    | "root"
+    | "types"
+    | "includes"
+    | "visualizes"
+  > & {
+      blockLanguages?: Maybe<
+        { __typename?: "BlockLanguageConnection" } & {
+          nodes?: Maybe<
+            Array<
+              Maybe<
+                { __typename?: "BlockLanguage" } & Pick<
+                  BlockLanguage,
+                  "id" | "name"
+                >
+              >
+            >
+          >;
+        }
+      >;
+    };
 };
 
 export type FullProjectQueryVariables = {
@@ -1763,7 +1764,7 @@ export type UpdateNewsMutationVariables = {
   id: Scalars["ID"];
   title: Scalars["LangJson"];
   text: Scalars["LangJson"];
-  publishedFrom: Scalars["ISO8601DateTime"];
+  publishedFrom: Scalars["SettableDate"];
 };
 
 export type UpdateNewsMutation = { __typename?: "Mutation" } & {
@@ -1806,40 +1807,6 @@ export type UpdateProjectMutation = { __typename?: "Mutation" } & {
   >;
 };
 
-export const AdminEditBlockLanguageDocument = gql`
-  query AdminEditBlockLanguage($id: ID!) {
-    blockLanguages(input: { filter: { id: $id } }) {
-      nodes {
-        id
-        name
-        slug
-        generated
-        grammarId
-        sidebars
-        editorBlocks
-        editorComponents
-        rootCssClasses
-        localGeneratorInstructions
-        createdAt
-        updatedAt
-        defaultProgrammingLanguageId
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class AdminEditBlockLanguageGQL extends Apollo.Query<
-  AdminEditBlockLanguageQuery,
-  AdminEditBlockLanguageQueryVariables
-> {
-  document = AdminEditBlockLanguageDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const AdminListBlockLanguagesDocument = gql`
   query AdminListBlockLanguages(
     $first: Int
@@ -2066,41 +2033,6 @@ export class AdminRelatedBlockLanguagesGQL extends Apollo.Query<
     super(apollo);
   }
 }
-export const AdminSingleGrammarDocument = gql`
-  query AdminSingleGrammar($id: ID!) {
-    singleGrammar(id: $id) {
-      id
-      name
-      programmingLanguageId
-      slug
-      generatedFromId
-      foreignTypes
-      root
-      types
-      includes
-      visualizes
-      blockLanguages {
-        nodes {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class AdminSingleGrammarGQL extends Apollo.Query<
-  AdminSingleGrammarQuery,
-  AdminSingleGrammarQueryVariables
-> {
-  document = AdminSingleGrammarDocument;
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const AdminSingleNewsDocument = gql`
   query AdminSingleNews($id: ID!) {
     adminSingleNews(id: $id) {
@@ -2251,7 +2183,7 @@ export const CreateNewsDocument = gql`
   mutation CreateNews(
     $title: LangJson!
     $text: LangJson!
-    $publishedFrom: ISO8601DateTime!
+    $publishedFrom: SettableDate!
   ) {
     createNews(
       input: { title: $title, text: $text, publishedFrom: $publishedFrom }
@@ -2474,6 +2406,75 @@ export class FrontpageSingleNewsGQL extends Apollo.Query<
   FrontpageSingleNewsQueryVariables
 > {
   document = FrontpageSingleNewsDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FullBlockLanguageDocument = gql`
+  query FullBlockLanguage($id: ID!) {
+    blockLanguages(input: { filter: { id: $id } }) {
+      nodes {
+        id
+        name
+        slug
+        generated
+        grammarId
+        sidebars
+        editorBlocks
+        editorComponents
+        rootCssClasses
+        localGeneratorInstructions
+        createdAt
+        updatedAt
+        defaultProgrammingLanguageId
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FullBlockLanguageGQL extends Apollo.Query<
+  FullBlockLanguageQuery,
+  FullBlockLanguageQueryVariables
+> {
+  document = FullBlockLanguageDocument;
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FullGrammarDocument = gql`
+  query FullGrammar($id: ID!) {
+    singleGrammar(id: $id) {
+      id
+      name
+      programmingLanguageId
+      slug
+      generatedFromId
+      foreignTypes
+      root
+      types
+      includes
+      visualizes
+      blockLanguages {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FullGrammarGQL extends Apollo.Query<
+  FullGrammarQuery,
+  FullGrammarQueryVariables
+> {
+  document = FullGrammarDocument;
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
@@ -2820,7 +2821,7 @@ export const UpdateNewsDocument = gql`
     $id: ID!
     $title: LangJson!
     $text: LangJson!
-    $publishedFrom: ISO8601DateTime!
+    $publishedFrom: SettableDate!
   ) {
     updateNews(
       input: {

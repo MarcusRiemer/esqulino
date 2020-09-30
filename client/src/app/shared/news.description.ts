@@ -20,7 +20,7 @@ export interface NewsDescription {
   title: MultiLangString;
   /** Internal Markdown version of the text */
   text: MultiLangString;
-  publishedFrom: string | null;
+  publishedFrom: string;
   createdAt: string;
   updatedAt: string;
   userId?: string;
@@ -37,6 +37,6 @@ export interface NewsUpdateDescription {
   title: MultiLangString;
   /** Internal Markdown version of the text */
   text: MultiLangString;
-  publishedFrom: string | null;
+  publishedFrom: string;
   userId?: string;
 }

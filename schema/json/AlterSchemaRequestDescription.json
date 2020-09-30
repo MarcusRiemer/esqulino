@@ -19,7 +19,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "type"
       ],
@@ -45,7 +44,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "newForeignKey",
         "type"
@@ -85,7 +83,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "type"
       ],
@@ -108,7 +105,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "type"
       ],
@@ -137,7 +133,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "newValue",
         "oldValue",
@@ -168,7 +163,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "newType",
         "oldType",
@@ -199,7 +193,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "newName",
         "oldName",
@@ -262,7 +255,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "type"
       ],
@@ -321,7 +313,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "foreignKeyToRemove",
         "index",
         "type"
@@ -351,7 +342,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "newName",
         "oldName",
@@ -382,7 +372,6 @@
         }
       },
       "required": [
-        "columnIndex",
         "index",
         "indexOrder",
         "type"

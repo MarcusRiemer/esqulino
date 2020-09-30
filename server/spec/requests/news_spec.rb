@@ -8,11 +8,11 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news, published_from: Date.new(2999, 1, 1) )
       send_query(query_name:"FrontpageListNews")
 
-
       json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
       expect(response).to have_http_status(200)
       expect(json_data.length).to eq(0)
     end
+
     it 'Frontpage: retrieving the only existing news (default language)' do
       create(:news)
       send_query(query_name:"FrontpageListNews")
@@ -134,13 +134,23 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       send_query(query_name:"AdminListNews")
 
       json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data.length).to eq(3)
+      # validate_against "NewsDescription" does not work because of __typename fields
+    end
+    it 'Admin: returning "UNSET" if published_from field is not set ohterwise the Date' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
 
-      expect(json_data[2]['title']['de']).to eq("Schlagzeile 1")
-      expect(json_data[2]['title']['en']).to eq("Headline 1")
-      expect(json_data[0]['title']['de']).to eq("Schlagzeile")
-      expect(json_data[0]['title']['en']).to eq("Headline")
-      expect(json_data[1]['title']['de']).to eq("Schlagzeile")
-      expect(json_data[1]['title']['en']).to eq("Headline")
+      create(:news, published_from: nil )
+      create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
+      create(:news, published_from: Date.new(9999, 12, 1) )
+
+      send_query(query_name:"AdminListNews")
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data[0]["publishedFrom"]).to eq("UNSET")
+      expect(json_data[1]["publishedFrom"]).to eq("9999-12-01T00:00:00Z")
+      expect(json_data[2]["publishedFrom"]).to eq("2019-01-01T00:00:00Z")
       # validate_against "NewsDescription" does not work because of __typename fields
     end
   end
@@ -212,9 +222,9 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       expect(curr_news.title).to eq news.title
     end
 
-    xit 'updating a news to remove a previously set publishing date' do
+    it 'updating a news to remove a previously set publishing date in database' do
       news = create(:news, published_from: Date.new(2019, 1, 1) )
-      news_params = news.api_attributes.merge({ "publishedFrom" => nil, "id" => news.id })
+      news_params = news.api_attributes.merge({ "publishedFrom" => "UNSET", "id" => news.id })
 
       send_query(query_name:"UpdateNews",variables: news_params)
 
@@ -223,12 +233,24 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
 
         json_data = JSON.parse(response.body)["data"]["updateNews"]
         expect(json_data.fetch('errors', [])).to eq []
-
-        expect(json_data["news"]).to validate_against "NewsDescription"
+          # validate_against "NewsDescription" does not work because of __typename fields
+          # expect(json_data["news"]).to validate_against "NewsDescription"
       end
 
       news.reload
       expect(news.published_from).to be nil
+    end
+    it 'Returning UNSET for published_from if value is set to nil in database' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
+      news = create(:news, published_from: Date.new(2019, 1, 1) )
+      news_params = news.api_attributes.merge({ "publishedFrom" => "UNSET", "id" => news.id })
+
+      send_query(query_name:"UpdateNews",variables: news_params)
+      send_query(query_name:"AdminListNews",variables: news_params)
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data[0]["publishedFrom"]).to eq("UNSET")
     end
 
     it 'updating a news with a valid language and an invalid language' do
@@ -328,12 +350,12 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       expect(count_news).to_not eq(News.all.count)
     end
 
-    xit 'creating a news with an empty publishing date' do
+    it 'creating a news with an empty publishing date' do
       count_news = News.all.count
       news_params = {
           title: { 'de': 'Test' },
           text: { 'de': 'Test2' },
-          publishedFrom: nil
+          publishedFrom: "UNSET"
       }
       send_query(query_name:"CreateNews",variables:  news_params)
 
@@ -345,7 +367,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       expect(news_data['id']).to_not be_nil
       expect(news_data['text']).to_not be_nil
       expect(news_data['title']).to_not be_nil
-      expect(news_data['publishedFrom']).to be_nil
+      expect(news_data['publishedFrom']).to eq("UNSET")
       expect(count_news).to_not eq(News.all.count)
     end
 
@@ -361,6 +383,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       expect(json_data.fetch('errors', [])).not_to eq []
       expect(response).to have_http_status(200)
     end
+
 
     it 'creating a news without a date' do
       news = build(:news)

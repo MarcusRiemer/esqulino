@@ -1682,7 +1682,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
+                  "name": "SettableDate",
                   "ofType": null
                 }
               },
@@ -3674,9 +3674,13 @@
 
               ],
               "type": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SettableDate",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -6832,6 +6836,16 @@
           "possibleTypes": null
         },
         {
+          "kind": "SCALAR",
+          "name": "SettableDate",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "SqlColumn",
           "description": null,
@@ -7616,9 +7630,13 @@
               "name": "publishedFrom",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SettableDate",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             },
