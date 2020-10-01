@@ -177,19 +177,27 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
         addPlaceholder();
       }
 
-      toReturn.push(
-        Object.assign(
-          {},
-          {
-            type: t.languageName + "." + t.typeName,
-            colour: getRandomInt(360),
-            message0: messageString || t.languageName + "." + t.typeName,
-            args0: args,
-            tooltip: t.languageName + "." + t.typeName,
-          },
-          blockConnectors(t, ac)
-        )
+      const block: BlocklyBlock = Object.assign(
+        {},
+        {
+          type: t.languageName + "." + t.typeName,
+          colour: getRandomInt(360),
+          message0: messageString || t.languageName + "." + t.typeName,
+          args0: args,
+          tooltip: t.languageName + "." + t.typeName,
+        },
+        blockConnectors(t, ac)
       );
+
+      const inlineInfo = t.tags?.find(
+        (t): t is "blockly-inline" | "blockly-external" =>
+          t === "blockly-inline" || t === "blockly-external"
+      );
+      if (inlineInfo) {
+        block.inputsInline = inlineInfo === "blockly-inline";
+      }
+
+      toReturn.push(block);
     }
   );
 

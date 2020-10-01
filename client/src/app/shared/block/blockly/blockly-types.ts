@@ -66,4 +66,6 @@ export interface BlocklyBlock {
   colour: number;
   tooltip?: string;
   helpUrl?: string;
+
+  inputsInline?: boolean;
 }

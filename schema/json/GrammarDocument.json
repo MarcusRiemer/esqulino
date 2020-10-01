@@ -238,6 +238,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "$ref": "#/definitions/TagDescription"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "concrete"
@@ -545,7 +551,7 @@
         },
         "tags": {
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/TagDescription"
           },
           "type": "array"
         },
@@ -794,6 +800,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "$ref": "#/definitions/TagDescription"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "visualize"
@@ -887,6 +899,9 @@
         "value"
       ],
       "type": "object"
+    },
+    "TagDescription": {
+      "type": "string"
     },
     "TypeReference": {
       "anyOf": [

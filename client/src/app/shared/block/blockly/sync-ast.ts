@@ -1,9 +1,9 @@
 import {
   NodeDescription,
   NamedLanguages,
-  isNodeTypeChildrenGroupDescription,
   Orientation,
   isNodeOneOfTypeDescription,
+  isNodeTypeChildrenGroupDescription,
 } from "../../syntaxtree/";
 import {
   fromStableQualifiedTypename,
