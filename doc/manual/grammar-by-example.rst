@@ -132,20 +132,3 @@ Grammar Visualization
 =======================
 
 So far we have seen how the structure of valid syntaxtrees can be defined with a grammar. The ``XML`` example however lacks all those pointy brackets that users associate with the language.
-
-Hacks, Shortcomings and Caveats
-===============================
-
-Some things about grammars are not exactly nice currently.
-
-Virtual Root
-------------
-
-Blattwerkzeug assumes that a syntaxtree is actually a tree, not a forest. Therefore quite a few documents require the use of a root node that has no intuitive meaning for the user. In the case of ``SQL``, this root node could define the general structure of a query: ``SELECT ... FROM ... WHERE ... GROUP BY ... ORDER BY`` or ``DELETE ... FROM ... WHERE``. For a typical imperative programming language this root node could provide child categories for function definitions and the actual ``main`` program.
-
-The builtin block language works around this limitation by allowing multiple nodes to be defined when a single node is actually dragged. For Blockly, this fact can't be hidden.
-
-Boolean Properties or Blocks
-----------------------------
-
-Sometimes nodes have more or less boolean properties, one prominent example is the ``DISTINCT`` keyword in ``SQL``: It may be specified for a whole ``SELECT`` component or as part of a function call.
