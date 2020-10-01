@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 
+import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
 
 import * as Blockly from "blockly";
@@ -24,7 +25,7 @@ import { EditorToolbarService } from "../../toolbar.service";
 import { SidebarService } from "../../sidebar.service";
 
 import { BlocklyBlocksService } from "./blockly-blocks.service";
-import { Subscription } from "rxjs";
+import { downloadBlockly } from "./workspace-to-image";
 
 /**
  * Host component for a blockly workspace. Blockly seems to use a global
@@ -86,6 +87,17 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
     });
 
     this._subscriptions.push(subsSync);
+
+    // Wiring up the "download as image"-button
+    let btnDownloadImage = this._toolbarService.addButton(
+      "download-image",
+      "Als Bild speichern",
+      "download"
+    );
+    const subsDownloadImage = btnDownloadImage.onClick.subscribe((_) => {
+      downloadBlockly("png", this._workspace, this._current.peekResource.name);
+    });
+    this._subscriptions.push(subsDownloadImage);
   }
 
   /**
