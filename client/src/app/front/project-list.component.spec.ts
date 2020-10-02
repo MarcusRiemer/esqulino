@@ -72,8 +72,8 @@ describe(`Component: ProjectList`, () => {
     const project: FrontendProjectGQLResponse = buildFrontendProjectResponse();
     c.op.flush(project);
 
+    await c.fixture.whenStable();
     c.fixture.detectChanges();
-    await c.fixture.whenRenderingDone();
 
     expect(
       Array.from(c.element.querySelectorAll("project-list-item")).length

@@ -1,6 +1,6 @@
 import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
-import { TestBed } from "@angular/core/testing";
+import { TestBed, ComponentFixtureAutoDetect } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
@@ -98,7 +98,11 @@ describe("OverviewBlockLanguageComponent", () => {
     const t = await createComponent();
     const response = buildEmptyBlockLanguageResponse();
 
-    const res = t.component.query.valueChanges.toPromise();
+    // Trigger a request
+    t.component.query.valueChanges.subscribe(
+      (v) => v.data.blockLanguages.totalCount === 0
+    );
+
     const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
     op.flush(response);
 
@@ -115,12 +119,10 @@ describe("OverviewBlockLanguageComponent", () => {
     const t = await createComponent();
     const response = buildSingleBlockLanguageResponse();
 
-    const res = t.component.query.valueChanges.toPromise();
-    const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
-    op.flush(response);
+    t.controller.expectOne(AdminListBlockLanguagesDocument).flush(response);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");
@@ -137,7 +139,7 @@ describe("OverviewBlockLanguageComponent", () => {
     const emptyBlockLanguage = buildEmptyBlockLanguageResponse();
     const responses = [emptyBlockLanguage, singleBlockLanguage];
 
-    const res = t.component.query.valueChanges.subscribe((response) => {
+    t.component.query.valueChanges.subscribe((response) => {
       if (!response.loading) {
         expect(response.data).toEqual(responses.pop().data);
       }
@@ -162,10 +164,12 @@ describe("OverviewBlockLanguageComponent", () => {
       }
     });
 
-    const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
-    op.flush(singleBlockLanguage);
+    t.controller
+      .expectOne(AdminListBlockLanguagesDocument)
+      .flush(singleBlockLanguage);
+
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");

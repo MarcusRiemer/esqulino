@@ -1,3 +1,5 @@
+import { QueryRef } from "apollo-angular";
+import { ApolloQueryResult } from "@apollo/client/core";
 import {
   Component,
   Input,
@@ -8,15 +10,14 @@ import {
   OnDestroy,
   AfterViewInit,
 } from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { PageEvent } from "@angular/material/paginator";
 import { SortDirection, MatSort } from "@angular/material/sort";
 import { MatTable, MatColumnDef } from "@angular/material/table";
 
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import { QueryRef } from "apollo-angular";
+
 import { PageInfo } from "../../../generated/graphql";
 import { map } from "rxjs/operators";
-import { ApolloQueryResult } from "apollo-client";
 
 export interface GraphQLQueryData<
   QueryItem,
@@ -53,10 +54,6 @@ export interface GraphQLQueryComponent<
 })
 export class PaginatorTableGraphqlComponent
   implements AfterContentInit, AfterViewInit, OnDestroy {
-  // Angular Material UI to paginate
-  @ViewChild(MatPaginator)
-  private _paginator: MatPaginator;
-
   // The table instance that register the column definitions
   @ViewChild(MatTable, { static: true })
   private _table: MatTable<any>;
@@ -66,7 +63,12 @@ export class PaginatorTableGraphqlComponent
   columnDefs: QueryList<MatColumnDef>;
 
   @Input()
-  queryData: GraphQLQueryData<{ __typename: String }, unknown, string, string>;
+  queryData: GraphQLQueryData<
+    { __typename: String; data: any },
+    unknown,
+    string,
+    string
+  >;
 
   private _subscriptions: Subscription[] = [];
 
@@ -159,7 +161,7 @@ export class PaginatorTableGraphqlComponent
   }
 
   getPageInfo(): PageInfo {
-    return this.queryData.query.currentResult().data[this.queryData.dataKey]
+    return this.queryData.query.getLastResult().data[this.queryData.dataKey]
       .pageInfo;
   }
 }

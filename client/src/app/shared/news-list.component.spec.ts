@@ -53,8 +53,8 @@ describe(`Component: NewsList`, () => {
     const news: NewsGQLResponse = buildSingleNewsResponse();
     c.op.flush(news);
 
+    await c.fixture.whenStable();
     c.fixture.detectChanges();
-    await c.fixture.whenRenderingDone();
 
     expect(Array.from(c.element.querySelectorAll("mat-card")).length).toEqual(
       1

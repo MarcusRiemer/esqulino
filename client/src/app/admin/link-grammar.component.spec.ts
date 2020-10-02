@@ -55,14 +55,16 @@ describe("LinkGrammarComponent", () => {
     const grammar = response.data.grammars.nodes[0];
     const t = await createComponent(grammar.id);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
-    const op = t.controller.expectOne(AdminListGrammarsDocument);
-    op.flush(response);
+    expect(t.element.innerText.trim()).toEqual(grammar.id);
+    expect(t.element.querySelector("a").href).toContain(grammar.id);
 
+    t.controller.expectOne(AdminListGrammarsDocument).flush(response);
+
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     expect(t.element.innerText.trim()).toEqual(grammar.name);
     expect(t.element.querySelector("a").href).toContain(grammar.id);

@@ -102,12 +102,11 @@ describe("CreateBlockLanguageComponent", () => {
     const singleGrammar = buildSingleGrammarResponse();
     const grammarDescriptionItem = buildGrammarDescItemResponse();
 
-    t.component.availableGrammars$.toPromise();
     // Render with grammar list
     t.controller.expectOne(SelectionListGrammarsDocument).flush(singleGrammar);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     // simulate user entering a new name into the input box
     nameInput.value = "G1Test";
@@ -117,25 +116,40 @@ describe("CreateBlockLanguageComponent", () => {
     // use newEvent utility function (not provided by Angular) for better browser compatibility
     nameInput.dispatchEvent(new Event("input"));
     grammarIdSelect.dispatchEvent(new Event("change"));
-
     t.fixture.detectChanges();
 
+    //
     t.component.submitForm();
 
     t.controller
-      .expectOne(GrammarDescriptionItemDocument)
+      .expectOne(
+        GrammarDescriptionItemDocument,
+        "Grammar must be requested before creation"
+      )
       .flush(grammarDescriptionItem);
+
+    // For whatever reason this call to `whenStable` immediatly returns
+    // before the code inside the async `submitForm` method has run.
+    await t.fixture.whenStable();
+    // So: Most dirty hack to ensure that the promise inside the
+    // submitForm method will be resolved
+    await new Promise((r) => setTimeout(r, 1));
+
+    const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
+    t.controller
+      .expectOne(
+        CreateBlockLanguageDocument,
+        "Creation request for block language"
+      )
+      .flush({
+        data: { createBlockLanguage: { id: generatedId, errors: [] } },
+        errors: [],
+      });
 
     await t.fixture.whenStable();
 
-    const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
-    const op3 = t.controller.expectOne(CreateBlockLanguageDocument);
-    op3.flush({
-      data: { createBlockLanguage: { id: generatedId, errors: [] } },
-      errors: [],
-    });
     //expecting in subscribe would cause a warning that test has no expectations.
-    const prom = await new Promise<boolean>((resolve, _) => {
+    const navigationHappened = await new Promise<boolean>((resolve, _) => {
       t.router.events.subscribe((event) => {
         if (event instanceof NavigationStart) {
           // Navigation started.
@@ -143,6 +157,6 @@ describe("CreateBlockLanguageComponent", () => {
         }
       });
     });
-    expect(prom).toBeTrue();
+    expect(navigationHappened).toBeTrue();
   });
 });

@@ -70,8 +70,8 @@ describe("MetaCodeResourceSelect", () => {
     const op = fixture.controller.expectOne(AdminMetaCodeResourcesDocument);
     op.flush({ data: { codeResources: { nodes: response } } });
 
+    await fixture.fixture.whenStable();
     fixture.fixture.detectChanges();
-    await fixture.fixture.whenRenderingDone();
 
     const selectElement = fixture.element.querySelector("select");
     expect(selectElement.selectedIndex).toEqual(-1);
@@ -95,8 +95,8 @@ describe("MetaCodeResourceSelect", () => {
     const op = fixture.controller.expectOne(AdminMetaCodeResourcesDocument);
     op.flush({ data: { codeResources: { nodes: response } } });
 
+    await fixture.fixture.whenStable();
     fixture.fixture.detectChanges();
-    await fixture.fixture.whenRenderingDone();
 
     const selectElement = fixture.element.querySelector("select");
 

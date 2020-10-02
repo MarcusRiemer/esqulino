@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
-import { map } from "rxjs/operators";
+import { map, first, pluck } from "rxjs/operators";
 
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
@@ -55,10 +55,11 @@ export class CreateBlockLanguageComponent {
    */
   async submitForm() {
     // We need to give the new language a default programming language
-    // and only the grammar knows which language that may be.
+    // and only the grammar knows which language that may be. Additionally
+    // fetching the whole grammar here allows us to generate some blocks.
     const g = await this._grammarGQL
       .fetch({ id: this.blockLanguage.grammarId })
-      .pipe(map((response) => response.data.singleGrammar))
+      .pipe(first(), pluck("data", "singleGrammar"))
       .toPromise();
 
     // Generate some default blocks
@@ -77,11 +78,11 @@ export class CreateBlockLanguageComponent {
       delete toCreate.slug;
     }
 
-    this._createBlockLanguageGQL
+    const res = await this._createBlockLanguageGQL
       .mutate(toCreate)
-      .pipe(map((response) => response.data.createBlockLanguage))
-      .subscribe((res) => {
-        this._router.navigateByUrl(`/admin/block-language/${res.id}`);
-      });
+      .pipe(first(), pluck("data", "createBlockLanguage"))
+      .toPromise();
+
+    this._router.navigateByUrl(`/admin/block-language/${res.id}`);
   }
 }

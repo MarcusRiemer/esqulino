@@ -20,7 +20,8 @@
       "dom",
       "esnext.asynciterable",
       "es2019.array"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true
