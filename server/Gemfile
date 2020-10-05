@@ -111,6 +111,9 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   gem 'irb', require: false
+
+  # Code formatting and stylecheck
+  gem 'rubocop', '~> 0.92.0', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

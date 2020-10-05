@@ -58,6 +58,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    ast (2.4.1)
     async (1.26.1)
       console (~> 1.0)
       nio4r (~> 2.3)
@@ -221,6 +222,9 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
+    parallel (1.19.2)
+    parser (2.7.1.5)
+      ast (~> 2.4.1)
     pg (1.2.3)
     process-group (1.2.1)
       process-terminal (~> 0.2.0)
@@ -281,6 +285,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.20.3, < 2.0)
+    rainbow (3.0.0)
     rake (13.0.1)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
@@ -319,9 +324,21 @@ GEM
     rspec-support (3.9.3)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
+    rubocop (0.92.0)
+      parallel (~> 1.10)
+      parser (>= 2.7.1.5)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.7)
+      rexml
+      rubocop-ast (>= 0.5.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
+    rubocop-ast (0.7.1)
+      parser (>= 2.7.1.5)
     ruby-filemagic (0.7.2)
     ruby-graphviz (1.2.5)
       rexml
+    ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
     safe_yaml (1.0.5)
     samovar (2.1.4)
@@ -356,6 +373,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
+    unicode-display_width (1.7.0)
     uri_template (0.7.0)
     webmock (3.8.3)
       addressable (>= 2.3.6)
@@ -400,6 +418,7 @@ DEPENDENCIES
   rolify
   rspec-rails (= 4.0.0.beta3)
   rspec_junit_formatter
+  rubocop (~> 0.92.0)
   ruby-filemagic (~> 0.7)
   sentry-raven (~> 2.9)
   simplecov (~> 0.18.0.beta1)
