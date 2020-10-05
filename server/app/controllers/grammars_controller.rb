@@ -20,16 +20,15 @@ class GrammarsController < ApplicationController
     grammar = Grammar.find(id_params[:id])
     authorize grammar
     render json: grammar
-             .code_resources
-             .map { |c| c.to_full_api_response }
+      .code_resources
+      .map { |c| c.to_full_api_response }
   end
 
   private
 
   # These parameters may be used to identify a grammar
   def id_params
-    params.
-      permit(:id, :slug)
+    params
+      .permit(:id, :slug)
   end
-
 end

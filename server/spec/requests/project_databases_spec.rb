@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe ProjectDatabasesController, type: :request do
-
   # A database with a single table
   def database_description_key_value
     [
@@ -300,7 +299,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       post "#{default_db_api_url project}/upload",
            :headers => json_headers,
-           :params => { }.to_json
+           :params => {}.to_json
 
       expect(response.status).to eq 400
 

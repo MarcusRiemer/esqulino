@@ -17,7 +17,7 @@ RSpec.describe "Project-Policy" do
   context "as user (but not owner)" do
     let(:user) { create(:user) }
 
-    it { should permit(:create)  }
+    it { should permit(:create) }
     it { should_not permit(:update)  }
     it { should_not permit(:destroy) }
     it { should_not permit(:list_all) }

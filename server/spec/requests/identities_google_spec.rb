@@ -89,11 +89,11 @@ RSpec.describe "identities controller (with Google Identity)" do
 
       # Renewal of refresh token requires roundtrip to Google
       refresh_response = {
-        "access_token"=>"new_secret",
-        "expires_in"=>3261,
-        "scope"=>"https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
-        "token_type"=>"Bearer",
-        "id_token"=>"secret"
+        "access_token" => "new_secret",
+        "expires_in" => 3261,
+        "scope" => "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+        "token_type" => "Bearer",
+        "id_token" => "secret"
       }.to_json
 
       stub_request(:post, "https://accounts.google.com/o/oauth2/token")
@@ -110,7 +110,7 @@ RSpec.describe "identities controller (with Google Identity)" do
     end
 
     it "access_token expired, refresh_token expired and googles token expired (and can't be renewed)" do
-        # This test must fall back to the guest user
+      # This test must fall back to the guest user
       create(:user, :guest)
 
       user_identity = create(:google_provider, :expired)
@@ -174,20 +174,20 @@ RSpec.describe "identities controller (with Google Identity)" do
     let (:default_google_auth_hash) {
       OmniAuth::AuthHash.new(
         {
-          "provider"=>"google_oauth2",
-          "uid"=>"1234567890",
-          "info"=> {
-            "name"=>"Some Body",
-            "email"=>"somebody@gmail.com",
-            "email_verified"=>true,
-            "first_name"=>"Some",
-            "last_name"=>"Body",
-            "image"=>"https://lh3.googleusercontent.com/a-/invalid"
+          "provider" => "google_oauth2",
+          "uid" => "1234567890",
+          "info" => {
+            "name" => "Some Body",
+            "email" => "somebody@gmail.com",
+            "email_verified" => true,
+            "first_name" => "Some",
+            "last_name" => "Body",
+            "image" => "https://lh3.googleusercontent.com/a-/invalid"
           },
-          "credentials"=> {
-            "token"=> "first_google_auth_token",
-            "expires_at"=> 300.seconds.after.to_i,
-            "expires"=>true
+          "credentials" => {
+            "token" => "first_google_auth_token",
+            "expires_at" => 300.seconds.after.to_i,
+            "expires" => true
           },
         }
       )
@@ -236,7 +236,7 @@ RSpec.describe "identities controller (with Google Identity)" do
       expect(Identity::Google.count).to eq 1
       old_user_count = User.count
 
-      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: identity.uid})
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: identity.uid })
       Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
       get '/api/auth/google_oauth2/callback'
 
@@ -253,7 +253,7 @@ RSpec.describe "identities controller (with Google Identity)" do
       expect(Identity::Google.count).to eq 1
       old_user_count = User.count
 
-      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: identity.uid})
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: identity.uid })
       Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
       get '/api/auth/google_oauth2/callback'
 
@@ -281,7 +281,7 @@ RSpec.describe "identities controller (with Google Identity)" do
       expect(Identity::Google.count).to eq 1
       old_user_count = User.count
 
-      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: user_identity.uid})
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: user_identity.uid })
       Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
       get '/api/auth/google_oauth2/callback'
 
@@ -308,7 +308,7 @@ RSpec.describe "identities controller (with Google Identity)" do
       expect(Identity::Google.count).to eq 1
       old_user_count = User.count
 
-      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: user_identity.uid})
+      OmniAuth.config.mock_auth[:google_oauth2] = default_google_auth_hash.merge({ uid: user_identity.uid })
       Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
       delete '/api/auth/sign_out'
 

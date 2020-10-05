@@ -47,7 +47,7 @@ module ValidateAgainstMatcher
       else
         # Omit the whole schema from the shown output
         @result
-          .map {|r| JSON.pretty_generate(r.except("root_schema")) }
+          .map { |r| JSON.pretty_generate(r.except("root_schema")) }
           .join "\n"
       end
     end
@@ -90,18 +90,17 @@ module GraphqlSpecHelper
   end
 
   def execute_query(query: nil, variables: {}, operation_name: nil, language: ["de"])
-      query = get_query(operation_name) if query.nil?
-      context = {
-          user: create(:user, :guest),
-          language: language
-      }
-      result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
-      return result.as_json
-    rescue => e
-      return {"errors":[e]}
+    query = get_query(operation_name) if query.nil?
+    context = {
+      user: create(:user, :guest),
+      language: language
+    }
+    result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    return result.as_json
+  rescue => e
+    return { "errors": [e] }
   end
 end
-
 
 ApplicationRecord.include ApplicationRecordSpecExtensions
 
@@ -127,7 +126,7 @@ RSpec::Matchers.define :delete_cookie do |names|
   end
 
   failure_message do |actual|
-    deleted_cookies = response.cookies.keys.filter {|name| response.cookies[name].nil? }
+    deleted_cookies = response.cookies.keys.filter { |name| response.cookies[name].nil? }
     "Deleted cookies [#{deleted_cookies.join ', '}] but expected [#{names.join ', '}] to be deleted"
   end
 end

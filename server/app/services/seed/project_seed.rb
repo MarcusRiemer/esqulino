@@ -11,12 +11,12 @@ module Seed
     # takes an optional arguments dependencies as hash with key as the Model and value as the directory
     def initialize(seed_id)
       super(seed_id, dependencies = {
-              "project_uses_block_languages" => ProjectUsesBlockLanguageSeed,
-              "code_resources" => CodeResourceSeed,
-              "project_sources" => ProjectSourceSeed,
-              "project_databases" => ProjectDatabaseSeed,
-              "default_database" => ProjectDatabaseSeed,
-            }, defer_referential_checks = true)
+        "project_uses_block_languages" => ProjectUsesBlockLanguageSeed,
+        "code_resources" => CodeResourceSeed,
+        "project_sources" => ProjectSourceSeed,
+        "project_databases" => ProjectDatabaseSeed,
+        "default_database" => ProjectDatabaseSeed,
+      }, defer_referential_checks = true)
     end
 
     # define base's abstract class to copy images of the project in project directory with under the project file

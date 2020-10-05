@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe IdentityMailer, :type => :mailer do
-
   describe "Identity Mailer" do
     locale = "de"
     display_name = "Blattwerkzeug"

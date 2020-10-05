@@ -2,7 +2,7 @@ module Identity
   # The GitHub provider comes from https://github.com/omniauth/omniauth-github
   class Github < Identity
     # Search for all GitHub identities with the given email
-    scope :find_by_email, -> (email) {
+    scope :find_by_email, ->(email) {
       where("provider_data ->> 'email' = ?", email)
     }
 
@@ -13,8 +13,8 @@ module Identity
         :uid => auth[:uid],
         :provider => auth[:provider],
         :provider_data => auth[:info].merge({
-                                              credentials: auth[:credentials]}
-                                           ),
+                                              credentials: auth[:credentials]
+                                            }),
         :own_data => {}
       )
     end
@@ -22,11 +22,11 @@ module Identity
     # Client side information for the GitHub provider
     def self.client_information
       return ({
-                name: "Github",
-                url_name: "github",
-                icon: "fa-github",
-                color: "black"
-              })
+        name: "Github",
+        url_name: "github",
+        icon: "fa-github",
+        color: "black"
+      })
     end
 
     # Github (hopefully) validates mails for us
@@ -48,15 +48,15 @@ module Identity
     # contains all information about a current selected identity
     def to_list_api_response
       return ({
-                :id => self.id,
-                :type => self.type,
-                :link => self.link,
-                :email => self.email,
-                :confirmed => self.confirmed?,
-                :changes => {
-                  primary: self.change_primary_token_exp
-                }
-              })
+        :id => self.id,
+        :type => self.type,
+        :link => self.link,
+        :email => self.email,
+        :confirmed => self.confirmed?,
+        :changes => {
+          primary: self.change_primary_token_exp
+        }
+      })
     end
 
     def access_token_duration

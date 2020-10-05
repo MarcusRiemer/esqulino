@@ -17,8 +17,8 @@ class BlockLanguagesController < ApplicationController
 
   # These parameters may be used to identify a block language
   def id_params
-    params.
-      permit(:id, :slug)
+    params
+      .permit(:id, :slug)
   end
 
   # These parameters are "normal" table attributes
@@ -41,5 +41,4 @@ class BlockLanguagesController < ApplicationController
         :localGeneratorInstructions
       )
   end
-
 end

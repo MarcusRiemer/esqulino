@@ -65,6 +65,4 @@ class ApplicationController < ActionController::API
       render status: exception.code, json: exception.to_liquid
     end
   end
-
-
 end

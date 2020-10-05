@@ -1,11 +1,9 @@
 Rails.application.routes.draw do
-
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphql"
   end
   # Second stop: The API for the editor
   scope '/api' do
-
     post "graphql", to: "graphql#execute"
 
     scope 'identities' do
@@ -39,11 +37,10 @@ Rails.application.routes.draw do
     scope 'project' do
       # Everything that does something in the context of a specific project
       scope ':project_id' do
-
         get 'preview', controller: 'projects', action: :preview_image
 
         resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
-        post 'code_resources/:code_resource_id/clone', controller:  'code_resources', action: 'clone'
+        post 'code_resources/:code_resource_id/clone', controller: 'code_resources', action: 'clone'
 
         # Everything that does something with the database content via a query
         scope 'query' do

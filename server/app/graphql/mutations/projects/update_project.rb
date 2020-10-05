@@ -1,5 +1,4 @@
 class Mutations::Projects::UpdateProject < Mutations::Projects::Projects
-
   argument :id, ID, required: true
 
   argument :name, Types::Scalar::LangJson, required: false

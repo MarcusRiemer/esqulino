@@ -14,13 +14,13 @@ class Types::Scalar::NodeDescription < Types::Base::BaseScalar
     else
       raise GraphQL::ExecutionError.new("Unexpected parameter: #{value} for #{self.class.name} class", extensions: { code: 'INVALID_PARAM' })
     end
-    Validators::GraphqlValidator.validate!(schema_name: 'NodeDescription',document: value)
+    Validators::GraphqlValidator.validate!(schema_name: 'NodeDescription', document: value)
     value
   end
 
-  #Validators could be used to check if it fit the client-side declared type
+  # Validators could be used to check if it fit the client-side declared type
   def self.coerce_result(value, _context)
-    Validators::GraphqlValidator.validate!(schema_name: 'NodeDescription',document: value)
+    Validators::GraphqlValidator.validate!(schema_name: 'NodeDescription', document: value)
     value
   end
 end

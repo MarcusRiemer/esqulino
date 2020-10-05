@@ -51,7 +51,6 @@ class User < ApplicationRecord
     find_by(email: email) ? true : false
   end
 
-
   # During development repeatedly logging in can be tedious. To ease this pain
   # it is possible to simply promote the guest user to be an administator.
   #
@@ -107,7 +106,7 @@ class User < ApplicationRecord
   # for displaying all linked identities and selected primary email
   def all_providers()
     return {
-      providers: self.identities.map {|i| i.to_list_api_response },
+      providers: self.identities.map { |i| i.to_list_api_response },
       primary: self.email
     }
   end
@@ -115,8 +114,8 @@ class User < ApplicationRecord
   # Returns all confirmed e-mails of a users
   def all_validated_emails()
     self.identities
-      .filter { |i| i.confirmed? }
-      .map { |i| i.email }
+        .filter { |i| i.confirmed? }
+        .map { |i| i.email }
   end
 
   # Is current user owner of something
@@ -147,15 +146,15 @@ class User < ApplicationRecord
 
   # Checks if the current user is changing his primary email
   def primary_email_change?
-    return self.identities.find {
-      |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?)
+    return self.identities.find { |k|
+      (k.change_primary_email_token) && (not k.primary_email_token_expired?)
     } ? (not identity.email.eql?(self.email)) : false
   end
 
   # If a user is changing his primary email, the expiration time of the current token returns
   def primary_email_change_time
-    return self.identities.find {
-      |k| (k.change_primary_email_token) && (not k.primary_email_token_expired?)
+    return self.identities.find { |k|
+      (k.change_primary_email_token) && (not k.primary_email_token_expired?)
     }.change_primary_token_exp
   end
 

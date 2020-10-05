@@ -1,9 +1,8 @@
 module Resolvers
   class ProjectsResolver < Resolvers::BaseResolver
-
     attr_reader(:scope)
 
-    def initialize(context:nil,filter:nil,order:nil,languages:nil)
+    def initialize(context: nil, filter: nil, order: nil, languages: nil)
       # query context instance of GraphQL::Query::Context
       scope = Project
 
@@ -20,7 +19,7 @@ module Resolvers
         order: order,
         languages: languages,
         order_dir: "asc",
-        order_field:"name"
+        order_field: "name"
       )
     end
   end

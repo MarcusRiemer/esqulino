@@ -7,10 +7,10 @@ module EsqulinoError
   # as part of the response (unless rescued before of course).
   class UnexpectedLogout < Base
     def initialize(
-          message: 'Unexpected Logout',
-          code: 400,
-          inner_exception: nil
-        )
+      message: 'Unexpected Logout',
+      code: 400,
+      inner_exception: nil
+    )
       super message, code
       @inner_exception = inner_exception
     end

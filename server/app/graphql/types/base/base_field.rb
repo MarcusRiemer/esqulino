@@ -2,7 +2,6 @@ module Types
   class Types::Base::BaseField < GraphQL::Schema::Field
     argument_class Types::Base::BaseArgument
     def initialize(*args, default_value: nil, **kwargs, &block)
-
       super(*args, **kwargs, &block)
       if !default_value.nil?
         extension(DefaultValueExtension, default_value: default_value)

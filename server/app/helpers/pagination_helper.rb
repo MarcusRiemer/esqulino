@@ -1,7 +1,6 @@
 module PaginationHelper
-      # Pagination for any query that will be displayed in a listing
-  def pagination_response(model, query,options:{})
-
+  # Pagination for any query that will be displayed in a listing
+  def pagination_response(model, query, options: {})
     order_key = list_params.stringify_keys.fetch("order_field", "name")
     order_dir = list_params.stringify_keys.fetch("order_direction", "asc")
 
@@ -10,15 +9,15 @@ module PaginationHelper
     end
 
     paginated_query = query
-              .order({ order_key => order_dir})
-              .limit(list_params.fetch("limit", 100))
-              .offset(list_params.fetch("offset", 0))
+                      .order({ order_key => order_dir })
+                      .limit(list_params.fetch("limit", 100))
+                      .offset(list_params.fetch("offset", 0))
 
     return {
-      data: paginated_query.map{|p| p.to_list_api_response(options:options)},
+      data: paginated_query.map { |p| p.to_list_api_response(options: options)},
       meta: {
         # size() runs count() or length(), depending on if the collection has already been loaded or not.
-        # count() will be executed if the collection hasn't been loaded yet 
+        # count() will be executed if the collection hasn't been loaded yet
         # length() will be executed if the collection already has been loaded
         # http://web.archive.org/web/20100210204319/http://blog.hasmanythrough.com/2008/2/27/count-length-size
         totalCount: query.size
@@ -26,13 +25,12 @@ module PaginationHelper
     }
   end
 
-    # These attributes are used in all listings
-    def list_params
-      # keys and values which are needed for pagination and sorting need to be transformed to underscore.
-      # when sorting for attributes consisting of 2 words, the value will arrive in camelCase.
-      # e.g. by transform_values updatedAt becomes updated_at, which should match a model Attribute.
-        params.permit(:limit, :offset, :orderField, :orderDirection)
-          .transform_keys { |k| k.underscore }.transform_values{ |v| v.underscore}
-      end
-
+  # These attributes are used in all listings
+  def list_params
+    # keys and values which are needed for pagination and sorting need to be transformed to underscore.
+    # when sorting for attributes consisting of 2 words, the value will arrive in camelCase.
+    # e.g. by transform_values updatedAt becomes updated_at, which should match a model Attribute.
+    params.permit(:limit, :offset, :orderField, :orderDirection)
+          .transform_keys { |k| k.underscore }.transform_values { |v| v.underscore}
+  end
 end

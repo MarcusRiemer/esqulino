@@ -103,16 +103,16 @@ mutation RegenerateForeignTypes($id: ID!) {
     aggregate_failures do
       expect(response.status).to eq 200
       expect(response_json).to eq ({
-                                     "data" => {
-                                       "regenerateForeignTypes" => {
-                                         "__typename"=>"RegenerateForeignTypesPayload",
-                                         "grammar" => {
-                                           "__typename"=>"Grammar",
-                                           "foreignTypes" => lang_single_type
-                                         }
-                                       }
-                                     }
-                                   })
+        "data" => {
+          "regenerateForeignTypes" => {
+            "__typename" => "RegenerateForeignTypesPayload",
+            "grammar" => {
+              "__typename" => "Grammar",
+              "foreignTypes" => lang_single_type
+            }
+          }
+        }
+      })
     end
   end
 end

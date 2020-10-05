@@ -30,7 +30,7 @@ module JwtHelper
   end
 
   def self.append_registered_claims(payload = {}, duration = access_token_duration.from_now)
-    return payload.merge({exp: duration.to_i, iss: JwtHelper.issuer})
+    return payload.merge({ exp: duration.to_i, iss: JwtHelper.issuer })
   end
 
   def self.encode(payload, duration = JwtHelper.access_token_duration.from_now)
@@ -117,9 +117,9 @@ module JwtHelper
           # A valid refresh token may renew the access token
           if (not refresh_token) then
             raise EsqulinoError::UnexpectedLogout.new(
-                    message: "Error decoding ACCESS_TOKEN, no REFRESH_TOKEN present",
-                    inner_exception: accessError
-                  )
+              message: "Error decoding ACCESS_TOKEN, no REFRESH_TOKEN present",
+              inner_exception: accessError
+            )
           end
 
           begin
@@ -149,22 +149,21 @@ module JwtHelper
             # The ACCESS_TOKEN should be renewed with every request where it has
             # been touched
             renew_access_token(user_id)
-
           rescue JWT::DecodeError => accessError
             # Specifically tell what token is broken
             raise EsqulinoError::UnexpectedLogout.new(
-                    message: "Error decoding REFRESH_TOKEN",
-                    inner_exception: accessError
-                  )
+              message: "Error decoding REFRESH_TOKEN",
+              inner_exception: accessError
+            )
           rescue EsqulinoError::UnexpectedLogout
             # Pass through unexpected logouts as they are
             raise
           rescue => e
             # Everything else must be treated as an unexpected logout
             raise EsqulinoError::UnexpectedLogout.new(
-                    message: "General error during ACCESS_TOKEN retrieval",
-                    inner_exception: e
-                  )
+              message: "General error during ACCESS_TOKEN retrieval",
+              inner_exception: e
+            )
           end
         end
       end
@@ -226,12 +225,12 @@ module JwtHelper
   # httpOnly: Cookie can not be accessed with JS
   def response_secure_cookie(name, value, expires)
     response.set_cookie(name, {
-      value: value,
-      httponly: true,
-      expires: expires,
-      path: '/api',
-      domain: "." + Rails.application.config.cookie_domain
-    })
+                          value: value,
+                          httponly: true,
+                          expires: expires,
+                          path: '/api',
+                          domain: "." + Rails.application.config.cookie_domain
+                        })
   end
 
   def response_refresh_cookie(refresh_token)

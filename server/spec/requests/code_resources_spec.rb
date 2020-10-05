@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "CodeResource request", :type => :request do
-
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   describe "GET code_resources/by_programming_language/:programming_language_id" do
@@ -173,7 +172,7 @@ RSpec.describe "CodeResource request", :type => :request do
 
       put "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
           :headers => json_headers,
-          :params => { "resource" => { "name" => "Changed" } } .to_json
+          :params => { "resource" => { "name" => "Changed" } }.to_json
 
       aggregate_failures do
         expect(response.status).to eq 200
@@ -193,7 +192,7 @@ RSpec.describe "CodeResource request", :type => :request do
 
       put "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
           :headers => json_headers,
-          :params => { "resource" => { "id" => new_id } } .to_json
+          :params => { "resource" => { "id" => new_id } }.to_json
 
       aggregate_failures do
         expect(response.status).to eq 400
@@ -206,7 +205,6 @@ RSpec.describe "CodeResource request", :type => :request do
         expect(CodeResource.find_by(id: new_id)).to be nil
       end
     end
-
 
     it "changes the programming language" do
       new_lang = FactoryBot.create(:programming_language)
@@ -238,7 +236,7 @@ RSpec.describe "CodeResource request", :type => :request do
         expect(response.media_type).to eq "application/json"
 
         result = JSON.parse response.body
-        expect(result).to eq ({"errors"=>{"programming_language"=>["must exist"]}})
+        expect(result).to eq ({ "errors" => { "programming_language" => ["must exist"] } })
       end
     end
 
@@ -313,7 +311,7 @@ RSpec.describe "CodeResource request", :type => :request do
     it "a resource does not exist" do
       project = FactoryBot.create(:project)
       post "/api/project/#{project.slug}/code_resources/nonexistant/clone",
-             :headers => json_headers
+           :headers => json_headers
 
       expect(response.status).to eq(404)
     end
@@ -322,7 +320,7 @@ RSpec.describe "CodeResource request", :type => :request do
       resource = FactoryBot.create(:code_resource)
       project = resource.project
       post "/api/project/#{project.slug}/code_resources/#{resource.id}/clone",
-             :headers => json_headers
+           :headers => json_headers
 
       expect(response.status).to eq(200)
       expect(project.code_resources.length).to eq(2)
@@ -342,7 +340,6 @@ RSpec.describe "CodeResource request", :type => :request do
 
       expect(response.status).to eq(404)
     end
-
 
     it "a resource that exists" do
       resource = FactoryBot.create(:code_resource)
@@ -372,5 +369,4 @@ RSpec.describe "CodeResource request", :type => :request do
       end
     end
   end
-
 end

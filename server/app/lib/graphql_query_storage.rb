@@ -1,14 +1,11 @@
-
 class GraphqlQueryStorage
-
-
   attr_reader :queries
 
   # Loads all queries from the given directory
   #
   # @param query_dir [string] A path containing graphql query and mutation files
   def initialize(query_dir)
-    @queries = { }
+    @queries = {}
     @query_dir = File.realdirpath(query_dir)
 
     Dir.glob(@query_dir + "/*.graphql").each do |query_file|
@@ -29,6 +26,7 @@ class GraphqlQueryStorage
     if query == nil
       raise ArgumentError, "Could not find unknown query \"#{query_name}\""
     end
+
     query
   end
 
@@ -40,5 +38,4 @@ class GraphqlQueryStorage
   def query_path(name)
     File.join(@query_dir, name + ".json")
   end
-  
 end

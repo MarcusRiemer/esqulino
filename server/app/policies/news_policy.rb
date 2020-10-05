@@ -19,7 +19,7 @@ class NewsPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    def resolve_show(id, lang: )
+    def resolve_show(id, lang:)
       if user.has_role?(:admin)
         News.all
             .find_by(id: id)
@@ -32,9 +32,9 @@ class NewsPolicy < ApplicationPolicy
       end
     end
 
-    def resolve_index(lang: )
+    def resolve_index(lang:)
       if user.has_role?(:admin)
-        News.all.map{|l| l.to_full_api_response}
+        News.all.map { |l| l.to_full_api_response}
       else
         News.scope_single_language(lang)
             .map { |l| l.to_frontpage_api_response(text_length: :short, languages: [lang]) }

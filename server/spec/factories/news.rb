@@ -6,7 +6,7 @@ FactoryBot.define do
         'en' => "Headline"
       }
     }
-    text { 
+    text {
       {
         'de' => "Das ist ein Test",
         'en' => "This is a test"

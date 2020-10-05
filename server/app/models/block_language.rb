@@ -43,7 +43,6 @@ class BlockLanguage < ApplicationRecord
       .transform_keys { |k| k.camelize(:lower) }
   end
 
-
   # Uses the associated grammar and the generator instructions to re-generate
   # the visual blocks for this language.
   #
@@ -92,14 +91,13 @@ class BlockLanguage < ApplicationRecord
   #
   # @param options {include_list_calculations [boolean]}
   #   True, if certain calculated values should be part of the response
-  def to_list_api_response(options:{})
+  def to_list_api_response(options: {})
     response = self.to_json_api_response
-                 .except("editorBlocks", "sidebars", "editorComponents", "rootCssClasses", "localGeneratorInstructions")
+                   .except("editorBlocks", "sidebars", "editorComponents", "rootCssClasses", "localGeneratorInstructions")
     if options.fetch(:include_list_calculations, false)
       return response
     else
       return response.except("generated")
     end
   end
-
 end

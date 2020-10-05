@@ -1,28 +1,28 @@
 module Types
   class Types::BlockLanguageType < Types::Base::BaseObject
-    field :id, ID, null:false
-    field :name, String, null:false
-    field :slug, String, null:true
+    field :id, ID, null: false
+    field :name, String, null: false
+    field :slug, String, null: true
 
-    field :sidebars, GraphQL::Types::JSON, null:false
-    field :editorBlocks, GraphQL::Types::JSON, null:false
-    field :editorComponents, GraphQL::Types::JSON, null:false
-    field :localGeneratorInstructions, GraphQL::Types::JSON, null:true
-    field :rootCssClasses, [String], null:false
+    field :sidebars, GraphQL::Types::JSON, null: false
+    field :editorBlocks, GraphQL::Types::JSON, null: false
+    field :editorComponents, GraphQL::Types::JSON, null: false
+    field :localGeneratorInstructions, GraphQL::Types::JSON, null: true
+    field :rootCssClasses, [String], null: false
 
-    field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
-    field :defaultProgrammingLanguageId, ID,null:false
-    field :grammar, Types::GrammarType, null:true
+    field :defaultProgrammingLanguage, Types::ProgrammingLanguageType, null: false
+    field :defaultProgrammingLanguageId, ID, null: false
+    field :grammar, Types::GrammarType, null: true
     field :grammarId, ID, null: true
-    field :generated, Boolean, null:true
-    field :code_resources, [Types::CodeResourceType], null:true
+    field :generated, Boolean, null: true
+    field :code_resources, [Types::CodeResourceType], null: true
 
-    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'BlockLanguageOrderFieldEnum'
-      #Order Fields
+      # Order Fields
       value 'name'
       value 'slug'
       value 'grammar'

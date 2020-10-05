@@ -17,7 +17,7 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'lists a grammar' do
       FactoryBot.create(:grammar)
-      send_query(query_name:"AdminListGrammars")
+      send_query(query_name: "AdminListGrammars")
 
       expect(response).to have_http_status(200)
       grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
@@ -29,16 +29,16 @@ RSpec.describe GrammarsController, type: :request do
       FactoryBot.create(:grammar)
       FactoryBot.create(:grammar)
       FactoryBot.create(:grammar)
-      send_query(query_name:"AdminListGrammars",variables:{first:1})
+      send_query(query_name: "AdminListGrammars", variables: { first: 1 })
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 1
 
-      send_query(query_name:"AdminListGrammars",variables:{first:2})
+      send_query(query_name: "AdminListGrammars", variables: { first: 2 })
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 2
 
-      send_query(query_name:"AdminListGrammars",variables:{first:3})
+      send_query(query_name: "AdminListGrammars", variables: { first: 3 })
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 3
 
-      send_query(query_name:"AdminListGrammars",variables:{first:4})
+      send_query(query_name: "AdminListGrammars", variables: { first: 4 })
       expect(JSON.parse(response.body)['data']['grammars']['nodes'].length).to eq 3
     end
 
@@ -50,15 +50,15 @@ RSpec.describe GrammarsController, type: :request do
       end
 
       it 'nonexistant column' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "test"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "test" } } })
 
         expect(response.status).to eq 200
-        #top level error
+        # top level error
         expect(JSON.parse(response.body)['errors'].length).not_to eq []
       end
 
       it 'slug' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "slug"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "slug" } } })
 
         grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
@@ -66,15 +66,15 @@ RSpec.describe GrammarsController, type: :request do
       end
 
       it 'slug invalid direction' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "slug", orderDirection: "north"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "slug", orderDirection: "north" } } })
 
         expect(response.status).to eq 200
-        #top level error
+        # top level error
         expect(JSON.parse(response.body)['errors'].length).not_to eq []
       end
 
       it 'slug desc' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "slug", orderDirection: "desc"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "slug", orderDirection: "desc" } } })
 
         grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
@@ -82,7 +82,7 @@ RSpec.describe GrammarsController, type: :request do
       end
 
       it 'slug asc' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "slug", orderDirection: "asc"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "slug", orderDirection: "asc" } } })
 
         grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
@@ -90,14 +90,14 @@ RSpec.describe GrammarsController, type: :request do
       end
 
       it 'name desc' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "name", orderDirection: "desc"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "name", orderDirection: "desc" } } })
         grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
         expect(grammars_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'name asc' do
-        send_query(query_name:"AdminListGrammars",variables:{input: {order: {orderField: "name", orderDirection: "asc"}}})
+        send_query(query_name: "AdminListGrammars", variables: { input: { order: { orderField: "name", orderDirection: "asc" } } })
         grammars_data = JSON.parse(response.body)['data']['grammars']['nodes']
 
         expect(grammars_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
@@ -111,7 +111,7 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'finds a single grammar by ID' do
       g = FactoryBot.create(:grammar)
-      send_query(query_name:"FullGrammar",variables:{id: g.id})
+      send_query(query_name: "FullGrammar", variables: { id: g.id })
 
       expect(response).to have_http_status(200)
       response_data = JSON.parse(response.body)['data']['singleGrammar']
@@ -121,18 +121,18 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'finds a single grammar by slug' do
       g = FactoryBot.create(:grammar)
-      send_query(query_name:"FullGrammar",variables:{id: g.slug})
+      send_query(query_name: "FullGrammar", variables: { id: g.slug })
 
       expect(response).to have_http_status(200)
 
-      expect(JSON.parse(response.body).fetch('errors',[])).to eq []
+      expect(JSON.parse(response.body).fetch('errors', [])).to eq []
       grammar_data = JSON.parse(response.body)['data']['singleGrammar']
       # root can't be null in GrammarDocument, but in database
       expect(grammar_data["slug"]).to eq g.slug
     end
 
     it 'responds with 200 but not empty errors for non existing grammars' do
-      send_query(query_name:"FullGrammar",variables:{id: "0"})
+      send_query(query_name: "FullGrammar", variables: { id: "0" })
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
@@ -141,7 +141,7 @@ RSpec.describe GrammarsController, type: :request do
     it 'includes the CodeResource a grammar is based on' do
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
-      send_query(query_name:"FullGrammar",variables:{id: original.id})
+      send_query(query_name: "FullGrammar", variables: { id: original.id })
 
       expect(response).to have_http_status(200)
       grammar_data = JSON.parse(response.body)["data"]["singleGrammar"]
@@ -154,34 +154,33 @@ RSpec.describe GrammarsController, type: :request do
     it 'Creates a new, empty grammar' do
       prog_lang = FactoryBot.create(:programming_language)
       params = {
-             "slug" => "spec",
-             "name" => "Spec Grammar",
-             "programmingLanguageId" => prog_lang.id,
-             "types" => {
-                 "spec" => {
-                     "root" => {
-                         "type" => "concrete",
-                         "attributes" => []
-                     }
-                 }
-             },
-             "root" => {
-                 "languageName" => "spec",
-                 "typeName" => "root"
-             }
-         }
-      send_query(query_name:"CreateGrammar",variables:params)
+        "slug" => "spec",
+        "name" => "Spec Grammar",
+        "programmingLanguageId" => prog_lang.id,
+        "types" => {
+          "spec" => {
+            "root" => {
+              "type" => "concrete",
+              "attributes" => []
+            }
+          }
+        },
+        "root" => {
+          "languageName" => "spec",
+          "typeName" => "root"
+        }
+      }
+      send_query(query_name: "CreateGrammar", variables: params)
 
       expect(response.media_type).to eq "application/json"
 
       json_data = JSON.parse(response.body)["data"]["createGrammar"]
       expect(json_data.fetch('errors', [])).to eq []
 
-
       g = Grammar.find(json_data["grammar"]['id'])
       expect(g.name).to eq "Spec Grammar"
       expect(g.slug).to eq "spec"
-      expect(g.root).to eq({ "languageName" => "spec", "typeName" => "root"})
+      expect(g.root).to eq({ "languageName" => "spec", "typeName" => "root" })
       expect(g.types["spec"]["root"]).to eq({ "type" => "concrete", "attributes" => [] })
 
       expect(response.status).to eq(200)
@@ -189,7 +188,7 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'Attempts to creates a new, invalid grammar (programming_language missing)' do
       prog_lang = FactoryBot.create(:programming_language)
-      send_query(query_name:"CreateGrammar",variables:{"slug" => "spec", "name" => "Spec Grammar"})
+      send_query(query_name: "CreateGrammar", variables: { "slug" => "spec", "name" => "Spec Grammar" })
 
       expect(response.media_type).to eq "application/json"
       expect(response.status).to eq(200)
@@ -203,17 +202,16 @@ RSpec.describe GrammarsController, type: :request do
     it 'Updating basic properties' do
       orig_grammar = FactoryBot.create(:grammar)
       upda_grammar = {
-          "id" => orig_grammar.id,
-          "name" => "Upda",
-          "types" => {},
-          "root" => {
-            "languageName" => "spec",
-            "typeName" => "root"
-          }
+        "id" => orig_grammar.id,
+        "name" => "Upda",
+        "types" => {},
+        "root" => {
+          "languageName" => "spec",
+          "typeName" => "root"
+        }
       }
 
-      send_query(query_name:"UpdateGrammar",variables:upda_grammar)
-
+      send_query(query_name: "UpdateGrammar", variables: upda_grammar)
 
       if (not response.body.blank?) then
         json_data = JSON.parse(response.body)["data"]
@@ -230,7 +228,7 @@ RSpec.describe GrammarsController, type: :request do
       original = FactoryBot.create(:grammar, :model_single_type)
       params_update = { "id" => original.id, "root" => nil }
 
-      send_query(query_name:"UpdateGrammar",variables:params_update)
+      send_query(query_name: "UpdateGrammar", variables: params_update)
 
       unless response.body.blank?
         json_data = JSON.parse(response.body)["data"]
@@ -244,12 +242,12 @@ RSpec.describe GrammarsController, type: :request do
     it 'Update with invalid root type' do
       original = FactoryBot.create(:grammar, :model_single_type)
       params_update = FactoryBot
-                        .attributes_for(:grammar,
-                                        name: "Updated empty",
-                                        root: { "foo" => "bar" })
-                        .transform_keys { |k| k.to_s.camelize(:lower) }
+                      .attributes_for(:grammar,
+                                      name: "Updated empty",
+                                      root: { "foo" => "bar" })
+                      .transform_keys { |k| k.to_s.camelize(:lower) }
       params_update["id"] = original.id
-      send_query(query_name:"UpdateGrammar",variables:params_update)
+      send_query(query_name: "UpdateGrammar", variables: params_update)
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body).fetch('errors', [])).not_to eq []
@@ -261,8 +259,7 @@ RSpec.describe GrammarsController, type: :request do
     it 'Set the a CodeResouce that a grammar is generated from' do
       original = FactoryBot.create(:grammar)
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
-      send_query(query_name:"UpdateGrammar",variables:{"id"=>original.id, "generatedFromId" => meta_code_resource.id })
-
+      send_query(query_name: "UpdateGrammar", variables: { "id" => original.id, "generatedFromId" => meta_code_resource.id })
 
       original.reload
       expect(original.generated_from).to eq meta_code_resource
@@ -271,7 +268,7 @@ RSpec.describe GrammarsController, type: :request do
     it 'Attempt to set a non-existant CodeResouce that a grammar is generated from' do
       original = FactoryBot.create(:grammar)
       ref_id = SecureRandom.uuid
-      send_query(query_name:"UpdateGrammar",variables:{"id"=>original.id, "generatedFromId" => ref_id })
+      send_query(query_name: "UpdateGrammar", variables: { "id" => original.id, "generatedFromId" => ref_id })
 
       expect(response.status).to eq(200)
 
@@ -283,7 +280,7 @@ RSpec.describe GrammarsController, type: :request do
       meta_code_resource = FactoryBot.create(:code_resource, :grammar_single_type)
       original = FactoryBot.create(:grammar, generated_from: meta_code_resource)
 
-      send_query(query_name:"UpdateGrammar",variables:{"id"=>original.id, "generatedFromId" => nil })
+      send_query(query_name: "UpdateGrammar", variables: { "id" => original.id, "generatedFromId" => nil })
 
       expect(response.status).to eq(200)
 
@@ -299,24 +296,24 @@ RSpec.describe GrammarsController, type: :request do
 
     it 'removes unreferenced grammar' do
       g = FactoryBot.create(:grammar)
-      send_query(query_name:"DestroyGrammar",variables:{"id"=>g.id})
+      send_query(query_name: "DestroyGrammar", variables: { "id" => g.id })
       expect(response.status).to eq(200)
 
-      send_query(query_name:"FullGrammar",variables:{"id"=>g.id})
+      send_query(query_name: "FullGrammar", variables: { "id" => g.id })
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
     end
 
     it 'keeps referenced grammars' do
       b = FactoryBot.create(:block_language)
-      send_query(query_name:"DestroyGrammar",variables:{"id"=>b.grammar_id})
+      send_query(query_name: "DestroyGrammar", variables: { "id" => b.grammar_id })
       expect(response.status).to eq(200)
 
       json_data = JSON.parse(response.body)["data"]["destroyGrammar"]
       expect(json_data.fetch('errors', []).length).to eq 1
       expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
 
-      send_query(query_name:"FullGrammar",variables:{"id"=>b.grammar_id})
+      send_query(query_name: "FullGrammar", variables: { "id" => b.grammar_id })
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
@@ -354,7 +351,7 @@ RSpec.describe GrammarsController, type: :request do
       expect(response.status).to eq(200)
 
       json_data = JSON.parse(response.body)
-      json_ids = Set.new(json_data.map {|c| c["id"] })
+      json_ids = Set.new(json_data.map { |c| c["id"] })
       expect(json_ids).to eq Set.new([res_1.id])
     end
 
@@ -384,7 +381,7 @@ RSpec.describe GrammarsController, type: :request do
     }
     it 'Finds nothing for an unused grammar' do
       original = FactoryBot.create(:grammar)
-      send_query(query_name:"AdminRelatedBlockLanguages",variables:{"grammarId"=>original.id})
+      send_query(query_name: "AdminRelatedBlockLanguages", variables: { "grammarId" => original.id })
 
       expect(response.status).to eq(200)
       json_data = JSON.parse(response.body)["data"]["relatedBlockLanguages"]
@@ -395,7 +392,7 @@ RSpec.describe GrammarsController, type: :request do
       original = FactoryBot.create(:grammar)
       related = FactoryBot.create(:block_language, grammar: original)
 
-      send_query(query_name:"AdminRelatedBlockLanguages",variables:{"grammarId"=>original.id})
+      send_query(query_name: "AdminRelatedBlockLanguages", variables: { "grammarId" => original.id })
 
       expect(response.status).to eq(200)
 
@@ -411,7 +408,7 @@ RSpec.describe GrammarsController, type: :request do
       related = FactoryBot.create(:block_language, grammar: original)
       unrelated = FactoryBot.create(:block_language)
 
-      send_query(query_name:"AdminRelatedBlockLanguages",variables:{"grammarId"=>original.id})
+      send_query(query_name: "AdminRelatedBlockLanguages", variables: { "grammarId" => original.id })
 
       expect(response.status).to eq(200)
 

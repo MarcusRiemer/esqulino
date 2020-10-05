@@ -17,7 +17,6 @@ class ProjectDatabase < ApplicationRecord
     5000
   end
 
-
   # Creating the database record for this instance is the trivial part.
   # The actual work is to create some sort of database-thing in the
   # "real world".
@@ -130,11 +129,11 @@ class ProjectDatabase < ApplicationRecord
   def table_bulk_insert(table_name, column_names, rows)
     if table_exists? table_name
       sql_column_names = column_names
-        .map { |n| "'#{n}'" }
-        .join(",")
+                         .map { |n| "'#{n}'" }
+                         .join(",")
       sql_data = rows
-        .map { |r| "(" + r.map { |n| "'#{n}'" }.join(",") + ")" }
-        .join(",\n")
+                 .map { |r| "(" + r.map { |n| "'#{n}'" }.join(",") + ")" }
+                 .join(",\n")
 
       sql = "INSERT INTO '#{table_name}' (#{sql_column_names}) VALUES\n#{sql_data}"
 
@@ -202,12 +201,12 @@ class ProjectDatabase < ApplicationRecord
           end
         end
         return {
-                 "columns" => result.first,
-                 "rows" => result.drop(1),
-                 "totalCount" => num_rows - 1, # First row are columns
-                 "changes" => db.changes,
-                 "unknownTotal" => unknown_total
-               }
+          "columns" => result.first,
+          "rows" => result.drop(1),
+          "totalCount" => num_rows - 1, # First row are columns
+          "changes" => db.changes,
+          "unknownTotal" => unknown_total
+        }
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault
         # of the caller in some way.

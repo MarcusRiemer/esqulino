@@ -18,11 +18,11 @@ class Mutations::Projects::AddUsedBlockLanguage < Mutations::Projects::Projects
     uses = p.project_uses_block_languages.create(block_language: b)
 
     return ({
-              result: {
-                project_uses_block_language: uses,
-                block_language: b
-              }
-            })
+      result: {
+        project_uses_block_language: uses,
+        block_language: b
+      }
+    })
   rescue Pundit::NotAuthorizedError, ActiveRecord::RecordNotFound => e
     return ({
       errors: [e]

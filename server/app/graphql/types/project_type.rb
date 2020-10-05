@@ -1,30 +1,30 @@
 module Types
   class Types::ProjectType < Types::Base::BaseObject
-    field :id, ID, null:false
+    field :id, ID, null: false
     field :name, Types::Scalar::LangJson, null: false
-    field :description, Types::Scalar::LangJson, null:false
-    field :public, Boolean, null:true
-    field :preview, String, null:true
-    field :index_page_id, String, null:true
-    field :slug, String, null:true
+    field :description, Types::Scalar::LangJson, null: false
+    field :public, Boolean, null: true
+    field :preview, String, null: true
+    field :index_page_id, String, null: true
+    field :slug, String, null: true
 
-    field :default_database, Types::ProjectDatabaseType,null:true
-    field :default_database_id, ID,null:true
+    field :default_database, Types::ProjectDatabaseType, null: true
+    field :default_database_id, ID, null: true
 
-    field :user, Types::UserType,null:true
-    field :userId, ID,null:true
+    field :user, Types::UserType, null: true
+    field :userId, ID, null: true
 
-    field :codeResources, [Types::CodeResourceType], null:false
-    field :codeResourceCount, Integer, null:true
-    field :projectSources, [Types::ProjectSourceType], null:false
-    field :blockLanguages, [Types::BlockLanguageType], null:false
-    field :projectUsesBlockLanguages, [Types::ProjectUsesBlockLanguageType], null:false
+    field :codeResources, [Types::CodeResourceType], null: false
+    field :codeResourceCount, Integer, null: true
+    field :projectSources, [Types::ProjectSourceType], null: false
+    field :blockLanguages, [Types::BlockLanguageType], null: false
+    field :projectUsesBlockLanguages, [Types::ProjectUsesBlockLanguageType], null: false
     field :grammars, [Types::GrammarType], null: false
 
     field :schema, [Types::SqlTableType], null: false
 
-    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     def code_resource_count
       # code_resource_count defined in projects_resolver.rb
@@ -33,7 +33,7 @@ module Types
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'ProjectOrderFieldEnum'
-      #Order Fields
+      # Order Fields
       value 'name'
       value 'slug'
     end

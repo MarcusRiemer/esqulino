@@ -11,27 +11,27 @@ RSpec.describe "HashTools" do
     end
 
     it "[{a:1}]" do
-      expect(HashTools.union({a:1})).to eq({a:1})
+      expect(HashTools.union({ a: 1 })).to eq({ a: 1 })
     end
 
     it "[{a:1}, nil]" do
-      expect(HashTools.union({a:1}, nil)).to eq({a:1})
+      expect(HashTools.union({ a: 1 }, nil)).to eq({ a: 1 })
     end
 
     it "[nil, {a:1}]" do
-      expect(HashTools.union(nil, {a:1}, nil)).to eq({a:1})
+      expect(HashTools.union(nil, { a: 1 }, nil)).to eq({ a: 1 })
     end
 
     it "[nil, {a:1}, nil]" do
-      expect(HashTools.union(nil, {a:1}, nil)).to eq({a:1})
+      expect(HashTools.union(nil, { a: 1 }, nil)).to eq({ a: 1 })
     end
 
     it "[{a:1}, {b:1}]" do
-      expect(HashTools.union({a:1}, {b:1})).to eq({a:1, b:1})
+      expect(HashTools.union({ a: 1 }, { b: 1 })).to eq({ a: 1, b: 1 })
     end
 
     it "[{a:1}, {a:1}]" do
-      expect(HashTools.union({a:1}, {a:1})).to eq({a:1})
+      expect(HashTools.union({ a: 1 }, { a: 1 })).to eq({ a: 1 })
     end
   end
 end

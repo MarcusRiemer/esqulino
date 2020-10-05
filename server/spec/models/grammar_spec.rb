@@ -46,36 +46,36 @@ RSpec.describe Grammar, type: :model do
     end
 
     it "root" do
-      root = { "languageName" => "l", "typeName" => "t"}
+      root = { "languageName" => "l", "typeName" => "t" }
       res = FactoryBot.build(
         :grammar,
         root: root,
         types: nil,
         foreign_types: nil
       )
-      expect(res.document).to eq({"root" => root})
+      expect(res.document).to eq({ "root" => root })
     end
 
     it "root and types" do
-      root = { "languageName" => "l", "typeName" => "t"}
+      root = { "languageName" => "l", "typeName" => "t" }
       res = FactoryBot.build(
         :grammar,
         root: root,
         types: Hash.new,
         foreign_types: nil
       )
-      expect(res.document).to eq({"root" => root, "types" => Hash.new})
+      expect(res.document).to eq({ "root" => root, "types" => Hash.new })
     end
 
     it "root, types and foreign_types" do
-      root = { "languageName" => "l", "typeName" => "t"}
+      root = { "languageName" => "l", "typeName" => "t" }
       res = FactoryBot.build(
         :grammar,
         root: root,
         types: Hash.new,
         foreign_types: Hash.new
       )
-      expect(res.document).to eq({"root" => root, "types" => Hash.new, "foreign_types" => Hash.new})
+      expect(res.document).to eq({ "root" => root, "types" => Hash.new, "foreign_types" => Hash.new })
     end
   end
 
@@ -107,22 +107,22 @@ RSpec.describe Grammar, type: :model do
 
       it "Empty local language" do
         g = FactoryBot.build(:grammar, types: { "l" => {} })
-        expect(g.all_types).to eq({"l" => {}})
+        expect(g.all_types).to eq({ "l" => {} })
       end
 
       it "Empty foreign language" do
         g = FactoryBot.build(:grammar, foreign_types: { "l" => {} })
-        expect(g.all_types).to eq({"l" => {}})
+        expect(g.all_types).to eq({ "l" => {} })
       end
 
       it "Identical empty foreign and local language" do
         g = FactoryBot.build(:grammar, types: { "l" => {} }, foreign_types: { "l" => {} })
-        expect(g.all_types).to eq({"l" => {}})
+        expect(g.all_types).to eq({ "l" => {} })
       end
 
       it "Different empty foreign and local language" do
         g = FactoryBot.build(:grammar, types: { "l1" => {} }, foreign_types: { "l2" => {} })
-        expect(g.all_types).to eq({"l1" => {}, "l2" => {}})
+        expect(g.all_types).to eq({ "l1" => {}, "l2" => {} })
       end
 
       it "Local language with single type" do
@@ -132,7 +132,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Foreign language with single type" do
@@ -142,7 +142,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Local and foreign language with identical single type" do
@@ -158,7 +158,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Local precedence: Termninal a" do
@@ -174,7 +174,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_terminal_a } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_terminal_a } })
       end
 
       it "Local precedence: Empty" do
@@ -190,7 +190,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Local precedence: Termninal a, additional local" do
@@ -207,7 +207,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t1" => type_terminal_a, "t2" => type_terminal_a } })
+        expect(g.all_types).to eq({ "l" => { "t1" => type_terminal_a, "t2" => type_terminal_a } })
       end
 
       it "Local precedence: Termninal a, additional foreign" do
@@ -224,7 +224,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t1" => type_terminal_a, "t2" => type_terminal_a } })
+        expect(g.all_types).to eq({ "l" => { "t1" => type_terminal_a, "t2" => type_terminal_a } })
       end
     end
 
@@ -393,31 +393,31 @@ RSpec.describe Grammar, type: :model do
     context "references" do
       def grammar_document_references(category_name, *grammar_ids)
         ({
-           "language"=> "MetaGrammar",
-           "name"=> "grammar",
-           "properties"=> {
-             "name"=> "lang"
-           },
-           "children" => {
-             category_name => [
-               {
-                 "language" => "MetaGrammar",
-                 "name" => "grammarIncludes",
-                 "children" => {
-                   "includes" => grammar_ids.map do |id|
-                     ({
-                        "language" => "MetaGrammar",
-                        "name" => "grammarRef",
-                        "properties" => {
-                          "grammarId" => id
-                        }
-                      })
-                   end
-                 }
-               }
-             ]
-           }
-         })
+          "language" => "MetaGrammar",
+          "name" => "grammar",
+          "properties" => {
+            "name" => "lang"
+          },
+          "children" => {
+            category_name => [
+              {
+                "language" => "MetaGrammar",
+                "name" => "grammarIncludes",
+                "children" => {
+                  "includes" => grammar_ids.map do |id|
+                    ({
+                      "language" => "MetaGrammar",
+                      "name" => "grammarRef",
+                      "properties" => {
+                        "grammarId" => id
+                      }
+                    })
+                  end
+                }
+              }
+            ]
+          }
+        })
       end
 
       it "ensure that the AST leads to 'include' instructions" do
@@ -471,15 +471,14 @@ RSpec.describe Grammar, type: :model do
         expect(grammar.targeted_grammars).to match_array [inc_2]
       end
     end
-
   end
 
   context "references to other grammars" do
     it "doesn't have any references at all" do
       g = create(:grammar)
 
-      expect(g.grammar_reference_origins). to eq []
-      expect(g.targeted_grammars). to eq []
+      expect(g.grammar_reference_origins).to eq []
+      expect(g.targeted_grammars).to eq []
     end
 
     it "includes types of another grammar" do

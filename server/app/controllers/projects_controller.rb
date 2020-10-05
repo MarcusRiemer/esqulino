@@ -46,7 +46,7 @@ class ProjectsController < ApplicationController
   # These attributes are mandatory when a project is created
   def project_creation_params
     to_return = params.permit(:slug, name: {})
-      .transform_keys { |k| k.underscore }
+                      .transform_keys { |k| k.underscore }
 
     to_return["user"] = current_user
 
@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
   # These attributes may be changed once a project has been created
   def project_update_params
     params.permit(:indexPageId, :preview, name: {}, description: {})
-      .transform_keys { |k| k.underscore }
+          .transform_keys { |k| k.underscore }
   end
 
   # The references to block languages that are part of this project.
@@ -65,12 +65,12 @@ class ProjectsController < ApplicationController
     used_block_languages = params[:projectUsesBlockLanguages]
     if used_block_languages then
       attributes = used_block_languages
-                     .map { |used| used.transform_keys! { |k| k.underscore } }
-                     .each { |used| used.permit! }
+                   .map { |used| used.transform_keys! { |k| k.underscore } }
+                   .each { |used| used.permit! }
 
       to_return = ActionController::Parameters
-                    .new({ "project_uses_block_languages_attributes" => attributes})
-                    .permit!
+                  .new({ "project_uses_block_languages_attributes" => attributes })
+                  .permit!
       return (to_return)
     else
       return ({})

@@ -19,7 +19,7 @@ module Mutations
     end
 
     def underscore_keys(args)
-      args.transform_keys{|k| k.to_s.underscore.to_sym}
+      args.transform_keys { |k| k.to_s.underscore.to_sym }
     end
   end
 end

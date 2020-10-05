@@ -10,20 +10,20 @@ class Mutations::News::News < Mutations::BaseMutation
   def save_news(news)
     if news.save
       {
-          news: news,
-          errors: []
+        news: news,
+        errors: []
       }
     else
       {
-          news: nil,
-          errors: news.errors.full_messages.map do |err|
-            ({
-                type: "railsValidation",
-                data: {
-                    msg: err,
-                }
-            })
-          end
+        news: nil,
+        errors: news.errors.full_messages.map do |err|
+                  ({
+                    type: "railsValidation",
+                    data: {
+                      msg: err,
+                    }
+                  })
+                end
       }
     end
   end
@@ -31,8 +31,8 @@ class Mutations::News::News < Mutations::BaseMutation
   def destroy_news(news)
     news.destroy
     {
-        news: nil,
-        errors: []
+      news: nil,
+      errors: []
     }
   end
 
@@ -43,7 +43,4 @@ class Mutations::News::News < Mutations::BaseMutation
   rescue ArgumentError => e
     raise EsqulinoError::Base.new("Invalid date #{date_str}", 400)
   end
-
 end
-
-

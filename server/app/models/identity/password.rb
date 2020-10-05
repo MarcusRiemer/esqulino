@@ -35,18 +35,18 @@ module Identity
         :uid => auth[:uid],
         :provider => auth[:provider],
         :provider_data => auth[:info].merge({
-                                              credentials: auth[:credentials]}
-                                           ),
+                                              credentials: auth[:credentials]
+                                            }),
         :own_data => auth[:data]
       )
     end
 
     def self.client_information
       return ({
-                name: "E-Mail",
-                icon: "fa-envelope-o",
-                color: "Maroon"
-              })
+        name: "E-Mail",
+        icon: "fa-envelope-o",
+        color: "Maroon"
+      })
     end
 
     # Ensure that the data hash is never nil
@@ -119,6 +119,7 @@ module Identity
         if (identity.invalid?) then
           raise EsqulinoError::Base.new(identity.errors.full_messages[0])
         end
+
         identity.save!
       end
     end

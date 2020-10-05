@@ -1,5 +1,4 @@
 class UserMailer < ApplicationMailer
-
   @@base_url = Rails.configuration.sqlino["editor_domain"]
 
   def change_primary_email(identity, locale)

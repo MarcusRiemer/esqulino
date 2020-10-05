@@ -7,7 +7,7 @@ module SchemaTools
     attr_accessor :from_column, :to_table, :to_column
 
     def attributes
-      {'from_column' => nil, 'to_table' => nil, 'to_column' => nil}
+      { 'from_column' => nil, 'to_table' => nil, 'to_column' => nil }
     end
 
     def initialize(from_column, to_table, to_column)
@@ -26,5 +26,4 @@ module SchemaTools
       }.to_json(options)
     end
   end
-
 end

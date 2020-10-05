@@ -3,7 +3,7 @@
 # (using databases and HTML), but this is not set in stone.
 class Project < ApplicationRecord
   # In progress: Multilingual migration
-  self.ignored_columns = ['name_single',  'description_single']
+  self.ignored_columns = ['name_single', 'description_single']
 
   # The owner if this project
   belongs_to :user
@@ -39,7 +39,7 @@ class Project < ApplicationRecord
   validates :slug, uniqueness: true, allow_nil: true
   validates :slug, format: { with: /\A[a-zA-Z][a-zA-Z0-9\-]+\z/,
                              message: "Starts with a letter, allows letters, digits and -" },
-            allow_nil: true
+                   allow_nil: true
 
   # Projects that are publicly available
   scope :only_public, -> { where(public: true) }
@@ -74,6 +74,7 @@ class Project < ApplicationRecord
   after_create do
     Rails.logger.info "Creating project data directory at #{data_directory_path}"
     raise EsqulinoError.new("Project directory already exist: #{data_directory_path}") if File.exist? data_directory_path
+
     Dir.mkdir data_directory_path
     Dir.mkdir File.join(data_directory_path, "databases/")
     Dir.mkdir File.join(data_directory_path, "images/")
@@ -100,7 +101,7 @@ class Project < ApplicationRecord
       else
         # Using `find` here (instead of `find_by`) should make sure that no query is
         # fired if this relation has been loaded already.
-        project_databases.find {|db| db.id == database_id }
+        project_databases.find { |db| db.id == database_id }
       end
     else
       default_database

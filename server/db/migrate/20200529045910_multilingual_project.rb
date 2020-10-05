@@ -8,8 +8,8 @@ class MultilingualProject < ActiveRecord::Migration[6.0]
     rename_column :projects, :name, :name_single
     rename_column :projects, :description, :description_single
 
-    add_column :projects, :name, :hstore, null:false, :default => Hash.new
-    add_column :projects, :description, :hstore, null:false, :default => Hash.new
+    add_column :projects, :name, :hstore, null: false, :default => Hash.new
+    add_column :projects, :description, :hstore, null: false, :default => Hash.new
 
     Project.all.each do |p|
       p.name = { "de" => p.name_single }

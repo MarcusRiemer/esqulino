@@ -18,16 +18,16 @@ class News < ApplicationRecord
   # Retrieve a certain news in a single language
   #
   # @param language [String] A valid language that is hopefully stored with the news
-  scope :scope_single_language, -> (language) {
+  scope :scope_single_language, ->(language) {
     raise EsqulinoError::Base.new("Invalid language: #{language}") unless LocaleHelper.allowed_languages_s.include? language
 
-     where("title->? != '' AND text->? != ''", language, language)
-    .where("published_from <= ?", Date.today)
-    .limit(10)
-    .select('id, published_from, created_at, updated_at')
-    .select("slice(title, ARRAY['#{language}']) as title")
-    .select("slice(text, ARRAY['#{language}']) as text")
-    .order('published_from DESC')
+    where("title->? != '' AND text->? != ''", language, language)
+      .where("published_from <= ?", Date.today)
+      .limit(10)
+      .select('id, published_from, created_at, updated_at')
+      .select("slice(title, ARRAY['#{language}']) as title")
+      .select("slice(text, ARRAY['#{language}']) as text")
+      .order('published_from DESC')
   }
 
   # Compiles the text in the given languages to HTML
@@ -74,8 +74,8 @@ class News < ApplicationRecord
     to_json_api_response(compact: false)
   end
 
-  def to_list_api_response(options:{})
-    if options.fetch(:full_api_response,false) then
+  def to_list_api_response(options: {})
+    if options.fetch(:full_api_response, false) then
       to_full_api_response
     end
     to_json_api_response
@@ -89,9 +89,8 @@ class News < ApplicationRecord
   # API response for data that is rendered on the frontpage. May restrict
   # length of the text and returned languages
   def to_frontpage_api_response(text_length: :full, languages: nil)
-
     to_return = to_json_api_response
-                    .slice("id", "title", "text", "publishedFrom")
+                .slice("id", "title", "text", "publishedFrom")
 
     if (to_return['text'])
       to_return['text'] = rendered_text(text_length: text_length, languages: languages)

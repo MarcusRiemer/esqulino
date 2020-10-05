@@ -46,7 +46,6 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -56,10 +55,10 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:   ENV["SMTP_HOST"],
-    port:      ENV.fetch("SMTP_PORT", 587),
+    address: ENV["SMTP_HOST"],
+    port: ENV.fetch("SMTP_PORT", 587),
     user_name: ENV["SMTP_USER"],
-    password:  ENV["SMTP_PASS"],
+    password: ENV["SMTP_PASS"],
     enable_starttls_auto: true
   }
 

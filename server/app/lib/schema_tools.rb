@@ -13,7 +13,8 @@ module SchemaTools
     db.create_function('regexp', 2) do |func, pattern, expression|
       unless expression.nil?
         func.result = expression.to_s.match(
-          Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
+          Regexp.new(pattern.to_s, Regexp::IGNORECASE)
+        ) ? 1 : 0
       else
         # Return true if the value is null, let the DB handle this
         func.result = 1
@@ -22,7 +23,6 @@ module SchemaTools
 
     return db
   end
-
 
   # Describes the schema of a whole database as a handy dictionary
   # of tables with their columns.
@@ -51,7 +51,7 @@ module SchemaTools
       name = name[0]
       table_schema = SchemaTable.new name
       db.execute("PRAGMA table_info(#{name})") do |ci|
-        column_schema = SchemaColumn.new(ci[0],ci[1],ci[2],ci[3],ci[4],ci[5])
+        column_schema = SchemaColumn.new(ci[0], ci[1], ci[2], ci[3], ci[4], ci[5])
         table_schema.add_column(column_schema)
       end
 
@@ -60,7 +60,7 @@ module SchemaTools
 
       # A foreign key may consist of multiple columns, so we group all
       # columns that belong to the same foreign key
-      grouped_foreign_keys = foreign_keys_table.group_by{ |fk| fk[0]}
+      grouped_foreign_keys = foreign_keys_table.group_by { |fk| fk[0]}
       grouped_foreign_keys.each do |key, value|
         foreign_key_comp = SchemaForeignKey.new()
         # Add all columns that are part of this particular foreign key
@@ -84,8 +84,8 @@ module SchemaTools
 
     # Add nodes for all tables
     tables = schema
-               .select {|table| not table.system?}
-               .map do |table|
+             .select { |table| not table.system?}
+             .map do |table|
       columns = table.columns.map do |c|
         c_type = (table.is_column_fk? c) ? "FK" : c.type
         c_name = c.name
@@ -127,15 +127,15 @@ module SchemaTools
     refs = refs.join("\n")
 
     # TODO: Remove dirty hack to set the path!
-    to_return = <<-delim
-digraph db {
-  graph[rankdir=LR, nodesep=0, splines=polyline, imagepath="../client/src", overlap=false];
-  edge[dir=both, arrowhead=dot, arrowtail=dot];
-  node[shape=plaintext, fontname = "Monospace"];
-  #{tables}
-  #{refs}
-}
-  delim
+    to_return = <<~delim
+      digraph db {
+        graph[rankdir=LR, nodesep=0, splines=polyline, imagepath="../client/src", overlap=false];
+        edge[dir=both, arrowhead=dot, arrowtail=dot];
+        node[shape=plaintext, fontname = "Monospace"];
+        #{tables}
+        #{refs}
+      }
+    delim
 
     to_return
   end

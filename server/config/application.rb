@@ -28,7 +28,6 @@ module Server
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-
     # Cookie options according to configured domains
     editor_domain = Rails.application.config_for(:sqlino)["editor_domain"]
     # Without `http` scheme parser wont extract host

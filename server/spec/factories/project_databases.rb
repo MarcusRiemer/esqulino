@@ -1,4 +1,5 @@
 # coding: utf-8
+
 require 'tempfile'
 
 FactoryBot.define do
@@ -87,7 +88,6 @@ FactoryBot.define do
       end
     end
 
-
     # A simple table that stores the nams of all digits
     #
     # Key | Value
@@ -155,7 +155,6 @@ FactoryBot.define do
       transient do
         row_count { 10 }
       end
-
 
       after(:create) do |db, options|
         db.table_create(

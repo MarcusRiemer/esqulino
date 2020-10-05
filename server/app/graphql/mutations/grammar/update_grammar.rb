@@ -1,12 +1,11 @@
 class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
-
   argument :id, ID, required: false
   argument :name, String, required: false
   argument :slug, String, required: false
-  argument :types, GraphQL::Types::JSON, required:false
-  argument :foreign_types, GraphQL::Types::JSON, required:false
-  argument :root, Types::Scalar::QualifiedTypeName, required:false
-  argument :programming_language_id,  ID, required: false
+  argument :types, GraphQL::Types::JSON, required: false
+  argument :foreign_types, GraphQL::Types::JSON, required: false
+  argument :root, Types::Scalar::QualifiedTypeName, required: false
+  argument :programming_language_id, ID, required: false
   argument :generated_from_id, ID, required: false
   argument :block_language_ids, [ID], required: false
 
@@ -27,11 +26,9 @@ class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
       save_grammar(grammar)
     rescue ActiveRecord::RecordNotFound
       {
-          news: nil,
-          errors: ["Couldn't find Grammar with 'id'=#{args[:id]}"]
+        news: nil,
+        errors: ["Couldn't find Grammar with 'id'=#{args[:id]}"]
       }
     end
   end
 end
-
-

@@ -9,7 +9,7 @@ RSpec.describe ProjectsController, type: :request do
 
       send_query(
         query_name: "FullProject",
-        variables: { "id" => p.id}
+        variables: { "id" => p.id }
       )
 
       expect(response.status).to eq 200
@@ -26,7 +26,7 @@ RSpec.describe ProjectsController, type: :request do
 
       send_query(
         query_name: "FullProject",
-        variables: { "id" => p.slug}
+        variables: { "id" => p.slug }
       )
 
       expect(response.status).to eq 200
@@ -96,7 +96,7 @@ RSpec.describe ProjectsController, type: :request do
         set_access_token(user)
         send_query(
           query_name: "CreateProject",
-          variables: {"name" => { "en" => "Some project" }, "slug" => "test" }
+          variables: { "name" => { "en" => "Some project" }, "slug" => "test" }
         )
 
         expect(response.status).to eq(200)
@@ -117,7 +117,7 @@ RSpec.describe ProjectsController, type: :request do
         set_access_token(user)
         send_query(
           query_name: "CreateProject",
-          variables: {"name" => { "en" => "Some project" }, "slug" => "test" }
+          variables: { "name" => { "en" => "Some project" }, "slug" => "test" }
         )
 
         expect(response.status).to eq(200)
@@ -202,7 +202,7 @@ RSpec.describe ProjectsController, type: :request do
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -221,11 +221,11 @@ RSpec.describe ProjectsController, type: :request do
           query_name: "UpdateProject",
           variables: {
             "id" => project.id,
-            "name" => { }
+            "name" => {}
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -246,7 +246,7 @@ RSpec.describe ProjectsController, type: :request do
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -267,7 +267,7 @@ RSpec.describe ProjectsController, type: :request do
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -353,14 +353,12 @@ RSpec.describe ProjectsController, type: :request do
       json_body = JSON.parse(response.body)
       expect(json_body["errors"]).to eq nil
 
-
       # Ensure the database has actually changed
       project.reload
       expect(project.project_uses_block_languages.size).to eq 0
       expect(BlockLanguage.count).to eq 1
     end
   end
-
 
   describe 'GraphQL FrontpageListProjects' do
     it 'lists nothing if nothing is there' do
@@ -396,7 +394,7 @@ RSpec.describe ProjectsController, type: :request do
   end
 
   describe 'GraphQL AdminListProjects' do
-   it 'guest user: not permitted' do
+    it 'guest user: not permitted' do
       send_query(query_name: "AdminListProjects")
 
       expect(response.status).to eq(401)
@@ -414,9 +412,9 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'admin user: permitted' do
-      FactoryBot.create(:project, :public, name: {"de" => 'cccc'}, slug: 'cccc')
-      FactoryBot.create(:project, :public, name: {"de" => 'aaaa'}, slug: 'aaaa')
-      FactoryBot.create(:project, :public, name: {"de" => 'bbbb'}, slug: 'bbbb')
+      FactoryBot.create(:project, :public, name: { "de" => 'cccc' }, slug: 'cccc')
+      FactoryBot.create(:project, :public, name: { "de" => 'aaaa' }, slug: 'aaaa')
+      FactoryBot.create(:project, :public, name: { "de" => 'bbbb' }, slug: 'bbbb')
 
       user = create(:user, :admin)
       set_access_token(user)
@@ -435,7 +433,7 @@ RSpec.describe ProjectsController, type: :request do
 
       send_query(
         query_name: "DestroyProject",
-        variables: { "id" => p.id}
+        variables: { "id" => p.id }
       )
 
       expect(response).to have_http_status(200)
