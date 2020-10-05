@@ -1,10 +1,7 @@
-import {Mutation, Query, gql} from 'apollo-angular';
+import { Mutation, Query, gql } from "apollo-angular";
 import { Injectable, OnDestroy } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-
-
-
 
 import { Subscription } from "rxjs";
 import { map, first } from "rxjs/operators";
