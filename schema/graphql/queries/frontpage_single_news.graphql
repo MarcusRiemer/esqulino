@@ -1,8 +1,18 @@
-query FrontpageSingleNews($id: ID!) {
-    frontpageSingleNews(id: $id) {
-        id
-        title
-        text
-        publishedFrom
+query FrontpageSingleNews($id: ID!, $languages: [LanguageEnum!]) {
+  news(
+    first: 1
+    input: {
+      filter: { id: $id }
+      textLength: short
+      languages: $languages
+      order: { orderField: publishedFrom, orderDirection: desc }
     }
+  ) {
+    nodes {
+      id
+      title
+      renderedTextFull
+      publishedFrom
+    }
+  }
 }

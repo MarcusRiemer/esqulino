@@ -8,7 +8,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news, published_from: Date.new(2999, 1, 1))
       send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(response).to have_http_status(200)
       expect(json_data.length).to eq(0)
     end
@@ -17,7 +17,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news)
       send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(1)
       # validate_against "NewsFrontpageDescription" does not work because of __typename fields
       expect(response).to have_http_status(200)
@@ -27,7 +27,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news, published_from: nil)
       send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(0)
       expect(response).to have_http_status(200)
     end
@@ -36,7 +36,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news, published_from: Date.new(9999, 1, 1))
       send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
       expect(json_data.length).to eq(0)
       expect(response).to have_http_status(200)
@@ -48,7 +48,7 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news) # Published
       send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
       expect(json_data.length).to eq(1)
       # validate_against "NewsFrontpageDescription" does not work because of __typename fields
@@ -56,31 +56,33 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
 
     it 'Frontpage: retrieving the only existing news (english)' do
-      host! 'en.example.com'
-
       news = create(:news, published_from: Date.new(2019, 1, 1))
       send_query(query_name: "FrontpageListNews", variables: { languages: ["en"] })
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(1)
       expect(json_data[0]['title']).to eq({ "en" => news.title['en'] })
-      expect(json_data[0]['text']).to eq({ "en" => news.rendered_text()['en'] })
-
-      # validate_against "NewsFrontpageDescription" does not work because of __typename fields
+      expect(json_data[0]['renderedTextShort']).to eq({ "en" => news.rendered_text_short()['en'] })
     end
 
     it 'Frontpage: retrieving the only existing news (german)' do
-      host! 'de.example.com'
-
       news = create(:news, published_from: Date.new(2019, 1, 1))
       send_query(query_name: "FrontpageListNews", variables: { languages: ["de"] })
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(1)
       expect(json_data[0]['title']).to eq({ "de" => news.title['de'] })
-      expect(json_data[0]['text']).to eq({ "de" => news.rendered_text()['de'] })
+      expect(json_data[0]['renderedTextShort']).to eq({ "de" => news.rendered_text_short()['de'] })
+    end
 
-      # validate_against "NewsFrontpageDescription" does not work because of __typename fields
+    it 'Frontpage: retrieving the only existing news (english & german)' do
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      send_query(query_name: "FrontpageListNews", variables: { languages: ["de", "en"] })
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data.length).to eq(1)
+      expect(json_data[0]['title']).to eq(news.title)
+      expect(json_data[0]['renderedTextShort']).to eq(news.rendered_text_short)
     end
 
     it 'Frontpage: News are shortened' do
@@ -88,13 +90,13 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
 
       send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)["data"]["frontpageListNews"]["nodes"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
       aggregate_failures "frontpage response" do
         expect(json_data.length).to eq(1)
-        expect(json_data[0]['text']['de']).to include("1")
-        expect(json_data[0]['text']['de']).not_to include("2")
-        expect(json_data[0]['text']['de']).not_to eq(news.text['de'])
+        expect(json_data[0]['renderedTextShort']['de']).to include("1")
+        expect(json_data[0]['renderedTextShort']['de']).not_to include("2")
+        expect(json_data[0]['renderedTextShort']['de']).not_to eq(news.text['de'])
       end
     end
   end
@@ -105,12 +107,12 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
 
       send_query(query_name: "FrontpageSingleNews", variables: { id: n.id })
 
-      json_data = JSON.parse(response.body)["data"]["frontpageSingleNews"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"][0]
 
       aggregate_failures "frontpage detail response" do
-        expect(json_data['text']['de']).to include("1")
-        expect(json_data['text']['de']).to include("2")
-        expect(json_data['text']['de']).not_to eq(n.text['de'])
+        expect(json_data['renderedTextFull']['de']).to include("1")
+        expect(json_data['renderedTextFull']['de']).to include("2")
+        expect(json_data['renderedTextFull']['de']).not_to eq(n.text['de'])
       end
     end
 
@@ -161,10 +163,10 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       set_access_token(admin)
     }
     it 'Admin: Existing news' do
-      n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
+      n = create(:news, text: { "de": "1 <!-- SNIP --> 2" })
       send_query(query_name: "AdminSingleNews", variables: { id: n.id })
 
-      json_data = JSON.parse(response.body)["data"]["adminSingleNews"]
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"][0]
 
       aggregate_failures "frontpage detail response" do
         expect(json_data['text']['de']).to include("1")
@@ -174,7 +176,11 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
 
     it 'Admin: non existant news' do
-      send_query(query_name: "AdminSingleNews", variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" })
+      send_query(
+        query_name: "AdminSingleNews",
+        variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" },
+        expect_no_errors: false,
+      )
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)["errors"]).not_to eq []
@@ -205,17 +211,13 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1))
 
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }, "id" => news.id })
-      send_query(query_name: "UpdateNews", variables: news_params)
+      json_data = send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false,
+      )
 
-      aggregate_failures "update response" do
-        # Graphql always returns with status: 200
-        # https://medium.com/@takewakamma/graphql-error-handling-with-graphql-ruby-653aa2a129f6
-        # https://www.graph.cool/docs/faq/api-eep0ugh1wa/#how-does-error-handling-work-with-graphcool
-        expect(response).to have_http_status(200)
-
-        json_data = JSON.parse(response.body)
-        expect(json_data.fetch('errors', [])).not_to eq []
-      end
+      expect(json_data.fetch('errors', [])).not_to eq([])
 
       # Ensure the news has not changed
       curr_news = News.find(news.id)
@@ -257,11 +259,12 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       news = create(:news, published_from: Date.new(2019, 1, 1))
       news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }, "id" => news.id })
 
-      send_query(query_name: "UpdateNews", variables: news_params)
+      json_data = send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false,
+      )
 
-      # Ensure some kind of error was reported
-
-      json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).not_to eq []
 
       # Ensure the news has not changed
@@ -273,7 +276,11 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1" }, published_from: Date.new(2019, 1, 1))
       news_params = news.api_attributes.merge({ "publishedFrom" => "test", "id" => news.id })
 
-      send_query(query_name: "UpdateNews", variables: news_params)
+      send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false
+      )
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)
@@ -289,7 +296,11 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       news = create(:news)
       news_params = news.slice(:id, :title, :text)
 
-      send_query(query_name: "UpdateNews", variables: news_params)
+      send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false
+      )
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)
@@ -316,7 +327,11 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     it 'deleting a news with an invalid id' do
       create(:news)
       count_news = News.all.count
-      send_query(query_name: "DestroyNews", variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" })
+      send_query(
+        query_name: "DestroyNews",
+        variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" },
+        expect_no_errors: false
+      )
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)["data"]["destroyNews"]["errors"]).not_to eq []
@@ -374,7 +389,11 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
         text: { 'de': 'Test2' },
         publishedFrom: "tom"
       }
-      send_query(query_name: "CreateNews", variables: news_params)
+      send_query(
+        query_name: "CreateNews",
+        variables: news_params,
+        expect_no_errors: false,
+      )
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).not_to eq []
@@ -382,11 +401,14 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
     end
 
     it 'creating a news without a date' do
-      news = build(:news)
-      news_params = news.api_attributes.except("publishedFrom")
-      # set_access_token(user)
-
-      send_query(query_name: "CreateNews", variables: news_params)
+      json_data = send_query(
+        query_name: "CreateNews",
+        variables: {
+          title: { de: "Titel" },
+          text: { de: "text" },
+        },
+        expect_no_errors: false,
+      )
       json_data = JSON.parse(response.body)
 
       expect(json_data.fetch('errors', [])).not_to eq []

@@ -63,23 +63,13 @@ RSpec.describe News, type: :model do
   it 'renders the text' do
     orig = build(:news, text: { "de" => "# Überschrift", "en" => "#Headline" })
 
-    expect(orig.rendered_text).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
-    expect(orig.rendered_text(text_length: :full, languages: ["de"]))
-      .to eq({ "de" => "<h1>Überschrift</h1>\n" })
-    expect(orig.rendered_text(text_length: :full, languages: ["en"]))
-      .to eq({ "en" => "<h1>Headline</h1>\n" })
-  end
-
-  it 'rendering texts in unknown languages' do
-    orig = build(:news, text: { "de" => "# Überschrift" })
-
-    expect { orig.rendered_text(languages: ["en"]) }.to raise_exception(EsqulinoError::Base)
-    expect { orig.rendered_text(languages: ["en", "de"]) }.to raise_exception(EsqulinoError::Base)
+    expect(orig.rendered_text_full).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
+    expect(orig.rendered_text_short).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
   end
 
   it 'renders the text (start)' do
     orig = build(:news, text: { "de" => "<!-- SNIP --> # Überschrift", "en" => "#Headline" })
-    expect(orig.rendered_text(text_length: :short, languages: ['de', 'en']))
+    expect(orig.rendered_text_short)
       .to eq({ "de" => "", "en" => "<h1>Headline</h1>\n" })
   end
 
@@ -89,14 +79,14 @@ RSpec.describe News, type: :model do
                    "en" => "#Headline <!-- SNIP --> Test"
                  })
 
-    expect(orig.rendered_text(text_length: :short, languages: ['de', 'en']))
+    expect(orig.rendered_text_short)
       .to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
   end
 
   it 'renders the text (end)' do
     orig = build(:news, text: { "de" => "# Überschrift Test <!-- SNIP -->", "en" => "#Headline Test <!-- SNIP -->" })
 
-    expect(orig.rendered_text(text_length: :short, languages: ['de', 'en']))
+    expect(orig.rendered_text_short)
       .to eq({ "de" => "<h1>Überschrift Test</h1>\n", "en" => "<h1>Headline Test</h1>\n" })
   end
 end

@@ -85,18 +85,34 @@ module Resolvers
     end
 
     def to_single_quotes_array(arr)
-      "[#{arr.map { |e| "'#{e}'"}.join(", ")}]"
+      "[" + arr.map { |e| "'" + e + "'"}.join(", ") + "]"
     end
 
-    # list the requested columns except additional columns which doesnt exist in the Model like (projects codeResourceCount)
-    # also add primary key and foreign key columns (columns which ends with _id) to keep relations.
-    # if no columns are requested select all
+    # List the requested columns except additional columns which doesn't exist in
+    # the Model like (projects codeResourceCount) also add primary key and foreign key
+    # columns (columns which ends with _id) to keep relations if no columns are
+    # requested at all
     def relevant_columns
-      if requested_columns(@context).empty?
-        @model_class.attribute_names
-      else
-        @model_class.attribute_names & requested_columns(@context) | @model_class.attribute_names.filter { |f| f.end_with?("_id")} | ["id"]
-      end
+      column_names = if requested_columns.empty?
+                       # No columns explicitly requested, hand out everything we have
+                       @model_class.attribute_names
+                     else
+                       # All requested columns that exist directly as a column in the model
+                       selectable_columns =  @model_class.attribute_names & requested_columns
+                       # Everything that ends in "_id"
+                       fk_columns = @model_class.attribute_names.filter { |f| f.end_with?("_id")}
+
+                       # Putting it together and always select the id
+                       selectable_columns | fk_columns | ["id"]
+                     end
+
+      return column_names + additional_relevant_columns
+    end
+
+    # Sometimes attributes are computed at runtime from columns. An inheriting resolver may add
+    # additional columns here
+    def additional_relevant_columns
+      []
     end
 
     def multilingual_columns
@@ -111,7 +127,7 @@ module Resolvers
       end
     end
 
-    def requested_columns(context)
+    def requested_columns(context = nil)
       # .query: Access GraphQL::Query instance
       # .lookahead: Access Class: GraphQL::Execution::Lookahead instance
       #   Lookahead creates a uniform interface to inspect the forthcoming selections.
@@ -126,6 +142,8 @@ module Resolvers
       # nodes.selections: Access to Array<Nodes::Field>
       #   Contains all requested nodes like id, slug, name, [...]
       # context should never be nil, unless in tests
+      context ||= @context
+
       if context.nil?
         []
       else

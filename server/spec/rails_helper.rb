@@ -80,13 +80,41 @@ end
 
 module GraphqlSpecHelper
   include GraphqlQueryHelper
-  def send_query(query_name:, variables: {})
+
+  # Sends the GraphQL query with the given name and the given variables.
+  # Expects that there shouldn't be any errors in the response by default.
+  def send_query(
+        query_name:,
+        variables: {},
+        expect_no_errors: true,
+        exp_http_status: 200
+      )
     post "/api/graphql",
          headers: { "CONTENT_TYPE" => "application/json" },
          params: {
            operationName: query_name,
            variables: variables
          }.to_json
+
+    aggregate_failures "Basic GraphQL Response" do
+      # Graphql usually returns with status: 200
+      # https://medium.com/@takewakamma/graphql-error-handling-with-graphql-ruby-653aa2a129f6
+      # https://www.graph.cool/docs/faq/api-eep0ugh1wa/#how-does-error-handling-work-with-graphcool
+
+      expect(response.status).to eq exp_http_status
+      expect(response.media_type).to eq "application/json"
+    end
+
+    json_data = JSON.parse(response.body)
+
+    # Ensure that there are no errors
+    if expect_no_errors
+      aggregate_failures "GraphQL Query Errors" do
+        recurse_no_error(json_data, [])
+      end
+    end
+
+    return json_data
   end
 
   def execute_query(query: nil, variables: {}, operation_name: nil, language: ["de"])
@@ -99,6 +127,20 @@ module GraphqlSpecHelper
     return result.as_json
   rescue => e
     return { "errors": [e] }
+  end
+
+  private
+
+  def recurse_no_error(data, path)
+    if data.is_a? Hash
+      data.each do |key,value|
+        if key === "errors"
+          expect(value).to eq([]), "Path: Root" + path.join(".")
+        else
+          recurse_no_error(value, path + [key])
+        end
+      end
+    end
   end
 end
 

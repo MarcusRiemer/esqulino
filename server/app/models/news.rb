@@ -30,22 +30,34 @@ class News < ApplicationRecord
       .order('published_from DESC')
   }
 
+  def rendered_text_full
+    self.impl_rendered_text(text_length: :full)
+  end
+
+  def rendered_text_short
+    self.impl_rendered_text(text_length: :short)
+  end
+
+  # Checks if the logged in user is the owner of this news
+  def owner?(user)
+    return user.eql? self.user
+  end
+
+  def readable_identification
+    _, printed_title = title.first
+    return "\"#{printed_title}\" (#{id})"
+  end
+
+  private
+
   # Compiles the text in the given languages to HTML
   #
-  # @param languages [String[]] Language codes to render. Renders all languages
-  #                           if parameter is nil.
   # @param text_length [:full | :short] choose between short/full text
   # @return [Hash<String, String>] Rendered content in asked languages
-  def rendered_text(text_length: :full, languages: nil)
+  def impl_rendered_text(text_length: )
     raise EsqulinoMessageError.new("Invalid text_length") unless [:short, :full].include? text_length
 
-    # Possibly restrict the languages to be rendered
-    if languages
-      assert_languages(languages)
-      rendered_hash = self.text.slice(*languages)
-    else
-      rendered_hash = self.text
-    end
+    rendered_hash = self.text
 
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
     rendered_hash.each do |key, value|
@@ -67,40 +79,5 @@ class News < ApplicationRecord
     end
   end
 
-  # API response for the data that is of interest in the administrative backend
-  # Does **not** render the markdown, because the Admin UI should show the
-  # actual markdown text.
-  def to_full_api_response()
-    to_json_api_response(compact: false)
-  end
 
-  def to_list_api_response(options: {})
-    if options.fetch(:full_api_response, false) then
-      to_full_api_response
-    end
-    to_json_api_response
-  end
-
-  # Checks if the logged in user is the owner of this news
-  def owner?(user)
-    return user.eql? self.user
-  end
-
-  # API response for data that is rendered on the frontpage. May restrict
-  # length of the text and returned languages
-  def to_frontpage_api_response(text_length: :full, languages: nil)
-    to_return = to_json_api_response
-                .slice("id", "title", "text", "publishedFrom")
-
-    if (to_return['text'])
-      to_return['text'] = rendered_text(text_length: text_length, languages: languages)
-    end
-
-    return (to_return)
-  end
-
-  def readable_identification
-    _, printed_title = title.first
-    return "\"#{printed_title}\" (#{id})"
-  end
 end

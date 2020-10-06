@@ -12,13 +12,13 @@ module Types
     field :default_database_id, ID, null: true
 
     field :user, Types::UserType, null: true
-    field :userId, ID, null: true
+    field :user_id, ID, null: true
 
-    field :codeResources, [Types::CodeResourceType], null: false
-    field :codeResourceCount, Integer, null: true
-    field :projectSources, [Types::ProjectSourceType], null: false
-    field :blockLanguages, [Types::BlockLanguageType], null: false
-    field :projectUsesBlockLanguages, [Types::ProjectUsesBlockLanguageType], null: false
+    field :code_resources, [Types::CodeResourceType], null: false
+    field :code_resource_count, Integer, null: true
+    field :project_sources, [Types::ProjectSourceType], null: false
+    field :block_languages, [Types::BlockLanguageType], null: false
+    field :project_uses_block_languages, [Types::ProjectUsesBlockLanguageType], null: false
     field :grammars, [Types::GrammarType], null: false
 
     field :schema, [Types::SqlTableType], null: false
@@ -40,8 +40,8 @@ module Types
 
     class OrderType < Types::Base::BaseInputObject
       graphql_name 'ProjectOrderType'
-      argument :orderField, OrderFieldEnum, required: false
-      argument :orderDirection, Types::Base::BaseEnum::OrderDirectionEnum, required: false
+      argument :order_field, OrderFieldEnum, required: false
+      argument :order_direction, Types::Base::BaseEnum::OrderDirectionEnum, required: false
     end
 
     class MultilingualColumnsEnum < Types::Base::BaseEnum

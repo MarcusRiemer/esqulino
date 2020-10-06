@@ -55,31 +55,44 @@ RSpec.describe BlockLanguagesController, type: :request do
       end
 
       it 'nonexistant column' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderField: "nonexistant" } } })
+        json_data = send_query(
+          query_name: "AdminListBlockLanguages",
+          variables: { input: { order: { orderField: "nonexistant" } } },
+          expect_no_errors: false,
+        )
 
-        expect(JSON.parse(response.body)['errors'].length).not_to eq []
-        expect(response.status).to eq 200
+        expect(json_data['errors'].length).not_to eq []
+
       end
 
       it 'slug' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderField: "slug" } } })
-        json_data = JSON.parse(response.body)['data']['blockLanguages']['nodes']
+        json = send_query(
+          query_name: "AdminListBlockLanguages",
+          variables: { input: { order: { orderField: "slug" } } }
+        )
+        json_data = json['data']['blockLanguages']['nodes']
 
         expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
       end
 
       it 'slug invalid direction' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderDirection: "north" } } })
+        send_query(
+          query_name: "AdminListBlockLanguages",
+          variables: { input: { order: { orderDirection: "north" } } },
+          expect_no_errors: false,
+        )
 
         expect(JSON.parse(response.body)['errors'].length).not_to eq []
-        expect(response.status).to eq 200
       end
 
       it 'slug desc' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderField: "slug", orderDirection: "desc" } } })
+        send_query(
+          query_name: "AdminListBlockLanguages",
+          variables: { input: { order: { orderField: "slug", orderDirection: "desc" } } }
+        )
         json_data = JSON.parse(response.body)['data']['blockLanguages']['nodes']
 
-        expect(json_data.map { |p| p['slug'] }).to eq ['cccc', 'bbbb', 'aaaa']
+        expect(json_data.pluck "slug").to eq ['cccc', 'bbbb', 'aaaa']
       end
 
       it 'slug asc' do
@@ -284,7 +297,11 @@ RSpec.describe BlockLanguagesController, type: :request do
       b = FactoryBot.create(:block_language)
       FactoryBot.build(:code_resource, block_language: b)
 
-      send_query(query_name: "DestroyBlockLanguage", variables: { id: b.id })
+      send_query(
+        query_name: "DestroyBlockLanguage",
+        variables: { id: b.id },
+        expect_no_errors: false,
+      )
 
       expect(response.status).to eq(200)
       json_data = JSON.parse(response.body)["data"]["destroyBlockLanguage"]
