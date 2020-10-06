@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
   if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphql"
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphiql"
   end
   # Second stop: The API for the editor
   scope '/api' do
     post "graphql", to: "graphql#execute"
+
+    # Allow a special unrestricted graphql endpoint for development with GraphiQL
+    if Rails.env.development?
+      post "graphiql", to: "graphql#execute_graphiql"
+    end
 
     scope 'identities' do
       get '/', controller: 'identities', action: :show

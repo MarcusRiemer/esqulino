@@ -3,7 +3,9 @@ class GraphqlController < ApplicationController
   include LocaleHelper
   include GraphqlQueryHelper
 
-  # Runs a GraphQL query
+  # Runs a GraphQL query for a "normal" user. This doesn't actually trust the
+  # query that the client is sending but instead loads the query from a secure
+  # location on the server.
   def execute
     variables = ensure_hash(params[:variables])
     operation_name = params[:operationName]
@@ -16,10 +18,33 @@ class GraphqlController < ApplicationController
     query = get_query(operation_name)
 
     # TODO: proper authorisation instead of relying on the name of the query
-
     if operation_name and operation_name.start_with? "Admin" and not current_user.is_admin?
       raise EsqulinoError::Authorization
     end
+
+    context = {
+      user: current_user,
+      language: request_locale
+    }
+
+    result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    render json: result
+  rescue => e
+    raise e unless Rails.env.development?
+
+    handle_error_in_development e
+  end
+
+  # Runs a GraphQL query for a developer. This trusts the query that is sent by the
+  # client and should never be used in production.
+  def execute_graphiql
+    if not Rails.env.development?
+      raise EsqulinoError::Base.new("Client queries are only executed in development");
+    end
+
+    variables = ensure_hash(params[:variables])
+    operation_name = params[:operationName]
+    query = params[:query]
 
     context = {
       user: current_user,
