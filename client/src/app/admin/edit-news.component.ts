@@ -7,10 +7,12 @@ import {
   ViewChild,
   TemplateRef,
 } from "@angular/core";
-import { map } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { NewsUpdateDescription } from "../shared/news.description";
+import { pluck } from "rxjs/operators";
+
+import * as _ from "lodash";
+
 import { ToolbarService } from "../shared";
 import { PerformDataService } from "../shared/authorisation/perform-data.service";
 import {
@@ -18,7 +20,9 @@ import {
   UpdateNewsGQL,
   DestroyNewsGQL,
   AdminSingleNewsGQL,
+  UpdateNewsMutationVariables,
 } from "../../generated/graphql";
+import { objectOmit } from "../shared/util";
 
 /**
  * Administrative UI to edit or create news.
@@ -58,7 +62,7 @@ export class AdminNewsEditComponent implements OnInit {
   readonly performCreateData = this._performData.news.create();
   readonly performDeleteData = this._performData.news.delete(this._newsId);
 
-  public newsData: NewsUpdateDescription;
+  public newsData: UpdateNewsMutationVariables;
   public readonly queryParamsLanguage =
     this._queryParams.language || this.localeID;
   public queryParamsMode = this._queryParams.mode || "single";
@@ -75,10 +79,10 @@ export class AdminNewsEditComponent implements OnInit {
       // Retrieve the news that should be edited
       this._singleNewsGQL
         .fetch({ id: this._newsId })
-        .pipe(map((result) => result.data.adminSingleNews))
+        .pipe(pluck("data", "news", "nodes", 0))
         .subscribe(
           (news) => {
-            this.newsData = news;
+            this.newsData = objectOmit("__typename", news);
             if (this.newsData.publishedFrom != "UNSET") {
               this.newsData.publishedFrom = new Date(
                 this.newsData.publishedFrom
@@ -99,6 +103,7 @@ export class AdminNewsEditComponent implements OnInit {
     this.newsData = {
       title: {},
       text: {},
+      id: undefined,
       publishedFrom: "UNSET", // Field needs to be sent, even if empty
     };
   }

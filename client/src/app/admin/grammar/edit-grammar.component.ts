@@ -10,7 +10,7 @@ import { Title } from "@angular/platform-browser";
 
 import { Subscription, BehaviorSubject } from "rxjs";
 
-import { switchMap, map } from "rxjs/operators";
+import { switchMap, map, pluck } from "rxjs/operators";
 
 import {
   FullGrammarGQL,
@@ -76,11 +76,10 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
               { id },
               { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
             ).valueChanges
-        )
+        ),
+        pluck("data", "grammars", "nodes", 0)
       )
-      .subscribe((response) => {
-        const g = response.data.singleGrammar;
-
+      .subscribe((g) => {
         // The response object contains additional properties that
         // we don't expect.
         this.grammar = Object.assign({}, g);
@@ -91,8 +90,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
         this._title.setTitle(
           `Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`
         );
-        this.relatedBlockLanguages =
-          response.data.singleGrammar.blockLanguages.nodes;
+        this.relatedBlockLanguages = g.blockLanguages.nodes;
         if (this.grammar.generatedFromId === null) {
           this.grammar.generatedFromId = undefined;
         }

@@ -1,24 +1,26 @@
 mutation UpdateNews(
-    $id: ID!,
-    $title: LangJson!,
-    $text: LangJson!,
-    $publishedFrom: SettableDate!
+  $id: ID!
+  $title: LangJson!
+  $text: LangJson!
+  $publishedFrom: SettableDate!
 ) {
-    updateNews(input:{
-        id:$id,
-        title:$title,
-        text:$text,
-        publishedFrom:$publishedFrom
-    }) {
-        news {
-            id
-            createdAt
-            updatedAt
-            publishedFrom
-            text
-            title
-            userId
-        }
-        errors
+  updateNews(
+    input: {
+      id: $id
+      title: $title
+      text: $text
+      publishedFrom: $publishedFrom
     }
+  ) {
+    news {
+      id
+      createdAt
+      updatedAt
+      publishedFrom
+      text
+      title
+      userId
+    }
+    errors
+  }
 }

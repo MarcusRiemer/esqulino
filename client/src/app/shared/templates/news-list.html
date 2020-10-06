@@ -11,7 +11,9 @@
       Neuigkeiten vom {{item.publishedFrom | date:'dd.MM.yyyy'}}
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content [innerHTML]="item.text[locale]"></mat-card-content>
+  <mat-card-content
+    [innerHTML]="item.renderedTextShort[locale]"
+  ></mat-card-content>
   <mat-card-actions>
     <a
       mat-button

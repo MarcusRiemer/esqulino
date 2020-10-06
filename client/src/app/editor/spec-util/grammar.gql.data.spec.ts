@@ -1,6 +1,5 @@
 import { generateUUIDv4 } from "../../shared/util-browser";
 import {
-  AdminListBlockLanguagesQuery,
   AdminListGrammarsQuery,
   GrammarDescriptionItemQuery,
 } from "../../../generated/graphql";
@@ -12,7 +11,7 @@ type GrammarGQLResponse = {
 };
 type AdminListGrammarNode = AdminListGrammarsQuery["grammars"]["nodes"][0];
 
-type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["singleGrammar"];
+type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["grammars"]["nodes"][0];
 type GrammarItemGQLResponse = {
   data: GrammarDescriptionItemQuery;
   errors: ReadonlyArray<GraphQLError>;
@@ -47,7 +46,9 @@ const wrapGrammarItem = (
   return {
     errors: [],
     data: {
-      singleGrammar: data,
+      grammars: {
+        nodes: [data],
+      },
     },
   };
 };

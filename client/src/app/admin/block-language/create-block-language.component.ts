@@ -59,7 +59,7 @@ export class CreateBlockLanguageComponent {
     // fetching the whole grammar here allows us to generate some blocks.
     const g = await this._grammarGQL
       .fetch({ id: this.blockLanguage.grammarId })
-      .pipe(first(), pluck("data", "singleGrammar"))
+      .pipe(first(), pluck("data", "grammars", "nodes", 0))
       .toPromise();
 
     // Generate some default blocks

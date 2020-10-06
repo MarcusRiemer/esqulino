@@ -60,10 +60,10 @@ describe(`Component: NewsList`, () => {
       1
     );
     expect(c.element.querySelector("mat-card-title").textContent).toEqual(
-      news.data.frontpageListNews.nodes[0].title["de"]
+      news.data.news.nodes[0].title["de"]
     );
     expect(c.element.querySelector("mat-card-content").textContent).toEqual(
-      news.data.frontpageListNews.nodes[0].text["de"]
+      news.data.news.nodes[0].renderedTextShort["de"]
     );
   });
 });

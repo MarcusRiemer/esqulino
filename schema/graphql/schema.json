@@ -27,7 +27,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "blockLanguageId",
@@ -41,7 +43,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -51,7 +55,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -122,65 +128,6 @@
           "interfaces": [
 
           ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "AdvancedNewsInputType",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "order",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "NewsOrderType",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "filter",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "NewsFilterFieldType",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "languages",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "LanguageEnum",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "textLength",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "TextLengthOptionsEnum",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -621,7 +568,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -631,7 +580,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -641,7 +592,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "grammar",
@@ -651,7 +604,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -672,7 +627,9 @@
                 "name": "BlockLanguageOrderType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "filter",
@@ -682,7 +639,9 @@
                 "name": "BlockLanguageFilterFieldType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "languages",
@@ -700,7 +659,9 @@
                   }
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -750,7 +711,9 @@
                 "name": "BlockLanguageOrderFieldEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "orderDirection",
@@ -760,7 +723,9 @@
                 "name": "OrderDirectionEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1138,7 +1103,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -1148,7 +1115,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "programmingLanguageId",
@@ -1158,7 +1127,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1179,7 +1150,9 @@
                 "name": "CodeResourceOrderType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "filter",
@@ -1189,7 +1162,9 @@
                 "name": "CodeResourceFilterFieldType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "languages",
@@ -1207,7 +1182,9 @@
                   }
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1245,7 +1222,9 @@
                 "name": "CodeResourceOrderFieldEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "orderDirection",
@@ -1255,7 +1234,9 @@
                 "name": "OrderDirectionEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1280,7 +1261,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -1290,7 +1273,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "defaultProgrammingLanguageId",
@@ -1300,7 +1285,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "grammarId",
@@ -1310,7 +1297,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "sidebars",
@@ -1324,7 +1313,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "editorBlocks",
@@ -1338,7 +1329,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "editorComponents",
@@ -1352,7 +1345,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "rootCssClasses",
@@ -1362,7 +1357,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "localGeneratorInstructions",
@@ -1372,7 +1369,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -1382,7 +1381,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1488,7 +1489,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -1498,7 +1501,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "types",
@@ -1512,7 +1517,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "foreignTypes",
@@ -1522,7 +1529,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "root",
@@ -1532,7 +1541,9 @@
                 "name": "QualifiedTypeName",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "programmingLanguageId",
@@ -1546,7 +1557,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "generatedFromId",
@@ -1556,7 +1569,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -1566,7 +1581,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1658,7 +1675,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "text",
@@ -1672,7 +1691,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "publishedFrom",
@@ -1686,7 +1707,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -1696,7 +1719,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1802,7 +1827,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -1812,7 +1839,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -1822,7 +1851,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1910,7 +1941,9 @@
                 "name": "ISO8601DateTime",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "until",
@@ -1924,7 +1957,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -1949,7 +1984,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -1959,7 +1996,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -2065,7 +2104,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -2075,7 +2116,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -2163,7 +2206,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -2173,7 +2218,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -2279,7 +2326,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -2289,7 +2338,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -2366,7 +2417,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -2376,7 +2429,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -2386,7 +2441,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -2396,7 +2453,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -2419,7 +2478,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -2429,7 +2490,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -2439,7 +2502,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -2449,7 +2514,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -2856,7 +2923,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -2866,7 +2935,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -2876,7 +2947,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -2897,7 +2970,9 @@
                 "name": "GrammarOrderType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "filter",
@@ -2907,7 +2982,9 @@
                 "name": "GrammarFilterFieldType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "languages",
@@ -2925,7 +3002,9 @@
                   }
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -2969,7 +3048,9 @@
                 "name": "GrammarOrderFieldEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "orderDirection",
@@ -2979,7 +3060,9 @@
                 "name": "OrderDirectionEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -3229,7 +3312,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3256,7 +3341,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3283,7 +3370,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3310,7 +3399,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3337,7 +3428,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3364,7 +3457,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3391,7 +3486,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3418,7 +3515,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3445,7 +3544,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3472,7 +3573,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3499,7 +3602,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3526,7 +3631,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3553,7 +3660,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3580,7 +3689,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3607,7 +3718,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -3679,6 +3792,42 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "SettableDate",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "renderedTextFull",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "LangJson",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "renderedTextShort",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "LangJson",
                   "ofType": null
                 }
               },
@@ -3919,7 +4068,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "title",
@@ -3929,7 +4080,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "text",
@@ -3939,7 +4092,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "userId",
@@ -3949,7 +4104,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "publishedFrom",
@@ -3959,7 +4116,9 @@
                 "name": "DateTimeFilter",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -3980,7 +4139,9 @@
                 "name": "NewsOrderType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "filter",
@@ -3990,7 +4151,9 @@
                 "name": "NewsFilterFieldType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "languages",
@@ -4008,7 +4171,21 @@
                   }
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "textLength",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "TextLengthOptionsEnum",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -4064,7 +4241,9 @@
                 "name": "NewsOrderFieldEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "orderDirection",
@@ -4074,7 +4253,9 @@
                 "name": "OrderDirectionEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -4963,136 +5144,6 @@
         },
         {
           "kind": "OBJECT",
-          "name": "ProjectDatabaseConnection",
-          "description": "The connection type for ProjectDatabase.",
-          "fields": [
-            {
-              "name": "edges",
-              "description": "A list of edges.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectDatabaseEdge",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "nodes",
-              "description": "A list of nodes.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectDatabase",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "pageInfo",
-              "description": "Information to aid in pagination.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PageInfo",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "totalCount",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [
-
-          ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "ProjectDatabaseEdge",
-          "description": "An edge in a connection.",
-          "fields": [
-            {
-              "name": "cursor",
-              "description": "A cursor for use in pagination.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "node",
-              "description": "The item at the end of the edge.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "ProjectDatabase",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [
-
-          ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
           "name": "ProjectEdge",
           "description": "An edge in a connection.",
           "fields": [
@@ -5150,7 +5201,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -5160,7 +5213,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -5170,7 +5225,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "public",
@@ -5180,7 +5237,9 @@
                 "name": "Boolean",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -5201,7 +5260,9 @@
                 "name": "ProjectOrderType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "filter",
@@ -5211,7 +5272,9 @@
                 "name": "ProjectFilterFieldType",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "languages",
@@ -5229,7 +5292,9 @@
                   }
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -5273,7 +5338,9 @@
                 "name": "ProjectOrderFieldEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "orderDirection",
@@ -5283,7 +5350,9 @@
                 "name": "OrderDirectionEnum",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -5448,136 +5517,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "OBJECT",
-          "name": "ProjectSourceConnection",
-          "description": "The connection type for ProjectSource.",
-          "fields": [
-            {
-              "name": "edges",
-              "description": "A list of edges.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectSourceEdge",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "nodes",
-              "description": "A list of nodes.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectSource",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "pageInfo",
-              "description": "Information to aid in pagination.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PageInfo",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "totalCount",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [
-
-          ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "ProjectSourceEdge",
-          "description": "An edge in a connection.",
-          "fields": [
-            {
-              "name": "cursor",
-              "description": "A cursor for use in pagination.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "node",
-              "description": "The item at the end of the edge.",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "ProjectSource",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [
-
-          ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "ENUM",
           "name": "ProjectSourceKind",
           "description": null,
@@ -5713,37 +5652,6 @@
           "description": null,
           "fields": [
             {
-              "name": "adminSingleNews",
-              "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "News",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "blockLanguages",
               "description": null,
               "args": [
@@ -5755,7 +5663,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -5765,7 +5675,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -5775,7 +5687,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -5785,7 +5699,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "input",
@@ -5795,7 +5711,9 @@
                     "name": "BlockLanguageInputType",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -5822,7 +5740,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -5832,7 +5752,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -5842,7 +5764,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -5852,7 +5776,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "input",
@@ -5862,7 +5788,9 @@
                     "name": "CodeResourceInputType",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -5871,104 +5799,6 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "CodeResourceConnection",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "frontpageListNews",
-              "description": null,
-              "args": [
-                {
-                  "name": "after",
-                  "description": "Returns the elements in the list that come after the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Returns the elements in the list that come before the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "Returns the first _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "Returns the last _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "input",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "AdvancedNewsInputType",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "NewsConnection",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "frontpageSingleNews",
-              "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "News",
                   "ofType": null
                 }
               },
@@ -5987,7 +5817,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -5997,7 +5829,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -6007,7 +5841,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -6017,7 +5853,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "input",
@@ -6027,7 +5865,9 @@
                     "name": "GrammarInputType",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -6054,7 +5894,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -6064,7 +5906,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -6074,7 +5918,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -6084,7 +5930,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "input",
@@ -6094,7 +5942,9 @@
                     "name": "NewsInputType",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -6121,7 +5971,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -6131,7 +5983,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -6141,7 +5995,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -6151,7 +6007,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -6160,120 +6018,6 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "ProgrammingLanguageConnection",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "projectDatabases",
-              "description": null,
-              "args": [
-                {
-                  "name": "after",
-                  "description": "Returns the elements in the list that come after the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Returns the elements in the list that come before the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "Returns the first _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "Returns the last _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectDatabaseConnection",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "projectSources",
-              "description": null,
-              "args": [
-                {
-                  "name": "after",
-                  "description": "Returns the elements in the list that come after the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Returns the elements in the list that come before the specified cursor.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "Returns the first _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "Returns the last _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectSourceConnection",
                   "ofType": null
                 }
               },
@@ -6292,7 +6036,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "before",
@@ -6302,7 +6048,9 @@
                     "name": "String",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "first",
@@ -6312,7 +6060,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "last",
@@ -6322,7 +6072,9 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 },
                 {
                   "name": "input",
@@ -6332,7 +6084,9 @@
                     "name": "ProjectInputType",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -6363,7 +6117,9 @@
                       "ofType": null
                     }
                   },
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -6381,99 +6137,6 @@
                       "ofType": null
                     }
                   }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "singleBlockLanguage",
-              "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "BlockLanguage",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "singleGrammar",
-              "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Grammar",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "singleProject",
-              "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Project",
-                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -6505,7 +6168,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -6515,7 +6180,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -6585,7 +6252,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -6595,7 +6264,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -7216,7 +6887,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -7226,7 +6899,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -7236,7 +6911,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "defaultProgrammingLanguageId",
@@ -7246,7 +6923,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "grammarId",
@@ -7256,7 +6935,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "sidebars",
@@ -7266,7 +6947,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "editorBlocks",
@@ -7276,7 +6959,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "rootCssClasses",
@@ -7286,7 +6971,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "editorComponents",
@@ -7296,7 +6983,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "localGeneratorInstructions",
@@ -7306,7 +6995,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -7316,7 +7007,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -7418,7 +7111,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -7428,7 +7123,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -7438,7 +7135,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "types",
@@ -7448,7 +7147,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "foreignTypes",
@@ -7458,7 +7159,9 @@
                 "name": "JSON",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "root",
@@ -7468,7 +7171,9 @@
                 "name": "QualifiedTypeName",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "programmingLanguageId",
@@ -7478,7 +7183,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "generatedFromId",
@@ -7488,7 +7195,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "blockLanguageIds",
@@ -7506,7 +7215,9 @@
                   }
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -7516,7 +7227,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -7604,7 +7317,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "title",
@@ -7614,7 +7329,9 @@
                 "name": "LangJson",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "text",
@@ -7624,7 +7341,9 @@
                 "name": "LangJson",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "publishedFrom",
@@ -7638,7 +7357,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "userId",
@@ -7648,7 +7369,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -7658,7 +7381,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -7764,7 +7489,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "name",
@@ -7774,7 +7501,9 @@
                 "name": "LangJson",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "description",
@@ -7784,7 +7513,9 @@
                 "name": "LangJson",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "slug",
@@ -7794,7 +7525,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "preview",
@@ -7804,7 +7537,9 @@
                 "name": "ID",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "clientMutationId",
@@ -7814,7 +7549,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -8427,7 +8164,18 @@
               "name": "args",
               "description": null,
               "args": [
-
+                {
+                  "name": "includeDeprecated",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false",
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
               ],
               "type": {
                 "kind": "NON_NULL",
@@ -8559,6 +8307,20 @@
               "deprecationReason": null
             },
             {
+              "name": "deprecationReason",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "description",
               "description": null,
               "args": [
@@ -8568,6 +8330,24 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -8758,7 +8538,9 @@
                     "name": "Boolean",
                     "ofType": null
                   },
-                  "defaultValue": "false"
+                  "defaultValue": "false",
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -8789,7 +8571,9 @@
                     "name": "Boolean",
                     "ofType": null
                   },
-                  "defaultValue": "false"
+                  "defaultValue": "false",
+                  "isDeprecated": false,
+                  "deprecationReason": null
                 }
               ],
               "type": {
@@ -8812,7 +8596,18 @@
               "name": "inputFields",
               "description": null,
               "args": [
-
+                {
+                  "name": "includeDeprecated",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false",
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
               ],
               "type": {
                 "kind": "LIST",
@@ -9010,7 +8805,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ]
         },
@@ -9035,7 +8832,9 @@
                   "ofType": null
                 }
               },
-              "defaultValue": null
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ]
         },
@@ -9044,7 +8843,9 @@
           "description": "Marks an element of a GraphQL schema as no longer supported.",
           "locations": [
             "FIELD_DEFINITION",
-            "ENUM_VALUE"
+            "ENUM_VALUE",
+            "ARGUMENT_DEFINITION",
+            "INPUT_FIELD_DEFINITION"
           ],
           "args": [
             {
@@ -9055,7 +8856,9 @@
                 "name": "String",
                 "ofType": null
               },
-              "defaultValue": "\"No longer supported\""
+              "defaultValue": "\"No longer supported\"",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ]
         }

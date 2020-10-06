@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID } from "@angular/core";
 
 import { FrontpageListNewsGQL } from "../../generated/graphql";
-import { map } from "rxjs/operators";
+import { pluck } from "rxjs/operators";
 
 @Component({
   selector: "news-list",
@@ -16,7 +16,5 @@ export class NewsListComponent {
 
   readonly newsList$ = this._newsGQL
     .watch()
-    .valueChanges.pipe(
-      map((response) => response.data.frontpageListNews.nodes)
-    );
+    .valueChanges.pipe(pluck("data", "news", "nodes"));
 }
